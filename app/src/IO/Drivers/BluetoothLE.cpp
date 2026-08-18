@@ -313,6 +313,16 @@ static constexpr BleKnownUuid BLE_KNOWN_UUIDS[] = {
 // clang-format on
 
 /**
+ * @brief Logs a driver failure to the console. Drivers never raise modal dialogs: a modal pumps
+ *        the event loop, so one raised from a connect or error stack lets queued work retire the
+ *        very driver still on that stack (spec 0056).
+ */
+static void logDriverError(const QString& title, const QString& text)
+{
+  qWarning().noquote() << QStringLiteral("[%1] %2").arg(title, text);
+}
+
+/**
  * @brief Returns the friendly name for a known UUID, or an empty string.
  */
 static QString knownUuidName(const QBluetoothUuid& uuid)
@@ -457,13 +467,8 @@ IO::Drivers::BluetoothLE::BluetoothLE()
           this,
           &IO::Drivers::BluetoothLE::configurationChanged);
 
-  connect(this, &IO::Drivers::BluetoothLE::error, this, [=, this](const QString& message) {
-    QMetaObject::invokeMethod(
-      this,
-      [message] {
-        Misc::Utilities::showMessageBox(tr("BLE I/O Module Error"), message, QMessageBox::Critical);
-      },
-      Qt::QueuedConnection);
+  connect(this, &IO::Drivers::BluetoothLE::error, this, [](const QString& message) {
+    logDriverError(tr("BLE I/O Module Error"), message);
   });
 }
 

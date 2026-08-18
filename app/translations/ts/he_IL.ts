@@ -324,22 +324,22 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>API::GRPC::GRPCServer</name>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="431"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="448"/>
         <source>Export Protobuf File</source>
         <translation>ייצא קובץ Protobuf</translation>
     </message>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="433"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="450"/>
         <source>Protocol Buffers (*.proto)</source>
         <translation>Protocol Buffers (‎*.proto)</translation>
     </message>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="481"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="498"/>
         <source>Unable to start gRPC server</source>
         <translation>לא ניתן להפעיל שרת GRPC</translation>
     </message>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="482"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="499"/>
         <source>Failed to bind to %1</source>
         <translation>נכשל לקשור ל-%1</translation>
     </message>
@@ -397,7 +397,7 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation>המרוחק שלח פרויקט שגרסה זו אינה יכולה לטעון</translation>
     </message>
     <message>
-        <location filename="../../src/API/Mirror/MirrorSession.cpp" line="617"/>
+        <location filename="../../src/API/Mirror/MirrorSession.cpp" line="619"/>
         <source>This build resolves the remote project to a different dataset layout</source>
         <translation>גרסה זו פותרת את הפרויקט המרוחק לפריסת dataset שונה</translation>
     </message>
@@ -418,17 +418,17 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>API::Server</name>
     <message>
-        <location filename="../../src/API/Server.cpp" line="595"/>
+        <location filename="../../src/API/Server.cpp" line="625"/>
         <source>Unable to start API TCP server</source>
         <translation>לא ניתן להפעיל שרת TCP של API</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="642"/>
+        <location filename="../../src/API/Server.cpp" line="672"/>
         <source>Allow External API Connections?</source>
         <translation>לאפשר חיבורי API חיצוניים?</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="643"/>
+        <location filename="../../src/API/Server.cpp" line="673"/>
         <source>Exposing the API server to external hosts allows other devices on your network to connect to Serial Studio on port 7777.
 
 Only enable this on trusted networks. Untrusted clients may read live data or send commands to your device.</source>
@@ -437,32 +437,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 יש להפעיל אפשרות זו רק ברשתות מהימנות. לקוחות לא מהימנים עלולים לקרוא נתונים חיים או לשלוח פקודות למכשיר.</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="707"/>
+        <location filename="../../src/API/Server.cpp" line="737"/>
         <source>Unable to restart API TCP server</source>
         <translation>לא ניתן להפעיל מחדש שרת TCP של API</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="817"/>
+        <location filename="../../src/API/Server.cpp" line="847"/>
         <source>Allow API device control?</source>
         <translation>לאפשר שליטה במכשיר דרך API?</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="818"/>
+        <location filename="../../src/API/Server.cpp" line="848"/>
         <source>A program using Serial Studio's local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
         <translation>תוכנית המשתמשת ב-API המקומי של Serial Studio מבקשת לשלוח נתונים למכשיר המחובר. לאפשר ללקוחות API לכתוב למכשיר?</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="821"/>
+        <location filename="../../src/API/Server.cpp" line="851"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1908"/>
+        <location filename="../../src/API/Server.cpp" line="1969"/>
         <source>API server</source>
         <translation>שרת API</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1908"/>
+        <location filename="../../src/API/Server.cpp" line="1969"/>
         <source>Invalid pending connection</source>
         <translation>חיבור ממתין לא חוקי</translation>
     </message>
@@ -3802,6 +3802,87 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
 </context>
 <context>
+    <name>Console::AnnotationDecoder</name>
+    <message>
+        <location filename="../../src/Console/Annotations.cpp" line="987"/>
+        <source>decode() exceeded %1 ms</source>
+        <translation>decode() חרג מ-%1 ms</translation>
+    </message>
+    <message>
+        <location filename="../../src/Console/Annotations.cpp" line="1039"/>
+        <source>Line %1: %2</source>
+        <translation>שורה %1: %2</translation>
+    </message>
+    <message>
+        <location filename="../../src/Console/Annotations.cpp" line="1047"/>
+        <source>the script must define a global 'decoder' object</source>
+        <translation>הסקריפט חייב להגדיר אובייקט 'decoder' גלובלי</translation>
+    </message>
+    <message>
+        <location filename="../../src/Console/Annotations.cpp" line="1053"/>
+        <source>'decoder.decode(bytes, offset, ctx)' is not a function</source>
+        <translation>'decoder.decode(bytes, offset, ctx)' אינה פונקציה</translation>
+    </message>
+    <message>
+        <location filename="../../src/Console/Annotations.cpp" line="1092"/>
+        <source>'decoder.rows' and 'decoder.classes' must be non-empty arrays</source>
+        <translation>'decoder.rows' ו-'decoder.classes' חייבים להיות מערכים לא ריקים</translation>
+    </message>
+    <message>
+        <location filename="../../src/Console/Annotations.cpp" line="1106"/>
+        <source>unknown decoder error</source>
+        <translation>שגיאת decoder לא ידועה</translation>
+    </message>
+</context>
+<context>
+    <name>Console::AnnotationModel</name>
+    <message>
+        <location filename="../../src/Console/Annotations.cpp" line="153"/>
+        <source>Start</source>
+        <translation>התחלה</translation>
+    </message>
+    <message>
+        <location filename="../../src/Console/Annotations.cpp" line="155"/>
+        <source>End</source>
+        <translation>סוף</translation>
+    </message>
+    <message>
+        <location filename="../../src/Console/Annotations.cpp" line="157"/>
+        <source>Length</source>
+        <translation>אורך</translation>
+    </message>
+    <message>
+        <location filename="../../src/Console/Annotations.cpp" line="159"/>
+        <source>Row</source>
+        <translation>שורה</translation>
+    </message>
+    <message>
+        <location filename="../../src/Console/Annotations.cpp" line="161"/>
+        <source>Class</source>
+        <translation>מחלקה</translation>
+    </message>
+    <message>
+        <location filename="../../src/Console/Annotations.cpp" line="163"/>
+        <source>Text</source>
+        <translation>טקסט</translation>
+    </message>
+    <message>
+        <location filename="../../src/Console/Annotations.cpp" line="532"/>
+        <source>Annotations</source>
+        <translation>הערות</translation>
+    </message>
+    <message>
+        <location filename="../../src/Console/Annotations.cpp" line="562"/>
+        <source>class %1</source>
+        <translation>מחלקה %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/Console/Annotations.cpp" line="568"/>
+        <source>data</source>
+        <translation>נתונים</translation>
+    </message>
+</context>
+<context>
     <name>Console::Export</name>
     <message>
         <location filename="../../src/Console/Export.cpp" line="337"/>
@@ -3817,42 +3898,42 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>Console::Handler</name>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="278"/>
+        <location filename="../../src/Console/Handler.cpp" line="284"/>
         <source>ASCII</source>
         <translation>ASCII</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="279"/>
+        <location filename="../../src/Console/Handler.cpp" line="285"/>
         <source>HEX</source>
         <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="289"/>
+        <location filename="../../src/Console/Handler.cpp" line="295"/>
         <source>No Line Ending</source>
         <translation>ללא סיום שורה</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="290"/>
+        <location filename="../../src/Console/Handler.cpp" line="296"/>
         <source>New Line</source>
         <translation>שורה חדשה</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="291"/>
+        <location filename="../../src/Console/Handler.cpp" line="297"/>
         <source>Carriage Return</source>
         <translation>החזרת עגלה</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="292"/>
+        <location filename="../../src/Console/Handler.cpp" line="298"/>
         <source>CR + NL</source>
         <translation>CR + NL</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="302"/>
+        <location filename="../../src/Console/Handler.cpp" line="308"/>
         <source>Text</source>
         <translation>טקסט</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="303"/>
+        <location filename="../../src/Console/Handler.cpp" line="309"/>
         <source>Hex</source>
         <translation>הקס</translation>
     </message>
@@ -3865,14 +3946,248 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">הקסדצימלי</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="325"/>
+        <location filename="../../src/Console/Handler.cpp" line="331"/>
         <source>No Checksum</source>
         <translation>ללא סיכום ביקורת</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="1023"/>
+        <location filename="../../src/Console/Handler.cpp" line="1057"/>
         <source>Device %1</source>
         <translation>התקן %1</translation>
+    </message>
+</context>
+<context>
+    <name>ConsoleAnnotations</name>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="74"/>
+        <source>Decoder error: %1</source>
+        <translation>שגיאת מפענח: %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="77"/>
+        <source>Decoding, %1 annotations</source>
+        <translation>מפענח, %1 הערות</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="79"/>
+        <source>Paused, %1 annotations kept</source>
+        <translation>מושהה, %1 הערות נשמרו</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="80"/>
+        <source>No decoder applied</source>
+        <translation>לא הוחל מפענח</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="178"/>
+        <source>Export annotations</source>
+        <translation>ייצוא הערות</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="179"/>
+        <source>CSV files (*.csv)</source>
+        <translation>קבצי CSV (*.CSV)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="204"/>
+        <source>Track</source>
+        <translation>מסלול</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="210"/>
+        <source>Table</source>
+        <translation>טבלה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="216"/>
+        <source>Payload</source>
+        <translation>מטען</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="222"/>
+        <source>Decoder</source>
+        <translation>מפענח</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="301"/>
+        <source>Window</source>
+        <translation>חלון</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="318"/>
+        <source>Bytes of history drawn across the lanes</source>
+        <translation>בתים של היסטוריה מוצגים על פני הנתיבים</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="322"/>
+        <source>bytes</source>
+        <translation>בתים</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="347"/>
+        <source>paused</source>
+        <translation>מושהה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="358"/>
+        <source>%1 annotations kept</source>
+        <translation>%1 הערות נשמרו</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="374"/>
+        <source>Each bar is a byte range the decoder labelled, one lane per decoder row: oldest on the left, newest on the right.</source>
+        <translation>כל פס מייצג טווח בתים שהמפענח תייג, נתיב אחד לכל שורת מפענח: הישן ביותר משמאל, החדש ביותר מימין.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="377"/>
+        <source>Labelled bytes %1 to %2, oldest on the left.</source>
+        <translation>בתים מתויגים %1 עד %2, הישן ביותר משמאל.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="384"/>
+        <source>The store is full at %1 labels, so anything older was dropped: shrink the window to see individual labels.</source>
+        <translation>המאגר מלא ב־%1 תוויות, כך שכל דבר ישן יותר הושמט: כווץ את החלון כדי לראות תוויות בודדות.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="487"/>
+        <source>nothing labelled in this window</source>
+        <translation>אין תוויות בחלון זה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="540"/>
+        <source>%1 labels</source>
+        <translation>%1 תוויות</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="602"/>
+        <source>%1 labels merged (bytes %2 to %3). Shrink the window to separate them.</source>
+        <translation>%1 תוויות מוזגו (בתים %2 עד %3). כווץ את החלון כדי להפריד ביניהן.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="607"/>
+        <source>%1 (bytes %2 to %3)</source>
+        <translation>%1 (בתים %2 עד %3)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="670"/>
+        <source>Row</source>
+        <translation>שורה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="679"/>
+        <source>All rows</source>
+        <translation>כל השורות</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="683"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="858"/>
+        <source>Class</source>
+        <translation>מחלקה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="694"/>
+        <source>All classes</source>
+        <translation>כל המחלקות</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="704"/>
+        <source>Export CSV</source>
+        <translation>ייצא CSV</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="709"/>
+        <source>Save every annotation to a spreadsheet</source>
+        <translation>שמור כל הערה לגיליון אלקטרוני</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="841"/>
+        <source>No annotations decoded yet</source>
+        <translation>טרם פוענחו הערות</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="876"/>
+        <source>Hexadecimal</source>
+        <translation>הקסדצימלי</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="883"/>
+        <source>Refresh</source>
+        <translation>רענן</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="886"/>
+        <source>Re-read the bytes of the selected class</source>
+        <translation>קרא מחדש את הבתים של המחלקה הנבחרת</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="898"/>
+        <source>%1 characters</source>
+        <translation>%1 תווים</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="922"/>
+        <source>Pick a class and press Refresh to extract its bytes</source>
+        <translation>בחר מחלקה ולחץ רענן כדי לחלץ את הבתים שלה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="954"/>
+        <source>Apply</source>
+        <translation>החל</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="957"/>
+        <source>Compile the script and start decoding</source>
+        <translation>קמפל את הסקריפט והתחל פענוח</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="969"/>
+        <source>Load a decoder for a known protocol</source>
+        <translation>טען מפענח עבור פרוטוקול ידוע</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="981"/>
+        <source>Clear</source>
+        <translation>נקה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="986"/>
+        <source>Discard the annotations decoded so far</source>
+        <translation>מחק את ההערות שפוענחו עד כה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="994"/>
+        <source>Pause</source>
+        <translation>השהה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="994"/>
+        <source>Resume</source>
+        <translation>המשך</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="999"/>
+        <source>Stop decoding, keep the labels already captured</source>
+        <translation>עצור פענוח, שמור את התוויות שכבר נלכדו</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1000"/>
+        <source>Resume decoding the incoming bytes</source>
+        <translation>המשך פענוח הבתים הנכנסים</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1073"/>
+        <source>No annotations yet</source>
+        <translation>אין הערות עדיין</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1086"/>
+        <source>Annotations label ranges of the incoming byte stream: a small script names each range, and this panel draws them as lanes, lists them, and extracts their bytes.</source>
+        <translation>הערות מסמנות טווחים בזרם הבתים הנכנס: סקריפט קטן נותן שם לכל טווח, והפאנל הזה מציג אותם כנתיבים, מפרט אותם ומחלץ את הבתים שלהם.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1094"/>
+        <source>Open Decoder</source>
+        <translation>פתח מפענח</translation>
     </message>
 </context>
 <context>
@@ -4732,107 +5047,172 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataModel::DatasetTransformEditor</name>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="75"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="78"/>
         <source>Dataset Value Transform</source>
         <translation>טרנספורמציית ערך Dataset</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="112"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="115"/>
         <source>Lua</source>
         <translation>Lua</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="112"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="115"/>
         <source>JavaScript</source>
         <translation>JavaScript</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="118"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="115"/>
+        <source>Expression</source>
+        <translation>ביטוי</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="124"/>
         <source>Enter raw value (e.g., 1024)</source>
         <translation>הזן ערך גולמי (לדוגמה, 1024)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="123"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="129"/>
         <source>Test</source>
         <translation>בדיקה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="124"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="130"/>
         <source>Clear</source>
         <translation>נקה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="126"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="132"/>
         <source>Apply</source>
         <translation>החל</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="127"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="133"/>
         <source>Cancel</source>
         <translation>ביטול</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="136"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="142"/>
         <source>Language:</source>
         <translation>שפה:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="139"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="145"/>
         <source>Template:</source>
         <translation>תבנית:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="150"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="156"/>
         <source>Input:</source>
         <translation>קלט:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="153"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="159"/>
         <source>Output:</source>
         <translation>פלט:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="231"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="237"/>
         <source>Transform — %1</source>
         <translation>טרנספורמציה — %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="311"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="317"/>
         <source>The value transform has a syntax error and was not applied.</source>
         <translation>טרנספורמציית הערך מכילה שגיאת תחביר ולא הוחלה.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="320"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="326"/>
         <source>The value transform must define a transform(value) function.</source>
         <translation>טרנספורמציית הערך חייבת להגדיר פונקציית transform(value).</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="321"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="327"/>
         <source>Define a transform(value) function that returns a number, or use Clear to remove the transform.</source>
         <translation>הגדר פונקציית transform(value) שמחזירה מספר, או השתמש בניקוי כדי להסיר את הטרנספורמציה.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="339"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="345"/>
         <source>Enter a value</source>
         <translation>הזן ערך</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="346"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="352"/>
         <source>Invalid number</source>
         <translation>מספר לא חוקי</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="415"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="427"/>
         <source>Format Document	Ctrl+Shift+I</source>
         <translation>עצב מסמך	Ctrl+Shift+I</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="416"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="428"/>
         <source>Format Selection	Ctrl+I</source>
         <translation>בחירת עיצוב	Ctrl+I</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="533"/>
+        <source>#
+# An arithmetic expression evaluated once per sample. No function,
+# no statements: the value of the expression is the new reading.
+# Lines starting with # are comments.
+#
+# Inputs:
+#    v     this sample's raw value
+#    t     seconds since the frame stream started
+#    dt    seconds since the previous sample
+#    n     sample index, starting at 0
+#    pi, e, nan, inf
+#
+# Other datasets of the same source by title, braced when the
+# title has spaces, plus history up to 256 samples back:
+#    Voltage * {Shunt Current}
+#    v - sample(Voltage, 1)       Voltage one sample ago
+#
+# Operators: + - * / % ^ &lt; &lt;= &gt; &gt;= == != &amp;&amp; || ! and a ? b : c
+# Functions: abs floor ceil round sqrt cbrt exp log log10 log2
+#            sin cos tan asin acos atan sinh cosh tanh deg rad
+#            min max pow atan2 hypot clamp lerp
+#
+# Examples:
+#    v * 0.01 + 273.15            scale and offset
+#    clamp(v, 0, 100)             limit to a range
+#    v &gt; 50 ? 50 : v              conditional
+#
+v
+</source>
+        <translation type="vanished">#
+# ביטוי אריתמטי המחושב פעם אחת לכל דגימה. ללא פונקציה,
+# ללא הצהרות: ערך הביטוי הוא הקריאה החדשה.
+# שורות המתחילות ב-# הן הערות.
+#
+# קלטים:
+#    v     הערך הגולמי של דגימה זו
+#    t     שניות מאז התחלת זרם ה-Frame
+#    dt    שניות מאז הדגימה הקודמת
+#    n     אינדקס דגימה, מתחיל מ-0
+#    pi, e, nan, inf
+#
+# מערכי נתונים אחרים מאותו מקור לפי כותרת, בסוגריים מסולסלים
+# כאשר הכותרת מכילה רווחים, בתוספת היסטוריה עד 256 דגימות אחורה:
+#    Voltage * {Shunt Current}
+#    v - sample(Voltage, 1)       Voltage דגימה אחת אחורה
+#
+# אופרטורים: + - * / % ^ &lt; &lt;= &gt; &gt;= == != &amp;&amp; || ! וכן a ? b : c
+# פונקציות: abs floor ceil round sqrt cbrt exp log log10 log2
+#            sin cos tan asin acos atan sinh cosh tanh deg rad
+#            min max pow atan2 hypot clamp lerp
+#
+# דוגמאות:
+#    v * 0.01 + 273.15            קנה מידה והיסט
+#    clamp(v, 0, 100)             הגבלה לטווח
+#    v &gt; 50 ? 50 : v              תנאי
+#
+v
+</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="599"/>
         <source>--
 -- Define a transform(value) function that receives the live
 -- dataset reading and returns a transformed number. If no
@@ -4891,7 +5271,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 </translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="561"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="627"/>
         <source>/*
  * Define a transform(value) function that receives the live
  * dataset reading and returns a transformed number. If no
@@ -4948,41 +5328,111 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
  */</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="622"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="768"/>
         <source>Failed to create the Lua engine.</source>
         <translation>יצירת מנוע Lua נכשלה.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="661"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="807"/>
         <source>Line %1: %2</source>
         <translation>שורה %1: %2</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="706"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="863"/>
         <source>Engine error</source>
         <translation>שגיאת מנוע</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="730"/>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="743"/>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="760"/>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="771"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="853"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="887"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="900"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="917"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="928"/>
         <source>Error: %1</source>
         <translation>שגיאה: %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="736"/>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="764"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="565"/>
+        <source>#
+# An arithmetic expression evaluated once per sample. No function,
+# no statements: the value of the expression is the new reading.
+# Lines starting with # are comments.
+#
+# Inputs:
+#    v     this sample's raw value
+#    t     seconds since the frame stream started
+#    dt    seconds since the previous sample
+#    n     sample index, starting at 0
+#    pi, e, nan, inf
+#
+# Other datasets of the same source by Script Alias, or by
+# dataset id in braces, plus history up to 256 samples back:
+#    v * shunt_current            by alias
+#    v * {12}                     by dataset id
+#    v - sample(shunt_current, 1) one sample ago
+#
+# Data-table registers are readable (never writable):
+#    v * table(calibration, scale)
+#
+# Operators: + - * / % ^ &lt; &lt;= &gt; &gt;= == != &amp;&amp; || ! and a ? b : c
+# Functions: abs floor ceil round sqrt cbrt exp log log10 log2
+#            sin cos tan asin acos atan sinh cosh tanh deg rad
+#            min max pow atan2 hypot clamp lerp
+#
+# Examples:
+#    v * 0.01 + 273.15            scale and offset
+#    clamp(v, 0, 100)             limit to a range
+#    v &gt; 50 ? 50 : v              conditional
+#
+v
+</source>
+        <translation>#
+# ביטוי אריתמטי המחושב פעם אחת לכל דגימה. ללא פונקציה,
+# ללא הצהרות: ערך הביטוי הוא הקריאה החדשה.
+# שורות המתחילות ב-# הן הערות.
+#
+# קלטים:
+#    v     הערך הגולמי של דגימה זו
+#    t     שניות מאז תחילת זרם המסגרות
+#    dt    שניות מאז הדגימה הקודמת
+#    n     אינדקס הדגימה, מתחיל מ-0
+#    pi, e, nan, inf
+#
+# מערכי נתונים אחרים מאותו מקור לפי כינוי סקריפט, או לפי
+# מזהה מערך נתונים בסוגריים מסולסלים, בתוספת היסטוריה עד 256 דגימאות אחורה:
+#    v * shunt_current            לפי כינוי
+#    v * {12}                     לפי מזהה מערך נתונים
+#    v - sample(shunt_current, 1) דגימה אחת אחורה
+#
+# רגיסטרים של טבלת נתונים ניתנים לקריאה (לעולם לא לכתיבה):
+#    v * table(calibration, scale)
+#
+# אופרטורים: + - * / % ^ &lt; &lt;= &gt; &gt;= == != &amp;&amp; || ! וכן a ? b : c
+# פונקציות: abs floor ceil round sqrt cbrt exp log log10 log2
+#            sin cos tan asin acos atan sinh cosh tanh deg rad
+#            min max pow atan2 hypot clamp lerp
+#
+# דוגמאות:
+#    v * 0.01 + 273.15            קנה מידה והיסט
+#    clamp(v, 0, 100)             הגבלה לטווח
+#    v &gt; 50 ? 50 : v              תנאי
+#
+v
+</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="893"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="921"/>
         <source>Error: transform() not defined</source>
         <translation>שגיאה: transform() לא מוגדרת</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="748"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="905"/>
         <source>Error: transform() must return a number</source>
         <translation>שגיאה: transform() חייבת להחזיר מספר</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="816"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="973"/>
         <source>Select Template…</source>
         <translation>בחר תבנית…</translation>
     </message>
@@ -4990,54 +5440,62 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2336"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2676"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>תקציב ההמרה של JavaScript חרג מהמותר</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2337"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2677"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>המרת ערכת נתונים ארכה יותר מ-%1 מילישניות; ערכות הנתונים הנותרות ב-Frame חזרו לערכים גולמיים עד ל-Frame הבא. בצע פרופיל או פשט את קוד ההמרה.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="287"/>
         <source>Frame pool exhausted</source>
-        <translation>מאגר ה-Frame מוצא</translation>
+        <translation type="vanished">מאגר ה-Frame מוצא</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="289"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, session DB, or API subscriber) is not draining frames fast enough. Serial Studio is falling back to per-frame allocations until the backlog clears. Disable a heavy consumer or reduce the data rate.</source>
-        <translation>צרכן במורד הזרם (Dashboard, ייצוא CSV/MDF4, מסד נתוני Session, או מנוי API) לא מרוקן Frames מספיק מהר. Serial Studio עובר להקצאות לפי Frame עד שהצטברות תתפנה. השבת צרכן כבד או הפחת את קצב הנתונים.</translation>
+        <translation type="vanished">צרכן במורד הזרם (Dashboard, ייצוא CSV/MDF4, מסד נתוני Session, או מנוי API) לא מרוקן Frames מספיק מהר. Serial Studio עובר להקצאות לפי Frame עד שהצטברות תתפנה. השבת צרכן כבד או הפחת את קצב הנתונים.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2614"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="578"/>
+        <source>Block pool exhausted</source>
+        <translation>מאגר הבלוקים מוצה</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="580"/>
+        <source>A downstream consumer (dashboard, CSV/MDF4 export, session DB, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
+        <translation>צרכן במורד הזרם (לוח בקרה, ייצוא CSV/MDF4, מסד נתוני סשן או מנוי API) אינו מתרוקן מהר מספיק, ולכן נתונים נשמטים מהתצוגה ומכל הקלטה פעילה. יש להשבית צרכן כבד או להפחית את קצב הנתונים.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2962"/>
         <source>Device A</source>
         <translation>התקן A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2654"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2792"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3002"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3140"/>
         <source>Channel %1</source>
         <translation>ערוץ %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2663"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2808"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3011"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3156"/>
         <source>Quick Plot</source>
         <translation>תרשים מהיר</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2670"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3018"/>
         <source>Quick Plot Data</source>
         <translation>נתוני תרשים מהיר</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2682"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3030"/>
         <source>Multiple Plots</source>
         <translation>תרשימים מרובים</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2803"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3151"/>
         <source>Audio Input</source>
         <translation>קלט שמע</translation>
     </message>
@@ -11241,77 +11699,77 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="320"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="321"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="321"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="322"/>
         <source>Network Socket</source>
         <translation>Network Socket</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="322"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="323"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="324"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="325"/>
         <source>Audio</source>
         <translation>אודיו</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="325"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="326"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="326"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="327"/>
         <source>CAN Bus</source>
         <translation>אפיק CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="327"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="328"/>
         <source>USB Device</source>
         <translation>התקן USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="328"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="329"/>
         <source>HID Device</source>
         <translation>התקן HID</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="329"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="330"/>
         <source>Process</source>
         <translation>תהליך</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="330"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="331"/>
         <source>MQTT Subscriber</source>
         <translation>מנוי MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="772"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="773"/>
         <source>Your trial period has ended.</source>
         <translation>תקופת הניסיון הסתיימה.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="773"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="774"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>להמשך שימוש ב-Serial Studio, יש להפעיל את הרישיון.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="869"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="870"/>
         <source>connection attempt failed</source>
         <translation>ניסיון החיבור נכשל</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1413"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1417"/>
         <source>This connection type requires an active license or trial.</source>
         <translation>סוג חיבור זה דורש רישיון פעיל או תקופת ניסיון.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1414"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1418"/>
         <source>Activate Serial Studio Pro or start a trial to use this device type.</source>
         <translation>הפעל את Serial Studio Pro או התחל תקופת ניסיון כדי להשתמש בסוג מכשיר זה.</translation>
     </message>
@@ -11347,77 +11805,77 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::Drivers::Audio</name>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="593"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="599"/>
         <source>Audio Device Stopped</source>
         <translation>התקן שמע הופסק</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="594"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="600"/>
         <source>The audio backend stopped the stream. The device may have been unplugged or claimed by another application.</source>
         <translation>ממשק השמע עצר את הזרם. ייתכן שההתקן נותק או נתפס על ידי יישום אחר.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="836"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="839"/>
         <source>channels</source>
         <translation>ערוצים</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="889"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="892"/>
         <source> channels</source>
         <translation>ערוצים</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1037"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1040"/>
         <source>Unsigned 8-bit</source>
         <translation>ללא סימן 8 סיביות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1038"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1041"/>
         <source>Signed 16-bit</source>
         <translation>עם סימן 16 סיביות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1039"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1042"/>
         <source>Signed 24-bit</source>
         <translation>עם סימן 24 סיביות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1040"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1043"/>
         <source>Signed 32-bit</source>
         <translation>עם סימן 32 סיביות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1041"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1044"/>
         <source>Float 32-bit</source>
         <translation>נקודה צפה 32 סיביות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1044"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1047"/>
         <source>Mono</source>
         <translation>מונו</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1045"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1048"/>
         <source>Stereo</source>
         <translation>סטריאו</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1544"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1549"/>
         <source>Input Device</source>
         <translation>התקן קלט</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1552"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1557"/>
         <source>Sample Rate</source>
         <translation>קצב דגימה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1560"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1565"/>
         <source>Sample Format</source>
         <translation>פורמט דגימה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1568"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1573"/>
         <source>Channels</source>
         <translation>ערוצים</translation>
     </message>
@@ -11425,93 +11883,93 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::Drivers::BluetoothLE</name>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="464"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="471"/>
         <source>BLE I/O Module Error</source>
         <translation>שגיאת מודול BLE קלט/פלט</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="725"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="730"/>
         <source>The device disconnected before the connection completed</source>
         <translation>ההתקן התנתק לפני השלמת החיבור</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="741"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="746"/>
         <source>BLE connection error: %1</source>
         <translation>שגיאת חיבור BLE: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="830"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="835"/>
         <source>Select Device</source>
         <translation>בחר התקן</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="841"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="846"/>
         <source>Select Service</source>
         <translation>בחר שירות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="852"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="857"/>
         <source>Select Characteristic</source>
         <translation>בחר מאפיין</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1063"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1068"/>
         <source>Error while configuring BLE service</source>
         <translation>שגיאה בעת הגדרת שירות BLE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1281"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1286"/>
         <source>Operation error</source>
         <translation>שגיאת פעולה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1284"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1289"/>
         <source>Characteristic write error</source>
         <translation>שגיאת כתיבת מאפיין</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1287"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1292"/>
         <source>Descriptor write error</source>
         <translation>שגיאת כתיבת מתאר</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="740"/>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1290"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="745"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1295"/>
         <source>Unknown error</source>
         <translation>שגיאה לא ידועה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1295"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1300"/>
         <source>Characteristic read error</source>
         <translation>שגיאת קריאת מאפיין</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1298"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1303"/>
         <source>Descriptor read error</source>
         <translation>שגיאת קריאת מתאר</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1306"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1311"/>
         <source>BLE service error during connect</source>
         <translation>שגיאת שירות BLE במהלך החיבור</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1539"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1544"/>
         <source>BLE Device</source>
         <translation>התקן BLE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1547"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1552"/>
         <source>Service</source>
         <translation>שירות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1554"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1559"/>
         <source>Notify Characteristic</source>
         <translation>מאפיין התראה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1561"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1566"/>
         <source>Characteristic</source>
         <translation>מאפיין</translation>
     </message>
@@ -11519,35 +11977,35 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::Drivers::CANBus</name>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="322"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="319"/>
         <source>CAN Device Creation Failed</source>
         <translation>יצירת התקן CAN נכשלה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="324"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="321"/>
         <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
         <translation>לא ניתן ליצור התקן CAN. בדוק את החומרה והמנהלים.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="355"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="351"/>
         <source>CAN Connection Failed</source>
         <translation>חיבור CAN נכשל</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="352"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="349"/>
         <source>Unable to connect to CAN bus device. Check your hardware connection and settings.</source>
         <translation>לא ניתן להתחבר להתקן CAN. בדוק את חיבור החומרה וההגדרות.</translation>
     </message>
     <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="366"/>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="371"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="377"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="383"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="388"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="376"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="380"/>
         <source>CAN Bus Not Available</source>
         <translation>CAN Bus לא זמין</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="372"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="367"/>
         <source>No CAN bus plugins found on this system.
 
 On Linux, ensure SocketCAN kernel modules are loaded.</source>
@@ -11556,7 +12014,7 @@ On Linux, ensure SocketCAN kernel modules are loaded.</source>
 ב-Linux, יש לוודא שמודולי הליבה של SOCKETCAN טעונים.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="378"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="372"/>
         <source>No CAN bus plugins found on this system.
 
 On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
@@ -11565,7 +12023,7 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
 ב-Windows, יש להתקין מנהלי התקן לחומרת CAN (PEAK, VECTOR וכו').</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="384"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="377"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
@@ -11574,37 +12032,37 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
 תמיכה ב-CAN bus ב-macOS מוגבלת ועשויה לדרוש מנהלי התקן של צד שלישי.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="388"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="381"/>
         <source>No CAN bus plugins are available on this platform.</source>
         <translation>אין תוספי CAN bus זמינים בפלטפורמה זו.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="400"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="392"/>
         <source>Invalid CAN Configuration</source>
         <translation>תצורת CAN לא תקינה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="401"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="393"/>
         <source>The CAN bus configuration is incomplete. Select a valid plugin and interface.</source>
         <translation>תצורת CAN bus אינה שלמה. יש לבחור תוסף וממשק תקינים.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="408"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="399"/>
         <source>Invalid Selection</source>
         <translation>בחירה לא תקינה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="409"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="400"/>
         <source>The selected plugin or interface is no longer available. Refresh the lists and try again.</source>
         <translation>התוסף או הממשק שנבחרו אינם זמינים עוד. יש לרענן את הרשימות ולנסות שוב.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="417"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="407"/>
         <source>No Devices Available</source>
         <translation>אין התקנים זמינים</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="418"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="408"/>
         <source>The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected.</source>
         <translation>רשימת התוספים או הממשקים ריקה. רענן את הרשימות וודא שחומרת ה-CAN שלך מחוברת.</translation>
     </message>
@@ -11617,63 +12075,63 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
         <translation type="vanished">אירעה שגיאה אך התקן ה-CAN אינו זמין עוד.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="806"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="796"/>
         <source>Error code: %1</source>
         <translation>קוד שגיאה: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="818"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="804"/>
         <source>CAN Bus Communication Error</source>
         <translation>שגיאת תקשורת אפיק CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="859"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="843"/>
         <source>Connect a %1 adapter, then refresh</source>
         <translation>חבר מתאם %1 ולאחר מכן רענן</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="863"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="847"/>
         <source>Load SocketCAN kernel modules first</source>
         <translation>טען תחילה מודולי ליבה של SOCKETCAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="866"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="850"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>הגדר תחילה ממשק CAN וירטואלי</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="868"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="888"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="852"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="872"/>
         <source>No interfaces found for %1</source>
         <translation>לא נמצאו ממשקים עבור %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="872"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="856"/>
         <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
         <translation>התקן &lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;מנהלי התקן PEAK CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="876"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="860"/>
         <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
         <translation>התקן &lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;מנהלי התקן VECTOR CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="880"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="864"/>
         <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
         <translation>התקן &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;מנהלי התקן SysTec CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="883"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="867"/>
         <source>Install %1 drivers</source>
         <translation>התקן מנהלי התקן %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="886"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="870"/>
         <source>Install %1 drivers for macOS</source>
         <translation>התקן מנהלי התקן %1 עבור macOS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="900"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="884"/>
         <source>
 
 If the interface is down, bring it up first:
@@ -11684,42 +12142,42 @@ sudo ip link set %1 up type can bitrate %2
 </translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="926"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="910"/>
         <source>No CAN driver selected</source>
         <translation>לא נבחר מנהל התקן CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1036"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1020"/>
         <source>Plugin</source>
         <translation>תוסף</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1044"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1028"/>
         <source>Interface</source>
         <translation>ממשק</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1052"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1036"/>
         <source>Bitrate</source>
         <translation>קצב סיביות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1061"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1045"/>
         <source>CAN FD</source>
         <translation>CAN FD</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1068"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1052"/>
         <source>Data Bitrate</source>
         <translation>קצב סיביות נתונים</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1077"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1061"/>
         <source>Loopback</source>
         <translation>Loopback</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1084"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1068"/>
         <source>Listen-Only</source>
         <translation>האזנה בלבד</translation>
     </message>
@@ -11821,12 +12279,12 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::HID</name>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="175"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="190"/>
         <source>Unknown error</source>
         <translation>שגיאה לא ידועה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="178"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="193"/>
         <source>
 
 Check that your user is in the 'plugdev' group or that a udev rule grants access to this device.</source>
@@ -11835,27 +12293,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 </translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="181"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="196"/>
         <source>Failed to open "%1"</source>
         <translation>נכשל לפתוח "%1"</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="289"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="301"/>
         <source>HID Device Error</source>
         <translation>שגיאת התקן HID</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="290"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="302"/>
         <source>The HID device was disconnected or encountered a fatal read error.</source>
         <translation>התקן ה-HID נותק או נתקל בשגיאת קריאה חמורה.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="417"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="446"/>
         <source>Select Device</source>
         <translation>בחר התקן</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="559"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="588"/>
         <source>HID Device</source>
         <translation>התקן HID</translation>
     </message>
@@ -11863,72 +12321,72 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::MQTT</name>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="72"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="69"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="73"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="70"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="74"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="71"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="76"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="73"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="77"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="74"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="78"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="75"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3 או חדש יותר</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="79"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="76"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2 או חדש יותר</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="80"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="77"/>
         <source>Any Protocol</source>
         <translation>כל פרוטוקול</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="81"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="78"/>
         <source>Secure Protocols Only</source>
         <translation>פרוטוקולים מאובטחים בלבד</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="83"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="80"/>
         <source>None</source>
         <translation>ללא</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="84"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="81"/>
         <source>Query Peer</source>
         <translation>שאילתת עמית</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="85"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="82"/>
         <source>Verify Peer</source>
         <translation>אימות עמית</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="86"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="83"/>
         <source>Auto Verify Peer</source>
         <translation>אימות עמית אוטומטי</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="194"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="191"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>תכונת MQTT דורשת רישיון מסחרי</translation>
     </message>
@@ -11937,147 +12395,147 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">הרשמה למתווך MQTT זמינה רק עם רישיון מסחרי תקף של Serial Studio (רמת Hobbyist ומעלה).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="195"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="192"/>
         <source>Subscribing to an MQTT broker is only available with a valid Serial Studio license or an active trial.</source>
         <translation>הרשמה למתווך MQTT זמינה רק עם רישיון Serial Studio תקף או תקופת ניסיון פעילה.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="427"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="424"/>
         <source>Use System Database</source>
         <translation>השתמש במסד נתונים של המערכת</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="428"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="425"/>
         <source>Load From Folder…</source>
         <translation>טען מתיקייה…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="461"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="458"/>
         <source>Select PEM Certificates Directory</source>
         <translation>בחר ספריית אישורי PEM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="716"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="713"/>
         <source>Hostname</source>
         <translation>שם מארח</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="723"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="720"/>
         <source>Port</source>
         <translation>פורט</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="732"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="729"/>
         <source>Topic Filter</source>
         <translation>מסנן נושא</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="739"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="736"/>
         <source>Client ID</source>
         <translation>מזהה לקוח</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="746"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="743"/>
         <source>Username</source>
         <translation>שם משתמש</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="753"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="750"/>
         <source>Password</source>
         <translation>סיסמה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="760"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="757"/>
         <source>MQTT Version</source>
         <translation>גרסת MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="768"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="765"/>
         <source>Clean Session</source>
         <translation>Clean Session</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="775"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="772"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (שניות)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="784"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="781"/>
         <source>Auto Keep Alive</source>
         <translation>Keep Alive אוטומטי</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="801"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="798"/>
         <source>SSL/TLS Enabled</source>
         <translation>SSL/TLS מופעל</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="811"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="808"/>
         <source>SSL Protocol</source>
         <translation>פרוטוקול SSL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="819"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="816"/>
         <source>Peer Verify Mode</source>
         <translation>מצב אימות עמית</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="827"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="824"/>
         <source>Peer Verify Depth</source>
         <translation>עומק אימות עמית</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="836"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="833"/>
         <source>Client Certificate (PEM)</source>
         <translation>אישור לקוח (PEM)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="843"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="840"/>
         <source>Private Key (PEM)</source>
         <translation>מפתח פרטי (PEM)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="850"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="847"/>
         <source>ALPN (MQTT over port 443)</source>
         <translation>ALPN (MQTT דרך פורט 443)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="858"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="855"/>
         <source>ALPN Protocol</source>
         <translation>פרוטוקול ALPN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="981"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="978"/>
         <source>The broker closed the connection during the attempt</source>
         <translation>ה-Broker סגר את החיבור במהלך הניסיון</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="999"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="995"/>
         <source>MQTT Subscription Error</source>
         <translation>שגיאת מנוי MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1000"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="996"/>
         <source>Failed to subscribe to topic "%1".</source>
         <translation>המנוי לנושא "%1" נכשל.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1257"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1253"/>
         <source>MQTT Client Certificate Error</source>
         <translation>שגיאת אישור לקוח MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1276"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1270"/>
         <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
         <translation>קבצי PEM (*.pem *.crt *.cer *.key);;כל הקבצים (*)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1302"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1296"/>
         <source>Select Client Certificate</source>
         <translation>בחר אישור לקוח</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1310"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1304"/>
         <source>Select Private Key</source>
         <translation>בחר מפתח פרטי</translation>
     </message>
@@ -12086,97 +12544,97 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">ה-Broker סגר את החיבור.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1027"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1023"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>גרסת פרוטוקול MQTT לא חוקית</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1028"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1024"/>
         <source>The broker rejected the configured MQTT protocol version.</source>
         <translation>הברוקר דחה את גרסת פרוטוקול MQTT שהוגדרה.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1031"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1027"/>
         <source>Client ID Rejected</source>
         <translation>מזהה לקוח נדחה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1032"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1028"/>
         <source>The broker rejected the client ID. Try a different identifier.</source>
         <translation>הברוקר דחה את מזהה הלקוח. נסה מזהה אחר.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1035"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1031"/>
         <source>MQTT Server Unavailable</source>
         <translation>שרת MQTT לא זמין</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1036"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1032"/>
         <source>The broker is currently unavailable. Retry later.</source>
         <translation>הברוקר אינו זמין כעת. נסה שוב מאוחר יותר.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1039"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1035"/>
         <source>Authentication Error</source>
         <translation>שגיאת אימות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1040"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1036"/>
         <source>The credentials provided were rejected by the broker.</source>
         <translation>פרטי הגישה שסופקו נדחו על ידי הברוקר.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1043"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1039"/>
         <source>Authorization Error</source>
         <translation>שגיאת הרשאה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1044"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1040"/>
         <source>Account lacks permission for this operation.</source>
         <translation>לחשבון אין הרשאה לפעולה זו.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1047"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1043"/>
         <source>Network or Transport Error</source>
         <translation>שגיאת רשת או תעבורה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1048"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1044"/>
         <source>Network/transport layer issue while connecting to the broker.</source>
         <translation>בעיה בשכבת הרשת/תעבורה בעת התחברות ל-Broker.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1051"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1047"/>
         <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
         <translation>אישור לקוח מוגדר: ודא שהוא תואם למפתח הפרטי ומופעל ב-Broker.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1056"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1052"/>
         <source>MQTT Protocol Violation</source>
         <translation>הפרת פרוטוקול MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1057"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1053"/>
         <source>The broker reported a protocol violation and closed the connection.</source>
         <translation>ה-Broker דיווח על הפרת פרוטוקול וסגר את החיבור.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1060"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1056"/>
         <source>MQTT 5 Error</source>
         <translation>שגיאת MQTT 5</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1061"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1057"/>
         <source>An MQTT 5 protocol-level error occurred.</source>
         <translation>אירעה שגיאה ברמת פרוטוקול MQTT 5.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1064"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1060"/>
         <source>MQTT Error</source>
         <translation>שגיאת MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1065"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1061"/>
         <source>An unexpected MQTT error occurred.</source>
         <translation>אירעה שגיאת MQTT בלתי צפויה.</translation>
     </message>
@@ -12184,37 +12642,37 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Modbus</name>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="390"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="386"/>
         <source>Invalid Serial Port</source>
         <translation>יציאה טורית לא חוקית</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="391"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="387"/>
         <source>The selected serial port "%1" is no longer available. Refresh the port list and try again.</source>
         <translation>היציאה הטורית שנבחרה "%1" אינה זמינה עוד. יש לרענן את רשימת הפורטים ולנסות שוב.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="435"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="430"/>
         <source>Modbus Initialization Failed</source>
         <translation>אתחול Modbus נכשל</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="436"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="431"/>
         <source>Unable to create Modbus device. Check your system configuration and try again.</source>
         <translation>לא ניתן ליצור התקן Modbus. בדוק את תצורת המערכת ונסה שוב.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="458"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="453"/>
         <source>Nothing is listening at %1</source>
         <translation>אין מאזין ב-%1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="517"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="511"/>
         <source>Modbus Connection Failed</source>
         <translation>חיבור Modbus נכשל</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="519"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="513"/>
         <source>Unable to connect to "%1". Check your connection settings.</source>
         <translation>לא ניתן להתחבר אל "%1". בדוק את הגדרות החיבור.</translation>
     </message>
@@ -12223,7 +12681,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">לקוח ה-Modbus סירב להתחיל את החיבור.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="520"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="514"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
@@ -12232,199 +12690,198 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">פסק זמן לניסיון החיבור</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="636"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="630"/>
         <source>None</source>
         <translation>ללא</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="637"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="631"/>
         <source>Even</source>
         <translation>זוגי</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="638"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="632"/>
         <source>Odd</source>
         <translation>אי-זוגי</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="639"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="633"/>
         <source>Space</source>
         <translation>רווח</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="640"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="634"/>
         <source>Mark</source>
         <translation>סימון</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="692"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="686"/>
         <source>Holding Registers (0x03)</source>
         <translation>רגיסטרי החזקה (0x03)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="693"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="687"/>
         <source>Input Registers (0x04)</source>
         <translation>רגיסטרי קלט (0x04)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="694"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="688"/>
         <source>Coils (0x01)</source>
         <translation>סלילים (0x01)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="695"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="689"/>
         <source>Discrete Inputs (0x02)</source>
         <translation>כניסות בדידות (0x02)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="880"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="874"/>
         <source>No register groups configured</source>
         <translation>לא הוגדרו קבוצות רגיסטרים</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="881"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="875"/>
         <source>Add at least one register group before generating a project.</source>
         <translation>יש להוסיף לפחות קבוצת רגיסטרים אחת לפני יצירת פרויקט.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="883"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="896"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="921"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="877"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="913"/>
         <source>Modbus Project Generator</source>
         <translation>מחולל פרויקט Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="893"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="887"/>
         <source>Failed to load generated project</source>
         <translation>טעינת הפרויקט שנוצר נכשלה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="894"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="888"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>לא ניתן לטעון את JSON של הפרויקט שנוצר.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="916"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="908"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>הפרויקט נוצר בהצלחה עם %1 קבוצות ו־%2 מערכי נתונים.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="919"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="911"/>
         <source>The project editor is now open for customization.</source>
         <translation>עורך הפרויקט פתוח כעת להתאמה אישית.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="934"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="926"/>
         <source>Modbus Project</source>
         <translation>פרויקט Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="939"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="931"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="959"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="951"/>
         <source>Holding Registers</source>
         <translation>רגיסטרי Holding</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="960"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="952"/>
         <source>Input Registers</source>
         <translation>רגיסטרי Input</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="961"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="953"/>
         <source>Coils</source>
         <translation>סלילים</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="962"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="954"/>
         <source>Discrete Inputs</source>
         <translation>כניסות בדידות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="976"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="968"/>
         <source>Unknown</source>
         <translation>לא ידוע</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="989"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="981"/>
         <source>Register %1</source>
         <translation>רגיסטר %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="997"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="989"/>
         <source>Coil %1</source>
         <translation>סליל %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="997"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="989"/>
         <source>Discrete %1</source>
         <translation>בדיד %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1424"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1416"/>
         <source>Error code: %1</source>
         <translation>קוד שגיאה: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1426"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1418"/>
         <source>Modbus Communication Error</source>
         <translation>שגיאת תקשורת Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1438"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1430"/>
         <source>Select Port</source>
         <translation>בחר פורט</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1591"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1583"/>
         <source>Protocol</source>
         <translation>פרוטוקול</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1599"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1591"/>
         <source>Slave Address</source>
         <translation>כתובת Slave</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1608"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1600"/>
         <source>Poll Interval (ms)</source>
         <translation>מרווח סקירה (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1648"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1640"/>
         <source>Host / IP</source>
         <translation>מארח / IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1655"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1647"/>
         <source>Port</source>
         <translation>פורט</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1670"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1662"/>
         <source>Serial Port</source>
         <translation>יציאה טורית</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1678"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1670"/>
         <source>Baud Rate</source>
         <translation>קצב באוד</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1686"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1678"/>
         <source>Parity</source>
         <translation>זוגיות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1694"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1686"/>
         <source>Data Bits</source>
         <translation>ביטי נתונים</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1702"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1694"/>
         <source>Stop Bits</source>
         <translation>ביטי עצירה</translation>
     </message>
@@ -12432,9 +12889,9 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Network</name>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="298"/>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="309"/>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="648"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="482"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="492"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="831"/>
         <source>Network socket error</source>
         <translation>שגיאת שקע רשת</translation>
     </message>
@@ -12443,38 +12900,38 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">פסק זמן לחיבור אל %1:%2.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="299"/>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="310"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="483"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="493"/>
         <source>Cannot connect to %1:%2 (%3)</source>
         <translation>לא ניתן להתחבר אל %1:%2 (%3)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="665"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="848"/>
         <source>Socket Type</source>
         <translation>סוג שקע</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="673"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="856"/>
         <source>Remote Address</source>
         <translation>כתובת מרוחקת</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="681"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="864"/>
         <source>TCP Port</source>
         <translation>פורט TCP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="690"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="873"/>
         <source>UDP Local Port</source>
         <translation>פורט מקומי UDP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="699"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="882"/>
         <source>UDP Remote Port</source>
         <translation>פורט מרוחק UDP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="708"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="891"/>
         <source>UDP Multicast</source>
         <translation>ריבוי שידור UDP</translation>
     </message>
@@ -12482,118 +12939,118 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Process</name>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="217"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="213"/>
         <source>Failed to start process</source>
         <translation>כשל בהפעלת תהליך</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="218"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="214"/>
         <source>Executable "%1" not found in PATH.</source>
         <translation>קובץ הפעלה "%1" לא נמצא ב-PATH.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="393"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="389"/>
         <source>Select Executable</source>
         <translation>בחר קובץ הפעלה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="417"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="413"/>
         <source>Select Working Directory</source>
         <translation>בחר תיקיית עבודה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="442"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="438"/>
         <source>Select Named Pipe / FIFO</source>
         <translation>בחר Named Pipe / FIFO</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="540"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="536"/>
         <source>The process crashed.</source>
         <translation>התהליך קרס.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="541"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="537"/>
         <source>Exit code: %1</source>
         <translation>קוד יציאה: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="550"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="545"/>
         <source>Process "%1" stopped</source>
         <translation>תהליך "%1" הופסק</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="560"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="555"/>
         <source>Failed to start</source>
         <translation>כשל בהפעלה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="564"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="559"/>
         <source>Unknown error</source>
         <translation>שגיאה לא ידועה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="571"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="566"/>
         <source>Process Error</source>
         <translation>שגיאת תהליך</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="585"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="580"/>
         <source>The pipe closed before the peer attached.</source>
         <translation>הצינור נסגר לפני שהעמית התחבר.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="589"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="583"/>
         <source>Pipe Closed</source>
         <translation>צינור נסגר</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="590"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="584"/>
         <source>The named pipe "%1" was closed on the other end.</source>
         <translation>הצינור בעל השם "%1" נסגר בקצה השני.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="613"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="605"/>
         <source>Pipe Error</source>
         <translation>שגיאת צינור</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="609"/>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="613"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="602"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="605"/>
         <source>Could not open named pipe: %1</source>
         <translation>לא ניתן לפתוח צינור בעל שם: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="854"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="846"/>
         <source>Mode</source>
         <translation>מצב</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="857"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="849"/>
         <source>Launch Process</source>
         <translation>הפעלת תהליך</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="857"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="849"/>
         <source>Named Pipe</source>
         <translation>צינור בעל שם</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="862"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="854"/>
         <source>Executable</source>
         <translation>קובץ הפעלה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="869"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="861"/>
         <source>Arguments</source>
         <translation>ארגומנטים</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="876"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="868"/>
         <source>Working Directory</source>
         <translation>ספריית עבודה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="883"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="875"/>
         <source>Pipe Path</source>
         <translation>נתיב צינור</translation>
     </message>
@@ -12657,187 +13114,187 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::UART</name>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="114"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="115"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="448"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="487"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="111"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="112"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="444"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="483"/>
         <source>None</source>
         <translation>ללא</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="298"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="562"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="294"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="557"/>
         <source>Failed to set baud rate</source>
         <translation>כשל בהגדרת קצב שידור</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="299"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="295"/>
         <source>Baud rate %1 rejected for port "%2": %3</source>
         <translation>קצב שידור %1 נדחה עבור יציאה "%2": %3</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="320"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="315"/>
         <source>Failed to connect to serial port "%1"</source>
         <translation>כשל בהתחברות ליציאה טורית "%1"</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="406"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="797"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="402"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="792"/>
         <source>Select Port</source>
         <translation>בחר פורט</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="449"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="445"/>
         <source>Even</source>
         <translation>זוגי</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="450"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="446"/>
         <source>Odd</source>
         <translation>אי-זוגי</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="451"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="447"/>
         <source>Space</source>
         <translation>רווח</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="452"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="448"/>
         <source>Mark</source>
         <translation>סימון</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="488"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="484"/>
         <source>RTS/CTS</source>
         <translation>RTS/CTS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="489"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="485"/>
         <source>XON/XOFF</source>
         <translation>XON/XOFF</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="563"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="558"/>
         <source>Baud rate %1 rejected: %2</source>
         <translation>קצב באוד %1 נדחה: %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="626"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="621"/>
         <source>"%1" is not a valid path</source>
         <translation>"%1" אינו נתיב חוקי</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="627"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="622"/>
         <source>Please type another path to register a custom serial device</source>
         <translation>נא להזין נתיב אחר לרישום התקן טורי מותאם אישית</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="880"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="875"/>
         <source>Unknown</source>
         <translation>לא ידוע</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="882"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="876"/>
         <source>Critical error on serial port "%1"</source>
         <translation>שגיאה קריטית ביציאה הטורית "%1"</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="883"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="877"/>
         <source>Unknown error</source>
         <translation>שגיאה לא ידועה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="909"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="903"/>
         <source>No error occurred.</source>
         <translation>לא אירעה שגיאה.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="910"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="904"/>
         <source>The specified device could not be found. Check the connection and try again.</source>
         <translation>ההתקן המצוין לא נמצא. יש לבדוק את החיבור ולנסות שוב.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="911"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="905"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
         <translation>הגישה נדחתה. יש לוודא שליישום יש הרשאות גישה נדרשות להתקן.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="912"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="906"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
         <translation>פתיחת ההתקן נכשלה. ייתכן שהוא כבר בשימוש או שאינו זמין.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="913"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="907"/>
         <source>An error occurred while writing data to the device.</source>
         <translation>אירעה שגיאה בעת כתיבת נתונים להתקן.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="914"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="908"/>
         <source>An error occurred while reading data from the device.</source>
         <translation>אירעה שגיאה בעת קריאת נתונים מההתקן.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="915"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="909"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
         <translation>אירעה שגיאת משאב קריטית. ייתכן שההתקן נותק או שאינו זמין עוד.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="916"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="910"/>
         <source>The requested operation is not supported on this device.</source>
         <translation>הפעולה המבוקשת אינה נתמכת בהתקן זה.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="917"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="911"/>
         <source>An unknown error occurred. Check the device and try again.</source>
         <translation>אירעה שגיאה לא ידועה. בדוק את ההתקן ונסה שוב.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="918"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="912"/>
         <source>The operation timed out. The device may not be responding.</source>
         <translation>תם הזמן המוקצב לפעולה. ייתכן שההתקן אינו מגיב.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="919"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="913"/>
         <source>The device is not open. Open the device before attempting this operation.</source>
         <translation>ההתקן אינו פתוח. פתח את ההתקן לפני ביצוע פעולה זו.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1081"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1075"/>
         <source>Serial Port</source>
         <translation>יציאה טורית</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1089"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1083"/>
         <source>Baud Rate</source>
         <translation>קצב שידור</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1097"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1091"/>
         <source>Parity</source>
         <translation>זוגיות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1105"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1099"/>
         <source>Data Bits</source>
         <translation>סיביות נתונים</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1113"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1107"/>
         <source>Stop Bits</source>
         <translation>סיביות עצירה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1121"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1115"/>
         <source>Flow Control</source>
         <translation>בקרת זרימה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1129"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1123"/>
         <source>DTR</source>
         <translation>DTR</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1136"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1130"/>
         <source>Auto-Reconnect</source>
         <translation>התחברות מחדש אוטומטית</translation>
     </message>
@@ -12845,33 +13302,33 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::USB</name>
     <message>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="170"/>
         <location filename="../../src/IO/Drivers/USB.cpp" line="177"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="185"/>
         <source>USB Error</source>
         <translation>שגיאת USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="178"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="171"/>
         <source>Failed to initialize the USB subsystem. Check that libusb is available on your system.</source>
         <translation>אתחול מערכת המשנה של USB נכשל. ודא ש-libusb זמין במערכת שלך.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="185"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="177"/>
         <source>No USB device selected. Select a device and try again.</source>
         <translation>לא נבחר התקן USB. בחר התקן ונסה שוב.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="190"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="182"/>
         <source>Unknown Device</source>
         <translation>התקן לא ידוע</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="195"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="186"/>
         <source>Failed to open "%1"</source>
         <translation>פתיחת "%1" נכשלה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="196"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="187"/>
         <source>Could not open the USB device: %1.
 
 On Linux, ensure you have read/write permission on the device node (add a udev rule or run as root). On macOS, the kernel driver may need to be detached first.</source>
@@ -12880,20 +13337,20 @@ On Linux, ensure you have read/write permission on the device node (add a udev r
 ב-Linux, ודא שיש לך הרשאת קריאה/כתיבה לצומת ההתקן (הוסף כלל udev או הרץ כ-root). ב-macOS, ייתכן שיהיה צורך לנתק תחילה את מנהל ההתקן של הליבה.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="216"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="605"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="207"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="596"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1126"/>
         <location filename="../../src/IO/Drivers/USB.cpp" line="1137"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1149"/>
         <source>USB Device Error</source>
         <translation>שגיאת התקן USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="394"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="385"/>
         <source>No Usable IN Endpoints</source>
         <translation>אין נקודות קצה IN שמישות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="815"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="805"/>
         <source>No isochronous IN endpoint was found on this device, but bulk or interrupt endpoints are available.
 
 Switch the Transfer Mode to "Bulk/Interrupt Stream" and try again.</source>
@@ -12902,7 +13359,7 @@ Switch the Transfer Mode to "Bulk/Interrupt Stream" and try again.</source>
 החלף את מצב ההעברה ל-"זרם בתפזורת/הפרעה" ונסה שוב.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="820"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="810"/>
         <source>No bulk or interrupt IN endpoint was found on this device, but isochronous endpoints are available.
 
 Switch the Transfer Mode to "Isochronous" and try again.</source>
@@ -12911,7 +13368,7 @@ Switch the Transfer Mode to "Isochronous" and try again.</source>
 החלף את מצב ההעברה ל-"איזוכרוני" ונסה שוב.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="824"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="814"/>
         <source>No usable IN endpoint was found on this device.
 
 The device may not expose data endpoints in its active configuration, or it may speak a dedicated protocol. Protocol adapters (e.g. CAN or Modbus interfaces) should be connected through their own driver.</source>
@@ -12920,7 +13377,7 @@ The device may not expose data endpoints in its active configuration, or it may 
 ייתכן שההתקן אינו חושף נקודות קצה לנתונים בתצורה הפעילה שלו, או שהוא משתמש בפרוטוקול ייעודי. מתאמי פרוטוקול (למשל ממשקי CAN או Modbus) צריכים להתחבר דרך מנהל ההתקן שלהם.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1138"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1127"/>
         <source>Could not claim interface %1 on the USB device.
 
 Another driver or application may already have it open. On Linux, try unloading the kernel driver (e.g. cdc_acm) or adding a udev rule.</source>
@@ -12929,97 +13386,97 @@ Another driver or application may already have it open. On Linux, try unloading 
 ייתכן שמנהל התקן או יישום אחר כבר פתח אותו. ב-Linux, נסה לפרוק את מנהל ההתקן של הליבה (למשל cdc_acm) או הוסף כלל udev.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1150"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1138"/>
         <source>Could not activate alternate setting %1 on interface %2. The selected endpoint is not reachable.</source>
         <translation>לא ניתן להפעיל הגדרה חלופית %1 בממשק %2. נקודת הקצה שנבחרה אינה נגישה.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1181"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1168"/>
         <source>USB Device Warning</source>
         <translation>אזהרת התקן USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1182"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1169"/>
         <source>The selected OUT endpoint could not be activated. Continuing in read-only mode.</source>
         <translation>לא ניתן להפעיל את נקודת הקצה OUT שנבחרה. ממשיך במצב קריאה בלבד.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1416"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1402"/>
         <source>No device connected in Advanced Control mode.</source>
         <translation>אין התקן מחובר במצב בקרה מתקדם.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1421"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1407"/>
         <source>A control transfer is already in progress.</source>
         <translation>העברת בקרה כבר מתבצעת.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1431"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1417"/>
         <source>Invalid setup field: request type, request, wValue, and wIndex must be hex.</source>
         <translation>שדה הגדרה לא תקין: סוג הבקשה, בקשה, wValue ו-wIndex חייבים להיות הקסדצימליים.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1441"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1427"/>
         <source>Invalid data payload: expected a sequence of hex bytes.</source>
         <translation>מטען נתונים לא תקין: צפויה רצף של בתים הקסדצימליים.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1447"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1433"/>
         <source>Invalid transfer length (0-%1 bytes).</source>
         <translation>אורך העברה לא תקין (0-%1 בתים).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1465"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1451"/>
         <source>Could not allocate the control transfer.</source>
         <translation>לא ניתן להקצות את העברת הבקרה.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1492"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1478"/>
         <source>Failed to submit control transfer: %1.</source>
         <translation>שליחת העברת הבקרה נכשלה: %1.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1520"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1506"/>
         <source>Transfer complete: %1 byte(s).</source>
         <translation>ההעברה הושלמה: %1 בתים.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1527"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1513"/>
         <source>Control transfer failed: %1.</source>
         <translation>העברת הבקרה נכשלה: %1.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="372"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="363"/>
         <source>Select Device</source>
         <translation>בחר התקן</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="396"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="387"/>
         <source>Select IN Endpoint</source>
         <translation>בחר נקודת קצה IN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="408"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="399"/>
         <source>None (Read-only)</source>
         <translation>ללא (קריאה בלבד)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="483"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="474"/>
         <source>Enable Advanced USB Control Transfers?</source>
         <translation>הפעל העברות בקרה מתקדמות של USB?</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="484"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="475"/>
         <source>This enables control transfers in addition to bulk transfers. Sending incorrect control requests can crash or damage connected hardware. Only enable this if you know what you are doing.</source>
         <translation>זה מאפשר העברות בקרה בנוסף להעברות בתפזורת. שליחת בקשות בקרה שגויות עלולה לקרוס או לפגוע בחומרה המחוברת. הפעל זאת רק אם אתה יודע מה אתה עושה.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="488"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="479"/>
         <source>Advanced USB Mode</source>
         <translation>מצב USB מתקדם</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="606"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="597"/>
         <source>The USB device was disconnected or encountered a fatal read error.</source>
         <translation>התקן ה-USB נותק או נתקל בשגיאת קריאה קריטית.</translation>
     </message>
@@ -13048,12 +13505,12 @@ The device may not expose data endpoints in its active configuration, or it may 
 ייתכן שההתקן אינו חושף נקודות קצה לנתונים בתצורה הפעילה שלו, או שהוא דורש מנהל התקן ספציפי.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1665"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1651"/>
         <source>USB Device</source>
         <translation>התקן USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1673"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1659"/>
         <source>Transfer Mode</source>
         <translation>מצב העברה</translation>
     </message>
@@ -13062,32 +13519,32 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation type="vanished">זרם Bulk</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1676"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1662"/>
         <source>Advanced Control</source>
         <translation>בקרה מתקדמת</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1676"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1662"/>
         <source>Isochronous</source>
         <translation>Isochronous</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1676"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1662"/>
         <source>Bulk/Interrupt Stream</source>
         <translation>זרם Bulk/Interrupt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1681"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1667"/>
         <source>IN Endpoint</source>
         <translation>נקודת קצה IN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1689"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1675"/>
         <source>OUT Endpoint</source>
         <translation>נקודת קצה OUT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1697"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1683"/>
         <source>ISO Packet Size</source>
         <translation>גודל מנת ISO</translation>
     </message>
@@ -14156,12 +14613,12 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
 <context>
     <name>MDF4::Export</name>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="888"/>
+        <location filename="../../src/MDF4/Export.cpp" line="765"/>
         <source>MDF4 Export is a Pro feature.</source>
         <translation>ייצוא MDF4 הוא תכונת Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="889"/>
+        <location filename="../../src/MDF4/Export.cpp" line="766"/>
         <source>This feature requires a license. Please purchase one to enable MDF4 export.</source>
         <translation>תכונה זו דורשת רישיון. יש לרכוש רישיון כדי לאפשר ייצוא MDF4.</translation>
     </message>
@@ -14372,149 +14829,149 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
 <context>
     <name>MQTT::Publisher</name>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="829"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="857"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="830"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="858"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="831"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="859"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="833"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="861"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="834"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="862"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="835"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="863"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3 ומעלה</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="836"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="864"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2 ומעלה</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="837"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="865"/>
         <source>Any Protocol</source>
         <translation>כל פרוטוקול</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="838"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="866"/>
         <source>Secure Protocols Only</source>
         <translation>פרוטוקולים מאובטחים בלבד</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="840"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="868"/>
         <source>None</source>
         <translation>ללא</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="841"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="869"/>
         <source>Query Peer</source>
         <translation>שאילתת עמית</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="842"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="870"/>
         <source>Verify Peer</source>
         <translation>אימות עמית</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="843"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="871"/>
         <source>Auto Verify Peer</source>
         <translation>אימות עמית אוטומטי</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1200"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1235"/>
         <source>Raw RX Data</source>
         <translation>נתוני RX גולמיים</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1201"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1236"/>
         <source>Custom Script</source>
         <translation>סקריפט מותאם אישית</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1202"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1237"/>
         <source>Dashboard Data (CSV)</source>
         <translation>נתוני לוח בקרה (CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1203"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1238"/>
         <source>Dashboard Data (JSON)</source>
         <translation>נתוני לוח בקרה (JSON)</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1370"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1405"/>
         <source>MQTT publisher unavailable</source>
         <translation>מפרסם MQTT אינו זמין</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1371"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1406"/>
         <source>A valid commercial license is required to use MQTT publishing.</source>
         <translation>נדרש רישיון מסחרי תקף לשימוש בפרסום MQTT.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1373"/>
-        <location filename="../../src/MQTT/Publisher.cpp" line="2061"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1408"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2096"/>
         <source>MQTT Test Connection</source>
         <translation>בדיקת חיבור MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1392"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1427"/>
         <source>Select PEM Certificates Directory</source>
         <translation>בחירת ספריית אישורי PEM</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1451"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1486"/>
         <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
         <translation>קבצי PEM (*.pem *.crt *.cer *.key);;כל הקבצים (*)</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1477"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1512"/>
         <source>Select Client Certificate</source>
         <translation>בחר אישור לקוח</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1485"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1520"/>
         <source>Select Private Key</source>
         <translation>בחר מפתח פרטי</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="2058"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2093"/>
         <source>MQTT broker reachable</source>
         <translation>ברוקר MQTT נגיש</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="2058"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2093"/>
         <source>MQTT broker unreachable</source>
         <translation>ברוקר MQTT לא נגיש</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="2072"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2107"/>
         <source>MQTT broker connection failed</source>
         <translation>חיבור לברוקר MQTT נכשל</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="2072"/>
-        <location filename="../../src/MQTT/Publisher.cpp" line="2229"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2107"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2264"/>
         <source>MQTT Publisher</source>
         <translation>מפרסם MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="2226"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="2261"/>
         <source>MQTT Client Certificate Error</source>
         <translation>שגיאת אישור לקוח MQTT</translation>
     </message>
@@ -14726,17 +15183,17 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
 <context>
     <name>MQTT::PublisherWorker</name>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="701"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="729"/>
         <source>Configure broker hostname and port before testing the connection.</source>
         <translation>הגדר שם מארח ופורט של Broker לפני בדיקת החיבור.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="737"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="765"/>
         <source>Successfully connected to %1:%2.</source>
         <translation>התחבר בהצלחה אל %1:%2.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="748"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="776"/>
         <source>Timed out after 5 seconds without reaching the broker.</source>
         <translation>תם הזמן הקצוב לאחר 5 שניות ללא הגעה ל־Broker.</translation>
     </message>
@@ -16084,7 +16541,7 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>MultiPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="300"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="372"/>
         <source>Interpolation: %1</source>
         <translation>אינטרפולציה: %1</translation>
     </message>
@@ -16093,47 +16550,47 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">הצג מקרא</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="328"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="400"/>
         <source>Show X Axis Label</source>
         <translation>הצג תווית ציר X</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="339"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="411"/>
         <source>Show Y Axis Label</source>
         <translation>הצג תווית ציר Y</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="351"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="423"/>
         <source>Show Crosshair</source>
         <translation>הצג כוונת</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="421"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="493"/>
         <source>Pause</source>
         <translation>השהה</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="421"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="493"/>
         <source>Resume</source>
         <translation>המשך</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="366"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="438"/>
         <source>Sweep / Trigger Mode</source>
         <translation>מצב סריקה / טריגר</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="378"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="450"/>
         <source>Trigger Settings</source>
         <translation>הגדרות טריגר</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="402"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="474"/>
         <source>Reset View</source>
         <translation>אפס תצוגה</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="408"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="480"/>
         <source>Axis Range Settings</source>
         <translation>הגדרות טווח צירים</translation>
     </message>
@@ -17202,57 +17659,67 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>Plot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="294"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="383"/>
         <source>Interpolation: %1</source>
         <translation>אינטרפולציה: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="307"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="396"/>
         <source>Show Area Under Plot</source>
         <translation>הצג שטח מתחת לגרף</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="326"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="415"/>
         <source>Show X Axis Label</source>
         <translation>הצג תווית ציר X</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="337"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="426"/>
         <source>Show Y Axis Label</source>
         <translation>הצג תווית ציר Y</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="349"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="438"/>
         <source>Show Crosshair</source>
         <translation>הצג כוונת</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="419"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="494"/>
+        <source>Keep fewer past sweeps</source>
+        <translation>שמור פחות סריקות קודמות</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="512"/>
+        <source>Keep more past sweeps</source>
+        <translation>שמור יותר סריקות קודמות</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="557"/>
         <source>Pause</source>
         <translation>השהה</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="419"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="557"/>
         <source>Resume</source>
         <translation>המשך</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="364"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="453"/>
         <source>Sweep / Trigger Mode</source>
         <translation>מצב סריקה / טריגר</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="376"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="465"/>
         <source>Trigger Settings</source>
         <translation>הגדרות טריגר</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="400"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="538"/>
         <source>Reset View</source>
         <translation>אפס תצוגה</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="406"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="544"/>
         <source>Axis Range Settings</source>
         <translation>הגדרות טווח צירים</translation>
     </message>
@@ -17341,22 +17808,108 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>PlotWidget</name>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1480"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1955"/>
         <source>Time</source>
         <translation>זמן</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1502"/>
         <source>ΔX: %1  ΔY: %2 — Drag to move, right-click to clear</source>
-        <translation>ΔX: %1  ΔY: %2 — גרור להזזה, לחץ ימני לניקוי</translation>
+        <translation type="vanished">ΔX: %1  ΔY: %2 — גרור להזזה, לחץ ימני לניקוי</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="540"/>
+        <source>Drag to move, right-click to clear</source>
+        <translation>גרור להזזה, לחץ ימני לניקוי</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="541"/>
+        <source>ΔX: %1  ΔY: %2</source>
+        <translation>ΔX: %1  ΔY: %2</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="543"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="550"/>
+        <source>%1 — %2</source>
+        <translation>%1 — %2</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="547"/>
+        <source>%1  1/ΔX: %2</source>
+        <translation>%1  1/ΔX: %2</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1446"/>
+        <source>Add marker here...</source>
+        <translation>הוסף סמן כאן...</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1453"/>
+        <source>Remove marker "%1"</source>
+        <translation>הסר סמן "%1"</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1459"/>
+        <source>Clear all markers</source>
+        <translation>נקה את כל הסמנים</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1468"/>
+        <source>Set time zero here</source>
+        <translation>הגדר זמן אפס כאן</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1468"/>
+        <source>Set zero here</source>
+        <translation>הגדר אפס כאן</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1474"/>
+        <source>Reset time zero</source>
+        <translation>אפס זמן אפס</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1474"/>
+        <source>Reset zero</source>
+        <translation>אפס אפס</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1482"/>
+        <source>Hover marker</source>
+        <translation>סמן ריחוף</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/PlotWidget.qml" line="1504"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1512"/>
+        <source>M%1</source>
+        <translation>M%1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1520"/>
+        <source>Marker name:</source>
+        <translation>שם סמן:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1532"/>
+        <source>Add</source>
+        <translation>הוסף</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1537"/>
+        <source>Cancel</source>
+        <translation>ביטול</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1956"/>
+        <source>%1 from zero</source>
+        <translation>%1 מאפס</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1982"/>
         <source>Click to place cursor</source>
         <translation>לחץ למיקום סמן</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1506"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1984"/>
         <source>Click to place second cursor — Drag to move</source>
         <translation>לחץ למיקום סמן שני — גרור להזזה</translation>
     </message>
@@ -18562,62 +19115,62 @@ Click Refresh to update the list.</source>
 <context>
     <name>Publisher</name>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="79"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="80"/>
         <source>No error</source>
         <translation>אין שגיאה</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="81"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="82"/>
         <source>The broker rejected the connection due to an unsupported protocol version. Match the broker's MQTT version and try again.</source>
         <translation>ה-Broker דחה את החיבור עקב גרסת פרוטוקול לא נתמכת. יש להתאים את גרסת MQTT של ה-Broker ולנסות שוב.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="84"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="85"/>
         <source>The broker rejected the client ID. It may be malformed, too long, or already in use. Regenerate it and try again.</source>
         <translation>ה-Broker דחה את מזהה הלקוח. ייתכן שהוא פגום, ארוך מדי או כבר בשימוש. יש ליצור אותו מחדש ולנסות שוב.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="87"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="88"/>
         <source>The network reached the broker, but the broker is currently unavailable. Verify its status and try again later.</source>
         <translation>הרשת הגיעה ל-Broker, אך ה-Broker אינו זמין כעת. יש לאמת את מצבו ולנסות שוב מאוחר יותר.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="90"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="91"/>
         <source>The username or password is incorrect or malformed. Double-check the credentials and try again.</source>
         <translation>שם המשתמש או הסיסמה שגויים או פגומים. יש לבדוק שוב את פרטי ההזדהות ולנסות שוב.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="93"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="94"/>
         <source>The broker denied the connection due to insufficient permissions. Verify that the account has the required ACLs.</source>
         <translation>ה-Broker דחה את החיבור עקב הרשאות לא מספיקות. יש לאמת שלחשבון יש את הרשאות ה-ACL הנדרשות.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="96"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="97"/>
         <source>A network or transport-layer issue prevented the connection. Check connectivity, ports, and TLS configuration.</source>
         <translation>בעיית רשת או שכבת תעבורה מנעה את החיבור. יש לבדוק קישוריות, פורטים והגדרות TLS.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="99"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="100"/>
         <source>The client detected an MQTT protocol violation and closed the connection. Verify broker and client compatibility.</source>
         <translation>הלקוח זיהה הפרה של פרוטוקול MQTT וסגר את החיבור. יש לוודא תאימות בין Broker ללקוח.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="102"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="103"/>
         <source>An unexpected error occurred. Check the broker logs and the application console for details.</source>
         <translation>אירעה שגיאה בלתי צפויה. יש לבדוק את יומני ה-Broker ואת קונסולת היישום לפרטים.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="105"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="106"/>
         <source>An MQTT 5 protocol-level error occurred. Inspect the broker's reason code for details.</source>
         <translation>אירעה שגיאה ברמת פרוטוקול MQTT 5. יש לבדוק את קוד הסיבה של ה-Broker לפרטים.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="109"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="110"/>
         <source>Unspecified MQTT error (code %1).</source>
         <translation>שגיאת MQTT לא מוגדרת (קוד %1).</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="779"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="807"/>
         <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
         <translation>אישור לקוח מוגדר: ודא שהוא תואם למפתח הפרטי ומופעל ב-broker.</translation>
     </message>
@@ -18669,42 +19222,42 @@ Click Refresh to update the list.</source>
         <translation>יציאה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1313"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1308"/>
         <source>Time (s)</source>
         <translation>זמן (שניות)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1392"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1387"/>
         <source>%1  %2 dB</source>
         <translation>%1  %2 dB</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1504"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1499"/>
         <source>Freq: %1</source>
         <translation>תדר: %1</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1507"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1502"/>
         <source>Time: −%1</source>
         <translation>זמן: −%1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1409"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1414"/>
         <source>Invalid Bluetooth adapter!</source>
         <translation>מתאם Bluetooth לא תקין!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1412"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1417"/>
         <source>Unsuported platform or operating system</source>
         <translation>פלטפורמה או מערכת הפעלה לא נתמכת</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1415"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1420"/>
         <source>Unsupported discovery method</source>
         <translation>שיטת גילוי לא נתמכת</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1418"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1423"/>
         <source>General I/O error</source>
         <translation>שגיאת קלט/פלט כללית</translation>
     </message>
@@ -19200,32 +19753,32 @@ function parse(%1) { ... }
         <translation>הפעלה לא מקוונת</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1384"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1370"/>
         <source>timed out</source>
         <translation>פסק זמן</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1386"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1372"/>
         <source>cancelled</source>
         <translation>בוטל</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1388"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1374"/>
         <source>stalled (request not supported)</source>
         <translation>נתקע (בקשה לא נתמכת)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1390"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1376"/>
         <source>device disconnected</source>
         <translation>התקן מנותק</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1392"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1378"/>
         <source>buffer overflow</source>
         <translation>גלישת חוצץ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1394"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1380"/>
         <source>transfer error</source>
         <translation>שגיאת העברה</translation>
     </message>
@@ -19283,6 +19836,114 @@ function parse(%1) { ... }
         <location filename="../../src/MDF4/PlayerLoaderWorker.cpp" line="509"/>
         <source>Failed to read file structure. The file may be corrupted.</source>
         <translation>קריאת מבנה הקובץ נכשלה. הקובץ עשוי להיות פגום.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="432"/>
+        <source>Host not found</source>
+        <translation>המארח לא נמצא</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="456"/>
+        <source>Connection failed</source>
+        <translation>החיבור נכשל</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="464"/>
+        <source>Connection timed out</source>
+        <translation>פסק זמן לחיבור</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="332"/>
+        <source>%1 (column %2)</source>
+        <translation>%1 (עמודה %2)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="343"/>
+        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="602"/>
+        <source>expression too long</source>
+        <translation>ביטוי ארוך מדי</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="349"/>
+        <source>expression too deeply nested</source>
+        <translation>ביטוי מקונן עמוק מדי</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="368"/>
+        <source>expected '%1'</source>
+        <translation>צפוי '%1'</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="408"/>
+        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="463"/>
+        <source>unknown name '%1'</source>
+        <translation>שם לא ידוע '%1'</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="425"/>
+        <source>table() is not available for this source</source>
+        <translation>table() אינו זמין עבור מקור זה</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="428"/>
+        <source>table() needs a table name first</source>
+        <translation>table() דורש שם טבלה תחילה</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="436"/>
+        <source>table() needs a register name second</source>
+        <translation>table() דורש שם רגיסטר שני</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="441"/>
+        <source>unknown register '%1.%2'</source>
+        <translation>רגיסטר לא ידוע '%1.%2'</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="459"/>
+        <source>sample() needs a dataset name first</source>
+        <translation>sample() דורש שם מערך נתונים תחילה</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="499"/>
+        <source>%1() takes %2 argument(s)</source>
+        <translation>%1() מקבל %2 ארגומנט(ים)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="529"/>
+        <source>unknown function '%1'</source>
+        <translation>פונקציה לא ידועה '%1'</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="540"/>
+        <source>too many nested parentheses</source>
+        <translation>יותר מדי סוגריים מקוננים</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="563"/>
+        <source>unexpected end of expression</source>
+        <translation>סוף ביטוי לא צפוי</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="565"/>
+        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="658"/>
+        <source>unexpected '%1'</source>
+        <translation>'%1' לא צפוי</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="618"/>
+        <source>too many nested conditionals</source>
+        <translation>יותר מדי תנאים מקוננים</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="652"/>
+        <source>empty expression</source>
+        <translation>ביטוי ריק</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="661"/>
+        <source>malformed expression</source>
+        <translation>ביטוי פגום</translation>
     </message>
 </context>
 <context>
@@ -19984,242 +20645,276 @@ function parse(%1) { ... }
         <translation>פרטי סשן</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="47"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="48"/>
         <source>Reproduced</source>
         <translation>שוכפל</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="50"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="51"/>
         <source>Diverged</source>
         <translation>סטה</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="53"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="54"/>
         <source>Partially verified</source>
         <translation>אומת חלקית</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="56"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="57"/>
         <source>Not mechanically verifiable</source>
         <translation>לא ניתן לאימות מכני</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="59"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="60"/>
         <source>Verification error</source>
         <translation>שגיאת אימות</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="61"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="62"/>
         <source>Never verified</source>
         <translation>מעולם לא אומת</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="69"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="70"/>
         <source>Identical</source>
         <translation>זהה</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="72"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="73"/>
         <source>Value drift</source>
         <translation>סטיית ערכים</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="75"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="76"/>
         <source>Coverage drift</source>
         <translation>סטיית כיסוי</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="78"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="79"/>
         <source>Structural drift</source>
         <translation>סטייה מבנית</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="81"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="82"/>
         <source>Not mechanically comparable</source>
         <translation>לא ניתן להשוואה מכנית</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="83"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="84"/>
         <source>Check failed</source>
         <translation>הבדיקה נכשלה</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="163"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="113"/>
+        <source>%1 B</source>
+        <translation>%1 B</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="116"/>
+        <source>%1 KB</source>
+        <translation>%1 KB</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="119"/>
+        <source>%1 MB</source>
+        <translation>%1 MB</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="121"/>
+        <source>%1 GB</source>
+        <translation>%1 GB</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="145"/>
+        <source>%1 samples over %2 s, %3 datasets</source>
+        <translation>%1 דגימות על פני %2 שניות, %3 מערכי נתונים</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="218"/>
         <source>Select a session to view details.</source>
         <translation>בחר סשן כדי להציג פרטים.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="205"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="260"/>
         <source>Project:</source>
         <translation>פרויקט:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="218"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="273"/>
         <source>Started:</source>
         <translation>התחיל:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="231"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="286"/>
         <source>Ended:</source>
         <translation>הסתיים:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="237"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="292"/>
         <source>(in progress)</source>
         <translation>(בתהליך)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="244"/>
         <source>Frames:</source>
-        <translation>מסגרות:</translation>
+        <translation type="vanished">מסגרות:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="260"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="299"/>
+        <source>Size:</source>
+        <translation>גודל:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="313"/>
+        <source>Stream data:</source>
+        <translation>נתוני זרם:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="330"/>
         <source>Notes</source>
         <translation>הערות</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="275"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="345"/>
         <source>Add session notes…</source>
         <translation>הוסף הערות סשן…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="276"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="346"/>
         <source>Notes are read-only for completed sessions.</source>
         <translation>הערות הן לקריאה בלבד עבור סשנים שהושלמו.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="297"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="367"/>
         <source>Tags</source>
         <translation>תגיות</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="361"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="431"/>
         <source>New tag…</source>
         <translation>תגית חדשה…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="368"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="438"/>
         <source>Add</source>
         <translation>הוסף</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="385"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="455"/>
         <source>Reproducibility</source>
         <translation>שחזוריות</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="413"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="483"/>
         <source>Checked %1 with version %2</source>
         <translation>נבדק %1 עם גרסה %2</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="456"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="526"/>
         <source>Re-runs the archived raw data through the current build and compares it against the recorded values. This proves the archive is reproducible; it is not a determinism guarantee, a safety function, or a calibration authority.</source>
         <translation>מריץ מחדש את הנתונים הגולמיים המאוחסנים דרך הגרסה הנוכחית ומשווה אותם לערכים המתועדים. זה מוכיח שהארכיון ניתן לשחזור; זו אינה ערובה לדטרמיניזם, פונקציית בטיחות או סמכות כיול.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="468"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="538"/>
         <source>Drift vs Current Project</source>
         <translation>סטייה מול הפרויקט הנוכחי</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="489"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="559"/>
         <source>Compares this session's decoded values against the project currently open in the editor. The result reflects a transient candidate and is not stored with the session.</source>
         <translation>משווה את הערכים המפוענחים של סשן זה מול הפרויקט הפתוח כעת בעורך. התוצאה משקפת מועמד זמני ואינה נשמרת עם הסשן.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="511"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="581"/>
         <source>Candidate: %1 (%2)</source>
         <translation>מועמד: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="512"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="582"/>
         <source>untitled</source>
         <translation>ללא שם</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="523"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="593"/>
         <source>Archived-configuration reproduction status: %1</source>
         <translation>סטטוס שחזור תצורה ארכיונית: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="577"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="647"/>
         <source>%1: only in the current project</source>
         <translation>%1: רק בפרויקט הנוכחי</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="580"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="650"/>
         <source>%1: only in the recorded project</source>
         <translation>%1: רק בפרויקט המוקלט</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="582"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="652"/>
         <source>%1: %2 of %3 values changed, %4 missing, %5 extra</source>
         <translation>%1: %2 מתוך %3 ערכים השתנו, %4 חסרים, %5 נוספים</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="598"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="668"/>
         <source>…and %1 more datasets are affected.</source>
         <translation>…ו-%1 מערכי נתונים נוספים מושפעים.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="620"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="690"/>
         <source>Replay</source>
         <translation>הפעל מחדש</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="628"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="698"/>
         <source>Export CSV</source>
         <translation>ייצוא CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="635"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="705"/>
         <source>Generate Report</source>
         <translation>צור דוח</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="645"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="715"/>
         <source>Only completed sessions can be verified</source>
         <translation>ניתן לאמת רק סשנים שהושלמו</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="649"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="719"/>
         <source>Verifying…</source>
         <translation>מאמת…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="650"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="720"/>
         <source>Verify</source>
         <translation>אמת</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="657"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="727"/>
         <source>Only completed sessions can be checked against a project</source>
         <translation>ניתן לבדוק מול פרויקט רק סשנים שהושלמו</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="660"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="730"/>
         <source>Checking…</source>
         <translation>בודק…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="660"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="730"/>
         <source>Check Project</source>
         <translation>בדוק מול פרויקט</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="664"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="734"/>
         <source>View Report</source>
         <translation>הצג דוח</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="675"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="745"/>
         <source>Delete</source>
         <translation>מחק</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="681"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="751"/>
         <source>Unlock the session file to delete sessions</source>
         <translation>בטל נעילת קובץ הסשן כדי למחוק סשנים</translation>
     </message>
@@ -20232,62 +20927,86 @@ function parse(%1) { ... }
         <translation>סשנים</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="35"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="39"/>
+        <source>%1 B</source>
+        <translation>%1 B</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="42"/>
+        <source>%1 KB</source>
+        <translation>%1 KB</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="45"/>
+        <source>%1 MB</source>
+        <translation>%1 MB</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="47"/>
+        <source>%1 GB</source>
+        <translation>%1 GB</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="56"/>
         <source>Reproduced</source>
         <translation>שוחזר</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="38"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="59"/>
         <source>Diverged</source>
         <translation>סטה</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="41"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="62"/>
         <source>Partial</source>
         <translation>חלקי</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="44"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="65"/>
         <source>Not verifiable</source>
         <translation>לא ניתן לאימות</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="47"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="68"/>
         <source>Error</source>
         <translation>שגיאה</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="107"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="128"/>
         <source>Search</source>
         <translation>חיפוש</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="127"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="148"/>
         <source>Date</source>
         <translation>תאריך</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="128"/>
-        <source>Frames</source>
-        <translation>מסגרות</translation>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="149"/>
+        <source>Size</source>
+        <translation>גודל</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="129"/>
+        <source>Frames</source>
+        <translation type="vanished">מסגרות</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="150"/>
         <source>Verified</source>
         <translation>אומת</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="130"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="151"/>
         <source>Tags</source>
         <translation>תגיות</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="249"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="270"/>
         <source>No sessions found.</source>
         <translation>לא נמצאו סשנים.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="250"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="271"/>
         <source>No session file open.</source>
         <translation>אין קובץ סשן פתוח.</translation>
     </message>
@@ -20295,136 +21014,136 @@ function parse(%1) { ... }
 <context>
     <name>Sessions::DatabaseManager</name>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1009"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1012"/>
         <source>Open Session File</source>
         <translation>פתח קובץ סשן</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1011"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1014"/>
         <source>Session files (*.db)</source>
         <translation>קבצי סשן (*.db)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1067"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1076"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1070"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1079"/>
         <source>Lock Session File</source>
         <translation>נעל קובץ סשן</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1068"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1071"/>
         <source>Choose a password to lock the session file:</source>
         <translation>בחר סיסמה לנעילת קובץ הסשן:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1077"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1080"/>
         <source>Confirm the password:</source>
         <translation>אשר את הסיסמה:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1085"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1088"/>
         <source>Passwords do not match</source>
         <translation>הסיסמאות אינן תואמות</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1086"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1089"/>
         <source>The two passwords you entered do not match. The session file was not locked.</source>
         <translation>שתי הסיסמאות שהזנת אינן תואמות. קובץ הסשן לא ננעל.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1122"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1125"/>
         <source>Unlock Session File</source>
         <translation>בטל נעילת קובץ סשן</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1123"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1126"/>
         <source>Enter the session file password:</source>
         <translation>הזן את סיסמת קובץ הסשן:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1133"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1136"/>
         <source>Incorrect password</source>
         <translation>סיסמה שגויה</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1134"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1137"/>
         <source>The password you entered does not match the one stored in the session file.</source>
         <translation>הסיסמה שהזנת אינה תואמת לזו השמורה בקובץ הסשן.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1226"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1229"/>
         <source>Session file locked</source>
         <translation>קובץ הסשן נעול</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1227"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1230"/>
         <source>Unlock the session file before deleting recorded sessions.</source>
         <translation>בטל נעילת קובץ הסשן לפני מחיקת סשנים מוקלטים.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1236"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1239"/>
         <source>Delete session from %1?</source>
         <translation>למחוק סשן מ-%1?</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1237"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1240"/>
         <source>All readings and raw data for this session are permanently removed.</source>
         <translation>כל הקריאות והנתונים הגולמיים של סשן זה יוסרו לצמיתות.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1239"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1242"/>
         <source>Delete Session</source>
         <translation>מחק סשן</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1380"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1383"/>
         <source>Export Session to CSV</source>
         <translation>ייצוא סשן ל-CSV</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1380"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1383"/>
         <source>CSV files (*.csv)</source>
         <translation>קבצי CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1460"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1463"/>
         <source>Loading session data…</source>
         <translation>טוען נתוני סשן…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1498"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1513"/>
         <source>Save PDF Report</source>
         <translation>שמור דוח PDF</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1498"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1513"/>
         <source>Save HTML Report</source>
         <translation>שמור דוח HTML</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1499"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1514"/>
         <source>PDF files (*.pdf)</source>
         <translation>קבצי PDF (*.PDF)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1499"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1514"/>
         <source>HTML files (*.html)</source>
         <translation>קבצי HTML (*.HTML)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1563"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1597"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1578"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1612"/>
         <source>Failed</source>
         <translation>נכשל</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1568"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1606"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1583"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1621"/>
         <source>Report Failed</source>
         <translation>הדוח נכשל</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1569"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1607"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1584"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1622"/>
         <source>Could not generate the report.</source>
         <translation>לא ניתן ליצור את הדוח.</translation>
     </message>
@@ -20433,62 +21152,62 @@ function parse(%1) { ... }
         <translation type="vanished">לא ניתן ליצור את הדוח. בדוק את נתיב הפלט ונסה שוב.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1597"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1612"/>
         <source>Done</source>
         <translation>הושלם</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1625"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1640"/>
         <source>Select logo image</source>
         <translation>בחירת תמונת לוגו</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1627"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1642"/>
         <source>Images (*.png *.jpg *.jpeg *.svg)</source>
         <translation>תמונות (*.png *.jpg *.jpeg *.svg)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1689"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1704"/>
         <source>No project data</source>
         <translation>אין נתוני פרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1690"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1705"/>
         <source>This session file does not contain an embedded project.</source>
         <translation>קובץ סשן זה אינו מכיל פרויקט משובץ.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1699"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1714"/>
         <source>Invalid project data</source>
         <translation>נתוני פרויקט לא תקינים</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1700"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1715"/>
         <source>The embedded project JSON is malformed and cannot be restored.</source>
         <translation>ה-JSON המוטמע של הפרויקט פגום ולא ניתן לשחזרו.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1710"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1725"/>
         <source>Restore Project</source>
         <translation>שחזור פרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1710"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1725"/>
         <source>Serial Studio projects (*.ssproj *.json)</source>
         <translation>פרויקטי Serial Studio (*.ssproj *.json)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1718"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1733"/>
         <source>Cannot write file</source>
         <translation>לא ניתן לכתוב קובץ</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1718"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1733"/>
         <source>Check file permissions and try again.</source>
         <translation>בדוק הרשאות קובץ ונסה שוב.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1828"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1843"/>
         <source>Cannot open session file</source>
         <translation>לא ניתן לפתוח קובץ סשן</translation>
     </message>
@@ -20496,41 +21215,42 @@ function parse(%1) { ... }
 <context>
     <name>Sessions::DatabaseWorker</name>
     <message>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="77"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="87"/>
         <source>Empty file path</source>
         <translation>נתיב קובץ ריק</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="171"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="226"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="343"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="414"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="439"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="467"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="507"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="696"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="762"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="181"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="238"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="355"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="426"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="451"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="479"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="519"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="799"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="873"/>
         <source>Database not open</source>
         <translation>מסד הנתונים אינו פתוח</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="263"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="286"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="275"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="298"/>
         <source>Database not open or empty label</source>
         <translation>מסד הנתונים אינו פתוח או תווית ריקה</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="388"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="400"/>
         <source>Invalid label</source>
         <translation>תווית לא חוקית</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="655"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="667"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="759"/>
         <source>Cancelled</source>
         <translation>בוטל</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="774"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="885"/>
         <source>Could not load session data</source>
         <translation>לא ניתן לטעון נתוני סשן</translation>
     </message>
@@ -20775,78 +21495,100 @@ function parse(%1) { ... }
 <context>
     <name>Sessions::Player</name>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="302"/>
+        <location filename="../../src/Sessions/Player.cpp" line="311"/>
         <source>Open Session File</source>
         <translation>פתח קובץ סשן</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="304"/>
+        <location filename="../../src/Sessions/Player.cpp" line="313"/>
         <source>Session files (*.db)</source>
         <translation>קבצי סשן (*.db)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="377"/>
+        <location filename="../../src/Sessions/Player.cpp" line="387"/>
         <source>Device Connection Active</source>
         <translation>חיבור למכשיר פעיל</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="378"/>
+        <location filename="../../src/Sessions/Player.cpp" line="388"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>כדי להשתמש בתכונה זו, יש להתנתק מהמכשיר. להמשיך?</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="426"/>
-        <location filename="../../src/Sessions/Player.cpp" line="507"/>
+        <location filename="../../src/Sessions/Player.cpp" line="436"/>
+        <location filename="../../src/Sessions/Player.cpp" line="520"/>
         <source>Cannot open session file</source>
         <translation>לא ניתן לפתוח קובץ סשן</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="427"/>
+        <location filename="../../src/Sessions/Player.cpp" line="437"/>
         <source>Unknown error</source>
         <translation>שגיאה לא ידועה</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="443"/>
+        <location filename="../../src/Sessions/Player.cpp" line="454"/>
         <source>No project data</source>
         <translation>אין נתוני פרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="444"/>
+        <location filename="../../src/Sessions/Player.cpp" line="455"/>
         <source>This session does not contain an embedded project file — the dashboard falls back to a quick-plot layout.</source>
         <translation>הסשן אינו מכיל קובץ פרויקט משובץ — לוח הבקרה עובר לפריסת quick-plot.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="508"/>
+        <location filename="../../src/Sessions/Player.cpp" line="521"/>
         <source>Check file permissions and try again.</source>
         <translation>בדוק הרשאות קובץ ונסה שוב.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Sessions/Player.cpp" line="674"/>
+        <source>Sessions</source>
+        <translation>סשנים</translation>
+    </message>
+    <message>
+        <location filename="../../src/Sessions/Player.cpp" line="675"/>
+        <source>Recording uses an older copy of the project</source>
+        <translation>ההקלטה משתמשת בעותק ישן יותר של הפרויקט</translation>
+    </message>
+    <message>
+        <location filename="../../src/Sessions/Player.cpp" line="676"/>
+        <source>The dashboard shown is the one embedded in the recording; the project on disk has changed since. Close the session to return to the current project.</source>
+        <translation>לוח המחוונים המוצג הוא זה המוטמע בהקלטה; הפרויקט בדיסק השתנה מאז. סגור את הסשן כדי לחזור לפרויקט הנוכחי.</translation>
     </message>
 </context>
 <context>
     <name>Sessions::PlayerLoaderWorker</name>
     <message>
-        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="69"/>
+        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="72"/>
         <source>This file does not contain any recording sessions.</source>
         <translation>קובץ זה אינו מכיל סשני הקלטה.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="144"/>
-        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="205"/>
-        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="224"/>
+        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="159"/>
+        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="195"/>
+        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="252"/>
+        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="320"/>
+        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="339"/>
         <source>Cancelled</source>
         <translation>בוטל</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="168"/>
+        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="211"/>
+        <source>Corrupt block timing in session %1</source>
+        <translation>תזמון בלוק פגום בסשן %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="283"/>
         <source>Empty file path</source>
         <translation>נתיב קובץ ריק</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="218"/>
+        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="333"/>
         <source>The selected session is missing its column definitions.</source>
         <translation>הסשן שנבחר חסר את הגדרות העמודות שלו.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="235"/>
+        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="355"/>
         <source>The selected session does not contain any frames.</source>
         <translation>הסשן שנבחר אינו מכיל מסגרות.</translation>
     </message>
@@ -22457,28 +23199,28 @@ function parse(%1) { ... }
 <context>
     <name>Terminal</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="166"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="178"/>
         <source>Copy</source>
         <translation>העתק</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="174"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="186"/>
         <source>Select all</source>
         <translation>בחר הכל</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="180"/>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="242"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="192"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="254"/>
         <source>Clear</source>
         <translation>נקה</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="257"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="269"/>
         <source>Find</source>
         <translation>חיפוש</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="285"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="297"/>
         <source>Collapse</source>
         <translation>כווץ</translation>
     </message>
@@ -22491,148 +23233,158 @@ function parse(%1) { ... }
         <translation type="vanished">רישום פלט קונסול לקובץ</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="388"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="417"/>
         <source>Settings</source>
         <translation>הגדרות</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="391"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="420"/>
         <source>Console settings</source>
         <translation>הגדרות קונסול</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="564"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="593"/>
         <source>Find in console</source>
         <translation>חיפוש בקונסול</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="601"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="630"/>
         <source>%1 of %2</source>
         <translation>%1 מתוך %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="602"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="631"/>
         <source>No results</source>
         <translation>אין תוצאות</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="614"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="643"/>
         <source>Match case</source>
         <translation>התאמת אותיות גדולות/קטנות</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="629"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="658"/>
         <source>Previous match</source>
         <translation>התאמה קודמת</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="640"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="669"/>
         <source>Next match</source>
         <translation>התאמה הבאה</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="650"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="679"/>
         <source>Close search</source>
         <translation>סגירת חיפוש</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="682"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="726"/>
         <source>Send a file to the connected device</source>
         <translation>שליחת קובץ להתקן המחובר</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="262"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="274"/>
         <source>Search console output</source>
         <translation>חיפוש בפלט הקונסול</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="231"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="243"/>
         <source>Utilities</source>
         <translation>כלי עזר</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="289"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="301"/>
         <source>Collapse repeated lines into a single entry</source>
         <translation>כיווץ שורות חוזרות לערך בודד</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="315"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="314"/>
+        <source>Annotations</source>
+        <translation>הערות</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="321"/>
+        <source>Label the incoming bytes with a decoder and inspect them</source>
+        <translation>סמן את הבתים הנכנסים עם מפענח ובדוק אותם</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="344"/>
         <source>Resume</source>
         <translation>המשך</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="315"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="344"/>
         <source>Pause</source>
         <translation>השהה</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="320"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="349"/>
         <source>Resume console updates</source>
         <translation>המשך עדכוני מסוף</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="321"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="350"/>
         <source>Freeze the console display (data keeps logging)</source>
         <translation>הקפא תצוגת מסוף (נתונים ממשיכים להירשם)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="340"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="369"/>
         <source>Format</source>
         <translation>עיצוב</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="348"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="377"/>
         <source>Text</source>
         <translation>טקסט</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="352"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="381"/>
         <source>Plain text display mode</source>
         <translation>מצב תצוגת טקסט רגיל</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="363"/>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="831"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="392"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="875"/>
         <source>Hex</source>
         <translation>הקס</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="367"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="396"/>
         <source>Hex display mode</source>
         <translation>מצב תצוגה הקסדצימלי</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="467"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="496"/>
         <source>Scrollback Lines</source>
         <translation>שורות גלילה אחורה</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="724"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="768"/>
         <source>Send Data to Device</source>
         <translation>שלח נתונים למכשיר</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="884"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="928"/>
         <source>Send data to the device</source>
         <translation>שלח נתונים למכשיר</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="422"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="451"/>
         <source>Show Timestamp</source>
         <translation>הצג חותמת זמן</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="429"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="458"/>
         <source>Echo</source>
         <translation>הד</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="445"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="474"/>
         <source>Emulate VT-100</source>
         <translation>אמולציה של VT-100</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="457"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="486"/>
         <source>ANSI Colors</source>
         <translation>צבעי ANSI</translation>
     </message>
@@ -22641,7 +23393,7 @@ function parse(%1) { ... }
         <translation type="vanished">תצוגה: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="246"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="258"/>
         <source>Clear console output</source>
         <translation>נקה פלט קונסול</translation>
     </message>
@@ -23395,34 +24147,34 @@ function parse(%1) { ... }
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2523"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2769"/>
         <source>Console</source>
         <translation>קונסול</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2531"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2777"/>
         <source>Notifications</source>
         <translation>התראות</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2539"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2785"/>
         <source>Clock</source>
         <translation>שעון</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2546"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2792"/>
         <source>Stopwatch</source>
         <translation>שעון עצר</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2600"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2615"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2846"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2861"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (גיבוי)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2637"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2716"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2883"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2962"/>
         <source>LED Panel (%1)</source>
         <translation>לוח LED (%1)</translation>
     </message>
@@ -23453,17 +24205,17 @@ function parse(%1) { ... }
         <translation>תמונות (*.png *.jpg *.jpeg *.bmp)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1475"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="1500"/>
         <source>Width: %1    Height: %2</source>
         <translation>רוחב: %1    גובה: %2</translation>
     </message>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1477"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="1502"/>
         <source>Width: %1</source>
         <translation>רוחב: %1</translation>
     </message>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1479"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="1504"/>
         <source>Height: %1</source>
         <translation>גובה: %1</translation>
     </message>
@@ -24301,12 +25053,12 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::MultiPlot</name>
     <message>
-        <location filename="../../src/UI/Widgets/MultiPlot.cpp" line="113"/>
+        <location filename="../../src/UI/Widgets/MultiPlot.cpp" line="115"/>
         <source>Time (s)</source>
         <translation>זמן (שניות)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/MultiPlot.cpp" line="113"/>
+        <location filename="../../src/UI/Widgets/MultiPlot.cpp" line="115"/>
         <source>Samples</source>
         <translation>דגימות</translation>
     </message>
@@ -24327,12 +25079,12 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Plot</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot.cpp" line="96"/>
+        <location filename="../../src/UI/Widgets/Plot.cpp" line="101"/>
         <source>Time (s)</source>
         <translation>זמן (שניות)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Plot.cpp" line="114"/>
+        <location filename="../../src/UI/Widgets/Plot.cpp" line="119"/>
         <source>Samples</source>
         <translation>דגימות</translation>
     </message>

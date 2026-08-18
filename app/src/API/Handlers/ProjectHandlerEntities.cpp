@@ -949,11 +949,12 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetSetTransformCode(
   bool languageInherited = false;
   if (params.contains(QStringLiteral("language"))) {
     const int lang = params.value(QStringLiteral("language")).toInt();
-    if (lang != SerialStudio::JavaScript && lang != SerialStudio::Lua)
+    if (lang != SerialStudio::JavaScript && lang != SerialStudio::Lua
+        && lang != SerialStudio::Expression)
       return CommandResponse::makeError(
         id,
         ErrorCode::InvalidParam,
-        QStringLiteral("Invalid language: must be 0 (JavaScript) or 1 (Lua)"));
+        QStringLiteral("Invalid language: must be 0 (JavaScript), 1 (Lua) or 3 (Expression)"));
 
     updated.transformLanguage = lang;
   } else if (!code.isEmpty() && updated.transformLanguage < 0) {
@@ -986,7 +987,8 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetSetTransformCode(
         .arg(updated.transformLanguage == 1 ? QStringLiteral("Lua") : QStringLiteral("JavaScript"));
   }
 
-  if (!code.isEmpty() && updated.transformLanguage != -1) {
+  if (!code.isEmpty() && updated.transformLanguage != -1
+      && updated.transformLanguage != SerialStudio::Expression) {
     const auto warning = detectLanguageMismatch(code, updated.transformLanguage);
     if (!warning.isEmpty())
       result[QStringLiteral("warning")] = warning;
@@ -1562,7 +1564,8 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetUpdate(const QString&
   appendStaleProjectWarning(result, params, preEpoch);
   attachProjectEpoch(result);
 
-  if (!d.transformCode.isEmpty() && d.transformLanguage != -1) {
+  if (!d.transformCode.isEmpty() && d.transformLanguage != -1
+      && d.transformLanguage != SerialStudio::Expression) {
     const auto warning = detectLanguageMismatch(d.transformCode, d.transformLanguage);
     if (!warning.isEmpty())
       result[QStringLiteral("warning")] = warning;

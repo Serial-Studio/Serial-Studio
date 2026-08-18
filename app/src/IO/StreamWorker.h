@@ -38,6 +38,8 @@ extern "C" {
 #include <QThread>
 #include <vector>
 
+#include "DataModel/DataBlock.h"
+#include "DataModel/Scripting/ExpressionTransform.h"
 #include "IO/HAL_Driver.h"
 #include "ThirdParty/readerwriterqueue.h"
 
@@ -74,6 +76,8 @@ struct StreamChannelConfig {
   int fftSamples        = 0;
   int transformLanguage = 0;
   QString transformCode;
+  QString title;
+  QString alias;
 };
 
 /**
@@ -88,72 +92,32 @@ struct StreamConfig {
 };
 
 /**
- * @brief Bounded display payload published per processed block: O(pixels + fftSize + datasets),
- *        never O(samples). Envelope pairs accumulate across updates (apply every update); the
- *        FFT window is a full snapshot (apply only the newest update per drain).
+ * @brief Samples per dense-lane block before publication (spec 0055 D6). Far above the frame
+ *        lane's cap: a dense column is numeric-only (D2), so it carries no per-sample strings.
  */
-struct StreamDisplayUpdate {
-  struct ChannelUpdate {
-    int uniqueId  = -1;
-    double latest = 0.0;
-    bool hasFft   = false;
-    std::vector<std::pair<double, double>> envelope;
-    std::vector<double> fftWindow;
-  };
-
-  int sourceId        = 0;
-  quint64 blockNumber = 0;
-  SampleBlock::SteadyTimePoint t0;
-  std::chrono::nanoseconds dt{1};
-  qsizetype frames = 0;
-  std::vector<ChannelUpdate> channels;
-};
+inline constexpr qsizetype kStreamBlockSampleCap = 4096;
 
 /**
- * @typedef StreamDisplayUpdatePtr
- * @brief Shared immutable pointer to a display update.
+ * @brief Pooled blocks a stream processor keeps in flight. Bounded low on purpose: the consumers
+ *        that queue blocks take a trimmed copy, so only the dashboard ring holds a pool slot.
  */
-typedef std::shared_ptr<const StreamDisplayUpdate> StreamDisplayUpdatePtr;
-
-/**
- * @brief Per-block export payload for the typed sinks (spec 0051 M5): full-rate post-transform
- *        planar samples with per-sample timing derivable as t0 + i * dt.
- */
-struct StreamBlockItem {
-  int sourceId        = 0;
-  quint64 blockNumber = 0;
-  SampleBlock::SteadyTimePoint t0;
-  std::chrono::nanoseconds dt{1};
-  qsizetype frames = 0;
-  std::vector<int> uniqueIds;
-  std::vector<std::vector<double>> channels;
-};
-
-/**
- * @typedef StreamBlockItemPtr
- * @brief Shared immutable pointer to a full-rate export block.
- */
-typedef std::shared_ptr<const StreamBlockItem> StreamBlockItemPtr;
+inline constexpr std::size_t kBlockPoolSlots = 8;
 
 /**
  * @brief Worker-thread half of a stream source (spec 0051 M4): consumes typed SampleBlocks at
- *        block rate, runs block/per-sample transforms in a worker-owned script engine, reduces
- *        to per-pixel envelopes + FFT windows + latest values, and fans out full-rate typed
+ *        block rate, runs block/per-sample transforms in a worker-owned script engine, publishes
+ *        the transformed samples + FFT windows + latest values, and fans out full-rate typed
  *        export blocks. Lives on the StreamWorker's thread; all members are worker-affine.
  */
 class StreamProcessor : public QObject {
   Q_OBJECT
 
 signals:
-  void blockReady(const IO::StreamBlockItemPtr& block);
+  void blockReady(const DataModel::DataBlockPtr& block);
   void latestValuesReady(int sourceId, const QList<QPair<int, double>>& values);
 
 public:
   explicit StreamProcessor(const StreamConfig& config,
-                           moodycamel::ReaderWriterQueue<StreamDisplayUpdatePtr>* displayOut,
-                           std::atomic<int>* pixelWidth,
-                           std::atomic<double>* windowSec,
-                           std::atomic<bool>* exportActive,
                            std::atomic<bool>* paused             = nullptr,
                            DataModel::FrameBuilder* frameBuilder = nullptr);
   ~StreamProcessor() override;
@@ -190,22 +154,27 @@ private:
     std::vector<double> fftRing;
     std::size_t fftFill = 0;
     std::size_t fftHead = 0;
-    std::vector<std::pair<double, double>> envelope;
+    bool exprValid      = false;
+    DataModel::Expression::Runtime expr;
   };
 
   void processChannel(ChannelState& state,
                       const IO::SampleBlock& block,
                       quint64 blockNumber,
-                      StreamBlockItem* exportItem);
+                      DataModel::BlockColumn* column);
   void compileLuaEntry(ChannelState& state);
   void compileJsEntry(ChannelState& state);
+  void compileExprEntry(ChannelState& state);
+  void processExpressionChannels(const IO::SampleBlock& block, DataModel::DataBlock& out);
+  void publishFftWindow(const ChannelState& state, DataModel::BlockColumn& column) const;
   [[nodiscard]] bool runBlockTransform(ChannelState& state, quint64 blockNumber, double t0Ms);
   [[nodiscard]] bool runLuaBlockTransform(ChannelState& state, quint64 blockNumber, double t0Ms);
   [[nodiscard]] bool runJsBlockTransform(ChannelState& state, quint64 blockNumber, double t0Ms);
   void runSampleTransform(ChannelState& state);
-  void reduceChannel(ChannelState& state, const IO::SampleBlock& block);
-  void publishDisplayUpdate(const IO::SampleBlock& block, quint64 blockNumber);
-  [[nodiscard]] std::shared_ptr<StreamDisplayUpdate> claimUpdateSlot();
+  void publishChannel(ChannelState& state, DataModel::BlockColumn& column);
+  static void appendFftRing(ChannelState& state, const double* samples, std::size_t count);
+  [[nodiscard]] std::shared_ptr<DataModel::DataBlock> claimBlockSlot();
+  void bindBlockColumns(DataModel::DataBlock& block) const;
   void setupLuaState();
   void setupJsEngine();
   static void luaWatchdogHook(lua_State* L, lua_Debug* ar);
@@ -213,13 +182,8 @@ private:
 private:
   static constexpr int kWatchdogMs     = 100;
   static constexpr int kHookInstrCount = 10000;
-  static constexpr int kDefaultBuckets = 512;
 
   StreamConfig m_config;
-  moodycamel::ReaderWriterQueue<StreamDisplayUpdatePtr>* m_displayOut;
-  std::atomic<int>* m_pixelWidth;
-  std::atomic<double>* m_windowSec;
-  std::atomic<bool>* m_exportActive;
   std::atomic<bool>* m_paused;
   DataModel::FrameBuilder* m_frameBuilder;
 
@@ -235,16 +199,18 @@ private:
 
   std::vector<double> m_scratch;
   std::vector<ChannelState> m_channels;
+  DataModel::Expression::SlotTable m_exprSlots;
+  bool m_hasExpressions;
 
-  std::vector<std::shared_ptr<StreamDisplayUpdate>> m_updatePool;
+  std::vector<std::shared_ptr<DataModel::DataBlock>> m_updatePool;
   std::size_t m_updatePoolHint;
 };
 
 /**
- * @brief GUI-side facade of one stream source's worker (spec 0051 M4): owns the thread, the
- *        display SPSC ring and the resize atomics; created/destroyed by ConnectionManager
- *        beside the DeviceManager. Teardown is stop(): disconnect feed, quit, bounded wait,
- *        warn-and-abandon on a hung Fast-mode script (R21).
+ * @brief GUI-side facade of one stream source's worker (spec 0051 M4): owns the thread and the
+ *        display SPSC ring; created/destroyed by ConnectionManager beside the DeviceManager.
+ *        Teardown is stop(): disconnect feed, quit, bounded wait, warn-and-abandon on a hung
+ *        Fast-mode script (R21).
  */
 class StreamWorker : public QObject {
   Q_OBJECT
@@ -264,21 +230,14 @@ public:
   [[nodiscard]] int sourceId() const noexcept;
   [[nodiscard]] bool abandoned() const noexcept;
   [[nodiscard]] const StreamConfig& config() const noexcept;
-  [[nodiscard]] int displayRingCapacity() const noexcept;
-  [[nodiscard]] bool dequeueDisplayUpdate(StreamDisplayUpdatePtr& out);
   [[nodiscard]] StreamProcessor* processor() const noexcept;
 
-  void setPixelWidth(int px) noexcept;
-  void setWindowSec(double seconds) noexcept;
-  void setExportActive(bool active) noexcept;
   void setPaused(bool paused) noexcept;
 
   void stop();
 
 private:
-  static constexpr int kJoinTimeoutMs     = 5000;
-  static constexpr int kDisplayRingSlots  = 256;
-  static constexpr int kDefaultPixelWidth = 512;
+  static constexpr int kJoinTimeoutMs = 5000;
 
   StreamConfig m_config;
   bool m_abandoned;
@@ -286,15 +245,8 @@ private:
   QMetaObject::Connection m_feed;
   StreamProcessor* m_processor;
 
-  // code-verify off
-  // All written by the GUI at resize/config rate only; the worker reads per block. No
-  // steady-state cross-core write traffic, so sharing a cache line is harmless.
-  std::atomic<int> m_pixelWidth;
-  std::atomic<double> m_windowSec;
-  std::atomic<bool> m_exportActive;
+  // GUI-written at command rate, worker-read per block; no steady-state cross-core traffic
   std::atomic<bool> m_paused;
-  // code-verify on
-  moodycamel::ReaderWriterQueue<StreamDisplayUpdatePtr> m_displayRing;
 };
 
 }  // namespace IO

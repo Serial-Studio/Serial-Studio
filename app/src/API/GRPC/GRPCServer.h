@@ -102,7 +102,8 @@ public:
 
 public slots:
   void setEnabled(const bool enabled);
-  void hotpathTxFrame(const DataModel::TimestampedFramePtr& frame);
+  void ingestBlock(const DataModel::DataBlockPtr& block);
+  void setTemplateFrame(int sourceId, const DataModel::Frame& frame);
   void hotpathTxData(const QByteArray& data);
 
   void exportProto();
@@ -129,7 +130,14 @@ private:
   std::thread m_serverThread;
   std::thread m_writerThread;
 
-  moodycamel::ReaderWriterQueue<DataModel::TimestampedFramePtr> m_frameQueue;
+  moodycamel::ReaderWriterQueue<DataModel::DataBlockPtr> m_frameQueue;
+
+  // Caps one writer pass: a dense block carries up to kStreamBlockSampleCap samples
+
+  static constexpr int kMaxFramesPerBatch = 4096;
+
+  std::mutex m_templatesMutex;
+  std::map<int, DataModel::FrameTemplate> m_templates;
   moodycamel::ReaderWriterQueue<RawPacket> m_rawQueue;
 
   std::mutex m_frameStreamsMutex;

@@ -329,8 +329,15 @@ API::GRPC::GRPCServer::GRPCServer()
           &GRPCServer::onExternalConnectionsChanged);
 
   QTimer::singleShot(0, this, [this]() {
-    static auto& apiServer = API::Server::instance();
+    static auto& apiServer    = API::Server::instance();
+    static auto& frameBuilder = DataModel::FrameBuilder::instance();
     setEnabled(apiServer.enabled());
+
+    connect(&frameBuilder,
+            &DataModel::FrameBuilder::structurePublished,
+            this,
+            &GRPCServer::setTemplateFrame,
+            Qt::QueuedConnection);
   });
 }
 
@@ -403,12 +410,22 @@ void API::GRPC::GRPCServer::setEnabled(const bool enabled)
 /**
  * @brief Enqueues a parsed frame for background writing to gRPC clients (lock-free, hotpath-safe).
  */
-void API::GRPC::GRPCServer::hotpathTxFrame(const DataModel::TimestampedFramePtr& frame)
+void API::GRPC::GRPCServer::ingestBlock(const DataModel::DataBlockPtr& block)
 {
-  if (!m_enabled)
+  if (!m_enabled || m_clientCount.load() <= 0)
     return;
 
-  m_frameQueue.try_enqueue(frame);
+  m_frameQueue.try_enqueue(block);
+}
+
+/**
+ * @brief Adopts one source's structure. gRPC publishes frame-shaped messages (spec 0055 D5) and a
+ *        block carries values only, so the writer thread stamps them onto this.
+ */
+void API::GRPC::GRPCServer::setTemplateFrame(int sourceId, const DataModel::Frame& frame)
+{
+  const std::lock_guard<std::mutex> guard(m_templatesMutex);
+  DataModel::bind_frame_template(m_templates[sourceId], frame);
 }
 
 /**
@@ -565,18 +582,34 @@ void API::GRPC::GRPCServer::writerLoop()
 
     {
       serialstudio::FrameBatch batch;
-      DataModel::TimestampedFramePtr frame;
-      while (m_frameQueue.try_dequeue(frame)) {
-        did_work             = true;
-        auto* fd             = batch.add_frames();
-        *fd->mutable_frame() = ConversionUtils::frameToProtoStruct(frame->data);
-        fd->set_timestamp_ms(
-          std::chrono::duration_cast<std::chrono::milliseconds>(frame->timestamp.time_since_epoch())
-            .count());
+      DataModel::DataBlockPtr block;
+
+      {
+        const std::lock_guard<std::mutex> guard(m_templatesMutex);
+        while (batch.frames_size() < kMaxFramesPerBatch && m_frameQueue.try_dequeue(block)) {
+          if (!block || block->samples <= 0)
+            continue;
+
+          const auto tpl = m_templates.find(block->sourceId);
+          if (tpl == m_templates.end())
+            continue;
+
+          for (qsizetype i = 0; i < block->samples; ++i) {
+            DataModel::apply_block_sample(tpl->second, *block, i);
+
+            auto* fd             = batch.add_frames();
+            *fd->mutable_frame() = ConversionUtils::frameToProtoStruct(tpl->second.frame);
+            fd->set_timestamp_ms(std::chrono::duration_cast<std::chrono::milliseconds>(
+                                   DataModel::sample_time(*block, i).time_since_epoch())
+                                   .count());
+          }
+        }
       }
 
-      if (batch.frames_size() > 0)
+      if (batch.frames_size() > 0) {
+        did_work = true;
         broadcastFrameBatch(batch);
+      }
     }
 
     {

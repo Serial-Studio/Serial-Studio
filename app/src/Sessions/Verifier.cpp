@@ -36,6 +36,7 @@
 #  include "IO/FrameReader.h"
 #  include "IO/HAL_Driver.h"
 #  include "SerialStudio.h"
+#  include "Sessions/BlockReader.h"
 #  include "Sessions/DatabaseManager.h"
 #  include "Sessions/Export.h"
 #  include "SSAssert.h"
@@ -346,24 +347,8 @@ bool Sessions::Verifier::verifyIntegrity()
       rawHash, raw.value(0).toLongLong(), raw.value(1).toInt(), raw.value(2).toByteArray());
 
   QCryptographicHash readingsHash(QCryptographicHash::Sha256);
-  QSqlQuery readings(m_db);
-  readings.prepare(
-    QStringLiteral("SELECT timestamp_ns, unique_id, raw_numeric_value, raw_string_value, "
-                   "final_numeric_value, final_string_value, is_numeric FROM readings "
-                   "WHERE session_id = ? ORDER BY reading_id"));
-  readings.bindValue(0, m_sessionId);
-  if (!readings.exec())
+  if (!hashSampleStream(readingsHash))
     return false;
-
-  while (readings.next())
-    hashReadingRow(readingsHash,
-                   readings.value(0).toLongLong(),
-                   readings.value(1).toLongLong(),
-                   SerialStudio::toDouble(readings.value(2)),
-                   readings.value(3).toString(),
-                   SerialStudio::toDouble(readings.value(4)),
-                   readings.value(5).toString(),
-                   readings.value(6).toInt() != 0);
 
   const auto rawHex      = QString::fromLatin1(rawHash.result().toHex());
   const auto readingsHex = QString::fromLatin1(readingsHash.result().toHex());
@@ -375,6 +360,60 @@ bool Sessions::Verifier::verifyIntegrity()
   if (!m_storedReadingsSha256.isEmpty())
     m_readingsIntegrity = readingsHex == m_storedReadingsSha256 ? QStringLiteral("verified")
                                                                 : QStringLiteral("mismatch");
+
+  return true;
+}
+
+/**
+ * @brief Re-hashes the archive's sample stream in insertion order, using whichever digest its
+ *        storage was written with. A legacy archive keeps `hashReadingRow` over `readings` exactly
+ *        as it was captured -- re-deriving it any other way would report every pre-0055 archive as
+ *        tampered -- and a spec-0055 archive hashes its `blocks` rows with `hashBlockRow`.
+ */
+bool Sessions::Verifier::hashSampleStream(QCryptographicHash& hash)
+{
+  if (Sessions::sessionUsesBlocks(m_db, m_sessionId)) {
+    QSqlQuery blocks(m_db);
+    blocks.setForwardOnly(true);
+    blocks.prepare(QStringLiteral("SELECT unique_id, t0_ns, dt_ns, frames, values_blob, "
+                                  "raw_values, texts FROM blocks WHERE session_id = ? "
+                                  "ORDER BY block_id"));
+    blocks.bindValue(0, m_sessionId);
+    if (!blocks.exec())
+      return false;
+
+    while (blocks.next())
+      hashBlockRow(hash,
+                   blocks.value(0).toLongLong(),
+                   blocks.value(1).toLongLong(),
+                   blocks.value(2).toLongLong(),
+                   blocks.value(3).toLongLong(),
+                   blocks.value(4).toByteArray(),
+                   blocks.value(5).toByteArray(),
+                   blocks.value(6).toByteArray());
+
+    return true;
+  }
+
+  QSqlQuery readings(m_db);
+  readings.setForwardOnly(true);
+  readings.prepare(
+    QStringLiteral("SELECT timestamp_ns, unique_id, raw_numeric_value, raw_string_value, "
+                   "final_numeric_value, final_string_value, is_numeric FROM readings "
+                   "WHERE session_id = ? ORDER BY reading_id"));
+  readings.bindValue(0, m_sessionId);
+  if (!readings.exec())
+    return false;
+
+  while (readings.next())
+    hashReadingRow(hash,
+                   readings.value(0).toLongLong(),
+                   readings.value(1).toLongLong(),
+                   SerialStudio::toDouble(readings.value(2)),
+                   readings.value(3).toString(),
+                   SerialStudio::toDouble(readings.value(4)),
+                   readings.value(5).toString(),
+                   readings.value(6).toInt() != 0);
 
   return true;
 }
@@ -579,19 +618,24 @@ static bool regenSanityCheck(QSqlDatabase& regen,
 
   regenSessionId = sessions.value(1).toInt();
 
-  QSqlQuery archived(archive);
-  archived.prepare(QStringLiteral("SELECT COUNT(*) FROM readings WHERE session_id = ?"));
-  archived.bindValue(0, archiveSessionId);
-  if (!archived.exec() || !archived.next())
+  const auto sampleCount = [](QSqlDatabase& db, int sessionId) -> qint64 {
+    QSqlQuery q(db);
+    q.prepare(Sessions::sessionUsesBlocks(db, sessionId)
+                ? QStringLiteral("SELECT COALESCE(SUM(frames), 0) FROM blocks WHERE session_id = ?")
+                : QStringLiteral("SELECT COUNT(*) FROM readings WHERE session_id = ?"));
+    q.bindValue(0, sessionId);
+    if (!q.exec() || !q.next())
+      return -1;
+
+    return q.value(0).toLongLong();
+  };
+
+  const qint64 archivedRows = sampleCount(archive, archiveSessionId);
+  const qint64 regenRows    = sampleCount(regen, regenSessionId);
+  if (archivedRows < 0 || regenRows < 0)
     return false;
 
-  QSqlQuery regenerated(regen);
-  regenerated.prepare(QStringLiteral("SELECT COUNT(*) FROM readings WHERE session_id = ?"));
-  regenerated.bindValue(0, regenSessionId);
-  if (!regenerated.exec() || !regenerated.next())
-    return false;
-
-  return archived.value(0).toLongLong() == 0 || regenerated.value(0).toLongLong() > 0;
+  return archivedRows == 0 || regenRows > 0;
 }
 
 /**
@@ -655,25 +699,14 @@ QJsonObject Sessions::Verifier::diffDataset(QSqlDatabase& regen,
   SS_ASSERT(regen.isOpen(), return QJsonObject());
   SS_ASSERT(m_sessionId >= 0, return QJsonObject());
 
-  const auto select =
-    QStringLiteral("SELECT timestamp_ns, raw_numeric_value, raw_string_value, "
-                   "final_numeric_value, final_string_value, is_numeric FROM readings "
-                   "WHERE session_id = ? AND unique_id = ? ORDER BY timestamp_ns, reading_id");
-
-  QSqlQuery archived(m_db);
-  archived.prepare(select);
-  archived.bindValue(0, m_sessionId);
-  archived.bindValue(1, uniqueId);
-
-  QSqlQuery regenerated(regen);
-  regenerated.prepare(select);
-  regenerated.bindValue(0, regenSessionId);
-  regenerated.bindValue(1, uniqueId);
+  Sessions::ReadingCursor archived;
+  Sessions::ReadingCursor regenerated;
 
   QJsonObject result;
   result.insert(Keys::UniqueId, uniqueId);
   result.insert(QStringLiteral("finalsCompared"), compareFinals);
-  if (!archived.exec() || !regenerated.exec()) {
+  if (!archived.open(m_db, m_sessionId, uniqueId)
+      || !regenerated.open(regen, regenSessionId, uniqueId)) {
     result.insert(QStringLiteral("error"), QStringLiteral("query failed"));
     return result;
   }
@@ -681,21 +714,22 @@ QJsonObject Sessions::Verifier::diffDataset(QSqlDatabase& regen,
   qint64 recordedRows = 0, regenRows = 0, mismatches = 0, row = 0;
   QJsonObject firstMismatch;
 
-  while (archived.next()) {
+  Sessions::ReadingRow a;
+  Sessions::ReadingRow b;
+  // code-verify off
+  // Bounded: the cursor walks a finite result set and yields each row once.
+  while (archived.next(a)) {
     ++recordedRows;
-    if (!regenerated.next())
+    if (!regenerated.next(b))
       continue;
 
     ++regenRows;
     ++row;
 
-    const bool rawMatch = bitEqual(SerialStudio::toDouble(archived.value(1)),
-                                   SerialStudio::toDouble(regenerated.value(1)))
-                       && archived.value(2).toString() == regenerated.value(2).toString();
-    const bool finalMatch = !compareFinals
-                         || (bitEqual(SerialStudio::toDouble(archived.value(3)),
-                                      SerialStudio::toDouble(regenerated.value(3)))
-                             && archived.value(4).toString() == regenerated.value(4).toString());
+    const bool rawMatch = bitEqual(a.rawNumeric, b.rawNumeric) && a.rawString == b.rawString;
+    const bool finalMatch =
+      !compareFinals
+      || (bitEqual(a.finalNumeric, b.finalNumeric) && a.finalString == b.finalString);
 
     if (rawMatch && finalMatch)
       continue;
@@ -707,21 +741,27 @@ QJsonObject Sessions::Verifier::diffDataset(QSqlDatabase& regen,
     const bool parseStage = !rawMatch;
     firstMismatch         = QJsonObject{
               {                    QStringLiteral("row"),                                                                row},
-              {    QStringLiteral("recordedTimestampNs"),                                     archived.value(0).toLongLong()},
+              {    QStringLiteral("recordedTimestampNs"),                                                      a.timestampNs},
               {                  QStringLiteral("stage"), parseStage ? QStringLiteral("parse") : QStringLiteral("transform")},
-              {            QStringLiteral("recordedRaw"),                                       archived.value(2).toString()},
-              {         QStringLiteral("regeneratedRaw"),                                    regenerated.value(2).toString()},
-              {     QStringLiteral("recordedRawNumeric"),                          SerialStudio::toDouble(archived.value(1))},
-              {  QStringLiteral("regeneratedRawNumeric"),                       SerialStudio::toDouble(regenerated.value(1))},
-              {          QStringLiteral("recordedFinal"),                                       archived.value(4).toString()},
-              {       QStringLiteral("regeneratedFinal"),                                    regenerated.value(4).toString()},
-              {   QStringLiteral("recordedFinalNumeric"),                          SerialStudio::toDouble(archived.value(3))},
-              {QStringLiteral("regeneratedFinalNumeric"),                       SerialStudio::toDouble(regenerated.value(3))}
+              {            QStringLiteral("recordedRaw"),                                                        a.rawString},
+              {         QStringLiteral("regeneratedRaw"),                                                        b.rawString},
+              {     QStringLiteral("recordedRawNumeric"),                                                       a.rawNumeric},
+              {  QStringLiteral("regeneratedRawNumeric"),                                                       b.rawNumeric},
+              {          QStringLiteral("recordedFinal"),                                                      a.finalString},
+              {       QStringLiteral("regeneratedFinal"),                                                      b.finalString},
+              {   QStringLiteral("recordedFinalNumeric"),                                                     a.finalNumeric},
+              {QStringLiteral("regeneratedFinalNumeric"),                                                     b.finalNumeric}
     };
   }
 
-  while (regenerated.next())
+  while (regenerated.next(b))
     ++regenRows;
+  // code-verify on
+
+  if (archived.damaged() || regenerated.damaged()) {
+    result.insert(QStringLiteral("error"), QStringLiteral("archive damaged"));
+    return result;
+  }
 
   result.insert(QStringLiteral("recordedRows"), recordedRows);
   result.insert(QStringLiteral("regeneratedRows"), regenRows);

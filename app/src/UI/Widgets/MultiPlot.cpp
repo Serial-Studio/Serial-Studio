@@ -28,6 +28,7 @@
 #include "Misc/ThemeManager.h"
 #include "SSAssert.h"
 #include "UI/Dashboard.h"
+#include "UI/Widgets/PlotAutoScale.h"
 #include "UI/Widgets/PlotLogScale.h"
 
 /**
@@ -62,6 +63,7 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem* parent)
   , m_index(index)
   , m_dataW(0)
   , m_dataH(0)
+  , m_yStepIndex(AutoScale::kNoStep)
   , m_minX(0)
   , m_maxX(0)
   , m_minY(0)
@@ -658,8 +660,7 @@ void Widgets::MultiPlot::updateData()
         continue;
 
       const auto& ring = rings[static_cast<size_t>(i)];
-      (void)DSP::downsampleTimeWindow(
-        ring.time, ring.value, xLo, xHi, m_dataW, m_dataH, m_data[i], &ws);
+      (void)DSP::downsampleTimeWindow(ring, xLo, xHi, m_dataW, m_dataH, m_data[i], &ws);
       applyLogYToCurve(m_data[i]);
     }
 
@@ -842,11 +843,15 @@ void Widgets::MultiPlot::scanCurvesForRange()
 }
 
 /**
- * @brief Adjusts m_minY/m_maxY when data-derived bounds need padding.
+ * @brief Pads the data-derived Y bounds and snaps them onto the 1-2-5 auto-scale ladder
+ *        (spec 0058); m_yStepIndex carries the step between draws so the shared axis grows at
+ *        once but shrinks only past the hysteresis margin.
  */
 void Widgets::MultiPlot::padDerivedRange()
 {
   applyDerivedYBounds();
+  if (AutoScale::quantizeRange(m_minY, m_maxY, m_yStepIndex))
+    return;
 
   m_maxY = std::ceil(m_maxY);
   m_minY = std::floor(m_minY);
@@ -887,8 +892,8 @@ void Widgets::MultiPlot::applyDerivedYBounds()
   if (DSP::isZero(paddedRange))
     paddedRange = 1;
 
-  m_minY = std::floor(midY - paddedRange);
-  m_maxY = std::ceil(midY + paddedRange);
+  m_minY = midY - paddedRange;
+  m_maxY = midY + paddedRange;
 
   if (DSP::almostEqual(m_minY, m_maxY)) {
     m_minY -= 1;

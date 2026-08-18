@@ -146,12 +146,12 @@ Mission-critical telemetry. Hotpath violations are blockers.
 2. **Loops have fixed upper bounds.** External-data loops use explicit `kMaxIterations`.
    `while(true)` only with a provable termination invariant — document it.
 3. **No allocation after init on the hotpath.** No `new`/`make_shared`/`.append()` on the
-   dashboard path. `FrameBuilder::acquireFrame()` draws each `TimestampedFramePtr` from a
-   fixed-size slot pool (`kFramePoolSize = 8192`); the slot is recycled when the last
-   consumer drops the shared_ptr (custom deleter flips `inUse` to false). Don't bypass the
-   pool with a direct `std::make_shared<TimestampedFrame>(...)` on the hotpath — that
-   re-introduces a per-frame heap alloc. Pool exhaustion logs once and falls back to
-   `make_shared` so the producer never blocks. The perf-* advisories (`code-verify.py`)
+   dashboard path. Since spec 0055 `FrameBuilder::claimBlockSlot()` draws each published
+   `DataBlockPtr` from a fixed-size pool whose columns are sized once at bind, so staging a
+   parsed row is a plain store; a slot is free exactly when the pool's shared_ptr is its only
+   reference, and the hand-out aliases it (no per-block control block). Don't bypass the pool
+   with a direct `std::make_shared<DataBlock>(...)` on the hotpath — that re-introduces a
+   per-block heap alloc. Pool exhaustion logs once and drops, so the producer never blocks. The perf-* advisories (`code-verify.py`)
    catch accidental hot-path allocation, regex construction, locking, logging, throwing,
    large by-value params, `shared_ptr` by-value, runtime divide/modulo, `pow()`,
    `dynamic_cast`, virtual calls, large stack buffers, false-sharing, recursion in hot loops.

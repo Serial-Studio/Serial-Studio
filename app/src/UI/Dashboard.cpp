@@ -48,6 +48,8 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
+#include <QJsonDocument>
+#include <QJSValue>
 #include <QSet>
 #include <QTimer>
 
@@ -62,6 +64,10 @@ constexpr double kAssumedMaxRateHz    = 1024000.0;
 constexpr double kTimeRingHeadroom    = 1.25;
 constexpr double kSmoothMaxPeriodSec  = 0.002;
 constexpr double kSmoothMaxForwardSec = 0.050;
+
+// Ceiling for a rate-sized ring: one cell per sample to 256 kHz on a 10 s axis, folding at 1 MHz
+constexpr int kMaxRateSizedRingSamples = 1 << 22;
+constexpr double kRingGrowthFactor     = 1.5;
 
 // Ring-drain budget per display tick: kDrainBudgetNs / fps == 40% of the tick period
 constexpr qint64 kDrainBudgetNs = 400000000LL;
@@ -88,14 +94,47 @@ static int timeRingCapacity(const double plotTimeRangeSec)
 }
 
 /**
+ * @brief Time-ring capacity for a stream source: enough slots to hold the window at the source's
+ *        real sample rate, bounded by a per-ring byte budget. Sizing off the actual rate is what
+ *        keeps the trace spanning the whole axis -- a ring bounded in samples runs out of history
+ *        in seconds as soon as the rate is high (44.1 kHz filled a 10 s axis to 5.9 s).
+ */
+static int streamRingCapacity(const double windowSec, const double sampleRateHz)
+{
+  const double want = windowSec * sampleRateHz;
+  const double cap  = static_cast<double>(kMaxRateSizedRingSamples);
+  return static_cast<int>(std::clamp(want, static_cast<double>(kDefaultPlotBuckets), cap));
+}
+
+/**
  * @brief Builds a scrolling-history ring for the visible window plus headroom, so a
  *        saturated min/max source (two slots per decimation cell) still spans the full
- *        axis instead of erasing at the left edge; the surplus samples sit off-screen.
+ *        axis instead of erasing at the left edge. A positive @p sampleRateHz sizes the ring
+ *        for that rate, so a stream keeps one cell per sample until the byte budget binds.
  */
-static DSP::TimeRing makeHistoryRing(const double plotTimeRangeSec)
+static DSP::EnvelopeRing makeHistoryRing(const double plotTimeRangeSec,
+                                         const double sampleRateHz = 0)
 {
   const double window = plotTimeRangeSec * kTimeRingHeadroom;
-  return DSP::TimeRing(timeRingCapacity(window), window);
+  if (sampleRateHz > 0)
+    return DSP::EnvelopeRing(streamRingCapacity(window, sampleRateHz), window);
+
+  return DSP::EnvelopeRing(timeRingCapacity(window), window);
+}
+
+/**
+ * @brief Sample rate of the stream worker feeding a source, or 0 when the source is frame-fed.
+ *        Read at layout-build time only; a source that connects later rebuilds the layout.
+ */
+static double streamSampleRate(const int sourceId)
+{
+  static auto& ioManager = IO::ConnectionManager::instance();
+
+  for (const auto& worker : ioManager.streamWorkers())
+    if (worker && worker->sourceId() == sourceId)
+      return worker->config().sampleRate;
+
+  return 0.0;
 }
 
 /**
@@ -295,8 +334,9 @@ void UI::Dashboard::onDisplayTick()
 
   SS_ASSERT(m_drainBudgetNs > 0, return);
 
-  drainDashboardRing(clock, m_drainBudgetNs);
-  drainStreamWorkers(clock, m_drainBudgetNs);
+  growTimeRings();
+  drainStructureSnapshots();
+  drainBlockRing(clock, m_drainBudgetNs);
 
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
   frameBuilder.drainTableSnapshot();
@@ -309,12 +349,32 @@ void UI::Dashboard::onDisplayTick()
 }
 
 /**
- * @brief Drains the dashboard ring under @p budgetNs of @p clock, hard-bounded by the ring
- *        capacity: the producer is a live thread, so draining "until empty" livelocks the GUI.
- *        Frames past the budget are discarded except the newest, so the display stays current;
- *        exports are untouched, they fan out on the pipeline thread.
+ * @brief Adopts every structure snapshot queued since the last tick. Drained BEFORE the block ring
+ *        so a block never reaches a layout it was not staged under; snapshots arrive at
+ * project-edit rate, so the loop is bounded by the ring and costs nothing in the steady state.
  */
-void UI::Dashboard::drainDashboardRing(const QElapsedTimer& clock, const qint64 budgetNs)
+void UI::Dashboard::drainStructureSnapshots()
+{
+  static auto& pipeline = IO::PipelineHost::instance();
+
+  DataModel::StructureSnapshotPtr snapshot;
+  // code-verify off
+  // Ring drain: bounded by the structure ring capacity, provably finite per tick.
+  while (pipeline.dequeueStructureSnapshot(snapshot))
+    if (snapshot)
+      applyStructureSnapshot(snapshot);
+  // code-verify on
+
+  snapshot.reset();
+}
+
+/**
+ * @brief Drains the block ring under @p budgetNs of @p clock, hard-bounded by the ring capacity:
+ *        the producer is a live thread, so draining "until empty" livelocks the GUI. Blocks past
+ *        the budget are discarded except the newest, so the display stays current; exports are
+ *        untouched, they fan out on the pipeline thread.
+ */
+void UI::Dashboard::drainBlockRing(const QElapsedTimer& clock, const qint64 budgetNs)
 {
   static auto& pipeline = IO::PipelineHost::instance();
 
@@ -324,140 +384,245 @@ void UI::Dashboard::drainDashboardRing(const QElapsedTimer& clock, const qint64 
 
   quint64 discarded = 0;
   bool over_budget  = false;
-  DataModel::TimestampedFramePtr frame;
-  DataModel::TimestampedFramePtr newest;
+  DataModel::DataBlockPtr block;
+  DataModel::DataBlockPtr newest;
 
-  for (int drained = 0; drained < max_drain && pipeline.dequeueDashboardFrame(frame); ++drained) {
+  for (int drained = 0; drained < max_drain && pipeline.dequeueDashboardBlock(block); ++drained) {
     if (over_budget) [[unlikely]] {
-      newest = frame;
+      newest = block;
       ++discarded;
       continue;
     }
 
-    hotpathRxFrame(frame);
+    applyBlock(block);
     if ((drained & kBudgetCheckMask) == kBudgetCheckMask)
       over_budget = clock.nsecsElapsed() >= budgetNs;
   }
 
   if (newest) [[unlikely]] {
-    hotpathRxFrame(newest);
+    applyBlock(newest);
     --discarded;
     newest.reset();
   }
 
-  frame.reset();
+  block.reset();
   pipeline.noteDisplayDrops(discarded);
 }
 
 /**
- * @brief Drains every stream worker's display ring and applies the updates, publishing the
- *        current display budget (points/window) to the workers' resize atomics on the way
- *        (GUI-written, worker-read, eventually consistent by design; spec 0051 T25).
+ * @brief Grows one saturated time ring whose source's measured cadence outruns the sizing it was
+ *        built with. The frame lane cannot know its rate at layout time (that is the device's to
+ *        decide), so a full ring is re-sized from the plot clock's smoothed sample period, upward
+ *        only: shrinking would throw away history over a momentary lull.
  */
-void UI::Dashboard::drainStreamWorkers(const QElapsedTimer& clock, const qint64 budgetNs)
+void UI::Dashboard::growTimeRing(DSP::EnvelopeRing& ring,
+                                 const int sourceId,
+                                 const double windowSec)
 {
-  static auto& ioManager = IO::ConnectionManager::instance();
-  const auto& workers    = ioManager.streamWorkers();
-  if (workers.empty()) [[likely]]
+  if (ring.level0.time.size() < ring.level0.time.capacity())
     return;
 
-  for (const auto& worker : workers) {
-    if (!worker)
-      continue;
+  const auto clockIt = m_plotClocks.constFind(sourceId);
+  if (clockIt == m_plotClocks.cend() || !(clockIt->samplePeriodSec > 0))
+    return;
 
-    worker->setPixelWidth(qMax(1, m_points / 2));
-    worker->setWindowSec(m_plotTimeRange);
-    drainStreamWorker(*worker, clock, budgetNs);
+  const double want    = windowSec / clockIt->samplePeriodSec;
+  const double ceiling = static_cast<double>(kMaxRateSizedRingSamples);
+  const double desired = std::clamp(want, static_cast<double>(kDefaultPlotBuckets), ceiling);
+  if (desired < static_cast<double>(ring.level0.time.capacity()) * kRingGrowthFactor)
+    return;
+
+  ring.resizeCapacity(static_cast<int>(desired), windowSec);
+}
+
+/**
+ * @brief Re-checks every time ring against its source's measured cadence. Runs on the display
+ *        tick, costs one hash probe per plot, and resizes only on the rare tick where a source
+ *        proved faster than its ring; a stream source never triggers it, since its ring is
+ *        already sized from the real rate and the plot clock only sees its block cadence.
+ */
+void UI::Dashboard::growTimeRings()
+{
+  const double window = m_plotTimeRange * kTimeRingHeadroom;
+
+  for (auto it = m_plotTimeRings.begin(); it != m_plotTimeRings.end(); ++it)
+    growTimeRing(
+      it.value(), getDatasetWidget(SerialStudio::DashboardPlot, it.key()).sourceId, window);
+
+  for (auto it = m_multiplotTimeRings.begin(); it != m_multiplotTimeRings.end(); ++it) {
+    const int sourceId = getGroupWidget(SerialStudio::DashboardMultiPlot, it.key()).sourceId;
+    for (auto& ring : it.value())
+      growTimeRing(ring, sourceId, window);
   }
 }
 
 /**
- * @brief Drains one worker's display ring, hard-bounded by the ring capacity and stopped by the
- *        shared tick budget. Leftovers stay queued for the next tick; a ring that then fills is
- *        dropped and counted worker-side, which is the reported signal.
+ * @brief Ingests one published block. A uniform-grid block feeds its rings column-wise from one
+ *        clock advance; an irregular block replays each sample through the value push and series
+ *        update a frame took before spec 0055. A generation mismatch is stale and dropped;
+ *        generation 0 means an unversioned producer (a stream worker) and gates on its template.
  */
-void UI::Dashboard::drainStreamWorker(IO::StreamWorker& worker,
-                                      const QElapsedTimer& clock,
-                                      const qint64 budgetNs)
+void UI::Dashboard::applyBlock(const DataModel::DataBlockPtr& block)
 {
-  const int max_drain = worker.displayRingCapacity();
-  SS_ASSERT(max_drain > 0, return);
-  SS_ASSERT(budgetNs > 0, return);
+  SS_ASSERT_HOTPATH(block);
 
-  IO::StreamDisplayUpdatePtr update;
-
-  for (int drained = 0; drained < max_drain && worker.dequeueDisplayUpdate(update); ++drained) {
-    if (update)
-      applyStreamUpdate(*update);
-
-    if ((drained & kBudgetCheckMask) == kBudgetCheckMask && clock.nsecsElapsed() >= budgetNs)
-      break;
-  }
-
-  update.reset();
-}
-
-/**
- * @brief Ingests one bounded stream display update: latest values into the widget dataset
- *        copies, envelope pairs into the plot/multiplot time rings (per-source clock advanced
- *        from block t0, never cleared), FFT window into the FFT series. All work is O(pixels +
- *        fftSize + datasets), independent of the stream's sample rate (spec 0051 R7/R11).
- */
-void UI::Dashboard::applyStreamUpdate(const IO::StreamDisplayUpdate& update)
-{
   if (!m_layoutValid || !m_streamAvailable) [[unlikely]]
     return;
 
-  const double baseSec = advancePlotClock(update.sourceId, update.t0);
+  if (block->samples <= 0 || block->columns.empty()) [[unlikely]]
+    return;
 
-  for (const auto& channel : update.channels)
-    applyStreamChannel(channel, baseSec);
+  const int sid = block->sourceId;
+  if (block->structureGeneration != 0) [[likely]] {
+    const auto genIt = m_sourceStructureGen.constFind(sid);
+    if (genIt == m_sourceStructureGen.cend() || genIt.value() != block->structureGeneration)
+      [[unlikely]]
+      return;
 
-  for (auto it = m_multiplotSweep.begin(); it != m_multiplotSweep.end(); ++it)
-    if (it.value().enabled && m_activeMultiplots.value(it.key(), false))
-      feedMultiplotStreamSweep(it.key(), update, baseSec);
+  } else if (!m_sourceRawFrames.contains(sid)) [[unlikely]]
+    return;
+
+  if (DataModel::uniform_grid(*block)) {
+    const double baseSec = advancePlotClock(sid, block->t0);
+
+    for (const auto& column : block->columns)
+      applyBlockColumn(column, *block, baseSec);
+
+    for (auto it = m_multiplotSweep.begin(); it != m_multiplotSweep.end(); ++it)
+      if (it.value().enabled && m_activeMultiplots.value(it.key(), false))
+        feedMultiplotBlockSweep(it.key(), *block, baseSec);
+
+    if (!applyBlockValues(*block, block->samples - 1)) [[unlikely]]
+      return;
+
+  } else {
+    for (qsizetype i = 0; i < block->samples; ++i) {
+      (void)advancePlotClock(sid, DataModel::sample_time(*block, i));
+      if (!applyBlockValues(*block, i)) [[unlikely]]
+        return;
+
+      foldExtremes(sid);
+      updateDataSeries(sid);
+    }
+  }
 
   m_updateRequired = true;
 }
 
 /**
- * @brief Applies one channel's display payload: latest value into every widget dataset copy,
- *        envelope pairs into the plot/multiplot rings, FFT window into the FFT and waterfall
- *        series (both hold time-domain samples and transform themselves).
+ * @brief Adopts one structure snapshot: caches the source's layout, rebuilds the widget model from
+ *        the union of every cached source, and republishes the commercial-feature flag. Runs at
+ *        project-edit rate, which is what lets the per-block path skip structural revalidation
+ *        entirely -- the compare_frames() walk every frame used to pay for is gone.
  */
-void UI::Dashboard::applyStreamChannel(const IO::StreamDisplayUpdate::ChannelUpdate& channel,
-                                       double baseSec)
+void UI::Dashboard::applyStructureSnapshot(const DataModel::StructureSnapshotPtr& snapshot)
 {
-  const auto refs = m_datasetReferences.constFind(channel.uniqueId);
+  SS_ASSERT(snapshot != nullptr, return);
+
+  if (snapshot->data.groups.empty() || !m_streamAvailable)
+    return;
+
+  const int sid             = snapshot->data.sourceId;
+  const bool hadProFeatures = containsCommercialFeatures();
+
+  m_sourceStructureGen[sid] = snapshot->generation;
+  m_sourceRawFrames[sid]    = snapshot->data;
+
+  reconfigureDashboard(combineSourceFrames(snapshot->data));
+
+  if (hadProFeatures != containsCommercialFeatures())
+    Q_EMIT containsCommercialFeaturesChanged();
+}
+
+/**
+ * @brief Propagates sample @p index of every column into its widget copies. Returns false when the
+ *        push table no longer lines up with the block, which hands the source to the rebuild-once
+ *        then quarantine path rather than writing values into the wrong widgets.
+ */
+bool UI::Dashboard::applyBlockValues(const DataModel::DataBlock& block, qsizetype index)
+{
+  const auto pit = m_valuePushes.constFind(block.sourceId);
+  if (pit == m_valuePushes.cend()) [[unlikely]] {
+    handleMissingDataset(m_sourceRawFrames.value(block.sourceId));
+    return false;
+  }
+
+  const auto& table         = pit.value();
+  const std::size_t entries = table.size();
+  const std::size_t columns = block.columns.size();
+
+  if (entries != columns) [[unlikely]] {
+    handleMissingDataset(m_sourceRawFrames.value(block.sourceId));
+    return false;
+  }
+
+  m_updateRetryInProgress = false;
+
+  const auto slot = static_cast<std::size_t>(index);
+  for (std::size_t c = 0; c < columns; ++c) {
+    const auto& column = block.columns[c];
+    const auto& push   = table[c];
+    if (push.uniqueId != column.uniqueId) [[unlikely]] {
+      handleMissingDataset(m_sourceRawFrames.value(block.sourceId));
+      return false;
+    }
+
+    const bool numeric = DataModel::sample_is_numeric(column, index);
+    for (auto* ptr : push.targets) {
+      ptr->isNumeric    = numeric;
+      ptr->numericValue = column.values[slot];
+    }
+
+    if (!column.hasText)
+      continue;
+
+    const auto& string_targets = numeric ? push.stringTargets : push.targets;
+    for (auto* ptr : string_targets)
+      ptr->value = column.text[slot];
+  }
+
+  return true;
+}
+
+/**
+ * @brief Applies one column of a uniform-grid block: latest value into every widget dataset copy,
+ *        samples into the plot/multiplot rings at t = baseSec + i * dtSec, and the producer's FFT
+ *        window into the FFT and waterfall series (both hold time-domain samples and transform
+ *        themselves). Ports the pre-0055 stream path unchanged.
+ */
+void UI::Dashboard::applyBlockColumn(const DataModel::BlockColumn& column,
+                                     const DataModel::DataBlock& block,
+                                     double baseSec)
+{
+  const double dtSec  = std::chrono::duration<double>(block.dt).count();
+  const auto count    = static_cast<std::size_t>(block.samples);
+  const double latest = column.values[count - 1];
+
+  const auto refs = m_datasetReferences.constFind(column.uniqueId);
   if (refs != m_datasetReferences.cend()) {
-    const QString text = QString::number(channel.latest, 'g', 10);
+    const QString text = QString::number(latest, 'g', 10);
     for (auto* dataset : refs.value()) {
       dataset->isNumeric    = true;
-      dataset->numericValue = channel.latest;
+      dataset->numericValue = latest;
       dataset->value        = text;
     }
   }
 
-  const auto ext_it = m_datasetExtremes.find(channel.uniqueId);
+  const auto ext_it = m_datasetExtremes.find(column.uniqueId);
   if (ext_it != m_datasetExtremes.end()) [[unlikely]] {
     auto& slot = ext_it.value();
-    if (std::isfinite(channel.latest)) {
-      slot.min   = slot.valid ? qMin(slot.min, channel.latest) : channel.latest;
-      slot.max   = slot.valid ? qMax(slot.max, channel.latest) : channel.latest;
-      slot.valid = true;
-    }
-
-    for (const auto& pair : channel.envelope) {
-      if (!std::isfinite(pair.second))
+    for (std::size_t i = 0; i < count; ++i) {
+      const double value = column.values[i];
+      if (!std::isfinite(value))
         continue;
 
-      slot.min   = slot.valid ? qMin(slot.min, pair.second) : pair.second;
-      slot.max   = slot.valid ? qMax(slot.max, pair.second) : pair.second;
+      slot.min   = slot.valid ? qMin(slot.min, value) : value;
+      slot.max   = slot.valid ? qMax(slot.max, value) : value;
       slot.valid = true;
     }
   }
 
-  const StreamTargets& targets = streamTargetsFor(channel.uniqueId);
+  const StreamTargets& targets = streamTargetsFor(column.uniqueId);
 
   for (const int plotIndex : targets.plotIndexes) {
     if (!m_activePlots.value(plotIndex, false))
@@ -467,10 +632,11 @@ void UI::Dashboard::applyStreamChannel(const IO::StreamDisplayUpdate::ChannelUpd
     if (ringIt == m_plotTimeRings.end()) [[unlikely]]
       continue;
 
-    for (const auto& pair : channel.envelope)
-      ringIt.value().appendDecimated(baseSec + pair.first, pair.second);
+    auto& ring = ringIt.value();
+    for (std::size_t i = 0; i < count; ++i)
+      ring.appendDecimated(baseSec + static_cast<double>(i) * dtSec, column.values[i]);
 
-    feedPlotStreamSweep(plotIndex, channel, baseSec);
+    feedPlotBlockSweep(plotIndex, column, block, baseSec);
   }
 
   for (const auto& [groupIndex, curveIndex] : targets.multiplotCurves) {
@@ -485,12 +651,15 @@ void UI::Dashboard::applyStreamChannel(const IO::StreamDisplayUpdate::ChannelUpd
     if (curveIndex < 0 || static_cast<std::size_t>(curveIndex) >= rings.size()) [[unlikely]]
       continue;
 
-    for (const auto& pair : channel.envelope)
-      rings[curveIndex].appendDecimated(baseSec + pair.first, pair.second);
+    auto& ring = rings[curveIndex];
+    for (std::size_t i = 0; i < count; ++i)
+      ring.appendDecimated(baseSec + static_cast<double>(i) * dtSec, column.values[i]);
   }
 
-  if (!channel.hasFft)
+  if (column.fftWindow.empty()) {
+    feedFftFromSamples(column, targets, count);
     return;
+  }
 
   for (const int fftIndex : targets.fftIndexes) {
     if (!m_activeFFTPlots.value(fftIndex, false))
@@ -501,7 +670,7 @@ void UI::Dashboard::applyStreamChannel(const IO::StreamDisplayUpdate::ChannelUpd
 
     auto& series = m_fftValues[fftIndex];
     series.clear();
-    for (const double sample : channel.fftWindow)
+    for (const double sample : column.fftWindow)
       series.push(sample);
   }
 
@@ -515,21 +684,57 @@ void UI::Dashboard::applyStreamChannel(const IO::StreamDisplayUpdate::ChannelUpd
 
     auto& series = m_waterfallValues[fallIndex];
     series.clear();
-    for (const double sample : channel.fftWindow)
+    for (const double sample : column.fftWindow)
       series.push(sample);
   }
 #endif
 }
 
 /**
- * @brief Feeds the stream lane's envelope into one plot's sweep engine, the counterpart of the
- *        frame lane's feedSweep (spec 0051 M4: stream sources never reach that path). Trigger
- *        detection runs at the envelope's bucket resolution, which is the resolution the trace
- *        is drawn at, so precision degrades in step with the display and never below it.
+ * @brief Feeds the FFT and waterfall series from a column's raw samples. Used when the producer
+ *        computed no window -- a replayed session, which has no stream worker in front of it. The
+ *        series hold time-domain samples and transform themselves, so pushing samples is exactly
+ *        what the frame lane does per frame.
  */
-void UI::Dashboard::feedPlotStreamSweep(int plotIndex,
-                                        const IO::StreamDisplayUpdate::ChannelUpdate& channel,
-                                        double baseSec)
+void UI::Dashboard::feedFftFromSamples(const DataModel::BlockColumn& column,
+                                       const StreamTargets& targets,
+                                       std::size_t count)
+{
+  for (const int fftIndex : targets.fftIndexes) {
+    if (!m_activeFFTPlots.value(fftIndex, false))
+      continue;
+
+    if (fftIndex < 0 || fftIndex >= m_fftValues.size()) [[unlikely]]
+      continue;
+
+    auto& series = m_fftValues[fftIndex];
+    for (std::size_t i = 0; i < count; ++i)
+      series.push(column.values[i]);
+  }
+
+#ifdef BUILD_COMMERCIAL
+  for (const int fallIndex : targets.waterfallIndexes) {
+    if (!m_activeWaterfalls.value(fallIndex, false))
+      continue;
+
+    if (fallIndex < 0 || fallIndex >= m_waterfallValues.size()) [[unlikely]]
+      continue;
+
+    auto& series = m_waterfallValues[fallIndex];
+    for (std::size_t i = 0; i < count; ++i)
+      series.push(column.values[i]);
+  }
+#endif
+}
+
+/**
+ * @brief Feeds one uniform-grid column's samples into a plot's sweep engine. The trigger steps per
+ *        sample, so its resolution is the source's rather than the display's.
+ */
+void UI::Dashboard::feedPlotBlockSweep(int plotIndex,
+                                       const DataModel::BlockColumn& column,
+                                       const DataModel::DataBlock& block,
+                                       double baseSec)
 {
   auto sweepIt = m_plotSweep.find(plotIndex);
   if (sweepIt == m_plotSweep.end())
@@ -539,22 +744,26 @@ void UI::Dashboard::feedPlotStreamSweep(int plotIndex,
   if (!sweep.enabled || sweep.back.empty())
     return;
 
-  for (const auto& pair : channel.envelope) {
-    const double st = sweep.advance(baseSec + pair.first, pair.second);
+  const double dtSec = std::chrono::duration<double>(block.dt).count();
+  const auto count   = static_cast<std::size_t>(block.samples);
+
+  for (std::size_t i = 0; i < count; ++i) {
+    const double value = column.values[i];
+    const double st    = sweep.advance(baseSec + static_cast<double>(i) * dtSec, value);
     if (st >= 0)
-      sweep.back[0].appendDecimated(st, pair.second);
+      sweep.back[0].appendDecimated(st, value);
   }
 }
 
 /**
- * @brief Feeds one multiplot's sweep engine from a stream update: the trigger curve alone drives
- *        advance(), every curve is appended at the time it returns, and curves pair by envelope
- *        index because one source's channels share a bucket grid. A group this update feeds no
+ * @brief Feeds one multiplot's sweep engine from a uniform-grid block: the trigger curve alone
+ *        drives advance(), every curve is appended at the time it returns, and curves pair by
+ *        sample index because one source's columns share a block grid. A group this block feeds no
  *        curve of resolves to no trigger, which keeps frame-fed multiplots out of this path.
  */
-void UI::Dashboard::feedMultiplotStreamSweep(int groupIndex,
-                                             const IO::StreamDisplayUpdate& update,
-                                             double baseSec)
+void UI::Dashboard::feedMultiplotBlockSweep(int groupIndex,
+                                            const DataModel::DataBlock& block,
+                                            double baseSec)
 {
   auto sweepIt = m_multiplotSweep.find(groupIndex);
   if (sweepIt == m_multiplotSweep.end())
@@ -565,13 +774,13 @@ void UI::Dashboard::feedMultiplotStreamSweep(int groupIndex,
     return;
 
   m_streamSweepCurves.assign(sweep.back.size(), nullptr);
-  for (const auto& channel : update.channels) {
-    for (const auto& [group, curve] : streamTargetsFor(channel.uniqueId).multiplotCurves) {
+  for (const auto& column : block.columns) {
+    for (const auto& [group, curve] : streamTargetsFor(column.uniqueId).multiplotCurves) {
       if (group != groupIndex || curve < 0)
         continue;
 
       if (static_cast<std::size_t>(curve) < m_streamSweepCurves.size())
-        m_streamSweepCurves[static_cast<std::size_t>(curve)] = &channel;
+        m_streamSweepCurves[static_cast<std::size_t>(curve)] = &column;
     }
   }
 
@@ -581,20 +790,17 @@ void UI::Dashboard::feedMultiplotStreamSweep(int groupIndex,
   if (!trigger)
     return;
 
-  std::size_t count = trigger->envelope.size();
-  for (const auto* curve : m_streamSweepCurves)
-    if (curve)
-      count = std::min(count, curve->envelope.size());
+  const double dtSec = std::chrono::duration<double>(block.dt).count();
+  const auto count   = static_cast<std::size_t>(block.samples);
 
   for (std::size_t i = 0; i < count; ++i) {
-    const double st =
-      sweep.advance(baseSec + trigger->envelope[i].first, trigger->envelope[i].second);
+    const double st = sweep.advance(baseSec + static_cast<double>(i) * dtSec, trigger->values[i]);
     if (st < 0)
       continue;
 
     for (std::size_t j = 0; j < m_streamSweepCurves.size(); ++j)
       if (m_streamSweepCurves[j])
-        sweep.back[j].appendDecimated(st, m_streamSweepCurves[j]->envelope[i].second);
+        sweep.back[j].appendDecimated(st, m_streamSweepCurves[j]->values[i]);
   }
 }
 
@@ -677,6 +883,111 @@ void UI::Dashboard::restorePersistedSettings()
 UI::Dashboard& UI::Dashboard::instance()
 {
   return SessionContext::current().dashboard();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Session view state (spec 0062)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief View state one widget pushed (cursors, zoom/pan, paused, ...); empty when none.
+ *        View state is session state, never project state: it never marks the project modified.
+ */
+QJsonObject UI::Dashboard::widgetViewState(const QString& widgetId) const
+{
+  return m_widgetViewState.value(widgetId).toObject();
+}
+
+/**
+ * @brief Global view state (active workspace, plot time range, theme id).
+ */
+QJsonObject UI::Dashboard::globalViewState() const
+{
+  return m_globalViewState;
+}
+
+/**
+ * @brief The whole view state as one compact JSON document (what a recording bundles).
+ */
+QString UI::Dashboard::viewStateJson() const
+{
+  QJsonObject root;
+  root.insert(QStringLiteral("version"), 1);
+  root.insert(QStringLiteral("global"), m_globalViewState);
+  root.insert(QStringLiteral("widgets"), m_widgetViewState);
+  return QString::fromUtf8(QJsonDocument(root).toJson(QJsonDocument::Compact));
+}
+
+/**
+ * @brief Records one per-widget view value; emits viewStateChanged only on a real change so the
+ *        recording bundle's debounce sees edits, not repaints.
+ */
+void UI::Dashboard::saveWidgetViewState(const QString& widgetId,
+                                        const QString& key,
+                                        const QVariant& value)
+{
+  if (widgetId.isEmpty() || key.isEmpty())
+    return;
+
+  auto normalized = value;
+  if (normalized.userType() == qMetaTypeId<QJSValue>())
+    normalized = normalized.value<QJSValue>().toVariant();
+
+  auto obj            = m_widgetViewState.value(widgetId).toObject();
+  const auto newValue = QJsonValue::fromVariant(normalized);
+  if (obj.value(key) == newValue)
+    return;
+
+  obj.insert(key, newValue);
+  m_widgetViewState.insert(widgetId, obj);
+  Q_EMIT viewStateChanged();
+}
+
+/**
+ * @brief Records one global view value (see saveWidgetViewState).
+ */
+void UI::Dashboard::saveGlobalViewState(const QString& key, const QVariant& value)
+{
+  if (key.isEmpty())
+    return;
+
+  auto normalized = value;
+  if (normalized.userType() == qMetaTypeId<QJSValue>())
+    normalized = normalized.value<QJSValue>().toVariant();
+
+  const auto newValue = QJsonValue::fromVariant(normalized);
+  if (m_globalViewState.value(key) == newValue)
+    return;
+
+  m_globalViewState.insert(key, newValue);
+  Q_EMIT viewStateChanged();
+}
+
+/**
+ * @brief Replaces the view state from a bundled document (session playback); widgets created
+ *        afterwards read it in their Component.onCompleted. Malformed input clears it.
+ */
+void UI::Dashboard::setViewStateJson(const QString& json)
+{
+  const auto doc = QJsonDocument::fromJson(json.toUtf8());
+  m_widgetViewState =
+    doc.isObject() ? doc.object().value(QStringLiteral("widgets")).toObject() : QJsonObject();
+  m_globalViewState =
+    doc.isObject() ? doc.object().value(QStringLiteral("global")).toObject() : QJsonObject();
+  Q_EMIT viewStateChanged();
+}
+
+/**
+ * @brief Drops every recorded view value.
+ */
+void UI::Dashboard::clearViewState()
+{
+  if (m_widgetViewState.isEmpty() && m_globalViewState.isEmpty())
+    return;
+
+  m_widgetViewState = QJsonObject();
+  m_globalViewState = QJsonObject();
+  Q_EMIT viewStateChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -798,8 +1109,8 @@ bool UI::Dashboard::useTimeXAxisGroup(const DataModel::Group& group) const
 
 /**
  * @brief Checks if at least one data source/stream is active. An attached remote dashboard counts
- *        as a stream: its snapshots enter through hotpathRxFrame like any local frame, and the
- *        flag read there is what decides whether they are drawn. The query is a plain flag read
+ *        as a stream: its snapshots enter through applyBlock like any local block, and the flag
+ *        read there is what decides whether they are drawn. The query is a plain flag read
  *        because this function is reached from the constructor, inside the pinned module order.
  */
 bool UI::Dashboard::streamAvailable() const
@@ -828,7 +1139,7 @@ bool UI::Dashboard::streamAvailable() const
 }
 
 /**
- * @brief Refreshes the cached stream flag read by hotpathRxFrame; wired to every input that
+ * @brief Refreshes the cached stream flag read by applyBlock; wired to every input that
  *        streamAvailable() derives from (connection, players, benchmark activation).
  */
 void UI::Dashboard::updateStreamAvailable()
@@ -1304,11 +1615,11 @@ const DSP::MultiLineSeries& UI::Dashboard::multiplotData(const int index) const
 /**
  * @brief Returns the decimating time ring for a time-axis plot widget.
  */
-const DSP::TimeRing& UI::Dashboard::plotTimeRing(const int index) const
+const DSP::EnvelopeRing& UI::Dashboard::plotTimeRing(const int index) const
 {
   const auto it = m_plotTimeRings.find(index);
   if (it == m_plotTimeRings.end()) [[unlikely]] {
-    static const DSP::TimeRing kEmpty{};
+    static const DSP::EnvelopeRing kEmpty{};
     return kEmpty;
   }
 
@@ -1318,11 +1629,11 @@ const DSP::TimeRing& UI::Dashboard::plotTimeRing(const int index) const
 /**
  * @brief Returns the per-curve decimating time rings for a time-axis multiplot widget.
  */
-const std::vector<DSP::TimeRing>& UI::Dashboard::multiplotTimeRings(const int index) const
+const std::vector<DSP::EnvelopeRing>& UI::Dashboard::multiplotTimeRings(const int index) const
 {
   const auto it = m_multiplotTimeRings.find(index);
   if (it == m_multiplotTimeRings.end()) [[unlikely]] {
-    static const std::vector<DSP::TimeRing> kEmpty{};
+    static const std::vector<DSP::EnvelopeRing> kEmpty{};
     return kEmpty;
   }
 
@@ -1546,7 +1857,7 @@ void UI::Dashboard::resetData(const bool notify)
   m_multiplotTimeRings.clear();
   m_plotSweep.clear();
   m_multiplotSweep.clear();
-  m_plotClocks.clear();
+  resetPlotClocks();
 
   m_widgetCount = 0;
   m_widgetMap.clear();
@@ -1622,7 +1933,7 @@ void UI::Dashboard::clearPlotData()
   for (auto it = m_multiplotSweep.begin(); it != m_multiplotSweep.end(); ++it)
     it.value().resetState();
 
-  m_plotClocks.clear();
+  resetPlotClocks();
 
   for (auto& multiSeries : m_multipltValues)
     for (auto& yAxis : multiSeries.y)
@@ -1831,9 +2142,8 @@ void UI::Dashboard::bulkLoadPlotWindow(const QVector<double>& timesSec,
   for (auto it = m_multiplotSweep.begin(); it != m_multiplotSweep.end(); ++it)
     it.value().resetState();
 
-  m_plotClocks.clear();
-  m_plotDisplayTimeSec = 0.0;
-  m_updateRequired     = true;
+  resetPlotClocks();
+  m_updateRequired = true;
 }
 
 /**
@@ -2192,6 +2502,16 @@ void UI::Dashboard::setMultiplotSweep(const int index,
 }
 
 /**
+ * @brief Sets how many completed sweeps a plot retains (spec 0061; 0 = off, byte-budget clamped).
+ */
+void UI::Dashboard::setPlotSweepRetention(const int index, const int count)
+{
+  auto it = m_plotSweep.find(index);
+  if (it != m_plotSweep.end())
+    it.value().setSegmentRetention(count);
+}
+
+/**
  * @brief Re-arms a single-shot plot sweep capture.
  */
 void UI::Dashboard::armPlotSweep(const int index)
@@ -2216,45 +2536,15 @@ void UI::Dashboard::armMultiplotSweep(const int index)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Processes a frame and updates the dashboard. Each source owns its plot clock
- *        (m_plotClocks[sid]); the per-source display clock never runs backwards and is published
- *        to the m_plotDisplayTimeSec scalar the append/advance sites read. A matching cached
- *        publisher generation skips the per-frame compare_frames() walk (changes only on rebuild).
+ * @brief Drops every per-source plot clock together with the display time they publish. The two
+ *        are one state: a cleared clock restarts at the next publish, so a display time left
+ *        behind stamps rings on a timeline that no longer exists, and their decimation grid
+ *        clamps every later sample until wall time climbs back past it.
  */
-void UI::Dashboard::hotpathRxFrame(const DataModel::TimestampedFramePtr& frame)
+void UI::Dashboard::resetPlotClocks()
 {
-  SS_ASSERT_HOTPATH(frame);
-  SS_ASSERT_HOTPATH(frame->data.sourceId >= 0);
-
-  const auto& payload = frame->data;
-
-  if (payload.groups.size() <= 0 || !m_streamAvailable) [[unlikely]]
-    return;
-
-  const int sid = payload.sourceId;
-  (void)advancePlotClock(sid, frame->timestamp);
-
-  const auto genIt = m_sourceStructureGen.constFind(sid);
-  const bool genKnown =
-    genIt != m_sourceStructureGen.cend() && genIt.value() == frame->structureGeneration;
-
-  const bool structureChanged =
-    !genKnown || !m_sourceRawFrames.contains(sid) || m_valuePushes.isEmpty();
-
-  if (structureChanged) [[unlikely]] {
-    const bool hadProFeatures = containsCommercialFeatures();
-    m_sourceStructureGen[sid] = frame->structureGeneration;
-    m_sourceRawFrames[sid]    = payload;
-
-    reconfigureDashboard(combineSourceFrames(payload));
-
-    if (hadProFeatures != containsCommercialFeatures())
-      Q_EMIT containsCommercialFeaturesChanged();
-  }
-
-  updateDashboardData(payload);
-
-  m_updateRequired = true;
+  m_plotClocks.clear();
+  m_plotDisplayTimeSec = 0.0;
 }
 
 /**
@@ -2322,8 +2612,8 @@ double UI::Dashboard::advancePlotClock(int sourceId,
  */
 void UI::Dashboard::handleMissingDataset(const DataModel::Frame& frame)
 {
-  SS_ASSERT(!frame.groups.empty(), return);
-  SS_ASSERT(frame.sourceId >= 0, return);
+  if (frame.groups.empty() || frame.sourceId < 0) [[unlikely]]
+    return;
 
   const quint64 generation = m_sourceStructureGen.value(frame.sourceId);
   const auto qit           = m_quarantinedSources.constFind(frame.sourceId);
@@ -2332,61 +2622,15 @@ void UI::Dashboard::handleMissingDataset(const DataModel::Frame& frame)
 
   if (m_updateRetryInProgress) {
     qWarning() << "[Dashboard] widget model build failed twice for source" << frame.sourceId
-               << "-- dropping its frames until the structure changes";
+               << "-- dropping its blocks until the structure changes";
     m_quarantinedSources.insert(frame.sourceId, generation);
+    m_updateRetryInProgress = false;
     return;
   }
 
   m_sourceRawFrames[frame.sourceId] = frame;
   reconfigureDashboard(combineSourceFrames(frame));
-
   m_updateRetryInProgress = true;
-  updateDashboardData(frame);
-  m_updateRetryInProgress = false;
-}
-
-/**
- * @brief Updates dataset values and plot data based on the given frame.
- */
-void UI::Dashboard::updateDashboardData(const DataModel::Frame& frame)
-{
-  SS_ASSERT_HOTPATH(!frame.groups.empty());
-  SS_ASSERT_HOTPATH(frame.sourceId >= 0);
-
-  if (!m_layoutValid) [[unlikely]]
-    return;
-
-  const auto pit = m_valuePushes.constFind(frame.sourceId);
-  if (pit == m_valuePushes.cend()) [[unlikely]] {
-    handleMissingDataset(frame);
-    return;
-  }
-
-  const auto& table         = pit.value();
-  const std::size_t entries = table.size();
-
-  std::size_t i = 0;
-  for (const auto& group : frame.groups) {
-    for (const auto& dataset : group.datasets) {
-      if (i >= entries || table[i].uniqueId != dataset.uniqueId) [[unlikely]] {
-        handleMissingDataset(frame);
-        return;
-      }
-
-      const auto& push = table[i++];
-      for (auto* ptr : push.targets) {
-        ptr->isNumeric    = dataset.isNumeric;
-        ptr->numericValue = dataset.numericValue;
-      }
-
-      const auto& string_targets = dataset.isNumeric ? push.stringTargets : push.targets;
-      for (auto* ptr : string_targets)
-        ptr->value = dataset.value;
-    }
-  }
-
-  foldExtremes(frame.sourceId);
-  updateDataSeries(frame.sourceId);
 }
 
 /**
@@ -2505,16 +2749,18 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
 
   const bool pro = SerialStudio::activated();
 
-  auto savedSourceFrames = m_sourceRawFrames;
-  auto savedClocks       = m_plotClocks;
+  auto savedSourceFrames  = m_sourceRawFrames;
+  auto savedClocks        = m_plotClocks;
+  const double savedClock = m_plotDisplayTimeSec;
 
   auto savedPlotRings      = snapshotPlotTimeRings();
   auto savedMultiplotRings = snapshotMultiplotTimeRings();
 
   resetData(false);
 
-  m_sourceRawFrames = std::move(savedSourceFrames);
-  m_plotClocks      = std::move(savedClocks);
+  m_sourceRawFrames    = std::move(savedSourceFrames);
+  m_plotClocks         = std::move(savedClocks);
+  m_plotDisplayTimeSec = savedClock;
 
   m_lastFrame = frame;
 
@@ -3090,10 +3336,6 @@ void UI::Dashboard::updateFftSeries(int sourceId)
   SS_ASSERT_LOG(static_cast<int>(m_fftPushes.size()) == m_fftValues.size());
   SS_ASSERT_LOG(m_activeFFTPlots.size() == m_fftValues.size());
 
-#ifdef BUILD_COMMERCIAL
-  static auto& audioExport = Widgets::AudioExport::instance();
-#endif
-
   for (const auto& p : m_fftPushes) {
     if (!*p.activeFlag)
       continue;
@@ -3102,10 +3344,6 @@ void UI::Dashboard::updateFftSeries(int sourceId)
       continue;
 
     p.buf->push(*p.value);
-#ifdef BUILD_COMMERCIAL
-    if (p.record) [[unlikely]]
-      audioExport.enqueueSample(p.sessionKey, *p.value);
-#endif
   }
 }
 
@@ -3348,8 +3586,6 @@ void UI::Dashboard::updateWaterfallSeries(int sourceId)
   SS_ASSERT_LOG(static_cast<int>(m_waterfallPushes.size()) == m_waterfallValues.size());
   SS_ASSERT_LOG(m_activeWaterfalls.size() == m_waterfallValues.size());
 
-  static auto& audioExport = Widgets::AudioExport::instance();
-
   for (const auto& p : m_waterfallPushes) {
     if (!*p.activeFlag)
       continue;
@@ -3358,8 +3594,6 @@ void UI::Dashboard::updateWaterfallSeries(int sourceId)
       continue;
 
     p.buf->push(*p.value);
-    if (p.record) [[unlikely]]
-      audioExport.enqueueSample(p.sessionKey, *p.value);
   }
 }
 
@@ -3442,9 +3676,9 @@ void UI::Dashboard::registerXAxisIfNeeded(const DataModel::Dataset& dataset)
 /**
  * @brief Snapshots plot time-ring contents keyed by dataset uniqueId.
  */
-QHash<qint64, DSP::TimeRing> UI::Dashboard::snapshotPlotTimeRings() const
+QHash<qint64, DSP::EnvelopeRing> UI::Dashboard::snapshotPlotTimeRings() const
 {
-  QHash<qint64, DSP::TimeRing> out;
+  QHash<qint64, DSP::EnvelopeRing> out;
   const int n = widgetCount(SerialStudio::DashboardPlot);
   for (int i = 0; i < n; ++i) {
     const auto it = m_plotTimeRings.find(i);
@@ -3461,9 +3695,9 @@ QHash<qint64, DSP::TimeRing> UI::Dashboard::snapshotPlotTimeRings() const
 /**
  * @brief Snapshots multiplot time-ring contents keyed by group uniqueId.
  */
-QHash<qint64, std::vector<DSP::TimeRing>> UI::Dashboard::snapshotMultiplotTimeRings() const
+QHash<qint64, std::vector<DSP::EnvelopeRing>> UI::Dashboard::snapshotMultiplotTimeRings() const
 {
-  QHash<qint64, std::vector<DSP::TimeRing>> out;
+  QHash<qint64, std::vector<DSP::EnvelopeRing>> out;
   const int n = widgetCount(SerialStudio::DashboardMultiPlot);
   for (int i = 0; i < n; ++i) {
     const auto it = m_multiplotTimeRings.find(i);
@@ -3478,21 +3712,22 @@ QHash<qint64, std::vector<DSP::TimeRing>> UI::Dashboard::snapshotMultiplotTimeRi
 }
 
 /**
- * @brief Replays a saved ring's samples into @p target via appendDecimated. Used when
- *        the new ring has a different capacity / interval than the saved one.
+ * @brief Replays a saved ring's level-0 samples into @p target via appendDecimated, which rebuilds
+ *        the coarse levels as a side effect. Used when the new ring has a different capacity /
+ *        interval than the saved one.
  */
-static void replayTimeRing(const DSP::TimeRing& saved, DSP::TimeRing& target)
+static void replayTimeRing(const DSP::EnvelopeRing& saved, DSP::EnvelopeRing& target)
 {
-  const std::size_t n = saved.time.size();
+  const std::size_t n = std::min(saved.level0.time.size(), saved.level0.value.size());
   for (std::size_t k = 0; k < n; ++k)
-    target.appendDecimated(saved.time[k], saved.value[k]);
+    target.appendDecimated(saved.level0.time[k], saved.level0.value[k]);
 }
 
 /**
  * @brief Restores saved plot rings into the currently configured widget slots. Splices when
  *        the new ring shape matches the saved one, replays through appendDecimated otherwise.
  */
-void UI::Dashboard::restorePlotTimeRings(QHash<qint64, DSP::TimeRing>& snapshot)
+void UI::Dashboard::restorePlotTimeRings(QHash<qint64, DSP::EnvelopeRing>& snapshot)
 {
   if (snapshot.isEmpty())
     return;
@@ -3510,10 +3745,11 @@ void UI::Dashboard::restorePlotTimeRings(QHash<qint64, DSP::TimeRing>& snapshot)
 
     auto& live = ringIt.value();
     auto& kept = savedIt.value();
-    if (kept.time.raw() == nullptr)
+    if (kept.level0.time.raw() == nullptr)
       continue;
 
-    if (live.time.capacity() == kept.time.capacity() && qFuzzyCompare(live.interval, kept.interval))
+    if (live.level0.time.capacity() == kept.level0.time.capacity()
+        && qFuzzyCompare(live.level0.interval, kept.level0.interval))
       live = std::move(kept);
     else
       replayTimeRing(kept, live);
@@ -3525,7 +3761,8 @@ void UI::Dashboard::restorePlotTimeRings(QHash<qint64, DSP::TimeRing>& snapshot)
 /**
  * @brief Restores saved multiplot rings; matches by group uniqueId and per-curve shape.
  */
-void UI::Dashboard::restoreMultiplotTimeRings(QHash<qint64, std::vector<DSP::TimeRing>>& snapshot)
+void UI::Dashboard::restoreMultiplotTimeRings(
+  QHash<qint64, std::vector<DSP::EnvelopeRing>>& snapshot)
 {
   if (snapshot.isEmpty())
     return;
@@ -3546,11 +3783,11 @@ void UI::Dashboard::restoreMultiplotTimeRings(QHash<qint64, std::vector<DSP::Tim
 
     const std::size_t count = std::min(live.size(), kept.size());
     for (std::size_t j = 0; j < count; ++j) {
-      if (kept[j].time.raw() == nullptr)
+      if (kept[j].level0.time.raw() == nullptr)
         continue;
 
-      if (live[j].time.capacity() == kept[j].time.capacity()
-          && qFuzzyCompare(live[j].interval, kept[j].interval))
+      if (live[j].level0.time.capacity() == kept[j].level0.time.capacity()
+          && qFuzzyCompare(live[j].level0.interval, kept[j].level0.interval))
         live[j] = std::move(kept[j]);
       else
         replayTimeRing(kept[j], live[j]);
@@ -3574,6 +3811,7 @@ void UI::Dashboard::restorePlotSweepConfig(const QMap<int, DSP::SweepEngine>& sa
     live->setTrigger(src.level, src.edge, src.mode, src.holdoffSec, src.triggerCurve);
     live->setTimebase(src.timebaseSec);
     live->enabled = src.enabled;
+    live->takeSegmentsFrom(src);
   }
 }
 
@@ -3591,6 +3829,7 @@ void UI::Dashboard::restoreMultiplotSweepConfig(const QMap<int, DSP::SweepEngine
     live->setTrigger(src.level, src.edge, src.mode, src.holdoffSec, src.triggerCurve);
     live->setTimebase(src.timebaseSec);
     live->enabled = src.enabled;
+    live->takeSegmentsFrom(src);
   }
 }
 
@@ -3637,7 +3876,8 @@ void UI::Dashboard::configureLineSeries()
 
     if (useTimeXAxis(yDataset)) {
       const int cap = timeRingCapacity(m_plotTimeRange);
-      m_plotTimeRings.insert(i, makeHistoryRing(m_plotTimeRange));
+      m_plotTimeRings.insert(i,
+                             makeHistoryRing(m_plotTimeRange, streamSampleRate(yDataset.sourceId)));
 
       DSP::SweepEngine sweep;
       sweep.configure(1, cap, m_plotTimeRange);
@@ -3823,11 +4063,12 @@ void UI::Dashboard::configureMultiLineSeries()
     m_activeMultiplots.insert(i, true);
 
     if (useTimeXAxisGroup(group)) {
-      const int cap = timeRingCapacity(m_plotTimeRange);
-      std::vector<DSP::TimeRing> rings;
+      const int cap     = timeRingCapacity(m_plotTimeRange);
+      const double rate = streamSampleRate(group.sourceId);
+      std::vector<DSP::EnvelopeRing> rings;
       rings.reserve(group.datasets.size());
       for (size_t j = 0; j < group.datasets.size(); ++j)
-        rings.push_back(makeHistoryRing(m_plotTimeRange));
+        rings.push_back(makeHistoryRing(m_plotTimeRange, rate));
 
       m_multiplotTimeRings.insert(i, std::move(rings));
 

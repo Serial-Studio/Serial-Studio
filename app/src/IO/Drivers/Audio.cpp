@@ -38,6 +38,16 @@ static constexpr std::size_t kAudioQueueCapacity = 1024;
 // Continuous-clock resync bound: jitter under this is absorbed, drift over it snaps to wall time
 static constexpr std::chrono::milliseconds kAudioClockResync{50};
 
+/**
+ * @brief Logs a driver failure to the console. Drivers never raise modal dialogs: a modal pumps
+ *        the event loop, so one raised from a connect or error stack lets queued work retire the
+ *        very driver still on that stack (spec 0056).
+ */
+static void logDriverError(const QString& title, const QString& text)
+{
+  qWarning().noquote() << QStringLiteral("[%1] %2").arg(title, text);
+}
+
 //--------------------------------------------------------------------------------------------------
 // Utility functions
 //--------------------------------------------------------------------------------------------------
@@ -586,16 +596,9 @@ void IO::Drivers::Audio::onBackendStopped()
   static auto& connectionManager = IO::ConnectionManager::instance();
   connectionManager.disconnectDevice(this);
 
-  QMetaObject::invokeMethod(
-    this,
-    [] {
-      Misc::Utilities::showMessageBox(
-        tr("Audio Device Stopped"),
-        tr("The audio backend stopped the stream. The device may have been "
-           "unplugged or claimed by another application."),
-        QMessageBox::Warning);
-    },
-    Qt::QueuedConnection);
+  logDriverError(tr("Audio Device Stopped"),
+                 tr("The audio backend stopped the stream. The device may have been "
+                    "unplugged or claimed by another application."));
 }
 
 /**
@@ -1131,10 +1134,10 @@ void IO::Drivers::Audio::configureOutput()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Drains captured PCM on the input worker thread and publishes it: a typed SampleBlock
- *        when the stream lane is active (spec 0051, no text round-trip), the CSV text path
- *        otherwise (lane "off" keeps today's frame-lane semantics). The sample-clock resync is
- *        shared by both lanes, so input jitter never shifts the sample timeline.
+ * @brief Drains captured PCM on the input worker thread and publishes it: a typed SampleBlock when
+ *        the stream lane is active (spec 0051), the CSV text otherwise. The lane still renders that
+ *        CSV for the terminal alone, so a stream source reads there as it did before the lane. The
+ *        sample-clock resync is shared by both, so input jitter never shifts the sample timeline.
  */
 void IO::Drivers::Audio::processInputBuffer()
 {
@@ -1170,10 +1173,9 @@ void IO::Drivers::Audio::processInputBuffer()
   const auto timestamp  = m_nextSampleTime;
   m_nextSampleTime     += frameStep * totalFrames;
 
-  if (m_streamLaneActive.load(std::memory_order_relaxed)) {
+  const bool streamLane = m_streamLaneActive.load(std::memory_order_relaxed);
+  if (streamLane)
     publishTypedBlock(raw, channels, format, totalFrames, timestamp, frameStep);
-    return;
-  }
 
   m_csvBuffer.seek(0);
 
@@ -1224,7 +1226,10 @@ void IO::Drivers::Audio::processInputBuffer()
 
   m_csvStream.flush();
   const auto length = m_csvBuffer.pos();
-  publishReceivedData(m_csvData.left(length), timestamp, frameStep, totalFrames);
+  if (streamLane)
+    publishConsoleData(m_csvData.left(length), timestamp, frameStep, totalFrames);
+  else
+    publishReceivedData(m_csvData.left(length), timestamp, frameStep, totalFrames);
 }
 
 /**

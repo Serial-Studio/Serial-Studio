@@ -46,10 +46,12 @@ extern "C" {
 #include <unordered_map>
 #include <vector>
 
+#include "DataModel/DataBlock.h"
 #include "DataModel/DataTable.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FramePoolPolicy.h"
 #include "DataModel/ParseBudget.h"
+#include "DataModel/Scripting/ExpressionTransform.h"
 #include "DataModel/Scripting/JsWatchdog.h"
 #include "IO/HAL_Driver.h"
 #include "IO/PipelineHost.h"
@@ -57,6 +59,10 @@ extern "C" {
 #include "ThirdParty/readerwriterqueue.h"
 
 class SessionContext;
+
+namespace Misc {
+class TimerEvents;
+}  // namespace Misc
 
 namespace DataModel {
 
@@ -72,6 +78,8 @@ class FrameBuilder : public QObject {
 signals:
   void jsonFileMapChanged();
   void frameChanged(const DataModel::Frame& frame);
+  void structurePublished(int sourceId, const DataModel::Frame& frame);
+  void sessionStructureReady(const DataModel::Frame& frame);
 
 private:
   friend class ::SessionContext;
@@ -144,6 +152,7 @@ public:
                            const ReplayCell* cells,
                            qsizetype count,
                            const DataModel::TimestampedFrame::SteadyTimePoint& timestamp);
+  void replayBlock(const DataModel::DataBlockPtr& block);
 
   [[nodiscard]] bool reprocessFrames();
   [[nodiscard]] bool dashboardTick();
@@ -181,6 +190,7 @@ public slots:
   void prepareShutdown();
   void setupExternalConnections();
   void syncFromProjectModel();
+
   void registerQuickPlotHeaders(const QStringList& headers);
 
   void hotpathRxFrame(const IO::CapturedDataPtr& data);
@@ -190,9 +200,12 @@ public slots:
   void publishQuickPlotAudioTemplate(int channels);
   void setStreamSourceIds(const QSet<int>& sourceIds);
   void ingestStreamValues(int sourceId, const QList<QPair<int, double>>& values);
+  void ingestStreamBlock(const DataModel::DataBlockPtr& block);
   void refreshStreamDrivenFrames();
+  void refreshAsyncSinks();
 
   void collectTransformEngineGarbage();
+  void flushOpenBlocks();
 
 private slots:
   void onSourceRemoved();
@@ -201,9 +214,10 @@ private slots:
   void refreshProjectSourceSnapshot();
 
 private:
-  using BudgetClock                             = DataModel::ParseBudget::Clock;
-  static constexpr int kTransformWatchdogMs     = 100;
-  static constexpr int kTransformHookInstrCount = 10000;
+  using BudgetClock                              = DataModel::ParseBudget::Clock;
+  static constexpr int kTransformWatchdogMs      = 100;
+  static constexpr int kTransformHookInstrCount  = 10000;
+  static constexpr double kMillisecondsToSeconds = 1.0 / 1000.0;
 
   struct TransformEntry {
     int uniqueId;
@@ -233,6 +247,8 @@ private:
     std::map<int, LuaTransformRef> luaRefs;
     std::map<int, JsTransformRef> jsRefs;
     QDeadlineTimer luaDeadline{QDeadlineTimer::Forever};
+    std::unique_ptr<Expression::SlotTable> exprSlots;
+    std::map<int, Expression::Runtime> exprRefs;
   };
 
   struct EngineKey {
@@ -298,6 +314,9 @@ private:
   // code-verify off
   // One is written once at bridge injection, the other toggles once per display tick. No
   // steady-state cross-core write traffic, so sharing a cache line is harmless.
+  // Latches a project sync already in flight: its blocking marshal pumps the GUI loop, and a
+  // nested sync delivered there would spin another loop and recurse without bound
+  std::atomic<bool> m_projectSyncInFlight;
   std::atomic<bool> m_guiTableApiUsers;
   std::atomic<bool> m_tableSnapshotRequested;
   // code-verify on
@@ -372,6 +391,7 @@ private:
   int m_engineCacheSourceId;
   TransformEngine* m_luaEngineForSource;
   TransformEngine* m_jsEngineForSource;
+  TransformEngine* m_exprEngineForSource;
 
   int m_compileGuard;
   bool m_compilePending;
@@ -400,17 +420,73 @@ private:
   DataModel::FramePoolPolicy m_poolPolicy;
   quint64 m_framePoolGeneration;
 
+  /**
+   * @brief Recyclable pool slot holding one staged DataBlock plus the generation and source it
+   *        is bound to. A slot is free exactly when the pool's shared_ptr is its only reference,
+   *        so the builder keeps its own reference while a block is open and hands out an aliasing
+   *        shared_ptr on publish -- no per-block control block, and no other source can steal a
+   *        slot that is still filling.
+   */
+  struct PooledBlockSlot {
+    PooledBlockSlot();
+    DataModel::DataBlock block;
+    quint64 generation;
+    quint64 flushEpoch;
+    int sourceId;
+  };
+
+  static constexpr int kBlockPoolSlots = 64;
+
+  // Frame-lane flush cap (spec 0055 D1/D6); low because these columns carry a string per sample
+  static constexpr qsizetype kFrameBlockSampleCap = 64;
+
+  // Memory ceiling for materialised block slots; a slot's storage scales with the dataset count
+  static constexpr size_t kBlockPoolBudgetBytes = 192ULL * 1024ULL * 1024ULL;
+
+  std::vector<std::shared_ptr<PooledBlockSlot>> m_blockPool;
+  std::map<int, std::shared_ptr<PooledBlockSlot>> m_openBlocks;
+  std::map<int, quint64> m_blockNumbers;
+  std::size_t m_blockPoolHint;
+  int m_blockSlotsUsable;
+  bool m_maskSinks;
+  std::map<int, quint64> m_publishedStructureGeneration;
+
+  /**
+   * @brief ProjectModel state carried from the GUI thread to the builder thread, so the builder
+   *        never has to reach back for it mid-sync.
+   */
+  struct ProjectSnapshot {
+    QString title;
+    std::vector<DataModel::Group> groups;
+    std::vector<DataModel::Action> actions;
+    std::vector<DataModel::Source> sources;
+    SerialStudio::DecoderMethod decoder = SerialStudio::PlainText;
+  };
+
+  [[nodiscard]] static ProjectSnapshot collectProjectSnapshot();
+  void applyProjectSnapshot(ProjectSnapshot snapshot);
+  [[nodiscard]] std::shared_ptr<PooledBlockSlot> claimBlockSlot(int sourceId) noexcept;
+  void refreshBlockPoolBudget(const DataModel::Frame& src) noexcept;
+  [[nodiscard]] DataModel::StructureSnapshotPtr buildStructureSnapshot(const DataModel::Frame& src);
+  [[nodiscard]] bool structureIsCurrent(int sourceId) const noexcept;
+  void noteStructurePublished(int sourceId) noexcept;
+
+  void ensureStructurePublished(int sourceId, const DataModel::Frame& src);
+  void bindBlockToFrame(PooledBlockSlot& slot, const DataModel::Frame& src, bool uniform);
+  [[nodiscard]] PooledBlockSlot* openBlockFor(int sourceId, const DataModel::Frame& src);
+  SS_HOT void stageFrameValues(int sourceId,
+                               const DataModel::Frame& src,
+                               const DataModel::TimestampedFrame::SteadyTimePoint& ts);
+  void flushBlock(int sourceId);
+  void publishBlock(const DataModel::DataBlockPtr& block);
+
   void invalidateFramePool() noexcept;
   void refreshFramePoolBudget(const DataModel::Frame& src) noexcept;
   SS_COLD void notePoolExhausted();
   [[nodiscard]] size_t claimPoolSlot(int sourceId, bool hintedOnly = false) noexcept;
-  [[nodiscard]] DataModel::TimestampedFramePtr acquireReusedFrame(const DataModel::Frame& src);
   bool emitRepublishedFrame(const DataModel::Frame& frame, int key, bool feedExports);
   void bindSlotTemplate(PooledFrameSlot* slot, const DataModel::Frame& src);
   [[nodiscard]] bool preparePooledSlot(PooledFrameSlot* slot, const DataModel::Frame& src);
-  [[nodiscard]] SS_HOT DataModel::TimestampedFramePtr acquireFrame(const DataModel::Frame& src);
-  [[nodiscard]] SS_HOT DataModel::TimestampedFramePtr acquireFrame(
-    const DataModel::Frame& src, const DataModel::TimestampedFrame::SteadyTimePoint& ts);
 
 private:
   // code-verify off
@@ -426,10 +502,12 @@ private:
   void parseQuickPlotFrame(const IO::CapturedDataPtr& data);
   void buildQuickPlotFrame(const QStringList& channels);
   void buildQuickPlotAudioFrame(const QStringList& channels);
-  void hotpathTxFrame(const DataModel::TimestampedFramePtr& frame);
-  void publishReplayFrame(const DataModel::TimestampedFramePtr& frame);
+  void publishReplayValues(int sourceId,
+                           const DataModel::Frame& src,
+                           const DataModel::TimestampedFrame::SteadyTimePoint& ts);
   void publishSourceTemplateFrame(const DataModel::Source& src);
   [[nodiscard]] bool republishFrames(bool feedExports);
+  void wireDisplayTickHooks(Misc::TimerEvents& timers, IO::PipelineHost& pipeline);
   void refreshAnyAsyncSink();
   void refreshDatasetCaptureFlag();
   void refreshLatestFrameCapture();
@@ -495,6 +573,10 @@ private:
                              int uniqueId,
                              const QVariant& rawValue,
                              const TransformFrameInfo& info);
+  QVariant applyTransformExpr(TransformEngine& engine,
+                              int uniqueId,
+                              const QVariant& rawValue,
+                              const TransformFrameInfo& info);
   QVariant applyTransformJs(TransformEngine& engine,
                             int uniqueId,
                             const QVariant& rawValue,
@@ -513,6 +595,9 @@ private:
   void compileTransformsLuaEntry(lua_State* L,
                                  TransformEngine& engine,
                                  const TransformEntry& entry);
+  void compileTransformsExpr(TransformEngine& engine,
+                             int sourceId,
+                             const std::vector<TransformEntry>& entries);
   void compileTransformsJS(TransformEngine& engine,
                            int sourceId,
                            const std::vector<TransformEntry>& entries);

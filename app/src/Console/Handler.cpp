@@ -91,7 +91,11 @@ Console::Handler::Handler()
   , m_connectionManager(nullptr)
   , m_appState(nullptr)
   , m_projectModel(nullptr)
+  , m_annotations(new AnnotationModel(this))
+  , m_annotationDecoder(new AnnotationDecoder(m_annotations, this))
+  , m_annotationFilter(new AnnotationFilter(this))
 {
+  m_annotationFilter->setSourceModel(m_annotations);
   clear();
   static auto& commonFonts = Misc::CommonFonts::instance();
   const auto defaultFont   = commonFonts.monoFont();
@@ -133,6 +137,8 @@ Console::Handler::Handler()
       Q_EMIT displayString(m_pendingDisplay);
       m_pendingDisplay.clear();
     }
+
+    m_annotations->commitPending();
   });
 
   updateFont();
@@ -893,7 +899,32 @@ void Console::Handler::hotpathRxData(const QByteArray& data)
   if (data.isEmpty())
     return;
 
+  m_annotationDecoder->feed(data);
   append(dataToString(data), showTimestamp());
+}
+
+/**
+ * @brief The frame annotation store (spec 0059) fed by this console's raw byte stream.
+ */
+QObject* Console::Handler::annotations() const noexcept
+{
+  return m_annotations;
+}
+
+/**
+ * @brief The user decoder that fills the annotation store.
+ */
+QObject* Console::Handler::annotationDecoder() const noexcept
+{
+  return m_annotationDecoder;
+}
+
+/**
+ * @brief Row/class filter proxy over the annotation store, for the table view.
+ */
+QObject* Console::Handler::annotationFilter() const noexcept
+{
+  return m_annotationFilter;
 }
 
 /**
@@ -903,6 +934,9 @@ void Console::Handler::hotpathRxDeviceData(int deviceId, const QByteArray& data)
 {
   if (data.isEmpty())
     return;
+
+  if (m_currentDeviceId < 0 || deviceId == m_currentDeviceId)
+    m_annotationDecoder->feed(data);
 
   const auto str = dataToString(data);
   if (str.isEmpty())

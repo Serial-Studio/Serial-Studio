@@ -15,11 +15,14 @@
 
 #  include "Sessions/PlayerLoaderWorker.h"
 
+#  include <algorithm>
 #  include <QDateTime>
 #  include <QObject>
 #  include <QSqlDatabase>
 #  include <QSqlError>
 #  include <QSqlQuery>
+
+#  include "Sessions/BlockReader.h"
 
 //--------------------------------------------------------------------------------------------------
 // Construction
@@ -75,7 +78,8 @@ bool Sessions::PlayerLoaderWorker::resolveSessionId(QSqlDatabase& db,
 }
 
 /**
- * @brief Loads the embedded project JSON for the session, falling back to the global row.
+ * @brief Loads the embedded project JSON for the session (falling back to the global row) and the
+ *        spec-0062 view-state bundle (absent on pre-0062 archives, the query then yields NULL).
  */
 void Sessions::PlayerLoaderWorker::loadProjectJson(QSqlDatabase& db,
                                                    int sessionId,
@@ -87,6 +91,14 @@ void Sessions::PlayerLoaderWorker::loadProjectJson(QSqlDatabase& db,
     q.bindValue(0, sessionId);
     if (q.exec() && q.next())
       payload.projectJson = q.value(0).toString();
+  }
+
+  {
+    QSqlQuery q(db);
+    q.prepare("SELECT view_state FROM sessions WHERE session_id = ?");
+    q.bindValue(0, sessionId);
+    if (q.exec() && q.next())
+      payload.viewState = q.value(0).toString();
   }
 
   if (payload.projectJson.isEmpty()) {
@@ -128,6 +140,9 @@ bool Sessions::PlayerLoaderWorker::loadTimestampIndex(QSqlDatabase& db,
                                                       PlayerSessionPayload& payload,
                                                       QString& errorOut)
 {
+  if (Sessions::sessionUsesBlocks(db, sessionId))
+    return loadBlockTimestampIndex(db, sessionId, payload, errorOut);
+
   QSqlQuery q(db);
   q.setForwardOnly(true);
   q.prepare("SELECT DISTINCT timestamp_ns FROM readings "
@@ -146,6 +161,106 @@ bool Sessions::PlayerLoaderWorker::loadTimestampIndex(QSqlDatabase& db,
     }
 
     payload.timestampsNs.push_back(q.value(0).toLongLong());
+    ++row;
+  }
+
+  return true;
+}
+
+/**
+ * @brief Spec-0055 twin of loadTimestampIndex. Frame-lane blocks contribute every sample instant,
+ *        but a dense uniform-grid block contributes only its start: a 48 kHz capture would
+ *        otherwise materialise ~29 M timestamps per 10 minutes and make the player step one audio
+ *        sample at a time, which is what the pre-0055 per-block stream index avoided.
+ */
+bool Sessions::PlayerLoaderWorker::loadBlockTimestampIndex(QSqlDatabase& db,
+                                                           int sessionId,
+                                                           PlayerSessionPayload& payload,
+                                                           QString& errorOut)
+{
+  QSqlQuery q(db);
+  q.setForwardOnly(true);
+  q.prepare("SELECT t0_ns, dt_ns, frames, times FROM blocks "
+            "WHERE session_id = ? ORDER BY t0_ns ASC, block_id ASC");
+  q.bindValue(0, sessionId);
+  if (!q.exec()) {
+    errorOut = q.lastError().text();
+    return false;
+  }
+
+  std::vector<qint64> stamps;
+  qint64 row = 0;
+  while (q.next()) {
+    if ((row & 0xFF) == 0 && m_cancelRequested.load(std::memory_order_acquire)) {
+      errorOut = tr("Cancelled");
+      return false;
+    }
+
+    const qint64 t0Ns = q.value(0).toLongLong();
+    const qint64 dtNs = q.value(1).toLongLong();
+
+    if (dtNs != 0) {
+      payload.timestampsNs.push_back(t0Ns);
+      ++row;
+      continue;
+    }
+
+    stamps.clear();
+    if (!Sessions::expandBlockTimes(
+          t0Ns, dtNs, q.value(2).toLongLong(), q.value(3).toByteArray(), stamps)) {
+      errorOut = tr("Corrupt block timing in session %1").arg(sessionId);
+      return false;
+    }
+
+    for (const qint64 stamp : stamps)
+      payload.timestampsNs.push_back(stamp);
+
+    ++row;
+  }
+
+  std::sort(payload.timestampsNs.begin(), payload.timestampsNs.end());
+  payload.timestampsNs.erase(std::unique(payload.timestampsNs.begin(), payload.timestampsNs.end()),
+                             payload.timestampsNs.end());
+
+  return true;
+}
+
+/**
+ * @brief Loads the stream-block index for the session: metadata only, ordered by time. The
+ *        samples blobs deliberately stay on disk -- materializing them would scale replay
+ *        memory with recording length (~23 MB/minute/channel), so playback fetches one block
+ *        at a time instead (spec 0054).
+ */
+bool Sessions::PlayerLoaderWorker::loadStreamBlockIndex(QSqlDatabase& db,
+                                                        int sessionId,
+                                                        PlayerSessionPayload& payload,
+                                                        QString& errorOut)
+{
+  QSqlQuery q(db);
+  q.setForwardOnly(true);
+  q.prepare("SELECT stream_block_id, source_id, unique_id, t0_ns, dt_ns, frames "
+            "FROM stream_blocks WHERE session_id = ? ORDER BY t0_ns ASC, stream_block_id ASC");
+  q.bindValue(0, sessionId);
+  if (!q.exec()) {
+    errorOut = q.lastError().text();
+    return false;
+  }
+
+  qint64 row = 0;
+  while (q.next()) {
+    if ((row & 0xFFFF) == 0 && m_cancelRequested.load(std::memory_order_acquire)) {
+      errorOut = tr("Cancelled");
+      return false;
+    }
+
+    PlayerStreamBlockIndex entry;
+    entry.rowId    = q.value(0).toLongLong();
+    entry.sourceId = q.value(1).toInt();
+    entry.uniqueId = q.value(2).toInt();
+    entry.t0Ns     = q.value(3).toLongLong();
+    entry.dtNs     = q.value(4).toLongLong();
+    entry.frames   = q.value(5).toLongLong();
+    payload.streamBlocks.push_back(entry);
     ++row;
   }
 
@@ -231,7 +346,12 @@ void Sessions::PlayerLoaderWorker::openAndLoad(const QString& filePath, int sess
     return;
   }
 
-  if (payload->timestampsNs.empty()) {
+  if (!loadStreamBlockIndex(db, sessionId, *payload, payload->error)) {
+    closeAndEmit(db);
+    return;
+  }
+
+  if (payload->timestampsNs.empty() && payload->streamBlocks.empty()) {
     payload->error = tr("The selected session does not contain any frames.");
     closeAndEmit(db);
     return;

@@ -56,12 +56,9 @@
  * @brief Queues a warning box so it opens once the current stack has returned: a modal spins the
  *        event loop, and raising one mid open()/error stack re-enters the stack it was raised from.
  */
-static void queueWarningBox(QObject* context, const QString& title, const QString& text)
+static void logDriverError(const QString& title, const QString& text)
 {
-  QMetaObject::invokeMethod(
-    context,
-    [title, text] { Misc::Utilities::showMessageBox(title, text, QMessageBox::Warning); },
-    Qt::QueuedConnection);
+  qWarning().noquote() << QStringLiteral("[%1] %2").arg(title, text);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -213,9 +210,8 @@ bool IO::Drivers::Process::open(const QIODevice::OpenMode mode)
   if (m_mode == Mode::Launch) {
     const QString resolved = resolveExecutable(m_executable);
     if (resolved.isEmpty()) {
-      queueWarningBox(this,
-                      tr("Failed to start process"),
-                      tr("Executable \"%1\" not found in PATH.").arg(m_executable));
+      logDriverError(tr("Failed to start process"),
+                     tr("Executable \"%1\" not found in PATH.").arg(m_executable));
       return false;
     }
 
@@ -546,8 +542,7 @@ void IO::Drivers::Process::onProcessFinished(int exitCode, QProcess::ExitStatus 
   QMetaObject::invokeMethod(
     &connectionManager, [this] { connectionManager.disconnectDevice(this); }, Qt::QueuedConnection);
 
-  queueWarningBox(
-    this, tr("Process \"%1\" stopped").arg(QFileInfo(m_executable).fileName()), reason);
+  logDriverError(tr("Process \"%1\" stopped").arg(QFileInfo(m_executable).fileName()), reason);
 }
 
 /**
@@ -568,7 +563,7 @@ void IO::Drivers::Process::onProcessError(QProcess::ProcessError error)
   QMetaObject::invokeMethod(
     &connectionManager, [this] { connectionManager.disconnectDevice(this); }, Qt::QueuedConnection);
 
-  queueWarningBox(this, tr("Process Error"), detail);
+  logDriverError(tr("Process Error"), detail);
 }
 
 /**
@@ -585,10 +580,8 @@ void IO::Drivers::Process::onPipeClosed()
   reportOpenFinished(false, tr("The pipe closed before the peer attached."));
   queuePipeTeardown();
 
-  Misc::Utilities::showMessageBox(
-    tr("Pipe Closed"),
-    tr("The named pipe \"%1\" was closed on the other end.").arg(m_pipePath),
-    QMessageBox::Warning);
+  logDriverError(tr("Pipe Closed"),
+                 tr("The named pipe \"%1\" was closed on the other end.").arg(m_pipePath));
 }
 
 /**
@@ -609,8 +602,7 @@ void IO::Drivers::Process::onPipeError()
   reportOpenFinished(false, tr("Could not open named pipe: %1").arg(m_pipePath));
   queuePipeTeardown();
 
-  Misc::Utilities::showMessageBox(
-    tr("Pipe Error"), tr("Could not open named pipe: %1").arg(m_pipePath), QMessageBox::Warning);
+  logDriverError(tr("Pipe Error"), tr("Could not open named pipe: %1").arg(m_pipePath));
 }
 
 /**

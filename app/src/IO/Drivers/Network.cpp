@@ -19,28 +19,105 @@
  * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
-#include "IO/Drivers/Network.h"
+// Winsock must precede anything that can reach <windows.h>, hence above the Qt includes
+#ifdef _WIN32
+#  include <winsock2.h>
+#  include <ws2tcpip.h>
+#else
+#  include <fcntl.h>
+#  include <netdb.h>
+#  include <poll.h>
+#  include <unistd.h>
+
+#  include <cerrno>
+#  include <sys/socket.h>
+#endif
 
 #include <QElapsedTimer>
 #include <QThread>
 
 #include "IO/ConnectionManager.h"
+#include "IO/Drivers/Network.h"
 #include "Misc/Utilities.h"
+#include "SSAssert.h"
 
 static constexpr int kDialDeadlineMs = 5000;
 static constexpr int kDialPaceMs     = 250;
 
+#ifdef Q_OS_WIN
+using ProbeSocket                           = SOCKET;
+using ProbeLen                              = int;
+using ProbePoll                             = WSAPOLLFD;
+static constexpr ProbeSocket kNoProbeSocket = INVALID_SOCKET;
+static constexpr int kProbeRefused          = WSAECONNREFUSED;
+static constexpr auto ProbePollFn           = ::WSAPoll;
+#else
+using ProbeSocket                           = int;
+using ProbeLen                              = socklen_t;
+using ProbePoll                             = pollfd;
+static constexpr ProbeSocket kNoProbeSocket = -1;
+static constexpr int kProbeRefused          = ECONNREFUSED;
+static constexpr auto ProbePollFn           = ::poll;
+#endif
+
 /**
- * @brief Queues an error box so it opens once the current stack has returned: a modal spins the
- *        event loop, and raising one from a connect or socket-error stack leaves the connection
- *        stuck behind a dialog the user cannot disconnect from.
+ * @brief Whether the last connect() merely started an asynchronous dial rather than failing.
  */
-static void queueErrorBox(QObject* context, const QString& title, const QString& text)
+[[nodiscard]] static bool probeConnectPending()
 {
-  QMetaObject::invokeMethod(
-    context,
-    [title, text] { Misc::Utilities::showMessageBox(title, text, QMessageBox::Critical); },
-    Qt::QueuedConnection);
+#ifdef Q_OS_WIN
+  return ::WSAGetLastError() == WSAEWOULDBLOCK;
+#else
+  return errno == EINPROGRESS;
+#endif
+}
+
+/**
+ * @brief Whether the last connect() failed outright because the endpoint refused the connection.
+ */
+[[nodiscard]] static bool probeLastErrorRefused()
+{
+#ifdef Q_OS_WIN
+  return ::WSAGetLastError() == WSAECONNREFUSED;
+#else
+  return errno == ECONNREFUSED;
+#endif
+}
+
+/**
+ * @brief Closes a probe descriptor on either platform.
+ */
+static void closeProbeSocket(ProbeSocket handle)
+{
+#ifdef Q_OS_WIN
+  ::closesocket(handle);
+#else
+  ::close(handle);
+#endif
+}
+
+/**
+ * @brief Puts a probe descriptor in non-blocking mode so the connect can be bounded by select().
+ */
+[[nodiscard]] static bool markProbeNonBlocking(ProbeSocket handle)
+{
+#ifdef Q_OS_WIN
+  u_long mode = 1;
+  return ::ioctlsocket(handle, FIONBIO, &mode) == 0;
+#else
+  const int flags = ::fcntl(handle, F_GETFL, 0);
+  return flags != -1 && ::fcntl(handle, F_SETFL, flags | O_NONBLOCK) != -1;
+#endif
+}
+
+/**
+ * @brief Logs a driver failure to the console. Drivers never raise modal dialogs: a modal pumps
+ *        the event loop, so one raised from a connect or error stack lets queued work retire the
+ *        very driver still on that stack (spec 0056).
+ */
+static void logDriverError(const QString& title, const QString& text)
+{
+  qWarning().noquote() << QStringLiteral("[%1] %2").arg(title, text);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -50,7 +127,12 @@ static void queueErrorBox(QObject* context, const QString& title, const QString&
 /**
  * @brief Constructs the Network driver and restores persisted socket settings.
  */
-IO::Drivers::Network::Network() : m_udpMulticast(false), m_lookupActive(false), m_lookupId(-1)
+IO::Drivers::Network::Network()
+  : m_udpMulticast(false)
+  , m_lookupActive(false)
+  , m_lookupId(-1)
+  , m_tcpSocket(new QTcpSocket)
+  , m_udpSocket(new QUdpSocket)
 {
   // clang-format off
   auto socketType = m_settings.value("NetworkDriver/socketType", 0).toInt();
@@ -78,12 +160,12 @@ IO::Drivers::Network::Network() : m_udpMulticast(false), m_lookupActive(false), 
     this, &IO::Drivers::Network::portChanged, this, &IO::Drivers::Network::configurationChanged);
 
   connect(
-    &m_tcpSocket, &QAbstractSocket::stateChanged, this, &IO::Drivers::Network::onTcpStateChanged);
-  connect(&m_udpSocket, &QAbstractSocket::stateChanged, this, [=, this] {
+    m_tcpSocket, &QAbstractSocket::stateChanged, this, &IO::Drivers::Network::onTcpStateChanged);
+  connect(m_udpSocket, &QAbstractSocket::stateChanged, this, [=, this] {
     Q_EMIT configurationChanged();
   });
 
-  connect(&m_udpSocket, &QUdpSocket::errorOccurred, this, &IO::Drivers::Network::onErrorOccurred);
+  connect(m_udpSocket, &QUdpSocket::errorOccurred, this, &IO::Drivers::Network::onErrorOccurred);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -91,22 +173,34 @@ IO::Drivers::Network::Network() : m_udpMulticast(false), m_lookupActive(false), 
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Closes the link and retires the sockets. They are deleteLater()'d rather than destroyed
+ *        with the driver: a run-loop source scheduled for a socket still fires after close(), and
+ *        it must find a live, aborted socket instead of a freed one (macOS, 2026-08-16).
+ */
+IO::Drivers::Network::~Network()
+{
+  close();
+
+  m_tcpSocket->deleteLater();
+  m_udpSocket->deleteLater();
+}
+
+/**
  * @brief Closes the current network connection. Nothing may redial after close() returns: there
  *        are no dial or reopen timers left to cancel.
  */
 void IO::Drivers::Network::close()
 {
-  disconnect(&m_tcpSocket, &QTcpSocket::readyRead, this, &IO::Drivers::Network::onReadyRead);
-  disconnect(&m_udpSocket, &QUdpSocket::readyRead, this, &IO::Drivers::Network::onReadyRead);
-  disconnect(
-    &m_tcpSocket, &QTcpSocket::errorOccurred, this, &IO::Drivers::Network::onErrorOccurred);
+  disconnect(m_tcpSocket, &QTcpSocket::readyRead, this, &IO::Drivers::Network::onReadyRead);
+  disconnect(m_udpSocket, &QUdpSocket::readyRead, this, &IO::Drivers::Network::onReadyRead);
+  disconnect(m_tcpSocket, &QTcpSocket::errorOccurred, this, &IO::Drivers::Network::onErrorOccurred);
 
-  m_tcpSocket.abort();
-  m_udpSocket.abort();
-  m_tcpSocket.close();
-  m_udpSocket.close();
-  m_tcpSocket.disconnectFromHost();
-  m_udpSocket.disconnectFromHost();
+  m_tcpSocket->abort();
+  m_udpSocket->abort();
+  m_tcpSocket->close();
+  m_udpSocket->close();
+  m_tcpSocket->disconnectFromHost();
+  m_udpSocket->disconnectFromHost();
 }
 
 /**
@@ -115,11 +209,11 @@ void IO::Drivers::Network::close()
 bool IO::Drivers::Network::isOpen() const noexcept
 {
   if (socketType() == QAbstractSocket::TcpSocket)
-    return m_tcpSocket.isOpen() && tcpLinkUp();
+    return m_tcpSocket->isOpen() && tcpLinkUp();
 
   if (socketType() == QAbstractSocket::UdpSocket) {
-    const auto state = m_udpSocket.state();
-    return m_udpSocket.isOpen()
+    const auto state = m_udpSocket->state();
+    return m_udpSocket->isOpen()
         && (state == QUdpSocket::ConnectedState || state == QUdpSocket::BoundState);
   }
 
@@ -132,9 +226,9 @@ bool IO::Drivers::Network::isOpen() const noexcept
 bool IO::Drivers::Network::isReadable() const noexcept
 {
   if (socketType() == QAbstractSocket::UdpSocket)
-    return m_udpSocket.isReadable();
+    return m_udpSocket->isReadable();
   else if (socketType() == QAbstractSocket::TcpSocket)
-    return m_tcpSocket.isReadable();
+    return m_tcpSocket->isReadable();
 
   return false;
 }
@@ -145,9 +239,9 @@ bool IO::Drivers::Network::isReadable() const noexcept
 bool IO::Drivers::Network::isWritable() const noexcept
 {
   if (socketType() == QAbstractSocket::UdpSocket)
-    return m_udpSocket.isWritable();
+    return m_udpSocket->isWritable();
   else if (socketType() == QAbstractSocket::TcpSocket)
-    return m_tcpSocket.isWritable();
+    return m_tcpSocket->isWritable();
 
   return false;
 }
@@ -178,11 +272,11 @@ qint64 IO::Drivers::Network::write(const QByteArray& data)
       if (dest.isNull())
         return -1;
 
-      return m_udpSocket.writeDatagram(data, dest, udpRemotePort());
+      return m_udpSocket->writeDatagram(data, dest, udpRemotePort());
     }
 
     else if (socketType() == QAbstractSocket::TcpSocket)
-      return m_tcpSocket.write(data);
+      return m_tcpSocket->write(data);
   }
 
   return 0;
@@ -209,23 +303,24 @@ bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
     if (!m_address.isEmpty() && m_resolvedAddress.isNull() && !m_lookupActive)
       lookup(m_address);
 
-    if (!m_udpSocket.bind(udpLocalPort(),
-                          QAbstractSocket::ShareAddress | QAbstractSocket::ReuseAddressHint)) {
-      qWarning() << "UDP bind failed on port" << udpLocalPort() << ":" << m_udpSocket.errorString();
+    if (!m_udpSocket->bind(udpLocalPort(),
+                           QAbstractSocket::ShareAddress | QAbstractSocket::ReuseAddressHint)) {
+      qWarning() << "UDP bind failed on port" << udpLocalPort() << ":"
+                 << m_udpSocket->errorString();
       close();
       return false;
     }
 
     enlargeUdpReceiveBuffer();
-    socket = static_cast<QIODevice*>(&m_udpSocket);
+    socket = static_cast<QIODevice*>(m_udpSocket);
   }
 
   if (socketType() == QAbstractSocket::UdpSocket && udpMulticast()) {
     const QHostAddress literal(m_address);
     const QHostAddress group = literal.isNull() ? m_resolvedAddress : literal;
-    if (group.isNull() || !m_udpSocket.joinMulticastGroup(group)) {
+    if (group.isNull() || !m_udpSocket->joinMulticastGroup(group)) {
       qWarning() << "UDP multicast join failed for" << m_address << ":"
-                 << m_udpSocket.errorString();
+                 << m_udpSocket->errorString();
       close();
       return false;
     }
@@ -248,7 +343,7 @@ bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
  */
 bool IO::Drivers::Network::tcpLinkUp() const
 {
-  return m_tcpSocket.state() == QAbstractSocket::ConnectedState;
+  return m_tcpSocket->state() == QAbstractSocket::ConnectedState;
 }
 
 /**
@@ -257,28 +352,117 @@ bool IO::Drivers::Network::tcpLinkUp() const
  *        destroyed inside the blocked section: abort-and-redial churn on a run-loop-registered
  *        socket leaves stale CFSocket sources that crashed readFromSocket (2026-08-10, macOS).
  */
+/**
+ * @brief Runs one bounded non-blocking connect against @p address, reporting an active refusal
+ *        separately so the caller retries only while something is listening but not yet ready.
+ *        poll() rather than select(): a descriptor past FD_SETSIZE overruns an fd_set, and the
+ *        app holds session-DB, export and device descriptors alongside this one.
+ */
+[[nodiscard]] static bool probeTcpOnce(const addrinfo* address, int timeoutMs, bool& refused)
+{
+  SS_ASSERT(address != nullptr, return false);
+  SS_ASSERT(timeoutMs >= 0, timeoutMs = 0);
+
+  refused = false;
+
+  const ProbeSocket handle =
+    ::socket(address->ai_family, address->ai_socktype, address->ai_protocol);
+  if (handle == kNoProbeSocket)
+    return false;
+
+  if (!markProbeNonBlocking(handle)) {
+    closeProbeSocket(handle);
+    return false;
+  }
+
+  const int dialed =
+    ::connect(handle, address->ai_addr, static_cast<ProbeLen>(address->ai_addrlen));
+  if (dialed == 0) {
+    closeProbeSocket(handle);
+    return true;
+  }
+
+  if (!probeConnectPending()) {
+    refused = probeLastErrorRefused();
+    closeProbeSocket(handle);
+    return false;
+  }
+
+  ProbePoll pending{};
+  pending.fd     = handle;
+  pending.events = POLLOUT;
+
+  const int ready = ProbePollFn(&pending, 1, timeoutMs);
+  if (ready <= 0) {
+    closeProbeSocket(handle);
+    return false;
+  }
+
+  int error          = 0;
+  ProbeLen errorSize = sizeof(error);
+  const int queried =
+    ::getsockopt(handle, SOL_SOCKET, SO_ERROR, reinterpret_cast<char*>(&error), &errorSize);
+  closeProbeSocket(handle);
+
+  refused = (queried == 0 && error == kProbeRefused);
+  return queried == 0 && error == 0;
+}
+
+/**
+ * @brief Waits for @p host:@p port to accept connections, retrying only while the endpoint
+ *        actively refuses. Every resolved address is tried, as QTcpSocket::connectToHost() does:
+ *        probing only the first record makes this stricter than the dial it gates, and a
+ *        dual-stack host commonly resolves ::1 ahead of an IPv4-only listener.
+ */
 static bool waitForTcpEndpoint(const QString& host, quint16 port, QString& reason)
 {
+  SS_ASSERT(port != 0, return false);
+  SS_ASSERT_LOG(!host.isEmpty());
+
+  addrinfo hints{};
+  hints.ai_family   = AF_UNSPEC;
+  hints.ai_socktype = SOCK_STREAM;
+  hints.ai_flags    = AI_ADDRCONFIG;
+
+  const QByteArray node    = host.toUtf8();
+  const QByteArray service = QByteArray::number(port);
+
+  addrinfo* resolved = nullptr;
+  if (::getaddrinfo(node.constData(), service.constData(), &hints, &resolved) != 0 || !resolved) {
+    reason = QObject::tr("Host not found");
+    return false;
+  }
+
   QElapsedTimer deadline;
   deadline.start();
 
   while (deadline.elapsed() < kDialDeadlineMs) {
-    QTcpSocket probe;
-    probe.connectToHost(host, port);
-    const bool up = probe.waitForConnected(kDialDeadlineMs - int(deadline.elapsed()));
-    const QAbstractSocket::SocketError err = probe.error();
-    reason                                 = probe.errorString();
-    probe.abort();
+    bool refusedAny = false;
+    for (const addrinfo* it = resolved; it != nullptr; it = it->ai_next) {
+      const int remaining = kDialDeadlineMs - static_cast<int>(deadline.elapsed());
+      if (remaining <= 0)
+        break;
 
-    if (up)
-      return true;
+      bool refused = false;
+      if (probeTcpOnce(it, remaining, refused)) {
+        ::freeaddrinfo(resolved);
+        return true;
+      }
 
-    if (err != QAbstractSocket::ConnectionRefusedError)
+      refusedAny = refusedAny || refused;
+    }
+
+    if (!refusedAny) {
+      reason = QObject::tr("Connection failed");
+      ::freeaddrinfo(resolved);
       return false;
+    }
 
     QThread::msleep(kDialPaceMs);
   }
 
+  reason = QObject::tr("Connection timed out");
+  ::freeaddrinfo(resolved);
   return false;
 }
 
@@ -294,29 +478,28 @@ bool IO::Drivers::Network::dialTcpBlocking(const QString& host, const QIODevice:
 
   QString reason;
   if (!waitForTcpEndpoint(host, tcpPort(), reason)) {
-    queueErrorBox(&connectionManager,
-                  tr("Network socket error"),
-                  tr("Cannot connect to %1:%2 (%3)").arg(host, QString::number(tcpPort()), reason));
+    logDriverError(
+      tr("Network socket error"),
+      tr("Cannot connect to %1:%2 (%3)").arg(host, QString::number(tcpPort()), reason));
     return false;
   }
 
-  m_tcpSocket.connectToHost(host, tcpPort(), mode);
-  if (!m_tcpSocket.waitForConnected(kDialDeadlineMs)) {
-    const QString finalReason = m_tcpSocket.errorString();
-    m_tcpSocket.abort();
-    queueErrorBox(
-      &connectionManager,
+  m_tcpSocket->connectToHost(host, tcpPort(), mode);
+  if (!m_tcpSocket->waitForConnected(kDialDeadlineMs)) {
+    const QString finalReason = m_tcpSocket->errorString();
+    m_tcpSocket->abort();
+    logDriverError(
       tr("Network socket error"),
       tr("Cannot connect to %1:%2 (%3)").arg(host, QString::number(tcpPort()), finalReason));
     return false;
   }
 
-  connect(&m_tcpSocket,
+  connect(m_tcpSocket,
           &QTcpSocket::readyRead,
           this,
           &IO::Drivers::Network::onReadyRead,
           Qt::UniqueConnection);
-  connect(&m_tcpSocket,
+  connect(m_tcpSocket,
           &QTcpSocket::errorOccurred,
           this,
           &IO::Drivers::Network::onErrorOccurred,
@@ -341,8 +524,8 @@ void IO::Drivers::Network::onTcpStateChanged()
 void IO::Drivers::Network::enlargeUdpReceiveBuffer()
 {
   constexpr int kUdpReceiveBufferBytes = 8 * 1024 * 1024;
-  m_udpSocket.setSocketOption(QAbstractSocket::ReceiveBufferSizeSocketOption,
-                              kUdpReceiveBufferBytes);
+  m_udpSocket->setSocketOption(QAbstractSocket::ReceiveBufferSizeSocketOption,
+                               kUdpReceiveBufferBytes);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -638,14 +821,14 @@ void IO::Drivers::Network::onErrorOccurred(const QAbstractSocket::SocketError so
 
   QString error;
   if (socketType() == QAbstractSocket::TcpSocket)
-    error = m_tcpSocket.errorString();
+    error = m_tcpSocket->errorString();
   else if (socketType() == QAbstractSocket::UdpSocket)
-    error = m_udpSocket.errorString();
+    error = m_udpSocket->errorString();
   else
     error = QString::number(socketError);
 
   static auto& connectionManager = ConnectionManager::instance();
-  queueErrorBox(&connectionManager, tr("Network socket error"), error);
+  logDriverError(tr("Network socket error"), error);
   connectionManager.disconnectDevice(this);
 }
 

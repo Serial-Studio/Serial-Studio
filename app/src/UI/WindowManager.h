@@ -201,6 +201,7 @@ public slots:
   void updateHoverCursor(const QPointF& pos);
   void focusWindowUnderCursor(const QPointF& pos);
   void setBackgroundImage(const QString& path);
+  void setLayoutContext(const QString& key);
   void setAutoLayoutEnabled(const bool enabled);
   void selectLayoutPattern(const QString& pattern, const int ratio);
   void setFrozen(const bool frozen);
@@ -297,6 +298,7 @@ private:
   QString m_fractionPreviewLabel;
   int m_layoutRatio;
   QString m_layoutPattern;
+  QString m_layoutContextKey;
   QVariantMap m_mergedEdges;
   QVariantList m_alignmentGuides;
   QVariantList m_spacingIndicators;

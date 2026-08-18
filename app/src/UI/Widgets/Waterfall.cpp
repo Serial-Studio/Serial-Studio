@@ -604,15 +604,17 @@ void Widgets::Waterfall::allocateFftPlan(int size)
   if (size <= 0)
     return;
 
+  SS_ASSERT(size % 2 == 0, return);
+
   m_size = size;
   m_window.resize(m_size);
   m_samples.resize(m_size);
-  m_fftOutput.resize(m_size);
+  m_fftOutput.resize(m_size / 2 + 1);
   m_dbCache.assign(m_size / 2, kFloorDb);
 
   Widgets::fillFftWindow(m_windowType, m_window.data(), static_cast<unsigned int>(m_size));
 
-  m_plan = kiss_fft_alloc(m_size, 0, nullptr, nullptr);
+  m_plan = kiss_fftr_alloc(m_size, 0, nullptr, nullptr);
   if (!m_plan)
     qWarning() << "Waterfall FFT plan allocation failed for size:" << m_size;
 
@@ -704,7 +706,7 @@ double Widgets::Waterfall::freqFromWorld(double w) const
 void Widgets::Waterfall::releaseFftPlan()
 {
   if (m_plan) {
-    kiss_fft_free(m_plan);
+    kiss_fftr_free(m_plan);
     m_plan = nullptr;
   }
 }
@@ -737,27 +739,10 @@ void Widgets::Waterfall::writeRow(const float* dbValues, int bins)
   if (m_image.isNull() || bins <= 0)
     return;
 
-  const int imageWidth  = m_image.width();
   const int imageHeight = m_image.height();
   m_topRow              = (m_topRow + imageHeight - 1) % imageHeight;
 
-  const float minDb      = static_cast<float>(m_minDb);
-  const float maxDb      = static_cast<float>(m_maxDb);
-  const float invDbRange = 1.0f / qMax(1e-6f, maxDb - minDb);
-  const int writableBins = qMin(bins, imageWidth);
-  QRgb* scan             = reinterpret_cast<QRgb*>(m_image.scanLine(m_topRow));
-
-  for (int x = 0; x < writableBins; ++x) {
-    const float v  = (dbValues[x] - minDb) * invDbRange;
-    const double t = qBound(0.0, static_cast<double>(v), 1.0);
-    scan[x]        = sampleColorMap(m_colorMap, t);
-  }
-
-  if (writableBins < imageWidth) {
-    const QRgb floor = sampleColorMap(m_colorMap, 0.0);
-    for (int x = writableBins; x < imageWidth; ++x)
-      scan[x] = floor;
-  }
+  paintRowInto(m_topRow, dbValues, bins);
 
   if (!m_filledOnce) {
     if (++m_writeRow >= imageHeight) {
@@ -780,8 +765,19 @@ void Widgets::Waterfall::writeRowAt(int row, const float* dbValues, int bins)
   if (row < 0 || row >= imageHeight)
     return;
 
+  paintRowInto((row + m_topRow) % imageHeight, dbValues, bins);
+}
+
+/**
+ * @brief Colorizes one spectrum row into a physical scan line: dB values normalize onto the
+ *        current display range and the bins past the spectrum take the colormap floor.
+ */
+void Widgets::Waterfall::paintRowInto(int physicalRow, const float* dbValues, int bins)
+{
+  SS_ASSERT(dbValues != nullptr, return);
+  SS_ASSERT(physicalRow >= 0 && physicalRow < m_image.height(), return);
+
   const int imageWidth   = m_image.width();
-  const int physicalRow  = (row + m_topRow) % imageHeight;
   const float minDb      = static_cast<float>(m_minDb);
   const float maxDb      = static_cast<float>(m_maxDb);
   const float invDbRange = 1.0f / qMax(1e-6f, maxDb - minDb);
@@ -816,14 +812,16 @@ void Widgets::Waterfall::computeSmoothedRow(int spectrumSize)
               && m_dbCache.size() >= static_cast<std::size_t>(spectrumSize),
             spectrumSize = static_cast<int>(std::min(m_fftOutput.size(), m_dbCache.size())));
 
+  static_assert(sizeof(kiss_fft_cpx) == 2 * sizeof(float), "kiss_fft_cpx must pack two floats");
+
   const float normFactor = static_cast<float>(m_size) * static_cast<float>(m_size);
   const float invNorm    = 1.0f / normFactor;
-  for (int i = 0; i < spectrumSize; ++i) {
-    const float re    = m_fftOutput[i].r;
-    const float im    = m_fftOutput[i].i;
-    const float power = std::max((re * re + im * im) * invNorm, kEpsSquared);
-    m_dbCache[i]      = std::max(10.0f * std::log10(power), kFloorDb);
-  }
+  DSP::simdPowerSpectrumDb(reinterpret_cast<const float*>(m_fftOutput.data()),
+                           m_dbCache.data(),
+                           static_cast<std::size_t>(spectrumSize),
+                           invNorm,
+                           kEpsSquared,
+                           kFloorDb);
 
   if (m_smoothed.size() < static_cast<size_t>(spectrumSize))
     m_smoothed.resize(spectrumSize);
@@ -885,24 +883,21 @@ void Widgets::Waterfall::updateData()
   const double offset    = m_scaleIsValid ? -m_center : 0.0;
   const double scale     = m_scaleIsValid ? (1.0 / m_halfRange) : 1.0;
 
-  static_assert(sizeof(kiss_fft_cpx) == 2 * sizeof(float));
+  static_assert(sizeof(kiss_fft_scalar) == sizeof(float));
 
   if (avail > 0)
-    DSP::simdWindowedComplexFill(in,
-                                 data.frontIndex(),
-                                 mask,
-                                 static_cast<std::size_t>(avail),
-                                 offset,
-                                 scale,
-                                 m_window.data(),
-                                 &m_samples[0].r);
+    DSP::simdWindowedRealFill(in,
+                              data.frontIndex(),
+                              mask,
+                              static_cast<std::size_t>(avail),
+                              offset,
+                              scale,
+                              m_window.data(),
+                              m_samples.data());
 
-  for (int i = avail; i < m_size; ++i) {
-    m_samples[i].r = 0.0f;
-    m_samples[i].i = 0.0f;
-  }
+  std::fill(m_samples.begin() + avail, m_samples.end(), 0.0f);
 
-  kiss_fft(m_plan, m_samples.data(), m_fftOutput.data());
+  kiss_fftr(m_plan, m_samples.data(), m_fftOutput.data());
 
   const int spectrumSize = m_size / 2;
   computeSmoothedRow(spectrumSize);

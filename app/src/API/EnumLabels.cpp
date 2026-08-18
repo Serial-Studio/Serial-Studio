@@ -216,6 +216,8 @@ QString API::EnumLabels::scriptLanguageSlug(int value)
       return QStringLiteral("lua");
     case SerialStudio::Native:
       return QStringLiteral("native");
+    case SerialStudio::Expression:
+      return QStringLiteral("expression");
   }
   return QStringLiteral("unknown");
 }
@@ -235,6 +237,8 @@ QString API::EnumLabels::scriptLanguageLabel(int value)
       return QStringLiteral("Lua 5.4");
     case SerialStudio::Native:
       return QStringLiteral("Built-In (C++ template)");
+    case SerialStudio::Expression:
+      return QStringLiteral("Expression (compiled formula)");
   }
   return QStringLiteral("Unknown");
 }

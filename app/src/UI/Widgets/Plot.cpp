@@ -27,6 +27,7 @@
 #include "DSPSimd.h"
 #include "SSAssert.h"
 #include "UI/Dashboard.h"
+#include "UI/Widgets/PlotAutoScale.h"
 #include "UI/Widgets/PlotLogScale.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -42,6 +43,8 @@ Widgets::Plot::Plot(const int index, QQuickItem* parent)
   , m_index(index)
   , m_dataW(0)
   , m_dataH(0)
+  , m_xStepIndex(AutoScale::kNoStep)
+  , m_yStepIndex(AutoScale::kNoStep)
   , m_minX(0)
   , m_maxX(0)
   , m_minY(0)
@@ -62,6 +65,8 @@ Widgets::Plot::Plot(const int index, QQuickItem* parent)
   , m_timebaseMs(0)
   , m_sweepMode(SerialStudio::SweepAuto)
   , m_triggerEdge(SerialStudio::TriggerRising)
+  , m_sweepRetention(0)
+  , m_lastSegmentCount(0)
 {
   if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index)) {
     const auto& yDataset = GET_DATASET(SerialStudio::DashboardPlot, m_index);
@@ -323,6 +328,80 @@ SerialStudio::TriggerEdge Widgets::Plot::triggerEdge() const noexcept
 }
 
 //--------------------------------------------------------------------------------------------------
+// Sweep segment retention (spec 0061)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Requested number of completed sweeps to retain (0 = off).
+ */
+int Widgets::Plot::sweepRetention() const noexcept
+{
+  return m_sweepRetention;
+}
+
+/**
+ * @brief Segments the engine currently holds.
+ */
+int Widgets::Plot::sweepSegmentCount() const
+{
+  return m_dashboard.plotSweep(m_index).segmentCount();
+}
+
+/**
+ * @brief Effective retention after the byte-budget clamp (what the UI shows).
+ */
+int Widgets::Plot::sweepSegmentCapacity() const
+{
+  return m_dashboard.plotSweep(m_index).segmentCapacity();
+}
+
+/**
+ * @brief Sets the retention count and pushes it into the engine.
+ */
+void Widgets::Plot::setSweepRetention(const int count)
+{
+  const int clamped = qBound(0, count, DSP::SweepEngine::kMaxSegments);
+  if (m_sweepRetention == clamped)
+    return;
+
+  m_sweepRetention = clamped;
+  m_dashboard.setPlotSweepRetention(m_index, m_sweepRetention);
+  Q_EMIT sweepSegmentsChanged();
+}
+
+/**
+ * @brief Downsamples retained segment @p index into @p series (age-dimmed overlay traces are
+ *        drawn by the view from these); an empty series when the segment does not exist.
+ */
+void Widgets::Plot::drawSegment(QXYSeries* series, const int index)
+{
+  static thread_local DSP::DownsampleWorkspace ws;
+  if (!series)
+    return;
+
+  const DSP::SweepSegment* segment = m_dashboard.plotSweep(m_index).segment(index);
+  if (!segment || segment->curves.empty()) {
+    series->clear();
+    return;
+  }
+
+  double xLo = m_minX;
+  double xHi = m_maxX;
+  clampToVisibleX(xLo, xHi);
+  const auto& ring = segment->curves.front();
+  (void)DSP::downsampleWindowAbsolute(
+    ring.time, ring.value, xLo, xHi, m_dataW, m_dataH, m_segmentScratch, &ws);
+  if (m_logY) {
+    QPointF* points = m_segmentScratch.data();
+    for (qsizetype i = 0; i < m_segmentScratch.size(); ++i)
+      points[i].setY(LogScale::clampedLog10(points[i].y()));
+  }
+
+  series->replace(m_segmentScratch);
+  Q_EMIT series->update();
+}
+
+//--------------------------------------------------------------------------------------------------
 // Rendering
 //--------------------------------------------------------------------------------------------------
 
@@ -552,10 +631,18 @@ void Widgets::Plot::updateData()
     double xLo = m_minX;
     double xHi = m_maxX;
     clampToVisibleX(xLo, xHi);
-    const auto& ring = m_dashboard.plotSweep(m_index).display(0);
+    const auto& engine = m_dashboard.plotSweep(m_index);
+    const auto& ring   = engine.display(0);
     (void)DSP::downsampleWindowAbsolute(
       ring.time, ring.value, xLo, xHi, m_dataW, m_dataH, m_data, &ws);
     applyLogYToRender();
+
+    const int count = engine.segmentCount();
+    if (count != m_lastSegmentCount) [[unlikely]] {
+      m_lastSegmentCount = count;
+      Q_EMIT sweepSegmentsChanged();
+    }
+
     return;
   }
 
@@ -564,7 +651,7 @@ void Widgets::Plot::updateData()
     double xHi = m_maxX;
     clampToVisibleX(xLo, xHi);
     const auto& ring = m_dashboard.plotTimeRing(m_index);
-    (void)DSP::downsampleTimeWindow(ring.time, ring.value, xLo, xHi, m_dataW, m_dataH, m_data, &ws);
+    (void)DSP::downsampleTimeWindow(ring, xLo, xHi, m_dataW, m_dataH, m_data, &ws);
     applyLogYToRender();
     return;
   }
@@ -900,18 +987,24 @@ bool Widgets::Plot::computeMinMaxValues(double& min,
     max = std::numeric_limits<double>::lowest();
     DSP::simdFiniteMinMaxPointF<kLane>(m_data.constData(), m_data.size(), min, max);
 
-    padDerivedRange(min, max, addPadding);
+    padDerivedRange(min, max, addPadding, kLane == 0 ? m_xStepIndex : m_yStepIndex);
   }
 
   return DSP::notEqual(prevMinY, min) || DSP::notEqual(prevMaxY, max);
 }
 
 /**
- * @brief Pads a data-derived [min, max] range and rounds to integer bounds.
+ * @brief Pads a data-derived [min, max] range and snaps it onto the 1-2-5 auto-scale ladder
+ *        (spec 0058): @p stepIndex carries the chosen ladder step between draws so the axis
+ *        grows at once but shrinks only past the hysteresis margin, instead of breathing with
+ *        every drift of the data extent.
  */
-void Widgets::Plot::padDerivedRange(double& min, double& max, const bool addPadding)
+void Widgets::Plot::padDerivedRange(double& min, double& max, const bool addPadding, int& stepIndex)
 {
   applyAxisPadding(min, max, addPadding);
+  if (AutoScale::quantizeRange(min, max, stepIndex))
+    return;
+
   max = std::ceil(max);
   min = std::floor(min);
   if (DSP::almostEqual(max, min) && addPadding) {

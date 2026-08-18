@@ -126,6 +126,12 @@
   "file": "SerialStudio-SDK.md"
  },
  {
+  "id": "console-annotations",
+  "title": "Console Annotations",
+  "section": "Scripting & Data Logic",
+  "file": "Console-Annotations.md"
+ },
+ {
   "id": "communication-protocols",
   "title": "Communication Protocols",
   "section": "Connectivity",

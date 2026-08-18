@@ -577,6 +577,26 @@ HotpathBenchmark::Result HotpathBenchmark::runDataPipeline(quint64 targetFrames,
 }
 
 /**
+ * @brief Drains the pipeline's dashboard rings the way the display tick does, structure first so a
+ *        block is never rejected for a layout the dashboard has not adopted yet.
+ */
+static void drainDashboardRings()
+{
+  static auto& dashboard = UI::Dashboard::instance();
+  static auto& pipeline  = IO::PipelineHost::instance();
+
+  DataModel::DataBlockPtr block;
+  DataModel::StructureSnapshotPtr structure;
+
+  // code-verify off
+  while (pipeline.dequeueStructureSnapshot(structure))
+    dashboard.applyStructureSnapshot(structure);
+  while (pipeline.dequeueDashboardBlock(block))
+    dashboard.applyBlock(block);
+  // code-verify on
+}
+
+/**
  * @brief Drives FrameReader -> FrameBuilder -> consumers end-to-end and measures parsed frames/sec.
  */
 HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
@@ -617,19 +637,16 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
   auto& queue = reader.queue();
   IO::CapturedDataPtr drained;
 
-  static auto& dashboard = UI::Dashboard::instance();
-  static auto& pipeline  = IO::PipelineHost::instance();
-  DataModel::TimestampedFramePtr ringFrame;
-
   if (activateDashboard) {
     reader.processData(IO::makeCapturedData(chunk));
 
     // code-verify off
     while (queue.try_dequeue(drained))
       builder.hotpathRxFrame(drained);
-    while (pipeline.dequeueDashboardFrame(ringFrame))
-      dashboard.hotpathRxFrame(ringFrame);
     // code-verify on
+
+    builder.flushOpenBlocks();
+    drainDashboardRings();
 
     activateDashboardWidgets();
   }
@@ -651,10 +668,10 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
     // code-verify off
     while (queue.try_dequeue(drained))
       builder.hotpathRxFrame(drained);
-    if (activateDashboard)
-      while (pipeline.dequeueDashboardFrame(ringFrame))
-        dashboard.hotpathRxFrame(ringFrame);
     // code-verify on
+
+    if (activateDashboard)
+      drainDashboardRings();
 
     fed     += kFramesPerChunk;
     seconds  = std::chrono::duration<double>(Clock::now() - start).count() - spentSpin;
@@ -1001,11 +1018,14 @@ bool HotpathBenchmark::printReport(const Result* results,
 }
 
 /**
- * @brief Measures stream-lane throughput (spec 0051 M4, ungated): a StreamProcessor driven
- *        synchronously with 96 kHz stereo blocks, with and without a heavy Lua block transform.
- *        Returns per-channel sample frames per second (the AC6/AC19 counter source).
+ * @brief Measures stream-lane throughput (spec 0051 M4, ungated): 96 kHz stereo blocks driven
+ *        synchronously, with and without a heavy Lua block transform. Counts blockReady rather
+ *        than a display ring (gone in spec 0055 D8), so publication is still measured.
  */
-static double streamPhaseThroughput(const QString& transformCode, bool fastMode, double seconds)
+static double streamPhaseThroughput(const QString& transformCode,
+                                    bool fastMode,
+                                    double seconds,
+                                    int language = SerialStudio::Lua)
 {
   IO::StreamConfig config;
   config.sourceId    = 0;
@@ -1017,17 +1037,22 @@ static double streamPhaseThroughput(const QString& transformCode, bool fastMode,
     dataset.uniqueId          = channel;
     dataset.channel           = channel;
     dataset.plot              = true;
-    dataset.transformLanguage = SerialStudio::Lua;
+    dataset.transformLanguage = language;
     dataset.transformCode     = transformCode;
+    dataset.title             = QStringLiteral("ch%1").arg(channel);
     config.datasets.push_back(dataset);
   }
 
-  moodycamel::ReaderWriterQueue<IO::StreamDisplayUpdatePtr> ring(4096);
-  std::atomic<int> pixelWidth{512};
-  std::atomic<double> windowSec{10.0};
-  std::atomic<bool> exportActive{false};
-  IO::StreamProcessor processor(config, &ring, &pixelWidth, &windowSec, &exportActive);
+  IO::StreamProcessor processor(config);
   processor.compileEngines();
+
+  quint64 published = 0;
+  QObject::connect(
+    &processor,
+    &IO::StreamProcessor::blockReady,
+    &processor,
+    [&published](const DataModel::DataBlockPtr&) { ++published; },
+    Qt::DirectConnection);
 
   constexpr qsizetype kFrames = 960;
   auto block                  = std::make_shared<IO::SampleBlock>();
@@ -1042,26 +1067,23 @@ static double streamPhaseThroughput(const QString& transformCode, bool fastMode,
   using Clock      = std::chrono::steady_clock;
   const auto start = Clock::now();
   double elapsed   = 0.0;
-  IO::StreamDisplayUpdatePtr drained;
   // code-verify off
-  // Wall-clock-bounded drive loop; the inner drain is bounded by the ring capacity.
+  // Wall-clock-bounded drive loop.
   while (elapsed < seconds) {
     processor.onSampleBlock(block);
-
-    while (ring.try_dequeue(drained)) {
-    }
-
     elapsed = std::chrono::duration<double>(Clock::now() - start).count();
   }
   // code-verify on
 
   const auto frames = processor.samplesProcessed();
+  SS_ASSERT_LOG(published > 0);
   return elapsed > 0.0 ? static_cast<double>(frames) / elapsed : 0.0;
 }
 
 /**
  * @brief Runs and prints the ungated stream-lane phase: raw ingest, Safe-mode heavy Lua block
- *        transform, and Fast-mode (JIT) heavy Lua block transform.
+ *        transform, Fast-mode (JIT) heavy Lua block transform, and the same 3-tap filter as a
+ *        compiled expression (spec 0060 R7).
  */
 static void runStreamPhase(double minSeconds)
 {
@@ -1079,23 +1101,30 @@ static void runStreamPhase(double minSeconds)
                                        "  return samples\n"
                                        "end\n");
 
+  const QString expression =
+    QStringLiteral("0.2 * v + 0.4 * sample(ch0, 1) + 0.2 * sample(ch0, 2)");
+
   const double raw  = streamPhaseThroughput(QString(), false, window);
   const double safe = streamPhaseThroughput(heavy, false, window);
   const double fast = streamPhaseThroughput(heavy, true, window);
+  const double expr = streamPhaseThroughput(expression, false, window, SerialStudio::Expression);
 
   // code-verify off
   // Benchmark report lines must reach raw stdout (CI parses them); qDebug would detour through
   // the message handler and the console widget.
   std::printf("hotpath-stream: raw %.0f frames/s, lua-block safe %.0f frames/s, "
-              "lua-block fast %.0f frames/s (2 ch, 96 kHz target per source)\n",
+              "lua-block fast %.0f frames/s, expression %.0f frames/s "
+              "(2 ch, 96 kHz target per source)\n",
               raw,
               safe,
-              fast);
+              fast,
+              expr);
   std::printf("HOTPATH_STREAM_RAW_FPS=%.0f HOTPATH_STREAM_SAFE_FPS=%.0f "
-              "HOTPATH_STREAM_FAST_FPS=%.0f\n",
+              "HOTPATH_STREAM_FAST_FPS=%.0f HOTPATH_STREAM_EXPR_FPS=%.0f\n",
               raw,
               safe,
-              fast);
+              fast,
+              expr);
   std::fflush(stdout);
   // code-verify on
 }

@@ -307,6 +307,7 @@ set(SOURCES
   src/IO/Drivers/UART.cpp
   src/IO/Drivers/BluetoothLE.cpp
   src/IO/Checksum.cpp
+  src/Console/Annotations.cpp
   src/Console/Handler.cpp
   src/IO/FrameConfig.h
   src/IO/DeviceManager.cpp
@@ -333,6 +334,7 @@ set(SOURCES
   src/DataModel/Scripting/LuaScriptEngine.cpp
   src/DataModel/Scripting/LuaCompat.cpp
   src/DataModel/Scripting/LuaMigration.cpp
+  src/DataModel/Scripting/ExpressionTransform.cpp
   src/DataModel/Scripting/DashboardApi.cpp
   src/DataModel/Scripting/DeviceWriteApi.cpp
   src/DataModel/Scripting/ScriptApiCall.cpp
@@ -349,6 +351,7 @@ set(SOURCES
   src/DataModel/Editors/SerialStudioCompleter.cpp
   src/DataModel/Editors/FrameParserModel.cpp
   src/DataModel/Editors/CodeFormatter.cpp
+  src/DataModel/Editors/ExpressionHighlighter.cpp
   src/DataModel/Editors/OutputCodeEditor.cpp
   src/DataModel/ProjectModel.cpp
   src/DataModel/Project/ProjectHistory.cpp
@@ -502,6 +505,7 @@ set(HEADERS
   src/SSAssert.h
   src/Platform/AppPlatform.h
   src/Platform/NativeWindow.h
+  src/Console/Annotations.h
   src/Console/Handler.h
   src/Console/Export.h
   src/IO/Drivers/UART.h
@@ -538,6 +542,7 @@ set(HEADERS
   src/DataModel/Scripting/LuaScriptEngine.h
   src/DataModel/Scripting/LuaCompat.h
   src/DataModel/Scripting/LuaMigration.h
+  src/DataModel/Scripting/ExpressionTransform.h
   src/DataModel/Scripting/DashboardApi.h
   src/DataModel/Scripting/DeviceWriteApi.h
   src/DataModel/Scripting/ScriptApiCall.h
@@ -548,6 +553,7 @@ set(HEADERS
   src/DataModel/Editors/ControlScriptEditor.h
   src/DataModel/Editors/MacroEditor.h
   src/DataModel/Editors/SerialStudioCompleter.h
+  src/DataModel/Editors/ExpressionHighlighter.h
   src/DataModel/Editors/FrameParserModel.h
   src/DataModel/Editors/CodeFormatter.h
   src/DataModel/Editors/OutputCodeEditor.h
@@ -560,6 +566,7 @@ set(HEADERS
   src/DataModel/Project/ProjectEditorItemIds.h
   src/DataModel/Project/ProjectEditorShared.h
   src/DataModel/Importers/ProtoImporter.h
+  src/DataModel/DataBlock.h
   src/DataModel/Frame.h
   src/DataModel/FrameBuilder.h
   src/DataModel/FramePoolPolicy.h
@@ -570,6 +577,7 @@ set(HEADERS
   src/DataModel/Editors/DatasetTransformEditor.h
   src/DataModel/NotificationCenter.h
   src/DataModel/Dialogs/TransmitTestDialog.h
+  src/CSV/SparseRowMerger.h
   src/CSV/Export.h
   src/CSV/Player.h
   src/CSV/PlayerLoaderWorker.h
@@ -698,6 +706,7 @@ set(QML_SOURCES
   qml/Widgets/Dashboard/Plot.qml
   qml/Widgets/Dashboard/PlotCommon.qml
   qml/Widgets/Dashboard/Stopwatch.qml
+  qml/Widgets/Dashboard/ConsoleAnnotations.qml
   qml/Widgets/Dashboard/Terminal.qml
   qml/Widgets/Dashboard/WidgetTitleBar.qml
   qml/Widgets/Dashboard/WidgetToolbar.qml
@@ -805,6 +814,8 @@ if(BUILD_COMMERCIAL)
     src/Sessions/Player.h
     src/Sessions/PlayerLoaderWorker.h
     src/Sessions/ReportData.h
+    src/Sessions/BlockReader.h
+    src/Sessions/StreamBlockCodec.h
     src/Sessions/Verifier.h
     src/ThirdParty/miniaudio.h
     src/ThirdParty/tweetnacl.h
@@ -1279,6 +1290,18 @@ if(ENABLE_GRPC)
       _WINSOCKAPI_
     )
   endif()
+endif()
+
+#---------------------------------------------------------------------------------------------------
+# Winsock (Windows)
+#---------------------------------------------------------------------------------------------------
+#
+# The Network driver's TCP reachability probe calls socket/connect/WSAPoll/getaddrinfo directly
+# rather than through QTcpSocket, so it needs ws2_32 explicitly: Qt keeps it as a private
+# dependency and does not propagate it to consumers.
+
+if(WIN32)
+  target_link_libraries(${PROJECT_EXECUTABLE} PRIVATE ws2_32)
 endif()
 
 #---------------------------------------------------------------------------------------------------

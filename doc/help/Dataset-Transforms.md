@@ -57,6 +57,106 @@ The function returns a number, or a string for text datasets (a returned string 
 
 If the function returns `nil` (Lua), `undefined`/`NaN`/`Infinity` (JS), or if an error happens, the raw value is kept unchanged so the data stream isn't interrupted. Both a JS exception and a Lua error log a warning (with the error message and dataset ID) to the application log; only the non-error fallback cases (`nil`/`undefined`/`NaN`/`Infinity`) are silent.
 
+## Expression transforms
+
+A third language sits beside Lua and JavaScript in the language dropdown: **Expression**. It has no function, no statements, and no script engine. The editor holds one arithmetic expression, and its value is the dataset's new reading:
+
+```text
+v * 0.01 + 273.15
+```
+
+Expressions compile to a flat program that runs without allocating, which makes them the cheapest option for the common case of scaling, clamping, and combining channels. Use Lua or JavaScript when the transform needs state, branching over several lines, table access, or `deviceWrite`.
+
+Lines starting with `#` are comments and run to the end of the line.
+
+### Inputs
+
+| Name | Value |
+|------|-------|
+| `v`  | This sample's raw value |
+| `t`  | Seconds since the frame stream started |
+| `dt` | Seconds since the previous sample |
+| `n`  | Sample index, starting at 0 |
+| `pi`, `e`, `nan`, `inf` | Constants |
+
+Other datasets of the same source are read by their **Script Alias**, the same identifier `datasetGetRaw` and the API accept. Dataset titles do not resolve: titles are display text and change freely, while the alias is stable.
+
+```text
+v * shunt_current
+```
+
+A dataset with no alias is addressed by its **dataset ID**, wrapped in braces because a bare number is a numeric constant:
+
+```text
+v * {12}
+```
+
+Braces also carry an alias containing spaces. If a project defines an alias that is itself all digits, the alias wins over the ID of the same number.
+
+A sibling holds the latest value published for it, so a dataset processed later in the tree contributes its previous sample. Order datasets in the Project Editor accordingly.
+
+`sample(name, k)` reads a dataset's value `k` samples back, up to 256:
+
+```text
+v - sample(shunt_current, 1)
+```
+
+The name is bare or braced, never quoted.
+
+### Data tables
+
+Expressions read data-table registers with `table(name, register)`, the same constants and computed registers `tableGet` reaches from Lua and JavaScript:
+
+```text
+v * table(calibration, voltage_scale)
+```
+
+Both names are bare, or braced when they contain spaces. The register is resolved to a handle when the expression compiles, so the read costs an array lookup per sample; an unknown register is a compile error naming the pair.
+
+Access is **read-only**. Writing a register from an expression would give it an execution-order dependency, which is where a Lua or JavaScript transform with `tableSet` belongs. Computed registers carry the same processing-order caveat as sibling datasets: an expression sees the last value written, which for a register written later in the same frame is the previous frame's.
+
+`table()` is available on the frame pipeline. On a source running the stream lane (a dense source such as audio, or one with the stream lane forced on) an expression using `table()` fails to compile, since the register store belongs to another thread and a per-sample cross-thread read is not on the table.
+
+### Operators and functions
+
+Operators, loosest binding first: `||`, `&&`, `==` `!=`, `<` `<=` `>` `>=`, `+` `-`, `*` `/` `%`, `^` (right-associative), unary `-` and `!`, and the conditional `condition ? a : b`.
+
+| Arity | Functions |
+|-------|-----------|
+| One   | `abs` `floor` `ceil` `round` `sqrt` `cbrt` `exp` `log` `log10` `log2` `sin` `cos` `tan` `asin` `acos` `atan` `sinh` `cosh` `tanh` `deg` `rad` |
+| Two   | `min` `max` `pow` `atan2` `hypot` |
+| Three | `clamp` `lerp` |
+
+`log` is the natural logarithm. `deg` and `rad` convert between radians and degrees.
+
+### Examples
+
+```text
+# Scale and offset an ADC reading
+v * 0.01 + 273.15
+```
+
+```text
+# Limit to a range
+clamp(v, 0, 100)
+```
+
+```text
+# Ratio of two channels, guarding the divide
+bus_voltage == 0 ? 0 : v / bus_voltage
+```
+
+```text
+# Difference from one sample ago
+v - sample(flow, 1)
+```
+
+### Limits
+
+An expression compiles to at most 512 operations; a longer one is rejected with `expression too long`. History reaches 256 samples back. A compile error is reported once and the dataset publishes its raw value.
+
+The Template dropdown is disabled for Expression: the built-in templates are Lua and JavaScript code and have no expression equivalent.
+
 ## Persistent state
 
 Variables declared at the top level of the transform code (outside the `transform()` function) persist between frames. That's how filters, accumulators, and other stateful transforms keep state across calls.
@@ -170,7 +270,7 @@ So filters and accumulators start from scratch on each new connection session, w
 
 ## Data Table API
 
-Every transform has access to four built-in functions for reading and writing the project's data tables. Tables are covered in full in [Data Tables](Data-Tables.md). This section documents the API surface from the transform's point of view.
+Lua and JavaScript transforms have four built-in functions for reading and writing the project's data tables. An Expression transform reads registers with `table(name, register)` instead, and cannot write. Tables are covered in full in [Data Tables](Data-Tables.md). This section documents the API surface from the transform's point of view.
 
 | Function                       | Returns                        | Purpose |
 |--------------------------------|--------------------------------|---------|
@@ -420,8 +520,8 @@ Full reference, including argument types and longer examples (GPS fix reset, mod
 1. Select a dataset in the Project Editor tree.
 2. Click the **Transform** button in the dataset toolbar.
 3. The Transform Editor opens with:
-   - **Language selector.** Lua or JavaScript. Defaults to the source's frame parser language, but each dataset can pick its own.
-   - **Template dropdown.** 34 ready-made transforms for common operations.
+   - **Language selector.** Lua, JavaScript, or Expression. Defaults to the source's frame parser language, but each dataset can pick its own.
+   - **Template dropdown.** 34 ready-made transforms for common operations. Disabled for Expression.
    - **Code editor.** Syntax-highlighted, with auto-completion.
    - **Test area.** Enter a raw value, click Test, see the transformed output.
 4. Write or pick a `transform(value)` function.
@@ -599,7 +699,7 @@ end
 2. It takes one required parameter (`value`), plus an optional second parameter (`info`) with frame metadata (`frameNumber`, `sourceId`, `timestampMs`).
 3. It has to return a number, or a string for text datasets (a returned string is kept as the dataset value).
 4. Returning `nil`, `NaN`, or `Infinity` falls back to the raw value, as does a script error (logged in both languages; only the non-error `nil`/`NaN`/`Infinity` fallback is silent).
-5. Each dataset picks its own transform language (Lua or JavaScript); datasets on the same source can mix the two. The source's frame parser language is only the default when none is picked.
+5. Each dataset picks its own transform language (Lua, JavaScript, or Expression); datasets on the same source can mix them. The source's frame parser language is only the default when none is picked. Rules 1 to 4 describe the `transform()` function and apply to Lua and JavaScript; an Expression dataset has no function and publishes the value of its single expression.
 6. Datasets on the same source share one underlying scripting engine, but each dataset's top-level state is isolated. In JavaScript, declare stateful variables with `var`: an implicit (undeclared) global is written to the shared engine and leaks across datasets. In Lua each dataset chunk has its own environment, so bare globals (and `function foo() end` at chunk top level) stay isolated per dataset; `local` is still recommended for clarity and consistency with the JavaScript rule.
 7. The engine is sandboxed: no file I/O, no network, no OS commands.
 8. Transforms run on every incoming frame, so keep them fast. Avoid unbounded loops or heavy computation.

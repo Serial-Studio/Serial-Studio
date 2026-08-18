@@ -34,6 +34,7 @@ extern "C" {
 #include <charconv>
 #include <cmath>
 #include <cstdio>
+#include <limits>
 
 #include "DataModel/Scripting/LuaCompatJIT.h"
 
@@ -75,6 +76,7 @@ extern "C" {
 #  include "MQTT/Publisher.h"
 #  include "Sessions/Export.h"
 #  include "Sessions/Player.h"
+#  include "UI/Widgets/AudioExport.h"
 #endif
 
 #ifdef ENABLE_GRPC
@@ -159,6 +161,7 @@ DataModel::FrameBuilder::FrameBuilder()
   , m_jsTransformTimedOut(false)
   , m_publishedTableGeneration(-1)
   , m_publishedTableClock(0)
+  , m_projectSyncInFlight(false)
   , m_guiTableApiUsers(false)
   , m_tableSnapshotRequested(false)
   , m_tableMirrorRing(kTableMirrorSlots)
@@ -174,10 +177,14 @@ DataModel::FrameBuilder::FrameBuilder()
   , m_engineCacheSourceId(-1)
   , m_luaEngineForSource(nullptr)
   , m_jsEngineForSource(nullptr)
+  , m_exprEngineForSource(nullptr)
   , m_compileGuard(0)
   , m_compilePending(false)
   , m_poolPolicy(kFramePoolSize)
   , m_framePoolGeneration(1)
+  , m_blockPoolHint(0)
+  , m_blockSlotsUsable(kBlockPoolSlots)
+  , m_maskSinks(false)
 {
   m_luaTableContext.store  = &m_tableStore;
   m_luaTableContext.owner  = this;
@@ -190,6 +197,10 @@ DataModel::FrameBuilder::FrameBuilder()
   m_tableSnapshotPool.reserve(kTableSnapshotPoolSlots);
   for (size_t i = 0; i < kTableSnapshotPoolSlots; ++i)
     m_tableSnapshotPool.emplace_back(std::make_shared<DataModel::DataTableSnapshot>());
+
+  m_blockPool.reserve(kBlockPoolSlots);
+  for (int i = 0; i < kBlockPoolSlots; ++i)
+    m_blockPool.emplace_back(std::make_shared<PooledBlockSlot>());
 
 #ifdef BUILD_COMMERCIAL
   static auto& lemonSqueezy = Licensing::LemonSqueezy::instance();
@@ -235,17 +246,299 @@ DataModel::FrameBuilder& DataModel::FrameBuilder::instance()
 DataModel::FrameBuilder::PooledFrameSlot::PooledFrameSlot() : generation(0), matchedSrc(nullptr) {}
 
 /**
- * @brief Bumps the pool generation after a template rebuild so stale slots full-assign on reuse
- *        instead of leaking old identity fields through the structure-match fast path, and clears
- *        slot ownership so the next claims re-partition the pool across the new source set.
+ * @brief Default-constructs a block slot with no generation or source binding.
+ */
+DataModel::FrameBuilder::PooledBlockSlot::PooledBlockSlot()
+  : generation(0), flushEpoch(0), sourceId(-1)
+{}
+
+/**
+ * @brief Bumps the pool generation after a template rebuild so stale slots full-assign on reuse,
+ *        and clears slot ownership so the next claims re-partition the pool. Structure is not
+ *        republished here: the snapshot goes out lazily just before the first block of the new
+ *        generation, so a block never arrives ahead of its layout.
  */
 void DataModel::FrameBuilder::invalidateFramePool() noexcept
 {
   ++m_framePoolGeneration;
+  m_publishedStructureGeneration.clear();
   m_poolPolicy.releaseOwnership();
+  refreshBlockPoolBudget(m_frame.groups.empty() && !m_sourceFrames.isEmpty()
+                           ? m_sourceFrames.constBegin().value()
+                           : m_frame);
   refreshFramePoolBudget(m_frame.groups.empty() && !m_sourceFrames.isEmpty()
                            ? m_sourceFrames.constBegin().value()
                            : m_frame);
+}
+
+/**
+ * @brief Caps how many block slots may be materialised so a wide project cannot blow past
+ *        kBlockPoolBudgetBytes: a slot's storage scales with the dataset count, and 64 of them
+ *        is a lot of memory once a project carries hundreds of datasets. Never drops below the
+ *        dashboard ring plus headroom, since starving staging is worse than exceeding the budget.
+ */
+void DataModel::FrameBuilder::refreshBlockPoolBudget(const DataModel::Frame& src) noexcept
+{
+  std::size_t datasets = 0;
+  for (const auto& group : src.groups)
+    datasets += group.datasets.size();
+
+  constexpr std::size_t kFloor = IO::PipelineHost::kBlockRingSize + 8;
+  if (datasets == 0) {
+    m_blockSlotsUsable = kBlockPoolSlots;
+    return;
+  }
+
+  const std::size_t perSample = 2 * sizeof(double) + 2 * sizeof(QString) + 1 + sizeof(qint64);
+  const std::size_t perSlot = datasets * static_cast<std::size_t>(kFrameBlockSampleCap) * perSample;
+  const std::size_t affordable = perSlot > 0 ? kBlockPoolBudgetBytes / perSlot : kBlockPoolSlots;
+
+  m_blockSlotsUsable =
+    static_cast<int>(std::clamp<std::size_t>(affordable, kFloor, kBlockPoolSlots));
+}
+
+/**
+ * @brief Probes for a free block slot, preferring one already laid out for @p sourceId at the
+ *        current generation so openBlockFor() can skip the rebind and keep the slot's column
+ *        storage. use_count()==1 is exact here for the same reason it is on the frame pool: every
+ *        alias lives on this thread, and the builder holds its own reference while a block is open.
+ */
+std::shared_ptr<DataModel::FrameBuilder::PooledBlockSlot> DataModel::FrameBuilder::claimBlockSlot(
+  int sourceId) noexcept
+{
+  static_assert(IO::PipelineHost::kBlockRingSize < kBlockPoolSlots - 8,
+                "block pool must outsize the dashboard ring or staging starves");
+
+  SS_ASSERT(!m_blockPool.empty(), return nullptr);
+
+  const std::size_t n = std::min(m_blockPool.size(), static_cast<std::size_t>(m_blockSlotsUsable));
+  std::size_t freeIdx = n;
+
+  for (std::size_t k = 0; k < n; ++k) {
+    const std::size_t idx = (m_blockPoolHint + k) % n;
+    const auto& slot      = m_blockPool[idx];
+    if (slot.use_count() != 1)
+      continue;
+
+    if (slot->generation == m_framePoolGeneration && slot->sourceId == sourceId) {
+      m_blockPoolHint = (idx + 1) % n;
+      return m_blockPool[idx];
+    }
+
+    if (freeIdx == n)
+      freeIdx = idx;
+  }
+
+  if (freeIdx == n)
+    return nullptr;
+
+  m_blockPoolHint = (freeIdx + 1) % n;
+  return m_blockPool[freeIdx];
+}
+
+/**
+ * @brief Builds the structure consumers reconfigure from: the frame's layout stamped with the
+ *        generation its blocks will carry. Runs on structural change only, never per frame, so
+ *        the deep copy it makes is the copy the per-frame publish no longer has to.
+ */
+DataModel::StructureSnapshotPtr DataModel::FrameBuilder::buildStructureSnapshot(
+  const DataModel::Frame& src)
+{
+  auto snapshot        = std::make_shared<DataModel::StructureSnapshot>();
+  snapshot->generation = m_framePoolGeneration;
+  snapshot->data       = src;
+  return snapshot;
+}
+
+/**
+ * @brief Returns whether @p sourceId already saw a snapshot for the current pool generation.
+ */
+bool DataModel::FrameBuilder::structureIsCurrent(int sourceId) const noexcept
+{
+  const auto it = m_publishedStructureGeneration.find(sourceId);
+  return it != m_publishedStructureGeneration.end() && it->second == m_framePoolGeneration;
+}
+
+/**
+ * @brief Records that @p sourceId's structure for the current generation has been published.
+ */
+void DataModel::FrameBuilder::noteStructurePublished(int sourceId) noexcept
+{
+  m_publishedStructureGeneration[sourceId] = m_framePoolGeneration;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Block staging (spec 0055)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Publishes @p sourceId's structure if the current generation has not been announced yet.
+ *        Runs before the source's first block of that generation, so the dashboard has reconfigured
+ *        by the time values referring to the new layout arrive.
+ */
+void DataModel::FrameBuilder::ensureStructurePublished(int sourceId, const DataModel::Frame& src)
+{
+  if (structureIsCurrent(sourceId)) [[likely]]
+    return;
+
+  static auto& pipeline = IO::PipelineHost::instance();
+  pipeline.publishStructureToDashboard(buildStructureSnapshot(src));
+  noteStructurePublished(sourceId);
+
+  Q_EMIT structurePublished(sourceId, src);
+}
+
+/**
+ * @brief Binds a claimed slot's block to @p src's dataset layout and sizes its storage once. Runs
+ *        on structural change only; every later frame of that generation is a plain store into the
+ *        storage laid out here.
+ */
+void DataModel::FrameBuilder::bindBlockToFrame(PooledBlockSlot& slot,
+                                               const DataModel::Frame& src,
+                                               bool uniform)
+{
+  auto& block               = slot.block;
+  block.sourceId            = src.sourceId;
+  block.structureGeneration = m_framePoolGeneration;
+  block.dt                  = std::chrono::nanoseconds(0);
+
+  block.columns.clear();
+  for (const auto& group : src.groups)
+    for (const auto& dataset : group.datasets) {
+      DataModel::BlockColumn column;
+      column.uniqueId = dataset.uniqueId;
+      column.hasText  = true;
+      column.hasRaw   = true;
+      block.columns.push_back(std::move(column));
+    }
+
+  DataModel::size_block_storage(block, kFrameBlockSampleCap, !uniform);
+  slot.generation = m_framePoolGeneration;
+  slot.sourceId   = src.sourceId;
+}
+
+/**
+ * @brief Returns @p sourceId's open block, opening one when none is held and flushing first when
+ *        the held block was staged under an older layout -- a block must never straddle a
+ *        structural change. Null when every pool slot is still referenced by a consumer.
+ */
+DataModel::FrameBuilder::PooledBlockSlot* DataModel::FrameBuilder::openBlockFor(
+  int sourceId, const DataModel::Frame& src)
+{
+  static auto& pipeline = IO::PipelineHost::instance();
+
+  const auto it = m_openBlocks.find(sourceId);
+  if (it != m_openBlocks.end()) [[likely]] {
+    if (it->second->generation == m_framePoolGeneration) [[likely]]
+      return it->second.get();
+
+    flushBlock(sourceId);
+  }
+
+  auto slot = claimBlockSlot(sourceId);
+  if (!slot) [[unlikely]] {
+    notePoolExhausted();
+    return nullptr;
+  }
+
+  if (slot->generation != m_framePoolGeneration || slot->sourceId != src.sourceId)
+    bindBlockToFrame(*slot, src, false);
+
+  slot->flushEpoch = pipeline.flushEpoch();
+  DataModel::reset_block(slot->block);
+  slot->block.structureGeneration = m_framePoolGeneration;
+
+  const auto inserted = m_openBlocks.emplace(sourceId, std::move(slot));
+  return inserted.first->second.get();
+}
+
+/**
+ * @brief Appends one parsed frame's dataset values to @p sourceId's open block, flushing when the
+ *        block is full or the display tick moved the flush epoch on (spec 0055 D1). Every write is
+ *        a store into storage sized at bind time, so the steady state allocates nothing.
+ */
+SS_HOT void DataModel::FrameBuilder::stageFrameValues(
+  int sourceId, const DataModel::Frame& src, const DataModel::TimestampedFrame::SteadyTimePoint& ts)
+{
+  SS_ASSERT_HOTPATH(sourceId >= 0);
+
+  static auto& pipeline = IO::PipelineHost::instance();
+
+  ensureStructurePublished(sourceId, src);
+
+  auto* slot = openBlockFor(sourceId, src);
+  if (!slot) [[unlikely]]
+    return;
+
+  auto& block           = slot->block;
+  const qsizetype index = block.samples;
+  if (index == 0)
+    block.t0 = ts;
+
+  std::size_t column = 0;
+  for (const auto& group : src.groups) {
+    SS_NO_UNROLL
+    for (const auto& dataset : group.datasets) {
+      if (column >= block.columns.size()) [[unlikely]]
+        break;
+
+      SS_ASSERT_HOTPATH(block.columns[column].uniqueId == dataset.uniqueId);
+      DataModel::write_block_sample(
+        block.columns[column], index, dataset.numericValue, dataset.value, dataset.isNumeric);
+      DataModel::write_block_raw(
+        block.columns[column], index, dataset.rawNumericValue, dataset.rawValue);
+      ++column;
+    }
+  }
+
+  DataModel::write_block_time(
+    block, index, std::chrono::duration_cast<std::chrono::nanoseconds>(ts - block.t0).count());
+
+  block.samples = index + 1;
+
+  const quint64 epoch = pipeline.flushEpoch();
+  if (block.samples >= kFrameBlockSampleCap || epoch != slot->flushEpoch) [[unlikely]]
+    flushBlock(sourceId);
+}
+
+/**
+ * @brief Publishes @p sourceId's open block and releases the builder's reference to its slot. The
+ *        hand-out is an aliasing shared_ptr over the pool slot, so there is no per-block control
+ *        block and the slot frees itself once every consumer has drained it.
+ */
+void DataModel::FrameBuilder::flushBlock(int sourceId)
+{
+  const auto it = m_openBlocks.find(sourceId);
+  if (it == m_openBlocks.end())
+    return;
+
+  auto slot = it->second;
+  m_openBlocks.erase(it);
+
+  if (slot->block.samples == 0)
+    return;
+
+  slot->block.blockNumber = ++m_blockNumbers[sourceId];
+  publishBlock(DataModel::DataBlockPtr(slot, &slot->block));
+}
+
+/**
+ * @brief Flushes every open block regardless of fill (queued from the GUI display tick, spec 0055
+ *        D1). A source that has gone quiet would otherwise hold its partial block indefinitely,
+ *        because the cap and the epoch check are only reached while frames keep arriving.
+ */
+void DataModel::FrameBuilder::flushOpenBlocks()
+{
+  if (m_openBlocks.empty()) [[likely]]
+    return;
+
+  std::vector<int> sources;
+  sources.reserve(m_openBlocks.size());
+  for (const auto& [sourceId, slot] : m_openBlocks)
+    sources.push_back(sourceId);
+
+  for (const int sourceId : sources)
+    flushBlock(sourceId);
 }
 
 /**
@@ -266,27 +559,28 @@ size_t DataModel::FrameBuilder::claimPoolSlot(int sourceId, bool hintedOnly) noe
 }
 
 /**
- * @brief Logs the one-shot pool-exhaustion warning before a heap-allocation fallback.
+ * @brief Logs the one-shot block-pool exhaustion warning. There is no heap fallback on this path:
+ *        a failed claim drops the batch from every sink, so the message must say so.
  */
 SS_COLD void DataModel::FrameBuilder::notePoolExhausted()
 {
   static bool warned = false;
   if (!warned) [[unlikely]] {
     warned = true;
-    qWarning() << "[FrameBuilder] Frame pool exhausted (" << kFramePoolSize
-               << " slots), consumers are not draining; falling back to heap allocation.";
+    qWarning() << "[FrameBuilder] Block pool exhausted (" << kBlockPoolSlots
+               << " slots), consumers are not draining; dropping blocks.";
     static auto& nc = NotificationCenter::instance();
     QMetaObject::invokeMethod(
       &nc,
       "postWarning",
       Qt::QueuedConnection,
       Q_ARG(QString, QStringLiteral("FrameBuilder")),
-      Q_ARG(QString, tr("Frame pool exhausted")),
+      Q_ARG(QString, tr("Block pool exhausted")),
       Q_ARG(QString,
             tr("A downstream consumer (dashboard, CSV/MDF4 export, session DB, or API "
-               "subscriber) is not draining frames fast enough. Serial Studio is falling "
-               "back to per-frame allocations until the backlog clears. Disable a heavy "
-               "consumer or reduce the data rate.")));
+               "subscriber) is not draining fast enough, so data is being dropped from the "
+               "display and from any active recording. Disable a heavy consumer or reduce "
+               "the data rate.")));
   }
 }
 
@@ -355,68 +649,6 @@ void DataModel::FrameBuilder::refreshFramePoolBudget(const DataModel::Frame& src
                           + datasets * sizeof(DataModel::Dataset);
 
   m_poolPolicy.applyMemoryBudget(bytes, kFramePoolBudgetBytes);
-}
-
-/**
- * @brief Claims a free pool slot, copies @p src + @p ts into it, and returns an aliasing
- *        shared_ptr: no deleter, no per-frame control block.
- */
-SS_HOT DataModel::TimestampedFramePtr DataModel::FrameBuilder::acquireFrame(
-  const DataModel::Frame& src, const DataModel::TimestampedFrame::SteadyTimePoint& ts)
-{
-  const size_t idx = claimPoolSlot(src.sourceId);
-  if (idx == kInvalidSlotIdx) [[unlikely]] {
-    notePoolExhausted();
-    auto heap                 = std::make_shared<TimestampedFrame>(src, ts);
-    heap->structureGeneration = m_framePoolGeneration;
-    return heap;
-  }
-
-  const auto& slotOwner = m_framePool[idx];
-  auto* slotRaw         = slotOwner.get();
-
-  if (preparePooledSlot(slotRaw, src)) [[likely]]
-    copy_frame_values(slotRaw->frame.data, src);
-
-  slotRaw->frame.timestamp           = ts;
-  slotRaw->frame.structureGeneration = m_framePoolGeneration;
-  SS_ASSERT_HOTPATH(slotRaw->frame.data.groups.size() == src.groups.size());
-
-  return TimestampedFramePtr(slotOwner, &slotRaw->frame);
-}
-
-/**
- * @brief Pooled acquire restricted to the source's own slot, for the synthetic dashboard refresh.
- *        Returns null when that slot is still pinned by a frame the GUI has not drained yet: a
- *        refresh carries no new data, so skipping it is free, whereas walking to a virgin slot
- *        would fault in a permanent full-frame copy the pool never releases.
- */
-DataModel::TimestampedFramePtr DataModel::FrameBuilder::acquireReusedFrame(
-  const DataModel::Frame& src)
-{
-  const size_t idx = claimPoolSlot(src.sourceId, true);
-  if (idx == kInvalidSlotIdx)
-    return {};
-
-  const auto& slotOwner = m_framePool[idx];
-  auto* slotRaw         = slotOwner.get();
-
-  if (preparePooledSlot(slotRaw, src)) [[likely]]
-    copy_frame_values(slotRaw->frame.data, src);
-
-  slotRaw->frame.timestamp           = DataModel::TimestampedFrame::SteadyClock::now();
-  slotRaw->frame.structureGeneration = m_framePoolGeneration;
-
-  return TimestampedFramePtr(slotOwner, &slotRaw->frame);
-}
-
-/**
- * @brief Convenience overload that timestamps the slot with SteadyClock::now().
- */
-SS_HOT DataModel::TimestampedFramePtr DataModel::FrameBuilder::acquireFrame(
-  const DataModel::Frame& src)
-{
-  return acquireFrame(src, DataModel::TimestampedFrame::SteadyClock::now());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -593,10 +825,7 @@ void DataModel::FrameBuilder::setupExternalConnections()
     publishParseLoads();
   });
 
-  connect(&Misc::TimerEvents::instance(),
-          &Misc::TimerEvents::uiTimeout,
-          this,
-          &DataModel::FrameBuilder::refreshStreamDrivenFrames);
+  wireDisplayTickHooks(Misc::TimerEvents::instance(), IO::PipelineHost::instance());
 
   const auto onPlayerOpenChanged = [this] {
     m_playerOpen        = SerialStudio::isAnyPlayerOpen();
@@ -633,6 +862,10 @@ void DataModel::FrameBuilder::setupExternalConnections()
   connect(&MQTT::Publisher::instance(), &MQTT::Publisher::configurationChanged, this, [this] {
     refreshAnyAsyncSink();
   });
+  connect(&Widgets::AudioExport::instance(),
+          &Widgets::AudioExport::activeSessionsChanged,
+          this,
+          [this] { refreshAnyAsyncSink(); });
 #endif
 #ifdef ENABLE_GRPC
   connect(&API::GRPC::GRPCServer::instance(), &API::GRPC::GRPCServer::enabledChanged, this, [this] {
@@ -651,6 +884,45 @@ void DataModel::FrameBuilder::setupExternalConnections()
 }
 
 /**
+ * @brief Wires the two display-tick hooks. Both connections are queued by construction (the
+ *        builder is pipeline-affine): the tick advances the flush epoch so a producing source
+ *        closes its block on its next frame, and the queued call closes the block of a source that
+ *        has gone quiet and would otherwise never reach the epoch check.
+ */
+void DataModel::FrameBuilder::wireDisplayTickHooks(Misc::TimerEvents& timers,
+                                                   IO::PipelineHost& pipeline)
+{
+  connect(&timers,
+          &Misc::TimerEvents::uiTimeout,
+          this,
+          &DataModel::FrameBuilder::refreshStreamDrivenFrames);
+
+  connect(
+    &timers,
+    &Misc::TimerEvents::uiTimeout,
+    &pipeline,
+    [&pipeline] { pipeline.bumpFlushEpoch(); },
+    Qt::DirectConnection);
+
+  connect(&timers, &Misc::TimerEvents::uiTimeout, this, [this] { flushOpenBlocks(); });
+}
+
+/**
+ * @brief Public entry point for the cached any-async-sink refresh, so a sink whose enable state
+ *        moved can re-derive it from its own thread. Every sink must reach this: a missed input
+ *        leaves the flag stale and the recording produces a valid-looking, empty file.
+ */
+void DataModel::FrameBuilder::refreshAsyncSinks()
+{
+  if (QThread::currentThread() != thread()) {
+    invokeOnBuilderThread([this] { refreshAsyncSinks(); });
+    return;
+  }
+
+  refreshAnyAsyncSink();
+}
+
+/**
  * @brief Recomputes the cached any-async-consumer flag from every export/output module. The
  *        TCP and gRPC servers only count while a client is connected: with zero clients their
  *        workers drop every frame, so the per-frame detached copy would be pure waste.
@@ -665,7 +937,9 @@ void DataModel::FrameBuilder::refreshAnyAsyncSink()
 #ifdef BUILD_COMMERCIAL
   static auto& sessionsExport = Sessions::Export::instance();
   static auto& mqttPublisher  = MQTT::Publisher::instance();
-  any                         = any || sessionsExport.exportEnabled() || mqttPublisher.enabled();
+  static auto& audioExport    = Widgets::AudioExport::instance();
+  any                         = any || sessionsExport.exportEnabled() || mqttPublisher.enabled()
+     || audioExport.hasActiveSessions();
 #endif
 #ifdef ENABLE_GRPC
   static auto& grpc = API::GRPC::GRPCServer::instance();
@@ -708,29 +982,60 @@ void DataModel::FrameBuilder::clearLatestFrames()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Rebuilds m_frame from ProjectModel's already-parsed in-memory state (no file I/O).
+ * @brief Rebuilds m_frame from ProjectModel's in-memory state (no file I/O). A GUI-thread caller
+ *        collects the project data here and carries it across, so the builder never blocks back on
+ *        the GUI: that round trip made the GUI's event-loop-backed wait re-enter this function and
+ *        nest loops without bound. The in-flight latch stops a re-entrant call regardless.
  */
 void DataModel::FrameBuilder::syncFromProjectModel()
 {
   if (QThread::currentThread() != thread()) {
-    invokeOnBuilderThreadBlocking([this] { syncFromProjectModel(); });
+    if (m_projectSyncInFlight.exchange(true, std::memory_order_acq_rel))
+      return;
+
+    auto snapshot = collectProjectSnapshot();
+    invokeOnBuilderThreadBlocking([this, snapshot = std::move(snapshot)]() mutable {
+      applyProjectSnapshot(std::move(snapshot));
+    });
+    m_projectSyncInFlight.store(false, std::memory_order_release);
     return;
   }
 
-  QString title;
-  std::vector<DataModel::Group> groups;
-  std::vector<DataModel::Action> actions;
-  std::vector<DataModel::Source> sources;
-  auto decoder = SerialStudio::PlainText;
-  IO::PipelineHost::runOnGuiThreadBlocking([&] {
-    static auto& pm = DataModel::ProjectModel::instance();
-    SS_ASSERT_LOG(!pm.title().isEmpty());
-    title   = pm.title();
-    groups  = buildEnabledGroups(pm.groups());
-    actions = pm.actions();
-    sources = pm.sources();
-    decoder = pm.decoderMethod();
-  });
+  ProjectSnapshot snapshot;
+  IO::PipelineHost::runOnGuiThreadBlocking([&] { snapshot = collectProjectSnapshot(); });
+  applyProjectSnapshot(std::move(snapshot));
+}
+
+/**
+ * @brief Reads ProjectModel's live state. Must run on the GUI thread, which owns that model.
+ */
+DataModel::FrameBuilder::ProjectSnapshot DataModel::FrameBuilder::collectProjectSnapshot()
+{
+  static auto& pm = DataModel::ProjectModel::instance();
+  SS_ASSERT_LOG(!pm.title().isEmpty());
+
+  ProjectSnapshot snapshot;
+  snapshot.title   = pm.title();
+  snapshot.groups  = buildEnabledGroups(pm.groups());
+  snapshot.actions = pm.actions();
+  snapshot.sources = pm.sources();
+  snapshot.decoder = pm.decoderMethod();
+  return snapshot;
+}
+
+/**
+ * @brief Rebuilds m_frame from an already-collected project snapshot. Builder thread only, and it
+ *        deliberately never reaches back to the GUI: the caller brought the data with it.
+ */
+void DataModel::FrameBuilder::applyProjectSnapshot(ProjectSnapshot snapshot)
+{
+  SS_ASSERT(QThread::currentThread() == thread(), return);
+
+  QString title                          = std::move(snapshot.title);
+  std::vector<DataModel::Group> groups   = std::move(snapshot.groups);
+  std::vector<DataModel::Action> actions = std::move(snapshot.actions);
+  std::vector<DataModel::Source> sources = std::move(snapshot.sources);
+  const auto decoder                     = snapshot.decoder;
 
   clear_frame(m_frame);
   m_sourceFrames.clear();
@@ -945,7 +1250,7 @@ void DataModel::FrameBuilder::publishSourceTemplateFrame(const DataModel::Source
 
   m_sourceFrames.insert(src.sourceId, srcFrame);
   m_republishedSourceIds.insert(src.sourceId);
-  hotpathTxFrame(acquireFrame(srcFrame));
+  ensureStructurePublished(src.sourceId, m_sourceFrames[src.sourceId]);
 }
 
 /**
@@ -989,7 +1294,7 @@ void DataModel::FrameBuilder::publishQuickPlotAudioTemplate(int channels)
   m_quickPlotChannels = channels;
 
   if (!m_quickPlotFrame.groups.empty())
-    hotpathTxFrame(acquireFrame(m_quickPlotFrame));
+    ensureStructurePublished(m_quickPlotFrame.sourceId, m_quickPlotFrame);
 }
 
 /**
@@ -1017,13 +1322,30 @@ void DataModel::FrameBuilder::ingestStreamValues(int sourceId,
 }
 
 /**
+ * @brief Publishes one dense-lane block through the same tail the frame lane uses (spec 0055 D8).
+ *        Queued from the stream workers so the PIPELINE thread stays the single producer for
+ *        every sink: routing dense blocks straight to the sinks from the GUI would give each
+ *        sink's SPSC queue a second producer, which is what the two-sink split existed to avoid.
+ */
+void DataModel::FrameBuilder::ingestStreamBlock(const DataModel::DataBlockPtr& block)
+{
+  SS_ASSERT(block != nullptr, return);
+  SS_ASSERT_LOG(QThread::currentThread() == thread());
+
+  if (block->samples <= 0) [[unlikely]]
+    return;
+
+  publishBlock(block);
+}
+
+/**
  * @brief Records which sources feed the stream lane, so the frame-lane republish paths skip
  *        their template frames (their live values are the Dashboard's stream-ingest copies).
  */
 void DataModel::FrameBuilder::setStreamSourceIds(const QSet<int>& sourceIds)
 {
   if (QThread::currentThread() != thread()) {
-    invokeOnBuilderThreadBlocking([this, sourceIds] { setStreamSourceIds(sourceIds); });
+    invokeOnBuilderThread([this, sourceIds] { setStreamSourceIds(sourceIds); });
     return;
   }
 
@@ -1050,36 +1372,39 @@ void DataModel::FrameBuilder::refreshStreamDrivenFrames()
 }
 
 /**
- * @brief Sends one republished frame out, returning false when a dashboard-only refresh had to be
- *        skipped because the source's pool slot was still pinned. Export republishes always go
- *        through the normal acquire, so a recorded frame is never dropped for slot pressure.
+ * @brief Stages and immediately flushes one republished frame as a single-sample block, so a
+ *        synthetic refresh reaches the display within the tick that asked for it. Any block
+ *        already open is flushed FIRST and unmasked: it holds real captured samples, and
+ *        closing it under the mask would drop them from every recording sink.
  */
 bool DataModel::FrameBuilder::emitRepublishedFrame(const DataModel::Frame& frame,
                                                    int key,
                                                    bool feedExports)
 {
-  static auto& pipeline = IO::PipelineHost::instance();
+  const int sourceId = frame.sourceId;
+  flushBlock(sourceId);
 
-  if (feedExports) {
-    m_republishedSourceIds.insert(key);
-    hotpathTxFrame(acquireFrame(frame));
-    return true;
-  }
+  const bool previousMask = m_maskSinks;
+  m_maskSinks             = m_maskSinks || !feedExports;
 
-  auto pooled = acquireReusedFrame(frame);
-  if (!pooled)
+  stageFrameValues(sourceId, frame, DataModel::TimestampedFrame::SteadyClock::now());
+  const bool staged = m_openBlocks.find(sourceId) != m_openBlocks.end();
+  flushBlock(sourceId);
+
+  m_maskSinks = previousMask;
+
+  if (!staged)
     return false;
 
   m_republishedSourceIds.insert(key);
-  pipeline.publishFrameToDashboard(pooled);
   return true;
 }
 
 /**
  * @brief Re-runs every dataset transform from the last raw values and republishes the live
- *        frames: dashboard only with @p feedExports false, hotpathTxFrame() fan-out with it
- *        true. A frame republishes only on a changed dataset value or its first publish, so a
- *        synthetic tick never touches the plot clock of a source whose data did not change.
+ *        frames: dashboard only with @p feedExports false, full sink fan-out with it true. A
+ *        frame republishes only on a changed dataset value or its first publish, so a synthetic
+ *        tick never touches the plot clock of a source whose data did not change.
  */
 bool DataModel::FrameBuilder::republishFrames(bool feedExports)
 {
@@ -1149,7 +1474,7 @@ bool DataModel::FrameBuilder::reprocessFrames()
 /**
  * @brief Forces a render from the current table/dataset state even when the device is silent:
  *        seeds each source frame from the template, runs the transform-only pass and publishes
- *        through hotpathTxFrame, so table-driven datasets render and feed the exports. A GUI
+ *        as one block, so table-driven datasets render and feed the exports. A GUI
  *        caller queues the pass and reports false; waiting would park it behind the pipeline.
  */
 bool DataModel::FrameBuilder::dashboardTick()
@@ -1323,6 +1648,9 @@ void DataModel::FrameBuilder::onConnectedChanged()
 
   clearLatestFrames();
 
+  Q_EMIT sessionStructureReady(m_operationMode == SerialStudio::ProjectFile ? m_frame
+                                                                            : m_quickPlotFrame);
+
   if (m_operationMode != SerialStudio::ProjectFile)
     return;
 
@@ -1364,7 +1692,7 @@ void DataModel::FrameBuilder::onConnectedChanged()
        });
 
   if (allImageGroups)
-    hotpathTxFrame(acquireFrame(m_frame));
+    ensureStructurePublished(m_frame.sourceId, m_frame);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1417,7 +1745,7 @@ void DataModel::FrameBuilder::parseProjectFrame(const IO::CapturedDataPtr& data)
       captureLatestChannels(0, channels);
 
     applyDatasetValues(m_frame, channels, info);
-    hotpathTxFrame(acquireFrame(m_frame, frameTs));
+    stageFrameValues(0, m_frame, frameTs);
     ++m_parsedFrameCount;
   }
 
@@ -1472,7 +1800,7 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::Captured
       captureLatestChannels(sourceId, channels);
 
     applyDatasetValues(srcFrame, channels, info);
-    hotpathTxFrame(acquireFrame(srcFrame, frameTs));
+    stageFrameValues(sourceId, srcFrame, frameTs);
     ++m_parsedFrameCount;
   }
 
@@ -1511,7 +1839,7 @@ void DataModel::FrameBuilder::replayChannels(
   info.sourceId = sourceId;
 
   applyDatasetValues(srcFrame, channels, info);
-  publishReplayFrame(acquireFrame(srcFrame, timestamp));
+  publishReplayValues(sourceId, srcFrame, timestamp);
   ++m_parsedFrameCount;
 }
 
@@ -1600,6 +1928,9 @@ void DataModel::FrameBuilder::applyReplaySpanValue(Dataset& dataset,
   if (!dataset.isNumeric)
     dataset.numericValue = (dataset.wgtMax > dataset.wgtMin) ? dataset.wgtMin : 0.0;
 
+  if (m_exprEngineForSource) [[unlikely]]
+    m_exprEngineForSource->exprSlots->publish(dataset.uniqueId, dataset.numericValue);
+
   if (m_captureDatasetValues)
     m_tableStore.setDatasetFinal(
       dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
@@ -1661,6 +1992,9 @@ void DataModel::FrameBuilder::applyReplayTypedValue(Dataset& dataset,
   if (!dataset.isNumeric)
     dataset.numericValue = (dataset.wgtMax > dataset.wgtMin) ? dataset.wgtMin : 0.0;
 
+  if (m_exprEngineForSource) [[unlikely]]
+    m_exprEngineForSource->exprSlots->publish(dataset.uniqueId, dataset.numericValue);
+
   if (m_captureDatasetValues)
     m_tableStore.setDatasetFinal(
       dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
@@ -1710,7 +2044,7 @@ void DataModel::FrameBuilder::replayChannelSpans(
 
   endDatasetPass(armedWatchdog);
 
-  publishReplayFrame(acquireFrame(srcFrame, timestamp));
+  publishReplayValues(sourceId, srcFrame, timestamp);
   ++m_parsedFrameCount;
 }
 
@@ -1758,7 +2092,7 @@ void DataModel::FrameBuilder::replayChannelsTyped(
 
   endDatasetPass(armedWatchdog);
 
-  publishReplayFrame(acquireFrame(srcFrame, timestamp));
+  publishReplayValues(sourceId, srcFrame, timestamp);
   ++m_parsedFrameCount;
 }
 
@@ -1811,7 +2145,7 @@ int DataModel::FrameBuilder::trySpanLane(int sourceId,
     auto heap                 = std::make_shared<TimestampedFrame>(frame, data->timestamp);
     heap->structureGeneration = m_framePoolGeneration;
     applyDatasetValuesSpans(heap->data, m_spanScratch.data(), tokens, info);
-    hotpathTxFrame(heap);
+    stageFrameValues(sourceId, heap->data, data->timestamp);
     return 1;
   }
 
@@ -1827,7 +2161,7 @@ int DataModel::FrameBuilder::trySpanLane(int sourceId,
 
   slotRaw->frame.timestamp           = data->timestamp;
   slotRaw->frame.structureGeneration = m_framePoolGeneration;
-  hotpathTxFrame(TimestampedFramePtr(slotOwner, &slotRaw->frame));
+  stageFrameValues(sourceId, slotRaw->frame.data, data->timestamp);
   return 1;
 }
 
@@ -2198,6 +2532,9 @@ void DataModel::FrameBuilder::applyDatasetValue(Dataset& dataset,
   if (!dataset.isNumeric)
     dataset.numericValue = (dataset.wgtMax > dataset.wgtMin) ? dataset.wgtMin : 0.0;
 
+  if (m_exprEngineForSource) [[unlikely]]
+    m_exprEngineForSource->exprSlots->publish(dataset.uniqueId, dataset.numericValue);
+
   if (m_captureDatasetValues)
     m_tableStore.setDatasetFinal(
       dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
@@ -2275,6 +2612,9 @@ SS_HOT void DataModel::FrameBuilder::applyDatasetValueSpan(Dataset& dataset,
   if (!dataset.isNumeric)
     dataset.numericValue = (dataset.wgtMax > dataset.wgtMin) ? dataset.wgtMin : 0.0;
 
+  if (m_exprEngineForSource) [[unlikely]]
+    m_exprEngineForSource->exprSlots->publish(dataset.uniqueId, dataset.numericValue);
+
   if (m_captureDatasetValues)
     m_tableStore.setDatasetFinal(
       dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
@@ -2297,8 +2637,11 @@ bool DataModel::FrameBuilder::beginDatasetPass(const TransformFrameInfo& info)
     m_engineCacheSourceId = info.sourceId;
     auto luaIt            = m_transformEngines.find({info.sourceId, SerialStudio::Lua});
     auto jsIt             = m_transformEngines.find({info.sourceId, SerialStudio::JavaScript});
+    auto exprIt           = m_transformEngines.find({info.sourceId, SerialStudio::Expression});
     m_luaEngineForSource  = (luaIt != m_transformEngines.end()) ? &luaIt->second : nullptr;
     m_jsEngineForSource   = (jsIt != m_transformEngines.end()) ? &jsIt->second : nullptr;
+    m_exprEngineForSource =
+      (exprIt != m_transformEngines.end() && exprIt->second.exprSlots) ? &exprIt->second : nullptr;
   }
 
   const bool armJsWatchdog =
@@ -2347,13 +2690,18 @@ void DataModel::FrameBuilder::endDatasetPass(bool armedJsWatchdog)
  * @brief Recomputes whether per-dataset values must be mirrored into the table store: only
  *        scripts (transforms, Lua parsers, externally-injected engines) can read them back,
  *        and none of them run while a final-value player replays -- capture stays off then.
+ *        Expression transforms (spec 0060) read their own SlotTable, never the store.
  */
 void DataModel::FrameBuilder::refreshDatasetCaptureFlag()
 {
   static auto& parser = DataModel::FrameParser::instance();
+  bool script_engines = false;
+  for (const auto& [key, engine] : m_transformEngines)
+    script_engines = script_engines || engine.luaState != nullptr || engine.jsEngine != nullptr;
+
   m_captureDatasetValues =
     !m_playerOpen && m_tableStore.isInitialized()
-    && (!m_transformEngines.empty() || m_externalTableApiUsers || parser.hasTableApiEngines());
+    && (script_engines || m_externalTableApiUsers || parser.hasTableApiEngines());
   static auto& projectModel = DataModel::ProjectModel::instance();
   m_changeDriven            = projectModel.changeDrivenTransforms();
   m_datasetDeps.clear();
@@ -2435,6 +2783,9 @@ bool DataModel::FrameBuilder::reprocessDatasetValues(DataModel::Frame& frame)
 
       if (!dataset.isNumeric)
         dataset.numericValue = (dataset.wgtMax > dataset.wgtMin) ? dataset.wgtMin : 0.0;
+
+      if (m_exprEngineForSource) [[unlikely]]
+        m_exprEngineForSource->exprSlots->publish(dataset.uniqueId, dataset.numericValue);
 
       changed = changed || dataset.isNumeric != prev_is_numeric
              || dataset.numericValue != prev_numeric || dataset.value != prev_value;
@@ -2591,7 +2942,7 @@ void DataModel::FrameBuilder::parseQuickPlotFrame(const IO::CapturedDataPtr& dat
     }
   }
 
-  hotpathTxFrame(acquireFrame(m_quickPlotFrame, data->timestamp));
+  stageFrameValues(m_quickPlotFrame.sourceId, m_quickPlotFrame, data->timestamp);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2816,81 +3167,111 @@ void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channe
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Publishes a fully constructed DataModel frame to all registered output modules. The
- *        dashboard receives the pooled slot through the PipelineHost SPSC ring drained on the UI
- *        tick (spec 0051 M3); async sinks (gated on the cached m_anyAsyncSink flag) get one
- *        detached copy so a slow-export backlog can never pin the pool.
+ * @brief Publishes one finished block: the dashboard gets the pooled slot, async sinks get ONE
+ *        trimmed values-only copy between them -- a queued sink must never hold a pool slot or a
+ *        backlog would starve staging. While the sink mask is set only the read-only observers
+ *        see it, so a replay or a synthetic refresh can never re-record itself.
  */
-void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::TimestampedFramePtr& frame)
+void DataModel::FrameBuilder::publishBlock(const DataModel::DataBlockPtr& block)
 {
-  SS_ASSERT_HOTPATH(frame);
-  SS_ASSERT_HOTPATH(!frame->data.groups.empty());
-  SS_ASSERT_HOTPATH(!frame->data.title.isEmpty());
+  SS_ASSERT_HOTPATH(block);
+  SS_ASSERT_HOTPATH(block->samples > 0);
 
   static auto& pipeline = IO::PipelineHost::instance();
-  pipeline.publishFrameToDashboard(frame);
+  pipeline.publishBlockToDashboard(block);
+
+  static auto& pluginsServer = API::Server::instance();
+#ifdef ENABLE_GRPC
+  static auto& grpcServer = API::GRPC::GRPCServer::instance();
+#endif
+
+  if (m_maskSinks) [[unlikely]] {
+    const bool observed = (pluginsServer.enabled() && pluginsServer.clientCount() > 0)
+#ifdef ENABLE_GRPC
+                       || (grpcServer.enabled() && grpcServer.clientCount() > 0)
+#endif
+      ;
+    if (!observed)
+      return;
+
+    const DataModel::DataBlockPtr replayed = DataModel::clone_block_trimmed(*block);
+    if (pluginsServer.enabled() && pluginsServer.clientCount() > 0)
+      pluginsServer.ingestBlock(replayed);
+#ifdef ENABLE_GRPC
+    if (grpcServer.enabled() && grpcServer.clientCount() > 0)
+      grpcServer.ingestBlock(replayed);
+#endif
+    return;
+  }
 
   if (!m_anyAsyncSink)
     return;
 
-  static auto& csvExport     = CSV::Export::instance();
-  static auto& mdf4Export    = MDF4::Export::instance();
-  static auto& pluginsServer = API::Server::instance();
+  const DataModel::DataBlockPtr detached = DataModel::clone_block_trimmed(*block);
+
+  static auto& csvExport  = CSV::Export::instance();
+  static auto& mdf4Export = MDF4::Export::instance();
 #ifdef BUILD_COMMERCIAL
   static auto& sqliteExport  = Sessions::Export::instance();
   static auto& mqttPublisher = MQTT::Publisher::instance();
-#endif
-#ifdef ENABLE_GRPC
-  static auto& grpcServer = API::GRPC::GRPCServer::instance();
+  static auto& audioExport   = Widgets::AudioExport::instance();
 #endif
 
-  const auto detached =
-    std::make_shared<DataModel::TimestampedFrame>(frame->data, frame->timestamp);
-
-  csvExport.hotpathTxFrame(detached);
-  mdf4Export.hotpathTxFrame(detached);
-  pluginsServer.hotpathTxFrame(detached);
+  csvExport.ingestBlock(detached);
+  mdf4Export.ingestBlock(detached);
+  pluginsServer.ingestBlock(detached);
 #ifdef BUILD_COMMERCIAL
-  sqliteExport.hotpathTxFrame(detached);
-  mqttPublisher.hotpathTxFrame(detached);
+  sqliteExport.ingestBlock(detached);
+  mqttPublisher.ingestBlock(detached);
+  audioExport.ingestBlock(detached);
 #endif
 #ifdef ENABLE_GRPC
-  grpcServer.hotpathTxFrame(detached);
+  grpcServer.ingestBlock(detached);
 #endif
 }
 
 /**
- * @brief Replay twin of hotpathTxFrame: the dashboard receives the pooled slot through the
- *        PipelineHost ring, and one detached copy goes to the read-only observers (API/gRPC,
- *        only with a client connected). The recording sinks are deliberately absent -- replay
- *        must never feed an exporter.
+ * @brief Publishes an already-decoded replay block with the recording sinks masked. The session
+ *        player builds these from its stored sample blobs, so a dense recording replays through the
+ *        same tail a live source uses without a stand-in driver or a second worker in between.
  */
-void DataModel::FrameBuilder::publishReplayFrame(const DataModel::TimestampedFramePtr& frame)
+void DataModel::FrameBuilder::replayBlock(const DataModel::DataBlockPtr& block)
 {
-  SS_ASSERT_HOTPATH(frame);
-  SS_ASSERT_HOTPATH(m_playerOpen);
-  SS_ASSERT_HOTPATH(!frame->data.groups.empty());
+  if (QThread::currentThread() != thread()) {
+    invokeOnBuilderThread([this, block] { replayBlock(block); });
+    return;
+  }
 
-  static auto& pipeline = IO::PipelineHost::instance();
-  pipeline.publishFrameToDashboard(frame);
+  SS_ASSERT(block != nullptr, return);
 
-  static auto& pluginsServer = API::Server::instance();
-  bool observers             = pluginsServer.enabled() && pluginsServer.clientCount() > 0;
-#ifdef ENABLE_GRPC
-  static auto& grpcServer = API::GRPC::GRPCServer::instance();
-  observers               = observers || (grpcServer.enabled() && grpcServer.clientCount() > 0);
-#endif
-  if (!observers)
+  if (block->samples <= 0)
     return;
 
-  const auto detached =
-    std::make_shared<DataModel::TimestampedFrame>(frame->data, frame->timestamp);
-  if (pluginsServer.enabled() && pluginsServer.clientCount() > 0)
-    pluginsServer.hotpathTxFrame(detached);
-#ifdef ENABLE_GRPC
-  if (grpcServer.enabled() && grpcServer.clientCount() > 0)
-    grpcServer.hotpathTxFrame(detached);
-#endif
+  const bool previousMask = m_maskSinks;
+  m_maskSinks             = true;
+
+  publishBlock(block);
+
+  m_maskSinks = previousMask;
+}
+
+/**
+ * @brief Replay publish: stages one recorded row and flushes it immediately with the recording
+ *        sinks masked, so a replayed session reaches the dashboard and the read-only observers but
+ *        can never re-record itself into a new file or session.
+ */
+void DataModel::FrameBuilder::publishReplayValues(
+  int sourceId, const DataModel::Frame& src, const DataModel::TimestampedFrame::SteadyTimePoint& ts)
+{
+  SS_ASSERT_HOTPATH(m_playerOpen);
+
+  const bool previousMask = m_maskSinks;
+  m_maskSinks             = true;
+
+  stageFrameValues(sourceId, src, ts);
+  flushBlock(sourceId);
+
+  m_maskSinks = previousMask;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -3012,10 +3393,10 @@ void DataModel::FrameBuilder::setReplayColumnMap(
 }
 
 /**
- * @brief Compiles per-dataset transforms into one shared Lua/JS engine per source, caching function
- * refs. Defers when a frame is in flight (m_compileGuard > 0): mutating m_transformEngines while a
- * dataset pass holds hot pointers into it would dangle them. No-op after aboutToQuit: rebuilding
- * a QJSEngine once QCoreApplication is gone is a qFatal at exit.
+ * @brief Compiles per-dataset transforms into one shared engine per (source, language): Lua, JS or
+ * the compiled-expression evaluator. Defers while a frame is in flight (m_compileGuard > 0), since
+ * mutating m_transformEngines under a dataset pass dangles its hot pointers, and no-ops after
+ * aboutToQuit because rebuilding a QJSEngine once QCoreApplication is gone is a qFatal at exit.
  */
 void DataModel::FrameBuilder::compileTransforms()
 {
@@ -3056,10 +3437,12 @@ void DataModel::FrameBuilder::compileTransforms()
 
     if (key.language == SerialStudio::Lua)
       compileTransformsLua(engine, key.sourceId, entries);
+    else if (key.language == SerialStudio::Expression)
+      compileTransformsExpr(engine, key.sourceId, entries);
     else
       compileTransformsJS(engine, key.sourceId, entries);
 
-    if (!engine.luaState && !engine.jsEngine)
+    if (!engine.luaState && !engine.jsEngine && !engine.exprSlots)
       m_transformEngines.erase(it);
   }
 }
@@ -3200,6 +3583,87 @@ void DataModel::FrameBuilder::compileTransformsLuaEntry(lua_State* L,
 }
 
 /**
+ * @brief Reads one data-table register for a compiled expression. The handle was resolved at
+ *        compile time, so this is an index lookup; a missing or non-numeric register reads as
+ *        NaN, which the transform pipeline already treats as "keep the raw value".
+ */
+static double expressionTableValue(const void* owner, qint64 handle)
+{
+  const auto* store = static_cast<const DataModel::DataTableStore*>(owner);
+  if (!store) [[unlikely]]
+    return std::numeric_limits<double>::quiet_NaN();
+
+  const auto* value = store->getByHandle(handle);
+  if (!value || !value->isNumeric) [[unlikely]]
+    return std::numeric_limits<double>::quiet_NaN();
+
+  return value->numericValue;
+}
+
+/**
+ * @brief Compiles per-dataset expression transforms (spec 0060) against the sibling aliases and
+ *        dataset ids of @p sourceId, into one SlotTable shared by every program of that source,
+ *        plus read-only table handles through the store this thread owns.
+ */
+void DataModel::FrameBuilder::compileTransformsExpr(TransformEngine& engine,
+                                                    int sourceId,
+                                                    const std::vector<TransformEntry>& entries)
+{
+  auto table = std::make_unique<DataModel::Expression::SlotTable>();
+
+  QHash<QString, int> aliases;
+  QSet<int> uniqueIds;
+  for (const auto& group : m_frame.groups) {
+    if (group.sourceId != sourceId)
+      continue;
+
+    for (const auto& dataset : group.datasets) {
+      uniqueIds.insert(dataset.uniqueId);
+      if (!dataset.alias.isEmpty() && !aliases.contains(dataset.alias))
+        aliases.insert(dataset.alias, dataset.uniqueId);
+    }
+  }
+
+  const DataModel::Expression::NameResolver resolver =
+    [&aliases, &uniqueIds, &table](QStringView name) -> int {
+    const auto it = aliases.constFind(name.toString());
+    if (it != aliases.cend())
+      return table->slotFor(it.value());
+
+    bool ok               = false;
+    const int resolved_id = name.toInt(&ok);
+    if (ok && uniqueIds.contains(resolved_id))
+      return table->slotFor(resolved_id);
+
+    return -1;
+  };
+
+  const DataModel::Expression::TableResolver tables = [this](QStringView table,
+                                                             QStringView reg) -> qint64 {
+    return m_tableStore.handleOf(table.toString(), reg.toString());
+  };
+
+  for (const auto& entry : entries) {
+    QString error;
+    DataModel::Expression::Runtime runtime;
+    runtime.tableOwner = &m_tableStore;
+    runtime.tableValue = &expressionTableValue;
+    if (!DataModel::Expression::compile(entry.code, resolver, tables, runtime.program, error)) {
+      ++m_transformErrors;
+      qWarning() << "[FrameBuilder] Expression transform rejected for dataset" << entry.uniqueId
+                 << ":" << error;
+      noteTransformError(entry.uniqueId, error);
+      continue;
+    }
+
+    engine.exprRefs.emplace(entry.uniqueId, std::move(runtime));
+  }
+
+  if (!engine.exprRefs.empty())
+    engine.exprSlots = std::move(table);
+}
+
+/**
  * @brief Compiles per-dataset JavaScript transforms into a shared QJSEngine; code is IIFE-wrapped
  * for isolation.
  */
@@ -3269,6 +3733,7 @@ void DataModel::FrameBuilder::destroyTransformEngines()
   m_engineCacheSourceId = -1;
   m_luaEngineForSource  = nullptr;
   m_jsEngineForSource   = nullptr;
+  m_exprEngineForSource = nullptr;
   m_captureFlagsDirty   = true;
 
   m_transformErrors              = 0;
@@ -3279,6 +3744,8 @@ void DataModel::FrameBuilder::destroyTransformEngines()
 
   for (auto& [id, engine] : m_transformEngines) {
     engine.jsRefs.clear();
+    engine.exprRefs.clear();
+    engine.exprSlots.reset();
 
     if (engine.luaState)
       for (const auto& [uid, ref] : engine.luaRefs)
@@ -3342,8 +3809,14 @@ QVariant DataModel::FrameBuilder::applyTransform(int language,
   SS_ASSERT_HOTPATH(uniqueId >= 0);
   SS_ASSERT_HOTPATH(info.sourceId == m_engineCacheSourceId);
 
-  TransformEngine* engine =
-    (language == SerialStudio::Lua) ? m_luaEngineForSource : m_jsEngineForSource;
+  TransformEngine* engine = nullptr;
+  if (language == SerialStudio::Lua)
+    engine = m_luaEngineForSource;
+  else if (language == SerialStudio::Expression)
+    engine = m_exprEngineForSource;
+  else
+    engine = m_jsEngineForSource;
+
   if (!engine)
     return rawValue;
 
@@ -3352,6 +3825,9 @@ QVariant DataModel::FrameBuilder::applyTransform(int language,
 
   if (engine->jsEngine)
     return applyTransformJs(*engine, uniqueId, rawValue, info);
+
+  if (engine->exprSlots)
+    return applyTransformExpr(*engine, uniqueId, rawValue, info);
 
   return rawValue;
 }
@@ -3444,6 +3920,27 @@ QVariant DataModel::FrameBuilder::applyTransformLua(TransformEngine& engine,
   engine.luaDeadline = QDeadlineTimer(QDeadlineTimer::Forever);
   lua_settop(L, 0);
   return rawValue;
+}
+
+/**
+ * @brief Evaluates the compiled expression for @p uniqueId (spec 0060): a text input enters as
+ *        NaN so an arithmetic expression over a non-numeric channel degrades instead of parsing
+ *        garbage, and `t` is the source's own frame timestamp, never a re-stamp here.
+ */
+QVariant DataModel::FrameBuilder::applyTransformExpr(TransformEngine& engine,
+                                                     int uniqueId,
+                                                     const QVariant& rawValue,
+                                                     const TransformFrameInfo& info)
+{
+  auto refIt = engine.exprRefs.find(uniqueId);
+  if (refIt == engine.exprRefs.end() || !engine.exprSlots)
+    return rawValue;
+
+  bool numeric   = false;
+  const double v = SerialStudio::toDouble(rawValue, &numeric);
+  const double t = static_cast<double>(info.timestampMs) * kMillisecondsToSeconds;
+  return QVariant(refIt->second.run(
+    numeric ? v : std::numeric_limits<double>::quiet_NaN(), t, *engine.exprSlots));
 }
 
 /**

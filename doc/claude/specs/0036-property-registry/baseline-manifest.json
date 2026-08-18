@@ -46,7 +46,7 @@
     },
     {
       "path": "examples/LorenzAttractor/LorenzAttractor.ssproj",
-      "sha256": "25b73667f97af8fb50bb06854da9117f881a4b41d99fcfd1cce75c48a5029914"
+      "sha256": "5d004a3bb04b8a23e86b73381b664b7e67a64e2661bda4298b13e6ce53b43da7"
     },
     {
       "path": "examples/MPU6050/MPU6050.ssproj",

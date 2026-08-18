@@ -61,6 +61,7 @@ public:
     JavaScript = 0,
     Lua        = 1,
     Native     = 2,
+    Expression = 3,
   };
   Q_ENUM(ScriptLanguage)
 

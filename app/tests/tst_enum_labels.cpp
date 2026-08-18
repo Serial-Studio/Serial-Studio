@@ -330,7 +330,7 @@ void TstEnumLabels::operationModeOutOfRange_data()
   QTest::addColumn<int>("value");
 
   QTest::newRow("negative") << -1;
-  QTest::newRow("just-past-last") << 3;
+  QTest::newRow("just-past-last") << 4;
   QTest::newRow("far-out-of-range") << 100;
 }
 
@@ -364,6 +364,9 @@ void TstEnumLabels::scriptLanguageFullSweep_data()
                        << QStringLiteral("Lua 5.4");
   QTest::newRow("Native") << static_cast<int>(SerialStudio::Native) << QStringLiteral("native")
                           << QStringLiteral("Built-In (C++ template)");
+  QTest::newRow("Expression") << static_cast<int>(SerialStudio::Expression)
+                              << QStringLiteral("expression")
+                              << QStringLiteral("Expression (compiled formula)");
 }
 
 /**
@@ -385,7 +388,7 @@ void TstEnumLabels::scriptLanguageOutOfRange_data()
   QTest::addColumn<int>("value");
 
   QTest::newRow("negative-not-inherit") << -2;
-  QTest::newRow("just-past-last") << 3;
+  QTest::newRow("just-past-last") << 4;
   QTest::newRow("far-out-of-range") << 100;
 }
 

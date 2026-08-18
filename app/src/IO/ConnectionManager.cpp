@@ -21,6 +21,7 @@
 
 #include "IO/ConnectionManager.h"
 
+#include <algorithm>
 #include <QApplication>
 #include <QSignalBlocker>
 
@@ -1402,7 +1403,10 @@ void IO::ConnectionManager::dropUnavailablePrimaryDevice(SerialStudio::BusType t
     if (existing->second)
       disconnect(existing->second.get(), nullptr, this, nullptr);
 
+    auto* retired = existing->second.release();
     m_devices.erase(existing);
+    if (retired)
+      retired->deleteLater();
   }
 
   if (uiDriverForBusType(type) != nullptr) {
@@ -1504,6 +1508,12 @@ void IO::ConnectionManager::wireDevice(DeviceManager* dm)
           &IO::DeviceManager::rawDataReceived,
           this,
           &IO::ConnectionManager::onRawDataReceived,
+          Qt::DirectConnection);
+
+  connect(dm,
+          &IO::DeviceManager::consoleDataReceived,
+          this,
+          &IO::ConnectionManager::onConsoleDataReceived,
           Qt::DirectConnection);
 }
 
@@ -1700,6 +1710,12 @@ void IO::ConnectionManager::wireStreamLifecycle()
           &Widgets::AudioExport::activeSessionsChanged,
           this,
           &IO::ConnectionManager::refreshStreamExportFlags);
+
+  static auto& sessionExport = Sessions::Export::instance();
+  connect(&sessionExport,
+          &Sessions::Export::enabledChanged,
+          this,
+          &IO::ConnectionManager::refreshStreamExportFlags);
 #endif
 }
 
@@ -1763,6 +1779,8 @@ IO::StreamConfig IO::ConnectionManager::buildStreamConfig(int deviceId, HAL_Driv
       channel.fftSamples        = dataset.fftSamples;
       channel.transformLanguage = dataset.transformLanguage;
       channel.transformCode     = dataset.transformCode;
+      channel.title             = dataset.title;
+      channel.alias             = dataset.alias;
       config.datasets.push_back(std::move(channel));
     }
   };
@@ -1840,72 +1858,41 @@ void IO::ConnectionManager::rebuildStreamWorkers()
 }
 
 /**
- * @brief Connects one worker's block-rate outputs: full-rate export blocks to the typed
- *        CSV/MDF4 sinks (queued to the GUI, which is their single SPSC producer) and per-block
- *        latest values to the FrameBuilder's store ingest (queued to the pipeline thread, the
- *        store's single writer; spec 0051 R12/R13).
+ * @brief Connects one worker's block-rate outputs, both to the FrameBuilder on the pipeline
+ *        thread (spec 0055 D8): blocks join the frame lane's publish tail so the pipeline stays
+ *        the SINGLE producer for every sink, and latest values keep feeding the data-table store
+ *        whose single writer is that same thread.
  */
 void IO::ConnectionManager::wireStreamWorkerSinks(StreamWorker& worker)
 {
   auto* processor = worker.processor();
   SS_ASSERT(processor != nullptr, return);
 
-  static auto& csvSink = CSV::Export::instance().streamSink();
-  connect(processor,
-          &IO::StreamProcessor::blockReady,
-          &csvSink,
-          &CSV::StreamExport::ingestBlock,
-          Qt::QueuedConnection);
-
-#ifdef BUILD_COMMERCIAL
-  static auto& mdf4Sink = MDF4::Export::instance().streamSink();
-  connect(processor,
-          &IO::StreamProcessor::blockReady,
-          &mdf4Sink,
-          &MDF4::StreamExport::ingestBlock,
-          Qt::QueuedConnection);
-
-  static auto& audioExport = Widgets::AudioExport::instance();
-  connect(processor,
-          &IO::StreamProcessor::blockReady,
-          &audioExport,
-          &Widgets::AudioExport::ingestStreamBlock,
-          Qt::QueuedConnection);
-#endif
-
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
+
+  connect(processor,
+          &IO::StreamProcessor::blockReady,
+          &frameBuilder,
+          &DataModel::FrameBuilder::ingestStreamBlock,
+          Qt::QueuedConnection);
+
   connect(processor,
           &IO::StreamProcessor::latestValuesReady,
           &frameBuilder,
           &DataModel::FrameBuilder::ingestStreamValues,
           Qt::QueuedConnection);
-
-  static auto& apiServer = API::Server::instance();
-  connect(processor,
-          &IO::StreamProcessor::blockReady,
-          &apiServer,
-          &API::Server::ingestStreamBlock,
-          Qt::QueuedConnection);
 }
 
 /**
- * @brief Pushes the current typed-sink enable state (CSV or MDF4 export on) to every worker so
- *        export payloads are only built while a sink can consume them.
+ * @brief Re-derives the FrameBuilder's cached any-async-sink flag when a typed sink's enable
+ *        state moves. Since spec 0055 D8 both lanes publish through that one flag, so this no
+ *        longer pushes a per-worker export gate -- but it must still fire for every sink, or a
+ *        recording produces a valid-looking file containing nothing.
  */
 void IO::ConnectionManager::refreshStreamExportFlags()
 {
-  static auto& csvExport = CSV::Export::instance();
-  static auto& apiServer = API::Server::instance();
-  bool exportOn          = csvExport.exportEnabled() || apiServer.hasStreamSubscribers();
-#ifdef BUILD_COMMERCIAL
-  static auto& mdf4Export  = MDF4::Export::instance();
-  static auto& audioExport = Widgets::AudioExport::instance();
-  exportOn = exportOn || mdf4Export.exportEnabled() || audioExport.hasActiveSessions();
-#endif
-
-  for (auto& worker : m_streamWorkers)
-    if (worker)
-      worker->setExportActive(exportOn);
+  static auto& frameBuilder = DataModel::FrameBuilder::instance();
+  frameBuilder.refreshAsyncSinks();
 }
 
 /**
@@ -1959,10 +1946,10 @@ const std::vector<std::unique_ptr<IO::StreamWorker>>& IO::ConnectionManager::str
 }
 
 /**
- * @brief Rebuilds DeviceManagers for all sources when the project source list changes. Reentrant
- *        triggers coalesce into one queued follow-up rebuild. Never emits sessionClosed: a
- *        rebuild is transient churn that reconnects on its own, and ProcessLauncher reaps the
- *        script-launched helpers serving the very links being rebuilt on that signal.
+ * @brief Rebuilds DeviceManagers when the source list changes; reentrant triggers coalesce into one
+ *        queued rebuild, none emits sessionClosed. Retired devices leave the map at once but die
+ *        via deleteLater(): a modal driver error box pumps events, so a rebuild can land mid socket
+ *        notification, where freeing the driver leaves the run loop calling a dead socket.
  */
 void IO::ConnectionManager::rebuildDevices()
 {
@@ -2017,7 +2004,10 @@ void IO::ConnectionManager::rebuildDevices()
       disconnect(it->second.get(), nullptr, this, nullptr);
     }
 
-    it = m_devices.erase(it);
+    auto* retired = it->second.release();
+    it            = m_devices.erase(it);
+    if (retired)
+      retired->deleteLater();
   }
 
   if (opMode == SerialStudio::ProjectFile) {
@@ -2138,6 +2128,23 @@ void IO::ConnectionManager::onRawDataReceived(int deviceId, const IO::CapturedDa
   static auto& grpcServer = API::GRPC::GRPCServer::instance();
   grpcServer.hotpathTxData(data->data);
 #endif
+}
+
+/**
+ * @brief Forwards a stream-lane source's terminal-only bytes from device @p deviceId to the
+ *        console. The typed sample blocks already fed the dashboard, the exports and the API,
+ *        so this text stops at the terminal and nothing is recorded twice.
+ */
+void IO::ConnectionManager::onConsoleDataReceived(int deviceId, const IO::CapturedDataPtr& data)
+{
+  SS_ASSERT(data != nullptr, return);
+  SS_ASSERT_LOG(deviceId >= 0);
+
+  if (m_paused)
+    return;
+
+  static auto& console = Console::Handler::instance();
+  console.hotpathRxDeviceData(deviceId, data->data);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -37,6 +37,7 @@
 #include <vector>
 
 #include "Concepts.h"
+#include "DSPSimd.h"
 #include "HotpathOptimization.h"
 #include "SSAssert.h"
 
@@ -957,16 +958,9 @@ SS_FORCE_INLINE void assign_utf8_in_place(QString& dst, QByteArrayView src)
   }
 
   dst.resize(n);
-  QChar* out = dst.data();
 
-  uchar nonAscii = 0;
-  for (qsizetype i = 0; i < n; ++i) {
-    const uchar c  = static_cast<uchar>(p[i]);
-    nonAscii      |= c;
-    out[i]         = QChar(static_cast<char16_t>(c));
-  }
-
-  if (nonAscii & 0x80) [[unlikely]]
+  char16_t* out = reinterpret_cast<char16_t*>(dst.data());
+  if (!DSP::simdWidenAscii(p, out, static_cast<std::size_t>(n))) [[unlikely]]
     dst = QString::fromUtf8(p, n);
 }
 

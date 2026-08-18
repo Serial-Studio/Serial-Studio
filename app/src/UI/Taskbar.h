@@ -246,6 +246,7 @@ private:
   [[nodiscard]] int resolveWorkspaceRefWindowId(const DataModel::WidgetRef& ref) const;
   [[nodiscard]] int relativeIndexForWindow(int windowId) const;
   [[nodiscard]] int indexForGroupId(int groupId) const;
+  [[nodiscard]] QString layoutContextKey() const;
   void emitWorkspaceChangeAnticipation(int toGroupId);
 
   UI::Dashboard& m_dashboard;

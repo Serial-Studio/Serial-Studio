@@ -100,18 +100,18 @@ void finiteMinMaxPointFY(const QPointF* pts, qsizetype n, double& lo, double& hi
 }
 
 /**
- * @brief Scalar reference for DSP::simdWindowedComplexFill.
+ * @brief Scalar reference for DSP::simdWindowedRealFill.
  */
-void windowedComplexFill(const double* ring,
-                         std::size_t front,
-                         std::size_t mask,
-                         std::size_t n,
-                         double offset,
-                         double scale,
-                         const float* window,
-                         float* out)
+void windowedRealFill(const double* ring,
+                      std::size_t front,
+                      std::size_t mask,
+                      std::size_t n,
+                      double offset,
+                      double scale,
+                      const float* window,
+                      float* out)
 {
-  DspSimdScalar::simdWindowedComplexFill(ring, front, mask, n, offset, scale, window, out);
+  DspSimdScalar::simdWindowedRealFill(ring, front, mask, n, offset, scale, window, out);
 }
 
 /**
@@ -138,12 +138,37 @@ void asciiDots16(const quint8* src, char16_t* out)
 }
 
 /**
- * @brief Scalar reference for DSP::SimdDetail::windowedComplexSpan.
+ * @brief Scalar reference for DSP::simdWidenAscii.
  */
-void windowedComplexSpan(
+bool widenAscii(const char* src, char16_t* out, std::size_t n)
+{
+  return DspSimdScalar::simdWidenAscii(src, out, n);
+}
+
+/**
+ * @brief Scalar reference for DSP::simdDeinterleaveToF64.
+ */
+void deinterleaveToF64(const float* src, std::size_t frames, int channels, int channel, double* out)
+{
+  DspSimdScalar::simdDeinterleaveToF64(src, frames, channels, channel, out);
+}
+
+/**
+ * @brief Scalar reference for DSP::simdPowerSpectrumDb.
+ */
+void powerSpectrumDb(
+  const float* interleaved, float* out, std::size_t n, float invNorm, float epsSq, float floorDb)
+{
+  DspSimdScalar::simdPowerSpectrumDb(interleaved, out, n, invNorm, epsSq, floorDb);
+}
+
+/**
+ * @brief Scalar reference for DSP::SimdDetail::windowedRealSpan.
+ */
+void windowedRealSpan(
   const double* src, const float* win, float* out, std::size_t n, double offset, double scale)
 {
-  DspSimdScalar::SimdDetail::windowedComplexSpan(src, win, out, n, offset, scale);
+  DspSimdScalar::SimdDetail::windowedRealSpan(src, win, out, n, offset, scale);
 }
 
 /**

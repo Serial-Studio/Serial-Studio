@@ -3,13 +3,18 @@
 Transforms run on every parsed frame, after the frame parser, before the
 dashboard sees the value. They turn a raw value into the displayed value.
 
-## Pick Lua first
+## Picking a language
 
-Both Lua and JavaScript work, but **Lua is the recommended default**.
-It is measurably faster on the hotpath at typical telemetry rates and
-the embedded interpreter has a lighter per-call cost than `QJSEngine`.
-Use JavaScript only when you need a JS-specific feature (regex
-flavours, `JSON.stringify`, etc.).
+Three exist. **Expression (`language: 3`) first** when the transform is
+arithmetic on this sample, its siblings, or a table register: no engine,
+no allocation, cheapest at rate. See the section below for its syntax.
+
+Otherwise **Lua (`language: 1`) is the default**: measurably faster on
+the hotpath than `QJSEngine` at typical telemetry rates, with a lighter
+per-call cost. Use JavaScript only when you need a JS-specific feature
+(regex flavours, `JSON.stringify`, etc.), and use Lua or JavaScript
+whenever the transform needs state, multi-step logic, a table WRITE, or
+`deviceWrite`.
 
 When you push transform code, ALWAYS pass `language` so the dataset's
 `transformLanguage` is locked to the syntax you wrote. A mismatch is a
@@ -20,6 +25,44 @@ visible error. Two ways to set both at once:
 project.dataset.setTransformCode {groupId, datasetId, code, language: 1}
 project.dataset.update            {groupId, datasetId, transformCode, transformLanguage: 1}
 ```
+
+## Expression: language 3, the cheapest option
+
+A third `transformLanguage` exists: **Expression** (`language: 3`). No
+script engine, no `transform()` function, no statements. The code is ONE
+arithmetic expression whose value becomes the reading:
+
+```
+project.dataset.setTransformCode {groupId, datasetId, code: "v * 0.01 + 273.15", language: 3}
+```
+
+Prefer it for scale/offset, clamping, unit conversion, and combining
+channels: it compiles to a flat program that runs without allocating, so
+it beats both scripting languages. Fall back to Lua when the transform
+needs state across frames, multi-step logic, table access, or
+`deviceWrite`.
+
+Inputs: `v` (this sample), `t` (seconds), `dt` (since previous sample),
+`n` (sample index), `pi`, `e`, `nan`, `inf`. Sibling datasets of the same
+source read by **Script Alias** (`v * shunt_current`), or by dataset
+uniqueId in braces (`v * {12}`) since a bare number is a constant. Titles
+do NOT resolve. Set the alias with `project.dataset.update {alias}` before
+referencing a sibling by name. History: `sample(name, k)` up to 256 back,
+with a bare or braced name, NEVER a quoted string. Lines starting with
+`#` are comments.
+
+Data tables are readable with `table(name, register)` (`v * table(cal, scale)`),
+read-only: a write needs Lua or JavaScript. Table access is a frame-lane
+feature; on a stream-lane source `table()` is a compile error.
+
+Operators `|| && == != < <= > >= + - * / % ^ ! ?:` and the functions
+`abs floor ceil round sqrt cbrt exp log log10 log2 sin cos tan asin acos
+atan sinh cosh tanh deg rad min max pow atan2 hypot clamp lerp`.
+
+An expression compiles to at most 512 operations. A compile error is
+reported once and the dataset publishes its raw value, so a wrong
+expression fails the same silent way a language mismatch does: always
+pass `language: 3` when you write one.
 
 ## Virtual vs non-virtual: when to flip the flag
 

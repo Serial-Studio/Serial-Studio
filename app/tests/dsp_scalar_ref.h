@@ -80,14 +80,14 @@ void finiteMinMaxPointFY(const QPointF* pts, qsizetype n, double& lo, double& hi
 // Ring-buffer bulk transforms
 //--------------------------------------------------------------------------------------------------
 
-void windowedComplexFill(const double* ring,
-                         std::size_t front,
-                         std::size_t mask,
-                         std::size_t n,
-                         double offset,
-                         double scale,
-                         const float* window,
-                         float* out);
+void windowedRealFill(const double* ring,
+                      std::size_t front,
+                      std::size_t mask,
+                      std::size_t n,
+                      double offset,
+                      double scale,
+                      const float* window,
+                      float* out);
 
 void ringsToPoints(const double* xs,
                    std::size_t xfront,
@@ -104,11 +104,23 @@ void ringsToPoints(const double* xs,
 
 void asciiDots16(const quint8* src, char16_t* out);
 
+[[nodiscard]] bool widenAscii(const char* src, char16_t* out, std::size_t n);
+
+//--------------------------------------------------------------------------------------------------
+// Block staging
+//--------------------------------------------------------------------------------------------------
+
+void deinterleaveToF64(
+  const float* src, std::size_t frames, int channels, int channel, double* out);
+
+void powerSpectrumDb(
+  const float* interleaved, float* out, std::size_t n, float invNorm, float epsSq, float floorDb);
+
 //--------------------------------------------------------------------------------------------------
 // SimdDetail contiguous-span helpers
 //--------------------------------------------------------------------------------------------------
 
-void windowedComplexSpan(
+void windowedRealSpan(
   const double* src, const float* win, float* out, std::size_t n, double offset, double scale);
 
 void interleaveSpan(const double* xs, const double* ys, double* out, qsizetype n);

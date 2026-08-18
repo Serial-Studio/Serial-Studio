@@ -46,7 +46,7 @@ the GUI thread, and it runs in this order:
    revalidation changed, only who calls them and when.
 2. **Stream worker drain** — for each `IO::StreamWorker`, publish the current display budget
    into its atomics (bucket count = `points()/2`, window = `plotTimeRange`) and apply every
-   pending `StreamDisplayUpdate` through `applyStreamUpdate`.
+   pending `DataBlock` through `applyBlock` (spec 0055: one ring, one drain, both lanes).
 3. **One coalesced `updated()`** if anything set `m_updateRequired`.
 
 `applyStreamUpdate` is O(pixels + fftSize + datasets) per block, never O(samples): latest
@@ -92,6 +92,50 @@ flag to an `ExternalWidgetWindow`; a user closing the window flips the flag back
 enabled == window visible. Tool windows are excluded from the per-project `externalWindows`
 widgetSettings entry (their flags already persist globally).
 
+**Frame annotation layer (spec 0059).** `Console::Handler` owns a `Console::AnnotationModel`
+(bounded annotations over absolute byte offsets, interned texts, decoder-declared rows/classes,
+a 1 MiB retained byte copy for payload extraction; also the table model), an
+`AnnotationDecoder` (user JS `decoder = { rows, classes, decode(bytes, offset, ctx) }` in its own
+`QJSEngine` under a 200 ms `JsWatchdog`, chunk cadence on the GUI thread, bounded carry-over,
+disabled on throw/timeout) and an `AnnotationFilter` proxy; `hotpathRxData` /
+`hotpathRxDeviceData` feed the decoder. `ConsoleAnnotations.qml` (ribbon toggle in
+`Terminal.qml`, Utilities lane) shows the track strip, the filterable table with CSV export, the
+per-class payload view and the decoder editor. Nothing on the frame pipeline; JS only.
+
+Load-bearing rules, all earned against a 48 kHz audio stream (2026-08-17):
+
+- **`annotate()` stages, `commitPending()` publishes.** `annotate()` pushes into a pending vector
+  and emits nothing; `Console::Handler`'s `uiTimeout` lambda calls `commitPending()`, which does
+  ONE `beginInsertRows` and at most one `countChanged` per tick. A decoder emitting thousands of
+  records per second used to open one model transaction each, through a
+  `QSortFilterProxyModel`. `ingestBytes()` only marks the count dirty for the same reason.
+  Anything that reads `count()` right after `annotate()` (tests, headless callers) must commit
+  first.
+- **Panel UI state lives in `Settings { category: "ConsoleAnnotations" }`**, not in the project:
+  `saveWidgetSetting` is a no-op outside Project File mode.
+- **The store is a `std::deque`.** Trimming (`dropOldest`, `trimToRetainedBytes`) costs the
+  dropped records, not a memmove of the survivors.
+- **`AnnotationDecoder::reset()` empties the model BEFORE re-reading the offset.** Reading first
+  left the decoder annotating at the old stream position while the byte window restarted at zero:
+  every later record landed past the window, escaped trimming (its `end >= m_bytesStart` always
+  held) and never reached the strip — a full store with empty lanes.
+- **The strip anchors on `labelledEnd`, never `retainedEnd`.** Bytes are counted on arrival but
+  records only land on the tick, so a narrow window anchored on the byte counter sits past the
+  newest bar and reads as empty. Anchoring on the labels also freezes the strip while paused.
+- **The strip is painted, not instantiated.** `trackStrip()` returns flat pixel geometry
+  (`x, width, start, end, class, merged` per mark) and the lane is a `Canvas`; texts ride along
+  only under `kLabelledSpanBudget` (256) marks. One scene-graph item per mark, rebuilt per tick,
+  is what made a decimated lane crawl. `trackSpans()` keeps the readable map form.
+- **Decimation merges to one pixel, never to one blob.** `collectRuns()` merges neighbours of one
+  class only when the record, the gap before it, AND the resulting cluster all fit inside
+  `minSpanBytes`; merging on the gap alone collapsed a lane of legible records separated by one
+  delimiter byte.
+- **Persistence is two-sided.** `widgetSettings("console")` carries the decoder with the `.ssproj`
+  but is a **no-op outside `ProjectFile` mode** (`ProjectModel.cpp:1203`), so `Settings { category:
+  "ConsoleAnnotations" }` also stores decoder code/enabled plus window bytes, current tab and the
+  payload hex toggle. Project copy wins when present; the app copy is the Quick Plot / Console
+  Only fallback. Superseded once the decoder becomes a `Source` field.
+
 ## Plot X-Axis (Time / Samples / Dataset) & the TimeRing
 
 `Dataset::xAxisId` selects the plot X source, and
@@ -123,10 +167,25 @@ sample is visible immediately at any input rate. Capacity is sized in `Dashboard
 `timeRingCapacity(plotTimeRangeSec)`: `min(plotTimeRange * kAssumedMaxRateHz, kMaxTimeRingSamples)`
 with a floor of `kDefaultPlotBuckets` (`50000` Hz assumption, `262144` cap, `1024` floor). Storage
 is `m_plotTimeRings` / `m_multiplotTimeRings` (keyed by widget index; the multiplot one is a
-`std::vector<TimeRing>` per curve). The hotpath appends `numericValue` at `m_plotDisplayTimeSec`
+`std::vector<EnvelopeRing>` per curve). **Since spec 0057 the history ring is a
+`DSP::EnvelopeRing`**: `level0` is the `TimeRing` just described, unchanged, and `levels[k-1]`
+is a bounded `FixedQueue<EnvelopeCell>` of time-ordered `{t0, v0, t1, v1}` extreme pairs, each
+cell covering `16^k` level-0 grid cells (identity = level-0 cell index `>> 4k`, exact integer
+nesting). A completed level-0 cell folds into every coarser open cell (`foldOpenCell`, at most
+nine merges, never a rescan); coarse levels are sized `ceil(cells0 / 16^k) + 1` while at least
+three cells remain, so they cost 16/15 of level 0's bytes and never allocate after construction
+(level 0's `resizeCapacity` rebuilds them from its retained slots). Sweep engines keep plain
+`TimeRing`s. The hotpath appends `numericValue` at `m_plotDisplayTimeSec`
 via `m_timePushes` (single plots) and `m_multiplotPushes` with its `TimeCurve` list (multi). The
 widget side calls `Dashboard::plotTimeRing(idx)` / `multiplotTimeRings(idx)` and renders through
-`DSP::downsampleTimeWindow(ring.time, ring.value, ...)`: a viewport decimation of the
+`DSP::downsampleTimeWindow(ring, ...)`, which asks `EnvelopeRing::selectLevel(span, pixels,
+oldest)` for the coarsest level whose cell span is at or under one render column *and* whose
+oldest cell still reaches the window (else it falls to a finer level, level 0 always qualifying),
+then feeds the shared `dsTimeWindowCore` with either level 0's slots or the coarse level's
+`2 * cells` points, always rebased to level 0's newest sample. Wide windows therefore read
+O(pixels) cells instead of O(samples); narrow windows read level 0 exactly as before. The API's
+`dashboard.tailFrames` reads `level0`. `tst_envelope_ring` pins the per-level brute-force
+contract. The plain-ring overload is a viewport decimation of the
 already-decimated ring whose pixel columns are bucketed on an **absolute column-width lattice**
 (anchor quantized to the column width, drawing still uses true newest-rebased positions), so
 per-column sample membership stays stable as the window slides -- a newest-anchored bucket grid
@@ -307,7 +366,16 @@ MultiPlot); `sweepTimebase` is ms, 0 = match time range). QML wiring is a Pro-ga
 `TriggerDialog.qml` (with the optional "Timebase (ms)" field), and the trigger-level line drawn in
 `PlotWidget.qml` (`sweepMode`/`triggerLevel`). Setters are runtime-gated on a valid commercial
 token (`isValid()` + `SS_LICENSE_GUARD()`; tier compares were removed 2026-07, trial = Pro).
-`SweepMode`/`TriggerEdge` enums live in `SerialStudio.h`.
+`SweepMode`/`TriggerEdge` enums live in `SerialStudio.h`. **Retained segments (spec 0061):** the
+engine keeps a bounded ring of `SweepSegment`s (deep copies of `front` taken in `completeSweep()`
+via `retainFront()`, pre-sized by `setSegmentRetention(n)`, n clamped to 64 and to 32 MB per plot);
+`segment(0)` is the newest, `resetState()`/`clearSegments()` drop them, `takeSegmentsFrom()` carries
+them across rebuilds. `Widgets::Plot` exposes retention only (`sweepRetention` + the read-only
+`sweepSegmentCount`/`sweepSegmentCapacity`) and draws every retained segment age-dimmed under the live
+trace (`drawSegment`, `PlotCurve` repeater in `Plot.qml`); the toolbar control is the retention pill,
+and `sweepRetention` persists per widget. The stepper, the pinned reference and the overlay toggle were
+removed 2026-08-17 as UI nobody could read; `MultiPlot` has no segment surface at all (it never rendered
+one). Session-DB persistence of segments is not implemented yet.
 
 **Stream-lane sources feed the same engines by a second path (spec 0051 M4).** Audio and any other
 `isStreamCapable()` source never reaches `updateLineSeries`/`updateDataSeries`, so `feedSweep`/
@@ -316,7 +384,7 @@ the plain time rings kept updating, so the plot looked alive. `applyStreamChanne
 `feedPlotStreamSweep` per plot, and `applyStreamUpdate` calls `feedMultiplotStreamSweep` per enabled
 multiplot sweep after the channel loop (a multiplot needs one sweep time from its trigger curve applied
 to every curve, which a per-channel hook cannot produce). Both drive `advance()` from the
-`StreamDisplayUpdate` envelope pairs, so **trigger resolution is the envelope bucket**, i.e. exactly the
+`DataBlock` envelope pairs, so **trigger resolution is the envelope bucket**, i.e. exactly the
 resolution the trace is drawn at (`StreamProcessor::reduceChannel` buckets on the same
 `windowSec`/`pixelWidth` the plot uses). Curves pair by envelope index because one source's channels
 share that grid. A multiplot no channel of the update feeds resolves to a null trigger and is skipped,
@@ -464,3 +532,22 @@ reusing the dataset's FFT settings. Class IS the painted item (`QQuickPaintedIte
 Toggle via `DatasetWaterfall = 0b01000000`; persists as `Keys::Waterfall` (omit when false).
 `Keys::WaterfallYAxis` non-zero → **Campbell mode**: rows placed by another dataset's
 value (e.g. RPM) instead of time. `commercialCfg()` flags any project using waterfall.
+
+## Time-Ring Sizing & the Plot Clocks — Non-Negotiable
+
+**Time rings are sized from a rate, never from a sample count alone**
+(`kMaxRateSizedRingSamples` is the shared ceiling): the stream lane sizes at build from the
+source's real rate (`streamRingCapacity`), the frame lane cannot know its rate then, so a
+*saturated* ring re-sizes once from the plot clock's smoothed period (`growTimeRing`, upward
+only). A ring bounded in samples alone runs out of history in seconds (44.1 kHz filled a 10 s
+axis to 5.9 s, 2026-08-15).
+
+**A time ring's clock never rewinds, and the clocks never outlive their display time.**
+`appendDecimated` clamps sub-cell backward jitter forward to keep the grid monotonic, but a jump
+back over a whole cell drops the retained span: clamping it instead wedges the ring shut (no new
+cell can open) until wall time climbs past the stale stamp, and the plot draws a single point at
+the right edge meanwhile. Producer side: `m_plotClocks` and `m_plotDisplayTimeSec` are ONE state
+(every rebuild seeds every ring with that scalar through `updateDataSeries()`), so they are
+cleared, saved and restored together via `Dashboard::resetPlotClocks()`, never one without the
+other. Clearing the map alone left QuickPlot audio blank for seconds after each rebuild
+(2026-08-18).

@@ -26,6 +26,7 @@
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
+#include <cstring>
 #include <limits>
 #include <QPointF>
 #include <QtGlobal>
@@ -71,11 +72,11 @@ namespace SS_DSP_NAMESPACE {
 namespace SimdDetail {
 
 /**
- * @brief Windowed FFT staging over one contiguous span: out[2i] = finite(src[i]) ?
- *        f32((src[i]+offset)*scale)*win[i] : 0, out[2i+1] = 0. Per-lane ops replicate the
- *        scalar order exactly (add, mul in f64, convert, mul in f32).
+ * @brief Windowed FFT staging over one contiguous span: out[i] = finite(src[i]) ?
+ *        f32((src[i]+offset)*scale)*win[i] : 0. Per-lane ops replicate the scalar order
+ *        exactly (add, mul in f64, convert, mul in f32).
  */
-inline void windowedComplexSpan(
+inline void windowedRealSpan(
   const double* src, const float* win, float* out, std::size_t n, double offset, double scale)
 {
   SS_ASSERT(src != nullptr || n == 0, return);
@@ -88,7 +89,6 @@ inline void windowedComplexSpan(
   const __m128d plus_inf  = _mm_set1_pd(std::numeric_limits<double>::infinity());
   const __m128d v_offset  = _mm_set1_pd(offset);
   const __m128d v_scale   = _mm_set1_pd(scale);
-  const __m128 zero       = _mm_setzero_ps();
   for (; i + 2 <= n; i += 2) {
     const __m128d raw    = _mm_loadu_pd(src + i);
     const __m128d finite = _mm_cmplt_pd(_mm_andnot_pd(sign_mask, raw), plus_inf);
@@ -96,7 +96,7 @@ inline void windowedComplexSpan(
     const __m128 v       = _mm_cvtpd_ps(_mm_and_pd(scaled, finite));
     const __m128i w_bits = _mm_loadl_epi64(reinterpret_cast<const __m128i*>(win + i));
     const __m128 vw      = _mm_mul_ps(v, _mm_castsi128_ps(w_bits));
-    _mm_storeu_ps(out + 2 * i, _mm_unpacklo_ps(vw, zero));
+    _mm_storel_epi64(reinterpret_cast<__m128i*>(out + i), _mm_castps_si128(vw));
   }
 #elif defined(SS_SIMD_NEON)
   const float64x2_t plus_inf = vdupq_n_f64(std::numeric_limits<double>::infinity());
@@ -108,18 +108,14 @@ inline void windowedComplexSpan(
     const float64x2_t scaled = vmulq_f64(vaddq_f64(raw, v_offset), v_scale);
     const uint64x2_t bits    = vandq_u64(vreinterpretq_u64_f64(scaled), finite);
     const float32x2_t v      = vcvt_f32_f64(vreinterpretq_f64_u64(bits));
-    float32x2x2_t pair;
-    pair.val[0] = vmul_f32(v, vld1_f32(win + i));
-    pair.val[1] = vdup_n_f32(0.0f);
-    vst2_f32(out + 2 * i, pair);
+    vst1_f32(out + i, vmul_f32(v, vld1_f32(win + i)));
   }
 #endif
 
   for (; i < n; ++i) {
     const double raw = src[i];
     const float v    = std::isfinite(raw) ? static_cast<float>((raw + offset) * scale) : 0.0f;
-    out[2 * i]       = v * win[i];
-    out[2 * i + 1]   = 0.0f;
+    out[i]           = v * win[i];
   }
 }
 
@@ -154,6 +150,46 @@ inline void interleaveSpan(const double* xs, const double* ys, double* out, qsiz
     out[2 * i]     = xs[i];
     out[2 * i + 1] = ys[i];
   }
+}
+
+/**
+ * @brief Spreads the four bytes of @p v into the four 16-bit lanes of the result, so a
+ *        little-endian store lands one UTF-16 code unit per source byte.
+ */
+[[nodiscard]] inline quint64 widenFourBytes(quint32 v)
+{
+  return (static_cast<quint64>(v) & 0xFF) | ((static_cast<quint64>(v) & 0xFF00) << 8)
+       | ((static_cast<quint64>(v) & 0xFF0000) << 16)
+       | ((static_cast<quint64>(v) & 0xFF000000) << 24);
+}
+
+/**
+ * @brief Widens a contiguous f32 span to f64. Exact by construction: every finite or
+ *        non-finite f32 has an exact f64 image, so the converts carry no rounding.
+ */
+inline void widenF32Span(const float* src, double* out, std::size_t n)
+{
+  SS_ASSERT(src != nullptr || n == 0, return);
+  SS_ASSERT(out != nullptr || n == 0, return);
+
+  std::size_t i = 0;
+
+#if defined(SS_SIMD_X86)
+  for (; i + 4 <= n; i += 4) {
+    const __m128 v = _mm_loadu_ps(src + i);
+    _mm_storeu_pd(out + i, _mm_cvtps_pd(v));
+    _mm_storeu_pd(out + i + 2, _mm_cvtps_pd(_mm_movehl_ps(v, v)));
+  }
+#elif defined(SS_SIMD_NEON)
+  for (; i + 4 <= n; i += 4) {
+    const float32x4_t v = vld1q_f32(src + i);
+    vst1q_f64(out + i, vcvt_f64_f32(vget_low_f32(v)));
+    vst1q_f64(out + i + 2, vcvt_f64_f32(vget_high_f32(v)));
+  }
+#endif
+
+  for (; i < n; ++i)
+    out[i] = static_cast<double>(src[i]);
 }
 
 }  // namespace SimdDetail
@@ -272,6 +308,126 @@ template<typename OnMatch>
   }
 
   return len;
+}
+
+/**
+ * @brief Widens @p n bytes to UTF-16 code units one-for-one and reports whether every byte was
+ *        ASCII. All @p n units are written either way, so a false return lets the caller redo
+ *        the span through a real UTF-8 decoder without first restoring anything.
+ */
+[[nodiscard]] inline bool simdWidenAscii(const char* src, char16_t* out, std::size_t n)
+{
+  SS_ASSERT(src != nullptr || n == 0, return true);
+  SS_ASSERT(out != nullptr || n == 0, return true);
+
+  std::size_t i    = 0;
+  quint64 highBits = 0;
+
+#if defined(SS_SIMD_X86)
+  const __m128i zero = _mm_setzero_si128();
+  for (; i + 16 <= n; i += 16) {
+    const __m128i block  = _mm_loadu_si128(reinterpret_cast<const __m128i*>(src + i));
+    highBits            |= static_cast<unsigned>(_mm_movemask_epi8(block));
+    _mm_storeu_si128(reinterpret_cast<__m128i*>(out + i), _mm_unpacklo_epi8(block, zero));
+    _mm_storeu_si128(reinterpret_cast<__m128i*>(out + i + 8), _mm_unpackhi_epi8(block, zero));
+  }
+#elif defined(SS_SIMD_NEON)
+  uint8x16_t acc = vdupq_n_u8(0);
+  for (; i + 16 <= n; i += 16) {
+    const uint8x16_t block = vld1q_u8(reinterpret_cast<const uint8_t*>(src + i));
+    acc                    = vorrq_u8(acc, block);
+    vst1q_u16(reinterpret_cast<uint16_t*>(out + i), vmovl_u8(vget_low_u8(block)));
+    vst1q_u16(reinterpret_cast<uint16_t*>(out + i + 8), vmovl_u8(vget_high_u8(block)));
+  }
+  highBits |= (vmaxvq_u8(acc) & 0x80u);
+#endif
+
+#if !defined(SS_SIMD_DISABLE)
+  if constexpr (std::endian::native == std::endian::little)
+    for (; i + 8 <= n; i += 8) {
+      quint64 v = 0;
+      std::memcpy(&v, src + i, sizeof(v));
+      highBits |= (v & UINT64_C(0x8080808080808080));
+
+      const quint64 lo = SimdDetail::widenFourBytes(static_cast<quint32>(v));
+      const quint64 hi = SimdDetail::widenFourBytes(static_cast<quint32>(v >> 32));
+      std::memcpy(out + i, &lo, sizeof(lo));
+      std::memcpy(out + i + 4, &hi, sizeof(hi));
+    }
+#endif
+
+  for (; i < n; ++i) {
+    const auto c  = static_cast<quint8>(src[i]);
+    highBits     |= (c & 0x80u);
+    out[i]        = static_cast<char16_t>(c);
+  }
+
+  return highBits == 0;
+}
+
+/**
+ * @brief Extracts one channel of an interleaved f32 block into f64. A single-channel block is
+ *        a contiguous widen; a multi-channel one is a strided gather no SIMD lane improves.
+ */
+inline void simdDeinterleaveToF64(
+  const float* src, std::size_t frames, int channels, int channel, double* out)
+{
+  SS_ASSERT(src != nullptr || frames == 0, return);
+  SS_ASSERT(out != nullptr || frames == 0, return);
+  SS_ASSERT(channels >= 1, return);
+  SS_ASSERT(channel >= 0 && channel < channels, return);
+
+  if (channels == 1) {
+    SimdDetail::widenF32Span(src, out, frames);
+    return;
+  }
+
+  for (std::size_t i = 0; i < frames; ++i)
+    out[i] = static_cast<double>(
+      src[i * static_cast<std::size_t>(channels) + static_cast<std::size_t>(channel)]);
+}
+
+/**
+ * @brief Converts an interleaved complex-f32 spectrum to display dB:
+ *        out[i] = max(10*log10(max((re*re + im*im) * @p invNorm, @p epsSq)), @p floorDb).
+ *        Only the power stage vectorizes -- same op order, max operands ordered so NaN
+ *        propagates like std::max -- since no bit-exact vector log10 exists.
+ */
+inline void simdPowerSpectrumDb(
+  const float* interleaved, float* out, std::size_t n, float invNorm, float epsSq, float floorDb)
+{
+  SS_ASSERT(interleaved != nullptr || n == 0, return);
+  SS_ASSERT(out != nullptr || n == 0, return);
+
+  std::size_t i = 0;
+
+#if defined(SS_SIMD_X86)
+  const __m128 v_norm = _mm_set1_ps(invNorm);
+  const __m128 v_eps  = _mm_set1_ps(epsSq);
+  for (; i + 4 <= n; i += 4) {
+    const __m128 lo  = _mm_loadu_ps(interleaved + 2 * i);
+    const __m128 hi  = _mm_loadu_ps(interleaved + 2 * i + 4);
+    const __m128 sum = _mm_hadd_ps(_mm_mul_ps(lo, lo), _mm_mul_ps(hi, hi));
+    _mm_storeu_ps(out + i, _mm_max_ps(v_eps, _mm_mul_ps(sum, v_norm)));
+  }
+#elif defined(SS_SIMD_NEON)
+  const float32x4_t v_norm = vdupq_n_f32(invNorm);
+  const float32x4_t v_eps  = vdupq_n_f32(epsSq);
+  for (; i + 4 <= n; i += 4) {
+    const float32x4x2_t c = vld2q_f32(interleaved + 2 * i);
+    const float32x4_t sum = vaddq_f32(vmulq_f32(c.val[0], c.val[0]), vmulq_f32(c.val[1], c.val[1]));
+    vst1q_f32(out + i, vmaxq_f32(v_eps, vmulq_f32(sum, v_norm)));
+  }
+#endif
+
+  for (; i < n; ++i) {
+    const float re = interleaved[2 * i];
+    const float im = interleaved[2 * i + 1];
+    out[i]         = std::max((re * re + im * im) * invNorm, epsSq);
+  }
+
+  for (std::size_t k = 0; k < n; ++k)
+    out[k] = std::max(10.0f * std::log10(out[k]), floorDb);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -504,19 +660,18 @@ inline void simdFiniteMinMaxPointF(const QPointF* pts, qsizetype n, double& lo, 
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Fills an interleaved complex-f32 buffer from a pow2-masked f64 ring for FFT staging:
- *        out[2i] = finite(r) ? f32((r+offset)*scale)*window[i] : 0, out[2i+1] = 0, with the
- *        ring resolved into at most two contiguous spans so the inner loops vectorize.
- *        Requires n <= mask + 1.
+ * @brief Fills @p n windowed f32 samples from a pow2-masked f64 ring for kiss_fftr staging:
+ *        out[i] = finite(r) ? f32((r+offset)*scale)*window[i] : 0, with the ring resolved into
+ *        at most two contiguous spans so the inner loops vectorize. Requires n <= mask + 1.
  */
-inline void simdWindowedComplexFill(const double* ring,
-                                    std::size_t front,
-                                    std::size_t mask,
-                                    std::size_t n,
-                                    double offset,
-                                    double scale,
-                                    const float* window,
-                                    float* out)
+inline void simdWindowedRealFill(const double* ring,
+                                 std::size_t front,
+                                 std::size_t mask,
+                                 std::size_t n,
+                                 double offset,
+                                 double scale,
+                                 const float* window,
+                                 float* out)
 {
   SS_ASSERT(ring != nullptr || n == 0, return);
   SS_ASSERT(out != nullptr || n == 0, return);
@@ -525,8 +680,8 @@ inline void simdWindowedComplexFill(const double* ring,
   SS_ASSERT(front <= mask, return);
 
   const std::size_t n0 = std::min(n, mask + 1 - front);
-  SimdDetail::windowedComplexSpan(ring + front, window, out, n0, offset, scale);
-  SimdDetail::windowedComplexSpan(ring, window + n0, out + 2 * n0, n - n0, offset, scale);
+  SimdDetail::windowedRealSpan(ring + front, window, out, n0, offset, scale);
+  SimdDetail::windowedRealSpan(ring, window + n0, out + n0, n - n0, offset, scale);
 }
 
 /**

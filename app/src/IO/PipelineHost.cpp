@@ -61,9 +61,11 @@ IO::PipelineHost::PipelineHost()
   , m_connected(false)
   , m_operationMode(static_cast<int>(SerialStudio::ProjectFile))
   , m_dashboardAccepting(false)
+  , m_flushEpoch(0)
   , m_dashboardDrops(0)
   , m_displayDrops(0)
-  , m_dashboardRing(kDashboardRingSize)
+  , m_dashboardRing(kBlockRingSize)
+  , m_structureRing(kStructureRingSize)
 {
   m_thread->setObjectName(QStringLiteral("FramePipeline"));
   m_thread->start();
@@ -127,7 +129,7 @@ SerialStudio::OperationMode IO::PipelineHost::operationMode() const noexcept
 }
 
 /**
- * @brief Frames the dashboard never rendered: producer-side ring-full drops plus the GUI drain's
+ * @brief Blocks the dashboard never rendered: producer-side ring-full drops plus the GUI drain's
  *        over-budget discards, each accumulated in its own word by its own thread. Plain counters
  *        pulled by diagnostics, never pushed (spec 0033).
  */
@@ -143,7 +145,7 @@ quint64 IO::PipelineHost::dashboardDropCount() const noexcept
  */
 int IO::PipelineHost::dashboardRingCapacity() const noexcept
 {
-  return kDashboardRingSize;
+  return kBlockRingSize;
 }
 
 /**
@@ -277,27 +279,53 @@ void IO::PipelineHost::routeFrames(int deviceId, FrameReader* reader)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Enqueues a finished pooled frame for the GUI drain (producer: processing thread only).
- *        A full ring means the GUI stalled long enough to pin kDashboardRingSize slots; the frame
- *        is dropped and counted, and the pool-exhaustion warning carries the user-facing signal.
+ * @brief Enqueues a finished pooled block for the GUI drain (producer: processing thread only).
+ *        A full ring means the GUI stalled long enough to pin every block slot; the WHOLE block is
+ *        dropped and counted -- never a partial hand-off, because a consumer that saw half a
+ *        block's samples would interleave them with the next one's.
  */
-void IO::PipelineHost::publishFrameToDashboard(const DataModel::TimestampedFramePtr& frame)
+void IO::PipelineHost::publishBlockToDashboard(const DataModel::DataBlockPtr& block)
 {
-  SS_ASSERT(frame != nullptr, return);
+  SS_ASSERT(block != nullptr, return);
 
   if (!m_dashboardAccepting.load(std::memory_order_relaxed))
     return;
 
-  if (!m_dashboardRing.try_enqueue(frame)) [[unlikely]]
+  if (!m_dashboardRing.try_enqueue(block)) [[unlikely]]
     ++m_dashboardDrops;
 }
 
 /**
- * @brief Pops one pending dashboard frame (consumer: GUI thread only, on the display tick).
+ * @brief Enqueues a structure snapshot ahead of the blocks that carry its generation (producer:
+ *        processing thread only). Published on layout change only, so a full ring here means the
+ *        GUI has not ticked across several project edits; the drop is counted like a block's.
  */
-bool IO::PipelineHost::dequeueDashboardFrame(DataModel::TimestampedFramePtr& out)
+void IO::PipelineHost::publishStructureToDashboard(const DataModel::StructureSnapshotPtr& structure)
+{
+  SS_ASSERT(structure != nullptr, return);
+
+  if (!m_dashboardAccepting.load(std::memory_order_relaxed))
+    return;
+
+  if (!m_structureRing.try_enqueue(structure)) [[unlikely]]
+    ++m_dashboardDrops;
+}
+
+/**
+ * @brief Pops one pending block (consumer: GUI thread only, on the display tick).
+ */
+bool IO::PipelineHost::dequeueDashboardBlock(DataModel::DataBlockPtr& out)
 {
   return m_dashboardRing.try_dequeue(out);
+}
+
+/**
+ * @brief Pops one pending structure snapshot (consumer: GUI thread only). Drained BEFORE the block
+ *        ring on each tick, so a block never reaches the dashboard ahead of its layout.
+ */
+bool IO::PipelineHost::dequeueStructureSnapshot(DataModel::StructureSnapshotPtr& out)
+{
+  return m_structureRing.try_dequeue(out);
 }
 
 /**
@@ -317,6 +345,26 @@ void IO::PipelineHost::setDashboardAccepting(bool accepting) noexcept
 void IO::PipelineHost::noteDisplayDrops(quint64 count) noexcept
 {
   m_displayDrops += count;
+}
+
+/**
+ * @brief Advances the block-flush epoch (spec 0055 D1). Written on the GUI thread from the display
+ *        tick at transition rate, exactly like the mode/paused/connected mirrors. It is an epoch
+ *        rather than a flag because every source compares independently: a consume-once flag would
+ *        let the first source to notice it starve every other source's open block.
+ */
+void IO::PipelineHost::bumpFlushEpoch() noexcept
+{
+  m_flushEpoch.fetch_add(1, std::memory_order_relaxed);
+}
+
+/**
+ * @brief Current flush epoch; a staging source pays one relaxed load per frame to compare against
+ *        the epoch its open block was started in, and never a timer on the processing thread.
+ */
+quint64 IO::PipelineHost::flushEpoch() const noexcept
+{
+  return m_flushEpoch.load(std::memory_order_relaxed);
 }
 
 //--------------------------------------------------------------------------------------------------

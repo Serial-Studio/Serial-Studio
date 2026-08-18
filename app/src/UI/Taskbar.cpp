@@ -427,6 +427,20 @@ QQuickItem* UI::Taskbar::nextActiveWindow(int delta) const
 }
 
 /**
+ * @brief Identifies the layout universe currently on screen: operation mode, project file,
+ *        workspace scope and group. Any of them changing means the layout state held by the
+ *        window manager belongs to a different dashboard and must not carry over.
+ */
+QString UI::Taskbar::layoutContextKey() const
+{
+  return QStringLiteral("%1|%2|%3|%4")
+    .arg(QString::number(static_cast<int>(m_appState.operationMode())),
+         m_projectModel.jsonFilePath(),
+         m_layoutScope,
+         QString::number(m_activeGroupId));
+}
+
+/**
  * @brief Serializes the active group's layout and writes it to the project file;
  *        no-ops during a layout restore so restore-driven signals can't loop back.
  */
@@ -833,6 +847,8 @@ void UI::Taskbar::registerWindow(const int id, QQuickItem* window)
 
   if (m_windowIDs.count() >= m_taskbarButtons->rowCount() && m_windowManager) {
     m_restoringLayout = true;
+    m_windowManager->setLayoutContext(layoutContextKey());
+
     const auto opMode = m_appState.operationMode();
     bool restored     = false;
     if (opMode == SerialStudio::ProjectFile) {

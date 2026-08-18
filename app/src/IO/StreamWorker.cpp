@@ -31,7 +31,9 @@ extern "C" {
 // clang-format on
 
 #include <algorithm>
+#include <chrono>
 #include <cmath>
+#include <limits>
 #include <QDebug>
 #include <QScopedValueRollback>
 
@@ -39,6 +41,7 @@ extern "C" {
 #include "DataModel/HotpathOptimization.h"
 #include "DataModel/Scripting/LuaCompat.h"
 #include "DataModel/Scripting/LuaCompatJIT.h"
+#include "DSPSimd.h"
 #include "SerialStudio.h"
 #include "SSAssert.h"
 
@@ -88,19 +91,10 @@ static void openSafeStreamLibs(lua_State* L)
  *        FFT rings sized from the configuration. Script engines compile later on the worker
  *        thread (compileEngines), never here.
  */
-IO::StreamProcessor::StreamProcessor(
-  const StreamConfig& config,
-  moodycamel::ReaderWriterQueue<StreamDisplayUpdatePtr>* displayOut,
-  std::atomic<int>* pixelWidth,
-  std::atomic<double>* windowSec,
-  std::atomic<bool>* exportActive,
-  std::atomic<bool>* paused,
-  DataModel::FrameBuilder* frameBuilder)
+IO::StreamProcessor::StreamProcessor(const StreamConfig& config,
+                                     std::atomic<bool>* paused,
+                                     DataModel::FrameBuilder* frameBuilder)
   : m_config(config)
-  , m_displayOut(displayOut)
-  , m_pixelWidth(pixelWidth)
-  , m_windowSec(windowSec)
-  , m_exportActive(exportActive)
   , m_paused(paused)
   , m_frameBuilder(frameBuilder)
   , m_lua(nullptr)
@@ -111,10 +105,11 @@ IO::StreamProcessor::StreamProcessor(
   , m_blocksProcessed(0)
   , m_transformErrors(0)
   , m_displayDrops(0)
+  , m_exprSlots()
+  , m_hasExpressions(false)
   , m_updatePoolHint(0)
 {
-  SS_ASSERT_LOG(displayOut != nullptr);
-  SS_ASSERT_LOG(pixelWidth != nullptr && windowSec != nullptr);
+  SS_ASSERT_LOG(!m_config.datasets.empty());
 
   m_channels.reserve(m_config.datasets.size());
   for (const auto& dataset : m_config.datasets) {
@@ -123,14 +118,12 @@ IO::StreamProcessor::StreamProcessor(
     if (dataset.fft && dataset.fftSamples > 0)
       state.fftRing.resize(static_cast<std::size_t>(dataset.fftSamples), 0.0);
 
-    state.envelope.reserve(64);
     m_channels.push_back(std::move(state));
   }
 
-  const std::size_t pool_slots = (displayOut ? displayOut->max_capacity() : 0) + 4;
-  m_updatePool.reserve(pool_slots);
-  for (std::size_t i = 0; i < pool_slots; ++i)
-    m_updatePool.push_back(std::make_shared<StreamDisplayUpdate>());
+  m_updatePool.reserve(kBlockPoolSlots);
+  for (std::size_t i = 0; i < kBlockPoolSlots; ++i)
+    m_updatePool.push_back(std::make_shared<DataModel::DataBlock>());
 }
 
 /**
@@ -244,15 +237,56 @@ void IO::StreamProcessor::setupJsEngine()
  */
 void IO::StreamProcessor::compileEngines()
 {
+  m_hasExpressions = false;
   for (auto& state : m_channels) {
     if (state.config.transformCode.isEmpty())
       continue;
 
-    if (state.config.transformLanguage == SerialStudio::Lua)
+    const int language = state.config.transformLanguage;
+    if (language == SerialStudio::Lua)
       compileLuaEntry(state);
-    else if (state.config.transformLanguage == SerialStudio::JavaScript)
+
+    if (language == SerialStudio::JavaScript)
       compileJsEntry(state);
+
+    if (language == SerialStudio::Expression)
+      compileExprEntry(state);
   }
+}
+
+/**
+ * @brief Compiles one dataset's expression transform (spec 0060) against this source's channel
+ *        names; a compile error counts once and leaves the channel raw.
+ */
+void IO::StreamProcessor::compileExprEntry(ChannelState& state)
+{
+  const DataModel::Expression::NameResolver resolver = [this](QStringView name) -> int {
+    for (const auto& channel : m_config.datasets)
+      if (!channel.alias.isEmpty() && QStringView(channel.alias) == name)
+        return m_exprSlots.slotFor(channel.uniqueId);
+
+    bool ok               = false;
+    const int resolved_id = name.toInt(&ok);
+    if (ok)
+      for (const auto& channel : m_config.datasets)
+        if (channel.uniqueId == resolved_id)
+          return m_exprSlots.slotFor(channel.uniqueId);
+
+    return -1;
+  };
+
+  QString error;
+  state.expr.reset();
+  state.exprValid =
+    DataModel::Expression::compile(state.config.transformCode, resolver, state.expr.program, error);
+  if (!state.exprValid) {
+    ++m_transformErrors;
+    qWarning() << "[StreamProcessor] expression transform rejected for dataset"
+               << state.config.uniqueId << ":" << error;
+    return;
+  }
+
+  m_hasExpressions = true;
 }
 
 /**
@@ -373,10 +407,10 @@ void IO::StreamProcessor::teardownEngines()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Consumes one typed sample block: extract each dataset's channel into the reused scratch,
- *        run the transform, reduce to envelope + FFT + latest, publish one bounded display
- *        update. A table-API marshal spins a nested event loop here, so a re-entrant block is
- *        dropped and counted -- the shared scratch is never processed twice concurrently.
+ * @brief Consumes one typed sample block: extract each channel into the reused scratch, transform,
+ *        then publish samples + FFT + latest as one update. A re-entrant block is dropped and
+ *        counted, and samples is clamped to the shortest column so a channel the source does not
+ *        carry cannot be read past its end.
  */
 void IO::StreamProcessor::onSampleBlock(const IO::SampleBlockPtr& block)
 {
@@ -397,23 +431,37 @@ void IO::StreamProcessor::onSampleBlock(const IO::SampleBlockPtr& block)
   const QScopedValueRollback<bool> reentry_guard(m_inBlock, true);
   const quint64 blockNumber = ++m_blocksProcessed;
 
-  std::shared_ptr<StreamBlockItem> exportItem;
-  if (m_exportActive && m_exportActive->load(std::memory_order_relaxed)) {
-    exportItem              = std::make_shared<StreamBlockItem>();
-    exportItem->sourceId    = m_config.sourceId;
-    exportItem->blockNumber = blockNumber;
-    exportItem->t0          = block->t0;
-    exportItem->dt          = block->dt;
-    exportItem->frames      = block->frames;
-    exportItem->uniqueIds.reserve(m_channels.size());
-    exportItem->channels.reserve(m_channels.size());
+  const auto slot = claimBlockSlot();
+  if (!slot) [[unlikely]] {
+    ++m_displayDrops;
+    return;
   }
 
-  for (auto& state : m_channels)
-    processChannel(state, *block, blockNumber, exportItem.get());
+  auto& out               = *slot;
+  out.sourceId            = m_config.sourceId;
+  out.blockNumber         = blockNumber;
+  out.structureGeneration = 0;
+  out.t0                  = block->t0;
+  out.dt                  = block->dt;
+  out.samples             = block->frames;
+  out.times.clear();
 
-  m_samplesProcessed += static_cast<quint64>(block->frames);
-  publishDisplayUpdate(*block, blockNumber);
+  if (out.columns.size() != m_channels.size()) [[unlikely]]
+    bindBlockColumns(out);
+
+  for (std::size_t i = 0; i < m_channels.size(); ++i)
+    if (!m_channels[i].exprValid)
+      processChannel(m_channels[i], *block, blockNumber, &out.columns[i]);
+
+  if (m_hasExpressions) [[unlikely]]
+    processExpressionChannels(*block, out);
+
+  for (const auto& column : out.columns)
+    out.samples = std::min(out.samples, static_cast<qsizetype>(column.values.size()));
+
+  m_samplesProcessed += static_cast<quint64>(out.samples);
+
+  Q_EMIT blockReady(DataModel::DataBlockPtr(slot, slot.get()));
 
   QList<QPair<int, double>> latest;
   latest.reserve(static_cast<qsizetype>(m_channels.size()));
@@ -421,32 +469,50 @@ void IO::StreamProcessor::onSampleBlock(const IO::SampleBlockPtr& block)
     latest.append({state.config.uniqueId, state.latest});
 
   Q_EMIT latestValuesReady(m_config.sourceId, latest);
-
-  if (exportItem)
-    Q_EMIT blockReady(StreamBlockItemPtr(std::move(exportItem)));
 }
 
 /**
- * @brief Runs one dataset's transform + reductions for the block.
+ * @brief Lays out one pooled block's columns from the configured datasets. Dense columns are
+ *        numeric-only (spec 0055 D2), so they allocate no text or per-sample numeric storage.
+ */
+void IO::StreamProcessor::bindBlockColumns(DataModel::DataBlock& block) const
+{
+  block.columns.clear();
+  block.columns.reserve(m_channels.size());
+  for (const auto& state : m_channels) {
+    DataModel::BlockColumn column;
+    column.uniqueId = state.config.uniqueId;
+    column.hasText  = false;
+    column.values.resize(static_cast<std::size_t>(kStreamBlockSampleCap));
+    block.columns.push_back(std::move(column));
+  }
+}
+
+/**
+ * @brief Runs one dataset's transform for the block, then fills its display payload and export
+ *        column. A null @p channel means the display slot pool was exhausted: the transform and
+ *        the export still run, only this block's trace points are lost.
  */
 void IO::StreamProcessor::processChannel(ChannelState& state,
                                          const IO::SampleBlock& block,
                                          quint64 blockNumber,
-                                         StreamBlockItem* exportItem)
+                                         DataModel::BlockColumn* column)
 {
-  const int channel  = state.config.channel;
+  SS_ASSERT(column != nullptr, return);
+
+  column->uniqueId = state.config.uniqueId;
+  column->fftWindow.clear();
+
+  const int index    = state.config.channel;
   const int channels = std::max(1, block.channels);
-  if (channel < 0 || channel >= channels) [[unlikely]]
+  if (index < 0 || index >= channels) [[unlikely]]
     return;
 
   const qsizetype frames = block.frames;
   m_scratch.resize(static_cast<std::size_t>(frames));
 
-  const float* interleaved = block.samples.data();
-  SS_NO_UNROLL
-  for (qsizetype i = 0; i < frames; ++i)
-    m_scratch[static_cast<std::size_t>(i)] =
-      static_cast<double>(interleaved[i * channels + channel]);
+  DSP::simdDeinterleaveToF64(
+    block.samples.data(), static_cast<std::size_t>(frames), channels, index, m_scratch.data());
 
   const double t0Ms = std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(
                         block.t0.time_since_epoch())
@@ -461,12 +527,14 @@ void IO::StreamProcessor::processChannel(ChannelState& state,
   }
 
   state.firstSampleIndex += static_cast<quint64>(frames);
-  reduceChannel(state, block);
 
-  if (exportItem) {
-    exportItem->uniqueIds.push_back(state.config.uniqueId);
-    exportItem->channels.push_back(m_scratch);
+  if (!m_scratch.empty()) [[likely]] {
+    state.latest = m_scratch.back();
+    if (!state.fftRing.empty())
+      appendFftRing(state, m_scratch.data(), m_scratch.size());
   }
+
+  publishChannel(state, *column);
 }
 
 /**
@@ -646,78 +714,152 @@ void IO::StreamProcessor::runSampleTransform(ChannelState& state)
 }
 
 /**
- * @brief Reduces the transformed scratch into the channel's display state: per-pixel min/max
- *        envelope pairs on the visible-window grid, FFT ring append, latest value.
+ * @brief Copies the transformed block into the channel's column: the samples exactly as the source
+ *        produced them, on the block's own uniform grid. Nothing is reduced here -- the widget
+ *        decimates the visible window at screen resolution when it draws, and a GUI that cannot
+ *        keep up drops whole blocks through the pool, which is counted.
  */
-void IO::StreamProcessor::reduceChannel(ChannelState& state, const IO::SampleBlock& block)
+void IO::StreamProcessor::publishChannel(ChannelState& state, DataModel::BlockColumn& column)
 {
   const std::size_t count = m_scratch.size();
   if (count == 0) [[unlikely]]
     return;
 
-  const double dtSec     = std::chrono::duration<double>(block.dt).count();
-  const int px           = std::max(1, m_pixelWidth->load(std::memory_order_relaxed));
-  const double win       = std::max(1.0e-3, m_windowSec->load(std::memory_order_relaxed));
-  const double bucketSec = win / static_cast<double>(px > 0 ? px : kDefaultBuckets);
+  if (column.values.size() < count) [[unlikely]]
+    column.values.resize(count);
 
-  double bucketEnd = bucketSec;
-  double vMin      = m_scratch[0];
-  double vMax      = m_scratch[0];
-  double tMin      = 0.0;
-  double tMax      = 0.0;
+  std::copy_n(m_scratch.data(), count, column.values.data());
+  publishFftWindow(state, column);
+}
 
-  SS_NO_UNROLL
-  for (std::size_t i = 0; i < count; ++i) {
-    const double t = static_cast<double>(i) * dtSec;
-    const double v = m_scratch[i];
-    if (t >= bucketEnd) {
-      if (tMin <= tMax) {
-        state.envelope.emplace_back(tMin, vMin);
-        state.envelope.emplace_back(tMax, vMax);
-      } else {
-        state.envelope.emplace_back(tMax, vMax);
-        state.envelope.emplace_back(tMin, vMin);
-      }
+/**
+ * @brief Copies a filled FFT ring into the column's window (two contiguous runs); nothing until
+ *        the ring has filled once.
+ */
+void IO::StreamProcessor::publishFftWindow(const ChannelState& state,
+                                           DataModel::BlockColumn& column) const
+{
+  if (state.fftRing.empty() || state.fftFill < state.fftRing.size())
+    return;
 
-      bucketEnd = (std::floor(t / bucketSec) + 1.0) * bucketSec;
-      vMin      = v;
-      vMax      = v;
-      tMin      = t;
-      tMax      = t;
+  column.fftWindow.resize(state.fftRing.size());
+
+  const std::size_t cap      = state.fftRing.size();
+  const std::size_t firstRun = cap - state.fftHead;
+  std::copy_n(state.fftRing.data() + state.fftHead, firstRun, column.fftWindow.data());
+  std::copy_n(state.fftRing.data(), state.fftHead, column.fftWindow.data() + firstRun);
+}
+
+/**
+ * @brief Evaluates every expression channel sample-major (spec 0060): per sample the processed
+ *        channels publish their value into the SlotTable, then each expression channel
+ *        evaluates its raw sample and publishes its result, so a sibling reads "the latest
+ *        published value" exactly as on the frame lane. Allocation-free per sample.
+ */
+void IO::StreamProcessor::processExpressionChannels(const IO::SampleBlock& block,
+                                                    DataModel::DataBlock& out)
+{
+  SS_ASSERT(block.channels > 0, return);
+  SS_ASSERT(out.columns.size() == m_channels.size(), return);
+
+  const auto frames  = static_cast<std::size_t>(block.frames);
+  const int channels = std::max(1, block.channels);
+  const double t0Sec = std::chrono::duration<double>(block.t0.time_since_epoch()).count();
+  const double dtSec = std::chrono::duration<double>(block.dt).count();
+  const float* raw   = block.samples.data();
+
+  for (std::size_t c = 0; c < m_channels.size(); ++c)
+    if (m_channels[c].exprValid && out.columns[c].values.size() < frames)
+      out.columns[c].values.resize(frames);
+
+  for (std::size_t i = 0; i < frames; ++i) {
+    const double t = t0Sec + static_cast<double>(i) * dtSec;
+
+    for (std::size_t c = 0; c < m_channels.size(); ++c) {
+      const ChannelState& state = m_channels[c];
+      if (state.exprValid || i >= out.columns[c].values.size())
+        continue;
+
+      m_exprSlots.publish(state.config.uniqueId, out.columns[c].values[i]);
+    }
+
+    for (std::size_t c = 0; c < m_channels.size(); ++c) {
+      ChannelState& state = m_channels[c];
+      if (!state.exprValid)
+        continue;
+
+      const int index = state.config.channel;
+      const double v =
+        (index >= 0 && index < channels)
+          ? static_cast<double>(
+              raw[i * static_cast<std::size_t>(channels) + static_cast<std::size_t>(index)])
+          : std::numeric_limits<double>::quiet_NaN();
+      const double y           = state.expr.run(v, t, m_exprSlots);
+      out.columns[c].values[i] = y;
+      m_exprSlots.publish(state.config.uniqueId, y);
+    }
+  }
+
+  for (std::size_t c = 0; c < m_channels.size(); ++c) {
+    ChannelState& state = m_channels[c];
+    if (!state.exprValid)
       continue;
-    }
 
-    if (v < vMin) {
-      vMin = v;
-      tMin = t;
-    }
+    auto& column            = out.columns[c];
+    column.uniqueId         = state.config.uniqueId;
+    state.firstSampleIndex += static_cast<quint64>(frames);
+    if (frames == 0) [[unlikely]]
+      continue;
 
-    if (v > vMax) {
-      vMax = v;
-      tMax = t;
-    }
+    state.latest = column.values[frames - 1];
+    column.fftWindow.clear();
+    if (!state.fftRing.empty())
+      appendFftRing(state, column.values.data(), frames);
+
+    publishFftWindow(state, column);
+  }
+}
+
+/**
+ * @brief Appends a block to a sample ring as at most two contiguous runs. A block longer than the
+ *        ring keeps only its tail, which is what the per-sample overwrite it replaces left behind.
+ */
+static void pushSamples(std::vector<double>& ring,
+                        std::size_t& head,
+                        std::size_t& fill,
+                        const double* samples,
+                        std::size_t count)
+{
+  const std::size_t cap = ring.size();
+  SS_ASSERT(cap > 0, return);
+  SS_ASSERT(head < cap, head = 0);
+
+  const double* src = samples;
+  std::size_t start = head;
+  std::size_t n     = count;
+  if (n > cap) [[unlikely]] {
+    src   += (n - cap);
+    start  = (start + (n - cap)) % cap;
+    n      = cap;
   }
 
-  if (tMin <= tMax) {
-    state.envelope.emplace_back(tMin, vMin);
-    state.envelope.emplace_back(tMax, vMax);
-  } else {
-    state.envelope.emplace_back(tMax, vMax);
-    state.envelope.emplace_back(tMin, vMin);
-  }
+  const std::size_t firstRun = std::min(n, cap - start);
+  std::copy_n(src, firstRun, ring.data() + start);
+  if (n > firstRun)
+    std::copy_n(src + firstRun, n - firstRun, ring.data());
 
-  state.latest = m_scratch[count - 1];
+  head = (start + n) % cap;
+  fill = std::min(cap, fill + count);
+}
 
-  if (!state.fftRing.empty()) {
-    const std::size_t cap = state.fftRing.size();
-    SS_NO_UNROLL
-    for (std::size_t i = 0; i < count; ++i) {
-      state.fftRing[state.fftHead] = m_scratch[i];
-      state.fftHead                = (state.fftHead + 1) % cap;
-      if (state.fftFill < cap)
-        ++state.fftFill;
-    }
-  }
+/**
+ * @brief Appends a block to a channel's FFT ring.
+ */
+void IO::StreamProcessor::appendFftRing(ChannelState& state,
+                                        const double* samples,
+                                        std::size_t count)
+{
+  pushSamples(state.fftRing, state.fftHead, state.fftFill, samples, count);
 }
 
 /**
@@ -726,7 +868,7 @@ void IO::StreamProcessor::reduceChannel(ChannelState& state, const IO::SampleBlo
  *        an atomic read and the acquire fence pairs with the GUI's release of its last alias, so
  *        slot reuse happens-after every consumer read of the slot's buffers.
  */
-std::shared_ptr<IO::StreamDisplayUpdate> IO::StreamProcessor::claimUpdateSlot()
+std::shared_ptr<DataModel::DataBlock> IO::StreamProcessor::claimBlockSlot()
 {
   SS_ASSERT(!m_updatePool.empty(), return nullptr);
 
@@ -742,51 +884,6 @@ std::shared_ptr<IO::StreamDisplayUpdate> IO::StreamProcessor::claimUpdateSlot()
   }
 
   return nullptr;
-}
-
-/**
- * @brief Publishes one bounded display update from a reused pool slot, so the steady state
- *        allocates nothing: envelope pairs copy into the slot's retained capacity (channel
- *        state keeps its own buffer), the FFT window is a linearized snapshot reusing the
- *        slot's buffer. Pool exhaustion or a full ring drops the update and counts it.
- */
-void IO::StreamProcessor::publishDisplayUpdate(const IO::SampleBlock& block, quint64 blockNumber)
-{
-  const auto slot = claimUpdateSlot();
-  if (!slot) [[unlikely]] {
-    ++m_displayDrops;
-    return;
-  }
-
-  auto* update        = slot.get();
-  update->sourceId    = m_config.sourceId;
-  update->blockNumber = blockNumber;
-  update->t0          = block.t0;
-  update->dt          = block.dt;
-  update->frames      = block.frames;
-  update->channels.resize(m_channels.size());
-
-  for (std::size_t i = 0; i < m_channels.size(); ++i) {
-    auto& state      = m_channels[i];
-    auto& channel    = update->channels[i];
-    channel.uniqueId = state.config.uniqueId;
-    channel.latest   = state.latest;
-    channel.envelope.assign(state.envelope.begin(), state.envelope.end());
-    state.envelope.clear();
-
-    channel.hasFft = false;
-    channel.fftWindow.clear();
-    if (!state.fftRing.empty() && state.fftFill == state.fftRing.size()) {
-      channel.hasFft = true;
-      channel.fftWindow.resize(state.fftRing.size());
-      const std::size_t cap = state.fftRing.size();
-      for (std::size_t j = 0; j < cap; ++j)
-        channel.fftWindow[j] = state.fftRing[(state.fftHead + j) % cap];
-    }
-  }
-
-  if (!m_displayOut->try_enqueue(StreamDisplayUpdatePtr(slot, update))) [[unlikely]]
-    ++m_displayDrops;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -808,19 +905,14 @@ IO::StreamWorker::StreamWorker(HAL_Driver* driver,
   , m_abandoned(false)
   , m_thread(std::make_unique<QThread>())
   , m_processor(nullptr)
-  , m_pixelWidth(kDefaultPixelWidth)
-  , m_windowSec(10.0)
-  , m_exportActive(false)
   , m_paused(false)
-  , m_displayRing(kDisplayRingSlots)
 {
   SS_ASSERT(driver != nullptr, return);
   SS_ASSERT_LOG(!config.datasets.empty());
 
   m_thread->setObjectName(QStringLiteral("StreamWorker-%1").arg(config.sourceId));
 
-  m_processor = new StreamProcessor(
-    config, &m_displayRing, &m_pixelWidth, &m_windowSec, &m_exportActive, &m_paused, frameBuilder);
+  m_processor = new StreamProcessor(config, &m_paused, frameBuilder);
   m_processor->moveToThread(m_thread.get());
   m_thread->start();
 
@@ -872,54 +964,11 @@ const IO::StreamConfig& IO::StreamWorker::config() const noexcept
 }
 
 /**
- * @brief Capacity of the display ring, taken by the GUI drain as its hard per-tick dequeue bound
- *        so a worker that outruns the display cannot hold the GUI thread inside one tick.
- */
-int IO::StreamWorker::displayRingCapacity() const noexcept
-{
-  return kDisplayRingSlots;
-}
-
-/**
- * @brief Pops one pending display update (consumer: GUI thread, display tick).
- */
-bool IO::StreamWorker::dequeueDisplayUpdate(StreamDisplayUpdatePtr& out)
-{
-  return m_displayRing.try_dequeue(out);
-}
-
-/**
  * @brief Returns the worker-affine processor (counters are plain quint64 pulled at 1 Hz).
  */
 IO::StreamProcessor* IO::StreamWorker::processor() const noexcept
 {
   return m_processor;
-}
-
-/**
- * @brief Publishes the plot pixel width (GUI-written on resize, worker-read per block;
- *        eventually consistent by design).
- */
-void IO::StreamWorker::setPixelWidth(int px) noexcept
-{
-  m_pixelWidth.store(std::max(1, px), std::memory_order_relaxed);
-}
-
-/**
- * @brief Publishes the visible plot window in seconds (GUI-written, worker-read per block).
- */
-void IO::StreamWorker::setWindowSec(double seconds) noexcept
-{
-  m_windowSec.store(std::max(1.0e-3, seconds), std::memory_order_relaxed);
-}
-
-/**
- * @brief Enables the full-rate export block fan-out (GUI-written when a typed sink is on;
- *        with it off the worker never allocates or emits export payloads).
- */
-void IO::StreamWorker::setExportActive(bool active) noexcept
-{
-  m_exportActive.store(active, std::memory_order_relaxed);
 }
 
 /**

@@ -139,6 +139,7 @@ signals:
   void configurationChanged();
   void dataSent(const QByteArray& data);
   void dataReceived(const IO::CapturedDataPtr& data);
+  void consoleDataReceived(const IO::CapturedDataPtr& data);
   void sampleBlockReceived(const IO::SampleBlockPtr& block);
   void openFinished(bool ok, const QString& reason);
 
@@ -222,6 +223,22 @@ protected:
     qsizetype logicalFramesHint             = 0)
   {
     Q_EMIT dataReceived(makeCapturedData(std::move(data), timestamp, frameStep, logicalFramesHint));
+  }
+
+  /**
+   * @brief Publishes a terminal-only view of the incoming data. A stream-lane driver feeds the
+   *        console through here: the typed sample blocks already carry the same samples to the
+   *        dashboard and the sinks, so this text must never reach the FrameReader or the export
+   *        fan-out or every sample would be recorded twice.
+   */
+  void publishConsoleData(
+    QByteArray&& data,
+    CapturedData::SteadyTimePoint timestamp = CapturedData::SteadyClock::now(),
+    std::chrono::nanoseconds frameStep      = std::chrono::nanoseconds(1),
+    qsizetype logicalFramesHint             = 0)
+  {
+    Q_EMIT consoleDataReceived(
+      makeCapturedData(std::move(data), timestamp, frameStep, logicalFramesHint));
   }
 
   void publishSampleBlock(const IO::SampleBlockPtr& block) { Q_EMIT sampleBlockReceived(block); }

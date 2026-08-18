@@ -21,8 +21,20 @@
 
 #include "Export.h"
 
+#include <charconv>
+#include <cstdio>
+
+#if defined(__APPLE__) && defined(__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__) \
+  && __ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ < 130300
+#  define SS_APPLE_NO_FLOAT_TO_CHARS 1
+#  include <xlocale.h>
+#endif
+
+#include <algorithm>
+#include <limits>
 #include <QDateTime>
 #include <QDir>
+#include <QVarLengthArray>
 
 #include "AppState.h"
 #include "CSV/Player.h"
@@ -31,6 +43,14 @@
 #include "MDF4/Player.h"
 #include "Misc/WorkspaceManager.h"
 #include "SerialStudio.h"
+#include "SSAssert.h"
+
+//--------------------------------------------------------------------------------------------------
+// Constants
+//--------------------------------------------------------------------------------------------------
+
+// Reorder window keeping rows time-ordered across sources (spec 0055 D3/D7); T34 pins the sweep
+static constexpr qint64 kReorderWindowNs = 250'000'000LL;
 
 /**
  * @brief Escapes a CSV field per RFC 4180 and neutralizes leading formula-injection chars.
@@ -62,6 +82,93 @@ static QString escapeCsvField(const QString& s)
   return QStringLiteral("\"%1\"").arg(out);
 }
 
+/**
+ * @brief Returns (creating it) the session directory both export lanes write into:
+ *        <workspace CSV>/<sanitized title>. Routing the frame and stream lanes through one
+ *        helper is what keeps their files side by side. A title that sanitizes away becomes
+ *        "Untitled"; a directory that cannot be created comes back non-existent.
+ */
+[[nodiscard]] static QDir csvSessionDir(const QString& title)
+{
+  static auto& workspaceManager = Misc::WorkspaceManager::instance();
+  const auto subdir             = workspaceManager.path(QStringLiteral("CSV"));
+
+  QString safeTitle = title;
+  safeTitle.remove(QChar('/'));
+  safeTitle.remove(QChar('\\'));
+  safeTitle.remove(QChar(':'));
+  safeTitle.remove(QChar('*'));
+  safeTitle.remove(QChar('?'));
+  safeTitle.remove(QChar('"'));
+  safeTitle.remove(QChar('<'));
+  safeTitle.remove(QChar('>'));
+  safeTitle.remove(QChar('|'));
+  safeTitle.remove(QChar('\0'));
+  safeTitle.remove(QStringLiteral(".."));
+  safeTitle = safeTitle.simplified();
+
+  int keep = 0;
+  for (int i = safeTitle.size(); i > 0; --i) {
+    const QChar c = safeTitle.at(i - 1);
+    if (c != QChar('.') && c != QChar(' ')) {
+      keep = i;
+      break;
+    }
+  }
+
+  safeTitle.truncate(keep);
+  if (safeTitle.isEmpty())
+    safeTitle = QStringLiteral("Untitled");
+
+  const QString path = QStringLiteral("%1/%2/").arg(subdir, safeTitle);
+  QDir dir(path);
+  if (!dir.exists() && !dir.mkpath(QStringLiteral(".")))
+    qWarning() << "[CSV] failed to create export directory:" << path;
+
+  return dir;
+}
+
+/**
+ * @brief Appends @p value to @p dst byte-identically to QString::number(value, fmt, precision),
+ *        without the per-cell QString allocation: both are C-locale %f / %g. Apple ships float
+ *        std::to_chars only from macOS 13.3, so older targets use snprintf_l with the NULL (C)
+ *        locale; the buffer covers the fixed worst case (sign + 309 digits + '.' + precision).
+ */
+static void appendDouble(QByteArray& dst, double value, std::chars_format fmt, int precision)
+{
+  SS_ASSERT(precision >= 0, return);
+  SS_ASSERT(fmt == std::chars_format::fixed || fmt == std::chars_format::general, return);
+
+  char buf[352];
+#ifdef SS_APPLE_NO_FLOAT_TO_CHARS
+  const char* spec = (fmt == std::chars_format::fixed) ? "%.*f" : "%.*g";
+  const int len    = snprintf_l(buf, sizeof(buf), nullptr, spec, precision, value);
+  SS_ASSERT(len > 0 && static_cast<size_t>(len) < sizeof(buf), return);
+  dst.append(buf, static_cast<qsizetype>(len));
+#else
+  const auto res = std::to_chars(buf, buf + sizeof(buf), value, fmt, precision);
+  SS_ASSERT(res.ec == std::errc(), return);
+  dst.append(buf, static_cast<qsizetype>(res.ptr - buf));
+#endif
+}
+
+/**
+ * @brief Byte-level double formatter the sparse merger shares with the header writer.
+ */
+void CSV::appendCsvDouble(QByteArray& dst, double value, bool fixed, int precision)
+{
+  appendDouble(
+    dst, value, fixed ? std::chars_format::fixed : std::chars_format::general, precision);
+}
+
+/**
+ * @brief RFC-4180 field escape the sparse merger shares with the header writer.
+ */
+QByteArray CSV::escapeCsvBytes(const QString& field)
+{
+  return escapeCsvField(field.simplified()).toUtf8();
+}
+
 //--------------------------------------------------------------------------------------------------
 // ExportWorker implementation
 //--------------------------------------------------------------------------------------------------
@@ -70,11 +177,10 @@ static QString escapeCsvField(const QString& s)
  * @brief Constructs the CSV worker with its snapshot timer. The timer is a child so it migrates
  *        with the worker to its thread; it stays stopped until a non-zero interval arrives.
  */
-CSV::ExportWorker::ExportWorker(
-  moodycamel::ReaderWriterQueue<DataModel::TimestampedFramePtr>* queue,
-  std::atomic<bool>* enabled,
-  std::atomic<size_t>* queueSize)
-  : DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr>(queue, enabled, queueSize)
+CSV::ExportWorker::ExportWorker(moodycamel::ReaderWriterQueue<DataModel::DataBlockPtr>* queue,
+                                std::atomic<bool>* enabled,
+                                std::atomic<size_t>* queueSize)
+  : DataModel::FrameConsumerWorker<DataModel::DataBlockPtr>(queue, enabled, queueSize)
   , m_snapshotIntervalMs(0)
   , m_snapshotTimer(new QTimer(this))
 {
@@ -91,8 +197,9 @@ bool CSV::ExportWorker::isResourceOpen() const
 }
 
 /**
- * @brief Applies the snapshot interval on the worker thread: 0 restores per-frame rows and stops
- *        the timer; a positive value switches row writing to the fixed cadence (spec 0023).
+ * @brief Applies the snapshot interval on the worker thread: 0 restores sparse full-rate rows and
+ *        stops the timer; a positive value switches to dense forward-filled rows on a fixed
+ *        cadence (spec 0023, kept by spec-0055 D4 at its disabled default).
  */
 void CSV::ExportWorker::setSnapshotIntervalMs(int interval)
 {
@@ -108,10 +215,9 @@ void CSV::ExportWorker::setSnapshotIntervalMs(int interval)
 }
 
 /**
- * @brief Writes one interval-mode snapshot row from the forward-fill map. Drains the pending queue
- *        first so cell staleness is bounded by the snapshot interval rather than the 1000 ms batch
- *        timer at low frame rates, and writes nothing before the session's first frame: the file
- *        only exists once processItems() has seen data (spec 0023).
+ * @brief Writes one interval-mode row from the forward-fill map. Drains the pending queue first so
+ *        cell staleness is bounded by the interval rather than the batch timer, and writes nothing
+ *        before the session's first block: the file only exists once data has arrived.
  */
 void CSV::ExportWorker::writeSnapshotRow()
 {
@@ -123,40 +229,62 @@ void CSV::ExportWorker::writeSnapshotRow()
   if (!m_csvFile.isOpen() || m_schema.columns.empty())
     return;
 
-  writeRow(DataModel::TimestampedFrame::SteadyClock::now());
-  m_textStream.flush();
+  writeSnapshotRowNow(DataModel::TimestampedFrame::SteadyClock::now());
 }
 
 /**
- * @brief Closes the currently open CSV file and resets worker state.
+ * @brief Closes the currently open CSV file and resets worker state, flushing whatever the reorder
+ *        window still holds so the tail of a recording is never lost.
  */
 void CSV::ExportWorker::closeResources()
 {
   if (!m_csvFile.isOpen())
     return;
 
+  flushReadyRows(std::numeric_limits<qint64>::max());
+
   m_csvFile.close();
   m_schema = DataModel::ExportSchema{};
-  m_textStream.setDevice(nullptr);
+  m_merger.clear();
+  m_rowBuffer.clear();
   m_lastFinalValues.clear();
   DataModel::clear_frame(m_templateFrame);
 }
 
 /**
- * @brief Stores the schema template frame; must run on the worker thread (queued invoke) so
- *        the assignment never races processItems() or closeResources().
+ * @brief Stores the schema template frame; must run on the worker thread (queued invoke) so the
+ *        assignment never races processItems() or closeResources(). An empty frame is ignored:
+ *        structure arrives asynchronously and QuickPlot has none until its first frame, so an
+ *        empty payload landing second would wipe an adopted template and no file would be made.
  */
 void CSV::ExportWorker::setTemplateFrame(const DataModel::Frame& frame)
 {
+  if (frame.groups.empty())
+    return;
+
   m_templateFrame = frame;
 }
 
 /**
- * @brief Processes a batch of CSV frames, creating the file if needed. Per-frame mode (interval
- *        0) writes one row per frame; interval mode only refreshes the forward-fill map and
- *        leaves row writing to the snapshot timer.
+ * @brief Adopts the structure the pipeline publishes when the connect-time fetch came back empty.
+ *        QuickPlot derives its datasets from the first frame, so at connect there is nothing to
+ *        fetch; blocks carry values only, so without this the file is never created. Ignored once
+ *        a file exists -- an open file's schema is fixed for its lifetime.
  */
-void CSV::ExportWorker::processItems(const std::vector<DataModel::TimestampedFramePtr>& items)
+void CSV::ExportWorker::applyPublishedStructure(const DataModel::Frame& frame)
+{
+  if (isResourceOpen() || !m_templateFrame.groups.empty())
+    return;
+
+  m_templateFrame = frame;
+}
+
+/**
+ * @brief Ingests a batch of blocks, creating the file on first data. Sparse mode buffers them for
+ *        the reorder window and flushes everything older than it; interval mode only refreshes the
+ *        forward-fill map and leaves row writing to the snapshot timer.
+ */
+void CSV::ExportWorker::processItems(const std::vector<DataModel::DataBlockPtr>& items)
 {
   if (items.empty())
     return;
@@ -164,203 +292,104 @@ void CSV::ExportWorker::processItems(const std::vector<DataModel::TimestampedFra
   if (!m_csvFile.isOpen()) {
     if (!m_templateFrame.groups.empty())
       createCsvFile(m_templateFrame);
-    else
-      createCsvFile((*items.begin())->data);
 
     if (m_schema.columns.empty())
       return;
 
-    m_referenceTimestamp = (*items.begin())->timestamp;
+    m_referenceTimestamp = items.front()->t0;
     resetMonotonicClock();
   }
 
-  for (const auto& i : items) {
-    for (const auto& g : i->data.groups)
-      for (const auto& d : g.datasets)
-        m_lastFinalValues[d.uniqueId] = d.value.simplified();
+  for (const auto& block : items) {
+    if (!block || block->samples <= 0)
+      continue;
 
-    if (m_snapshotIntervalMs == 0)
-      writeRow(i->timestamp);
-  }
+    if (m_snapshotIntervalMs > 0) {
+      const auto last = static_cast<std::size_t>(block->samples - 1);
+      for (const auto& column : block->columns)
+        m_lastFinalValues[column.uniqueId] = column.hasText
+                                             ? column.text[last].simplified()
+                                             : QString::number(column.values[last], 'g', 10);
 
-  if (m_snapshotIntervalMs == 0)
-    m_textStream.flush();
-}
-
-/**
- * @brief Writes one timestamped row across the full schema from the forward-fill map; shared by
- *        the per-frame path (frame timestamps) and the snapshot path (now() at the tick).
- */
-void CSV::ExportWorker::writeRow(const DataModel::TimestampedFrame::SteadyTimePoint& timestamp)
-{
-  const qint64 nanoseconds = monotonicFrameNs(timestamp, m_referenceTimestamp);
-  const double seconds     = static_cast<double>(nanoseconds) / 1'000'000'000.0;
-  m_textStream << QString::number(seconds, 'f', 9);
-
-  const int colCount = static_cast<int>(m_schema.columns.size());
-  for (int j = 0; j < colCount; ++j) {
-    const int uid = m_schema.columns[static_cast<size_t>(j)].uniqueId;
-    m_textStream << ',' << escapeCsvField(m_lastFinalValues.value(uid, QString()));
-  }
-
-  m_textStream << '\n';
-}
-
-//--------------------------------------------------------------------------------------------------
-// Stream-block CSV sink (spec 0051 M5)
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Constructs the stream-block CSV worker.
- */
-CSV::StreamExportWorker::StreamExportWorker(
-  moodycamel::ReaderWriterQueue<IO::StreamBlockItemPtr>* queue,
-  std::atomic<bool>* enabled,
-  std::atomic<size_t>* queueSize)
-  : FrameConsumerWorker(queue, enabled, queueSize)
-{}
-
-/**
- * @brief Returns true while any per-source stream CSV file is open.
- */
-bool CSV::StreamExportWorker::isResourceOpen() const
-{
-  return !m_files.empty();
-}
-
-/**
- * @brief Closes every per-source stream CSV file.
- */
-void CSV::StreamExportWorker::closeResources()
-{
-  for (auto& [sourceId, state] : m_files) {
-    if (state.stream)
-      state.stream->flush();
-
-    if (state.file)
-      state.file->close();
-  }
-
-  m_files.clear();
-}
-
-/**
- * @brief Returns (creating on first sight) the file state for @p block's source; the header
- *        row names each dataset column by uniqueId.
- */
-CSV::StreamExportWorker::FileState* CSV::StreamExportWorker::fileFor(
-  const IO::StreamBlockItem& block)
-{
-  auto it = m_files.find(block.sourceId);
-  if (it != m_files.end())
-    return &it->second;
-
-  const auto dt       = QDateTime::currentDateTime();
-  const auto fileName = dt.toString(QStringLiteral("yyyy-MM-dd_HH-mm-ss"))
-                      + QStringLiteral("_stream_source%1.csv").arg(block.sourceId);
-
-  static auto& workspaceManager = Misc::WorkspaceManager::instance();
-  QDir dir(workspaceManager.path(QStringLiteral("CSV")));
-
-  FileState state;
-  state.file = std::make_unique<QFile>(dir.filePath(fileName));
-  if (!state.file->open(QIODevice::WriteOnly | QIODevice::Text)) {
-    qWarning() << "[CSV] cannot open stream export file" << state.file->fileName();
-    return nullptr;
-  }
-
-  state.stream = std::make_unique<QTextStream>(state.file.get());
-  state.start  = block.t0;
-
-  *state.stream << "Time (s)";
-  for (const int uniqueId : block.uniqueIds)
-    *state.stream << ",ds" << uniqueId;
-
-  *state.stream << '\n';
-
-  auto [inserted, ok] = m_files.emplace(block.sourceId, std::move(state));
-  return ok ? &inserted->second : nullptr;
-}
-
-/**
- * @brief Writes one full-rate block: every sample row carries t0 + i * dt relative to the
- *        file's first block (source-owns-time; never the monotonic bump).
- */
-void CSV::StreamExportWorker::writeBlock(FileState& state, const IO::StreamBlockItem& block)
-{
-  const double baseSec = std::chrono::duration<double>(block.t0 - state.start).count();
-  const double dtSec   = std::chrono::duration<double>(block.dt).count();
-  auto& stream         = *state.stream;
-
-  for (qsizetype i = 0; i < block.frames; ++i) {
-    stream << QString::number(baseSec + static_cast<double>(i) * dtSec, 'f', 9);
-    for (const auto& channel : block.channels) {
-      stream << ',';
-      if (static_cast<std::size_t>(i) < channel.size())
-        stream << QString::number(channel[static_cast<std::size_t>(i)], 'g', 10);
+      continue;
     }
 
-    stream << '\n';
-  }
-}
-
-/**
- * @brief Writes a batch of stream blocks to their per-source files.
- */
-void CSV::StreamExportWorker::processItems(const std::vector<IO::StreamBlockItemPtr>& items)
-{
-  for (const auto& block : items) {
-    if (!block || block->frames <= 0)
-      continue;
-
-    auto* state = fileFor(*block);
-    if (!state)
-      continue;
-
-    writeBlock(*state, *block);
+    bufferBlock(block);
   }
 
-  for (auto& [sourceId, state] : m_files)
-    if (state.stream)
-      state.stream->flush();
+  if (m_snapshotIntervalMs > 0)
+    return;
+
+  if (!m_merger.empty())
+    flushReadyRows(m_merger.newestNs() - kReorderWindowNs);
+
+  (void)m_csvFile.flush();
 }
 
 /**
- * @brief Constructs the stream-block CSV facade (worker created eagerly like the frame sink).
+ * @brief Buffers one block for the merge, resolving its schema columns and per-sample times once.
+ *        An irregular block takes the monotonic bump so two frames landing on the same coarse-clock
+ *        nanosecond stay distinct rows; a uniform grid keeps its derived times exactly.
  */
-CSV::StreamExport::StreamExport()
-  : DataModel::FrameConsumer<IO::StreamBlockItemPtr>(
-      {.queueCapacity = 4096, .flushThreshold = 256, .timerIntervalMs = 500})
+void CSV::ExportWorker::bufferBlock(const DataModel::DataBlockPtr& block)
 {
-  initializeWorker();
-  setConsumerEnabled(false);
+  const bool uniform = DataModel::uniform_grid(*block);
+
+  std::vector<qint64> times;
+  times.reserve(static_cast<std::size_t>(block->samples));
+  for (qsizetype i = 0; i < block->samples; ++i) {
+    const auto stamp = DataModel::sample_time(*block, i);
+    times.push_back(
+      uniform
+        ? std::chrono::duration_cast<std::chrono::nanoseconds>(stamp - m_referenceTimestamp).count()
+        : monotonicFrameNs(stamp, m_referenceTimestamp));
+  }
+
+  m_merger.addBlock(block, std::move(times));
 }
 
 /**
- * @brief GUI-thread ingest slot: the single producer for the worker's SPSC queue, fed by every
- *        stream worker's queued blockReady signal (block rate, never per sample).
+ * @brief Emits every buffered instant at or before @p cutoffNs into the open file.
  */
-void CSV::StreamExport::ingestBlock(const IO::StreamBlockItemPtr& block)
+void CSV::ExportWorker::flushReadyRows(qint64 cutoffNs)
 {
-  if (block)
-    enqueueData(block);
+  bool failed = false;
+  m_merger.flush(cutoffNs, [this, &failed](const QByteArray& row) {
+    if (failed)
+      return;
+
+    failed = m_csvFile.write(row) < row.size();
+  });
+
+  if (!failed)
+    return;
+
+  qWarning() << "[CSV] row write failed, closing export:" << m_csvFile.fileName();
+  closeResources();
+  Q_EMIT resourceOpenChanged();
 }
 
 /**
- * @brief Flushes and closes every per-source stream file (queued to the worker).
+ * @brief Writes one dense forward-filled row across the full schema (interval mode).
  */
-void CSV::StreamExport::closeFiles()
+void CSV::ExportWorker::writeSnapshotRowNow(
+  const DataModel::TimestampedFrame::SteadyTimePoint& timestamp)
 {
-  if (m_worker)
-    QMetaObject::invokeMethod(m_worker, "close", Qt::QueuedConnection);
-}
+  const qint64 nanoseconds = monotonicFrameNs(timestamp, m_referenceTimestamp);
 
-/**
- * @brief Factory method creating the stream-block worker.
- */
-DataModel::FrameConsumerWorkerBase* CSV::StreamExport::createWorker()
-{
-  return new StreamExportWorker(&m_pendingQueue, &m_consumerEnabled, &m_queueSize);
+  m_rowBuffer.resize(0);
+  appendDouble(
+    m_rowBuffer, static_cast<double>(nanoseconds) / 1'000'000'000.0, std::chars_format::fixed, 9);
+
+  for (const auto& column : m_schema.columns) {
+    m_rowBuffer += ',';
+    m_rowBuffer += escapeCsvField(m_lastFinalValues.value(column.uniqueId, QString())).toUtf8();
+  }
+
+  m_rowBuffer          += '\n';
+  const qint64 written  = m_csvFile.write(m_rowBuffer);
+  SS_ASSERT(written >= m_rowBuffer.size(), return);
+  (void)m_csvFile.flush();
 }
 
 /**
@@ -371,42 +400,9 @@ void CSV::ExportWorker::createCsvFile(const DataModel::Frame& frame)
   const auto dt       = QDateTime::currentDateTime();
   const auto fileName = dt.toString("yyyy-MM-dd_HH-mm-ss") + ".csv";
 
-  static auto& workspaceManager = Misc::WorkspaceManager::instance();
-  const auto subdir             = workspaceManager.path("CSV");
-  QString safeTitle             = frame.title;
-  safeTitle.remove(QChar('/'));
-  safeTitle.remove(QChar('\\'));
-  safeTitle.remove(QChar(':'));
-  safeTitle.remove(QChar('*'));
-  safeTitle.remove(QChar('?'));
-  safeTitle.remove(QChar('"'));
-  safeTitle.remove(QChar('<'));
-  safeTitle.remove(QChar('>'));
-  safeTitle.remove(QChar('|'));
-  safeTitle.remove(QChar('\0'));
-  safeTitle.remove(QStringLiteral(".."));
-  safeTitle = safeTitle.simplified();
-
-  int keepCsv = 0;
-  for (int i = safeTitle.size(); i > 0; --i) {
-    const QChar c = safeTitle.at(i - 1);
-    if (c != QChar('.') && c != QChar(' ')) {
-      keepCsv = i;
-      break;
-    }
-  }
-  safeTitle.truncate(keepCsv);
-
-  if (safeTitle.isEmpty())
-    safeTitle = QStringLiteral("Untitled");
-
-  const QString path = QString("%1/%2/").arg(subdir, safeTitle);
-
-  QDir dir(path);
-  if (!dir.exists() && !dir.mkpath(".")) {
-    qWarning() << "Failed to create directory:" << path;
+  const QDir dir = csvSessionDir(frame.title);
+  if (!dir.exists())
     return;
-  }
 
   m_csvFile.setFileName(dir.filePath(fileName));
   if (!m_csvFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -415,23 +411,26 @@ void CSV::ExportWorker::createCsvFile(const DataModel::Frame& frame)
   }
 
   m_lastFinalValues.clear();
-
-  m_textStream.setDevice(&m_csvFile);
-  m_textStream.setGenerateByteOrderMark(true);
-  m_textStream.setEncoding(QStringConverter::Utf8);
-
   m_schema = DataModel::buildExportSchema(frame);
+  m_merger.setSchema(m_schema);
 
-  m_textStream << "Elapsed (s)";
+  QByteArray header("\xEF\xBB\xBF", 3);
+  header += "Elapsed (s)";
   for (const auto& col : m_schema.columns) {
     auto label = QString("%1/%2").arg(col.groupTitle, col.title).simplified();
     if (!col.sourceTitle.isEmpty())
       label = col.sourceTitle + "/" + label;
 
-    m_textStream << ',' << escapeCsvField(label);
+    header += ',';
+    header += escapeCsvField(label).toUtf8();
   }
 
-  m_textStream << '\n';
+  header += '\n';
+  if (m_csvFile.write(header) < header.size()) {
+    qWarning() << "[CSV] cannot write export header" << m_csvFile.fileName();
+    m_csvFile.close();
+    return;
+  }
 
   Q_EMIT resourceOpenChanged();
 }
@@ -444,7 +443,7 @@ void CSV::ExportWorker::createCsvFile(const DataModel::Frame& frame)
  * @brief Constructs the CSV export manager and initializes the worker.
  */
 CSV::Export::Export()
-  : DataModel::FrameConsumer<DataModel::TimestampedFramePtr>(
+  : DataModel::FrameConsumer<DataModel::DataBlockPtr>(
       {.queueCapacity = 8192, .flushThreshold = 1024, .timerIntervalMs = 1000})
   , m_isOpen(false)
   , m_persistSettings(true)
@@ -522,7 +521,6 @@ void CSV::Export::closeFile()
 {
   auto* worker = static_cast<ExportWorker*>(m_worker);
   QMetaObject::invokeMethod(worker, "close", Qt::QueuedConnection);
-  m_streamExport.closeFiles();
 }
 
 /**
@@ -541,25 +539,30 @@ void CSV::Export::onWorkerOpenChanged()
 void CSV::Export::setupExternalConnections()
 {
   connect(
+    &DataModel::FrameBuilder::instance(),
+    &DataModel::FrameBuilder::structurePublished,
+    this,
+    [this](int, const DataModel::Frame& frame) {
+      auto* worker = static_cast<ExportWorker*>(m_worker);
+      SS_ASSERT(worker != nullptr, return);
+
+      QMetaObject::invokeMethod(
+        worker, [worker, frame] { worker->applyPublishedStructure(frame); }, Qt::QueuedConnection);
+    });
+  connect(&DataModel::FrameBuilder::instance(),
+          &DataModel::FrameBuilder::sessionStructureReady,
+          this,
+          [this](const DataModel::Frame& frame) {
+            auto* worker = static_cast<ExportWorker*>(m_worker);
+            SS_ASSERT(worker != nullptr, return);
+
+            QMetaObject::invokeMethod(
+              worker, [worker, frame] { worker->setTemplateFrame(frame); }, Qt::QueuedConnection);
+          });
+  connect(
     &IO::ConnectionManager::instance(), &IO::ConnectionManager::connectedChanged, this, [this] {
-      if (IO::ConnectionManager::instance().isConnected()) {
-        auto* worker = static_cast<ExportWorker*>(m_worker);
-        DataModel::Frame frame;
-        if (AppState::instance().operationMode() == SerialStudio::ProjectFile) {
-          static auto& builder = DataModel::FrameBuilder::instance();
-          builder.invokeOnBuilderThreadBlocking(
-            [&frame] { frame = DataModel::FrameBuilder::instance().frame(); });
-        }
-
-        QMetaObject::invokeMethod(
-          worker,
-          [worker, frame = std::move(frame)] { worker->setTemplateFrame(frame); },
-          Qt::QueuedConnection);
-      }
-
-      else {
+      if (!IO::ConnectionManager::instance().isConnected())
         closeFile();
-      }
     });
   connect(&IO::ConnectionManager::instance(), &IO::ConnectionManager::pausedChanged, this, [this] {
     if (IO::ConnectionManager::instance().paused())
@@ -611,9 +614,6 @@ void CSV::Export::setExportEnabled(const bool enabled)
     closeFile();
 
   setConsumerEnabled(allow);
-  m_streamExport.setConsumerEnabled(allow);
-  if (!allow)
-    m_streamExport.closeFiles();
 
   if (m_persistSettings)
     m_settings.setValue("CSVExport", allow);
@@ -621,25 +621,18 @@ void CSV::Export::setExportEnabled(const bool enabled)
   Q_EMIT enabledChanged();
 }
 
-/**
- * @brief Returns the typed stream-block sink (spec 0051 M5); enable state follows exportEnabled.
- */
-CSV::StreamExport& CSV::Export::streamSink() noexcept
-{
-  return m_streamExport;
-}
-
 //--------------------------------------------------------------------------------------------------
 // Hotpath data processing
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Enqueues a frame for asynchronous CSV export.
+ * @brief Enqueues one block for asynchronous CSV export. The single producer for this SPSC queue
+ *        is the pipeline thread, for both lanes (spec 0055 D8).
  */
-void CSV::Export::hotpathTxFrame(const DataModel::TimestampedFramePtr& frame)
+void CSV::Export::ingestBlock(const DataModel::DataBlockPtr& block)
 {
-  if (!exportEnabled() || SerialStudio::isAnyPlayerOpen())
+  if (!block || !exportEnabled() || SerialStudio::isAnyPlayerOpen())
     return;
 
-  enqueueData(frame);
+  enqueueData(block);
 }

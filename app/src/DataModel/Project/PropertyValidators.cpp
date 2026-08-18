@@ -57,9 +57,11 @@ bool DataModel::PropertyHooks::isValidFftWindow(int window)
 }
 
 /**
- * @brief Returns true when @p language is inherit (-1), JavaScript or Lua.
+ * @brief Returns true when @p language is inherit (-1), JavaScript, Lua or a compiled Expression
+ *        (spec 0060). Native is a frame-parser language only.
  */
 bool DataModel::PropertyHooks::isValidTransformLanguage(int language)
 {
-  return language == -1 || language == SerialStudio::JavaScript || language == SerialStudio::Lua;
+  return language == -1 || language == SerialStudio::JavaScript || language == SerialStudio::Lua
+      || language == SerialStudio::Expression;
 }

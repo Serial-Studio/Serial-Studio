@@ -29,6 +29,7 @@
 #include <QStringList>
 #include <vector>
 
+#include "DataModel/DataBlock.h"
 #include "DataModel/Frame.h"
 #include "Licensing/SimpleCrypt.h"
 
@@ -156,6 +157,9 @@ private:
   void setAttached(const bool value);
   void rememberEndpoint(const QString& address, const QString& token);
   void publishFrames(const QJsonObject& snapshot);
+  void publishStructures();
+  [[nodiscard]] DataModel::DataBlockPtr buildSnapshotBlock(
+    const DataModel::TimestampedFrame& frame) const;
   void assignValues(const QJsonObject& snapshot);
   void setError(const QString& code, const QString& message);
   [[nodiscard]] bool buildTemplates(const QJsonObject& structure);

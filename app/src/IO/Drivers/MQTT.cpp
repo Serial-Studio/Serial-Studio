@@ -37,16 +37,13 @@
 Q_LOGGING_CATEGORY(lcMqttSub, "serialstudio.mqtt.subscriber", QtCriticalMsg)
 
 /**
- * @brief Queues an error box so it opens after the current stack returns: a modal spins a nested
- *        event loop, and raising one inside a client signal emission re-enters the socket stack
- *        (the 2026-08-10 Modbus readFromSocket crash).
+ * @brief Logs a driver failure to the console. Drivers never raise modal dialogs: a modal pumps
+ *        the event loop, so one raised from a connect or error stack lets queued work retire the
+ *        very driver still on that stack (spec 0056).
  */
-static void queueErrorBox(QObject* context, const QString& title, const QString& text)
+static void logDriverError(const QString& title, const QString& text)
 {
-  QMetaObject::invokeMethod(
-    context,
-    [title, text] { Misc::Utilities::showMessageBox(title, text, QMessageBox::Critical); },
-    Qt::QueuedConnection);
+  qWarning().noquote() << QStringLiteral("[%1] %2").arg(title, text);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -995,9 +992,8 @@ void IO::Drivers::MQTT::onStateChanged(QMqttClient::ClientState state)
     auto* sub = m_client.subscribe(filter, 0);
     if (!sub || sub->state() == QMqttSubscription::Error) {
       qCCritical(lcMqttSub) << "subscribe failed for filter" << m_topicFilter;
-      queueErrorBox(this,
-                    tr("MQTT Subscription Error"),
-                    tr("Failed to subscribe to topic \"%1\".").arg(m_topicFilter));
+      logDriverError(tr("MQTT Subscription Error"),
+                     tr("Failed to subscribe to topic \"%1\".").arg(m_topicFilter));
       return;
     }
 
@@ -1077,7 +1073,7 @@ void IO::Drivers::MQTT::onErrorChanged(QMqttClient::ClientError error)
     }
   }
 
-  queueErrorBox(this, title, message);
+  logDriverError(title, message);
 }
 
 /**
@@ -1254,9 +1250,7 @@ void IO::Drivers::MQTT::reloadTlsIdentity(const bool interactive)
 
   qCWarning(lcMqttSub) << "TLS identity rejected:" << ::MQTT::tlsIdentityErrorString(result);
   if (interactive)
-    Misc::Utilities::showMessageBox(tr("MQTT Client Certificate Error"),
-                                    ::MQTT::tlsIdentityErrorString(result),
-                                    QMessageBox::Warning);
+    logDriverError(tr("MQTT Client Certificate Error"), ::MQTT::tlsIdentityErrorString(result));
 }
 
 /**

@@ -54,15 +54,9 @@ constexpr int kMaxControlLength          = 4096;
  * @brief Queues an error box so it opens once the current stack has returned: a modal spins the
  *        event loop, and raising one mid open()/error stack re-enters the stack it was raised from.
  */
-static void queueErrorBox(QObject* context,
-                          const QString& title,
-                          const QString& text,
-                          const QMessageBox::Icon icon = QMessageBox::Critical)
+static void logDriverError(const QString& title, const QString& text)
 {
-  QMetaObject::invokeMethod(
-    context,
-    [title, text, icon] { Misc::Utilities::showMessageBox(title, text, icon); },
-    Qt::QueuedConnection);
+  qWarning().noquote() << QStringLiteral("[%1] %2").arg(title, text);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -173,16 +167,14 @@ bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
   Q_UNUSED(mode)
 
   if (!m_ctx) {
-    queueErrorBox(this,
-                  tr("USB Error"),
-                  tr("Failed to initialize the USB subsystem. "
-                     "Check that libusb is available on your system."));
+    logDriverError(tr("USB Error"),
+                   tr("Failed to initialize the USB subsystem. "
+                      "Check that libusb is available on your system."));
     return false;
   }
 
   if (m_deviceIndex <= 0 || (m_deviceIndex - 1) >= m_devicePtrs.size()) {
-    queueErrorBox(
-      this, tr("USB Error"), tr("No USB device selected. Select a device and try again."));
+    logDriverError(tr("USB Error"), tr("No USB device selected. Select a device and try again."));
     return false;
   }
 
@@ -191,13 +183,12 @@ bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
   const int openRc       = libusb_open(dev, &m_handle);
   if (openRc < 0) {
     m_handle = nullptr;
-    queueErrorBox(this,
-                  tr("Failed to open \"%1\"").arg(deviceLabel),
-                  tr("Could not open the USB device: %1.\n\n"
-                     "On Linux, ensure you have read/write permission on the device node "
-                     "(add a udev rule or run as root). "
-                     "On macOS, the kernel driver may need to be detached first.")
-                    .arg(QString::fromUtf8(libusb_strerror(static_cast<libusb_error>(openRc)))));
+    logDriverError(tr("Failed to open \"%1\"").arg(deviceLabel),
+                   tr("Could not open the USB device: %1.\n\n"
+                      "On Linux, ensure you have read/write permission on the device node "
+                      "(add a udev rule or run as root). "
+                      "On macOS, the kernel driver may need to be detached first.")
+                     .arg(QString::fromUtf8(libusb_strerror(static_cast<libusb_error>(openRc)))));
     return false;
   }
 
@@ -213,7 +204,7 @@ bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
   if (m_inEndpointIndex <= 0 || (m_inEndpointIndex - 1) >= m_inEndpoints.size()) {
     libusb_close(m_handle);
     m_handle = nullptr;
-    queueErrorBox(this, tr("USB Device Error"), endpointErrorMessage());
+    logDriverError(tr("USB Device Error"), endpointErrorMessage());
     return false;
   }
 
@@ -602,9 +593,8 @@ void IO::Drivers::USB::onReadError()
 
   static auto& connectionManager = ConnectionManager::instance();
   connectionManager.disconnectDevice(this);
-  Misc::Utilities::showMessageBox(tr("USB Device Error"),
-                                  tr("The USB device was disconnected or "
-                                     "encountered a fatal read error."));
+  logDriverError(tr("USB Device Error"),
+                 tr("The USB device was disconnected or encountered a fatal read error."));
 }
 
 /**
@@ -1133,24 +1123,22 @@ bool IO::Drivers::USB::activateSelectedEndpoints()
 
   const EndpointInfo in = m_inEndpoints.at(m_inEndpointIndex - 1);
   if (!claimInterface(in.interfaceNumber)) {
-    queueErrorBox(this,
-                  tr("USB Device Error"),
-                  tr("Could not claim interface %1 on the USB device.\n\n"
-                     "Another driver or application may already have it open. "
-                     "On Linux, try unloading the kernel driver (e.g. cdc_acm) "
-                     "or adding a udev rule.")
-                    .arg(in.interfaceNumber));
+    logDriverError(tr("USB Device Error"),
+                   tr("Could not claim interface %1 on the USB device.\n\n"
+                      "Another driver or application may already have it open. "
+                      "On Linux, try unloading the kernel driver (e.g. cdc_acm) "
+                      "or adding a udev rule.")
+                     .arg(in.interfaceNumber));
     return false;
   }
 
   if (in.altSetting != 0
       && libusb_set_interface_alt_setting(m_handle, in.interfaceNumber, in.altSetting) < 0) {
-    queueErrorBox(this,
-                  tr("USB Device Error"),
-                  tr("Could not activate alternate setting %1 on interface %2. "
-                     "The selected endpoint is not reachable.")
-                    .arg(in.altSetting)
-                    .arg(in.interfaceNumber));
+    logDriverError(tr("USB Device Error"),
+                   tr("Could not activate alternate setting %1 on interface %2. "
+                      "The selected endpoint is not reachable.")
+                     .arg(in.altSetting)
+                     .arg(in.interfaceNumber));
     return false;
   }
 
@@ -1177,11 +1165,9 @@ bool IO::Drivers::USB::activateSelectedEndpoints()
     m_activeOutEp     = out.address;
     m_activeOutEpType = out.attributes & LIBUSB_TRANSFER_TYPE_MASK;
   } else {
-    queueErrorBox(this,
-                  tr("USB Device Warning"),
-                  tr("The selected OUT endpoint could not be activated. "
-                     "Continuing in read-only mode."),
-                  QMessageBox::Warning);
+    logDriverError(tr("USB Device Warning"),
+                   tr("The selected OUT endpoint could not be activated. "
+                      "Continuing in read-only mode."));
   }
 
   return true;

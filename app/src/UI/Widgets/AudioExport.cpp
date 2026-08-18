@@ -512,28 +512,29 @@ bool Widgets::AudioExport::hasActiveSessions() const noexcept
 }
 
 /**
- * @brief Feeds one full-rate stream export block into the recording sessions that match its
- *        dataset uniqueIds (frame-lane sources never produce blocks, so the two feeds are
- *        mutually exclusive per dataset). Runs on the GUI thread, queued from the workers'
- *        blockReady, so this facade's queue keeps its single producer.
+ * @brief Feeds one published block into the recording sessions matching its dataset uniqueIds.
+ *        Runs on the pipeline thread, which is the single producer for every sink (spec 0055 D8),
+ *        so this facade's queue keeps its single-producer invariant.
  */
-void Widgets::AudioExport::ingestStreamBlock(const IO::StreamBlockItemPtr& block)
+void Widgets::AudioExport::ingestBlock(const DataModel::DataBlockPtr& block)
 {
   SS_ASSERT(block != nullptr, return);
-  SS_ASSERT_LOG(block->uniqueIds.size() == block->channels.size());
 
+  const QMutexLocker locker(&m_sessionDatasetsMutex);
   if (m_sessionDatasets.isEmpty())
     return;
 
-  const std::size_t count = std::min(block->uniqueIds.size(), block->channels.size());
-  for (std::size_t c = 0; c < count; ++c) {
-    const int uid = block->uniqueIds[c];
+  const auto used = static_cast<std::size_t>(block->samples);
+  for (const auto& column : block->columns) {
+    if (column.uniqueId < 0)
+      continue;
+
     for (auto it = m_sessionDatasets.cbegin(); it != m_sessionDatasets.cend(); ++it) {
-      if (it.value() != uid || uid < 0)
+      if (it.value() != column.uniqueId)
         continue;
 
-      for (const double sample : block->channels[c])
-        enqueueSample(it.key(), sample);
+      for (std::size_t i = 0; i < used; ++i)
+        enqueueSample(it.key(), column.values[i]);
     }
   }
 }
@@ -570,7 +571,10 @@ void Widgets::AudioExport::openSession(SerialStudio::DashboardWidget kind,
   config.outputPath =
     QStringLiteral("%1/%2-%3%4.wav").arg(dir, stamp, slug, QString::number(index));
   m_activeSessions.insert(key);
-  m_sessionDatasets.insert(key, config.uniqueId);
+  {
+    const QMutexLocker locker(&m_sessionDatasetsMutex);
+    m_sessionDatasets.insert(key, config.uniqueId);
+  }
 
   auto* worker = static_cast<AudioExportWorker*>(m_worker);
   QMetaObject::invokeMethod(
@@ -586,7 +590,10 @@ void Widgets::AudioExport::closeSession(SerialStudio::DashboardWidget kind, int 
   SS_ASSERT(m_worker != nullptr, return);
   const quint32 key = sessionKey(kind, index);
   m_activeSessions.remove(key);
-  m_sessionDatasets.remove(key);
+  {
+    const QMutexLocker locker(&m_sessionDatasetsMutex);
+    m_sessionDatasets.remove(key);
+  }
 
   auto* worker = static_cast<AudioExportWorker*>(m_worker);
   QMetaObject::invokeMethod(
@@ -601,7 +608,10 @@ void Widgets::AudioExport::closeAllSessions()
 {
   SS_ASSERT(m_worker != nullptr, return);
   m_activeSessions.clear();
-  m_sessionDatasets.clear();
+  {
+    const QMutexLocker locker(&m_sessionDatasetsMutex);
+    m_sessionDatasets.clear();
+  }
 
   auto* worker = static_cast<AudioExportWorker*>(m_worker);
   QMetaObject::invokeMethod(worker, [worker] { worker->closeAllSessions(); }, Qt::QueuedConnection);
@@ -619,7 +629,10 @@ void Widgets::AudioExport::onSessionOpenFailed(quint32 key)
   SS_ASSERT_LOG(thread() == QThread::currentThread());
 
   m_activeSessions.remove(key);
-  m_sessionDatasets.remove(key);
+  {
+    const QMutexLocker locker(&m_sessionDatasetsMutex);
+    m_sessionDatasets.remove(key);
+  }
   Q_EMIT sessionClosed(key);
   Q_EMIT activeSessionsChanged();
 }

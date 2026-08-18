@@ -37,6 +37,7 @@
 // clang-format on
 
 #  include "Async/TaskTree.h"
+#  include "DataModel/DataBlock.h"
 #  include "DataModel/ExportSchema.h"
 #  include "DataModel/Frame.h"
 #  include "DataModel/FrameConsumer.h"
@@ -90,7 +91,7 @@ class PublisherScript;
 /**
  * @brief Background worker that owns the QMqttClient and performs broker I/O off-main.
  */
-class PublisherWorker : public DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr> {
+class PublisherWorker : public DataModel::FrameConsumerWorker<DataModel::DataBlockPtr> {
   Q_OBJECT
 
 signals:
@@ -100,7 +101,7 @@ signals:
   void testConnectionFinished(bool ok, const QString& detail);
 
 public:
-  PublisherWorker(moodycamel::ReaderWriterQueue<DataModel::TimestampedFramePtr>* frameQueue,
+  PublisherWorker(moodycamel::ReaderWriterQueue<DataModel::DataBlockPtr>* frameQueue,
                   std::atomic<bool>* enabled,
                   std::atomic<size_t>* queueSize,
                   moodycamel::ReaderWriterQueue<TimestampedRawBytes>* rawQueue,
@@ -127,7 +128,10 @@ public slots:
   void runTestConnection();
 
 protected:
-  void processItems(const std::vector<DataModel::TimestampedFramePtr>& items) override;
+  void processItems(const std::vector<DataModel::DataBlockPtr>& items) override;
+
+public slots:
+  void setTemplateFrame(int sourceId, const DataModel::Frame& frame);
 
 private slots:
   void onClientStateChanged(QMqttClient::ClientState state);
@@ -135,10 +139,17 @@ private slots:
 
 private:
   [[nodiscard]] Async::Task* buildReconnectFlow();
-  void publishBatchAsJson(const std::vector<DataModel::TimestampedFramePtr>& items);
-  void publishBatchAsCsv(const std::vector<DataModel::TimestampedFramePtr>& items);
+  void publishBatchAsJson(const std::vector<DataModel::Frame>& items);
+  void publishBatchAsCsv(const std::vector<DataModel::Frame>& items);
+  void expandBlocks(const std::vector<DataModel::DataBlockPtr>& blocks);
   void rebuildCsvSchema(const DataModel::Frame& frame);
   void recompileScriptIfNeeded();
+
+private:
+  std::map<int, DataModel::FrameTemplate> m_templates;
+  // One publish carries at most this many samples; a dense block alone can exceed it
+  static constexpr std::size_t kMaxExpandedSamples = 4096;
+  std::vector<DataModel::Frame> m_expanded;
   void publishAndCount(const QMqttTopicName& topic, const QByteArray& payload);
   void applyClientPropertiesUnsafe();
   static QString describeMqttError(QMqttClient::ClientError error);
@@ -171,7 +182,7 @@ private:
 /**
  * @brief Per-project MQTT publisher; broadcasts frames, raw bytes and notifications.
  */
-class Publisher : public DataModel::FrameConsumer<DataModel::TimestampedFramePtr> {
+class Publisher : public DataModel::FrameConsumer<DataModel::DataBlockPtr> {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(bool enabled
@@ -424,7 +435,7 @@ public slots:
   void setScriptLanguage(const int language);
   void hotpathTxRawFrame(int deviceId, const IO::CapturedDataPtr& data);
 
-  void hotpathTxFrame(const DataModel::TimestampedFramePtr& frame);
+  void ingestBlock(const DataModel::DataBlockPtr& block);
   void hotpathTxRawBytes(int deviceId, const IO::CapturedDataPtr& data);
   void onNotificationPosted(const QVariantMap& event);
 

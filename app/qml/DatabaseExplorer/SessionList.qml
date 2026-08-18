@@ -27,6 +27,27 @@ Widgets.Pane {
   property var verdicts: Cpp_Sessions_Manager.latestVerdicts()
 
   //
+  // Formats a session's recorded payload size. Frame count was a misleading metric for stream
+  // sources, which write blocks rather than reading rows and so always reported one frame.
+  //
+  function formatSize(bytes) {
+    const value = bytes || 0
+    if (value <= 0)
+      return "--"
+
+    if (value < 1024)
+      return qsTr("%1 B").arg(value)
+
+    if (value < 1024 * 1024)
+      return qsTr("%1 KB").arg((value / 1024).toFixed(1))
+
+    if (value < 1024 * 1024 * 1024)
+      return qsTr("%1 MB").arg((value / (1024 * 1024)).toFixed(1))
+
+    return qsTr("%1 GB").arg((value / (1024 * 1024 * 1024)).toFixed(2))
+  }
+
+  //
   // Maps a stored verdict string to a short badge label
   //
   function verdictBadge(sessionId) {
@@ -125,7 +146,7 @@ Widgets.Pane {
       Layout.fillWidth: true
       columns: [
         { title: qsTr("Date"),     width: 160 },
-        { title: qsTr("Frames"),   width: 70  },
+        { title: qsTr("Size"),     width: 80  },
         { title: qsTr("Verified"), width: 90  },
         { title: qsTr("Tags"),     width: -1  }
       ]
@@ -187,10 +208,10 @@ Widgets.Pane {
           }
 
           Label {
-            Layout.preferredWidth: 70
+            Layout.preferredWidth: 80
             Layout.alignment: Qt.AlignVCenter
             leftPadding: 8
-            text: modelData.frame_count || "0"
+            text: root.formatSize(modelData.size_bytes)
             font: Cpp_Misc_CommonFonts.monoFont
             color: sessionRow.isCurrent
                    ? Cpp_ThemeManager.colors["highlighted_text"]

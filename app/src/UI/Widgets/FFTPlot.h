@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include <kiss_fft.h>
+#include <kiss_fftr.h>
 
 #include <QElapsedTimer>
 #include <QQuickItem>
@@ -198,8 +198,8 @@ private:
 
   SerialStudio::InterpolationMode m_interpolationMode;
 
-  kiss_fft_cfg m_plan;
-  std::vector<kiss_fft_cpx> m_samples;
+  kiss_fftr_cfg m_plan;
+  std::vector<kiss_fft_scalar> m_samples;
   std::vector<kiss_fft_cpx> m_fftOutput;
 
   QVariantList m_markerConfig;

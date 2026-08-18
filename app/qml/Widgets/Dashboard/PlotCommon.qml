@@ -84,4 +84,25 @@ QtObject {
     return mode !== SerialStudio.InterpolationNone
       && mode !== SerialStudio.InterpolationStem
   }
+
+  //
+  // Sweep retention walks a doubling ladder (spec 0061): stepping one sweep at a time up to
+  // 64 is a chore, and the memory cost doubles with it
+  //
+  readonly property var retentionLadder: [0, 1, 2, 4, 8, 16, 32, 64]
+
+  //
+  // Next/previous retention count from @p current in the @p direction, clamped to the ladder
+  //
+  function stepRetention(current, direction)
+  {
+    const ladder = root.retentionLadder
+    let index = 0
+    for (let i = 0; i < ladder.length; ++i)
+      if (ladder[i] <= current)
+        index = i
+
+    const next = Math.max(0, Math.min(ladder.length - 1, index + direction))
+    return ladder[next]
+  }
 }

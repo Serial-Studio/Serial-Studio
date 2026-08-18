@@ -34,11 +34,11 @@ void DataModel::FrameBuilder::injectTableApiLua(lua_State*) {}
 
 void DataModel::FrameBuilder::injectTableApiJS(QJSEngine*) {}
 
+using DataModel::DataBlockPtr;
 using IO::SampleBlock;
 using IO::SampleBlockPtr;
 using IO::StreamChannelConfig;
 using IO::StreamConfig;
-using IO::StreamDisplayUpdatePtr;
 using IO::StreamProcessor;
 using IO::StreamWorker;
 
@@ -114,8 +114,52 @@ static StreamConfig makeConfig(const QString& transform = QString(),
 }
 
 /**
+ * @brief Collects the blocks a worker publishes. Since spec 0055 D8 the worker owns no display
+ *        ring: it emits blockReady on its own thread, so the connection is queued and
+ *        QTest::qWait pumps the blocks onto the test thread.
+ */
+class BlockCollector : public QObject {
+  Q_OBJECT
+
+public:
+  explicit BlockCollector(StreamWorker& worker)
+  {
+    connect(
+      worker.processor(),
+      &StreamProcessor::blockReady,
+      this,
+      [this](const DataBlockPtr& block) {
+        if (block)
+          m_blocks.push_back(block);
+      },
+      Qt::QueuedConnection);
+  }
+
+  [[nodiscard]] const std::vector<DataBlockPtr>& blocks() const noexcept { return m_blocks; }
+
+  /**
+   * @brief Last sample of the first column across every collected block, or 0 when none arrived.
+   */
+  [[nodiscard]] double latest() const
+  {
+    for (auto it = m_blocks.rbegin(); it != m_blocks.rend(); ++it) {
+      const auto& block = **it;
+      if (block.columns.empty() || block.samples <= 0)
+        continue;
+
+      return block.columns.front().values[static_cast<std::size_t>(block.samples - 1)];
+    }
+
+    return 0.0;
+  }
+
+private:
+  std::vector<DataBlockPtr> m_blocks;
+};
+
+/**
  * @brief Unit coverage for the stream worker: teardown ordering (the repo's recurring crash
- *        class), envelope impulse survival (AC9 logic tier), transform application, and the
+ *        class), impulse survival through the display path (AC9 logic tier), transforms, and the
  *        Safe-mode runaway abort (AC8/AC17 logic tier).
  */
 class TestStreamWorker : public QObject {
@@ -123,7 +167,7 @@ class TestStreamWorker : public QObject {
 
 private slots:
   void teardownJoinsAndIsIdempotent();
-  void impulseSurvivesEnvelope();
+  void impulseSurvivesDisplayPath();
   void blockTransformApplies();
   void perSampleTransformApplies();
   void safeModeAbortsRunawayTransform();
@@ -149,31 +193,30 @@ void TestStreamWorker::teardownJoinsAndIsIdempotent()
 }
 
 /**
- * @brief A single-sample impulse in a long block must appear in the published envelope (R11).
+ * @brief A single-sample impulse in a long block must reach the published samples (R11).
  */
-void TestStreamWorker::impulseSurvivesEnvelope()
+void TestStreamWorker::impulseSurvivesDisplayPath()
 {
   StubDriver driver;
   StreamWorker worker(&driver, makeConfig());
+
+  BlockCollector collector(worker);
 
   std::vector<float> samples(4800, 0.0f);
   samples[2400] = 100.0f;
   driver.feed(makeBlock(samples));
 
-  StreamDisplayUpdatePtr update;
   bool found = false;
   for (int i = 0; i < 100 && !found; ++i) {
     QTest::qWait(20);
-    while (worker.dequeueDisplayUpdate(update)) {
-      QVERIFY(update != nullptr);
-      for (const auto& channel : update->channels)
-        for (const auto& pair : channel.envelope)
-          if (qFuzzyCompare(pair.second, 100.0))
+    for (const auto& block : collector.blocks())
+      for (const auto& column : block->columns)
+        for (qsizetype k = 0; k < block->samples; ++k)
+          if (qFuzzyCompare(column.values[static_cast<std::size_t>(k)], 100.0))
             found = true;
-    }
   }
 
-  QVERIFY2(found, "impulse peak was swallowed by the envelope reduction");
+  QVERIFY2(found, "impulse peak never reached the published samples");
   worker.stop();
 }
 
@@ -191,16 +234,14 @@ void TestStreamWorker::blockTransformApplies()
 
   StubDriver driver;
   StreamWorker worker(&driver, makeConfig(code));
+  BlockCollector collector(worker);
 
   driver.feed(makeBlock({1.0f, 2.0f, 21.0f}));
 
-  StreamDisplayUpdatePtr update;
   double latest = 0.0;
   for (int i = 0; i < 100 && latest == 0.0; ++i) {
     QTest::qWait(20);
-    while (worker.dequeueDisplayUpdate(update))
-      if (update && !update->channels.empty())
-        latest = update->channels.front().latest;
+    latest = collector.latest();
   }
 
   QCOMPARE(latest, 42.0);
@@ -218,16 +259,14 @@ void TestStreamWorker::perSampleTransformApplies()
 
   StubDriver driver;
   StreamWorker worker(&driver, makeConfig(code));
+  BlockCollector collector(worker);
 
   driver.feed(makeBlock({1.0f, 2.0f, 3.0f}));
 
-  StreamDisplayUpdatePtr update;
   double latest = 0.0;
   for (int i = 0; i < 100 && latest == 0.0; ++i) {
     QTest::qWait(20);
-    while (worker.dequeueDisplayUpdate(update))
-      if (update && !update->channels.empty())
-        latest = update->channels.front().latest;
+    latest = collector.latest();
   }
 
   QCOMPARE(latest, 4.0);
@@ -249,16 +288,14 @@ void TestStreamWorker::safeModeAbortsRunawayTransform()
 
   StubDriver driver;
   StreamWorker worker(&driver, config);
+  BlockCollector collector(worker);
 
   driver.feed(makeBlock({5.0f, 6.0f, 7.0f}));
 
-  StreamDisplayUpdatePtr update;
   double latest = 0.0;
   for (int i = 0; i < 200 && latest == 0.0; ++i) {
     QTest::qWait(25);
-    while (worker.dequeueDisplayUpdate(update))
-      if (update && !update->channels.empty())
-        latest = update->channels.front().latest;
+    latest = collector.latest();
   }
 
   QCOMPARE(latest, 7.0);
@@ -275,16 +312,16 @@ void TestStreamWorker::fftWindowPublishedWhenFilled()
 {
   StubDriver driver;
   StreamWorker worker(&driver, makeConfig(QString(), 1, 8));
+  BlockCollector collector(worker);
 
   driver.feed(makeBlock({1, 2, 3, 4, 5, 6, 7, 8, 9, 10}));
 
-  StreamDisplayUpdatePtr update;
   std::vector<double> window;
   for (int i = 0; i < 100 && window.empty(); ++i) {
     QTest::qWait(20);
-    while (worker.dequeueDisplayUpdate(update))
-      if (update && !update->channels.empty() && update->channels.front().hasFft)
-        window = update->channels.front().fftWindow;
+    for (const auto& block : collector.blocks())
+      if (!block->columns.empty() && !block->columns.front().fftWindow.empty())
+        window = block->columns.front().fftWindow;
   }
 
   QCOMPARE(window.size(), std::size_t(8));

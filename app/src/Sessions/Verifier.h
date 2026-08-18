@@ -17,6 +17,7 @@
 
 #  include <map>
 #  include <memory>
+#  include <QCryptographicHash>
 #  include <QJsonArray>
 #  include <QJsonObject>
 #  include <QSet>
@@ -80,6 +81,7 @@ private:
   [[nodiscard]] bool loadSession();
   [[nodiscard]] bool sessionIsConsoleOnly() const;
   [[nodiscard]] bool verifyIntegrity();
+  [[nodiscard]] bool hashSampleStream(QCryptographicHash& hash);
   void classifySession();
   [[nodiscard]] int runRegression();
   [[nodiscard]] QString loadCandidate();

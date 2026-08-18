@@ -803,7 +803,7 @@ API::CommandResponse API::Handlers::DashboardHandler::tailFrames(const QString& 
       continue;
 
     const auto& series  = dashboard.plotData(i);
-    const auto& ring    = dashboard.plotTimeRing(i);
+    const auto& ring    = dashboard.plotTimeRing(i).level0;
     const bool timeAxis = ring.value.size() > 0;
     if (!timeAxis && (!series.x || !series.y))
       continue;

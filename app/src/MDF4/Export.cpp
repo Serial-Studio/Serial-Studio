@@ -57,10 +57,9 @@
 /**
  * @brief Constructor for the MDF4 export worker
  */
-MDF4::ExportWorker::ExportWorker(
-  moodycamel::ReaderWriterQueue<DataModel::TimestampedFramePtr>* queue,
-  std::atomic<bool>* enabled,
-  std::atomic<size_t>* queueSize)
+MDF4::ExportWorker::ExportWorker(moodycamel::ReaderWriterQueue<DataModel::DataBlockPtr>* queue,
+                                 std::atomic<bool>* enabled,
+                                 std::atomic<size_t>* queueSize)
   : FrameConsumerWorker(queue, enabled, queueSize), m_fileOpen(false)
 {}
 
@@ -78,60 +77,123 @@ bool MDF4::ExportWorker::isResourceOpen() const
 }
 
 /**
- * @brief Writes all dataset values (final + raw) for one channel group.
+ * @brief Resolves every dataset's uniqueId to the channel group and slot its samples land in, so a
+ *        block column can address its channels directly. Built once at file creation; the block
+ *        carries no group structure, only dataset identities.
  */
-void MDF4::ExportWorker::writeGroupDatasets(const DataModel::Group& group, ChannelGroupInfo& info)
+void MDF4::ExportWorker::buildColumnMap(const DataModel::Frame& frame)
 {
-  for (size_t i = 0; i < group.datasets.size(); ++i) {
-    const auto& dataset = group.datasets.at(i);
-
-    auto* channel = info.channels[i];
-    if (info.isNumeric[i])
-      channel->SetChannelValue(dataset.numericValue);
-    else
-      channel->SetChannelValue(dataset.value.toStdString());
-
-    if (i >= info.rawChannels.size() || !info.rawChannels[i])
-      continue;
-
-    auto* rawCh = info.rawChannels[i];
-    if (info.isNumeric[i])
-      rawCh->SetChannelValue(dataset.rawNumericValue);
-    else
-      rawCh->SetChannelValue(dataset.rawValue.toStdString());
-  }
-}
-
-/**
- * @brief Persists one frame's groups to the MDF4 writer at the given timestamp.
- */
-void MDF4::ExportWorker::writeFrameGroups(const DataModel::Frame& frame,
-                                          qint64 timestamp_ns,
-                                          double timestamp_s)
-{
+  m_columnMap.clear();
   for (const auto& group : frame.groups) {
-    auto it = m_groupMap.find(group.groupId);
+    const auto it = m_groupMap.find(group.groupId);
     if (it == m_groupMap.end())
       continue;
 
-    auto& info = it->second;
-    if (group.datasets.size() != info.channels.size())
-      continue;
+    for (std::size_t i = 0; i < group.datasets.size(); ++i) {
+      if (i >= it->second.channels.size())
+        break;
 
-    if (info.timeChannel)
-      info.timeChannel->SetChannelValue(timestamp_s);
-
-    writeGroupDatasets(group, info);
-    m_writer->SaveSample(*info.channelGroup, static_cast<uint64_t>(timestamp_ns));
+      m_columnMap[group.datasets[i].uniqueId] = ColumnSlot{group.groupId, i};
+    }
   }
 }
 
 /**
- * @brief Processes a batch of MDF4 frames. Connectivity only gates the creation of a NEW file:
- *        an already-open writer still receives the queued backlog, so the close() drain after a
- *        disconnect flushes captured frames instead of silently dropping them.
+ * @brief Resolves each of @p block's columns to its channels once, so the per-sample write is an
+ *        indexed load rather than two std::map lookups and a linear scan repeated per sample.
  */
-void MDF4::ExportWorker::processItems(const std::vector<DataModel::TimestampedFramePtr>& items)
+void MDF4::ExportWorker::resolveBlockColumns(const DataModel::DataBlock& block)
+{
+  m_resolved.assign(block.columns.size(), ResolvedColumn{});
+  m_touchedGroups.clear();
+
+  for (std::size_t c = 0; c < block.columns.size(); ++c) {
+    const auto mapped = m_columnMap.find(block.columns[c].uniqueId);
+    if (mapped == m_columnMap.end())
+      continue;
+
+    auto group = m_groupMap.find(mapped->second.groupId);
+    if (group == m_groupMap.end())
+      continue;
+
+    auto& info    = group->second;
+    const auto ch = mapped->second.index;
+    auto& out     = m_resolved[c];
+
+    out.valid      = true;
+    out.groupId    = mapped->second.groupId;
+    out.isNumeric  = ch < info.isNumeric.size() ? info.isNumeric[ch] : true;
+    out.channel    = ch < info.channels.size() ? info.channels[ch] : nullptr;
+    out.rawChannel = ch < info.rawChannels.size() ? info.rawChannels[ch] : nullptr;
+
+    if (std::find(m_touchedGroups.begin(), m_touchedGroups.end(), out.groupId)
+        == m_touchedGroups.end())
+      m_touchedGroups.push_back(out.groupId);
+  }
+}
+
+/**
+ * @brief Writes sample @p index of @p block into its channels and saves every channel group the
+ *        block touched. Each group keeps its own master time channel, which is what lets one file
+ *        hold sources at different rates (spec 0055 R5). Targets come from resolveBlockColumns().
+ */
+void MDF4::ExportWorker::writeBlockSample(const DataModel::DataBlock& block,
+                                          qsizetype index,
+                                          qint64 systemEpochNs)
+{
+  const auto slot = static_cast<std::size_t>(index);
+  SS_ASSERT(m_resolved.size() == block.columns.size(), return);
+
+  for (std::size_t c = 0; c < block.columns.size(); ++c) {
+    const auto& target = m_resolved[c];
+    if (!target.valid)
+      continue;
+
+    const auto& column = block.columns[c];
+    const bool isNum   = target.isNumeric;
+
+    if (target.channel) {
+      if (isNum || !column.hasText)
+        target.channel->SetChannelValue(column.values[slot]);
+      else
+        target.channel->SetChannelValue(column.text[slot].toStdString());
+    }
+
+    if (column.hasRaw && target.rawChannel) {
+      if (isNum || !column.hasText)
+        target.rawChannel->SetChannelValue(column.rawValues[slot]);
+      else
+        target.rawChannel->SetChannelValue(column.rawText[slot].toStdString());
+    }
+  }
+
+  const auto stamp = DataModel::sample_time(block, index);
+  const qint64 offsetNs =
+    DataModel::uniform_grid(block)
+      ? std::chrono::duration_cast<std::chrono::nanoseconds>(stamp - m_steadyBaseline).count()
+      : monotonicFrameNs(stamp, m_steadyBaseline);
+
+  const qint64 timestampNs = systemEpochNs + offsetNs;
+  const double timestampS  = static_cast<double>(timestampNs) / 1'000'000'000.0;
+
+  for (const int groupId : m_touchedGroups) {
+    auto group = m_groupMap.find(groupId);
+    if (group == m_groupMap.end())
+      continue;
+
+    if (group->second.timeChannel)
+      group->second.timeChannel->SetChannelValue(timestampS);
+
+    m_writer->SaveSample(*group->second.channelGroup, static_cast<uint64_t>(timestampNs));
+  }
+}
+
+/**
+ * @brief Processes a batch of blocks. Connectivity only gates the creation of a NEW file: an
+ *        already-open writer still receives the queued backlog, so the close() drain after a
+ *        disconnect flushes captured samples instead of silently dropping them.
+ */
+void MDF4::ExportWorker::processItems(const std::vector<DataModel::DataBlockPtr>& items)
 {
   if (items.empty())
     return;
@@ -141,8 +203,12 @@ void MDF4::ExportWorker::processItems(const std::vector<DataModel::TimestampedFr
     if (!pipeline.pipelineConnected())
       return;
 
-    createFile(items.front()->data);
-    m_steadyBaseline = items.front()->timestamp;
+    if (m_templateFrame.groups.empty())
+      return;
+
+    createFile(m_templateFrame);
+    buildColumnMap(m_templateFrame);
+    m_steadyBaseline = items.front()->t0;
     m_systemBaseline = std::chrono::system_clock::now();
     resetMonotonicClock();
   }
@@ -155,12 +221,13 @@ void MDF4::ExportWorker::processItems(const std::vector<DataModel::TimestampedFr
       std::chrono::duration_cast<std::chrono::nanoseconds>(m_systemBaseline.time_since_epoch())
         .count();
 
-    for (const auto& frame : items) {
-      const qint64 offsetNs     = monotonicFrameNs(frame->timestamp, m_steadyBaseline);
-      const qint64 timestamp_ns = systemEpochNs + offsetNs;
-      const double timestamp_s  = static_cast<double>(timestamp_ns) / 1'000'000'000.0;
+    for (const auto& block : items) {
+      if (!block || block->samples <= 0)
+        continue;
 
-      writeFrameGroups(frame->data, timestamp_ns, timestamp_s);
+      resolveBlockColumns(*block);
+      for (qsizetype i = 0; i < block->samples; ++i)
+        writeBlockSample(*block, i, systemEpochNs);
     }
   } catch (const std::exception& e) {
     qWarning() << "[MDF4] Exception in processItems:" << e.what();
@@ -189,16 +256,36 @@ void MDF4::ExportWorker::closeResources()
     m_fileOpen = false;
     m_writer.reset();
     m_groupMap.clear();
+    m_columnMap.clear();
     DataModel::clear_frame(m_templateFrame);
   }
 }
 
 /**
- * @brief Stores the schema template frame; must run on the worker thread (queued invoke) so
- *        the assignment never races processItems() or closeResources().
+ * @brief Stores the schema template frame; must run on the worker thread (queued invoke) so the
+ *        assignment never races processItems() or closeResources(). An empty frame is ignored:
+ *        structure arrives asynchronously and QuickPlot has none until its first frame, so an
+ *        empty payload landing second would wipe an adopted template and no file would be made.
  */
 void MDF4::ExportWorker::setTemplateFrame(const DataModel::Frame& frame)
 {
+  if (frame.groups.empty())
+    return;
+
+  m_templateFrame = frame;
+}
+
+/**
+ * @brief Adopts the structure the pipeline publishes when the connect-time fetch came back empty.
+ *        QuickPlot derives its datasets from the first frame, so at connect there is nothing to
+ *        fetch; blocks carry values only, so without this the file is never created. Ignored once
+ *        a file exists -- an open file's schema is fixed for its lifetime.
+ */
+void MDF4::ExportWorker::applyPublishedStructure(const DataModel::Frame& frame)
+{
+  if (isResourceOpen() || !m_templateFrame.groups.empty())
+    return;
+
   m_templateFrame = frame;
 }
 
@@ -235,6 +322,29 @@ static QString sanitizeFrameTitle(const QString& title)
     frameName = QStringLiteral("SerialStudio");
 
   return frameName;
+}
+
+/**
+ * @brief Returns (creating it) the session directory the export writes into:
+ *        <workspace MDF4>/<sanitized name>. A directory that cannot be created or entered comes
+ *        back non-existent, so the caller must check exists() as the CSV lane does.
+ */
+[[nodiscard]] static QDir mdf4SessionDir(const QString& sanitizedName)
+{
+  static auto& workspaceManager = Misc::WorkspaceManager::instance();
+  QDir dir(workspaceManager.path(QStringLiteral("MDF4")));
+
+  if (!dir.exists(sanitizedName) && !dir.mkpath(sanitizedName)) {
+    qWarning() << "[MDF4] failed to create export directory:" << dir.filePath(sanitizedName);
+    return QDir(dir.filePath(sanitizedName));
+  }
+
+  if (!dir.cd(sanitizedName)) {
+    qWarning() << "[MDF4] cannot enter export directory:" << dir.filePath(sanitizedName);
+    return QDir(dir.filePath(sanitizedName));
+  }
+
+  return dir;
 }
 
 /**
@@ -414,12 +524,10 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
     dateTime.toString(QStringLiteral("yyyy-MM-dd_HH-mm-ss")) + QStringLiteral(".mf4");
   const QString frameName = sanitizeFrameTitle(frame.title);
 
-  static auto& workspaceManager = Misc::WorkspaceManager::instance();
-  QDir dir(workspaceManager.path("MDF4"));
-  if (!dir.exists(frameName))
-    dir.mkpath(frameName);
+  const QDir dir = mdf4SessionDir(frameName);
+  if (!dir.exists())
+    return;
 
-  dir.cd(frameName);
   m_filePath = dir.filePath(fileName);
 
   try {
@@ -449,228 +557,6 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
   }
 }
 
-//--------------------------------------------------------------------------------------------------
-// Stream-block MDF4 sink (spec 0051 M5)
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Constructs the stream-block MDF4 worker.
- */
-MDF4::StreamExportWorker::StreamExportWorker(
-  moodycamel::ReaderWriterQueue<IO::StreamBlockItemPtr>* queue,
-  std::atomic<bool>* enabled,
-  std::atomic<size_t>* queueSize)
-  : FrameConsumerWorker(queue, enabled, queueSize)
-{}
-
-/**
- * @brief Default destructor (writers close through closeResources).
- */
-MDF4::StreamExportWorker::~StreamExportWorker() = default;
-
-/**
- * @brief Returns true while any per-source stream MDF4 file is open.
- */
-bool MDF4::StreamExportWorker::isResourceOpen() const
-{
-  return !m_files.empty();
-}
-
-/**
- * @brief Finalizes and closes every per-source stream file.
- */
-void MDF4::StreamExportWorker::closeResources()
-{
-  for (auto& [sourceId, state] : m_files) {
-    if (!state.writer)
-      continue;
-
-    try {
-      const auto now = std::chrono::system_clock::now();
-      const auto stopNs =
-        std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count();
-      state.writer->StopMeasurement(static_cast<uint64_t>(stopNs));
-      state.writer->FinalizeMeasurement();
-    } catch (const std::exception& e) {
-      qWarning() << "[MDF4] stream close failed for source" << sourceId << ":" << e.what();
-    }
-  }
-
-  m_files.clear();
-}
-
-/**
- * @brief Returns (creating on first sight) the writer for @p block's source: one data group with
- *        one channel group of native FloatLe channels named by dataset uniqueId.
- */
-MDF4::StreamExportWorker::StreamFile* MDF4::StreamExportWorker::fileFor(
-  const IO::StreamBlockItem& block)
-{
-  auto it = m_files.find(block.sourceId);
-  if (it != m_files.end())
-    return &it->second;
-
-  const auto& token = Licensing::CommercialToken::current();
-  if (!token.isValid() || !SS_LICENSE_GUARD())
-    return nullptr;
-
-  const auto dateTime = QDateTime::currentDateTime();
-  const auto fileName = dateTime.toString(QStringLiteral("yyyy-MM-dd_HH-mm-ss"))
-                      + QStringLiteral("_stream_source%1.mf4").arg(block.sourceId);
-
-  static auto& workspaceManager = Misc::WorkspaceManager::instance();
-  QDir dir(workspaceManager.path(QStringLiteral("MDF4")));
-
-  StreamFile state;
-  state.writer = mdf::MdfFactory::CreateMdfWriter(mdf::MdfWriterType::Mdf4Basic);
-  if (!state.writer)
-    return nullptr;
-
-  try {
-    state.writer->Init(dir.filePath(fileName).toStdString());
-
-    auto* header = state.writer->Header();
-    if (!header)
-      return nullptr;
-
-    header->Author("Serial Studio");
-    header->Description("Typed stream capture - https://serial-studio.com/");
-    header->Subject(QStringLiteral("Stream source %1").arg(block.sourceId).toStdString());
-    header->Project("Telemetry Data");
-    header->StartTime(dateTime.toMSecsSinceEpoch() * 1000000);
-
-    auto* dataGroup = state.writer->CreateDataGroup();
-    if (!dataGroup)
-      return nullptr;
-
-    dataGroup->Description("Serial Studio Stream Data");
-    auto* channelGroup = dataGroup->CreateChannelGroup();
-    if (!channelGroup)
-      return nullptr;
-
-    channelGroup->Name(QStringLiteral("Stream source %1").arg(block.sourceId).toStdString());
-    state.channelGroup = channelGroup;
-    state.timeChannel  = createTimeChannel(channelGroup);
-
-    for (const int uniqueId : block.uniqueIds) {
-      auto* channel = channelGroup->CreateChannel();
-      if (!channel)
-        return nullptr;
-
-      channel->Name(QStringLiteral("ds%1").arg(uniqueId).toStdString());
-      channel->Type(mdf::ChannelType::FixedLength);
-      channel->DataType(mdf::ChannelDataType::FloatLe);
-      channel->DataBytes(8);
-      state.channels.push_back(channel);
-    }
-
-    state.writer->InitMeasurement();
-    state.writer->StartMeasurement(dateTime.toMSecsSinceEpoch() * 1000000);
-  } catch (const std::exception& e) {
-    qWarning() << "[MDF4] stream file creation failed:" << e.what();
-    return nullptr;
-  }
-
-  state.steadyBaseline = block.t0;
-  state.systemBaseline = std::chrono::system_clock::now();
-
-  auto [inserted, ok] = m_files.emplace(block.sourceId, std::move(state));
-  return ok ? &inserted->second : nullptr;
-}
-
-/**
- * @brief Writes one full-rate block: per-sample time = t0 + i * dt mapped onto the system-clock
- *        baseline captured at file creation (source-owns-time; never the monotonic bump).
- */
-void MDF4::StreamExportWorker::writeBlock(StreamFile& state, const IO::StreamBlockItem& block)
-{
-  const auto systemEpochNs =
-    std::chrono::duration_cast<std::chrono::nanoseconds>(state.systemBaseline.time_since_epoch())
-      .count();
-  const qint64 baseOffsetNs =
-    std::chrono::duration_cast<std::chrono::nanoseconds>(block.t0 - state.steadyBaseline).count();
-  const qint64 dtNs = block.dt.count();
-
-  const std::size_t channelCount = std::min(state.channels.size(), block.channels.size());
-
-  constexpr double kNsToSec = 1.0e-9;
-  for (qsizetype i = 0; i < block.frames; ++i) {
-    const qint64 timestampNs = systemEpochNs + baseOffsetNs + static_cast<qint64>(i) * dtNs;
-    const double timestampS  = static_cast<double>(timestampNs) * kNsToSec;
-
-    if (state.timeChannel)
-      state.timeChannel->SetChannelValue(timestampS);
-
-    for (std::size_t c = 0; c < channelCount; ++c) {
-      const auto& samples = block.channels[c];
-      const double value =
-        (static_cast<std::size_t>(i) < samples.size()) ? samples[static_cast<std::size_t>(i)] : 0.0;
-      state.channels[c]->SetChannelValue(value);
-    }
-
-    state.writer->SaveSample(*state.channelGroup, static_cast<uint64_t>(timestampNs));
-  }
-}
-
-/**
- * @brief Writes a batch of stream blocks to their per-source writers.
- */
-void MDF4::StreamExportWorker::processItems(const std::vector<IO::StreamBlockItemPtr>& items)
-{
-  for (const auto& block : items) {
-    if (!block || block->frames <= 0)
-      continue;
-
-    auto* state = fileFor(*block);
-    if (!state)
-      continue;
-
-    try {
-      writeBlock(*state, *block);
-    } catch (const std::exception& e) {
-      qWarning() << "[MDF4] stream write failed:" << e.what();
-    }
-  }
-}
-
-/**
- * @brief Constructs the stream-block MDF4 facade (worker created eagerly like the frame sink).
- */
-MDF4::StreamExport::StreamExport()
-  : DataModel::FrameConsumer<IO::StreamBlockItemPtr>(
-      {.queueCapacity = 4096, .flushThreshold = 256, .timerIntervalMs = 500})
-{
-  initializeWorker();
-  setConsumerEnabled(false);
-}
-
-/**
- * @brief GUI-thread ingest slot: the single producer for the worker's SPSC queue, fed by every
- *        stream worker's queued blockReady signal (block rate, never per sample).
- */
-void MDF4::StreamExport::ingestBlock(const IO::StreamBlockItemPtr& block)
-{
-  if (block)
-    enqueueData(block);
-}
-
-/**
- * @brief Finalizes and closes every per-source stream file (queued to the worker).
- */
-void MDF4::StreamExport::closeFiles()
-{
-  if (m_worker)
-    QMetaObject::invokeMethod(m_worker, "close", Qt::QueuedConnection);
-}
-
-/**
- * @brief Factory method creating the stream-block worker.
- */
-DataModel::FrameConsumerWorkerBase* MDF4::StreamExport::createWorker()
-{
-  return new StreamExportWorker(&m_pendingQueue, &m_consumerEnabled, &m_queueSize);
-}
-
 #endif
 
 //--------------------------------------------------------------------------------------------------
@@ -682,15 +568,11 @@ DataModel::FrameConsumerWorkerBase* MDF4::StreamExport::createWorker()
  */
 MDF4::Export::Export()
 #ifdef BUILD_COMMERCIAL
-  : DataModel::FrameConsumer<DataModel::TimestampedFramePtr>(
+  : DataModel::FrameConsumer<DataModel::DataBlockPtr>(
       {.queueCapacity = 8192, .flushThreshold = 1024, .timerIntervalMs = 1000})
   , m_isOpen(false)
   , m_exportEnabled(false)
   , m_persistSettings(true)
-  // code-verify off: ctor captures, invisible to the AST scan through the #ifdef-split list
-  , m_appState(&AppState::instance())
-  , m_frameBuilder(&DataModel::FrameBuilder::instance())
-// code-verify on
 #else
   : m_isOpen(false), m_exportEnabled(false), m_persistSettings(true)
 #endif
@@ -770,19 +652,8 @@ void MDF4::Export::closeFile()
 #ifdef BUILD_COMMERCIAL
   auto* worker = static_cast<ExportWorker*>(m_worker);
   QMetaObject::invokeMethod(worker, "close", Qt::QueuedConnection);
-  m_streamExport.closeFiles();
 #endif
 }
-
-#ifdef BUILD_COMMERCIAL
-/**
- * @brief Returns the typed stream-block sink (spec 0051 M5); enable state follows exportEnabled.
- */
-MDF4::StreamExport& MDF4::Export::streamSink() noexcept
-{
-  return m_streamExport;
-}
-#endif
 
 #ifdef BUILD_COMMERCIAL
 /**
@@ -790,18 +661,12 @@ MDF4::StreamExport& MDF4::Export::streamSink() noexcept
  */
 void MDF4::Export::refreshTemplateFrame()
 {
-  SS_ASSERT(m_appState != nullptr, return);
-  SS_ASSERT(m_frameBuilder != nullptr, return);
-
   auto* worker = static_cast<ExportWorker*>(m_worker);
-  DataModel::Frame frame;
-  if (m_appState->operationMode() == SerialStudio::ProjectFile)
-    m_frameBuilder->invokeOnBuilderThreadBlocking(
-      [this, &frame] { frame = m_frameBuilder->frame(); });
+  SS_ASSERT(worker != nullptr, return);
 
   QMetaObject::invokeMethod(
     worker,
-    [worker, frame = std::move(frame)] { worker->setTemplateFrame(frame); },
+    [worker, frame = m_sessionStructure] { worker->setTemplateFrame(frame); },
     Qt::QueuedConnection);
 }
 #endif
@@ -813,10 +678,26 @@ void MDF4::Export::setupExternalConnections()
 {
 #ifdef BUILD_COMMERCIAL
   connect(
+    &DataModel::FrameBuilder::instance(),
+    &DataModel::FrameBuilder::structurePublished,
+    this,
+    [this](int, const DataModel::Frame& frame) {
+      auto* worker = static_cast<ExportWorker*>(m_worker);
+      SS_ASSERT(worker != nullptr, return);
+
+      QMetaObject::invokeMethod(
+        worker, [worker, frame] { worker->applyPublishedStructure(frame); }, Qt::QueuedConnection);
+    });
+  connect(&DataModel::FrameBuilder::instance(),
+          &DataModel::FrameBuilder::sessionStructureReady,
+          this,
+          [this](const DataModel::Frame& frame) {
+            m_sessionStructure = frame;
+            refreshTemplateFrame();
+          });
+  connect(
     &IO::ConnectionManager::instance(), &IO::ConnectionManager::connectedChanged, this, [this] {
-      if (IO::ConnectionManager::instance().isConnected())
-        refreshTemplateFrame();
-      else
+      if (!IO::ConnectionManager::instance().isConnected())
         closeFile();
     });
   connect(&IO::ConnectionManager::instance(), &IO::ConnectionManager::pausedChanged, this, [this] {
@@ -856,9 +737,6 @@ void MDF4::Export::setExportEnabled(const bool enabled)
       closeFile();
 
     setConsumerEnabled(allow);
-    m_streamExport.setConsumerEnabled(allow);
-    if (!allow)
-      m_streamExport.closeFiles();
 
     if (m_persistSettings)
       m_settings.setValue("MDF4Export", allow);
@@ -869,7 +747,6 @@ void MDF4::Export::setExportEnabled(const bool enabled)
 
   closeFile();
   setConsumerEnabled(false);
-  m_streamExport.setConsumerEnabled(false);
   if (m_persistSettings)
     m_settings.setValue("MDF4Export", false);
 
@@ -890,17 +767,18 @@ void MDF4::Export::setExportEnabled(const bool enabled)
 }
 
 /**
- * @brief Receives timestamped frame data and enqueues it for export.
+ * @brief Enqueues one block for export. The single producer for this SPSC queue is the pipeline
+ *        thread, for both lanes (spec 0055 D8).
  */
-void MDF4::Export::hotpathTxFrame(const DataModel::TimestampedFramePtr& frame)
+void MDF4::Export::ingestBlock(const DataModel::DataBlockPtr& block)
 {
 #ifdef BUILD_COMMERCIAL
-  if (!exportEnabled() || SerialStudio::isAnyPlayerOpen())
+  if (!block || !exportEnabled() || SerialStudio::isAnyPlayerOpen())
     return;
 
-  enqueueData(frame);
+  enqueueData(block);
 #else
-  (void)frame;
+  (void)block;
 #endif
 }
 

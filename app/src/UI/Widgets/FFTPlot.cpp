@@ -94,14 +94,14 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem* parent)
     }
 
     m_samples.resize(m_size);
-    m_fftOutput.resize(m_size);
+    m_fftOutput.resize(m_size / 2 + 1);
     m_window.resize(m_size);
     Widgets::fillFftWindow(m_windowType, m_window.data(), static_cast<unsigned int>(m_size));
 
     loadMarkers();
     rebuildMarkerBins();
 
-    m_plan = kiss_fft_alloc(m_size, 0, nullptr, nullptr);
+    m_plan = kiss_fftr_alloc(m_size, 0, nullptr, nullptr);
     if (!m_plan) {
       qWarning() << "FFT plan allocation failed for size:" << m_size;
       return;
@@ -156,7 +156,7 @@ Widgets::FFTPlot::~FFTPlot()
 #endif
 
   if (m_plan) {
-    kiss_fft_free(m_plan);
+    kiss_fftr_free(m_plan);
     m_plan = nullptr;
   }
 }
@@ -530,20 +530,22 @@ void Widgets::FFTPlot::setAudioRecordingEnabled(const bool enabled)
  */
 bool Widgets::FFTPlot::rebuildFftPlan(int newSize)
 {
+  SS_ASSERT(newSize % 2 == 0, return false);
+
   m_size = newSize;
 
   m_window.resize(m_size);
   m_samples.resize(m_size);
-  m_fftOutput.resize(m_size);
+  m_fftOutput.resize(m_size / 2 + 1);
 
   Widgets::fillFftWindow(m_windowType, m_window.data(), static_cast<unsigned int>(m_size));
 
   if (m_plan) {
-    kiss_fft_free(m_plan);
+    kiss_fftr_free(m_plan);
     m_plan = nullptr;
   }
 
-  m_plan = kiss_fft_alloc(m_size, 0, nullptr, nullptr);
+  m_plan = kiss_fftr_alloc(m_size, 0, nullptr, nullptr);
   if (!m_plan) {
     qWarning() << "FFT plan allocation failed for size:" << m_size;
     return false;
@@ -616,14 +618,16 @@ void Widgets::FFTPlot::computeBinSpectrum(int spectrumSize)
   if (dbCache.size() < static_cast<size_t>(spectrumSize))
     dbCache.resize(spectrumSize);
 
+  static_assert(sizeof(kiss_fft_cpx) == 2 * sizeof(float), "kiss_fft_cpx must pack two floats");
+
   const float normFactor = static_cast<float>(m_size) * static_cast<float>(m_size);
   const float invNorm    = 1.0f / normFactor;
-  for (int i = 0; i < spectrumSize; ++i) {
-    const float re    = m_fftOutput[i].r;
-    const float im    = m_fftOutput[i].i;
-    const float power = std::max((re * re + im * im) * invNorm, kSpectrumEpsSq);
-    dbCache[i]        = std::max(10.0f * std::log10(power), kSpectrumFloorDb);
-  }
+  DSP::simdPowerSpectrumDb(reinterpret_cast<const float*>(m_fftOutput.data()),
+                           dbCache.data(),
+                           static_cast<std::size_t>(spectrumSize),
+                           invNorm,
+                           kSpectrumEpsSq,
+                           kSpectrumFloorDb);
 
   if (m_binDb.size() != static_cast<std::size_t>(spectrumSize))
     m_binDb.resize(static_cast<std::size_t>(spectrumSize));
@@ -816,24 +820,21 @@ void Widgets::FFTPlot::updateData()
   const double offset    = m_scaleIsValid ? -m_center : 0.0;
   const double scale     = m_scaleIsValid ? (1.0 / m_halfRange) : 1.0;
 
-  static_assert(sizeof(kiss_fft_cpx) == 2 * sizeof(float));
+  static_assert(sizeof(kiss_fft_scalar) == sizeof(float));
 
   if (avail > 0)
-    DSP::simdWindowedComplexFill(in,
-                                 data.frontIndex(),
-                                 mask,
-                                 static_cast<std::size_t>(avail),
-                                 offset,
-                                 scale,
-                                 m_window.data(),
-                                 &m_samples[0].r);
+    DSP::simdWindowedRealFill(in,
+                              data.frontIndex(),
+                              mask,
+                              static_cast<std::size_t>(avail),
+                              offset,
+                              scale,
+                              m_window.data(),
+                              m_samples.data());
 
-  for (int i = avail; i < m_size; ++i) {
-    m_samples[i].r = 0.0f;
-    m_samples[i].i = 0.0f;
-  }
+  std::fill(m_samples.begin() + avail, m_samples.end(), 0.0f);
 
-  kiss_fft(m_plan, m_samples.data(), m_fftOutput.data());
+  kiss_fftr(m_plan, m_samples.data(), m_fftOutput.data());
   const int spectrumSize = m_size / 2;
   computeBinSpectrum(spectrumSize);
   if (m_logX && spectrumSize >= 4)

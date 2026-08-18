@@ -23,6 +23,8 @@
 
 #include <algorithm>
 #include <cmath>
+#include <QDebug>
+#include <QElapsedTimer>
 #include <QSGGeometryNode>
 #include <QSGVertexColorMaterial>
 
@@ -631,6 +633,7 @@ QSGNode* Widgets::PlotCurve::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeDa
 
   const bool valid =
     points.size() >= 2 && xRange > 0 && yRange > 0 && w > 0 && h > 0 && m_lineWidth > 0;
+
   if (!valid) {
     delete oldNode;
     return nullptr;

@@ -375,7 +375,14 @@ static QString buildRoleBlock(bool device_control, bool memory_on, bool probe_on
                         "reconstruct or guess them.\n"
                         "\n"
                         "Concise. No filler. Match the user's register. When unsure, list/"
-                        "describe/load skill before acting.\n")
+                        "describe/load skill before acting.\n"
+                        "\n"
+                        "Rendering\n"
+                        "Replies render as GitHub-flavored markdown, and a fenced ```mermaid "
+                        "block renders as a real diagram in the chat. Reach for one whenever a "
+                        "picture beats prose -- dataflow through a project, group/dataset "
+                        "structure, a parse pipeline, a decision tree. Keep it small and "
+                        "labelled; invalid syntax falls back to showing the source.\n")
        + (memory_on
             ? QStringLiteral("\n"
                              "When the user states a durable preference, project convention, or "

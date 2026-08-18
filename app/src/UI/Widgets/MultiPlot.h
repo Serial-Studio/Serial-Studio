@@ -172,7 +172,6 @@ public:
 
 public slots:
   void draw(QXYSeries* series, const int index);
-
   void setDataW(const int width);
   void setDataH(const int height);
   void setRunning(const bool enabled);
@@ -211,6 +210,7 @@ private:
   int m_index;
   int m_dataW;
   int m_dataH;
+  int m_yStepIndex;
   double m_minX;
   double m_maxX;
   double m_minY;

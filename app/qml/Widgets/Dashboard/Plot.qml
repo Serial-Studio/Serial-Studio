@@ -156,7 +156,78 @@ Item {
     if (root.sweepAllowed && s["sweepEnabled"] !== undefined)
       root.model.sweepEnabled = s["sweepEnabled"]
 
+    if (s["sweepRetention"] !== undefined)
+      root.model.sweepRetention = s["sweepRetention"]
+
     root.restoringSweep = false
+
+    plot.restoreRuler(s)
+    root.restoreViewState()
+  }
+
+  //
+  // Persist the X-axis ruler (markers, zero point, hover marker) with the widget settings
+  //
+  function saveRulerSettings() {
+    Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "xMarkers", plot.xMarkers)
+    Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "xZero", plot.xZero)
+    Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "xZeroSet", plot.xZeroSet)
+    Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "hoverMarker", plot.hoverMarkerEnabled)
+  }
+
+  //
+  // Session view state (spec 0062): cursors, zoom/pan, crosshair mode and pause travel with a
+  // recording through Cpp_UI_Dashboard, never through the project document
+  //
+  function saveViewState() {
+    const d = Cpp_UI_Dashboard
+    d.saveWidgetViewState(widgetId, "cursorAX", plot.cursorAX)
+    d.saveWidgetViewState(widgetId, "cursorAY", plot.cursorAY)
+    d.saveWidgetViewState(widgetId, "cursorBX", plot.cursorBX)
+    d.saveWidgetViewState(widgetId, "cursorBY", plot.cursorBY)
+    d.saveWidgetViewState(widgetId, "cursorAVisible", plot.cursorAVisible)
+    d.saveWidgetViewState(widgetId, "cursorBVisible", plot.cursorBVisible)
+    d.saveWidgetViewState(widgetId, "showCrosshairs", plot.showCrosshairs)
+    d.saveWidgetViewState(widgetId, "xZoom", plot.xAxis.zoom)
+    d.saveWidgetViewState(widgetId, "xPan", plot.xAxis.pan)
+    d.saveWidgetViewState(widgetId, "yZoom", plot.yAxis.zoom)
+    d.saveWidgetViewState(widgetId, "yPan", plot.yAxis.pan)
+    d.saveWidgetViewState(widgetId, "paused", !root.model.running)
+  }
+
+  function restoreViewState() {
+    const v = Cpp_UI_Dashboard.widgetViewState(widgetId)
+    if (v["showCrosshairs"] !== undefined)
+      plot.showCrosshairs = v["showCrosshairs"] === true
+
+    if (isFinite(v["xZoom"]) && v["xZoom"] >= 1)
+      plot.xAxis.zoom = v["xZoom"]
+
+    if (isFinite(v["xPan"]))
+      plot.xAxis.pan = v["xPan"]
+
+    if (isFinite(v["yZoom"]) && v["yZoom"] >= 1)
+      plot.yAxis.zoom = v["yZoom"]
+
+    if (isFinite(v["yPan"]))
+      plot.yAxis.pan = v["yPan"]
+
+    if (v["cursorAVisible"] === true && isFinite(v["cursorAX"]) && isFinite(v["cursorAY"]))
+      plot.setCursorA(v["cursorAX"], v["cursorAY"])
+
+    if (v["cursorBVisible"] === true && isFinite(v["cursorBX"]) && isFinite(v["cursorBY"]))
+      plot.setCursorB(v["cursorBX"], v["cursorBY"])
+
+    if (v["paused"] === true && root.model)
+      root.model.running = false
+  }
+
+  Timer {
+    id: _viewStateTimer
+
+    interval: 500
+    repeat: false
+    onTriggered: root.saveViewState()
   }
 
   //
@@ -172,6 +243,16 @@ Item {
     Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "holdoff", root.model.holdoff)
     Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "sweepTimebase", root.model.sweepTimebase)
     Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "sweepEnabled", root.model.sweepEnabled)
+  }
+
+  //
+  // Persist how many past sweeps the plot keeps drawn (spec 0061)
+  //
+  function saveSegmentSettings() {
+    if (root.restoringSweep)
+      return
+
+    Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "sweepRetention", root.model.sweepRetention)
   }
 
   //
@@ -193,6 +274,14 @@ Item {
 
     function onSweepChanged() {
       root.saveSweepSettings()
+    }
+
+    function onSweepSegmentsChanged() {
+      root.saveSegmentSettings()
+    }
+
+    function onRunningChanged() {
+      _viewStateTimer.restart()
     }
   }
 
@@ -378,6 +467,55 @@ Item {
       onClicked: triggerDialog.openDialog(root.model, false)
     }
 
+    //
+    // Sweep retention (spec 0061): how many past sweeps stay drawn, dimmed by age, under the
+    // live trace; the count walks a doubling ladder and the model clamps it to the memory budget
+    //
+    Rectangle {
+      radius: 6
+      border.width: 1
+      implicitHeight: 24
+      implicitWidth: _retentionRow.implicitWidth + 10
+      color: Cpp_ThemeManager.colors["widget_base"]
+      border.color: Cpp_ThemeManager.colors["widget_border"]
+      visible: root.sweepAllowed && root.model.sweepEnabled
+
+      RowLayout {
+        id: _retentionRow
+
+        spacing: 2
+        anchors.centerIn: parent
+
+        DashboardToolButton {
+          text: "\u2039"
+          Layout.preferredWidth: 20
+          Layout.preferredHeight: 20
+          enabled: root.model.sweepRetention > 0
+          ToolTip.text: qsTr("Keep fewer past sweeps")
+          onClicked: root.model.sweepRetention = plotCommon.stepRetention(
+                       root.model.sweepRetention, -1)
+        }
+
+        Label {
+          Layout.minimumWidth: 20
+          text: root.model.sweepSegmentCapacity
+          horizontalAlignment: Text.AlignHCenter
+          font: Cpp_Misc_CommonFonts.monoFont
+          color: Cpp_ThemeManager.colors["widget_text"]
+        }
+
+        DashboardToolButton {
+          text: "\u203a"
+          Layout.preferredWidth: 20
+          Layout.preferredHeight: 20
+          enabled: root.model.sweepRetention < 64
+          ToolTip.text: qsTr("Keep more past sweeps")
+          onClicked: root.model.sweepRetention = plotCommon.stepRetention(
+                       root.model.sweepRetention, 1)
+        }
+      }
+    }
+
     Rectangle {
       visible: root.sweepAllowed
       implicitWidth: 1
@@ -465,6 +603,18 @@ Item {
     areaFillBaseline: root.areaFillBaseline
     areaFillSource: root.areaFillVisible ? upperSeries : null
 
+    onRulerChanged: root.saveRulerSettings()
+    onCursorAXChanged: _viewStateTimer.restart()
+    onCursorAYChanged: _viewStateTimer.restart()
+    onCursorBXChanged: _viewStateTimer.restart()
+    onCursorBYChanged: _viewStateTimer.restart()
+    onCursorAVisibleChanged: _viewStateTimer.restart()
+    onCursorBVisibleChanged: _viewStateTimer.restart()
+    onShowCrosshairsChanged: _viewStateTimer.restart()
+    xAxis.onPanChanged: _viewStateTimer.restart()
+    yAxis.onPanChanged: _viewStateTimer.restart()
+    xAxis.onZoomChanged: _viewStateTimer.restart()
+    yAxis.onZoomChanged: _viewStateTimer.restart()
     onZoomChanged: Qt.callLater(root.redrawCurves)
     onXVisibleMinChanged: Qt.callLater(root.redrawCurves)
     onWidthChanged: root.setDownsample()
@@ -514,6 +664,40 @@ Item {
       yMax: plot.yVisibleMax
       parent: plot.curveLayer
       visible: root.interpolationMode !== SerialStudio.InterpolationNone
+    }
+
+    //
+    // Retained sweep segments (spec 0061): age-dimmed overlay traces under the live curve
+    //
+    Repeater {
+      model: root.model.sweepEnabled ? root.model.sweepSegmentCount : 0
+
+      delegate: PlotCurve {
+        id: _segmentCurve
+
+        required property int index
+
+        lineWidth: 1
+        color: root.color
+        anchors.fill: parent
+        xMin: plot.xVisibleMin
+        xMax: plot.xVisibleMax
+        yMin: plot.yVisibleMin
+        yMax: plot.yVisibleMax
+        parent: plot.curveLayer
+        source: LineSeries {}
+        opacity: 0.12 + 0.5 * (1 - index / Math.max(1, root.model.sweepSegmentCount))
+
+        Connections {
+          enabled: root.alive
+          target: Cpp_Misc_TimerEvents
+
+          function onUiTimeout() {
+            if (root.visible && root.model)
+              root.model.drawSegment(_segmentCurve.source, _segmentCurve.index)
+          }
+        }
+      }
     }
   }
 }

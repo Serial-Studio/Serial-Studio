@@ -113,6 +113,7 @@ private:
 
   void cleanupDevice();
   void readLoop();
+  void refreshDeviceEnumeration();
 
   [[nodiscard]] QList<DeviceEntry> collectHidDeviceEntries() const;
   void composeHidDeviceLists(const QList<DeviceEntry>& entries,
@@ -125,6 +126,7 @@ private:
 
   hid_device* m_handle;
   hid_device_info* m_deviceInfoList;
+  bool m_enumerating;
 
   QThread m_readThread;
   QTimer m_enumTimer;

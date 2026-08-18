@@ -6,6 +6,10 @@ A quick reference for the terms used throughout Serial Studio and this documenta
 
 A user-defined command bound to a button on the dashboard or to an incoming trigger. Actions send bytes back to the device, run on a timer, or fire on a condition. See [Actions](Actions.md).
 
+## Annotation
+
+A labelled range of bytes in the console stream, produced by an annotation decoder rather than by the frame parser. Annotations carry a row, a class, and a text, and feed the console's Track, Table, and Payload views. See [Console Annotations](Console-Annotations.md).
+
 ## Built-In parser (Native)
 
 The no-code frame parser. You describe the frame layout with a JSON descriptor and Serial Studio parses it with parametrized C++ templates, so no Lua or JavaScript is needed. "Built-In" is the user-facing name; internal identifiers call it *Native*. See [Frame Parser Reference](JavaScript-API.md).

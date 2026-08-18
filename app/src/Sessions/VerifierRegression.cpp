@@ -29,6 +29,7 @@
 #  include "DataModel/Scripting/ControlScript.h"
 #  include "IO/FrameReader.h"
 #  include "SerialStudio.h"
+#  include "Sessions/BlockReader.h"
 #  include "Sessions/Verifier.h"
 #  include "SSAssert.h"
 
@@ -52,12 +53,13 @@ static bool regressBitEqual(double a, double b)
 }
 
 /**
- * @brief Streaming cursor over one dataset's readings in a regenerated database, decoding
- *        the injected timestamp back to the (chunk, rank) provenance key row by row; the
- *        diff never materializes a side in memory (same discipline as the 0044 diff).
+ * @brief Streaming cursor over one dataset's readings in a regenerated database, decoding the
+ *        injected timestamp back to the (chunk, rank) provenance key row by row. Reads through
+ *        Sessions::ReadingCursor, so a side stored as blocks and a side stored as legacy readings
+ *        merge identically; the diff still never materializes a side in memory.
  */
 struct RegenCursor {
-  QSqlQuery query;
+  Sessions::ReadingCursor cursor;
   qint64 first_chunk   = 0;
   bool valid           = false;
   qint64 chunk         = 0;
@@ -74,14 +76,7 @@ struct RegenCursor {
   [[nodiscard]] bool open(QSqlDatabase& db, int sessionId, qint64 uniqueId, qint64 firstChunk)
   {
     first_chunk = firstChunk;
-    query       = QSqlQuery(db);
-    query.prepare(QStringLiteral("SELECT timestamp_ns, raw_numeric_value, raw_string_value, "
-                                 "final_numeric_value, final_string_value, is_numeric "
-                                 "FROM readings WHERE session_id = ? AND unique_id = ? "
-                                 "ORDER BY timestamp_ns, reading_id"));
-    query.bindValue(0, sessionId);
-    query.bindValue(1, uniqueId);
-    if (!query.exec())
+    if (!cursor.open(db, sessionId, uniqueId))
       return false;
 
     advance();
@@ -89,22 +84,27 @@ struct RegenCursor {
   }
 
   /**
+   * @brief Whether the walk stopped on a malformed block rather than at the end of the session.
+   */
+  [[nodiscard]] bool damaged() const noexcept { return cursor.damaged(); }
+
+  /**
    * @brief Steps to the next row and decodes its provenance key; clears valid at the end.
    */
   void advance()
   {
-    valid = query.next();
+    Sessions::ReadingRow row;
+    valid = cursor.next(row);
     if (!valid)
       return;
 
-    const qint64 ns = query.value(0).toLongLong();
-    chunk           = ns / Sessions::Verifier::kChunkStepNs + first_chunk;
-    rank            = ns % Sessions::Verifier::kChunkStepNs;
-    raw_numeric     = SerialStudio::toDouble(query.value(1));
-    raw_string      = query.value(2).toString();
-    final_numeric   = SerialStudio::toDouble(query.value(3));
-    final_string    = query.value(4).toString();
-    is_numeric      = query.value(5).toInt() != 0;
+    chunk         = row.timestampNs / Sessions::Verifier::kChunkStepNs + first_chunk;
+    rank          = row.timestampNs % Sessions::Verifier::kChunkStepNs;
+    raw_numeric   = row.rawNumeric;
+    raw_string    = row.rawString;
+    final_numeric = row.finalNumeric;
+    final_string  = row.finalString;
+    is_numeric    = row.isNumeric;
   }
 };
 
@@ -527,6 +527,11 @@ static QJsonObject diffRegressDataset(const QString& title,
   QJsonObject result;
   result.insert(Keys::UniqueId, uniqueId);
   result.insert(QStringLiteral("title"), title);
+  if (base.damaged() || cand.damaged()) {
+    result.insert(QStringLiteral("error"), QStringLiteral("archive damaged"));
+    return result;
+  }
+
   result.insert(QStringLiteral("finalsCompared"), compareFinals);
   result.insert(QStringLiteral("compared"), compared);
   result.insert(QStringLiteral("changed"), changed);

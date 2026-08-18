@@ -2264,6 +2264,13 @@ function ui.window.setLayout(layout)
   return apiCall('ui.window.setLayout', p)
 end
 
+function ui.window.setLayoutPattern(pattern, options)
+  local p = {}
+  p['pattern'] = pattern
+  if options then for k, v in pairs(options) do p[k] = v end end
+  return apiCall('ui.window.setLayoutPattern', p)
+end
+
 function ui.window.setWidgetSetting(widgetId, key, settingValue)
   local p = {}
   p['widgetId'] = widgetId

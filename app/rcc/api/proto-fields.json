@@ -2548,6 +2548,14 @@
       "reserved": [],
       "next": 3
     },
+    "ui.window.setLayoutPattern": {
+      "fields": {
+        "pattern": 2,
+        "ratio": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
     "ui.window.setWidgetSetting": {
       "fields": {
         "key": 2,

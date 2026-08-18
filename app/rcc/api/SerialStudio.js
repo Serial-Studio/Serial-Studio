@@ -2558,6 +2558,13 @@ ui.window.setLayout = function(layout) {
   return apiCall('ui.window.setLayout', p);
 };
 
+ui.window.setLayoutPattern = function(pattern, options) {
+  var p = {};
+  p['pattern'] = pattern;
+  if (options) for (var k in options) p[k] = options[k];
+  return apiCall('ui.window.setLayoutPattern', p);
+};
+
 ui.window.setWidgetSetting = function(widgetId, key, settingValue) {
   var p = {};
   p['widgetId'] = widgetId;

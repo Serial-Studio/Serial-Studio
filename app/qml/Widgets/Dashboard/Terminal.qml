@@ -73,9 +73,21 @@ Item {
   property int minimumRows: 24
   property bool searchOpen: false
   property int minimumColumns: 80
+  property bool annotationsOpen: false
+  readonly property int annotationsHeight: 260
   readonly property bool hasToolbar: consoleToolbar.visible
   property int minimumHeight: Cpp_Console_Handler.defaultCharHeight * root.minimumRows
   property int minimumWidth: Cpp_Console_Handler.defaultCharWidth * root.minimumColumns
+
+  //
+  // Rows the console gives up to the annotation panel: opening the panel takes its space from
+  // the console instead of growing the widget, so the terminal's minimum size never moves.
+  //
+  readonly property int consoleMinimumHeight: {
+    const base = Cpp_Console_Handler.defaultCharHeight * root.minimumRows
+    const taken = root.annotationsOpen ? root.annotationsHeight + layout.spacing + 4 : 0
+    return Math.max(0, base - taken)
+  }
 
   //
   // Expose the live terminal dimensions (columns/rows) so parent items can
@@ -222,7 +234,7 @@ Item {
         fadeColor: Cpp_ThemeManager.colors["window_toolbar_background"]
 
         //
-        // Console actions (collapsible): clear, find, collapse duplicates
+        // Console actions (collapsible): clear, find, collapse duplicates, annotations
         //
         Widgets.RibbonSection {
           collapsible: true
@@ -290,6 +302,23 @@ Item {
             Layout.preferredWidth: implicitContentWidth + leftPadding + rightPadding
             icon.source: Cpp_Misc_IconRegistry.icon("console", "collapse-duplicates", 32)
             onClicked: Cpp_Console_Handler.collapseDuplicates = !Cpp_Console_Handler.collapseDuplicates
+          }
+
+          Widgets.IconButton {
+            id: annotationsButton
+
+            flat: true
+            leftPadding: 8
+            rightPadding: 8
+            implicitHeight: 32
+            text: qsTr("Annotations")
+            icon.color: "transparent"
+            checked: root.annotationsOpen
+            Layout.alignment: Qt.AlignVCenter
+            onClicked: root.annotationsOpen = !root.annotationsOpen
+            icon.source: Cpp_Misc_IconRegistry.icon("console", "annotations", 32)
+            Layout.preferredWidth: implicitContentWidth + leftPadding + rightPadding
+            ToolTip.text: qsTr("Label the incoming bytes with a decoder and inspect them")
           }
         }
 
@@ -507,7 +536,7 @@ Item {
       ansiColors: Cpp_Console_Handler.ansiColors
       Layout.topMargin: consoleToolbar.visible ? 4 : 8
       vt100emulation: Cpp_Console_Handler.vt100Emulation
-      Layout.minimumHeight: root.minimal ? 0 : Cpp_Console_Handler.defaultCharHeight * root.minimumRows
+      Layout.minimumHeight: root.minimal ? 0 : root.consoleMinimumHeight
       Layout.minimumWidth: root.minimal ? 0 : Cpp_Console_Handler.defaultCharWidth * root.minimumColumns
 
       Rectangle {
@@ -653,6 +682,21 @@ Item {
           }
         }
       }
+    }
+
+    //
+    // Frame annotation layer (track / table / payload / decoder), toggled from the toolbar
+    //
+    ConsoleAnnotations {
+      id: annotationsPanel
+
+      Layout.leftMargin: 8
+      Layout.rightMargin: 8
+      Layout.fillWidth: true
+      Layout.minimumHeight: 0
+      visible: root.annotationsOpen
+      Layout.topMargin: root.annotationsOpen ? 4 : 0
+      Layout.preferredHeight: root.annotationsHeight
     }
 
     //

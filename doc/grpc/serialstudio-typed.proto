@@ -1985,6 +1985,12 @@ message UiWindowSetLayoutRequest {
   google.protobuf.Struct layout = 2;
 }
 
+message UiWindowSetLayoutPatternRequest {
+  string id = 1;
+  string pattern = 2;
+  int64 ratio = 3;
+}
+
 message UiWindowSetWidgetSettingRequest {
   string id = 1;
   string key = 2;
@@ -3140,6 +3146,9 @@ service SerialStudioTypedAPI {
 
   // Apply a layout to WindowManager (params: layout object)
   rpc UiWindowSetLayout(UiWindowSetLayoutRequest) returns (CommandResponse);
+
+  // Set the auto-layout pattern of the workspace or group on screen. Pattern is '' (Grid), master-stack, master-grid, row, column or spiral; ratio is the primary split in sixteenths (1..15, default 8) and only applies to the patterns with a primary region. Stored beside that workspace's window geometry, so it does not touch the workspace list.
+  rpc UiWindowSetLayoutPattern(UiWindowSetLayoutPatternRequest) returns (CommandResponse);
 
   // Set a widget setting (params: widgetId string, key string, value any)
   rpc UiWindowSetWidgetSetting(UiWindowSetWidgetSettingRequest) returns (CommandResponse);

@@ -58,7 +58,10 @@ Two entries in that list carry their own reason to sit where they do:
   time (auto workspaces, driver lists, dashboard layout) reads a fallback value if the token
   arrives late. Late or async activation still needs a `LemonSqueezy::activatedChanged` hook — the
   pinning fixes the startup path only (2026-07-09: Plot3D degraded to MultiPlot on
-  offline-activated machines).
+  offline-activated machines). `activatedChanged` fires only on real token-validity transitions
+  (`LemonSqueezy::notifyEntitlementMaybeChanged()`, 2026-08-04) — redundant emissions used to loop
+  live-device rebuilds. Consumer inventory:
+  [../specs/0042-license-token-hardening/consumers.md](../specs/0042-license-token-hardening/consumers.md).
 
 **The `ProjectModel`-before-`AppState` rule kills a live hazard.** `AppState`'s ctor calls
 `deriveFrameConfig()`, whose ProjectFile branch calls `ProjectModel::instance()` (AppState.cpp), so

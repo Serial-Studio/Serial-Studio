@@ -25,11 +25,13 @@
 #include <QElapsedTimer>
 #include <QFont>
 #include <QHash>
+#include <QJsonObject>
 #include <QObject>
 #include <QSet>
 #include <QSettings>
 #include <utility>
 
+#include "DataModel/DataBlock.h"
 #include "DSP.h"
 #include "IO/StreamWorker.h"
 #include "SerialStudio.h"
@@ -137,6 +139,7 @@ signals:
   void thinningActiveChanged();
   void displayTitlesChanged();
   void containsCommercialFeaturesChanged();
+  void viewStateChanged();
 
 private:
   friend class ::SessionContext;
@@ -195,6 +198,9 @@ public:
   [[nodiscard]] int layoutSpacing() const noexcept;
 
   [[nodiscard]] Q_INVOKABLE bool frameValid() const;
+  [[nodiscard]] Q_INVOKABLE QJsonObject widgetViewState(const QString& widgetId) const;
+  [[nodiscard]] Q_INVOKABLE QJsonObject globalViewState() const;
+  [[nodiscard]] QString viewStateJson() const;
   [[nodiscard]] Q_INVOKABLE int relativeIndex(const int widgetIndex) const;
   [[nodiscard]] Q_INVOKABLE QString formatValue(double val, double min, double max) const;
   [[nodiscard]] Q_INVOKABLE SerialStudio::DashboardWidget widgetType(const int widgetIndex) const;
@@ -228,8 +234,8 @@ public:
   [[nodiscard]] const DSP::GpsSeries& gpsSeries(const int index) const;
   [[nodiscard]] const DSP::LineSeries& plotData(const int index) const;
   [[nodiscard]] const DSP::MultiLineSeries& multiplotData(const int index) const;
-  [[nodiscard]] const DSP::TimeRing& plotTimeRing(const int index) const;
-  [[nodiscard]] const std::vector<DSP::TimeRing>& multiplotTimeRings(const int index) const;
+  [[nodiscard]] const DSP::EnvelopeRing& plotTimeRing(const int index) const;
+  [[nodiscard]] const std::vector<DSP::EnvelopeRing>& multiplotTimeRings(const int index) const;
   [[nodiscard]] const DSP::SweepEngine& plotSweep(const int index) const;
   [[nodiscard]] const DSP::SweepEngine& multiplotSweep(const int index) const;
 
@@ -295,9 +301,15 @@ public slots:
                          const double timebase);
   void armPlotSweep(const int index);
   void armMultiplotSweep(const int index);
+  void setPlotSweepRetention(const int index, const int count);
 
-  void hotpathRxFrame(const DataModel::TimestampedFramePtr& frame);
-  void applyStreamUpdate(const IO::StreamDisplayUpdate& update);
+  void saveWidgetViewState(const QString& widgetId, const QString& key, const QVariant& value);
+  void saveGlobalViewState(const QString& key, const QVariant& value);
+  void setViewStateJson(const QString& json);
+  void clearViewState();
+
+  void applyBlock(const DataModel::DataBlockPtr& block);
+  void applyStructureSnapshot(const DataModel::StructureSnapshotPtr& snapshot);
   void updateStreamAvailable();
   void pollThinningState();
   void refreshDisplayTitles();
@@ -306,7 +318,6 @@ public slots:
 private:
   void restorePersistedSettings();
   void connectStreamAvailableInputs();
-  void updateDashboardData(const DataModel::Frame& frame);
   void reconfigureDashboard(const DataModel::Frame& frame);
   [[nodiscard]] DataModel::Frame combineSourceFrames(const DataModel::Frame& seed) const;
   void processDatasetIntoWidgetMaps(const DataModel::Dataset& datasetIn,
@@ -332,10 +343,10 @@ private:
   void buildMultiplotPushes();
   void configureActions(const DataModel::Frame& frame);
 
-  [[nodiscard]] QHash<qint64, DSP::TimeRing> snapshotPlotTimeRings() const;
-  [[nodiscard]] QHash<qint64, std::vector<DSP::TimeRing>> snapshotMultiplotTimeRings() const;
-  void restorePlotTimeRings(QHash<qint64, DSP::TimeRing>& snapshot);
-  void restoreMultiplotTimeRings(QHash<qint64, std::vector<DSP::TimeRing>>& snapshot);
+  [[nodiscard]] QHash<qint64, DSP::EnvelopeRing> snapshotPlotTimeRings() const;
+  [[nodiscard]] QHash<qint64, std::vector<DSP::EnvelopeRing>> snapshotMultiplotTimeRings() const;
+  void restorePlotTimeRings(QHash<qint64, DSP::EnvelopeRing>& snapshot);
+  void restoreMultiplotTimeRings(QHash<qint64, std::vector<DSP::EnvelopeRing>>& snapshot);
   void restorePlotSweepConfig(const QMap<int, DSP::SweepEngine>& saved);
   void restoreMultiplotSweepConfig(const QMap<int, DSP::SweepEngine>& saved);
 #ifdef BUILD_COMMERCIAL
@@ -451,16 +462,23 @@ private:
   };
 
   [[nodiscard]] const StreamTargets& streamTargetsFor(int uniqueId);
-  void applyStreamChannel(const IO::StreamDisplayUpdate::ChannelUpdate& channel, double baseSec);
-  void feedPlotStreamSweep(int plotIndex,
-                           const IO::StreamDisplayUpdate::ChannelUpdate& channel,
-                           double baseSec);
-  void feedMultiplotStreamSweep(int groupIndex,
-                                const IO::StreamDisplayUpdate& update,
-                                double baseSec);
-  void drainDashboardRing(const QElapsedTimer& clock, qint64 budgetNs);
-  void drainStreamWorkers(const QElapsedTimer& clock, qint64 budgetNs);
-  void drainStreamWorker(IO::StreamWorker& worker, const QElapsedTimer& clock, qint64 budgetNs);
+  void applyBlockColumn(const DataModel::BlockColumn& column,
+                        const DataModel::DataBlock& block,
+                        double baseSec);
+  [[nodiscard]] bool applyBlockValues(const DataModel::DataBlock& block, qsizetype index);
+  void feedFftFromSamples(const DataModel::BlockColumn& column,
+                          const StreamTargets& targets,
+                          std::size_t count);
+  void feedPlotBlockSweep(int plotIndex,
+                          const DataModel::BlockColumn& column,
+                          const DataModel::DataBlock& block,
+                          double baseSec);
+  void feedMultiplotBlockSweep(int groupIndex, const DataModel::DataBlock& block, double baseSec);
+  void growTimeRings();
+  void resetPlotClocks();
+  void growTimeRing(DSP::EnvelopeRing& ring, int sourceId, double windowSec);
+  void drainStructureSnapshots();
+  void drainBlockRing(const QElapsedTimer& clock, qint64 budgetNs);
   double advancePlotClock(int sourceId, const std::chrono::steady_clock::time_point& ts);
 
   /**
@@ -555,8 +573,8 @@ private:
 
   QMap<int, DSP::AxisData> m_xAxisData;
   QMap<int, DSP::AxisData> m_yAxisData;
-  QMap<int, DSP::TimeRing> m_plotTimeRings;
-  QMap<int, std::vector<DSP::TimeRing>> m_multiplotTimeRings;
+  QMap<int, DSP::EnvelopeRing> m_plotTimeRings;
+  QMap<int, std::vector<DSP::EnvelopeRing>> m_multiplotTimeRings;
   QMap<int, DSP::SweepEngine> m_plotSweep;
   QMap<int, DSP::SweepEngine> m_multiplotSweep;
 
@@ -609,12 +627,16 @@ private:
   QMap<int, DataModel::Frame> m_sourceRawFrames;
   QHash<int, StreamTargets> m_streamTargets;
 
-  // Curve-index -> channel scratch for one multiplot sweep; reused so a tick allocates nothing
-  std::vector<const IO::StreamDisplayUpdate::ChannelUpdate*> m_streamSweepCurves;
+  // Curve-index -> column scratch for one multiplot sweep; reused so a tick allocates nothing
+  std::vector<const DataModel::BlockColumn*> m_streamSweepCurves;
 
   // Subordinate to m_sourceRawFrames (validated by its contains(sid) check); never cleared alone.
   QHash<int, quint64> m_sourceStructureGen;
   QHash<int, quint64> m_quarantinedSources;
+
+  // Session view state (spec 0062): per-widget + global, never part of the project document
+  QJsonObject m_widgetViewState;
+  QJsonObject m_globalViewState;
 };
 }  // namespace UI
 

@@ -24,11 +24,14 @@
 #include <QCodeEditor>
 #include <QComboBox>
 #include <QDialog>
+#include <QGraphicsOpacityEffect>
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QSyntaxStyle>
 #include <QVBoxLayout>
+
+#include "DataModel/Scripting/ExpressionTransform.h"
 
 namespace Misc {
 class CommonFonts;
@@ -88,6 +91,11 @@ private:
   [[nodiscard]] QString testTransform(const QString& code, int language, double inputValue);
   [[nodiscard]] static QString defaultPlaceholder(int language);
   [[nodiscard]] static bool isDefaultPlaceholder(const QString& code, int language);
+  [[nodiscard]] static int comboIndexForLanguage(int language);
+  [[nodiscard]] static int languageForComboIndex(int index);
+  [[nodiscard]] static DataModel::Expression::TableResolver expressionTables();
+  [[nodiscard]] static DataModel::Expression::NameResolver expressionResolver(
+    DataModel::Expression::SlotTable& table);
   [[nodiscard]] static TransformStatus validateTransform(const QString& code,
                                                          int language,
                                                          QString& error);
@@ -109,6 +117,7 @@ private:
 
   QComboBox* m_languageCombo;
   QComboBox* m_templateCombo;
+  QGraphicsOpacityEffect* m_templateOpacity;
 
   QLineEdit* m_testInput;
   QLineEdit* m_testOutput;

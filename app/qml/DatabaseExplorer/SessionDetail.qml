@@ -27,6 +27,7 @@ Widgets.Pane {
   property var metadata: sessionId >= 0
                          ? Cpp_Sessions_Manager.sessionMetadata(sessionId)
                          : ({})
+  property var streamStats: []
   property var verification: sessionId >= 0
                              ? Cpp_Sessions_Manager.latestVerification(sessionId)
                              : ({})
@@ -100,6 +101,52 @@ Widgets.Pane {
         && root.sessionId === Cpp_Sessions_Export.currentSessionId)
 
   //
+  // Formats a session's recorded payload size. Frame count was a misleading metric for stream
+  // sources, which write blocks rather than reading rows and so always reported one frame.
+  //
+  function formatSize(bytes) {
+    const value = bytes || 0
+    if (value <= 0)
+      return "--"
+
+    if (value < 1024)
+      return qsTr("%1 B").arg(value)
+
+    if (value < 1024 * 1024)
+      return qsTr("%1 KB").arg((value / 1024).toFixed(1))
+
+    if (value < 1024 * 1024 * 1024)
+      return qsTr("%1 MB").arg((value / (1024 * 1024)).toFixed(1))
+
+    return qsTr("%1 GB").arg((value / (1024 * 1024 * 1024)).toFixed(2))
+  }
+
+  //
+  // Summarises recorded stream data so a capture can be confirmed without replaying it
+  //
+  function streamSummary() {
+    if (!root.streamStats || root.streamStats.length === 0)
+      return ""
+
+    var samples = 0
+    var start = -1
+    var end = -1
+    for (var i = 0; i < root.streamStats.length; ++i) {
+      var entry = root.streamStats[i]
+      samples += entry.sampleCount
+      if (start < 0 || entry.startNs < start)
+        start = entry.startNs
+
+      if (end < 0 || entry.endNs > end)
+        end = entry.endNs
+    }
+
+    var seconds = (end - start) / 1000000000
+    return qsTr("%1 samples over %2 s, %3 datasets")
+             .arg(samples).arg(seconds.toFixed(1)).arg(root.streamStats.length)
+  }
+
+  //
   // Refresh when selected session changes
   //
   Connections {
@@ -112,6 +159,14 @@ Widgets.Pane {
       root.verification = root.sessionId >= 0
                           ? Cpp_Sessions_Manager.latestVerification(root.sessionId)
                           : {}
+      root.streamStats = []
+      if (root.sessionId >= 0)
+        Cpp_Sessions_Manager.requestStreamStats(root.sessionId)
+    }
+
+    function onSessionStreamStatsReady(id, stats) {
+      if (id === root.sessionId)
+        root.streamStats = stats
     }
 
     function onVerificationFinished() {
@@ -241,13 +296,28 @@ Widgets.Pane {
 
           Label {
             opacity: 0.6
-            text: qsTr("Frames:")
+            text: qsTr("Size:")
             color: Cpp_ThemeManager.colors["text"]
             font: Cpp_Misc_CommonFonts.boldUiFont
           }
           Label {
             Layout.fillWidth: true
-            text: root.metadata.frame_count || "0"
+            text: root.formatSize(root.metadata.size_bytes)
+            color: Cpp_ThemeManager.colors["text"]
+            font: Cpp_Misc_CommonFonts.monoFont
+          }
+
+          Label {
+            opacity: 0.6
+            visible: root.streamStats.length > 0
+            text: qsTr("Stream data:")
+            color: Cpp_ThemeManager.colors["text"]
+            font: Cpp_Misc_CommonFonts.boldUiFont
+          }
+          Label {
+            Layout.fillWidth: true
+            visible: root.streamStats.length > 0
+            text: root.streamSummary()
             color: Cpp_ThemeManager.colors["text"]
             font: Cpp_Misc_CommonFonts.monoFont
           }

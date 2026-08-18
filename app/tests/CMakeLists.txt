@@ -203,6 +203,17 @@ ss_add_unit_test(tst_dsp_kernels
 )
 
 #
+# Real-versus-complex KissFFT equivalence over the bins FFTPlot and Waterfall read. The widgets
+# transform real input with kiss_fftr; this pins that its bins 0..N/2 match a complex transform
+# of the same signal, which is the assumption that swap rests on. Vendored library only, so
+# kissfft is the whole link set.
+#
+ss_add_unit_test(tst_real_fft
+  SOURCES tst_real_fft.cpp
+  LIBS    Qt6::Core kissfft
+)
+
+#
 # Spec 0034 AC1-AC3 of the task-tree engine: sequencing, parallel completion, timeout, retry
 # backoff, cancellation and error provenance. Fake steps and a virtual clock only, so TaskTree.cpp
 # plus RetryPolicy.cpp is the whole link set and the suite never waits on real time.
@@ -291,6 +302,128 @@ ss_add_unit_test(tst_parse_budget
 ss_add_unit_test(tst_frame_pool_policy
   SOURCES tst_frame_pool_policy.cpp
           ${SS_APP_SRC}/DataModel/FramePoolPolicy.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# The unified publication payload (spec 0055). DataBlock.h is header-only and pulls Frame.h only
+# for the Frame that StructureSnapshot carries, so SSAssert.cpp is the entire production link set
+# -- keeping it that cheap is deliberate: the pool's no-reallocation property is the thing worth
+# checking on every build, and a suite that needed FrameBuilder could not run that often.
+#
+ss_add_unit_test(tst_data_block
+  SOURCES tst_data_block.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# The cascading envelope pyramid behind the time-axis plots (spec 0057): every coarse cell must
+# equal the brute-force min/max of the level-0 range it covers, before and after wrap, and level
+# selection must follow seconds-per-pixel. DSP.h is header-only but its FixedQueue pins plot-scale
+# buffers through Platform::AppPlatform, so AppPlatform.cpp (QtWidgets for QApplication) is the
+# whole production link set -- the same carve-out tst_frame_delimiters documents.
+#
+#
+# The 1-2-5 auto-scale ladder behind the plot Y range (spec 0058): header-only, SSAssert.cpp is
+# the whole production link set.
+#
+ss_add_unit_test(tst_plot_autoscale
+  SOURCES tst_plot_autoscale.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# Compiled expression transforms (spec 0060): grammar, evaluator and slot table. The TU pulls
+# SerialStudio.h only for the inline fast_float toDouble, so no SerialStudio*.cpp is needed;
+# QtGui comes with the QColor include of that header.
+#
+ss_add_unit_test(tst_expression_transform
+  SOURCES tst_expression_transform.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/ExpressionTransform.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+)
+
+#
+# Frame annotation layer (spec 0059): the model, filter proxy, payload extraction, CSV export and
+# the JS decoder with carry-over. Console/Annotations.cpp reaches only JsWatchdog and SSAssert;
+# QtQml for the QJSEngine the decoder embeds.
+#
+ss_add_unit_test(tst_console_annotations
+  SOURCES tst_console_annotations.cpp
+          ${SS_APP_SRC}/Console/Annotations.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/JsWatchdog.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/JsWatchdogThread.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+          Qt6::Qml
+)
+
+ss_add_unit_test(tst_envelope_ring
+  SOURCES tst_envelope_ring.cpp
+          ${SS_APP_SRC}/Platform/AppPlatform.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+          Qt6::Widgets
+          ${SS_PLATFORM_LIBS}
+)
+
+#
+# Retained sweep segments of DSP::SweepEngine (spec 0061): same DSP.h link set as
+# tst_envelope_ring.
+#
+ss_add_unit_test(tst_sweep_segments
+  SOURCES tst_sweep_segments.cpp
+          ${SS_APP_SRC}/Platform/AppPlatform.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+          Qt6::Widgets
+          ${SS_PLATFORM_LIBS}
+)
+
+#
+# Frozen pre-0055 session archives (spec 0055 R8). The build under test no longer writes the old
+# layout, so the legacy read path cannot be checked against a fixture it produces itself; these are
+# real 4.0.3 captures under tests/fixtures/sessions/. BlockReader.h is header-only, so Qt6::Sql plus
+# SSAssert.cpp is the whole link set -- adding the session worker here is the move that would turn a
+# seconds-long suite into an application link.
+#
+ss_add_unit_test(tst_sessions_legacy_archive
+  SOURCES tst_sessions_legacy_archive.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core Qt6::Sql
+)
+
+if(TARGET tst_sessions_legacy_archive)
+  target_compile_definitions(tst_sessions_legacy_archive
+    PRIVATE SS_FIXTURE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../../tests/fixtures/sessions")
+endif()
+
+#
+# The single-file sparse CSV body (spec 0055). SparseRowMerger.h was extracted from CSV::ExportWorker
+# precisely so this can be checked without QFile, the workspace manager or a session: the suite
+# supplies the two formatter stubs itself and links nothing but QtCore.
+#
+ss_add_unit_test(tst_csv_sparse_writer
+  SOURCES tst_csv_sparse_writer.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# The session stream-block codec (spec 0054) is a header-only pair of free functions, so the suite
+# needs no production TU at all -- which is the point of having extracted it: the encoder in
+# Sessions::ExportWorker and the decoder in Sessions::Player cannot drift apart without this
+# failing.
+#
+ss_add_unit_test(tst_stream_block_codec
+  SOURCES tst_stream_block_codec.cpp
   LIBS    Qt6::Core
 )
 

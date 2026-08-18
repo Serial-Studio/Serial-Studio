@@ -216,6 +216,20 @@ constexpr int kPayloadKinds[] = {
 }
 
 /**
+ * @brief Float twin of makePayload for the f32 block kernels, over the same IEEE corner cases.
+ */
+[[nodiscard]] std::vector<float> makeF32Payload(int kind, std::size_t count)
+{
+  const auto payload = makePayload(kind, count);
+
+  std::vector<float> out(count, 0.0f);
+  for (std::size_t i = 0; i < count; ++i)
+    out[i] = static_cast<float>(payload[i]);
+
+  return out;
+}
+
+/**
  * @brief Fills a length/offset table shared by the byte-scanning and copy kernels.
  */
 void addLengthOffsetRows()
@@ -274,16 +288,22 @@ private slots:
   void signedZeroReductions();
   void finiteMinMaxPointF_data();
   void finiteMinMaxPointF();
-  void windowedComplexSpan_data();
-  void windowedComplexSpan();
   void interleaveSpan_data();
   void interleaveSpan();
-  void windowedComplexFill_data();
-  void windowedComplexFill();
+  void windowedRealSpan_data();
+  void windowedRealSpan();
+  void windowedRealFill_data();
+  void windowedRealFill();
   void ringsToPoints_data();
   void ringsToPoints();
   void asciiDots16_data();
   void asciiDots16();
+  void widenAscii_data();
+  void widenAscii();
+  void deinterleaveToF64_data();
+  void deinterleaveToF64();
+  void powerSpectrumDb_data();
+  void powerSpectrumDb();
 };
 
 /**
@@ -577,40 +597,6 @@ void TstDspKernels::finiteMinMaxPointF()
 // SimdDetail contiguous-span helpers
 //--------------------------------------------------------------------------------------------------
 
-void TstDspKernels::windowedComplexSpan_data()
-{
-  addReductionRows();
-}
-
-/**
- * @brief Every staged f32 pair matches bit for bit, including the imaginary lane that must stay
- *        exactly +0.0 and the non-finite inputs that must collapse to zero.
- */
-void TstDspKernels::windowedComplexSpan()
-{
-  QFETCH(qsizetype, length);
-  QFETCH(int, offset);
-  QFETCH(int, kind);
-
-  const auto n                      = static_cast<std::size_t>(length);
-  const std::vector<double> payload = makePayload(kind, n + static_cast<std::size_t>(offset));
-  const std::vector<float> win      = makeWindow(n + 1);
-  std::vector<float> vec(2 * n + 2, 1.0f);
-  std::vector<float> ref(2 * n + 2, 1.0f);
-
-  const double* src = payload.data() + offset;
-  DSP::SimdDetail::windowedComplexSpan(src, win.data(), vec.data(), n, -3.25, 0.5);
-  DspRef::windowedComplexSpan(src, win.data(), ref.data(), n, -3.25, 0.5);
-
-  for (std::size_t i = 0; i < vec.size(); ++i)
-    if (!bitEqual(vec[i], ref[i]))
-      QFAIL(mismatch("windowedComplexSpan",
-                     static_cast<qsizetype>(i),
-                     std::bit_cast<quint32>(vec[i]),
-                     std::bit_cast<quint32>(ref[i]))
-              .constData());
-}
-
 void TstDspKernels::interleaveSpan_data()
 {
   addLengthOffsetRows();
@@ -643,20 +629,50 @@ void TstDspKernels::interleaveSpan()
               .constData());
 }
 
-//--------------------------------------------------------------------------------------------------
-// Ring-buffer bulk transforms
-//--------------------------------------------------------------------------------------------------
-
-void TstDspKernels::windowedComplexFill_data()
+void TstDspKernels::windowedRealSpan_data()
 {
   addReductionRows();
 }
 
 /**
- * @brief The masked ring walk splits into the same two spans on both lanes, so the staged FFT
- *        buffer is bit-identical no matter where the read front sits.
+ * @brief The kiss_fftr staging span: one windowed f32 per input sample, non-finite inputs
+ *        folded to zero, compared word-for-word against the scalar lane.
  */
-void TstDspKernels::windowedComplexFill()
+void TstDspKernels::windowedRealSpan()
+{
+  QFETCH(qsizetype, length);
+  QFETCH(int, offset);
+  QFETCH(int, kind);
+
+  const auto n                      = static_cast<std::size_t>(length);
+  const std::vector<double> payload = makePayload(kind, n + static_cast<std::size_t>(offset));
+  const std::vector<float> win      = makeWindow(n + 1);
+  std::vector<float> vec(n + 2, 1.0f);
+  std::vector<float> ref(n + 2, 1.0f);
+
+  const double* src = payload.data() + offset;
+  DSP::SimdDetail::windowedRealSpan(src, win.data(), vec.data(), n, -3.25, 0.5);
+  DspRef::windowedRealSpan(src, win.data(), ref.data(), n, -3.25, 0.5);
+
+  for (std::size_t i = 0; i < vec.size(); ++i)
+    if (!bitEqual(vec[i], ref[i]))
+      QFAIL(mismatch("windowedRealSpan",
+                     static_cast<qsizetype>(i),
+                     std::bit_cast<quint32>(vec[i]),
+                     std::bit_cast<quint32>(ref[i]))
+              .constData());
+}
+
+//--------------------------------------------------------------------------------------------------
+// Ring-buffer bulk transforms
+//--------------------------------------------------------------------------------------------------
+
+void TstDspKernels::windowedRealFill_data()
+{
+  addReductionRows();
+}
+
+void TstDspKernels::windowedRealFill()
 {
   QFETCH(qsizetype, length);
   QFETCH(int, offset);
@@ -668,15 +684,15 @@ void TstDspKernels::windowedComplexFill()
   const std::size_t front        = static_cast<std::size_t>(offset) & mask;
   const std::vector<double> ring = makePayload(kind, cap);
   const std::vector<float> win   = makeWindow(n + 1);
-  std::vector<float> vec(2 * n + 2, 1.0f);
-  std::vector<float> ref(2 * n + 2, 1.0f);
+  std::vector<float> vec(n + 2, 1.0f);
+  std::vector<float> ref(n + 2, 1.0f);
 
-  DSP::simdWindowedComplexFill(ring.data(), front, mask, n, -3.25, 0.5, win.data(), vec.data());
-  DspRef::windowedComplexFill(ring.data(), front, mask, n, -3.25, 0.5, win.data(), ref.data());
+  DSP::simdWindowedRealFill(ring.data(), front, mask, n, -3.25, 0.5, win.data(), vec.data());
+  DspRef::windowedRealFill(ring.data(), front, mask, n, -3.25, 0.5, win.data(), ref.data());
 
   for (std::size_t i = 0; i < vec.size(); ++i)
     if (!bitEqual(vec[i], ref[i]))
-      QFAIL(mismatch("simdWindowedComplexFill",
+      QFAIL(mismatch("simdWindowedRealFill",
                      static_cast<qsizetype>(i),
                      std::bit_cast<quint32>(vec[i]),
                      std::bit_cast<quint32>(ref[i]))
@@ -766,6 +782,137 @@ void TstDspKernels::asciiDots16()
   for (int i = 0; i < 16; ++i)
     if (vec[i] != ref[i])
       QFAIL(mismatch("simdAsciiDots16", i, vec[i], ref[i]).constData());
+}
+
+/**
+ * @brief Length/offset matrix plus a per-row switch between pure-ASCII and high-bit payloads,
+ *        so both the all-ASCII verdict and the fallback verdict cross every lane boundary.
+ */
+void TstDspKernels::widenAscii_data()
+{
+  QTest::addColumn<qsizetype>("length");
+  QTest::addColumn<int>("offset");
+  QTest::addColumn<int>("highAt");
+
+  for (const qsizetype length : kLengths)
+    for (int offset = 0; offset < kOffsets; ++offset)
+      for (const int highAt : {-1, 0, 1, 7, 8, 15, 16}) {
+        if (static_cast<qsizetype>(highAt) >= length)
+          continue;
+
+        QTest::addRow("len=%lld off=%d high=%d", static_cast<long long>(length), offset, highAt)
+          << length << offset << highAt;
+      }
+}
+
+void TstDspKernels::widenAscii()
+{
+  QFETCH(qsizetype, length);
+  QFETCH(int, offset);
+  QFETCH(int, highAt);
+
+  QByteArray bytes(offset + length + 16, 'z');
+  for (qsizetype i = 0; i < length; ++i)
+    bytes[offset + i] = static_cast<char>(1 + (i % 127));
+
+  if (highAt >= 0)
+    bytes[offset + highAt] = static_cast<char>(0xC3);
+
+  const auto n          = static_cast<std::size_t>(length);
+  constexpr auto kGuard = static_cast<char16_t>(0xABCD);
+  std::vector<char16_t> vec(n + 8, kGuard);
+  std::vector<char16_t> ref(n + 8, kGuard);
+
+  const bool vecAscii = DSP::simdWidenAscii(bytes.constData() + offset, vec.data(), n);
+  const bool refAscii = DspRef::widenAscii(bytes.constData() + offset, ref.data(), n);
+  QCOMPARE(vecAscii, refAscii);
+  QCOMPARE(vecAscii, highAt < 0);
+
+  for (std::size_t i = 0; i < vec.size(); ++i)
+    if (vec[i] != ref[i])
+      QFAIL(mismatch("simdWidenAscii", static_cast<qsizetype>(i), vec[i], ref[i]).constData());
+}
+
+/**
+ * @brief Frame-count matrix across every channel layout, so the contiguous single-channel lane
+ *        and the strided gather are both walked over the IEEE corner payloads.
+ */
+void TstDspKernels::deinterleaveToF64_data()
+{
+  QTest::addColumn<qsizetype>("frames");
+  QTest::addColumn<int>("channels");
+  QTest::addColumn<int>("kind");
+
+  for (const qsizetype frames : kLengths)
+    for (const int channels : {1, 2, 3, 4, 8})
+      for (const int kind : kPayloadKinds)
+        QTest::addRow(
+          "%s frames=%lld ch=%d", payloadName(kind), static_cast<long long>(frames), channels)
+          << frames << channels << kind;
+}
+
+void TstDspKernels::deinterleaveToF64()
+{
+  QFETCH(qsizetype, frames);
+  QFETCH(int, channels);
+  QFETCH(int, kind);
+
+  const auto n     = static_cast<std::size_t>(frames);
+  const auto total = n * static_cast<std::size_t>(channels);
+  const auto src   = makeF32Payload(kind, total + 8);
+
+  for (int channel = 0; channel < channels; ++channel) {
+    std::vector<double> vec(n + 4, -1.0);
+    std::vector<double> ref(n + 4, -1.0);
+    DSP::simdDeinterleaveToF64(src.data(), n, channels, channel, vec.data());
+    DspRef::deinterleaveToF64(src.data(), n, channels, channel, ref.data());
+
+    for (std::size_t i = 0; i < vec.size(); ++i)
+      if (!bitEqual(vec[i], ref[i]))
+        QFAIL(mismatch("simdDeinterleaveToF64",
+                       static_cast<qsizetype>(i),
+                       std::bit_cast<quint64>(vec[i]),
+                       std::bit_cast<quint64>(ref[i]))
+                .constData());
+  }
+}
+
+/**
+ * @brief Spectrum-length matrix over the IEEE corner payloads, so the vectorized power stage and
+ *        the eps/floor clamps are compared bit-for-bit against the scalar lane.
+ */
+void TstDspKernels::powerSpectrumDb_data()
+{
+  QTest::addColumn<qsizetype>("length");
+  QTest::addColumn<int>("kind");
+
+  for (const qsizetype length : kLengths)
+    for (const int kind : kPayloadKinds)
+      QTest::addRow("%s len=%lld", payloadName(kind), static_cast<long long>(length))
+        << length << kind;
+}
+
+void TstDspKernels::powerSpectrumDb()
+{
+  QFETCH(qsizetype, length);
+  QFETCH(int, kind);
+
+  const auto n     = static_cast<std::size_t>(length);
+  const auto inter = makeF32Payload(kind, 2 * n + 8);
+  const float norm = 1.0f / (256.0f * 256.0f);
+
+  std::vector<float> vec(n + 4, -7.0f);
+  std::vector<float> ref(n + 4, -7.0f);
+  DSP::simdPowerSpectrumDb(inter.data(), vec.data(), n, norm, 1e-24f, -100.0f);
+  DspRef::powerSpectrumDb(inter.data(), ref.data(), n, norm, 1e-24f, -100.0f);
+
+  for (std::size_t i = 0; i < vec.size(); ++i)
+    if (!bitEqual(vec[i], ref[i]))
+      QFAIL(mismatch("simdPowerSpectrumDb",
+                     static_cast<qsizetype>(i),
+                     std::bit_cast<quint32>(vec[i]),
+                     std::bit_cast<quint32>(ref[i]))
+              .constData());
 }
 
 QTEST_APPLESS_MAIN(TstDspKernels)

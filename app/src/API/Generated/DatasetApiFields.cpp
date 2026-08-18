@@ -270,7 +270,8 @@ static QString applyDatasetNumberFields3(DataModel::Dataset& d,
   if (!key_transform_language.isEmpty()) {
     const auto candidate = params.value(key_transform_language).toInt();
     if (!PropertyHooks::isValidTransformLanguage(candidate))
-      return QStringLiteral("Invalid transformLanguage: must be -1 (inherit), 0 (JS), or 1 (Lua)");
+      return QStringLiteral("Invalid transformLanguage: must be -1 (inherit), 0 (JS), 1 (Lua) or "
+                            "3 (Expression)");
 
     d.transformLanguage = candidate;
   }
@@ -706,7 +707,8 @@ static void datasetSchemaPart4(QJsonObject& props)
 {
   props.insert(Keys::TransformLanguage,
                datasetSchemaProperty("integer",
-                                     "Transform script language: -1 inherit, 0 JavaScript, 1 Lua",
+                                     "Transform script language: -1 inherit, 0 JavaScript, 1 Lua, "
+                                     "3 Expression",
                                      QJsonArray()));
   props.insert(Keys::SourceId,
                datasetSchemaProperty("integer",

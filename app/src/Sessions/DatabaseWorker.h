@@ -73,6 +73,7 @@ signals:
   void csvExportFinished(const QString& outputPath, bool ok, const QString& error);
   void reportDataReady(const Sessions::ReportPayloadPtr& payload);
   void datasetListReady(int sessionId, const QVariantList& datasets);
+  void streamStatsReady(int sessionId, const QVariantList& stats);
 
 public:
   explicit DatabaseWorker(QObject* parent = nullptr);
@@ -111,6 +112,7 @@ public slots:
                          int chartMaxSamples,
                          const QVariantList& selectedUniqueIds);
   void runDatasetListLoad(int sessionId);
+  void runStreamStatsLoad(int sessionId);
 
 private:
   void refreshSessionListInternal();
@@ -131,6 +133,12 @@ private:
                                    const std::vector<int>& uniqueIds,
                                    qint64 totalRows,
                                    const QString& outputPath);
+  [[nodiscard]] bool streamCsvRowsFromBlocks(int sessionId,
+                                             QFile& file,
+                                             QTextStream& out,
+                                             const std::vector<int>& uniqueIds,
+                                             qint64 totalRows,
+                                             const QString& outputPath);
 
 private:
   QSqlDatabase m_db;

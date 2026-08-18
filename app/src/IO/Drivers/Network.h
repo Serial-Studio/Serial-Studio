@@ -97,6 +97,7 @@ signals:
 
 public:
   explicit Network();
+  ~Network() override;
 
   Network(Network&&)                 = delete;
   Network(const Network&)            = delete;
@@ -122,9 +123,9 @@ public:
   [[nodiscard]] int socketTypeIndex() const;
   [[nodiscard]] QAbstractSocket::SocketType socketType() const;
 
-  [[nodiscard]] QTcpSocket* tcpSocket() { return &m_tcpSocket; }
+  [[nodiscard]] QTcpSocket* tcpSocket() { return m_tcpSocket; }
 
-  [[nodiscard]] QUdpSocket* udpSocket() { return &m_udpSocket; }
+  [[nodiscard]] QUdpSocket* udpSocket() { return m_udpSocket; }
 
   [[nodiscard]] const QString& remoteAddress() const;
   [[nodiscard]] QStringList socketTypes() const;
@@ -180,8 +181,8 @@ private:
   quint16 m_udpRemotePort;
   QAbstractSocket::SocketType m_socketType;
 
-  QTcpSocket m_tcpSocket;
-  QUdpSocket m_udpSocket;
+  QTcpSocket* m_tcpSocket;
+  QUdpSocket* m_udpSocket;
   QByteArray m_udpBuffer;
 };
 }  // namespace Drivers

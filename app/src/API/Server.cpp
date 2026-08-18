@@ -34,6 +34,7 @@
 #include "API/MCPHandler.h"
 #include "API/MCPProtocol.h"
 #include "API/Mirror/MirrorPublisher.h"
+#include "DataModel/FrameBuilder.h"
 #include "IO/ConnectionManager.h"
 #include "Misc/Utilities.h"
 #include "SSAssert.h"
@@ -143,11 +144,10 @@ bool exceedsJsonDepthLimit(const QByteArray& data, int maxDepth)
 /**
  * @brief Constructs the worker over the shared frame-consumer queue plumbing.
  */
-API::ServerWorker::ServerWorker(
-  moodycamel::ReaderWriterQueue<DataModel::TimestampedFramePtr>* queue,
-  std::atomic<bool>* enabled,
-  std::atomic<size_t>* queueSize)
-  : DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr>(queue, enabled, queueSize)
+API::ServerWorker::ServerWorker(moodycamel::ReaderWriterQueue<DataModel::DataBlockPtr>* queue,
+                                std::atomic<bool>* enabled,
+                                std::atomic<size_t>* queueSize)
+  : DataModel::FrameConsumerWorker<DataModel::DataBlockPtr>(queue, enabled, queueSize)
   , m_droppedBroadcasts(0)
 {}
 
@@ -407,7 +407,7 @@ void API::ServerWorker::onSocketDisconnected()
  *        write cap are skipped, and the serialization is skipped entirely when no socket is
  *        eligible for this batch.
  */
-void API::ServerWorker::processItems(const std::vector<DataModel::TimestampedFramePtr>& items)
+void API::ServerWorker::processItems(const std::vector<DataModel::DataBlockPtr>& items)
 {
   if (items.empty() || m_sockets.isEmpty())
     return;
@@ -424,11 +424,31 @@ void API::ServerWorker::processItems(const std::vector<DataModel::TimestampedFra
     return;
 
   QJsonArray array;
-  for (const auto& timestampedFrame : items) {
-    QJsonObject object;
-    object.insert(QStringLiteral("data"), serialize(timestampedFrame->data));
-    array.append(object);
+  for (const auto& block : items) {
+    if (!block || block->samples <= 0)
+      continue;
+
+    const auto tpl = m_templates.find(block->sourceId);
+    if (tpl == m_templates.end())
+      continue;
+
+    for (qsizetype i = 0; i < block->samples; ++i) {
+      if (array.size() >= kMaxBroadcastSamples)
+        break;
+
+      DataModel::apply_block_sample(tpl->second, *block, i);
+
+      QJsonObject object;
+      object.insert(QStringLiteral("data"), serialize(tpl->second.frame));
+      array.append(object);
+    }
+
+    if (array.size() >= kMaxBroadcastSamples)
+      break;
   }
+
+  if (array.isEmpty())
+    return;
 
   QJsonObject object;
   object.insert(QStringLiteral("frames"), array);
@@ -439,6 +459,15 @@ void API::ServerWorker::processItems(const std::vector<DataModel::TimestampedFra
     socket->write(json);
 }
 
+/**
+ * @brief Stores one source's structure and rebuilds its uniqueId lookup. Queued from the GUI, so
+ *        the assignment never races processItems().
+ */
+void API::ServerWorker::setTemplateFrame(int sourceId, const DataModel::Frame& frame)
+{
+  DataModel::bind_frame_template(m_templates[sourceId], frame);
+}
+
 //--------------------------------------------------------------------------------------------------
 // Server implementation
 //--------------------------------------------------------------------------------------------------
@@ -447,13 +476,14 @@ void API::ServerWorker::processItems(const std::vector<DataModel::TimestampedFra
  * @brief Constructs the API server.
  */
 API::Server::Server()
-  : DataModel::FrameConsumer<DataModel::TimestampedFramePtr>(
+  : DataModel::FrameConsumer<DataModel::DataBlockPtr>(
       {.queueCapacity = 2048, .flushThreshold = 512, .timerIntervalMs = 1000})
   , m_clientCount(0)
   , m_enabled(false)
   , m_mirrorLinked(false)
   , m_externalConnections(false)
   , m_deviceWriteConsent(DeviceWriteConsent::Unset)
+  , m_anyStreamSubscriber(false)
 {
   m_externalConnections = m_settings.value("API/ExternalConnections", false).toBool();
   m_authToken           = m_settings.value("API/AuthToken").toString();
@@ -534,7 +564,7 @@ bool API::Server::enabled() const noexcept
 
 /**
  * @brief True while at least one connection holds a stream subscription. What gates the stream
- *        workers' typed export payloads: ingestStreamBlock() drops a block for every connection
+ *        workers' typed export payloads: pushStreamBlock() drops a block for every connection
  *        that never subscribed, so an enabled server with no subscriber would otherwise pay a
  *        full per-block payload build and a queued fan-out to four sinks that all discard it.
  */
@@ -940,12 +970,46 @@ void API::Server::hotpathTxData(const QByteArray& data)
 }
 
 /**
- * @brief Registers a new structured data frame.
+ * @brief Adopts the frame structure the pipeline publishes on every layout change. The wire keeps
+ *        its per-frame shape (spec 0055 D5), and a block carries values only, so the worker needs
+ *        this to rebuild the frame it serializes.
  */
-void API::Server::hotpathTxFrame(const DataModel::TimestampedFramePtr& frame)
+void API::Server::setupExternalConnections()
 {
-  if (enabled())
-    enqueueData(frame);
+  SS_ASSERT(m_worker != nullptr, return);
+
+  auto* worker = static_cast<ServerWorker*>(m_worker);
+  connect(&DataModel::FrameBuilder::instance(),
+          &DataModel::FrameBuilder::structurePublished,
+          worker,
+          &ServerWorker::setTemplateFrame,
+          Qt::QueuedConnection);
+}
+
+/**
+ * @brief Registers one published block. Feeds both wire surfaces: the frame-shaped default every
+ *        API client already parses, and the block-shaped payload a stream.subscribe opt-in gets.
+ */
+void API::Server::ingestBlock(const DataModel::DataBlockPtr& block)
+{
+  if (!block || !enabled())
+    return;
+
+  enqueueData(block);
+
+  if (!m_anyStreamSubscriber.load(std::memory_order_relaxed))
+    return;
+
+  QMetaObject::invokeMethod(this, [this, block] { pushStreamBlock(block); }, Qt::QueuedConnection);
+}
+
+/**
+ * @brief Recomputes the lock-free subscriber flag the pipeline thread reads. Must run on the GUI
+ *        thread, which owns m_connections; the pipeline may never touch that container.
+ */
+void API::Server::refreshStreamSubscriberFlag() noexcept
+{
+  m_anyStreamSubscriber.store(hasStreamSubscribers(), std::memory_order_relaxed);
 }
 
 /**
@@ -1678,8 +1742,9 @@ API::CommandResponse API::Server::streamSubscribe(ConnectionState& state,
     state.streamSources.insert(value.toInt(-1));
 
   state.streamSubscribed = true;
-  state.streamSeq        = 0;
-  state.streamMissed     = 0;
+  refreshStreamSubscriberFlag();
+  state.streamSeq    = 0;
+  state.streamMissed = 0;
   state.streamPending.clear();
   Q_EMIT streamSubscribersChanged();
 
@@ -1710,6 +1775,7 @@ API::CommandResponse API::Server::streamUnsubscribe(ConnectionState& state,
   }
 
   state.streamSubscribed = false;
+  refreshStreamSubscriberFlag();
   state.streamPending.clear();
   Q_EMIT streamSubscribersChanged();
 
@@ -1725,11 +1791,8 @@ API::CommandResponse API::Server::streamUnsubscribe(ConnectionState& state,
  *        overflow drops the OLDEST block and counts it, so a slow subscriber falls behind
  *        visibly instead of growing memory or stalling the worker (R24).
  */
-void API::Server::ingestStreamBlock(const IO::StreamBlockItemPtr& block)
+void API::Server::pushStreamBlock(const DataModel::DataBlockPtr& block)
 {
-  if (!block || !enabled())
-    return;
-
   for (auto it = m_connections.begin(); it != m_connections.end(); ++it) {
     auto& state = it.value();
     if (!state.streamSubscribed)
@@ -1773,24 +1836,22 @@ void API::Server::pumpStreamQueue(QTcpSocket* socket, ConnectionState& state)
   state.streamMissed = 0;
   ++state.streamSeq;
 
-  const std::size_t channelCount = std::min(block->uniqueIds.size(), block->channels.size());
-  for (std::size_t c = 0; c < channelCount; ++c) {
-    const auto& samples = block->channels[c];
-
+  const auto used = static_cast<std::size_t>(block->samples);
+  for (const auto& column : block->columns) {
     QByteArray raw;
-    raw.resize(static_cast<qsizetype>(samples.size() * sizeof(float)));
+    raw.resize(static_cast<qsizetype>(used * sizeof(float)));
     auto* out = reinterpret_cast<float*>(raw.data());
-    for (std::size_t i = 0; i < samples.size(); ++i)
-      out[i] = static_cast<float>(samples[i]);
+    for (std::size_t i = 0; i < used; ++i)
+      out[i] = static_cast<float>(column.values[i]);
 
     QJsonObject entry;
     entry.insert(Keys::SourceId, block->sourceId);
-    entry.insert(Keys::UniqueId, block->uniqueIds[c]);
+    entry.insert(Keys::UniqueId, column.uniqueId);
     entry.insert(QStringLiteral("seq"), static_cast<double>(state.streamSeq));
     entry.insert(QStringLiteral("missed"), static_cast<double>(missed));
     entry.insert(QStringLiteral("t0Ms"), static_cast<double>(t0Ms));
     entry.insert(QStringLiteral("dtNs"), static_cast<double>(block->dt.count()));
-    entry.insert(QStringLiteral("count"), static_cast<double>(samples.size()));
+    entry.insert(QStringLiteral("count"), static_cast<double>(used));
     entry.insert(QStringLiteral("data"), QString::fromLatin1(raw.toBase64()));
 
     QJsonObject line;
@@ -1987,6 +2048,7 @@ void API::Server::onSocketDisconnected(QTcpSocket* socket, const QString& sessio
 
     const bool wasStreaming = it->streamSubscribed;
     m_connections.erase(it);
+    refreshStreamSubscriberFlag();
     if (wasStreaming)
       Q_EMIT streamSubscribersChanged();
   }

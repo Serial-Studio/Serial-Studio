@@ -28,6 +28,7 @@
 #include <QStringList>
 #include <unordered_map>
 
+#include "Console/Annotations.h"
 #include "IO/CircularBuffer.h"
 #include "IO/HAL_Driver.h"
 #include "SerialStudio.h"
@@ -163,6 +164,15 @@ class Handler : public QObject {
   Q_PROPERTY(bool multiDeviceMode
              READ multiDeviceMode
              NOTIFY deviceNamesChanged)
+  Q_PROPERTY(QObject* annotations
+             READ annotations
+             CONSTANT)
+  Q_PROPERTY(QObject* annotationDecoder
+             READ annotationDecoder
+             CONSTANT)
+  Q_PROPERTY(QObject* annotationFilter
+             READ annotationFilter
+             CONSTANT)
   // clang-format on
 
 signals:
@@ -263,6 +273,9 @@ public:
 
   [[nodiscard]] Q_INVOKABLE bool validateUserHex(const QString& text);
   [[nodiscard]] Q_INVOKABLE QString formatUserHex(const QString& text);
+  [[nodiscard]] QObject* annotations() const noexcept;
+  [[nodiscard]] QObject* annotationDecoder() const noexcept;
+  [[nodiscard]] QObject* annotationFilter() const noexcept;
 
 public slots:
   void clear();
@@ -354,5 +367,10 @@ private:
   IO::ConnectionManager* m_connectionManager;
   AppState* m_appState;
   DataModel::ProjectModel* m_projectModel;
+
+  // Frame annotation layer (spec 0059): owned here so the console's raw feed is its input
+  AnnotationModel* m_annotations;
+  AnnotationDecoder* m_annotationDecoder;
+  AnnotationFilter* m_annotationFilter;
 };
 }  // namespace Console

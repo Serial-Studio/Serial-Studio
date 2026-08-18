@@ -123,6 +123,7 @@ signals:
   void projectMetadataRestored();
   void lockedChanged();
   void sessionDatasetsReady(int sessionId, const QVariantList& datasets);
+  void sessionStreamStatsReady(int sessionId, const QVariantList& stats);
   void verificationBusyChanged();
   void verificationFinished(int sessionId, bool success, const QVariantMap& verdict);
   void regressionBusyChanged();
@@ -169,8 +170,8 @@ public:
   Q_INVOKABLE [[nodiscard]] static QString canonicalDbPath(const QString& projectTitle);
   static void setDbPathOverride(const QString& path);
 
-  static constexpr int kUserVersion          = 1;
-  static constexpr int kCaptureFormatVersion = 1;
+  static constexpr int kUserVersion          = 4;
+  static constexpr int kCaptureFormatVersion = 2;
 
   static void createSchema(QSqlQuery& q);
   static void createSchemaVerifications(QSqlQuery& q);
@@ -205,6 +206,7 @@ public slots:
   void exportSessionToCsv(int sessionId);
   void exportSessionToPdf(int sessionId, const QVariantMap& options);
   void requestSessionDatasets(int sessionId);
+  void requestStreamStats(int sessionId);
   void pickReportLogo();
 
   void storeProjectMetadata();
@@ -253,6 +255,8 @@ private:
   static void migrateColumnsTable(QSqlQuery& q);
   static void migrateSessionsTable(QSqlQuery& q);
   static void createSchemaSampleTables(QSqlQuery& q);
+  static void createSchemaStreamTables(QSqlQuery& q);
+  static void createSchemaBlockTable(QSqlQuery& q);
   static void createSchemaTagTables(QSqlQuery& q);
   static void createSchemaProjectMetadata(QSqlQuery& q);
 

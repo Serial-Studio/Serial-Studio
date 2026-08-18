@@ -41,6 +41,7 @@ class DeviceManager : public QObject {
 
 signals:
   void rawDataReceived(int deviceId, const IO::CapturedDataPtr& data);
+  void consoleDataReceived(int deviceId, const IO::CapturedDataPtr& data);
 
 public:
   explicit DeviceManager(int deviceId,
@@ -66,6 +67,7 @@ public slots:
 
 private slots:
   void onRawDataReceived(const IO::CapturedDataPtr& data);
+  void onConsoleDataReceived(const IO::CapturedDataPtr& data);
 
 private:
   void startFrameReader(const FrameConfig& config);

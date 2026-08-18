@@ -19,49 +19,66 @@ Driver  (driver thread OR main, depending on driver)
   ▼
 FrameReader::processData  (pipeline thread — moveToThread at creation)
   │ appends to CircularBuffer (SPSC); tracks per-chunk timestamps;
-  │ delimiter scan: vectorized memchr for 1-byte delimiters, memchr-anchored
-  │ + memcmp for <= 8-byte patterns on the linear region, KMP for long or
-  │ wrap-straddling patterns; extracted frames fill REUSED CapturedData pool
-  │ slots (use_count()==1 probe, peekRangeInto writes the slot's QByteArray
-  │ in place — steady-state zero-allocation; backlog falls back to heap);
-  │ enqueues to lock-free ReaderWriterQueue<CapturedDataPtr>; emits readyRead
+  │ delimiter scan; extracted frames fill REUSED CapturedData pool slots
   ▼
 PipelineHost::routeFrames  (pipeline thread, DirectConnection — same thread)
-  │ drains the reader queue; routes by ATOMIC operation-mode/paused mirrors
-  │ (written on the GUI thread at transition rate) to FrameBuilder; MQTT raw-frame
-  │ fan-out rides along
   ▼
-FrameBuilder  (pipeline thread — moveToThread as the LAST composition-root step)
-  │ parse → apply per-dataset transforms → mutate m_frame / m_sourceFrames
-  │ Native + PlainText takes the span fast lane (trySpanLane): the engine tokenizes the
-  │ raw bytes into the member QByteArrayView scratch (IScriptEngine::parseUtf8Spans,
-  │ -1 = unsupported → QList fallback) and applyDatasetValuesSpans writes datasets in
-  │ place (assign_utf8_in_place) DIRECTLY into the claimed pool slot — single write per
-  │ dataset, steady-state zero-allocation. On this lane m_frame / m_sourceFrames stay
-  │ structural templates only (frame() consumers — CSV/MDF4 worker templates,
-  │ configureActions — read structure/actions, never live values). JS/Lua always take
-  │ the QList<QStringList> path, which still refreshes the template frame's values.
-  │ Dashboard gets the pooled TimestampedFramePtr (acquireFrame slot, fast recycle);
-  │ async sinks get one detached make_shared copy (their backlog can't pin the pool).
-  │ A slot is free exactly when the pool's shared_ptr is its only reference; acquireFrame
-  │ probes use_count()==1 and hands out an ALIASING shared_ptr (no per-frame control block,
-  │ no deleter). Pool slots fast-path reuse only when generation + sourceId + structure
-  │ match; the generation bumps (invalidateFramePool) on project sync/save, QuickPlot
-  │ rebuild, op-mode change, and connect/disconnect — stale slots full-assign once, then
-  │ recycle. copy_frame_values deep-copies value strings IN PLACE (assign_string_in_place)
-  │ so producer strings stay unique and never detach-allocate.
-  │ Per-frame singleton polls are cached: operationMode / player-open / any-async-sink /
-  │ Dashboard streamAvailable are members refreshed by their owning signals; table-store
-  │ dataset capture only runs when a script can read it back (transforms, Lua parser
-  │ engines, injected table APIs) — native/script-less projects skip it entirely.
+FrameBuilder parse  (pipeline thread — moveToThread as the LAST composition-root step)
+  │ parse → per-dataset transforms → mutate the pooled Frame slot
+  │ Native + PlainText takes the span fast lane (trySpanLane), unchanged by spec 0055:
+  │ the pooled Frame is now a STAGING BUFFER, not the published object
   ▼
-PipelineHost dashboard ring (SPSC, 8192 = pool size; gated on the dashboardAccepting
-mirror so no-dashboard sessions never pin pool slots; full ring = counted drop, the
-pool-exhaustion warning carries the user signal)
+FrameBuilder::stageFrameValues  (spec 0055)
+  │ appends one row into the per-source open DataBlock (pooled slot, pre-sized
+  │ columns — plain stores, no allocation); flushes at kFrameBlockSampleCap or
+  │ when the display tick moved PipelineHost's flush epoch
   ▼
-Dashboard::onDisplayTick drain (GUI thread, uiTimeout)   |   CSV / MDF4 / API / gRPC /
-Sessions / MQTT (detached copy, SPSC queues — single producer is now the pipeline thread)
+FrameBuilder::publishBlock
+  ├─ PipelineHost block ring (SPSC, 256) ──> Dashboard::onDisplayTick drain
+  └─ if m_anyAsyncSink: ONE clone_block_trimmed copy shared by every sink
+       CSV / MDF4 / Sessions / API / gRPC / MQTT / AudioExport
+
+Dense sources (audio, or streamLane=on) — spec 0055 D8
+  Driver SampleBlock ──> StreamWorker thread (transforms, FFT ring, latest values)
+    │ blockReady(DataBlockPtr)   QUEUED to FrameBuilder::ingestStreamBlock
+    ▼ (pipeline thread)
+  the SAME publishBlock tail as above
+
+Structure travels separately
+  FrameBuilder::publishStructureSnapshot on pool-generation bump only
+  ──> its own small ring, drained BEFORE the block ring each tick
+  ──> Q_EMIT structurePublished(sourceId, frame) for the frame-shaped wires
+      (API server, gRPC, MQTT) to rebuild what they serialize
 ```
+## The Unified Block Lane (spec 0055)
+
+There is ONE publication payload and ONE ingestion path. `DataModel::DataBlock` (`DataBlock.h`)
+carries N samples of M datasets: per-dataset `values` (float64), optional `text` + per-sample
+`numeric` flags, optional `rawValues`/`rawText` (the pre-transform twin MDF4's "(raw)" channels,
+the session `blocks` table and spec-0044's parse-vs-transform classification all need), and a
+timebase that is either a uniform grid (`dt != 0`) or explicit per-sample offsets (`dt == 0`).
+
+- **Parsing is unchanged and still per frame.** Delimiter scanning is inherently sequential; spec
+  0055 changed only what happens *after* `applyDatasetValues*` returns. `trySpanLane` and the frame
+  slot pool are untouched — the pooled `Frame` simply became the staging buffer.
+- **Two caps, not one (D6).** `kFrameBlockSampleCap` (64) bounds the frame lane because its columns
+  carry a display string per sample — `updateDashboardData` wrote `dataset.value` into DataGrid and
+  the API-serialized frame, and re-rendering that from the double changes what the user sees.
+  `kStreamBlockSampleCap` (4096) bounds the numeric-only dense lane (D2).
+- **The pipeline thread is the single producer for every sink (D8).** A stream worker owns no
+  display ring and never touches a sink; it emits `blockReady` queued to the pipeline. Wiring a
+  worker straight to a consumer would give that consumer's SPSC queue a second producer.
+- **Sinks get a trimmed copy, the dashboard gets the pooled slot.** A queued sink must never hold a
+  pool slot: its backlog would pin every slot, `claimBlockSlot` would return null, and staging
+  would drop frames from the exports as well as the display.
+- **Structure is not in the block.** It travels as a `StructureSnapshot` on pool-generation bumps,
+  drained ahead of the block ring, so `Dashboard` reconfigures once per layout change — the
+  per-frame `compare_frames()` walk is gone, not moved. A block whose generation does not match the
+  layout on screen is stale and dropped; generation `0` means an unversioned producer (a stream
+  worker) and gates on its source template instead.
+- **Consumers that still publish frames** (API wire, gRPC, MQTT) keep one `DataModel::FrameTemplate`
+  per source and stamp block values onto it via `apply_block_sample()`, so the wire is unchanged
+  (D5) while the storage underneath is not.
 
 ### Cross-thread marshal protocol (spec 0051 M3)
 

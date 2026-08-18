@@ -120,8 +120,19 @@ grabbed into a `QQuickPaintedItem`, so three invariants hold them together:
 - `keyPressEvent` reroutes to `completer()->popup()` while it's visible (the popup never has
   real focus in the embedded setup).
 
-Input handlers call `renderWidget()` directly — dropping that re-introduces one-timer-tick
-lag on every keystroke/drag.
+`JsCodeEditor` & the other project-editor siblings call `renderWidget()` **directly** from their
+input handlers and grab unconditionally on `uiTimeout` — dropping that re-introduces one-timer-tick
+lag on every keystroke/drag. They live in modal editors, so the cost is bounded by the dialog.
+
+**`MacroEditor` is the exception and must stay one (2026-08-17).** It is embedded in the main
+window (Macros dialog, and the console annotations decoder tab), where an unconditional
+`m_widget.grab()` per tick cost **13% of the main thread plus a per-frame texture upload for the
+whole session** — measured with `sample`, not guessed. Handlers there call `scheduleRender()`
+(sets `m_dirty`), the `uiTimeout` slot grabs only when `isVisible() && (m_dirty ||
+hasActiveFocus())`, and the widget's `textChanged` / `selectionChanged` / `cursorPositionChanged`
+feed the same flag so undo, paste, `clear()` and `selectAll()` still repaint. Focus keeps the caret
+blinking; unfocused steady state costs zero grabs. Never re-wire an embedded editor's tick to grab
+unconditionally — check with a sample first if you think you need to.
 
 ## Per-Dataset Value Transforms
 
@@ -159,6 +170,32 @@ lag on every keystroke/drag.
   returns a `TransformStatus` (`Ok` / `SyntaxError` / `NoFunction`). `SyntaxError` and
   `NoFunction` (the placeholder or any code that doesn't define `transform()`) block
   persistence and keep the dialog open with a warning, so the placeholder never persists.
+- **Expression transforms (spec 0060, `transformLanguage == SerialStudio::Expression`).** A
+  third mode with no script engine: `DataModel::Expression` (`Scripting/ExpressionTransform.h`)
+  compiles one arithmetic expression (`v t n dt`, `+ - * / % ^`, comparisons, `? :`, a fixed
+  function set, siblings by Script Alias or `{uniqueId}` / `{aliased name}`, `sample(name, k)` up to
+  256) into a flat postfix `Program`; `evaluate()` is a fixed-array stack machine, allocation-
+  free, bounded by the program length (`kMaxNodes` 512). One `SlotTable` per source holds the
+  latest published value + a history ring for every dataset any expression of that source
+  refers to; every dataset publishes its final value into it (`FrameBuilder::applyDatasetValue*`
+  behind `if (m_exprEngineForSource) [[unlikely]]`), so a sibling reads "the latest published
+  value" — a sibling processed later in dataset order yields the previous frame's value. The
+  stream lane runs the same `Runtime::run` in `StreamProcessor::processExpressionChannels`, a
+  sample-major second pass after the ordinary channels, publishing per sample, so both lanes
+  are bit-identical by construction. Compile errors are `noteTransformError`'d once (dataset
+  publishes raw); expression-only projects do not turn on the table-store capture flag.
+  `table(name, register)` reads a DataTableStore register **read-only**, resolved to a store
+  handle at compile time and read per sample through a thunk on the owning thread; the resolver
+  is installed by the frame lane and the editor only, so `table()` on a stream-lane source is a
+  compile error ("not available for this source") rather than a cross-thread read.
+  `#` runs to end of line as a comment (`#` starts no token, so unlike `//` it cannot collide
+  with division). Editor: third combo row, `DataModel::ExpressionHighlighter` (comments, numbers,
+  braced titles, built-ins, call names — the JS highlighter coloured keywords this language does
+  not have), the template combo is **disabled** for Expression because templates only carry
+  `luaCode`/`jsCode`, the placeholder documents the whole language and ends on `v` so the default
+  still compiles, and the live test compiles against the project's titles. Note `sample()` takes a
+  bare or `{braced}` name, never a quoted string. Benchmark: ungated `HOTPATH_STREAM_EXPR_FPS` in
+  the stream phase.
 
 ## Data Tables — Central Data Bus
 
@@ -222,11 +259,11 @@ transform-only pass (`reprocessDatasetValues`) over the live frames (per-source 
 populated, else `m_frame`) and sharing the private `republishFrames(bool feedExports)` helper:
 `refreshDashboard()` (`dashboard.reprocess` → `FrameBuilder::reprocessFrames`, `feedExports`
 false) runs **synchronously** and publishes to `Dashboard::hotpathRxFrame` directly, skipping
-the `hotpathTxFrame` export fan-out so a synthetic refresh never re-records frames already
+the sink fan-out so a synthetic refresh never re-records samples already
 exported on arrival; `dashboardTick()` (`dashboard.tick` → `FrameBuilder::dashboardTick`,
 `feedExports` true) runs **synchronously**: the call seeds the source frames (from the project
 template when none has arrived yet, so it works from the very first `loop()`) and runs one
-`republishFrames(true)` immediately, publishing *through* `hotpathTxFrame` so a table-driven
+`republishFrames(true)` immediately, publishing *through* `publishBlock` so a table-driven
 control-script simulation both renders and feeds the CSV/MDF4/session/MQTT/API exports (still
 gated on `m_anyAsyncSink`). Every tick renders its own frame, so a per-frame control-script
 curve (a Lorenz attractor, for example) is not decimated. The `dashboard.tick` response

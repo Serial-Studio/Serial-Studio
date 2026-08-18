@@ -30,6 +30,7 @@
 #include <vector>
 
 #include "Concepts.h"
+#include "DSPSimd.h"
 #include "SSAssert.h"
 
 namespace IO {
@@ -106,9 +107,11 @@ public:
   void resetOverflowCount() noexcept { m_overflowCount.store(0, std::memory_order_relaxed); }
 
 private:
+  static constexpr int kMaxPatterns           = 8;
   static constexpr qsizetype kShortPatternMax = 8;
 
   [[nodiscard]] std::vector<int> computeKMPTable(const T& p) const;
+  [[nodiscard]] static int collectFirstBytes(const QVector<T>& patterns, int count, quint8* out);
   [[nodiscard]] static int byteScanLinear(const StorageType* base,
                                           qsizetype current_size,
                                           int pos,
@@ -586,6 +589,37 @@ std::vector<int> IO::CircularBuffer<T, StorageType>::computeKMPTable(const T& p)
 }
 
 /**
+ * @brief Collects the distinct first bytes of the first @p count patterns into @p out (which
+ *        holds kMaxPatterns entries). A match at any position must start with one of them, so
+ *        anchoring the scan on this set cannot skip a match.
+ */
+template<typename T, Concepts::ByteLike StorageType>
+int IO::CircularBuffer<T, StorageType>::collectFirstBytes(const QVector<T>& patterns,
+                                                          int count,
+                                                          quint8* out)
+{
+  SS_ASSERT_HOTPATH(out != nullptr);
+  SS_ASSERT_HOTPATH(count >= 1 && count <= kMaxPatterns);
+
+  int unique = 0;
+  for (int p = 0; p < count; ++p) {
+    const auto c = static_cast<quint8>(patterns[p].constData()[0]);
+
+    bool seen = false;
+    for (int k = 0; k < unique; ++k)
+      if (out[k] == c) {
+        seen = true;
+        break;
+      }
+
+    if (!seen)
+      out[unique++] = c;
+  }
+
+  return unique;
+}
+
+/**
  * @brief Single-pass multi-pattern scan over the circular buffer.
  */
 template<typename T, Concepts::ByteLike StorageType>
@@ -596,7 +630,6 @@ typename IO::CircularBuffer<T, StorageType>::MultiMatchResult IO::CircularBuffer
   if (patterns.isEmpty() || bufSize <= 0) [[unlikely]]
     return {};
 
-  static constexpr int kMaxPatterns = 8;
   SS_ASSERT_LOG(patterns.size() <= kMaxPatterns);
 
   struct PatInfo {
@@ -653,8 +686,26 @@ typename IO::CircularBuffer<T, StorageType>::MultiMatchResult IO::CircularBuffer
   };
 
   if ((head + bufSize) <= m_capacity) [[likely]] {
+    quint8 firstBytes[kMaxPatterns];
+    const int anchors       = collectFirstBytes(patterns, patCount, firstBytes);
     const StorageType* base = m_buffer.data() + head;
-    return scan([base](qsizetype k) { return base[k]; });
+    const char* raw         = reinterpret_cast<const char*>(base);
+
+    qsizetype i = 0;
+    for (qsizetype it = 0; it < scanEnd && i < scanEnd; ++it) {
+      const qsizetype rel = DSP::simdFindAnyByte(raw + i, scanEnd - i, firstBytes, anchors);
+      if (rel >= scanEnd - i)
+        break;
+
+      i             += rel;
+      const int hit  = matchAt(i, [base](qsizetype k) { return base[k]; });
+      if (hit >= 0)
+        return {static_cast<int>(i), hit};
+
+      ++i;
+    }
+
+    return {};
   }
 
   return scan([this, head, mask](qsizetype k) { return m_buffer[(head + k) & mask]; });

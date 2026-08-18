@@ -69,20 +69,136 @@ Item {
   signal triggerLevelChangeRequested(real level)
 
   //
-  // TextMetrics for estimating label sizes
+  // X-axis ruler (spec 0058): named markers, a zero point every X label and cursor readout
+  // becomes relative to, and a hover marker; the host persists them on rulerChanged()
   //
-  TextMetrics {
-    id: _xLabelMetrics
+  property var xMarkers: []
+  property real xZero: 0
+  property bool xZeroSet: false
+  property bool hoverMarkerEnabled: false
+  signal rulerChanged()
 
-    text: "-8888.88"
+  function addMarker(worldX, name) {
+    const list = root.xMarkers.slice()
+    list.push({ "x": worldX, "name": name })
+    root.xMarkers = list
+    root.rulerChanged()
+  }
+
+  function removeMarker(index) {
+    if (index < 0 || index >= root.xMarkers.length)
+      return
+
+    const list = root.xMarkers.slice()
+    list.splice(index, 1)
+    root.xMarkers = list
+    root.rulerChanged()
+  }
+
+  function clearMarkers() {
+    root.xMarkers = []
+    root.rulerChanged()
+  }
+
+  function setZeroAt(worldX) {
+    root.xZero = worldX
+    root.xZeroSet = true
+    root.rulerChanged()
+  }
+
+  function resetZero() {
+    root.xZero = 0
+    root.xZeroSet = false
+    root.rulerChanged()
+  }
+
+  function setHoverMarker(enabled) {
+    root.hoverMarkerEnabled = enabled
+    root.rulerChanged()
+  }
+
+  //
+  // Restores the ruler from a widgetSettings object (missing keys keep the defaults)
+  //
+  function restoreRuler(settings) {
+    if (Array.isArray(settings["xMarkers"]))
+      root.xMarkers = settings["xMarkers"].filter(function(m) {
+        return m && isFinite(m.x) && typeof m.name === "string"
+      })
+
+    if (settings["xZeroSet"] === true && isFinite(settings["xZero"])) {
+      root.xZero = settings["xZero"]
+      root.xZeroSet = true
+    }
+
+    if (settings["hoverMarker"] !== undefined)
+      root.hoverMarkerEnabled = settings["hoverMarker"] === true
+  }
+
+  //
+  // Nearest marker to a plot-area pixel X, or -1 when none is within the hit threshold
+  //
+  function markerNear(pixelX) {
+    let best = -1
+    let bestDist = 8
+    for (let i = 0; i < root.xMarkers.length; ++i) {
+      const d = Math.abs(root.worldToPixelX(root.xMarkers[i].x) - pixelX)
+      if (d <= bestDist) {
+        bestDist = d
+        best = i
+      }
+    }
+
+    return best
+  }
+
+  //
+  // X value relative to the ruler zero (identity on log axes, which have no zero point)
+  //
+  function relativeX(worldX) {
+    return (root.xZeroSet && !root.logX) ? worldX - root.xZero : worldX
+  }
+
+  //
+  // Measures the labels the axes would actually draw. advanceWidth() is a pure call, so the
+  // tick-interval bindings capture no mutable dependency and cannot loop.
+  //
+  FontMetrics {
+    id: _tickMetrics
+
     font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.83))
   }
 
-  TextMetrics {
-    id: _yLabelMetrics
+  FontMetrics {
+    id: _readoutMetrics
 
-    text: "-8888.88"
-    font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.83))
+    font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.85, false))
+  }
+
+  //
+  // Tick fitting: 1-2-5 mantissas per decade, a fixed gutter between neighbouring labels, and
+  // a hard bound on the convergence walk (40 steps span 13 decades)
+  //
+  readonly property var tickMantissas: [1, 2, 5]
+  readonly property int tickGutterPx: 12
+  readonly property int tickGutterPy: 8
+  readonly property int maxTickSteps: 40
+
+  //
+  // Floor on the major-tick pitch: labels alone fit far tighter than the eye reads, and each
+  // major carries four minor grid lines, so a label-only fit produces a mesh
+  //
+  readonly property int minTickPitchPx: 76
+  readonly property int minTickPitchPy: 44
+
+  //
+  // Minor grid lines sit between the plot background and the border color so the fine
+  // subdivisions read as texture instead of competing with the majors
+  //
+  function fadedGrid(strength) {
+    const border = Qt.color(Cpp_ThemeManager.colors["widget_border"])
+    return Qt.tint(Cpp_ThemeManager.colors["widget_base"],
+                   Qt.rgba(border.r, border.g, border.b, strength))
   }
 
   //
@@ -111,7 +227,54 @@ Item {
   }
 
   //
-  // Calculate tick intervals for X axis based on available width
+  // Convergent tick period: walk the 1-2-5 sequence up from the finest plausible period until
+  // the widest drawn label plus the gutter fits one tick pitch (extentOf = px along the axis)
+  //
+  function fitInterval(min, max, pixels, gutter, minPitch, extentOf) {
+    const range = max - min
+    if (!(range > 0) || !(pixels > 0))
+      return 1.0
+
+    const finest = range / pixels
+    const magnitude0 = Math.floor(Math.log10(finest))
+    let candidate = Math.pow(10, magnitude0)
+    for (let step = 0; step < root.maxTickSteps; ++step) {
+      const mantissa = root.tickMantissas[step % 3]
+      candidate = mantissa * Math.pow(10, magnitude0 + Math.floor(step / 3))
+      const pitch = pixels * candidate / range
+      const first = Math.ceil(min / candidate) * candidate
+      const last = Math.floor(max / candidate) * candidate
+      const extent = Math.max(extentOf(first, candidate), extentOf(last, candidate))
+      if (extent + gutter <= pitch && pitch >= minPitch)
+        return candidate
+    }
+
+    return candidate
+  }
+
+  //
+  // Labels exactly as the axis delegates draw them, so the fit measures the real thing
+  //
+  function xTickLabel(value, interval) {
+    if (root.timeAxis)
+      return root.secondsAgoFormat(value, interval)
+
+    if (root.logX)
+      return root.logTickFormat(value, interval)
+
+    return root.engineeringFormat(root.relativeX(value), interval)
+  }
+
+  function yTickLabel(value, interval) {
+    if (root.logY)
+      return root.logTickFormat(value, interval)
+
+    return root.engineeringFormat(value, interval)
+  }
+
+  //
+  // Tick period for the X axis: log axes keep the decade rule, linear axes converge on the
+  // measured label width
   //
   function smartIntervalX(min, max) {
     const range = max - min
@@ -119,31 +282,19 @@ Item {
       return 1.0
 
     const availableWidth = _graph.plotArea.width
-    const labelWidth = _xLabelMetrics.width + 20
-    const maxLabels = Math.max(2, Math.floor(availableWidth / labelWidth))
+    if (root.logX) {
+      const labelWidth = _tickMetrics.advanceWidth("-8888.88") + 20
+      return logInterval(range, Math.max(2, Math.floor(availableWidth / labelWidth)))
+    }
 
-    if (root.logX)
-      return logInterval(range, maxLabels)
-
-    const roughInterval = range / maxLabels
-    const magnitude = Math.pow(10, Math.floor(Math.log10(roughInterval)))
-    const normalized = roughInterval / magnitude
-
-    let niceInterval
-    if (normalized <= 1.0)
-      niceInterval = 1.0
-    else if (normalized <= 2.0)
-      niceInterval = 2.0
-    else if (normalized <= 5.0)
-      niceInterval = 5.0
-    else
-      niceInterval = 10.0
-
-    return niceInterval * magnitude
+    return fitInterval(min, max, availableWidth, root.tickGutterPx, root.minTickPitchPx,
+                       function(value, period) {
+      return _tickMetrics.advanceWidth(root.xTickLabel(value, period))
+    })
   }
 
   //
-  // Calculate tick intervals for Y axis based on available height
+  // Tick period for the Y axis: labels stack, so the extent is the font height
   //
   function smartIntervalY(min, max) {
     const range = max - min
@@ -151,41 +302,58 @@ Item {
       return 1.0
 
     const availableHeight = _graph.plotArea.height
-    const labelHeight = _yLabelMetrics.height + 8
-    const maxLabels = Math.max(2, Math.floor(availableHeight / labelHeight))
+    if (root.logY) {
+      const labelHeight = _tickMetrics.height + root.tickGutterPy
+      return logInterval(range, Math.max(2, Math.floor(availableHeight / labelHeight)))
+    }
 
-    if (root.logY)
-      return logInterval(range, maxLabels)
-
-    const roughInterval = range / maxLabels
-    const magnitude = Math.pow(10, Math.floor(Math.log10(roughInterval)))
-    const normalized = roughInterval / magnitude
-
-    let niceInterval
-    if (normalized <= 1.0)
-      niceInterval = 1.0
-    else if (normalized <= 2.0)
-      niceInterval = 2.0
-    else if (normalized <= 5.0)
-      niceInterval = 5.0
-    else
-      niceInterval = 10.0
-
-    return niceInterval * magnitude
+    return fitInterval(min, max, availableHeight, root.tickGutterPy, root.minTickPitchPy,
+                       function(value, period) {
+      return _tickMetrics.height
+    })
   }
 
   //
-  // Calculate appropriate decimal places based on visible range
+  // Mantissa of a tick period (1, 2 or 5), tolerant of floating-point scaling
   //
-  function smartPrecision(visibleRange) {
-    if (visibleRange <= 0)
+  function tickMantissa(interval) {
+    if (!(interval > 0))
+      return 1
+
+    return Math.round(interval / Math.pow(10, Math.floor(Math.log10(interval))))
+  }
+
+  //
+  // Minor ticks between two majors: four subdivisions under a 2, five otherwise; log axes keep
+  // the single midpoint sub-tick
+  //
+  function subTicksFor(interval, logAxis) {
+    if (logAxis)
+      return 1
+
+    return tickMantissa(interval) === 2 ? 3 : 4
+  }
+
+  //
+  // Readout precision follows the tick period (one digit finer than the ticks) so cursors and
+  // ticks can never disagree about how many digits matter
+  //
+  function precisionForInterval(interval) {
+    if (!(interval > 0) || !isFinite(interval))
       return 2
 
-    const magnitude = Math.floor(Math.log10(visibleRange))
+    return Math.max(0, Math.min(6, Math.ceil(-Math.log10(interval) - 1e-9) + 1))
+  }
 
-    // ~3-4 significant digits across zoom levels
-    const precision = Math.max(0, 2 - magnitude)
-    return Math.min(precision, 6)
+  //
+  // Decimals QtGraphs keeps in the tick text the delegates re-parse: its auto precision (0
+  // decimals over a 0..10 range) collapses 0.5 to "1" and the axis repeats labels
+  //
+  function tickDecimals(interval) {
+    if (!(interval > 0) || !isFinite(interval))
+      return 6
+
+    return Math.max(0, Math.min(12, Math.ceil(-Math.log10(interval) + 1e-9) + 1))
   }
 
   //
@@ -265,7 +433,8 @@ Item {
     if (!isFinite(value))
       return ""
 
-    const scaled   = Math.abs(value) * root.timeUnitFactor
+    const relative = root.relativeX(value)
+    const scaled   = (root.xZeroSet ? relative : Math.abs(value)) * root.timeUnitFactor
     const scaledIv = tickInterval * root.timeUnitFactor
     let decimals   = 0
     if (scaledIv > 0 && scaledIv < 1)
@@ -288,12 +457,21 @@ Item {
   //
   function displayValueX(worldX) {
     if (root.timeAxis)
-      return root.timeAgoLabel(worldX)
+      return root.xZeroSet ? root.relativeTimeLabel(worldX) : root.timeAgoLabel(worldX)
 
     if (root.logX)
       return root.engineeringFormat(Math.pow(10, worldX), 0)
 
-    return worldX.toFixed(root.xPrecision)
+    return root.relativeX(worldX).toFixed(root.xPrecision)
+  }
+
+  //
+  // Signed time relative to the ruler zero, in the axis unit (e.g. "-12.5 ms")
+  //
+  function relativeTimeLabel(worldX) {
+    const scaled = root.relativeX(worldX) * root.timeUnitFactor
+    const magnitude = Math.abs(scaled)
+    return scaled.toFixed(magnitude >= 100 ? 0 : (magnitude >= 1 ? 1 : 3)) + " " + root.timeUnitName
   }
 
   function displayValueY(worldY) {
@@ -318,6 +496,69 @@ Item {
       return root.engineeringFormat(Math.pow(10, root.cursorBY) - Math.pow(10, root.cursorAY), 0)
 
     return root.deltaY.toFixed(root.yPrecision)
+  }
+
+  //
+  // SI-prefixed frequency (mHz .. GHz) at @p digits significant digits, e.g. "1.25 kHz"
+  //
+  function frequencyLabel(hz, digits) {
+    if (!isFinite(hz) || !(hz > 0))
+      return ""
+
+    const scales = [[1e9, "GHz"], [1e6, "MHz"], [1e3, "kHz"], [1, "Hz"], [1e-3, "mHz"]]
+    let factor = 1e-3
+    let unit = "mHz"
+    for (let i = 0; i < scales.length; ++i) {
+      if (hz >= scales[i][0]) {
+        factor = scales[i][0]
+        unit = scales[i][1]
+        break
+      }
+    }
+
+    const scaled = hz / factor
+    const decimals = Math.max(0, digits - 1 - Math.floor(Math.log10(scaled)))
+    return scaled.toFixed(Math.min(6, decimals)) + " " + unit
+  }
+
+  //
+  // 1/dX for the cursor pair: only meaningful on a time axis with a non-zero separation
+  //
+  readonly property bool cursorFrequencyValid: root.timeAxis && root.cursorAVisible
+                                               && root.cursorBVisible
+                                               && Math.abs(root.deltaX) > 1e-12
+                                               && isFinite(root.deltaX)
+  readonly property real cursorFrequencyHz: cursorFrequencyValid ? 1.0 / Math.abs(root.deltaX) : 0
+
+  //
+  // Cursor readout that fits @p widthPx: the hint goes first, then frequency precision
+  // degrades, and the frequency drops last; units are never dropped
+  //
+  function cursorReadout(widthPx) {
+    const dx = root.displayDeltaX()
+    const dy = root.displayDeltaY()
+    const hint = qsTr("Drag to move, right-click to clear")
+    const base = qsTr("ΔX: %1  ΔY: %2").arg(dx).arg(dy)
+    if (!root.cursorFrequencyValid)
+      return qsTr("%1 — %2").arg(base).arg(hint)
+
+    const hz = root.cursorFrequencyHz
+    const withHz = function(digits) {
+      return qsTr("%1  1/ΔX: %2").arg(base).arg(root.frequencyLabel(hz, digits))
+    }
+    const candidates = [
+      qsTr("%1 — %2").arg(withHz(4)).arg(hint),
+      withHz(4),
+      withHz(3),
+      withHz(2),
+      base
+    ]
+
+    for (let i = 0; i < candidates.length; ++i)
+      if (_readoutMetrics.advanceWidth(candidates[i]) <= widthPx)
+        return candidates[i]
+
+    return candidates[candidates.length - 1]
   }
 
   function isPointVisible(worldX, worldY) {
@@ -396,10 +637,10 @@ Item {
   readonly property real deltaY: cursorBY - cursorAY
 
   //
-  // Dynamic precision based on visible range
+  // Readout precision derived from the tick period the axis settled on
   //
-  readonly property int xPrecision: smartPrecision(xVisibleRange)
-  readonly property int yPrecision: smartPrecision(yVisibleRange)
+  readonly property int xPrecision: precisionForInterval(xTickInterval)
+  readonly property int yPrecision: precisionForInterval(yTickInterval)
 
   readonly property bool cursorAInView: isPointVisible(cursorAX, cursorAY)
   readonly property bool cursorBInView: isPointVisible(cursorBX, cursorBY)
@@ -607,8 +848,8 @@ Item {
       axisY.subWidth: 1
       axisX.mainWidth: 1
       axisY.mainWidth: 1
-      axisX.subColor: Cpp_ThemeManager.colors["widget_border"]
-      axisY.subColor: Cpp_ThemeManager.colors["widget_border"]
+      axisX.subColor: root.fadedGrid(0.4)
+      axisY.subColor: root.fadedGrid(0.4)
       axisX.mainColor: Cpp_ThemeManager.colors["widget_border"]
       axisY.mainColor: Cpp_ThemeManager.colors["widget_border"]
       axisX.labelTextColor: Cpp_ThemeManager.colors["widget_text"]
@@ -627,8 +868,8 @@ Item {
       grid.subWidth: 1
       gridVisible: true
       grid.mainWidth: 1
-      grid.subColor: Cpp_ThemeManager.colors["widget_border"]
-      grid.mainColor: Cpp_ThemeManager.colors["widget_border"]
+      grid.subColor: root.fadedGrid(0.4)
+      grid.mainColor: root.fadedGrid(0.75)
 
       //
       // Highlight colors for better contrast
@@ -643,15 +884,15 @@ Item {
         _theme.borderColors = [Cpp_ThemeManager.colors["widget_border"]]
         _theme.backgroundColor = Cpp_ThemeManager.colors["widget_window"]
         _theme.plotAreaBackgroundColor = Cpp_ThemeManager.colors["widget_base"]
-        _theme.axisX.subColor = Cpp_ThemeManager.colors["widget_border"]
-        _theme.axisY.subColor = Cpp_ThemeManager.colors["widget_border"]
+        _theme.axisX.subColor = root.fadedGrid(0.4)
+        _theme.axisY.subColor = root.fadedGrid(0.4)
         _theme.axisX.mainColor = Cpp_ThemeManager.colors["widget_border"]
         _theme.axisY.mainColor = Cpp_ThemeManager.colors["widget_border"]
         _theme.axisX.labelTextColor = Cpp_ThemeManager.colors["widget_text"]
         _theme.axisY.labelTextColor = Cpp_ThemeManager.colors["widget_text"]
         _theme.labelTextColor = Cpp_ThemeManager.colors["widget_text"]
-        _theme.grid.subColor = Cpp_ThemeManager.colors["widget_border"]
-        _theme.grid.mainColor = Cpp_ThemeManager.colors["widget_border"]
+        _theme.grid.subColor = root.fadedGrid(0.4)
+        _theme.grid.mainColor = root.fadedGrid(0.75)
         _theme.multiHighlightColor = Cpp_ThemeManager.colors["widget_highlight"]
         _theme.singleHighlightColor = Cpp_ThemeManager.colors["widget_highlighted_text"]
       }
@@ -693,10 +934,11 @@ Item {
 
       min: root.yMin
       max: root.yMax
-      subTickCount: 1
       visible: root.yLabelVisible
       tickInterval: root.yTickInterval
+      labelDecimals: root.tickDecimals(root.yTickInterval)
       tickAnchor: root.logY ? Math.ceil(root.yMin) : root.yMin
+      subTickCount: root.subTicksFor(root.yTickInterval, root.logY)
 
       labelDelegate: Item {
         id: _yLabelItem
@@ -728,10 +970,11 @@ Item {
 
       min: root.xMin
       max: root.xMax
-      subTickCount: 1
       visible: root.xLabelVisible
       tickInterval: root.xTickInterval
-      tickAnchor: root.logX ? Math.ceil(root.xMin) : root.xMin
+      labelDecimals: root.tickDecimals(root.xTickInterval)
+      subTickCount: root.subTicksFor(root.xTickInterval, root.logX)
+      tickAnchor: root.logX ? Math.ceil(root.xMin) : (root.xZeroSet ? root.xZero : root.xMin)
 
       labelDelegate: Item {
         id: _xLabelItem
@@ -745,11 +988,7 @@ Item {
           id: _xEngLabel
 
           anchors.centerIn: parent
-          text: root.timeAxis
-                ? root.secondsAgoFormat(parseFloat(_xLabelItem.text), root.xTickInterval)
-                : (root.logX
-                   ? root.logTickFormat(parseFloat(_xLabelItem.text), root.xTickInterval)
-                   : root.engineeringFormat(parseFloat(_xLabelItem.text), root.xTickInterval))
+          text: root.xTickLabel(parseFloat(_xLabelItem.text), root.xTickInterval)
           color: Cpp_ThemeManager.colors["widget_text"]
           font: (Cpp_Misc_CommonFonts.widgetFontRevision,
                  Cpp_Misc_CommonFonts.widgetFont(0.83))
@@ -933,6 +1172,15 @@ Item {
           return
         }
 
+        // Ruler menu on a plain right-click outside cursor mode (cursor mode keeps clearing)
+        if (!root.cursorMode && pressedButton === Qt.RightButton && !didDrag) {
+          _rulerMenu.pressWorldX = root.pixelToWorldX(mouse.x)
+          _rulerMenu.pressMarker = root.markerNear(mouse.x)
+          _rulerMenu.popup()
+          pressedButton = Qt.NoButton
+          return
+        }
+
         // Handle cursor placement on release (only if no drag occurred)
         if (root.cursorMode && pressedButton === Qt.LeftButton && !didDrag && draggedCursor === null) {
           const worldX = root.pixelToWorldX(mouse.x)
@@ -1062,6 +1310,232 @@ Item {
           //
           lastX = mouse.x
           lastY = mouse.y
+        }
+      }
+    }
+
+    //
+    // Ruler zero line: drawn wherever the user set t = 0, with a chip on the top edge
+    //
+    Item {
+      id: _zeroLine
+
+      width: 1
+      height: parent.height
+      x: root.worldToPixelX(root.xZero)
+      visible: root.xZeroSet && !root.logX && root.xZero >= root.xVisibleMin
+               && root.xZero <= root.xVisibleMax
+
+      Rectangle {
+        width: 1
+        opacity: 0.7
+        height: parent.height
+        color: Cpp_ThemeManager.colors["widget_text"]
+      }
+
+      Label {
+        text: "0"
+        padding: 3
+        color: Cpp_ThemeManager.colors["widget_base"]
+        font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8, true))
+        background: Rectangle {
+          radius: 3
+          opacity: 0.9
+          color: Cpp_ThemeManager.colors["widget_text"]
+        }
+        anchors {
+          topMargin: 4
+          leftMargin: 3
+          top: parent.top
+          left: parent.right
+        }
+      }
+    }
+
+    //
+    // Named markers: a thin line and a name chip, only while inside the visible window
+    //
+    Repeater {
+      model: root.xMarkers
+
+      delegate: Item {
+        id: _markerItem
+
+        required property int index
+        required property var modelData
+
+        width: 1
+        height: parent.height
+        x: root.worldToPixelX(modelData.x)
+        visible: modelData.x >= root.xVisibleMin && modelData.x <= root.xVisibleMax
+
+        Rectangle {
+          width: 1
+          opacity: 0.8
+          height: parent.height
+          color: Cpp_ThemeManager.colors["widget_highlight"]
+        }
+
+        Label {
+          padding: 3
+          text: _markerItem.modelData.name
+          color: Cpp_ThemeManager.colors["widget_highlighted_text"]
+          font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8, true))
+          background: Rectangle {
+            radius: 3
+            opacity: 0.9
+            color: Cpp_ThemeManager.colors["widget_highlight"]
+          }
+          anchors {
+            topMargin: 4
+            leftMargin: 3
+            top: parent.top
+            left: parent.right
+          }
+        }
+      }
+    }
+
+    //
+    // Hover marker: tracks the pointer with an X readout while enabled
+    //
+    Item {
+      id: _hoverMarker
+
+      width: 1
+      height: parent.height
+      x: _overlayMouse.mouseX
+      visible: root.hoverMarkerEnabled && _overlayMouse.containsMouse && !_overlayMouse.dragging
+
+      Rectangle {
+        width: 1
+        opacity: 0.5
+        height: parent.height
+        color: Cpp_ThemeManager.colors["widget_text"]
+      }
+
+      Label {
+        padding: 3
+        color: Cpp_ThemeManager.colors["widget_base"]
+        text: root.displayValueX(root.pixelToWorldX(_overlayMouse.mouseX))
+        font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
+        background: Rectangle {
+          radius: 3
+          opacity: 0.85
+          color: Cpp_ThemeManager.colors["widget_text"]
+        }
+        anchors {
+          leftMargin: 3
+          bottomMargin: 4
+          left: parent.right
+          bottom: parent.bottom
+        }
+      }
+    }
+
+    //
+    // Ruler context menu (right-click outside cursor mode)
+    //
+    Menu {
+      id: _rulerMenu
+
+      property real pressWorldX: 0
+      property int pressMarker: -1
+
+      MenuItem {
+        text: qsTr("Add marker here...")
+        onTriggered: _markerNamePopup.openAt(_rulerMenu.pressWorldX)
+      }
+
+      MenuItem {
+        visible: _rulerMenu.pressMarker >= 0
+        height: visible ? implicitHeight : 0
+        text: qsTr("Remove marker \"%1\"").arg(_rulerMenu.pressMarker >= 0
+                                             ? root.xMarkers[_rulerMenu.pressMarker].name : "")
+        onTriggered: root.removeMarker(_rulerMenu.pressMarker)
+      }
+
+      MenuItem {
+        text: qsTr("Clear all markers")
+        enabled: root.xMarkers.length > 0
+        onTriggered: root.clearMarkers()
+      }
+
+      MenuSeparator {}
+
+      MenuItem {
+        enabled: !root.logX
+        text: root.timeAxis ? qsTr("Set time zero here") : qsTr("Set zero here")
+        onTriggered: root.setZeroAt(_rulerMenu.pressWorldX)
+      }
+
+      MenuItem {
+        enabled: root.xZeroSet
+        text: root.timeAxis ? qsTr("Reset time zero") : qsTr("Reset zero")
+        onTriggered: root.resetZero()
+      }
+
+      MenuSeparator {}
+
+      MenuItem {
+        checkable: true
+        text: qsTr("Hover marker")
+        checked: root.hoverMarkerEnabled
+        onTriggered: root.setHoverMarker(checked)
+      }
+    }
+
+    //
+    // Marker name prompt
+    //
+    Popup {
+      id: _markerNamePopup
+
+      property real worldX: 0
+
+      padding: 8
+      modal: true
+      focus: true
+      x: Math.round((parent.width - width) / 2)
+      y: Math.round((parent.height - height) / 2)
+
+      function openAt(worldXValue) {
+        worldX = worldXValue
+        _markerName.text = qsTr("M%1").arg(root.xMarkers.length + 1)
+        open()
+        _markerName.forceActiveFocus()
+        _markerName.selectAll()
+      }
+
+      function accept() {
+        const name = _markerName.text.trim()
+        root.addMarker(worldX, name.length > 0 ? name : qsTr("M%1").arg(root.xMarkers.length + 1))
+        close()
+      }
+
+      contentItem: RowLayout {
+        spacing: 6
+
+        Label {
+          text: qsTr("Marker name:")
+          color: Cpp_ThemeManager.colors["widget_text"]
+        }
+
+        TextField {
+          id: _markerName
+
+          Layout.preferredWidth: 140
+          onAccepted: _markerNamePopup.accept()
+        }
+
+        Button {
+          text: qsTr("Add")
+          onClicked: _markerNamePopup.accept()
+        }
+
+        Button {
+          text: qsTr("Cancel")
+          onClicked: _markerNamePopup.close()
         }
       }
     }
@@ -1477,7 +1951,11 @@ Item {
         visible: root.xLabelVisible
         Layout.alignment: Qt.AlignHCenter
         horizontalAlignment: Qt.AlignHCenter
-        text: root.timeAxis ? (qsTr("Time") + " (" + root.timeUnitName + ")") : root.xLabel
+        text: {
+          const base = root.timeAxis ? qsTr("Time") : root.xLabel
+          const title = (root.xZeroSet && !root.logX) ? qsTr("%1 from zero").arg(base) : base
+          return root.timeAxis ? (title + " (" + root.timeUnitName + ")") : title
+        }
         color: Cpp_ThemeManager.colors["widget_text"]
         font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.91, true))
       }
@@ -1499,7 +1977,7 @@ Item {
         font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.85, false))
         text: {
           if (root.cursorAVisible && root.cursorBVisible)
-            return qsTr("ΔX: %1  ΔY: %2 — Drag to move, right-click to clear").arg(root.displayDeltaX()).arg(root.displayDeltaY())
+            return root.cursorReadout(_layout.width)
           else if (!root.cursorAVisible)
             return qsTr("Click to place cursor")
           else

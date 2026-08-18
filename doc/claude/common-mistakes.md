@@ -108,3 +108,20 @@
 |---------|-----|
 | Bundled scope creep — slipping an unrelated bug-fix, "small cleanup", rename, or import-sort into the same diff as the user's actual ask | Name it in chat first ("noticed X — want it in this pass?"). Every unrelated file you touch costs the reviewer an audit pass, and "all the changes were individually correct" doesn't restore the trust the surprise diff cost. The user can always say yes; they can't say no after the fact. |
 | Treating a subagent's report as ground truth — writing docs, edits, or follow-up agent prompts on top of its claims without checking | Spot-check before you build: open 2-3 of the cited files/symbols (or grep for them) yourself before propagating anything a subagent reported. Agent reports are leads, not facts — the 2026 AI-docs audits repeatedly traced shipped wrong claims back to unverified agent output. Same discipline for cached workflow results: an empty result is a finding to verify, not proof of absence. |
+
+## Diagnosing a GUI Stall — Sample, Don't Theorize
+
+**Sample the running app before theorizing about a GUI stall.** Freezes, stutters, ignored
+window resize/close: get the stack, don't reason from the source. `pgrep -f Serial-Studio-Pro`
+(skip Helper processes), then run `sample <pid> 12 -f out.txt` **in the background** and tell the
+user to reproduce during that window -- a drag steals their keyboard, so a foreground sample
+never lines up. Read the `com.apple.main-thread` tree first. Known signatures: a nested
+`QEventLoop` appears as a re-entrant `-[NSApplication run]` under a timer callback (it swallows
+in-flight OS resize steps); render-thread saturation appears as `QWaitCondition::wait` under
+`QQuickWindow::event`, with `QSGRenderThread` busy in `renderSceneGraph`. Earned the hard way on
+2026-08-13: three plausible fixes read out of the source were all wrong, one sample was decisive.
+
+Related: `MacroEditor` grabs its offscreen widget only when dirty or focused
+([scripting.md](architecture/scripting.md) "Embedded Code Editors"); the project-editor siblings
+still grab per tick. Never give a main-window-embedded editor an unconditional per-tick `grab()`
+— that cost 13% of the GUI thread all session (2026-08-17, found by sampling, not by reading).

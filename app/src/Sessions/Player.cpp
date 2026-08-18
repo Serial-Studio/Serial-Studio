@@ -16,17 +16,21 @@
 #  include "Sessions/Player.h"
 
 #  include <algorithm>
+#  include <bit>
 #  include <cmath>
+#  include <cstring>
 #  include <limits>
 #  include <QApplication>
 #  include <QDateTime>
 #  include <QDeadlineTimer>
+#  include <QFile>
 #  include <QFileDialog>
 #  include <QFileInfo>
 #  include <QJsonDocument>
 #  include <QJsonParseError>
 #  include <QSqlError>
 #  include <QSqlQuery>
+#  include <QtEndian>
 #  include <QThread>
 #  include <QTimer>
 #  include <QtMath>
@@ -34,11 +38,14 @@
 
 #  include "AppState.h"
 #  include "DataModel/FrameBuilder.h"
+#  include "DataModel/NotificationCenter.h"
 #  include "DataModel/ProjectModel.h"
 #  include "DataModel/Scripting/FrameParserPipeline.h"
 #  include "IO/ConnectionManager.h"
 #  include "Misc/Utilities.h"
 #  include "Misc/WorkspaceManager.h"
+#  include "Sessions/BlockReader.h"
+#  include "Sessions/StreamBlockCodec.h"
 #  include "SSAssert.h"
 #  include "UI/Dashboard.h"
 
@@ -57,6 +64,7 @@ Sessions::Player::Player()
   , m_frameQueryPrepared(false)
   , m_seekQueryPrepared(false)
   , m_hasFinalValues(false)
+  , m_usesBlocks(false)
   , m_sessionId(-1)
   , m_pendingSessionId(-1)
   , m_loading(false)
@@ -67,6 +75,7 @@ Sessions::Player::Player()
   , m_startTimestampSeconds(0.0)
   , m_steadyBaseRowSeconds(0.0)
   , m_preSessionCaptured(false)
+  , m_restorePending(false)
   , m_preSessionOperationMode(SerialStudio::QuickPlot)
 {
   qRegisterMetaType<Sessions::PlayerSessionPayloadPtr>("Sessions::PlayerSessionPayloadPtr");
@@ -339,7 +348,7 @@ void Sessions::Player::closeFile()
   frameBuilder.registerQuickPlotHeaders(QStringList());
   frameBuilder.setReplayColumnMap({});
 
-  restorePreSessionState();
+  schedulePreSessionRestore();
 
   if (wasLoading)
     Q_EMIT loadingChanged();
@@ -369,6 +378,7 @@ void Sessions::Player::openFile(const QString& filePath, int sessionId)
 
   closeFile();
 
+  m_restorePending = false;
   capturePreSessionState();
 
   static auto& connectionManager = IO::ConnectionManager::instance();
@@ -431,7 +441,7 @@ void Sessions::Player::onLoadFinished(const PlayerSessionPayloadPtr& payload)
     Q_EMIT loadingChanged();
     teardownLocalDb();
     clearLocalState();
-    restorePreSessionState();
+    schedulePreSessionRestore();
     Q_EMIT openChanged();
     Q_EMIT playerStateChanged();
     return;
@@ -439,6 +449,7 @@ void Sessions::Player::onLoadFinished(const PlayerSessionPayloadPtr& payload)
 
   if (!payload->projectJson.isEmpty()) {
     (void)restoreProjectFromJson(payload->projectJson);
+    applyBundledViewState(payload->viewState, payload->projectJson);
   } else {
     Misc::Utilities::showMessageBox(tr("No project data"),
                                     tr("This session does not contain an embedded project file — "
@@ -450,7 +461,7 @@ void Sessions::Player::onLoadFinished(const PlayerSessionPayloadPtr& payload)
     m_loading = false;
     Q_EMIT loadingChanged();
     clearLocalState();
-    restorePreSessionState();
+    schedulePreSessionRestore();
     Q_EMIT openChanged();
     Q_EMIT playerStateChanged();
     return;
@@ -459,6 +470,8 @@ void Sessions::Player::onLoadFinished(const PlayerSessionPayloadPtr& payload)
   m_sessionId       = payload->sessionId;
   m_columnUniqueIds = payload->columnUniqueIds;
   m_timestampsNs    = payload->timestampsNs;
+  m_streamBlocks    = payload->streamBlocks;
+  mergeStreamBlockTimes();
 
   static auto& appState = AppState::instance();
   const auto mode       = appState.operationMode();
@@ -531,6 +544,12 @@ void Sessions::Player::detectFinalValueColumns()
 {
   SS_ASSERT(m_db && m_db->isOpen(), return);
 
+  m_usesBlocks = Sessions::sessionUsesBlocks(*m_db, m_sessionId);
+  if (m_usesBlocks) {
+    m_hasFinalValues = true;
+    return;
+  }
+
   m_hasFinalValues = false;
 
   QSqlQuery probe(*m_db);
@@ -558,6 +577,7 @@ void Sessions::Player::teardownLocalDb()
 
   m_frameQuery.reset();
   m_seekQuery.reset();
+  m_streamBlobQuery.reset();
   m_frameQueryPrepared = false;
   m_seekQueryPrepared  = false;
 
@@ -584,11 +604,14 @@ void Sessions::Player::clearLocalState()
   m_startTimestampSeconds = 0.0;
   m_multiSource           = false;
   m_hasFinalValues        = false;
+  m_usesBlocks            = false;
   m_columnUniqueIds.clear();
   m_uidToColumn.clear();
   m_timestampsNs.clear();
   m_columnToSource.clear();
   m_sourceColumns.clear();
+  m_streamBlocks.clear();
+  m_streamChannelBuf.clear();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -607,7 +630,78 @@ void Sessions::Player::capturePreSessionState()
   static auto& projectModel = DataModel::ProjectModel::instance();
   m_preSessionOperationMode = appState.operationMode();
   m_preSessionProjectPath   = projectModel.jsonFilePath();
+  m_preSessionViewState     = viewStateDashboard().viewStateJson();
   m_preSessionCaptured      = true;
+}
+
+/**
+ * @brief The dashboard the view-state bundle (spec 0062) is read from and applied to.
+ */
+UI::Dashboard& Sessions::Player::viewStateDashboard()
+{
+  static auto& dashboard = UI::Dashboard::instance();
+  return dashboard;
+}
+
+/**
+ * @brief Applies a recording's view-state bundle after its project was restored (widgets read it
+ *        in Component.onCompleted, so ordering falls out of the rebuild) and warns once when the
+ *        embedded project differs from the one loaded before playback (R5, notice only: the
+ *        recording's project always wins, as playback did before this spec).
+ */
+void Sessions::Player::applyBundledViewState(const QString& viewState, const QString& projectJson)
+{
+  auto& dashboard = viewStateDashboard();
+  if (viewState.isEmpty())
+    dashboard.clearViewState();
+  else
+    dashboard.setViewStateJson(viewState);
+
+  if (projectJson.isEmpty() || m_preSessionProjectPath.isEmpty())
+    return;
+
+  QFile file(m_preSessionProjectPath);
+  if (!file.open(QIODevice::ReadOnly))
+    return;
+
+  const auto live     = QJsonDocument::fromJson(file.readAll());
+  const auto embedded = QJsonDocument::fromJson(projectJson.toUtf8());
+  if (!live.isObject() || !embedded.isObject() || live.object() == embedded.object())
+    return;
+
+  static auto& notifications = DataModel::NotificationCenter::instance();
+  notifications.postWarning(
+    tr("Sessions"),
+    tr("Recording uses an older copy of the project"),
+    tr("The dashboard shown is the one embedded in the recording; the project on disk has "
+       "changed since. Close the session to return to the current project."));
+}
+
+/**
+ * @brief Queues the pre-session restore instead of running it on the caller's stack: closing a
+ *        session can be driven from a QML handler firing during window destruction, and the
+ *        restore reloads the project, which rebuilds devices and waits on the frame pipeline.
+ *        Inline, that re-enters the platform event loop against a half-torn-down window.
+ */
+void Sessions::Player::schedulePreSessionRestore()
+{
+  if (!m_preSessionCaptured)
+    return;
+
+  m_restorePending = true;
+  QMetaObject::invokeMethod(this, [this] { performPendingRestore(); }, Qt::QueuedConnection);
+}
+
+/**
+ * @brief Runs a queued restore unless it was cancelled by a session opened in the meantime.
+ */
+void Sessions::Player::performPendingRestore()
+{
+  if (!m_restorePending)
+    return;
+
+  m_restorePending = false;
+  restorePreSessionState();
 }
 
 /**
@@ -627,8 +721,11 @@ void Sessions::Player::restorePreSessionState()
   static auto& appState = AppState::instance();
   appState.setOperationMode(m_preSessionOperationMode);
 
+  viewStateDashboard().setViewStateJson(m_preSessionViewState);
+
   m_preSessionCaptured = false;
   m_preSessionProjectPath.clear();
+  m_preSessionViewState.clear();
   m_preSessionOperationMode = SerialStudio::QuickPlot;
 }
 
@@ -842,6 +939,11 @@ void Sessions::Player::buildSeekWindow(int startRow,
 
   if (keyByUid.isEmpty())
     return;
+
+  if (m_usesBlocks) {
+    fillSeekWindowFromBlocks(startRow, endRow, keyByUid, series);
+    return;
+  }
 
   if (!m_seekQueryPrepared) {
     m_seekQuery.emplace(*m_db);
@@ -1140,6 +1242,9 @@ QHash<int, QString> Sessions::Player::buildFrameAt(qint64 timestampNs)
   if (!m_db) [[unlikely]]
     return uidValues;
 
+  if (m_usesBlocks)
+    return frameValuesFromBlocks(timestampNs);
+
   if (!m_frameQueryPrepared) {
     m_frameQuery.emplace(*m_db);
     m_frameQuery->setForwardOnly(true);
@@ -1187,6 +1292,111 @@ QHash<int, QString> Sessions::Player::buildFrameAt(qint64 timestampNs)
 }
 
 /**
+ * @brief Spec-0055 twin of the seek window: selects the blocks overlapping the window by their
+ *        indexed [t0_ns, t_end_ns] span, decodes them, and drops each sample onto its row. The
+ *        span index is what keeps this a lookup rather than a decode of the whole session.
+ */
+void Sessions::Player::fillSeekWindowFromBlocks(int startRow,
+                                                int endRow,
+                                                const QHash<int, qint64>& keyByUid,
+                                                QHash<qint64, QVector<double>>& series)
+{
+  const qint64 fromNs = m_timestampsNs[static_cast<size_t>(startRow)];
+  const qint64 toNs   = m_timestampsNs[static_cast<size_t>(endRow)];
+
+  QSqlQuery q(*m_db);
+  q.setForwardOnly(true);
+  q.prepare(QStringLiteral("SELECT %1 FROM blocks WHERE session_id = ? AND t_end_ns >= ? "
+                           "AND t0_ns <= ? ORDER BY t0_ns, block_id")
+              .arg(QLatin1String(Sessions::kBlockColumns)));
+  q.bindValue(0, m_sessionId);
+  q.bindValue(1, fromNs);
+  q.bindValue(2, toNs);
+
+  if (!q.exec()) [[unlikely]] {
+    qWarning() << "[Sessions::Player] block seek query failed:" << q.lastError().text();
+    series.clear();
+    return;
+  }
+
+  const auto begin = m_timestampsNs.cbegin() + startRow;
+  const auto end   = m_timestampsNs.cbegin() + endRow + 1;
+
+  std::vector<Sessions::ReadingRow> rows;
+  while (q.next()) {
+    rows.clear();
+    if (!Sessions::decodeBlockRow(q, rows))
+      continue;
+
+    for (const auto& row : rows) {
+      const auto keyIt = keyByUid.constFind(row.uniqueId);
+      if (keyIt == keyByUid.constEnd())
+        continue;
+
+      const auto pos = std::lower_bound(begin, end, row.timestampNs);
+      if (pos == end || *pos != row.timestampNs)
+        continue;
+
+      series[keyIt.value()][static_cast<int>(pos - begin)] = row.finalNumeric;
+    }
+  }
+
+  q.finish();
+
+  for (auto it = series.begin(); it != series.end(); ++it)
+    fillSeekGaps(it.value());
+}
+
+/**
+ * @brief Spec-0055 twin of the cursor-row read: the blocks containing @p timestampNs are those
+ *        whose indexed span covers it, and the sample at that exact instant is the replayed cell.
+ */
+QHash<int, QString> Sessions::Player::frameValuesFromBlocks(qint64 timestampNs)
+{
+  QHash<int, QString> uidValues;
+
+  QSqlQuery q(*m_db);
+  q.setForwardOnly(true);
+  q.prepare(QStringLiteral("SELECT %1 FROM blocks WHERE session_id = ? AND t0_ns <= ? "
+                           "AND t_end_ns >= ? ORDER BY block_id")
+              .arg(QLatin1String(Sessions::kBlockColumns)));
+  q.bindValue(0, m_sessionId);
+  q.bindValue(1, timestampNs);
+  q.bindValue(2, timestampNs);
+
+  if (!q.exec()) [[unlikely]] {
+    qWarning() << "[Sessions::Player] block frame query failed:" << q.lastError().text();
+    return uidValues;
+  }
+
+  std::vector<Sessions::ReadingRow> rows;
+  while (q.next()) {
+    rows.clear();
+    if (!Sessions::decodeBlockRow(q, rows))
+      continue;
+
+    for (const auto& row : rows) {
+      if (row.timestampNs != timestampNs)
+        continue;
+
+      const auto it = m_uidToColumn.constFind(row.uniqueId);
+      if (it == m_uidToColumn.constEnd())
+        continue;
+
+      uidValues[row.uniqueId] =
+        row.isNumeric ? QString::number(row.finalNumeric, 'g', 17) : row.finalString;
+
+      const auto srcIt = m_columnToSource.constFind(it.value());
+      if (srcIt != m_columnToSource.constEnd())
+        m_sourcesAtCurrentTs.insert(srcIt.value());
+    }
+  }
+
+  q.finish();
+  return uidValues;
+}
+
+/**
  * @brief Anchors the steady-clock base used to stamp replayed rows with recorded deltas.
  */
 void Sessions::Player::anchorSteadyBase(int frameIndex)
@@ -1216,6 +1426,8 @@ std::chrono::steady_clock::time_point Sessions::Player::rowSteadyTimestamp(qint6
  */
 void Sessions::Player::injectFrame(const QHash<int, QString>& uidValues, qint64 timestampNs)
 {
+  injectStreamBlocksAt(timestampNs);
+
   if (uidValues.isEmpty())
     return;
 
@@ -1250,6 +1462,159 @@ void Sessions::Player::injectFrame(const QHash<int, QString>& uidValues, qint64 
       cells.append(uidValues.value(uid));
 
     frameBuilder.replayChannels(m_multiSource ? srcId : 0, cells, timestamp);
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Stream-block replay (spec 0054)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Folds each block's start time into the playback clock, so a session whose data is
+ *        entirely stream-lane still advances: the player steps over block starts (block rate),
+ *        never over individual samples, which is what keeps the index bounded.
+ */
+void Sessions::Player::mergeStreamBlockTimes()
+{
+  if (m_streamBlocks.empty())
+    return;
+
+  m_timestampsNs.reserve(m_timestampsNs.size() + m_streamBlocks.size());
+  for (const auto& entry : m_streamBlocks)
+    m_timestampsNs.push_back(entry.t0Ns);
+
+  std::sort(m_timestampsNs.begin(), m_timestampsNs.end());
+  m_timestampsNs.erase(std::unique(m_timestampsNs.begin(), m_timestampsNs.end()),
+                       m_timestampsNs.end());
+}
+
+/**
+ * @brief Reads one block's samples blob by rowid and decodes it from canonical little-endian
+ *        float64. Rejects a blob whose length is not `frames * 8` rather than decoding past its
+ *        end -- a truncated or foreign file must fail loudly, not silently misplay.
+ */
+bool Sessions::Player::fetchStreamSamples(qint64 rowId, qint64 frames, std::vector<double>& out)
+{
+  SS_ASSERT(frames >= 0, return false);
+
+  if (!m_db || !m_db->isOpen()) [[unlikely]]
+    return false;
+
+  if (!m_streamBlobQuery) {
+    m_streamBlobQuery.emplace(*m_db);
+    m_streamBlobQuery->setForwardOnly(true);
+    m_streamBlobQuery->prepare("SELECT samples FROM stream_blocks WHERE stream_block_id = ?");
+  }
+
+  m_streamBlobQuery->bindValue(0, rowId);
+  if (!m_streamBlobQuery->exec() || !m_streamBlobQuery->next()) [[unlikely]] {
+    qWarning() << "[Sessions::Player] stream block fetch failed:"
+               << m_streamBlobQuery->lastError().text();
+    return false;
+  }
+
+  const QByteArray blob = m_streamBlobQuery->value(0).toByteArray();
+  m_streamBlobQuery->finish();
+
+  if (!unpackStreamSamples(blob, frames, out)) [[unlikely]] {
+    qWarning() << "[Sessions::Player] stream block" << rowId << "has" << blob.size()
+               << "bytes, expected" << (frames * kStreamSampleBytes);
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * @brief Replays one source's slice of a block: decodes each channel straight into a DataBlock
+ *        and publishes it through the same tail a live source uses (spec 0055). Only this block's
+ *        channels are resident. QuickPlot has no project groups, so the session's own column order
+ *        stands in for the empty source-column map.
+ */
+void Sessions::Player::replayStreamGroup(int sourceId, std::size_t first, std::size_t last)
+{
+  SS_ASSERT(first < m_streamBlocks.size(), return);
+  SS_ASSERT(last <= m_streamBlocks.size(), return);
+
+  const auto colsIt               = m_sourceColumns.constFind(sourceId);
+  const bool mapped               = colsIt != m_sourceColumns.constEnd() && !colsIt.value().empty();
+  const std::vector<int>& columns = mapped ? colsIt.value() : m_columnUniqueIds;
+  if (columns.empty())
+    return;
+
+  m_streamChannelBuf.resize(columns.size());
+
+  QHash<int, std::size_t> uidToSlot;
+  for (std::size_t c = 0; c < columns.size(); ++c)
+    uidToSlot.insert(columns[c], c);
+
+  qint64 frames = 0;
+  qint64 t0Ns   = m_streamBlocks[first].t0Ns;
+  qint64 dtNs   = m_streamBlocks[first].dtNs;
+  for (std::size_t b = first; b < last; ++b) {
+    const auto& entry = m_streamBlocks[b];
+    const auto slotIt = uidToSlot.constFind(entry.uniqueId);
+    if (slotIt == uidToSlot.constEnd())
+      continue;
+
+    if (fetchStreamSamples(entry.rowId, entry.frames, m_streamChannelBuf[slotIt.value()]))
+      frames = std::max(frames, entry.frames);
+  }
+
+  if (frames <= 0)
+    return;
+
+  auto block                 = std::make_shared<DataModel::DataBlock>();
+  block->sourceId            = sourceId;
+  block->structureGeneration = 0;
+  block->samples             = frames;
+  block->t0                  = rowSteadyTimestamp(t0Ns);
+  block->dt                  = std::chrono::nanoseconds(dtNs > 0 ? dtNs : 1);
+
+  block->columns.resize(columns.size());
+  for (std::size_t c = 0; c < columns.size(); ++c) {
+    auto& column    = block->columns[c];
+    column.uniqueId = columns[c];
+    column.hasText  = false;
+    column.hasRaw   = false;
+    column.values.assign(static_cast<std::size_t>(frames), 0.0);
+
+    const auto& samples = m_streamChannelBuf[c];
+    const auto used     = std::min(samples.size(), static_cast<std::size_t>(frames));
+    std::copy_n(samples.begin(), used, column.values.begin());
+  }
+
+  static auto& frameBuilder = DataModel::FrameBuilder::instance();
+  frameBuilder.replayBlock(block);
+}
+
+/**
+ * @brief Replays every stream block whose start time is @p timestampNs. Blocks arrive as a
+ *        burst with per-sample timestamps, exactly as they do live -- the recording, not the
+ *        wall clock, owns the sample times.
+ */
+void Sessions::Player::injectStreamBlocksAt(qint64 timestampNs)
+{
+  if (m_streamBlocks.empty())
+    return;
+
+  const auto begin = std::lower_bound(
+    m_streamBlocks.begin(),
+    m_streamBlocks.end(),
+    timestampNs,
+    [](const PlayerStreamBlockIndex& entry, qint64 ts) { return entry.t0Ns < ts; });
+
+  std::size_t i          = static_cast<std::size_t>(begin - m_streamBlocks.begin());
+  const std::size_t size = m_streamBlocks.size();
+  while (i < size && m_streamBlocks[i].t0Ns == timestampNs) {
+    const int sourceId   = m_streamBlocks[i].sourceId;
+    std::size_t groupEnd = i;
+    while (groupEnd < size && m_streamBlocks[groupEnd].t0Ns == timestampNs
+           && m_streamBlocks[groupEnd].sourceId == sourceId)
+      ++groupEnd;
+
+    replayStreamGroup(sourceId, i, groupEnd);
+    i = groupEnd;
   }
 }
 

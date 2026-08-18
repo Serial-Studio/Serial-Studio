@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <atomic>
 #include <deque>
 #include <QByteArray>
 #include <QElapsedTimer>
@@ -34,6 +35,7 @@
 #include <QTcpSocket>
 
 #include "API/CommandProtocol.h"
+#include "DataModel/DataBlock.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FrameConsumer.h"
 #include "IO/HAL_Driver.h"
@@ -48,7 +50,7 @@ class MirrorPublisher;
 /**
  * @brief Worker that handles JSON serialization and socket I/O on a background thread.
  */
-class ServerWorker : public DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr> {
+class ServerWorker : public DataModel::FrameConsumerWorker<DataModel::DataBlockPtr> {
   // clang-format off
   Q_OBJECT
   // clang-format on
@@ -60,7 +62,7 @@ signals:
   void dataReceived(QTcpSocket* socket, const QString& sessionId, const QByteArray& data);
 
 public:
-  ServerWorker(moodycamel::ReaderWriterQueue<DataModel::TimestampedFramePtr>* queue,
+  ServerWorker(moodycamel::ReaderWriterQueue<DataModel::DataBlockPtr>* queue,
                std::atomic<bool>* enabled,
                std::atomic<size_t>* queueSize);
   ~ServerWorker() override;
@@ -77,10 +79,14 @@ public slots:
   void writeToSocket(QTcpSocket* socket, const QString& sessionId, const QByteArray& data);
   void writeMirrorPayload(QTcpSocket* socket, const QString& sessionId, const QByteArray& data);
   void writeStreamBlock(QTcpSocket* socket, const QString& sessionId, const QByteArray& data);
+  void setTemplateFrame(int sourceId, const DataModel::Frame& frame);
   void setSocketStreamFrames(QTcpSocket* socket, const QString& sessionId, const bool enabled);
 
 protected:
-  void processItems(const std::vector<DataModel::TimestampedFramePtr>& items) override;
+  void processItems(const std::vector<DataModel::DataBlockPtr>& items) override;
+
+private:
+  std::map<int, DataModel::FrameTemplate> m_templates;
 
 private slots:
   void onSocketReadyRead();
@@ -98,13 +104,16 @@ private:
   // Sockets already reported as over-cap; per socket so a later client's stall is not swallowed
   QSet<QTcpSocket*> m_warnedSockets;
 
+  // One broadcast document carries at most this many samples; a dense block can exceed it
+  static constexpr int kMaxBroadcastSamples = 4096;
+
   quint64 m_droppedBroadcasts;
 };
 
 /**
  * @brief TCP server interface for API communication in Serial Studio.
  */
-class Server : public DataModel::FrameConsumer<DataModel::TimestampedFramePtr> {
+class Server : public DataModel::FrameConsumer<DataModel::DataBlockPtr> {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(int clientCount
@@ -159,8 +168,14 @@ public slots:
   void setEnabled(const bool enabled);
   void setExternalConnections(const bool enabled);
   void hotpathTxData(const QByteArray& data);
-  void hotpathTxFrame(const DataModel::TimestampedFramePtr& frame);
-  void ingestStreamBlock(const IO::StreamBlockItemPtr& block);
+  void setupExternalConnections();
+  void ingestBlock(const DataModel::DataBlockPtr& block);
+
+private:
+  void pushStreamBlock(const DataModel::DataBlockPtr& block);
+  void refreshStreamSubscriberFlag() noexcept;
+
+public slots:
   void broadcastLifecycleEvent(const QString& eventName);
 
 protected:
@@ -199,7 +214,7 @@ private:
     QSet<int> streamSources;
     quint64 streamSeq    = 0;
     quint64 streamMissed = 0;
-    std::deque<IO::StreamBlockItemPtr> streamPending;
+    std::deque<DataModel::DataBlockPtr> streamPending;
   };
 
   /**
@@ -263,5 +278,6 @@ private:
   DeviceWriteConsent m_deviceWriteConsent;
   QTcpServer m_server;
   QHash<QTcpSocket*, ConnectionState> m_connections;
+  alignas(64) std::atomic<bool> m_anyStreamSubscriber;
 };
 }  // namespace API

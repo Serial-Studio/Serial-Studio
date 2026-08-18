@@ -204,6 +204,7 @@ ctest --preset dev -R dsp_kernels --output-on-failure
 | `tst_checksums`       | All ten `IO::checksum()` algorithms against published `"123456789"` vectors, output byte order, empty and single-byte inputs, registry consistency, unknown names |
 | `tst_frame_serialization` | `toJson`/`fromJson` round-trips for `Dataset`, `Group`, `Action`, `Source`, `Frame`, `AlarmBand`, `FrequencyMarker`, `OutputWidget`, `RegisterDef`, `TableDef`, and the workspace/folder structs |
 | `tst_dsp_kernels`     | Every `DSPSimd.h` kernel compared bit-for-bit against a scalar build of the same header, over edge lengths, source offsets, and NaN / ±0.0 / ±inf / denormal payloads |
+| `tst_real_fft`        | `kiss_fftr` bins 0..N/2 against a complex `kiss_fft` of the same real signal (relative-to-peak tolerance, the one non-bit-exact comparison in the tree) and the odd-size rejection both FFT widgets rely on |
 | `tst_frame_delimiters`| `IO::FrameReader` extraction: start / end / start+end delimiters, delimiters split across chunks, multi-byte delimiters at the scan-lane boundary, validation outcomes, dropped-frame and overflow accounting |
 | `tst_async_engine`    | The spec-0034 task-tree engine against a virtual clock: sequential and parallel outcomes, timeouts, the retry backoff schedule, cancel mid-step and mid-backoff |
 | `tst_ring_wrap`       | `CircularBuffer` wrap-state gaps: `operator[]` across the boundary, `pos`-resumed pattern scans on wrapped content, `setCapacity` while wrapped, offset `peekRangeInto` spans |

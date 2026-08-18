@@ -180,6 +180,8 @@ void Sessions::DatabaseManager::initWorker()
     m_worker, &DatabaseWorker::reportDataReady, this, &DatabaseManager::onWorkerReportDataReady);
   connect(
     m_worker, &DatabaseWorker::datasetListReady, this, &DatabaseManager::sessionDatasetsReady);
+  connect(
+    m_worker, &DatabaseWorker::streamStatsReady, this, &DatabaseManager::sessionStreamStatsReady);
   connect(m_worker,
           &DatabaseWorker::globalProjectJsonReady,
           this,
@@ -434,6 +436,7 @@ QVariantMap Sessions::DatabaseManager::sessionMetadata(int sessionId) const
     result["ended_at"]      = m.value("ended_at");
     result["notes"]         = m.value("notes");
     result["frame_count"]   = m.value("frame_count");
+    result["size_bytes"]    = m.value("size_bytes");
     return result;
   }
 
@@ -1489,6 +1492,18 @@ void Sessions::DatabaseManager::requestSessionDatasets(int sessionId)
 }
 
 /**
+ * @brief Asks the worker thread to summarise a session's recorded stream data (spec 0054).
+ */
+void Sessions::DatabaseManager::requestStreamStats(int sessionId)
+{
+  if (!isOpen())
+    return;
+
+  QMetaObject::invokeMethod(
+    m_worker, "runStreamStatsLoad", Qt::QueuedConnection, Q_ARG(int, sessionId));
+}
+
+/**
  * @brief Opens a Save dialog for the report path and launches the export on accept.
  */
 void Sessions::DatabaseManager::requestPdfOutputPath(int sessionId, HtmlReportOptions opts)
@@ -1967,6 +1982,8 @@ void Sessions::DatabaseManager::createSchema(QSqlQuery& q)
   migrateColumnsTable(q);
   migrateSessionsTable(q);
   createSchemaSampleTables(q);
+  createSchemaStreamTables(q);
+  createSchemaBlockTable(q);
   createSchemaTagTables(q);
   createSchemaProjectMetadata(q);
   createSchemaVerifications(q);
@@ -2030,7 +2047,8 @@ void Sessions::DatabaseManager::migrateColumnsTable(QSqlQuery& q)
 }
 
 /**
- * @brief Adds the spec-0044 fingerprint and classification columns to legacy sessions tables.
+ * @brief Adds the spec-0044 fingerprint/classification columns and the spec-0062 view-state
+ *        bundle column to legacy sessions tables (nullable, so old archives keep reading).
  */
 void Sessions::DatabaseManager::migrateSessionsTable(QSqlQuery& q)
 {
@@ -2057,6 +2075,8 @@ void Sessions::DatabaseManager::migrateSessionsTable(QSqlQuery& q)
     {    "repro_class",    "TEXT"},
     { "frames_dropped", "INTEGER"},
     { "overflow_bytes", "INTEGER"},
+    {  "stream_sha256",    "TEXT"},
+    {     "view_state",    "TEXT"},
   };
 
   for (const auto& col : kColumns) {
@@ -2112,6 +2132,64 @@ void Sessions::DatabaseManager::createSchemaSampleTables(QSqlQuery& q)
          ")");
   q.exec("CREATE INDEX IF NOT EXISTS idx_snapshots_session_ts "
          "ON table_snapshots (session_id, timestamp_ns, table_name)");
+}
+
+/**
+ * @brief Creates the full-rate stream-block table (spec 0054). One row per acquisition block
+ *        per dataset: `samples` is `frames` IEEE-754 float64 values written little-endian, and
+ *        `t0_ns` + `dt_ns` date each of them as t0 + i * dt, so the source keeps owning time.
+ *        Additive only -- a v1 database gains the empty table and replays unchanged.
+ */
+void Sessions::DatabaseManager::createSchemaStreamTables(QSqlQuery& q)
+{
+  q.exec("CREATE TABLE IF NOT EXISTS stream_blocks ("
+         "  stream_block_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+         "  session_id      INTEGER NOT NULL,"
+         "  source_id       INTEGER NOT NULL,"
+         "  unique_id       INTEGER NOT NULL,"
+         "  block_number    INTEGER NOT NULL,"
+         "  t0_ns           INTEGER NOT NULL,"
+         "  dt_ns           INTEGER NOT NULL,"
+         "  frames          INTEGER NOT NULL,"
+         "  samples         BLOB NOT NULL"
+         ")");
+  q.exec("CREATE INDEX IF NOT EXISTS idx_stream_blocks_session_uid_t0 "
+         "ON stream_blocks (session_id, unique_id, t0_ns)");
+}
+
+/**
+ * @brief Creates the unified block table (spec 0055 R7): one row per dataset per published block,
+ *        for BOTH lanes. Little-endian float64 values plus their pre-transform twin, length-
+ *        prefixed UTF-8 texts, and explicit per-sample times when `dt_ns` is 0. Additive -- v1/v2
+ *        databases keep `readings` and `stream_blocks` and still replay.
+ */
+void Sessions::DatabaseManager::createSchemaBlockTable(QSqlQuery& q)
+{
+  q.exec("CREATE TABLE IF NOT EXISTS blocks ("
+         "  block_id     INTEGER PRIMARY KEY AUTOINCREMENT,"
+         "  session_id   INTEGER NOT NULL,"
+         "  source_id    INTEGER NOT NULL,"
+         "  unique_id    INTEGER NOT NULL,"
+         "  block_number INTEGER NOT NULL,"
+         "  t0_ns        INTEGER NOT NULL,"
+         "  t_end_ns     INTEGER NOT NULL,"
+         "  dt_ns        INTEGER NOT NULL,"
+         "  frames       INTEGER NOT NULL,"
+         "  is_numeric   INTEGER NOT NULL DEFAULT 1,"
+         "  min_value    REAL,"
+         "  max_value    REAL,"
+         "  sum_value    REAL,"
+         "  finite_count INTEGER NOT NULL DEFAULT 0,"
+         "  values_blob  BLOB NOT NULL,"
+         "  raw_values   BLOB,"
+         "  texts        BLOB,"
+         "  raw_texts    BLOB,"
+         "  times        BLOB"
+         ")");
+  q.exec("CREATE INDEX IF NOT EXISTS idx_blocks_session_uid_t0 "
+         "ON blocks (session_id, unique_id, t0_ns)");
+  q.exec("CREATE INDEX IF NOT EXISTS idx_blocks_session_t0 "
+         "ON blocks (session_id, t0_ns, t_end_ns)");
 }
 
 /**

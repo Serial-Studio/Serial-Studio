@@ -26,6 +26,20 @@ class QSqlDatabase;
 namespace Sessions {
 
 /**
+ * @brief One stream block's index entry (spec 0054). Metadata only: the samples blob stays on
+ *        disk and is fetched per block at playback, so replay memory stays flat in session
+ *        length instead of scaling with it.
+ */
+struct PlayerStreamBlockIndex {
+  qint64 rowId;
+  int sourceId;
+  int uniqueId;
+  qint64 t0Ns;
+  qint64 dtNs;
+  qint64 frames;
+};
+
+/**
  * @brief Bundle of per-session data the player needs to start playback.
  */
 struct PlayerSessionPayload {
@@ -34,8 +48,10 @@ struct PlayerSessionPayload {
   QString filePath;
   int sessionId;
   QString projectJson;
+  QString viewState;
   std::vector<int> columnUniqueIds;
   std::vector<qint64> timestampsNs;
+  std::vector<PlayerStreamBlockIndex> streamBlocks;
 };
 
 /**
@@ -77,6 +93,14 @@ private:
                                         int sessionId,
                                         PlayerSessionPayload& payload,
                                         QString& errorOut);
+  [[nodiscard]] bool loadBlockTimestampIndex(QSqlDatabase& db,
+                                             int sessionId,
+                                             PlayerSessionPayload& payload,
+                                             QString& errorOut);
+  [[nodiscard]] bool loadStreamBlockIndex(QSqlDatabase& db,
+                                          int sessionId,
+                                          PlayerSessionPayload& payload,
+                                          QString& errorOut);
 
 private:
   std::atomic<bool> m_cancelRequested;

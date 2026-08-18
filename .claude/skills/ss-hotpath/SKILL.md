@@ -14,6 +14,10 @@ paths:
   - app/src/DataModel/FrameBuilder.*
   - app/src/DataModel/HotpathOptimization.h
   - app/src/UI/Dashboard.*
+  - app/src/DSP.h
+  - app/src/DSPSimd.h
+  - app/src/IO/StreamWorker.*
+  - app/src/IO/PipelineHost.*
 ---
 
 # Serial Studio — data hotpath
@@ -89,6 +93,31 @@ block. Never per-sample across a thread boundary.
   restates a guard that provably already ran — a condition derived from device bytes keeps
   `SS_ASSERT` and its release recovery. The `hotpath-assert-scope` lint pins the macro to
   the hotpath TUs.
+
+## Block publication, time rings & kernels — the newest invariants
+
+- **One publication payload, one ingestion path (spec 0055).** Nothing publishes a
+  `TimestampedFrame` any more: `FrameBuilder` stages parsed rows into a pooled
+  `DataModel::DataBlock` and flushes on the display tick or a sample cap. Two caps, not one --
+  `kFrameBlockSampleCap` (64) because frame-lane columns carry a display string per sample,
+  `kStreamBlockSampleCap` (4096) for the numeric-only dense lane. Dense sources (Audio, or
+  `streamLane` on) do all per-sample work on their own `IO::StreamWorker` thread but emit
+  `blockReady` **queued to the pipeline thread**, the SINGLE producer for every sink. Sinks
+  share ONE `clone_block_trimmed` copy. Structure travels separately as a `StructureSnapshot`
+  on pool-generation bumps. Never add a rate cap or a per-view reduction.
+  Detail: `doc/claude/architecture/dataflow.md`.
+- **Time rings are sized from a rate, never a sample count alone** (`kMaxRateSizedRingSamples`
+  ceiling): stream lane sizes at build from the real rate (`streamRingCapacity`); the frame lane
+  re-sizes a *saturated* ring once from the plot clock's smoothed period (`growTimeRing`, upward
+  only). `m_plotClocks` and `m_plotDisplayTimeSec` are ONE state — cleared, saved and restored
+  together via `Dashboard::resetPlotClocks()`, never one without the other. `appendDecimated`
+  clamps sub-cell backward jitter forward; a jump back over a whole cell drops the retained span
+  (clamping it wedges the ring shut). Detail: `doc/claude/architecture/dashboard.md`.
+- **Kernels and macros:** portable SIMD lives in `app/src/DSPSimd.h` (spec 0021, per-lane
+  bit-exact vs scalar) — reuse it, never inline intrinsics at a call site. Optimizer macros live
+  in `app/src/DataModel/HotpathOptimization.h`; annotate `.h` and `.cpp` in lockstep, never add a
+  fast-math / no-unwind / GCC `optimize("...")` macro, and use `SS_ASSERT_HOTPATH` (not
+  `SS_ASSERT`) on per-frame/per-cell kernels. Detail: `doc/claude/architecture/kernels.md`.
 
 ## Measure, don't guess
 

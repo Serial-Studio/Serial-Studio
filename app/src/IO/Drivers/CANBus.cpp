@@ -55,15 +55,13 @@ static QStringList enumerateCanPlugins()
 }
 
 /**
- * @brief Queues an error box so it opens once the current stack has returned: a modal spins the
- *        event loop, and raising one mid open()/error stack re-enters the stack it was raised from.
+ * @brief Logs a driver failure to the console. Drivers never raise modal dialogs: a modal pumps
+ *        the event loop, so one raised from a connect or error stack lets queued work retire the
+ *        very driver still on that stack (spec 0056).
  */
-static void queueErrorBox(QObject* context, const QString& title, const QString& text)
+static void logDriverError(const QString& title, const QString& text)
 {
-  QMetaObject::invokeMethod(
-    context,
-    [title, text] { Misc::Utilities::showMessageBox(title, text, QMessageBox::Critical); },
-    Qt::QueuedConnection);
+  qWarning().noquote() << QStringLiteral("[%1] %2").arg(title, text);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -318,11 +316,10 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
   }
 
   if (!m_device) {
-    queueErrorBox(this,
-                  tr("CAN Device Creation Failed"),
-                  error.isEmpty()
-                    ? tr("Unable to create CAN bus device. Check your hardware and drivers.")
-                    : error);
+    logDriverError(tr("CAN Device Creation Failed"),
+                   error.isEmpty()
+                     ? tr("Unable to create CAN bus device. Check your hardware and drivers.")
+                     : error);
     return false;
   }
 
@@ -351,8 +348,7 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
       error.isEmpty()
         ? tr("Unable to connect to CAN bus device. Check your hardware connection and settings.")
         : error;
-    queueErrorBox(
-      this, tr("CAN Connection Failed"), base + connectionErrorHint(plugin, interface_name));
+    logDriverError(tr("CAN Connection Failed"), base + connectionErrorHint(plugin, interface_name));
     return false;
   }
 
@@ -366,26 +362,23 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
 void IO::Drivers::CANBus::showCanSupportError()
 {
 #if defined(Q_OS_LINUX)
-  queueErrorBox(
-    this,
+  logDriverError(
     tr("CAN Bus Not Available"),
     tr(
       "No CAN bus plugins found on this system.\n\nOn Linux, ensure SocketCAN kernel modules are loaded."));
 #elif defined(Q_OS_WIN)
-  queueErrorBox(
-    this,
+  logDriverError(
     tr("CAN Bus Not Available"),
     tr(
       "No CAN bus plugins found on this system.\n\nOn Windows, install CAN hardware drivers (PEAK, Vector, etc.)."));
 #elif defined(Q_OS_MAC)
-  queueErrorBox(
-    this,
+  logDriverError(
     tr("CAN Bus Not Available"),
     tr(
       "No CAN bus plugins found on this system.\n\nCAN bus support on macOS is limited and may require third-party hardware drivers."));
 #else
-  queueErrorBox(
-    this, tr("CAN Bus Not Available"), tr("No CAN bus plugins are available on this platform."));
+  logDriverError(tr("CAN Bus Not Available"),
+                 tr("No CAN bus plugins are available on this platform."));
 #endif
 }
 
@@ -395,16 +388,14 @@ void IO::Drivers::CANBus::showCanSupportError()
 bool IO::Drivers::CANBus::validateOpenPreconditions()
 {
   if (!configurationOk()) {
-    queueErrorBox(
-      this,
+    logDriverError(
       tr("Invalid CAN Configuration"),
       tr("The CAN bus configuration is incomplete. Select a valid plugin and interface."));
     return false;
   }
 
   if (m_pluginIndex >= m_pluginList.count() || m_interfaceIndex >= m_interfaceList.count()) {
-    queueErrorBox(
-      this,
+    logDriverError(
       tr("Invalid Selection"),
       tr(
         "The selected plugin or interface is no longer available. Refresh the lists and try again."));
@@ -412,8 +403,7 @@ bool IO::Drivers::CANBus::validateOpenPreconditions()
   }
 
   if (m_pluginList.isEmpty() || m_interfaceList.isEmpty()) {
-    queueErrorBox(
-      this,
+    logDriverError(
       tr("No Devices Available"),
       tr(
         "The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected."));
@@ -811,13 +801,7 @@ void IO::Drivers::CANBus::onErrorOccurred(QCanBusDevice::CanBusError error)
   }
 
   m_errorBoxTimer.restart();
-  QMetaObject::invokeMethod(
-    this,
-    [error_string] {
-      Misc::Utilities::showMessageBox(
-        tr("CAN Bus Communication Error"), error_string, QMessageBox::Warning);
-    },
-    Qt::QueuedConnection);
+  logDriverError(tr("CAN Bus Communication Error"), error_string);
 }
 
 //--------------------------------------------------------------------------------------------------

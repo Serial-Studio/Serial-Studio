@@ -53,7 +53,7 @@ lifecycle); plus `API/Handlers/MirrorHandler` and `app/qml/Dialogs/RemoteAttach.
 
 - Injects frames via `dashboard.hotpathRxFrame(...)` from pre-built per-source
   `TimestampedFramePtr` templates (values assigned in place, timestamp rewritten against a
-  local anchor). It **never** reaches `FrameBuilder::hotpathTxFrame` — a viewer's export
+  local anchor). It **never** reaches the sink fan-out — a viewer's export
   sinks never see mirrored data.
 - Mirrored frames carry `structureGeneration = kMirrorGenerationBase + epoch`
   (base `1ULL << 48`) so they can't alias a local frame-pool generation.
@@ -96,3 +96,22 @@ Codec: `tests/unit/test_mirror_protocol.py` (pure Python, no app) + reference cl
 `generate_fixtures.py` on any wire change). Live: `tests/integration/test_remote_mirror.py`
 (maintainer-run, `SS_MIRROR_HOST/PORT/TOKEN`), bandwidth probe
 `tests/manual/mirror_bandwidth_live.py`.
+
+## Spec 0055 — the viewer publishes blocks
+
+The publisher is unchanged: it still reads `Dashboard::rawFrame()` on the display tick, so it
+carries one value per dataset per tick exactly as before, and the wire format is untouched
+(`kWireVersion` stays 1 — nothing about the payload changed, so bumping it would refuse peers for
+no reason).
+
+The **viewer** did change, because `Dashboard::hotpathRxFrame` no longer exists. `MirrorSession`
+now hands the dashboard a `StructureSnapshot` per mirrored source when it adopts an epoch's layout,
+and wraps each snapshot as a **single-sample** `DataBlock` through `Dashboard::applyBlock`. One
+sample is exactly what arrived: padding it out to the remote's real rate would invent measurements
+the viewer never received.
+
+**Known gap against spec 0055 R4.** The mirror therefore keeps its pre-0055 fidelity — a viewer
+watching a 48 kHz source still sees a tick-rate trace, not the signal. Closing that means carrying
+sample runs in the snapshot payload, which is a redesign of `encodeSnapshot`, the chunker,
+`MirrorClient`'s decode, the viewer's reconstruction and every checked-in fixture. It is deferred
+deliberately rather than half-done; the MQTT and gRPC halves of R4 *are* met.

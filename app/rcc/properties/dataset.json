@@ -1648,11 +1648,11 @@
       "type": "int",
       "default": -1,
       "scope": "document",
-      "apiDescription": "Transform script language: -1 inherit, 0 JavaScript, 1 Lua",
+      "apiDescription": "Transform script language: -1 inherit, 0 JavaScript, 1 Lua, 3 Expression",
       "persist": "withProperty",
       "persistWith": "TransformCode",
       "validate": "transformLanguageDomain",
-      "apiError": "Invalid transformLanguage: must be -1 (inherit), 0 (JS), or 1 (Lua)",
+      "apiError": "Invalid transformLanguage: must be -1 (inherit), 0 (JS), 1 (Lua) or 3 (Expression)",
       "undo": {
         "label": "Edit Dataset",
         "coalesce": false

@@ -424,11 +424,9 @@ void Misc::ModuleManager::stopFrameConsumerWorkers()
   IO::ConnectionManager::instance().stopStreamWorkers();
   IO::PipelineHost::instance().shutdown();
   CSV::Export::instance().stopWorker();
-  CSV::Export::instance().streamSink().stopWorker();
 #ifdef BUILD_COMMERCIAL
   Console::Export::instance().stopWorker();
   MDF4::Export::instance().stopWorker();
-  MDF4::Export::instance().streamSink().stopWorker();
 #endif
   API::Server::instance().stopWorker();
 #ifdef BUILD_COMMERCIAL
@@ -796,6 +794,7 @@ void Misc::ModuleManager::setupCrossModuleConnections()
   appState->setEphemeralSession(m_ephemeralSession);
   appState->setupExternalConnections();
   CSV::Export::instance().setupExternalConnections();
+  API::Server::instance().setupExternalConnections();
   ioManager->setupExternalConnections();
   IO::PipelineHost::instance().setupExternalConnections();
   MDF4::Export::instance().setupExternalConnections();

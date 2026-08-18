@@ -240,6 +240,7 @@ private slots:
   void refreshConnectedState();
   void onUiDriverConfigurationChanged();
   void onRawDataReceived(int deviceId, const IO::CapturedDataPtr& data);
+  void onConsoleDataReceived(int deviceId, const IO::CapturedDataPtr& data);
   void onDeviceOpenFinished(int deviceId, bool ok, const QString& reason);
   void onDriverOpenFinished(bool ok, const QString& reason);
 

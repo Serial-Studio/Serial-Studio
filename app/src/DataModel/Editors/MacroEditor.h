@@ -79,9 +79,10 @@ public slots:
   void markSaved();
 
 private slots:
-  void onThemeChanged();
   void renderWidget();
+  void onThemeChanged();
   void resizeWidget();
+  void scheduleRender();
 
 private:
   void syncWidgetPosition();
@@ -105,6 +106,7 @@ private:
   void dropEvent(QDropEvent* event) override;
 
 private:
+  bool m_dirty;
   int m_language;
   Misc::ThemeManager& m_themeManager;
   Misc::CommonFonts& m_commonFonts;

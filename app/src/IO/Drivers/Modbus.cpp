@@ -49,16 +49,13 @@ static constexpr int kDialDeadlineMs = 5000;
 #include "SerialStudio.h"
 
 /**
- * @brief Queues an error box so it opens once the open attempt has returned: a modal spins the
- *        event loop, and raising one from inside the connect stack leaves the connection stuck
- *        behind a dialog the user cannot disconnect from.
+ * @brief Logs a driver failure to the console. Drivers never raise modal dialogs: a modal pumps
+ *        the event loop, so one raised from a connect or error stack lets queued work retire the
+ *        very driver still on that stack (spec 0056).
  */
-static void queueErrorBox(QObject* context, const QString& title, const QString& text)
+static void logDriverError(const QString& title, const QString& text)
 {
-  QMetaObject::invokeMethod(
-    context,
-    [title, text] { Misc::Utilities::showMessageBox(title, text, QMessageBox::Critical); },
-    Qt::QueuedConnection);
+  qWarning().noquote() << QStringLiteral("[%1] %2").arg(title, text);
 }
 
 /**
@@ -386,11 +383,10 @@ bool IO::Drivers::Modbus::configureRtuClient(QString& target)
     return false;
 
   if (portId >= m_serialPortLocations.count()) {
-    queueErrorBox(this,
-                  tr("Invalid Serial Port"),
-                  tr("The selected serial port \"%1\" is no longer available. "
-                     "Refresh the port list and try again.")
-                    .arg(ports.value(portId)));
+    logDriverError(tr("Invalid Serial Port"),
+                   tr("The selected serial port \"%1\" is no longer available. "
+                      "Refresh the port list and try again.")
+                     .arg(ports.value(portId)));
     return false;
   }
 
@@ -430,8 +426,7 @@ bool IO::Drivers::Modbus::configureTcpClient(QString& target)
 bool IO::Drivers::Modbus::finalizeAndConnect(const QString& target)
 {
   if (!m_device) {
-    queueErrorBox(
-      this,
+    logDriverError(
       tr("Modbus Initialization Failed"),
       tr("Unable to create Modbus device. Check your system configuration and try again."));
     return false;
@@ -513,11 +508,10 @@ void IO::Drivers::Modbus::failDial(const QString& error)
   const QString target = m_dialTarget;
   doClose();
 
-  queueErrorBox(this,
-                tr("Modbus Connection Failed"),
-                error.isEmpty()
-                  ? tr("Unable to connect to \"%1\". Check your connection settings.").arg(target)
-                  : tr("\"%1\": %2").arg(target, error));
+  logDriverError(tr("Modbus Connection Failed"),
+                 error.isEmpty()
+                   ? tr("Unable to connect to \"%1\". Check your connection settings.").arg(target)
+                   : tr("\"%1\": %2").arg(target, error));
 
   reportOpenFinished(false, error);
 
@@ -890,10 +884,8 @@ void IO::Drivers::Modbus::generateProject()
   static auto& appState = AppState::instance();
   appState.setOperationMode(SerialStudio::ProjectFile);
   if (!pm.loadFromJsonDocument(QJsonDocument(project), QString())) {
-    Misc::Utilities::showMessageBox(tr("Failed to load generated project"),
-                                    tr("The generated project JSON could not be loaded."),
-                                    QMessageBox::Critical,
-                                    tr("Modbus Project Generator"));
+    logDriverError(tr("Failed to load generated project"),
+                   tr("The generated project JSON could not be loaded."));
     return;
   }
 
@@ -1423,7 +1415,7 @@ void IO::Drivers::Modbus::onErrorOccurred(QModbusDevice::Error error)
   if (errorString.isEmpty())
     errorString = tr("Error code: %1").arg(static_cast<int>(error));
 
-  queueErrorBox(this, tr("Modbus Communication Error"), errorString);
+  logDriverError(tr("Modbus Communication Error"), errorString);
 }
 
 /**

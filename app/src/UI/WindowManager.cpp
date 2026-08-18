@@ -1303,6 +1303,31 @@ void UI::WindowManager::setGridSize(const int size)
 }
 
 /**
+ * @brief Rebinds the manager to the layout universe named by @a key (mode, project, scope,
+ *        group). Auto-versus-manual lives inside each group's layout blob, so a context with
+ *        no blob falls back to auto instead of inheriting the mode of the workspace the user
+ *        just left. Resets state only; the caller applies the layout right afterwards.
+ */
+void UI::WindowManager::setLayoutContext(const QString& key)
+{
+  if (m_layoutContextKey == key)
+    return;
+
+  m_layoutContextKey = key;
+  if (m_autoLayoutEnabled)
+    return;
+
+  m_autoLayoutEnabled  = true;
+  m_layoutRestored     = false;
+  m_manualCanvasWidth  = 0;
+  m_manualCanvasHeight = 0;
+  m_manualGeometries.clear();
+  m_pendingGeometries.clear();
+
+  Q_EMIT autoLayoutEnabledChanged();
+}
+
+/**
  * @brief Enables or disables automatic window layout.
  */
 void UI::WindowManager::setAutoLayoutEnabled(const bool enabled)

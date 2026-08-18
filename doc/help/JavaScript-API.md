@@ -951,6 +951,7 @@ Output appears in Serial Studio's console/terminal panel. Lua provides the same 
 
 - [SDK Reference](SerialStudio-SDK.md): the `deviceWrite`/`actionFire`/`apiCall`/`tableGet` surface a parser can call to act on what it decodes.
 - [Dataset Value Transforms](Dataset-Transforms.md): per-dataset `transform(value)` for calibration, filtering, and unit conversion.
+- [Console Annotations](Console-Annotations.md): a decoder that labels raw console bytes for inspection, separate from the parsing pipeline.
 - [Data Flow](Data-Flow.md): how data moves from device through parsing to the dashboard.
 - [Project Editor](Project-Editor.md): where you write and configure parser code.
 - [Operation Modes](Operation-Modes.md): when Project File mode (and thus custom parsers) applies.

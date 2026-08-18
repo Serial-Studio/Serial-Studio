@@ -35,6 +35,10 @@
 
 class QThread;
 
+namespace UI {
+class Dashboard;
+}  // namespace UI
+
 namespace Sessions {
 
 /**
@@ -120,20 +124,33 @@ private:
   void initWorker();
   void joinWorker();
   void clearLocalState();
+  void applyBundledViewState(const QString& viewState, const QString& projectJson);
+  [[nodiscard]] static UI::Dashboard& viewStateDashboard();
   void teardownLocalDb();
   bool openLocalDb(const QString& filePath);
   void detectFinalValueColumns();
+  void fillSeekWindowFromBlocks(int startRow,
+                                int endRow,
+                                const QHash<int, qint64>& keyByUid,
+                                QHash<qint64, QVector<double>>& series);
+  [[nodiscard]] QHash<int, QString> frameValuesFromBlocks(qint64 timestampNs);
 
   [[nodiscard]] bool restoreProjectFromJson(const QString& json);
 
   void capturePreSessionState();
   void restorePreSessionState();
+  void schedulePreSessionRestore();
+  void performPendingRestore();
 
   void alignColumnsToProject();
   void buildMultiSourceMapping();
 
   [[nodiscard]] QHash<int, QString> buildFrameAt(qint64 timestampNs);
   void injectFrame(const QHash<int, QString>& uidValues, qint64 timestampNs);
+  void mergeStreamBlockTimes();
+  void injectStreamBlocksAt(qint64 timestampNs);
+  void replayStreamGroup(int sourceId, std::size_t first, std::size_t last);
+  [[nodiscard]] bool fetchStreamSamples(qint64 rowId, qint64 frames, std::vector<double>& out);
   void processFrameBatch(int startFrame, int endFrame);
   void anchorSteadyBase(int frameIndex);
   [[nodiscard]] int seekWindowStartRow(int target) const;
@@ -156,6 +173,7 @@ private:
   bool m_frameQueryPrepared;
   bool m_seekQueryPrepared;
   bool m_hasFinalValues;
+  bool m_usesBlocks;
   QString m_filePath;
   QString m_connectionName;
   int m_sessionId;
@@ -180,14 +198,20 @@ private:
 
   std::vector<qint64> m_timestampsNs;
 
+  std::vector<PlayerStreamBlockIndex> m_streamBlocks;
+  std::optional<QSqlQuery> m_streamBlobQuery;
+  std::vector<std::vector<double>> m_streamChannelBuf;
+
   QMap<int, int> m_columnToSource;
   QMap<int, std::vector<int>> m_sourceColumns;
 
   QSet<int> m_sourcesAtCurrentTs;
 
   bool m_preSessionCaptured;
+  bool m_restorePending;
   SerialStudio::OperationMode m_preSessionOperationMode;
   QString m_preSessionProjectPath;
+  QString m_preSessionViewState;
 };
 
 }  // namespace Sessions

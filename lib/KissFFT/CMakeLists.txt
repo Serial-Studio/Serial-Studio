@@ -32,7 +32,7 @@ set(MAKEFILE_EXTRACTED_VERSION "${KFVER_MAJOR}.${KFVER_MINOR}.${KFVER_PATCH}")
 # Declare CMake project
 #
 
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.10)
 project(kissfft VERSION "${MAKEFILE_EXTRACTED_VERSION}")
 
 #

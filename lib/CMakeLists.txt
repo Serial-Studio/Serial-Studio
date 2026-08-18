@@ -343,6 +343,7 @@ endif()
 #   - C implementation, header-only with minimal compile-time config
 #   - Used for: Real-time spectrum analysis, audio visualization
 #   - Optimized with SSE/NEON SIMD instructions when available
+#   - Bundled copy; cmake_minimum_required bumped to 3.10 to satisfy modern CMake
 #
 # QCodeEditor (lib/QCodeEditor/):
 #   - Syntax-highlighted code editor widget
@@ -432,7 +433,7 @@ endif()
 #             with the usb-1.0 Raw USB driver already in the build)
 #
 # Acquisition: bundled local copy in lib/hidapi (hidapi 0.14.0), static build,
-#              no tests/examples. cmake_minimum_required bumped to 3.5 to satisfy
+#              no tests/examples. cmake_minimum_required bumped to 3.10 to satisfy
 #              modern CMake's compatibility requirement.
 # CMake target exposed: hidapi::hidapi
 #---------------------------------------------------------------------------------------------------

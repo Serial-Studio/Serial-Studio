@@ -25,6 +25,7 @@
 #include <cmath>
 #include <concepts>
 #include <cstddef>
+#include <cstdint>
 #include <cstdlib>
 #include <cstring>
 #include <limits>
@@ -417,6 +418,44 @@ struct TimeRing {
   {}
 
   /**
+   * @brief Re-grids the decimation cell in place, keeping retained samples: older data stays at
+   *        the resolution it was captured with and the next append opens a fresh cell. Retained
+   *        span is capacity/2 cells, so a finer grid trades history for detail, but only while a
+   *        source saturates every cell.
+   */
+  void retune(double cellSeconds)
+  {
+    if (!(cellSeconds > 0.0) || interval == cellSeconds)
+      return;
+
+    interval  = cellSeconds;
+    nextEmit  = 0.0;
+    cellSlots = 0;
+  }
+
+  /**
+   * @brief Re-sizes the ring to @p capacity slots and re-grids it to @p windowSec, keeping the
+   *        newest samples. This is what lets a ring whose source turned out faster than its
+   *        initial sizing assumed still span its axis: a ring bounded below the source's rate
+   *        runs out of history in seconds and the trace stops short of the left edge.
+   */
+  void resizeCapacity(int capacity, double windowSec)
+  {
+    if (capacity < 1 || !(windowSec > 0.0))
+      return;
+
+    if (static_cast<std::size_t>(capacity) == time.capacity())
+      return;
+
+    time.resize(static_cast<std::size_t>(capacity));
+    value.resize(static_cast<std::size_t>(capacity));
+
+    interval  = 2.0 * windowSec / static_cast<double>(capacity);
+    nextEmit  = 0.0;
+    cellSlots = 0;
+  }
+
+  /**
    * @brief Clears retained samples and the decimation cell state.
    */
   void clear()
@@ -428,10 +467,20 @@ struct TimeRing {
   }
 
   /**
-   * @brief Appends one (time, value), decimating to a min/max envelope pair per cell on an
-   *        absolute time grid, replacing the drifting peak-pick that aliased high-rate
-   *        bipolar signals into shimmer. The open cell's slots update in place so the
-   *        newest sample is visible immediately at any input rate.
+   * @brief True when a (sanitised, monotonic) time @p t opens a fresh decimation cell: the ring
+   *        is empty or the open cell's grid boundary has been crossed. The one predicate both
+   *        appendDecimated() and the envelope pyramid built on top of it evaluate.
+   */
+  [[nodiscard]] bool opensCell(double t) const noexcept
+  {
+    return time.size() == 0 || t >= nextEmit;
+  }
+
+  /**
+   * @brief Appends one (time, value) as a per-cell min/max pair on an absolute time grid; the
+   *        open cell updates in place. Sub-cell backward jitter clamps forward, but a jump back
+   *        over a whole cell is a restarted clock and drops the retained span: clamping it
+   *        wedges the ring shut until wall time catches up.
    */
   void appendDecimated(double t, double v)
   {
@@ -444,13 +493,18 @@ struct TimeRing {
     if (!std::isfinite(t) || !std::isfinite(v)) [[unlikely]]
       return;
 
-    if (time.size() > 0 && t < time[time.size() - 1]) [[unlikely]]
-      t = time[time.size() - 1];
+    const std::size_t held = time.size();
+    if (held > 0 && t < time[held - 1]) [[unlikely]] {
+      if (t < time[held - 1] - interval)
+        clear();
+      else
+        t = time[held - 1];
+    }
 
     if (cellSlots > static_cast<int>(time.size())) [[unlikely]]
       cellSlots = static_cast<int>(time.size());
 
-    if (time.size() == 0 || t >= nextEmit) {
+    if (opensCell(t)) {
       nextEmit   = (std::floor(t / interval) + 1.0) * interval;
       accMin     = v;
       accMax     = v;
@@ -505,7 +559,304 @@ struct TimeRing {
 };
 
 /**
- * @brief Oscilloscope-style sweep/trigger engine with a front/back ring per curve.
+ * @brief One coarse envelope cell: the two extremes of the level-0 span it covers, stored in
+ *        time order so a level reads as a monotonic (time, value) sequence of 2 * cells points.
+ */
+struct EnvelopeCell {
+  double t0;
+  double v0;
+  double t1;
+  double v1;
+};
+
+/**
+ * @brief One coarse level of an EnvelopeRing: a bounded ring of cells each spanning
+ *        16^level level-0 grid cells. The back cell is the open one; openIndex is its level-0
+ *        cell index shifted right by @c shift, so nesting is exact integer arithmetic.
+ */
+struct EnvelopeLevel {
+  FixedQueue<EnvelopeCell> cells;
+  std::int64_t openIndex;
+  int shift;
+  bool openValid;
+
+  /**
+   * @brief Sizes the level to @p capacity cells covering 2^shift level-0 cells each.
+   */
+  explicit EnvelopeLevel(std::size_t capacity = 1, int shiftBits = 4)
+    : cells(capacity < 1 ? 1 : capacity), openIndex(0), shift(shiftBits), openValid(false)
+  {}
+};
+
+/**
+ * @brief Bounded envelope pyramid over a TimeRing (spec 0057): level 0 is the full-detail ring,
+ *        level k holds time-ordered min/max pairs per 16^k level-0 cells in its own bounded ring
+ *        (16/15 of level 0's bytes in total). A completed level-0 cell folds into every coarser
+ *        open cell, never a rescan; no allocation after construction. GUI-thread single writer.
+ */
+struct EnvelopeRing {
+  static constexpr int kLevelShift            = 4;
+  static constexpr int kMaxCoarseLevels       = 9;
+  static constexpr std::size_t kMinLevelCells = 3;
+
+  TimeRing level0;
+  std::vector<EnvelopeLevel> levels;
+  std::int64_t openCell;
+  bool openCellValid;
+
+  /**
+   * @brief Constructs level 0 with `capacity` slots over `windowSec` seconds and derives the
+   *        coarse levels from that capacity.
+   */
+  explicit EnvelopeRing(int capacity = 1, double windowSec = 1.0)
+    : level0(capacity, windowSec), levels(), openCell(0), openCellValid(false)
+  {
+    buildLevels();
+  }
+
+  /**
+   * @brief Level-0 grid index of time @p t; the same floor(t / interval) appendDecimated uses
+   *        to place nextEmit, so both agree on cell boundaries by construction.
+   */
+  [[nodiscard]] std::int64_t cellIndex(double t) const noexcept
+  {
+    return static_cast<std::int64_t>(std::floor(t / level0.interval));
+  }
+
+  /**
+   * @brief Wall-time span of one cell at @p level (0 = the level-0 interval).
+   */
+  [[nodiscard]] double levelSpanSec(int level) const noexcept
+  {
+    return std::ldexp(level0.interval, kLevelShift * (level < 0 ? 0 : level));
+  }
+
+  /**
+   * @brief Number of coarse levels currently built (level 0 excluded).
+   */
+  [[nodiscard]] int coarseLevelCount() const noexcept { return static_cast<int>(levels.size()); }
+
+  /**
+   * @brief Coarsest level whose cell span fits under one pixel of @p spanSec / @p pixels and
+   *        whose oldest cell still reaches back to @p oldestSec (absolute time). Level 0 is the
+   *        ground truth and the answer for narrow windows or empty coarse levels.
+   */
+  [[nodiscard]] int selectLevel(double spanSec, int pixels, double oldestSec) const
+  {
+    if (!(spanSec > 0.0) || pixels <= 0 || !(level0.interval > 0.0) || !std::isfinite(oldestSec))
+      return 0;
+
+    const double pixelSec       = spanSec / static_cast<double>(pixels);
+    const std::int64_t oldestId = cellIndex(oldestSec);
+
+    int chosen = 0;
+    for (std::size_t k = 0; k < levels.size(); ++k) {
+      const auto& level = levels[k];
+      const int number  = static_cast<int>(k) + 1;
+      if (levelSpanSec(number) > pixelSec || level.cells.size() < 2)
+        break;
+
+      if ((cellIndex(level.cells.front().t0) >> level.shift) > (oldestId >> level.shift))
+        break;
+
+      chosen = number;
+    }
+
+    return chosen;
+  }
+
+  /**
+   * @brief Drops every retained sample and every coarse cell.
+   */
+  void clear()
+  {
+    level0.clear();
+    for (auto& level : levels) {
+      level.cells.clear();
+      level.openValid = false;
+    }
+
+    openCellValid = false;
+  }
+
+  /**
+   * @brief Re-sizes level 0 (keeping its newest samples, see TimeRing::resizeCapacity) and
+   *        rebuilds the coarse levels from what it retained. Rare by construction: only the
+   *        display-tick growth path and a time-range change reach it.
+   */
+  void resizeCapacity(int capacity, double windowSec)
+  {
+    if (capacity < 1 || !(windowSec > 0.0))
+      return;
+
+    if (static_cast<std::size_t>(capacity) == level0.time.capacity())
+      return;
+
+    level0.resizeCapacity(capacity, windowSec);
+    buildLevels();
+    rebuildLevelsFromLevel0();
+  }
+
+  /**
+   * @brief Appends one (time, value): rejects non-finite input, folds the level-0 cell this
+   *        sample closes into the coarse levels, then decimates into level 0. Costs one branch
+   *        over TimeRing::appendDecimated on the common (same-cell) path. A restarted producer
+   *        clock drops the pyramid with level 0: those cells describe the abandoned timeline.
+   */
+  void appendDecimated(double t, double v)
+  {
+    SS_ASSERT(level0.time.capacity() == level0.value.capacity(), return);
+
+    if (!std::isfinite(t) || !std::isfinite(v)) [[unlikely]]
+      return;
+
+    if (!(level0.interval > 0.0) || level0.time.raw() == nullptr) [[unlikely]]
+      return;
+
+    const std::size_t n = level0.time.size();
+    if (n > 0 && t < level0.time[n - 1]) [[unlikely]] {
+      if (t < level0.time[n - 1] - level0.interval)
+        clear();
+      else
+        t = level0.time[n - 1];
+    }
+
+    if (level0.opensCell(t)) [[unlikely]] {
+      if (openCellValid)
+        foldOpenCell();
+
+      openCell      = cellIndex(t);
+      openCellValid = true;
+    }
+
+    level0.appendDecimated(t, v);
+  }
+
+private:
+  /**
+   * @brief Sizes the coarse levels from level 0's capacity: cells0 = capacity / 2 (a saturated
+   *        grid keeps two slots per cell), level k holds ceil(cells0 / 16^k) + 1 cells while that
+   *        is at least kMinLevelCells, at most kMaxCoarseLevels levels.
+   */
+  void buildLevels()
+  {
+    levels.clear();
+    const std::size_t cells0 = level0.time.capacity() / 2;
+    for (int k = 1; k <= kMaxCoarseLevels; ++k) {
+      const std::size_t denom = static_cast<std::size_t>(1) << (kLevelShift * k);
+      const std::size_t count = (cells0 + denom - 1) / denom + 1;
+      if (count < kMinLevelCells)
+        break;
+
+      levels.emplace_back(count, kLevelShift * k);
+    }
+  }
+
+  /**
+   * @brief Folds level 0's closed cell (its acc* extremes) into every coarse level's open cell.
+   */
+  void foldOpenCell()
+  {
+    SS_ASSERT(openCellValid, return);
+
+    const bool minFirst = level0.accMinTime <= level0.accMaxTime;
+    EnvelopeCell cell;
+    cell.t0 = minFirst ? level0.accMinTime : level0.accMaxTime;
+    cell.v0 = minFirst ? level0.accMin : level0.accMax;
+    cell.t1 = minFirst ? level0.accMaxTime : level0.accMinTime;
+    cell.v1 = minFirst ? level0.accMax : level0.accMin;
+    foldCell(openCell, cell);
+  }
+
+  /**
+   * @brief Merges one level-0 cell (index @p index0, extremes @p cell) into each coarse level:
+   *        the open cell when the shifted index matches, a fresh pushed cell otherwise.
+   */
+  void foldCell(std::int64_t index0, const EnvelopeCell& cell)
+  {
+    for (auto& level : levels) {
+      const std::int64_t index = index0 >> level.shift;
+      if (level.openValid && index == level.openIndex && level.cells.size() > 0) {
+        mergeCell(level.cells[level.cells.size() - 1], cell);
+        continue;
+      }
+
+      level.cells.push(cell);
+      level.openIndex = index;
+      level.openValid = true;
+    }
+  }
+
+  /**
+   * @brief Widens @p target's extremes with @p cell's, keeping the pair time-ordered.
+   */
+  static void mergeCell(EnvelopeCell& target, const EnvelopeCell& cell)
+  {
+    const bool targetMinFirst = target.v0 <= target.v1;
+    double minT               = targetMinFirst ? target.t0 : target.t1;
+    double minV               = targetMinFirst ? target.v0 : target.v1;
+    double maxT               = targetMinFirst ? target.t1 : target.t0;
+    double maxV               = targetMinFirst ? target.v1 : target.v0;
+
+    const bool cellMinFirst = cell.v0 <= cell.v1;
+    const double cMinT      = cellMinFirst ? cell.t0 : cell.t1;
+    const double cMinV      = cellMinFirst ? cell.v0 : cell.v1;
+    const double cMaxT      = cellMinFirst ? cell.t1 : cell.t0;
+    const double cMaxV      = cellMinFirst ? cell.v1 : cell.v0;
+
+    if (cMinV < minV) {
+      minV = cMinV;
+      minT = cMinT;
+    }
+
+    if (cMaxV > maxV) {
+      maxV = cMaxV;
+      maxT = cMaxT;
+    }
+
+    const bool minFirst = minT <= maxT;
+    target.t0           = minFirst ? minT : maxT;
+    target.v0           = minFirst ? minV : maxV;
+    target.t1           = minFirst ? maxT : minT;
+    target.v1           = minFirst ? maxV : minV;
+  }
+
+  /**
+   * @brief Refills the coarse levels from level 0's retained slots, each folded as a one-sample
+   *        cell. Level 0's own open-cell state was reset by the resize, so the next append opens
+   *        a fresh cell instead of re-folding stale accumulators.
+   */
+  void rebuildLevelsFromLevel0()
+  {
+    openCellValid       = false;
+    const std::size_t n = std::min(level0.time.size(), level0.value.size());
+    for (std::size_t k = 0; k < n; ++k) {
+      const double t = level0.time[k];
+      const double v = level0.value[k];
+      if (!std::isfinite(t) || !std::isfinite(v))
+        continue;
+
+      const EnvelopeCell cell{t, v, t, v};
+      foldCell(cellIndex(t), cell);
+    }
+  }
+};
+
+/**
+ * @brief One retained, completed sweep (spec 0061): the trigger instant on the plot clock, the
+ *        window it spans and a deep copy of every curve's ring at completion time.
+ */
+struct SweepSegment {
+  double triggerSec;
+  double windowSec;
+  std::vector<TimeRing> curves;
+
+  SweepSegment() : triggerSec(0.0), windowSec(0.0), curves() {}
+};
+
+/**
+ * @brief Oscilloscope-style sweep/trigger engine with a front/back ring per curve, plus a
+ *        bounded store of the last N completed sweeps (spec 0061).
  */
 struct SweepEngine {
   static constexpr int kAuto    = 0;
@@ -517,8 +868,17 @@ struct SweepEngine {
   // Windows wider than this draw the live partial trace instead of freezing
   static constexpr double kLiveWindowSec = 0.1;
 
+  // Segment retention bounds: requested N is clamped so a plot never exceeds kMaxSegmentBytes
+  static constexpr int kMaxSegments              = 64;
+  static constexpr std::size_t kMaxSegmentBytes  = 32u * 1024u * 1024u;
+  static constexpr std::size_t kSegmentSlotBytes = 2 * sizeof(double);
+
   std::vector<TimeRing> front;
   std::vector<TimeRing> back;
+  std::vector<SweepSegment> segments;
+  std::size_t segmentHead;
+  std::size_t segmentFill;
+  int segmentRetention;
 
   double windowSec;
   double timebaseSec;
@@ -543,7 +903,10 @@ struct SweepEngine {
    * @brief Constructs an idle, disabled sweep engine with no curves.
    */
   SweepEngine()
-    : windowSec(1.0)
+    : segmentHead(0)
+    , segmentFill(0)
+    , segmentRetention(0)
+    , windowSec(1.0)
     , timebaseSec(0.0)
     , level(0.0)
     , holdoffSec(0.0)
@@ -580,7 +943,120 @@ struct SweepEngine {
       back.emplace_back(capacity, windowSec);
     }
 
+    retuneRings();
     resetState();
+    setSegmentRetention(segmentRetention);
+  }
+
+  /**
+   * @brief Requests retention of the last @p count completed sweeps (0 = off). The effective
+   *        count is clamped so `count * curves * capacity * 16 B` stays under kMaxSegmentBytes;
+   *        segments are pre-sized here so completeSweep() never allocates.
+   */
+  void setSegmentRetention(int count)
+  {
+    segmentRetention = std::clamp(count, 0, kMaxSegments);
+
+    const std::size_t curves   = front.size();
+    const std::size_t capacity = front.empty() ? 0 : front.front().time.capacity();
+    const std::size_t perSeg   = std::max<std::size_t>(1, curves * capacity * kSegmentSlotBytes);
+    const std::size_t maxByMem = std::max<std::size_t>(1, kMaxSegmentBytes / perSeg);
+    const std::size_t target =
+      std::min<std::size_t>(static_cast<std::size_t>(segmentRetention), maxByMem);
+
+    const bool sameShape =
+      !segments.empty() && segments.front().curves.size() == curves
+      && (curves == 0 || segments.front().curves.front().time.capacity() == capacity);
+    if (segments.size() == target && (segments.empty() || sameShape))
+      return;
+
+    segments.clear();
+    segments.reserve(target);
+    for (std::size_t i = 0; i < target; ++i) {
+      SweepSegment segment;
+      segment.curves.reserve(curves);
+      for (std::size_t c = 0; c < curves; ++c)
+        segment.curves.emplace_back(static_cast<int>(capacity), windowSec);
+
+      segments.push_back(std::move(segment));
+    }
+
+    segmentHead = 0;
+    segmentFill = 0;
+  }
+
+  /**
+   * @brief Effective retained-segment capacity after the byte-budget clamp.
+   */
+  [[nodiscard]] int segmentCapacity() const noexcept { return static_cast<int>(segments.size()); }
+
+  /**
+   * @brief Number of completed sweeps currently retained.
+   */
+  [[nodiscard]] int segmentCount() const noexcept { return static_cast<int>(segmentFill); }
+
+  /**
+   * @brief Retained segment @p index, 0 = newest; nullptr when out of range.
+   */
+  [[nodiscard]] const SweepSegment* segment(int index) const noexcept
+  {
+    if (index < 0 || static_cast<std::size_t>(index) >= segmentFill || segments.empty())
+      return nullptr;
+
+    const std::size_t cap  = segments.size();
+    const std::size_t slot = (segmentHead + cap - 1 - static_cast<std::size_t>(index)) % cap;
+    return &segments[slot];
+  }
+
+  /**
+   * @brief Forgets every retained sweep but keeps the storage.
+   */
+  void clearSegments() noexcept
+  {
+    segmentHead = 0;
+    segmentFill = 0;
+  }
+
+  /**
+   * @brief Takes over @p other's retained segments when the shapes match (curve count and ring
+   *        capacity), so a Time-Range or layout rebuild keeps them like the history rings.
+   */
+  void takeSegmentsFrom(const SweepEngine& other)
+  {
+    setSegmentRetention(other.segmentRetention);
+    if (other.segments.empty() || other.segments.size() != segments.size())
+      return;
+
+    const auto& mine   = segments.front().curves;
+    const auto& theirs = other.segments.front().curves;
+    if (mine.size() != theirs.size())
+      return;
+
+    if (!mine.empty() && mine.front().time.capacity() != theirs.front().time.capacity())
+      return;
+
+    segments    = other.segments;
+    segmentHead = other.segmentHead;
+    segmentFill = other.segmentFill;
+  }
+
+  /**
+   * @brief Re-grids every ring to the window a sweep actually spans, so a short timebase
+   *        decimates at the timebase's resolution instead of the full-range grid the rings were
+   *        built with -- which is what used to flatten a millisecond capture of a dense source.
+   */
+  void retuneRings()
+  {
+    const auto cell = [](const TimeRing& ring, double window) {
+      const auto capacity = ring.time.capacity();
+      return 2.0 * window / static_cast<double>(capacity > 0 ? capacity : 1);
+    };
+
+    for (auto& r : front)
+      r.retune(cell(r, activeWindow()));
+
+    for (auto& r : back)
+      r.retune(cell(r, activeWindow()));
   }
 
   /**
@@ -605,9 +1081,14 @@ struct SweepEngine {
   }
 
   /**
-   * @brief Sets the per-sweep timebase in seconds; 0 or >= window means full window.
+   * @brief Sets the per-sweep timebase in seconds; 0 or >= window means full window. The rings
+   *        follow, so the capture is decimated at the resolution the timebase implies.
    */
-  void setTimebase(double seconds) { timebaseSec = seconds > 0 ? seconds : 0.0; }
+  void setTimebase(double seconds)
+  {
+    timebaseSec = seconds > 0 ? seconds : 0.0;
+    retuneRings();
+  }
 
   /**
    * @brief Re-arms a single-shot capture without touching retained data.
@@ -634,6 +1115,7 @@ struct SweepEngine {
     sweeping       = false;
     hasFront       = false;
     armed          = true;
+    clearSegments();
   }
 
   /**
@@ -755,6 +1237,51 @@ private:
     sweeping = false;
     if (mode == kSingle)
       armed = false;
+
+    retainFront();
+  }
+
+  /**
+   * @brief Deep-copies the just-completed front rings into the next segment slot (FixedQueue
+   *        copies alias their storage, so the slots are refilled element by element). One
+   *        bounded walk per completed sweep, no allocation.
+   */
+  void retainFront()
+  {
+    if (segments.empty())
+      return;
+
+    SS_ASSERT(segmentHead < segments.size(), segmentHead = 0);
+
+    SweepSegment& slot = segments[segmentHead];
+    slot.triggerSec    = t0;
+    slot.windowSec     = activeWindow();
+
+    const std::size_t curves = std::min(slot.curves.size(), front.size());
+    for (std::size_t c = 0; c < curves; ++c)
+      copyRing(front[c], slot.curves[c]);
+
+    segmentHead = (segmentHead + 1) % segments.size();
+    segmentFill = std::min(segments.size(), segmentFill + 1);
+  }
+
+  /**
+   * @brief Element-wise copy of a ring's retained samples and grid state into a same-capacity
+   *        target that owns its own storage.
+   */
+  static void copyRing(const TimeRing& source, TimeRing& target)
+  {
+    target.clear();
+    target.interval = source.interval;
+
+    const std::size_t n = std::min(source.time.size(), source.value.size());
+    for (std::size_t k = 0; k < n && k < target.time.capacity(); ++k) {
+      target.time.push(source.time[k]);
+      target.value.push(source.value[k]);
+    }
+
+    target.nextEmit  = source.nextEmit;
+    target.cellSlots = 0;
   }
 };
 
@@ -1140,39 +1667,27 @@ inline bool downsampleMonotonic(
 }
 
 /**
- * @brief Decimate the visible [xLo, xHi] slice of a monotonic time ring to render
- *        columns. Times rebase so the newest sample sits at 0 (axis [-T, 0]); monotonic
- *        time resolves the window as two binary searches and the slice is walked once.
- *        Buckets sit on an absolute newest-anchored column-width lattice (shimmer fix).
+ * @brief Shared body of the time-window downsamplers over @p n monotonic (time, value) points
+ *        rebased so @p newest sits at 0 (axis [-T, 0]): the window resolves as two binary
+ *        searches, the slice is walked once, and buckets sit on an absolute newest-anchored
+ *        column-width lattice (shimmer fix).
  */
-inline bool downsampleTimeWindow(const AxisData& timeX,
-                                 const AxisData& valueY,
-                                 ssfp_t xLo,
-                                 ssfp_t xHi,
-                                 int w,
-                                 int h,
-                                 QList<QPointF>& out,
-                                 DownsampleWorkspace* ws)
+template<typename XAt, typename YAt>
+inline bool dsTimeWindowCore(std::size_t n,
+                             XAt xAbs,
+                             YAt yAt,
+                             ssfp_t newest,
+                             ssfp_t xLo,
+                             ssfp_t xHi,
+                             int w,
+                             int h,
+                             QList<QPointF>& out,
+                             DownsampleWorkspace* ws)
 {
-  out.clear();
-  const std::size_t n = std::min<std::size_t>(timeX.size(), valueY.size());
-  if (n == 0 || w <= 0 || h <= 0 || !(xLo < xHi))
-    return true;
+  SS_ASSERT(ws != nullptr, return false);
+  SS_ASSERT(n > 0, return true);
 
-  std::size_t xn0, xn1, yn0, yn1;
-  const ssfp_t *xp0, *xp1, *yp0, *yp1;
-  spanFromFixedQueue(timeX, xp0, xn0, xp1, xn1);
-  spanFromFixedQueue(valueY, yp0, yn0, yp1, yn1);
-
-  auto xAbs = [&](std::size_t i) -> ssfp_t {
-    return (i < xn0) ? xp0[i] : xp1[i - xn0];
-  };
-  auto yAt = [&](std::size_t i) -> ssfp_t {
-    return (i < yn0) ? yp0[i] : yp1[i - yn0];
-  };
-
-  const ssfp_t newest = xAbs(n - 1);
-  auto tRel           = [&](std::size_t i) -> ssfp_t {
+  auto tRel = [&](std::size_t i) -> ssfp_t {
     return xAbs(i) - newest;
   };
 
@@ -1220,6 +1735,90 @@ inline bool downsampleTimeWindow(const AxisData& timeX,
   }
 
   return true;
+}
+
+/**
+ * @brief Decimate the visible [xLo, xHi] slice of a monotonic time ring to render columns; the
+ *        newest sample is the axis' 0. See dsTimeWindowCore() for the bucket lattice.
+ */
+inline bool downsampleTimeWindow(const AxisData& timeX,
+                                 const AxisData& valueY,
+                                 ssfp_t xLo,
+                                 ssfp_t xHi,
+                                 int w,
+                                 int h,
+                                 QList<QPointF>& out,
+                                 DownsampleWorkspace* ws)
+{
+  out.clear();
+  const std::size_t n = std::min<std::size_t>(timeX.size(), valueY.size());
+  if (n == 0 || w <= 0 || h <= 0 || !(xLo < xHi))
+    return true;
+
+  std::size_t xn0, xn1, yn0, yn1;
+  const ssfp_t *xp0, *xp1, *yp0, *yp1;
+  spanFromFixedQueue(timeX, xp0, xn0, xp1, xn1);
+  spanFromFixedQueue(valueY, yp0, yn0, yp1, yn1);
+
+  auto xAbs = [&](std::size_t i) -> ssfp_t {
+    return (i < xn0) ? xp0[i] : xp1[i - xn0];
+  };
+  auto yAt = [&](std::size_t i) -> ssfp_t {
+    return (i < yn0) ? yp0[i] : yp1[i - yn0];
+  };
+
+  return dsTimeWindowCore(n, xAbs, yAt, xAbs(n - 1), xLo, xHi, w, h, out, ws);
+}
+
+/**
+ * @brief Decimate the visible [xLo, xHi] slice of an envelope pyramid (spec 0057): the coarsest
+ *        level whose cells fit under one render column and still cover the window feeds the
+ *        same column lattice with its extreme pairs; level 0 reads as the plain overload. The
+ *        axis' 0 is always level 0's newest sample, so a coarse trace never shifts right.
+ */
+inline bool downsampleTimeWindow(const EnvelopeRing& ring,
+                                 ssfp_t xLo,
+                                 ssfp_t xHi,
+                                 int w,
+                                 int h,
+                                 QList<QPointF>& out,
+                                 DownsampleWorkspace* ws)
+{
+  out.clear();
+  const AxisData& timeX  = ring.level0.time;
+  const AxisData& valueY = ring.level0.value;
+  const std::size_t n0   = std::min<std::size_t>(timeX.size(), valueY.size());
+  if (n0 == 0 || w <= 0 || h <= 0 || !(xLo < xHi))
+    return true;
+
+  const ssfp_t newest = timeX[n0 - 1];
+  const ssfp_t oldest = std::max<ssfp_t>(xLo + newest, timeX[0]);
+  const int level     = ring.selectLevel(xHi - xLo, w, oldest);
+  if (level <= 0 || level > ring.coarseLevelCount())
+    return downsampleTimeWindow(timeX, valueY, xLo, xHi, w, h, out, ws);
+
+  const auto& cells   = ring.levels[static_cast<std::size_t>(level - 1)].cells;
+  const std::size_t n = 2 * cells.size();
+  if (n == 0)
+    return true;
+
+  std::size_t cn0, cn1;
+  const EnvelopeCell *cp0, *cp1;
+  spanFromFixedQueue(cells, cp0, cn0, cp1, cn1);
+
+  auto cellAt = [&](std::size_t i) -> const EnvelopeCell& {
+    return (i < cn0) ? cp0[i] : cp1[i - cn0];
+  };
+  auto xAbs = [&](std::size_t i) -> ssfp_t {
+    const EnvelopeCell& c = cellAt(i >> 1);
+    return (i & 1) ? c.t1 : c.t0;
+  };
+  auto yAt = [&](std::size_t i) -> ssfp_t {
+    const EnvelopeCell& c = cellAt(i >> 1);
+    return (i & 1) ? c.v1 : c.v0;
+  };
+
+  return dsTimeWindowCore(n, xAbs, yAt, newest, xLo, xHi, w, h, out, ws);
 }
 
 /**

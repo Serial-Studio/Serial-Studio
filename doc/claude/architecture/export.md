@@ -20,17 +20,46 @@
   mostly-forward-filled rows/s; MDF4/Sessions stay full-rate and sparse and are the right home
   for sample-rate data). Applies live to an open recording. The `csvExport.setInterval` API and
   the Preferences → Export tab both drive `exportInterval`.
-- **Typed stream sinks (spec 0051 M5)**: a stream-lane source never reaches the frame
-  exporters. `CSV::StreamExport` / `MDF4::StreamExport` (each a `FrameConsumer<StreamBlockItemPtr>`
-  with its own worker thread) write **one file per stream source**
-  (`*_stream_sourceN.csv` / `.mf4`) carrying the **full-rate post-transform** samples, with
-  per-sample times derived as `t0 + i * dt` — never the `monotonicFrameNs` bump, which exists
-  only to break same-ns collisions on the frame lane. Their enable state follows the parent
-  exporter (`setExportEnabled`), they close with it, and they stop in
-  `stopFrameConsumerWorkers()`. The single-producer invariant is kept by fan-in: every
-  `StreamProcessor::blockReady` is queued to the GUI-affine `ingestBlock`, so each sink's SPSC
-  queue still has exactly one producer no matter how many stream workers exist. Block payloads
-  are only built while some sink (CSV, MDF4 or an API subscriber) is live.
+- **One file per format per session (spec 0055).** The per-source `*_stream_sourceN.csv` /
+  `.mf4` files are gone with the sinks that wrote them: every consumer now ingests one
+  `DataModel::DataBlock` from the pipeline thread, both lanes.
+  - **CSV writes SPARSE rows into one file**: one row per distinct sample instant, cells filled
+    only for the datasets sampled at that instant, nothing forward-filled and nothing invented.
+    The merge lives in `CSV/SparseRowMerger.h` (extracted so it is unit-testable without QFile,
+    the workspace manager or a session) and buffers **blocks, not rows** -- at 48 kHz a 250 ms
+    reorder window is ~12k rows, which as cells would be hundreds of thousands of live QStrings.
+    A uniform-grid block keeps its exactly-derived offsets; an irregular one takes
+    `monotonicFrameNs`, because without that bump two frames landing on the same coarse-clock
+    nanosecond would coalesce into one row and one of them would be lost. Coalescing is only
+    correct ACROSS sources. `CSVExportInterval` still switches to dense forward-filled rows and
+    still defaults to disabled (D4).
+  - **MDF4 writes one `.mf4`** with a channel group per project group *and* per stream source,
+    each on its own master time channel -- which is what lets one file hold sources at different
+    rates. `buildColumnMap()` resolves uniqueId -> (channel group, slot) once at file creation,
+    since a block carries dataset identities but no group structure.
+- **Sessions store one unified `blocks` table (spec 0055, schema `user_version` 3)**: one row per
+  dataset per published block, for both lanes. `values_blob` + `raw_values` are little-endian
+  float64, `texts`/`raw_texts` length-prefixed UTF-8 (a recorded value may contain commas, quotes
+  or NULs, so delimiting would corrupt exactly the values worth recording), `times` present only
+  when `dt_ns` is 0. `t_end_ns` is indexed with `t0_ns` so a reader finds the blocks covering an
+  instant by lookup instead of decoding, and `min_value`/`max_value`/`sum_value`/`finite_count`
+  keep the explorer's report aggregates pure SQL -- SQL cannot compute MIN/AVG over a blob.
+  `hashBlockRow` is the spec-0044 digest; `hashReadingRow` / `hashStreamBlock` are **kept verbatim**
+  so a legacy archive re-hashes identically.
+  - **Legacy archives are read-only history (R8).** `readings` and `stream_blocks` still open,
+    replay and verify; the app never writes them again. Every reader goes through
+    `Sessions/BlockReader.h` -- `decodeBlockRow()`, `expandBlockTimes()`, the `ReadingCursor` that
+    streams either storage a block at a time, and `sessionUsesBlocks()`. **That probe is
+    per-session, deliberately NOT `PRAGMA user_version`**: opening a legacy archive with a current
+    build migrates its schema, so the version says nothing about where an already-recorded
+    session's samples sit. `tests/fixtures/sessions/` holds frozen 4.0.3 captures of both legacy
+    storages; `tst_sessions_legacy_archive` pins the probe against them.
+  - **Replay re-enters through the unified tail.** The session player builds `DataBlock`s straight
+    from its stored blobs and calls `FrameBuilder::replayBlock`, which publishes with the recording
+    sinks masked. The spec-0054 `ReplayStreamSource` stand-in driver and its replay `StreamWorker`
+    are deleted, along with the float32 interleave round trip they required. Because no worker sits
+    in front of a replay any more there is no precomputed FFT window, so `applyBlockColumn` falls
+    back to feeding the FFT and waterfall series from the samples -- what the frame lane always did.
 - **Session DB lives in `app/src/Sessions/`** (NOT `app/src/SQLite/`):
   - `Sessions::DatabaseManager` — singleton owning the open `.db`; backs `app/qml/DatabaseExplorer/`.
   - `Sessions::Export` (`Sessions/Export.h/.cpp`): `FrameConsumer`-based; tables
@@ -84,6 +113,15 @@
     `INSERT` — **never `INSERT OR IGNORE`** — `timestamp_ns` collisions are routine.
   - Break ts ties with `reading_id` in ORDER BY / MIN/MAX subqueries. `DISTINCT timestamp_ns`
     stats undercount on collisions.
+  - **View-state bundle (spec 0062)**: `sessions.view_state` (nullable TEXT, `kUserVersion` 4)
+    carries `UI::Dashboard::viewStateJson()` — per-widget cursors, zoom/pan, crosshair mode and
+    pause pushed by `Plot.qml`/`MultiPlot.qml` through `saveWidgetViewState` (500 ms coalesce),
+    snapshotted by `Sessions::Export` beside the project snapshot and written by the worker at
+    session start, on a 1.5 s debounce (`ExportWorker::storeViewState`) and in `finalizeSession`.
+    `Sessions::Player` captures the pre-session view state, applies the bundle after
+    `restoreProjectFromJson` (widgets read it in `Component.onCompleted`), restores it on close,
+    and posts a Notification-Center warning when the embedded project differs from the one on
+    disk (the recording's project always wins). View state never marks the project modified.
 
 ## Reproducibility Verification (spec 0044)
 

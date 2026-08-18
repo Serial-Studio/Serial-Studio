@@ -15,6 +15,8 @@
 
 #  include "Sessions/DatabaseWorker.h"
 
+#  include <limits>
+#  include <map>
 #  include <QCoreApplication>
 #  include <QDateTime>
 #  include <QFile>
@@ -28,7 +30,15 @@
 #  include <QThread>
 
 #  include "SerialStudio.h"
+#  include "Sessions/BlockReader.h"
 #  include "Sessions/DatabaseManager.h"
+
+//--------------------------------------------------------------------------------------------------
+// Constants
+//--------------------------------------------------------------------------------------------------
+
+// Caps the CSV reorder buffer; a degenerate archive never advances its drain watermark
+static constexpr std::size_t kMaxBufferedInstants = 1 << 16;
 
 //--------------------------------------------------------------------------------------------------
 // Construction & destruction
@@ -191,6 +201,8 @@ void Sessions::DatabaseWorker::deleteSession(int sessionId, quint64 token)
 
   const char* statements[] = {
     "DELETE FROM readings WHERE session_id = ?",
+    "DELETE FROM blocks WHERE session_id = ?",
+    "DELETE FROM stream_blocks WHERE session_id = ?",
     "DELETE FROM raw_bytes WHERE session_id = ?",
     "DELETE FROM table_snapshots WHERE session_id = ?",
     "DELETE FROM session_tags WHERE session_id = ?",
@@ -686,6 +698,97 @@ bool Sessions::DatabaseWorker::streamCsvRows(QSqlQuery& readQ,
 }
 
 /**
+ * @brief Spec-0055 twin of streamCsvRows for block-backed sessions. Blocks are read in t0 order,
+ *        so once every block with t0_ns <= X has been decoded no later row can carry a stamp below
+ *        X: that watermark is what lets the export stay strictly time-ordered while holding only
+ *        the overlap between sources in memory, instead of materialising the whole session.
+ */
+bool Sessions::DatabaseWorker::streamCsvRowsFromBlocks(int sessionId,
+                                                       QFile& file,
+                                                       QTextStream& out,
+                                                       const std::vector<int>& uniqueIds,
+                                                       qint64 totalRows,
+                                                       const QString& outputPath)
+{
+  QMap<int, int> uidToCol;
+  for (int i = 0; i < static_cast<int>(uniqueIds.size()); ++i)
+    uidToCol.insert(uniqueIds[static_cast<size_t>(i)], i);
+
+  QSqlQuery q(m_db);
+  q.setForwardOnly(true);
+  q.prepare(QStringLiteral("SELECT %1 FROM blocks WHERE session_id = ? ORDER BY t0_ns, block_id")
+              .arg(QLatin1String(Sessions::kBlockColumns)));
+  q.bindValue(0, sessionId);
+  if (!q.exec()) {
+    Q_EMIT csvExportFinished(outputPath, false, q.lastError().text());
+    return false;
+  }
+
+  const int colCount        = static_cast<int>(uniqueIds.size());
+  const qint64 progressTick = totalRows > 0 ? (totalRows / 100 + 1) : 0;
+  std::map<qint64, QStringList> buffered;
+  qint64 emitted = 0;
+
+  const auto emitRow = [&](qint64 ts, const QStringList& cells) {
+    out << QString::number(ts / 1e9, 'f', 9);
+    for (const auto& cell : cells)
+      out << ',' << cell;
+
+    out << '\n';
+
+    ++emitted;
+    if (progressTick > 0 && emitted % progressTick == 0) {
+      const double pct = static_cast<double>(emitted) / static_cast<double>(totalRows);
+      Q_EMIT csvExportProgress(std::clamp(pct, 0.0, 1.0));
+    }
+  };
+
+  const auto flushBelow = [&](qint64 watermark) {
+    // code-verify off
+    // Bounded: every pass erases one buffered instant, and the buffer is finite.
+    for (auto it = buffered.begin(); it != buffered.end() && it->first < watermark;)
+      it = (emitRow(it->first, it->second), buffered.erase(it));
+    // code-verify on
+  };
+
+  std::vector<Sessions::ReadingRow> rows;
+  while (q.next()) {
+    if (m_cancelRequested.load(std::memory_order_acquire)) {
+      file.close();
+      file.remove();
+      Q_EMIT csvExportFinished(outputPath, false, tr("Cancelled"));
+      return false;
+    }
+
+    const qint64 blockStart = q.value(1).toLongLong();
+    flushBelow(blockStart);
+
+    if (buffered.size() > kMaxBufferedInstants)
+      flushBelow(buffered.rbegin()->first);
+
+    rows.clear();
+    if (!Sessions::decodeBlockRow(q, rows))
+      continue;
+
+    for (const auto& row : rows) {
+      const auto colIt = uidToCol.constFind(row.uniqueId);
+      if (colIt == uidToCol.constEnd())
+        continue;
+
+      auto& cells = buffered[row.timestampNs];
+      if (cells.isEmpty())
+        cells = QStringList(colCount);
+
+      cells[colIt.value()] =
+        row.isNumeric ? QString::number(row.finalNumeric, 'g', 17) : row.finalString;
+    }
+  }
+
+  flushBelow(std::numeric_limits<qint64>::max());
+  return true;
+}
+
+/**
  * @brief Streams a session's readings into a CSV file row-by-row, emitting progress.
  */
 void Sessions::DatabaseWorker::runCsvExport(int sessionId, const QString& outputPath)
@@ -705,24 +808,29 @@ void Sessions::DatabaseWorker::runCsvExport(int sessionId, const QString& output
     return;
   }
 
+  const bool usesBlocks = Sessions::sessionUsesBlocks(m_db, sessionId);
+
   qint64 totalRows = 0;
   {
     QSqlQuery cnt(m_db);
-    cnt.prepare("SELECT COUNT(*) FROM readings WHERE session_id = ?");
+    cnt.prepare(usesBlocks ? "SELECT COALESCE(SUM(frames), 0) FROM blocks WHERE session_id = ?"
+                           : "SELECT COUNT(*) FROM readings WHERE session_id = ?");
     cnt.bindValue(0, sessionId);
     if (cnt.exec() && cnt.next())
       totalRows = cnt.value(0).toLongLong();
   }
 
   QSqlQuery readQ(m_db);
-  readQ.setForwardOnly(true);
-  readQ.prepare(
-    "SELECT timestamp_ns, unique_id, final_numeric_value, final_string_value, is_numeric "
-    "FROM readings WHERE session_id = ? ORDER BY timestamp_ns, reading_id");
-  readQ.bindValue(0, sessionId);
-  if (!readQ.exec()) {
-    Q_EMIT csvExportFinished(outputPath, false, readQ.lastError().text());
-    return;
+  if (!usesBlocks) {
+    readQ.setForwardOnly(true);
+    readQ.prepare(
+      "SELECT timestamp_ns, unique_id, final_numeric_value, final_string_value, is_numeric "
+      "FROM readings WHERE session_id = ? ORDER BY timestamp_ns, reading_id");
+    readQ.bindValue(0, sessionId);
+    if (!readQ.exec()) {
+      Q_EMIT csvExportFinished(outputPath, false, readQ.lastError().text());
+      return;
+    }
   }
 
   QFile file(outputPath);
@@ -734,7 +842,10 @@ void Sessions::DatabaseWorker::runCsvExport(int sessionId, const QString& output
   QTextStream out(&file);
   out << headerCells.join(',') << '\n';
 
-  if (!streamCsvRows(readQ, file, out, uniqueIds, totalRows, outputPath))
+  const bool ok = usesBlocks
+                  ? streamCsvRowsFromBlocks(sessionId, file, out, uniqueIds, totalRows, outputPath)
+                  : streamCsvRows(readQ, file, out, uniqueIds, totalRows, outputPath);
+  if (!ok)
     return;
 
   file.close();
@@ -820,6 +931,51 @@ void Sessions::DatabaseWorker::runDatasetListLoad(int sessionId)
   Q_EMIT datasetListReady(sessionId, datasets);
 }
 
+/**
+ * @brief Summarises a session's recorded stream data per dataset (spec 0054): sample count and
+ *        the time span it covers, so a capture can be confirmed in the explorer without
+ *        replaying it. Aggregated in SQL -- no blob is read.
+ */
+void Sessions::DatabaseWorker::runStreamStatsLoad(int sessionId)
+{
+  QVariantList stats;
+  if (!m_db.isOpen()) {
+    Q_EMIT streamStatsReady(sessionId, stats);
+    return;
+  }
+
+  const bool usesBlocks = Sessions::sessionUsesBlocks(m_db, sessionId);
+
+  QSqlQuery q(m_db);
+  if (usesBlocks)
+    q.prepare("SELECT source_id, unique_id, SUM(frames), MIN(t0_ns), MAX(t_end_ns) "
+              "FROM blocks WHERE session_id = ? "
+              "GROUP BY source_id, unique_id ORDER BY source_id ASC, unique_id ASC");
+  else
+    q.prepare("SELECT source_id, unique_id, SUM(frames), MIN(t0_ns), "
+              "       MAX(t0_ns + frames * dt_ns) "
+              "FROM stream_blocks WHERE session_id = ? "
+              "GROUP BY source_id, unique_id ORDER BY source_id ASC, unique_id ASC");
+
+  q.bindValue(0, sessionId);
+  if (!q.exec()) {
+    Q_EMIT streamStatsReady(sessionId, stats);
+    return;
+  }
+
+  while (q.next()) {
+    QVariantMap entry;
+    entry["sourceId"]    = q.value(0).toInt();
+    entry["uniqueId"]    = q.value(1).toInt();
+    entry["sampleCount"] = q.value(2).toLongLong();
+    entry["startNs"]     = q.value(3).toLongLong();
+    entry["endNs"]       = q.value(4).toLongLong();
+    stats.append(entry);
+  }
+
+  Q_EMIT streamStatsReady(sessionId, stats);
+}
+
 //--------------------------------------------------------------------------------------------------
 // Internal cache fetchers
 //--------------------------------------------------------------------------------------------------
@@ -837,6 +993,23 @@ void Sessions::DatabaseWorker::refreshSessionListInternal()
   q.prepare("SELECT s.session_id, s.project_title, s.started_at, s.ended_at, s.notes, "
             "       (SELECT COUNT(DISTINCT timestamp_ns) FROM readings "
             "        WHERE session_id = s.session_id) "
+            "     + (SELECT COALESCE(SUM(frames), 0) FROM blocks b "
+            "        WHERE b.session_id = s.session_id AND b.unique_id = "
+            "          (SELECT MIN(unique_id) FROM blocks "
+            "           WHERE session_id = s.session_id)), "
+            "       (SELECT COALESCE(SUM(LENGTH(samples)), 0) FROM stream_blocks "
+            "        WHERE session_id = s.session_id) "
+            "     + (SELECT COALESCE(SUM(LENGTH(values_blob) "
+            "                           + COALESCE(LENGTH(raw_values), 0) "
+            "                           + COALESCE(LENGTH(texts), 0) "
+            "                           + COALESCE(LENGTH(raw_texts), 0) "
+            "                           + COALESCE(LENGTH(times), 0)), 0) "
+            "        FROM blocks WHERE session_id = s.session_id) "
+            "     + (SELECT COALESCE(SUM(LENGTH(data)), 0) FROM raw_bytes "
+            "        WHERE session_id = s.session_id) "
+            "     + (SELECT COALESCE(SUM(24 + COALESCE(LENGTH(raw_string_value), 0) "
+            "                           + COALESCE(LENGTH(final_string_value), 0)), 0) "
+            "        FROM readings WHERE session_id = s.session_id) "
             "FROM sessions s ORDER BY s.started_at DESC");
   if (!q.exec())
     return;
@@ -855,6 +1028,7 @@ void Sessions::DatabaseWorker::refreshSessionListInternal()
     row["ended_at"]       = formatDateForDisplay(q.value(3).toString());
     row["notes"]          = q.value(4).toString();
     row["frame_count"]    = q.value(5).toInt();
+    row["size_bytes"]     = q.value(6).toLongLong();
 
     const auto tags = tagsForSession(sessionId);
     QStringList labels;

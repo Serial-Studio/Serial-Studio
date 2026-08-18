@@ -24,7 +24,9 @@
 #include <QSettings>
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QTimer>
 
+#include "DataModel/DataBlock.h"
 #include "DataModel/DataTable.h"
 #include "DataModel/ExportSchema.h"
 #include "DataModel/Frame.h"
@@ -40,6 +42,10 @@ class ProjectModel;
 }  // namespace DataModel
 
 #ifdef BUILD_COMMERCIAL
+
+namespace UI {
+class Dashboard;
+}  // namespace UI
 
 namespace Sessions {
 class Export;
@@ -62,6 +68,19 @@ void hashReadingRow(QCryptographicHash& hash,
                     bool isNumeric);
 
 /**
+ * @brief Feeds one `blocks` row into a fingerprint hash (spec 0055). Both blobs are already
+ *        canonical little-endian, so the digest is machine-independent.
+ */
+void hashBlockRow(QCryptographicHash& hash,
+                  qint64 uniqueId,
+                  qint64 t0Ns,
+                  qint64 dtNs,
+                  qint64 frames,
+                  const QByteArray& values,
+                  const QByteArray& rawValues,
+                  const QByteArray& texts);
+
+/**
  * @brief Raw driver bytes paired with device id and capture timestamp.
  */
 struct TimestampedRawBytes {
@@ -82,14 +101,14 @@ struct TableSnapshotEntry {
 /**
  * @brief Background worker that persists frames and raw bytes to SQLite.
  */
-class ExportWorker : public DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr> {
+class ExportWorker : public DataModel::FrameConsumerWorker<DataModel::DataBlockPtr> {
   Q_OBJECT
 
 signals:
   void sessionIdAssigned(int sessionId);
 
 public:
-  ExportWorker(moodycamel::ReaderWriterQueue<DataModel::TimestampedFramePtr>* frameQueue,
+  ExportWorker(moodycamel::ReaderWriterQueue<DataModel::DataBlockPtr>* blockQueue,
                std::atomic<bool>* enabled,
                std::atomic<size_t>* queueSize,
                moodycamel::ReaderWriterQueue<TimestampedRawBytes>* rawQueue,
@@ -97,6 +116,7 @@ public:
                std::atomic<int>* operationMode,
                QMutex* projectSnapshotMutex,
                const QByteArray* projectSnapshot,
+               const QByteArray* viewStateSnapshot,
                const std::atomic<bool>* controlScriptSeen,
                const std::atomic<quint64>* linkDroppedFrames,
                const std::atomic<quint64>* linkOverflowBytes);
@@ -106,8 +126,13 @@ public:
   [[nodiscard]] bool isResourceOpen() const override;
   void processData() override;
 
+public slots:
+  void setTemplateFrame(const DataModel::Frame& frame);
+  void applyPublishedStructure(const DataModel::Frame& frame);
+  void storeViewState();
+
 protected:
-  void processItems(const std::vector<DataModel::TimestampedFramePtr>& items) override;
+  void processItems(const std::vector<DataModel::DataBlockPtr>& items) override;
 
 private:
   void createDatabase(const DataModel::Frame& frame);
@@ -118,8 +143,11 @@ private:
   void prepareHotpathQueries();
   void writeRawBytes();
   void writeTableSnapshots();
-  void writeFrameReadings(const DataModel::TimestampedFramePtr& frame);
-  void bindAndInsertReading(qint64 ns, const DataModel::Dataset& dataset);
+  void writeBlocks(const DataModel::DataBlockPtr& block);
+  void insertBlockRow(const DataModel::DataBlock& block,
+                      const DataModel::BlockColumn& column,
+                      qint64 t0Ns,
+                      qint64 dtNs);
   void finalizeSession();
 
   [[nodiscard]] QJsonObject buildReplayProjectJson(const DataModel::Frame& frame) const;
@@ -128,14 +156,15 @@ private:
 private:
   bool m_dbOpen;
   int m_sessionId;
+  DataModel::Frame m_templateFrame;
   std::optional<QSqlDatabase> m_db;
   DataModel::ExportSchema m_schema;
   DataModel::TimestampedFrame::SteadyTimePoint m_steadyBaseline;
   qint64 m_lastRawBytesNs;
   QCryptographicHash m_rawHash;
-  QCryptographicHash m_readingsHash;
+  QCryptographicHash m_blocksHash;
 
-  std::optional<QSqlQuery> m_readingQuery;
+  std::optional<QSqlQuery> m_blockQuery;
   std::optional<QSqlQuery> m_rawBytesQuery;
   std::optional<QSqlQuery> m_tableSnapshotQuery;
 
@@ -144,6 +173,7 @@ private:
   std::atomic<int>* m_operationMode;
   QMutex* m_projectSnapshotMutex;
   const QByteArray* m_projectSnapshot;
+  const QByteArray* m_viewStateSnapshot;
   const std::atomic<bool>* m_controlScriptSeen;
   const std::atomic<quint64>* m_linkDroppedFrames;
   const std::atomic<quint64>* m_linkOverflowBytes;
@@ -152,7 +182,7 @@ private:
 /**
  * @brief Session-database export controller (Pro) driving the SQLite worker.
  */
-class Export : public DataModel::FrameConsumer<DataModel::TimestampedFramePtr> {
+class Export : public DataModel::FrameConsumer<DataModel::DataBlockPtr> {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(bool isOpen
@@ -193,7 +223,7 @@ public slots:
   void setupExternalConnections();
   void setExportEnabled(const bool enabled);
   void setSettingsPersistent(const bool persistent);
-  void hotpathTxFrame(const DataModel::TimestampedFramePtr& frame);
+  void ingestBlock(const DataModel::DataBlockPtr& block);
   void hotpathTxRawBytes(int deviceId, const IO::CapturedDataPtr& data);
 
 protected:
@@ -203,9 +233,13 @@ private slots:
   void onWorkerOpenChanged();
   void captureTableSnapshots();
   void onWorkerSessionIdAssigned(int sessionId);
+  void refreshViewStateSnapshot();
+  void pushViewStateToWorker();
 
 private:
+  void wireViewState();
   void refreshProjectSnapshot();
+  void refreshTemplateFrame();
   void resetSessionHealthBaseline();
   void sampleSessionHealth();
 
@@ -226,6 +260,8 @@ private:
 
   QMutex m_projectSnapshotMutex;
   QByteArray m_projectSnapshot;
+  QByteArray m_viewStateSnapshot;
+  QTimer m_viewStateDebounce;
 
   alignas(kCacheLine) std::atomic<bool> m_controlScriptSeen;
   alignas(kCacheLine) std::atomic<quint64> m_linkDroppedFrames;
@@ -236,8 +272,10 @@ private:
   AppState* m_appState;
   DataModel::ProjectModel* m_projectModel;
   DataModel::FrameBuilder* m_frameBuilder;
+  DataModel::Frame m_sessionStructure;
   DataModel::ControlScript* m_controlScript;
   IO::ConnectionManager* m_connectionManager;
+  UI::Dashboard* m_dashboard;
 };
 
 }  // namespace Sessions

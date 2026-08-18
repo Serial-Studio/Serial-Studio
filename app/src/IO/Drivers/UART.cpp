@@ -80,16 +80,13 @@ static void configureNativeBuffer(QSerialPort* port, const qint32 baud)
 #endif
 
 /**
- * @brief Queues an error box so it opens once the open attempt has returned: a modal spins the
- *        event loop, and a connect request arriving inside it would re-enter the open whose
- *        stack the box was raised from.
+ * @brief Logs a driver failure to the console. Drivers never raise modal dialogs: a modal pumps
+ *        the event loop, so one raised from a connect or error stack lets queued work retire the
+ *        very driver still on that stack (spec 0056).
  */
-static void queueErrorBox(QObject* context, const QString& title, const QString& text)
+static void logDriverError(const QString& title, const QString& text)
 {
-  QMetaObject::invokeMethod(
-    context,
-    [title, text] { Misc::Utilities::showMessageBox(title, text, QMessageBox::Critical); },
-    Qt::QueuedConnection);
+  qWarning().noquote() << QStringLiteral("[%1] %2").arg(title, text);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -294,10 +291,9 @@ bool IO::Drivers::UART::open(const QIODevice::OpenMode mode)
 
     port()->setParity(parity());
     if (!port()->setBaudRate(baudRate())) {
-      queueErrorBox(this,
-                    tr("Failed to set baud rate"),
-                    tr("Baud rate %1 rejected for port \"%2\": %3")
-                      .arg(QString::number(baudRate()), name, port()->errorString()));
+      logDriverError(tr("Failed to set baud rate"),
+                     tr("Baud rate %1 rejected for port \"%2\": %3")
+                       .arg(QString::number(baudRate()), name, port()->errorString()));
     }
     port()->setDataBits(dataBits());
     port()->setStopBits(stopBits());
@@ -316,8 +312,8 @@ bool IO::Drivers::UART::open(const QIODevice::OpenMode mode)
     }
 
     else {
-      queueErrorBox(
-        this, tr("Failed to connect to serial port \"%1\"").arg(name), port()->errorString());
+      logDriverError(tr("Failed to connect to serial port \"%1\"").arg(name),
+                     port()->errorString());
     }
   }
 
@@ -557,8 +553,7 @@ void IO::Drivers::UART::setBaudRate(const qint32 rate)
 
     if (port()) {
       if (!port()->setBaudRate(baudRate())) {
-        queueErrorBox(
-          this,
+        logDriverError(
           tr("Failed to set baud rate"),
           tr("Baud rate %1 rejected: %2").arg(QString::number(baudRate()), port()->errorString()));
       }
@@ -878,9 +873,8 @@ void IO::Drivers::UART::handleError(QSerialPort::SerialPortError error)
 
     if (!m_autoReconnect || error != QSerialPort::ResourceError) {
       const auto name = serialPort ? serialPort->portName() : tr("Unknown");
-      queueErrorBox(this,
-                    tr("Critical error on serial port \"%1\"").arg(name),
-                    m_errorDescriptions.value(error, tr("Unknown error")));
+      logDriverError(tr("Critical error on serial port \"%1\"").arg(name),
+                     m_errorDescriptions.value(error, tr("Unknown error")));
     }
 
     else {

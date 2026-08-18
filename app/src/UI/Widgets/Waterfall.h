@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include <kiss_fft.h>
+#include <kiss_fftr.h>
 
 #include <QFontMetrics>
 #include <QImage>
@@ -258,6 +258,7 @@ private:
   void rebuildHistoryImage();
   void writeRow(const float* dbValues, int bins);
   void writeRowAt(int row, const float* dbValues, int bins);
+  void paintRowInto(int physicalRow, const float* dbValues, int bins);
   void renderAxisLayer();
   void markAxisDirty();
   void drawXAxis(QPainter* painter, const QRectF& plotRect) const;
@@ -353,9 +354,9 @@ private:
   std::vector<float> m_window;
   std::vector<float> m_dbCache;
   std::vector<float> m_smoothed;
-  std::vector<kiss_fft_cpx> m_samples;
+  std::vector<kiss_fft_scalar> m_samples;
   std::vector<kiss_fft_cpx> m_fftOutput;
-  kiss_fft_cfg m_plan;
+  kiss_fftr_cfg m_plan;
 
   UI::Dashboard& m_dashboard;
   Misc::ThemeManager& m_themeManager;

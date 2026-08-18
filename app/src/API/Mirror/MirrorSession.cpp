@@ -610,12 +610,30 @@ bool API::MirrorSession::buildTemplates(const QJsonObject& structure)
   m_tNsAnchor.assign(m_frames.size(), 0);
 
   const auto announced = structure.value(QStringLiteral("layoutHash")).toString();
-  if (announced == Mirror::layoutHash(identities))
+  if (announced == Mirror::layoutHash(identities)) {
+    publishStructures();
     return true;
+  }
 
   setError(QStringLiteral("MIRROR_LAYOUT_MISMATCH"),
            tr("This build resolves the remote project to a different dataset layout"));
   return false;
+}
+
+/**
+ * @brief Hands the adopted layout to the dashboard as one structure snapshot per mirrored source.
+ *        The dashboard reconfigures from these and then only accepts blocks stamped with the same
+ *        generation, which is what keeps a snapshot from being drawn against a stale epoch.
+ */
+void API::MirrorSession::publishStructures()
+{
+  auto& dashboard = m_ctx.dashboard();
+  for (const auto& frame : m_frames) {
+    auto structure        = std::make_shared<DataModel::StructureSnapshot>();
+    structure->generation = frame->structureGeneration;
+    structure->data       = frame->data;
+    dashboard.applyStructureSnapshot(structure);
+  }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -702,10 +720,10 @@ void API::MirrorSession::assignValues(const QJsonObject& snapshot)
 }
 
 /**
- * @brief Publishes one frame per mirrored source, rebuilding each source's timestamp from the
- *        wire's relative nanoseconds against a local anchor taken at the epoch's first snapshot,
- *        so plot geometry stays the remote's and only the absolute origin is local. Nothing here
- *        reaches FrameBuilder::hotpathTxFrame: a viewer's export sinks never see a mirrored frame.
+ * @brief Publishes one single-sample block per mirrored source, rebuilding each source's timestamp
+ *        from the wire's relative nanoseconds against a local anchor taken at the epoch's first
+ *        snapshot, so plot geometry stays the remote's and only the absolute origin is local.
+ *        Nothing here reaches the export fan-out: a viewer never re-records a mirrored session.
  */
 void API::MirrorSession::publishFrames(const QJsonObject& snapshot)
 {
@@ -724,8 +742,37 @@ void API::MirrorSession::publishFrames(const QJsonObject& snapshot)
     const auto delta   = std::chrono::nanoseconds(qMax<qint64>(0, stamp - m_tNsAnchor[i]));
 
     m_frames[i]->timestamp = m_localAnchor + delta;
-    dashboard.hotpathRxFrame(m_frames[i]);
+    dashboard.applyBlock(buildSnapshotBlock(*m_frames[i]));
   }
+}
+
+/**
+ * @brief Wraps one mirrored frame's current values as a single-sample block. The snapshot wire
+ *        carries one value per dataset per tick, so one sample is exactly what arrived -- padding
+ *        it out to the remote's real rate would invent measurements the viewer never received.
+ */
+DataModel::DataBlockPtr API::MirrorSession::buildSnapshotBlock(
+  const DataModel::TimestampedFrame& frame) const
+{
+  auto block                 = std::make_shared<DataModel::DataBlock>();
+  block->sourceId            = frame.data.sourceId;
+  block->structureGeneration = frame.structureGeneration;
+  block->samples             = 1;
+  block->t0                  = frame.timestamp;
+  block->times.assign(1, 0);
+
+  for (const auto& group : frame.data.groups)
+    for (const auto& dataset : group.datasets) {
+      DataModel::BlockColumn column;
+      column.uniqueId = dataset.uniqueId;
+      column.hasText  = true;
+      column.values.assign(1, dataset.numericValue);
+      column.numeric.assign(1, dataset.isNumeric ? 1 : 0);
+      column.text.assign(1, dataset.value);
+      block->columns.push_back(std::move(column));
+    }
+
+  return block;
 }
 
 //--------------------------------------------------------------------------------------------------

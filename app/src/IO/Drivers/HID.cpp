@@ -24,6 +24,7 @@
 
 #include <QJsonObject>
 #include <QMetaObject>
+#include <QScopedValueRollback>
 #include <QSet>
 #include <QTimer>
 
@@ -38,6 +39,16 @@ constexpr int kReadBufSize    = 65;
 constexpr int kReadTimeoutMs  = 100;
 constexpr int kEnumIntervalMs = 2000;
 
+/**
+ * @brief Logs a driver failure to the console. Drivers never raise modal dialogs: a modal pumps
+ *        the event loop, so one raised from a connect or error stack lets queued work retire the
+ *        very driver still on that stack (spec 0056).
+ */
+static void logDriverError(const QString& title, const QString& text)
+{
+  qWarning().noquote() << QStringLiteral("[%1] %2").arg(title, text);
+}
+
 //--------------------------------------------------------------------------------------------------
 // Constructor / destructor / singleton
 //--------------------------------------------------------------------------------------------------
@@ -46,7 +57,11 @@ constexpr int kEnumIntervalMs = 2000;
  * @brief Constructs the HID driver and starts hotplug enumeration.
  */
 IO::Drivers::HID::HID()
-  : m_handle(nullptr), m_deviceInfoList(nullptr), m_running(false), m_deviceIndex(0)
+  : m_handle(nullptr)
+  , m_deviceInfoList(nullptr)
+  , m_enumerating(false)
+  , m_running(false)
+  , m_deviceIndex(0)
 {
   hid_init();
   m_deviceIndex = m_settings.value("HID/deviceIndex", 0).toInt();
@@ -179,10 +194,7 @@ bool IO::Drivers::HID::open(const QIODevice::OpenMode mode)
                "or that a udev rule grants access to this device.");
 #endif
     const QString title = tr("Failed to open \"%1\"").arg(m_deviceLabels.value(m_deviceIndex));
-    QMetaObject::invokeMethod(
-      this,
-      [title, info] { Misc::Utilities::showMessageBox(title, info, QMessageBox::Warning); },
-      Qt::QueuedConnection);
+    logDriverError(title, info);
     return false;
   }
 
@@ -286,9 +298,8 @@ void IO::Drivers::HID::onReadError()
 
   static auto& connectionManager = ConnectionManager::instance();
   connectionManager.disconnectDevice(this);
-  Misc::Utilities::showMessageBox(tr("HID Device Error"),
-                                  tr("The HID device was disconnected or "
-                                     "encountered a fatal read error."));
+  logDriverError(tr("HID Device Error"),
+                 tr("The HID device was disconnected or encountered a fatal read error."));
 }
 
 /**
@@ -310,11 +321,29 @@ void IO::Drivers::HID::setDiscoveryPaused(const bool paused)
 }
 
 /**
- * @brief Re-enumerates all connected HID devices.
+ * @brief Re-enumerates all connected HID devices, ignoring a re-entrant call. The tail of the
+ *        refresh emits signals that reach ConnectionManager::rebuildDevices() through a direct
+ *        connection, which re-enters here; without the latch that second pass frees the list the
+ *        first one is still walking.
  */
 void IO::Drivers::HID::enumerateDevices()
 {
+  if (m_enumerating)
+    return;
+
+  const QScopedValueRollback<bool> guard(m_enumerating, true);
+  refreshDeviceEnumeration();
+}
+
+/**
+ * @brief Rebuilds the device list from a fresh hidapi enumeration. The member is cleared before
+ *        the re-enumerate so it never names freed memory: hid_enumerate() walks IOKit, and any
+ *        reentry reaching hid_free_enumeration() with a stale pointer aborts in libmalloc.
+ */
+void IO::Drivers::HID::refreshDeviceEnumeration()
+{
   hid_free_enumeration(m_deviceInfoList);
+  m_deviceInfoList = nullptr;
   m_deviceInfoList = hid_enumerate(0x0000, 0x0000);
 
   QList<DeviceEntry> entries = collectHidDeviceEntries();

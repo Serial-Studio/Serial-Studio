@@ -34,6 +34,7 @@
 #  include <QStandardPaths>
 
 #  include "DataModel/ExportSchema.h"
+#  include "DataModel/FrameBuilder.h"
 #  include "DataModel/NotificationCenter.h"
 #  include "DataModel/ProjectModel.h"
 #  include "Licensing/CommercialToken.h"
@@ -113,7 +114,7 @@ QString MQTT::PublisherWorker::describeMqttError(QMqttClient::ClientError error)
  * @brief Constructs the worker; QMqttClient is built on the worker thread via bootstrap().
  */
 MQTT::PublisherWorker::PublisherWorker(
-  moodycamel::ReaderWriterQueue<DataModel::TimestampedFramePtr>* frameQueue,
+  moodycamel::ReaderWriterQueue<DataModel::DataBlockPtr>* frameQueue,
   std::atomic<bool>* enabled,
   std::atomic<size_t>* queueSize,
   moodycamel::ReaderWriterQueue<TimestampedRawBytes>* rawQueue,
@@ -122,7 +123,7 @@ MQTT::PublisherWorker::PublisherWorker(
   std::atomic<int>* scriptLanguage,
   std::atomic<quint64>* messagesSent,
   std::atomic<quint64>* bytesSent)
-  : DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr>(frameQueue, enabled, queueSize)
+  : DataModel::FrameConsumerWorker<DataModel::DataBlockPtr>(frameQueue, enabled, queueSize)
   , m_client(nullptr)
   , m_rawQueue(rawQueue)
   , m_frameQueueBytes(frameQueueBytes)
@@ -208,7 +209,7 @@ void MQTT::PublisherWorker::closeResources()
  */
 void MQTT::PublisherWorker::processData()
 {
-  DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr>::processData();
+  DataModel::FrameConsumerWorker<DataModel::DataBlockPtr>::processData();
 
   if (!consumerEnabled())
     return;
@@ -286,7 +287,7 @@ void MQTT::PublisherWorker::processData()
 /**
  * @brief Dispatches the latest batched frame to the per-mode publisher.
  */
-void MQTT::PublisherWorker::processItems(const std::vector<DataModel::TimestampedFramePtr>& items)
+void MQTT::PublisherWorker::processItems(const std::vector<DataModel::DataBlockPtr>& items)
 {
   if (items.empty())
     return;
@@ -295,14 +296,21 @@ void MQTT::PublisherWorker::processItems(const std::vector<DataModel::Timestampe
     return;
 
   const int mode = m_mode->load(std::memory_order_relaxed);
+  if (static_cast<Publisher::Mode>(mode) != Publisher::Mode::DashboardDataJson
+      && static_cast<Publisher::Mode>(mode) != Publisher::Mode::DashboardDataCsv)
+    return;
+
+  expandBlocks(items);
+  if (m_expanded.empty())
+    return;
 
   switch (static_cast<Publisher::Mode>(mode)) {
     case Publisher::Mode::DashboardDataJson:
-      publishBatchAsJson(items);
+      publishBatchAsJson(m_expanded);
       break;
 
     case Publisher::Mode::DashboardDataCsv:
-      publishBatchAsCsv(items);
+      publishBatchAsCsv(m_expanded);
       break;
 
     case Publisher::Mode::ScriptDriven:
@@ -312,29 +320,57 @@ void MQTT::PublisherWorker::processItems(const std::vector<DataModel::Timestampe
 }
 
 /**
+ * @brief Adopts one source's structure; MQTT publishes frame-shaped payloads (spec 0055 D5).
+ */
+void MQTT::PublisherWorker::setTemplateFrame(int sourceId, const DataModel::Frame& frame)
+{
+  DataModel::bind_frame_template(m_templates[sourceId], frame);
+}
+
+/**
+ * @brief Materialises the batch's blocks into one frame per sample, capped at kMaxExpandedSamples:
+ *        a dense source can present millions of samples in one batch, and MQTT is a live feed, not
+ *        a lossless recorder. A block whose source has published no structure yet is skipped.
+ */
+void MQTT::PublisherWorker::expandBlocks(const std::vector<DataModel::DataBlockPtr>& blocks)
+{
+  m_expanded.clear();
+
+  for (const auto& block : blocks) {
+    if (!block || block->samples <= 0)
+      continue;
+
+    const auto tpl = m_templates.find(block->sourceId);
+    if (tpl == m_templates.end())
+      continue;
+
+    for (qsizetype i = 0; i < block->samples; ++i) {
+      if (m_expanded.size() >= kMaxExpandedSamples)
+        return;
+
+      DataModel::apply_block_sample(tpl->second, *block, i);
+      m_expanded.push_back(tpl->second.frame);
+    }
+  }
+}
+
+/**
  * @brief Publishes the batch as one compact JSON document where each dataset's "value" and
  *        "numericValue" become arrays collecting every frame's sample in arrival order.
  */
-void MQTT::PublisherWorker::publishBatchAsJson(
-  const std::vector<DataModel::TimestampedFramePtr>& items)
+void MQTT::PublisherWorker::publishBatchAsJson(const std::vector<DataModel::Frame>& items)
 {
   QMqttTopicName topic(m_cfg.topicBase);
   if (!topic.isValid())
     return;
 
   const auto& latest = items.back();
-  if (!latest)
-    return;
-
-  QJsonObject root = DataModel::serialize(latest->data);
+  QJsonObject root   = DataModel::serialize(latest);
 
   QMap<int, QJsonArray> valuesByDataset;
   QMap<int, QJsonArray> numericByDataset;
   for (const auto& item : items) {
-    if (!item)
-      continue;
-
-    for (const auto& g : item->data.groups) {
+    for (const auto& g : item.groups) {
       for (const auto& d : g.datasets) {
         valuesByDataset[d.uniqueId].append(d.value.simplified());
         numericByDataset[d.uniqueId].append(d.numericValue);
@@ -343,9 +379,8 @@ void MQTT::PublisherWorker::publishBatchAsJson(
   }
 
   QJsonArray groupArray = root.value(Keys::Groups).toArray();
-  for (int gi = 0; gi < groupArray.size() && gi < static_cast<int>(latest->data.groups.size());
-       ++gi) {
-    const auto& liveGroup  = latest->data.groups[gi];
+  for (int gi = 0; gi < groupArray.size() && gi < static_cast<int>(latest.groups.size()); ++gi) {
+    const auto& liveGroup  = latest.groups[gi];
     QJsonObject groupObj   = groupArray.at(gi).toObject();
     QJsonArray datasetsArr = groupObj.value(Keys::Datasets).toArray();
     for (int di = 0; di < datasetsArr.size() && di < static_cast<int>(liveGroup.datasets.size());
@@ -372,19 +407,15 @@ void MQTT::PublisherWorker::publishBatchAsJson(
  * @brief Publishes every frame in the batch as concatenated CSV rows on topicBase.
  *        (Re)publishes the header retained on schema changes.
  */
-void MQTT::PublisherWorker::publishBatchAsCsv(
-  const std::vector<DataModel::TimestampedFramePtr>& items)
+void MQTT::PublisherWorker::publishBatchAsCsv(const std::vector<DataModel::Frame>& items)
 {
   QMqttTopicName rowsTopic(m_cfg.topicBase);
   if (!rowsTopic.isValid())
     return;
 
   const auto& latest = items.back();
-  if (!latest)
-    return;
-
-  if (m_csvHeaderDirty || latest->data.title != m_csvFrameTitle)
-    rebuildCsvSchema(latest->data);
+  if (m_csvHeaderDirty || latest.title != m_csvFrameTitle)
+    rebuildCsvSchema(latest);
 
   if (m_csvHeaderPayload.isEmpty())
     return;
@@ -400,10 +431,7 @@ void MQTT::PublisherWorker::publishBatchAsCsv(
   m_csvRowBuffer.resize(0);
 
   for (const auto& item : items) {
-    if (!item)
-      continue;
-
-    for (const auto& g : item->data.groups)
+    for (const auto& g : item.groups)
       for (const auto& d : g.datasets)
         m_csvLastFinal[d.uniqueId] = d.value.simplified();
 
@@ -790,7 +818,7 @@ void MQTT::PublisherWorker::onClientErrorChanged(QMqttClient::ClientError error)
  * @brief Constructs the publisher with safe broker defaults and starts the worker thread.
  */
 MQTT::Publisher::Publisher()
-  : DataModel::FrameConsumer<DataModel::TimestampedFramePtr>(
+  : DataModel::FrameConsumer<DataModel::DataBlockPtr>(
       {.queueCapacity = 8192, .flushThreshold = 1024, .timerIntervalMs = 100})
   , m_enabled(false)
   , m_sslEnabled(false)
@@ -861,6 +889,13 @@ MQTT::Publisher::Publisher()
   connect(w, &PublisherWorker::scriptErrorOccurred, this, &Publisher::onWorkerScriptError);
   connect(
     w, &PublisherWorker::testConnectionFinished, this, &Publisher::onWorkerTestConnectionFinished);
+
+  static auto& frameBuilder = DataModel::FrameBuilder::instance();
+  connect(&frameBuilder,
+          &DataModel::FrameBuilder::structurePublished,
+          w,
+          &PublisherWorker::setTemplateFrame,
+          Qt::QueuedConnection);
 
   QMetaObject::invokeMethod(w, &PublisherWorker::bootstrap, Qt::QueuedConnection);
 }
@@ -1938,7 +1973,7 @@ void MQTT::Publisher::setScriptLanguage(const int language)
 /**
  * @brief Enqueues the frame for the worker; rate-limiting and broker I/O happen off-main.
  */
-void MQTT::Publisher::hotpathTxFrame(const DataModel::TimestampedFramePtr& frame)
+void MQTT::Publisher::ingestBlock(const DataModel::DataBlockPtr& block)
 {
   if (!m_enabled || !licenseValid()) [[likely]]
     return;
@@ -1947,10 +1982,10 @@ void MQTT::Publisher::hotpathTxFrame(const DataModel::TimestampedFramePtr& frame
       && m_mode != static_cast<int>(Mode::DashboardDataCsv))
     return;
 
-  if (!frame || m_topicBase.isEmpty())
+  if (!block || m_topicBase.isEmpty())
     return;
 
-  enqueueData(frame);
+  enqueueData(block);
 }
 
 /**

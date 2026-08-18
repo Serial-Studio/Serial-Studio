@@ -119,6 +119,16 @@ class Plot : public QQuickItem {
              READ triggerEdge
              WRITE setTriggerEdge
              NOTIFY sweepChanged)
+  Q_PROPERTY(int sweepRetention
+             READ sweepRetention
+             WRITE setSweepRetention
+             NOTIFY sweepSegmentsChanged)
+  Q_PROPERTY(int sweepSegmentCount
+             READ sweepSegmentCount
+             NOTIFY sweepSegmentsChanged)
+  Q_PROPERTY(int sweepSegmentCapacity
+             READ sweepSegmentCapacity
+             NOTIFY sweepSegmentsChanged)
   // clang-format on
 
 signals:
@@ -126,6 +136,7 @@ signals:
   void sweepChanged();
   void runningChanged();
   void dataSizeChanged();
+  void sweepSegmentsChanged();
   void interpolationModeChanged();
 
 public:
@@ -160,9 +171,14 @@ public:
   [[nodiscard]] double sweepTimebase() const noexcept;
   [[nodiscard]] SerialStudio::SweepMode sweepMode() const noexcept;
   [[nodiscard]] SerialStudio::TriggerEdge triggerEdge() const noexcept;
+  [[nodiscard]] int sweepRetention() const noexcept;
+  [[nodiscard]] int sweepSegmentCount() const;
+  [[nodiscard]] int sweepSegmentCapacity() const;
 
 public slots:
   void draw(QXYSeries* series);
+  void drawSegment(QXYSeries* series, const int index);
+  void setSweepRetention(const int count);
   void setDataW(const int width);
   void setDataH(const int height);
   void setRunning(const bool enabled);
@@ -199,7 +215,7 @@ private:
                            const bool addPadding,
                            const bool logAxis);
 
-  static void padDerivedRange(double& min, double& max, const bool addPadding);
+  static void padDerivedRange(double& min, double& max, const bool addPadding, int& stepIndex);
   static void applyAxisPadding(double& min, double& max, const bool addPadding);
 
 private:
@@ -207,6 +223,8 @@ private:
   int m_index;
   int m_dataW;
   int m_dataH;
+  int m_xStepIndex;
+  int m_yStepIndex;
   double m_minX;
   double m_maxX;
   double m_minY;
@@ -233,5 +251,9 @@ private:
   double m_timebaseMs;
   SerialStudio::SweepMode m_sweepMode;
   SerialStudio::TriggerEdge m_triggerEdge;
+
+  int m_sweepRetention;
+  int m_lastSegmentCount;
+  QList<QPointF> m_segmentScratch;
 };
 }  // namespace Widgets

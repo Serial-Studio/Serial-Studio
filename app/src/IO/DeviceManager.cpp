@@ -46,6 +46,10 @@ IO::DeviceManager::DeviceManager(int deviceId,
 
   connect(
     m_driver.get(), &IO::HAL_Driver::dataReceived, this, &IO::DeviceManager::onRawDataReceived);
+  connect(m_driver.get(),
+          &IO::HAL_Driver::consoleDataReceived,
+          this,
+          &IO::DeviceManager::onConsoleDataReceived);
 
   startFrameReader(config);
 }
@@ -173,6 +177,14 @@ void IO::DeviceManager::reconfigure(const FrameConfig& config)
 void IO::DeviceManager::onRawDataReceived(const IO::CapturedDataPtr& data)
 {
   Q_EMIT rawDataReceived(m_deviceId, data);
+}
+
+/**
+ * @brief Re-emits a driver's terminal-only bytes tagged with the device identifier.
+ */
+void IO::DeviceManager::onConsoleDataReceived(const IO::CapturedDataPtr& data)
+{
+  Q_EMIT consoleDataReceived(m_deviceId, data);
 }
 
 //--------------------------------------------------------------------------------------------------

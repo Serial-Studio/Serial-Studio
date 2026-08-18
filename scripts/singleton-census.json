@@ -1,55 +1,55 @@
 {
   "spec": "0039-session-context",
   "regenerate": "python scripts/code-verify.py --singleton-census --accept",
-  "total": 1684,
+  "total": 1686,
   "files": 209,
   "buckets": {
-    "root": 157,
+    "root": 156,
     "accessor": 68,
     "ctor-capture": 105,
-    "deferred": 19,
-    "static-cache": 1215,
-    "loose": 120
+    "deferred": 20,
+    "static-cache": 1214,
+    "loose": 123
   },
   "per_class": {
     "DataModel::ProjectModel": 216,
     "IO::ConnectionManager": 214,
-    "AppState": 132,
+    "AppState": 130,
     "CommandRegistry": 101,
-    "UI::Dashboard": 83,
-    "DataModel::FrameBuilder": 68,
+    "UI::Dashboard": 85,
+    "DataModel::FrameBuilder": 76,
     "Misc::IconRegistry": 48,
     "Misc::ThemeManager": 43,
     "Misc::TimerEvents": 33,
-    "API::Server": 31,
-    "Misc::WorkspaceManager": 29,
-    "Console::Handler": 29,
+    "Console::Handler": 30,
+    "API::Server": 29,
+    "Misc::WorkspaceManager": 27,
+    "DataModel::NotificationCenter": 27,
     "Misc::CommonFonts": 27,
-    "DataModel::NotificationCenter": 26,
     "API::CommandRegistry": 25,
+    "Sessions::Export": 25,
     "Misc::Translator": 25,
-    "Sessions::Export": 24,
-    "CSV::Export": 23,
     "Licensing::LemonSqueezy": 23,
     "Sessions::DatabaseManager": 23,
     "CSV::Player": 22,
-    "MDF4::Export": 22,
     "MDF4::Player": 21,
+    "IO::PipelineHost": 21,
+    "CSV::Export": 20,
     "DataModel::FrameParser": 20,
-    "IO::PipelineHost": 18,
+    "MDF4::Export": 19,
     "UI::WidgetExtensions": 18,
-    "API::GRPC::GRPCServer": 16,
     "MQTT::Publisher": 16,
     "Sessions::Player": 16,
     "AI::CommandRegistry": 15,
+    "API::GRPC::GRPCServer": 15,
     "DataModel::ControlScript": 15,
     "Misc::ExtensionManager": 14,
     "Misc::ProblemCenter": 13,
     "UI::UISessionRegistry": 13,
     "DataModel::ProjectEditor": 13,
     "Console::Export": 11,
-    "Widgets::AudioExport": 11,
     "Misc::BackupManager": 10,
+    "Widgets::AudioExport": 10,
     "Misc::CrashTracker": 10,
     "MachineID": 9,
     "Licensing::Trial": 8,
@@ -227,13 +227,13 @@
       }
     },
     "app/src/API/GRPC/GRPCServer.cpp": {
-      "total": 12,
+      "total": 13,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 11,
+        "static-cache": 12,
         "loose": 0
       }
     },
@@ -744,14 +744,14 @@
       }
     },
     "app/src/API/Server.cpp": {
-      "total": 10,
+      "total": 11,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
         "static-cache": 9,
-        "loose": 0
+        "loose": 1
       }
     },
     "app/src/API/TerminalBridge.cpp": {
@@ -799,13 +799,13 @@
       }
     },
     "app/src/CSV/Export.cpp": {
-      "total": 13,
+      "total": 11,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 4,
+        "static-cache": 2,
         "loose": 8
       }
     },
@@ -876,13 +876,13 @@
       }
     },
     "app/src/DataModel/Editors/DatasetTransformEditor.cpp": {
-      "total": 6,
+      "total": 8,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 4,
         "deferred": 0,
-        "static-cache": 2,
+        "static-cache": 4,
         "loose": 0
       }
     },
@@ -942,14 +942,14 @@
       }
     },
     "app/src/DataModel/FrameBuilder.cpp": {
-      "total": 64,
+      "total": 67,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 41,
-        "loose": 22
+        "static-cache": 42,
+        "loose": 24
       }
     },
     "app/src/DataModel/Generated/DatasetForm.cpp": {
@@ -1349,13 +1349,13 @@
       }
     },
     "app/src/IO/ConnectionManager.cpp": {
-      "total": 70,
+      "total": 65,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 63,
+        "static-cache": 58,
         "loose": 6
       }
     },
@@ -1569,13 +1569,13 @@
       }
     },
     "app/src/MDF4/Export.cpp": {
-      "total": 15,
+      "total": 14,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 5,
+        "static-cache": 4,
         "loose": 9
       }
     },
@@ -1602,13 +1602,13 @@
       }
     },
     "app/src/MQTT/Publisher.cpp": {
-      "total": 6,
+      "total": 7,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 1,
+        "static-cache": 2,
         "loose": 4
       }
     },
@@ -1789,9 +1789,9 @@
       }
     },
     "app/src/Misc/ModuleManager.cpp": {
-      "total": 151,
+      "total": 150,
       "buckets": {
-        "root": 151,
+        "root": 150,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
@@ -1987,24 +1987,24 @@
       }
     },
     "app/src/Sessions/Export.cpp": {
-      "total": 18,
+      "total": 19,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 4,
-        "deferred": 2,
+        "deferred": 3,
         "static-cache": 2,
         "loose": 9
       }
     },
     "app/src/Sessions/Player.cpp": {
-      "total": 26,
+      "total": 29,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 25,
+        "static-cache": 28,
         "loose": 0
       }
     },
@@ -2053,13 +2053,13 @@
       }
     },
     "app/src/UI/Dashboard.cpp": {
-      "total": 41,
+      "total": 40,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 40,
+        "static-cache": 39,
         "loose": 0
       }
     },

@@ -46,6 +46,7 @@
  */
 DataModel::MacroEditor::MacroEditor(QQuickItem* parent)
   : QQuickPaintedItem(parent)
+  , m_dirty(true)
   , m_language(0)
   , m_themeManager(Misc::ThemeManager::instance())
   , m_commonFonts(Misc::CommonFonts::instance())
@@ -78,6 +79,10 @@ DataModel::MacroEditor::MacroEditor(QQuickItem* parent)
 
   connect(&m_widget, &QCodeEditor::textChanged, this, [this] { Q_EMIT modifiedChanged(); });
   connect(&m_widget, &QCodeEditor::textChanged, this, &DataModel::MacroEditor::textChanged);
+  connect(&m_widget, &QCodeEditor::textChanged, this, &DataModel::MacroEditor::scheduleRender);
+  connect(&m_widget, &QCodeEditor::selectionChanged, this, &DataModel::MacroEditor::scheduleRender);
+  connect(
+    &m_widget, &QCodeEditor::cursorPositionChanged, this, &DataModel::MacroEditor::scheduleRender);
 
   connect(this, &QQuickPaintedItem::widthChanged, this, &DataModel::MacroEditor::resizeWidget);
   connect(this, &QQuickPaintedItem::heightChanged, this, &DataModel::MacroEditor::resizeWidget);
@@ -210,7 +215,7 @@ void DataModel::MacroEditor::setLanguage(int language)
     old_highlighter->deleteLater();
 
   Q_EMIT languageChanged();
-  renderWidget();
+  scheduleRender();
 }
 
 /**
@@ -225,7 +230,7 @@ void DataModel::MacroEditor::setText(const QString& text)
   m_widget.document()->clearUndoRedoStacks();
   m_widget.document()->setModified(false);
   Q_EMIT modifiedChanged();
-  renderWidget();
+  scheduleRender();
 }
 
 /**
@@ -265,15 +270,27 @@ void DataModel::MacroEditor::onThemeChanged()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Grabs the editor widget into a pixmap for QML rendering.
+ * @brief Marks the cached pixmap stale; the next UI tick does the grab, so a burst of edits
+ *        costs one widget render instead of one per event.
+ */
+void DataModel::MacroEditor::scheduleRender()
+{
+  m_dirty = true;
+}
+
+/**
+ * @brief Grabs the editor widget into a pixmap for QML rendering, at most once per UI tick and
+ *        only when something changed; a focused editor always regrabs so the caret keeps blinking.
  */
 void DataModel::MacroEditor::renderWidget()
 {
-  if (isVisible()) {
-    syncWidgetPosition();
-    m_pixmap = m_widget.grab();
-    update();
-  }
+  if (!isVisible() || (!m_dirty && !hasActiveFocus()))
+    return;
+
+  m_dirty = false;
+  syncWidgetPosition();
+  m_pixmap = m_widget.grab();
+  update();
 }
 
 /**
@@ -297,7 +314,7 @@ void DataModel::MacroEditor::resizeWidget()
 {
   if (width() > 0 && height() > 0) {
     m_widget.setFixedSize(static_cast<int>(width()), static_cast<int>(height()));
-    renderWidget();
+    scheduleRender();
   }
 }
 
@@ -342,7 +359,7 @@ void DataModel::MacroEditor::keyPressEvent(QKeyEvent* event)
   else
     QCoreApplication::sendEvent(&m_widget, event);
 
-  renderWidget();
+  scheduleRender();
 }
 
 /**
@@ -359,7 +376,7 @@ void DataModel::MacroEditor::keyReleaseEvent(QKeyEvent* event)
 void DataModel::MacroEditor::inputMethodEvent(QInputMethodEvent* event)
 {
   QCoreApplication::sendEvent(&m_widget, event);
-  renderWidget();
+  scheduleRender();
 }
 
 /**
@@ -368,6 +385,7 @@ void DataModel::MacroEditor::inputMethodEvent(QInputMethodEvent* event)
 void DataModel::MacroEditor::focusInEvent(QFocusEvent* event)
 {
   QCoreApplication::sendEvent(&m_widget, event);
+  scheduleRender();
 }
 
 /**
@@ -376,6 +394,7 @@ void DataModel::MacroEditor::focusInEvent(QFocusEvent* event)
 void DataModel::MacroEditor::focusOutEvent(QFocusEvent* event)
 {
   QCoreApplication::sendEvent(&m_widget, event);
+  scheduleRender();
 }
 
 /** @brief Forwards mouse-press events to the backing widget after offsetting for the line-number
@@ -392,7 +411,7 @@ void DataModel::MacroEditor::mousePressEvent(QMouseEvent* event)
                    event->pointingDevice());
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
   forceActiveFocus();
-  renderWidget();
+  scheduleRender();
 }
 
 /** @brief Forwards mouse-move events to the backing widget after offsetting for the line-number
@@ -408,7 +427,7 @@ void DataModel::MacroEditor::mouseMoveEvent(QMouseEvent* event)
                    event->modifiers(),
                    event->pointingDevice());
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
-  renderWidget();
+  scheduleRender();
 }
 
 /** @brief Forwards mouse-release events to the backing widget after offsetting for the line-number
@@ -424,7 +443,7 @@ void DataModel::MacroEditor::mouseReleaseEvent(QMouseEvent* event)
                    event->modifiers(),
                    event->pointingDevice());
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
-  renderWidget();
+  scheduleRender();
 }
 
 /** @brief Forwards double-click events to the backing widget after offsetting for the line-number
@@ -440,7 +459,7 @@ void DataModel::MacroEditor::mouseDoubleClickEvent(QMouseEvent* event)
                    event->modifiers(),
                    event->pointingDevice());
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
-  renderWidget();
+  scheduleRender();
 }
 
 /**
@@ -449,7 +468,7 @@ void DataModel::MacroEditor::mouseDoubleClickEvent(QMouseEvent* event)
 void DataModel::MacroEditor::wheelEvent(QWheelEvent* event)
 {
   QCoreApplication::sendEvent(m_widget.viewport(), event);
-  renderWidget();
+  scheduleRender();
 }
 
 /**

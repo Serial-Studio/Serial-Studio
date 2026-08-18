@@ -31,6 +31,7 @@ extern "C" {
 
 #include <QDir>
 #include <QFile>
+#include <QHash>
 #include <QHBoxLayout>
 #include <QIcon>
 #include <QJavascriptHighlighter>
@@ -42,9 +43,11 @@ extern "C" {
 #include <QTextCursor>
 
 #include "DataModel/Editors/CodeFormatter.h"
+#include "DataModel/Editors/ExpressionHighlighter.h"
 #include "DataModel/Editors/SerialStudioCompleter.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/NotificationCenter.h"
+#include "DataModel/Scripting/ExpressionTransform.h"
 #include "DataModel/Scripting/LuaCompat.h"
 #include "DataModel/Scripting/LuaCompatJIT.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
@@ -109,9 +112,12 @@ void DataModel::DatasetTransformEditor::buildEditorWidgets()
   m_editor->setLayoutDirection(Qt::LeftToRight);
 
   m_languageCombo = new QComboBox(this);
-  m_languageCombo->addItems({tr("Lua"), tr("JavaScript")});
+  m_languageCombo->addItems({tr("Lua"), tr("JavaScript"), tr("Expression")});
 
-  m_templateCombo = new QComboBox(this);
+  m_templateCombo   = new QComboBox(this);
+  m_templateOpacity = new QGraphicsOpacityEffect(m_templateCombo);
+  m_templateOpacity->setOpacity(1.0);
+  m_templateCombo->setGraphicsEffect(m_templateOpacity);
   buildTemplates();
 
   m_testInput = new QLineEdit(this);
@@ -230,12 +236,12 @@ void DataModel::DatasetTransformEditor::displayDialog(
 
   setWindowTitle(tr("Transform — %1").arg(datasetTitle));
 
-  const int comboIdx = (language == SerialStudio::Lua) ? 0 : 1;
+  const int comboIdx = comboIndexForLanguage(language);
   m_languageCombo->blockSignals(true);
   m_languageCombo->setCurrentIndex(comboIdx);
   m_languageCombo->blockSignals(false);
 
-  const int resolvedLanguage = (comboIdx == 0) ? SerialStudio::Lua : SerialStudio::JavaScript;
+  const int resolvedLanguage = languageForComboIndex(comboIdx);
   applyLanguage(resolvedLanguage);
 
   if (currentCode.isEmpty())
@@ -356,6 +362,9 @@ void DataModel::DatasetTransformEditor::onTest()
  */
 void DataModel::DatasetTransformEditor::onFormat()
 {
+  if (m_language == SerialStudio::Expression)
+    return;
+
   const auto lang         = (m_language == SerialStudio::Lua) ? CodeFormatter::Language::Lua
                                                               : CodeFormatter::Language::JavaScript;
   const QString original  = m_editor->toPlainText();
@@ -379,6 +388,9 @@ void DataModel::DatasetTransformEditor::onFormat()
  */
 void DataModel::DatasetTransformEditor::onFormatLine()
 {
+  if (m_language == SerialStudio::Expression)
+    return;
+
   const auto lang        = (m_language == SerialStudio::Lua) ? CodeFormatter::Language::Lua
                                                              : CodeFormatter::Language::JavaScript;
   const QString original = m_editor->toPlainText();
@@ -434,7 +446,7 @@ void DataModel::DatasetTransformEditor::onClear()
  */
 void DataModel::DatasetTransformEditor::onTemplateSelected(int index)
 {
-  if (index <= 0 || index > m_templates.size())
+  if (index <= 0 || index > m_templates.size() || m_language == SerialStudio::Expression)
     return;
 
   const auto& tmpl   = m_templates[index - 1];
@@ -447,7 +459,7 @@ void DataModel::DatasetTransformEditor::onTemplateSelected(int index)
  */
 void DataModel::DatasetTransformEditor::onLanguageChanged(int index)
 {
-  const int newLang = (index == 0) ? SerialStudio::Lua : SerialStudio::JavaScript;
+  const int newLang = languageForComboIndex(index);
   if (newLang == m_language)
     return;
 
@@ -456,7 +468,17 @@ void DataModel::DatasetTransformEditor::onLanguageChanged(int index)
 
   applyLanguage(newLang);
 
-  if (tmplIdx >= 0) {
+  if (newLang == SerialStudio::Expression) {
+    QString error;
+    const bool compiles =
+      validateTransform(m_editor->toPlainText(), newLang, error) == TransformStatus::Ok;
+    if (!compiles)
+      m_editor->setPlainText(defaultPlaceholder(newLang));
+
+    m_templateCombo->setCurrentIndex(0);
+  }
+
+  else if (tmplIdx >= 0) {
     const auto& tmpl   = m_templates[tmplIdx];
     const QString code = (newLang == SerialStudio::Lua) ? tmpl.luaCode : tmpl.jsCode;
     m_editor->setPlainText(code);
@@ -504,6 +526,12 @@ void DataModel::DatasetTransformEditor::applyLanguage(int language)
 {
   m_language = language;
 
+  const bool scripted = language != SerialStudio::Expression;
+  m_templateCombo->setEnabled(scripted);
+  m_templateOpacity->setOpacity(scripted ? 1.0 : 0.5);
+  if (!scripted)
+    m_templateCombo->setCurrentIndex(0);
+
   auto* old_completer   = m_editor->completer();
   auto* old_highlighter = m_editor->highlighter();
 
@@ -511,6 +539,10 @@ void DataModel::DatasetTransformEditor::applyLanguage(int language)
     m_editor->setHighlighter(new QLuaHighlighter());
     m_editor->setLanguageHint(QCodeEditor::LanguageHint::Lua);
     m_editor->setCompleter(new DataModel::SerialStudioCompleter(true, m_editor));
+  } else if (language == SerialStudio::Expression) {
+    m_editor->setHighlighter(new DataModel::ExpressionHighlighter());
+    m_editor->setLanguageHint(QCodeEditor::LanguageHint::JavaScript);
+    m_editor->setCompleter(nullptr);
   } else {
     m_editor->setHighlighter(new QJavascriptHighlighter());
     m_editor->setLanguageHint(QCodeEditor::LanguageHint::JavaScript);
@@ -529,6 +561,40 @@ void DataModel::DatasetTransformEditor::applyLanguage(int language)
  */
 QString DataModel::DatasetTransformEditor::defaultPlaceholder(int language)
 {
+  if (language == SerialStudio::Expression)
+    return tr("#\n"
+              "# An arithmetic expression evaluated once per sample. No function,\n"
+              "# no statements: the value of the expression is the new reading.\n"
+              "# Lines starting with # are comments.\n"
+              "#\n"
+              "# Inputs:\n"
+              "#    v     this sample's raw value\n"
+              "#    t     seconds since the frame stream started\n"
+              "#    dt    seconds since the previous sample\n"
+              "#    n     sample index, starting at 0\n"
+              "#    pi, e, nan, inf\n"
+              "#\n"
+              "# Other datasets of the same source by Script Alias, or by\n"
+              "# dataset id in braces, plus history up to 256 samples back:\n"
+              "#    v * shunt_current            by alias\n"
+              "#    v * {12}                     by dataset id\n"
+              "#    v - sample(shunt_current, 1) one sample ago\n"
+              "#\n"
+              "# Data-table registers are readable (never writable):\n"
+              "#    v * table(calibration, scale)\n"
+              "#\n"
+              "# Operators: + - * / % ^ < <= > >= == != && || ! and a ? b : c\n"
+              "# Functions: abs floor ceil round sqrt cbrt exp log log10 log2\n"
+              "#            sin cos tan asin acos atan sinh cosh tanh deg rad\n"
+              "#            min max pow atan2 hypot clamp lerp\n"
+              "#\n"
+              "# Examples:\n"
+              "#    v * 0.01 + 273.15            scale and offset\n"
+              "#    clamp(v, 0, 100)             limit to a range\n"
+              "#    v > 50 ? 50 : v              conditional\n"
+              "#\n"
+              "v\n");
+
   if (language == SerialStudio::Lua)
     return tr("--\n"
               "-- Define a transform(value) function that receives the live\n"
@@ -599,8 +665,79 @@ bool DataModel::DatasetTransformEditor::isDefaultPlaceholder(const QString& code
   if (trimmed == defaultPlaceholder(language).trimmed())
     return true;
 
-  const int other = (language == SerialStudio::Lua) ? SerialStudio::JavaScript : SerialStudio::Lua;
-  return trimmed == defaultPlaceholder(other).trimmed();
+  return trimmed == defaultPlaceholder(SerialStudio::Lua).trimmed()
+      || trimmed == defaultPlaceholder(SerialStudio::JavaScript).trimmed()
+      || trimmed == defaultPlaceholder(SerialStudio::Expression).trimmed();
+}
+
+/**
+ * @brief Combo row for a transform language: Lua, JavaScript, Expression (spec 0060).
+ */
+int DataModel::DatasetTransformEditor::comboIndexForLanguage(int language)
+{
+  if (language == SerialStudio::Lua)
+    return 0;
+
+  return (language == SerialStudio::Expression) ? 2 : 1;
+}
+
+/**
+ * @brief Transform language behind a combo row.
+ */
+int DataModel::DatasetTransformEditor::languageForComboIndex(int index)
+{
+  if (index == 0)
+    return SerialStudio::Lua;
+
+  return (index == 2) ? SerialStudio::Expression : SerialStudio::JavaScript;
+}
+
+/**
+ * @brief Table resolver for the editor's expression compile: handles come from the same store the
+ *        pipeline reads, refreshed from the project model before validation.
+ */
+DataModel::Expression::TableResolver DataModel::DatasetTransformEditor::expressionTables()
+{
+  static auto& frameBuilder = DataModel::FrameBuilder::instance();
+  return [](QStringView table, QStringView reg) -> qint64 {
+    return frameBuilder.tableStore().handleOf(table.toString(), reg.toString());
+  };
+}
+
+/**
+ * @brief Name resolver for the editor's expression compile: every dataset title of the live
+ *        frame resolves (to a throwaway slot), so a sibling reference validates without a device.
+ *        The titles are read once through the builder-thread marshal, never from the GUI thread.
+ *        Static because validateTransform() is static and needs the same resolver.
+ */
+DataModel::Expression::NameResolver DataModel::DatasetTransformEditor::expressionResolver(
+  DataModel::Expression::SlotTable& table)
+{
+  static auto& frameBuilder = DataModel::FrameBuilder::instance();
+
+  QHash<QString, int> aliases;
+  QSet<int> uniqueIds;
+  frameBuilder.invokeOnBuilderThreadBlocking([&aliases, &uniqueIds] {
+    for (const auto& group : frameBuilder.frame().groups)
+      for (const auto& dataset : group.datasets) {
+        uniqueIds.insert(dataset.uniqueId);
+        if (!dataset.alias.isEmpty())
+          aliases.insert(dataset.alias, dataset.uniqueId);
+      }
+  });
+
+  return [aliases, uniqueIds, &table](QStringView name) -> int {
+    const auto it = aliases.constFind(name.toString());
+    if (it != aliases.cend())
+      return table.slotFor(it.value());
+
+    bool ok               = false;
+    const int resolved_id = name.toInt(&ok);
+    if (ok && uniqueIds.contains(resolved_id))
+      return table.slotFor(resolved_id);
+
+    return -1;
+  };
 }
 
 /**
@@ -615,6 +752,15 @@ DataModel::DatasetTransformEditor::TransformStatus DataModel::DatasetTransformEd
 
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
   frameBuilder.refreshTableStoreFromProjectModel();
+
+  if (language == SerialStudio::Expression) {
+    DataModel::Expression::SlotTable table;
+    DataModel::Expression::Program program;
+    return DataModel::Expression::compile(
+             code, expressionResolver(table), expressionTables(), program, error)
+           ? TransformStatus::Ok
+           : TransformStatus::SyntaxError;
+  }
 
   if (language == SerialStudio::Lua) {
     lua_State* L = luaL_newstate();
@@ -697,6 +843,17 @@ QString DataModel::DatasetTransformEditor::testTransform(const QString& code,
 {
   if (code.trimmed().isEmpty())
     return QString::number(inputValue, 'g', 15);
+
+  if (language == SerialStudio::Expression) {
+    DataModel::Expression::SlotTable table;
+    DataModel::Expression::Runtime runtime;
+    QString error;
+    if (!DataModel::Expression::compile(
+          code, expressionResolver(table), expressionTables(), runtime.program, error))
+      return tr("Error: %1").arg(error);
+
+    return QString::number(runtime.run(inputValue, 0.0, table), 'g', 15);
+  }
 
   m_frameBuilder.refreshTableStoreFromProjectModel();
 

@@ -28,10 +28,10 @@
 #include <QSettings>
 #include <vector>
 
+#include "DataModel/DataBlock.h"
 #include "DataModel/ExportSchema.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FrameConsumer.h"
-#include "IO/StreamWorker.h"
 
 class AppState;
 
@@ -53,11 +53,11 @@ class Export;
 /**
  * @brief Worker that handles MDF4 export file I/O on a background thread.
  */
-class ExportWorker : public DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr> {
+class ExportWorker : public DataModel::FrameConsumerWorker<DataModel::DataBlockPtr> {
   Q_OBJECT
 
 public:
-  ExportWorker(moodycamel::ReaderWriterQueue<DataModel::TimestampedFramePtr>* queue,
+  ExportWorker(moodycamel::ReaderWriterQueue<DataModel::DataBlockPtr>* queue,
                std::atomic<bool>* enabled,
                std::atomic<size_t>* queueSize);
   ~ExportWorker() override;
@@ -67,6 +67,7 @@ public:
 
 public slots:
   void setTemplateFrame(const DataModel::Frame& frame);
+  void applyPublishedStructure(const DataModel::Frame& frame);
 
 public:
   /**
@@ -80,13 +81,22 @@ public:
     std::vector<bool> isNumeric;
   };
 
+  /**
+   * @brief Where one block column's samples land: the owning channel group and its slot in it.
+   */
+  struct ColumnSlot {
+    int groupId       = -1;
+    std::size_t index = 0;
+  };
+
 protected:
-  void processItems(const std::vector<DataModel::TimestampedFramePtr>& items) override;
+  void processItems(const std::vector<DataModel::DataBlockPtr>& items) override;
 
 private:
   void createFile(const DataModel::Frame& frame);
-  void writeGroupDatasets(const DataModel::Group& group, ChannelGroupInfo& info);
-  void writeFrameGroups(const DataModel::Frame& frame, qint64 timestamp_ns, double timestamp_s);
+  void buildColumnMap(const DataModel::Frame& frame);
+  void resolveBlockColumns(const DataModel::DataBlock& block);
+  void writeBlockSample(const DataModel::DataBlock& block, qsizetype index, qint64 systemEpochNs);
   void buildChannelGroups(mdf::IDataGroup* dataGroup, const DataModel::Frame& frame);
   void buildChannelGroupForGroup(mdf::IDataGroup* dataGroup,
                                  const DataModel::Group& group,
@@ -105,64 +115,27 @@ private:
   QString m_filePath;
   std::unique_ptr<mdf::MdfWriter> m_writer;
   std::map<int, ChannelGroupInfo> m_groupMap;
+  std::map<int, ColumnSlot> m_columnMap;
+  std::vector<int> m_touchedGroups;
+
+  /**
+   * @brief One block column's resolved MDF4 targets. Both maps are fixed for the file's lifetime,
+   *        so resolving per sample repeats the same two tree walks for every sample of the block.
+   */
+  struct ResolvedColumn {
+    mdf::IChannel* channel    = nullptr;
+    mdf::IChannel* rawChannel = nullptr;
+    bool isNumeric            = true;
+    bool valid                = false;
+    int groupId               = -1;
+  };
+
+  std::vector<ResolvedColumn> m_resolved;
 
   DataModel::TimestampedFrame::SteadyTimePoint m_steadyBaseline;
   std::chrono::system_clock::time_point m_systemBaseline;
 };
 
-/**
- * @brief Worker writing full-rate typed stream blocks (spec 0051 M5) to one MDF4 file per
- *        stream source: native float channels, per-sample timestamps derived as t0 + i * dt.
- */
-class StreamExportWorker : public DataModel::FrameConsumerWorker<IO::StreamBlockItemPtr> {
-  Q_OBJECT
-
-public:
-  StreamExportWorker(moodycamel::ReaderWriterQueue<IO::StreamBlockItemPtr>* queue,
-                     std::atomic<bool>* enabled,
-                     std::atomic<size_t>* queueSize);
-  ~StreamExportWorker() override;
-
-  void closeResources() override;
-  [[nodiscard]] bool isResourceOpen() const override;
-
-protected:
-  void processItems(const std::vector<IO::StreamBlockItemPtr>& items) override;
-
-private:
-  struct StreamFile {
-    std::unique_ptr<mdf::MdfWriter> writer;
-    mdf::IChannelGroup* channelGroup = nullptr;
-    mdf::IChannel* timeChannel       = nullptr;
-    std::vector<mdf::IChannel*> channels;
-    DataModel::TimestampedFrame::SteadyTimePoint steadyBaseline;
-    std::chrono::system_clock::time_point systemBaseline;
-  };
-
-  [[nodiscard]] StreamFile* fileFor(const IO::StreamBlockItem& block);
-  void writeBlock(StreamFile& state, const IO::StreamBlockItem& block);
-
-private:
-  std::map<int, StreamFile> m_files;
-};
-
-/**
- * @brief FrameConsumer facade for the stream-block MDF4 sink; the single producer is the GUI
- *        thread (ingestBlock is a queued slot fed by every StreamProcessor's blockReady).
- */
-class StreamExport : public DataModel::FrameConsumer<IO::StreamBlockItemPtr> {
-  Q_OBJECT
-
-public:
-  explicit StreamExport();
-
-public slots:
-  void ingestBlock(const IO::StreamBlockItemPtr& block);
-  void closeFiles();
-
-protected:
-  DataModel::FrameConsumerWorkerBase* createWorker() override;
-};
 #endif
 
 /**
@@ -170,7 +143,7 @@ protected:
  */
 class Export
 #ifdef BUILD_COMMERCIAL
-  : public DataModel::FrameConsumer<DataModel::TimestampedFramePtr>
+  : public DataModel::FrameConsumer<DataModel::DataBlockPtr>
 #else
   : public QObject
 #endif
@@ -204,16 +177,13 @@ public:
 
   [[nodiscard]] bool isOpen() const;
   [[nodiscard]] bool exportEnabled() const;
-#ifdef BUILD_COMMERCIAL
-  [[nodiscard]] StreamExport& streamSink() noexcept;
-#endif
 
 public slots:
   void closeFile();
   void setupExternalConnections();
   void setExportEnabled(const bool enabled);
   void setSettingsPersistent(const bool persistent);
-  void hotpathTxFrame(const DataModel::TimestampedFramePtr& frame);
+  void ingestBlock(const DataModel::DataBlockPtr& block);
 
 protected:
 #ifdef BUILD_COMMERCIAL
@@ -236,9 +206,7 @@ private:
   std::atomic<bool> m_exportEnabled;
   bool m_persistSettings;
 #ifdef BUILD_COMMERCIAL
-  AppState* m_appState;
-  DataModel::FrameBuilder* m_frameBuilder;
-  StreamExport m_streamExport;
+  DataModel::Frame m_sessionStructure;
 #endif
 };
 }  // namespace MDF4

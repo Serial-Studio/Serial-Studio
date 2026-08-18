@@ -145,6 +145,74 @@ Item {
       root.model.sweepEnabled = s["sweepEnabled"]
 
     root.restoringSweep = false
+
+    plot.restoreRuler(s)
+    root.restoreViewState()
+  }
+
+  //
+  // Persist the X-axis ruler (markers, zero point, hover marker) with the widget settings
+  //
+  function saveRulerSettings() {
+    Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "xMarkers", plot.xMarkers)
+    Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "xZero", plot.xZero)
+    Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "xZeroSet", plot.xZeroSet)
+    Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "hoverMarker", plot.hoverMarkerEnabled)
+  }
+
+  //
+  // Session view state (spec 0062): cursors, zoom/pan, crosshair mode and pause travel with a
+  // recording through Cpp_UI_Dashboard, never through the project document
+  //
+  function saveViewState() {
+    const d = Cpp_UI_Dashboard
+    d.saveWidgetViewState(widgetId, "cursorAX", plot.cursorAX)
+    d.saveWidgetViewState(widgetId, "cursorAY", plot.cursorAY)
+    d.saveWidgetViewState(widgetId, "cursorBX", plot.cursorBX)
+    d.saveWidgetViewState(widgetId, "cursorBY", plot.cursorBY)
+    d.saveWidgetViewState(widgetId, "cursorAVisible", plot.cursorAVisible)
+    d.saveWidgetViewState(widgetId, "cursorBVisible", plot.cursorBVisible)
+    d.saveWidgetViewState(widgetId, "showCrosshairs", plot.showCrosshairs)
+    d.saveWidgetViewState(widgetId, "xZoom", plot.xAxis.zoom)
+    d.saveWidgetViewState(widgetId, "xPan", plot.xAxis.pan)
+    d.saveWidgetViewState(widgetId, "yZoom", plot.yAxis.zoom)
+    d.saveWidgetViewState(widgetId, "yPan", plot.yAxis.pan)
+    d.saveWidgetViewState(widgetId, "paused", !root.model.running)
+  }
+
+  function restoreViewState() {
+    const v = Cpp_UI_Dashboard.widgetViewState(widgetId)
+    if (v["showCrosshairs"] !== undefined)
+      plot.showCrosshairs = v["showCrosshairs"] === true
+
+    if (isFinite(v["xZoom"]) && v["xZoom"] >= 1)
+      plot.xAxis.zoom = v["xZoom"]
+
+    if (isFinite(v["xPan"]))
+      plot.xAxis.pan = v["xPan"]
+
+    if (isFinite(v["yZoom"]) && v["yZoom"] >= 1)
+      plot.yAxis.zoom = v["yZoom"]
+
+    if (isFinite(v["yPan"]))
+      plot.yAxis.pan = v["yPan"]
+
+    if (v["cursorAVisible"] === true && isFinite(v["cursorAX"]) && isFinite(v["cursorAY"]))
+      plot.setCursorA(v["cursorAX"], v["cursorAY"])
+
+    if (v["cursorBVisible"] === true && isFinite(v["cursorBX"]) && isFinite(v["cursorBY"]))
+      plot.setCursorB(v["cursorBX"], v["cursorBY"])
+
+    if (v["paused"] === true && root.model)
+      root.model.running = false
+  }
+
+  Timer {
+    id: _viewStateTimer
+
+    interval: 500
+    repeat: false
+    onTriggered: root.saveViewState()
   }
 
   //
@@ -183,6 +251,10 @@ Item {
 
     function onSweepChanged() {
       root.saveSweepSettings()
+    }
+
+    function onRunningChanged() {
+      _viewStateTimer.restart()
     }
   }
 
@@ -471,6 +543,18 @@ Item {
       xAxis.tickInterval: plot.xTickInterval
       yAxis.tickInterval: plot.yTickInterval
 
+      onRulerChanged: root.saveRulerSettings()
+      onCursorAXChanged: _viewStateTimer.restart()
+      onCursorAYChanged: _viewStateTimer.restart()
+      onCursorBXChanged: _viewStateTimer.restart()
+      onCursorBYChanged: _viewStateTimer.restart()
+      onCursorAVisibleChanged: _viewStateTimer.restart()
+      onCursorBVisibleChanged: _viewStateTimer.restart()
+      onShowCrosshairsChanged: _viewStateTimer.restart()
+      xAxis.onPanChanged: _viewStateTimer.restart()
+      yAxis.onPanChanged: _viewStateTimer.restart()
+      xAxis.onZoomChanged: _viewStateTimer.restart()
+      yAxis.onZoomChanged: _viewStateTimer.restart()
       onZoomChanged: Qt.callLater(root.redrawCurves)
       onXVisibleMinChanged: Qt.callLater(root.redrawCurves)
       onWidthChanged: root.setDownsample()

@@ -1,0 +1,31 @@
+[
+ {
+  "file": "line_framing",
+  "name": "Line framing (LF)",
+  "default": true
+ },
+ {
+  "file": "nmea_0183",
+  "name": "NMEA 0183 sentences"
+ },
+ {
+  "file": "slip",
+  "name": "SLIP framing (RFC 1055)"
+ },
+ {
+  "file": "cobs",
+  "name": "COBS packets"
+ },
+ {
+  "file": "mavlink_v2",
+  "name": "MAVLink v2 packets"
+ },
+ {
+  "file": "modbus_rtu",
+  "name": "Modbus RTU frames"
+ },
+ {
+  "file": "fixed_records",
+  "name": "Fixed-size records"
+ }
+]

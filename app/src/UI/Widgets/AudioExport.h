@@ -25,11 +25,13 @@
 #include <cstdint>
 #include <memory>
 #include <QHash>
+#include <QMutex>
 #include <QSet>
 #include <QString>
 #include <unordered_map>
 #include <vector>
 
+#include "DataModel/DataBlock.h"
 #include "DataModel/FrameConsumer.h"
 #include "IO/StreamWorker.h"
 #include "SerialStudio.h"
@@ -110,7 +112,7 @@ private:
 
 /**
  * @brief Singleton facade recording FFT/Waterfall input to WAV (Pro). Widgets own their frame-lane
- * Dashboard taps; stream-lane sources feed sessions by dataset uniqueId via @c ingestStreamBlock
+ * Dashboard taps; published blocks feed sessions by dataset uniqueId via @c ingestBlock
  * (queued from blockReady, so the GUI stays the queue's single producer). External auto-stop calls
  * @c closeAllSessions(), which emits @c sessionsClosed() so widgets disarm (T6/T7 contract).
  */
@@ -148,7 +150,7 @@ public slots:
   void openSession(SerialStudio::DashboardWidget kind, int index, AudioSessionConfig config);
   void closeSession(SerialStudio::DashboardWidget kind, int index);
   void closeAllSessions();
-  void ingestStreamBlock(const IO::StreamBlockItemPtr& block);
+  void ingestBlock(const DataModel::DataBlockPtr& block);
   void setupExternalConnections();
 
 private slots:
@@ -159,6 +161,8 @@ protected:
 
 private:
   QSet<quint32> m_activeSessions;
+  // Read by the pipeline thread in ingestBlock(), mutated by the GUI on session open/close
+  mutable QMutex m_sessionDatasetsMutex;
   QHash<quint32, int> m_sessionDatasets;
 };
 

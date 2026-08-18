@@ -393,6 +393,7 @@
         <file>icons/commands/48/ai.svg</file>
         <file>icons/commands/48/extensions.svg</file>
         <file>icons/commands/48/pictures-folder.svg</file>
+        <file>icons/console/24/annotations.svg</file>
         <file>icons/console/24/clear.svg</file>
         <file>icons/console/24/collapse-duplicates.svg</file>
         <file>icons/console/24/hexadecimal.svg</file>
@@ -400,6 +401,7 @@
         <file>icons/console/24/search.svg</file>
         <file>icons/console/24/settings.svg</file>
         <file>icons/console/24/utilities.svg</file>
+        <file>icons/console/32/annotations.svg</file>
         <file>icons/console/32/clear.svg</file>
         <file>icons/console/32/collapse-duplicates.svg</file>
         <file>icons/console/32/hexadecimal.svg</file>
@@ -407,6 +409,7 @@
         <file>icons/console/32/search.svg</file>
         <file>icons/console/32/settings.svg</file>
         <file>icons/console/32/utilities.svg</file>
+        <file>icons/console/48/annotations.svg</file>
         <file>icons/database/32/close.svg</file>
         <file>icons/database/32/delete.svg</file>
         <file>icons/database/32/export-pdf.svg</file>
@@ -939,6 +942,14 @@
         <file>messages/trial/Welcome_VI.txt</file>
         <file>messages/trial/Welcome_ZH.txt</file>
         <file>messages/Acknowledgements.txt</file>
+        <file>scripts/annotations/cobs.js</file>
+        <file>scripts/annotations/fixed_records.js</file>
+        <file>scripts/annotations/line_framing.js</file>
+        <file>scripts/annotations/mavlink_v2.js</file>
+        <file>scripts/annotations/modbus_rtu.js</file>
+        <file>scripts/annotations/nmea_0183.js</file>
+        <file>scripts/annotations/slip.js</file>
+        <file>scripts/annotations/templates.json</file>
         <file>scripts/control/default_template.js</file>
         <file>scripts/mqtt/js/aws_iot.js</file>
         <file>scripts/mqtt/js/home_assistant.js</file>

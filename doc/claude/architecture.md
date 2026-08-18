@@ -17,6 +17,7 @@ summarized inline in CLAUDE.md — the sub-files hold the full detail.
 | [architecture/export.md](architecture/export.md) | CSV/MDF4 export schema, the Sessions SQLite DB (schema, replay, snapshots, PK/index rules). |
 | [architecture/mirror.md](architecture/mirror.md) | The spec-0040 remote dashboard mirror: `app/src/API/Mirror/` (protocol codec, publisher, client, session), the NDJSON wire format + layout hash, the `streamAvailable()` mirroring disjunct, viewer frame injection, `RemoteAttach.qml`. |
 | [architecture/commands-icons.md](architecture/commands-icons.md) | Before adding a toolbar button, palette entry, menu item, keyboard shortcut, or fixed icon: the spec-0028 icon registry (tiered tree, `IconRegistry` resolution, legacy map) and command registry (JSON command/layout manifests, per-context bindings, `CommandModel`/`CommandToolbar`, contexts + binding-set ordering, shortcuts, translations) with recipes for new commands/surfaces. |
+| [architecture/kernels.md](architecture/kernels.md) | Adding a bulk numeric loop or annotating a function for the optimizer: the portable SIMD kernels in `DSPSimd.h` (spec 0021, bit-exact contract) and the `HotpathOptimization.h` macro cascade (`SS_FORCE_INLINE`, `SS_ASSUME`, `SS_ASSERT_HOTPATH`, the forbidden fast-math/no-unwind macros). |
 
 Cross-cutting reads: a Dashboard ingest change is also a hotpath change (dataflow.md); a
 ProjectModel ctor-adjacent change is also a startup change (startup.md). When a change spans

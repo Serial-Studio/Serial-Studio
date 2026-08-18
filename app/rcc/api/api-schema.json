@@ -3536,7 +3536,7 @@
                 "type": "string"
             },
             "transformLanguage": {
-                "description": "Transform script language: -1 inherit, 0 JavaScript, 1 Lua",
+                "description": "Transform script language: -1 inherit, 0 JavaScript, 1 Lua, 3 Expression",
                 "type": "integer"
             },
             "units": {
@@ -5407,6 +5407,23 @@
         },
         "required": [
             "layout"
+        ]
+    },
+    {
+        "description": "Set the auto-layout pattern of the workspace or group on screen. Pattern is '' (Grid), master-stack, master-grid, row, column or spiral; ratio is the primary split in sixteenths (1..15, default 8) and only applies to the patterns with a primary region. Stored beside that workspace's window geometry, so it does not touch the workspace list.",
+        "name": "ui.window.setLayoutPattern",
+        "properties": {
+            "pattern": {
+                "description": "Pattern id; '' selects Grid",
+                "type": "string"
+            },
+            "ratio": {
+                "description": "Primary split in sixteenths, 1..15 (optional)",
+                "type": "integer"
+            }
+        },
+        "required": [
+            "pattern"
         ]
     },
     {
