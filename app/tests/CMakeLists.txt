@@ -397,7 +397,7 @@ ss_add_unit_test(tst_sweep_segments
 ss_add_unit_test(tst_sessions_legacy_archive
   SOURCES tst_sessions_legacy_archive.cpp
           ${SS_APP_SRC}/SSAssert.cpp
-  LIBS    Qt6::Core Qt6::Sql
+  LIBS    Qt6::Core Qt6::Gui Qt6::Sql
 )
 
 if(TARGET tst_sessions_legacy_archive)

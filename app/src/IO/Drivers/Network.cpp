@@ -50,15 +50,26 @@ using ProbeLen                              = int;
 using ProbePoll                             = WSAPOLLFD;
 static constexpr ProbeSocket kNoProbeSocket = INVALID_SOCKET;
 static constexpr int kProbeRefused          = WSAECONNREFUSED;
-static constexpr auto ProbePollFn           = ::WSAPoll;
 #else
 using ProbeSocket                           = int;
 using ProbeLen                              = socklen_t;
 using ProbePoll                             = pollfd;
 static constexpr ProbeSocket kNoProbeSocket = -1;
 static constexpr int kProbeRefused          = ECONNREFUSED;
-static constexpr auto ProbePollFn           = ::poll;
 #endif
+
+/**
+ * @brief Waits for the probe socket to become writable; a wrapper because clang-cl refuses the
+ *        dllimport'ed WSAPoll address as a constant expression.
+ */
+static inline int probePoll(ProbePoll* fds, int timeoutMs)
+{
+#ifdef Q_OS_WIN
+  return ::WSAPoll(fds, 1, timeoutMs);
+#else
+  return ::poll(fds, 1, timeoutMs);
+#endif
+}
 
 /**
  * @brief Whether the last connect() merely started an asynchronous dial rather than failing.
@@ -392,7 +403,7 @@ bool IO::Drivers::Network::tcpLinkUp() const
   pending.fd     = handle;
   pending.events = POLLOUT;
 
-  const int ready = ProbePollFn(&pending, 1, timeoutMs);
+  const int ready = probePoll(&pending, timeoutMs);
   if (ready <= 0) {
     closeProbeSocket(handle);
     return false;
@@ -474,8 +485,6 @@ static bool waitForTcpEndpoint(const QString& host, quint16 port, QString& reaso
  */
 bool IO::Drivers::Network::dialTcpBlocking(const QString& host, const QIODevice::OpenMode mode)
 {
-  static auto& connectionManager = ConnectionManager::instance();
-
   QString reason;
   if (!waitForTcpEndpoint(host, tcpPort(), reason)) {
     logDriverError(
