@@ -570,7 +570,14 @@ API::CommandResponse API::Handlers::SessionsHandler::replay(const QString& id,
   const int sessionId = params.value(QStringLiteral("sessionId")).toInt();
   static auto& db     = Sessions::DatabaseManager::instance();
   db.setSelectedSessionId(sessionId);
-  db.replaySelectedSession();
+
+  if (!db.replaySelectedSession()) {
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::ExecutionError,
+      QStringLiteral(
+        "No database open, or no session selected. Call sessions.openDatabase first."));
+  }
 
   QJsonObject result;
   result[QStringLiteral("sessionId")] = sessionId;

@@ -117,11 +117,21 @@ API::CommandResponse API::Handlers::StreamHandler::getSources(const QString& id,
 
     QJsonObject source;
     source.insert(Keys::SourceId, config.sourceId);
-    source.insert(QStringLiteral("channels"), config.channels);
     source.insert(QStringLiteral("sampleRate"), config.sampleRate);
     source.insert(QStringLiteral("datasets"), datasets);
 
+    // code-verify off
+    // Report what the blocks actually carry, not what the driver advertised when the worker was
+    // built: a device opened or reconfigured after that never updates config.channels, and the
+    // binding bounds-checks against the block anyway, so the stale value only misleads whoever is
+    // debugging a source. Falls back to the configured count until the first block lands.
+    // code-verify on
+    int channels = config.channels;
+
     if (auto* processor = worker->processor()) {
+      if (processor->observedChannels() > 0)
+        channels = processor->observedChannels();
+
       source.insert(QStringLiteral("samplesProcessed"),
                     static_cast<double>(processor->samplesProcessed()));
       source.insert(QStringLiteral("blocksProcessed"),
@@ -131,6 +141,8 @@ API::CommandResponse API::Handlers::StreamHandler::getSources(const QString& id,
       source.insert(QStringLiteral("displayDrops"),
                     static_cast<double>(processor->displayDropCount()));
     }
+
+    source.insert(QStringLiteral("channels"), channels);
 
     sources.append(source);
   }

@@ -680,8 +680,9 @@ void CSV::Player::openFile(const QString& filePath)
 
 /**
  * @brief Foreground quick pass over the first rows only: skips a UTF-8 BOM, captures the
- *        header (first valid row), detects the timestamp mode from the first data row, and
- *        runs the interval / date-time-column prompts when neither format matches.
+ *        header, detects the timestamp mode, and prompts when neither format matches. Any
+ *        finite number is an elapsed column, negatives included -- multi-source recordings
+ *        written before the exporter latched its origin start below zero.
  */
 bool CSV::Player::runQuickPass()
 {
@@ -749,7 +750,7 @@ bool CSV::Player::runQuickPass()
 
   bool is_number     = false;
   const double value = SerialStudio::toDouble(first_cell, &is_number);
-  if (is_number && value >= 0.0 && std::isfinite(value)) {
+  if (is_number && std::isfinite(value)) {
     m_tsMode         = PlayerTimestampMode::Numeric;
     const auto scale = timestampUnitScale(m_headerCells.first());
     m_timeScale      = scale ? *scale : promptTimestampUnitScale();

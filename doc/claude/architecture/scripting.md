@@ -120,11 +120,22 @@ grabbed into a `QQuickPaintedItem`, so three invariants hold them together:
 - `keyPressEvent` reroutes to `completer()->popup()` while it's visible (the popup never has
   real focus in the embedded setup).
 
-`JsCodeEditor` & the other project-editor siblings call `renderWidget()` **directly** from their
-input handlers and grab unconditionally on `uiTimeout` — dropping that re-introduces one-timer-tick
-lag on every keystroke/drag. They live in modal editors, so the cost is bounded by the dialog.
+**Every embedded editor is gated; none grabs unconditionally (2026-08-18).** The old rule here
+said the project-editor siblings could grab on every `uiTimeout` because "they live in modal
+editors, so the cost is bounded by the dialog". That was wrong twice over: the Project Editor is a
+separate **top-level window** whose Loader is `active: !app.runtimeMode`, so it is constructed at
+startup and never destroyed, and its right-panel Loader keeps the last-selected view instantiated.
+On top of that **`QQuickItem::isVisible()` stays true for an item inside a closed window** — item
+visibility tracks the item's own chain, not whether the window is on screen. A user who once
+opened the Control Script tab and closed the editor therefore paid a full `QCodeEditor::grab()`
+(software text shaping through HarfBuzz) 60 times a second for the rest of the session. Measured
+with `sample` on a live app with the editor **not open**: `ControlScriptEditor::renderWidget` 40%,
+`QLineNumberArea::paintEvent` 11%, `QCodeEditor::getFirstVisibleBlock` 5% — **56% of the GUI
+thread**, 4x the 2026-08-17 incident. `ControlScriptEditor`, `JsCodeEditor`, `OutputCodeEditor` and
+`PainterCodeEditor` now carry `MacroEditor`'s gate plus a `renderable()` helper that also requires
+`window() && window()->isVisible()`.
 
-**`MacroEditor` is the exception and must stay one (2026-08-17).** It is embedded in the main
+**`MacroEditor` is the pattern all of them follow (2026-08-17).** It is embedded in the main
 window (Macros dialog, and the console annotations decoder tab), where an unconditional
 `m_widget.grab()` per tick cost **13% of the main thread plus a per-frame texture upload for the
 whole session** — measured with `sample`, not guessed. Handlers there call `scheduleRender()`
@@ -132,7 +143,8 @@ whole session** — measured with `sample`, not guessed. Handlers there call `sc
 hasActiveFocus())`, and the widget's `textChanged` / `selectionChanged` / `cursorPositionChanged`
 feed the same flag so undo, paste, `clear()` and `selectAll()` still repaint. Focus keeps the caret
 blinking; unfocused steady state costs zero grabs. Never re-wire an embedded editor's tick to grab
-unconditionally — check with a sample first if you think you need to.
+unconditionally — check with a sample first if you think you need to, and never gate a grab on
+`isVisible()` alone: it is true behind a closed window.
 
 ## Per-Dataset Value Transforms
 

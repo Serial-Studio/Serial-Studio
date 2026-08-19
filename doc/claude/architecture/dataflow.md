@@ -116,6 +116,40 @@ The pipeline is single-threaded internally; the thread boundary is crossed only 
   `setSettingsPersistent(false)` throughout and `abortSession()` runs on `aboutToQuit`, so a quit
   mid-run persists none of the synthetic project, forced-on exporters, or 10 s plot range.
 
+## The Two Republish Lanes (spec 0064)
+
+A dataset fed from a data table rather than from parsed channels has **one** publication path: the
+synthetic refresh. A parser that returns an empty dataset list never stages a row (`parseProjectFrame`
+skips an empty channel list), so nothing else ever publishes those datasets. Two callers drive that
+refresh and they are not interchangeable:
+
+| Caller | Call | Sinks |
+|--------|------|-------|
+| Control script / `dashboard.tick` | `dashboardTick()` -> `republishFrames(true)` | **fed** |
+| `dashboard.reprocess`, watchdog renders | `reprocessFrames()` -> `republishFrames(false)` | masked |
+| `refreshStreamDrivenFrames()`, UI tick while a stream source produces | `republishFrames(false)` | masked |
+
+Both lanes run `reprocessDatasetValues()`, which honors the change-driven skip. **They must not
+share one "already republished" mark.** They did until spec 0064, and the result was that any
+active stream-lane source drove the masked lane on every UI tick, consumed the change-driven
+transform clock, and left the export lane seeing `changed == false` — so the dashboard updated
+live while every recording sink got nothing. A 635-dataset project recorded 4 channels; the 4 were
+the only ones not fed from tables.
+
+`DataModel::RepublishGate` (`RepublishGate.h`, header-only so the rule is unit-testable without
+FrameBuilder's link set) keeps the lanes apart:
+
+- **any** lane observing a change calls `noteChanged(key)` — a masked pass is exactly what leaves
+  the sinks stale, so it marks them dirty rather than clearing the obligation;
+- the dashboard lane keeps the cheap "changed, or never published" rule;
+- the export lane asks whether the **sinks** are behind (`sinkDirty`), not whether this pass saw a
+  change;
+- only an export publish clears the mark.
+
+`tst_republish_lanes` pins the asymmetry; `tests/integration/test_export_replay_fidelity.py`
+reproduces the original failure end-to-end with no hardware (parser returns no datasets,
+`dashboard.reprocess` stands in for the stream lane).
+
 ## Timestamp Ownership — Source Owns Time
 
 Timing is stamped at the driver boundary and preserved downstream. Do not re-stamp in

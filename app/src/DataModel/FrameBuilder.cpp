@@ -1040,7 +1040,7 @@ void DataModel::FrameBuilder::applyProjectSnapshot(ProjectSnapshot snapshot)
   clear_frame(m_frame);
   m_sourceFrames.clear();
   m_sourceFrameCounters.clear();
-  m_republishedSourceIds.clear();
+  m_republishGate.clear();
   m_streamDatasetIds.clear();
   m_streamValuesDirty = false;
 
@@ -1223,7 +1223,7 @@ void DataModel::FrameBuilder::onOperationModeChanged()
   m_quickPlotChannels = -1;
   m_sourceFrames.clear();
   m_sourceFrameCounters.clear();
-  m_republishedSourceIds.clear();
+  m_republishGate.clear();
   m_streamDatasetIds.clear();
   m_streamValuesDirty = false;
   clearLatestFrames();
@@ -1249,7 +1249,7 @@ void DataModel::FrameBuilder::publishSourceTemplateFrame(const DataModel::Source
     return;
 
   m_sourceFrames.insert(src.sourceId, srcFrame);
-  m_republishedSourceIds.insert(src.sourceId);
+  m_republishGate.notePublishedTemplate(src.sourceId);
   ensureStructurePublished(src.sourceId, m_sourceFrames[src.sourceId]);
 }
 
@@ -1384,19 +1384,24 @@ bool DataModel::FrameBuilder::emitRepublishedFrame(const DataModel::Frame& frame
   const int sourceId = frame.sourceId;
   flushBlock(sourceId);
 
+  const auto published_count = [this, sourceId] {
+    const auto it = m_blockNumbers.find(sourceId);
+    return it != m_blockNumbers.end() ? it->second : quint64(0);
+  };
+
+  const quint64 before    = published_count();
   const bool previousMask = m_maskSinks;
   m_maskSinks             = m_maskSinks || !feedExports;
 
   stageFrameValues(sourceId, frame, DataModel::TimestampedFrame::SteadyClock::now());
-  const bool staged = m_openBlocks.find(sourceId) != m_openBlocks.end();
   flushBlock(sourceId);
 
   m_maskSinks = previousMask;
 
-  if (!staged)
+  if (published_count() == before)
     return false;
 
-  m_republishedSourceIds.insert(key);
+  m_republishGate.notePublished(key, feedExports);
   return true;
 }
 
@@ -1429,24 +1434,31 @@ bool DataModel::FrameBuilder::republishFrames(bool feedExports)
       continue;
     }
 
-    any_source         = true;
-    const bool changed = reprocessDatasetValues(frame);
-    if (!changed && m_republishedSourceIds.contains(frame.sourceId))
-      continue;
-
-    if (emitRepublishedFrame(frame, frame.sourceId, feedExports))
-      published = true;
+    any_source = true;
+    published  = republishOneFrame(frame, frame.sourceId, feedExports) || published;
   }
 
-  if (!any_source && !m_frame.groups.empty() && !m_frame.title.isEmpty()) {
-    const bool changed = reprocessDatasetValues(m_frame);
-    if (changed || !m_republishedSourceIds.contains(combined_frame_key)) {
-      if (emitRepublishedFrame(m_frame, combined_frame_key, feedExports))
-        published = true;
-    }
-  }
+  if (!any_source && !m_frame.groups.empty() && !m_frame.title.isEmpty())
+    published = republishOneFrame(m_frame, combined_frame_key, feedExports) || published;
 
   return published;
+}
+
+/**
+ * @brief Runs @p frame's transform pass and publishes it when this lane still owes @p key a
+ *        publish. An export publish is what clears the sink-dirty mark: until one lands, the
+ *        recording sinks are behind the values the dashboard already shows (spec 0064).
+ */
+bool DataModel::FrameBuilder::republishOneFrame(DataModel::Frame& frame, int key, bool feedExports)
+{
+  const bool changed = reprocessDatasetValues(frame);
+  if (changed)
+    m_republishGate.noteChanged(key);
+
+  if (!m_republishGate.needed(key, changed, feedExports))
+    return false;
+
+  return emitRepublishedFrame(frame, key, feedExports);
 }
 
 /**
@@ -1637,7 +1649,7 @@ void DataModel::FrameBuilder::onConnectedChanged()
   if (!nowConnected) {
     m_sourceFrames.clear();
     m_sourceFrameCounters.clear();
-    m_republishedSourceIds.clear();
+    m_republishGate.clear();
     m_streamDatasetIds.clear();
     m_streamValuesDirty = false;
     clearLatestFrames();

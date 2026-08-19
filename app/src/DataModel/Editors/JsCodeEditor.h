@@ -110,10 +110,12 @@ private slots:
   void onThemeChanged();
   void renderWidget();
   void resizeWidget();
+  void scheduleRender();
 
 private:
   void switchNativeLanguage(const int language);
   void syncWidgetPosition();
+  [[nodiscard]] bool renderable() const;
 
 private:
   bool event(QEvent* event) override;
@@ -134,6 +136,7 @@ private:
   void dropEvent(QDropEvent* event) override;
 
 private:
+  bool m_dirty;
   int m_sourceId;
   int m_language;
   bool m_readingCode;

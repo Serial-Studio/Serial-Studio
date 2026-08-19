@@ -1250,13 +1250,14 @@ void Sessions::DatabaseManager::confirmDeleteSession(int sessionId)
 /**
  * @brief Hands the selected session off to the SQLite player for replay.
  */
-void Sessions::DatabaseManager::replaySelectedSession()
+bool Sessions::DatabaseManager::replaySelectedSession()
 {
   if (m_selectedSessionId < 0 || m_filePath.isEmpty())
-    return;
+    return false;
 
-  SS_ASSERT(m_player != nullptr, return);
+  SS_ASSERT(m_player != nullptr, return false);
   m_player->openFile(m_filePath, m_selectedSessionId);
+  return true;
 }
 
 //--------------------------------------------------------------------------------------------------

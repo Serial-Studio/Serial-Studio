@@ -201,6 +201,14 @@ block caps, the time-ring/plot-clock rules, and the kernel macros.
   `IO::StreamWorker` thread but emit `blockReady` **queued to the pipeline thread**, the SINGLE
   producer for every sink. Structure travels separately as a `StructureSnapshot`. Never add a
   rate cap or a per-view reduction; an overrun drops whole blocks and counts them.
+- **Two republish lanes, one obligation each (spec 0064).** A table-fed virtual dataset publishes
+  ONLY through the synthetic refresh, and it has a sink-fed lane (`dashboardTick()`) and a masked
+  lane (`reprocessFrames()`, `refreshStreamDrivenFrames()` on every UI tick while a stream source
+  produces). They must never share one "already republished" mark: the masked lane consumes the
+  change-driven transform clock, so sharing it makes the export lane see `changed == false` and
+  skip — dashboard live, every recording empty. `DataModel::RepublishGate` keeps them apart; any
+  lane seeing a change marks the sinks dirty, only an export publish clears it. Never gate an
+  export publish on "did THIS pass see a change".
 - **Time rings are sized from a rate, never a sample count alone**, and a ring's clock never
   rewinds; `m_plotClocks` and `m_plotDisplayTimeSec` are ONE state (`resetPlotClocks()`), never
   cleared one without the other. Full rules + both 2026-08 incidents:

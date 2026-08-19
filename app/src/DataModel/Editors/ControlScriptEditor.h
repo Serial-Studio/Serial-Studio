@@ -87,9 +87,11 @@ private slots:
   void onThemeChanged();
   void renderWidget();
   void resizeWidget();
+  void scheduleRender();
 
 private:
   void syncWidgetPosition();
+  [[nodiscard]] bool renderable() const;
 
 private:
   bool event(QEvent* event) override;
@@ -110,6 +112,7 @@ private:
   void dropEvent(QDropEvent* event) override;
 
 private:
+  bool m_dirty;
   bool m_readingCode;
   bool m_initialLoad;
   Misc::ThemeManager& m_themeManager;

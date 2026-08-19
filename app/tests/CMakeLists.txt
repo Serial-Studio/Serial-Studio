@@ -410,6 +410,17 @@ if(TARGET tst_sessions_legacy_archive)
 endif()
 
 #
+# The two synthetic-refresh lanes (spec 0064). RepublishGate.h is header-only precisely so the
+# lane-asymmetry rule can be pinned without FrameBuilder's link set: a masked dashboard refresh
+# must never discharge the export lane's obligation, or a stream source silently empties every
+# recording of the frame lane's table-fed datasets.
+#
+ss_add_unit_test(tst_republish_lanes
+  SOURCES tst_republish_lanes.cpp
+  LIBS    Qt6::Core
+)
+
+#
 # The single-file sparse CSV body (spec 0055). SparseRowMerger.h was extracted from CSV::ExportWorker
 # precisely so this can be checked without QFile, the workspace manager or a session: the suite
 # supplies the two formatter stubs itself and links nothing but QtCore.

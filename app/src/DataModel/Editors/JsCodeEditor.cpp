@@ -35,6 +35,7 @@
 #include <QLineNumberArea>
 #include <QLuaHighlighter>
 #include <QMessageBox>
+#include <QQuickWindow>
 #include <QTextCursor>
 #include <QTextDocument>
 #include <QUrl>
@@ -56,6 +57,7 @@
  */
 DataModel::JsCodeEditor::JsCodeEditor(QQuickItem* parent)
   : QQuickPaintedItem(parent)
+  , m_dirty(true)
   , m_sourceId(0)
   , m_language(0)
   , m_readingCode(false)
@@ -133,6 +135,11 @@ DataModel::JsCodeEditor::JsCodeEditor(QQuickItem* parent)
   connect(this, &QQuickPaintedItem::widthChanged, this, &DataModel::JsCodeEditor::resizeWidget);
   connect(this, &QQuickPaintedItem::heightChanged, this, &DataModel::JsCodeEditor::resizeWidget);
 
+  connect(&m_widget, &QCodeEditor::textChanged, this, &DataModel::JsCodeEditor::scheduleRender);
+  connect(
+    &m_widget, &QCodeEditor::selectionChanged, this, &DataModel::JsCodeEditor::scheduleRender);
+  connect(
+    &m_widget, &QCodeEditor::cursorPositionChanged, this, &DataModel::JsCodeEditor::scheduleRender);
   connect(
     &m_timerEvents, &Misc::TimerEvents::uiTimeout, this, &DataModel::JsCodeEditor::renderWidget);
 
@@ -592,15 +599,35 @@ void DataModel::JsCodeEditor::onThemeChanged()
 }
 
 /**
+ * @brief Marks the cached pixmap stale; the next UI tick does the grab, so a burst of edits
+ *        costs one widget render instead of one per event.
+ */
+void DataModel::JsCodeEditor::scheduleRender()
+{
+  m_dirty = true;
+}
+
+/**
+ * @brief Whether a grab would be seen: an item in a closed window still reports itself visible,
+ *        so a project-editor tab left selected keeps rendering at UI rate behind a hidden window.
+ */
+bool DataModel::JsCodeEditor::renderable() const
+{
+  return isVisible() && window() && window()->isVisible();
+}
+
+/**
  * @brief Captures the editor widget as a pixmap for QML painting.
  */
 void DataModel::JsCodeEditor::renderWidget()
 {
-  if (isVisible()) {
-    syncWidgetPosition();
-    m_pixmap = m_widget.grab();
-    update();
-  }
+  if (!renderable() || (!m_dirty && !hasActiveFocus()))
+    return;
+
+  m_dirty = false;
+  syncWidgetPosition();
+  m_pixmap = m_widget.grab();
+  update();
 }
 
 /**
@@ -624,7 +651,7 @@ void DataModel::JsCodeEditor::resizeWidget()
 {
   if (width() > 0 && height() > 0) {
     m_widget.setFixedSize(static_cast<int>(width()), static_cast<int>(height()));
-    renderWidget();
+    scheduleRender();
   }
 }
 
@@ -669,7 +696,7 @@ void DataModel::JsCodeEditor::keyPressEvent(QKeyEvent* event)
   else
     QCoreApplication::sendEvent(&m_widget, event);
 
-  renderWidget();
+  scheduleRender();
 }
 
 /**
@@ -686,7 +713,7 @@ void DataModel::JsCodeEditor::keyReleaseEvent(QKeyEvent* event)
 void DataModel::JsCodeEditor::inputMethodEvent(QInputMethodEvent* event)
 {
   QCoreApplication::sendEvent(&m_widget, event);
-  renderWidget();
+  scheduleRender();
 }
 
 /**
@@ -719,7 +746,7 @@ void DataModel::JsCodeEditor::mousePressEvent(QMouseEvent* event)
                    event->pointingDevice());
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
   forceActiveFocus();
-  renderWidget();
+  scheduleRender();
 }
 
 /** @brief Forwards mouse-move events to the backing widget after offsetting for the line-number
@@ -735,7 +762,7 @@ void DataModel::JsCodeEditor::mouseMoveEvent(QMouseEvent* event)
                    event->modifiers(),
                    event->pointingDevice());
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
-  renderWidget();
+  scheduleRender();
 }
 
 /** @brief Forwards mouse-release events to the backing widget after offsetting for the line-number
@@ -751,7 +778,7 @@ void DataModel::JsCodeEditor::mouseReleaseEvent(QMouseEvent* event)
                    event->modifiers(),
                    event->pointingDevice());
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
-  renderWidget();
+  scheduleRender();
 }
 
 /** @brief Forwards double-click events to the backing widget after offsetting for the line-number
@@ -767,7 +794,7 @@ void DataModel::JsCodeEditor::mouseDoubleClickEvent(QMouseEvent* event)
                    event->modifiers(),
                    event->pointingDevice());
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
-  renderWidget();
+  scheduleRender();
 }
 
 /**
@@ -776,7 +803,7 @@ void DataModel::JsCodeEditor::mouseDoubleClickEvent(QMouseEvent* event)
 void DataModel::JsCodeEditor::wheelEvent(QWheelEvent* event)
 {
   QCoreApplication::sendEvent(m_widget.viewport(), event);
-  renderWidget();
+  scheduleRender();
 }
 
 /**

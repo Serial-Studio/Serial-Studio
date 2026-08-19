@@ -191,7 +191,7 @@ public slots:
   void setSelectedSessionNotes(const QString& notes);
   void deleteSession(int sessionId);
   void confirmDeleteSession(int sessionId);
-  void replaySelectedSession();
+  bool replaySelectedSession();
 
   void addTag(const QString& label);
   void addTagAndAssign(int sessionId, const QString& label);

@@ -51,6 +51,7 @@ extern "C" {
 #include "DataModel/Frame.h"
 #include "DataModel/FramePoolPolicy.h"
 #include "DataModel/ParseBudget.h"
+#include "DataModel/RepublishGate.h"
 #include "DataModel/Scripting/ExpressionTransform.h"
 #include "DataModel/Scripting/JsWatchdog.h"
 #include "IO/HAL_Driver.h"
@@ -339,7 +340,7 @@ private:
   bool m_streamValuesDirty;
   QSet<int> m_streamSourceIds;
   QSet<int> m_streamDatasetIds;
-  QSet<int> m_republishedSourceIds;
+  DataModel::RepublishGate m_republishGate;
   QMap<int, DataModel::Frame> m_sourceFrames;
   std::map<int, quint64> m_sourceFrameCounters;
   std::map<EngineKey, TransformEngine> m_transformEngines;
@@ -484,6 +485,7 @@ private:
   void refreshFramePoolBudget(const DataModel::Frame& src) noexcept;
   SS_COLD void notePoolExhausted();
   [[nodiscard]] size_t claimPoolSlot(int sourceId, bool hintedOnly = false) noexcept;
+  bool republishOneFrame(DataModel::Frame& frame, int key, bool feedExports);
   bool emitRepublishedFrame(const DataModel::Frame& frame, int key, bool feedExports);
   void bindSlotTemplate(PooledFrameSlot* slot, const DataModel::Frame& src);
   [[nodiscard]] bool preparePooledSlot(PooledFrameSlot* slot, const DataModel::Frame& src);

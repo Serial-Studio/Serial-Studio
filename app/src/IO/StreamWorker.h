@@ -131,6 +131,8 @@ public:
 
   [[nodiscard]] quint64 blocksProcessed() const noexcept { return m_blocksProcessed; }
 
+  [[nodiscard]] int observedChannels() const noexcept { return m_observedChannels; }
+
   [[nodiscard]] quint64 transformErrorCount() const noexcept { return m_transformErrors; }
 
   [[nodiscard]] quint64 displayDropCount() const noexcept { return m_displayDrops; }
@@ -192,6 +194,7 @@ private:
   QDeadlineTimer m_luaDeadline;
   bool m_inBlock;
 
+  int m_observedChannels;
   quint64 m_samplesProcessed;
   quint64 m_blocksProcessed;
   quint64 m_transformErrors;

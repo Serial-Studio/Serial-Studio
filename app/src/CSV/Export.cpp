@@ -297,6 +297,10 @@ void CSV::ExportWorker::processItems(const std::vector<DataModel::DataBlockPtr>&
       return;
 
     m_referenceTimestamp = items.front()->t0;
+    for (const auto& block : items)
+      if (block && block->samples > 0 && block->t0 < m_referenceTimestamp)
+        m_referenceTimestamp = block->t0;
+
     resetMonotonicClock();
   }
 
@@ -339,10 +343,11 @@ void CSV::ExportWorker::bufferBlock(const DataModel::DataBlockPtr& block)
   times.reserve(static_cast<std::size_t>(block->samples));
   for (qsizetype i = 0; i < block->samples; ++i) {
     const auto stamp = DataModel::sample_time(*block, i);
-    times.push_back(
+    const qint64 offset =
       uniform
         ? std::chrono::duration_cast<std::chrono::nanoseconds>(stamp - m_referenceTimestamp).count()
-        : monotonicFrameNs(stamp, m_referenceTimestamp));
+        : monotonicFrameNs(stamp, m_referenceTimestamp);
+    times.push_back(std::max<qint64>(0, offset));
   }
 
   m_merger.addBlock(block, std::move(times));
@@ -375,7 +380,7 @@ void CSV::ExportWorker::flushReadyRows(qint64 cutoffNs)
 void CSV::ExportWorker::writeSnapshotRowNow(
   const DataModel::TimestampedFrame::SteadyTimePoint& timestamp)
 {
-  const qint64 nanoseconds = monotonicFrameNs(timestamp, m_referenceTimestamp);
+  const qint64 nanoseconds = std::max<qint64>(0, monotonicFrameNs(timestamp, m_referenceTimestamp));
 
   m_rowBuffer.resize(0);
   appendDouble(

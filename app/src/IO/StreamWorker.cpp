@@ -101,6 +101,7 @@ IO::StreamProcessor::StreamProcessor(const StreamConfig& config,
   , m_js(nullptr)
   , m_luaDeadline(QDeadlineTimer::Forever)
   , m_inBlock(false)
+  , m_observedChannels(0)
   , m_samplesProcessed(0)
   , m_blocksProcessed(0)
   , m_transformErrors(0)
@@ -430,6 +431,7 @@ void IO::StreamProcessor::onSampleBlock(const IO::SampleBlockPtr& block)
 
   const QScopedValueRollback<bool> reentry_guard(m_inBlock, true);
   const quint64 blockNumber = ++m_blocksProcessed;
+  m_observedChannels        = block->channels;
 
   const auto slot = claimBlockSlot();
   if (!slot) [[unlikely]] {
