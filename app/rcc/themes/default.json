@@ -58,6 +58,10 @@
     "alarm_critical":"#fa0a0a",
     "dashboard_background":"#e0e3e5",
 
+    "notebox_text":"#232629",
+    "notebox_border":"#c2c2c2",
+    "notebox_background":"#FFF4CE",
+
     "mid":"#d4d4d4",
     "dark":"#b0b0b0",
     "text":"#232629",
@@ -79,6 +83,7 @@
     "alternate_base":"#e9e9e9",
     "placeholder_text":"#6b7280",
     "highlighted_text":"#ffffff",
+    "switch_highlight":"#3daee9",
 
     "console_text":"#2a2d2f",
     "console_base":"#ffffff",
@@ -124,6 +129,7 @@
     "start_menu_version_text":"#FFFFFF",
     "start_menu_gradient_bottom":"#2B36B3",
     "start_menu_highlighted_text":"#ffffff",
+    "start_menu_button_gradient_enabled":false,
 
     "snap_indicator_border":"#1A83CA",
     "snap_indicator_background":"#401A83CA",

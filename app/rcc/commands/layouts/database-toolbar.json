@@ -11,28 +11,14 @@
     {
       "type": "section",
       "items": [
-        { "type": "command", "id": "db.replay" },
-        { "type": "command", "id": "db.delete" }
-      ]
-    },
-    {
-      "type": "section",
-      "items": [
         { "type": "command", "id": "db.lock" }
-      ]
-    },
-    {
-      "type": "section",
-      "items": [
-        { "type": "command", "id": "db.exportCsv" },
-        { "type": "command", "id": "db.exportPdf" }
       ]
     },
     {
       "type": "section",
       "showSeparator": false,
       "items": [
-        { "type": "command", "id": "db.restoreProject" }
+        { "type": "command", "id": "db.help" }
       ]
     }
   ]

@@ -882,10 +882,24 @@ QJsonArray DataModel::ProjectModel::externalWindows() const
 }
 
 /**
+ * @brief True while per-widget settings are live. Only a loaded project owns them, and a widget id
+ *        is just type:groupId:datasetIndex: outside ProjectFile a QuickPlot widget reusing an id
+ *        would read settings the loaded project's widget saved and it can never save back.
+ */
+static bool widget_settings_active()
+{
+  static auto& appState = AppState::instance();
+  return appState.operationMode() == SerialStudio::ProjectFile;
+}
+
+/**
  * @brief Returns the persisted settings object for the given widget.
  */
 QJsonObject DataModel::ProjectModel::widgetSettings(const QString& widgetId) const
 {
+  if (!widget_settings_active())
+    return QJsonObject();
+
   return m_widgetSettings.value(widgetId).toObject();
 }
 
@@ -1200,8 +1214,7 @@ void DataModel::ProjectModel::saveWidgetSetting(const QString& widgetId,
                                                 const QString& key,
                                                 const QVariant& value)
 {
-  static auto& appState = AppState::instance();
-  if (appState.operationMode() != SerialStudio::ProjectFile)
+  if (!widget_settings_active())
     return;
 
   auto normalized = value;

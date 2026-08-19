@@ -21,22 +21,63 @@
 
 #include "Misc/HelpCenter.h"
 
+#include <algorithm>
+
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QNetworkReply>
 
+#include "AppInfo.h"
 #include "Misc/ThemeManager.h"
 
 //--------------------------------------------------------------------------------------------------
 // GitHub URL helpers
 //--------------------------------------------------------------------------------------------------
 
-static const QString kGitHubBranch = QStringLiteral("master");
-static const QString kGitHubRepo   = QStringLiteral("Serial-Studio/Serial-Studio");
+static const QString kDevSlug     = QStringLiteral("dev");
+static const QString kDevRef      = QStringLiteral("master");
+static const QString kGitHubRepo  = QStringLiteral("Serial-Studio/Serial-Studio");
+static const QString kSite        = QStringLiteral("https://serial-studio.com");
+static const QString kVersionsUrl = kSite + QStringLiteral("/help/versions.json");
 
-static const QString kBase = QStringLiteral("https://raw.githubusercontent.com/%1/%2/doc/help/")
-                               .arg(kGitHubRepo, kGitHubBranch);
+/**
+ * @brief Returns the raw.githubusercontent.com base URL of doc/help at @a ref.
+ */
+static QString baseUrl(const QString& ref)
+{
+  return QStringLiteral("https://raw.githubusercontent.com/%1/%2/doc/help/").arg(kGitHubRepo, ref);
+}
+
+/**
+ * @brief Packs a "v4.0.3" or "4.0.3" string into a single comparable integer.
+ */
+static int versionKey(const QString& version)
+{
+  const auto trimmed = version.startsWith(QLatin1Char('v')) ? version.mid(1) : version;
+  const auto parts   = trimmed.split(QLatin1Char('.'));
+
+  int key = 0;
+  for (int i = 0; i < 3; ++i) {
+    const auto part = i < parts.count() ? parts.at(i) : QString();
+    key             = key * 1000 + std::clamp(part.section(QLatin1Char('-'), 0, 0).toInt(), 0, 999);
+  }
+
+  return key;
+}
+
+/**
+ * @brief Returns the position of @a slug in a version list, or -1.
+ */
+static int indexOfSlug(const QVariantList& versions, const QString& slug)
+{
+  for (int i = 0; i < versions.count(); ++i) {
+    if (versions.at(i).toMap().value(QStringLiteral("slug")).toString() == slug)
+      return i;
+  }
+
+  return -1;
+}
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access functions
@@ -45,7 +86,13 @@ static const QString kBase = QStringLiteral("https://raw.githubusercontent.com/%
 /**
  * @brief Constructs the HelpCenter singleton.
  */
-Misc::HelpCenter::HelpCenter() : m_loading(false), m_currentIndex(-1), m_pendingPreloads(0)
+Misc::HelpCenter::HelpCenter()
+  : m_loading(false)
+  , m_epoch(0)
+  , m_currentIndex(-1)
+  , m_versionIndex(-1)
+  , m_defaultVersion(-1)
+  , m_pendingPreloads(0)
 {
   m_nam.setTransferTimeout(15 * 1000);
 
@@ -145,6 +192,59 @@ const QString& Misc::HelpCenter::themeColors() const noexcept
   return m_themeColors;
 }
 
+/**
+ * @brief Returns the index of the documentation version being displayed.
+ */
+int Misc::HelpCenter::versionIndex() const noexcept
+{
+  return m_versionIndex;
+}
+
+/**
+ * @brief Returns the list of documentation versions offered to the user.
+ */
+const QVariantList& Misc::HelpCenter::versions() const noexcept
+{
+  return m_versions;
+}
+
+/**
+ * @brief Returns the human-readable label of the current documentation version.
+ */
+QString Misc::HelpCenter::versionLabel() const
+{
+  return currentVersion().value(QStringLiteral("label")).toString();
+}
+
+/**
+ * @brief Returns a warning shown when the user browses documentation that does
+ *        not correspond to the running application, or an empty string.
+ */
+QString Misc::HelpCenter::versionNotice() const
+{
+  if (m_versionIndex < 0 || m_versionIndex == m_defaultVersion)
+    return {};
+
+  return tr("Showing documentation for %1; this copy of Serial Studio is version %2.")
+    .arg(versionLabel(), QStringLiteral(APP_VERSION));
+}
+
+/**
+ * @brief Returns the serial-studio.com address of the current page and version.
+ */
+QString Misc::HelpCenter::onlineUrl() const
+{
+  auto path = currentVersion().value(QStringLiteral("path")).toString();
+  if (path.isEmpty())
+    path = QStringLiteral("/help");
+
+  const auto id = pageId();
+  if (!id.isEmpty())
+    return kSite + path + QLatin1Char('/') + id;
+
+  return kSite + path;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Property setters
 //--------------------------------------------------------------------------------------------------
@@ -165,6 +265,37 @@ void Misc::HelpCenter::setCurrentIndex(int index)
 
   if (index >= 0 && index < m_filteredPages.count())
     fetchPage(index);
+}
+
+/**
+ * @brief Switches the documentation version, dropping every cached page and
+ *        re-fetching the manifest for the newly selected git ref.
+ */
+void Misc::HelpCenter::setVersionIndex(int index)
+{
+  if (index == m_versionIndex || index < 0 || index >= m_versions.count())
+    return;
+
+  const auto page = pageId();
+  ++m_epoch;
+  m_versionIndex = index;
+  Q_EMIT versionIndexChanged();
+
+  m_loading         = false;
+  m_currentIndex    = -1;
+  m_pendingPreloads = 0;
+  m_allPages        = QJsonArray();
+  m_pendingPageId   = page;
+  m_pageContents.clear();
+  m_filteredPages.clear();
+  m_pageContent.clear();
+
+  Q_EMIT pagesChanged();
+  Q_EMIT loadingChanged();
+  Q_EMIT currentIndexChanged();
+  Q_EMIT pageContentChanged();
+
+  fetchManifest();
 }
 
 /**
@@ -246,6 +377,50 @@ void Misc::HelpCenter::showPage(const QString& pageId)
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Fetches the documentation version manifest published by
+ *        serial-studio.com. No-op while another request is in flight.
+ */
+void Misc::HelpCenter::fetchVersions()
+{
+  if (m_loading)
+    return;
+
+  m_loading = true;
+  Q_EMIT loadingChanged();
+
+  auto* reply = m_nam.get(QNetworkRequest(QUrl(kVersionsUrl)));
+  reply->setProperty("epoch", m_epoch);
+  connect(reply, &QNetworkReply::finished, this, &HelpCenter::onVersionsReply);
+}
+
+/**
+ * @brief Handles the versions.json fetch response and continues with the
+ *        manifest of the resolved version. A failed fetch falls back to a
+ *        single "latest" entry tracking the master branch.
+ */
+void Misc::HelpCenter::onVersionsReply()
+{
+  auto* reply = qobject_cast<QNetworkReply*>(sender());
+  if (!reply)
+    return;
+
+  reply->deleteLater();
+  if (reply->property("epoch").toInt() != m_epoch)
+    return;
+
+  QJsonArray array;
+  if (reply->error() == QNetworkReply::NoError)
+    array = QJsonDocument::fromJson(reply->readAll()).array();
+
+  applyVersions(array);
+
+  m_loading = false;
+  Q_EMIT loadingChanged();
+
+  fetchManifest();
+}
+
+/**
  * @brief Handles the help.json manifest fetch response.
  */
 void Misc::HelpCenter::onManifestReply()
@@ -255,18 +430,19 @@ void Misc::HelpCenter::onManifestReply()
     return;
 
   reply->deleteLater();
+  if (reply->property("epoch").toInt() != m_epoch)
+    return;
 
   if (reply->error() == QNetworkReply::NoError) {
     const auto doc = QJsonDocument::fromJson(reply->readAll());
     m_allPages     = doc.array();
     applyFilter();
 
-    if (!m_pendingPageId.isEmpty()) {
-      navigateToPage(m_pendingPageId);
-      m_pendingPageId.clear();
-    }
+    const auto pending = m_pendingPageId;
+    m_pendingPageId.clear();
 
-    else if (!m_filteredPages.isEmpty())
+    const bool restored = !pending.isEmpty() && navigateToPage(pending);
+    if (!restored && !m_filteredPages.isEmpty())
       setCurrentIndex(0);
 
     preloadAllPages();
@@ -286,6 +462,8 @@ void Misc::HelpCenter::onPageReply()
     return;
 
   reply->deleteLater();
+  if (reply->property("epoch").toInt() != m_epoch)
+    return;
 
   if (reply->error() == QNetworkReply::NoError) {
     const auto raw = QString::fromUtf8(reply->readAll());
@@ -310,19 +488,24 @@ void Misc::HelpCenter::onPageReply()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Fetches the help.json manifest from GitHub. No-op if already
- *        loaded or currently loading.
+ * @brief Fetches the help.json manifest of the selected documentation version.
+ *        No-op if already loaded or currently loading.
  */
 void Misc::HelpCenter::fetchManifest()
 {
   if (m_loading || !m_allPages.isEmpty())
     return;
 
+  if (m_versions.isEmpty()) {
+    fetchVersions();
+    return;
+  }
+
   m_loading = true;
   Q_EMIT loadingChanged();
 
-  const auto url = QUrl(kBase + "help.json");
-  auto* reply    = m_nam.get(QNetworkRequest(url));
+  auto* reply = m_nam.get(QNetworkRequest(contentUrl(QStringLiteral("help.json"))));
+  reply->setProperty("epoch", m_epoch);
   connect(reply, &QNetworkReply::finished, this, &HelpCenter::onManifestReply);
 }
 
@@ -365,6 +548,91 @@ bool Misc::HelpCenter::pageMatchesFilter(const QJsonObject& obj) const
 }
 
 /**
+ * @brief Rebuilds the version list from the fetched manifest and selects the
+ *        version that matches the running application. An empty or unreadable
+ *        manifest degrades to a single entry tracking the master branch.
+ */
+void Misc::HelpCenter::applyVersions(const QJsonArray& array)
+{
+  m_versions.clear();
+
+  for (const auto& entry : array) {
+    const auto obj = entry.toObject();
+    if (!obj.value(QStringLiteral("ref")).toString().isEmpty())
+      m_versions.append(obj.toVariantMap());
+  }
+
+  if (m_versions.isEmpty()) {
+    QVariantMap fallback;
+    fallback.insert(QStringLiteral("slug"), kDevSlug);
+    fallback.insert(QStringLiteral("label"), tr("Latest"));
+    fallback.insert(QStringLiteral("ref"), kDevRef);
+    fallback.insert(QStringLiteral("path"), QStringLiteral("/help"));
+    m_versions.append(fallback);
+  }
+
+  m_defaultVersion = resolveDefaultVersion();
+  m_versionIndex   = m_defaultVersion;
+
+  Q_EMIT versionsChanged();
+  Q_EMIT versionIndexChanged();
+}
+
+/**
+ * @brief Returns the version the running application should read: its own tag
+ *        when documented, the development branch when the application is newer
+ *        than every tag, otherwise the manifest's default.
+ */
+int Misc::HelpCenter::resolveDefaultVersion() const
+{
+  const auto tag = QStringLiteral("v" APP_VERSION);
+
+  int marked = -1;
+  int newest = 0;
+  for (int i = 0; i < m_versions.count(); ++i) {
+    const auto version = m_versions.at(i).toMap();
+    const auto slug    = version.value(QStringLiteral("slug")).toString();
+    if (slug.compare(tag, Qt::CaseInsensitive) == 0)
+      return i;
+
+    if (version.value(QStringLiteral("default")).toBool())
+      marked = i;
+
+    newest = std::max(newest, versionKey(slug));
+  }
+
+  const auto dev = indexOfSlug(m_versions, kDevSlug);
+  if (dev >= 0 && versionKey(QStringLiteral(APP_VERSION)) > newest)
+    return dev;
+
+  return marked >= 0 ? marked : (m_versions.isEmpty() ? -1 : 0);
+}
+
+/**
+ * @brief Returns the manifest entry of the version being displayed.
+ */
+QVariantMap Misc::HelpCenter::currentVersion() const
+{
+  if (m_versionIndex >= 0 && m_versionIndex < m_versions.count())
+    return m_versions.at(m_versionIndex).toMap();
+
+  return {};
+}
+
+/**
+ * @brief Returns the download URL of @a file within the selected version.
+ */
+QUrl Misc::HelpCenter::contentUrl(const QString& file) const
+{
+  auto ref = currentVersion().value(QStringLiteral("ref")).toString();
+  if (ref.isEmpty())
+    ref = kDevRef;
+
+  const auto encoded = QString::fromUtf8(QUrl::toPercentEncoding(file));
+  return QUrl::fromEncoded((baseUrl(ref) + encoded).toUtf8());
+}
+
+/**
  * @brief Fetches the content for the page at the given index. Uses preloaded
  *        content or network fetch.
  */
@@ -387,10 +655,9 @@ void Misc::HelpCenter::fetchPage(int index)
   m_loading = true;
   Q_EMIT loadingChanged();
 
-  auto encoded = QString::fromUtf8(QUrl::toPercentEncoding(file));
-  auto url     = QUrl::fromEncoded((kBase + encoded).toUtf8());
-  auto* reply  = m_nam.get(QNetworkRequest(url));
+  auto* reply = m_nam.get(QNetworkRequest(contentUrl(file)));
   reply->setProperty("pageId", id);
+  reply->setProperty("epoch", m_epoch);
   connect(reply, &QNetworkReply::finished, this, &HelpCenter::onPageReply);
 }
 
@@ -411,10 +678,9 @@ void Misc::HelpCenter::preloadAllPages()
       continue;
 
     ++m_pendingPreloads;
-    auto encoded = QString::fromUtf8(QUrl::toPercentEncoding(file));
-    auto url     = QUrl::fromEncoded((kBase + encoded).toUtf8());
-    auto* reply  = m_nam.get(QNetworkRequest(url));
+    auto* reply = m_nam.get(QNetworkRequest(contentUrl(file)));
     reply->setProperty("pageId", id);
+    reply->setProperty("epoch", m_epoch);
     connect(reply, &QNetworkReply::finished, this, &HelpCenter::onPreloadReply);
   }
 }
@@ -430,6 +696,8 @@ void Misc::HelpCenter::onPreloadReply()
     return;
 
   reply->deleteLater();
+  if (reply->property("epoch").toInt() != m_epoch)
+    return;
 
   if (reply->error() == QNetworkReply::NoError) {
     const auto id  = reply->property("pageId").toString();

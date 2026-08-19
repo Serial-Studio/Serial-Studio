@@ -569,6 +569,8 @@ Widgets.SmartWindow {
         }
 
         sourceComponent: Panes.Toolbar {
+          mwPalette: _mwPalette
+          dashboard: root.dashboard
           toolbarEnabled: root.toolbarVisible
           dashboardVisible: root.dashboardVisible
           autoHide: Cpp_UI_Dashboard.autoHideToolbar

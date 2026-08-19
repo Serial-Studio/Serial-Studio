@@ -65,6 +65,8 @@ UI::CommandRegistry::CommandRegistry() : m_translator(Misc::Translator::instance
   loadLayout(QStringLiteral(":/commands/layouts/project-toolbar.json"));
   loadLayout(QStringLiteral(":/commands/layouts/start-menu.json"));
   loadLayout(QStringLiteral(":/commands/layouts/database-toolbar.json"));
+  loadLayout(QStringLiteral(":/commands/layouts/database-detail-toolbar.json"));
+  loadMenus(QStringLiteral(":/commands/layouts/editor-menus.json"));
 
   QHash<QString, QString> claimed;
   for (const auto& command : m_commands) {
@@ -171,6 +173,104 @@ void UI::CommandRegistry::loadLayout(const QString& path)
                     filterLayoutNodes(layout.value(QLatin1String(key)).toArray()));
 
   m_layouts.insert(surface, layout);
+}
+
+/**
+ * @brief Parses a multi-menu manifest, storing each menu as its own
+ *        "editor-menu/<name>" surface so context menus query it like any layout.
+ */
+void UI::CommandRegistry::loadMenus(const QString& path)
+{
+  SS_ASSERT(!path.isEmpty(), return);
+
+  QFile file(path);
+  if (!file.open(QFile::ReadOnly)) {
+    qWarning() << "CommandRegistry: cannot open" << path;
+    return;
+  }
+
+  QJsonParseError error{};
+  const auto document = QJsonDocument::fromJson(file.readAll(), &error);
+  if (error.error != QJsonParseError::NoError || !document.isObject()) {
+    qWarning() << "CommandRegistry: invalid menu manifest" << path << error.errorString();
+    return;
+  }
+
+  QHash<QString, QJsonArray> authored;
+  const auto menus = document.object().value(QStringLiteral("menus")).toArray();
+  for (const auto& entry : menus) {
+    const auto menu    = entry.toObject();
+    const auto name    = menu.value(QStringLiteral("name")).toString();
+    const bool ignored = name.isEmpty() || authored.contains(name);
+    if (ignored) {
+      qWarning() << "CommandRegistry: missing or duplicate menu name in" << path << name;
+      continue;
+    }
+
+    authored.insert(name, menu.value(QStringLiteral("items")).toArray());
+  }
+
+  for (auto it = authored.constBegin(); it != authored.constEnd(); ++it) {
+    QStringList stack;
+    const auto surface = QStringLiteral("editor-menu/") + it.key();
+    QJsonObject layout;
+    layout.insert(QStringLiteral("surface"), surface);
+    layout.insert(QStringLiteral("items"),
+                  filterLayoutNodes(resolveMenuIncludes(it.value(), authored, stack, 0)));
+    m_layouts.insert(surface, layout);
+  }
+}
+
+/**
+ * @brief Splices "include" nodes with the items of the menu they name; a bare
+ *        include inlines them, a container include fills that container.
+ *        Unknown targets and cycles warn and expand to nothing.
+ */
+QJsonArray UI::CommandRegistry::resolveMenuIncludes(const QJsonArray& nodes,
+                                                    const QHash<QString, QJsonArray>& menus,
+                                                    QStringList& stack,
+                                                    const int depth)
+{
+  constexpr int kMaxIncludeDepth = 4;
+  constexpr int kMaxNodeDepth    = 8;
+  SS_ASSERT(depth <= kMaxNodeDepth, return {});
+
+  QJsonArray result;
+  for (const auto& entry : nodes) {
+    auto node          = entry.toObject();
+    const auto include = node.value(QStringLiteral("include")).toString();
+    if (include.isEmpty()) {
+      if (node.contains(QStringLiteral("items")))
+        node.insert(QStringLiteral("items"),
+                    resolveMenuIncludes(
+                      node.value(QStringLiteral("items")).toArray(), menus, stack, depth + 1));
+
+      result.append(node);
+      continue;
+    }
+
+    if (!menus.contains(include) || stack.contains(include) || stack.size() >= kMaxIncludeDepth) {
+      qWarning() << "CommandRegistry: unresolved menu include" << include;
+      continue;
+    }
+
+    stack.append(include);
+    const auto expanded = resolveMenuIncludes(menus.value(include), menus, stack, depth + 1);
+    stack.removeLast();
+
+    if (node.value(QStringLiteral("type")).toString() == QStringLiteral("include")) {
+      for (const auto& child : expanded)
+        result.append(child);
+
+      continue;
+    }
+
+    node.remove(QStringLiteral("include"));
+    node.insert(QStringLiteral("items"), expanded);
+    result.append(node);
+  }
+
+  return result;
 }
 
 /**

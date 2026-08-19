@@ -248,6 +248,61 @@ def check_layouts(errors: list[str], ids: set[str]) -> None:
             check_layout_nodes(errors, name, data.get(key, []), ids)
 
 
+MENUS = "editor-menus.json"
+MENU_BINDINGS = "ProjectEditorMenuBindings.qml"
+
+
+def menu_command_ids(nodes: list, out: set[str]) -> None:
+    for node in nodes:
+        if node.get("type") == "command":
+            out.add(node.get("id", ""))
+        menu_command_ids(node.get("items", []), out)
+
+
+def check_menus(errors: list[str], ids: set[str]) -> None:
+    path = RCC / "commands" / "layouts" / MENUS
+    if not path.exists():
+        fail(errors, f"missing menu manifest: {MENUS}")
+        return
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as error:
+        fail(errors, f"invalid JSON in {MENUS}: {error}")
+        return
+
+    names: set[str] = set()
+    for menu in data.get("menus", []):
+        name = menu.get("name", "")
+        if not name or name in names:
+            fail(errors, f"{MENUS}: missing or duplicate menu name '{name}'")
+            continue
+        names.add(name)
+
+    referenced: set[str] = set()
+    for menu in data.get("menus", []):
+        check_layout_nodes(errors, MENUS, menu.get("items", []), ids)
+        menu_command_ids(menu.get("items", []), referenced)
+        check_menu_includes(errors, menu.get("items", []), names)
+
+    bindings = ROOT / "app" / "qml" / "Commands" / MENU_BINDINGS
+    if not bindings.is_file():
+        fail(errors, f"missing menu bindings: {MENU_BINDINGS}")
+        return
+
+    text = bindings.read_text(encoding="utf-8")
+    bound = set(re.findall(r'"([\w.]+)":\s*root\.cmd', text))
+    for cid in sorted(referenced - bound):
+        fail(errors, f"{MENUS}: '{cid}' has no binding in {MENU_BINDINGS}")
+
+
+def check_menu_includes(errors: list[str], nodes: list, names: set[str]) -> None:
+    for node in nodes:
+        target = node.get("include")
+        if target is not None and target not in names:
+            fail(errors, f"{MENUS}: include references unknown menu '{target}'")
+        check_menu_includes(errors, node.get("items", []), names)
+
+
 def check_binding_guards(errors: list[str]) -> None:
     bindings_dir = ROOT / "app" / "qml" / "Commands"
     if not bindings_dir.is_dir():
@@ -1377,6 +1432,7 @@ def main() -> int:
     aliases = check_qrc(errors)
     ids = check_manifests(errors)
     check_layouts(errors, ids)
+    check_menus(errors, ids)
     check_binding_guards(errors)
     check_icon_render_sizes(errors)
     check_property_manifests(errors)

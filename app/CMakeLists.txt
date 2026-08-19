@@ -603,6 +603,7 @@ set(QML_SOURCES
   qml/Commands/CommandModel.qml
   qml/Commands/DashboardCommandBindings.qml
   qml/Commands/ProjectEditorCommandBindings.qml
+  qml/Commands/ProjectEditorMenuBindings.qml
   qml/Dialogs/About.qml
   qml/Dialogs/Acknowledgements.qml
   qml/Dialogs/AccelerometerConfigDialog.qml
@@ -713,6 +714,7 @@ set(QML_SOURCES
   qml/Widgets/Dashboard/ValueFormat.js
   qml/Widgets/BigButton.qml
   qml/Widgets/BoundField.qml
+  qml/Widgets/CommandMenu.qml
   qml/Widgets/CommandPalette.qml
   qml/Widgets/CommandToolbar.qml
   qml/Widgets/Combo.qml

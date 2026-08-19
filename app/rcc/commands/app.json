@@ -301,7 +301,8 @@
     {
       "id": "palette.open",
       "title": "Command Palette",
-      "icon": "commands/workspaces",
+      "icon": "commands/command-palette",
+      "tooltip": "Search and run any Serial Studio command",
       "kind": "action",
       "contexts": [],
       "shortcut": "Ctrl+K",

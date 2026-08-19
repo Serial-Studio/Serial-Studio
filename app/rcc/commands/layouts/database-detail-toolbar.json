@@ -1,0 +1,38 @@
+{
+  "surface": "database-detail-toolbar",
+  "sections": [
+    {
+      "type": "section",
+      "items": [
+        { "type": "command", "id": "db.replay",
+          "hints": { "iconSize": 24 } }
+      ]
+    },
+    {
+      "type": "section",
+      "items": [
+        { "type": "command", "id": "db.exportCsv",
+          "hints": { "iconSize": 24 } },
+        { "type": "command", "id": "db.exportPdf",
+          "hints": { "iconSize": 24 } }
+      ]
+    },
+    {
+      "type": "section",
+      "items": [
+        { "type": "command", "id": "db.compareProject",
+          "hints": { "iconSize": 24 } },
+        { "type": "command", "id": "db.restoreProject",
+          "hints": { "iconSize": 24 } }
+      ]
+    },
+    {
+      "type": "section",
+      "showSeparator": false,
+      "items": [
+        { "type": "command", "id": "db.delete",
+          "hints": { "iconSize": 24 } }
+      ]
+    }
+  ]
+}

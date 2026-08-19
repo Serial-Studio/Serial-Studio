@@ -32,6 +32,12 @@ QtObject {
   property var reportDialog: null
 
   //
+  // Operator mode (deployed shortcut) keeps the explorer read-only: only the
+  // export commands stay reachable.
+  //
+  readonly property bool operatorMode: typeof app !== "undefined" && app.runtimeMode
+
+  //
   // Session-database command behavior, keyed by manifest id (Sessions is a Pro-only
   // surface, so this file is loaded solely inside the commercial Database Explorer).
   //
@@ -43,7 +49,9 @@ QtObject {
     "db.lock": root.cmdDbLock,
     "db.exportCsv": root.cmdDbExportCsv,
     "db.exportPdf": root.cmdDbExportPdf,
-    "db.restoreProject": root.cmdDbRestoreProject
+    "db.restoreProject": root.cmdDbRestoreProject,
+    "db.compareProject": root.cmdDbCompareProject,
+    "db.help": root.cmdDbHelp
   })
 
   readonly property QtObject cmdDbOpen: QtObject {
@@ -56,12 +64,14 @@ QtObject {
   }
 
   readonly property QtObject cmdDbReplay: QtObject {
+    readonly property bool visible: !root.operatorMode
     readonly property bool enabled: Cpp_Sessions_Manager.isOpen
                                     && Cpp_Sessions_Manager.selectedSessionId >= 0
     function run() { Cpp_Sessions_Manager.replaySelectedSession() }
   }
 
   readonly property QtObject cmdDbDelete: QtObject {
+    readonly property bool visible: !root.operatorMode
     readonly property bool enabled: Cpp_Sessions_Manager.isOpen
                                     && Cpp_Sessions_Manager.selectedSessionId >= 0
                                     && !Cpp_Sessions_Manager.locked
@@ -107,8 +117,31 @@ QtObject {
   }
 
   readonly property QtObject cmdDbRestoreProject: QtObject {
+    readonly property bool visible: !root.operatorMode
     readonly property bool enabled: Cpp_Sessions_Manager.isOpen
                                     && Cpp_Sessions_Manager.selectedSessionId >= 0
     function run() { Cpp_Sessions_Manager.restoreProjectFromDb() }
+  }
+
+  readonly property QtObject cmdDbCompareProject: QtObject {
+    readonly property bool visible: !root.operatorMode
+    readonly property bool enabled: Cpp_Sessions_Manager.isOpen
+                                    && Cpp_Sessions_Manager.selectedSessionId >= 0
+                                    && !Cpp_Sessions_Manager.verificationBusy
+    readonly property string tooltip: Cpp_Sessions_Manager.regressionBusy
+                                      ? qsTr("Comparing the session against the current project…")
+                                      : qsTr("Compare this session against the project currently "
+                                             + "open in the editor")
+    function run() {
+      Cpp_Sessions_Manager.regressSession(Cpp_Sessions_Manager.selectedSessionId)
+    }
+  }
+
+  readonly property QtObject cmdDbHelp: QtObject {
+    readonly property bool visible: typeof app !== "undefined"
+    function run() {
+      if (typeof app !== "undefined")
+        app.showHelpCenter("session-database")
+    }
   }
 }

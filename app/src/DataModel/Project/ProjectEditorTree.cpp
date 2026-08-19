@@ -189,6 +189,9 @@ void DataModel::ProjectEditor::buildTreeModel()
   root->setData(registry.icon(QStringLiteral("editor"), QStringLiteral("project-setup"), 16),
                 TreeViewIcon);
   root->setData(true, TreeViewExpanded);
+  root->setData(KindProjectRoot, TreeItemKind);
+  root->setData(-1, TreeItemId);
+  root->setData(-1, TreeItemParentId);
 
   m_treeModel->appendRow(root);
   m_rootItems.insert(root, kRootItem);
@@ -291,6 +294,9 @@ void DataModel::ProjectEditor::appendSourceTreeItems(QStandardItem* root)
     parserItem->setData(registry.icon(QStringLiteral("editor"), QStringLiteral("code"), 16),
                         TreeViewIcon);
     parserItem->setData(tr("Frame Parser"), TreeViewText);
+    parserItem->setData(KindFrameParser, TreeItemKind);
+    parserItem->setData(source.sourceId, TreeItemId);
+    parserItem->setData(source.sourceId, TreeItemParentId);
     sourceItem->appendRow(parserItem);
     m_sourceParserItems.insert(parserItem, source);
 
@@ -466,6 +472,9 @@ void DataModel::ProjectEditor::appendGroupTreeItems(QStandardItem* root,
     registry.icon(QStringLiteral("editor"), QStringLiteral("dashboard-widgets"), 16), TreeViewIcon);
   groupsRoot->setData(-1, TreeViewFrameIndex);
   groupsRoot->setData(true, TreeViewExpanded);
+  groupsRoot->setData(KindGroupsRoot, TreeItemKind);
+  groupsRoot->setData(-1, TreeItemId);
+  groupsRoot->setData(-1, TreeItemParentId);
 
   QHash<int, QStandardItem*> folderItems;
   if (showFolders)
@@ -604,12 +613,18 @@ void DataModel::ProjectEditor::appendSharedMemoryTreeItems(QStandardItem* root,
                       TreeViewIcon);
   tablesRoot->setData(-1, TreeViewFrameIndex);
   tablesRoot->setData(true, TreeViewExpanded);
+  tablesRoot->setData(KindTablesRoot, TreeItemKind);
+  tablesRoot->setData(-1, TreeItemId);
+  tablesRoot->setData(-1, TreeItemParentId);
 
   auto* sysDsItem = new QStandardItem(tr("Dataset Values"));
   sysDsItem->setData(tr("Dataset Values"), TreeViewText);
   sysDsItem->setData(registry.icon(QStringLiteral("editor"), QStringLiteral("dataset-values"), 16),
                      TreeViewIcon);
   sysDsItem->setData(-1, TreeViewFrameIndex);
+  sysDsItem->setData(KindSystemDatasets, TreeItemKind);
+  sysDsItem->setData(-1, TreeItemId);
+  sysDsItem->setData(-1, TreeItemParentId);
   tablesRoot->appendRow(sysDsItem);
 
   const auto& tableFolders    = m_projectModelRef.editorTableFolders();
@@ -795,6 +810,9 @@ void DataModel::ProjectEditor::appendWorkspaceTreeItems(QStandardItem* root,
                   TreeViewIcon);
   wsRoot->setData(-1, TreeViewFrameIndex);
   wsRoot->setData(true, TreeViewExpanded);
+  wsRoot->setData(KindWorkspacesRoot, TreeItemKind);
+  wsRoot->setData(-1, TreeItemId);
+  wsRoot->setData(-1, TreeItemParentId);
 
   if (filterActive) {
     for (const auto& ws : workspaces) {

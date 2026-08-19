@@ -23,6 +23,12 @@
       "kind": "action", "contexts": [], "pro": true },
     { "id": "db.restoreProject", "title": "Restore Project", "icon": "database/restore",
       "tooltip": "Restore the project file from this session file",
+      "kind": "action", "contexts": [], "pro": true },
+    { "id": "db.compareProject", "title": "Compare Project", "icon": "commands/diagnostics",
+      "tooltip": "Compare the selected session against the project open in the editor",
+      "kind": "action", "contexts": [], "pro": true },
+    { "id": "db.help", "title": "Help", "icon": "commands/help",
+      "tooltip": "Open the session database documentation",
       "kind": "action", "contexts": [], "pro": true }
   ]
 }

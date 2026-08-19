@@ -82,6 +82,9 @@ def collect_strings() -> list[str]:
         for key in ("sections", "items", "pinnedEnd"):
             for node in data.get(key, []):
                 collect_node_strings(node, strings)
+        for menu in data.get("menus", []):
+            for node in menu.get("items", []):
+                collect_node_strings(node, strings)
     return sorted(strings)
 
 

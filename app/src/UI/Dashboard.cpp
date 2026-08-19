@@ -291,6 +291,7 @@ UI::Dashboard::Dashboard()
 #endif
 
   connectStreamAvailableInputs();
+  connectViewStateResets(appState);
 
   static auto& timerEvents = Misc::TimerEvents::instance();
   connect(&timerEvents, &Misc::TimerEvents::uiTimeout, this, &UI::Dashboard::onDisplayTick);
@@ -483,7 +484,9 @@ void UI::Dashboard::applyBlock(const DataModel::DataBlockPtr& block)
     return;
 
   if (DataModel::uniform_grid(*block)) {
-    const double baseSec = advancePlotClock(sid, block->t0);
+    const double spanSec =
+      std::chrono::duration<double>(block->dt).count() * static_cast<double>(block->samples);
+    const double baseSec = advancePlotClock(sid, block->t0, spanSec);
 
     for (const auto& column : block->columns)
       applyBlockColumn(column, *block, baseSec);
@@ -1185,6 +1188,26 @@ void UI::Dashboard::connectStreamAvailableInputs()
           &UI::Dashboard::updateStreamAvailable,
           Qt::DirectConnection);
 #endif
+}
+
+/**
+ * @brief Drops the session view state when the widget identity space changes: a widget id is only
+ *        type:groupId:datasetIndex, so a new project or mode inherits foreign zoom, pan and
+ *        cursors. Direct rather than queued, because Sessions::Player applies a recording's bundle
+ *        right after the project load and a queued clear would land on top of it.
+ */
+void UI::Dashboard::connectViewStateResets(AppState& appState)
+{
+  connect(&appState,
+          &AppState::projectFileChanged,
+          this,
+          &UI::Dashboard::clearViewState,
+          Qt::DirectConnection);
+  connect(&appState,
+          &AppState::operationModeChanged,
+          this,
+          &UI::Dashboard::clearViewState,
+          Qt::DirectConnection);
 }
 
 /**
@@ -2548,12 +2571,14 @@ void UI::Dashboard::resetPlotClocks()
 }
 
 /**
- * @brief Advances the per-source plot clock for one publish (frame or stream block) and returns
- *        the new forward-only display time, also published to m_plotDisplayTimeSec. Each source
- *        owns its clock so interleaved publishes never rewind another source's rings.
+ * @brief Advances the per-source plot clock for one publish and returns the new forward-only
+ *        display time. A uniform-grid block continues from the span the previous block published,
+ *        never from the smoothed per-sample cadence: that cadence averages over block sizes, so it
+ *        undershoots a long block (rewinding the rings) and ratchets past real time on a short one.
  */
 double UI::Dashboard::advancePlotClock(int sourceId,
-                                       const std::chrono::steady_clock::time_point& ts)
+                                       const std::chrono::steady_clock::time_point& ts,
+                                       const double blockSpanSec)
 {
   // code-verify off
   // Scoped tight: reconfigureDashboard move-assigns m_plotClocks, so this reference must not
@@ -2568,6 +2593,7 @@ double UI::Dashboard::advancePlotClock(int sourceId,
     clk.groupStartSec   = 0;
     clk.displayTimeSec  = 0;
     clk.samplePeriodSec = 0;
+    clk.blockSpanSec    = 0;
   }
   clk.relativeFrameTimeSec = std::chrono::duration<double>(ts - clk.origin).count();
 
@@ -2586,6 +2612,15 @@ double UI::Dashboard::advancePlotClock(int sourceId,
     clk.groupStartSec = clk.relativeFrameTimeSec;
     clk.groupCount    = 1;
   }
+  if (blockSpanSec > 0) {
+    const double continued = clk.displayTimeSec + clk.blockSpanSec;
+    const double blockNext = qMax(clk.relativeFrameTimeSec, continued);
+    clk.blockSpanSec       = blockSpanSec;
+    clk.displayTimeSec     = blockNext;
+    m_plotDisplayTimeSec   = blockNext;
+    return blockNext;
+  }
+
   const double expected = clk.displayTimeSec + clk.samplePeriodSec;
 
   double displayNext = qMax(expected, clk.relativeFrameTimeSec);
@@ -3236,7 +3271,10 @@ int UI::Dashboard::datasetBucketBase(const SerialStudio::DashboardWidget key) co
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Updates time-series data for all dashboard widgets that require historical tracking.
+ * @brief Updates time-series data for all dashboard widgets that require historical tracking. A
+ *        layout rebuild passes no source and refills the sample-count series only: time rings are
+ *        stamped with the global display clock, which belongs to whichever source published last,
+ *        so seeding every source's rings from it rewinds all but that one.
  */
 void UI::Dashboard::updateDataSeries(int sourceId)
 {
@@ -3316,8 +3354,10 @@ void UI::Dashboard::updateDataSeries(int sourceId)
     if (sourceId >= 0 && p.sourceId != sourceId)
       continue;
 
-    feedMultiRings(p);
-    feedMultiSweep(p);
+    if (sourceId >= 0) {
+      feedMultiRings(p);
+      feedMultiSweep(p);
+    }
 
     for (const auto& s : p.samples)
       s.first->push(*s.second);
@@ -3416,7 +3456,10 @@ void UI::Dashboard::updatePlot3DSeries(int sourceId)
 }
 
 /**
- * @brief Updates linear plot data series for all active plot widgets.
+ * @brief Updates linear plot data series for all active plot widgets. A layout rebuild passes no
+ *        source and refills the sample-count rings only: the time rings are stamped with the
+ *        global display clock, which belongs to whichever source published last, so feeding them
+ *        for every source rewinds the rings of all the others.
  */
 void UI::Dashboard::updateLineSeries(int sourceId)
 {
@@ -3443,6 +3486,9 @@ void UI::Dashboard::updateLineSeries(int sourceId)
 
   for (const auto& p : m_xLinePushes)
     fire(p);
+
+  if (sourceId < 0)
+    return;
 
   auto feedSweep = [this](const TimePush& p) {
     auto sIt = m_plotSweep.find(p.plotIndex);

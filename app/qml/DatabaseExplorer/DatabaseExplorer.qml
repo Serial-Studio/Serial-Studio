@@ -119,7 +119,7 @@ Widgets.SmartWindow {
 
         z: 2
         Layout.fillWidth: true
-        Layout.minimumWidth: 720
+        Layout.minimumWidth: 320
         visible: !root.operatorMode
         Layout.minimumHeight: visible ? titlebarHeight + 80 : 0
         Layout.maximumHeight: visible ? titlebarHeight + 80 : 0

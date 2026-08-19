@@ -58,7 +58,7 @@
           "items": [
             { "type": "command", "id": "app.examples" },
             { "type": "command", "id": "app.helpCenter" },
-            { "type": "command", "id": "app.deepwiki" }
+            { "type": "command", "id": "palette.open" }
           ] }
       ]
     }

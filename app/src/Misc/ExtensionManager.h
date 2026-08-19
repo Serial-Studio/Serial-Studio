@@ -86,6 +86,14 @@ class ExtensionManager : public QObject {
   Q_PROPERTY(QVariantList installedPlugins
              READ installedPlugins
              NOTIFY installedPluginsChanged)
+  Q_PROPERTY(bool updateCheckEnabled
+             READ updateCheckEnabled
+             WRITE setUpdateCheckEnabled
+             NOTIFY updatePolicyChanged)
+  Q_PROPERTY(bool automaticUpdates
+             READ automaticUpdates
+             WRITE setAutomaticUpdates
+             NOTIFY updatePolicyChanged)
   // clang-format on
 
 signals:
@@ -100,6 +108,7 @@ signals:
   void downloadProgressChanged();
   void runningPluginsChanged();
   void selectedReadmeChanged();
+  void updatePolicyChanged();
   void pluginOutputChanged(const QString& id);
   void extensionInstalled(const QString& id);
   void extensionUninstalled(const QString& id);
@@ -115,6 +124,8 @@ public:
   [[nodiscard]] static ExtensionManager& instance();
 
   [[nodiscard]] bool loading() const noexcept;
+  [[nodiscard]] bool updateCheckEnabled() const noexcept;
+  [[nodiscard]] bool automaticUpdates() const noexcept;
   [[nodiscard]] int count() const noexcept;
   [[nodiscard]] int selectedIndex() const noexcept;
   [[nodiscard]] float downloadProgress() const noexcept;
@@ -140,6 +151,9 @@ public:
 
 public slots:
   void refreshRepositories();
+  void checkForUpdatesOnStartup(const bool appUpdatesEnabled);
+  void setUpdateCheckEnabled(const bool enabled);
+  void setAutomaticUpdates(const bool enabled);
   void setSelectedIndex(int index);
   void setSearchFilter(const QString& filter);
   void setFilterCategory(const QString& category);
@@ -177,6 +191,9 @@ private slots:
 private:
   void parseManifest(QNetworkReply* reply);
   [[nodiscard]] QVariantMap loadPluginMetadata(const QString& iid);
+
+  [[nodiscard]] QString catalogName(const QString& id) const;
+  [[nodiscard]] bool confirmAutoUpdate(const QStringList& ids);
 
   [[nodiscard]] QString extensionsPath() const;
   [[nodiscard]] QString themesPath() const;
@@ -224,6 +241,7 @@ private:
   int m_totalDownloads;
   int m_pendingManifests;
   int m_pendingExtensionMetas;
+  int m_updatePolicy;
 
   QString m_filterType;
   QString m_searchFilter;
@@ -241,6 +259,7 @@ private:
   QVariantMap m_currentInstallMeta;
   QList<QPair<QString, QUrl>> m_downloadQueue;
   QStringList m_autoUpdateQueue;
+  QSet<QString> m_autoUpdateDeclined;
 
   bool m_dashboardWasAvailable;
   QSet<QString> m_userClosedPlugins;

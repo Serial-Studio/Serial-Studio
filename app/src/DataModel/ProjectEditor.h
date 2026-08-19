@@ -311,6 +311,12 @@ public:
     KindUserTable,
     KindTableFolder,
     KindSource,
+    KindProjectRoot,
+    KindFrameParser,
+    KindGroupsRoot,
+    KindTablesRoot,
+    KindSystemDatasets,
+    KindWorkspacesRoot,
   };
   Q_ENUM(ItemKind)
 

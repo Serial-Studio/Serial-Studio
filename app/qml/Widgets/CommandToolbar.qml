@@ -35,6 +35,12 @@ Item {
   required property string surface
 
   //
+  // Embedded (pane-level) rendering: flips the ribbon and its buttons to the
+  // secondary palette and drops the scroll fades.
+  //
+  property bool secondaryToolbar: false
+
+  //
   // Layout tree re-pulled when the registry retranslates (revision dependency).
   //
   readonly property var tree: {
@@ -62,6 +68,7 @@ Item {
                                                                        : node.icon
 
     checked: isChecked
+    toolbarButton: !root.secondaryToolbar
     horizontalLayout: hints.horizontalLayout === true
     visible: behavior !== null && behavior.visible !== false
     enabled: behavior !== null && behavior.enabled !== false
@@ -82,6 +89,8 @@ Item {
     id: _ribbon
 
     anchors.fill: parent
+    secondaryToolbar: root.secondaryToolbar
+    showScrollFades: !root.secondaryToolbar
 
     Repeater {
       model: root.tree.sections !== undefined ? root.tree.sections : []

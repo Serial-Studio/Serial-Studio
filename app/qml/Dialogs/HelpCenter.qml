@@ -65,9 +65,10 @@ Widgets.SmartDialog {
   }
 
   //
-  // True while the manifest fetch is in flight
+  // True only while the very first version + manifest fetch is in flight; a
+  // version switch keeps the sidebar up and spins in the content pane instead
   //
-  property bool fetchingData: Cpp_HelpCenter.loading && Cpp_HelpCenter.count === 0
+  property bool fetchingData: Cpp_HelpCenter.loading && Cpp_HelpCenter.versions.length === 0
 
   dialogContent: ColumnLayout {
     id: layout
@@ -101,6 +102,36 @@ Widgets.SmartDialog {
     }
 
     //
+    // Warning shown while browsing a version other than the one that matches
+    // this build of the application
+    //
+    Rectangle {
+      id: notice
+
+      readonly property color accent: Cpp_ThemeManager.colors["alarm_warning"]
+
+      radius: 2
+      border.width: 1
+      Layout.fillWidth: true
+      implicitHeight: noticeLabel.implicitHeight + 12
+      visible: !root.fetchingData && Cpp_HelpCenter.versionNotice !== ""
+      color: Qt.rgba(notice.accent.r, notice.accent.g, notice.accent.b, 0.15)
+      border.color: Qt.rgba(notice.accent.r, notice.accent.g, notice.accent.b, 0.5)
+
+      Label {
+        id: noticeLabel
+
+        anchors.fill: parent
+        anchors.margins: 6
+        wrapMode: Text.WordWrap
+        text: Cpp_HelpCenter.versionNotice
+        font: Cpp_Misc_CommonFonts.uiFont
+        color: Cpp_ThemeManager.colors["text"]
+        verticalAlignment: Text.AlignVCenter
+      }
+    }
+
+    //
     // Main content area: sidebar + page content
     //
     RowLayout {
@@ -117,6 +148,33 @@ Widgets.SmartDialog {
         Layout.fillHeight: true
         Layout.minimumWidth: 220
         Layout.maximumWidth: 220
+
+        //
+        // Documentation version selector
+        //
+        ComboBox {
+          id: versionBox
+
+          Layout.fillWidth: true
+          Layout.bottomMargin: 2
+          model: Cpp_HelpCenter.versions
+          font: Cpp_Misc_CommonFonts.uiFont
+          displayText: Cpp_HelpCenter.versionLabel
+          currentIndex: Cpp_HelpCenter.versionIndex
+          onActivated: (index) => {
+            if (count <= 0)
+              return
+
+            Cpp_HelpCenter.versionIndex = index
+          }
+
+          delegate: ItemDelegate {
+            text: modelData.label
+            width: versionBox.width
+            font: Cpp_Misc_CommonFonts.uiFont
+            highlighted: versionBox.highlightedIndex === index
+          }
+        }
 
         //
         // Search bar
@@ -352,14 +410,7 @@ Widgets.SmartDialog {
         text: qsTr("View Online")
         Layout.alignment: Qt.AlignVCenter
         icon.source: "qrc:/icons/buttons/website.svg"
-        onClicked: {
-          var url = "https://serial-studio.com/help"
-          var pageId = Cpp_HelpCenter.pageId
-          if (pageId !== "")
-            url += "#" + pageId
-
-          Qt.openUrlExternally(url)
-        }
+        onClicked: Qt.openUrlExternally(Cpp_HelpCenter.onlineUrl())
       }
 
       Item {

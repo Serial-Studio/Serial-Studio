@@ -25,6 +25,7 @@ import QtQuick.Controls
 
 import SerialStudio
 import "../../Widgets" as Widgets
+import "../../Commands" as Commands
 
 Widgets.Pane {
   id: root
@@ -121,212 +122,152 @@ Widgets.Pane {
       onHeightChanged: Qt.callLater(warmupContentHeight)
 
       //
-      // Shared context menu populated on right-click, outside the delegate.
+      // Right-clicked row, mirrored into the menu bindings on open. The cascade below needs
+      // the folder ids locally, everything else lives on the bindings.
       //
       property int ctxItemId: -1
-      property int ctxItemParentId: -1
-      property string ctxItemPath: ""
       property int ctxItemKind: ProjectEditor.KindNone
-      property bool ctxItemEnabled: true
       property int moveExcludeId: -1
-      property bool moveHasTargets: false
-      property var moveTargetsTree: []
-      property var dynamicMoveMenus: []
+      property var dynamicFolderMenus: []
 
-      readonly property bool ctxItemOrderable:
-          ctxItemKind === ProjectEditor.KindGroup
-          || ctxItemKind === ProjectEditor.KindDataset
-          || ctxItemKind === ProjectEditor.KindAction
-          || ctxItemKind === ProjectEditor.KindOutputWidget
-          || ctxItemKind === ProjectEditor.KindWorkspace
-          || ctxItemKind === ProjectEditor.KindWorkspaceFolder
-          || ctxItemKind === ProjectEditor.KindGroupFolder
-          || ctxItemKind === ProjectEditor.KindTableFolder
+      //
+      // Tree kind -> menu surface; a kind without a surface has no context menu.
+      //
+      readonly property var kindSurfaces: ({
+        [ProjectEditor.KindProjectRoot]: "project-root",
+        [ProjectEditor.KindSource]: "source",
+        [ProjectEditor.KindFrameParser]: "frame-parser",
+        [ProjectEditor.KindGroupsRoot]: "groups-root",
+        [ProjectEditor.KindGroupFolder]: "group-folder",
+        [ProjectEditor.KindGroup]: "group",
+        [ProjectEditor.KindDataset]: "dataset",
+        [ProjectEditor.KindOutputWidget]: "output",
+        [ProjectEditor.KindAction]: "action",
+        [ProjectEditor.KindTablesRoot]: "tables-root",
+        [ProjectEditor.KindSystemDatasets]: "system-datasets",
+        [ProjectEditor.KindTableFolder]: "table-folder",
+        [ProjectEditor.KindUserTable]: "user-table",
+        [ProjectEditor.KindWorkspacesRoot]: "workspaces-root",
+        [ProjectEditor.KindWorkspaceFolder]: "workspace-folder",
+        [ProjectEditor.KindWorkspace]: "workspace",
+        [ProjectEditor.KindControlScript]: "control-script",
+        [ProjectEditor.KindMqttPublisher]: "mqtt-publisher"
+      })
 
-      readonly property bool ctxIsFolder:
-          ctxItemKind === ProjectEditor.KindWorkspaceFolder
-          || ctxItemKind === ProjectEditor.KindGroupFolder
-          || ctxItemKind === ProjectEditor.KindTableFolder
+      //
+      // Opens the menu for one row; a kind with an output-panel group swaps to its own surface.
+      //
+      function openContextMenu(target) {
+        const surface = treeView.surfaceFor(target)
+        if (surface.length === 0)
+          return
 
-      readonly property bool ctxSupportsFolders:
-          ctxIsFolder
-          || ctxItemKind === ProjectEditor.KindWorkspace
-          || ctxItemKind === ProjectEditor.KindGroup
-          || ctxItemKind === ProjectEditor.KindUserTable
-
-      readonly property bool ctxRenameable:
-          ctxIsFolder
-          || ctxItemKind === ProjectEditor.KindGroup
-          || ctxItemKind === ProjectEditor.KindDataset
-          || ctxItemKind === ProjectEditor.KindAction
-          || ctxItemKind === ProjectEditor.KindSource
-          || ctxItemKind === ProjectEditor.KindWorkspace
-          || ctxItemKind === ProjectEditor.KindUserTable
-
-      function renameCtxItem() {
-        if (ctxItemKind === ProjectEditor.KindGroup)
-          Cpp_JSON_ProjectModel.promptRenameGroup(ctxItemId)
-        else if (ctxItemKind === ProjectEditor.KindDataset)
-          Cpp_JSON_ProjectModel.promptRenameDataset(ctxItemParentId, ctxItemId)
-        else if (ctxItemKind === ProjectEditor.KindAction)
-          Cpp_JSON_ProjectModel.promptRenameAction(ctxItemId)
-        else if (ctxItemKind === ProjectEditor.KindSource)
-          Cpp_JSON_ProjectModel.promptRenameSource(ctxItemId)
-        else if (ctxItemKind === ProjectEditor.KindWorkspace)
-          Cpp_JSON_ProjectModel.promptRenameWorkspace(ctxItemId)
-        else if (ctxItemKind === ProjectEditor.KindUserTable)
-          Cpp_JSON_ProjectModel.promptRenameTable(ctxItemPath)
-        else if (ctxIsFolder)
-          renameFolderForCtx()
+        treeView.ctxItemId = target.id
+        treeView.ctxItemKind = target.kind
+        treeView.moveExcludeId = treeView.isFolderKind(target.kind) ? target.id : -1
+        treeView.refreshSelectableCount()
+        menuBindings.setTarget(target)
+        menuBindings.selectionCount = treeView.selectionCount()
+        contextMenu.openSurface("editor-menu/" + surface)
       }
 
+      //
+      // Surface name for a target, or "" when the row carries no menu.
+      //
+      function surfaceFor(target) {
+        if (target.kind === ProjectEditor.KindGroup && target.widget === "output-panel")
+          return "output-panel"
+
+        const surface = treeView.kindSurfaces[target.kind]
+        return surface !== undefined ? surface : ""
+      }
+
+      //
+      // True for the three folder kinds, which exclude themselves as a move destination.
+      //
+      function isFolderKind(kind) {
+        return kind === ProjectEditor.KindGroupFolder
+            || kind === ProjectEditor.KindTableFolder
+            || kind === ProjectEditor.KindWorkspaceFolder
+      }
+
+      //
+      // Rows currently selected, used to switch the menu between single and bulk entries.
+      //
+      function selectionCount() {
+        return Cpp_JSON_ProjectEditor.selectedTreeItems()
+        .filter(it => treeView.contentKinds.indexOf(it.kind) >= 0).length
+      }
+
+      //
+      // Folder tree of the section the target belongs to.
+      //
       function folderTreeForCtx() {
-        if (ctxItemKind === ProjectEditor.KindGroup
-            || ctxItemKind === ProjectEditor.KindGroupFolder)
+        const section = menuBindings.folderSection
+        if (section === "group")
           return Cpp_JSON_ProjectEditor.groupFolderTree()
 
-        if (ctxItemKind === ProjectEditor.KindUserTable
-            || ctxItemKind === ProjectEditor.KindTableFolder)
+        if (section === "table")
           return Cpp_JSON_ProjectEditor.tableFolderTree()
 
         return Cpp_JSON_ProjectEditor.workspaceFolderTree()
       }
 
       //
-      // Build the cascading "Move to Folder" submenu (directory-explorer style): one level of
-      // folders per menu, drilling into children. Rebuilt on each context-menu open.
+      // Fills the "Move to Folder" cascade: one submenu per folder, drilled like a directory
+      // tree. Returns the top-level menus so CommandMenu destroys them with the rest.
       //
-      function clearMoveMenus() {
-        for (let i = 0; i < dynamicMoveMenus.length; ++i) {
-          const m = dynamicMoveMenus[i]
-          if (m) {
-            moveToFolderMenu.removeMenu(m)
-            m.destroy()
-          }
-        }
-
-        dynamicMoveMenus = []
+      function buildFolderCascade(menu) {
+        return treeView.populateMoveMenu(menu, treeView.folderTreeForCtx(), true)
       }
 
-      function populateMoveMenu(menu, nodes) {
+      function populateMoveMenu(menu, nodes, topLevel) {
+        let created = []
         for (let i = 0; i < nodes.length; ++i) {
           const node = nodes[i]
-          if (node.id === moveExcludeId)
+          if (node.id === treeView.moveExcludeId)
             continue
 
           const kids = (node.children !== undefined) && (node.children.length > 0)
           const sub = _moveFolderMenu.createObject(
-                      null, { folderId2: node.id, folderTitle: node.title, hasChildren: kids })
+                      menu, { folderId2: node.id, folderTitle: node.title, hasChildren: kids })
           menu.addMenu(sub)
-          if (menu === moveToFolderMenu)
-            dynamicMoveMenus.push(sub)
+          if (topLevel)
+            created.push({ "type": "menu", "obj": sub, "owner": menu })
 
           if (kids)
-            treeView.populateMoveMenu(sub, node.children)
+            treeView.populateMoveMenu(sub, node.children, false)
         }
-      }
 
-      function rebuildMoveMenu() {
-        clearMoveMenus()
-        moveExcludeId   = ctxIsFolder ? ctxItemId : -1
-        moveTargetsTree = folderTreeForCtx()
-        populateMoveMenu(moveToFolderMenu, moveTargetsTree)
-        moveHasTargets = dynamicMoveMenus.length > 0
-      }
-
-      function moveContextItemBy(direction) {
-        if (ctxItemKind === ProjectEditor.KindGroup)
-          Cpp_JSON_ProjectModel.moveGroup(ctxItemId, ctxItemId + direction)
-        else if (ctxItemKind === ProjectEditor.KindDataset)
-          Cpp_JSON_ProjectModel.moveDataset(ctxItemParentId,
-                                            ctxItemId, ctxItemId + direction)
-        else if (ctxItemKind === ProjectEditor.KindAction)
-          Cpp_JSON_ProjectModel.moveAction(ctxItemId, ctxItemId + direction)
-        else if (ctxItemKind === ProjectEditor.KindOutputWidget)
-          Cpp_JSON_ProjectModel.moveOutputWidget(ctxItemParentId,
-                                                 ctxItemId, ctxItemId + direction)
-        else if (ctxItemKind === ProjectEditor.KindWorkspace)
-          Cpp_JSON_ProjectEditor.moveWorkspace(ctxItemId, direction)
-        else if (ctxItemKind === ProjectEditor.KindWorkspaceFolder)
-          Cpp_JSON_ProjectModel.moveWorkspaceFolderInParent(ctxItemId, direction)
-        else if (ctxItemKind === ProjectEditor.KindGroupFolder)
-          Cpp_JSON_ProjectModel.moveGroupFolderInParent(ctxItemId, direction)
-        else if (ctxItemKind === ProjectEditor.KindTableFolder)
-          Cpp_JSON_ProjectModel.moveTableFolderInParent(ctxItemId, direction)
-      }
-
-      function ctxSectionOf(kind) {
-        if (kind === ProjectEditor.KindGroup || kind === ProjectEditor.KindGroupFolder)
-          return "group"
-
-        if (kind === ProjectEditor.KindUserTable || kind === ProjectEditor.KindTableFolder)
-          return "table"
-
-        if (kind === ProjectEditor.KindWorkspace || kind === ProjectEditor.KindWorkspaceFolder)
-          return "workspace"
-
-        return ""
-      }
-
-      function moveCtxItemToFolder(folderId) {
-        const section = ctxSectionOf(ctxItemKind)
-        if (section === "")
-          return
-
-        const items = Cpp_JSON_ProjectEditor.selectedTreeItems()
-        .filter(it => treeView.ctxSectionOf(it.kind) === section)
-        if (items.length > 0)
-          Cpp_JSON_ProjectModel.moveSelectedItemsToFolder(items, folderId)
-      }
-
-      function newTopFolderForCtx() {
-        if (ctxItemKind === ProjectEditor.KindGroup
-            || ctxItemKind === ProjectEditor.KindGroupFolder)
-          Cpp_JSON_ProjectModel.promptAddGroupFolder(-1)
-        else if (ctxItemKind === ProjectEditor.KindUserTable
-                 || ctxItemKind === ProjectEditor.KindTableFolder)
-          Cpp_JSON_ProjectModel.promptAddTableFolder(-1)
-        else
-          Cpp_JSON_ProjectModel.promptAddWorkspaceFolder(-1)
-      }
-
-      function newSubFolderForCtx() {
-        if (ctxItemKind === ProjectEditor.KindGroupFolder)
-          Cpp_JSON_ProjectModel.promptAddGroupFolder(ctxItemId)
-        else if (ctxItemKind === ProjectEditor.KindTableFolder)
-          Cpp_JSON_ProjectModel.promptAddTableFolder(ctxItemId)
-        else
-          Cpp_JSON_ProjectModel.promptAddWorkspaceFolder(ctxItemId)
-      }
-
-      function renameFolderForCtx() {
-        if (ctxItemKind === ProjectEditor.KindGroupFolder)
-          Cpp_JSON_ProjectModel.promptRenameGroupFolder(ctxItemId)
-        else if (ctxItemKind === ProjectEditor.KindTableFolder)
-          Cpp_JSON_ProjectModel.promptRenameTableFolder(ctxItemId)
-        else
-          Cpp_JSON_ProjectModel.promptRenameWorkspaceFolder(ctxItemId)
+        return created
       }
 
       //
-      // Reactive selection counters
+      // Selection counters, pushed into the menu bindings so bulk entries can label and gate
+      // themselves. Container rows (the section headers) never count as a selected item.
       //
-      property int deletableSelectionCount: 0
-      property int selectableSelectionCount: 0
-      property int enableableSelectionCount: 0
+      readonly property var contentKinds: [ProjectEditor.KindGroup, ProjectEditor.KindDataset,
+                                           ProjectEditor.KindAction,
+                                           ProjectEditor.KindOutputWidget,
+                                           ProjectEditor.KindWorkspace,
+                                           ProjectEditor.KindWorkspaceFolder,
+                                           ProjectEditor.KindGroupFolder,
+                                           ProjectEditor.KindUserTable,
+                                           ProjectEditor.KindTableFolder,
+                                           ProjectEditor.KindSource]
 
       function refreshSelectableCount() {
         const sel = Cpp_JSON_ProjectEditor.selectedTreeItems()
-        selectableSelectionCount = sel.filter(
+        menuBindings.selectableCount = sel.filter(
               it => it.kind === ProjectEditor.KindGroup
               || it.kind === ProjectEditor.KindDataset
               || it.kind === ProjectEditor.KindAction
               || it.kind === ProjectEditor.KindOutputWidget).length
-        enableableSelectionCount = sel.filter(
+        menuBindings.enableableCount = sel.filter(
               it => it.kind === ProjectEditor.KindGroup
               || it.kind === ProjectEditor.KindDataset
               || it.kind === ProjectEditor.KindGroupFolder).length
-        deletableSelectionCount = sel.filter(
+        menuBindings.deletableCount = sel.filter(
               it => it.kind === ProjectEditor.KindGroup
               || it.kind === ProjectEditor.KindDataset
               || it.kind === ProjectEditor.KindAction
@@ -412,254 +353,25 @@ Widgets.Pane {
 
       Component.onCompleted: refreshSelectableCount()
 
-      Menu {
-        id: sharedContextMenu
+      Commands.ProjectEditorMenuBindings {
+        id: menuBindings
 
-        //
-        // Expand All / Collapse All (whole tree)
-        //
-        MenuItem {
-          icon.width: 16
-          icon.height: 16
-          text: qsTr("Expand All")
-          icon.source: Cpp_Misc_IconRegistry.icon("editor", "expand", 16)
-          onTriggered: Cpp_JSON_ProjectEditor.expandAllTreeItems()
-        } MenuItem {
-          icon.width: 16
-          icon.height: 16
-          text: qsTr("Collapse All")
-          icon.source: Cpp_Misc_IconRegistry.icon("editor", "compress", 16)
-          onTriggered: Cpp_JSON_ProjectEditor.collapseTreeToOverview()
-        }
+        treeSelection: true
+      }
 
-        //
-        // Separator: hidden when the whole orderable/rename/enable/duplicate/delete region
-        // collapses, so it never renders back-to-back with the Seed Aliases separator below
-        //
-        MenuSeparator {
-          height: visible ? implicitHeight : 0
-          visible: treeView.ctxItemOrderable
-                   || treeView.ctxRenameable
-                   || treeView.enableableSelectionCount > 0
-                   || treeView.selectableSelectionCount > 0
-                   || treeView.deletableSelectionCount > 0
-        }
+      Commands.CommandModel {
+        id: menuModel
 
-        //
-        // Move Up / Move Down
-        //
-        MenuItem {
-          icon.width: 16
-          icon.height: 16
-          text: qsTr("Move Up")
-          visible: treeView.ctxItemOrderable
-          height: visible ? implicitHeight : 0
-          icon.source: Cpp_Misc_IconRegistry.icon("editor", "move-up", 16)
-          onTriggered: treeView.moveContextItemBy(-1)
-        } MenuItem {
-          icon.width: 16
-          icon.height: 16
-          text: qsTr("Move Down")
-          visible: treeView.ctxItemOrderable
-          height: visible ? implicitHeight : 0
-          icon.source: Cpp_Misc_IconRegistry.icon("editor", "move-down", 16)
-          onTriggered: treeView.moveContextItemBy(1)
-        }
+        context: "editor"
+        bindingSets: [menuBindings]
+      }
 
-        //
-        // Separator
-        //
-        MenuSeparator {
-          height: visible ? implicitHeight : 0
-          visible: treeView.ctxItemOrderable && treeView.deletableSelectionCount > 0
-        }
+      Widgets.CommandMenu {
+        id: contextMenu
 
-        //
-        // Rename
-        //
-        MenuItem {
-          icon.width: 16
-          icon.height: 16
-          text: qsTr("Rename")
-          visible: treeView.ctxRenameable
-          height: visible ? implicitHeight : 0
-          onTriggered: treeView.renameCtxItem()
-          icon.source: Cpp_Misc_IconRegistry.icon("editor", "rename", 16)
-        }
-
-        //
-        // Hide/show the selection (groups, datasets, and group folders which cascade to their
-        // groups); hidden items are excluded from frame building and greyed in the tree
-        //
-        MenuItem {
-          icon.width: 16
-          icon.height: 16
-          height: visible ? implicitHeight : 0
-          visible: treeView.enableableSelectionCount > 0
-          text: treeView.enableableSelectionCount > 1
-                ? (treeView.ctxItemEnabled
-                   ? qsTr("Hide Selected (%1)").arg(treeView.enableableSelectionCount)
-                   : qsTr("Show Selected (%1)").arg(treeView.enableableSelectionCount))
-                : (treeView.ctxItemEnabled ? qsTr("Hide") : qsTr("Show"))
-          icon.source: treeView.ctxItemEnabled ? Cpp_Misc_IconRegistry.icon("editor", "hide", 16) :
-                                                 Cpp_Misc_IconRegistry.icon("editor", "show", 16)
-          onTriggered: {
-            const items = Cpp_JSON_ProjectEditor.selectedTreeItems()
-            .filter(it => it.kind === ProjectEditor.KindGroup
-                    || it.kind === ProjectEditor.KindDataset
-                    || it.kind === ProjectEditor.KindGroupFolder)
-            if (items.length > 0)
-              Cpp_JSON_ProjectModel.setItemsEnabled(items, !treeView.ctxItemEnabled)
-          }
-        }
-
-        //
-        // Bulk-aware duplicate
-        //
-        MenuItem {
-          icon.width: 16
-          icon.height: 16
-          height: visible ? implicitHeight : 0
-          visible: treeView.selectableSelectionCount > 0
-          icon.source: Cpp_Misc_IconRegistry.icon("editor", "duplicate", 16)
-          text: treeView.selectableSelectionCount > 1
-                ? qsTr("Duplicate Selected (%1)").arg(treeView.selectableSelectionCount)
-                : qsTr("Duplicate")
-
-          onTriggered: {
-            const items = Cpp_JSON_ProjectEditor.selectedTreeItems()
-            .filter(it => it.kind !== ProjectEditor.KindWorkspace
-                    && it.kind !== ProjectEditor.KindWorkspaceFolder
-                    && it.kind !== ProjectEditor.KindNone)
-            if (items.length > 0)
-              Cpp_JSON_ProjectModel.duplicateSelectedItems(items)
-          }
-        }
-
-        //
-        // Bulk-aware delete
-        //
-        MenuItem {
-          icon.width: 16
-          icon.height: 16
-          height: visible ? implicitHeight : 0
-          visible: treeView.deletableSelectionCount > 0
-          icon.source: Cpp_Misc_IconRegistry.icon("editor", "delete", 16)
-          text: treeView.deletableSelectionCount > 1
-                ? qsTr("Delete Selected (%1)").arg(treeView.deletableSelectionCount)
-                : qsTr("Delete")
-          onTriggered: {
-            const items = Cpp_JSON_ProjectEditor.selectedTreeItems()
-            .filter(it => it.kind !== ProjectEditor.KindNone)
-            if (items.length === 1) {
-              const it = items[0]
-              if (it.kind === ProjectEditor.KindWorkspace) {
-                Cpp_JSON_ProjectModel.confirmDeleteWorkspace(it.id)
-                return
-              }
-
-              if (it.kind === ProjectEditor.KindWorkspaceFolder) {
-                Cpp_JSON_ProjectModel.confirmDeleteWorkspaceFolder(it.id)
-                return
-              }
-
-              if (it.kind === ProjectEditor.KindGroupFolder) {
-                Cpp_JSON_ProjectModel.confirmDeleteGroupFolder(it.id)
-                return
-              }
-
-              if (it.kind === ProjectEditor.KindTableFolder) {
-                Cpp_JSON_ProjectModel.confirmDeleteTableFolder(it.id)
-                return
-              }
-
-              if (it.kind === ProjectEditor.KindUserTable) {
-                Cpp_JSON_ProjectModel.confirmDeleteTable(it.path)
-                return
-              }
-            }
-
-            if (items.length > 0)
-              Cpp_JSON_ProjectModel.confirmDeleteSelectedItems(items)
-          }
-        }
-
-        //
-        // Project-wide: fill every empty dataset alias from its title (existing aliases are
-        // left untouched), so getDataset-style script/API lookups get stable names in one action
-        //
-        MenuSeparator {
-          height: implicitHeight
-        }
-
-        MenuItem {
-          icon.width: 16
-          icon.height: 16
-          text: qsTr("Seed Aliases from Titles")
-          icon.source: Cpp_Misc_IconRegistry.icon("editor", "rename", 16)
-          onTriggered: Cpp_JSON_ProjectModel.seedDatasetAliases()
-        }
-
-        //
-        // Folder actions (workspaces, groups, shared-memory tables)
-        //
-        MenuSeparator {
-          height: visible ? implicitHeight : 0
-          visible: treeView.ctxSupportsFolders
-        }
-
-        //
-        // New Folder
-        //
-        MenuItem {
-          icon.width: 16
-          icon.height: 16
-          text: qsTr("New Folder")
-          height: visible ? implicitHeight : 0
-          visible: treeView.ctxSupportsFolders
-          onTriggered: treeView.newTopFolderForCtx()
-          icon.source: Cpp_Misc_IconRegistry.icon("editor", "add-folder", 16)
-        }
-
-        //
-        // New Sub Folder
-        //
-        MenuItem {
-          icon.width: 16
-          icon.height: 16
-          text: qsTr("New Sub-Folder")
-          visible: treeView.ctxIsFolder
-          height: visible ? implicitHeight : 0
-          onTriggered: treeView.newSubFolderForCtx()
-          icon.source: Cpp_Misc_IconRegistry.icon("editor", "add-folder", 16)
-        }
-
-        //
-        // Move an item or folder into another folder, navigated like a directory tree.
-        // Child folders are filled dynamically by rebuildMoveMenu() on each open.
-        //
-        Menu {
-          id: moveToFolderMenu
-
-          icon.width: 16
-          icon.height: 16
-          title: qsTr("Move to Folder")
-          enabled: treeView.ctxSupportsFolders
-          icon.source: Cpp_Misc_IconRegistry.icon("editor", "move-folder", 16)
-
-          MenuItem {
-            icon.width: 16
-            icon.height: 16
-            text: qsTr("Top Level")
-            onTriggered: treeView.moveCtxItemToFolder(-1)
-            icon.source: Cpp_Misc_IconRegistry.icon("editor", "top-level-folder", 16)
-          }
-
-          MenuSeparator {
-            visible: treeView.moveHasTargets
-            height: visible ? implicitHeight : 0
-          }
-        }
+        model: menuModel
+        dynamicHandlers: ({ "folder-tree": treeView.buildFolderCascade })
+        onClosed: menuBindings.clearTarget()
       }
 
       //
@@ -685,7 +397,7 @@ Widgets.Pane {
             icon.height: 16
             text: qsTr("Move Here")
             icon.source: Cpp_Misc_IconRegistry.icon("editor", "move-here", 16)
-            onTriggered: treeView.moveCtxItemToFolder(folderSubMenu.folderId2)
+            onTriggered: menuBindings.moveToFolder(folderSubMenu.folderId2)
           }
 
           MenuSeparator {
@@ -738,6 +450,19 @@ Widgets.Pane {
       ScrollBar.vertical: ScrollBar {
         policy: treeView.contentHeight > treeView.height ? ScrollBar.AlwaysOn :
                                                            ScrollBar.AsNeeded
+      }
+
+      //
+      // Right-click on the empty space under the last row opens the project menu; rows sit
+      // above this handler, so a click on one never reaches it.
+      //
+      TapHandler {
+        acceptedButtons: Qt.RightButton
+        gesturePolicy: TapHandler.ReleaseWithinBounds
+        onSingleTapped: {
+          treeView.forceActiveFocus()
+          treeView.openContextMenu({ "kind": ProjectEditor.KindProjectRoot, "id": -1 })
+        }
       }
 
       //
@@ -851,6 +576,19 @@ Widgets.Pane {
         readonly property bool modelExpanded: model.treeViewExpanded === true
 
         //
+        // Group flavour of the current row, for the menus that differ by widget type.
+        //
+        readonly property string widgetRole: {
+          if (itemKind !== ProjectEditor.KindGroup)
+            return ""
+
+          if (Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel)
+            return "output-panel"
+
+          return Cpp_JSON_ProjectEditor.currentGroupIsPainter ? "painter" : ""
+        }
+
+        //
         // Restore expanded state from C++ model
         //
         function syncExpandedState() {
@@ -926,13 +664,14 @@ Widgets.Pane {
                              if (!treeView.selectionModel.isSelected(idx))
                              onLabelClicked()
 
-                             treeView.ctxItemKind     = item.itemKind
-                             treeView.ctxItemId       = item.itemId
-                             treeView.ctxItemParentId = item.itemParentId
-                             treeView.ctxItemPath     = item.itemPath
-                             treeView.ctxItemEnabled  = item.itemSelfEnabled
-                             treeView.rebuildMoveMenu()
-                             sharedContextMenu.popup()
+                             treeView.openContextMenu({
+                                                        "kind": item.itemKind,
+                                                        "id": item.itemId,
+                                                        "parentId": item.itemParentId,
+                                                        "path": item.itemPath,
+                                                        "enabled": item.itemSelfEnabled,
+                                                        "widget": item.widgetRole
+                                                      })
                            }
                            return
                          }

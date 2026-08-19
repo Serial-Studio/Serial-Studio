@@ -37,6 +37,7 @@
 #include "SerialStudio.h"
 #include "UI/WidgetRegistry.h"
 
+class AppState;
 class SessionContext;
 
 namespace UI {
@@ -318,6 +319,7 @@ public slots:
 private:
   void restorePersistedSettings();
   void connectStreamAvailableInputs();
+  void connectViewStateResets(AppState& appState);
   void reconfigureDashboard(const DataModel::Frame& frame);
   [[nodiscard]] DataModel::Frame combineSourceFrames(const DataModel::Frame& seed) const;
   void processDatasetIntoWidgetMaps(const DataModel::Dataset& datasetIn,
@@ -479,7 +481,9 @@ private:
   void growTimeRing(DSP::EnvelopeRing& ring, int sourceId, double windowSec);
   void drainStructureSnapshots();
   void drainBlockRing(const QElapsedTimer& clock, qint64 budgetNs);
-  double advancePlotClock(int sourceId, const std::chrono::steady_clock::time_point& ts);
+  double advancePlotClock(int sourceId,
+                          const std::chrono::steady_clock::time_point& ts,
+                          double blockSpanSec = 0.0);
 
   /**
    * @brief Pre-resolved descriptor that pushes one dataset value into one sample ring.
@@ -536,6 +540,7 @@ private:
     double displayTimeSec                        = 0.0;
     double groupStartSec                         = 0.0;
     double samplePeriodSec                       = 0.0;
+    double blockSpanSec                          = 0.0;
     std::chrono::steady_clock::time_point origin = {};
   };
 

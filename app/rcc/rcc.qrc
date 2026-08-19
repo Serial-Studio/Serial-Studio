@@ -8,6 +8,8 @@
         <file>commands/layouts/project-toolbar.json</file>
         <file>commands/layouts/start-menu.json</file>
         <file>commands/layouts/database-toolbar.json</file>
+        <file>commands/layouts/database-detail-toolbar.json</file>
+        <file>commands/layouts/editor-menus.json</file>
         <file>actions/Abscissa.svg</file>
         <file>actions/Accuracy.svg</file>
         <file>actions/Add properties.svg</file>
@@ -262,6 +264,7 @@
         <file>icons/commands/16/center.svg</file>
         <file>icons/commands/16/clear.svg</file>
         <file>icons/commands/16/color.svg</file>
+        <file>icons/commands/16/command-palette.svg</file>
         <file>icons/commands/16/console-log.svg</file>
         <file>icons/commands/16/console.svg</file>
         <file>icons/commands/16/crosshair.svg</file>
@@ -312,6 +315,7 @@
         <file>icons/commands/24/ai.svg</file>
         <file>icons/commands/24/anaglyph.svg</file>
         <file>icons/commands/24/auto-layout.svg</file>
+        <file>icons/commands/24/command-palette.svg</file>
         <file>icons/commands/24/console-log.svg</file>
         <file>icons/commands/24/console.svg</file>
         <file>icons/commands/24/crosshair.svg</file>
@@ -355,6 +359,7 @@
         <file>icons/commands/32/auto-layout.svg</file>
         <file>icons/commands/32/camcoder.svg</file>
         <file>icons/commands/32/center.svg</file>
+        <file>icons/commands/32/command-palette.svg</file>
         <file>icons/commands/32/connect.svg</file>
         <file>icons/commands/32/console-log.svg</file>
         <file>icons/commands/32/console.svg</file>
@@ -391,6 +396,7 @@
         <file>icons/commands/32/workspaces.svg</file>
         <file>icons/commands/48/activate.svg</file>
         <file>icons/commands/48/ai.svg</file>
+        <file>icons/commands/48/command-palette.svg</file>
         <file>icons/commands/48/extensions.svg</file>
         <file>icons/commands/48/pictures-folder.svg</file>
         <file>icons/console/24/annotations.svg</file>

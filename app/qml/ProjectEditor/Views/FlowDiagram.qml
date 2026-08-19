@@ -24,6 +24,9 @@ import QtQuick.Controls
 
 import SerialStudio
 
+import "../../Widgets" as Widgets
+import "../../Commands" as Commands
+
 Item {
   id: root
 
@@ -1539,21 +1542,6 @@ Item {
     property int    currentWidgetId:     -1
     property int    currentActionId:     -1
 
-    readonly property bool canMoveUp:
-      currentSiblingCount > 1 && currentMoveIndex() > 0
-    readonly property bool canMoveDown:
-      currentSiblingCount > 1 && currentMoveIndex() < currentSiblingCount - 1
-
-    function currentMoveIndex() {
-      switch (currentType) {
-        case "group":   return currentGroupId
-        case "dataset": return currentDatasetId
-        case "output":  return currentWidgetId
-        case "action":  return currentActionId
-      }
-      return -1
-    }
-
     function keyOf(node) {
       if (!node || !node.type) return ""
       switch (node.type) {
@@ -1573,1016 +1561,138 @@ Item {
     }
 
     function openForBackground() {
-      pinnedKey           = "background"
-      currentType         = "background"
-      currentWidget       = ""
-      currentLabel        = ""
-      currentTableName    = ""
-      currentSourceId     = -1
-      currentGroupId      = -1
-      currentDatasetId    = -1
-      currentWidgetId     = -1
-      currentActionId     = -1
+      pinnedKey = "background"
+      currentType = "background"
+      menuController.resetNode()
+      menuBindings.setTarget({ "kind": ProjectEditor.KindProjectRoot, "id": -1 })
+      contextMenu.openSurface("editor-menu/project-root")
+    }
+
+    function resetNode() {
+      currentWidget = ""
+      currentLabel = ""
+      currentTableName = ""
+      currentSourceId = -1
+      currentGroupId = -1
+      currentDatasetId = -1
+      currentWidgetId = -1
+      currentActionId = -1
       currentSiblingCount = 0
-      backgroundMenu.popup()
     }
 
     function openForNode(node) {
-      pinnedKey           = keyOf(node)
-      currentType         = node.type
-      currentWidget       = node.widget       !== undefined ? node.widget       : ""
-      currentLabel        = node.label        !== undefined ? node.label        : ""
-      currentTableName    = node.tableName    !== undefined ? node.tableName    : ""
-      currentSourceId     = node.sourceId     !== undefined ? node.sourceId     : -1
-      currentGroupId      = node.groupId      !== undefined ? node.groupId      : -1
-      currentDatasetId    = node.datasetId    !== undefined ? node.datasetId    : -1
-      currentWidgetId     = node.widgetId     !== undefined ? node.widgetId     : -1
-      currentActionId     = node.actionId     !== undefined ? node.actionId     : -1
+      pinnedKey = keyOf(node)
+      currentType = node.type
+      currentWidget = node.widget !== undefined ? node.widget : ""
+      currentLabel = node.label !== undefined ? node.label : ""
+      currentTableName = node.tableName !== undefined ? node.tableName : ""
+      currentSourceId = node.sourceId !== undefined ? node.sourceId : -1
+      currentGroupId = node.groupId !== undefined ? node.groupId : -1
+      currentDatasetId = node.datasetId !== undefined ? node.datasetId : -1
+      currentWidgetId = node.widgetId !== undefined ? node.widgetId : -1
+      currentActionId = node.actionId !== undefined ? node.actionId : -1
       currentSiblingCount = node.siblingCount !== undefined ? node.siblingCount : 0
 
-      switch (currentType) {
-        case "source":       sourceMenu.popup();      break
-        case "frameparser":  frameparserMenu.popup(); break
-        case "group":        groupMenu.popup();       break
-        case "dataset":      datasetMenu.popup();     break
-        case "output":       outputMenu.popup();      break
-        case "output-panel": outputPanelMenu.popup(); break
-        case "action":        actionMenu.popup();        break
-        case "table":         tableMenu.popup();         break
-        case "transform":     transformMenu.popup();     break
-        case "controlscript": controlScriptMenu.popup(); break
-        default:             pinnedKey = ""
+      const surface = menuController.surfaceFor(node.type)
+      if (surface.length === 0) {
+        pinnedKey = ""
+        return
       }
+
+      menuBindings.setTarget(menuController.targetFor(node))
+      contextMenu.openSurface("editor-menu/" + surface)
+    }
+
+    //
+    // Diagram node type -> menu surface; an unmapped type opens nothing.
+    //
+    function surfaceFor(type) {
+      const surfaces = {
+        "source": "source",
+        "frameparser": "frame-parser",
+        "group": "group",
+        "dataset": "dataset",
+        "output": "output",
+        "output-panel": "output-panel",
+        "action": "action",
+        "table": "user-table",
+        "transform": "transform",
+        "controlscript": "control-script",
+        "mqtt-publisher": "mqtt-publisher"
+      }
+
+      const surface = surfaces[type]
+      return surface !== undefined ? surface : ""
+    }
+
+    //
+    // Diagram node -> menu target, in the tree's own vocabulary of kinds and ids.
+    //
+    function targetFor(node) {
+      const type = node.type
+      const target = { "kind": ProjectEditor.KindNone, "id": -1, "parentId": -1,
+                       "sourceId": currentSourceId, "path": currentTableName,
+                       "widget": currentWidget, "siblingCount": currentSiblingCount }
+
+      if (type === "source" || type === "frameparser") {
+        target.kind = type === "source" ? ProjectEditor.KindSource
+                                        : ProjectEditor.KindFrameParser
+        target.id = currentSourceId
+      } else if (type === "group" || type === "output-panel") {
+        target.kind = ProjectEditor.KindGroup
+        target.id = currentGroupId
+        target.widget = type === "output-panel" ? "output-panel" : currentWidget
+      } else if (type === "dataset" || type === "transform") {
+        target.kind = ProjectEditor.KindDataset
+        target.id = currentDatasetId
+        target.parentId = currentGroupId
+      } else if (type === "output") {
+        target.kind = ProjectEditor.KindOutputWidget
+        target.id = currentWidgetId
+        target.parentId = currentGroupId
+      } else if (type === "action") {
+        target.kind = ProjectEditor.KindAction
+        target.id = currentActionId
+      } else if (type === "table") {
+        target.kind = ProjectEditor.KindUserTable
+      } else if (type === "controlscript") {
+        target.kind = ProjectEditor.KindControlScript
+      } else if (type === "mqtt-publisher") {
+        target.kind = ProjectEditor.KindMqttPublisher
+      }
+
+      return target
     }
 
     function unpin() { pinnedKey = "" }
 
-    function selectTargetGroup() {
-      if ((currentType === "group" || currentType === "output-panel")
-          && currentGroupId >= 0)
-        Cpp_JSON_ProjectEditor.selectGroup(currentGroupId)
-    }
-
-    function targetSourceId() {
-      if ((currentType === "source" || currentType === "frameparser")
-          && currentSourceId >= 0)
-        return currentSourceId
-      return -1
-    }
-
-    function locked(fn) {
-      Cpp_JSON_ProjectEditor.setSuppressViewChange(true)
-      try { fn() } finally {
-        Qt.callLater(() => Cpp_JSON_ProjectEditor.setSuppressViewChange(false))
-      }
-    }
-
   }
 
   //
-  // Reusable Actions for "Add ..." (shared between background and per-group menus)
+  // Context-menu plumbing: node ids go into the bindings, layout comes from the registry
+  // surface for that kind, and mutations run with the current view pinned.
   //
-  Item {
-    visible: false
+  Commands.ProjectEditorMenuBindings {
+    id: menuBindings
 
-    //
-    // Group variants
-    //
-    Action {
-      id: actAddGroupGeneric
-
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Dataset Container")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "group", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.addGroup(qsTr("Dataset Container"),
-                                       SerialStudio.NoGroupWidget,
-                                       menuController.targetSourceId()))
-    }
-    Action {
-      id: actAddGroupMultiPlot
-
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Multi-Plot")
-      icon.source: Cpp_Misc_IconRegistry.icon("widgets", "multiplot", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.addGroup(qsTr("Multiple Plot"),
-                                       SerialStudio.MultiPlot,
-                                       menuController.targetSourceId()))
-    }
-    Action {
-      id: actAddGroupAccel
-
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Accelerometer")
-      icon.source: Cpp_Misc_IconRegistry.icon("widgets", "accelerometer", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.addGroup(qsTr("Accelerometer"),
-                                       SerialStudio.Accelerometer,
-                                       menuController.targetSourceId()))
-    }
-    Action {
-      id: actAddGroupGyro
-
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Gyroscope")
-      icon.source: Cpp_Misc_IconRegistry.icon("widgets", "gyroscope", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.addGroup(qsTr("Gyroscope"),
-                                       SerialStudio.Gyroscope,
-                                       menuController.targetSourceId()))
-    }
-    Action {
-      id: actAddGroupGps
-
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("GPS Map")
-      icon.source: Cpp_Misc_IconRegistry.icon("widgets", "gps", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.addGroup(qsTr("GPS Map"), SerialStudio.GPS,
-                                       menuController.targetSourceId()))
-    }
-    Action {
-      id: actAddGroupPlot3D
-
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("3D Plot")
-      icon.source: Cpp_Misc_IconRegistry.icon("widgets", "plot3d", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.addGroup(qsTr("3D Plot"), SerialStudio.Plot3D,
-                                       menuController.targetSourceId()))
-    }
-    Action {
-      id: actAddGroupImage
-
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Image View")
-      icon.source: Cpp_Misc_IconRegistry.icon("widgets", "image", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.addGroup(qsTr("Image View"),
-                                       SerialStudio.ImageView,
-                                       menuController.targetSourceId()))
-    }
-    Action {
-      id: actAddGroupPainter
-
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Painter Widget")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "add-painter", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.addGroup(qsTr("Painter Widget"),
-                                       SerialStudio.Painter,
-                                       menuController.targetSourceId()))
-    }
-    Action {
-      id: actAddGroupWebView
-
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Web View")
-      icon.source: Cpp_Misc_IconRegistry.icon("widgets", "webview", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.addGroup(qsTr("Web View"),
-                                       SerialStudio.WebView,
-                                       menuController.targetSourceId()))
-    }
-    Action {
-      id: actAddGroupDataGrid
-
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Data Grid")
-      icon.source: Cpp_Misc_IconRegistry.icon("widgets", "datagrid", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.addGroup(qsTr("Data Grid"),
-                                       SerialStudio.DataGrid,
-                                       menuController.targetSourceId()))
-    }
-
-    Action {
-      id: actAddGroupBarPanel
-
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Bar Panel")
-      icon.source: Cpp_Misc_IconRegistry.icon("widgets", "barpanel", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.addGroup(qsTr("Bar Panel"),
-                                       SerialStudio.BarPanel,
-                                       menuController.targetSourceId()))
-    }
-
-    //
-    // Dataset variants (target-group selection lives on menuController)
-    //
-    Action {
-      id: actAddDsGeneric
-
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Generic")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "dataset", 16)
-      onTriggered: menuController.locked(() => {
-        menuController.selectTargetGroup()
-        Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetGeneric,
-                                         menuController.targetSourceId())
-      })
-    }
-    Action {
-      id: actAddDsPlot
-
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Plot")
-      icon.source: Cpp_Misc_IconRegistry.icon("widgets", "plot", 16)
-      onTriggered: menuController.locked(() => {
-        menuController.selectTargetGroup()
-        Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetPlot,
-                                         menuController.targetSourceId())
-      })
-    }
-    Action {
-      id: actAddDsFFT
-
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("FFT Plot")
-      icon.source: Cpp_Misc_IconRegistry.icon("widgets", "fft", 16)
-      onTriggered: menuController.locked(() => {
-        menuController.selectTargetGroup()
-        Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetFFT,
-                                         menuController.targetSourceId())
-      })
-    }
-    Action {
-      id: actAddDsGauge
-
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Gauge")
-      icon.source: Cpp_Misc_IconRegistry.icon("widgets", "gauge", 16)
-      onTriggered: menuController.locked(() => {
-        menuController.selectTargetGroup()
-        Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetGauge,
-                                         menuController.targetSourceId())
-      })
-    }
-    Action {
-      id: actAddDsBar
-
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Level Indicator")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "add-bar", 16)
-      onTriggered: menuController.locked(() => {
-        menuController.selectTargetGroup()
-        Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetBar,
-                                         menuController.targetSourceId())
-      })
-    }
-    Action {
-      id: actAddDsCompass
-
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Compass")
-      icon.source: Cpp_Misc_IconRegistry.icon("widgets", "compass", 16)
-      onTriggered: menuController.locked(() => {
-        menuController.selectTargetGroup()
-        Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetCompass,
-                                         menuController.targetSourceId())
-      })
-    }
-    Action {
-      id: actAddDsMeter
-
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Meter")
-      icon.source: Cpp_Misc_IconRegistry.icon("widgets", "meter", 16)
-      onTriggered: menuController.locked(() => {
-        menuController.selectTargetGroup()
-        Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetMeter,
-                                         menuController.targetSourceId())
-      })
-    }
-    Action {
-      id: actAddDsLED
-
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("LED Indicator")
-      icon.source: Cpp_Misc_IconRegistry.icon("widgets", "led", 16)
-      onTriggered: menuController.locked(() => {
-        menuController.selectTargetGroup()
-        Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetLED,
-                                         menuController.targetSourceId())
-      })
-    }
-
-    //
-    // Output variants (Pro)
-    //
-    Action {
-      id: actAddOutPanel
-
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Output Panel")
-      icon.source: Cpp_Misc_IconRegistry.icon("widgets", "output-panel", 16)
-      onTriggered: menuController.locked(() => {
-        menuController.selectTargetGroup()
-        Cpp_JSON_ProjectModel.addOutputPanel(menuController.targetSourceId())
-      })
-    }
-    Action {
-      id: actAddOutSlider
-
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Slider")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "output-slider", 16)
-      onTriggered: menuController.locked(() => {
-        menuController.selectTargetGroup()
-        Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputSlider,
-                                               menuController.targetSourceId())
-      })
-    }
-    Action {
-      id: actAddOutToggle
-
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Toggle")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "output-toggle", 16)
-      onTriggered: menuController.locked(() => {
-        menuController.selectTargetGroup()
-        Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputToggle,
-                                               menuController.targetSourceId())
-      })
-    }
-    Action {
-      id: actAddOutKnob
-
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Knob")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "output-knob", 16)
-      onTriggered: menuController.locked(() => {
-        menuController.selectTargetGroup()
-        Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputKnob,
-                                               menuController.targetSourceId())
-      })
-    }
-    Action {
-      id: actAddOutText
-
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Text Field")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "output-textfield", 16)
-      onTriggered: menuController.locked(() => {
-        menuController.selectTargetGroup()
-        Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputTextField,
-                                               menuController.targetSourceId())
-      })
-    }
-    Action {
-      id: actAddOutButton
-
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Button")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "output-button", 16)
-      onTriggered: menuController.locked(() => {
-        menuController.selectTargetGroup()
-        Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputButton,
-                                               menuController.targetSourceId())
-      })
-    }
+    suppressViewChange: true
+    onPainterCodeRequested: painterCodeDialog.showDialog()
   }
 
-  //
-  // -- Per-context Menus --------------------------------------------------
-  //
-  // Each Menu is a fixed list of items relevant to one node type. No
-  // conditional visibility on individual items (avoids empty-slot bugs).
-  //
-  Menu {
-    id: backgroundMenu
+  Commands.CommandModel {
+    id: menuModel
 
-    onClosed: menuController.unpin()
-
-    Menu {
-      icon.width: 16
-      icon.height: 16
-      title: qsTr("Add Group")
-      icon.source: Cpp_Misc_IconRegistry.icon("widgets", "group", 16)
-      MenuItem { action: actAddGroupGeneric }
-      MenuItem { action: actAddGroupMultiPlot }
-      MenuItem { action: actAddGroupAccel }
-      MenuItem { action: actAddGroupGyro }
-      MenuItem { action: actAddGroupGps }
-      MenuItem { action: actAddGroupPlot3D }
-      MenuItem { action: actAddGroupImage }
-      MenuItem { action: actAddGroupPainter }
-      MenuItem { action: actAddGroupWebView }
-      MenuItem { action: actAddGroupDataGrid }
-      MenuItem { action: actAddGroupBarPanel }
-    }
-    Menu {
-      icon.width: 16
-      icon.height: 16
-      title: qsTr("Add Dataset")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "dataset", 16)
-      MenuItem { action: actAddDsGeneric }
-      MenuItem { action: actAddDsPlot }
-      MenuItem { action: actAddDsFFT }
-      MenuItem { action: actAddDsGauge }
-      MenuItem { action: actAddDsBar }
-      MenuItem { action: actAddDsCompass }
-      MenuItem { action: actAddDsMeter }
-      MenuItem { action: actAddDsLED }
-    }
-    Menu {
-      icon.width: 16
-      icon.height: 16
-      title: qsTr("Add Output")
-      enabled: Cpp_CommercialBuild
-      icon.source: Cpp_Misc_IconRegistry.icon("widgets", "output-panel", 16)
-      MenuItem { action: actAddOutPanel }
-      MenuItem { action: actAddOutSlider }
-      MenuItem { action: actAddOutToggle }
-      MenuItem { action: actAddOutKnob }
-      MenuItem { action: actAddOutText }
-      MenuItem { action: actAddOutButton }
-    }
-
-    MenuSeparator {}
-
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Add Action")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "add-action", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.addAction(menuController.targetSourceId()))
-    }
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      enabled: Cpp_CommercialBuild
-      text: qsTr("Add Data Source")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "add-device", 16)
-      onTriggered: menuController.locked(() => Cpp_JSON_ProjectModel.addSource())
-    }
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Add Data Table")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "shared-table-alt", 16)
-      onTriggered: menuController.locked(() => Cpp_JSON_ProjectModel.promptAddTable())
-    }
+    context: "editor"
+    bindingSets: [menuBindings]
   }
 
-  Menu {
-    id: sourceMenu
+  Widgets.CommandMenu {
+    id: contextMenu
 
-    onClosed: menuController.unpin()
-
-    Menu {
-      icon.width: 16
-      icon.height: 16
-      title: qsTr("Add Group")
-      icon.source: Cpp_Misc_IconRegistry.icon("widgets", "group", 16)
-      MenuItem { action: actAddGroupGeneric }
-      MenuItem { action: actAddGroupMultiPlot }
-      MenuItem { action: actAddGroupAccel }
-      MenuItem { action: actAddGroupGyro }
-      MenuItem { action: actAddGroupGps }
-      MenuItem { action: actAddGroupPlot3D }
-      MenuItem { action: actAddGroupImage }
-      MenuItem { action: actAddGroupPainter }
-      MenuItem { action: actAddGroupWebView }
-      MenuItem { action: actAddGroupDataGrid }
-      MenuItem { action: actAddGroupBarPanel }
-    }
-    Menu {
-      icon.width: 16
-      icon.height: 16
-      title: qsTr("Add Dataset")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "dataset", 16)
-      MenuItem { action: actAddDsGeneric }
-      MenuItem { action: actAddDsPlot }
-      MenuItem { action: actAddDsFFT }
-      MenuItem { action: actAddDsGauge }
-      MenuItem { action: actAddDsBar }
-      MenuItem { action: actAddDsCompass }
-      MenuItem { action: actAddDsMeter }
-      MenuItem { action: actAddDsLED }
-    }
-    Menu {
-      icon.width: 16
-      icon.height: 16
-      title: qsTr("Add Output")
-      enabled: Cpp_CommercialBuild
-      icon.source: Cpp_Misc_IconRegistry.icon("widgets", "output-panel", 16)
-      MenuItem { action: actAddOutPanel }
-      MenuItem { action: actAddOutSlider }
-      MenuItem { action: actAddOutToggle }
-      MenuItem { action: actAddOutKnob }
-      MenuItem { action: actAddOutText }
-      MenuItem { action: actAddOutButton }
-    }
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Add Action")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "add-action", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.addAction(menuController.targetSourceId()))
-    }
-
-    MenuSeparator {}
-
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Rename…")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "rename", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.promptRenameSource(menuController.currentSourceId))
-    }
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Duplicate")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "duplicate", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.duplicateSource(menuController.currentSourceId))
-    }
-
-    MenuSeparator {}
-
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Delete…")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "delete", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.deleteSource(menuController.currentSourceId, true))
+    model: menuModel
+    onClosed: {
+      menuBindings.clearTarget()
+      menuController.unpin()
     }
   }
-
-  Menu {
-    id: frameparserMenu
-
-    onClosed: menuController.unpin()
-
-    Menu {
-      icon.width: 16
-      icon.height: 16
-      title: qsTr("Add Group")
-      icon.source: Cpp_Misc_IconRegistry.icon("widgets", "group", 16)
-      MenuItem { action: actAddGroupGeneric }
-      MenuItem { action: actAddGroupMultiPlot }
-      MenuItem { action: actAddGroupAccel }
-      MenuItem { action: actAddGroupGyro }
-      MenuItem { action: actAddGroupGps }
-      MenuItem { action: actAddGroupPlot3D }
-      MenuItem { action: actAddGroupImage }
-      MenuItem { action: actAddGroupPainter }
-      MenuItem { action: actAddGroupWebView }
-      MenuItem { action: actAddGroupDataGrid }
-      MenuItem { action: actAddGroupBarPanel }
-    }
-    Menu {
-      icon.width: 16
-      icon.height: 16
-      title: qsTr("Add Dataset")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "dataset", 16)
-      MenuItem { action: actAddDsGeneric }
-      MenuItem { action: actAddDsPlot }
-      MenuItem { action: actAddDsFFT }
-      MenuItem { action: actAddDsGauge }
-      MenuItem { action: actAddDsBar }
-      MenuItem { action: actAddDsCompass }
-      MenuItem { action: actAddDsMeter }
-      MenuItem { action: actAddDsLED }
-    }
-    Menu {
-      icon.width: 16
-      icon.height: 16
-      title: qsTr("Add Output")
-      enabled: Cpp_CommercialBuild
-      icon.source: Cpp_Misc_IconRegistry.icon("widgets", "output-panel", 16)
-      MenuItem { action: actAddOutPanel }
-      MenuItem { action: actAddOutSlider }
-      MenuItem { action: actAddOutToggle }
-      MenuItem { action: actAddOutKnob }
-      MenuItem { action: actAddOutText }
-      MenuItem { action: actAddOutButton }
-    }
-
-    MenuSeparator {}
-
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Edit Frame Parser…")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "edit-code", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectEditor.selectFrameParser(menuController.currentSourceId))
-    }
-  }
-
-  Menu {
-    id: groupMenu
-
-    onClosed: menuController.unpin()
-
-    Menu {
-      icon.width: 16
-      icon.height: 16
-      title: qsTr("Add Dataset")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "dataset", 16)
-      MenuItem { action: actAddDsGeneric }
-      MenuItem { action: actAddDsPlot }
-      MenuItem { action: actAddDsFFT }
-      MenuItem { action: actAddDsGauge }
-      MenuItem { action: actAddDsBar }
-      MenuItem { action: actAddDsCompass }
-      MenuItem { action: actAddDsMeter }
-      MenuItem { action: actAddDsLED }
-    }
-    Menu {
-      icon.width: 16
-      icon.height: 16
-      title: qsTr("Add Output")
-      enabled: Cpp_CommercialBuild
-      icon.source: Cpp_Misc_IconRegistry.icon("widgets", "output-panel", 16)
-      MenuItem { action: actAddOutPanel }
-      MenuItem { action: actAddOutSlider }
-      MenuItem { action: actAddOutToggle }
-      MenuItem { action: actAddOutKnob }
-      MenuItem { action: actAddOutText }
-      MenuItem { action: actAddOutButton }
-    }
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Edit Painter Code…")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "edit-code", 16)
-      enabled: menuController.currentWidget === "painter" && Cpp_CommercialBuild
-      onTriggered: menuController.locked(() => {
-        Cpp_JSON_ProjectEditor.selectGroup(menuController.currentGroupId)
-        painterCodeDialog.showDialog()
-      })
-    }
-
-    MenuSeparator {}
-
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Rename…")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "rename", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.promptRenameGroup(menuController.currentGroupId))
-    }
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Move Up")
-      opacity: enabled ? 1 : 0.5
-      enabled: menuController.canMoveUp
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "move-up", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.moveGroup(menuController.currentGroupId,
-                                        menuController.currentGroupId - 1))
-    }
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Move Down")
-      opacity: enabled ? 1 : 0.5
-      enabled: menuController.canMoveDown
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "move-down", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.moveGroup(menuController.currentGroupId,
-                                        menuController.currentGroupId + 1))
-    }
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Duplicate")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "duplicate", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.duplicateGroup(menuController.currentGroupId))
-    }
-
-    MenuSeparator {}
-
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Delete…")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "delete", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.deleteGroup(menuController.currentGroupId, true))
-    }
-  }
-
-  Menu {
-    id: datasetMenu
-
-    onClosed: menuController.unpin()
-
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Edit Transform Code…")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "transform", 16)
-      onTriggered: Cpp_JSON_ProjectEditor.openTransformEditorFor(
-        menuController.currentGroupId, menuController.currentDatasetId)
-    }
-
-    MenuSeparator {}
-
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Rename…")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "rename", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.promptRenameDataset(menuController.currentGroupId,
-                                                  menuController.currentDatasetId))
-    }
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Move Up")
-      opacity: enabled ? 1 : 0.5
-      enabled: menuController.canMoveUp
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "move-up", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.moveDataset(menuController.currentGroupId,
-                                          menuController.currentDatasetId,
-                                          menuController.currentDatasetId - 1))
-    }
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Move Down")
-      opacity: enabled ? 1 : 0.5
-      enabled: menuController.canMoveDown
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "move-down", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.moveDataset(menuController.currentGroupId,
-                                          menuController.currentDatasetId,
-                                          menuController.currentDatasetId + 1))
-    }
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Duplicate")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "duplicate", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.duplicateDataset(menuController.currentGroupId,
-                                               menuController.currentDatasetId))
-    }
-
-    MenuSeparator {}
-
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Delete…")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "delete", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.deleteDataset(menuController.currentGroupId,
-                                            menuController.currentDatasetId, true))
-    }
-  }
-
-  Menu {
-    id: outputMenu
-
-    onClosed: menuController.unpin()
-
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Move Up")
-      opacity: enabled ? 1 : 0.5
-      enabled: menuController.canMoveUp
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "move-up", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.moveOutputWidget(menuController.currentGroupId,
-                                               menuController.currentWidgetId,
-                                               menuController.currentWidgetId - 1))
-    }
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Move Down")
-      opacity: enabled ? 1 : 0.5
-      enabled: menuController.canMoveDown
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "move-down", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.moveOutputWidget(menuController.currentGroupId,
-                                               menuController.currentWidgetId,
-                                               menuController.currentWidgetId + 1))
-    }
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Duplicate")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "duplicate", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.duplicateOutputWidget(menuController.currentGroupId,
-                                                    menuController.currentWidgetId))
-    }
-
-    MenuSeparator {}
-
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Delete…")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "delete", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.deleteOutputWidget(menuController.currentGroupId,
-                                                 menuController.currentWidgetId, true))
-    }
-  }
-
-  Menu {
-    id: outputPanelMenu
-
-    onClosed: menuController.unpin()
-
-    Menu {
-      icon.width: 16
-      icon.height: 16
-      title: qsTr("Add Output")
-      enabled: Cpp_CommercialBuild
-      icon.source: Cpp_Misc_IconRegistry.icon("widgets", "output-panel", 16)
-      MenuItem { action: actAddOutSlider }
-      MenuItem { action: actAddOutToggle }
-      MenuItem { action: actAddOutKnob }
-      MenuItem { action: actAddOutText }
-      MenuItem { action: actAddOutButton }
-    }
-
-    MenuSeparator {}
-
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Rename…")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "rename", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.promptRenameGroup(menuController.currentGroupId))
-    }
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Duplicate")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "duplicate", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.duplicateGroup(menuController.currentGroupId))
-    }
-
-    MenuSeparator {}
-
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Delete…")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "delete", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.deleteGroup(menuController.currentGroupId, true))
-    }
-  }
-
-  Menu {
-    id: actionMenu
-
-    onClosed: menuController.unpin()
-
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Rename…")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "rename", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.promptRenameAction(menuController.currentActionId))
-    }
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Move Up")
-      opacity: enabled ? 1 : 0.5
-      enabled: menuController.canMoveUp
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "move-up", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.moveAction(menuController.currentActionId,
-                                         menuController.currentActionId - 1))
-    }
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Move Down")
-      opacity: enabled ? 1 : 0.5
-      enabled: menuController.canMoveDown
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "move-down", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.moveAction(menuController.currentActionId,
-                                         menuController.currentActionId + 1))
-    }
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Duplicate")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "duplicate", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.duplicateAction(menuController.currentActionId))
-    }
-
-    MenuSeparator {}
-
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Delete…")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "delete", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.deleteAction(menuController.currentActionId, true))
-    }
-  }
-
-  Menu {
-    id: tableMenu
-
-    onClosed: menuController.unpin()
-
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Rename…")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "rename", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.promptRenameTable(menuController.currentTableName))
-    }
-
-    MenuSeparator {}
-
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Delete…")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "delete", 16)
-      onTriggered: menuController.locked(() =>
-        Cpp_JSON_ProjectModel.confirmDeleteTable(menuController.currentTableName))
-    }
-  }
-
-  Menu {
-    id: transformMenu
-
-    onClosed: menuController.unpin()
-
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Edit Code…")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "transform", 16)
-      onTriggered: Cpp_JSON_ProjectEditor.openTransformEditorFor(
-        menuController.currentGroupId, menuController.currentDatasetId)
-    }
-  }
-
-  Menu {
-    id: controlScriptMenu
-
-    onClosed: menuController.unpin()
-
-    MenuItem {
-      icon.width: 16
-      icon.height: 16
-      text: qsTr("Edit Control Loop…")
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "edit-code", 16)
-      onTriggered: Cpp_JSON_ProjectEditor.selectControlScript()
-    }
-  }
-
 }

@@ -83,6 +83,7 @@
     "alternate_base":"#F3F3F3",
     "placeholder_text":"#6B7280",
     "highlighted_text":"#FFFFFF",
+    "switch_highlight":"#0078D4",
 
     "console_text":"#1F1F1F",
     "console_base":"#FFFFFF",
@@ -128,6 +129,7 @@
     "start_menu_version_text":"#4F4F4F",
     "start_menu_gradient_bottom":"#E0E0E0",
     "start_menu_highlighted_text":"#FFFFFF",
+    "start_menu_button_gradient_enabled":false,
 
     "snap_indicator_border":"#0078D4",
     "snap_indicator_background":"#400078D4",

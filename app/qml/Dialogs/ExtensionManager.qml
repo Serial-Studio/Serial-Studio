@@ -841,6 +841,7 @@ Widgets.SmartDialog {
             Item {
               Layout.fillWidth: true
               Layout.minimumHeight: detailsCol.implicitHeight + 24
+              Layout.maximumHeight: detailsCol.implicitHeight + 24
 
               Rectangle {
                 radius: 2
@@ -983,6 +984,16 @@ Widgets.SmartDialog {
                 color: Cpp_ThemeManager.colors["placeholder_text"]
                 font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
               }
+            }
+
+            //
+            // Spacer that keeps the details panel and screenshot top-aligned
+            //
+            Item {
+              Layout.fillWidth: true
+              Layout.fillHeight: true
+              visible: (Cpp_ExtensionManager.selectedExtension.screenshot || "") !== ""
+                       && (Cpp_ExtensionManager.selectedExtension.type || "") !== "plugin"
             }
 
             //

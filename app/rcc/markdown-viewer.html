@@ -452,11 +452,10 @@
         securityLevel: 'loose'
       });
 
-      // Re-highlight code blocks with new theme
-      document.querySelectorAll('pre code').forEach(function(block) {
-        block.removeAttribute('data-highlighted');
-        hljs.highlightElement(block);
-      });
+      // Code blocks need no re-highlight: hljs class names are theme-independent,
+      // the stylesheet swap above is the whole theme change. Re-running
+      // highlightElement over already-highlighted markup trips its
+      // unescaped-HTML guard (the block then holds <span> children).
     }
 
     // ----------------------------------------------------------------

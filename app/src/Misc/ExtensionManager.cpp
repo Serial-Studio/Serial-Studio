@@ -46,6 +46,10 @@
 // Default repository URL
 //--------------------------------------------------------------------------------------------------
 
+static constexpr int kUpdatePolicyAsk    = 0;
+static constexpr int kUpdatePolicyAlways = 1;
+static constexpr int kUpdatePolicyNever  = 2;
+
 static const QString kDefaultRepoUrl =
   QStringLiteral("https://raw.githubusercontent.com/serial-studio/extensions/main/manifest.json");
 
@@ -86,9 +90,11 @@ Misc::ExtensionManager::ExtensionManager()
   , m_totalDownloads(0)
   , m_pendingManifests(0)
   , m_pendingExtensionMetas(0)
+  , m_updatePolicy(kUpdatePolicyAsk)
   , m_dashboardWasAvailable(false)
 {
   m_nam.setTransferTimeout(15 * 1000);
+  m_updatePolicy = m_settings.value("ExtensionAutoUpdate", kUpdatePolicyAsk).toInt();
 
   const auto saved = m_settings.value("ExtensionRepositories").toStringList();
   if (saved.isEmpty())
@@ -120,6 +126,22 @@ Misc::ExtensionManager& Misc::ExtensionManager::instance()
 bool Misc::ExtensionManager::loading() const noexcept
 {
   return m_loading;
+}
+
+/**
+ * @brief Returns whether installed extensions are checked for updates.
+ */
+bool Misc::ExtensionManager::updateCheckEnabled() const noexcept
+{
+  return m_updatePolicy != kUpdatePolicyNever;
+}
+
+/**
+ * @brief Returns whether available updates are installed without asking the user.
+ */
+bool Misc::ExtensionManager::automaticUpdates() const noexcept
+{
+  return m_updatePolicy == kUpdatePolicyAlways;
 }
 
 /**
@@ -653,19 +675,134 @@ bool Misc::ExtensionManager::uninstallExtension()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Checks installed extensions against the catalog and auto-updates any that have a newer
- * version available.
+ * @brief Refreshes the catalog at startup so installed extensions are checked for updates; runs
+ * only when the application's own update checks are enabled too.
+ */
+void Misc::ExtensionManager::checkForUpdatesOnStartup(const bool appUpdatesEnabled)
+{
+  if (!appUpdatesEnabled || !updateCheckEnabled())
+    return;
+
+  refreshRepositories();
+}
+
+/**
+ * @brief Enables/disables update checks for installed extensions and persists the choice.
+ */
+void Misc::ExtensionManager::setUpdateCheckEnabled(const bool enabled)
+{
+  if (enabled == updateCheckEnabled())
+    return;
+
+  m_updatePolicy = enabled ? kUpdatePolicyAsk : kUpdatePolicyNever;
+  m_settings.setValue("ExtensionAutoUpdate", m_updatePolicy);
+  m_autoUpdateDeclined.clear();
+  Q_EMIT updatePolicyChanged();
+
+  if (enabled)
+    QTimer::singleShot(0, this, &ExtensionManager::autoUpdateExtensions);
+}
+
+/**
+ * @brief Enables/disables silent installation of available extension updates.
+ */
+void Misc::ExtensionManager::setAutomaticUpdates(const bool enabled)
+{
+  if (enabled == automaticUpdates())
+    return;
+
+  if (!enabled && !updateCheckEnabled())
+    return;
+
+  m_updatePolicy = enabled ? kUpdatePolicyAlways : kUpdatePolicyAsk;
+  m_settings.setValue("ExtensionAutoUpdate", m_updatePolicy);
+  m_autoUpdateDeclined.clear();
+  Q_EMIT updatePolicyChanged();
+
+  if (enabled)
+    QTimer::singleShot(0, this, &ExtensionManager::autoUpdateExtensions);
+}
+
+/**
+ * @brief Returns the catalog display name for the given addon ID, or the ID itself.
+ */
+QString Misc::ExtensionManager::catalogName(const QString& id) const
+{
+  for (const auto& entry : std::as_const(m_allExtensions)) {
+    const auto obj = entry.toObject();
+    if (obj.value("id").toString() != id)
+      continue;
+
+    const auto name = obj.value("name").toString();
+    return name.isEmpty() ? id : name;
+  }
+
+  return id;
+}
+
+/**
+ * @brief Asks the user whether the pending extension updates should be installed; a remembered
+ * "always update" choice skips the prompt on later refreshes.
+ */
+bool Misc::ExtensionManager::confirmAutoUpdate(const QStringList& ids)
+{
+  if (m_updatePolicy == kUpdatePolicyAlways)
+    return true;
+
+  if (m_updatePolicy == kUpdatePolicyNever)
+    return false;
+
+  QStringList names;
+  for (const auto& id : ids)
+    names.append(catalogName(id));
+
+  const auto answer = Misc::Utilities::showMessageBox(
+    tr("Extension updates available"),
+    tr("Newer versions are available for: %1.\n\nDo you want to update them now?")
+      .arg(names.join(QStringLiteral(", "))),
+    QMessageBox::Question,
+    qApp->applicationName(),
+    QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No,
+    QMessageBox::Yes,
+    {{QMessageBox::YesToAll, tr("Always update")}});
+
+  if (answer == QMessageBox::YesToAll) {
+    m_updatePolicy = kUpdatePolicyAlways;
+    m_settings.setValue("ExtensionAutoUpdate", m_updatePolicy);
+    Q_EMIT updatePolicyChanged();
+    return true;
+  }
+
+  return answer != QMessageBox::No;
+}
+
+/**
+ * @brief Checks installed extensions against the catalog and, with the user's consent, updates any
+ * that have a newer version available.
  */
 void Misc::ExtensionManager::autoUpdateExtensions()
 {
-  if (m_loading)
+  if (m_loading || !updateCheckEnabled())
     return;
 
   if (m_autoUpdateQueue.isEmpty()) {
+    QStringList pending;
     const auto ids = m_installedExtensions.keys();
     for (const auto& id : ids)
-      if (hasUpdate(id))
-        m_autoUpdateQueue.append(id);
+      if (hasUpdate(id) && !m_autoUpdateDeclined.contains(id))
+        pending.append(id);
+
+    if (pending.isEmpty())
+      return;
+
+    if (!confirmAutoUpdate(pending)) {
+      for (const auto& id : pending)
+        m_autoUpdateDeclined.insert(id);
+
+      return;
+    }
+
+    m_autoUpdateQueue = pending;
   }
 
   if (m_autoUpdateQueue.isEmpty())

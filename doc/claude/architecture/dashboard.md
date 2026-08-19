@@ -546,8 +546,24 @@ axis to 5.9 s, 2026-08-15).
 `appendDecimated` clamps sub-cell backward jitter forward to keep the grid monotonic, but a jump
 back over a whole cell drops the retained span: clamping it instead wedges the ring shut (no new
 cell can open) until wall time climbs past the stale stamp, and the plot draws a single point at
-the right edge meanwhile. Producer side: `m_plotClocks` and `m_plotDisplayTimeSec` are ONE state
-(every rebuild seeds every ring with that scalar through `updateDataSeries()`), so they are
+the right edge meanwhile. Producer side: `m_plotClocks` and `m_plotDisplayTimeSec` are ONE state,
 cleared, saved and restored together via `Dashboard::resetPlotClocks()`, never one without the
 other. Clearing the map alone left QuickPlot audio blank for seconds after each rebuild
 (2026-08-18).
+
+**A rebuild never seeds a time ring.** `updateDataSeries()` called with no source refills the
+sample-count series only. `m_plotDisplayTimeSec` is a single global owned by whichever source
+published last, so seeding every ring from it rewinds every other source's ring; the rings a
+rebuild keeps come from `restorePlotTimeRings()`, and the next real block appends on the source's
+own clock.
+
+**A uniform-grid block continues from the previous block's span, never from the smoothed cadence.**
+`applyBlockColumn()` writes a block out to `base + (samples - 1) * dt`, so the next block's base
+must clear that. Passing `blockSpanSec` to `advancePlotClock()` makes the continuation term
+`previous base + previous samples * dt` and takes `qMax` with the driver's own `t0`: both advance
+at the sample rate, so the clock can neither rewind nor ratchet. The EMA `samplePeriodSec` is still
+maintained (`growTimeRing` sizes frame-lane rings from it) but must not drive the block lane — it
+averages over callback sizes, so it undershoots a long block and overshoots a short one. Both
+failure modes shipped on 2026-08-18: the undershoot wiped 48 kHz audio roughly once a second, and
+"fixing" it by folding the span into `displayTimeSec` double-counted it and ran the axis at 2x with
+a one-block gap between every block.

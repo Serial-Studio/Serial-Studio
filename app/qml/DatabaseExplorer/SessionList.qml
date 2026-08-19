@@ -24,7 +24,6 @@ Widgets.Pane {
   // Custom properties
   //
   property string searchText: ""
-  property var verdicts: Cpp_Sessions_Manager.latestVerdicts()
 
   //
   // Formats a session's recorded payload size. Frame count was a misleading metric for stream
@@ -45,40 +44,6 @@ Widgets.Pane {
       return qsTr("%1 MB").arg((value / (1024 * 1024)).toFixed(1))
 
     return qsTr("%1 GB").arg((value / (1024 * 1024 * 1024)).toFixed(2))
-  }
-
-  //
-  // Maps a stored verdict string to a short badge label
-  //
-  function verdictBadge(sessionId) {
-    const verdict = verdicts[String(sessionId)]
-    if (verdict === "reproduced")
-      return qsTr("Reproduced")
-
-    if (verdict === "diverged")
-      return qsTr("Diverged")
-
-    if (verdict === "partial")
-      return qsTr("Partial")
-
-    if (verdict === "not_verifiable")
-      return qsTr("Not verifiable")
-
-    if (verdict === "error")
-      return qsTr("Error")
-
-    return "--.--"
-  }
-
-  //
-  // Refresh verdict badges when the session list changes (a finished verification also
-  // emits sessionsChanged, so one handler covers both)
-  //
-  Connections {
-    target: Cpp_Sessions_Manager
-    function onSessionsChanged() {
-      root.verdicts = Cpp_Sessions_Manager.latestVerdicts()
-    }
   }
 
   readonly property var filteredSessions: {
@@ -147,7 +112,6 @@ Widgets.Pane {
       columns: [
         { title: qsTr("Date"),     width: 160 },
         { title: qsTr("Size"),     width: 80  },
-        { title: qsTr("Verified"), width: 90  },
         { title: qsTr("Tags"),     width: -1  }
       ]
     }
@@ -213,25 +177,6 @@ Widgets.Pane {
             leftPadding: 8
             text: root.formatSize(modelData.size_bytes)
             font: Cpp_Misc_CommonFonts.monoFont
-            color: sessionRow.isCurrent
-                   ? Cpp_ThemeManager.colors["highlighted_text"]
-                   : sessionRow.textColor
-          }
-
-          Rectangle {
-            implicitWidth: 1
-            Layout.fillHeight: true
-            color: sessionRow.separatorColor
-          }
-
-          Label {
-            Layout.preferredWidth: 90
-            Layout.alignment: Qt.AlignVCenter
-            leftPadding: 8
-            opacity: 0.7
-            elide: Text.ElideRight
-            text: root.verdictBadge(modelData.session_id)
-            font: Cpp_Misc_CommonFonts.uiFont
             color: sessionRow.isCurrent
                    ? Cpp_ThemeManager.colors["highlighted_text"]
                    : sessionRow.textColor

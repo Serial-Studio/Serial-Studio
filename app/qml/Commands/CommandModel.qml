@@ -92,7 +92,8 @@ QtObject {
   }
 
   //
-  // Merges one registry command with its behavior entry; checked toggles swap title/icon.
+  // Merges one registry command with its behavior entry; checked toggles swap title/icon, and a
+  // behavior may override the label outright for state-dependent text (bulk counts).
   //
   function join(cmd, b) {
     if (b === null || b === undefined)
@@ -100,12 +101,16 @@ QtObject {
 
     var checked = (cmd.kind === "toggle" && b.checked === true)
     var iconRef = (checked && cmd.iconChecked.length > 0) ? cmd.iconChecked : cmd.icon
+    var label = (checked && cmd.titleChecked.length > 0) ? cmd.titleChecked : cmd.title
+    if (b.title !== undefined && b.title.length > 0)
+      label = b.title
+
     return {
       id: cmd.id,
       kind: cmd.kind,
       checked: checked,
       category: cmd.category,
-      name: (checked && cmd.titleChecked.length > 0) ? cmd.titleChecked : cmd.title,
+      name: label,
       tooltip: (b.tooltip !== undefined) ? b.tooltip : cmd.tooltip,
       iconId: iconRef,
       icon: (iconRef.length > 0) ? Cpp_Misc_IconRegistry.iconById(iconRef, 32) : "",

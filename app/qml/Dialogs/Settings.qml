@@ -703,6 +703,67 @@ Widgets.SmartDialog {
             }
           }
 
+          Label {
+            color: Cpp_ThemeManager.colors["text"]
+            text: qsTr("Check for Extension Updates")
+          } Switch {
+            id: _extensionUpdateCheck
+
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            checked: Cpp_ExtensionManager.updateCheckEnabled
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            onCheckedChanged: {
+              if (checked !== Cpp_ExtensionManager.updateCheckEnabled)
+                Cpp_ExtensionManager.updateCheckEnabled = checked
+            }
+
+            Connections {
+              target: Cpp_ExtensionManager
+              function onUpdatePolicyChanged() {
+                _extensionUpdateCheck.checked = Cpp_ExtensionManager.updateCheckEnabled
+              }
+            }
+          }
+
+          Label {
+            color: Cpp_ThemeManager.colors["text"]
+            opacity: Cpp_ExtensionManager.updateCheckEnabled ? 1 : 0.5
+            text: qsTr("Install Extension Updates Automatically")
+          } Switch {
+            id: _extensionAutoUpdate
+
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            checked: Cpp_ExtensionManager.automaticUpdates
+            enabled: Cpp_ExtensionManager.updateCheckEnabled
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            onCheckedChanged: {
+              if (checked !== Cpp_ExtensionManager.automaticUpdates)
+                Cpp_ExtensionManager.automaticUpdates = checked
+            }
+
+            Connections {
+              target: Cpp_ExtensionManager
+              function onUpdatePolicyChanged() {
+                _extensionAutoUpdate.checked = Cpp_ExtensionManager.automaticUpdates
+              }
+            }
+          }
+
+          Label {
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            Layout.topMargin: -2
+            opacity: 0.7
+            wrapMode: Text.WordWrap
+            color: Cpp_ThemeManager.colors["text"]
+            font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
+            text: qsTr("Installed extensions and themes are checked when Serial Studio "
+                       + "starts, together with application updates. Serial Studio asks "
+                       + "before installing them unless automatic installation is enabled.")
+          }
+
           Item { Layout.fillHeight: true }
           Item { Layout.fillHeight: true }
         }

@@ -1,0 +1,258 @@
+{
+  "surface": "editor-menus",
+  "menus": [
+    { "name": "add-group", "items": [
+        {"type": "command", "id": "editor.menu.addGroup.generic"},
+        {"type": "command", "id": "editor.menu.addGroup.dataGrid"},
+        {"type": "command", "id": "editor.menu.addGroup.barPanel"},
+        {"type": "command", "id": "editor.menu.addGroup.multiPlot"},
+        {"type": "command", "id": "editor.menu.addGroup.plot3D"},
+        {"type": "command", "id": "editor.menu.addGroup.accelerometer"},
+        {"type": "command", "id": "editor.menu.addGroup.gyroscope"},
+        {"type": "command", "id": "editor.menu.addGroup.gps"},
+        {"type": "command", "id": "editor.menu.addGroup.imageView"},
+        {"type": "command", "id": "editor.menu.addGroup.webView"},
+        {"type": "command", "id": "editor.menu.addGroup.painter"}
+    ] },
+    { "name": "add-dataset", "items": [
+        {"type": "command", "id": "editor.menu.addDataset.generic"},
+        {"type": "command", "id": "editor.menu.addDataset.plot"},
+        {"type": "command", "id": "editor.menu.addDataset.fft"},
+        {"type": "command", "id": "editor.menu.addDataset.gauge"},
+        {"type": "command", "id": "editor.menu.addDataset.bar"},
+        {"type": "command", "id": "editor.menu.addDataset.compass"},
+        {"type": "command", "id": "editor.menu.addDataset.meter"},
+        {"type": "command", "id": "editor.menu.addDataset.led"}
+    ] },
+    { "name": "add-output", "items": [
+        {"type": "command", "id": "editor.menu.addOutput.panel"},
+        {"type": "command", "id": "editor.menu.addOutput.slider"},
+        {"type": "command", "id": "editor.menu.addOutput.toggle"},
+        {"type": "command", "id": "editor.menu.addOutput.knob"},
+        {"type": "command", "id": "editor.menu.addOutput.textField"},
+        {"type": "command", "id": "editor.menu.addOutput.button"}
+    ] },
+    { "name": "add-output-controls", "items": [
+        {"type": "command", "id": "editor.menu.addOutput.slider"},
+        {"type": "command", "id": "editor.menu.addOutput.toggle"},
+        {"type": "command", "id": "editor.menu.addOutput.knob"},
+        {"type": "command", "id": "editor.menu.addOutput.textField"},
+        {"type": "command", "id": "editor.menu.addOutput.button"}
+    ] },
+    { "name": "dataset-visuals", "items": [
+        {"type": "command", "id": "editor.menu.dataset.plot"},
+        {"type": "command", "id": "editor.menu.dataset.fft"},
+        {"type": "command", "id": "editor.menu.dataset.waterfall"},
+        {"type": "command", "id": "editor.menu.dataset.bar"},
+        {"type": "command", "id": "editor.menu.dataset.gauge"},
+        {"type": "command", "id": "editor.menu.dataset.compass"},
+        {"type": "command", "id": "editor.menu.dataset.meter"},
+        {"type": "command", "id": "editor.menu.dataset.led"}
+    ] },
+    { "name": "move-to-folder", "items": [
+        {"type": "command", "id": "editor.menu.moveToTopLevel"},
+        {"type": "separator"},
+        {"type": "dynamic", "role": "folder-tree"}
+    ] },
+    { "name": "item-order", "items": [
+        {"type": "command", "id": "editor.menu.moveUp"},
+        {"type": "command", "id": "editor.menu.moveDown"}
+    ] },
+    { "name": "project-root", "items": [
+        {"type": "command", "id": "editor.menu.addSource"},
+        {"type": "submenu", "title": "Add Group", "icon": "editor/add-group",
+         "include": "add-group"},
+        {"type": "submenu", "title": "Add Dataset", "icon": "editor/add-dataset",
+         "include": "add-dataset"},
+        {"type": "submenu", "title": "Add Output", "icon": "editor/add-output-panel",
+         "include": "add-output", "proGated": true},
+        {"type": "command", "id": "editor.menu.addAction"},
+        {"type": "command", "id": "editor.menu.addTable"},
+        {"type": "command", "id": "editor.menu.addWorkspace"},
+        {"type": "separator"},
+        {"type": "command", "id": "editor.menu.editControlLoop"},
+        {"type": "command", "id": "editor.menu.configureMqtt"},
+        {"type": "separator"},
+        {"type": "command", "id": "editor.expandTree"},
+        {"type": "command", "id": "editor.collapseTree"},
+        {"type": "command", "id": "editor.menu.seedAliases"}
+    ] },
+    { "name": "source", "items": [
+        {"type": "submenu", "title": "Add Group", "icon": "editor/add-group",
+         "include": "add-group"},
+        {"type": "submenu", "title": "Add Dataset", "icon": "editor/add-dataset",
+         "include": "add-dataset"},
+        {"type": "submenu", "title": "Add Output", "icon": "editor/add-output-panel",
+         "include": "add-output", "proGated": true},
+        {"type": "command", "id": "editor.menu.addAction"},
+        {"type": "separator"},
+        {"type": "command", "id": "editor.menu.editFrameParser"},
+        {"type": "separator"},
+        {"type": "command", "id": "editor.menu.rename"},
+        {"type": "command", "id": "editor.menu.duplicate"},
+        {"type": "command", "id": "editor.menu.delete"}
+    ] },
+    { "name": "frame-parser", "items": [
+        {"type": "command", "id": "editor.menu.editFrameParser"},
+        {"type": "separator"},
+        {"type": "submenu", "title": "Add Group", "icon": "editor/add-group",
+         "include": "add-group"},
+        {"type": "submenu", "title": "Add Dataset", "icon": "editor/add-dataset",
+         "include": "add-dataset"},
+        {"type": "submenu", "title": "Add Output",
+         "icon": "editor/add-output-panel", "include": "add-output", "proGated": true}
+    ] },
+    { "name": "groups-root", "items": [
+        {"type": "submenu", "title": "Add Group", "icon": "editor/add-group",
+         "include": "add-group"},
+        {"type": "command", "id": "editor.menu.addFolder"},
+        {"type": "separator"},
+        {"type": "command", "id": "editor.menu.showHiddenGroups"},
+        {"type": "command", "id": "editor.menu.seedAliases"},
+        {"type": "separator"},
+        {"type": "command", "id": "editor.expandTree"},
+        {"type": "command", "id": "editor.collapseTree"}
+    ] },
+    { "name": "group-folder", "items": [
+        {"type": "submenu", "title": "Add Group", "icon": "editor/add-group",
+         "include": "add-group"},
+        {"type": "command", "id": "editor.menu.addSubFolder"},
+        {"type": "separator"},
+        {"type": "command", "id": "editor.menu.rename"},
+        {"type": "command", "id": "editor.menu.toggleEnabled"},
+        {"type": "command", "id": "editor.menu.duplicate"},
+        {"type": "command", "id": "editor.menu.delete"},
+        {"type": "separator"},
+        {"type": "include", "include": "item-order"},
+        {"type": "submenu", "title": "Move to Folder",
+         "icon": "editor/move-folder", "include": "move-to-folder"}
+    ] },
+    { "name": "group", "items": [
+        {"type": "submenu", "title": "Add Dataset", "icon": "editor/add-dataset",
+         "include": "add-dataset"},
+        {"type": "submenu", "title": "Add Output", "icon": "editor/add-output-panel",
+         "include": "add-output", "proGated": true},
+        {"type": "command", "id": "editor.menu.editPainterCode"},
+        {"type": "separator"},
+        {"type": "command", "id": "editor.menu.rename"},
+        {"type": "command", "id": "editor.menu.toggleEnabled"},
+        {"type": "command", "id": "editor.menu.duplicate"},
+        {"type": "command", "id": "editor.menu.delete"},
+        {"type": "separator"},
+        {"type": "include", "include": "item-order"},
+        {"type": "submenu", "title": "Move to Folder",
+         "icon": "editor/move-folder", "include": "move-to-folder"}
+    ] },
+    { "name": "output-panel", "items": [
+        {"type": "submenu", "title": "Add Output", "icon": "editor/add-output-panel",
+         "include": "add-output-controls", "proGated": true},
+        {"type": "separator"},
+        {"type": "command", "id": "editor.menu.rename"},
+        {"type": "command", "id": "editor.menu.duplicate"},
+        {"type": "command", "id": "editor.menu.delete"},
+        {"type": "separator"},
+        {"type": "include", "include": "item-order"},
+        {"type": "submenu", "title": "Move to Folder",
+         "icon": "editor/move-folder", "include": "move-to-folder"}
+    ] },
+    { "name": "dataset", "items": [
+        {"type": "command", "id": "editor.menu.editTransform"},
+        {"type": "submenu", "title": "Visualizations", "icon": "editor/widget",
+         "include": "dataset-visuals"},
+        {"type": "separator"},
+        {"type": "command", "id": "editor.menu.rename"},
+        {"type": "command", "id": "editor.menu.toggleEnabled"},
+        {"type": "command", "id": "editor.menu.duplicate"},
+        {"type": "command", "id": "editor.menu.delete"},
+        {"type": "separator"},
+        {"type": "include", "include": "item-order"}
+    ] },
+    { "name": "output", "items": [
+        {"type": "command", "id": "editor.menu.duplicate"},
+        {"type": "command", "id": "editor.menu.delete"},
+        {"type": "separator"},
+        {"type": "include", "include": "item-order"}
+    ] },
+    { "name": "action", "items": [
+        {"type": "command", "id": "editor.menu.rename"},
+        {"type": "command", "id": "editor.menu.duplicate"},
+        {"type": "command", "id": "editor.menu.delete"},
+        {"type": "separator"},
+        {"type": "include", "include": "item-order"}
+    ] },
+    { "name": "tables-root", "items": [
+        {"type": "command", "id": "editor.menu.addTable"},
+        {"type": "command", "id": "editor.menu.addFolder"},
+        {"type": "separator"},
+        {"type": "command", "id": "editor.menu.sharedMemoryHelp"}
+    ] },
+    { "name": "system-datasets", "items": [
+        {"type": "command", "id": "editor.menu.sharedMemoryHelp"}
+    ] },
+    { "name": "table-folder", "items": [
+        {"type": "command", "id": "editor.menu.addTable"},
+        {"type": "command", "id": "editor.menu.addSubFolder"},
+        {"type": "separator"},
+        {"type": "command", "id": "editor.menu.rename"},
+        {"type": "command", "id": "editor.menu.duplicate"},
+        {"type": "command", "id": "editor.menu.delete"},
+        {"type": "separator"},
+        {"type": "include", "include": "item-order"},
+        {"type": "submenu", "title": "Move to Folder",
+         "icon": "editor/move-folder", "include": "move-to-folder"}
+    ] },
+    { "name": "user-table", "items": [
+        {"type": "command", "id": "editor.menu.addRegister"},
+        {"type": "separator"},
+        {"type": "command", "id": "editor.menu.importTable"},
+        {"type": "command", "id": "editor.menu.exportTable"},
+        {"type": "separator"},
+        {"type": "command", "id": "editor.menu.rename"},
+        {"type": "command", "id": "editor.menu.duplicate"},
+        {"type": "command", "id": "editor.menu.delete"},
+        {"type": "separator"},
+        {"type": "submenu", "title": "Move to Folder",
+         "icon": "editor/move-folder", "include": "move-to-folder"}
+    ] },
+    { "name": "workspaces-root", "items": [
+        {"type": "command", "id": "editor.menu.addWorkspace"},
+        {"type": "command", "id": "editor.menu.addFolder"},
+        {"type": "separator"},
+        {"type": "command", "id": "editor.menu.customizeWorkspaces"},
+        {"type": "command", "id": "editor.menu.cleanupWorkspaces"},
+        {"type": "separator"},
+        {"type": "command", "id": "editor.menu.resetWorkspaces"},
+        {"type": "command", "id": "editor.menu.clearWorkspaces"}
+    ] },
+    { "name": "workspace-folder", "items": [
+        {"type": "command", "id": "editor.menu.addWorkspace"},
+        {"type": "command", "id": "editor.menu.addSubFolder"},
+        {"type": "separator"},
+        {"type": "command", "id": "editor.menu.rename"},
+        {"type": "command", "id": "editor.menu.delete"},
+        {"type": "separator"},
+        {"type": "include", "include": "item-order"},
+        {"type": "submenu", "title": "Move to Folder",
+         "icon": "editor/move-folder", "include": "move-to-folder"}
+    ] },
+    { "name": "workspace", "items": [
+        {"type": "command", "id": "editor.menu.editWorkspace"},
+        {"type": "separator"},
+        {"type": "command", "id": "editor.menu.rename"},
+        {"type": "command", "id": "editor.menu.delete"},
+        {"type": "separator"},
+        {"type": "include", "include": "item-order"},
+        {"type": "submenu", "title": "Move to Folder",
+         "icon": "editor/move-folder", "include": "move-to-folder"}
+    ] },
+    { "name": "control-script", "items": [
+        {"type": "command", "id": "editor.menu.editControlLoop"}
+    ] },
+    { "name": "mqtt-publisher", "items": [
+        {"type": "command", "id": "editor.menu.configureMqtt"}
+    ] },
+    { "name": "transform", "items": [
+        {"type": "command", "id": "editor.menu.editTransform"}
+    ] }
+  ]
+}

@@ -34,6 +34,8 @@ Rectangle {
   // Custom signals
   //
   signal projectEditorClicked()
+  property var mwPalette: null
+  property var dashboard: null
   property bool autoHide: false
   property bool toolbarEnabled: true
   property bool dashboardVisible: false
@@ -71,6 +73,9 @@ Rectangle {
   Commands.AppCommandBindings {
     id: _tbAppBindings
 
+    mwPalette: root.mwPalette
+    dashboard: root.dashboard
+    dashboardVisible: root.dashboardVisible
   } Commands.DashboardCommandBindings {
     id: _tbDashBindings
   } Commands.CommandModel {

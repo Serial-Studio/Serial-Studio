@@ -126,11 +126,52 @@ Command titles/tooltips are translated through `QCoreApplication::translate("Com
 `--check` gates drift. Dynamic per-state strings (a toggle's changing tooltip) use `qsTr`
 in the binding.
 
+### Context menus (spec 0063)
+
+The Project Editor's context menus are a third render surface for the same catalog, alongside
+the ribbon and the palette.
+
+- **One manifest**, `app/rcc/commands/layouts/editor-menus.json`, holds every menu as a named
+  entry under `menus`. `CommandRegistry::loadMenus()` stores each one as its own layout surface
+  keyed `editor-menu/<name>`, so `layout()` and all node enrichment are shared with the toolbars.
+- **Node types:** `command`, `separator`, `submenu`, plus two menu-only ones. `include` splices
+  another menu's items — bare (`{"type": "include", "include": "add-group"}`) or as the body of a
+  container (`{"type": "submenu", "title": "Add Group", "include": "add-group"}`); resolution is
+  depth-capped and cycle-guarded, unknown targets warn and expand to nothing. `dynamic` names a
+  `role` the host fills at open time (the folder cascade behind "Move to Folder").
+- **Fragments** `add-group`, `add-dataset`, `add-output`, `add-output-controls`,
+  `dataset-visuals`, `move-to-folder` and `item-order` are authored once and included everywhere,
+  so a new widget template is one manifest entry plus one binding — visible on the tree, the flow
+  diagram, and the toolbars' `GroupTemplateMenu`.
+- **Behavior + target:** `Commands/ProjectEditorMenuBindings.qml` is both the binding set and the
+  target holder — the right-clicked row's kind/ids/path live there as properties, so
+  `enabled`/`visible`/`checked`/`title` stay ordinary bindings. `setTarget()` before opening,
+  `clearTarget()` on close. Each host owns its own instance (tree, diagram, template menu); the
+  diagram sets `suppressViewChange`, the tree sets `treeSelection` for the bulk entries.
+- **Renderer:** `Widgets/CommandMenu.qml`, the menu twin of `CommandToolbar`. `openSurface(name)`
+  builds and pops up; items are created on open and destroyed on close, an entry with no binding
+  or `visible === false` is never created, an all-invisible submenu is dropped, and separators
+  survive only between two visible neighbours (no hand-written `visible:` on dividers). A
+  `dynamic` handler returns the objects it created so they are destroyed with the rest.
+- **Row kinds:** the tree stamps `TreeItemKind` on every menu-bearing row, including the six that
+  used to carry none (project root, frame parser, and the Dashboard Widgets / Shared Memory /
+  Dataset Values / Workspaces headers). The blank spacer row stays unkinded and inert.
+- **Pro entries** are gated with `enabled: Cpp_CommercialBuild` in the binding, or `proGated` on a
+  container node — *not* with the manifest `pro` flag, which deletes the command from the catalog
+  on GPL builds instead of showing it disabled.
+- **Verify:** `registry-verify.py` walks the menu manifest (known command ids, resolvable icons,
+  resolvable `include` targets) and fails when a menu references an id with no binding in
+  `ProjectEditorMenuBindings.qml`. `generate-command-strings.py` walks `menus` too, so submenu
+  titles reach the translations.
+
 ## Recipes
 
 - **New toolbar button:** add the command to the context manifest, add a `command` node to
   the layout manifest, add a `cmd…` binding entry. It appears with icon/tooltip/shortcut/
   translation wired.
+- **New context-menu entry:** add the command to `projecteditor.json` with `contexts: []`, add a
+  `command` node to the right menu in `editor-menus.json` (or to a fragment, to get it on every
+  surface at once), add a `cmd…` entry to `ProjectEditorMenuBindings.qml`. No menu QML changes.
 - **New palette command:** add the command with the right `contexts`, ensure a binding
   exists in every context's model (`registry-verify` + the binding-coverage check catch a
   miss).

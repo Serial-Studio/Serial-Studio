@@ -863,7 +863,7 @@ void Misc::ModuleManager::setupCrossModuleConnections()
 
   appState->restoreLastProject();
 
-  miscExtensionManager->refreshRepositories();
+  miscExtensionManager->checkForUpdatesOnStartup(m_automaticUpdates);
   connect(uiDashboard,
           &UI::Dashboard::widgetCountChanged,
           miscExtensionManager,
