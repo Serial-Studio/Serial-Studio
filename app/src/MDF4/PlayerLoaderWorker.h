@@ -50,6 +50,8 @@ struct PlayerDecodePayload {
   std::vector<std::vector<double>> numeric;
   std::vector<std::vector<QString>> text;
   std::vector<std::vector<bool>> active;
+  QVector<quint8> channelSourceBit;  ///< Per channel: bit of its source (input, may be empty)
+  QVector<quint8> rowSourceBits;     ///< Per row: OR of channelSourceBit over active channels
 };
 
 /**
@@ -81,7 +83,9 @@ public:
   [[nodiscard]] bool cancelRequested() const;
 
 public slots:
-  void decodeFile(const QString& filePath, quint64 generation);
+  void decodeFile(const QString& filePath,
+                  quint64 generation,
+                  const QVector<quint8>& channelSourceBit);
 
 private:
   std::atomic<bool> m_cancelRequested;

@@ -129,6 +129,9 @@ private:
   void buildReplayLayout();
   void injectFrame(const QByteArray& frame, int frameIndex = -1);
   void injectRow(int frameIndex);
+  void injectSourceRow(int frameIndex, int sourceId);
+  void backfillSparseSources();
+  [[nodiscard]] QVector<quint8> buildChannelSourceBits();
   void anchorSteadyBase(int frameIndex);
   [[nodiscard]] int seekWindowStartRow(int target) const;
   void buildSeekWindow(int startRow,
@@ -149,6 +152,7 @@ protected:
 
 private:
   int m_framePos;
+  bool m_injecting;
   bool m_playing;
   bool m_open;
   bool m_decoding;
@@ -164,6 +168,9 @@ private:
   QTimer m_seekTimer;
   QTimer m_settleTimer;
   QHash<qint64, int> m_seekColumnByKey;
+  QVector<quint8> m_rowSourceBits;
+  QVector<int> m_bitSourceIds;
+  QVector<int> m_lastSourceRow;
 
   quint64 m_playbackEpoch;
   quint64 m_decodeGeneration;

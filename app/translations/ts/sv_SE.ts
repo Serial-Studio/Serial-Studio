@@ -2411,144 +2411,144 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
 <context>
     <name>CSV::Player</name>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="503"/>
+        <location filename="../../src/CSV/Player.cpp" line="506"/>
         <source>Select CSV file</source>
         <translation>Välj CSV-fil</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="505"/>
+        <location filename="../../src/CSV/Player.cpp" line="508"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV-filer (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="628"/>
+        <location filename="../../src/CSV/Player.cpp" line="649"/>
         <source>Device Connection Active</source>
         <translation>Enhetsanslutning Aktiv</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="629"/>
+        <location filename="../../src/CSV/Player.cpp" line="650"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>För att använda denna funktion måste du koppla från enheten. Vill du fortsätta?</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="643"/>
-        <location filename="../../src/CSV/Player.cpp" line="661"/>
+        <location filename="../../src/CSV/Player.cpp" line="664"/>
+        <location filename="../../src/CSV/Player.cpp" line="682"/>
         <source>Check file permissions and location</source>
         <translation>Kontrollera filbehörigheter och plats</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="650"/>
-        <location filename="../../src/CSV/Player.cpp" line="731"/>
-        <location filename="../../src/CSV/Player.cpp" line="925"/>
+        <location filename="../../src/CSV/Player.cpp" line="671"/>
+        <location filename="../../src/CSV/Player.cpp" line="753"/>
+        <location filename="../../src/CSV/Player.cpp" line="949"/>
         <source>Insufficient Data in CSV File</source>
         <translation>Otillräcklig Data i CSV-Fil</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="643"/>
-        <location filename="../../src/CSV/Player.cpp" line="661"/>
+        <location filename="../../src/CSV/Player.cpp" line="664"/>
+        <location filename="../../src/CSV/Player.cpp" line="682"/>
         <source>Cannot read CSV file</source>
         <translation>Kan inte läsa CSV-fil</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="651"/>
-        <location filename="../../src/CSV/Player.cpp" line="732"/>
-        <location filename="../../src/CSV/Player.cpp" line="926"/>
+        <location filename="../../src/CSV/Player.cpp" line="672"/>
+        <location filename="../../src/CSV/Player.cpp" line="754"/>
+        <location filename="../../src/CSV/Player.cpp" line="950"/>
         <source>The CSV file must contain at least one data row to proceed. Check the file and try again.</source>
         <translation>CSV-filen måste innehålla minst en datarad för att fortsätta. Kontrollera filen och försök igen.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="919"/>
+        <location filename="../../src/CSV/Player.cpp" line="943"/>
         <source>CSV Row Limit Reached</source>
         <translation>CSV-radgräns Nådd</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="920"/>
+        <location filename="../../src/CSV/Player.cpp" line="944"/>
         <source>Playback is limited to %L1 rows; the rest of the file was not indexed.</source>
         <translation>Uppspelning är begränsad till %L1 rader; resten av filen indexerades inte.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1373"/>
+        <location filename="../../src/CSV/Player.cpp" line="1401"/>
         <source>Seconds (s)</source>
         <translation>Sekunder (s)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1373"/>
+        <location filename="../../src/CSV/Player.cpp" line="1401"/>
         <source>Milliseconds (ms)</source>
         <translation>Millisekunder (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1373"/>
+        <location filename="../../src/CSV/Player.cpp" line="1401"/>
         <source>Microseconds (us)</source>
         <translation>Mikrosekunder (us)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1377"/>
+        <location filename="../../src/CSV/Player.cpp" line="1405"/>
         <source>Timestamp Units</source>
         <translation>Tidsstämpelenheter</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1378"/>
+        <location filename="../../src/CSV/Player.cpp" line="1406"/>
         <source>The timestamp column does not declare a unit. How should it be interpreted?</source>
         <translation>Tidsstämpelkolumnen deklarerar ingen enhet. Hur ska den tolkas?</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1403"/>
+        <location filename="../../src/CSV/Player.cpp" line="1431"/>
         <source>Invalid CSV</source>
         <translation>Ogiltig CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1404"/>
+        <location filename="../../src/CSV/Player.cpp" line="1432"/>
         <source>The CSV file does not contain any data or headers.</source>
         <translation>CSV-filen innehåller inga data eller rubriker.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1417"/>
+        <location filename="../../src/CSV/Player.cpp" line="1445"/>
         <source>Select a date/time column</source>
         <translation>Välj en datum/tid-kolumn</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1417"/>
-        <location filename="../../src/CSV/Player.cpp" line="1429"/>
+        <location filename="../../src/CSV/Player.cpp" line="1445"/>
+        <location filename="../../src/CSV/Player.cpp" line="1457"/>
         <source>Set interval manually</source>
         <translation>Ställ in intervall manuellt</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1419"/>
+        <location filename="../../src/CSV/Player.cpp" line="1447"/>
         <source>CSV Date/Time Selection</source>
         <translation>Val av CSV-datum/tid</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1420"/>
+        <location filename="../../src/CSV/Player.cpp" line="1448"/>
         <source>Choose how to handle the date/time data:</source>
         <translation>Välj hur datum/tid-data ska hanteras:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1432"/>
+        <location filename="../../src/CSV/Player.cpp" line="1460"/>
         <source>Set Interval</source>
         <translation>Ställ In Intervall</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1433"/>
+        <location filename="../../src/CSV/Player.cpp" line="1461"/>
         <source>Please enter the interval between rows in milliseconds:</source>
         <translation>Ange intervallet mellan rader i millisekunder:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1450"/>
+        <location filename="../../src/CSV/Player.cpp" line="1478"/>
         <source>Select Date/Time Column</source>
         <translation>Välj Datum/tid-kolumn</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1451"/>
+        <location filename="../../src/CSV/Player.cpp" line="1479"/>
         <source>Please select the column that contains the date/time data:</source>
         <translation>Välj den kolumn som innehåller datum/tid-data:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1461"/>
+        <location filename="../../src/CSV/Player.cpp" line="1489"/>
         <source>Invalid Selection</source>
         <translation>Ogiltigt Val</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1461"/>
+        <location filename="../../src/CSV/Player.cpp" line="1489"/>
         <source>The selected column is not valid.</source>
         <translation>Den valda kolumnen är inte giltig.</translation>
     </message>
@@ -2704,7 +2704,7 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="39"/>
         <source>Add Data Source</source>
-        <translation type="unfinished">Lägg till Datakälla</translation>
+        <translation>Lägg till Datakälla</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="40"/>
@@ -2774,7 +2774,7 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="53"/>
         <source>Add Output</source>
-        <translation type="unfinished">Lägg till Utdata</translation>
+        <translation>Lägg till Utdata</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="54"/>
@@ -2819,12 +2819,12 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="62"/>
         <source>Add Register</source>
-        <translation type="unfinished">Lägg till Register</translation>
+        <translation>Lägg till Register</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="63"/>
         <source>Add Shared Table</source>
-        <translation type="unfinished">Lägg till Delad Tabell</translation>
+        <translation>Lägg till Delad Tabell</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="64"/>
@@ -2834,7 +2834,7 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="65"/>
         <source>Add Workspace</source>
-        <translation type="unfinished">Lägg till Arbetsyta</translation>
+        <translation>Lägg till Arbetsyta</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="66"/>
@@ -2849,17 +2849,17 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="68"/>
         <source>Add a 3-axis accelerometer group</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till en 3-axlig accelerometergrupp</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="69"/>
         <source>Add a 3-axis gyroscope group</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till en 3-axlig gyroskopgrupp</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="70"/>
         <source>Add a 3D plot group</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till en 3D-plottgrupp</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="71"/>
@@ -2874,7 +2874,7 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="73"/>
         <source>Add a button control</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till en knappkontroll</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="74"/>
@@ -2889,7 +2889,7 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="76"/>
         <source>Add a data table view group</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till en datatabellsvisningsgrupp</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="77"/>
@@ -2899,42 +2899,42 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="78"/>
         <source>Add a dataset shown as a 2D plot</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till ett dataset som visas som ett 2D-diagram</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="79"/>
         <source>Add a dataset shown as a bar or level</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till ett dataset som visas som en stapel eller nivå</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="80"/>
         <source>Add a dataset shown as a compass</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till ett dataset som visas som en kompass</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="81"/>
         <source>Add a dataset shown as a gauge</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till ett dataset som visas som en mätare</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="82"/>
         <source>Add a dataset shown as an FFT plot</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till ett dataset som visas som ett FFT-diagram</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="83"/>
         <source>Add a dataset shown as an LED indicator</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till ett dataset som visas som en LED-indikator</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="84"/>
         <source>Add a dataset shown as an analog meter</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till ett dataset som visas som en analog mätare</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="85"/>
         <source>Add a folder inside this folder</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till en mapp inuti denna mapp</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="86"/>
@@ -2959,12 +2959,12 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="90"/>
         <source>Add a knob control</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till en rattenkontroll</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="91"/>
         <source>Add a map group for GPS data</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till en kartgrupp för GPS-data</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="92"/>
@@ -2979,7 +2979,7 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="94"/>
         <source>Add a multi-channel bar panel group</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till en flerkanals stapelpanelgrupp</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="95"/>
@@ -2999,52 +2999,52 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="98"/>
         <source>Add a plain dataset</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till en enkel datauppsättning</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="99"/>
         <source>Add a plain dataset container group</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till en enkel datauppsättningscontainergrupp</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="100"/>
         <source>Add a plot with multiple signals</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till ett diagram med flera signaler</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="101"/>
         <source>Add a register to this shared table</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till ett register till denna delade tabell</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="102"/>
         <source>Add a script-drawn painter group</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till en skriptritad målargrupp</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="103"/>
         <source>Add a shared-memory table</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till en delat-minne-tabell</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="104"/>
         <source>Add a slider control</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till en skjutreglage-kontroll</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="105"/>
         <source>Add a text field control</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till en textfältskontroll</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="106"/>
         <source>Add a toggle control</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till en växlingskontroll</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="107"/>
         <source>Add a top-level folder in this section</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till en mapp på toppnivå i denna sektion</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="108"/>
@@ -3059,12 +3059,12 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="110"/>
         <source>Add a web viewer group</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till en webbvisargrupp</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="111"/>
         <source>Add a workspace to the project</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till en arbetsyta till projektet</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="112"/>
@@ -3074,12 +3074,12 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="113"/>
         <source>Add an action to the project</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till en åtgärd till projektet</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="114"/>
         <source>Add an image or video stream group</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till en bild- eller videoströmgrupp</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="115"/>
@@ -3094,7 +3094,7 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="117"/>
         <source>Add an output control panel</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till en utdatakontrollpanel</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="118"/>
@@ -3119,7 +3119,7 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="122"/>
         <source>Add another data source to the project</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till en annan datakälla till projektet</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="123"/>
@@ -3199,12 +3199,12 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="138"/>
         <source>Clean Up Unresolved Widgets</source>
-        <translation type="unfinished"/>
+        <translation>Rensa Upp Olösta Widgetar</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="139"/>
         <source>Clear All Workspaces</source>
-        <translation type="unfinished"/>
+        <translation>Rensa Alla Arbetsytor</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="140"/>
@@ -3268,1005 +3268,1025 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="152"/>
+        <source>Compare Project</source>
+        <translation>Jämför Projekt</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="153"/>
+        <source>Compare the selected session against the project open in the editor</source>
+        <translation>Jämför den valda sessionen mot projektet som är öppet i redigeraren</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="154"/>
         <source>Compass</source>
         <translation>Kompass</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="153"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="155"/>
         <source>Configure the MQTT publisher</source>
-        <translation type="unfinished"/>
+        <translation>Konfigurera MQTT-utgivaren</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="154"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="156"/>
         <source>Connect</source>
         <translation>Anslut</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="155"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="157"/>
         <source>Connect or disconnect from the configured device</source>
         <translation>Anslut eller koppla från den konfigurerade enheten</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="156"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="158"/>
         <source>Connection Diagnostics</source>
         <translation>Anslutningsdiagnostik</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="157"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="159"/>
         <source>Console</source>
         <translation>Konsol</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="158"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="160"/>
         <source>Console Echo</source>
         <translation>Konsoleko</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="159"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="161"/>
         <source>Console Only Mode</source>
         <translation>Endast Konsolläge</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="160"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="162"/>
         <source>Console Timestamps</source>
         <translation>Konsoltidsstämplar</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="161"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="163"/>
         <source>Console Transcript</source>
         <translation>Konsoltranskript</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="162"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="164"/>
         <source>Create a new JSON project</source>
         <translation>Skapa ett nytt JSON-projekt</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="163"/>
-        <source>Customize Workspaces</source>
-        <translation type="unfinished">Anpassa Arbetsytor</translation>
-    </message>
-    <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="164"/>
-        <source>Data Grid</source>
-        <translation type="unfinished">Datarutnät</translation>
-    </message>
-    <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="165"/>
+        <source>Customize Workspaces</source>
+        <translation>Anpassa Arbetsytor</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="166"/>
+        <source>Data Grid</source>
+        <translation>Datarutnät</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="167"/>
         <source>Dataset</source>
         <translation>Dataset</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="166"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="168"/>
         <source>Dataset Container</source>
-        <translation type="unfinished"/>
+        <translation>Datauppsättningscontainer</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="167"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="169"/>
         <source>Delete</source>
         <translation>Ta Bort</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="168"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="170"/>
         <source>Delete the selected session</source>
         <translation>Ta bort den valda sessionen</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="169"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="171"/>
         <source>Delete this item</source>
-        <translation type="unfinished"/>
+        <translation>Ta bort detta objekt</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="170"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="172"/>
         <source>Deploy</source>
         <translation>Distribuera</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="171"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="173"/>
         <source>Deploy Operator App</source>
         <translation>Distribuera Operatörsapp</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="172"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="174"/>
         <source>Disconnect</source>
         <translation>Koppla Från</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="173"/>
-        <source>Drop workspace widgets whose source is gone</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="174"/>
-        <source>Duplicate</source>
-        <translation type="unfinished">Duplicera</translation>
-    </message>
-    <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="175"/>
-        <source>Duplicate this item</source>
-        <translation type="unfinished"/>
+        <source>Drop workspace widgets whose source is gone</source>
+        <translation>Ta bort arbetsytewidgetar vars källa är borta</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="176"/>
+        <source>Duplicate</source>
+        <translation>Duplicera</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="177"/>
+        <source>Duplicate this item</source>
+        <translation>Duplicera detta objekt</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="178"/>
         <source>Echo transmitted data in the console</source>
         <translation>Eka överförda data i konsolen</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="177"/>
-        <source>Edit Control Loop</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="178"/>
-        <source>Edit Frame Parser</source>
-        <translation type="unfinished">Redigera Frame-parser</translation>
-    </message>
-    <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="179"/>
-        <source>Edit Painter Code</source>
-        <translation type="unfinished">Redigera Painter-kod</translation>
+        <source>Edit Control Loop</source>
+        <translation>Redigera Kontrollslinga</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="180"/>
-        <source>Edit Transform Code</source>
-        <translation type="unfinished"/>
+        <source>Edit Frame Parser</source>
+        <translation>Redigera Frame-parser</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="181"/>
-        <source>Edit Workspace Widgets</source>
-        <translation type="unfinished"/>
+        <source>Edit Painter Code</source>
+        <translation>Redigera Painter-kod</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="182"/>
-        <source>Edit workspaces manually instead of using the automatic layout</source>
-        <translation type="unfinished"/>
+        <source>Edit Transform Code</source>
+        <translation>Redigera Transform-kod</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="183"/>
+        <source>Edit Workspace Widgets</source>
+        <translation>Redigera Workspace-widgetar</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="184"/>
+        <source>Edit workspaces manually instead of using the automatic layout</source>
+        <translation>Redigera workspaces manuellt istället för att använda automatisk layout</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="185"/>
         <source>Examples</source>
         <translation>Exempel</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="184"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="186"/>
         <source>Expand All</source>
         <translation>Expandera Alla</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="185"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="187"/>
         <source>Expand every item in the project tree</source>
         <translation>Expandera varje objekt i projektträdet</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="186"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="188"/>
         <source>Export</source>
         <translation>Exportera</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="187"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="189"/>
         <source>Export CSV</source>
         <translation>Exportera CSV</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="188"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="190"/>
         <source>Export PDF</source>
         <translation>Exportera PDF</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="189"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="191"/>
         <source>Export Registers</source>
-        <translation type="unfinished"/>
+        <translation>Exportera Register</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="190"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="192"/>
         <source>Export selected session to CSV</source>
         <translation>Exportera vald session till CSV</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="191"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="193"/>
         <source>Export this table's registers to CSV</source>
-        <translation type="unfinished"/>
+        <translation>Exportera denna tabells register till CSV</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="192"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="194"/>
         <source>Extensions</source>
         <translation>Tillägg</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="193"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="195"/>
         <source>FFT Plot</source>
         <translation>FFT-diagram</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="194"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="196"/>
         <source>File Transmission</source>
         <translation>Filöverföring</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="195"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="197"/>
         <source>Fill every empty dataset alias from its title</source>
-        <translation type="unfinished"/>
+        <translation>Fyll varje tomt dataset-alias från dess titel</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="196"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="198"/>
         <source>Freeze Dashboard</source>
         <translation>Frys Instrumentpanel</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="197"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="199"/>
         <source>Full Screen</source>
         <translation>Helskärm</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="198"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="200"/>
         <source>GPS Map</source>
         <translation>GPS-karta</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="199"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="201"/>
         <source>Gauge</source>
         <translation>Mätare</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="200"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="202"/>
         <source>Generate a PDF report for the selected session</source>
         <translation>Generera en PDF-rapport för den valda sessionen</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="201"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="203"/>
         <source>Generate a project from a Protocol Buffers (.proto) schema</source>
         <translation>Generera ett projekt från ett Protocol Buffers-schema (.proto)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="202"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="204"/>
         <source>Generic</source>
-        <translation type="unfinished">Generisk</translation>
+        <translation>Generisk</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="203"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="205"/>
         <source>Group</source>
         <translation>Grupp</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="204"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="206"/>
         <source>Gyroscope</source>
         <translation>Gyroskop</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="205"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="207"/>
         <source>HID</source>
         <translation>HID</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="206"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="208"/>
+        <source>Help</source>
+        <translation>Hjälp</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="209"/>
         <source>Help Center</source>
         <translation>Hjälpcenter</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="207"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="210"/>
         <source>Hex Display</source>
         <translation>Hexadecimal Visning</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="208"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="211"/>
         <source>Hide</source>
-        <translation type="unfinished">Dölj</translation>
+        <translation>Dölj</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="209"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="212"/>
         <source>Hide this item from the dashboard and frame building</source>
-        <translation type="unfinished"/>
+        <translation>Dölj detta objekt från instrumentpanelen och rambyggnaden</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="210"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="213"/>
         <source>Image</source>
         <translation>Bild</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="211"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="214"/>
         <source>Image View</source>
-        <translation type="unfinished">Bildvisning</translation>
+        <translation>Bildvisning</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="212"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="215"/>
         <source>Import Protobuf Schema</source>
         <translation>Importera Protobuf-schema</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="213"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="216"/>
         <source>Import Registers</source>
-        <translation type="unfinished"/>
+        <translation>Importera Register</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="214"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="217"/>
         <source>Import this table's registers from CSV</source>
-        <translation type="unfinished"/>
+        <translation>Importera denna tabells register från CSV</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="215"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="218"/>
         <source>Knob</source>
         <translation>Ratt</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="216"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="219"/>
         <source>LED Indicator</source>
         <translation>LED-indikator</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="217"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="220"/>
         <source>Level Indicator</source>
         <translation>Nivåindikator</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="218"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="221"/>
         <source>License Management</source>
         <translation>Licenshantering</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="219"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="222"/>
         <source>Lock</source>
         <translation>Lås</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="220"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="223"/>
         <source>Lock Project Editor</source>
         <translation>Lås Projektredigerare</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="221"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="224"/>
         <source>MDF4 File</source>
         <translation>MDF4-fil</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="222"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="225"/>
         <source>MQTT Publisher</source>
-        <translation type="unfinished"/>
+        <translation>MQTT-publicerare</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="223"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="226"/>
         <source>Macros</source>
         <translation>Makron</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="224"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="227"/>
         <source>Make every hidden group visible again</source>
-        <translation type="unfinished"/>
+        <translation>Gör alla dolda grupper synliga igen</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="225"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="228"/>
         <source>Manage your Serial Studio Pro license</source>
         <translation>Hantera din Serial Studio Pro-licens</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="226"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="229"/>
         <source>Meter</source>
-        <translation type="unfinished">Mätare</translation>
+        <translation>Mätare</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="227"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="230"/>
         <source>Minimize Window</source>
         <translation>Minimera Fönster</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="228"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="231"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="229"/>
-        <source>Move Down</source>
-        <translation type="unfinished">Flytta Ner</translation>
-    </message>
-    <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="230"/>
-        <source>Move Up</source>
-        <translation type="unfinished">Flytta Upp</translation>
-    </message>
-    <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="231"/>
-        <source>Move this item down among its siblings</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="232"/>
-        <source>Move this item out of every folder</source>
-        <translation type="unfinished"/>
+        <source>Move Down</source>
+        <translation>Flytta Ner</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="233"/>
-        <source>Move this item up among its siblings</source>
-        <translation type="unfinished"/>
+        <source>Move Up</source>
+        <translation>Flytta Upp</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="234"/>
-        <source>Move to Folder</source>
-        <translation type="unfinished">Flytta till Mapp</translation>
+        <source>Move this item down among its siblings</source>
+        <translation>Flytta detta objekt nedåt bland dess syskon</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="235"/>
+        <source>Move this item out of every folder</source>
+        <translation>Flytta detta objekt ut ur alla mappar</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="236"/>
+        <source>Move this item up among its siblings</source>
+        <translation>Flytta detta objekt uppåt bland dess syskon</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="237"/>
+        <source>Move to Folder</source>
+        <translation>Flytta till Mapp</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="238"/>
         <source>Multi-Plot</source>
         <translation>Flerplott</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="236"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="239"/>
         <source>Navigate Back</source>
         <translation>Navigera Tillbaka</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="237"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="240"/>
         <source>Navigate Forward</source>
         <translation>Navigera Framåt</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="238"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="241"/>
         <source>Network</source>
         <translation>Nätverk</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="239"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="242"/>
         <source>New</source>
         <translation>Ny</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="240"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="243"/>
         <source>New Folder</source>
-        <translation type="unfinished">Ny Mapp</translation>
+        <translation>Ny Mapp</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="241"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="244"/>
         <source>New Project</source>
         <translation>Nytt Projekt</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="242"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="245"/>
         <source>New Sub-Folder</source>
-        <translation type="unfinished">Ny Undermapp</translation>
+        <translation>Ny Undermapp</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="243"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="246"/>
         <source>Next Workspace</source>
         <translation>Nästa Arbetsyta</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="244"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="247"/>
         <source>Notifications</source>
         <translation>Notifikationer</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="245"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="248"/>
         <source>Open</source>
         <translation>Öppna</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="246"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="249"/>
         <source>Open CSV</source>
         <translation>Öppna CSV</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="247"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="250"/>
         <source>Open MDF4</source>
         <translation>Öppna MDF4</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="248"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="251"/>
         <source>Open Project</source>
         <translation>Öppna Projekt</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="249"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="252"/>
         <source>Open a session file</source>
         <translation>Öppna en sessionsfil</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="250"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="253"/>
         <source>Open an existing JSON project</source>
         <translation>Öppna ett befintligt JSON-projekt</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="251"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="254"/>
         <source>Open application settings and preferences</source>
         <translation>Öppna applikationsinställningar och preferenser</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="252"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="255"/>
         <source>Open the Assistant</source>
         <translation>Öppna Assistenten</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="253"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="256"/>
         <source>Open the Project Editor documentation</source>
         <translation>Öppna dokumentationen för Projektredigeraren</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="254"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="257"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
         <translation>Öppna Projektredigeraren för att skapa eller ändra din JSON-layout</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="255"/>
-        <source>Open the frame parser for this data source</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="256"/>
-        <source>Open the painter script for this group</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="257"/>
-        <source>Open the project control loop</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="258"/>
-        <source>Open the shared-memory documentation</source>
-        <translation type="unfinished"/>
+        <source>Open the frame parser for this data source</source>
+        <translation>Öppna ramtolkaren för denna datakälla</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="259"/>
-        <source>Open the value transform for this dataset</source>
-        <translation type="unfinished"/>
+        <source>Open the painter script for this group</source>
+        <translation>Öppna ritskriptet för denna grupp</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="260"/>
-        <source>Open this workspace to edit its widgets</source>
-        <translation type="unfinished"/>
+        <source>Open the project control loop</source>
+        <translation>Öppna projektets kontrollslinga</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="261"/>
+        <source>Open the session database documentation</source>
+        <translation>Öppna dokumentationen för sessionsdatabasen</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="262"/>
+        <source>Open the shared-memory documentation</source>
+        <translation>Öppna dokumentationen för delat minne</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="263"/>
+        <source>Open the value transform for this dataset</source>
+        <translation>Öppna värdetransformen för detta dataset</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="264"/>
+        <source>Open this workspace to edit its widgets</source>
+        <translation>Öppna denna arbetsyta för att redigera dess widgetar</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="265"/>
         <source>Output</source>
         <translation>Utgång</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="262"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="266"/>
         <source>Output Panel</source>
-        <translation type="unfinished">Utdatapanel</translation>
+        <translation>Utdatapanel</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="263"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="267"/>
         <source>Painter</source>
         <translation>Ritare</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="264"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="268"/>
         <source>Painter Widget</source>
-        <translation type="unfinished">Painter-widget</translation>
+        <translation>Painter-widget</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="265"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="269"/>
         <source>Pause</source>
         <translation>Pausa</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="266"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="270"/>
         <source>Play a CSV file as if it were live sensor data</source>
         <translation>Spela upp en CSV-fil som om den vore live sensordata</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="267"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="271"/>
         <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
         <translation>Spela upp en MDF4-fil som om den vore live sensordata (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="268"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="272"/>
         <source>Plot</source>
         <translation>Diagram</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="269"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="273"/>
         <source>Preferences</source>
         <translation>Inställningar</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="270"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="274"/>
         <source>Previous Workspace</source>
         <translation>Föregående Arbetsyta</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="271"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="275"/>
         <source>Problem Center</source>
         <translation>Problemcenter</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="272"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="276"/>
         <source>Process</source>
         <translation>Process</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="273"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="277"/>
         <source>Project Editor</source>
         <translation>Projektredigerare</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="274"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="278"/>
         <source>Project File Mode</source>
         <translation>Projektfilsläge</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="275"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="279"/>
         <source>Protobuf</source>
         <translation>Protobuf</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="276"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="280"/>
         <source>Quick Plot Mode</source>
         <translation>Snabbdiagramläge</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="277"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="281"/>
         <source>Quit</source>
         <translation>Avsluta</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="278"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="282"/>
         <source>Rebuild the automatic workspace layout</source>
-        <translation type="unfinished"/>
+        <translation>Bygg om den automatiska arbetsytelayouten</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="279"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="283"/>
         <source>Redo</source>
         <translation>Gör Om</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="280"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="284"/>
         <source>Redo the last undone project edit</source>
         <translation>Gör om den senast ångrade projektredigeringen</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="281"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="285"/>
         <source>Remote Dashboard</source>
         <translation>Fjärrinstrumentpanel</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="282"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="286"/>
         <source>Remove every user workspace</source>
-        <translation type="unfinished"/>
+        <translation>Ta bort alla användararbetsytor</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="283"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="287"/>
         <source>Rename</source>
-        <translation type="unfinished">Byt Namn</translation>
+        <translation>Byt Namn</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="284"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="288"/>
         <source>Rename this item</source>
-        <translation type="unfinished"/>
+        <translation>Byt namn på detta objekt</translation>
     </message>
     <message>
         <source>Recover</source>
         <translation type="vanished">Återställ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="285"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="289"/>
         <source>Replay</source>
         <translation>Spela Upp</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="286"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="290"/>
         <source>Replay selected session on the dashboard</source>
         <translation>Spela upp vald session på instrumentpanelen</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="287"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="291"/>
         <source>Reset</source>
         <translation>Återställ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="288"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="292"/>
         <source>Reset to Auto Layout</source>
-        <translation type="unfinished">Återställ till Automatisk Layout</translation>
+        <translation>Återställ till Automatisk Layout</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="289"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="293"/>
         <source>Restore</source>
         <translation>Återställ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="290"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="294"/>
         <source>Restore Backup</source>
         <translation>Återställ Säkerhetskopia</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="291"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="295"/>
         <source>Restore Project</source>
         <translation>Återställ Projekt</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="292"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="296"/>
         <source>Restore a recent automatic snapshot of the current project</source>
         <translation>Återställ en nyligen automatisk ögonblicksbild av det aktuella projektet</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="293"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="297"/>
         <source>Restore the project file from this session file</source>
         <translation>Återställ projektfilen från denna sessionsfil</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="294"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="298"/>
         <source>Resume</source>
         <translation>Återuppta</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="295"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="299"/>
         <source>Review project, link, and script diagnostics</source>
         <translation>Granska projekt-, länk- och skriptdiagnostik</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="296"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="300"/>
         <source>Run API commands and script macros interactively</source>
         <translation>Kör API-kommandon och skriptmakron interaktivt</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="297"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="301"/>
         <source>Save</source>
         <translation>Spara</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="298"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="302"/>
         <source>Save As</source>
         <translation>Spara Som</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="299"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="303"/>
         <source>Save Project</source>
         <translation>Spara Projekt</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="300"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="304"/>
         <source>Save Project As</source>
         <translation>Spara Projekt Som</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="301"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="305"/>
         <source>Search</source>
         <translation>Sök</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="302"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="306"/>
         <source>Search and run any Serial Studio command</source>
-        <translation type="unfinished"/>
+        <translation>Sök och kör valfritt Serial Studio-kommando</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="303"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="307"/>
         <source>Seed Aliases from Titles</source>
-        <translation type="unfinished">Fyll Alias från Titlar</translation>
+        <translation>Fyll Alias från Titlar</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="304"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="308"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>Välj Bluetooth Low Energy-kommunikation</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="305"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="309"/>
         <source>Select CAN Bus communication (Pro)</source>
         <translation>Välj CAN Bus-kommunikation (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="306"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="310"/>
         <source>Select HID device communication (Pro)</source>
         <translation>Välj HID-enhetskommunikation (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="307"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="311"/>
         <source>Select MODBUS communication (Pro)</source>
         <translation>Välj MODBUS-kommunikation (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="308"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="312"/>
         <source>Select Serial port (UART) communication</source>
         <translation>Välj seriell port (UART)-kommunikation</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="309"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="313"/>
         <source>Select TCP/UDP network communication</source>
         <translation>Välj TCP/UDP-nätverkskommunikation</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="310"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="314"/>
         <source>Select audio input device (Pro)</source>
         <translation>Välj ljudingångsenhet (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="311"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="315"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>Välj processrörkommunikation (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="312"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="316"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>Välj rå USB-kommunikation (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="313"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="317"/>
         <source>Session Database</source>
         <translation>Sessionsdatabas</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="314"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="318"/>
         <source>Sessions</source>
         <translation>Sessioner</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="315"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="319"/>
         <source>Set a password and lock the Project Editor</source>
         <translation>Ange ett lösenord och lås Projektredigeraren</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="316"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="320"/>
         <source>Set a password to prevent session deletions</source>
         <translation>Ange ett lösenord för att förhindra radering av sessioner</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="317"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="321"/>
         <source>Shared Memory Help</source>
-        <translation type="unfinished"/>
+        <translation>Hjälp för Delat Minne</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="318"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="322"/>
         <source>Show</source>
-        <translation type="unfinished">Visa</translation>
+        <translation>Visa</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="319"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="323"/>
         <source>Show All Hidden Groups</source>
-        <translation type="unfinished"/>
+        <translation>Visa Alla Dolda Grupper</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="320"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="324"/>
         <source>Show application info and license details</source>
         <translation>Visa applikationsinformation och licensdetaljer</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="321"/>
-        <source>Show this dataset as a 2D plot</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="322"/>
-        <source>Show this dataset as a bar or level</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="323"/>
-        <source>Show this dataset as a compass</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="324"/>
-        <source>Show this dataset as a gauge</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="325"/>
-        <source>Show this dataset as a waterfall plot</source>
-        <translation type="unfinished"/>
+        <source>Show this dataset as a 2D plot</source>
+        <translation>Visa denna datamängd som ett 2D-diagram</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="326"/>
-        <source>Show this dataset as an FFT plot</source>
-        <translation type="unfinished"/>
+        <source>Show this dataset as a bar or level</source>
+        <translation>Visa denna datamängd som en stapel eller nivå</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="327"/>
-        <source>Show this dataset as an LED indicator</source>
-        <translation type="unfinished"/>
+        <source>Show this dataset as a compass</source>
+        <translation>Visa denna datamängd som en kompass</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="328"/>
-        <source>Show this dataset as an analog meter</source>
-        <translation type="unfinished"/>
+        <source>Show this dataset as a gauge</source>
+        <translation>Visa denna datamängd som en mätare</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="329"/>
+        <source>Show this dataset as a waterfall plot</source>
+        <translation>Visa denna datamängd som ett vattenfallsdiagram</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="330"/>
+        <source>Show this dataset as an FFT plot</source>
+        <translation>Visa denna datamängd som en FFT-plot</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="331"/>
+        <source>Show this dataset as an LED indicator</source>
+        <translation>Visa denna datamängd som en LED-indikator</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="332"/>
+        <source>Show this dataset as an analog meter</source>
+        <translation>Visa denna datamängd som en analog mätare</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="333"/>
         <source>Show timestamps in the console</source>
         <translation>Visa tidsstämplar i konsolen</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="330"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="334"/>
         <source>Slider</source>
         <translation>Skjutreglage</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="331"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="335"/>
         <source>Start Menu</source>
         <translation>Startmeny</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="332"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="336"/>
         <source>Stopwatch</source>
         <translation>Stoppur</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="333"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="337"/>
         <source>Switch to Console Only mode (no parsing)</source>
         <translation>Växla till läget Endast Konsol (ingen parsning)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="334"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="338"/>
         <source>Switch to Project File mode (parse via a project)</source>
         <translation>Växla till läget Projektfil (parsning via ett projekt)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="335"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="339"/>
         <source>Switch to Quick Plot mode (comma-separated values)</source>
         <translation>Växla till läget Snabbdiagram (kommaseparerade värden)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="336"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="340"/>
         <source>Table</source>
         <translation>Tabell</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="337"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="341"/>
         <source>Text Field</source>
         <translation>Textfält</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="338"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="342"/>
         <source>Toggle</source>
         <translation>Växlare</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="339"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="343"/>
         <source>Toggle hexadecimal console display</source>
         <translation>Växla hexadecimal konsoldisplay</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="340"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="344"/>
         <source>Tools</source>
         <translation>Verktyg</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="341"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="345"/>
         <source>Top Level</source>
-        <translation type="unfinished">Toppnivå</translation>
+        <translation>Toppnivå</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="342"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="346"/>
         <source>UART</source>
         <translation>UART</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="343"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="347"/>
         <source>USB</source>
         <translation>USB</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="344"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="348"/>
         <source>Undo</source>
         <translation>Ångra</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="345"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="349"/>
         <source>Undo the last project edit</source>
         <translation>Ångra den senaste projektredigeringen</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="346"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="350"/>
         <source>Unlock</source>
         <translation>Lås Upp</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="347"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="351"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
         <translation>Visa detaljerad dokumentation och ställ frågor på DeepWiki</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="348"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="352"/>
         <source>Visualizations</source>
-        <translation type="unfinished"/>
+        <translation>Visualiseringar</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="349"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="353"/>
         <source>Watch another Serial Studio instance's dashboard over the network</source>
         <translation>Bevaka en annan Serial Studio-instans instrumentpanel över nätverket</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="350"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="354"/>
         <source>Waterfall</source>
-        <translation type="unfinished">Vattenfall</translation>
+        <translation>Vattenfall</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="351"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="355"/>
         <source>Web View</source>
         <translation>Webbvisning</translation>
     </message>
@@ -5445,33 +5465,33 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
 <context>
     <name>DataModel::ControlScriptEditor</name>
     <message>
-        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="294"/>
+        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="306"/>
         <source>Select Javascript file to import</source>
         <translation>Välj Javascript-fil att importera</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="362"/>
-        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="373"/>
+        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="374"/>
+        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="385"/>
         <source>Code Validation Failed</source>
         <translation>Kodvalidering Misslyckades</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="363"/>
+        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="375"/>
         <source>Line %1: %2</source>
         <translation>Rad %1: %2</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="374"/>
+        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="386"/>
         <source>The script must define a setup() and/or loop() function.</source>
         <translation>Skriptet måste definiera en setup()- och/eller loop()-funktion.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="379"/>
+        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="391"/>
         <source>Code Validation Successful</source>
         <translation>Kodvalidering Lyckades</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="380"/>
+        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="392"/>
         <source>No syntax errors detected in the control loop.</source>
         <translation>Inga syntaxfel upptäcktes i kontrollslingan.</translation>
     </message>
@@ -6026,39 +6046,39 @@ v
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3002"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3140"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3090"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3228"/>
         <source>Channel %1</source>
         <translation>Kanal %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3151"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3239"/>
         <source>Audio Input</source>
         <translation>Ljudingång</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3011"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3156"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3099"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3244"/>
         <source>Quick Plot</source>
         <translation>Snabbdiagram</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="578"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="581"/>
         <source>Block pool exhausted</source>
         <translation>Block-poolen är uttömd</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="580"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="583"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, session DB, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
         <translation>En nedströmskonsument (instrumentpanel, CSV/MDF4-export, sessions-DB eller API-prenumerant) dränerar inte tillräckligt snabbt, så data tappas bort från visningen och från eventuell aktiv inspelning. Inaktivera en tung konsument eller minska datahastigheten.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2676"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2764"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>JavaScript-transform överskred budgeten</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2677"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2765"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>En datasettransform tog längre än %1 ms; återstående dataset i framen föll tillbaka till råvärden tills nästa frame. Profilera eller förenkla transformkoden.</translation>
     </message>
@@ -6071,17 +6091,17 @@ v
         <translation type="vanished">En nedströmskonsument (dashboard, CSV/MDF4-export, sessionsdatabas eller API-prenumerant) tömmer inte frames tillräckligt snabbt. Serial Studio faller tillbaka till per-frame-allokeringar tills kön är borta. Inaktivera en tung konsument eller sänk datahastigheten.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2962"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3050"/>
         <source>Device A</source>
         <translation>Enhet A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3018"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3106"/>
         <source>Quick Plot Data</source>
         <translation>Snabbdiagramdata</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3030"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3118"/>
         <source>Multiple Plots</source>
         <translation>Flera Diagram</translation>
     </message>
@@ -6333,12 +6353,12 @@ Exempel (HEX):  48 65 6C 6C 6F</translation>
 <context>
     <name>DataModel::JsCodeEditor</name>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="227"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="234"/>
         <source>Change Scripting Language?</source>
         <translation>Byt Skriptspråk?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="228"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="235"/>
         <source>Switching the scripting language replaces the current parser code with the equivalent template in the new language.
 
 Any unsaved changes are lost. Continue?</source>
@@ -6347,32 +6367,32 @@ Any unsaved changes are lost. Continue?</source>
 Alla osparade ändringar går förlorade. Fortsätt?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="384"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="391"/>
         <source>Select Javascript file to import</source>
         <translation>Välj Javascript-fil att importera</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="384"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="391"/>
         <source>Select Lua file to import</source>
         <translation>Välj Lua-fil att importera</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="415"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="422"/>
         <source>Code Validation Successful</source>
         <translation>Kodvalidering Lyckades</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="416"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="423"/>
         <source>No syntax errors detected in the parser code.</source>
         <translation>Inga syntaxfel upptäcktes i parserkoden.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="524"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="531"/>
         <source>Select Frame Parser Template</source>
         <translation>Välj Ramparsersmall</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="525"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="532"/>
         <source>Choose a template to load:</source>
         <translation>Välj en mall att ladda:</translation>
     </message>
@@ -6558,17 +6578,17 @@ Alla osparade ändringar går förlorade. Fortsätt?</translation>
 <context>
     <name>DataModel::OutputCodeEditor</name>
     <message>
-        <location filename="../../src/DataModel/Editors/OutputCodeEditor.cpp" line="293"/>
+        <location filename="../../src/DataModel/Editors/OutputCodeEditor.cpp" line="302"/>
         <source>Select Javascript file to import</source>
         <translation>Välj Javascript-fil att importera</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/OutputCodeEditor.cpp" line="350"/>
+        <location filename="../../src/DataModel/Editors/OutputCodeEditor.cpp" line="359"/>
         <source>Select Output Widget Template</source>
         <translation>Välj Mall för Utgångswidget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/OutputCodeEditor.cpp" line="351"/>
+        <location filename="../../src/DataModel/Editors/OutputCodeEditor.cpp" line="360"/>
         <source>Choose a template to load:</source>
         <translation>Välj en mall att ladda:</translation>
     </message>
@@ -6576,27 +6596,27 @@ Alla osparade ändringar går förlorade. Fortsätt?</translation>
 <context>
     <name>DataModel::PainterCodeEditor</name>
     <message>
-        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="303"/>
+        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="313"/>
         <source>Select Javascript file to import</source>
         <translation>Välj Javascript-fil att importera</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="389"/>
+        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="399"/>
         <source>Select Painter Widget Template</source>
         <translation>Välj Mall för Painter-widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="390"/>
+        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="400"/>
         <source>Choose a template to load:</source>
         <translation>Välj en mall att ladda:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="432"/>
+        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="442"/>
         <source>Add datasets for this template?</source>
         <translation>Lägg till dataset för denna mall?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="433"/>
+        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="443"/>
         <source>"%1" expects %2 dataset(s); the current group has %3.
 
 Add %4 dataset(s) using the template's defaults?</source>
@@ -6648,7 +6668,7 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>Rita varje kurva mot tid eller mot sampelnummer</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="414"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="413"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="314"/>
         <source>Logarithmic X Axis</source>
         <translation>Logaritmisk X-axel</translation>
@@ -6659,7 +6679,7 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>Skala X-axeln i dekader; tillgänglig när X-axelkällan är Samplingar (inte Tid)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="427"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="426"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="327"/>
         <source>Logarithmic Y Axis</source>
         <translation>Logaritmisk Y-axel</translation>
@@ -6815,22 +6835,22 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>Bildkonfiguration</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="239"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="238"/>
         <source>Virtual Dataset</source>
         <translation>Virtuell Datauppsättning</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="240"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="239"/>
         <source>Virtual datasets compute their value from transforms and data tables, they do not require a frame index</source>
         <translation>Virtuella datauppsättningar beräknar sitt värde från transformeringar och datatabeller, de kräver inget ramindex</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="578"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="577"/>
         <source>Scale the frequency axis in decades so low octaves stay readable; applies to both the FFT plot and the waterfall</source>
         <translation>Skala frekvensaxeln i dekader så att låga oktaver förblir läsbara; gäller både FFT-plotten och vattenfallet</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="694"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="693"/>
         <source>Fixed decimal places for the value display; overrides the format (-1 = auto)</source>
         <translation>Fasta decimaler för värdevisningen; åsidosätter formatet (-1 = auto)</translation>
     </message>
@@ -7262,7 +7282,7 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>Anslutningsinställningar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="215"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="214"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="692"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1108"/>
         <source>General Information</source>
@@ -7427,137 +7447,137 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>Antal gånger kommandot ska skickas vid varje utlösning</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="227"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="226"/>
         <source>Untitled Dataset</source>
         <translation>Namnlös Datamängd</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="228"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="227"/>
         <source>Dataset Title</source>
         <translation>Datamängdstitel</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="229"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="228"/>
         <source>Name of the dataset, used for labeling and identification</source>
         <translation>Namn på datamängden, används för märkning och identifiering</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="251"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="250"/>
         <source>Hide on Dashboard</source>
         <translation>Dölj på Instrumentpanelen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="252"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="251"/>
         <source>Suppress this dataset's standalone dashboard tile; the painter widget can still read its values</source>
         <translation>Undertryck detta datasets fristående instrumentpanelspanel; painter-widgeten kan fortfarande läsa dess värden</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="324"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="323"/>
         <source>Automatic</source>
         <translation>Automatisk</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="325"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="324"/>
         <source>Widget Color</source>
         <translation>Widgetfärg</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="326"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="325"/>
         <source>Custom display color for this dataset; automatic uses the theme palette</source>
         <translation>Anpassad visningsfärg för detta dataset; automatisk använder temats palett</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="304"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="303"/>
         <source>Stable name</source>
         <translation>Stabilt namn</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="305"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="304"/>
         <source>Script Alias</source>
         <translation>Skriptalias</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="306"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="305"/>
         <source>Stable name for getDataset-style script/API lookups; must be unique (optional)</source>
         <translation>Stabilt namn för getDataset-stil skript/API-uppslagningar; måste vara unikt (valfritt)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="346"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="345"/>
         <source>Lower bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>Nedre gräns för datauppsättningens värdeområde; widgets och FFT använder detta som standard när deras eget område inte är angivet</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="358"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="357"/>
         <source>Upper bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>Övre gräns för datauppsättningens värdeområde; widgets och FFT använder detta som standard när deras eget område inte är angivet</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="402"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="401"/>
         <source>Choose Time or a dataset to drive the X-Axis in plots</source>
         <translation>Välj Tid eller en datauppsättning för att styra X-axeln i diagram</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="415"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="414"/>
         <source>Scale the X axis in decades; available when the X-Axis source is Samples or a dataset (not Time)</source>
         <translation>Skala X-axeln i dekader; tillgänglig när X-axelkällan är Samplingar eller en datauppsättning (inte Tid)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="428"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="427"/>
         <source>Scale the Y axis in decades; values at or below zero are clamped</source>
         <translation>Skala Y-axeln i dekader; värden vid eller under noll begränsas</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="443"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="442"/>
         <source>Frequency Analysis</source>
         <translation>Frekvensanalys</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="480"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="479"/>
         <source>Peak Ballistics</source>
         <translation>Toppballistik</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="481"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="480"/>
         <source>Analyzer-style display: peaks rise instantly and decay smoothly over the release time</source>
         <translation>Analysatorliknande visning: toppar stiger omedelbart och avtar mjukt över frisläppningstiden</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="493"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="492"/>
         <source>Ballistics Release (ms)</source>
         <translation>Ballistisk Frisläppning (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="494"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="493"/>
         <source>Decay time for the ballistics display (50-5000 ms)</source>
         <translation>Avklingningstid för ballistikvisningen (50-5000 ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="510"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="509"/>
         <source>Choose Time (default) or any dataset whose value drives the Y axis -- produces a Campbell diagram when bound to e.g. RPM</source>
         <translation>Välj Tid (standard) eller valfri datamängd vars värde styr Y-axeln -- producerar ett Campbell-diagram när det binds till t.ex. RPM</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="550"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="549"/>
         <source>FFT Window Function</source>
         <translation>FFT-fönsterfunktion</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="551"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="550"/>
         <source>Window applied before the transform to reduce spectral leakage; affects both the FFT plot and the waterfall</source>
         <translation>Fönster som appliceras före transformationen för att minska spektralläckage; påverkar både FFT-plotten och vattenfallet</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="577"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="576"/>
         <source>Logarithmic Frequency Axis</source>
         <translation>Logaritmisk Frekvensaxel</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="740"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="739"/>
         <source>Hold Min/Max Markers</source>
         <translation>Behåll Min/max-markörer</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="741"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="740"/>
         <source>Show hold markers at the lowest and highest values observed since the last data reset</source>
         <translation>Visa hållmarkörer vid de lägsta och högsta värdena som observerats sedan senaste dataåterställningen</translation>
     </message>
@@ -7566,39 +7586,39 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">Skala FFT-frekvensaxeln i dekader så att låga oktaver förblir läsbara</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="591"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="715"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="590"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="714"/>
         <source>Minimum Value (optional)</source>
         <translation>Minimivärde (valfritt)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="592"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="591"/>
         <source>Lower bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>Nedre gräns för datanormalisering; återgår till datasetets värdeområde om den lämnas odefinierad</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="604"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="727"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="603"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="726"/>
         <source>Maximum Value (optional)</source>
         <translation>Maximivärde (valfritt)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="605"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="604"/>
         <source>Upper bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>Övre gräns för datanormalisering; återgår till datasetets värdeområde om den lämnas odefinierad</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="716"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="715"/>
         <source>Lower bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>Nedre gräns för mätare- eller stapelområdet; återgår till datasetets värdeområde om den lämnas odefinierad</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="728"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="727"/>
         <source>Upper bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>Övre gräns för mätare- eller stapelområdet; återgår till datasetets värdeområde om den lämnas odefinierad</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="693"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="692"/>
         <source>Decimal Points</source>
         <translation>Decimalpunkter</translation>
     </message>
@@ -7612,7 +7632,7 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>På</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="784"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="783"/>
         <source>LED lights up when value meets or exceeds this threshold; define alarm bands for multi-state colors</source>
         <translation>LED lyser när värdet når eller överskrider detta tröskelvärde; definiera larmband för flertillståndsfärger</translation>
     </message>
@@ -7657,7 +7677,7 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>Rensa Arbetsytor</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="267"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="266"/>
         <source>Frame Index</source>
         <translation>Ramindex</translation>
     </message>
@@ -7675,42 +7695,42 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>Kontrollslinga</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="268"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="267"/>
         <source>Frame position used for aligning datasets in time</source>
         <translation>Ramposition som används för att tidsjustera datamängder</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="279"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="278"/>
         <source>Measurement Unit</source>
         <translation>Mätenhet</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="278"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="277"/>
         <source>Volts, Amps, etc.</source>
         <translation>Volt, Ampere, etc.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="280"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="279"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
         <translation>Mätenhet, såsom volt eller ampere (valfritt)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="373"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="372"/>
         <source>Plot Settings</source>
         <translation>Diagraminställningar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="387"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="386"/>
         <source>Enable Plot Widget</source>
         <translation>Aktivera Diagramwidget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="388"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="387"/>
         <source>Plot data in real-time</source>
         <translation>Rita data i realtid</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="401"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="400"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="298"/>
         <source>X-Axis Source</source>
         <translation>X-axelkälla</translation>
@@ -7740,27 +7760,27 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">FFT-konfiguration</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="456"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="455"/>
         <source>Enable FFT Analysis</source>
         <translation>Aktivera FFT-analys</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="457"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="456"/>
         <source>Perform frequency-domain analysis of the dataset</source>
         <translation>Utför frekvensdomänanalys av datasetet</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="467"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="466"/>
         <source>Enable Waterfall Plot</source>
         <translation>Aktivera Vattenfallsdiagram</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="468"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="467"/>
         <source>Show a scrolling spectrogram of frequency content over time (Pro)</source>
         <translation>Visa ett rullande spektrogram av frekvensinnehåll över tid (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="509"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="508"/>
         <source>Waterfall Y Axis</source>
         <translation>Vattenfall Y-axel</translation>
     </message>
@@ -7769,22 +7789,22 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">Välj Tid (standard) eller valfri datamängd vars värde styr Y-axeln — producerar ett Campbell-diagram när det binds till t.ex. RPM</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="535"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="534"/>
         <source>FFT Window Size</source>
         <translation>FFT-fönsterstorlek</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="536"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="535"/>
         <source>Number of samples used for each FFT calculation window</source>
         <translation>Antal sampel som används för varje FFT-beräkningsfönster</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="564"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="563"/>
         <source>FFT Sampling Rate (Hz, required)</source>
         <translation>FFT-samplingsfrekvens (Hz, krävs)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="565"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="564"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
         <translation>Samplingsfrekvens som används för FFT (i Hz)</translation>
     </message>
@@ -7805,17 +7825,17 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">Övre gräns för datanormalisering</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="620"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="619"/>
         <source>Widget Settings</source>
         <translation>Widget-inställningar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="636"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="635"/>
         <source>Widget</source>
         <translation>Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="637"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="636"/>
         <source>Select the visual widget used to display this dataset</source>
         <translation>Välj den visuella widget som används för att visa detta dataset</translation>
     </message>
@@ -7837,29 +7857,29 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="731"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="663"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="690"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="662"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="689"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="366"/>
         <source>Auto</source>
         <translation>Auto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="664"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="663"/>
         <source>Tick Count</source>
         <translation>Antal Markeringar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="665"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="664"/>
         <source>Major-tick count on the dial scale (0 = auto-fit to widget size)</source>
         <translation>Antal huvudmarkeringar på urtavlans skala (0 = anpassa automatiskt till widgetens storlek)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="679"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="678"/>
         <source>Label Format</source>
         <translation>Etikettformat</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="680"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="679"/>
         <source>Decimal places or notation used on tick labels and the value display</source>
         <translation>Decimaler eller notation som används på markeringsetiketter och värdevisningen</translation>
     </message>
@@ -7900,22 +7920,22 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">Utlöser ett visuellt larm när värdet överskrider detta tröskelvärde</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="756"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="755"/>
         <source>LED Display Settings</source>
         <translation>Inställningar för LED-display</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="769"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="768"/>
         <source>Show in LED Panel</source>
         <translation>Visa i LED-Panel</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="770"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="769"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>Aktivera visuell statusövervakning med en LED-display</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="783"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="782"/>
         <source>LED On Threshold (required)</source>
         <translation>LED-tröskelvärde för På (obligatoriskt)</translation>
     </message>
@@ -8286,13 +8306,13 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>Värdeområde</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="345"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="344"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1199"/>
         <source>Minimum Value</source>
         <translation>Minimivärde</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="357"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="356"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1208"/>
         <source>Maximum Value</source>
         <translation>Maximivärde</translation>
@@ -9725,24 +9745,34 @@ Giltigt format: 01 A2 FF 3C</translation>
 <context>
     <name>DatabaseCommandBindings</name>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseCommandBindings.qml" line="69"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseCommandBindings.qml" line="79"/>
         <source>Unlock the session file to delete sessions</source>
         <translation>Lås upp sessionsfilen för att radera sessioner</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseCommandBindings.qml" line="70"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseCommandBindings.qml" line="80"/>
         <source>Delete the selected session</source>
         <translation>Ta bort den valda sessionen</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseCommandBindings.qml" line="80"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseCommandBindings.qml" line="90"/>
         <source>Unlock the session file to allow deletions</source>
         <translation>Lås upp sessionsfilen för att tillåta raderingar</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseCommandBindings.qml" line="81"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseCommandBindings.qml" line="91"/>
         <source>Set a password to prevent session deletions</source>
         <translation>Ange ett lösenord för att förhindra radering av sessioner</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DatabaseCommandBindings.qml" line="132"/>
+        <source>Comparing the session against the current project…</source>
+        <translation>Jämför sessionen mot det aktuella projektet…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DatabaseCommandBindings.qml" line="133"/>
+        <source>Compare this session against the project currently open in the editor</source>
+        <translation>Jämför denna session mot projektet som för närvarande är öppet i redigeraren</translation>
     </message>
 </context>
 <context>
@@ -15150,42 +15180,42 @@ För att återanvända denna plats på en annan enhet, mejla alex@serial-studio.
 <context>
     <name>MDF4::Player</name>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="246"/>
+        <location filename="../../src/MDF4/Player.cpp" line="248"/>
         <source>Select MDF4 file</source>
         <translation>Välj MDF4-fil</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="248"/>
+        <location filename="../../src/MDF4/Player.cpp" line="250"/>
         <source>MDF4 files (*.mf4 *.dat)</source>
         <translation>MDF4-filer (*.mf4 *.dat)</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="279"/>
+        <location filename="../../src/MDF4/Player.cpp" line="281"/>
         <source>MDF4 Playback is a Pro feature.</source>
         <translation>MDF4-uppspelning är en Pro-funktion.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="280"/>
+        <location filename="../../src/MDF4/Player.cpp" line="282"/>
         <source>This feature requires a license. Please purchase one to enable MDF4 playback.</source>
         <translation>Denna funktion kräver en licens. Köp en för att aktivera MDF4-uppspelning.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="287"/>
+        <location filename="../../src/MDF4/Player.cpp" line="289"/>
         <source>Disconnect from device?</source>
         <translation>Koppla från enhet?</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="288"/>
+        <location filename="../../src/MDF4/Player.cpp" line="290"/>
         <source>You must disconnect from the current device before opening a MDF4 file.</source>
         <translation>Du måste koppla från den aktuella enheten innan du öppnar en MDF4-fil.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="483"/>
+        <location filename="../../src/MDF4/Player.cpp" line="508"/>
         <source>MDF4 data may be incomplete</source>
         <translation>MDF4-data kan vara ofullständig</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="484"/>
+        <location filename="../../src/MDF4/Player.cpp" line="509"/>
         <source>Part of the file's data section could not be read; the recording may be truncated.</source>
         <translation>En del av filens datasektion kunde inte läsas; inspelningen kan vara trunkerad.</translation>
     </message>
@@ -15206,12 +15236,12 @@ För att återanvända denna plats på en annan enhet, mejla alex@serial-studio.
         <translation type="vanished">Misslyckades att läsa filstruktur. Filen kan vara skadad.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="457"/>
+        <location filename="../../src/MDF4/Player.cpp" line="480"/>
         <source>No data in file</source>
         <translation>Ingen data i fil</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="458"/>
+        <location filename="../../src/MDF4/Player.cpp" line="481"/>
         <source>The MDF4 file contains no measurement data.</source>
         <translation>MDF4-filen innehåller ingen mätdata.</translation>
     </message>
@@ -16684,60 +16714,62 @@ Ange nödvändiga inloggningsuppgifter.</translation>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="760"/>
         <source>Extension updates available</source>
-        <translation type="unfinished"/>
+        <translation>Tilläggsuppdateringar tillgängliga</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="761"/>
         <source>Newer versions are available for: %1.
 
 Do you want to update them now?</source>
-        <translation type="unfinished"/>
+        <translation>Nyare versioner finns tillgängliga för: %1.
+
+Vill du uppdatera dem nu?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="767"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="768"/>
         <source>Always update</source>
-        <translation type="unfinished"/>
+        <translation>Uppdatera alltid</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1158"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1160"/>
         <source>Installed (repository no longer available)</source>
         <translation>Installerat (arkiv inte längre tillgängligt)</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1466"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1476"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1497"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1519"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1564"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1574"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1583"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1468"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1478"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1499"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1521"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1566"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1576"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1585"/>
         <source>Plugin Error</source>
         <translation>Plugin-fel</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1466"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1468"/>
         <source>Plugin "%1" is not installed.</source>
         <translation>Plugin "%1" är inte installerat.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1477"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1479"/>
         <source>Extension "%1" is not a plugin (type: %2).</source>
         <translation>Tillägg "%1" är inte ett plugin (typ: %2).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1498"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1500"/>
         <source>Cannot read plugin metadata file:
 %1/info.json</source>
         <translation>Kan inte läsa plugin-metadatafil:
 %1/info.json</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1520"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1522"/>
         <source>Plugin "%1" requires gRPC but this build does not include gRPC support.</source>
         <translation>Plugin "%1" kräver GRPC men denna version inkluderar inte GRPC-stöd.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1530"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1532"/>
         <source>This plugin uses gRPC for high-performance data streaming. The API server needs to be enabled.
 
 Would you like to enable it now?</source>
@@ -16746,34 +16778,34 @@ Would you like to enable it now?</source>
 Vill du aktivera den nu?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1536"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1538"/>
         <source>API Server Required</source>
         <translation>API-server Krävs</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1565"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1567"/>
         <source>Plugin "%1" has no 'entry' field in info.json.</source>
         <translation>Tillägget "%1" saknar fältet 'entry' i info.json.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1575"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1577"/>
         <source>Entry point not found:
 %1</source>
         <translation>Startpunkt hittades inte:
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1584"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1586"/>
         <source>Plugin "%1" has an invalid entry point path.</source>
         <translation>Tillägget "%1" har en ogiltig sökväg till startpunkt.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1627"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1629"/>
         <source>Missing Dependency</source>
         <translation>Saknat Beroende</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1628"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1630"/>
         <source>This plugin requires "%1" but it was not found on your system.
 
 Would you like to open the download page?</source>
@@ -16782,7 +16814,7 @@ Would you like to open the download page?</source>
 Vill du öppna nedladdningssidan?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1533"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1535"/>
         <source>Plugins need the API server to communicate with Serial Studio. Would you like to enable it now?</source>
         <translation>Tillägg behöver API-servern för att kommunicera med Serial Studio. Vill du aktivera den nu?</translation>
     </message>
@@ -16803,19 +16835,19 @@ Vill du öppna nedladdningssidan?</translation>
 <context>
     <name>Misc::HelpCenter</name>
     <message>
-        <location filename="../../src/Misc/HelpCenter.cpp" line="228"/>
+        <location filename="../../src/Misc/HelpCenter.cpp" line="226"/>
         <source>Showing documentation for %1; this copy of Serial Studio is version %2.</source>
-        <translation type="unfinished"/>
+        <translation>Visar dokumentation för %1; denna version av Serial Studio är %2.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/HelpCenter.cpp" line="479"/>
+        <location filename="../../src/Misc/HelpCenter.cpp" line="477"/>
         <source>Failed to load page: %1</source>
         <translation>Misslyckades att ladda sida: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/HelpCenter.cpp" line="568"/>
+        <location filename="../../src/Misc/HelpCenter.cpp" line="566"/>
         <source>Latest</source>
-        <translation type="unfinished"/>
+        <translation>Senaste</translation>
     </message>
 </context>
 <context>
@@ -19467,77 +19499,77 @@ Klicka på Uppdatera för att uppdatera listan.</translation>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="400"/>
         <source>Dataset Container</source>
-        <translation type="unfinished"/>
+        <translation>Datauppsättningsbehållare</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="405"/>
         <source>Data Grid</source>
-        <translation type="unfinished">Datarutnät</translation>
+        <translation>Datarutnät</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="410"/>
         <source>Bar Panel</source>
-        <translation type="unfinished">Stapelpanel</translation>
+        <translation>Stapelpanel</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="415"/>
         <source>Multiple Plot</source>
-        <translation type="unfinished">Flerplott</translation>
+        <translation>Flerdiagram</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="420"/>
         <source>3D Plot</source>
-        <translation type="unfinished">3D-plott</translation>
+        <translation>3D-plott</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="425"/>
         <source>Accelerometer</source>
-        <translation type="unfinished">Accelerometer</translation>
+        <translation>Accelerometer</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="430"/>
         <source>Gyroscope</source>
-        <translation type="unfinished">Gyroskop</translation>
+        <translation>Gyroskop</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="435"/>
         <source>GPS Map</source>
-        <translation type="unfinished">GPS-karta</translation>
+        <translation>GPS-karta</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="440"/>
         <source>Image View</source>
-        <translation type="unfinished">Bildvisning</translation>
+        <translation>Bildvisning</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="445"/>
         <source>Web View</source>
-        <translation type="unfinished">Webbvisning</translation>
+        <translation>Webbvisning</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="450"/>
         <source>Painter Widget</source>
-        <translation type="unfinished">Painter-widget</translation>
+        <translation>Painter-widget</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="711"/>
         <source>Hide Selected (%1)</source>
-        <translation type="unfinished">Dölj Valda (%1)</translation>
+        <translation>Dölj Markerade (%1)</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="712"/>
         <source>Show Selected (%1)</source>
-        <translation type="unfinished">Visa Valda (%1)</translation>
+        <translation>Visa Markerade (%1)</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="724"/>
         <source>Duplicate Selected (%1)</source>
-        <translation type="unfinished">Duplicera Markerad (%1)</translation>
+        <translation>Duplicera Markerade (%1)</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="743"/>
         <source>Delete Selected (%1)</source>
-        <translation type="unfinished">Ta Bort Markerad (%1)</translation>
+        <translation>Ta Bort Markerade (%1)</translation>
     </message>
 </context>
 <context>
@@ -20835,22 +20867,22 @@ Separatorparametern behövs inte längre.</translation>
         <translation>Anpassad…</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/PlayerLoaderWorker.cpp" line="502"/>
+        <location filename="../../src/MDF4/PlayerLoaderWorker.cpp" line="508"/>
         <source>Cannot open MDF4 file</source>
         <translation>Kan inte öppna MDF4-fil</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/PlayerLoaderWorker.cpp" line="503"/>
+        <location filename="../../src/MDF4/PlayerLoaderWorker.cpp" line="509"/>
         <source>The file may be corrupted or in an unsupported format.</source>
         <translation>Filen kan vara skadad eller i ett format som inte stöds.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/PlayerLoaderWorker.cpp" line="508"/>
+        <location filename="../../src/MDF4/PlayerLoaderWorker.cpp" line="514"/>
         <source>Invalid MDF4 file</source>
         <translation>Ogiltig MDF4-fil</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/PlayerLoaderWorker.cpp" line="509"/>
+        <location filename="../../src/MDF4/PlayerLoaderWorker.cpp" line="515"/>
         <source>Failed to read file structure. The file may be corrupted.</source>
         <translation>Misslyckades att läsa filstruktur. Filen kan vara skadad.</translation>
     </message>
@@ -21661,117 +21693,117 @@ Separatorparametern behövs inte längre.</translation>
 <context>
     <name>SessionDetail</name>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="19"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="20"/>
         <source>Session Details</source>
         <translation>Sessionsdetaljer</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="48"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="49"/>
         <source>Reproduced</source>
         <translation>Reproducerad</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="51"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="52"/>
         <source>Diverged</source>
         <translation>Divergerad</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="54"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="55"/>
         <source>Partially verified</source>
         <translation>Delvis Verifierad</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="57"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="58"/>
         <source>Not mechanically verifiable</source>
         <translation>Ej Maskinellt Verifierbar</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="60"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="61"/>
         <source>Verification error</source>
         <translation>Verifieringsfel</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="62"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="63"/>
         <source>Never verified</source>
         <translation>Aldrig Verifierad</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="70"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="71"/>
         <source>Identical</source>
         <translation>Identiska</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="73"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="74"/>
         <source>Value drift</source>
         <translation>Värdeavvikelse</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="76"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="77"/>
         <source>Coverage drift</source>
         <translation>Täckningsavvikelse</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="79"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="80"/>
         <source>Structural drift</source>
         <translation>Strukturavvikelse</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="82"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="83"/>
         <source>Not mechanically comparable</source>
         <translation>Ej maskinellt jämförbar</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="84"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="85"/>
         <source>Check failed</source>
         <translation>Kontroll misslyckades</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="113"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="114"/>
         <source>%1 B</source>
         <translation>%1 B</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="116"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="117"/>
         <source>%1 KB</source>
         <translation>%1 KB</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="119"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="120"/>
         <source>%1 MB</source>
         <translation>%1 MB</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="121"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="122"/>
         <source>%1 GB</source>
         <translation>%1 GB</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="145"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="146"/>
         <source>%1 samples over %2 s, %3 datasets</source>
         <translation>%1 sampel över %2 s, %3 dataset</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="218"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="228"/>
         <source>Select a session to view details.</source>
         <translation>Välj en session för att visa detaljer.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="260"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="314"/>
         <source>Project:</source>
         <translation>Projekt:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="273"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="327"/>
         <source>Started:</source>
         <translation>Startad:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="286"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="340"/>
         <source>Ended:</source>
         <translation>Avslutad:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="292"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="346"/>
         <source>(in progress)</source>
         <translation>(pågår)</translation>
     </message>
@@ -21780,22 +21812,22 @@ Separatorparametern behövs inte längre.</translation>
         <translation type="vanished">Ramar:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="330"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="384"/>
         <source>Notes</source>
         <translation>Anteckningar</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="345"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="399"/>
         <source>Add session notes…</source>
         <translation>Lägg till sessionsanteckningar…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="346"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="400"/>
         <source>Notes are read-only for completed sessions.</source>
         <translation>Anteckningar är skrivskyddade för slutförda sessioner.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="431"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="485"/>
         <source>New tag…</source>
         <translation>Ny tagg…</translation>
     </message>
@@ -21816,42 +21848,42 @@ Separatorparametern behövs inte längre.</translation>
         <translation type="vanished">Avvikelse mot Aktuellt Projekt</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="559"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="630"/>
         <source>Compares this session's decoded values against the project currently open in the editor. The result reflects a transient candidate and is not stored with the session.</source>
         <translation>Jämför denna sessions avkodade värden mot projektet som för närvarande är öppet i redigeraren. Resultatet återspeglar en tillfällig kandidat och lagras inte med sessionen.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="581"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="652"/>
         <source>Candidate: %1 (%2)</source>
         <translation>Kandidat: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="582"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="653"/>
         <source>untitled</source>
         <translation>namnlös</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="593"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="664"/>
         <source>Archived-configuration reproduction status: %1</source>
         <translation>Arkiverad konfiguration reproduktionsstatus: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="647"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="718"/>
         <source>%1: only in the current project</source>
         <translation>%1: endast i det aktuella projektet</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="650"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="721"/>
         <source>%1: only in the recorded project</source>
         <translation>%1: endast i det inspelade projektet</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="652"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="723"/>
         <source>%1: %2 of %3 values changed, %4 missing, %5 extra</source>
         <translation>%1: %2 av %3 värden ändrade, %4 saknas, %5 extra</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="668"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="739"/>
         <source>…and %1 more datasets are affected.</source>
         <translation>…och %1 fler dataset påverkas.</translation>
     </message>
@@ -21884,69 +21916,49 @@ Separatorparametern behövs inte längre.</translation>
         <translation type="vanished">Visa Rapport</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="752"/>
         <source>Unlock the session file to delete sessions</source>
-        <translation>Lås upp sessionsfilen för att radera sessioner</translation>
+        <translation type="vanished">Lås upp sessionsfilen för att radera sessioner</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="367"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="421"/>
         <source>Tags</source>
         <translation>Taggar</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="299"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="353"/>
         <source>Size:</source>
         <translation>Storlek:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="313"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="367"/>
         <source>Stream data:</source>
         <translation>Strömdata:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="438"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="492"/>
         <source>Add</source>
         <translation>Lägg Till</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="538"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="590"/>
         <source>Project Comparison</source>
-        <translation type="unfinished"/>
+        <translation>Projektjämförelse</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="690"/>
         <source>Replay</source>
-        <translation>Spela Upp</translation>
+        <translation type="vanished">Spela Upp</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="698"/>
         <source>Export CSV</source>
-        <translation>Exportera CSV</translation>
+        <translation type="vanished">Exportera CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="705"/>
         <source>Generate Report</source>
-        <translation>Generera Rapport</translation>
+        <translation type="vanished">Generera Rapport</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="727"/>
-        <source>Only completed sessions can be compared against a project</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="730"/>
-        <source>Comparing…</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="731"/>
-        <source>Compare Project</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="746"/>
         <source>Delete</source>
-        <translation>Ta Bort</translation>
+        <translation type="vanished">Ta Bort</translation>
     </message>
 </context>
 <context>
@@ -21957,62 +21969,57 @@ Separatorparametern behövs inte längre.</translation>
         <translation>Sessioner</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="39"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="38"/>
         <source>%1 B</source>
         <translation>%1 B</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="42"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="41"/>
         <source>%1 KB</source>
         <translation>%1 KB</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="45"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="44"/>
         <source>%1 MB</source>
         <translation>%1 MB</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="47"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="46"/>
         <source>%1 GB</source>
         <translation>%1 GB</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="56"/>
         <source>Reproduced</source>
-        <translation>Reproducerad</translation>
+        <translation type="vanished">Reproducerad</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="59"/>
         <source>Diverged</source>
-        <translation>Avvikande</translation>
+        <translation type="vanished">Avvikande</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="62"/>
         <source>Partial</source>
-        <translation>Delvis</translation>
+        <translation type="vanished">Delvis</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="65"/>
         <source>Not verifiable</source>
-        <translation>Ej verifierbar</translation>
+        <translation type="vanished">Ej verifierbar</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="68"/>
         <source>Error</source>
-        <translation>Fel</translation>
+        <translation type="vanished">Fel</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="128"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="93"/>
         <source>Search</source>
         <translation>Sök</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="148"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="113"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="149"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="114"/>
         <source>Size</source>
         <translation>Storlek</translation>
     </message>
@@ -22021,22 +22028,21 @@ Separatorparametern behövs inte längre.</translation>
         <translation type="vanished">Ramar</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="150"/>
         <source>Verified</source>
-        <translation>Verifierad</translation>
+        <translation type="vanished">Verifierad</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="151"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="115"/>
         <source>Tags</source>
         <translation>Taggar</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="270"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="215"/>
         <source>No sessions found.</source>
         <translation>Inga sessioner hittades.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="271"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="216"/>
         <source>No session file open.</source>
         <translation>Ingen sessionsfil öppen.</translation>
     </message>
@@ -22044,12 +22050,12 @@ Separatorparametern behövs inte längre.</translation>
 <context>
     <name>Sessions::DatabaseManager</name>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1640"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1641"/>
         <source>Select logo image</source>
         <translation>Välj logotypbild</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1642"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1643"/>
         <source>Images (*.png *.jpg *.jpeg *.svg)</source>
         <translation>Bilder (*.png *.jpg *.jpeg *.svg)</translation>
     </message>
@@ -22064,7 +22070,7 @@ Separatorparametern behövs inte längre.</translation>
         <translation>Sessionsfiler (*.db)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1843"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1844"/>
         <source>Cannot open session file</source>
         <translation>Kan inte öppna sessionsfil</translation>
     </message>
@@ -22079,7 +22085,7 @@ Separatorparametern behövs inte längre.</translation>
         <translation>Ta Bort Session</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1704"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1705"/>
         <source>No project data</source>
         <translation>Ingen projektdata</translation>
     </message>
@@ -22149,12 +22155,12 @@ Separatorparametern behövs inte längre.</translation>
         <translation type="vanished">Denna session innehåller ingen inbäddad projektfil — instrumentpanelen använder en snabbdiagramlayout.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1383"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1384"/>
         <source>Export Session to CSV</source>
         <translation>Exportera Session till CSV</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1383"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1384"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV-filer (*.CSV)</translation>
     </message>
@@ -22173,19 +22179,19 @@ Separatorparametern behövs inte längre.</translation>
         <translation type="vanished">Förbereder export…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1612"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1613"/>
         <source>Done</source>
         <translation>Klar</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1578"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1612"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1579"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1613"/>
         <source>Failed</source>
         <translation>Misslyckades</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1583"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1621"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1584"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1622"/>
         <source>Report Failed</source>
         <translation>Rapport Misslyckades</translation>
     </message>
@@ -22194,68 +22200,68 @@ Separatorparametern behövs inte längre.</translation>
         <translation type="vanished">Kunde inte generera rapporten. Kontrollera utdatasökvägen och försök igen.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1513"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1514"/>
         <source>Save PDF Report</source>
         <translation>Spara PDF-rapport</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1463"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1464"/>
         <source>Loading session data…</source>
         <translation>Laddar sessionsdata…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1513"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1514"/>
         <source>Save HTML Report</source>
         <translation>Spara HTML-rapport</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1514"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1515"/>
         <source>PDF files (*.pdf)</source>
         <translation>PDF-filer (*.PDF)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1514"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1515"/>
         <source>HTML files (*.html)</source>
         <translation>HTML-filer (*.HTML)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1584"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1622"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1585"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1623"/>
         <source>Could not generate the report.</source>
         <translation>Kunde inte generera rapporten.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1705"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1706"/>
         <source>This session file does not contain an embedded project.</source>
         <translation>Denna sessionsfil innehåller inget inbäddat projekt.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1714"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1715"/>
         <source>Invalid project data</source>
         <translation>Ogiltig projektdata</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1715"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1716"/>
         <source>The embedded project JSON is malformed and cannot be restored.</source>
         <translation>Den inbäddade projekt-JSON:en är felaktig och kan inte återställas.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1725"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1726"/>
         <source>Restore Project</source>
         <translation>Återställ Projekt</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1725"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1726"/>
         <source>Serial Studio projects (*.ssproj *.json)</source>
         <translation>Serial Studio-projekt (*.ssproj *.json)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1733"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1734"/>
         <source>Cannot write file</source>
         <translation>Kan inte skriva fil</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1733"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1734"/>
         <source>Check file permissions and try again.</source>
         <translation>Kontrollera filbehörigheter och försök igen.</translation>
     </message>
@@ -22543,63 +22549,63 @@ Separatorparametern behövs inte längre.</translation>
 <context>
     <name>Sessions::Player</name>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="311"/>
+        <location filename="../../src/Sessions/Player.cpp" line="313"/>
         <source>Open Session File</source>
         <translation>Öppna Sessionsfil</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="313"/>
+        <location filename="../../src/Sessions/Player.cpp" line="315"/>
         <source>Session files (*.db)</source>
         <translation>Sessionsfiler (*.db)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="387"/>
+        <location filename="../../src/Sessions/Player.cpp" line="398"/>
         <source>Device Connection Active</source>
         <translation>Enhetsanslutning Aktiv</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="388"/>
+        <location filename="../../src/Sessions/Player.cpp" line="399"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>För att använda denna funktion måste du koppla från enheten. Vill du fortsätta?</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="436"/>
-        <location filename="../../src/Sessions/Player.cpp" line="520"/>
+        <location filename="../../src/Sessions/Player.cpp" line="447"/>
+        <location filename="../../src/Sessions/Player.cpp" line="537"/>
         <source>Cannot open session file</source>
         <translation>Kan inte öppna sessionsfil</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="437"/>
+        <location filename="../../src/Sessions/Player.cpp" line="448"/>
         <source>Unknown error</source>
         <translation>Okänt fel</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="454"/>
+        <location filename="../../src/Sessions/Player.cpp" line="465"/>
         <source>No project data</source>
         <translation>Ingen projektdata</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="455"/>
+        <location filename="../../src/Sessions/Player.cpp" line="466"/>
         <source>This session does not contain an embedded project file — the dashboard falls back to a quick-plot layout.</source>
         <translation>Denna session innehåller ingen inbäddad projektfil — instrumentpanelen använder en snabbdiagramlayout.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="521"/>
+        <location filename="../../src/Sessions/Player.cpp" line="538"/>
         <source>Check file permissions and try again.</source>
         <translation>Kontrollera filbehörigheter och försök igen.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="674"/>
+        <location filename="../../src/Sessions/Player.cpp" line="691"/>
         <source>Sessions</source>
         <translation>Sessioner</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="675"/>
+        <location filename="../../src/Sessions/Player.cpp" line="692"/>
         <source>Recording uses an older copy of the project</source>
         <translation>Inspelningen använder en äldre kopia av projektet</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="676"/>
+        <location filename="../../src/Sessions/Player.cpp" line="693"/>
         <source>The dashboard shown is the one embedded in the recording; the project on disk has changed since. Close the session to return to the current project.</source>
         <translation>Instrumentpanelen som visas är den som är inbäddad i inspelningen; projektet på disk har ändrats sedan dess. Stäng sessionen för att återgå till det aktuella projektet.</translation>
     </message>
@@ -22949,17 +22955,17 @@ Separatorparametern behövs inte längre.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="708"/>
         <source>Check for Extension Updates</source>
-        <translation type="unfinished"/>
+        <translation>Sök efter tilläggsuppdateringar</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="732"/>
         <source>Install Extension Updates Automatically</source>
-        <translation type="unfinished"/>
+        <translation>Installera Tilläggsuppdateringar Automatiskt</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="762"/>
         <source>Installed extensions and themes are checked when Serial Studio starts, together with application updates. Serial Studio asks before installing them unless automatic installation is enabled.</source>
-        <translation type="unfinished"/>
+        <translation>Installerade tillägg och teman kontrolleras när Serial Studio startar, tillsammans med programuppdateringar. Serial Studio frågar innan installation om inte automatisk installation är aktiverad.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="1272"/>
@@ -25310,34 +25316,34 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2804"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2812"/>
         <source>Console</source>
         <translation>Konsol</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2812"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2820"/>
         <source>Notifications</source>
         <translation>Notifikationer</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2820"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2828"/>
         <source>Clock</source>
         <translation>Klocka</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2827"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2835"/>
         <source>Stopwatch</source>
         <translation>Stoppur</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2881"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2896"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2889"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2904"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Reserv)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2918"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2997"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2926"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="3005"/>
         <source>LED Panel (%1)</source>
         <translation>LED-panel (%1)</translation>
     </message>

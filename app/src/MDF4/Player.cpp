@@ -29,6 +29,7 @@
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QMessageBox>
+#include <QScopedValueRollback>
 #include <QTimer>
 #include <unordered_map>
 
@@ -56,6 +57,7 @@ static constexpr int kMaxSeekWindowRows = 262144;
  */
 MDF4::Player::Player()
   : m_framePos(0)
+  , m_injecting(false)
   , m_playing(false)
   , m_open(false)
   , m_decoding(false)
@@ -306,6 +308,15 @@ void MDF4::Player::openFile(const QString& filePath)
  */
 void MDF4::Player::closeFile()
 {
+  // code-verify off
+  // A close dispatched inside injectRow's nested event loop would free m_text while the borrowed
+  // cell pointers handed to the builder are still live. Re-queue instead.
+  // code-verify on
+  if (m_injecting) {
+    QMetaObject::invokeMethod(this, [this] { closeFile(); }, Qt::QueuedConnection);
+    return;
+  }
+
   const bool was_open     = m_open;
   const bool was_decoding = (m_loaderThread != nullptr);
   if (!was_open && !was_decoding)
@@ -322,16 +333,26 @@ void MDF4::Player::closeFile()
   m_open = false;
   m_filePath.clear();
   m_timestamp.clear();
-  m_channelNames.clear();
-  m_channelIsString.clear();
-  m_timestamps.clear();
-  m_numeric.clear();
-  m_text.clear();
-  m_active.clear();
+  m_channelNames    = QStringList();
+  // code-verify off
+  // Default-assign, not clear(): std::vector::clear keeps capacity and QList keeps its
+  // allocation, so a closed multi-gigabyte recording would pin its index storage until the next
+  // open. The columnar payload is the player's entire footprint -- give it back (spec 0064).
+  // code-verify on
+  m_channelIsString = std::vector<bool>();
+  m_timestamps      = std::vector<double>();
+  m_numeric         = std::vector<std::vector<double>>();
+  m_text            = std::vector<std::vector<QString>>();
+  m_active          = std::vector<std::vector<bool>>();
+  m_rowSourceBits   = QVector<quint8>();
+  m_bitSourceIds.clear();
+  m_lastSourceRow.clear();
   m_multiSource    = false;
   m_decodeProgress = 0.0;
   m_seekColumnByKey.clear();
+  m_seekColumnByKey.squeeze();
   m_sourceChannelsByIndex.clear();
+  m_typedCells = {};
 
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
   frameBuilder.registerQuickPlotHeaders(QStringList());
@@ -379,7 +400,9 @@ void MDF4::Player::startDecoding(const QString& filePath)
   const quint64 generation = m_decodeGeneration;
   QMetaObject::invokeMethod(
     loader,
-    [loader, filePath, generation]() { loader->decodeFile(filePath, generation); },
+    [loader, filePath, generation, bits = buildChannelSourceBits()]() {
+      loader->decodeFile(filePath, generation, bits);
+    },
     Qt::QueuedConnection);
 
   Q_EMIT indexingChanged();
@@ -468,6 +491,8 @@ void MDF4::Player::onDecodeFinished(const MDF4::PlayerDecodePayloadPtr& payload)
   m_numeric         = std::move(payload->numeric);
   m_text            = std::move(payload->text);
   m_active          = std::move(payload->active);
+  m_rowSourceBits   = std::move(payload->rowSourceBits);
+  m_lastSourceRow   = QVector<int>(m_bitSourceIds.size(), -1);
 
   m_open     = true;
   m_framePos = 0;
@@ -650,6 +675,8 @@ void MDF4::Player::performSeekSettle()
   const int window = qMin(dashboard.points(), m_framePos + 1);
   const int start  = qMax(0, m_framePos - window + 1);
   processFrameBatch(start, m_framePos);
+  m_lastSourceRow.fill(-1);
+  backfillSparseSources();
 
   if (!m_seekColumnByKey.isEmpty()) {
     QVector<double> times;
@@ -766,6 +793,8 @@ void MDF4::Player::catchUpToTarget(double targetTime)
     m_framePos = qMin(targetRow, m_framePos + stride);
     sendFrame(m_framePos);
   }
+
+  backfillSparseSources();
 
   constexpr qint64 kCatchUpFillMs = 250;
   if (stride > 2 && !m_seekColumnByKey.isEmpty()
@@ -1060,6 +1089,111 @@ std::chrono::steady_clock::time_point MDF4::Player::rowSteadyTimestamp(int frame
 }
 
 /**
+ * @brief Per-channel source bit table for the loader (channel order == project traversal, the
+ *        writer's order). Also seeds m_bitSourceIds; empty outside ProjectFile mode.
+ */
+QVector<quint8> MDF4::Player::buildChannelSourceBits()
+{
+  m_bitSourceIds.clear();
+
+  static auto& appState = AppState::instance();
+  if (appState.operationMode() != SerialStudio::ProjectFile)
+    return {};
+
+  QVector<quint8> bits;
+  static auto& projectModel = DataModel::ProjectModel::instance();
+  for (const auto& g : projectModel.groups()) {
+    if (g.widget == QLatin1String("image"))
+      continue;
+
+    int bit = static_cast<int>(m_bitSourceIds.indexOf(g.sourceId));
+    if (bit < 0 && m_bitSourceIds.size() < 8) {
+      bit = m_bitSourceIds.size();
+      m_bitSourceIds.append(g.sourceId);
+    }
+
+    for (int i = 0; i < static_cast<int>(g.datasets.size()); ++i)
+      bits.append(bit >= 0 ? static_cast<quint8>(1u << bit) : quint8(0));
+  }
+
+  return bits;
+}
+
+/**
+ * @brief Injects @p frameIndex for @p sourceId only: the backfill path updates one stale source
+ *        from its own latest active row without re-publishing every other source.
+ */
+void MDF4::Player::injectSourceRow(int frameIndex, int sourceId)
+{
+  SS_ASSERT(frameIndex >= 0, return);
+  SS_ASSERT(frameIndex < frameCount(), return);
+
+  if (m_injecting)
+    return;
+
+  const QScopedValueRollback<bool> reentry_guard(m_injecting, true);
+  const qsizetype count = buildRowCellsTyped(frameIndex, m_typedCells);
+  if (count <= 0)
+    return;
+
+  const auto it = m_sourceChannelsByIndex.constFind(sourceId);
+  if (it == m_sourceChannelsByIndex.constEnd())
+    return;
+
+  static auto& frameBuilder = DataModel::FrameBuilder::instance();
+  const auto timestamp      = rowSteadyTimestamp(frameIndex);
+  const auto& orderedChs    = it.value();
+  QVarLengthArray<DataModel::FrameBuilder::ReplayCell, 128> cells;
+  cells.reserve(orderedChs.size());
+  for (int ch : orderedChs) {
+    static const QString kEmpty;
+    DataModel::FrameBuilder::ReplayCell cell{&kEmpty, 0.0};
+    if (ch >= 0 && ch < count)
+      cell = m_typedCells.at(ch);
+
+    cells.append(cell);
+  }
+
+  frameBuilder.replayChannelsTyped(sourceId, cells.constData(), cells.size(), timestamp);
+}
+
+/**
+ * @brief Brings every source the strided catch-up skipped up to its latest active row at or
+ *        before the playhead (spec 0064): a mixed-rate recording holds a slow source's samples
+ *        on a handful of rows per second, so row-strided sampling almost never lands on one and
+ *        its widgets would otherwise freeze for the whole replay.
+ */
+void MDF4::Player::backfillSparseSources()
+{
+  constexpr int kBackfillScanMax = 262144;
+
+  if (!m_multiSource || m_bitSourceIds.isEmpty())
+    return;
+
+  const int last = qMin(m_framePos, static_cast<int>(m_rowSourceBits.size()) - 1);
+  if (last < 0)
+    return;
+
+  for (int b = 0; b < m_bitSourceIds.size(); ++b) {
+    const auto mask = static_cast<quint8>(1u << b);
+    const int stop  = qMax(0, last - kBackfillScanMax);
+    int found       = -1;
+    for (int r = last; r >= stop; --r) {
+      if (m_rowSourceBits.at(r) & mask) {
+        found = r;
+        break;
+      }
+    }
+
+    if (found < 0 || found == m_lastSourceRow.value(b, -1))
+      continue;
+
+    m_lastSourceRow[b] = found;
+    injectSourceRow(found, m_bitSourceIds.at(b));
+  }
+}
+
+/**
  * @brief Replays one indexed row through the FrameBuilder typed replay lane (spec 0022):
  *        numeric channels flow as native doubles with the recorded timestamp -- no per-cell
  *        number formatting. QuickPlot mode keeps the byte path.
@@ -1068,6 +1202,16 @@ void MDF4::Player::injectRow(int frameIndex)
 {
   SS_ASSERT(frameIndex >= 0, return);
   SS_ASSERT(frameIndex < frameCount(), return);
+
+  // code-verify off
+  // replayChannelsTyped() marshals blocking and pumps this thread's event loop; a queued
+  // updateData() or close can re-enter here, refill the shared m_typedCells and rebuild
+  // m_sourceChannelsByIndex under the outer iteration. Crashed in the wild (seek-settle).
+  // code-verify on
+  if (m_injecting)
+    return;
+
+  const QScopedValueRollback<bool> reentry_guard(m_injecting, true);
 
   static auto& appState = AppState::instance();
   if (appState.operationMode() != SerialStudio::ProjectFile) {
@@ -1087,8 +1231,12 @@ void MDF4::Player::injectRow(int frameIndex)
     return;
   }
 
-  for (auto it = m_sourceChannelsByIndex.constBegin(); it != m_sourceChannelsByIndex.constEnd();
-       ++it) {
+  // code-verify off
+  // Iterate a copy: the blocking marshal below pumps this thread's event loop, so a queued close
+  // can clear m_sourceChannelsByIndex mid-loop. Implicitly shared, one refcount per source.
+  // code-verify on
+  const auto sourceChannels = m_sourceChannelsByIndex;
+  for (auto it = sourceChannels.constBegin(); it != sourceChannels.constEnd(); ++it) {
     const auto& orderedChs = it.value();
     QVarLengthArray<DataModel::FrameBuilder::ReplayCell, 128> sourceCells;
     sourceCells.reserve(orderedChs.size());

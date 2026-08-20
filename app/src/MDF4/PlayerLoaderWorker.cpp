@@ -438,8 +438,12 @@ static void appendFrameColumns(MDF4::PlayerDecodePayload& payload,
     else if (strIt != caches.strings.end() && c < strIt->second.size())
       payload.text[c][sampleIndex] = strIt->second[c];
 
-    if (actIt != caches.active.end() && c < actIt->second.size())
+    if (actIt != caches.active.end() && c < actIt->second.size()) {
       payload.active[c][sampleIndex] = actIt->second[c];
+      if (actIt->second[c] && static_cast<qsizetype>(c) < payload.channelSourceBit.size())
+        payload.rowSourceBits[static_cast<qsizetype>(sampleIndex)] |=
+          payload.channelSourceBit.at(static_cast<qsizetype>(c));
+    }
   }
 }
 
@@ -467,6 +471,8 @@ static void convertToColumnar(MDF4::PlayerDecodePayload& payload, DecodeCaches& 
 
     payload.active[c].resize(frameCount, false);
   }
+
+  payload.rowSourceBits.resize(static_cast<qsizetype>(frameCount), 0);
 
   for (uint64_t sampleIndex = 0; sampleIndex < frameCount && !caches.samples.empty();
        ++sampleIndex) {
@@ -583,7 +589,9 @@ static bool readAllGroups(MDF4::PlayerLoaderWorker* worker,
  *        with the legacy ns-key merge, then a map-to-columnar conversion. The reader and all
  *        mdf::* pointers live and die inside this slot.
  */
-void MDF4::PlayerLoaderWorker::decodeFile(const QString& filePath, quint64 generation)
+void MDF4::PlayerLoaderWorker::decodeFile(const QString& filePath,
+                                          quint64 generation,
+                                          const QVector<quint8>& channelSourceBit)
 {
   SS_ASSERT_LOG(!filePath.isEmpty());
 
@@ -591,9 +599,10 @@ void MDF4::PlayerLoaderWorker::decodeFile(const QString& filePath, quint64 gener
   m_recordsTotal     = 0;
   m_activeGeneration = generation;
 
-  auto payload        = std::make_shared<PlayerDecodePayload>();
-  payload->filePath   = filePath;
-  payload->generation = generation;
+  auto payload              = std::make_shared<PlayerDecodePayload>();
+  payload->channelSourceBit = channelSourceBit;
+  payload->filePath         = filePath;
+  payload->generation       = generation;
 
   auto reader = openStructure(filePath, *payload);
   if (!reader) {

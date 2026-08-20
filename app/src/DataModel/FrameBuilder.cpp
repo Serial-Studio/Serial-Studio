@@ -429,7 +429,9 @@ DataModel::FrameBuilder::PooledBlockSlot* DataModel::FrameBuilder::openBlockFor(
 
   const auto it = m_openBlocks.find(sourceId);
   if (it != m_openBlocks.end()) [[likely]] {
-    if (it->second->generation == m_framePoolGeneration) [[likely]]
+    const bool reusable =
+      it->second->generation == m_framePoolGeneration && it->second->block.masked == m_maskSinks;
+    if (reusable) [[likely]]
       return it->second.get();
 
     flushBlock(sourceId);
@@ -447,6 +449,7 @@ DataModel::FrameBuilder::PooledBlockSlot* DataModel::FrameBuilder::openBlockFor(
   slot->flushEpoch = pipeline.flushEpoch();
   DataModel::reset_block(slot->block);
   slot->block.structureGeneration = m_framePoolGeneration;
+  slot->block.masked              = m_maskSinks;
 
   const auto inserted = m_openBlocks.emplace(sourceId, std::move(slot));
   return inserted.first->second.get();
@@ -827,15 +830,11 @@ void DataModel::FrameBuilder::setupExternalConnections()
 
   wireDisplayTickHooks(Misc::TimerEvents::instance(), IO::PipelineHost::instance());
 
-  const auto onPlayerOpenChanged = [this] {
-    m_playerOpen        = SerialStudio::isAnyPlayerOpen();
-    m_captureFlagsDirty = true;
-    rebuildTransformsForPlayback();
-  };
-  connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, onPlayerOpenChanged);
-  connect(&MDF4::Player::instance(), &MDF4::Player::openChanged, this, onPlayerOpenChanged);
+  const auto onPlayer = &DataModel::FrameBuilder::onPlayerOpenChanged;
+  connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, onPlayer);
+  connect(&MDF4::Player::instance(), &MDF4::Player::openChanged, this, onPlayer);
 #ifdef BUILD_COMMERCIAL
-  connect(&Sessions::Player::instance(), &Sessions::Player::openChanged, this, onPlayerOpenChanged);
+  connect(&Sessions::Player::instance(), &Sessions::Player::openChanged, this, onPlayer);
 #endif
 
   connect(&CSV::Export::instance(), &CSV::Export::enabledChanged, this, [this] {
@@ -920,6 +919,69 @@ void DataModel::FrameBuilder::refreshAsyncSinks()
   }
 
   refreshAnyAsyncSink();
+}
+
+/**
+ * @brief Drops the per-source "structure already published" marks so the next staged block
+ *        republishes the layout. A consumer that hard-reset itself (Dashboard::resetData(true) on
+ *        a player opening or a disconnect) would otherwise wait for a pool-generation bump that a
+ *        replay never causes, and sit empty while blocks arrive for a layout it no longer holds.
+ */
+void DataModel::FrameBuilder::forgetPublishedStructures()
+{
+  if (QThread::currentThread() != thread()) {
+    invokeOnBuilderThread([this] { forgetPublishedStructures(); });
+    return;
+  }
+
+  m_publishedStructureGeneration.clear();
+}
+
+/**
+ * @brief Refreshes the cached player flag and playback transforms on any player open/close, and
+ *        hands the replay pools' storage back once the last player is gone.
+ */
+void DataModel::FrameBuilder::onPlayerOpenChanged()
+{
+  const bool wasOpen  = m_playerOpen;
+  m_playerOpen        = SerialStudio::isAnyPlayerOpen();
+  m_captureFlagsDirty = true;
+  rebuildTransformsForPlayback();
+
+  if (wasOpen && !m_playerOpen)
+    releaseReplayPoolStorage();
+}
+
+/**
+ * @brief Returns every idle pool slot's storage to the allocator after the last player closes: a
+ *        replay binds slots to the project's full column layout and cycles hundreds of frame
+ *        slots, and pool storage otherwise persists for the whole session. Busy slots (a consumer
+ *        still draining) are skipped; the next claim rebinds them.
+ */
+void DataModel::FrameBuilder::releaseReplayPoolStorage()
+{
+  SS_ASSERT_LOG(QThread::currentThread() == thread());
+
+  for (auto& slot : m_blockPool) {
+    if (slot.use_count() != 1)
+      continue;
+
+    slot->block      = DataModel::DataBlock();
+    slot->generation = 0;
+    slot->sourceId   = -1;
+  }
+
+  for (auto& slot : m_framePool) {
+    if (slot.use_count() != 1)
+      continue;
+
+    slot->frame      = DataModel::TimestampedFrame();
+    slot->generation = 0;
+    slot->matchedSrc = nullptr;
+    slot->flat       = {};
+  }
+
+  m_poolPolicy.releaseOwnership();
 }
 
 /**
@@ -1831,8 +1893,10 @@ void DataModel::FrameBuilder::replayChannels(
   const DataModel::TimestampedFrame::SteadyTimePoint& timestamp)
 {
   if (QThread::currentThread() != thread()) {
-    invokeOnBuilderThreadBlocking(
-      [this, sourceId, &channels, &timestamp] { replayChannels(sourceId, channels, timestamp); });
+    QMetaObject::invokeMethod(
+      this,
+      [this, sourceId, &channels, &timestamp] { replayChannels(sourceId, channels, timestamp); },
+      Qt::BlockingQueuedConnection);
     return;
   }
 
@@ -2024,9 +2088,18 @@ void DataModel::FrameBuilder::replayChannelSpans(
   const DataModel::TimestampedFrame::SteadyTimePoint& timestamp)
 {
   if (QThread::currentThread() != thread()) {
-    invokeOnBuilderThreadBlocking([this, sourceId, cells, count, &timestamp] {
-      replayChannelSpans(sourceId, cells, count, timestamp);
-    });
+    // code-verify off
+    // Plain BlockingQueued IS the documented design for the replay lanes (dataflow.md): engines
+    // are torn down during replay so no apiCall cycle can exist, the borrowed span pointers must
+    // stay alive, and the event-loop marshal wakes on the NEXT UI TICK -- measured 8.1 ms per
+    // row against 4 us of publish work, i.e. the entire replay speed ceiling (spec 0064).
+    // code-verify on
+    QMetaObject::invokeMethod(
+      this,
+      [this, sourceId, cells, count, &timestamp] {
+        replayChannelSpans(sourceId, cells, count, timestamp);
+      },
+      Qt::BlockingQueuedConnection);
     return;
   }
 
@@ -2072,9 +2145,12 @@ void DataModel::FrameBuilder::replayChannelsTyped(
   const DataModel::TimestampedFrame::SteadyTimePoint& timestamp)
 {
   if (QThread::currentThread() != thread()) {
-    invokeOnBuilderThreadBlocking([this, sourceId, cells, count, &timestamp] {
-      replayChannelsTyped(sourceId, cells, count, timestamp);
-    });
+    QMetaObject::invokeMethod(
+      this,
+      [this, sourceId, cells, count, &timestamp] {
+        replayChannelsTyped(sourceId, cells, count, timestamp);
+      },
+      Qt::BlockingQueuedConnection);
     return;
   }
 
@@ -3197,7 +3273,7 @@ void DataModel::FrameBuilder::publishBlock(const DataModel::DataBlockPtr& block)
   static auto& grpcServer = API::GRPC::GRPCServer::instance();
 #endif
 
-  if (m_maskSinks) [[unlikely]] {
+  if (block->masked || m_maskSinks) [[unlikely]] {
     const bool observed = (pluginsServer.enabled() && pluginsServer.clientCount() > 0)
 #ifdef ENABLE_GRPC
                        || (grpcServer.enabled() && grpcServer.clientCount() > 0)
@@ -3280,8 +3356,14 @@ void DataModel::FrameBuilder::publishReplayValues(
   const bool previousMask = m_maskSinks;
   m_maskSinks             = true;
 
+  // code-verify off
+  // No per-row flush: replay batches to the same cap/epoch rules as the live lane. Per-row
+  // single-sample blocks overflowed the 32-slot dashboard ring ~35x at replay rate (measured
+  // 67k blocks/s vs ~1.9k/s drained), and the random survivors were almost never the sparse
+  // sources' -- CAN gauges froze while audio moved. The mask rides on the block, so the display
+  // tick's flushOpenBlocks() publishing this batch later cannot leak it into a recording sink.
+  // code-verify on
   stageFrameValues(sourceId, src, ts);
-  flushBlock(sourceId);
 
   m_maskSinks = previousMask;
 }

@@ -73,6 +73,7 @@ struct DataBlock {
   std::chrono::nanoseconds dt{0};    ///< Uniform step; 0 means read @c times instead
   std::vector<qint64> times;         ///< Per-sample ns offsets from @c t0; empty when @c dt != 0
   std::vector<BlockColumn> columns;  ///< One entry per dataset, in export-schema order
+  bool masked = false;               ///< Replay: read-only observers only, never a recording sink
 };
 
 /**
@@ -183,6 +184,7 @@ inline void reset_block(DataBlock& block) noexcept
   block.samples             = 0;
   block.blockNumber         = 0;
   block.structureGeneration = 0;
+  block.masked              = false;
 }
 
 /**
@@ -199,6 +201,7 @@ inline void reset_block(DataBlock& block) noexcept
   copy->samples             = block.samples;
   copy->t0                  = block.t0;
   copy->dt                  = block.dt;
+  copy->masked              = block.masked;
 
   const auto used = static_cast<std::size_t>(block.samples);
   if (!block.times.empty())

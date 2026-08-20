@@ -152,6 +152,60 @@ invalidation designed properly — NOT via resetData, which the reconfigure path
 replay speed ceiling stays (~25.6k rows/s); the seek-settle crash hazard in MDF4 (nested event loop
 during blocking replay marshal) remains latent as it was at HEAD.
 
+## Task 9 — Player replay, designed properly this time (2026-08-19 night)
+
+- [x] **T9.1** Root cause of every "player shows no/partial dashboard" symptom: FrameBuilder's
+      per-source published-structure marks survive `Dashboard::resetData(true)`, so replay stages
+      blocks for a layout the dashboard no longer holds and `structureIsCurrent()` refuses to
+      resend. CSV replay showed ONLY audio widgets because stream-worker teardown republishes
+      templates for the stream sources -- the frame-lane sources never come back.
+- [x] **T9.2** Fix: `FrameBuilder::forgetPublishedStructures()` called from `resetData` **only
+      under `notify == true`**. The reconfigure path re-enters `resetData(false)`; forgetting there
+      is the 2026-08-19 reconfigure loop. The notify gate is the difference between the fix and
+      the regression.
+- [x] **T9.3** Close-while-playing: the close click is processed inside the replay marshal's
+      nested event loop and tears player state down under live cell views. Reapplied the verified
+      guard set: `m_injecting` re-entrancy latch in each player's inject, iterate-copies in
+      MDF4/Sessions, and `closeFile()` re-queuing itself while injecting.
+- [x] **T9.4** Deliberately NOT reapplied: seeds-on-open (dashboard appears once playback flows;
+      an on-open seed needs a design that survives the queued reset), replay batching
+      (DataBlock::masked), async configureActions.
+
+## Task 10 — Replay throughput and block batching (2026-08-19 night, measured)
+
+- [x] **T10.1** Timing probes split the 9 ms inject: builder publish work 4 us, GUI round trip
+      8,105 us. The generic event-loop marshal's wake (queued QEventLoop::quit) lands on the next
+      UI tick. The three replay lanes were switched to plain Qt::BlockingQueuedConnection — the
+      design dataflow.md already documented as "the ONE exception". Result: 10 us per inject,
+      replay at ~67k rows/s, full real-time pacing.
+- [x] **T10.2** That exposed the next stage: 67k single-sample blocks/s into the 32-slot dashboard
+      ring drained at ~1.9k/s = ~97% random drops; the sparse sources' rare blocks almost never
+      survived (CAN gauges frozen while audio moved). Fix: publishReplayValues no longer flushes
+      per row — replay batches to the same kFrameBlockSampleCap/epoch rules as the live lane
+      (~1.1k blocks/s, fits the ring), with the sink mask carried on DataBlock::masked so a block
+      flushed later by the display tick can never leak into a recording sink (R8). openBlockFor
+      refuses to reuse a slot whose mask differs, so no block mixes masked and unmasked samples.
+
+## Task 11 — Memory release on player close + instrumentation removal (2026-08-19) ✅
+
+- [x] **T11.1** `FrameBuilder::releaseReplayPoolStorage()`: when the last player closes
+      (`onPlayerOpenChanged`, open -> closed transition), every idle block-pool and frame-pool
+      slot returns its storage (a replay binds slots to the full 635-column layout and cycles
+      frame slots; pool storage otherwise persists for the whole session, up to the 192 MB block
+      budget plus populated frame slots). Busy slots are skipped; the next claim rebinds.
+- [x] **T11.2** Players shrink instead of clear on close: CSV squeezes the row index
+      (offsets+seconds+bits, 17 B/row -- 113 MB on a 4.4 GB file), MDF4 default-assigns its
+      columnar std::vectors (clear() keeps capacity) and squeezes the Qt containers, Sessions
+      default-assigns the timeline and stream blob buffers.
+- [x] **T11.3** All [SS0064] instrumentation and timing probes removed; repo-wide grep clean;
+      full lint sweep 0 errors 0 advisories.
+
+## Verified working by the maintainer (2026-08-19)
+
+Live dashboard steady; CSV, MDF4 and session replay all populate every widget with smooth values
+at real-time pacing; replay never re-records; recordings carry all 635 datasets; session PDF
+report generation works.
+
 ## Blocked / not done
 
 - **No build, no benchmark.** `cmake`, `ninja`, `make` and the compilers are in the `deny` list in

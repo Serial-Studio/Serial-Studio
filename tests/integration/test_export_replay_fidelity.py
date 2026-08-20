@@ -76,7 +76,12 @@ def _project() -> dict:
                 "connectionSettings": {},
             }
         ],
-        "tables": [{"name": "T", "registers": [{"name": "raw", "type": "computed", "value": 0}]}],
+        "tables": [
+            {
+                "name": "T",
+                "registers": [{"name": "raw", "type": "computed", "value": 0}],
+            }
+        ],
         "groups": [
             {
                 "title": "G",
@@ -195,7 +200,9 @@ def _column_is_populated(header, rows, title):
 @pytest.mark.integration
 @pytest.mark.project
 class TestRepublishLaneFidelity:
-    def test_table_fed_dataset_reaches_the_csv(self, api_client, clean_state, device_simulator):
+    def test_table_fed_dataset_reaches_the_csv(
+        self, api_client, clean_state, device_simulator
+    ):
         """Baseline: with no masked refresh competing, the export lane records the dataset."""
         header, rows = _record(api_client, device_simulator, masked_refreshes=0)
         assert header is not None, "no CSV was written at all"
@@ -288,4 +295,6 @@ class TestReplayNeverReRecords:
         api_client.disable_csv_export()
         time.sleep(1.0)
 
-        assert _newest_csv_since(started) is None, "replay re-recorded itself into a new CSV"
+        assert (
+            _newest_csv_since(started) is None
+        ), "replay re-recorded itself into a new CSV"

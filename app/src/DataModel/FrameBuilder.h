@@ -204,6 +204,9 @@ public slots:
   void ingestStreamBlock(const DataModel::DataBlockPtr& block);
   void refreshStreamDrivenFrames();
   void refreshAsyncSinks();
+  void forgetPublishedStructures();
+  void releaseReplayPoolStorage();
+  void onPlayerOpenChanged();
 
   void collectTransformEngineGarbage();
   void flushOpenBlocks();

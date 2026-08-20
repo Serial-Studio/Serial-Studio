@@ -764,7 +764,9 @@ bool Misc::ExtensionManager::confirmAutoUpdate(const QStringList& ids)
     qApp->applicationName(),
     QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No,
     QMessageBox::Yes,
-    {{QMessageBox::YesToAll, tr("Always update")}});
+    {
+      {QMessageBox::YesToAll, tr("Always update")}
+  });
 
   if (answer == QMessageBox::YesToAll) {
     m_updatePolicy = kUpdatePolicyAlways;

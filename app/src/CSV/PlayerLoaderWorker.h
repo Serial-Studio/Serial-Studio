@@ -76,6 +76,7 @@ struct PlayerIndexRequest {
   char separator            = ',';
   double timeScale          = 1.0;
   PlayerTimestampMode mode  = PlayerTimestampMode::Numeric;
+  QVector<quint8> fileColumnSourceBit;  ///< Per file cell: bit of its source, 0 = untracked
 };
 
 /**
@@ -90,6 +91,7 @@ using PlayerIndexRequestPtr = std::shared_ptr<PlayerIndexRequest>;
 struct PlayerIndexBatch {
   QVector<quint64> rowOffsets;
   QVector<double> rowSeconds;
+  QVector<quint8> rowSourceBits;  ///< Per row: OR of fileColumnSourceBit over non-empty cells
   qint64 bytesIndexed = 0;
   quint64 generation  = 0;
 };

@@ -35,8 +35,7 @@ constexpr bool kExport    = true;
 constexpr int kSource     = 0;
 }  // namespace
 
-class RepublishLanesTest : public QObject
-{
+class RepublishLanesTest : public QObject {
   Q_OBJECT
 
 private slots:

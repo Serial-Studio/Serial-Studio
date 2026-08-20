@@ -28,6 +28,7 @@
 #  include <QFileInfo>
 #  include <QJsonDocument>
 #  include <QJsonParseError>
+#  include <QScopedValueRollback>
 #  include <QSqlError>
 #  include <QSqlQuery>
 #  include <QtEndian>
@@ -71,6 +72,7 @@ Sessions::Player::Player()
   , m_framePos(0)
   , m_playing(false)
   , m_multiSource(false)
+  , m_injecting(false)
   , m_timestamp("--.--")
   , m_startTimestampSeconds(0.0)
   , m_steadyBaseRowSeconds(0.0)
@@ -330,6 +332,15 @@ void Sessions::Player::openFile()
  */
 void Sessions::Player::closeFile()
 {
+  // code-verify off
+  // Never tear the session down from inside an inject: the builder is still reading the cells
+  // this call staged. Re-queue; the inject returns within one marshal.
+  // code-verify on
+  if (m_injecting) {
+    QMetaObject::invokeMethod(this, [this] { closeFile(); }, Qt::QueuedConnection);
+    return;
+  }
+
   if (m_worker)
     m_worker->requestCancel();
 
@@ -457,6 +468,13 @@ void Sessions::Player::onLoadFinished(const PlayerSessionPayloadPtr& payload)
                                     QMessageBox::Warning);
   }
 
+  // code-verify off
+  // The id must be set BEFORE openLocalDb: detectFinalValueColumns probes
+  // "blocks WHERE session_id = m_sessionId", and the stale -1 from the previous close made a
+  // block-format session read the empty readings table for the whole replay (spec 0064).
+  // code-verify on
+  m_sessionId = payload->sessionId;
+
   if (!openLocalDb(m_filePath)) {
     m_loading = false;
     Q_EMIT loadingChanged();
@@ -467,7 +485,6 @@ void Sessions::Player::onLoadFinished(const PlayerSessionPayloadPtr& payload)
     return;
   }
 
-  m_sessionId       = payload->sessionId;
   m_columnUniqueIds = payload->columnUniqueIds;
   m_timestampsNs    = payload->timestampsNs;
   m_streamBlocks    = payload->streamBlocks;
@@ -605,13 +622,13 @@ void Sessions::Player::clearLocalState()
   m_multiSource           = false;
   m_hasFinalValues        = false;
   m_usesBlocks            = false;
-  m_columnUniqueIds.clear();
+  m_columnUniqueIds       = {};
   m_uidToColumn.clear();
-  m_timestampsNs.clear();
+  m_timestampsNs = {};
   m_columnToSource.clear();
   m_sourceColumns.clear();
-  m_streamBlocks.clear();
-  m_streamChannelBuf.clear();
+  m_streamBlocks     = {};
+  m_streamChannelBuf = {};
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1448,12 +1465,23 @@ void Sessions::Player::injectFrame(const QHash<int, QString>& uidValues, qint64 
   if (m_sourcesAtCurrentTs.isEmpty())
     return;
 
+  // code-verify off
+  // replayChannels() marshals blocking and pumps this thread's event loop, so a queued close can
+  // clear these members mid-loop. Guard against re-entry and walk copies, as the other players do.
+  // code-verify on
+  if (m_injecting)
+    return;
+
+  const QScopedValueRollback<bool> reentry_guard(m_injecting, true);
+
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
   const auto timestamp      = rowSteadyTimestamp(timestampNs);
+  const auto sources        = m_sourcesAtCurrentTs;
+  const auto sourceColumns  = m_sourceColumns;
 
-  for (int srcId : std::as_const(m_sourcesAtCurrentTs)) {
-    const auto colsIt = m_sourceColumns.constFind(srcId);
-    if (colsIt == m_sourceColumns.constEnd() || colsIt.value().empty())
+  for (int srcId : std::as_const(sources)) {
+    const auto colsIt = sourceColumns.constFind(srcId);
+    if (colsIt == sourceColumns.constEnd() || colsIt.value().empty())
       continue;
 
     QStringList cells;

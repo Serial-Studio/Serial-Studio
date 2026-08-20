@@ -1,23 +1,23 @@
 {
   "spec": "0039-session-context",
   "regenerate": "python scripts/code-verify.py --singleton-census --accept",
-  "total": 1686,
+  "total": 1690,
   "files": 209,
   "buckets": {
     "root": 156,
     "accessor": 68,
     "ctor-capture": 105,
     "deferred": 20,
-    "static-cache": 1214,
+    "static-cache": 1218,
     "loose": 123
   },
   "per_class": {
-    "DataModel::ProjectModel": 216,
+    "DataModel::ProjectModel": 217,
     "IO::ConnectionManager": 214,
-    "AppState": 130,
+    "AppState": 131,
     "CommandRegistry": 101,
     "UI::Dashboard": 85,
-    "DataModel::FrameBuilder": 76,
+    "DataModel::FrameBuilder": 79,
     "Misc::IconRegistry": 48,
     "Misc::ThemeManager": 43,
     "Misc::TimerEvents": 33,
@@ -53,10 +53,10 @@
     "Misc::CrashTracker": 10,
     "MachineID": 9,
     "Licensing::Trial": 8,
-    "ConnectionManager": 8,
     "Assistant": 7,
     "Licensing::MachineID": 7,
     "API::CommandHandler": 7,
+    "ConnectionManager": 7,
     "AI::FileSandbox": 6,
     "ProjectModel": 6,
     "Licensing::OfflineLicense": 5,
@@ -810,13 +810,13 @@
       }
     },
     "app/src/CSV/Player.cpp": {
-      "total": 19,
+      "total": 20,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 18,
+        "static-cache": 19,
         "loose": 0
       }
     },
@@ -1437,13 +1437,13 @@
       }
     },
     "app/src/IO/Drivers/Network.cpp": {
-      "total": 2,
+      "total": 1,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 2,
+        "static-cache": 1,
         "loose": 0
       }
     },
@@ -1580,13 +1580,13 @@
       }
     },
     "app/src/MDF4/Player.cpp": {
-      "total": 19,
+      "total": 22,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 18,
+        "static-cache": 21,
         "loose": 0
       }
     },
@@ -2053,13 +2053,13 @@
       }
     },
     "app/src/UI/Dashboard.cpp": {
-      "total": 40,
+      "total": 41,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 39,
+        "static-cache": 40,
         "loose": 0
       }
     },

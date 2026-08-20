@@ -184,6 +184,7 @@ private:
   int m_framePos;
   bool m_playing;
   bool m_multiSource;
+  bool m_injecting;
   QString m_timestamp;
   double m_startTimestampSeconds;
   double m_steadyBaseRowSeconds;

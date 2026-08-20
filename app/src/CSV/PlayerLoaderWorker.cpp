@@ -217,8 +217,15 @@ void CSV::PlayerLoaderWorker::processRow(const PlayerIndexRequest& request,
   if (!valid)
     return;
 
+  quint8 bits          = 0;
+  const qsizetype bitN = request.fileColumnSourceBit.size();
+  for (qsizetype c = 0; c < cells.size() && c < bitN; ++c)
+    if (!cells.at(c).isEmpty())
+      bits |= request.fileColumnSourceBit.at(c);
+
   batch.rowOffsets.append(static_cast<quint64>(begin));
   batch.rowSeconds.append(secondsForRow(request, cells));
+  batch.rowSourceBits.append(bits);
   ++m_validRows;
 }
 

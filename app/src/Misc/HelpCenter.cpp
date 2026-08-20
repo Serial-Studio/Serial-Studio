@@ -22,7 +22,6 @@
 #include "Misc/HelpCenter.h"
 
 #include <algorithm>
-
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -71,10 +70,9 @@ static int versionKey(const QString& version)
  */
 static int indexOfSlug(const QVariantList& versions, const QString& slug)
 {
-  for (int i = 0; i < versions.count(); ++i) {
+  for (int i = 0; i < versions.count(); ++i)
     if (versions.at(i).toMap().value(QStringLiteral("slug")).toString() == slug)
       return i;
-  }
 
   return -1;
 }

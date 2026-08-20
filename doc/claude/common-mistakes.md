@@ -76,6 +76,7 @@
 | Mistake | Fix |
 |---------|-----|
 | Looking for session DB code under `app/src/SQLite/` | It's `app/src/Sessions/` — `namespace Sessions` for DatabaseManager, Export, and Player (all three). |
+| Calling `clear()` on a big flat container at teardown and assuming the memory came back | `QList/QVector::clear()` and `std::vector::clear()` both KEEP capacity. This only bites **flat POD arrays** (index vectors, columnar doubles, scratch buffers) and **object pools** — containers *of* containers free their payload on `clear()` because the elements are destructed. On a close/stop path, `squeeze()` the Qt flats, default-assign (`= {}`) the std ones, and release pool slot storage explicitly (`FrameBuilder::releaseReplayPoolStorage()` when the last player closes). Found 2026-08-19: a closed 4.4 GB CSV pinned a 113 MB row index, and replay-bound pools pinned up to the 192 MB block budget for the whole session (spec 0064). |
 
 ## Qt & QML UI
 

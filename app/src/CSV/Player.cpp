@@ -28,8 +28,10 @@
 #include <QApplication>
 #include <QDateTime>
 #include <QDeadlineTimer>
+#include <QElapsedTimer>
 #include <QFileDialog>
 #include <QInputDialog>
+#include <QScopedValueRollback>
 #include <QSet>
 #include <QTimer>
 #include <QtMath>
@@ -277,6 +279,7 @@ static void fillSeekGaps(QVector<double>& values)
  */
 CSV::Player::Player()
   : m_framePos(0)
+  , m_injecting(false)
   , m_playing(false)
   , m_multiSource(false)
   , m_indexing(false)
@@ -523,6 +526,15 @@ void CSV::Player::openFile()
  */
 void CSV::Player::closeFile()
 {
+  // code-verify off
+  // A close dispatched inside injectRow's nested event loop would unmap the file while the
+  // builder still reads its byte views. Re-queue; the inject returns within one marshal.
+  // code-verify on
+  if (m_injecting) {
+    QMetaObject::invokeMethod(this, [this] { closeFile(); }, Qt::QueuedConnection);
+    return;
+  }
+
   if (!isOpen())
     return;
 
@@ -548,6 +560,11 @@ void CSV::Player::closeFile()
   m_rowSeconds.clear();
   m_rowSeconds.squeeze();
   m_headerCells.clear();
+  m_rowSourceBits.clear();
+  m_rowSourceBits.squeeze();
+  m_fileColumnSourceBit.clear();
+  m_bitSourceIds.clear();
+  m_lastSourceRow.clear();
   m_timestamp        = "--.--";
   m_tsMode           = PlayerTimestampMode::Numeric;
   m_timestampColumn  = 0;
@@ -560,7 +577,11 @@ void CSV::Player::closeFile()
   m_multiSource      = false;
   m_pausedAtFrontier = false;
   m_seekColumnByKey.clear();
+  m_seekColumnByKey.squeeze();
   m_sourceColumnsByIndex.clear();
+  m_cells        = {};
+  m_splitScratch = QByteArray();
+  m_dataSpans    = {};
 
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
   frameBuilder.registerQuickPlotHeaders(QStringList());
@@ -794,17 +815,18 @@ void CSV::Player::startIndexing()
 
   m_loaderThread->start();
 
-  auto request                = std::make_shared<PlayerIndexRequest>();
-  request->data               = m_mapped;
-  request->size               = m_mappedSize;
-  request->dataOffset         = m_dataOffset;
-  request->timestampColumn    = m_timestampColumn;
-  request->intervalSeconds    = m_intervalSeconds;
-  request->anchorMsSinceEpoch = m_anchorMs;
-  request->generation         = m_indexGeneration;
-  request->separator          = m_separator;
-  request->timeScale          = m_timeScale;
-  request->mode               = m_tsMode;
+  auto request                 = std::make_shared<PlayerIndexRequest>();
+  request->data                = m_mapped;
+  request->size                = m_mappedSize;
+  request->dataOffset          = m_dataOffset;
+  request->timestampColumn     = m_timestampColumn;
+  request->intervalSeconds     = m_intervalSeconds;
+  request->anchorMsSinceEpoch  = m_anchorMs;
+  request->generation          = m_indexGeneration;
+  request->separator           = m_separator;
+  request->timeScale           = m_timeScale;
+  request->mode                = m_tsMode;
+  request->fileColumnSourceBit = m_fileColumnSourceBit;
 
   m_indexing         = true;
   m_pausedAtFrontier = false;
@@ -879,9 +901,10 @@ void CSV::Player::onIndexBatch(const CSV::PlayerIndexBatchPtr& batch)
     m_rowSeconds.reserve(reserve_rows);
   }
 
-  m_rowOffsets   += batch->rowOffsets;
-  m_rowSeconds   += batch->rowSeconds;
-  m_bytesIndexed  = batch->bytesIndexed;
+  m_rowOffsets    += batch->rowOffsets;
+  m_rowSeconds    += batch->rowSeconds;
+  m_rowSourceBits += batch->rowSourceBits;
+  m_bytesIndexed   = batch->bytesIndexed;
 
   if (!m_playing && m_pausedAtFrontier
       && (frameCount() > m_framePos + 1 || (was_empty && frameCount() > 0))) {
@@ -1046,6 +1069,8 @@ void CSV::Player::performSeekSettle()
   const int window = qMin(dashboard.points(), m_framePos + 1);
   const int start  = qMax(0, m_framePos - window + 1);
   processFrameBatch(start, m_framePos);
+  m_lastSourceRow.fill(-1);
+  backfillSparseSources();
 
   if (!m_seekColumnByKey.isEmpty()) {
     QVector<double> times;
@@ -1263,6 +1288,8 @@ void CSV::Player::updateData()
       m_framePos = qMin(targetRow, m_framePos + stride);
       injectRow(m_framePos);
     }
+
+    backfillSparseSources();
 
     constexpr qint64 kCatchUpFillMs = 250;
     if (stride > 2 && !m_seekColumnByKey.isEmpty()
@@ -1624,6 +1651,112 @@ void CSV::Player::buildReplayLayout()
 
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
   frameBuilder.setReplayColumnMap(std::move(replay));
+
+  m_bitSourceIds.clear();
+  m_fileColumnSourceBit = QVector<quint8>(m_headerCells.size(), 0);
+  for (int i = 0; i < colCount; ++i) {
+    const int srcId = schema.columns[static_cast<size_t>(i)].sourceId;
+    int bit         = static_cast<int>(m_bitSourceIds.indexOf(srcId));
+    if (bit < 0 && m_bitSourceIds.size() < 8) {
+      bit = m_bitSourceIds.size();
+      m_bitSourceIds.append(srcId);
+    }
+
+    const int fileCol = dataColumnToFileColumn(i);
+    if (bit >= 0 && fileCol >= 0 && fileCol < m_fileColumnSourceBit.size())
+      m_fileColumnSourceBit[fileCol] = static_cast<quint8>(1u << bit);
+  }
+
+  m_lastSourceRow = QVector<int>(m_bitSourceIds.size(), -1);
+}
+
+/**
+ * @brief File cell index of data column @p i, undoing the timestamp-column exclusion that
+ *        splitDataCells applies for the active timestamp mode.
+ */
+int CSV::Player::dataColumnToFileColumn(int i) const
+{
+  SS_ASSERT(i >= 0, return -1);
+
+  switch (m_tsMode) {
+    case PlayerTimestampMode::Interval:
+      return i;
+    case PlayerTimestampMode::DateTimeColumn:
+      return (i < m_timestampColumn) ? i : i + 1;
+    case PlayerTimestampMode::Numeric:
+    case PlayerTimestampMode::DateTime:
+      return i + 1;
+  }
+
+  return -1;
+}
+
+/**
+ * @brief Injects @p row for @p sourceId only: the backfill path updates one stale source from
+ *        its own latest present row without re-publishing every other source at that instant.
+ */
+void CSV::Player::injectSourceRow(int row, int sourceId)
+{
+  SS_ASSERT(row >= 0, return);
+  SS_ASSERT(row < frameCount(), return);
+
+  if (m_injecting)
+    return;
+
+  const QScopedValueRollback<bool> reentry_guard(m_injecting, true);
+  const qsizetype count = splitDataCells(row);
+  if (count <= 0)
+    return;
+
+  const auto it = m_sourceColumnsByIndex.constFind(sourceId);
+  if (it == m_sourceColumnsByIndex.constEnd())
+    return;
+
+  static auto& frameBuilder = DataModel::FrameBuilder::instance();
+  const auto timestamp      = rowSteadyTimestamp(row);
+  const auto& orderedCols   = it.value();
+  QVarLengthArray<QByteArrayView, 64> cells;
+  cells.reserve(orderedCols.size());
+  for (int col : orderedCols)
+    cells.append((col >= 0 && col < count) ? m_dataSpans.at(col) : QByteArrayView());
+
+  frameBuilder.replayChannelSpans(sourceId, cells.constData(), cells.size(), timestamp);
+}
+
+/**
+ * @brief Brings every source the strided catch-up skipped up to its latest present row at or
+ *        before the playhead (spec 0064): a sparse recording holds a slow source's cells on a
+ *        handful of rows per second, so row-strided sampling almost never lands on one and its
+ *        widgets would otherwise freeze for the whole replay.
+ */
+void CSV::Player::backfillSparseSources()
+{
+  constexpr int kBackfillScanMax = 262144;
+
+  if (!m_multiSource || m_bitSourceIds.isEmpty())
+    return;
+
+  const int last = qMin(m_framePos, static_cast<int>(m_rowSourceBits.size()) - 1);
+  if (last < 0)
+    return;
+
+  for (int b = 0; b < m_bitSourceIds.size(); ++b) {
+    const auto mask = static_cast<quint8>(1u << b);
+    const int stop  = qMax(0, last - kBackfillScanMax);
+    int found       = -1;
+    for (int r = last; r >= stop; --r) {
+      if (m_rowSourceBits.at(r) & mask) {
+        found = r;
+        break;
+      }
+    }
+
+    if (found < 0 || found == m_lastSourceRow.value(b, -1))
+      continue;
+
+    m_lastSourceRow[b] = found;
+    injectSourceRow(found, m_bitSourceIds.at(b));
+  }
 }
 
 /**
@@ -1678,6 +1811,16 @@ void CSV::Player::injectRow(int row)
 {
   SS_ASSERT(row >= 0, return);
   SS_ASSERT(row < frameCount(), return);
+
+  // code-verify off
+  // replayChannelSpans() marshals blocking and pumps this thread's event loop, so a queued
+  // updateData() or close click can re-enter here and tear state down under the byte views the
+  // outer call already handed to the builder.
+  // code-verify on
+  if (m_injecting)
+    return;
+
+  const QScopedValueRollback<bool> reentry_guard(m_injecting, true);
 
   static auto& appState = AppState::instance();
   if (appState.operationMode() != SerialStudio::ProjectFile) {

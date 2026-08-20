@@ -1915,6 +1915,14 @@ void UI::Dashboard::resetData(const bool notify)
   if (notify) {
     m_datasetExtremes.clear();
 
+    // code-verify off
+    // Only a HARD reset (player open, disconnect) forgets the builder's published-structure
+    // marks; the reconfigure path re-enters resetData(false), and forgetting there loops
+    // reconfigure -> republish -> reconfigure at block rate (2026-08-19 incident).
+    // code-verify on
+    static auto& frameBuilder = DataModel::FrameBuilder::instance();
+    frameBuilder.forgetPublishedStructures();
+
     m_updateRequired = true;
 
     Q_EMIT updated();

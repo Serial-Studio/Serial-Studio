@@ -138,6 +138,9 @@ private:
   void buildReplayLayout();
   void injectFrame(const QByteArray& frame);
   void injectRow(int row);
+  void injectSourceRow(int row, int sourceId);
+  [[nodiscard]] int dataColumnToFileColumn(int i) const;
+  void backfillSparseSources();
   void anchorSteadyBase(int row);
   void buildSeekWindow(int startRow,
                        int endRow,
@@ -154,6 +157,7 @@ private:
 
 private:
   int m_framePos;
+  bool m_injecting;
   bool m_playing;
   bool m_multiSource;
   bool m_indexing;
@@ -199,5 +203,9 @@ private:
   QHash<qint64, int> m_seekColumnByKey;
 
   QMap<int, QVector<int>> m_sourceColumnsByIndex;
+  QVector<quint8> m_rowSourceBits;
+  QVector<quint8> m_fileColumnSourceBit;
+  QVector<int> m_bitSourceIds;
+  QVector<int> m_lastSourceRow;
 };
 }  // namespace CSV
