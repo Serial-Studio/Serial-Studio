@@ -1,7 +1,7 @@
 ---
 spec: 0043-connection-reliability
 title: Connection reliability sweep (post-0034 removal, trial/licensing loop)
-status: in-progress  # implemented same-day; maintainer ACs pending
+status: done          # closed 2026-08-20
 created: 2026-08-04
 author: Alex Spataru (executed by Claude)
 ---

@@ -1,7 +1,7 @@
 ---
 spec: 0033-problem-center
 title: Problem center (project + link diagnostics)
-status: in-progress  # draft -> approved -> in-progress -> done | shelved
+status: done          # closed 2026-08-20
 created: 2026-07-25
 author: Claude (drafted with Alex)
 ---

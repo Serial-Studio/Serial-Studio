@@ -1,7 +1,7 @@
 ---
 spec: 0011-dataset-alias
 title: Dataset aliases for script and API dataset lookup
-status: in-progress  # draft -> approved -> in-progress -> done | shelved
+status: done          # closed 2026-08-20
 created: 2026-07-15
 author: Alex Spataru
 ---

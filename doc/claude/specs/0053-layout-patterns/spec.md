@@ -1,7 +1,7 @@
 ---
 spec: 0053-layout-patterns
 title: Per-workspace auto-layout patterns + frozen shared borders
-status: in-progress  # draft -> approved -> in-progress -> done | shelved
+status: done          # closed 2026-08-20
 created: 2026-08-13
 amended: 2026-08-14  # R11-R13 / AC9-AC12: constant manual metrics + picker on the auto-layout button
 author: Alex Spataru

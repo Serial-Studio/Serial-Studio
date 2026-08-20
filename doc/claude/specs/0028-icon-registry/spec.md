@@ -1,7 +1,7 @@
 ---
 spec: 0028-icon-registry
 title: Centralized icon & command registry (icons by category/id + size; commands by manifest)
-status: in-progress  # draft -> approved -> in-progress -> done | shelved
+status: done          # closed 2026-08-20
 created: 2026-07-21
 author: Alex Spataru
 ---

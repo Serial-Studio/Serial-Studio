@@ -1,5 +1,8 @@
 # Spec 0030 — Campaign Tracker
 
+> **2026-08-20 update:** `CMakePresets.json` was later removed (maintainer prefers manual
+> configures); preset mentions below are historical. Unit tier + CI `unit` job stand.
+
 > Umbrella execution tracker. Maintainer instructed full-roadmap implementation
 > (2026-07-25) with per-item artifacts still produced; Claude self-gates phases and
 > the maintainer reviews the landed diffs. R1 shipped as spec 0031 (undo/redo).

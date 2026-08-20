@@ -1,7 +1,7 @@
 ---
 spec: 0008-assistant-auto-canary
 title: Assistant Context Health & Compounding Workflows (Weak-Model-First)
-status: in-progress  # draft -> approved -> in-progress -> done | shelved
+status: done          # closed 2026-08-20
 created: 2026-07-14
 author: Alex Spataru
 ---

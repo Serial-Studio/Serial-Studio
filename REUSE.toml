@@ -50,7 +50,6 @@ path = [
   ".github/**",
   "*.md",
   "updates.json",
-  "CMakePresets.json",
   ".clang-format",
   ".clang-tidy",
   ".gitattributes",

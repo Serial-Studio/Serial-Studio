@@ -176,26 +176,20 @@ A separate tier from everything above: Qt Test suites compiled into small binari
 the production translation units it exercises, never the application target, so the tier configures
 and links in seconds.
 
-The targets exist only when the build is configured with `-DSS_BUILD_TESTS=ON`. `CMakePresets.json`
-at the repo root wraps that (plus the sanitizer and lean-CI configurations) into named presets:
-
-| Preset | Configuration |
-|--------|---------------|
-| `dev` | The developer configuration: builds the app and the unit-test tier |
-| `asan` / `tsan` | Mutually exclusive sanitizers; both force `SS_USE_MIMALLOC=OFF` |
-| `analysis` | Compile-commands only, for static analysis tooling |
-| `unit-ci` | What the CI `unit` job runs, x86_64 + arm64 for the `DSPSimd` lanes; GRPC/WebEngine off, never builds the app |
-
-Presets are additive — nothing in the CMake sources reads them.
+The targets exist only when the build is configured with `-DSS_BUILD_TESTS=ON`. There are no
+CMake presets — configure by hand. Sanitizer builds (`-DDEBUG_SANITIZER=ON` for ASan+UBSan, or
+`-DENABLE_TSAN=ON`; mutually exclusive) must also pass `-DSS_USE_MIMALLOC=OFF`. The CI `unit`
+job (x86_64 + arm64 for the `DSPSimd` lanes) inlines its lean flags in `ci.yml`: GRPC/WebEngine
+off, never builds the app.
 
 ```bash
 # Configure, build, and run the whole tier
-cmake --preset dev
-cmake --build --preset dev --target ss_unit_tests
-ctest --preset dev
+cmake -G Ninja -B build/dev -DCMAKE_BUILD_TYPE=Debug -DSS_BUILD_TESTS=ON
+cmake --build build/dev --target ss_unit_tests
+ctest --test-dir build/dev --output-on-failure
 
 # One suite
-ctest --preset dev -R dsp_kernels --output-on-failure
+ctest --test-dir build/dev -R dsp_kernels --output-on-failure
 ```
 
 | Suite | What it covers |

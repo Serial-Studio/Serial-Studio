@@ -135,8 +135,20 @@ UI::Taskbar::Taskbar(QQuickItem* parent)
 
   connectToRegistry();
 
-  connect(&m_dashboard, &UI::Dashboard::dataReset, this, &UI::Taskbar::rebuildModel);
-  connect(&m_dashboard, &UI::Dashboard::widgetCountChanged, this, &UI::Taskbar::rebuildModel);
+  // code-verify off
+  // Queued: Dashboard emits both mid-reconfigureDashboard on the display tick, so a Direct rebuild
+  // reenters a half-built layout and incubates a QtGraphs widget whose polish loop never converges.
+  connect(&m_dashboard,
+          &UI::Dashboard::dataReset,
+          this,
+          &UI::Taskbar::rebuildModel,
+          Qt::QueuedConnection);
+  connect(&m_dashboard,
+          &UI::Dashboard::widgetCountChanged,
+          this,
+          &UI::Taskbar::rebuildModel,
+          Qt::QueuedConnection);
+  // code-verify on
 
   auto* pm = &m_projectModel;
   connect(pm, &DataModel::ProjectModel::activeGroupIdChanged, this, [this, pm] {

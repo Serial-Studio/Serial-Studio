@@ -1,7 +1,7 @@
 ---
 spec: 0037-generated-api-surfaces
 title: Generated API surfaces from one source of truth
-status: in-progress  # implemented + CI-gated; maintainer ACs pending
+status: done          # closed 2026-08-20
 created: 2026-07-25
 author: Claude (roadmap R6, with Alex)
 ---

@@ -7,6 +7,10 @@ updated: 2026-07-25
 
 # Plan 0032 — C++ unit-test tier plus build presets
 
+> **2026-08-20 update:** `CMakePresets.json` was later removed (maintainer prefers manual
+> configures); CI inlines the former `unit-ci` flags in `ci.yml`. Preset material below is
+> historical.
+
 > **Phase 2 of 4 — the HOW.** The technical design that satisfies every requirement in
 > [`spec.md`](./spec.md). Gate: do not start `/ss-tasks` until a human marks this
 > `approved`.

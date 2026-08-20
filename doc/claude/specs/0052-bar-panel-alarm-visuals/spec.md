@@ -1,7 +1,7 @@
 ---
 spec: 0052-bar-panel-alarm-visuals
 title: Bar Panel group widget + severity-first alarm visual language
-status: in-progress  # draft -> approved -> in-progress -> done | shelved  (code-complete; ACs pending a rebuild)
+status: done          # closed 2026-08-20
 created: 2026-08-12
 author: Alex Spataru
 ---

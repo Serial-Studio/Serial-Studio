@@ -1,7 +1,7 @@
 ---
 spec: 0057-cascading-envelope-rings
 title: Cascading envelope rings for plot history
-status: in-progress
+status: done          # closed 2026-08-20
 created: 2026-08-16
 author: Claude (overnight run, unattended)
 ---

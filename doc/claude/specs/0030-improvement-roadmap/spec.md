@@ -1,13 +1,17 @@
 ---
 spec: 0030-improvement-roadmap
 title: Architecture improvement roadmap (undo, registry, diagnostics, async, remote)
-status: in-progress  # draft -> approved -> in-progress -> done | shelved
+status: done          # closed 2026-08-20
 approved: 2026-07-24 # roadmap + ordering approved; R1 picked first
 created: 2026-07-24
 author: Claude (comparative review with Alex)
 ---
 
 # Spec 0030 — Architecture Improvement Roadmap
+
+> **2026-08-20 update:** the `CMakePresets.json` delivered under R3 was later removed —
+> the maintainer prefers manual `cmake -B ... -D...` configures. Preset mentions below
+> are historical; the unit-test tier and CI `unit` job stand (flags inlined in `ci.yml`).
 
 > **Umbrella spec.** This is a roadmap, not a single feature: ten improvement items
 > distilled from a comparative review of three mature Qt codebases (a 25-year CAD

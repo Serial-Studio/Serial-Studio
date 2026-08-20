@@ -1,7 +1,7 @@
 ---
 spec: 0038-widget-extensions
 title: Widget-as-extension (installable dashboard widgets)
-status: in-progress  # implemented + CI-gated; maintainer ACs pending
+status: done          # closed 2026-08-20
 created: 2026-07-25
 author: Claude (roadmap R5, drafted with Alex)
 ---

@@ -1,7 +1,7 @@
 ---
 spec: 0023-export-pacing
 title: Scheduled dashboard ticks and CSV interval-snapshot logging
-status: in-progress  # draft -> approved -> in-progress -> done | shelved
+status: done          # closed 2026-08-20
 created: 2026-07-20
 author: Claude (with Alex Spataru)
 ---

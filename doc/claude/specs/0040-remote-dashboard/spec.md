@@ -1,7 +1,7 @@
 ---
 spec: 0040-remote-dashboard
 title: Remote dashboard attach
-status: in-progress  # draft -> approved -> in-progress -> done | shelved
+status: done          # closed 2026-08-20
 # Retro-flip 2026-07-25: implemented under the spec-0030 campaign approval; the
 # per-phase gates were never formally run. T1-T23 + T26 done; T24/T25/T27 and all
 # ACs open (maintainer-run).

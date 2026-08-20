@@ -1,7 +1,7 @@
 ---
 spec: 0048-csv-separator-detection
 title: CSV player separator auto-detection
-status: in-progress  # draft -> approved -> in-progress -> done | shelved
+status: done          # closed 2026-08-20
 created: 2026-08-09
 author: Alex Spataru
 ---

@@ -427,7 +427,7 @@ include(${CMAKE_SOURCE_DIR}/cmake/Optimization.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/Sanitizers.cmake)
 
 #---------------------------------------------------------------------------------------------------
-# Debug build usability -- disable MSVC checked iterators
+# Debug build usability -- disable MSVC checked iterators, -Og elsewhere
 #---------------------------------------------------------------------------------------------------
 #
 # MSVC's debug STL ships with _ITERATOR_DEBUG_LEVEL=2 by default, which wraps every iterator
@@ -438,6 +438,12 @@ include(${CMAKE_SOURCE_DIR}/cmake/Sanitizers.cmake)
 #
 # ABI consequence: every translation unit (including lib/) must agree on the iterator macros,
 # so these are project-wide compile definitions rather than per-target.
+#
+# On GCC/Clang/AppleClang the equivalent usability problem is plain -O0: the acquisition hotpath
+# and plot-envelope kernels run an order of magnitude slower and the dashboard cannot keep up
+# with live data. -Og (debug-friendly optimization; -O1 on Clang) restores usable throughput
+# while keeping assertions, symbols, and stepping. Debug carries no LTO/dead-strip, so the Lua
+# unwind guarantees are unaffected, and no math or -march flags change here.
 #---------------------------------------------------------------------------------------------------
 
 if(MSVC)
@@ -445,6 +451,8 @@ if(MSVC)
       $<$<CONFIG:Debug>:_ITERATOR_DEBUG_LEVEL=0>
       $<$<CONFIG:Debug>:_HAS_ITERATOR_DEBUGGING=0>
    )
+else()
+   add_compile_options($<$<CONFIG:Debug>:-Og>)
 endif()
 
 #---------------------------------------------------------------------------------------------------

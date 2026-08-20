@@ -323,7 +323,8 @@ source lands anyway with its CMake registration commented and AC3 stays unchecke
   report; the same two in a file that does not mention it must not; the census classifier is
   checked against hand-counted numbers on three known files (`ModuleManager.cpp` 130,
   `BackupManager.cpp` 3, `DBCImporter.cpp` 2).
-- **Unit (maintainer runs, after spec 0032):** `ctest --preset dev --output-on-failure` —
+- **Unit (maintainer runs, after spec 0032):** `ctest --test-dir <builddir>
+  --output-on-failure` (presets since removed) —
   `tst_proto_importer` per AC3.
 - **Static (agent runs):** `python scripts/code-verify.py --check` on every changed C++ file;
   blocking-error count before and after the new rule must be identical;

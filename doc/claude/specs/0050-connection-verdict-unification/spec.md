@@ -1,7 +1,7 @@
 ---
 spec: 0050-connection-verdict-unification
 title: Bulletproof connections — one verdict, no timers, no live-edit churn
-status: in-progress  # draft -> approved -> in-progress -> done | shelved
+status: done          # closed 2026-08-20
                      # approved verbally + implementation ordered same night (2026-08-10,
                      # "ship tonight"); demo-freeze constraint overridden by the maintainer.
                      # AC8 (setter-guard lint rule) deferred post-demo; ACs 1-7 pending the

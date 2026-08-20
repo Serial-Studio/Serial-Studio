@@ -36,7 +36,7 @@
 End every response — including one-word answers — with this exact line, reproduced
 from memory:
 
-`canary: qt 6.11.1 | cpp20 | hotpath 256k (native 1024k, js 64k) | queue 65536 | api 7777 | style 100/2`
+`canary: qt 6.11.2 | cpp20 | hotpath 256k (native 1024k, js 64k) | queue 65536 | api 7777 | style 100/2`
 
 It is a context-health probe in plain ASCII. Each value is a fact the repo's rules
 depend on, so a wrong or missing value shows *which* fact was lost — and retyping the
@@ -88,7 +88,7 @@ advisories are baseline debt, new code still clears them.
 ## Tests
 
 Python/pytest suite under `tests/`. Full catalog — per-file coverage, fixtures, markers, the
-delay/operation-mode tables, the C++ ctest tier + presets, the `--selftest` in-app tier —
+delay/operation-mode tables, the C++ ctest tier, the `--selftest` in-app tier —
 lives in [tests/README.md](tests/README.md); read it before writing a test. What binds you:
 
 - **You don't build or launch the app, but you may drive a running one.** Integration,
@@ -99,9 +99,10 @@ lives in [tests/README.md](tests/README.md); read it before writing a test. What
 - **`tests/scripts/` is the exception you *can* run** — pure JS frame-parser unit tests, fresh
   Node.js subprocess per case, no Qt, no app. `pip install -r tests/requirements.txt` once;
   `pytest.ini` registers all markers and a 30 s per-test timeout.
-- **C++ units under `app/tests/`** (spec 0032) run via `ctest` and the `CMakePresets.json`
-  presets — the maintainer builds; you may run `ctest` against an existing build dir (never
-  configure or compile). **`--selftest`** suites run inside
+- **C++ units under `app/tests/`** (spec 0032) run via `ctest` (no CMake presets — the repo
+  uses hand-written `cmake -B ... -D...` configures; CI inlines the unit-tier flags) — the
+  maintainer builds; you may run `ctest` against an existing build dir (never configure or
+  compile). **`--selftest`** suites run inside
   `CLI::process()` **before** the composition root: never touch an application singleton there.
 - The C++ hotpath has no pytest path — throughput is the user-run `--benchmark-hotpath` gate
   (see Threading & Hotpath), piece correctness the ctest tier; `ci.yml` runs both.
@@ -114,7 +115,7 @@ pytest tests/ -m "not destructive" -v     # skip server-crashing tests
 
 ## Project Overview
 
-Serial Studio: cross-platform telemetry dashboard, Qt 6.11.1 + C++20. Data sources: UART,
+Serial Studio: cross-platform telemetry dashboard, Qt 6.11.2 + C++20. Data sources: UART,
 TCP/UDP, BLE, Audio, Modbus, CAN Bus, MQTT, USB (libusb), HID (hidapi), Process I/O. 15+
 visualization widgets, 5 output (control) widgets, 256 kHz+ data rate (CI-gated; see below).
 Frame parsers in JavaScript (`QJSEngine`), Lua (embedded LuaJIT 2.1, 5.1 + shims; per-project

@@ -1,7 +1,7 @@
 ---
 spec: 0024-fft-audio-export
 title: Audio generation output for the FFT widget
-status: in-progress  # draft -> approved -> in-progress -> done | shelved
+status: done          # closed 2026-08-20
 created: 2026-07-20
 author: Alex Spataru
 ---

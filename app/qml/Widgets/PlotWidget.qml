@@ -281,7 +281,7 @@ Item {
     if (range <= 0)
       return 1.0
 
-    const availableWidth = _graph.plotArea.width
+    const availableWidth = root.settledPlotW
     if (root.logX) {
       const labelWidth = _tickMetrics.advanceWidth("-8888.88") + 20
       return logInterval(range, Math.max(2, Math.floor(availableWidth / labelWidth)))
@@ -301,7 +301,7 @@ Item {
     if (range <= 0)
       return 1.0
 
-    const availableHeight = _graph.plotArea.height
+    const availableHeight = root.settledPlotH
     if (root.logY) {
       const labelHeight = _tickMetrics.height + root.tickGutterPy
       return logInterval(range, Math.max(2, Math.floor(availableHeight / labelHeight)))
@@ -577,6 +577,31 @@ Item {
   readonly property real yVisibleMin: yMin + (yMax - yMin) / 2 + _axisY.pan - yVisibleRange / 2
 
   //
+  // Settled plot-area extent for the tick math: reading live plotArea (which the interval resizes
+  // via the label containers) spins QtGraphs' polish; this debounced copy breaks the loop.
+  //
+  property real settledPlotW: 0
+  property real settledPlotH: 0
+  property bool plotSettlePending: false
+  function schedulePlotAreaSettle() {
+    if (root.plotSettlePending)
+      return
+
+    root.plotSettlePending = true
+    Qt.callLater(root.applyPlotAreaSettle)
+  }
+  function applyPlotAreaSettle() {
+    root.plotSettlePending = false
+    const w = _graph.plotArea.width
+    const h = _graph.plotArea.height
+    if (Math.abs(w - root.settledPlotW) > 1)
+      root.settledPlotW = w
+
+    if (Math.abs(h - root.settledPlotH) > 1)
+      root.settledPlotH = h
+  }
+
+  //
   // Dynamic tick intervals based on visible range and available space
   //
   readonly property real xTickInterval: smartIntervalX(xVisibleMin, xVisibleMax)
@@ -792,6 +817,8 @@ Item {
   //
   GraphsView {
     id: _graph
+
+    onPlotAreaChanged: root.schedulePlotAreaSettle()
 
     anchors {
       margins: 2

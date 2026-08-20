@@ -1,7 +1,7 @@
 ---
 spec: 0009-dataset-color-override
 title: Per-dataset color override in the Project Editor
-status: in-progress  # draft -> approved -> in-progress -> done | shelved
+status: done          # closed 2026-08-20
 created: 2026-07-14
 author: Alex Spataru
 ---

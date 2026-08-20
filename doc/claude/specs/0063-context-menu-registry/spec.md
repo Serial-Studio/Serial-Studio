@@ -1,7 +1,7 @@
 ---
 spec: 0063-context-menu-registry
 title: Registry-Driven Context Menus for the Project Editor
-status: in-progress  # draft -> approved -> in-progress -> done | shelved
+status: done          # closed 2026-08-20
 created: 2026-08-18
 author: Alex Spataru
 ---

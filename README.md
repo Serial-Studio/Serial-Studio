@@ -203,7 +203,7 @@ First time using it? Start with the [getting started guide](./doc/help/Getting-S
 
 Minimum:
 
-- **Qt 6.9 or later** (6.11.1 recommended). Required modules: QtCore, QtGui, QtWidgets, QtQml, QtQuick, QtQuickControls2, QtGraphs, QtSvg, QtSql, QtSerialPort, QtBluetooth, QtCore5Compat, and Qt LinguistTools at build time.
+- **Qt 6.9 or later** (6.11.2 recommended). Required modules: QtCore, QtGui, QtWidgets, QtQml, QtQuick, QtQuickControls2, QtGraphs, QtSvg, QtSql, QtSerialPort, QtBluetooth, QtCore5Compat, and Qt LinguistTools at build time.
 - **C++20 compiler:** GCC 10+ (Linux), Clang 12+ (macOS), or MSVC 2019+ (Windows).
 - **CMake 3.20 or later.**
 - Platform toolchain (see [Platform specifics](#platform-specifics)).

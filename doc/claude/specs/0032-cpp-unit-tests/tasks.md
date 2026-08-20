@@ -7,6 +7,10 @@ updated: 2026-07-25
 
 # Tasks 0032 — C++ unit-test tier plus build presets
 
+> **2026-08-20 update:** `CMakePresets.json` was later removed (maintainer prefers manual
+> configures); CI inlines the former `unit-ci` flags in `ci.yml`. T10 and other preset
+> references below are historical.
+
 > **Phase 3 of 4 — the ordered checklist.** Decompose [`plan.md`](./plan.md) into units that
 > are small, ordered, and *individually verifiable* — each one a coherent diff a reviewer
 > could read in isolation. `/ss-implement` works this list top to bottom and keeps the status

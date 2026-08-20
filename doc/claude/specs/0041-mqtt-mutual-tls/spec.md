@@ -1,7 +1,7 @@
 ---
 spec: 0041-mqtt-mutual-tls
 title: MQTT mutual TLS (client certificates) for AWS IoT Core
-status: in-progress  # draft -> approved -> in-progress -> done | shelved
+status: done          # closed 2026-08-20
 created: 2026-07-27
 author: Alex Spataru
 ---

@@ -65,9 +65,9 @@ env:
   #
   # Qt version selection
   #
-  QT_VERSION_LINUX: 6.11.1
-  QT_VERSION_MACOS: 6.11.1
-  QT_VERSION_WINDOWS: 6.11.1
+  QT_VERSION_LINUX: 6.11.2
+  QT_VERSION_MACOS: 6.11.2
+  QT_VERSION_WINDOWS: 6.11.2
   QTFRAMEWORK_BYPASS_LICENSE_CHECK: "true"
 
   #
@@ -266,13 +266,23 @@ jobs:
     # a parallel unit job racing this restore could get denied or evict the entry
     #
     - name: '🚧 Configure unit-test tier'
-      run: cmake --preset unit-ci
+      run: |
+        cmake -G Ninja -B build/unit-ci \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DSS_BUILD_TESTS=ON \
+          -DBUILD_GPL3=ON \
+          -DENABLE_GRPC=OFF \
+          -DWITH_WEBENGINE=OFF \
+          -DSS_USE_MIMALLOC=OFF \
+          -DUSE_SYSTEM_ZLIB=ON \
+          -DUSE_SYSTEM_EXPAT=ON
 
     #
-    # Lean Debug tier from the unit-ci preset; the application target never builds here
+    # Lean Debug tier: GPL build, no gRPC, no WebEngine, no mimalloc, system zlib and expat;
+    # the application target never builds here
     #
     - name: '🚧 Build unit-test tier'
-      run: cmake --build --preset unit-ci --target ss_unit_tests
+      run: cmake --build build/unit-ci --target ss_unit_tests
 
     #
     # Runs on both arches: DSPSimd.h picks its SIMD lane from the target architecture
@@ -280,7 +290,7 @@ jobs:
     - name: '🧪 Run ctest'
       env:
         QT_QPA_PLATFORM: offscreen
-      run: ctest --preset unit-ci --output-on-failure
+      run: ctest --test-dir build/unit-ci --output-on-failure
 
     #
     # Stage 1 of the two-stage PGO flow: an instrumented Release build whose only job is to emit
@@ -599,7 +609,12 @@ jobs:
         # the coverage checks below then delete the only copy.
         mkdir -p AppDir-compat/usr/shared/lib
 
-        ./sharun-aio lib4bin --dst-dir AppDir-compat/usr --with-sharun --hard-links --with-hooks \
+        # lib4bin resolves dependencies with ldd and silently drops unresolved ones; the
+        # executables were moved out of the AppDir, which breaks their $ORIGIN RUNPATH, so
+        # the libraries only they need (Widgets, Bluetooth, Mqtt, mimalloc, ...) vanish from
+        # the closure unless the AppDir library dir is on LD_LIBRARY_PATH for the conversion.
+        LD_LIBRARY_PATH="$PWD/AppDir-compat/usr/lib" \
+          ./sharun-aio lib4bin --dst-dir AppDir-compat/usr --with-sharun --hard-links --with-hooks \
           "$BIN_SRC"/* $DLOPEN_LIBS
 
         if [ -L AppDir-compat/usr/shared/lib ]; then
@@ -1029,13 +1044,23 @@ jobs:
     # a parallel unit job racing this restore could get denied or evict the entry
     #
     - name: '🚧 Configure unit-test tier'
-      run: cmake --preset unit-ci
+      run: |
+        cmake -G Ninja -B build/unit-ci \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DSS_BUILD_TESTS=ON \
+          -DBUILD_GPL3=ON \
+          -DENABLE_GRPC=OFF \
+          -DWITH_WEBENGINE=OFF \
+          -DSS_USE_MIMALLOC=OFF \
+          -DUSE_SYSTEM_ZLIB=ON \
+          -DUSE_SYSTEM_EXPAT=ON
 
     #
-    # Lean Debug tier from the unit-ci preset; the application target never builds here
+    # Lean Debug tier: GPL build, no gRPC, no WebEngine, no mimalloc, system zlib and expat;
+    # the application target never builds here
     #
     - name: '🚧 Build unit-test tier'
-      run: cmake --build --preset unit-ci --target ss_unit_tests
+      run: cmake --build build/unit-ci --target ss_unit_tests
 
     #
     # Runs on both arches: DSPSimd.h picks its SIMD lane from the target architecture
@@ -1043,7 +1068,7 @@ jobs:
     - name: '🧪 Run ctest'
       env:
         QT_QPA_PLATFORM: offscreen
-      run: ctest --preset unit-ci --output-on-failure
+      run: ctest --test-dir build/unit-ci --output-on-failure
 
     #
     # Stage 1 of the two-stage PGO flow: an instrumented Release build whose only job is to emit
@@ -1354,7 +1379,12 @@ jobs:
         # the coverage checks below then delete the only copy.
         mkdir -p AppDir-compat/usr/shared/lib
 
-        ./sharun-aio lib4bin --dst-dir AppDir-compat/usr --with-sharun --hard-links --with-hooks \
+        # lib4bin resolves dependencies with ldd and silently drops unresolved ones; the
+        # executables were moved out of the AppDir, which breaks their $ORIGIN RUNPATH, so
+        # the libraries only they need (Widgets, Bluetooth, Mqtt, mimalloc, ...) vanish from
+        # the closure unless the AppDir library dir is on LD_LIBRARY_PATH for the conversion.
+        LD_LIBRARY_PATH="$PWD/AppDir-compat/usr/lib" \
+          ./sharun-aio lib4bin --dst-dir AppDir-compat/usr --with-sharun --hard-links --with-hooks \
           "$BIN_SRC"/* $DLOPEN_LIBS
 
         if [ -L AppDir-compat/usr/shared/lib ]; then

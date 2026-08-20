@@ -1,12 +1,18 @@
 ---
 spec: 0032-cpp-unit-tests
 title: C++ unit-test tier plus build presets
-status: in-progress  # implemented + CI-gated; maintainer ACs pending
+status: done          # closed 2026-08-20
 created: 2026-07-25
 author: Claude (drafted with Alex)
 ---
 
 # Spec 0032 — C++ unit-test tier plus build presets
+
+> **2026-08-20 update:** `CMakePresets.json` was removed from the repo — the maintainer
+> prefers hand-written `cmake -B ... -D...` configures. The unit-test tier itself stands;
+> the CI `unit` job now inlines the former `unit-ci` flags directly in `ci.yml`, and local
+> runs use `cmake -B build/dev -DSS_BUILD_TESTS=ON` + `ctest --test-dir build/dev`. Preset
+> references below (R7, AC6) are historical.
 
 > **Phase 1 of 4 — the WHAT and the WHY.** No implementation detail; no file paths, no
 > class names, no signal wiring (that is `plan.md`). Gate: do not start `/ss-plan` until

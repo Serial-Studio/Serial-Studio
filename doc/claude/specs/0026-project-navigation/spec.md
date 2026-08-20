@@ -1,7 +1,7 @@
 ---
 spec: 0026-project-navigation
 title: Project navigation overhaul — editor history & workspace switching
-status: in-progress  # draft -> approved -> in-progress -> done | shelved
+status: done          # closed 2026-08-20
 created: 2026-07-21
 author: Alex Spataru
 ---

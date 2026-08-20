@@ -1,7 +1,7 @@
 ---
 spec: 0042-license-token-hardening
 title: CommercialToken lifecycle hardening (licensing first, no silent gaps)
-status: in-progress  # draft -> approved -> in-progress -> done | shelved
+status: done          # closed 2026-08-20
 created: 2026-07-28
 author: Alex Spataru
 ---

@@ -1,7 +1,7 @@
 ---
 spec: 0061-sweep-segment-retention
 title: Sweep segment retention
-status: in-progress
+status: done          # closed 2026-08-20
 created: 2026-08-16
 author: Claude (overnight run, unattended; planned + implemented 2026-08-17 on maintainer request)
 ---

@@ -1,7 +1,7 @@
 ---
 spec: 0051-stream-lane-and-parse-budget
 title: Per-source parse budget + typed stream lane for high-rate sample sources
-status: in-progress  # draft -> approved -> in-progress -> done | shelved
+status: done          # closed 2026-08-20
 created: 2026-08-11
 author: Alex Spataru
 ---

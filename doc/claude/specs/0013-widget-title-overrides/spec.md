@@ -1,7 +1,7 @@
 ---
 spec: 0013-widget-title-overrides
 title: Per-widget title overrides and freeze-titlebar visibility
-status: in-progress  # draft -> approved -> in-progress -> done | shelved
+status: done          # closed 2026-08-20
 created: 2026-07-16
 author: Alex Spataru
 ---
