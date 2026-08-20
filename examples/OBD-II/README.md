@@ -29,7 +29,7 @@ These are all standard SAE J1979 Mode-01 PIDs, so no vehicle-specific configurat
 | `0111`  | Throttle position   | `A * 100 / 255` (%)      | Common, not universal                 |
 | `AT RV` | Battery voltage     | adapter reading (volts)  | Always (measured by the adapter)      |
 
-Any PID the car does not support comes back as `NO DATA`; the script skips that write and the register keeps its last value (0 if the vehicle has never returned a reply for that PID), so the widget still shows a number rather than an explicit "no data" indication.
+Any PID the car does not support comes back as `NO DATA`; the script skips that write and the variable keeps its last value (0 if the vehicle has never returned a reply for that PID), so the widget still shows a number rather than an explicit "no data" indication.
 
 All requests are plain ASCII (the hex PID digits, or the letters `AT` for adapter commands) terminated by a carriage return, and every reply ends with the ELM327 `>` prompt. The full command set and reply formats are in the [ELM327 datasheet](https://cdn.sparkfun.com/assets/learn_tutorials/8/3/ELM327DS.pdf).
 
@@ -38,14 +38,14 @@ All requests are plain ASCII (the hex PID digits, or the letters `AT` for adapte
 This example shows the request/response pattern that OBD-II needs, which differs from a normal telemetry stream where the device pushes data on its own. Three Serial Studio features carry it:
 
 - **`deviceWriteAndWait(data, timeout, until, source?)`** sends a command and blocks the control-loop worker (never the UI) until the adapter's `>` prompt arrives or the timeout elapses, then returns the reply. This turns the fire-and-forget serial link into a clean request/response call. It mirrors `deviceWrite`'s data-first shape; `source` is optional and defaults to 0.
-- **The `OBD` data table** holds the decoded values. The control loop writes it with `tableSet("OBD", "rpm", value)` after each reply; the registers are declared as `computed` so they are writable.
-- **Virtual datasets** drive the gauges. Each gauge is a virtual dataset whose transform reads its table register (`tableGet("OBD", "rpm")`) and returns the value, so nothing needs a frame parser.
+- **The `OBD` shared table** holds the decoded values. The control loop writes it with `tableSet("OBD", "rpm", value)` after each reply; the variables are declared as `computed` so they are writable.
+- **Computed datasets** drive the gauges. Each gauge is a computed dataset whose transform reads its table variable (`tableGet("OBD", "rpm")`) and returns the value, so nothing needs a frame parser.
 
 After writing the table, the script calls **`dashboardTick()`**, which forces the dashboard to re-run the dataset transforms and render the fresh values, even though the adapter only speaks when polled. The project's frame parser is a stub that returns an empty frame.
 
 ## Project features
 
-- Gauge, Meter and Bar widgets for engine RPM, vehicle speed, coolant temperature, calculated load, intake air temperature, throttle position and adapter battery voltage (any PID the vehicle does not support leaves its register, and its widget, at the last value received).
+- Gauge, Meter and Bar widgets for engine RPM, vehicle speed, coolant temperature, calculated load, intake air temperature, throttle position and adapter battery voltage (any PID the vehicle does not support leaves its variable, and its widget, at the last value received).
 - Request/response polling driven entirely by an in-project control loop, no external program.
 - Works with any OBD-II compliant vehicle through the standard ELM327 command set; the core RPM/speed/coolant gauges populate on almost every car.
 - Serial (UART) source configured in Serial Studio's project editor (115200 baud, the OBDLink EX power-up rate; classic ELM327 clones default to 38400).

@@ -12,6 +12,6 @@ Pro features:
 → MQTT, XY, and 3D visualization
 → Audio, CAN Bus, Modbus, USB, HID, and Process I/O drivers
 → Output widgets, MDF4 export, and XMODEM/YMODEM/ZMODEM transfers
-→ Session database, Data Tables, and value transforms (JS + Lua)
+→ Historian, Variables, and value transforms (JS + Lua)
 → Multi-source projects and custom dashboard workspaces
 → Priority support

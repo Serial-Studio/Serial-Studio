@@ -738,7 +738,7 @@ Widgets.SmartDialog {
           }
 
           Label {
-            text: qsTr("Session Database")
+            text: qsTr("Historian")
             color: Cpp_ThemeManager.colors["text"]
           } Switch {
             id: sessionExport

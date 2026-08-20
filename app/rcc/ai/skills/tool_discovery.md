@@ -112,7 +112,7 @@ Top-level `io.*` itself has bus-management and tail/peek commands; use
 ## Bundled reference scripts
 
 `scripts.list{kind}` enumerates the ~50 reference scripts bundled with
-Pro: painter widgets, frame parsers, transforms, output widget transmit
+Pro: canvas widgets, frame parsers, transforms, output widget transmit
 functions. `scripts.get{kind, id}` returns the full source.
 
 Adapt a real reference instead of writing from scratch. The ones already
@@ -127,14 +127,14 @@ when the task is "make this readable", not just "make this work":
 
 | Skill                | Load when the user asks for...                     |
 |----------------------|----------------------------------------------------|
-| `painter` (design section) | A new painter, OR "make the painter clearer" |
+| `painter` (design section) | A new canvas widget, OR "make the canvas clearer" |
 | `workspace_design`   | "Organize my dashboard", "build an overview",      |
 |                      | "what should I put on which tab", or moving more   |
 |                      | than ~3 tiles between workspaces                   |
 
 The design skills carry the readability rules (contrast, color-
 independence, Miller's Law tile budgets, Peak-End placement). The
-mechanics skills carry the API. Both apply on a painter or workspace
+mechanics skills carry the API. Both apply on a canvas or workspace
 task; don't pick one. The design skill tells you *what* to build;
 the mechanics skill tells you *how* to push it.
 

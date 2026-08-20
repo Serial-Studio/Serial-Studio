@@ -23,7 +23,7 @@ Transforms are useful when:
 
 Transforms are optional. Datasets without one display the raw parsed value unchanged.
 
-A transform can also read and write **shared data tables**: constants defined at project time, and computed registers that hold their value across frames. That's how you pass a calibration value into several channels, have one transform compute a value that another consumes, or keep state for an integrator, filter, or latch. See [Data Tables](Data-Tables.md) for the full reference.
+A transform can also read and write **shared tables** of variables: constants defined at project time, and computed variables that hold their value across frames. That's how you pass a calibration value into several channels, have one transform compute a value that another consumes, or keep state for an integrator, filter, or latch. See [Variables](Data-Tables.md) for the full reference.
 
 ## The `transform()` function
 
@@ -103,19 +103,19 @@ v - sample(shunt_current, 1)
 
 The name is bare or braced, never quoted.
 
-### Data tables
+### Shared tables
 
-Expressions read data-table registers with `table(name, register)`, the same constants and computed registers `tableGet` reaches from Lua and JavaScript:
+Expressions read table variables with `table(name, variable)`, the same constants and computed variables `tableGet` reaches from Lua and JavaScript:
 
 ```text
 v * table(calibration, voltage_scale)
 ```
 
-Both names are bare, or braced when they contain spaces. The register is resolved to a handle when the expression compiles, so the read costs an array lookup per sample; an unknown register is a compile error naming the pair.
+Both names are bare, or braced when they contain spaces. The variable is resolved to a handle when the expression compiles, so the read costs an array lookup per sample; an unknown variable is a compile error naming the pair.
 
-Access is **read-only**. Writing a register from an expression would give it an execution-order dependency, which is where a Lua or JavaScript transform with `tableSet` belongs. Computed registers carry the same processing-order caveat as sibling datasets: an expression sees the last value written, which for a register written later in the same frame is the previous frame's.
+Access is **read-only**. Writing a variable from an expression would give it an execution-order dependency, which is where a Lua or JavaScript transform with `tableSet` belongs. Computed variables carry the same processing-order caveat as sibling datasets: an expression sees the last value written, which for a variable written later in the same frame is the previous frame's.
 
-`table()` is available on the frame pipeline. On a source running the stream lane (a dense source such as audio, or one with the stream lane forced on) an expression using `table()` fails to compile, since the register store belongs to another thread and a per-sample cross-thread read is not on the table.
+`table()` is available on the frame pipeline. On a source running the stream lane (a dense source such as audio, or one with the stream lane forced on) an expression using `table()` fails to compile, since the variable store belongs to another thread and a per-sample cross-thread read is not on the table.
 
 ### Operators and functions
 
@@ -228,9 +228,9 @@ Always declare stateful variables with `local`/`var` at the top of the file. It 
 
 In JavaScript, helpers defined at the top of the file (for example `function clamp(x, lo, hi) { ... }`) are also closed over by the IIFE and private per dataset. Safe to use.
 
-### Virtual datasets
+### Computed datasets
 
-A dataset can be marked **virtual** in the Project Editor. A virtual dataset has no Frame Index: nothing in the incoming frame feeds it. Its value is computed entirely by the `transform()` function, typically by reading other datasets or table registers. The `value` argument passed in is always `0`.
+A dataset can be marked as **computed** in the Project Editor. A computed dataset has no Frame Index: nothing in the incoming frame feeds it. Its value is computed entirely by the `transform()` function, typically by reading other datasets or table variables. The `value` argument passed in is always `0`.
 
 ```lua
 function transform(value)
@@ -240,7 +240,7 @@ function transform(value)
 end
 ```
 
-Use virtual datasets for derived metrics (averages, ratios, sums, percentage-of-total) that should show up on the dashboard and be exported alongside the raw channels, but that aren't present in the wire format.
+Use computed datasets for derived metrics (averages, ratios, sums, percentage-of-total) that should show up on the dashboard and be exported alongside the raw channels, but that aren't present in the wire format.
 
 In Lua, use `local function` for helpers so they share the isolation:
 
@@ -260,28 +260,28 @@ A plain `function foo() end` at chunk top level in Lua defines a global, but tha
 
 ### When state resets
 
-Persistent state (both top-level Lua/JS upvalues *and* Computed table registers) is cleared when:
+Persistent state (both top-level Lua/JS upvalues *and* Computed table variables) is cleared when:
 
 - The device is disconnected (transform engines are destroyed).
 - The user clicks **Apply** in the transform editor (engines are recompiled with fresh state).
 - The project is reloaded or saved with changes.
 
-So filters and accumulators start from scratch on each new connection session, which is usually what you want. Within a connection session, Computed registers and transform upvalues hold their values indefinitely; they aren't wiped between frames.
+So filters and accumulators start from scratch on each new connection session, which is usually what you want. Within a connection session, Computed variables and transform upvalues hold their values indefinitely; they aren't wiped between frames.
 
-## Data Table API
+## Table API
 
-Lua and JavaScript transforms have four built-in functions for reading and writing the project's data tables. An Expression transform reads registers with `table(name, register)` instead, and cannot write. Tables are covered in full in [Data Tables](Data-Tables.md). This section documents the API surface from the transform's point of view.
+Lua and JavaScript transforms have four built-in functions for reading and writing the project's shared tables. An Expression transform reads variables with `table(name, variable)` instead, and cannot write. Tables are covered in full in [Variables](Data-Tables.md). This section documents the API surface from the transform's point of view.
 
 | Function                       | Returns                        | Purpose |
 |--------------------------------|--------------------------------|---------|
-| `tableGet(table, reg)`         | number, string, or nil/undefined | Read a user-defined register |
-| `tableSet(table, reg, value)`  | nothing                        | Write a **computed** register (constants are read-only) |
+| `tableGet(table, reg)`         | number, string, or nil/undefined | Read a user-defined variable |
+| `tableSet(table, reg, value)`  | nothing                        | Write a **computed** variable (constants are read-only) |
 | `datasetGetRaw(uniqueId \| alias)`   | number, string, or nil/undefined | Raw (pre-transform) value of any dataset in the current frame |
 | `datasetGetFinal(uniqueId \| alias)` | number, string, or nil/undefined | Final (post-transform) value of any dataset already processed in the current frame |
 
 The API is identical in Lua and JavaScript. `table` and `reg` are strings. The dataset lookup takes either the integer `uniqueId` shown next to each dataset in the Project Editor, or the dataset's alias string (the **Script Alias** field). A number argument is always a uniqueId and a string is always an alias, so `datasetGetRaw(128)` and `datasetGetRaw("128")` are different lookups. An unknown alias returns `nil`/`undefined` with a one-time console warning, the same as an unknown uniqueId.
 
-For a transform that touches the same registers on every value, resolving a name once to a **handle** and using `tableGetH` / `tableSetH` avoids the per-call name lookup. See [Fast table access with handles](SerialStudio-SDK.md#handles-the-fast-path-for-table-heavy-parsers).
+For a transform that touches the same variables on every value, resolving a name once to a **handle** and using `tableGetH` / `tableSetH` avoids the per-call name lookup. See [Fast table access with handles](SerialStudio-SDK.md#handles-the-fast-path-for-table-heavy-parsers).
 
 **Lua example: scale a voltage reading by a project-wide calibration factor:**
 
@@ -301,7 +301,7 @@ function transform(value) {
 }
 ```
 
-**Writing to a computed register. One transform publishes, another consumes:**
+**Writing to a computed variable. One transform publishes, another consumes:**
 
 ```lua
 -- Dataset 10 (processed first): publish the total current
@@ -325,22 +325,22 @@ Transforms are applied in order: groups in frame order, datasets in group order.
 
 - `datasetGetRaw(uid)` returns the current frame's raw value only for the current dataset and the ones already processed before it. Later datasets still hold the previous frame's raw value, because raw and final values are written incrementally per dataset, not in a pre-pass.
 - `datasetGetFinal(uid)` only works for datasets that have already been transformed (earlier datasets in the same group, or any dataset in an earlier group).
-- Computed registers hold their last written value, so a value written in one frame is still visible in the next, handy for integrators, derivatives, and latched flags. If you specifically want a register to start each frame fresh, write the reset value yourself at the top of an early transform.
+- Computed variables hold their last written value, so a value written in one frame is still visible in the next, handy for integrators, derivatives, and latched flags. If you specifically want a variable to start each frame fresh, write the reset value yourself at the top of an early transform.
 
 If you need dataset B to consume dataset A's final value, make sure A comes before B in the Project Editor tree.
 
 ## Change-driven transforms (opt-in)
 
-By default every dataset's transform runs on every frame. For a large table-driven project, where the frame parser writes table registers and many virtual datasets each read one register, that means a frame for one device re-runs the transforms of *every* dataset, even the ones whose data did not change.
+By default every dataset's transform runs on every frame. For a large table-driven project, where the frame parser writes table variables and many computed datasets each read one variable, that means a frame for one device re-runs the transforms of *every* dataset, even the ones whose data did not change.
 
-The **Change-Driven Transforms** toggle turns on a faster mode: a virtual dataset's transform runs only when one of the registers (or datasets) it reads has changed since it last ran; otherwise it keeps its previous output for that frame. Serial Studio discovers what each transform reads automatically, so you change nothing in your scripts. The dashboard shows the same values either way; the option just skips recomputing values that did not change.
+The **Change-Driven Transforms** toggle turns on a faster mode: a computed dataset's transform runs only when one of the variables (or datasets) it reads has changed since it last ran; otherwise it keeps its previous output for that frame. Serial Studio discovers what each transform reads automatically, so you change nothing in your scripts. The dashboard shows the same values either way; the option just skips recomputing values that did not change.
 
 Find it in the Project Editor: select the project root, click the **Settings** button (wrench icon) next to the Project Title, and toggle **Change-Driven Transforms** in the popup, alongside Time Range and Point Count.
 
 It is **off by default** and saved per project. Turn it on for heavy table-driven dashboards that are dropping frames. Two things to know:
 
 - A per-sample filter (an EMA, a deadband) then steps once per *real* new sample of its input rather than once per global frame, which is what you usually want.
-- If a virtual dataset's output depends on something Serial Studio cannot see as an input — wall-clock time read directly inside the transform (`Date.now()`, `os.time()`) rather than a value passed through a table or `frameInfo` — leave this off for that project, or keep such datasets non-virtual, since the transform may not re-run on time alone.
+- If a computed dataset's output depends on something Serial Studio cannot see as an input — wall-clock time read directly inside the transform (`Date.now()`, `os.time()`) rather than a value passed through a table or `frameInfo` — leave this off for that project, or keep such datasets non-computed, since the transform may not re-run on time alone.
 
 ## Frame metadata: the second `frameInfo` argument
 
@@ -469,8 +469,8 @@ end
 ### When NOT to use it
 
 - For a button or slider the user clicks, use an **Output Widget**. Transforms run on every frame; an Output Widget runs when the user acts.
-- Don't `deviceWrite` from a virtual dataset unless you understand its execution order. Virtual datasets are processed in tree order like any other dataset (they are not automatically processed last), so a virtual dataset only sees the *final* values of datasets that come before it. Place it after its inputs. It still fires every frame.
-- Don't write large payloads on every frame. The transform hotpath is shared with all datasets in the source; a noisy `deviceWrite` saturates the link.
+- Don't `deviceWrite` from a computed dataset unless you understand its execution order. Computed datasets are processed in tree order like any other dataset (they are not automatically processed last), so a computed dataset only sees the *final* values of datasets that come before it. Place it after its inputs. It still fires every frame.
+- Don't write large payloads on every frame. The transform stage of the acquisition pipeline is shared with all datasets in the source; a noisy `deviceWrite` saturates the link.
 
 ## Firing actions: `actionFire()`
 
@@ -497,7 +497,7 @@ end
 
 Behaves like the user pressing the action's button, including running the action's timer (`AutoStart`, `RepeatNTimes`, ...). Calls are logged as `[actionFire] id=N index=M ok`.
 
-`actionFire` is also available in frame parsers and painter scripts.
+`actionFire` is also available in frame parsers and canvas scripts.
 
 ## Controlling the dashboard
 
@@ -545,7 +545,7 @@ The Transform Editor includes 34 ready-to-use templates. Pick one from the Templ
 | Polynomial (2nd order)  | `y = a×x² + b×x + c`. Non-linear response curves. |
 | Map Range               | Rescale from `[inMin, inMax]` to `[outMin, outMax]`. |
 | ADC to Voltage          | 10-bit ADC count to voltage (3.3 V reference). |
-| Calibration from Data Table | Read slope/offset from a data table register and apply it. |
+| Calibration from Data Table | Read slope/offset from a table variable and apply it. |
 
 ### Smoothing filters
 
@@ -708,7 +708,7 @@ end
 
 - [SDK Reference](SerialStudio-SDK.md): the full helper surface a transform can call (`tableGet`/`tableSet`, `deviceWrite`, `actionFire`, notifications, protocol encoders).
 - [Frame Parser Scripting](JavaScript-API.md): the `parse(frame)` function that feeds values to transforms.
-- [Data Tables](Data-Tables.md): shared constants and computed registers available to every transform.
+- [Variables](Data-Tables.md): shared constants and computed variables available to every transform.
 - [Data Flow](Data-Flow.md): how data moves from device through parsing, transforms, and into the dashboard.
 - [Project Editor](Project-Editor.md): where you configure datasets, transforms, and tables.
 - [Widget Reference](Widget-Reference.md): dashboard widgets that display transformed values.

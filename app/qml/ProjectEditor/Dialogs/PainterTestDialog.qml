@@ -25,7 +25,7 @@ Window {
   minimumHeight: 480
   flags: Qt.Dialog
   modality: Qt.NonModal
-  title: qsTr("Painter Live Preview")
+  title: qsTr("Canvas Live Preview")
   color: Cpp_ThemeManager.colors["window"]
 
   property string painterCode: ""

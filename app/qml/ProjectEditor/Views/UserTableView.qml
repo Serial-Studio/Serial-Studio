@@ -173,10 +173,10 @@ Widgets.Pane {
             Widgets.ToolbarButton {
               iconSize: 24
               toolbarButton: false
-              text: qsTr("Add Register")
+              text: qsTr("Add Variable")
               Layout.alignment: Qt.AlignVCenter
               onClicked: Cpp_JSON_ProjectModel.promptAddRegister(root.tableName)
-              ToolTip.text: qsTr("Add register")
+              ToolTip.text: qsTr("Add variable")
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "add-register", 24)
             }
 
@@ -196,7 +196,7 @@ Widgets.Pane {
               text: qsTr("Import")
               Layout.alignment: Qt.AlignVCenter
               onClicked: Cpp_JSON_ProjectModel.importTableFromCsv(root.tableName)
-              ToolTip.text: qsTr("Import registers from CSV")
+              ToolTip.text: qsTr("Import variables from CSV")
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "import-table", 24)
             }
 
@@ -206,7 +206,7 @@ Widgets.Pane {
               text: qsTr("Export")
               Layout.alignment: Qt.AlignVCenter
               onClicked: Cpp_JSON_ProjectModel.exportTableToCsv(root.tableName)
-              ToolTip.text: qsTr("Export registers to CSV")
+              ToolTip.text: qsTr("Export variables to CSV")
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "export-table", 24)
             }
 
@@ -250,7 +250,7 @@ Widgets.Pane {
               Layout.alignment: Qt.AlignVCenter
               onClicked: app.showHelpCenter("data-tables")
               icon.source: Cpp_Misc_IconRegistry.icon("code", "help", 24)
-              ToolTip.text: qsTr("Open help documentation for shared memory")
+              ToolTip.text: qsTr("Open help documentation for variables")
             }
           }
         }
@@ -291,7 +291,7 @@ Widgets.Pane {
         rowHeight: root.rowHeight
         columns: [
           { title: qsTr("Permissions"), width: root.colTypeWidth   },
-          { title: qsTr("Register Name"), width: root.colNameWidth },
+          { title: qsTr("Variable Name"), width: root.colNameWidth },
           { title: qsTr("Default Value"), width: -1                },
           { title: "",                  width: root.colActionWidth }
         ]
@@ -509,7 +509,7 @@ Widgets.Pane {
 
                 ToolTip.delay: 400
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Delete register")
+                ToolTip.text: qsTr("Delete variable")
 
                 onClicked: Cpp_JSON_ProjectModel.confirmDeleteRegister(root.tableName,
                                                                        regRow.committedName)
@@ -527,14 +527,14 @@ Widgets.Pane {
             opacity: 0.5
             color: Cpp_ThemeManager.colors["text"]
             visible: root.registers.length === 0
-            text: qsTr("No registers.")
+            text: qsTr("No variables.")
           }
         }
       }
     }
 
     //
-    // Floating "Register access code copied" toast.
+    // Floating "Variable access code copied" toast.
     //
     Rectangle {
       id: copyToast

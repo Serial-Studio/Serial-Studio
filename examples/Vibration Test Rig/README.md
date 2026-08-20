@@ -1,14 +1,14 @@
 # Vibration test rig
 
-A Python script that simulates a small electric motor on a test bench: a single accelerometer channel sees rotational imbalance, misalignment, a non-integer bearing-defect harmonic, and broadband noise; a stereo microphone in the enclosure picks up the airborne sound. The script sweeps the motor's RPM up and down so the **Waterfall** widget renders an order-tracking spectrogram, and two **Painter** widgets draw an audio VU meter and a live system schematic, all from the same UDP stream.
+A Python script that simulates a small electric motor on a test bench: a single accelerometer channel sees rotational imbalance, misalignment, a non-integer bearing-defect harmonic, and broadband noise; a stereo microphone in the enclosure picks up the airborne sound. The script sweeps the motor's RPM up and down so the **Waterfall** widget renders an order-tracking spectrogram, and two **Canvas** widgets draw an audio VU meter and a live system schematic, all from the same UDP stream.
 
 ## Overview
 
-This example exercises both Pro widgets, Waterfall and Painter:
+This example exercises both Pro widgets, Waterfall and Canvas:
 
 - **Waterfall (Campbell mode).** The vibration channel feeds a 512-sample FFT at 1 kHz. The waterfall's Y axis is bound to the RPM dataset, so the spectrogram becomes a Campbell diagram (frequency on X, RPM on Y, amplitude as color). Order lines (1×, 2×, 3×) appear as straight rays through the origin; the bearing harmonic at 5.43× shows up as a diagonal line at a different slope.
-- **Painter (audio VU meter).** Broadcast-style stereo VU with green/yellow/red zones, peak-hold markers that hold for 1.4 s before falling away, and dB-scale tick labels. All drawn in ~200 lines of JavaScript inside the project file.
-- **Painter (system schematic).** Live diagram of the rig: motor, bracket with accelerometer, and stereo microphones, each stage animated from its own dataset. The motor spins with RPM, the trace follows the vibration channel, and the mics pulse with level. ~380 lines of JavaScript.
+- **Canvas (audio VU meter).** Broadcast-style stereo VU with green/yellow/red zones, peak-hold markers that hold for 1.4 s before falling away, and dB-scale tick labels. All drawn in ~200 lines of JavaScript inside the project file.
+- **Canvas (system schematic).** Live diagram of the rig: motor, bracket with accelerometer, and stereo microphones, each stage animated from its own dataset. The motor spins with RPM, the trace follows the vibration channel, and the mics pulse with level. ~380 lines of JavaScript.
 
 Gauges for motor RPM and RMS vibration (computed by a rolling-RMS Lua transform on the vibration dataset) round out the dashboard so you can correlate spectrogram features with the sweep position.
 
@@ -17,8 +17,8 @@ Gauges for motor RPM and RMS vibration (computed by a rolling-RMS Lua transform 
 | Widget                       | Datasets                           | Purpose                                                                |
 |------------------------------|------------------------------------|------------------------------------------------------------------------|
 | Waterfall (Pro)              | Vibration, with Motor RPM as Y axis | Order-tracking spectrogram (Campbell diagram)                         |
-| Painter (Pro)                | Mic L, Mic R                       | Stereo VU meter with peak hold                                         |
-| Painter (Pro)                | Vibration, Motor RPM, Mic L, Mic R | Animated system schematic                                              |
+| Canvas (Pro)                 | Mic L, Mic R                       | Stereo VU meter with peak hold                                         |
+| Canvas (Pro)                 | Vibration, Motor RPM, Mic L, Mic R | Animated system schematic                                              |
 | Gauge                        | Vibration (RMS)                    | Rolling RMS level via a Lua transform                                  |
 | Gauge                        | Motor RPM                          | RPM sweep position                                                     |
 | Plot                         | Vibration, Mic L, Mic R            | Time-domain traces                                                     |
@@ -77,7 +77,7 @@ The script logs frame count and current RPM/vibration every two seconds.
 
 ### 2. Configure Serial Studio
 
-1. Open Serial Studio (Pro build, since the Painter and Waterfall widgets are commercial features).
+1. Open Serial Studio (Pro build, since the Canvas and Waterfall widgets are commercial features).
 2. Click **Open Project** in the toolbar (or **Select Project File** in the Setup pane) and choose `VibrationTestRig.ssproj`.
 3. The Network/UDP source is preconfigured for `127.0.0.1:9000`. Hit **Connect**.
 
@@ -90,11 +90,11 @@ You should see:
 
 ## What to play with
 
-- Open the **Project Editor** and pick either Painter group — the JS source is right there in the editor. Tweak the color zones, the peak-hold time, the motor animation, then close the editor window — the code commits automatically and the widget recompiles.
+- Open the **Project Editor** and pick either Canvas group — the JS source is right there in the editor. Tweak the color zones, the peak-hold time, the motor animation, then close the editor window — the code commits automatically and the widget recompiles.
 - Disable the bearing harmonic (`--bearing-amp 0`) and watch the diagonal line in the waterfall disappear, leaving only the rays from the integer harmonics.
-- Lower `--rate` to 250 Hz and notice how the waterfall still renders cleanly because the FFT sampling rate is fixed at 1 kHz inside the project. The Painter widgets' `onFrame()` runs on the dashboard's UI refresh rate (default 60 Hz), so it ticks at the same rate at both 1000 Hz and 250 Hz; only dropping `--rate` below 60 Hz would slow it down.
+- Lower `--rate` to 250 Hz and notice how the waterfall still renders cleanly because the FFT sampling rate is fixed at 1 kHz inside the project. The Canvas widgets' `onFrame()` runs on the dashboard's UI refresh rate (default 60 Hz), so it ticks at the same rate at both 1000 Hz and 250 Hz; only dropping `--rate` below 60 Hz would slow it down.
 
 ## Files
 
 - `vibration_test_rig.py` — the UDP emitter.
-- `VibrationTestRig.ssproj` — Serial Studio project: 5 groups, two Painter scripts, Waterfall in Campbell mode, Lua CSV parser.
+- `VibrationTestRig.ssproj` — Serial Studio project: 5 groups, two Canvas scripts, Waterfall in Campbell mode, Lua CSV parser.

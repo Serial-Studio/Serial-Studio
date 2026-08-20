@@ -98,7 +98,7 @@ wrong", do NOT guess what to mutate. Follow this flow:
    surface `reverseSnapshotPath` so the user knows the restore itself is
    reversible, and offer to restore that path if they change their mind.
 
-If the user provides extra context ("undo the painter dataset deletes"),
+If the user provides extra context ("undo the canvas dataset deletes"),
 filter the listed checkpoints by matching label ("pre-project.dataset.
 delete") before showing them. If no checkpoints exist, say so plainly --
 do not invent a restore path.

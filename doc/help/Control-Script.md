@@ -6,7 +6,7 @@ The Control Loop automates a device you have **already set up and connected**. I
 
 This is a per-project loop, not a per-source one. A project has exactly one Control Loop; if you run several devices in one project, the loop branches on the device itself.
 
-The loop runs on its own worker thread, separate from the data hotpath, so a slow or blocking loop never stalls frame parsing, the dashboard, or the UI. Each call is bounded by a runtime watchdog; a function that runs too long is stopped and reported as an error rather than freezing the application.
+The loop runs on its own worker thread, separate from the acquisition pipeline, so a slow or blocking loop never stalls frame parsing, the dashboard, or the UI. Each call is bounded by a runtime watchdog; a function that runs too long is stopped and reported as an error rather than freezing the application.
 
 Use this when:
 
@@ -145,20 +145,20 @@ A control loop is not limited to sending commands: it can also read what the dev
 
 Before the first frame of a connection arrives, `newFrame()` returns `null`; check for that before reading `values`. Pace any polling loop with `delay()`; 50-250 ms is plenty for channel detection.
 
-### Data tables: tableGet() / tableSet()
+### Shared tables: tableGet() / tableSet()
 
-Control loops can read and write the same data-table registers the frame parser and dataset transforms use. `tableGet(table, register)` returns the live runtime value (or `undefined` when the table or register does not exist, so `tableGet(t, r) || fallback` works), and `tableSet(table, register, value)` writes one. Both are marshalled to the GUI thread, so each call costs a thread round-trip: read what you need once per `loop()` pass, not in a tight inner loop.
+Control loops can read and write the same table variables the frame parser and dataset transforms use. `tableGet(table, variable)` returns the live runtime value (or `undefined` when the table or variable does not exist, so `tableGet(t, r) || fallback` works), and `tableSet(table, variable, value)` writes one. Both are marshalled to the GUI thread, so each call costs a thread round-trip: read what you need once per `loop()` pass, not in a tight inner loop.
 
-One caveat: dataset transforms only re-run when a frame arrives. If your script writes table registers while the device is silent (e.g. a communication-loss watchdog marking sensors invalid), the dashboard keeps showing the last rendered values until the next frame. Two calls close that gap, and the difference between them is whether the result is exported:
+One caveat: dataset transforms only re-run when a frame arrives. If your script writes table variables while the device is silent (e.g. a communication-loss watchdog marking sensors invalid), the dashboard keeps showing the last rendered values until the next frame. Two calls close that gap, and the difference between them is whether the result is exported:
 
-- **`refreshDashboard()` — view only.** Re-runs every dataset transform from the last received values and republishes to the dashboard. Nothing is appended to CSV/MDF4/Session Database/MQTT. Use it for a purely visual refresh, such as a comms-loss watchdog marking sensors invalid.
-- **`dashboardTick()` — render *and* export.** Runs the same transform pass but publishes the synthesized frame through the export fan-out as well, so a script-owned (table-driven) simulation is recorded to CSV/MDF4/Session Database/MQTT just like real device data. It also seeds the frame structure when no device frame has arrived yet, so it works from the very first `loop()`. Exports are still gated on a sink being enabled.
+- **`refreshDashboard()` — view only.** Re-runs every dataset transform from the last received values and republishes to the dashboard. Nothing is appended to CSV/MDF4/Historian/MQTT. Use it for a purely visual refresh, such as a comms-loss watchdog marking sensors invalid.
+- **`dashboardTick()` — render *and* export.** Runs the same transform pass but publishes the synthesized frame through the export fan-out as well, so a script-owned (table-driven) simulation is recorded to CSV/MDF4/Historian/MQTT just like real device data. It also seeds the frame structure when no device frame has arrived yet, so it works from the very first `loop()`. Exports are still gated on a sink being enabled.
 
-> **Choosing between them — and the parser's role.** If the script owns the values (it writes data tables and the device is silent or only a dummy source), call `dashboardTick()` so the data both renders and records, and make the frame parser return **empty** (`return []` / `return {}`). This last part matters: if the parser also returns a non-empty frame, every value is exported twice — once by the parser-produced frame and once by the frame `dashboardTick()` synthesizes — and the two paths race in the export records. Reserve `refreshDashboard()` for refreshes you explicitly do *not* want exported. The opposite pattern is parser-driven: when real device frames arrive and `parse()` writes the tables itself, have it return dummy data (`return [0];`) so each arriving frame flows through the export pipeline, and do *not* also call `dashboardTick()` — either path alone exports each value exactly once.
+> **Choosing between them — and the parser's role.** If the script owns the values (it writes table variables and the device is silent or only a dummy source), call `dashboardTick()` so the data both renders and records, and make the frame parser return **empty** (`return []` / `return {}`). This last part matters: if the parser also returns a non-empty frame, every value is exported twice — once by the parser-produced frame and once by the frame `dashboardTick()` synthesizes — and the two paths race in the export records. Reserve `refreshDashboard()` for refreshes you explicitly do *not* want exported. The opposite pattern is parser-driven: when real device frames arrive and `parse()` writes the tables itself, have it return dummy data (`return [0];`) so each arriving frame flows through the export pipeline, and do *not* also call `dashboardTick()` — either path alone exports each value exactly once.
 
 ### Staleness watchdog
 
-`ageMs` makes a communication-loss watchdog short: no clock mixing, no timestamp bookkeeping in the parser. Mark the failure state in the data tables, then `refreshDashboard()` renders it without waiting for a frame:
+`ageMs` makes a communication-loss watchdog short: no clock mixing, no timestamp bookkeeping in the parser. Mark the failure state in the shared tables, then `refreshDashboard()` renders it without waiting for a frame:
 
 ```javascript
 var commLost = false;
@@ -200,7 +200,7 @@ ensureDashboard([
 
 - Groups are matched by `title`; datasets are matched by their parser `index` within the group. If you rename a generated group in the Project Editor, the script no longer finds it and recreates it under the original name; treat the spec as the source of truth for the generated parts of a project.
 - Dataset flags map to widgets: `plot`, `fft`, `bar`, `gauge`, `compass`, `led`, `waterfall` (or pass a raw `options` bitfield instead). `waterfall` needs a Pro license.
-- Group `widget` accepts `datagrid`, `accelerometer`, `gyroscope`, `gps`, `multiplot`, `none`, `plot3d`, `image`, or `painter`. `plot3d` and `image` need a Pro license; without one, a `plot3d` group renders as a MultiPlot titled "*(title)* (Fallback)".
+- Group `widget` accepts `datagrid`, `accelerometer`, `gyroscope`, `gps`, `multiplot`, `none`, `plot3d`, `image`, or `painter`. `plot3d` and `image` need a Pro license; without one, a `plot3d` group renders as a Multi-Plot titled "*(title)* (Fallback)".
 - Created groups and datasets are real project edits: they are saved with the project exactly like changes made in the Project Editor, so the dashboard the script builds is still there the next time the project opens.
 
 ## Examples

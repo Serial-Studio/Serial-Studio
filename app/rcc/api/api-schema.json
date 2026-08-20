@@ -785,7 +785,7 @@
         ]
     },
     {
-        "description": "Force a dashboard render from the current table/dataset state, synthesizing the project frame structure if no device frame has arrived yet. Unlike dashboard.reprocess (which no-ops until a real frame exists and never feeds exporters), this lets a control script that only writes tables (tableSet()) render table-driven virtual datasets from the very first loop(), and it also fans the synthesized frame out to the enabled export sinks (CSV/MDF4/session/MQTT/API). SDK: dashboardTick().",
+        "description": "Force a dashboard render from the current table/dataset state, synthesizing the project frame structure if no device frame has arrived yet. Unlike dashboard.reprocess (which no-ops until a real frame exists and never feeds exporters), this lets a control script that only writes tables (tableSet()) render table-driven computed datasets from the very first loop(), and it also fans the synthesized frame out to the enabled export sinks (CSV/MDF4/session/MQTT/API). SDK: dashboardTick().",
         "name": "dashboard.tick",
         "properties": {
         },
@@ -2657,7 +2657,7 @@
         ]
     },
     {
-        "description": "Append a register (params: table, name, computed=true, defaultValue=0)",
+        "description": "Append a variable (params: table, name, computed=true, defaultValue=0)",
         "name": "project.dataTable.addRegister",
         "properties": {
             "computed": {
@@ -2672,7 +2672,7 @@
                 ]
             },
             "name": {
-                "description": "Register name (auto-uniquified)",
+                "description": "Variable name (auto-uniquified)",
                 "type": "string"
             },
             "table": {
@@ -2686,7 +2686,7 @@
         ]
     },
     {
-        "description": "Delete a table and all its registers (params: name). Pass dryRun:true to return the register list that WOULD be deleted without committing.",
+        "description": "Delete a table and all its variables (params: name). Pass dryRun:true to return the variable list that WOULD be deleted without committing.",
         "name": "project.dataTable.delete",
         "properties": {
             "dryRun": {
@@ -2703,7 +2703,7 @@
         ]
     },
     {
-        "description": "Delete a register (params: table, name). Pass dryRun:true to return what WOULD be deleted without committing.",
+        "description": "Delete a variable (params: table, name). Pass dryRun:true to return what WOULD be deleted without committing.",
         "name": "project.dataTable.deleteRegister",
         "properties": {
             "dryRun": {
@@ -2711,7 +2711,7 @@
                 "type": "boolean"
             },
             "name": {
-                "description": "Register name",
+                "description": "Variable name",
                 "type": "string"
             },
             "table": {
@@ -2725,7 +2725,7 @@
         ]
     },
     {
-        "description": "Return the register list for a table (params: name). name may be the bare table name or its full \"/\"-joined folder path.",
+        "description": "Return the variable list for a table (params: name). name may be the bare table name or its full \"/\"-joined folder path.",
         "name": "project.dataTable.get",
         "properties": {
             "name": {
@@ -2738,11 +2738,11 @@
         ]
     },
     {
-        "description": "Return a register's LIVE runtime value from the data-table store (params: table, name). This is the same store the parser/transform tableGet() reads; control scripts use it through the tableGet() global.",
+        "description": "Return a variable's LIVE runtime value from the data-table store (params: table, name). This is the same store the parser/transform tableGet() reads; control scripts use it through the tableGet() global.",
         "name": "project.dataTable.getValue",
         "properties": {
             "name": {
-                "description": "Register name",
+                "description": "Variable name",
                 "type": "string"
             },
             "table": {
@@ -2756,7 +2756,7 @@
         ]
     },
     {
-        "description": "Return a register's LIVE runtime value by handle (params: handle). A stale or invalid handle yields found=false. Mirrors tableGetH().",
+        "description": "Return a variable's LIVE runtime value by handle (params: handle). A stale or invalid handle yields found=false. Mirrors tableGetH().",
         "name": "project.dataTable.getValueH",
         "properties": {
             "handle": {
@@ -2769,11 +2769,11 @@
         ]
     },
     {
-        "description": "Resolve a register to a reusable numeric handle for the fast get/set path (params: table, name). Returns handle=-1 for an unknown register. Mirrors the parser/transform tableHandle() global.",
+        "description": "Resolve a variable to a reusable numeric handle for the fast get/set path (params: table, name). Returns handle=-1 for an unknown variable. Mirrors the parser/transform tableHandle() global.",
         "name": "project.dataTable.handle",
         "properties": {
             "name": {
-                "description": "Register name",
+                "description": "Variable name",
                 "type": "string"
             },
             "table": {
@@ -2813,11 +2813,11 @@
         ]
     },
     {
-        "description": "Write a register's LIVE runtime value into the data-table store (params: table, name, value). Same effect as a parser/transform tableSet(); control scripts use it through the tableSet() global. Constant registers reject writes.",
+        "description": "Write a variable's LIVE runtime value into the data-table store (params: table, name, value). Same effect as a parser/transform tableSet(); control scripts use it through the tableSet() global. Constant variables reject writes.",
         "name": "project.dataTable.setValue",
         "properties": {
             "name": {
-                "description": "Register name",
+                "description": "Variable name",
                 "type": "string"
             },
             "table": {
@@ -2839,7 +2839,7 @@
         ]
     },
     {
-        "description": "Write a register's LIVE runtime value by handle (params: handle, value). A stale, invalid, or constant-register handle yields written=false. Mirrors tableSetH().",
+        "description": "Write a variable's LIVE runtime value by handle (params: handle, value). A stale, invalid, or constant-variable handle yields written=false. Mirrors tableSetH().",
         "name": "project.dataTable.setValueH",
         "properties": {
             "handle": {
@@ -2860,7 +2860,7 @@
         ]
     },
     {
-        "description": "Update a register (params: table, name, newName?, computed?, defaultValue?)",
+        "description": "Update a variable (params: table, name, newName?, computed?, defaultValue?)",
         "name": "project.dataTable.updateRegister",
         "properties": {
             "computed": {
@@ -2875,11 +2875,11 @@
                 ]
             },
             "name": {
-                "description": "Current register name",
+                "description": "Current variable name",
                 "type": "string"
             },
             "newName": {
-                "description": "New register name (optional)",
+                "description": "New variable name (optional)",
                 "type": "string"
             },
             "table": {
@@ -3484,7 +3484,7 @@
                 "type": "integer"
             },
             "hideOnDashboard": {
-                "description": "Suppress this dataset's standalone dashboard tile; the painter widget can still read its values",
+                "description": "Suppress this dataset's standalone dashboard tile; the canvas widget can still read its values",
                 "type": "boolean"
             },
             "index": {
@@ -3544,7 +3544,7 @@
                 "type": "string"
             },
             "virtual": {
-                "description": "Virtual datasets compute their value from transforms and data tables, they do not require a frame index",
+                "description": "Computed datasets compute their value from transforms and shared variables, they do not require a frame index",
                 "type": "boolean"
             },
             "waterfall": {
@@ -4345,7 +4345,7 @@
         ]
     },
     {
-        "description": "Get the painter widget JS for a group (params: groupId)",
+        "description": "Get the canvas widget JS for a group (params: groupId)",
         "name": "project.painter.getCode",
         "properties": {
             "groupId": {
@@ -4358,11 +4358,11 @@
         ]
     },
     {
-        "description": "Set the painter widget code for a group (params: groupId, code). **JavaScript only** -- painter scripts run in QJSEngine, not Lua. Available globals: ctx (2D canvas context, QPainter-like), w, h (canvas dimensions), datasetGetFinal(uid)/datasetGetRaw(uid). The entry point is paint(ctx, w, h) and an optional zero-arg onFrame() callback. Validate with project.painter.dryRun before setCode. **Always call meta.fetchScriptingDocs{kind:'painter_js'} first** for the full API surface and worked examples -- don't invent canvas methods from JS DOM Canvas, the surface is QPainter-shaped.",
+        "description": "Set the canvas widget code for a group (params: groupId, code). **JavaScript only** -- canvas scripts run in QJSEngine, not Lua. Available globals: ctx (2D canvas context, QPainter-like), w, h (canvas dimensions), datasetGetFinal(uid)/datasetGetRaw(uid). The entry point is paint(ctx, w, h) and an optional zero-arg onFrame() callback. Validate with project.painter.dryRun before setCode. **Always call meta.fetchScriptingDocs{kind:'painter_js'} first** for the full API surface and worked examples -- don't invent canvas methods from JS DOM Canvas, the surface is QPainter-shaped.",
         "name": "project.painter.setCode",
         "properties": {
             "code": {
-                "description": "Painter widget JS source. Must define paint(ctx, w, h) and may define a zero-arg onFrame(). Replaces any existing code for the group.",
+                "description": "Canvas widget JS source. Must define paint(ctx, w, h) and may define a zero-arg onFrame(). Replaces any existing code for the group.",
                 "type": "string"
             },
             "groupId": {
@@ -5098,7 +5098,7 @@
         ]
     },
     {
-        "description": "Open a session database file for browsing (params: filePath)",
+        "description": "Open a historian database file for browsing (params: filePath)",
         "name": "sessions.openDatabase",
         "properties": {
             "filePath": {

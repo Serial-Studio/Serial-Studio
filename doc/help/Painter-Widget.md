@@ -1,8 +1,8 @@
-# Painter widget
+# Canvas widget
 
-The Painter is a Pro dashboard widget that exposes a JavaScript `paint(ctx, w, h)` callback. The script renders directly into the widget's bitmap on every dashboard tick. Use it when no built-in widget covers the visualization required by the project.
+The Canvas widget is a Pro dashboard widget that exposes a JavaScript `paint(ctx, w, h)` callback. The script renders directly into the widget's bitmap on every dashboard tick. Use it when no built-in widget covers the visualization required by the project.
 
-Painter is a Pro feature.
+Canvas is a Pro feature.
 
 ## Pipeline
 
@@ -13,17 +13,17 @@ flowchart LR
     C --> D["Widget bitmap"]
 ```
 
-Each Painter widget is bound to one project group. On every dashboard tick:
+Each Canvas widget is bound to one project group. On every dashboard tick:
 
 1. Serial Studio updates the group's datasets with the latest parsed values.
 2. If the script defines `onFrame()`, it runs once. Use it to advance time-domain state such as ring buffers, peak-hold decay, or accumulated angles.
 3. `paint(ctx, w, h)` runs. `ctx` is a Canvas2D-shaped context, `w` and `h` are the widget's pixel dimensions. The result is composited onto the dashboard.
 
-The context is a `QPainter` exposed through a `CanvasRenderingContext2D`-style API. The widget repaints at the dashboard refresh rate (60 Hz by default, configurable from 1 to 240 Hz), independent of the data rate.
+The context is a `QCanvas` exposed through a `CanvasRenderingContext2D`-style API. The widget repaints at the dashboard refresh rate (60 Hz by default, configurable from 1 to 240 Hz), independent of the data rate.
 
 ## Script structure
 
-A Painter script defines two functions: `paint()` (required) and `onFrame()` (optional).
+A Canvas script defines two functions: `paint()` (required) and `onFrame()` (optional).
 
 ```javascript
 // Minimal example: a single bar that follows datasets[0].
@@ -49,7 +49,7 @@ The function should return in under 10 ms to keep up with the refresh rate. If `
 
 ### `onFrame()`
 
-Called once per data-bearing dashboard tick, immediately before `paint()`. Optional. `paint()` can additionally run on UI-refresh ticks that carry no new data, where `onFrame()` is not invoked, so keep state that must advance on every tick out of `onFrame()` if it depends on the UI cadence. Both functions run regardless of widget visibility, so a Painter on a hidden workspace tab continues to update its state.
+Called once per data-bearing dashboard tick, immediately before `paint()`. Optional. `paint()` can additionally run on UI-refresh ticks that carry no new data, where `onFrame()` is not invoked, so keep state that must advance on every tick out of `onFrame()` if it depends on the UI cadence. Both functions run regardless of widget visibility, so a Canvas widget on a hidden workspace tab continues to update its state.
 
 `onFrame()` is the place for time-domain bookkeeping: pushing samples into history buffers, decaying peak holds, integrating a phase angle. Keeping that logic out of `paint()` makes both functions easier to read and review.
 
@@ -117,7 +117,7 @@ An array-like view of the group's datasets. `datasets.length` returns the count,
 
 ### `group`
 
-Metadata about the group bound to this Painter.
+Metadata about the group bound to this Canvas.
 
 | Field      | Type    | Description |
 |------------|---------|-------------|
@@ -153,22 +153,22 @@ The active color palette, refreshed automatically whenever the user switches the
 | `alarm`            | string | Alarm color. |
 | `widget_colors`    | array of string | Per-channel palette; index with `theme.widget_colors[i % theme.widget_colors.length]`. |
 
-Other palette keys exist (`text`, `window`, `mid`, `groupbox_background`, `groupbox_border`, `highlighted_text`, `pane_section_label`, ...) mirroring the palette the QML dashboard widgets draw from, but the fields above cover what a Painter script needs. `theme` is a plain object, not frozen — avoid mutating it. A theme switch replaces the global `theme` object and forces a script recompile (see [Persistent state](#persistent-state)), so any `onFrame()`-accumulated buffers reset when the user changes themes.
+Other palette keys exist (`text`, `window`, `mid`, `groupbox_background`, `groupbox_border`, `highlighted_text`, `pane_section_label`, ...) mirroring the palette the QML dashboard widgets draw from, but the fields above cover what a Canvas script needs. `theme` is a plain object, not frozen — avoid mutating it. A theme switch replaces the global `theme` object and forces a script recompile (see [Persistent state](#persistent-state)), so any `onFrame()`-accumulated buffers reset when the user changes themes.
 
 ### `console`
 
-`console.log`, `console.info`, `console.debug`, `console.warn`, and `console.error` route to the Painter widget's console output, which is visible in the script editor. Each call has the same signature as the browser console.
+`console.log`, `console.info`, `console.debug`, `console.warn`, and `console.error` route to the Canvas widget's console output, which is visible in the script editor. Each call has the same signature as the browser console.
 
 ## Control APIs — `deviceWrite()` and `actionFire()`
 
-Painter scripts can write back to the device or fire any existing project [Action](Actions.md):
+Canvas scripts can write back to the device or fire any existing project [Action](Actions.md):
 
 ```javascript
 deviceWrite(data, sourceId?)     // -> { ok: true } | { ok: false, error: "..." }
 actionFire(actionId)             // -> { ok: true } | { ok: false, error: "..." }
 ```
 
-Both are synchronous, fire-and-forget, and never throw. `deviceWrite` defaults `sourceId` to the painter's group `sourceId`; pass an explicit one to target a different source.
+Both are synchronous, fire-and-forget, and never throw. `deviceWrite` defaults `sourceId` to the canvas widget's group `sourceId`; pass an explicit one to target a different source.
 
 **Important:** `paint()` runs on every dashboard tick (60 Hz by default). Calling `deviceWrite` or `actionFire` from `paint()` will saturate the link. `onFrame()` runs at most once per data-bearing tick (frames batched at high rates), never on UI-refresh ticks with no new data, so move the calls there and guard them on a state transition or a `frame.number` change:
 
@@ -183,11 +183,11 @@ function onFrame() {
 
 The dashboard helpers (`clearPlots()`, `setPlotPoints(n)`, `setTerminalVisible(bool)`, `setNotificationLogVisible(bool)`, `setClockVisible(bool)`, `setStopwatchVisible(bool)`, `setActiveWorkspace(idOrName)`) are also available, with the same `{ ok, error }` return shape and the same "fire once on a state transition" guidance. Do not call them from `paint()`.
 
-See [Frame Parser Scripting](JavaScript-API.md) for full signatures and failure modes shared across parsers, transforms, and painters.
+See [Frame Parser Scripting](JavaScript-API.md) for full signatures and failure modes shared across parsers, transforms, and canvas scripts.
 
 ## Drawing API
 
-The context exposes a Canvas2D-style API backed by `QPainter`. The sections below cover the commonly used methods and properties. Additional Canvas2D members are implemented (`roundRect`, `arcTo`, `ellipse`, `transform` / `setTransform` / `getTransform`, `setLineDash` / `getLineDash`, `isPointInPath`, `isPointInStroke`, `measureText`, `globalCompositeOperation`, `miterLimit`, `lineDashOffset`, the `shadow*` properties, and image-smoothing controls). Calling a member that does not exist throws.
+The context exposes a Canvas2D-style API backed by `QCanvas`. The sections below cover the commonly used methods and properties. Additional Canvas2D members are implemented (`roundRect`, `arcTo`, `ellipse`, `transform` / `setTransform` / `getTransform`, `setLineDash` / `getLineDash`, `isPointInPath`, `isPointInStroke`, `measureText`, `globalCompositeOperation`, `miterLimit`, `lineDashOffset`, the `shadow*` properties, and image-smoothing controls). Calling a member that does not exist throws.
 
 ### State
 
@@ -215,7 +215,7 @@ Gradient and pattern objects are supported. `createLinearGradient(x0, y0, x1, y1
 
 `beginPath()`, `closePath()`, `moveTo(x, y)`, `lineTo(x, y)`, `rect(x, y, w, h)`, `arc(x, y, r, startRad, endRad, counterClockwise=false)`, `quadraticCurveTo(cpx, cpy, x, y)`, `bezierCurveTo(c1x, c1y, c2x, c2y, x, y)`. Commit with `fill()`, `stroke()`, or `clip()`.
 
-`arc()` requires a preceding `moveTo()` to the arc's start point. The implementation maps to `QPainterPath::arcTo`, which connects the path's current cursor to the arc's start with an implicit line. Without the `moveTo`, the cursor is at the origin (0, 0) and the chord becomes part of the path. A subsequent `stroke()` strokes the chord, `fill()` encloses it, and `clip()` removes a wedge from the clipping region.
+`arc()` requires a preceding `moveTo()` to the arc's start point. The implementation maps to `QCanvasPath::arcTo`, which connects the path's current cursor to the arc's start with an implicit line. Without the `moveTo`, the cursor is at the origin (0, 0) and the chord becomes part of the path. A subsequent `stroke()` strokes the chord, `fill()` encloses it, and `clip()` removes a wedge from the clipping region.
 
 ```javascript
 ctx.beginPath();
@@ -244,10 +244,10 @@ ctx.drawImage("qrc:/icons/dashboard-large/painter.svg",   // bundled resource
               0, 0);
 ```
 
-## Adding a Painter widget to a project
+## Adding a Canvas widget to a project
 
 1. Open the **Project Editor** from the main toolbar.
-2. Click **Painter** in the toolbar. A new Painter group is created with a default template attached.
+2. Click **Canvas** in the toolbar. A new Canvas group is created with a default template attached.
 3. Add datasets to the group. The script accesses them through the `datasets` global.
 4. Select the group in the tree and click **Edit Code** to open the script editor.
 5. Optionally click **Template** to load a built-in template. Edits compile and reload live.
@@ -281,7 +281,7 @@ Templates are stored as plain `.js` files under `app/rcc/scripts/painter/`.
 
 ## Composition reference
 
-The bundled templates use a shared visual layout and draw every color through the [`theme`](#theme) global. None of this is enforced by the engine; the patterns are documented here so user-authored Painters can match the built-in style when desired. Hardcoding a hex color instead of reading `theme.*` renders correctly once, then stays wrong when the user switches between light and dark themes.
+The bundled templates use a shared visual layout and draw every color through the [`theme`](#theme) global. None of this is enforced by the engine; the patterns are documented here so user-authored Canvas widgets can match the built-in style when desired. Hardcoding a hex color instead of reading `theme.*` renders correctly once, then stays wrong when the user switches between light and dark themes.
 
 ### Background and card
 
@@ -389,7 +389,7 @@ ctx.fillText(label, cx, y);
 
 ### Light and dark themes
 
-Every bundled template, including the instrument-style ones (`oscilloscope`, `radar_sweep`, `horizon`), draws through the same `theme` object; none of them hardcode a light or dark palette. The "instrument panel" look on those three comes from the composition — a recessed screen with a scan grid inside the same card frame — not from a separate color scheme, so the panel repaints correctly in whichever theme the user has active. A Painter that reads `theme.*` gets the same behavior for free.
+Every bundled template, including the instrument-style ones (`oscilloscope`, `radar_sweep`, `horizon`), draws through the same `theme` object; none of them hardcode a light or dark palette. The "instrument panel" look on those three comes from the composition — a recessed screen with a scan grid inside the same card frame — not from a separate color scheme, so the panel repaints correctly in whichever theme the user has active. A Canvas that reads `theme.*` gets the same behavior for free.
 
 ### Sizing
 
@@ -598,13 +598,13 @@ function paint(ctx, w, h) {
 
 ## Performance
 
-The Painter pipeline targets the dashboard refresh rate (60 Hz by default) for moderately complex scenes: a few hundred line segments, a few hundred filled shapes, and on the order of ten text labels per frame.
+The Canvas pipeline targets the dashboard refresh rate (60 Hz by default) for moderately complex scenes: a few hundred line segments, a few hundred filled shapes, and on the order of ten text labels per frame.
 
 Common causes of slow paints:
 
 - **Allocation in the paint path.** Iterating with `for (const ds of datasets)` is fine. `datasets.map(d => d.value)` allocates a new array each frame. So does `ds.title.toUpperCase()` inside a tight loop. Move the work into `onFrame()` and cache the result if the cost is non-trivial.
 - **`measureTextWidth()` per label.** Each call is a real metrics call into Qt. Measure fixed labels once at compile time and cache the width.
-- **One `stroke()` per point.** A single `beginPath()` followed by many `lineTo()` calls and one `stroke()` is one QPainter call. A `beginPath()`, `lineTo()`, `stroke()` per point is N calls.
+- **One `stroke()` per point.** A single `beginPath()` followed by many `lineTo()` calls and one `stroke()` is one QCanvas call. A `beginPath()`, `lineTo()`, `stroke()` per point is N calls.
 - **`drawImage` from disk every frame.** `drawImage` reloads the image from disk on every call with no internal caching, so per-frame disk reads are not free. Pre-resolve to `qrc:/` paths or read the image once at the top of the script and reuse it.
 
 The 250 ms watchdog terminates the script if a single `paint()` or `onFrame()` call exceeds it. The 30 ms slow-paint warning fires after two consecutive ticks over budget.
@@ -658,7 +658,7 @@ Context state (`fillStyle`, `strokeStyle`, `globalAlpha`, transform, line styles
 
 ### State leaks between channels
 
-The script has a single global scope per Painter widget, not per dataset. A top-level `let trace = []` is one buffer shared across all datasets. Use an array indexed by dataset index instead:
+The script has a single global scope per Canvas widget, not per dataset. A top-level `let trace = []` is one buffer shared across all datasets. Use an array indexed by dataset index instead:
 
 ```javascript
 const traces = [];
@@ -679,7 +679,7 @@ The image path resolver accepts `qrc:/` resources and paths inside the project f
 - Start from a built-in template and modify it. The eighteen bundled scripts cover most common shapes.
 - Keep `paint()` free of per-tick state mutation. Move bookkeeping into `onFrame()` so `paint()` is a function of the current state.
 - Use `frame.timestampMs` for animation timing instead of `Date.now()`.
-- If a built-in widget covers the visualization, use the built-in widget. The Painter is appropriate when no other widget fits.
+- If a built-in widget covers the visualization, use the built-in widget. The Canvas widget is appropriate when no other widget fits.
 - A `console.log` called once per `paint()` emits one line per dashboard tick (60 lines per second at the default refresh rate). Useful during development; remove from shipped projects.
 - For scripts longer than around 100 lines, split rendering into named helpers (`drawGrid`, `drawTraces`, `drawLegend`).
 
@@ -689,4 +689,4 @@ The image path resolver accepts `qrc:/` resources and paths inside the project f
 - [Frame Parser Scripting](JavaScript-API.md): the JavaScript engine on the receiving side of the data pipeline.
 - [Output Controls](Output-Controls.md): user-scripted widgets that send data to the device.
 - [Dataset Value Transforms](Dataset-Transforms.md): per-dataset scripts for calibration and filtering.
-- [Project Editor](Project-Editor.md): adding groups, datasets, and Painter widgets to a project.
+- [Project Editor](Project-Editor.md): adding groups, datasets, and Canvas widgets to a project.

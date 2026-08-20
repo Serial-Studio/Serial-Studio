@@ -70,7 +70,7 @@ publisher filled in.
 
 The publisher sends the dashboard structure (groups, datasets, titles, units) and the live
 values the dashboard displays. It does not send raw frames: the viewer's console stays empty,
-and the viewer's CSV/MDF4 export, MQTT publisher, and session database never see mirrored
+and the viewer's CSV/MDF4 export, MQTT publisher, and Historian never see mirrored
 data — recording stays the publisher's job. If the remote project changes while attached, the
 viewer picks up the new layout automatically.
 

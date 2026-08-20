@@ -1449,7 +1449,7 @@ void DataModel::ProjectModel::addDataset(const SerialStudio::DatasetOption optio
  */
 void DataModel::ProjectModel::ensurePainterDatasets(int groupId, const QVariantList& specs)
 {
-  const ProjectUndoScope undo_scope{*this, tr("Edit Painter Datasets")};
+  const ProjectUndoScope undo_scope{*this, tr("Edit Canvas Datasets")};
   if (groupId < 0 || static_cast<size_t>(groupId) >= m_groups.size())
     return;
 

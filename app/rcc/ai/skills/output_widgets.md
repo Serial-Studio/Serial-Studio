@@ -128,16 +128,16 @@ produces the right bytes, and let the user be the one who fires it.
 
 ## Why JavaScript-only
 
-Output widget transmit functions and Painter scripts are
+Output widget transmit functions and Canvas scripts are
 JavaScript-only on purpose:
 
 - Output widgets inject a JS-specific Modbus/CAN helper set and ship a
   JS reference-script library (NMEA, GRBL, GCode, SCPI, SLCAN, binary
   packet, etc.). Porting that to Lua is a large effort for marginal
   benefit.
-- Painters draw via Canvas2D, which is bound to QJSEngine; there is
+- Canvas scripts draw via Canvas2D, which is bound to QJSEngine; there is
   no Lua canvas API.
 
 Frame parsers and per-dataset transforms support BOTH Lua (preferred
 for hotpath performance) and JavaScript. The Lua nudge does NOT
-extend to output widgets or painters.
+extend to output widgets or canvas scripts.

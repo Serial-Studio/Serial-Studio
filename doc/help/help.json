@@ -85,7 +85,7 @@
  },
  {
   "id": "painter-widget",
-  "title": "Painter Widget",
+  "title": "Canvas Widget",
   "section": "Configuration",
   "file": "Painter-Widget.md"
  },
@@ -115,7 +115,7 @@
  },
  {
   "id": "data-tables",
-  "title": "Data Tables",
+  "title": "Variables",
   "section": "Scripting & Data Logic",
   "file": "Data-Tables.md"
  },
@@ -247,7 +247,7 @@
  },
  {
   "id": "session-database",
-  "title": "Session Database",
+  "title": "Historian",
   "section": "Data Management",
   "file": "Session-Database.md"
  },
@@ -313,7 +313,7 @@
  },
  {
   "id": "data-hotpath",
-  "title": "The Data Hotpath",
+  "title": "The Acquisition Pipeline",
   "section": "Architecture",
   "file": "Data-Hotpath.md"
  },

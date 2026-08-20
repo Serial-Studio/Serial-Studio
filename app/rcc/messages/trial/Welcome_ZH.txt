@@ -12,5 +12,5 @@ Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 → MQTT、XY 和 3D 可视化
 → Audio、CAN Bus、Modbus、USB、HID 和 Process I/O 驱动
 → 输出控件、MDF4 导出和 XMODEM/YMODEM/ZMODEM 传输
-→ 会话数据库、Data Tables 和数值转换 (JS + Lua)
+→ 历史数据库、变量和数值转换 (JS + Lua)
 → 多源项目和自定义仪表盘工作区

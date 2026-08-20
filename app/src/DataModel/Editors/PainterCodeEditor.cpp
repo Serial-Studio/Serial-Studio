@@ -396,7 +396,7 @@ void DataModel::PainterCodeEditor::selectTemplate()
 
   bool ok;
   const auto name = QInputDialog::getItem(nullptr,
-                                          tr("Select Painter Widget Template"),
+                                          tr("Select Canvas Widget Template"),
                                           tr("Choose a template to load:"),
                                           m_templateNames,
                                           0,

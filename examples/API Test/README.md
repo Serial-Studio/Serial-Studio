@@ -295,7 +295,7 @@ Use `python test_api.py list` to see all commands, or run `python test_api.py in
 - `mdf4Export.*` - MDF4 export control (`setEnabled`, `close`, `getStatus`)
 - `notifications.*` - Notification center
 - `licensing.*` - License inspection (mutations are AI-blocked)
-- `sessions.*` - Session database browse/replay/export
+- `sessions.*` - Historian browse/replay/export
 
 For the full reference with parameters and examples, see [API-Reference.md](../../doc/help/API-Reference.md).
 

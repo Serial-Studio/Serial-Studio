@@ -1250,6 +1250,11 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
         <translation>Gestisci chiavi API…</translation>
     </message>
     <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="427"/>
+        <source>What is the historian, and why would I use it?</source>
+        <translation>Cos'è lo storico e perché dovrei usarlo?</translation>
+    </message>
+    <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="428"/>
         <source>CSV vs MDF4 export - what is the difference?</source>
         <translation>Esportazione CSV vs MDF4 - qual è la differenza?</translation>
@@ -1258,6 +1263,11 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
         <location filename="../../qml/AI/AssistantPanel.qml" line="431"/>
         <source>Plot, Bar, and Gauge - when to use each?</source>
         <translation>Plot, Bar e Gauge - quando usare ciascuno?</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="450"/>
+        <source>Add a canvas widget for a custom visualization</source>
+        <translation>Aggiungi un widget canvas per una visualizzazione personalizzata</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="503"/>
@@ -1310,9 +1320,8 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
         <translation>Guidami attraverso ciò che questo progetto contiene già</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="427"/>
         <source>What is a session database, and why would I use one?</source>
-        <translation>Cos'è un database di sessione e perché dovrei usarne uno?</translation>
+        <translation type="vanished">Cos'è un database di sessione e perché dovrei usarne uno?</translation>
     </message>
     <message>
         <source>CSV vs MDF4 export — what is the difference?</source>
@@ -1403,9 +1412,8 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
         <translation>Costruisci uno spazio di lavoro panoramica esecutiva</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="450"/>
         <source>Add a painter widget for a custom visualization</source>
-        <translation>Aggiungi un widget painter per una visualizzazione personalizzata</translation>
+        <translation type="vanished">Aggiungi un widget painter per una visualizzazione personalizzata</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="451"/>
@@ -2698,118 +2706,122 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="38"/>
+        <source>Add Canvas</source>
+        <translation>Aggiungi Canvas</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="39"/>
         <source>Add Compass</source>
         <translation>Aggiungi Bussola</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="39"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="40"/>
         <source>Add Data Source</source>
         <translation>Aggiungi Sorgente Dati</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="40"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="41"/>
         <source>Add Data Table</source>
         <translation>Aggiungi Tabella Dati</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="41"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="42"/>
         <source>Add Dataset</source>
         <translation>Aggiungi Dataset</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="42"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="43"/>
         <source>Add Device</source>
         <translation>Aggiungi Dispositivo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="43"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="44"/>
         <source>Add External Window</source>
         <translation>Aggiungi Finestra Esterna</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="44"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="45"/>
         <source>Add FFT Plot</source>
         <translation>Aggiungi Grafico FFT</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="45"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="46"/>
         <source>Add GPS Map</source>
         <translation>Aggiungi Mappa GPS</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="46"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="47"/>
         <source>Add Gauge</source>
         <translation>Aggiungi Indicatore</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="47"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="48"/>
         <source>Add Group</source>
         <translation>Aggiungi Gruppo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="48"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="49"/>
         <source>Add Gyroscope</source>
         <translation>Aggiungi Giroscopio</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="49"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="50"/>
         <source>Add Image View</source>
         <translation>Aggiungi Vista Immagine</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="50"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="51"/>
         <source>Add LED Indicator</source>
         <translation>Aggiungi Indicatore LED</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="51"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="52"/>
         <source>Add Level Indicator</source>
         <translation>Aggiungi Indicatore di Livello</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="52"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="53"/>
         <source>Add Multi-Plot</source>
         <translation>Aggiungi Grafico Multiplo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="53"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="54"/>
         <source>Add Output</source>
         <translation>Aggiungi Output</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="54"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="55"/>
         <source>Add Output Button</source>
         <translation>Aggiungi Pulsante di Output</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="55"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="56"/>
         <source>Add Output Knob</source>
         <translation>Aggiungi Manopola di Output</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="56"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="57"/>
         <source>Add Output Panel</source>
         <translation>Aggiungi Pannello di Output</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="57"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="58"/>
         <source>Add Output Slider</source>
         <translation>Aggiungi Cursore di Output</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="58"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="59"/>
         <source>Add Output Text Field</source>
         <translation>Aggiungi Campo di Testo di Output</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="59"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="60"/>
         <source>Add Output Toggle</source>
         <translation>Aggiungi Interruttore di Output</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="60"/>
         <source>Add Painter</source>
-        <translation>Aggiungi Painter</translation>
+        <translation type="vanished">Aggiungi Painter</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="61"/>
@@ -2817,14 +2829,18 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
         <translation>Aggiungi Grafico</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="62"/>
         <source>Add Register</source>
-        <translation>Aggiungi Registro</translation>
+        <translation type="vanished">Aggiungi Registro</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="62"/>
+        <source>Add Shared Table</source>
+        <translation>Aggiungi Tabella Condivisa</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="63"/>
-        <source>Add Shared Table</source>
-        <translation>Aggiungi Tabella Condivisa</translation>
+        <source>Add Variable</source>
+        <translation>Aggiungi Variabile</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="64"/>
@@ -3012,39 +3028,51 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
         <translation>Aggiungi un grafico con segnali multipli</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="101"/>
         <source>Add a register to this shared table</source>
-        <translation>Aggiungi un registro a questa tabella condivisa</translation>
+        <translation type="vanished">Aggiungi un registro a questa tabella condivisa</translation>
+    </message>
+    <message>
+        <source>Add a script-drawn painter group</source>
+        <translation type="vanished">Aggiungi un gruppo painter disegnato da script</translation>
+    </message>
+    <message>
+        <source>Add a shared-memory table</source>
+        <translation type="vanished">Aggiungi una tabella di memoria condivisa</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="101"/>
+        <source>Add a script-drawn canvas group</source>
+        <translation>Aggiungi un gruppo canvas disegnato da script</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="102"/>
-        <source>Add a script-drawn painter group</source>
-        <translation>Aggiungi un gruppo painter disegnato da script</translation>
+        <source>Add a shared variable table</source>
+        <translation>Aggiungi una tabella di variabili condivise</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="103"/>
-        <source>Add a shared-memory table</source>
-        <translation>Aggiungi una tabella di memoria condivisa</translation>
-    </message>
-    <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="104"/>
         <source>Add a slider control</source>
         <translation>Aggiungi un controllo cursore</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="105"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="104"/>
         <source>Add a text field control</source>
         <translation>Aggiungi un controllo campo di testo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="106"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="105"/>
         <source>Add a toggle control</source>
         <translation>Aggiungi un controllo interruttore</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="107"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="106"/>
         <source>Add a top-level folder in this section</source>
         <translation>Aggiungi una cartella di primo livello in questa sezione</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="107"/>
+        <source>Add a variable to this shared table</source>
+        <translation>Aggiungi una variabile a questa tabella condivisa</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="108"/>
@@ -3188,766 +3216,811 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="136"/>
+        <source>Canvas</source>
+        <translation>Canvas</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="137"/>
+        <source>Canvas Widget</source>
+        <translation>Widget Canvas</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="138"/>
         <source>Chat with an AI to build and edit your project</source>
         <translation>Chatta con un'IA per creare e modificare il tuo progetto</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="137"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="139"/>
         <source>Check device permissions, adapters, and host reachability</source>
         <translation>Controlla permessi dispositivo, adattatori e raggiungibilità host</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="138"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="140"/>
         <source>Clean Up Unresolved Widgets</source>
         <translation>Pulisci Widget Non Risolti</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="139"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="141"/>
         <source>Clear All Workspaces</source>
         <translation>Cancella Tutti gli Spazi di Lavoro</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="140"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="142"/>
         <source>Clear Console</source>
         <translation>Cancella Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="141"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="143"/>
         <source>Clear Window</source>
         <translation>Cancella Finestra</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="142"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="144"/>
         <source>Clear the console output</source>
         <translation>Cancella l'output della console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="143"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="145"/>
         <source>Clock</source>
         <translation>Orologio</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="144"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="146"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="145"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="147"/>
         <source>Close Window</source>
         <translation>Chiudi Finestra</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="146"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="148"/>
         <source>Close session file</source>
         <translation>Chiudi file di sessione</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="147"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="149"/>
         <source>Collapse All</source>
         <translation>Comprimi Tutto</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="148"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="150"/>
         <source>Collapse Duplicates</source>
         <translation>Comprimi Duplicati</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="149"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="151"/>
         <source>Collapse repeated console lines</source>
         <translation>Comprimi le righe ripetute della console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="150"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="152"/>
         <source>Collapse the project tree to its overview</source>
         <translation>Comprimi l'albero del progetto alla sua panoramica</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="151"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="153"/>
         <source>Command Palette</source>
         <translation>Tavolozza Comandi</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="152"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="154"/>
         <source>Compare Project</source>
         <translation>Confronta Progetto</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="153"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="155"/>
         <source>Compare the selected session against the project open in the editor</source>
         <translation>Confronta la sessione selezionata con il progetto aperto nell'editor</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="154"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="156"/>
         <source>Compass</source>
         <translation>Bussola</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="155"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="157"/>
         <source>Configure the MQTT publisher</source>
         <translation>Configura il publisher MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="156"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="158"/>
         <source>Connect</source>
         <translation>Connetti</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="157"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="159"/>
         <source>Connect or disconnect from the configured device</source>
         <translation>Connetti o disconnetti dal dispositivo configurato</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="158"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="160"/>
         <source>Connection Diagnostics</source>
         <translation>Diagnostica Connessione</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="159"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="161"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="160"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="162"/>
         <source>Console Echo</source>
         <translation>Echo Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="161"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="163"/>
         <source>Console Only Mode</source>
         <translation>Modalità Solo Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="162"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="164"/>
         <source>Console Timestamps</source>
         <translation>Timestamp Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="163"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="165"/>
         <source>Console Transcript</source>
         <translation>Trascrizione Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="164"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="166"/>
         <source>Create a new JSON project</source>
         <translation>Crea un nuovo progetto JSON</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="165"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="167"/>
         <source>Customize Workspaces</source>
         <translation>Personalizza Aree di Lavoro</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="166"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="168"/>
         <source>Data Grid</source>
         <translation>Griglia Dati</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="167"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="169"/>
         <source>Dataset</source>
         <translation>Dataset</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="168"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="170"/>
         <source>Dataset Container</source>
         <translation>Contenitore di Dataset</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="169"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="171"/>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="170"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="172"/>
         <source>Delete the selected session</source>
         <translation>Elimina la sessione selezionata</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="171"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="173"/>
         <source>Delete this item</source>
         <translation>Elimina questo elemento</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="172"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="174"/>
         <source>Deploy</source>
         <translation>Distribuisci</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="173"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="175"/>
         <source>Deploy Operator App</source>
         <translation>Distribuisci App Operatore</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="174"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="176"/>
         <source>Disconnect</source>
         <translation>Disconnetti</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="175"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="177"/>
         <source>Drop workspace widgets whose source is gone</source>
         <translation>Rimuovi widget dell'area di lavoro la cui sorgente non esiste più</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="176"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="178"/>
         <source>Duplicate</source>
         <translation>Duplica</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="177"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="179"/>
         <source>Duplicate this item</source>
         <translation>Duplica questo elemento</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="178"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="180"/>
         <source>Echo transmitted data in the console</source>
         <translation>Ripeti i dati trasmessi nella console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="179"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="181"/>
+        <source>Edit Canvas Code</source>
+        <translation>Modifica Codice Canvas</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="182"/>
         <source>Edit Control Loop</source>
         <translation>Modifica Control Loop</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="180"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="183"/>
         <source>Edit Frame Parser</source>
         <translation>Modifica Frame Parser</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="181"/>
-        <source>Edit Painter Code</source>
-        <translation>Modifica Codice Painter</translation>
+        <location filename="../../src/UI/CommandStrings.cpp" line="193"/>
+        <source>Export Variables</source>
+        <translation>Esporta Variabili</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="182"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="195"/>
+        <source>Export this table's variables to CSV</source>
+        <translation>Esporta le variabili di questa tabella in CSV</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="219"/>
+        <source>Import Variables</source>
+        <translation>Importa Variabili</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="220"/>
+        <source>Import this table's variables from CSV</source>
+        <translation>Importa le variabili di questa tabella da CSV</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="263"/>
+        <source>Open the historian documentation</source>
+        <translation>Apri la documentazione dello storico</translation>
+    </message>
+    <message>
+        <source>Edit Painter Code</source>
+        <translation type="vanished">Modifica Codice Painter</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="184"/>
         <source>Edit Transform Code</source>
         <translation>Modifica Codice Transform</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="183"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="185"/>
         <source>Edit Workspace Widgets</source>
         <translation>Modifica Widget Workspace</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="184"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="186"/>
         <source>Edit workspaces manually instead of using the automatic layout</source>
         <translation>Modifica i workspace manualmente invece di usare il layout automatico</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="185"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="187"/>
         <source>Examples</source>
         <translation>Esempi</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="186"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="188"/>
         <source>Expand All</source>
         <translation>Espandi Tutto</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="187"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="189"/>
         <source>Expand every item in the project tree</source>
         <translation>Espandi ogni elemento nell'albero del progetto</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="188"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="190"/>
         <source>Export</source>
         <translation>Esporta</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="189"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="191"/>
         <source>Export CSV</source>
         <translation>Esporta CSV</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="190"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="192"/>
         <source>Export PDF</source>
         <translation>Esporta PDF</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="191"/>
         <source>Export Registers</source>
-        <translation>Esporta Registri</translation>
+        <translation type="vanished">Esporta Registri</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="192"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="194"/>
         <source>Export selected session to CSV</source>
         <translation>Esporta la sessione selezionata in CSV</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="193"/>
         <source>Export this table's registers to CSV</source>
-        <translation>Esporta i registri di questa tabella in CSV</translation>
+        <translation type="vanished">Esporta i registri di questa tabella in CSV</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="194"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="196"/>
         <source>Extensions</source>
         <translation>Estensioni</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="195"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="197"/>
         <source>FFT Plot</source>
         <translation>Grafico FFT</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="196"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="198"/>
         <source>File Transmission</source>
         <translation>Trasmissione File</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="197"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="199"/>
         <source>Fill every empty dataset alias from its title</source>
         <translation>Riempi ogni alias di dataset vuoto dal suo titolo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="198"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="200"/>
         <source>Freeze Dashboard</source>
         <translation>Blocca Dashboard</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="199"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="201"/>
         <source>Full Screen</source>
         <translation>Schermo Intero</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="200"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="202"/>
         <source>GPS Map</source>
         <translation>Mappa GPS</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="201"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="203"/>
         <source>Gauge</source>
         <translation>Indicatore</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="202"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="204"/>
         <source>Generate a PDF report for the selected session</source>
         <translation>Genera un report PDF per la sessione selezionata</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="203"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="205"/>
         <source>Generate a project from a Protocol Buffers (.proto) schema</source>
         <translation>Genera un progetto da uno schema Protocol Buffers (.proto)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="204"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="206"/>
         <source>Generic</source>
         <translation>Generico</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="205"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="207"/>
         <source>Group</source>
         <translation>Gruppo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="206"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="208"/>
         <source>Gyroscope</source>
         <translation>Giroscopio</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="207"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="209"/>
         <source>HID</source>
         <translation>HID</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="208"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="210"/>
         <source>Help</source>
         <translation>Aiuto</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="209"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="211"/>
         <source>Help Center</source>
         <translation>Centro Assistenza</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="210"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="212"/>
         <source>Hex Display</source>
         <translation>Display Esadecimale</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="211"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="213"/>
         <source>Hide</source>
         <translation>Nascondi</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="212"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="214"/>
         <source>Hide this item from the dashboard and frame building</source>
         <translation>Nascondi questo elemento dal dashboard e dalla costruzione del frame</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="213"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="215"/>
+        <source>Historian</source>
+        <translation>Storico</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="216"/>
         <source>Image</source>
         <translation>Immagine</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="214"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="217"/>
         <source>Image View</source>
         <translation>Visualizzatore Immagini</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="215"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="218"/>
         <source>Import Protobuf Schema</source>
         <translation>Importa Schema Protobuf</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="216"/>
         <source>Import Registers</source>
-        <translation>Importa Registri</translation>
+        <translation type="vanished">Importa Registri</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="217"/>
         <source>Import this table's registers from CSV</source>
-        <translation>Importa i registri di questa tabella da CSV</translation>
+        <translation type="vanished">Importa i registri di questa tabella da CSV</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="218"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="221"/>
         <source>Knob</source>
         <translation>Manopola</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="219"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="222"/>
         <source>LED Indicator</source>
         <translation>Indicatore LED</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="220"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="223"/>
         <source>Level Indicator</source>
         <translation>Indicatore di Livello</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="221"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="224"/>
         <source>License Management</source>
         <translation>Gestione Licenza</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="222"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="225"/>
         <source>Lock</source>
         <translation>Blocca</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="223"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="226"/>
         <source>Lock Project Editor</source>
         <translation>Blocca Editor Progetto</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="224"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="227"/>
         <source>MDF4 File</source>
         <translation>File MDF4</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="225"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="228"/>
         <source>MQTT Publisher</source>
         <translation>Publisher MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="226"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="229"/>
         <source>Macros</source>
         <translation>Macro</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="227"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="230"/>
         <source>Make every hidden group visible again</source>
         <translation>Rendi nuovamente visibili tutti i gruppi nascosti</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="228"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="231"/>
         <source>Manage your Serial Studio Pro license</source>
         <translation>Gestisci la tua licenza Serial Studio Pro</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="229"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="232"/>
         <source>Meter</source>
         <translation>Misuratore</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="230"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="233"/>
         <source>Minimize Window</source>
         <translation>Riduci a Icona Finestra</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="231"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="234"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="232"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="235"/>
         <source>Move Down</source>
         <translation>Sposta Giù</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="233"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="236"/>
         <source>Move Up</source>
         <translation>Sposta Su</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="234"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="237"/>
         <source>Move this item down among its siblings</source>
         <translation>Sposta questo elemento in basso tra i suoi elementi di pari livello</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="235"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="238"/>
         <source>Move this item out of every folder</source>
         <translation>Sposta questo elemento fuori da ogni cartella</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="236"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="239"/>
         <source>Move this item up among its siblings</source>
         <translation>Sposta questo elemento in alto tra i suoi elementi di pari livello</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="237"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="240"/>
         <source>Move to Folder</source>
         <translation>Sposta in Cartella</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="238"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="241"/>
         <source>Multi-Plot</source>
         <translation>Grafico Multiplo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="239"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="242"/>
         <source>Navigate Back</source>
         <translation>Torna Indietro</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="240"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="243"/>
         <source>Navigate Forward</source>
         <translation>Naviga Avanti</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="241"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="244"/>
         <source>Network</source>
         <translation>Rete</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="242"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="245"/>
         <source>New</source>
         <translation>Nuovo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="243"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="246"/>
         <source>New Folder</source>
         <translation>Nuova Cartella</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="244"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="247"/>
         <source>New Project</source>
         <translation>Nuovo Progetto</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="245"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="248"/>
         <source>New Sub-Folder</source>
         <translation>Nuova Sotto-cartella</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="246"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="249"/>
         <source>Next Workspace</source>
         <translation>Area di Lavoro Successiva</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="247"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="250"/>
         <source>Notifications</source>
         <translation>Notifiche</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="248"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="251"/>
         <source>Open</source>
         <translation>Apri</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="249"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="252"/>
         <source>Open CSV</source>
         <translation>Apri CSV</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="250"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="253"/>
         <source>Open MDF4</source>
         <translation>Apri MDF4</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="251"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="254"/>
         <source>Open Project</source>
         <translation>Apri Progetto</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="252"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="255"/>
         <source>Open a session file</source>
         <translation>Apri un file di sessione</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="253"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="256"/>
         <source>Open an existing JSON project</source>
         <translation>Apri un progetto JSON esistente</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="254"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="257"/>
         <source>Open application settings and preferences</source>
         <translation>Apri le impostazioni e le preferenze dell'applicazione</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="255"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="258"/>
         <source>Open the Assistant</source>
         <translation>Apri l'Assistente</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="256"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="259"/>
         <source>Open the Project Editor documentation</source>
         <translation>Apri la documentazione dell'Editor di Progetto</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="257"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="260"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
         <translation>Apri l'Editor di Progetto per creare o modificare il layout JSON</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="258"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="261"/>
+        <source>Open the canvas script for this group</source>
+        <translation>Apri lo script di canvas per questo gruppo</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="262"/>
         <source>Open the frame parser for this data source</source>
         <translation>Apri l'analizzatore di frame per questa sorgente dati</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="259"/>
         <source>Open the painter script for this group</source>
-        <translation>Apri lo script di disegno per questo gruppo</translation>
+        <translation type="vanished">Apri lo script di disegno per questo gruppo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="260"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="264"/>
         <source>Open the project control loop</source>
         <translation>Apri il ciclo di controllo del progetto</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="261"/>
         <source>Open the session database documentation</source>
-        <translation>Apri la documentazione del database delle sessioni</translation>
+        <translation type="vanished">Apri la documentazione del database delle sessioni</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="262"/>
         <source>Open the shared-memory documentation</source>
-        <translation>Apri la documentazione della memoria condivisa</translation>
+        <translation type="vanished">Apri la documentazione della memoria condivisa</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="263"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="265"/>
         <source>Open the value transform for this dataset</source>
         <translation>Apri la trasformazione del valore per questo dataset</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="264"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="266"/>
+        <source>Open the variables documentation</source>
+        <translation>Apri la documentazione delle variabili</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="267"/>
         <source>Open this workspace to edit its widgets</source>
         <translation>Apri questo workspace per modificarne i widget</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="265"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="268"/>
         <source>Output</source>
         <translation>Uscita</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="266"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="269"/>
         <source>Output Panel</source>
         <translation>Pannello di Output</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="267"/>
         <source>Painter</source>
-        <translation>Painter</translation>
+        <translation type="vanished">Painter</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="268"/>
         <source>Painter Widget</source>
-        <translation>Widget Painter</translation>
+        <translation type="vanished">Widget Painter</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="269"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="270"/>
         <source>Pause</source>
         <translation>Pausa</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="270"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="271"/>
         <source>Play a CSV file as if it were live sensor data</source>
         <translation>Riproduci un file CSV come se fossero dati dei sensori in tempo reale</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="271"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="272"/>
         <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
         <translation>Riproduci un file MDF4 come se fossero dati dei sensori in tempo reale (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="272"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="273"/>
         <source>Plot</source>
         <translation>Grafico</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="273"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="274"/>
         <source>Preferences</source>
         <translation>Preferenze</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="274"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="275"/>
         <source>Previous Workspace</source>
         <translation>Area di Lavoro Precedente</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="275"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="276"/>
         <source>Problem Center</source>
         <translation>Centro Problemi</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="276"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="277"/>
         <source>Process</source>
         <translation>Processo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="277"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="278"/>
         <source>Project Editor</source>
         <translation>Editor di Progetto</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="278"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="279"/>
         <source>Project File Mode</source>
         <translation>Modalità File di Progetto</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="279"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="280"/>
         <source>Protobuf</source>
         <translation>Protobuf</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="280"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="281"/>
         <source>Quick Plot Mode</source>
         <translation>Modalità Grafico Rapido</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="281"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="282"/>
         <source>Quit</source>
         <translation>Esci</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="282"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="283"/>
         <source>Rebuild the automatic workspace layout</source>
         <translation>Ricostruisci il layout automatico dell'area di lavoro</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="283"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="284"/>
         <source>Redo</source>
         <translation>Ripeti</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="284"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="285"/>
         <source>Redo the last undone project edit</source>
         <translation>Ripeti l'ultima modifica annullata del progetto</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="285"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="286"/>
         <source>Remote Dashboard</source>
         <translation>Dashboard Remoto</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="286"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="287"/>
         <source>Remove every user workspace</source>
         <translation>Rimuovi tutte le aree di lavoro utente</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="287"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="288"/>
         <source>Rename</source>
         <translation>Rinomina</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="288"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="289"/>
         <source>Rename this item</source>
         <translation>Rinomina questo elemento</translation>
     </message>
@@ -3956,337 +4029,339 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
         <translation type="vanished">Recupera</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="289"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="290"/>
         <source>Replay</source>
         <translation>Riproduci</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="290"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="291"/>
         <source>Replay selected session on the dashboard</source>
         <translation>Riproduci la sessione selezionata sul dashboard</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="291"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="292"/>
         <source>Reset</source>
         <translation>Ripristina</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="292"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="293"/>
         <source>Reset to Auto Layout</source>
         <translation>Ripristina Layout Automatico</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="293"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="294"/>
         <source>Restore</source>
         <translation>Ripristina</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="294"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="295"/>
         <source>Restore Backup</source>
         <translation>Ripristina Backup</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="295"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="296"/>
         <source>Restore Project</source>
         <translation>Ripristina Progetto</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="296"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="297"/>
         <source>Restore a recent automatic snapshot of the current project</source>
         <translation>Ripristina un'istantanea automatica recente del progetto corrente</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="297"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="298"/>
         <source>Restore the project file from this session file</source>
         <translation>Ripristina il file di progetto da questo file di sessione</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="298"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="299"/>
         <source>Resume</source>
         <translation>Riprendi</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="299"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="300"/>
         <source>Review project, link, and script diagnostics</source>
         <translation>Esamina diagnostica progetto, collegamento e script</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="300"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="301"/>
         <source>Run API commands and script macros interactively</source>
         <translation>Esegui comandi API e macro di script in modo interattivo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="301"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="302"/>
         <source>Save</source>
         <translation>Salva</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="302"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="303"/>
         <source>Save As</source>
         <translation>Salva Come</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="303"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="304"/>
         <source>Save Project</source>
         <translation>Salva Progetto</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="304"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="305"/>
         <source>Save Project As</source>
         <translation>Salva Progetto Come</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="305"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="306"/>
         <source>Search</source>
         <translation>Cerca</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="306"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="307"/>
         <source>Search and run any Serial Studio command</source>
         <translation>Cerca ed esegui qualsiasi comando di Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="307"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="308"/>
         <source>Seed Aliases from Titles</source>
         <translation>Genera Alias dai Titoli</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="308"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="309"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>Seleziona comunicazione Bluetooth Low Energy</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="309"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="310"/>
         <source>Select CAN Bus communication (Pro)</source>
         <translation>Seleziona comunicazione CAN Bus (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="310"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="311"/>
         <source>Select HID device communication (Pro)</source>
         <translation>Seleziona comunicazione dispositivo HID (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="311"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="312"/>
         <source>Select MODBUS communication (Pro)</source>
         <translation>Seleziona comunicazione MODBUS (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="312"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="313"/>
         <source>Select Serial port (UART) communication</source>
         <translation>Seleziona comunicazione porta seriale (UART)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="313"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="314"/>
         <source>Select TCP/UDP network communication</source>
         <translation>Seleziona comunicazione di rete TCP/UDP</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="314"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="315"/>
         <source>Select audio input device (Pro)</source>
         <translation>Seleziona dispositivo di ingresso audio (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="315"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="316"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>Seleziona comunicazione pipe di processo (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="316"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="317"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>Seleziona comunicazione USB raw (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="317"/>
         <source>Session Database</source>
-        <translation>Database Sessioni</translation>
+        <translation type="vanished">Database Sessioni</translation>
+    </message>
+    <message>
+        <source>Sessions</source>
+        <translation type="vanished">Sessioni</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="318"/>
-        <source>Sessions</source>
-        <translation>Sessioni</translation>
-    </message>
-    <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="319"/>
         <source>Set a password and lock the Project Editor</source>
         <translation>Imposta una Password e Blocca l'Editor di Progetto</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="320"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="319"/>
         <source>Set a password to prevent session deletions</source>
         <translation>Imposta una password per impedire l'eliminazione delle sessioni</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="321"/>
         <source>Shared Memory Help</source>
-        <translation>Guida Memoria Condivisa</translation>
+        <translation type="vanished">Guida Memoria Condivisa</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="322"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="320"/>
         <source>Show</source>
         <translation>Mostra</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="323"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="321"/>
         <source>Show All Hidden Groups</source>
         <translation>Mostra Tutti i Gruppi Nascosti</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="324"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="322"/>
         <source>Show application info and license details</source>
         <translation>Mostra Informazioni sull'Applicazione e Dettagli della Licenza</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="325"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="323"/>
         <source>Show this dataset as a 2D plot</source>
         <translation>Mostra questo dataset come grafico 2D</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="326"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="324"/>
         <source>Show this dataset as a bar or level</source>
         <translation>Mostra questo dataset come barra o livello</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="327"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="325"/>
         <source>Show this dataset as a compass</source>
         <translation>Mostra questo dataset come bussola</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="328"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="326"/>
         <source>Show this dataset as a gauge</source>
         <translation>Mostra questo dataset come indicatore</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="329"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="327"/>
         <source>Show this dataset as a waterfall plot</source>
         <translation>Mostra questo dataset come grafico a cascata</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="330"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="328"/>
         <source>Show this dataset as an FFT plot</source>
         <translation>Mostra questo dataset come grafico FFT</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="331"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="329"/>
         <source>Show this dataset as an LED indicator</source>
         <translation>Mostra questo dataset come indicatore LED</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="332"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="330"/>
         <source>Show this dataset as an analog meter</source>
         <translation>Mostra questo dataset come misuratore analogico</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="333"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="331"/>
         <source>Show timestamps in the console</source>
         <translation>Mostra Timestamp nella Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="334"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="332"/>
         <source>Slider</source>
         <translation>Cursore</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="335"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="333"/>
         <source>Start Menu</source>
         <translation>Menu di Avvio</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="336"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="334"/>
         <source>Stopwatch</source>
         <translation>Cronometro</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="337"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="335"/>
         <source>Switch to Console Only mode (no parsing)</source>
         <translation>Passa alla Modalità Solo Console (senza parsing)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="338"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="336"/>
         <source>Switch to Project File mode (parse via a project)</source>
         <translation>Passa alla Modalità File di Progetto (parsing tramite progetto)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="339"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="337"/>
         <source>Switch to Quick Plot mode (comma-separated values)</source>
         <translation>Passa alla Modalità Grafico Rapido (valori separati da virgola)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="340"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="338"/>
         <source>Table</source>
         <translation>Tabella</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="341"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="339"/>
         <source>Text Field</source>
         <translation>Campo di Testo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="342"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="340"/>
         <source>Toggle</source>
         <translation>Interruttore</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="343"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="341"/>
         <source>Toggle hexadecimal console display</source>
         <translation>Attiva/disattiva visualizzazione console esadecimale</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="344"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="342"/>
         <source>Tools</source>
         <translation>Strumenti</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="345"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="343"/>
         <source>Top Level</source>
         <translation>Livello Superiore</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="346"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="344"/>
         <source>UART</source>
         <translation>UART</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="347"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="345"/>
         <source>USB</source>
         <translation>USB</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="348"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="346"/>
         <source>Undo</source>
         <translation>Annulla</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="349"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="347"/>
         <source>Undo the last project edit</source>
         <translation>Annulla l'ultima modifica del progetto</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="350"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="348"/>
         <source>Unlock</source>
         <translation>Sblocca</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="351"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="349"/>
+        <source>Variables Help</source>
+        <translation>Aiuto Variabili</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="350"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
         <translation>Visualizza la documentazione dettagliata e poni domande su DeepWiki</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="352"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="351"/>
         <source>Visualizations</source>
         <translation>Visualizzazioni</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="353"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="352"/>
         <source>Watch another Serial Studio instance's dashboard over the network</source>
         <translation>Osserva il dashboard di un'altra istanza Serial Studio sulla rete</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="354"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="353"/>
         <source>Waterfall</source>
         <translation>Waterfall</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="355"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="354"/>
         <source>Web View</source>
         <translation>Visualizzatore Web</translation>
     </message>
@@ -6046,10 +6121,20 @@ v
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="583"/>
+        <source>A downstream consumer (dashboard, CSV/MDF4 export, historian, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
+        <translation>Un consumatore a valle (dashboard, esportazione CSV/MDF4, storico o sottoscrittore API) non sta elaborando abbastanza velocemente, quindi i dati vengono scartati dalla visualizzazione e da qualsiasi registrazione attiva. Disabilitare un consumatore pesante o ridurre la velocità dei dati.</translation>
+    </message>
+    <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="3090"/>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="3228"/>
         <source>Channel %1</source>
         <translation>Canale %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3118"/>
+        <source>Multi-Plot</source>
+        <translation>Grafico Multiplo</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="3239"/>
@@ -6068,9 +6153,8 @@ v
         <translation>Pool di Blocchi esaurito</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="583"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, session DB, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
-        <translation>Un consumatore a valle (dashboard, esportazione CSV/MDF4, database di sessione o sottoscrittore API) non sta drenando abbastanza velocemente, quindi i dati vengono scartati dalla visualizzazione e da qualsiasi registrazione attiva. Disabilitare un consumatore pesante o ridurre la velocità dei dati.</translation>
+        <translation type="vanished">Un consumatore a valle (dashboard, esportazione CSV/MDF4, database di sessione o sottoscrittore API) non sta drenando abbastanza velocemente, quindi i dati vengono scartati dalla visualizzazione e da qualsiasi registrazione attiva. Disabilitare un consumatore pesante o ridurre la velocità dei dati.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="2764"/>
@@ -6101,9 +6185,8 @@ v
         <translation>Dati Grafico Rapido</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3118"/>
         <source>Multiple Plots</source>
-        <translation>Grafici Multipli</translation>
+        <translation type="vanished">Grafici Multipli</translation>
     </message>
 </context>
 <context>
@@ -6601,9 +6684,13 @@ Qualsiasi modifica non salvata andrà persa. Continuare?</translation>
         <translation>Seleziona file Javascript da importare</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="399"/>
         <source>Select Painter Widget Template</source>
-        <translation>Seleziona Modello Widget Painter</translation>
+        <translation type="vanished">Seleziona Modello Widget Painter</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="399"/>
+        <source>Select Canvas Widget Template</source>
+        <translation>Seleziona Modello Widget Canvas</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="400"/>
@@ -6668,7 +6755,7 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
         <translation>Traccia ogni curva rispetto al tempo o al numero di campione</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="413"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="414"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="314"/>
         <source>Logarithmic X Axis</source>
         <translation>Asse X Logaritmico</translation>
@@ -6679,7 +6766,7 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
         <translation>Scala l'asse X in decadi; disponibile quando la sorgente dell'asse X è Campioni (non Tempo)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="426"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="427"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="327"/>
         <source>Logarithmic Y Axis</source>
         <translation>Asse Y Logaritmico</translation>
@@ -6835,22 +6922,20 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
         <translation>Configurazione Immagine</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="238"/>
         <source>Virtual Dataset</source>
-        <translation>Dataset Virtuale</translation>
+        <translation type="vanished">Dataset Virtuale</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="239"/>
         <source>Virtual datasets compute their value from transforms and data tables, they do not require a frame index</source>
-        <translation>I dataset virtuali calcolano il loro valore da trasformazioni e tabelle dati, non richiedono un indice frame</translation>
+        <translation type="vanished">I dataset virtuali calcolano il loro valore da trasformazioni e tabelle dati, non richiedono un indice frame</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="577"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="578"/>
         <source>Scale the frequency axis in decades so low octaves stay readable; applies to both the FFT plot and the waterfall</source>
         <translation>Scala l'asse delle frequenze in decadi per mantenere leggibili le ottave basse; si applica sia al grafico FFT che al waterfall</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="693"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="694"/>
         <source>Fixed decimal places for the value display; overrides the format (-1 = auto)</source>
         <translation>Cifre decimali fisse per il display del valore; sovrascrive il formato (-1 = auto)</translation>
     </message>
@@ -6880,12 +6965,8 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
         <translation type="vanished">Gruppi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="597"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="610"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="611"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="636"/>
         <source>Shared Memory</source>
-        <translation>Memoria Condivisa</translation>
+        <translation type="vanished">Memoria Condivisa</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorSummaries.cpp" line="134"/>
@@ -7282,7 +7363,7 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
         <translation>Impostazioni di Connessione</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="214"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="215"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="692"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1108"/>
         <source>General Information</source>
@@ -7447,137 +7528,151 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
         <translation>Numero di volte in cui inviare il comando ad ogni attivazione</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="226"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="227"/>
         <source>Untitled Dataset</source>
         <translation>Dataset Senza Titolo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="227"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="228"/>
         <source>Dataset Title</source>
         <translation>Titolo Dataset</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="228"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="229"/>
         <source>Name of the dataset, used for labeling and identification</source>
         <translation>Nome del dataset, utilizzato per etichettatura e identificazione</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="250"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="251"/>
         <source>Hide on Dashboard</source>
         <translation>Nascondi nel Dashboard</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="251"/>
         <source>Suppress this dataset's standalone dashboard tile; the painter widget can still read its values</source>
-        <translation>Sopprime il riquadro autonomo di questo dataset nel dashboard; il widget painter può comunque leggerne i valori</translation>
+        <translation type="vanished">Sopprime il riquadro autonomo di questo dataset nel dashboard; il widget painter può comunque leggerne i valori</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="323"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="324"/>
         <source>Automatic</source>
         <translation>Automatico</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="324"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="325"/>
         <source>Widget Color</source>
         <translation>Colore Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="325"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="326"/>
         <source>Custom display color for this dataset; automatic uses the theme palette</source>
         <translation>Colore di visualizzazione personalizzato per questo dataset; automatico utilizza la tavolozza del tema</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="303"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="304"/>
         <source>Stable name</source>
         <translation>Nome stabile</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="304"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="239"/>
+        <source>Computed Dataset</source>
+        <translation>Dataset Calcolato</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="240"/>
+        <source>Computed datasets compute their value from transforms and shared variables, they do not require a frame index</source>
+        <translation>I dataset calcolati calcolano il loro valore da trasformazioni e variabili condivise, non richiedono un indice frame</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="252"/>
+        <source>Suppress this dataset's standalone dashboard tile; the canvas widget can still read its values</source>
+        <translation>Sopprime il riquadro autonomo di questo dataset nel dashboard; il widget canvas può comunque leggerne i valori</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="305"/>
         <source>Script Alias</source>
         <translation>Alias Script</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="305"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="306"/>
         <source>Stable name for getDataset-style script/API lookups; must be unique (optional)</source>
         <translation>Nome stabile per ricerche script/API in stile getDataset; deve essere univoco (opzionale)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="345"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="346"/>
         <source>Lower bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>Limite inferiore dell'intervallo di valori del dataset; i widget e FFT utilizzano questo valore quando il proprio intervallo non è impostato</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="357"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="358"/>
         <source>Upper bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>Limite superiore dell'intervallo di valori del dataset; i widget e FFT utilizzano questo valore quando il proprio intervallo non è impostato</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="401"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="402"/>
         <source>Choose Time or a dataset to drive the X-Axis in plots</source>
         <translation>Scegli Tempo o un dataset per guidare l'asse X nei grafici</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="414"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="415"/>
         <source>Scale the X axis in decades; available when the X-Axis source is Samples or a dataset (not Time)</source>
         <translation>Scala l'asse X in decadi; disponibile quando la sorgente dell'asse X è Campioni o un dataset (non Tempo)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="427"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="428"/>
         <source>Scale the Y axis in decades; values at or below zero are clamped</source>
         <translation>Scala l'asse Y in decadi; i valori pari o inferiori a zero vengono limitati</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="442"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="443"/>
         <source>Frequency Analysis</source>
         <translation>Analisi di Frequenza</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="479"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="480"/>
         <source>Peak Ballistics</source>
         <translation>Balistica dei Picchi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="480"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="481"/>
         <source>Analyzer-style display: peaks rise instantly and decay smoothly over the release time</source>
         <translation>Visualizzazione stile analizzatore: i picchi salgono istantaneamente e decadono gradualmente nel tempo di rilascio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="492"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="493"/>
         <source>Ballistics Release (ms)</source>
         <translation>Rilascio Balistica (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="493"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="494"/>
         <source>Decay time for the ballistics display (50-5000 ms)</source>
         <translation>Tempo di decadimento per la visualizzazione balistica (50-5000 ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="509"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="510"/>
         <source>Choose Time (default) or any dataset whose value drives the Y axis -- produces a Campbell diagram when bound to e.g. RPM</source>
         <translation>Scegli Tempo (predefinito) o qualsiasi dataset il cui valore guida l'asse Y -- produce un diagramma di Campbell quando associato ad es. RPM</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="549"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="550"/>
         <source>FFT Window Function</source>
         <translation>Funzione Finestra FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="550"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="551"/>
         <source>Window applied before the transform to reduce spectral leakage; affects both the FFT plot and the waterfall</source>
         <translation>Finestra applicata prima della trasformata per ridurre il leakage spettrale; influisce sia sul grafico FFT che sul waterfall</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="576"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="577"/>
         <source>Logarithmic Frequency Axis</source>
         <translation>Asse delle Frequenze Logaritmico</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="739"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="740"/>
         <source>Hold Min/Max Markers</source>
         <translation>Mantieni Marcatori Min/max</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="740"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="741"/>
         <source>Show hold markers at the lowest and highest values observed since the last data reset</source>
         <translation>Mostra marcatori di tenuta ai valori minimo e massimo osservati dall'ultimo reset dei dati</translation>
     </message>
@@ -7586,39 +7681,39 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
         <translation type="vanished">Scala l'asse delle frequenze FFT in decadi per mantenere leggibili le ottave basse</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="590"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="714"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="591"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="715"/>
         <source>Minimum Value (optional)</source>
         <translation>Valore Massimo (opzionale)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="591"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="592"/>
         <source>Lower bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>Limite inferiore per la normalizzazione dei dati; utilizza l'intervallo di valori del dataset quando non impostato</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="603"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="726"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="604"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="727"/>
         <source>Maximum Value (optional)</source>
         <translation>Valore Massimo (opzionale)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="604"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="605"/>
         <source>Upper bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>Limite superiore per la normalizzazione dei dati; utilizza l'intervallo di valori del dataset quando non impostato</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="715"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="716"/>
         <source>Lower bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>Limite inferiore dell'intervallo del misuratore o della barra; utilizza l'intervallo di valori del dataset quando non impostato</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="727"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="728"/>
         <source>Upper bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>Limite superiore dell'intervallo del misuratore o della barra; utilizza l'intervallo di valori del dataset quando non impostato</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="692"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="693"/>
         <source>Decimal Points</source>
         <translation>Punti Decimali</translation>
     </message>
@@ -7632,14 +7727,13 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
         <translation>On</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="783"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="784"/>
         <source>LED lights up when value meets or exceeds this threshold; define alarm bands for multi-state colors</source>
         <translation>Il LED si accende quando il valore raggiunge o supera questa soglia; definisci bande di allarme per colori multi-stato</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="717"/>
         <source>Painter Widget</source>
-        <translation>Widget Painter</translation>
+        <translation type="vanished">Widget Painter</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="718"/>
@@ -7677,7 +7771,7 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
         <translation>Pulisci Aree di Lavoro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="266"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="267"/>
         <source>Frame Index</source>
         <translation>Indice Frame</translation>
     </message>
@@ -7688,6 +7782,14 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
         <translation>Widget della Dashboard</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="597"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="610"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="611"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="636"/>
+        <source>Variables</source>
+        <translation>Variabili</translation>
+    </message>
+    <message>
         <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="870"/>
         <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="874"/>
         <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="875"/>
@@ -7695,42 +7797,42 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
         <translation>Ciclo di Controllo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="267"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="268"/>
         <source>Frame position used for aligning datasets in time</source>
         <translation>Posizione del frame utilizzata per allineare i dataset nel tempo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="278"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="279"/>
         <source>Measurement Unit</source>
         <translation>Unità di Misura</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="277"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="278"/>
         <source>Volts, Amps, etc.</source>
         <translation>Volt, Ampere, ecc.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="279"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="280"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
         <translation>Unità di misura, come volt o ampere (opzionale)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="372"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="373"/>
         <source>Plot Settings</source>
         <translation>Impostazioni Grafico</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="386"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="387"/>
         <source>Enable Plot Widget</source>
         <translation>Abilita Widget Grafico</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="387"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="388"/>
         <source>Plot data in real-time</source>
         <translation>Traccia dati in tempo reale</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="400"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="401"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="298"/>
         <source>X-Axis Source</source>
         <translation>Sorgente Asse X</translation>
@@ -7760,27 +7862,27 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
         <translation type="vanished">Configurazione FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="455"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="456"/>
         <source>Enable FFT Analysis</source>
         <translation>Abilita Analisi FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="456"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="457"/>
         <source>Perform frequency-domain analysis of the dataset</source>
         <translation>Esegue l'analisi nel dominio della frequenza del dataset</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="466"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="467"/>
         <source>Enable Waterfall Plot</source>
         <translation>Abilita Grafico Waterfall</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="467"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="468"/>
         <source>Show a scrolling spectrogram of frequency content over time (Pro)</source>
         <translation>Mostra uno spettrogramma scorrevole del contenuto di frequenza nel tempo (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="508"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="509"/>
         <source>Waterfall Y Axis</source>
         <translation>Asse Y Waterfall</translation>
     </message>
@@ -7789,22 +7891,22 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
         <translation type="vanished">Scegli Tempo (predefinito) o qualsiasi dataset il cui valore guida l'asse Y — produce un diagramma di Campbell quando associato ad es. RPM</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="534"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="535"/>
         <source>FFT Window Size</source>
         <translation>Dimensione Finestra FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="535"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="536"/>
         <source>Number of samples used for each FFT calculation window</source>
         <translation>Numero di campioni utilizzati per ogni finestra di calcolo FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="563"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="564"/>
         <source>FFT Sampling Rate (Hz, required)</source>
         <translation>Frequenza di Campionamento FFT (Hz, richiesta)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="564"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="565"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
         <translation>Frequenza di campionamento utilizzata per FFT (in Hz)</translation>
     </message>
@@ -7825,17 +7927,17 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
         <translation type="vanished">Limite superiore per la normalizzazione dei dati</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="619"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="620"/>
         <source>Widget Settings</source>
         <translation>Impostazioni Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="635"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="636"/>
         <source>Widget</source>
         <translation>Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="636"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="637"/>
         <source>Select the visual widget used to display this dataset</source>
         <translation>Seleziona il widget visivo utilizzato per visualizzare questo dataset</translation>
     </message>
@@ -7857,29 +7959,29 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="731"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="662"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="689"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="663"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="690"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="366"/>
         <source>Auto</source>
         <translation>Automatico</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="663"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="664"/>
         <source>Tick Count</source>
         <translation>Conteggio Tacche</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="664"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="665"/>
         <source>Major-tick count on the dial scale (0 = auto-fit to widget size)</source>
         <translation>Numero di tacche principali sulla scala del quadrante (0 = adatta automaticamente alla dimensione del widget)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="678"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="679"/>
         <source>Label Format</source>
         <translation>Formato Etichetta</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="679"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="680"/>
         <source>Decimal places or notation used on tick labels and the value display</source>
         <translation>Cifre decimali o notazione utilizzata sulle etichette delle tacche e sul display del valore</translation>
     </message>
@@ -7920,22 +8022,22 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
         <translation type="vanished">Attiva un allarme visivo quando il valore supera questa soglia</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="755"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="756"/>
         <source>LED Display Settings</source>
         <translation>Impostazioni Display LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="768"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="769"/>
         <source>Show in LED Panel</source>
         <translation>Mostra nel Pannello LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="769"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="770"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>Abilita il monitoraggio visivo dello stato tramite un display LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="782"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="783"/>
         <source>LED On Threshold (required)</source>
         <translation>Soglia LED Acceso (obbligatorio)</translation>
     </message>
@@ -7944,9 +8046,13 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
         <translation type="vanished">Il LED si accende quando il valore raggiunge o supera questa soglia</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="455"/>
         <source>Edit Painter Code</source>
-        <translation>Modifica Codice Painter</translation>
+        <translation type="vanished">Modifica Codice Painter</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="455"/>
+        <source>Edit Canvas Code</source>
+        <translation>Modifica Codice Canvas</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="479"/>
@@ -8145,8 +8251,12 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="713"/>
-        <source>Multiple Plot</source>
+        <source>Multi-Plot</source>
         <translation>Grafico Multiplo</translation>
+    </message>
+    <message>
+        <source>Multiple Plot</source>
+        <translation type="vanished">Grafico Multiplo</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="714"/>
@@ -8162,6 +8272,11 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="716"/>
         <source>Image View</source>
         <translation>Visualizzatore Immagini</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="717"/>
+        <source>Canvas Widget</source>
+        <translation>Widget Canvas</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="719"/>
@@ -8306,13 +8421,13 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
         <translation>Intervallo di Valore</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="344"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="345"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1199"/>
         <source>Minimum Value</source>
         <translation>Valore Minimo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="356"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="357"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1208"/>
         <source>Maximum Value</source>
         <translation>Valore Massimo</translation>
@@ -9037,6 +9152,11 @@ Abilitarla solo per script di cui ci si fida e che sono stati testati prima in m
         <translation>Nuovo Indicatore</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1452"/>
+        <source>Edit Canvas Datasets</source>
+        <translation>Modifica Dataset Canvas</translation>
+    </message>
+    <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="2187"/>
         <source>Duplicate Selection</source>
         <translation>Duplica Selezione</translation>
@@ -9071,9 +9191,8 @@ Abilitarla solo per script di cui ci si fida e che sono stati testati prima in m
         <translation>Nuovo Waterfall</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1452"/>
         <source>Edit Painter Datasets</source>
-        <translation>Modifica Dataset Painter</translation>
+        <translation type="vanished">Modifica Dataset Painter</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1471"/>
@@ -9172,9 +9291,8 @@ Abilitarla solo per script di cui ci si fida e che sono stati testati prima in m
         <translation>Tabella Condivisa</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="223"/>
         <source>register</source>
-        <translation>registro</translation>
+        <translation type="vanished">registro</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="917"/>
@@ -9231,14 +9349,12 @@ Abilitarla solo per script di cui ci si fida e che sono stati testati prima in m
         <translation>Rinomina Azione</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="398"/>
         <source>New Register</source>
-        <translation>Nuovo Registro</translation>
+        <translation type="vanished">Nuovo Registro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="421"/>
         <source>Rename Register</source>
-        <translation>Rinomina Registro</translation>
+        <translation type="vanished">Rinomina Registro</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1200"/>
@@ -9249,9 +9365,8 @@ Abilitarla solo per script di cui ci si fida e che sono stati testati prima in m
         <translation>Questa azione non può essere annullata.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="456"/>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
-        <translation>Questo rimuove %1 registro/i insieme alla tabella. Questa azione non può essere annullata.</translation>
+        <translation type="vanished">Questo rimuove %1 registro/i insieme alla tabella. Questa azione non può essere annullata.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1199"/>
@@ -9272,20 +9387,52 @@ Abilitarla solo per script di cui ci si fida e che sono stati testati prima in m
         <translation>Elimina Tabella</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="214"/>
         <source>Add Register</source>
-        <translation>Aggiungi Registro</translation>
+        <translation type="vanished">Aggiungi Registro</translation>
+    </message>
+    <message>
+        <source>Delete Register</source>
+        <translation type="vanished">Elimina Registro</translation>
+    </message>
+    <message>
+        <source>Edit Register</source>
+        <translation type="vanished">Modifica Registro</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="214"/>
+        <source>Add Variable</source>
+        <translation>Aggiungi Variabile</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="223"/>
+        <source>variable</source>
+        <translation>variabile</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="253"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="482"/>
-        <source>Delete Register</source>
-        <translation>Elimina Registro</translation>
+        <source>Delete Variable</source>
+        <translation>Elimina Variabile</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="284"/>
-        <source>Edit Register</source>
-        <translation>Modifica Registro</translation>
+        <source>Edit Variable</source>
+        <translation>Modifica Variabile</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="398"/>
+        <source>New Variable</source>
+        <translation>Nuova Variabile</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="421"/>
+        <source>Rename Variable</source>
+        <translation>Rinomina Variabile</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="456"/>
+        <source>This removes %1 variable(s) along with the table. This action cannot be undone.</source>
+        <translation>Questo rimuove %1 variabile/i insieme alla tabella. Questa azione non può essere annullata.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="506"/>
@@ -9680,9 +9827,14 @@ Formato valido: 01 A2 FF 3C</translation>
 <context>
     <name>DataTablesView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="35"/>
         <source>Shared Memory</source>
-        <translation>Memoria Condivisa</translation>
+        <translation type="vanished">Memoria Condivisa</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="35"/>
+        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="223"/>
+        <source>Variables</source>
+        <translation>Variabili</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="187"/>
@@ -9711,8 +9863,12 @@ Formato valido: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="213"/>
+        <source>Open help documentation for variables</source>
+        <translation>Apri la documentazione di aiuto per le variabili</translation>
+    </message>
+    <message>
         <source>Open help documentation for shared memory</source>
-        <translation>Apri la documentazione di aiuto per la memoria condivisa</translation>
+        <translation type="vanished">Apri la documentazione di aiuto per la memoria condivisa</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="222"/>
@@ -9720,9 +9876,8 @@ Formato valido: 01 A2 FF 3C</translation>
         <translation>Titolo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="223"/>
         <source>Registers</source>
-        <translation>Registri</translation>
+        <translation type="vanished">Registri</translation>
     </message>
     <message>
         <source>Name</source>
@@ -9778,9 +9933,8 @@ Formato valido: 01 A2 FF 3C</translation>
 <context>
     <name>DatabaseExplorer</name>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="38"/>
         <source>Sessions</source>
-        <translation>Sessioni</translation>
+        <translation type="vanished">Sessioni</translation>
     </message>
     <message>
         <source>Open</source>
@@ -9857,6 +10011,11 @@ Formato valido: 01 A2 FF 3C</translation>
     <message>
         <source>Restore the project file from this session file</source>
         <translation type="vanished">Ripristina il file di progetto da questo file di sessione</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="38"/>
+        <source>Historian</source>
+        <translation>Storico</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="298"/>
@@ -11023,6 +11182,11 @@ Formato valido: 01 A2 FF 3C</translation>
         <translation>%1 reg</translation>
     </message>
     <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="834"/>
+        <source>Variables</source>
+        <translation>Variabili</translation>
+    </message>
+    <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="409"/>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="743"/>
         <source>empty</source>
@@ -11133,9 +11297,8 @@ Formato valido: 01 A2 FF 3C</translation>
         <translation>Uscite</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="834"/>
         <source>Shared Memory</source>
-        <translation>Memoria Condivisa</translation>
+        <translation type="vanished">Memoria Condivisa</translation>
     </message>
     <message>
         <source>Bar Panel</source>
@@ -11991,6 +12154,11 @@ Formato valido: 01 A2 FF 3C</translation>
         <translation>Controlli</translation>
     </message>
     <message>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="326"/>
+        <source>Edit the JavaScript that draws this canvas widget</source>
+        <translation>Modifica il JavaScript che disegna questo widget canvas</translation>
+    </message>
+    <message>
         <source>Thermometer</source>
         <translation type="vanished">Termometro</translation>
     </message>
@@ -12068,9 +12236,8 @@ Formato valido: 01 A2 FF 3C</translation>
         <translation>Modifica Codice</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="326"/>
         <source>Edit the JavaScript that draws this painter widget</source>
-        <translation>Modifica il JavaScript che disegna questo widget painter</translation>
+        <translation type="vanished">Modifica il JavaScript che disegna questo widget painter</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="339"/>
@@ -18397,17 +18564,20 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
 <context>
     <name>Painter</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Painter.qml" line="56"/>
         <source>Painter Widget Error</source>
-        <translation>Errore Widget Painter</translation>
+        <translation type="vanished">Errore Widget Painter</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Painter.qml" line="56"/>
+        <source>Canvas Widget Error</source>
+        <translation>Errore Widget Canvas</translation>
     </message>
 </context>
 <context>
     <name>PainterCodeDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="30"/>
         <source>Painter Widget Code Editor</source>
-        <translation>Editor Codice Widget Painter</translation>
+        <translation type="vanished">Editor Codice Widget Painter</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="76"/>
@@ -18420,9 +18590,8 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
         <translation>Importa</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="91"/>
         <source>Import painter code from a .js file</source>
-        <translation>Importa codice painter da un file .js</translation>
+        <translation type="vanished">Importa codice painter da un file .js</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="99"/>
@@ -18430,9 +18599,8 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
         <translation>Modello</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="102"/>
         <source>Select a built-in painter template</source>
-        <translation>Seleziona un modello di painter integrato</translation>
+        <translation type="vanished">Seleziona un modello di painter integrato</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="108"/>
@@ -18440,9 +18608,28 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
         <translation>Formatta</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="113"/>
         <source>Reformat the painter code</source>
-        <translation>Riformatta il codice del painter</translation>
+        <translation type="vanished">Riformatta il codice del painter</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="30"/>
+        <source>Canvas Widget Code Editor</source>
+        <translation>Editor Codice Widget Canvas</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="91"/>
+        <source>Import canvas code from a .js file</source>
+        <translation>Importa codice canvas da un file .js</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="102"/>
+        <source>Select a built-in canvas template</source>
+        <translation>Seleziona un modello di canvas integrato</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="113"/>
+        <source>Reformat the canvas code</source>
+        <translation>Riformatta il codice canvas</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="119"/>
@@ -18508,9 +18695,13 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
 <context>
     <name>PainterTestDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="28"/>
         <source>Painter Live Preview</source>
-        <translation>Anteprima Live Painter</translation>
+        <translation type="vanished">Anteprima Live Painter</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="28"/>
+        <source>Canvas Live Preview</source>
+        <translation>Anteprima Live Canvas</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="32"/>
@@ -19445,18 +19636,35 @@ Fai clic su Aggiorna per aggiornare l'elenco.</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="173"/>
-        <source>Add a custom JavaScript-rendered painter widget</source>
-        <translation>Aggiungi un widget painter personalizzato renderizzato in JavaScript</translation>
+        <source>Add a custom JavaScript-rendered canvas widget</source>
+        <translation>Aggiungi un widget canvas personalizzato renderizzato in JavaScript</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="174"/>
-        <source>Painter widgets require a Pro license, adding one will fall back to a data grid</source>
-        <translation>I widget Painter richiedono una licenza Pro, aggiungerne uno comporterà il fallback a una griglia dati</translation>
+        <source>Canvas widgets require a Pro license, adding one will fall back to a data grid</source>
+        <translation>I widget canvas richiedono una licenza Pro, aggiungerne uno comporterà il fallback a una griglia dati</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="175"/>
+        <source>Canvas Widget</source>
+        <translation>Widget Canvas</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="188"/>
+        <source>Multi-Plot</source>
+        <translation>Grafico Multiplo</translation>
+    </message>
+    <message>
+        <source>Add a custom JavaScript-rendered painter widget</source>
+        <translation type="vanished">Aggiungi un widget painter personalizzato renderizzato in JavaScript</translation>
+    </message>
+    <message>
+        <source>Painter widgets require a Pro license, adding one will fall back to a data grid</source>
+        <translation type="vanished">I widget Painter richiedono una licenza Pro, aggiungerne uno comporterà il fallback a una griglia dati</translation>
+    </message>
+    <message>
         <source>Painter Widget</source>
-        <translation>Widget Painter</translation>
+        <translation type="vanished">Widget Painter</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="179"/>
@@ -19469,9 +19677,8 @@ Fai clic su Aggiorna per aggiornare l'elenco.</translation>
         <translation>Pannello Barra</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="188"/>
         <source>Multiple Plot</source>
-        <translation>Grafico Multiplo</translation>
+        <translation type="vanished">Grafico Multiplo</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="193"/>
@@ -19512,8 +19719,12 @@ Fai clic su Aggiorna per aggiornare l'elenco.</translation>
         <translation>Pannello Barra</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="415"/>
         <source>Multiple Plot</source>
+        <translation type="vanished">Grafico Multiplo</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="415"/>
+        <source>Multi-Plot</source>
         <translation>Grafico Multiplo</translation>
     </message>
     <message>
@@ -19548,8 +19759,12 @@ Fai clic su Aggiorna per aggiornare l'elenco.</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="450"/>
+        <source>Canvas Widget</source>
+        <translation>Widget Canvas</translation>
+    </message>
+    <message>
         <source>Painter Widget</source>
-        <translation>Widget Painter</translation>
+        <translation type="vanished">Widget Painter</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="711"/>
@@ -20939,14 +21154,22 @@ Il parametro separatore non è più necessario.</translation>
         <translation>table() richiede prima il nome di una tabella</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="436"/>
         <source>table() needs a register name second</source>
-        <translation>table() richiede come secondo il nome di un registro</translation>
+        <translation type="vanished">table() richiede come secondo il nome di un registro</translation>
+    </message>
+    <message>
+        <source>unknown register '%1.%2'</source>
+        <translation type="vanished">registro sconosciuto '%1.%2'</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="436"/>
+        <source>table() needs a variable name second</source>
+        <translation>table() richiede come secondo il nome di una variabile</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="441"/>
-        <source>unknown register '%1.%2'</source>
-        <translation>registro sconosciuto '%1.%2'</translation>
+        <source>unknown variable '%1.%2'</source>
+        <translation>variabile sconosciuta '%1.%2'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="459"/>
@@ -21516,9 +21739,13 @@ Il parametro separatore non è più necessario.</translation>
         <translation>Griglie Dati</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="299"/>
         <source>Multiple Data Plots</source>
-        <translation>Grafici Dati Multipli</translation>
+        <translation type="vanished">Grafici Dati Multipli</translation>
+    </message>
+    <message>
+        <location filename="../../src/SerialStudio.cpp" line="299"/>
+        <source>Multi-Plots</source>
+        <translation>Grafici Multipli</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="302"/>
@@ -21586,6 +21813,11 @@ Il parametro separatore non è più necessario.</translation>
         <translation>Indicatori</translation>
     </message>
     <message>
+        <location filename="../../src/SerialStudio.cpp" line="363"/>
+        <source>Canvas Widgets</source>
+        <translation>Widget Canvas</translation>
+    </message>
+    <message>
         <source>Thermometers</source>
         <translation type="vanished">Termometri</translation>
     </message>
@@ -21625,9 +21857,8 @@ Il parametro separatore non è più necessario.</translation>
         <translation>Cascate</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="363"/>
         <source>Painter Widgets</source>
-        <translation>Widget Painter</translation>
+        <translation type="vanished">Widget Painter</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="367"/>
@@ -23264,8 +23495,12 @@ Il parametro separatore non è più necessario.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="323"/>
+        <source>Historian</source>
+        <translation>Storico</translation>
+    </message>
+    <message>
         <source>Session Recording</source>
-        <translation>Registrazione Sessione</translation>
+        <translation type="vanished">Registrazione Sessione</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="344"/>
@@ -23497,6 +23732,11 @@ Il parametro separatore non è più necessario.</translation>
         <translation>Pausa</translation>
     </message>
     <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="741"/>
+        <source>Historian</source>
+        <translation>Storico</translation>
+    </message>
+    <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="767"/>
         <source>Recordings are saved in the Serial Studio workspace folder</source>
         <translation>Le registrazioni vengono salvate nella cartella workspace di Serial Studio</translation>
@@ -23563,9 +23803,8 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
         <translation>File MDF4</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="741"/>
         <source>Session Database</source>
-        <translation>Database di Sessione</translation>
+        <translation type="vanished">Database di Sessione</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="751"/>
@@ -24047,9 +24286,8 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
         <translation>Unità</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="259"/>
         <source>(virtual)</source>
-        <translation>(virtuale)</translation>
+        <translation type="vanished">(virtuale)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="326"/>
@@ -24070,6 +24308,11 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="164"/>
         <source>Search…</source>
         <translation>Cerca…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="259"/>
+        <source>(computed)</source>
+        <translation>(calcolato)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="352"/>
@@ -24184,8 +24427,12 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableFolderView.qml" line="197"/>
+        <source>Variables</source>
+        <translation>Variabili</translation>
+    </message>
+    <message>
         <source>Registers</source>
-        <translation>Registri</translation>
+        <translation type="vanished">Registri</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableFolderView.qml" line="287"/>
@@ -25603,14 +25850,12 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
 <context>
     <name>UserTableView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="176"/>
         <source>Add Register</source>
-        <translation>Aggiungi Registro</translation>
+        <translation type="vanished">Aggiungi Registro</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="179"/>
         <source>Add register</source>
-        <translation>Aggiungi registro</translation>
+        <translation type="vanished">Aggiungi registro</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="186"/>
@@ -25628,9 +25873,8 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
         <translation>Importa</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="199"/>
         <source>Import registers from CSV</source>
-        <translation>Importa registri da CSV</translation>
+        <translation type="vanished">Importa registri da CSV</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="206"/>
@@ -25638,9 +25882,28 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
         <translation>Esporta</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="209"/>
         <source>Export registers to CSV</source>
-        <translation>Esporta registri in CSV</translation>
+        <translation type="vanished">Esporta registri in CSV</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="176"/>
+        <source>Add Variable</source>
+        <translation>Aggiungi Variabile</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="179"/>
+        <source>Add variable</source>
+        <translation>Aggiungi variabile</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="199"/>
+        <source>Import variables from CSV</source>
+        <translation>Importa variabili da CSV</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="209"/>
+        <source>Export variables to CSV</source>
+        <translation>Esporta variabili in CSV</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="221"/>
@@ -25669,8 +25932,27 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="253"/>
+        <source>Open help documentation for variables</source>
+        <translation>Apri la documentazione di aiuto per le variabili</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="294"/>
+        <source>Variable Name</source>
+        <translation>Nome Variabile</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="512"/>
+        <source>Delete variable</source>
+        <translation>Elimina variabile</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="530"/>
+        <source>No variables.</source>
+        <translation>Nessuna variabile.</translation>
+    </message>
+    <message>
         <source>Open help documentation for shared memory</source>
-        <translation>Apri la documentazione di aiuto per la memoria condivisa</translation>
+        <translation type="vanished">Apri la documentazione di aiuto per la memoria condivisa</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="293"/>
@@ -25678,9 +25960,8 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
         <translation>Permessi</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="294"/>
         <source>Register Name</source>
-        <translation>Nome Registro</translation>
+        <translation type="vanished">Nome Registro</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="295"/>
@@ -25703,14 +25984,12 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
         <translation>Copia il codice di accesso %1 negli appunti</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="512"/>
         <source>Delete register</source>
-        <translation>Elimina registro</translation>
+        <translation type="vanished">Elimina registro</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="530"/>
         <source>No registers.</source>
-        <translation>Nessun registro.</translation>
+        <translation type="vanished">Nessun registro.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="580"/>

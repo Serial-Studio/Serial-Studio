@@ -28,8 +28,8 @@ it:
 
 - Live data received from your devices (serial, network, BLE, MQTT, CAN, and
   every other source).
-- Project files, frame parsers, transforms, and control scripts.
-- Recorded sessions in the SQLite session database, CSV exports, MDF4 files,
+- Project files, frame parsers, transforms, and control loops.
+- Recorded sessions in the Historian's SQLite database, CSV exports, MDF4 files,
   and PDF reports.
 - Application settings, themes, window layout, and workspace configuration.
 - AI Assistant chat history, stored as local JSON files.
@@ -135,14 +135,14 @@ machine cannot be decrypted on another.
 API keys and license data are stored encrypted at rest in the application
 settings, using a key derived from the machine fingerprint and protected with
 an integrity hash. Plaintext API keys are scrubbed from memory when a key is
-removed. Project files, session databases, and exports are ordinary files under
+removed. Project files, Historian databases, and exports are ordinary files under
 your control and are not encrypted by the application; protect them with your
 operating system's own mechanisms if they contain sensitive data.
 
 ## Data retention and your choices
 
 - **Local data** is retained until you delete it. Removing project files,
-  clearing the session database, deleting chat history, or removing a stored
+  clearing the Historian database, deleting chat history, or removing a stored
   API key deletes that data from your machine.
 - **Purchase and license data** held by Lemon Squeezy is subject to its
   retention practices and your rights under applicable law. Contact Lemon
@@ -176,5 +176,5 @@ For privacy questions or data requests, email alex@serial-studio.com.
   activation policy.
 - [AI Assistant](AI-Assistant.md): how the bring-your-own-key chat panel works
   and what it sends.
-- [Session Database](Session-Database.md): how recorded sessions are stored
+- [Historian](Session-Database.md): how recorded sessions are stored
   locally.

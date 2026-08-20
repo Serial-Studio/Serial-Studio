@@ -1,6 +1,6 @@
 # SDK Reference
 
-Every script you write inside Serial Studio (a frame parser, a dataset transform, a Control Loop, an Output widget) runs with the **Serial Studio SDK** already loaded. The SDK is a set of natural, namespaced functions that let a script reach back into the application: write to the connected device, read the latest frame, move values through the shared data tables, fire actions, post notifications, reshape the dashboard, and encode wire-level protocol frames. You call these functions directly, with positional arguments, and the code editor offers them all in autocomplete.
+Every script you write inside Serial Studio (a frame parser, a dataset transform, a Control Loop, an Output widget) runs with the **Serial Studio SDK** already loaded. The SDK is a set of natural, namespaced functions that let a script reach back into the application: write to the connected device, read the latest frame, move values through the shared tables, fire actions, post notifications, reshape the dashboard, and encode wire-level protocol frames. You call these functions directly, with positional arguments, and the code editor offers them all in autocomplete.
 
 This page is the single reference for that surface. The scripting pages ([Frame Parser Reference](JavaScript-API.md), [Dataset Value Transforms](Dataset-Transforms.md), [Control Loop](Control-Script.md), [Output Controls](Output-Controls.md)) describe *where* and *when* each script runs; this page describes *what they can call* once they are running.
 
@@ -71,7 +71,7 @@ The SDK converts to base64 internally (in pure JS/Lua, with no host dependency),
 |---|---|---|
 | `apiCall(method, params)` | envelope | The primitive every wrapper routes through. Use it for commands that have no dedicated wrapper yet. |
 | `apiCallList()` | array | Every command name available in the current engine. |
-| `delay(ms)` | none | Blocks **only the calling worker thread**. Control Loop only (the frame-parser/transform hotpath has no `delay`). |
+| `delay(ms)` | none | Blocks **only the calling worker thread**. Control Loop only (the frame-parser/transform pipeline has no `delay`). |
 
 ### Device I/O (`io.*`)
 
@@ -101,28 +101,28 @@ if (reply.ok && !reply.timedOut)
   console.log("Instrument: " + reply.data);
 ```
 
-### Data tables (`tableGet` / `tableSet`)
+### Shared tables (`tableGet` / `tableSet`)
 
-The shared data tables are the cross-script blackboard (see [Data Tables](Data-Tables.md)): constants and computed registers that hold their value across frames. All four script kinds read and write them with the same two calls:
+The shared tables are the cross-script blackboard (see [Variables](Data-Tables.md)): constants and computed variables that hold their value across frames. All four script kinds read and write them with the same two calls:
 
 | Function | Returns | Notes |
 |---|---|---|
-| `tableGet(table, register)` | value or `undefined` | `tableGet(t, r) || fallback` works for missing registers. |
-| `tableSet(table, register, value)` | none | Stages the new value into the live runtime. An undefined/nil value is ignored. |
+| `tableGet(table, variable)` | value or `undefined` | `tableGet(t, r) || fallback` works for missing variables. |
+| `tableSet(table, variable, value)` | none | Stages the new value into the live runtime. An undefined/nil value is ignored. |
 | `datasetGetRaw(uniqueId \| alias)` / `datasetGetFinal(uniqueId \| alias)` | value | Read another dataset's pre/post-transform value. A number argument is a uniqueId; a string argument is the dataset's alias. |
 
 In a Control Loop these calls marshal to the GUI thread, so each costs a round-trip: read once per `loop()` pass, not in a tight inner loop.
 
 #### Handles: the fast path for table-heavy parsers
 
-`tableGet`/`tableSet` look a register up by name on every call. For a parser that touches many registers every frame, resolving a name once and reusing a **handle** is much cheaper: a handle is a number that points straight at the register, with no name lookup on read or write.
+`tableGet`/`tableSet` look a variable up by name on every call. For a parser that touches many variables every frame, resolving a name once and reusing a **handle** is much cheaper: a handle is a number that points straight at the variable, with no name lookup on read or write.
 
 | Function | Returns | Notes |
 |---|---|---|
-| `tableHandle(table, register)` | handle (number), or `-1` | Resolve once, at script load. `-1` means the register does not exist. |
-| `tableHandleMany(table, registers)` | array of handles | Resolve several registers of one table in a single call. |
+| `tableHandle(table, variable)` | handle (number), or `-1` | Resolve once, at script load. `-1` means the variable does not exist. |
+| `tableHandleMany(table, variables)` | array of handles | Resolve several variables of one table in a single call. |
 | `tableGetH(handle)` | value or `undefined` | Read by handle. A stale or invalid handle returns `undefined`. |
-| `tableSetH(handle, value)` | none | Write by handle. A stale, invalid, or constant-register handle is ignored, as is an undefined/nil value. |
+| `tableSetH(handle, value)` | none | Write by handle. A stale, invalid, or constant-variable handle is ignored, as is an undefined/nil value. |
 
 Resolve handles **once**, in the top-level body of the script (which runs when the project loads), and keep them in a variable or array. Then use only `tableGetH`/`tableSetH` inside `parse()` / `transform()` / `loop()`:
 
@@ -131,16 +131,16 @@ Resolve handles **once**, in the top-level body of the script (which runs when t
 var H = tableHandleMany("DAQ/BRD-1", ["ch1", "ch2", "ch3", "ch4"]);
 
 function parse(frame) {
-  // Hot path: write by handle, no name lookup.
+  // Per-frame path: write by handle, no name lookup.
   for (var i = 0; i < H.length; i++)
     tableSetH(H[i], frame[i]);
   return [0];
 }
 ```
 
-If a handle comes back as `-1` at the top level, the data-table store was not built yet when the script first ran; resolve on the first `parse()` / `transform()` call instead (cache it in a variable, then reuse), which always runs after the store exists.
+If a handle comes back as `-1` at the top level, the table store was not built yet when the script first ran; resolve on the first `parse()` / `transform()` call instead (cache it in a variable, then reuse), which always runs after the store exists.
 
-Handles are valid only while the project is loaded. If you edit the project's table definitions, the registers are rebuilt and old handles stop matching; the script re-resolves them automatically the next time it loads, and in the meantime a stale handle is a safe no-op (read returns `undefined`, write does nothing) rather than touching the wrong register. The handle calls are available to every script kind, including the Control Loop, where they still marshal to the GUI thread (so the round-trip rule above still applies; the win there is the elided name lookup, not the round-trip).
+Handles are valid only while the project is loaded. If you edit the project's table definitions, the variables are rebuilt and old handles stop matching; the script re-resolves them automatically the next time it loads, and in the meantime a stale handle is a safe no-op (read returns `undefined`, write does nothing) rather than touching the wrong variable. The handle calls are available to every script kind, including the Control Loop, where they still marshal to the GUI thread (so the round-trip rule above still applies; the win there is the elided name lookup, not the round-trip).
 
 ### Dashboard control
 
@@ -223,7 +223,7 @@ Four helpers for closed-loop automation — read the latest data, decide in plai
 function loop() {
   var r = deviceWriteAndWait("MEAS:VOLT:DC?\n", 1000, "\n");
   if (r.ok && !r.timedOut)
-    tableSet("DMM", "voltage", parseFloat(r.data));   // feed a virtual dataset
+    tableSet("DMM", "voltage", parseFloat(r.data));   // feed a computed dataset
   refreshDashboard();
   delay(500);                                          // ~2 Hz
 }
@@ -276,11 +276,11 @@ function parse(frame) {
 }
 ```
 
-> Do the SDK call only on the **state transition** (the `if`), never on every frame: the parser is the hotpath. `apiCall` is rate-limited and a per-frame call will throttle or stall the stream.
+> Do the SDK call only on the **state transition** (the `if`), never on every frame: the parser runs inside the acquisition pipeline. `apiCall` is rate-limited and a per-frame call will throttle or stall the stream.
 
-### 4. Dataset transform: calibrate against a live table register
+### 4. Dataset transform: calibrate against a live table variable
 
-A transform reads a calibration slope another script wrote into a data table, so one place owns the constant and every channel stays in sync.
+A transform reads a calibration slope another script wrote into a shared table, so one place owns the constant and every channel stays in sync.
 
 ```javascript
 function transform(value) {
@@ -349,6 +349,6 @@ end
 - [Dataset Value Transforms](Dataset-Transforms.md): per-dataset conditioning; where `transform()` runs.
 - [Control Loop](Control-Script.md): `setup()`/`loop()` automation and the See/Decide/Act model in depth.
 - [Output Controls](Output-Controls.md): Button/Slider/Toggle/Knob widgets and their `transmit()` function.
-- [Data Tables](Data-Tables.md): the shared blackboard behind `tableGet`/`tableSet`.
+- [Variables](Data-Tables.md): the shared blackboard behind `tableGet`/`tableSet`.
 - [API Reference](API-Reference.md): the full command catalog the SDK wraps, and the same surface over the network.
 - [Actions](Actions.md) and [Notifications](Notifications.md): what `actionFire()` and `notify*()` drive.

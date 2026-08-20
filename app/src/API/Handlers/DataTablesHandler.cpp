@@ -106,7 +106,7 @@ void API::Handlers::DataTablesHandler::registerTableQueryCommands()
     &tablesList);
   registry.registerCommand(
     QStringLiteral("project.dataTable.get"),
-    QStringLiteral("Return the register list for a table (params: name). name may be the bare "
+    QStringLiteral("Return the variable list for a table (params: name). name may be the bare "
                    "table name or its full \"/\"-joined folder path."),
     API::makeSchema({
       {QStringLiteral("name"),
@@ -116,31 +116,31 @@ void API::Handlers::DataTablesHandler::registerTableQueryCommands()
     &tableGet);
   registry.registerCommand(
     QStringLiteral("project.dataTable.getValue"),
-    QStringLiteral("Return a register's LIVE runtime value from the data-table store (params: "
+    QStringLiteral("Return a variable's LIVE runtime value from the data-table store (params: "
                    "table, name). This is the same store the parser/transform tableGet() reads; "
                    "control scripts use it through the tableGet() global."),
     API::makeSchema({
       {QStringLiteral("table"),
        QStringLiteral("string"),
        QStringLiteral("Owning table: full \"/\"-joined folder path (bare name if top-level)")                         },
-      { QStringLiteral("name"), QStringLiteral("string"),                              QStringLiteral("Register name")}
+      { QStringLiteral("name"), QStringLiteral("string"),                              QStringLiteral("Variable name")}
   }),
     &valueGet);
   registry.registerCommand(
     QStringLiteral("project.dataTable.handle"),
-    QStringLiteral("Resolve a register to a reusable numeric handle for the fast get/set path "
-                   "(params: table, name). Returns handle=-1 for an unknown register. Mirrors the "
+    QStringLiteral("Resolve a variable to a reusable numeric handle for the fast get/set path "
+                   "(params: table, name). Returns handle=-1 for an unknown variable. Mirrors the "
                    "parser/transform tableHandle() global."),
     API::makeSchema({
       {QStringLiteral("table"),
        QStringLiteral("string"),
        QStringLiteral("Owning table: full \"/\"-joined folder path (bare name if top-level)")                         },
-      { QStringLiteral("name"), QStringLiteral("string"),                              QStringLiteral("Register name")}
+      { QStringLiteral("name"), QStringLiteral("string"),                              QStringLiteral("Variable name")}
   }),
     &valueHandle);
   registry.registerCommand(
     QStringLiteral("project.dataTable.getValueH"),
-    QStringLiteral("Return a register's LIVE runtime value by handle (params: handle). A stale or "
+    QStringLiteral("Return a variable's LIVE runtime value by handle (params: handle). A stale or "
                    "invalid handle yields found=false. Mirrors tableGetH()."),
     API::makeSchema({
       {QStringLiteral("handle"),
@@ -169,8 +169,8 @@ void API::Handlers::DataTablesHandler::registerTableMutationCommands()
     &tableAdd);
   registry.registerCommand(
     QStringLiteral("project.dataTable.delete"),
-    QStringLiteral("Delete a table and all its registers (params: name). Pass dryRun:true to "
-                   "return the register list that WOULD be deleted without committing."),
+    QStringLiteral("Delete a table and all its variables (params: name). Pass dryRun:true to "
+                   "return the variable list that WOULD be deleted without committing."),
     API::makeSchema(
       {
         {QStringLiteral("name"), QStringLiteral("string"), QStringLiteral("Table name")}
@@ -195,7 +195,7 @@ void API::Handlers::DataTablesHandler::registerTableMutationCommands()
   };
   valueProps[QStringLiteral("name")] = QJsonObject{
     {       QStringLiteral("type"),        QStringLiteral("string")},
-    {QStringLiteral("description"), QStringLiteral("Register name")}
+    {QStringLiteral("description"), QStringLiteral("Variable name")}
   };
   valueProps[QStringLiteral("value")] = QJsonObject{
     {       QStringLiteral("type"), QJsonArray{QStringLiteral("number"), QStringLiteral("string")}},
@@ -208,9 +208,9 @@ void API::Handlers::DataTablesHandler::registerTableMutationCommands()
     QJsonArray{QStringLiteral("table"), QStringLiteral("name"), QStringLiteral("value")};
   registry.registerCommand(
     QStringLiteral("project.dataTable.setValue"),
-    QStringLiteral("Write a register's LIVE runtime value into the data-table store (params: "
+    QStringLiteral("Write a variable's LIVE runtime value into the data-table store (params: "
                    "table, name, value). Same effect as a parser/transform tableSet(); control "
-                   "scripts use it through the tableSet() global. Constant registers reject "
+                   "scripts use it through the tableSet() global. Constant variables reject "
                    "writes."),
     valueSchema,
     &valueSet);
@@ -231,8 +231,8 @@ void API::Handlers::DataTablesHandler::registerTableMutationCommands()
     QJsonArray{QStringLiteral("handle"), QStringLiteral("value")};
   registry.registerCommand(
     QStringLiteral("project.dataTable.setValueH"),
-    QStringLiteral("Write a register's LIVE runtime value by handle (params: handle, value). A "
-                   "stale, invalid, or constant-register handle yields written=false. Mirrors "
+    QStringLiteral("Write a variable's LIVE runtime value by handle (params: handle, value). A "
+                   "stale, invalid, or constant-variable handle yields written=false. Mirrors "
                    "tableSetH()."),
     valueHSchema,
     &valueSetH);
@@ -252,7 +252,7 @@ void API::Handlers::DataTablesHandler::registerRegisterCommands()
   };
   addProps[QStringLiteral("name")] = QJsonObject{
     {       QStringLiteral("type"),                          QStringLiteral("string")},
-    {QStringLiteral("description"), QStringLiteral("Register name (auto-uniquified)")}
+    {QStringLiteral("description"), QStringLiteral("Variable name (auto-uniquified)")}
   };
   addProps[QStringLiteral("computed")] = QJsonObject{
     {       QStringLiteral("type"),QStringLiteral("boolean")},
@@ -268,18 +268,18 @@ void API::Handlers::DataTablesHandler::registerRegisterCommands()
     QJsonArray{QStringLiteral("table"), QStringLiteral("name")};
   registry.registerCommand(
     QStringLiteral("project.dataTable.addRegister"),
-    QStringLiteral("Append a register (params: table, name, computed=true, defaultValue=0)"),
+    QStringLiteral("Append a variable (params: table, name, computed=true, defaultValue=0)"),
     addSchema,
     &registerAdd);
 
   registry.registerCommand(
     QStringLiteral("project.dataTable.deleteRegister"),
-    QStringLiteral("Delete a register (params: table, name). Pass dryRun:true to return what "
+    QStringLiteral("Delete a variable (params: table, name). Pass dryRun:true to return what "
                    "WOULD be deleted without committing."),
     API::makeSchema(
       {
         {QStringLiteral("table"), QStringLiteral("string"), QStringLiteral("Owning table name")},
-        { QStringLiteral("name"), QStringLiteral("string"),     QStringLiteral("Register name")}
+        { QStringLiteral("name"), QStringLiteral("string"),     QStringLiteral("Variable name")}
   },
       {{QStringLiteral("dryRun"),
         QStringLiteral("boolean"),
@@ -293,11 +293,11 @@ void API::Handlers::DataTablesHandler::registerRegisterCommands()
   };
   updProps[QStringLiteral("name")] = QJsonObject{
     {       QStringLiteral("type"),                QStringLiteral("string")},
-    {QStringLiteral("description"), QStringLiteral("Current register name")}
+    {QStringLiteral("description"), QStringLiteral("Current variable name")}
   };
   updProps[QStringLiteral("newName")] = QJsonObject{
     {       QStringLiteral("type"),                       QStringLiteral("string")},
-    {QStringLiteral("description"), QStringLiteral("New register name (optional)")}
+    {QStringLiteral("description"), QStringLiteral("New variable name (optional)")}
   };
   updProps[QStringLiteral("computed")] = QJsonObject{
     {       QStringLiteral("type"),                               QStringLiteral("boolean")},
@@ -311,7 +311,7 @@ void API::Handlers::DataTablesHandler::registerRegisterCommands()
     QJsonArray{QStringLiteral("table"), QStringLiteral("name")};
   registry.registerCommand(
     QStringLiteral("project.dataTable.updateRegister"),
-    QStringLiteral("Update a register (params: table, name, newName?, computed?, defaultValue?)"),
+    QStringLiteral("Update a variable (params: table, name, newName?, computed?, defaultValue?)"),
     updSchema,
     &registerUpdate);
 }

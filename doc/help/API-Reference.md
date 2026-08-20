@@ -76,7 +76,7 @@ The API Server is available in both **Serial Studio GPL** and **Serial Studio Pr
 - 🟢 = GPL/Pro (available in all builds)
 - 🔵 = Pro only (requires commercial license)
 
-## Calling the API from Frame Parsers, Transforms, and Painters
+## Calling the API from Frame Parsers, Transforms, and Canvas Widgets
 
 The commands in this document are also reachable from inside Serial Studio's scripting surfaces (Lua and JavaScript) via a generic `apiCall()` gateway. No TCP socket required: the call is dispatched in-process on the dashboard thread. A project's own scripts are first-party code, so the gateway is ungated for them — the full catalog below is callable with no allow-list, rate limit, or payload cap. The user-consent gate applies only to remote clients over TCP. See [Frame Parser Scripting](JavaScript-API.md) for examples.
 
@@ -899,7 +899,7 @@ Get the latest raw frame received from the device, including channel tokens not 
 
 **Notes:**
 - `timestampMs` is a monotonic clock in milliseconds, not Unix epoch time; use it only for deltas between frames
-- Capture runs only while a control script is running or the API server is enabled; `hasData: false` means no data or no active consumer
+- Capture runs only while a control loop is running or the API server is enabled; `hasData: false` means no data or no active consumer
 
 ### UART Driver Commands (12)
 
@@ -1859,7 +1859,7 @@ Get project info.
 
 #### 🟢 `project.snapshot`
 Composite read of the active project: title, sources, groups + datasets,
-workspaces summary, and data-tables summary, in one round trip. Prefer this
+workspaces summary, and shared-tables summary, in one round trip. Prefer this
 over chaining `project.group.list` / `project.dataset.list` / etc. Every
 level (top, source, group, dataset) carries an `_explanations` object with
 prose translations of enum/bitflag fields (`operationMode`, `busType`,
@@ -2018,7 +2018,7 @@ Rename the project (in-app title only). Does not move or rename the `.ssproj` fi
 
 #### 🟢 `project.activate`
 Load the current in-memory project into FrameBuilder, making it the live frame-parsing
-configuration. Fails if the project has no groups, or no datasets and no image/painter group.
+configuration. Fails if the project has no groups, or no datasets and no image/canvas group.
 
 **Parameters:** None
 
@@ -2257,7 +2257,7 @@ With `dryRun: true`, the response additionally sets `"dryRun": true` and
 
 #### 🟢 `project.search`
 Case-insensitive substring search across every project entity type: datasets
-(title, alias, units), groups, actions, sources, workspaces, and data tables
+(title, alias, units), groups, actions, sources, workspaces, and shared tables
 (title/name). Returns compact typed rows, never full objects. The starting
 point for finding anything in a large project; drill into hits with
 `project.dataset.getByUniqueId` / `project.dataset.getByPath` or
@@ -3071,7 +3071,7 @@ A failing sample run reports `sampleRun.ok: false` with `runtimeError` and
 `line` instead of `outputHex`/`byteCount`.
 
 #### 🟢 `project.painter.getCode`
-Get the Painter widget JavaScript for a group.
+Get the Canvas widget JavaScript for a group.
 
 **Parameters:**
 - `groupId` (int, required): Target group id
@@ -3085,16 +3085,16 @@ Get the Painter widget JavaScript for a group.
 ```
 
 #### 🟢 `project.painter.setCode`
-Set the Painter widget code for a group. JavaScript only — Painter scripts run in
+Set the Canvas widget code for a group. JavaScript only — Canvas scripts run in
 `QJSEngine`, not Lua. The entry point is `paint(ctx, w, h)`, with globals `ctx` (2D
 canvas context, QPainter-like), `w`, `h` (canvas dimensions),
 `datasetGetFinal(uid)`/`datasetGetRaw(uid)`, and an optional zero-arg `onFrame()`
-callback. Validate with `project.painter.dryRun` before setting. The Painter widget
+callback. Validate with `project.painter.dryRun` before setting. The Canvas widget
 itself requires a Pro license, but this command is not license-gated.
 
 **Parameters:**
 - `groupId` (int, required): Target group id (from `project.group.list`)
-- `code` (string, required): Painter widget JS source. Replaces any existing code
+- `code` (string, required): Canvas widget JS source. Replaces any existing code
   for the group.
 
 **Returns:**
@@ -3106,10 +3106,10 @@ itself requires a Pro license, but this command is not license-gated.
 ```
 
 #### 🟢 `project.painter.dryRun`
-Compile a painter program without touching the live project or rendering to a canvas.
+Compile a canvas program without touching the live project or rendering to a canvas.
 
 **Parameters:**
-- `code` (string): Painter source. Must define `paint(ctx, w, h)`.
+- `code` (string): Canvas source. Must define `paint(ctx, w, h)`.
 
 **Returns:**
 ```json

@@ -280,10 +280,10 @@ Globals are reset when: the project is reloaded, parser code is edited and reapp
 
 ### Fast table access with handles
 
-If your parser writes many [data-table](Data-Tables.md) registers every frame, looking each one up by name with `tableSet(table, register, value)` becomes the bottleneck. Resolve the names to **handles** once in global state, then write by handle on the hot path:
+If your parser writes many [table variables](Data-Tables.md) every frame, looking each one up by name with `tableSet(table, variable, value)` becomes the bottleneck. Resolve the names to **handles** once in global state, then write by handle on the per-frame path:
 
 ```javascript
-// Runs once at load: resolve register names to handles.
+// Runs once at load: resolve variable names to handles.
 var H = tableHandleMany("DAQ/BRD-1", ["ch1", "ch2", "ch3", "ch4"]);
 
 function parse(frame) {
@@ -293,7 +293,7 @@ function parse(frame) {
 }
 ```
 
-`tableHandle(table, register)` resolves one register (returns `-1` if it does not exist); `tableHandleMany` resolves several of one table at once; `tableGetH(handle)` / `tableSetH(handle, value)` read and write by handle. A stale handle (after a table-definition edit) is a safe no-op, and the script re-resolves on the next load. Full reference: [SDK Reference](SerialStudio-SDK.md#handles-the-fast-path-for-table-heavy-parsers).
+`tableHandle(table, variable)` resolves one variable (returns `-1` if it does not exist); `tableHandleMany` resolves several of one table at once; `tableGetH(handle)` / `tableSetH(handle, value)` read and write by handle. A stale handle (after a table-definition edit) is a safe no-op, and the script re-resolves on the next load. Full reference: [SDK Reference](SerialStudio-SDK.md#handles-the-fast-path-for-table-heavy-parsers).
 
 ## Practical Examples
 
@@ -544,7 +544,7 @@ end
 ### When NOT to use it
 
 - For one-shot user-triggered commands (button press, slider drag), use an **Output Widget** instead. Output widgets carry UI, validation, and protocol helpers (CRC, Modbus, NMEA, ...). `deviceWrite` is the right tool when the *parser itself* needs to react to incoming data.
-- Don't loop on `deviceWrite` inside a single `parse()` call. The parser hotpath runs on every frame, and runaway writes will saturate the link.
+- Don't loop on `deviceWrite` inside a single `parse()` call. The parser stage of the acquisition pipeline runs on every frame, and runaway writes will saturate the link.
 - Don't use it to broadcast unrelated state. The 500 ms parser watchdog will fire if your script spends too long in I/O.
 
 ## Firing actions: `actionFire()`
@@ -564,7 +564,7 @@ end
 
 `actionId` is the action's stable identifier (from `project.action.list` or the Project Editor), NOT its position in the action list.
 
-`actionFire` is also available in dataset transforms and painter scripts.
+`actionFire` is also available in dataset transforms and canvas scripts.
 
 ## Controlling the dashboard: `clearPlots()` and friends
 
@@ -577,7 +577,7 @@ All of them return the same shape as `deviceWrite` / `actionFire`:
 { ok = false, error = "..." }
 ```
 
-They never throw. They never block. They are available from frame parsers, dataset transforms, and painter scripts.
+They never throw. They never block. They are available from frame parsers, dataset transforms, and canvas scripts.
 
 ### Function reference
 
@@ -750,7 +750,7 @@ end
 
 ## Calling any API command: `apiCall()`
 
-Beyond the focused helpers above, parsers can invoke Serial Studio's API commands through a generic gateway. This is the same surface exposed on TCP port 7777 for external clients, now reachable from inside the parser, dataset transforms, control script, and Painter widgets. Because these are all the project's own first-party scripts, the gateway is ungated for them: the full command catalog is callable with no allow-list, no rate limit, and no payload cap. The gate lives on the network side instead — a remote TCP client still clears the user-consent prompt before any device write.
+Beyond the focused helpers above, parsers can invoke Serial Studio's API commands through a generic gateway. This is the same surface exposed on TCP port 7777 for external clients, now reachable from inside the parser, dataset transforms, control loop, and Canvas widgets. Because these are all the project's own first-party scripts, the gateway is ungated for them: the full command catalog is callable with no allow-list, no rate limit, and no payload cap. The gate lives on the network side instead — a remote TCP client still clears the user-consent prompt before any device write.
 
 ```text
 apiCall(method, params?) -> { ok, result?, error?, errorCode?, errorData? }
@@ -830,7 +830,7 @@ end
 
 - **One-shot, fire-and-forget.** `apiCall` runs synchronously on the dashboard thread. Heavy work (mass mutations, project save, MDF4 export) blocks frame processing. Gate every call on an event transition; never `apiCall` on every frame.
 - **Prefer the focused helpers.** Runtime UI orchestration (clearing plots, toggling panes, switching the active workspace) has `apiCall` equivalents under `ui.*` / `dashboard.*`, but the dedicated `clearPlots()` / `setPlotPoints()` / `setActiveWorkspace()` shortcuts are clearer and cheaper; use the shortcuts for those tasks and reach for `apiCall` for the rest of the command surface.
-- **Avoid destructive commands from a parser.** Anything that mutates the project (`project.save`, `project.batch`, `groups.delete`) is fine from a one-time setup hook, but should not fire from the streaming hotpath.
+- **Avoid destructive commands from a parser.** Anything that mutates the project (`project.save`, `project.batch`, `groups.delete`) is fine from a one-time setup hook, but should not fire from the streaming pipeline.
 - **Pro features stay gated.** In GPL builds the commercial-tier handlers (Modbus, CAN, sessions, MDF4, MQTT...) are not registered, so `apiCall` returns `{ ok = false, errorCode = "UNKNOWN_COMMAND" }`. Check `ok` before assuming success.
 
 ## Built-in Template Scripts

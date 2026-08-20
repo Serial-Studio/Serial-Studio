@@ -1250,6 +1250,11 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
         <translation>API Anahtarlarını Yönet…</translation>
     </message>
     <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="427"/>
+        <source>What is the historian, and why would I use it?</source>
+        <translation>Tarihçi nedir ve neden kullanmalıyım?</translation>
+    </message>
+    <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="428"/>
         <source>CSV vs MDF4 export - what is the difference?</source>
         <translation>CSV ve MDF4 dışa aktarma - fark nedir?</translation>
@@ -1258,6 +1263,11 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
         <location filename="../../qml/AI/AssistantPanel.qml" line="431"/>
         <source>Plot, Bar, and Gauge - when to use each?</source>
         <translation>Plot, Bar ve Gauge - her birini ne zaman kullanmalı?</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="450"/>
+        <source>Add a canvas widget for a custom visualization</source>
+        <translation>Özel görselleştirme için tuval widget'ı ekle</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="503"/>
@@ -1310,9 +1320,8 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
         <translation>Bu projenin zaten neleri içerdiğini adım adım göster</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="427"/>
         <source>What is a session database, and why would I use one?</source>
-        <translation>Oturum veritabanı nedir ve neden kullanmalıyım?</translation>
+        <translation type="vanished">Oturum veritabanı nedir ve neden kullanmalıyım?</translation>
     </message>
     <message>
         <source>CSV vs MDF4 export — what is the difference?</source>
@@ -1403,9 +1412,8 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
         <translation>Yönetici özet çalışma alanı oluştur</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="450"/>
         <source>Add a painter widget for a custom visualization</source>
-        <translation>Özel görselleştirme için çizici widget'ı ekle</translation>
+        <translation type="vanished">Özel görselleştirme için çizici widget'ı ekle</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="451"/>
@@ -2698,118 +2706,122 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="38"/>
+        <source>Add Canvas</source>
+        <translation>Tuval Ekle</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="39"/>
         <source>Add Compass</source>
         <translation>Pusula Ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="39"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="40"/>
         <source>Add Data Source</source>
         <translation>Veri Kaynağı Ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="40"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="41"/>
         <source>Add Data Table</source>
         <translation>Veri Tablosu Ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="41"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="42"/>
         <source>Add Dataset</source>
         <translation>Veri Kümesi Ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="42"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="43"/>
         <source>Add Device</source>
         <translation>Cihaz Ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="43"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="44"/>
         <source>Add External Window</source>
         <translation>Harici Pencere Ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="44"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="45"/>
         <source>Add FFT Plot</source>
         <translation>FFT Grafiği Ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="45"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="46"/>
         <source>Add GPS Map</source>
         <translation>GPS Haritası Ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="46"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="47"/>
         <source>Add Gauge</source>
         <translation>Gösterge Ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="47"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="48"/>
         <source>Add Group</source>
         <translation>Grup Ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="48"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="49"/>
         <source>Add Gyroscope</source>
         <translation>Jiroskop Ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="49"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="50"/>
         <source>Add Image View</source>
         <translation>Görüntü Görünümü Ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="50"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="51"/>
         <source>Add LED Indicator</source>
         <translation>LED Göstergesi Ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="51"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="52"/>
         <source>Add Level Indicator</source>
         <translation>Seviye Göstergesi Ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="52"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="53"/>
         <source>Add Multi-Plot</source>
         <translation>Çoklu Grafik Ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="53"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="54"/>
         <source>Add Output</source>
         <translation>Çıkış Ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="54"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="55"/>
         <source>Add Output Button</source>
         <translation>Çıkış Butonu Ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="55"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="56"/>
         <source>Add Output Knob</source>
         <translation>Çıkış Düğmesi Ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="56"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="57"/>
         <source>Add Output Panel</source>
         <translation>Çıkış Paneli Ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="57"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="58"/>
         <source>Add Output Slider</source>
         <translation>Çıkış Kaydırıcısı Ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="58"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="59"/>
         <source>Add Output Text Field</source>
         <translation>Çıkış Metin Alanı Ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="59"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="60"/>
         <source>Add Output Toggle</source>
         <translation>Çıkış Anahtarı Ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="60"/>
         <source>Add Painter</source>
-        <translation>Painter Ekle</translation>
+        <translation type="vanished">Painter Ekle</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="61"/>
@@ -2817,14 +2829,18 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
         <translation>Grafik Ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="62"/>
         <source>Add Register</source>
-        <translation>Kayıt Ekle</translation>
+        <translation type="vanished">Kayıt Ekle</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="62"/>
+        <source>Add Shared Table</source>
+        <translation>Paylaşımlı Tablo Ekle</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="63"/>
-        <source>Add Shared Table</source>
-        <translation>Paylaşımlı Tablo Ekle</translation>
+        <source>Add Variable</source>
+        <translation>Değişken Ekle</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="64"/>
@@ -3012,39 +3028,51 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
         <translation>Çoklu sinyalli grafik ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="101"/>
         <source>Add a register to this shared table</source>
-        <translation>Bu paylaşılan tabloya kayıt ekle</translation>
+        <translation type="vanished">Bu paylaşılan tabloya kayıt ekle</translation>
+    </message>
+    <message>
+        <source>Add a script-drawn painter group</source>
+        <translation type="vanished">Betik çizimli çizici grubu ekle</translation>
+    </message>
+    <message>
+        <source>Add a shared-memory table</source>
+        <translation type="vanished">Paylaşılan bellek tablosu ekle</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="101"/>
+        <source>Add a script-drawn canvas group</source>
+        <translation>Betik çizimli tuval grubu ekle</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="102"/>
-        <source>Add a script-drawn painter group</source>
-        <translation>Betik çizimli çizici grubu ekle</translation>
+        <source>Add a shared variable table</source>
+        <translation>Paylaşımlı değişken tablosu ekle</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="103"/>
-        <source>Add a shared-memory table</source>
-        <translation>Paylaşılan bellek tablosu ekle</translation>
-    </message>
-    <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="104"/>
         <source>Add a slider control</source>
         <translation>Kaydırıcı kontrolü ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="105"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="104"/>
         <source>Add a text field control</source>
         <translation>Metin alanı kontrolü ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="106"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="105"/>
         <source>Add a toggle control</source>
         <translation>Anahtar kontrolü ekle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="107"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="106"/>
         <source>Add a top-level folder in this section</source>
         <translation>Bu bölüme üst düzey klasör ekle</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="107"/>
+        <source>Add a variable to this shared table</source>
+        <translation>Bu paylaşılan tabloya değişken ekle</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="108"/>
@@ -3188,766 +3216,811 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="136"/>
+        <source>Canvas</source>
+        <translation>Tuval</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="137"/>
+        <source>Canvas Widget</source>
+        <translation>Tuval Widget'ı</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="138"/>
         <source>Chat with an AI to build and edit your project</source>
         <translation>Projenizi oluşturmak ve düzenlemek için yapay zeka ile sohbet et</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="137"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="139"/>
         <source>Check device permissions, adapters, and host reachability</source>
         <translation>Cihaz izinlerini, adaptörleri ve ana bilgisayar erişilebilirliğini kontrol et</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="138"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="140"/>
         <source>Clean Up Unresolved Widgets</source>
         <translation>Çözümlenmemiş Widget'ları Temizle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="139"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="141"/>
         <source>Clear All Workspaces</source>
         <translation>Tüm Çalışma Alanlarını Temizle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="140"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="142"/>
         <source>Clear Console</source>
         <translation>Konsolu Temizle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="141"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="143"/>
         <source>Clear Window</source>
         <translation>Pencereyi Temizle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="142"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="144"/>
         <source>Clear the console output</source>
         <translation>Konsol çıktısını temizle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="143"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="145"/>
         <source>Clock</source>
         <translation>Saat</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="144"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="146"/>
         <source>Close</source>
         <translation>Kapat</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="145"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="147"/>
         <source>Close Window</source>
         <translation>Pencereyi Kapat</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="146"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="148"/>
         <source>Close session file</source>
         <translation>Oturum dosyasını kapat</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="147"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="149"/>
         <source>Collapse All</source>
         <translation>Tümünü Daralt</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="148"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="150"/>
         <source>Collapse Duplicates</source>
         <translation>Tekrarları Daralt</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="149"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="151"/>
         <source>Collapse repeated console lines</source>
         <translation>Tekrarlanan konsol satırlarını daralt</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="150"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="152"/>
         <source>Collapse the project tree to its overview</source>
         <translation>Proje ağacını genel görünüme daralt</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="151"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="153"/>
         <source>Command Palette</source>
         <translation>Komut Paleti</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="152"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="154"/>
         <source>Compare Project</source>
         <translation>Projeyi Karşılaştır</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="153"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="155"/>
         <source>Compare the selected session against the project open in the editor</source>
         <translation>Seçili oturumu editörde açık olan projeyle karşılaştır</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="154"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="156"/>
         <source>Compass</source>
         <translation>Pusula</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="155"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="157"/>
         <source>Configure the MQTT publisher</source>
         <translation>MQTT yayıncısını yapılandır</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="156"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="158"/>
         <source>Connect</source>
         <translation>Bağlan</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="157"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="159"/>
         <source>Connect or disconnect from the configured device</source>
         <translation>Yapılandırılmış cihaza bağlan veya bağlantıyı kes</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="158"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="160"/>
         <source>Connection Diagnostics</source>
         <translation>Bağlantı Tanılaması</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="159"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="161"/>
         <source>Console</source>
         <translation>Konsol</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="160"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="162"/>
         <source>Console Echo</source>
         <translation>Konsol Yankısı</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="161"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="163"/>
         <source>Console Only Mode</source>
         <translation>Yalnızca Konsol Modu</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="162"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="164"/>
         <source>Console Timestamps</source>
         <translation>Konsol Zaman Damgaları</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="163"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="165"/>
         <source>Console Transcript</source>
         <translation>Konsol Kaydı</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="164"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="166"/>
         <source>Create a new JSON project</source>
         <translation>Yeni bir JSON projesi oluştur</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="165"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="167"/>
         <source>Customize Workspaces</source>
         <translation>Çalışma Alanlarını Özelleştir</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="166"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="168"/>
         <source>Data Grid</source>
         <translation>Veri Tablosu</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="167"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="169"/>
         <source>Dataset</source>
         <translation>Veri Kümesi</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="168"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="170"/>
         <source>Dataset Container</source>
         <translation>Veri Kümesi Kapsayıcısı</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="169"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="171"/>
         <source>Delete</source>
         <translation>Sil</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="170"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="172"/>
         <source>Delete the selected session</source>
         <translation>Seçili oturumu sil</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="171"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="173"/>
         <source>Delete this item</source>
         <translation>Bu öğeyi sil</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="172"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="174"/>
         <source>Deploy</source>
         <translation>Dağıt</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="173"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="175"/>
         <source>Deploy Operator App</source>
         <translation>Operatör Uygulamasını Dağıt</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="174"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="176"/>
         <source>Disconnect</source>
         <translation>Bağlantıyı Kes</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="175"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="177"/>
         <source>Drop workspace widgets whose source is gone</source>
         <translation>Kaynağı olmayan çalışma alanı widget'larını kaldır</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="176"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="178"/>
         <source>Duplicate</source>
         <translation>Çoğalt</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="177"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="179"/>
         <source>Duplicate this item</source>
         <translation>Bu öğeyi çoğalt</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="178"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="180"/>
         <source>Echo transmitted data in the console</source>
         <translation>Konsola iletilen verileri yankıla</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="179"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="181"/>
+        <source>Edit Canvas Code</source>
+        <translation>Tuval Kodunu Düzenle</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="182"/>
         <source>Edit Control Loop</source>
         <translation>Kontrol Döngüsünü Düzenle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="180"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="183"/>
         <source>Edit Frame Parser</source>
         <translation>Çerçeve Ayrıştırıcısını Düzenle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="181"/>
-        <source>Edit Painter Code</source>
-        <translation>Painter Kodunu Düzenle</translation>
+        <location filename="../../src/UI/CommandStrings.cpp" line="193"/>
+        <source>Export Variables</source>
+        <translation>Değişkenleri Dışa Aktar</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="182"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="195"/>
+        <source>Export this table's variables to CSV</source>
+        <translation>Bu tablonun değişkenlerini CSV'ye aktar</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="219"/>
+        <source>Import Variables</source>
+        <translation>Değişkenleri İçe Aktar</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="220"/>
+        <source>Import this table's variables from CSV</source>
+        <translation>Bu tablonun değişkenlerini CSV'den içe aktar</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="263"/>
+        <source>Open the historian documentation</source>
+        <translation>Tarihçe belgelerini aç</translation>
+    </message>
+    <message>
+        <source>Edit Painter Code</source>
+        <translation type="vanished">Painter Kodunu Düzenle</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="184"/>
         <source>Edit Transform Code</source>
         <translation>Transform Kodunu Düzenle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="183"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="185"/>
         <source>Edit Workspace Widgets</source>
         <translation>Çalışma Alanı Widget'larını Düzenle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="184"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="186"/>
         <source>Edit workspaces manually instead of using the automatic layout</source>
         <translation>Otomatik düzen yerine çalışma alanlarını manuel olarak düzenle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="185"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="187"/>
         <source>Examples</source>
         <translation>Örnekler</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="186"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="188"/>
         <source>Expand All</source>
         <translation>Tümünü Genişlet</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="187"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="189"/>
         <source>Expand every item in the project tree</source>
         <translation>Proje ağacındaki her öğeyi genişlet</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="188"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="190"/>
         <source>Export</source>
         <translation>Dışa Aktar</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="189"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="191"/>
         <source>Export CSV</source>
         <translation>CSV Dışa Aktar</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="190"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="192"/>
         <source>Export PDF</source>
         <translation>PDF Dışa Aktar</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="191"/>
         <source>Export Registers</source>
-        <translation>Kayıtları Dışa Aktar</translation>
+        <translation type="vanished">Kayıtları Dışa Aktar</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="192"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="194"/>
         <source>Export selected session to CSV</source>
         <translation>Seçili oturumu CSV olarak dışa aktar</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="193"/>
         <source>Export this table's registers to CSV</source>
-        <translation>Bu tablonun kayıtlarını CSV'ye aktar</translation>
+        <translation type="vanished">Bu tablonun kayıtlarını CSV'ye aktar</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="194"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="196"/>
         <source>Extensions</source>
         <translation>Eklentiler</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="195"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="197"/>
         <source>FFT Plot</source>
         <translation>FFT Grafiği</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="196"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="198"/>
         <source>File Transmission</source>
         <translation>Dosya İletimi</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="197"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="199"/>
         <source>Fill every empty dataset alias from its title</source>
         <translation>Her boş veri kümesi takma adını başlığından doldur</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="198"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="200"/>
         <source>Freeze Dashboard</source>
         <translation>Gösterge Panelini Dondur</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="199"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="201"/>
         <source>Full Screen</source>
         <translation>Tam Ekran</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="200"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="202"/>
         <source>GPS Map</source>
         <translation>GPS Haritası</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="201"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="203"/>
         <source>Gauge</source>
         <translation>Gösterge</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="202"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="204"/>
         <source>Generate a PDF report for the selected session</source>
         <translation>Seçili oturum için PDF raporu oluştur</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="203"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="205"/>
         <source>Generate a project from a Protocol Buffers (.proto) schema</source>
         <translation>Protocol Buffers (.proto) şemasından bir proje oluştur</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="204"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="206"/>
         <source>Generic</source>
         <translation>Genel</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="205"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="207"/>
         <source>Group</source>
         <translation>Grup</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="206"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="208"/>
         <source>Gyroscope</source>
         <translation>Jiroskop</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="207"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="209"/>
         <source>HID</source>
         <translation>HID</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="208"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="210"/>
         <source>Help</source>
         <translation>Yardım</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="209"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="211"/>
         <source>Help Center</source>
         <translation>Yardım Merkezi</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="210"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="212"/>
         <source>Hex Display</source>
         <translation>Onaltılık Gösterim</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="211"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="213"/>
         <source>Hide</source>
         <translation>Gizle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="212"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="214"/>
         <source>Hide this item from the dashboard and frame building</source>
         <translation>Bu öğeyi panodan ve çerçeve oluşturmadan gizle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="213"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="215"/>
+        <source>Historian</source>
+        <translation>Tarihçe</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="216"/>
         <source>Image</source>
         <translation>Görsel</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="214"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="217"/>
         <source>Image View</source>
         <translation>Görüntü Görünümü</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="215"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="218"/>
         <source>Import Protobuf Schema</source>
         <translation>Protobuf Şeması İçe Aktar</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="216"/>
         <source>Import Registers</source>
-        <translation>Kayıtları İçe Aktar</translation>
+        <translation type="vanished">Kayıtları İçe Aktar</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="217"/>
         <source>Import this table's registers from CSV</source>
-        <translation>Bu tablonun kayıtlarını CSV'den içe aktar</translation>
+        <translation type="vanished">Bu tablonun kayıtlarını CSV'den içe aktar</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="218"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="221"/>
         <source>Knob</source>
         <translation>Düğme</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="219"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="222"/>
         <source>LED Indicator</source>
         <translation>LED Göstergesi</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="220"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="223"/>
         <source>Level Indicator</source>
         <translation>Seviye Göstergesi</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="221"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="224"/>
         <source>License Management</source>
         <translation>Lisans Yönetimi</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="222"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="225"/>
         <source>Lock</source>
         <translation>Kilitle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="223"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="226"/>
         <source>Lock Project Editor</source>
         <translation>Proje Düzenleyiciyi Kilitle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="224"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="227"/>
         <source>MDF4 File</source>
         <translation>MDF4 Dosyası</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="225"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="228"/>
         <source>MQTT Publisher</source>
         <translation>MQTT Yayıncı</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="226"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="229"/>
         <source>Macros</source>
         <translation>Makrolar</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="227"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="230"/>
         <source>Make every hidden group visible again</source>
         <translation>Gizlenmiş tüm grupları tekrar görünür yap</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="228"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="231"/>
         <source>Manage your Serial Studio Pro license</source>
         <translation>Serial Studio Pro lisansınızı yönetin</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="229"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="232"/>
         <source>Meter</source>
         <translation>Ölçer</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="230"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="233"/>
         <source>Minimize Window</source>
         <translation>Pencereyi Simge Durumuna Küçült</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="231"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="234"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="232"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="235"/>
         <source>Move Down</source>
         <translation>Aşağı Taşı</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="233"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="236"/>
         <source>Move Up</source>
         <translation>Yukarı Taşı</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="234"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="237"/>
         <source>Move this item down among its siblings</source>
         <translation>Bu öğeyi kardeşleri arasında aşağı taşı</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="235"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="238"/>
         <source>Move this item out of every folder</source>
         <translation>Bu öğeyi tüm klasörlerden çıkar</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="236"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="239"/>
         <source>Move this item up among its siblings</source>
         <translation>Bu öğeyi kardeşleri arasında yukarı taşı</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="237"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="240"/>
         <source>Move to Folder</source>
         <translation>Klasöre Taşı</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="238"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="241"/>
         <source>Multi-Plot</source>
         <translation>Çoklu Grafik</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="239"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="242"/>
         <source>Navigate Back</source>
         <translation>Geri Git</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="240"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="243"/>
         <source>Navigate Forward</source>
         <translation>İleri Git</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="241"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="244"/>
         <source>Network</source>
         <translation>Ağ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="242"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="245"/>
         <source>New</source>
         <translation>Yeni</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="243"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="246"/>
         <source>New Folder</source>
         <translation>Yeni Klasör</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="244"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="247"/>
         <source>New Project</source>
         <translation>Yeni Proje</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="245"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="248"/>
         <source>New Sub-Folder</source>
         <translation>Yeni Alt Klasör</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="246"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="249"/>
         <source>Next Workspace</source>
         <translation>Sonraki Çalışma Alanı</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="247"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="250"/>
         <source>Notifications</source>
         <translation>Bildirimler</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="248"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="251"/>
         <source>Open</source>
         <translation>Aç</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="249"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="252"/>
         <source>Open CSV</source>
         <translation>CSV Aç</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="250"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="253"/>
         <source>Open MDF4</source>
         <translation>MDF4 Aç</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="251"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="254"/>
         <source>Open Project</source>
         <translation>Proje Aç</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="252"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="255"/>
         <source>Open a session file</source>
         <translation>Oturum dosyası aç</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="253"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="256"/>
         <source>Open an existing JSON project</source>
         <translation>Mevcut bir JSON projesini aç</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="254"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="257"/>
         <source>Open application settings and preferences</source>
         <translation>Uygulama ayarlarını ve tercihlerini aç</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="255"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="258"/>
         <source>Open the Assistant</source>
         <translation>Asistanı Aç</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="256"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="259"/>
         <source>Open the Project Editor documentation</source>
         <translation>Proje Düzenleyici belgelerini aç</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="257"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="260"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
         <translation>JSON düzeninizi oluşturmak veya değiştirmek için Proje Düzenleyiciyi aç</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="258"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="261"/>
+        <source>Open the canvas script for this group</source>
+        <translation>Bu grup için tuval betiğini aç</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="262"/>
         <source>Open the frame parser for this data source</source>
         <translation>Bu veri kaynağı için çerçeve ayrıştırıcısını aç</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="259"/>
         <source>Open the painter script for this group</source>
-        <translation>Bu grup için çizici betiğini aç</translation>
+        <translation type="vanished">Bu grup için çizici betiğini aç</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="260"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="264"/>
         <source>Open the project control loop</source>
         <translation>Proje kontrol döngüsünü aç</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="261"/>
         <source>Open the session database documentation</source>
-        <translation>Oturum veritabanı belgelerini aç</translation>
+        <translation type="vanished">Oturum veritabanı belgelerini aç</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="262"/>
         <source>Open the shared-memory documentation</source>
-        <translation>Paylaşılan bellek belgelerini aç</translation>
+        <translation type="vanished">Paylaşılan bellek belgelerini aç</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="263"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="265"/>
         <source>Open the value transform for this dataset</source>
         <translation>Bu veri kümesi için değer dönüşümünü aç</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="264"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="266"/>
+        <source>Open the variables documentation</source>
+        <translation>Değişkenler belgelerini aç</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="267"/>
         <source>Open this workspace to edit its widgets</source>
         <translation>Widget'larını düzenlemek için bu çalışma alanını aç</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="265"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="268"/>
         <source>Output</source>
         <translation>Çıkış</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="266"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="269"/>
         <source>Output Panel</source>
         <translation>Çıkış Paneli</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="267"/>
         <source>Painter</source>
-        <translation>Çizici</translation>
+        <translation type="vanished">Çizici</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="268"/>
         <source>Painter Widget</source>
-        <translation>Painter Widget</translation>
+        <translation type="vanished">Painter Widget</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="269"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="270"/>
         <source>Pause</source>
         <translation>Duraklat</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="270"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="271"/>
         <source>Play a CSV file as if it were live sensor data</source>
         <translation>Bir CSV dosyasını canlı sensör verisi gibi oynat</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="271"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="272"/>
         <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
         <translation>Bir MDF4 dosyasını canlı sensör verisi gibi oynat (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="272"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="273"/>
         <source>Plot</source>
         <translation>Grafik</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="273"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="274"/>
         <source>Preferences</source>
         <translation>Tercihler</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="274"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="275"/>
         <source>Previous Workspace</source>
         <translation>Önceki Çalışma Alanı</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="275"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="276"/>
         <source>Problem Center</source>
         <translation>Sorun Merkezi</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="276"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="277"/>
         <source>Process</source>
         <translation>İşlem</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="277"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="278"/>
         <source>Project Editor</source>
         <translation>Proje Düzenleyici</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="278"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="279"/>
         <source>Project File Mode</source>
         <translation>Proje Dosyası Modu</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="279"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="280"/>
         <source>Protobuf</source>
         <translation>Protobuf</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="280"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="281"/>
         <source>Quick Plot Mode</source>
         <translation>Hızlı Grafik Modu</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="281"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="282"/>
         <source>Quit</source>
         <translation>Çıkış</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="282"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="283"/>
         <source>Rebuild the automatic workspace layout</source>
         <translation>Otomatik çalışma alanı düzenini yeniden oluştur</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="283"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="284"/>
         <source>Redo</source>
         <translation>Yinele</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="284"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="285"/>
         <source>Redo the last undone project edit</source>
         <translation>Geri alınan son proje düzenlemesini yinele</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="285"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="286"/>
         <source>Remote Dashboard</source>
         <translation>Uzak Gösterge Paneli</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="286"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="287"/>
         <source>Remove every user workspace</source>
         <translation>Tüm kullanıcı çalışma alanlarını kaldır</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="287"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="288"/>
         <source>Rename</source>
         <translation>Yeniden Adlandır</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="288"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="289"/>
         <source>Rename this item</source>
         <translation>Bu öğeyi yeniden adlandır</translation>
     </message>
@@ -3956,337 +4029,339 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
         <translation type="vanished">Kurtar</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="289"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="290"/>
         <source>Replay</source>
         <translation>Yeniden Oynat</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="290"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="291"/>
         <source>Replay selected session on the dashboard</source>
         <translation>Seçili oturumu panoda yeniden oynat</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="291"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="292"/>
         <source>Reset</source>
         <translation>Sıfırla</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="292"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="293"/>
         <source>Reset to Auto Layout</source>
         <translation>Otomatik Düzene Sıfırla</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="293"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="294"/>
         <source>Restore</source>
         <translation>Geri Yükle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="294"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="295"/>
         <source>Restore Backup</source>
         <translation>Yedeği Geri Yükle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="295"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="296"/>
         <source>Restore Project</source>
         <translation>Projeyi Geri Yükle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="296"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="297"/>
         <source>Restore a recent automatic snapshot of the current project</source>
         <translation>Mevcut projenin son otomatik anlık görüntüsünü geri yükle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="297"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="298"/>
         <source>Restore the project file from this session file</source>
         <translation>Bu oturum dosyasından proje dosyasını geri yükle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="298"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="299"/>
         <source>Resume</source>
         <translation>Devam Et</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="299"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="300"/>
         <source>Review project, link, and script diagnostics</source>
         <translation>Proje, bağlantı ve betik tanılamalarını incele</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="300"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="301"/>
         <source>Run API commands and script macros interactively</source>
         <translation>API komutlarını ve betik makrolarını etkileşimli olarak çalıştır</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="301"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="302"/>
         <source>Save</source>
         <translation>Kaydet</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="302"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="303"/>
         <source>Save As</source>
         <translation>Farklı Kaydet</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="303"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="304"/>
         <source>Save Project</source>
         <translation>Projeyi Kaydet</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="304"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="305"/>
         <source>Save Project As</source>
         <translation>Projeyi Farklı Kaydet</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="305"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="306"/>
         <source>Search</source>
         <translation>Ara</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="306"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="307"/>
         <source>Search and run any Serial Studio command</source>
         <translation>Serial Studio komutlarını ara ve çalıştır</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="307"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="308"/>
         <source>Seed Aliases from Titles</source>
         <translation>Başlıklardan Takma Adları Türet</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="308"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="309"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>Bluetooth Low Energy iletişimini seç</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="309"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="310"/>
         <source>Select CAN Bus communication (Pro)</source>
         <translation>CAN Bus İletişimini Seç (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="310"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="311"/>
         <source>Select HID device communication (Pro)</source>
         <translation>HID Cihaz İletişimini Seç (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="311"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="312"/>
         <source>Select MODBUS communication (Pro)</source>
         <translation>MODBUS İletişimini Seç (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="312"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="313"/>
         <source>Select Serial port (UART) communication</source>
         <translation>Seri Port (UART) İletişimini Seç</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="313"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="314"/>
         <source>Select TCP/UDP network communication</source>
         <translation>TCP/UDP Ağ İletişimini Seç</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="314"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="315"/>
         <source>Select audio input device (Pro)</source>
         <translation>Ses Giriş Cihazını Seç (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="315"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="316"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>İşlem Borusu İletişimini Seç (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="316"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="317"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>Ham USB İletişimini Seç (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="317"/>
         <source>Session Database</source>
-        <translation>Oturum Veritabanı</translation>
+        <translation type="vanished">Oturum Veritabanı</translation>
+    </message>
+    <message>
+        <source>Sessions</source>
+        <translation type="vanished">Oturumlar</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="318"/>
-        <source>Sessions</source>
-        <translation>Oturumlar</translation>
-    </message>
-    <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="319"/>
         <source>Set a password and lock the Project Editor</source>
         <translation>Bir Parola Belirleyin ve Proje Düzenleyiciyi Kilitleyin</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="320"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="319"/>
         <source>Set a password to prevent session deletions</source>
         <translation>Oturum silme işlemlerini önlemek için bir parola belirleyin</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="321"/>
         <source>Shared Memory Help</source>
-        <translation>Paylaşılan Bellek Yardımı</translation>
+        <translation type="vanished">Paylaşılan Bellek Yardımı</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="322"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="320"/>
         <source>Show</source>
         <translation>Göster</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="323"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="321"/>
         <source>Show All Hidden Groups</source>
         <translation>Tüm Gizli Grupları Göster</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="324"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="322"/>
         <source>Show application info and license details</source>
         <translation>Uygulama Bilgilerini ve Lisans Ayrıntılarını Göster</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="325"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="323"/>
         <source>Show this dataset as a 2D plot</source>
         <translation>Bu veri kümesini 2B grafik olarak göster</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="326"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="324"/>
         <source>Show this dataset as a bar or level</source>
         <translation>Bu veri kümesini çubuk veya seviye olarak göster</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="327"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="325"/>
         <source>Show this dataset as a compass</source>
         <translation>Bu veri kümesini pusula olarak göster</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="328"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="326"/>
         <source>Show this dataset as a gauge</source>
         <translation>Bu veri kümesini kadran olarak göster</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="329"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="327"/>
         <source>Show this dataset as a waterfall plot</source>
         <translation>Bu veri kümesini şelale grafiği olarak göster</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="330"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="328"/>
         <source>Show this dataset as an FFT plot</source>
         <translation>Bu veri kümesini FFT grafiği olarak göster</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="331"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="329"/>
         <source>Show this dataset as an LED indicator</source>
         <translation>Bu veri kümesini LED göstergesi olarak göster</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="332"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="330"/>
         <source>Show this dataset as an analog meter</source>
         <translation>Bu veri kümesini analog ölçer olarak göster</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="333"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="331"/>
         <source>Show timestamps in the console</source>
         <translation>Konsolda Zaman Damgalarını Göster</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="334"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="332"/>
         <source>Slider</source>
         <translation>Kaydırıcı</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="335"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="333"/>
         <source>Start Menu</source>
         <translation>Başlangıç Menüsü</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="336"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="334"/>
         <source>Stopwatch</source>
         <translation>Kronometre</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="337"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="335"/>
         <source>Switch to Console Only mode (no parsing)</source>
         <translation>Yalnızca Konsol Moduna Geç (ayrıştırma yok)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="338"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="336"/>
         <source>Switch to Project File mode (parse via a project)</source>
         <translation>Proje Dosyası Moduna Geç (proje ile ayrıştır)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="339"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="337"/>
         <source>Switch to Quick Plot mode (comma-separated values)</source>
         <translation>Hızlı Çizim Moduna Geç (virgülle ayrılmış değerler)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="340"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="338"/>
         <source>Table</source>
         <translation>Tablo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="341"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="339"/>
         <source>Text Field</source>
         <translation>Metin Alanı</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="342"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="340"/>
         <source>Toggle</source>
         <translation>Anahtar</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="343"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="341"/>
         <source>Toggle hexadecimal console display</source>
         <translation>Onaltılık konsol görüntüsünü aç/kapat</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="344"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="342"/>
         <source>Tools</source>
         <translation>Araçlar</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="345"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="343"/>
         <source>Top Level</source>
         <translation>Üst Düzey</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="346"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="344"/>
         <source>UART</source>
         <translation>UART</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="347"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="345"/>
         <source>USB</source>
         <translation>USB</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="348"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="346"/>
         <source>Undo</source>
         <translation>Geri Al</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="349"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="347"/>
         <source>Undo the last project edit</source>
         <translation>Son proje düzenlemesini geri al</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="350"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="348"/>
         <source>Unlock</source>
         <translation>Kilidi Aç</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="351"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="349"/>
+        <source>Variables Help</source>
+        <translation>Değişkenler Yardımı</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="350"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
         <translation>DeepWiki'de ayrıntılı belgeleri görüntüleyin ve soru sorun</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="352"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="351"/>
         <source>Visualizations</source>
         <translation>Görselleştirmeler</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="353"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="352"/>
         <source>Watch another Serial Studio instance's dashboard over the network</source>
         <translation>Ağ üzerinden başka bir Serial Studio örneğinin gösterge panelini izle</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="354"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="353"/>
         <source>Waterfall</source>
         <translation>Waterfall</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="355"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="354"/>
         <source>Web View</source>
         <translation>Web Görünümü</translation>
     </message>
@@ -6046,10 +6121,20 @@ v
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="583"/>
+        <source>A downstream consumer (dashboard, CSV/MDF4 export, historian, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
+        <translation>Bir aşağı akış tüketicisi (gösterge paneli, CSV/MDF4 dışa aktarma, tarihçe veya API abonesi) yeterince hızlı boşaltmıyor, bu nedenle veriler ekrandan ve aktif kayıttan düşürülüyor. Ağır bir tüketiciyi devre dışı bırakın veya veri hızını azaltın.</translation>
+    </message>
+    <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="3090"/>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="3228"/>
         <source>Channel %1</source>
         <translation>Kanal %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3118"/>
+        <source>Multi-Plot</source>
+        <translation>Çoklu Grafik</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="3239"/>
@@ -6068,9 +6153,8 @@ v
         <translation>Blok havuzu tükendi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="583"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, session DB, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
-        <translation>Bir alt tüketici (gösterge paneli, CSV/MDF4 dışa aktarma, oturum veritabanı veya API abonesi) yeterince hızlı boşaltmıyor, bu nedenle veriler ekrandan ve aktif kayıttan düşürülüyor. Ağır bir tüketiciyi devre dışı bırakın veya veri hızını azaltın.</translation>
+        <translation type="vanished">Bir alt tüketici (gösterge paneli, CSV/MDF4 dışa aktarma, oturum veritabanı veya API abonesi) yeterince hızlı boşaltmıyor, bu nedenle veriler ekrandan ve aktif kayıttan düşürülüyor. Ağır bir tüketiciyi devre dışı bırakın veya veri hızını azaltın.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="2764"/>
@@ -6101,9 +6185,8 @@ v
         <translation>Hızlı Grafik Verisi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3118"/>
         <source>Multiple Plots</source>
-        <translation>Çoklu Grafikler</translation>
+        <translation type="vanished">Çoklu Grafikler</translation>
     </message>
 </context>
 <context>
@@ -6601,9 +6684,13 @@ Kaydedilmemiş değişiklikler kaybolur. Devam edilsin mi?</translation>
         <translation>İçe Aktarılacak Javascript Dosyasını Seç</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="399"/>
         <source>Select Painter Widget Template</source>
-        <translation>Painter Widget Şablonu Seç</translation>
+        <translation type="vanished">Painter Widget Şablonu Seç</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="399"/>
+        <source>Select Canvas Widget Template</source>
+        <translation>Tuval Widget Şablonu Seç</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="400"/>
@@ -6668,7 +6755,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>Her eğriyi zamana veya örnek numarasına göre çiz</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="413"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="414"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="314"/>
         <source>Logarithmic X Axis</source>
         <translation>Logaritmik X Ekseni</translation>
@@ -6679,7 +6766,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>X eksenini ondalık olarak ölçeklendir; yalnızca X Ekseni kaynağı Örnekler olduğunda kullanılabilir (Zaman değil)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="426"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="427"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="327"/>
         <source>Logarithmic Y Axis</source>
         <translation>Logaritmik Y Ekseni</translation>
@@ -6835,22 +6922,20 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>Görüntü Yapılandırması</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="238"/>
         <source>Virtual Dataset</source>
-        <translation>Sanal Veri Kümesi</translation>
+        <translation type="vanished">Sanal Veri Kümesi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="239"/>
         <source>Virtual datasets compute their value from transforms and data tables, they do not require a frame index</source>
-        <translation>Sanal veri kümeleri değerlerini dönüşümler ve veri tablolarından hesaplar, çerçeve indeksi gerektirmez</translation>
+        <translation type="vanished">Sanal veri kümeleri değerlerini dönüşümler ve veri tablolarından hesaplar, çerçeve indeksi gerektirmez</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="577"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="578"/>
         <source>Scale the frequency axis in decades so low octaves stay readable; applies to both the FFT plot and the waterfall</source>
         <translation>Frekans eksenini dekatlarda ölçeklendir, böylece düşük oktavlar okunabilir kalır; hem FFT grafiğine hem de şelale görünümüne uygulanır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="693"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="694"/>
         <source>Fixed decimal places for the value display; overrides the format (-1 = auto)</source>
         <translation>Değer gösterimi için sabit ondalık basamaklar; formatı geçersiz kılar (-1 = otomatik)</translation>
     </message>
@@ -6880,12 +6965,8 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Gruplar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="597"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="610"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="611"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="636"/>
         <source>Shared Memory</source>
-        <translation>Paylaşılan Bellek</translation>
+        <translation type="vanished">Paylaşılan Bellek</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorSummaries.cpp" line="134"/>
@@ -7282,7 +7363,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>Bağlantı Ayarları</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="214"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="215"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="692"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1108"/>
         <source>General Information</source>
@@ -7447,137 +7528,151 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>Her tetiklemede komutun kaç kez gönderileceği</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="226"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="227"/>
         <source>Untitled Dataset</source>
         <translation>Adsız Veri Kümesi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="227"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="228"/>
         <source>Dataset Title</source>
         <translation>Veri Kümesi Başlığı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="228"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="229"/>
         <source>Name of the dataset, used for labeling and identification</source>
         <translation>Veri kümesinin adı, etiketleme ve tanımlama için kullanılır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="250"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="251"/>
         <source>Hide on Dashboard</source>
         <translation>Panoda Gizle</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="251"/>
         <source>Suppress this dataset's standalone dashboard tile; the painter widget can still read its values</source>
-        <translation>Bu veri kümesinin bağımsız pano kutucuğunu gizle; painter widget değerlerini okumaya devam edebilir</translation>
+        <translation type="vanished">Bu veri kümesinin bağımsız pano kutucuğunu gizle; painter widget değerlerini okumaya devam edebilir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="323"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="324"/>
         <source>Automatic</source>
         <translation>Otomatik</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="324"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="325"/>
         <source>Widget Color</source>
         <translation>Widget Rengi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="325"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="326"/>
         <source>Custom display color for this dataset; automatic uses the theme palette</source>
         <translation>Bu veri kümesi için özel görüntüleme rengi; otomatik seçeneği tema paletini kullanır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="303"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="304"/>
         <source>Stable name</source>
         <translation>Sabit ad</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="304"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="239"/>
+        <source>Computed Dataset</source>
+        <translation>Hesaplanmış Veri Kümesi</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="240"/>
+        <source>Computed datasets compute their value from transforms and shared variables, they do not require a frame index</source>
+        <translation>Hesaplanmış veri kümeleri değerlerini dönüşümler ve paylaşılan değişkenlerden hesaplar, çerçeve indeksi gerektirmez</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="252"/>
+        <source>Suppress this dataset's standalone dashboard tile; the canvas widget can still read its values</source>
+        <translation>Bu veri kümesinin bağımsız pano kutucuğunu gizle; tuval widget değerlerini okumaya devam edebilir</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="305"/>
         <source>Script Alias</source>
         <translation>Betik Takma Adı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="305"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="306"/>
         <source>Stable name for getDataset-style script/API lookups; must be unique (optional)</source>
         <translation>GetDataset tarzı betik/API aramaları için sabit ad; benzersiz olmalıdır (isteğe bağlı)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="345"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="346"/>
         <source>Lower bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>Veri kümesi değer aralığının alt sınırı; widget'lar ve FFT kendi aralıkları ayarlanmadığında buna geri döner</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="357"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="358"/>
         <source>Upper bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>Veri kümesi değer aralığının üst sınırı; widget'lar ve FFT kendi aralıkları ayarlanmadığında buna geri döner</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="401"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="402"/>
         <source>Choose Time or a dataset to drive the X-Axis in plots</source>
         <translation>Grafiklerde X eksenini sürmek için Zaman veya bir veri kümesi seçin</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="414"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="415"/>
         <source>Scale the X axis in decades; available when the X-Axis source is Samples or a dataset (not Time)</source>
         <translation>X eksenini ondalık olarak ölçeklendir; yalnızca X Ekseni kaynağı Örnekler veya bir veri kümesi olduğunda kullanılabilir (Zaman değil)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="427"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="428"/>
         <source>Scale the Y axis in decades; values at or below zero are clamped</source>
         <translation>Y eksenini ondalık olarak ölçeklendir; sıfır veya altındaki değerler sınırlandırılır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="442"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="443"/>
         <source>Frequency Analysis</source>
         <translation>Frekans Analizi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="479"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="480"/>
         <source>Peak Ballistics</source>
         <translation>Tepe Balistiği</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="480"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="481"/>
         <source>Analyzer-style display: peaks rise instantly and decay smoothly over the release time</source>
         <translation>Analizör tarzı görüntüleme: tepe noktaları anında yükselir ve serbest bırakma süresi boyunca yumuşak bir şekilde azalır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="492"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="493"/>
         <source>Ballistics Release (ms)</source>
         <translation>Balistik Serbest Bırakma (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="493"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="494"/>
         <source>Decay time for the ballistics display (50-5000 ms)</source>
         <translation>Balistik görüntüleme için azalma süresi (50-5000 ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="509"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="510"/>
         <source>Choose Time (default) or any dataset whose value drives the Y axis -- produces a Campbell diagram when bound to e.g. RPM</source>
         <translation>Zaman (varsayılan) veya Y eksenini yönlendiren herhangi bir veri kümesi seçin -- örneğin RPM'e bağlandığında Campbell diyagramı üretir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="549"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="550"/>
         <source>FFT Window Function</source>
         <translation>FFT Pencere Fonksiyonu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="550"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="551"/>
         <source>Window applied before the transform to reduce spectral leakage; affects both the FFT plot and the waterfall</source>
         <translation>Spektral sızıntıyı azaltmak için dönüşümden önce uygulanan pencere; hem FFT grafiğini hem de şelale görünümünü etkiler</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="576"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="577"/>
         <source>Logarithmic Frequency Axis</source>
         <translation>Logaritmik Frekans Ekseni</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="739"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="740"/>
         <source>Hold Min/Max Markers</source>
         <translation>Min/maks İşaretleyicileri Tut</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="740"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="741"/>
         <source>Show hold markers at the lowest and highest values observed since the last data reset</source>
         <translation>Son veri sıfırlamasından bu yana gözlemlenen en düşük ve en yüksek değerlerde tutma işaretçilerini göster</translation>
     </message>
@@ -7586,39 +7681,39 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">FFT frekans eksenini dekatlarda ölçeklendir, böylece düşük oktavlar okunabilir kalır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="590"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="714"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="591"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="715"/>
         <source>Minimum Value (optional)</source>
         <translation>Maksimum Değer (isteğe bağlı)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="591"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="592"/>
         <source>Lower bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>Veri normalizasyonu için alt sınır; ayarlanmadığında veri kümesi değer aralığına geri döner</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="603"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="726"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="604"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="727"/>
         <source>Maximum Value (optional)</source>
         <translation>Minimum Değer (isteğe bağlı)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="604"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="605"/>
         <source>Upper bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>Veri normalizasyonu için üst sınır; ayarlanmadığında veri kümesi değer aralığına geri döner</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="715"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="716"/>
         <source>Lower bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>Gösterge veya çubuk aralığının alt sınırı; ayarlanmadığında veri kümesi değer aralığına geri döner</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="727"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="728"/>
         <source>Upper bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>Gösterge veya çubuk aralığının üst sınırı; ayarlanmadığında veri kümesi değer aralığına geri döner</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="692"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="693"/>
         <source>Decimal Points</source>
         <translation>Ondalık Noktalar</translation>
     </message>
@@ -7632,14 +7727,13 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>Açık</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="783"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="784"/>
         <source>LED lights up when value meets or exceeds this threshold; define alarm bands for multi-state colors</source>
         <translation>LED, değer bu eşiği karşıladığında veya aştığında yanar; çok durumlu renkler için alarm aralıkları tanımlayın</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="717"/>
         <source>Painter Widget</source>
-        <translation>Painter Widget</translation>
+        <translation type="vanished">Painter Widget</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="718"/>
@@ -7677,7 +7771,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>Çalışma Alanlarını Temizle</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="266"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="267"/>
         <source>Frame Index</source>
         <translation>Çerçeve İndeksi</translation>
     </message>
@@ -7688,6 +7782,14 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>Gösterge Paneli Widget'ları</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="597"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="610"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="611"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="636"/>
+        <source>Variables</source>
+        <translation>Değişkenler</translation>
+    </message>
+    <message>
         <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="870"/>
         <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="874"/>
         <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="875"/>
@@ -7695,42 +7797,42 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>Kontrol Döngüsü</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="267"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="268"/>
         <source>Frame position used for aligning datasets in time</source>
         <translation>Veri kümelerini zamanda hizalamak için kullanılan çerçeve konumu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="278"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="279"/>
         <source>Measurement Unit</source>
         <translation>Ölçüm Birimi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="277"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="278"/>
         <source>Volts, Amps, etc.</source>
         <translation>Volt, Amper, vb.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="279"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="280"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
         <translation>Volt veya amper gibi ölçüm birimi (isteğe bağlı)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="372"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="373"/>
         <source>Plot Settings</source>
         <translation>Grafik Ayarları</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="386"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="387"/>
         <source>Enable Plot Widget</source>
         <translation>Grafik Widget'ını Etkinleştir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="387"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="388"/>
         <source>Plot data in real-time</source>
         <translation>Verileri gerçek zamanlı olarak grafikle</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="400"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="401"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="298"/>
         <source>X-Axis Source</source>
         <translation>X Ekseni Kaynağı</translation>
@@ -7760,27 +7862,27 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">FFT Yapılandırması</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="455"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="456"/>
         <source>Enable FFT Analysis</source>
         <translation>FFT Analizini Etkinleştir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="456"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="457"/>
         <source>Perform frequency-domain analysis of the dataset</source>
         <translation>Veri kümesinin frekans-alanı analizini gerçekleştir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="466"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="467"/>
         <source>Enable Waterfall Plot</source>
         <translation>Waterfall Grafiğini Etkinleştir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="467"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="468"/>
         <source>Show a scrolling spectrogram of frequency content over time (Pro)</source>
         <translation>Zaman içinde frekans içeriğinin kayan spektrogramını göster (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="508"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="509"/>
         <source>Waterfall Y Axis</source>
         <translation>Waterfall Y Ekseni</translation>
     </message>
@@ -7789,22 +7891,22 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Zaman (varsayılan) veya Y eksenini yönlendiren herhangi bir veri kümesi seçin — örneğin RPM'e bağlandığında Campbell diyagramı üretir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="534"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="535"/>
         <source>FFT Window Size</source>
         <translation>FFT Pencere Boyutu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="535"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="536"/>
         <source>Number of samples used for each FFT calculation window</source>
         <translation>Her FFT hesaplama penceresi için kullanılan örnek sayısı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="563"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="564"/>
         <source>FFT Sampling Rate (Hz, required)</source>
         <translation>FFT Örnekleme Hızı (Hz, gerekli)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="564"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="565"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
         <translation>FFT için kullanılan örnekleme frekansı (Hz cinsinden)</translation>
     </message>
@@ -7825,17 +7927,17 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Veri normalizasyonu için üst sınır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="619"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="620"/>
         <source>Widget Settings</source>
         <translation>Widget Ayarları</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="635"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="636"/>
         <source>Widget</source>
         <translation>Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="636"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="637"/>
         <source>Select the visual widget used to display this dataset</source>
         <translation>Bu veri kümesini görüntülemek için kullanılan görsel widget'ı seçin</translation>
     </message>
@@ -7857,29 +7959,29 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="731"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="662"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="689"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="663"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="690"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="366"/>
         <source>Auto</source>
         <translation>Otomatik</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="663"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="664"/>
         <source>Tick Count</source>
         <translation>İşaret Sayısı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="664"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="665"/>
         <source>Major-tick count on the dial scale (0 = auto-fit to widget size)</source>
         <translation>Kadran ölçeğindeki ana işaret sayısı (0 = widget boyutuna otomatik sığdır)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="678"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="679"/>
         <source>Label Format</source>
         <translation>Etiket Biçimi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="679"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="680"/>
         <source>Decimal places or notation used on tick labels and the value display</source>
         <translation>İşaret etiketlerinde ve değer gösteriminde kullanılan ondalık basamak veya gösterim</translation>
     </message>
@@ -7920,22 +8022,22 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Değer bu eşiği aştığında görsel bir alarm tetikler</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="755"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="756"/>
         <source>LED Display Settings</source>
         <translation>LED Ekran Ayarları</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="768"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="769"/>
         <source>Show in LED Panel</source>
         <translation>LED Panelinde Göster</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="769"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="770"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>LED ekran kullanarak görsel durum izlemeyi etkinleştir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="782"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="783"/>
         <source>LED On Threshold (required)</source>
         <translation>LED Açık Eşiği (gerekli)</translation>
     </message>
@@ -7944,9 +8046,13 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">LED, değer bu eşiği karşıladığında veya aştığında yanar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="455"/>
         <source>Edit Painter Code</source>
-        <translation>Painter Kodunu Düzenle</translation>
+        <translation type="vanished">Painter Kodunu Düzenle</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="455"/>
+        <source>Edit Canvas Code</source>
+        <translation>Tuval Kodunu Düzenle</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="479"/>
@@ -8145,8 +8251,12 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="713"/>
-        <source>Multiple Plot</source>
+        <source>Multi-Plot</source>
         <translation>Çoklu Grafik</translation>
+    </message>
+    <message>
+        <source>Multiple Plot</source>
+        <translation type="vanished">Çoklu Grafik</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="714"/>
@@ -8162,6 +8272,11 @@ Add %4 dataset(s) using the template's defaults?</source>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="716"/>
         <source>Image View</source>
         <translation>Görüntü Görünümü</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="717"/>
+        <source>Canvas Widget</source>
+        <translation>Tuval Widget</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="719"/>
@@ -8306,13 +8421,13 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>Değer Aralığı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="344"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="345"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1199"/>
         <source>Minimum Value</source>
         <translation>Minimum Değer</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="356"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="357"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1208"/>
         <source>Maximum Value</source>
         <translation>Maksimum Değer</translation>
@@ -9037,6 +9152,11 @@ Yalnızca güvendiğiniz ve önce Güvenli modda test ettiğiniz betikler için 
         <translation>Yeni Ölçer</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1452"/>
+        <source>Edit Canvas Datasets</source>
+        <translation>Tuval Veri Kümelerini Düzenle</translation>
+    </message>
+    <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="2187"/>
         <source>Duplicate Selection</source>
         <translation>Seçimi Çoğalt</translation>
@@ -9071,9 +9191,8 @@ Yalnızca güvendiğiniz ve önce Güvenli modda test ettiğiniz betikler için 
         <translation>Yeni Waterfall</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1452"/>
         <source>Edit Painter Datasets</source>
-        <translation>Çizici Veri Kümelerini Düzenle</translation>
+        <translation type="vanished">Çizici Veri Kümelerini Düzenle</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1471"/>
@@ -9172,9 +9291,8 @@ Yalnızca güvendiğiniz ve önce Güvenli modda test ettiğiniz betikler için 
         <translation>Paylaşılan Tablo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="223"/>
         <source>register</source>
-        <translation>kayıt</translation>
+        <translation type="vanished">kayıt</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="917"/>
@@ -9231,14 +9349,12 @@ Yalnızca güvendiğiniz ve önce Güvenli modda test ettiğiniz betikler için 
         <translation>Eylemi Yeniden Adlandır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="398"/>
         <source>New Register</source>
-        <translation>Yeni Kayıt</translation>
+        <translation type="vanished">Yeni Kayıt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="421"/>
         <source>Rename Register</source>
-        <translation>Kaydı Yeniden Adlandır</translation>
+        <translation type="vanished">Kaydı Yeniden Adlandır</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1200"/>
@@ -9249,9 +9365,8 @@ Yalnızca güvendiğiniz ve önce Güvenli modda test ettiğiniz betikler için 
         <translation>Bu işlem geri alınamaz.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="456"/>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
-        <translation>Bu işlem %1 kayıt(lar)ı tabloyla birlikte kaldırır. Bu işlem geri alınamaz.</translation>
+        <translation type="vanished">Bu işlem %1 kayıt(lar)ı tabloyla birlikte kaldırır. Bu işlem geri alınamaz.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1199"/>
@@ -9272,20 +9387,52 @@ Yalnızca güvendiğiniz ve önce Güvenli modda test ettiğiniz betikler için 
         <translation>Tabloyu Sil</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="214"/>
         <source>Add Register</source>
-        <translation>Kayıt Ekle</translation>
+        <translation type="vanished">Kayıt Ekle</translation>
+    </message>
+    <message>
+        <source>Delete Register</source>
+        <translation type="vanished">Kaydı Sil</translation>
+    </message>
+    <message>
+        <source>Edit Register</source>
+        <translation type="vanished">Kaydı Düzenle</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="214"/>
+        <source>Add Variable</source>
+        <translation>Değişken Ekle</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="223"/>
+        <source>variable</source>
+        <translation>değişken</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="253"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="482"/>
-        <source>Delete Register</source>
-        <translation>Kaydı Sil</translation>
+        <source>Delete Variable</source>
+        <translation>Değişkeni Sil</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="284"/>
-        <source>Edit Register</source>
-        <translation>Kaydı Düzenle</translation>
+        <source>Edit Variable</source>
+        <translation>Değişkeni Düzenle</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="398"/>
+        <source>New Variable</source>
+        <translation>Yeni Değişken</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="421"/>
+        <source>Rename Variable</source>
+        <translation>Değişkeni Yeniden Adlandır</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="456"/>
+        <source>This removes %1 variable(s) along with the table. This action cannot be undone.</source>
+        <translation>Bu işlem %1 değişken(ler)i tabloyla birlikte kaldırır. Bu işlem geri alınamaz.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="506"/>
@@ -9680,9 +9827,14 @@ Geçerli biçim: 01 A2 FF 3C</translation>
 <context>
     <name>DataTablesView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="35"/>
         <source>Shared Memory</source>
-        <translation>Paylaşımlı Bellek</translation>
+        <translation type="vanished">Paylaşımlı Bellek</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="35"/>
+        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="223"/>
+        <source>Variables</source>
+        <translation>Değişkenler</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="187"/>
@@ -9711,8 +9863,12 @@ Geçerli biçim: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="213"/>
+        <source>Open help documentation for variables</source>
+        <translation>Değişkenler için yardım belgelerini aç</translation>
+    </message>
+    <message>
         <source>Open help documentation for shared memory</source>
-        <translation>Paylaşımlı bellek için yardım belgelerini aç</translation>
+        <translation type="vanished">Paylaşımlı bellek için yardım belgelerini aç</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="222"/>
@@ -9720,9 +9876,8 @@ Geçerli biçim: 01 A2 FF 3C</translation>
         <translation>Başlık</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="223"/>
         <source>Registers</source>
-        <translation>Kayıtlar</translation>
+        <translation type="vanished">Kayıtlar</translation>
     </message>
     <message>
         <source>Name</source>
@@ -9778,9 +9933,8 @@ Geçerli biçim: 01 A2 FF 3C</translation>
 <context>
     <name>DatabaseExplorer</name>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="38"/>
         <source>Sessions</source>
-        <translation>Oturumlar</translation>
+        <translation type="vanished">Oturumlar</translation>
     </message>
     <message>
         <source>Open</source>
@@ -9857,6 +10011,11 @@ Geçerli biçim: 01 A2 FF 3C</translation>
     <message>
         <source>Restore the project file from this session file</source>
         <translation type="vanished">Bu oturum dosyasından proje dosyasını geri yükle</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="38"/>
+        <source>Historian</source>
+        <translation>Tarihçe</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="298"/>
@@ -11023,6 +11182,11 @@ Geçerli biçim: 01 A2 FF 3C</translation>
         <translation>%1 kayıt</translation>
     </message>
     <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="834"/>
+        <source>Variables</source>
+        <translation>Değişkenler</translation>
+    </message>
+    <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="409"/>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="743"/>
         <source>empty</source>
@@ -11133,9 +11297,8 @@ Geçerli biçim: 01 A2 FF 3C</translation>
         <translation>Çıkışlar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="834"/>
         <source>Shared Memory</source>
-        <translation>Paylaşılan Bellek</translation>
+        <translation type="vanished">Paylaşılan Bellek</translation>
     </message>
     <message>
         <source>Bar Panel</source>
@@ -11991,6 +12154,11 @@ Geçerli biçim: 01 A2 FF 3C</translation>
         <translation>Kontroller</translation>
     </message>
     <message>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="326"/>
+        <source>Edit the JavaScript that draws this canvas widget</source>
+        <translation>Bu canvas widget'ını çizen JavaScript kodunu düzenle</translation>
+    </message>
+    <message>
         <source>Thermometer</source>
         <translation type="vanished">Termometre</translation>
     </message>
@@ -12068,9 +12236,8 @@ Geçerli biçim: 01 A2 FF 3C</translation>
         <translation>Kodu Düzenle</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="326"/>
         <source>Edit the JavaScript that draws this painter widget</source>
-        <translation>Bu painter widget'ını çizen JavaScript kodunu düzenle</translation>
+        <translation type="vanished">Bu painter widget'ını çizen JavaScript kodunu düzenle</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="339"/>
@@ -18397,17 +18564,20 @@ Birden fazla kayıt türünü sorgulamak için yukarıdan grup ekleyin.</transla
 <context>
     <name>Painter</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Painter.qml" line="56"/>
         <source>Painter Widget Error</source>
-        <translation>Painter Widget Hatası</translation>
+        <translation type="vanished">Painter Widget Hatası</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Painter.qml" line="56"/>
+        <source>Canvas Widget Error</source>
+        <translation>Canvas Widget Hatası</translation>
     </message>
 </context>
 <context>
     <name>PainterCodeDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="30"/>
         <source>Painter Widget Code Editor</source>
-        <translation>Painter Widget Kod Düzenleyici</translation>
+        <translation type="vanished">Painter Widget Kod Düzenleyici</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="76"/>
@@ -18420,9 +18590,8 @@ Birden fazla kayıt türünü sorgulamak için yukarıdan grup ekleyin.</transla
         <translation>İçe Aktar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="91"/>
         <source>Import painter code from a .js file</source>
-        <translation>Bir .js dosyasından painter kodunu içe aktar</translation>
+        <translation type="vanished">Bir .js dosyasından painter kodunu içe aktar</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="99"/>
@@ -18430,9 +18599,8 @@ Birden fazla kayıt türünü sorgulamak için yukarıdan grup ekleyin.</transla
         <translation>Şablon</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="102"/>
         <source>Select a built-in painter template</source>
-        <translation>Yerleşik bir çizici şablonu seç</translation>
+        <translation type="vanished">Yerleşik bir çizici şablonu seç</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="108"/>
@@ -18440,9 +18608,28 @@ Birden fazla kayıt türünü sorgulamak için yukarıdan grup ekleyin.</transla
         <translation>Biçimlendir</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="113"/>
         <source>Reformat the painter code</source>
-        <translation>Çizici kodunu yeniden biçimlendir</translation>
+        <translation type="vanished">Çizici kodunu yeniden biçimlendir</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="30"/>
+        <source>Canvas Widget Code Editor</source>
+        <translation>Canvas Widget Kod Düzenleyici</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="91"/>
+        <source>Import canvas code from a .js file</source>
+        <translation>Bir .js dosyasından canvas kodunu içe aktar</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="102"/>
+        <source>Select a built-in canvas template</source>
+        <translation>Yerleşik bir canvas şablonu seç</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="113"/>
+        <source>Reformat the canvas code</source>
+        <translation>Canvas kodunu yeniden biçimlendir</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="119"/>
@@ -18508,9 +18695,13 @@ Birden fazla kayıt türünü sorgulamak için yukarıdan grup ekleyin.</transla
 <context>
     <name>PainterTestDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="28"/>
         <source>Painter Live Preview</source>
-        <translation>Painter Canlı Önizleme</translation>
+        <translation type="vanished">Painter Canlı Önizleme</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="28"/>
+        <source>Canvas Live Preview</source>
+        <translation>Canvas Canlı Önizleme</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="32"/>
@@ -19445,18 +19636,35 @@ Listeyi güncellemek için Yenile'ye tıklayın.</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="173"/>
-        <source>Add a custom JavaScript-rendered painter widget</source>
-        <translation>Özel JavaScript tabanlı çizici widget'ı ekle</translation>
+        <source>Add a custom JavaScript-rendered canvas widget</source>
+        <translation>Özel JavaScript tabanlı canvas widget'ı ekle</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="174"/>
-        <source>Painter widgets require a Pro license, adding one will fall back to a data grid</source>
-        <translation>Painter widget'lar Pro lisansı gerektirir, eklenmesi durumunda veri tablosuna geri dönülecektir</translation>
+        <source>Canvas widgets require a Pro license, adding one will fall back to a data grid</source>
+        <translation>Canvas widget'lar Pro lisansı gerektirir, eklenmesi durumunda veri ızgarasına geri dönülecektir</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="175"/>
+        <source>Canvas Widget</source>
+        <translation>Canvas Widget</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="188"/>
+        <source>Multi-Plot</source>
+        <translation>Çoklu Grafik</translation>
+    </message>
+    <message>
+        <source>Add a custom JavaScript-rendered painter widget</source>
+        <translation type="vanished">Özel JavaScript tabanlı çizici widget'ı ekle</translation>
+    </message>
+    <message>
+        <source>Painter widgets require a Pro license, adding one will fall back to a data grid</source>
+        <translation type="vanished">Painter widget'lar Pro lisansı gerektirir, eklenmesi durumunda veri tablosuna geri dönülecektir</translation>
+    </message>
+    <message>
         <source>Painter Widget</source>
-        <translation>Painter Widget</translation>
+        <translation type="vanished">Painter Widget</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="179"/>
@@ -19469,9 +19677,8 @@ Listeyi güncellemek için Yenile'ye tıklayın.</translation>
         <translation>Çubuk Paneli</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="188"/>
         <source>Multiple Plot</source>
-        <translation>Çoklu Grafik</translation>
+        <translation type="vanished">Çoklu Grafik</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="193"/>
@@ -19512,8 +19719,12 @@ Listeyi güncellemek için Yenile'ye tıklayın.</translation>
         <translation>Çubuk Paneli</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="415"/>
         <source>Multiple Plot</source>
+        <translation type="vanished">Çoklu Grafik</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="415"/>
+        <source>Multi-Plot</source>
         <translation>Çoklu Grafik</translation>
     </message>
     <message>
@@ -19548,8 +19759,12 @@ Listeyi güncellemek için Yenile'ye tıklayın.</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="450"/>
+        <source>Canvas Widget</source>
+        <translation>Canvas Widget</translation>
+    </message>
+    <message>
         <source>Painter Widget</source>
-        <translation>Painter Widget</translation>
+        <translation type="vanished">Painter Widget</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="711"/>
@@ -20939,14 +21154,22 @@ Ayırıcı parametresine artık gerek yok.</translation>
         <translation>table() önce bir tablo adı gerektirir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="436"/>
         <source>table() needs a register name second</source>
-        <translation>table() ikinci olarak bir kayıt adı gerektirir</translation>
+        <translation type="vanished">table() ikinci olarak bir kayıt adı gerektirir</translation>
+    </message>
+    <message>
+        <source>unknown register '%1.%2'</source>
+        <translation type="vanished">bilinmeyen kayıt '%1.%2'</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="436"/>
+        <source>table() needs a variable name second</source>
+        <translation>table() ikinci olarak bir değişken adı gerektirir</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="441"/>
-        <source>unknown register '%1.%2'</source>
-        <translation>bilinmeyen kayıt '%1.%2'</translation>
+        <source>unknown variable '%1.%2'</source>
+        <translation>bilinmeyen değişken '%1.%2'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="459"/>
@@ -21516,9 +21739,13 @@ Ayırıcı parametresine artık gerek yok.</translation>
         <translation>Veri Tabloları</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="299"/>
         <source>Multiple Data Plots</source>
-        <translation>Çoklu Veri Grafikleri</translation>
+        <translation type="vanished">Çoklu Veri Grafikleri</translation>
+    </message>
+    <message>
+        <location filename="../../src/SerialStudio.cpp" line="299"/>
+        <source>Multi-Plots</source>
+        <translation>Çoklu Grafikler</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="302"/>
@@ -21586,6 +21813,11 @@ Ayırıcı parametresine artık gerek yok.</translation>
         <translation>Ölçerler</translation>
     </message>
     <message>
+        <location filename="../../src/SerialStudio.cpp" line="363"/>
+        <source>Canvas Widgets</source>
+        <translation>Canvas Widget'ları</translation>
+    </message>
+    <message>
         <source>Thermometers</source>
         <translation type="vanished">Termometreler</translation>
     </message>
@@ -21625,9 +21857,8 @@ Ayırıcı parametresine artık gerek yok.</translation>
         <translation>Şelaleler</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="363"/>
         <source>Painter Widgets</source>
-        <translation>Painter Widget'ları</translation>
+        <translation type="vanished">Painter Widget'ları</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="367"/>
@@ -23264,8 +23495,12 @@ Ayırıcı parametresine artık gerek yok.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="323"/>
+        <source>Historian</source>
+        <translation>Tarihçe</translation>
+    </message>
+    <message>
         <source>Session Recording</source>
-        <translation>Oturum Kaydı</translation>
+        <translation type="vanished">Oturum Kaydı</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="344"/>
@@ -23497,6 +23732,11 @@ Ayırıcı parametresine artık gerek yok.</translation>
         <translation>Duraklat</translation>
     </message>
     <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="741"/>
+        <source>Historian</source>
+        <translation>Tarihçe</translation>
+    </message>
+    <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="767"/>
         <source>Recordings are saved in the Serial Studio workspace folder</source>
         <translation>Kayıtlar Serial Studio çalışma alanı klasörüne kaydedilir</translation>
@@ -23563,9 +23803,8 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation>MDF4 Dosyası</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="741"/>
         <source>Session Database</source>
-        <translation>Oturum Veritabanı</translation>
+        <translation type="vanished">Oturum Veritabanı</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="751"/>
@@ -24047,9 +24286,8 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation>Birimler</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="259"/>
         <source>(virtual)</source>
-        <translation>(sanal)</translation>
+        <translation type="vanished">(sanal)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="326"/>
@@ -24070,6 +24308,11 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="164"/>
         <source>Search…</source>
         <translation>Ara…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="259"/>
+        <source>(computed)</source>
+        <translation>(hesaplanmış)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="352"/>
@@ -24184,8 +24427,12 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableFolderView.qml" line="197"/>
+        <source>Variables</source>
+        <translation>Değişkenler</translation>
+    </message>
+    <message>
         <source>Registers</source>
-        <translation>Kayıtlar</translation>
+        <translation type="vanished">Kayıtlar</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableFolderView.qml" line="287"/>
@@ -25575,14 +25822,12 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
 <context>
     <name>UserTableView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="176"/>
         <source>Add Register</source>
-        <translation>Kayıt Ekle</translation>
+        <translation type="vanished">Kayıt Ekle</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="179"/>
         <source>Add register</source>
-        <translation>Kayıt ekle</translation>
+        <translation type="vanished">Kayıt ekle</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="186"/>
@@ -25600,9 +25845,8 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation>İçe Aktar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="199"/>
         <source>Import registers from CSV</source>
-        <translation>CSV'den kayıtları içe aktar</translation>
+        <translation type="vanished">CSV'den kayıtları içe aktar</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="206"/>
@@ -25610,9 +25854,28 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation>Dışa Aktar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="209"/>
         <source>Export registers to CSV</source>
-        <translation>Kayıtları CSV'ye dışa aktar</translation>
+        <translation type="vanished">Kayıtları CSV'ye dışa aktar</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="176"/>
+        <source>Add Variable</source>
+        <translation>Değişken Ekle</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="179"/>
+        <source>Add variable</source>
+        <translation>Değişken ekle</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="199"/>
+        <source>Import variables from CSV</source>
+        <translation>CSV'den değişkenleri içe aktar</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="209"/>
+        <source>Export variables to CSV</source>
+        <translation>CSV'ye değişkenleri dışa aktar</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="221"/>
@@ -25641,8 +25904,27 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="253"/>
+        <source>Open help documentation for variables</source>
+        <translation>Değişkenler için yardım belgelerini aç</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="294"/>
+        <source>Variable Name</source>
+        <translation>Değişken Adı</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="512"/>
+        <source>Delete variable</source>
+        <translation>Değişkeni sil</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="530"/>
+        <source>No variables.</source>
+        <translation>Değişken yok.</translation>
+    </message>
+    <message>
         <source>Open help documentation for shared memory</source>
-        <translation>Paylaşımlı bellek için yardım belgelerini aç</translation>
+        <translation type="vanished">Paylaşımlı bellek için yardım belgelerini aç</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="293"/>
@@ -25650,9 +25932,8 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation>İzinler</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="294"/>
         <source>Register Name</source>
-        <translation>Kayıt Adı</translation>
+        <translation type="vanished">Kayıt Adı</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="295"/>
@@ -25675,14 +25956,12 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation>%1 erişim kodunu panoya kopyala</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="512"/>
         <source>Delete register</source>
-        <translation>Kaydı sil</translation>
+        <translation type="vanished">Kaydı sil</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="530"/>
         <source>No registers.</source>
-        <translation>Kayıt yok.</translation>
+        <translation type="vanished">Kayıt yok.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="580"/>

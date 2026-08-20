@@ -36,7 +36,7 @@ Options marked **(Pro)** are available only in commercial builds.
 | `--udp-remote` | `host:port` | UDP remote target. |
 | `--udp-multicast` | | Enable multicast mode for UDP. |
 
-## Hotpath Benchmark
+## Acquisition Pipeline Benchmark
 
 | Option | Argument | Description |
 |--------|----------|-------------|
@@ -63,7 +63,7 @@ pipeline.
 | `--shortcut-path` | `path` | Path of the shortcut that launched the process. |
 | `--csv-export` | | Enable CSV export on startup. |
 | `--mdf-export` | | Enable MDF4 export on startup. |
-| `--session-export` | | Enable session database export on startup. |
+| `--session-export` | | Enable Historian recording on startup. |
 | `--console-export` | | Enable console log export on startup. |
 | `--actions-panel` | | Show the actions panel in operator runtime mode. |
 | `--file-transmission` | | Allow the File Transmission dialog in operator runtime mode. |

@@ -1,13 +1,13 @@
-# Painter Widget API (JavaScript)
+# Canvas Widget API (JavaScript)
 
-The Painter widget (Pro) provides a Canvas-style 2D drawing surface. Each
-group with `widgetType: 8` (GroupWidget::Painter) gets its own painter
+The Canvas widget (Pro) provides a Canvas-style 2D drawing surface. Each
+group with `widgetType: 8` (GroupWidget::Painter) gets its own canvas
 script. Bind by calling `project.painter.setCode {groupId, code}`.
 
-A painter group can be **empty** (zero datasets). It will then draw using
-peer datasets read via `datasetGetFinal(uniqueId)` and shared registers
+A canvas group can be **empty** (zero datasets). It will then draw using
+peer datasets read via `datasetGetFinal(uniqueId)` and shared variables
 read via `tableGet(table, register)`. Don't duplicate datasets just to
-feed a painter; see "Reading peer datasets" below.
+feed a canvas widget; see "Reading peer datasets" below.
 
 ## Entry points
 
@@ -16,7 +16,7 @@ Names must match exactly.
 
 - **`paint(ctx, w, h)`: REQUIRED.** Called every UI tick (60 Hz default,
   configurable 1–240 via `dashboard.setFps`) to redraw the canvas, whether
-  or not new data arrived. This means a painter can animate freely
+  or not new data arrived. This means a canvas widget can animate freely
   (clocks, spinners, eased camera moves) without waiting for a frame. `ctx`
   is a Canvas-2D-like context. `w` and `h` are the current widget size in
   pixels. Treat the canvas as ephemeral; clear what you need at the top of
@@ -37,9 +37,9 @@ The function name is **`paint`**, not `draw`, not `render`. The engine
 looks up `globalThis.paint` by name and reports
 `missing paint(ctx, w, h) function` if it's absent.
 
-### Input events (OPTIONAL): make the painter interactive
+### Input events (OPTIONAL): make the canvas interactive
 
-The painter receives mouse and wheel input. Define any of these globals to
+The canvas widget receives mouse and wheel input. Define any of these globals to
 handle them. Coordinates are in widget pixels (same space as `paint`'s
 `w`/`h`). Each handler that fires triggers an immediate repaint, so you can
 mutate top-level state (camera angle, selection, pan offset) and see it on
@@ -77,8 +77,8 @@ function paint(ctx, w, h) {
 ```
 
 Input handlers fire both on the live dashboard and in the project-editor
-preview dialog, so you can test interaction while authoring. A painter
-with no input handlers behaves exactly as before (events pass through).
+preview dialog, so you can test interaction while authoring. A canvas
+script with no input handlers behaves exactly as before (events pass through).
 
 ## Globals injected before your script runs
 
@@ -86,7 +86,7 @@ These are available as soon as your script starts; you don't import them.
 
 ```js
 // datasets[i] -- read-only proxy. May be empty (length === 0) for a
-// painter group with no own datasets. Numeric indexing + .length.
+// canvas group with no own datasets. Numeric indexing + .length.
 datasets[0].value         // numeric current value (post-transform)
 datasets[0].rawValue      // numeric value before transforms
 datasets[0].text          // string form of value
@@ -117,8 +117,8 @@ frame.number      // monotonic frame counter
 frame.timestampMs
 
 // theme -- ThemeManager palette, always in sync with the active theme.
-// PRIMARY keys for painters (these match what the QML dashboard widgets
-// already use, so a painter-rendered widget visually fits the rest of the
+// PRIMARY keys for canvas scripts (these match what the QML dashboard widgets
+// already use, so a canvas-rendered widget visually fits the rest of the
 // dashboard):
 theme.widget_base       // canvas / card background
 theme.widget_border     // grid lines, frames, outlines
@@ -131,14 +131,14 @@ theme.widget_colors     // ARRAY of per-channel distinct colors, indexable
                         // as theme.widget_colors[i % theme.widget_colors.length]
 // Other keys also exist (text, window, base, mid, highlight, accent,
 // link, error, groupbox_background, ...) but prefer the widget_* ones
-// above for painter content -- they're tuned for in-widget rendering.
+// above for canvas content -- they're tuned for in-widget rendering.
 
 // console -- log/warn/error to the editor status pane
 console.log("...")
 console.warn("...")
 console.error("...")
 
-// Data-table API (shared with transforms; see "Tables and registers")
+// Shared-table API (shared with transforms; see "Tables and variables")
 tableGet(tableName, registerName)              // -> number | string
 tableSet(tableName, registerName, value)       // user-table writes only
 datasetGetRaw(uniqueId | "alias")              // raw value of any dataset (string = alias, number = uniqueId)
@@ -158,7 +158,7 @@ setStopwatchVisible(visible)                   // bool
 setActiveWorkspace(idOrName)                   // workspaceId (>= 1000) OR title
 ```
 
-`deviceWrite`'s default `sourceId` follows the painter's group sourceId
+`deviceWrite`'s default `sourceId` follows the canvas widget's group sourceId
 (updated automatically when the host group changes). `actionFire` fires a
 project Action by its stable `actionId`. The dashboard helpers all return
 `{ ok, error? }` and never log.
@@ -214,7 +214,7 @@ function colorFor(ds, value) {
 
 **Legacy compat.** `datasets[i].alarmLow` and `.alarmHigh` are still
 readable; they're derived from the first / last band with severity ≥
-Warning (`NaN` when no such band exists). Old painter scripts that
+Warning (`NaN` when no such band exists). Old canvas scripts that
 predate the band schema keep working unchanged. Prefer `alarmBands` for
 new code; it carries the full color/severity/label intent.
 
@@ -229,10 +229,10 @@ geometry, gradients, and counters.
 - Use `var` (not `const` / `let`) for anything you intend to mutate
   across calls.
 
-## Reading peer datasets (DO NOT duplicate datasets for the painter)
+## Reading peer datasets (DO NOT duplicate datasets for the canvas widget)
 
-Painter groups address peer data by **uniqueId**, not by dataset index
-inside the painter group. The right pattern:
+Canvas groups address peer data by **uniqueId**, not by dataset index
+inside the canvas group. The right pattern:
 
 1. Run `project.dataset.list` (or `project.group.list`'s `datasetSummary`)
    and read the `uniqueId` of each dataset you want to render. The id is
@@ -252,29 +252,29 @@ function paint(ctx, w, h) {
 }
 ```
 
-Why not duplicate datasets into the painter group? Because every dataset
-in a project costs a frame-table register, an exporter column, a
-dashboard row, and a project-file entry. Painters that just READ values
+Why not duplicate datasets into the canvas group? Because every dataset
+in a project costs a frame-table variable, an exporter column, a
+dashboard row, and a project-file entry. Canvas widgets that just READ values
 should not own them.
 
-## Tables and registers (the central data bus)
+## Tables and variables (the central data bus)
 
-Data tables let multiple scripts (transforms, painters) share state.
-Two register types:
+Shared tables let multiple scripts (transforms, canvas scripts) share state.
+Two variable types:
 
 - **Constant**: holds a single immutable value across the whole session.
   Set when you declare it; every `tableGet` thereafter returns the same
   value. Use for: calibration coefficients, lookup tables, configuration
   flags.
 - **Computed**: writable via `tableSet` from parsers, transforms,
-  painters, and output widgets. Holds the last value written **indefinitely**, with no
+  canvas scripts, and output widgets. Holds the last value written **indefinitely**, with no
   per-frame reset. The `defaultValue` is the starting value at
   project load. Use for: filter/integrator state, cross-frame counters,
   latched flags, and intermediate results another transform reads later
   in the same frame.
 
 A system-managed table named `__datasets__` is **always** present. It
-holds two registers per dataset: `raw:<uniqueId>` and `final:<uniqueId>`,
+holds two variables per dataset: `raw:<uniqueId>` and `final:<uniqueId>`,
 populated by the FrameBuilder. A dataset with a user-set `alias` also mirrors
 as `raw:<alias>` / `final:<alias>`. You almost never read it through
 `tableGet`. Use `datasetGetRaw(uniqueId | "alias")` /
@@ -302,12 +302,12 @@ return raw * scale + offset;   // a transform body
 Per-frame ordering: transforms run in group-array then dataset-array
 order, in a single pass. Inside a transform, reads of **earlier**
 datasets (raw or final) return this frame's values; reads of **later**
-datasets silently return the **previous** frame's. Painters
-run AFTER all transforms, so painters see final values for everything.
+datasets silently return the **previous** frame's. Canvas scripts
+run AFTER all transforms, so they see final values for everything.
 
 ## arc / moveTo discipline
 
-The Painter renderer requires `moveTo` BEFORE `arc` whenever you want the
+The Canvas renderer requires `moveTo` BEFORE `arc` whenever you want the
 arc to start a new subpath. Without `moveTo`, the arc is implicitly
 connected to the previous path endpoint and may render a stray chord:
 
@@ -323,7 +323,7 @@ For full circles, the order is the same: `moveTo` to the perimeter, then
 
 ## Color from theme (never hard-code hex)
 
-Use the `widget_*` family for in-painter content so the canvas matches
+Use the `widget_*` family for in-canvas content so the canvas matches
 the rest of the dashboard:
 
 ```js
@@ -334,7 +334,7 @@ ctx.fillStyle   = theme.widget_highlight;  // primary value / signal
 ctx.fillStyle   = theme.alarm;             // alarm / red accent
 ```
 
-For multi-channel painters (one color per dataset), index into the
+For multi-channel canvas widgets (one color per dataset), index into the
 `widget_colors` array. The dashboard's plot/multiplot widgets use the
 same palette:
 
@@ -405,7 +405,7 @@ function paint(ctx, w, h) {
     ctx.stroke();
 
     // Value arc -- pick a per-channel color from theme.widget_colors so
-    // multi-channel painters use the same palette as multiplots.
+    // multi-channel canvas widgets use the same palette as multiplots.
     if (norm > 0) {
       var startA = -Math.PI * 0.5;
       var endA   = startA + Math.PI * 2 * norm;
@@ -440,7 +440,7 @@ function paint(ctx, w, h) {
 
 ## Worked example 2: status grid (peer-dataset reads, no own datasets)
 
-Demonstrates a painter group with `datasets.length === 0`. The script
+Demonstrates a canvas group with `datasets.length === 0`. The script
 reads **peer** datasets by uniqueId (discovered ahead of time via
 `project.dataset.list`) and renders a coloured status tile per channel.
 
@@ -500,7 +500,7 @@ function paint(ctx, w, h) {
 
 ## Worked example 3: clock face (zero datasets, frame.timestampMs)
 
-Demonstrates a painter that uses NO dataset at all and just renders
+Demonstrates a canvas widget that uses NO dataset at all and just renders
 something useful from `frame.timestampMs`.
 
 ```js
@@ -565,7 +565,7 @@ function paint(ctx, w, h) {
 
 ## More references
 
-The Pro build ships ~18 reference painter scripts. Read them with:
+The Pro build ships ~18 reference canvas scripts. Read them with:
 
 ```
 scripts.list {kind: "painter"}    -> [{id, name, datasetCount}, ...]

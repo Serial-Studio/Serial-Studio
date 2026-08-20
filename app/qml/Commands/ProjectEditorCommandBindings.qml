@@ -170,9 +170,9 @@ QtObject {
     readonly property bool hasPro: Cpp_CommercialBuild
         && (Cpp_Licensing_LemonSqueezy.isActivated || Cpp_Licensing_Trial.trialEnabled)
     readonly property string tooltip: hasPro
-        ? qsTr("Add a custom JavaScript-rendered painter widget")
-        : qsTr("Painter widgets require a Pro license, adding one will fall back to a data grid")
-    function run() { Cpp_JSON_ProjectModel.addGroup(qsTr("Painter Widget"), SerialStudio.Painter) }
+        ? qsTr("Add a custom JavaScript-rendered canvas widget")
+        : qsTr("Canvas widgets require a Pro license, adding one will fall back to a data grid")
+    function run() { Cpp_JSON_ProjectModel.addGroup(qsTr("Canvas Widget"), SerialStudio.Painter) }
   }
 
   readonly property QtObject cmdEditorAddDataGrid: QtObject {
@@ -185,7 +185,7 @@ QtObject {
 
   readonly property QtObject cmdEditorAddMultiPlot: QtObject {
     function run() {
-      Cpp_JSON_ProjectModel.addGroup(qsTr("Multiple Plot"), SerialStudio.MultiPlot)
+      Cpp_JSON_ProjectModel.addGroup(qsTr("Multi-Plot"), SerialStudio.MultiPlot)
     }
   }
 

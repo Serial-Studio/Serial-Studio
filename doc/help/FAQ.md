@@ -367,7 +367,7 @@ See [Operation Modes](Operation-Modes.md) and [Project Editor](Project-Editor.md
 - 3D plots.
 - Waterfall (scrolling spectrogram with order tracking).
 - Image View (live JPEG/PNG camera feed widget).
-- Painter (scriptable Canvas2D-style widget).
+- Canvas (scriptable Canvas2D-style widget).
 - Output widgets: buttons, toggles, sliders, knobs, text fields, and the Output Panel (see [Output Controls](Output-Controls.md)).
 
 ### How do I export data to CSV?
@@ -509,7 +509,7 @@ The ARM64 AppImage needs Ubuntu 24.04+ (glibc 2.38+). Upgrade the OS or use the 
 | 3D visualization                 | ❌                         | ✅                             |
 | FFT spectrum analyzer            | ✅                         | ✅                             |
 | Waterfall (spectrogram)          | ❌                         | ✅                             |
-| Painter (scriptable widget)      | ❌                         | ✅                             |
+| Canvas (scriptable widget)       | ❌                         | ✅                             |
 | Output (control) widgets         | ❌                         | ✅                             |
 | Image View (camera/image stream) | ❌                         | ✅                             |
 | Raw USB (libusb)                 | ❌                         | ✅                             |
@@ -518,7 +518,7 @@ The ARM64 AppImage needs Ubuntu 24.04+ (glibc 2.38+). Upgrade the OS or use the 
 | Multi-device projects            | ❌                         | ✅                             |
 | CSV export and playback          | ✅                         | ✅                             |
 | MDF4 playback and export         | ❌                         | ✅                             |
-| Session Database (SQLite)        | ❌                         | ✅                             |
+| Historian (SQLite)               | ❌                         | ✅                             |
 | File transfer (X/Y/ZMODEM)       | ❌                         | ✅                             |
 | DBC file import (CAN)            | ❌                         | ✅                             |
 | Commercial use                   | ❌ Non-commercial only     | ✅                             |
@@ -697,7 +697,7 @@ Yes. The Console panel has a send line: type text (or hex), pick a line ending, 
 **Other options:**
 
 - Add [Output Controls](Output-Controls.md) (Pro): buttons, toggles, sliders, knobs, and text fields on the dashboard. Each one runs a JavaScript template (GCode, SCPI, Modbus, NMEA, custom binary) that converts the control's state into outgoing bytes.
-- Use a control script. Each project can hold an Arduino-style script with `setup()` and `loop()` functions that runs in the background, so you can send commands on a timer or in response to incoming data, and drive the whole session from code. It uses the same scripting API as the frame parser.
+- Use a control loop. Each project can hold an Arduino-style script with `setup()` and `loop()` functions that runs in the background, so you can send commands on a timer or in response to incoming data, and drive the whole session from code. It uses the same scripting API as the frame parser.
 - Write a [plugin application](https://github.com/Serial-Studio/Serial-Studio/tree/master/app/src/API) in your preferred language or framework that shares the device with Serial Studio.
 - Use MQTT (Pro). Serial Studio can publish commands to MQTT topics that your device subscribes to.
 

@@ -55,8 +55,10 @@
       "moving average",
       "smooth the",
       "virtual dataset",
+      "computed dataset",
       "derived value",
       "data table",
+      "shared table",
       "constants table"
     ],
     "painter": [
@@ -64,7 +66,8 @@
       "custom widget",
       "custom drawing",
       "draw a custom",
-      "canvas widget"
+      "canvas widget",
+      "canvas"
     ],
     "output_widgets": [
       "output widget",

@@ -351,7 +351,7 @@ The importer produces:
 
 - **Register groups** loaded into the Modbus driver (ready to connect immediately).
 - **Project groups.** One Data Grid group per contiguous block of same-type registers, plus one workspace per group and an Overview workspace.
-- **Data tables.** One table per block, with one register per entry; the parser publishes values into the tables and each dataset reads its value back through a small Lua transform, so datasets never depend on parser channel order.
+- **Shared tables.** One table per block, with one variable per entry; the parser publishes values into the tables and each dataset reads its value back through a small Lua transform, so datasets never depend on parser channel order.
 - **Datasets.** One per register entry, with name, units, min/max, a plot toggle, and widget type (LED with an alarm band for booleans, gauge for temperatures/pressures, bar for percentages). Plots and gauges open on demand from the Data Grid rows instead of crowding the dashboard.
 - **Frame parser.** A commented, editable Lua parser with one declarative spec line per register. It extracts values from Modbus protocol frames, handles data types (uint16, int16, float32, ...), and applies scaling/offset. See [How Multi-Group Polling Works](#how-multi-group-polling-works) for details on how the parser handles multiple register groups.
 
@@ -455,9 +455,9 @@ The groups are always polled in the same fixed order (the order they appear in t
 
 ### Parser Side
 
-The generated Lua parser keeps a poll cursor that starts at the first register block. Each time a response frame arrives, the parser reads the Modbus function code (the second byte of the response) and matches it against the configured blocks, probing in cursor order. It decodes the matching block, publishes the extracted values into the block's data table, then advances the cursor to the block after the one it just decoded. Because matching is keyed on the function code rather than on cursor position alone, the parser snaps to the correct block even if a response is missing or arrives out of order.
+The generated Lua parser keeps a poll cursor that starts at the first register block. Each time a response frame arrives, the parser reads the Modbus function code (the second byte of the response) and matches it against the configured blocks, probing in cursor order. It decodes the matching block, publishes the extracted values into the block's shared table, then advances the cursor to the block after the one it just decoded. Because matching is keyed on the function code rather than on cursor position alone, the parser snaps to the correct block even if a response is missing or arrives out of order.
 
-Values are latched through the data tables: each register block updates only its own table registers, and every dataset reads its current value back from the table inside its transform, so values from other blocks carry over between frames. A single contiguous block decodes on every frame; with multiple blocks, the cursor walks through them as their responses arrive.
+Values are latched through the shared tables: each register block updates only its own table variables, and every dataset reads its current value back from the table inside its transform, so values from other blocks carry over between frames. A single contiguous block decodes on every frame; with multiple blocks, the cursor walks through them as their responses arrive.
 
 For two groups (e.g., holding registers at address 0 and coils at address 100), the response for the holding registers carries function code `0x03` and updates the temperature and pressure datasets, while the coils response carries function code `0x01` and updates the E-Stop and Motor Run datasets.
 
@@ -469,7 +469,7 @@ Frame with function `0x01` arrives → parser matches the coil block → extract
 - **Typical group count:** Most Modbus devices use 1–3 register groups. A single contiguous block of holding registers is the most common configuration.
 - **Synchronization.** Each poll cycle is sequential: group N+1 isn't polled until group N's response arrives. The parser also matches each response to a block by its Modbus function code, so it stays aligned even when block types differ.
 - **Frame loss:** If a Modbus response times out or is dropped (rare over TCP, uncommon over RTU), the parser latches the previous values for that block and resynchronizes on the next matching response. At typical poll rates (100 ms or slower), this causes at most a brief glitch.
-- **Customization:** The generated parser is editable Lua. Each register is one line in the `BLOCKS` spec (`name`, `offset`, `type`, optional `scale`/`shift`); to add a register, add a line there plus a matching data-table register and a dataset that reads it back with `tableGet()`. For larger changes, adjust the register groups and regenerate the project.
+- **Customization:** The generated parser is editable Lua. Each register is one line in the `BLOCKS` spec (`name`, `offset`, `type`, optional `scale`/`shift`); to add a register, add a line there plus a matching table variable and a dataset that reads it back with `tableGet()`. For larger changes, adjust the register groups and regenerate the project.
 
 ## CAN Bus Setup (Pro)
 

@@ -4,7 +4,7 @@ Serial Studio keeps rolling backups of your project so you can undo edits and re
 
 Backups are always on and available in every build, GPL and Pro alike. There is nothing to set up.
 
-> Backups protect the project *definition* (sources, groups, datasets, frame parsers, transforms, widgets, workspaces). They are not a recording of your telemetry. To archive incoming data, see [Session Database](Session-Database.md) or [CSV Export & Playback](CSV-Export-Playback.md).
+> Backups protect the project *definition* (sources, groups, datasets, frame parsers, transforms, widgets, workspaces). They are not a recording of your telemetry. To archive incoming data, see [Historian](Session-Database.md) or [CSV Export & Playback](CSV-Export-Playback.md).
 
 ## When a snapshot is taken
 

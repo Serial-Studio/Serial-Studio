@@ -35,7 +35,7 @@ You can also browse and download examples directly from Serial Studio via the **
 | [Testo T549i](Testo%20T549i) | BLE pressure probe with Control Loop handshake and Lua unit transforms | Intermediate | |
 | [TinyGPS](TinyGPS) | GPS location tracker with map widget | Beginner | |
 | [UDP Function Generator](UDP%20Function%20Generator) | Multi-waveform signal generator over UDP | Beginner | |
-| [Vibration Test Rig](Vibration%20Test%20Rig) | Motor RPM sweep driving a Campbell-mode waterfall and two scripted Painter widgets | Intermediate | Yes |
+| [Vibration Test Rig](Vibration%20Test%20Rig) | Motor RPM sweep driving a Campbell-mode waterfall and two scripted Canvas widgets | Intermediate | Yes |
 
 ## Getting started
 

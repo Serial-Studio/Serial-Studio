@@ -1266,9 +1266,8 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>הצג את המקורות בפרויקט זה</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="427"/>
         <source>What is a session database, and why would I use one?</source>
-        <translation>מהו מסד נתוני סשן, ולמה אשתמש בו?</translation>
+        <translation type="vanished">מהו מסד נתוני סשן, ולמה אשתמש בו?</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="428"/>
@@ -1361,9 +1360,18 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>בניית סביבת עבודה לסקירה ניהולית</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="450"/>
         <source>Add a painter widget for a custom visualization</source>
-        <translation>הוספת ווידג'ט ציור לוויזואליזציה מותאמת אישית</translation>
+        <translation type="vanished">הוספת ווידג'ט ציור לוויזואליזציה מותאמת אישית</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="427"/>
+        <source>What is the historian, and why would I use it?</source>
+        <translation>מהו ההיסטוריון, ומדוע כדאי להשתמש בו?</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="450"/>
+        <source>Add a canvas widget for a custom visualization</source>
+        <translation>הוספת ווידג'ט קנבס לוויזואליזציה מותאמת אישית</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="451"/>
@@ -2686,118 +2694,122 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="38"/>
+        <source>Add Canvas</source>
+        <translation>הוסף קנבס</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="39"/>
         <source>Add Compass</source>
         <translation>הוסף מצפן</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="39"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="40"/>
         <source>Add Data Source</source>
         <translation>הוסף מקור נתונים</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="40"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="41"/>
         <source>Add Data Table</source>
         <translation>הוסף טבלת נתונים</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="41"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="42"/>
         <source>Add Dataset</source>
         <translation>הוסף מערך נתונים</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="42"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="43"/>
         <source>Add Device</source>
         <translation>הוספת התקן</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="43"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="44"/>
         <source>Add External Window</source>
         <translation>הוסף חלון חיצוני</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="44"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="45"/>
         <source>Add FFT Plot</source>
         <translation>הוסף גרף FFT</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="45"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="46"/>
         <source>Add GPS Map</source>
         <translation>הוסף מפת GPS</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="46"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="47"/>
         <source>Add Gauge</source>
         <translation>הוסף מד</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="47"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="48"/>
         <source>Add Group</source>
         <translation>הוסף קבוצה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="48"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="49"/>
         <source>Add Gyroscope</source>
         <translation>הוסף גירוסקופ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="49"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="50"/>
         <source>Add Image View</source>
         <translation>הוסף תצוגת תמונה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="50"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="51"/>
         <source>Add LED Indicator</source>
         <translation>הוסף מחוון LED</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="51"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="52"/>
         <source>Add Level Indicator</source>
         <translation>הוסף מחוון רמה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="52"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="53"/>
         <source>Add Multi-Plot</source>
         <translation>הוסף גרף מרובה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="53"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="54"/>
         <source>Add Output</source>
         <translation>הוסף פלט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="54"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="55"/>
         <source>Add Output Button</source>
         <translation>הוסף כפתור לפלט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="55"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="56"/>
         <source>Add Output Knob</source>
         <translation>הוסף כפתור סיבוב לפלט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="56"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="57"/>
         <source>Add Output Panel</source>
         <translation>הוספת פאנל פלט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="57"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="58"/>
         <source>Add Output Slider</source>
         <translation>הוסף מחוון החלקה לפלט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="58"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="59"/>
         <source>Add Output Text Field</source>
         <translation>הוסף שדה טקסט לפלט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="59"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="60"/>
         <source>Add Output Toggle</source>
         <translation>הוסף מתג לפלט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="60"/>
         <source>Add Painter</source>
-        <translation>הוסף ציור</translation>
+        <translation type="vanished">הוסף ציור</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="61"/>
@@ -2805,14 +2817,18 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>הוסף גרף</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="62"/>
         <source>Add Register</source>
-        <translation>הוספת רגיסטר</translation>
+        <translation type="vanished">הוספת רגיסטר</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="62"/>
+        <source>Add Shared Table</source>
+        <translation>הוסף טבלה משותפת</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="63"/>
-        <source>Add Shared Table</source>
-        <translation>הוסף טבלה משותפת</translation>
+        <source>Add Variable</source>
+        <translation>הוסף משתנה</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="64"/>
@@ -3000,39 +3016,51 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>הוספת גרף עם אותות מרובים</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="101"/>
         <source>Add a register to this shared table</source>
-        <translation>הוספת רגיסטר לטבלה משותפת זו</translation>
+        <translation type="vanished">הוספת רגיסטר לטבלה משותפת זו</translation>
+    </message>
+    <message>
+        <source>Add a script-drawn painter group</source>
+        <translation type="vanished">הוספת קבוצת ציור מבוססת סקריפט</translation>
+    </message>
+    <message>
+        <source>Add a shared-memory table</source>
+        <translation type="vanished">הוספת טבלת זיכרון משותף</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="101"/>
+        <source>Add a script-drawn canvas group</source>
+        <translation>הוספת קבוצת קנבס מבוססת סקריפט</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="102"/>
-        <source>Add a script-drawn painter group</source>
-        <translation>הוספת קבוצת ציור מבוססת סקריפט</translation>
+        <source>Add a shared variable table</source>
+        <translation>הוספת טבלת משתנים משותפת</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="103"/>
-        <source>Add a shared-memory table</source>
-        <translation>הוספת טבלת זיכרון משותף</translation>
-    </message>
-    <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="104"/>
         <source>Add a slider control</source>
         <translation>הוספת בקרת סליידר</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="105"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="104"/>
         <source>Add a text field control</source>
         <translation>הוספת בקרת שדה טקסט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="106"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="105"/>
         <source>Add a toggle control</source>
         <translation>הוספת בקרת מתג</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="107"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="106"/>
         <source>Add a top-level folder in this section</source>
         <translation>הוסף תיקייה ברמה העליונה בקטע זה</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="107"/>
+        <source>Add a variable to this shared table</source>
+        <translation>הוספת משתנה לטבלה משותפת זו</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="108"/>
@@ -3176,766 +3204,811 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="136"/>
+        <source>Canvas</source>
+        <translation>קנבס</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="137"/>
+        <source>Canvas Widget</source>
+        <translation>ווידג'ט קנבס</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="138"/>
         <source>Chat with an AI to build and edit your project</source>
         <translation>שוחח עם AI לבניה ועריכה של הפרויקט שלך</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="137"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="139"/>
         <source>Check device permissions, adapters, and host reachability</source>
         <translation>בדוק הרשאות התקן, מתאמים וזמינות מארח</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="138"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="140"/>
         <source>Clean Up Unresolved Widgets</source>
         <translation>נקה ווידג'טים לא פתורים</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="139"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="141"/>
         <source>Clear All Workspaces</source>
         <translation>נקה את כל סביבות העבודה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="140"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="142"/>
         <source>Clear Console</source>
         <translation>נקה קונסול</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="141"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="143"/>
         <source>Clear Window</source>
         <translation>נקה חלון</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="142"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="144"/>
         <source>Clear the console output</source>
         <translation>נקה את פלט המסוף</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="143"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="145"/>
         <source>Clock</source>
         <translation>שעון</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="144"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="146"/>
         <source>Close</source>
         <translation>סגור</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="145"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="147"/>
         <source>Close Window</source>
         <translation>סגור חלון</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="146"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="148"/>
         <source>Close session file</source>
         <translation>סגור קובץ הפעלה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="147"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="149"/>
         <source>Collapse All</source>
         <translation>כווץ הכול</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="148"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="150"/>
         <source>Collapse Duplicates</source>
         <translation>כווץ כפילויות</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="149"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="151"/>
         <source>Collapse repeated console lines</source>
         <translation>כווץ שורות מסוף חוזרות</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="150"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="152"/>
         <source>Collapse the project tree to its overview</source>
         <translation>כווץ את עץ הפרויקט לתצוגת מבט-על</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="151"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="153"/>
         <source>Command Palette</source>
         <translation>לוח פקודות</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="152"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="154"/>
         <source>Compare Project</source>
         <translation>השוואת פרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="153"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="155"/>
         <source>Compare the selected session against the project open in the editor</source>
         <translation>השוואת הסשן הנבחר מול הפרויקט הפתוח בעורך</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="154"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="156"/>
         <source>Compass</source>
         <translation>מצפן</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="155"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="157"/>
         <source>Configure the MQTT publisher</source>
         <translation>הגדר את מפרסם MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="156"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="158"/>
         <source>Connect</source>
         <translation>התחבר</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="157"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="159"/>
         <source>Connect or disconnect from the configured device</source>
         <translation>התחבר או התנתק מההתקן המוגדר</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="158"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="160"/>
         <source>Connection Diagnostics</source>
         <translation>אבחון חיבור</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="159"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="161"/>
         <source>Console</source>
         <translation>קונסול</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="160"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="162"/>
         <source>Console Echo</source>
         <translation>הדהוד קונסול</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="161"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="163"/>
         <source>Console Only Mode</source>
         <translation>מצב קונסולה בלבד</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="162"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="164"/>
         <source>Console Timestamps</source>
         <translation>חותמות זמן בקונסול</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="163"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="165"/>
         <source>Console Transcript</source>
         <translation>תמליל קונסול</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="164"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="166"/>
         <source>Create a new JSON project</source>
         <translation>צור פרויקט JSON חדש</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="165"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="167"/>
         <source>Customize Workspaces</source>
         <translation>התאמה אישית של סביבות עבודה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="166"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="168"/>
         <source>Data Grid</source>
         <translation>רשת נתונים</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="167"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="169"/>
         <source>Dataset</source>
         <translation>מערך נתונים</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="168"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="170"/>
         <source>Dataset Container</source>
         <translation>מיכל מערך נתונים</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="169"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="171"/>
         <source>Delete</source>
         <translation>מחק</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="170"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="172"/>
         <source>Delete the selected session</source>
         <translation>מחק את ההפעלה שנבחרה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="171"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="173"/>
         <source>Delete this item</source>
         <translation>מחק פריט זה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="172"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="174"/>
         <source>Deploy</source>
         <translation>פרוס</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="173"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="175"/>
         <source>Deploy Operator App</source>
         <translation>פרוס אפליקציית מפעיל</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="174"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="176"/>
         <source>Disconnect</source>
         <translation>התנתק</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="175"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="177"/>
         <source>Drop workspace widgets whose source is gone</source>
         <translation>הסר ווידג'טים של סביבת עבודה שהמקור שלהם נעלם</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="176"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="178"/>
         <source>Duplicate</source>
         <translation>שכפל</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="177"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="179"/>
         <source>Duplicate this item</source>
         <translation>שכפל פריט זה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="178"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="180"/>
         <source>Echo transmitted data in the console</source>
         <translation>הדהד נתונים משודרים בקונסולה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="179"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="181"/>
+        <source>Edit Canvas Code</source>
+        <translation>ערוך קוד קנבס</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="182"/>
         <source>Edit Control Loop</source>
         <translation>ערוך לולאת בקרה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="180"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="183"/>
         <source>Edit Frame Parser</source>
         <translation>ערוך מנתח מסגרות</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="181"/>
-        <source>Edit Painter Code</source>
-        <translation>ערוך קוד ציור</translation>
+        <location filename="../../src/UI/CommandStrings.cpp" line="193"/>
+        <source>Export Variables</source>
+        <translation>ייצוא משתנים</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="182"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="195"/>
+        <source>Export this table's variables to CSV</source>
+        <translation>ייצא את המשתנים של טבלה זו ל־CSV</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="219"/>
+        <source>Import Variables</source>
+        <translation>ייבוא משתנים</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="220"/>
+        <source>Import this table's variables from CSV</source>
+        <translation>ייבא את המשתנים של טבלה זו מ-CSV</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="263"/>
+        <source>Open the historian documentation</source>
+        <translation>פתח את התיעוד של ההיסטוריון</translation>
+    </message>
+    <message>
+        <source>Edit Painter Code</source>
+        <translation type="vanished">ערוך קוד ציור</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="184"/>
         <source>Edit Transform Code</source>
         <translation>ערוך קוד טרנספורמציה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="183"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="185"/>
         <source>Edit Workspace Widgets</source>
         <translation>ערוך ווידג'טים של סביבת עבודה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="184"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="186"/>
         <source>Edit workspaces manually instead of using the automatic layout</source>
         <translation>ערוך סביבות עבודה באופן ידני במקום להשתמש בפריסה אוטומטית</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="185"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="187"/>
         <source>Examples</source>
         <translation>דוגמאות</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="186"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="188"/>
         <source>Expand All</source>
         <translation>הרחב הכול</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="187"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="189"/>
         <source>Expand every item in the project tree</source>
         <translation>הרחב כל פריט בעץ הפרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="188"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="190"/>
         <source>Export</source>
         <translation>ייצוא</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="189"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="191"/>
         <source>Export CSV</source>
         <translation>ייצא CSV</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="190"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="192"/>
         <source>Export PDF</source>
         <translation>ייצא PDF</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="191"/>
         <source>Export Registers</source>
-        <translation>ייצא רגיסטרים</translation>
+        <translation type="vanished">ייצא רגיסטרים</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="192"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="194"/>
         <source>Export selected session to CSV</source>
         <translation>ייצא את ההפעלה שנבחרה ל-CSV</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="193"/>
         <source>Export this table's registers to CSV</source>
-        <translation>ייצא את הרגיסטרים של טבלה זו ל־CSV</translation>
+        <translation type="vanished">ייצא את הרגיסטרים של טבלה זו ל־CSV</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="194"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="196"/>
         <source>Extensions</source>
         <translation>הרחבות</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="195"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="197"/>
         <source>FFT Plot</source>
         <translation>גרף FFT</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="196"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="198"/>
         <source>File Transmission</source>
         <translation>שידור קובץ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="197"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="199"/>
         <source>Fill every empty dataset alias from its title</source>
         <translation>מלא כל כינוי ריק של מערך נתונים מהכותרת שלו</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="198"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="200"/>
         <source>Freeze Dashboard</source>
         <translation>הקפא לוח בקרה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="199"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="201"/>
         <source>Full Screen</source>
         <translation>מסך מלא</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="200"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="202"/>
         <source>GPS Map</source>
         <translation>מפת GPS</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="201"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="203"/>
         <source>Gauge</source>
         <translation>מד</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="202"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="204"/>
         <source>Generate a PDF report for the selected session</source>
         <translation>צור דוח PDF עבור ההפעלה שנבחרה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="203"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="205"/>
         <source>Generate a project from a Protocol Buffers (.proto) schema</source>
         <translation>צור פרויקט מסכמת Protocol Buffers ‏(.proto)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="204"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="206"/>
         <source>Generic</source>
         <translation>כללי</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="205"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="207"/>
         <source>Group</source>
         <translation>קבוצה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="206"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="208"/>
         <source>Gyroscope</source>
         <translation>גירוסקופ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="207"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="209"/>
         <source>HID</source>
         <translation>HID</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="208"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="210"/>
         <source>Help</source>
         <translation>עזרה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="209"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="211"/>
         <source>Help Center</source>
         <translation>מרכז עזרה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="210"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="212"/>
         <source>Hex Display</source>
         <translation>תצוגה הקסדצימלית</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="211"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="213"/>
         <source>Hide</source>
         <translation>הסתר</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="212"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="214"/>
         <source>Hide this item from the dashboard and frame building</source>
         <translation>הסתר פריט זה מלוח הבקרה ומבניית המסגרת</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="213"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="215"/>
+        <source>Historian</source>
+        <translation>היסטוריון</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="216"/>
         <source>Image</source>
         <translation>תמונה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="214"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="217"/>
         <source>Image View</source>
         <translation>תצוגת תמונה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="215"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="218"/>
         <source>Import Protobuf Schema</source>
         <translation>ייבא סכמת Protobuf</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="216"/>
         <source>Import Registers</source>
-        <translation>ייבא רגיסטרים</translation>
+        <translation type="vanished">ייבא רגיסטרים</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="217"/>
         <source>Import this table's registers from CSV</source>
-        <translation>ייבא את הרגיסטרים של טבלה זו מ-CSV</translation>
+        <translation type="vanished">ייבא את הרגיסטרים של טבלה זו מ-CSV</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="218"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="221"/>
         <source>Knob</source>
         <translation>כפתור סיבוב</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="219"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="222"/>
         <source>LED Indicator</source>
         <translation>מחוון LED</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="220"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="223"/>
         <source>Level Indicator</source>
         <translation>מחוון רמה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="221"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="224"/>
         <source>License Management</source>
         <translation>ניהול רישיון</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="222"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="225"/>
         <source>Lock</source>
         <translation>נעילה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="223"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="226"/>
         <source>Lock Project Editor</source>
         <translation>נעילת עורך הפרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="224"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="227"/>
         <source>MDF4 File</source>
         <translation>קובץ MDF4</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="225"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="228"/>
         <source>MQTT Publisher</source>
         <translation>מפרסם MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="226"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="229"/>
         <source>Macros</source>
         <translation>מאקרו</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="227"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="230"/>
         <source>Make every hidden group visible again</source>
         <translation>הפוך את כל הקבוצות המוסתרות לגלויות שוב</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="228"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="231"/>
         <source>Manage your Serial Studio Pro license</source>
         <translation>ניהול רישיון Serial Studio Pro שלך</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="229"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="232"/>
         <source>Meter</source>
         <translation>מד</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="230"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="233"/>
         <source>Minimize Window</source>
         <translation>מזעור חלון</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="231"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="234"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="232"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="235"/>
         <source>Move Down</source>
         <translation>העבר למטה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="233"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="236"/>
         <source>Move Up</source>
         <translation>העבר למעלה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="234"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="237"/>
         <source>Move this item down among its siblings</source>
         <translation>העבר פריט זה למטה בין האחים שלו</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="235"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="238"/>
         <source>Move this item out of every folder</source>
         <translation>העבר פריט זה החוצה מכל תיקייה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="236"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="239"/>
         <source>Move this item up among its siblings</source>
         <translation>העבר פריט זה למעלה בין האחים שלו</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="237"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="240"/>
         <source>Move to Folder</source>
         <translation>העבר לתיקייה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="238"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="241"/>
         <source>Multi-Plot</source>
         <translation>גרף מרובה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="239"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="242"/>
         <source>Navigate Back</source>
         <translation>ניווט אחורה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="240"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="243"/>
         <source>Navigate Forward</source>
         <translation>נווט קדימה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="241"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="244"/>
         <source>Network</source>
         <translation>רשת</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="242"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="245"/>
         <source>New</source>
         <translation>חדש</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="243"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="246"/>
         <source>New Folder</source>
         <translation>תיקייה חדשה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="244"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="247"/>
         <source>New Project</source>
         <translation>פרויקט חדש</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="245"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="248"/>
         <source>New Sub-Folder</source>
         <translation>תת-תיקייה חדשה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="246"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="249"/>
         <source>Next Workspace</source>
         <translation>מרחב עבודה הבא</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="247"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="250"/>
         <source>Notifications</source>
         <translation>התראות</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="248"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="251"/>
         <source>Open</source>
         <translation>פתח</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="249"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="252"/>
         <source>Open CSV</source>
         <translation>פתח CSV</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="250"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="253"/>
         <source>Open MDF4</source>
         <translation>פתח MDF4</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="251"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="254"/>
         <source>Open Project</source>
         <translation>פתח פרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="252"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="255"/>
         <source>Open a session file</source>
         <translation>פתח קובץ הפעלה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="253"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="256"/>
         <source>Open an existing JSON project</source>
         <translation>פתח פרויקט JSON קיים</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="254"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="257"/>
         <source>Open application settings and preferences</source>
         <translation>פתח הגדרות והעדפות היישום</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="255"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="258"/>
         <source>Open the Assistant</source>
         <translation>פתח את העוזר</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="256"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="259"/>
         <source>Open the Project Editor documentation</source>
         <translation>פתח את התיעוד של עורך הפרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="257"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="260"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
         <translation>פתח את עורך הפרויקט כדי ליצור או לשנות את פריסת ה-JSON שלך</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="258"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="261"/>
+        <source>Open the canvas script for this group</source>
+        <translation>פתח את סקריפט הקנבס עבור קבוצה זו</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="262"/>
         <source>Open the frame parser for this data source</source>
         <translation>פתח את מנתח ה-Frame עבור מקור נתונים זה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="259"/>
         <source>Open the painter script for this group</source>
-        <translation>פתח את סקריפט הציור עבור קבוצה זו</translation>
+        <translation type="vanished">פתח את סקריפט הציור עבור קבוצה זו</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="260"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="264"/>
         <source>Open the project control loop</source>
         <translation>פתח את לולאת הבקרה של הפרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="261"/>
         <source>Open the session database documentation</source>
-        <translation>פתיחת התיעוד של מסד נתוני הסשנים</translation>
+        <translation type="vanished">פתיחת התיעוד של מסד נתוני הסשנים</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="262"/>
         <source>Open the shared-memory documentation</source>
-        <translation>פתח את התיעוד של Shared-Memory</translation>
+        <translation type="vanished">פתח את התיעוד של Shared-Memory</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="263"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="265"/>
         <source>Open the value transform for this dataset</source>
         <translation>פתח את טרנספורמציית הערך עבור Dataset זה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="264"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="266"/>
+        <source>Open the variables documentation</source>
+        <translation>פתח את התיעוד של המשתנים</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="267"/>
         <source>Open this workspace to edit its widgets</source>
         <translation>פתח את סביבת העבודה לעריכת ה-Widgets שלה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="265"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="268"/>
         <source>Output</source>
         <translation>פלט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="266"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="269"/>
         <source>Output Panel</source>
         <translation>לוח פלט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="267"/>
         <source>Painter</source>
-        <translation>Painter</translation>
+        <translation type="vanished">Painter</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="268"/>
         <source>Painter Widget</source>
-        <translation>וידג'ט ציור</translation>
+        <translation type="vanished">וידג'ט ציור</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="269"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="270"/>
         <source>Pause</source>
         <translation>השהה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="270"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="271"/>
         <source>Play a CSV file as if it were live sensor data</source>
         <translation>הפעל קובץ CSV כאילו היה נתוני חיישן חיים</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="271"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="272"/>
         <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
         <translation>הפעל קובץ MDF4 כאילו היה נתוני חיישן חיים (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="272"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="273"/>
         <source>Plot</source>
         <translation>גרף</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="273"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="274"/>
         <source>Preferences</source>
         <translation>העדפות</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="274"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="275"/>
         <source>Previous Workspace</source>
         <translation>סביבת עבודה קודמת</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="275"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="276"/>
         <source>Problem Center</source>
         <translation>מרכז בעיות</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="276"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="277"/>
         <source>Process</source>
         <translation>תהליך</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="277"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="278"/>
         <source>Project Editor</source>
         <translation>עורך פרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="278"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="279"/>
         <source>Project File Mode</source>
         <translation>מצב קובץ פרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="279"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="280"/>
         <source>Protobuf</source>
         <translation>Protobuf</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="280"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="281"/>
         <source>Quick Plot Mode</source>
         <translation>מצב גרף מהיר</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="281"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="282"/>
         <source>Quit</source>
         <translation>יציאה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="282"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="283"/>
         <source>Rebuild the automatic workspace layout</source>
         <translation>בנה מחדש את פריסת סביבת העבודה האוטומטית</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="283"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="284"/>
         <source>Redo</source>
         <translation>בצע שוב</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="284"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="285"/>
         <source>Redo the last undone project edit</source>
         <translation>בצע שוב את עריכת הפרויקט האחרונה שבוטלה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="285"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="286"/>
         <source>Remote Dashboard</source>
         <translation>לוח בקרה מרוחק</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="286"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="287"/>
         <source>Remove every user workspace</source>
         <translation>הסר כל סביבת עבודה של משתמש</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="287"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="288"/>
         <source>Rename</source>
         <translation>שנה שם</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="288"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="289"/>
         <source>Rename this item</source>
         <translation>שנה שם לפריט זה</translation>
     </message>
@@ -3944,337 +4017,339 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">שחזר</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="289"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="290"/>
         <source>Replay</source>
         <translation>הפעל מחדש</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="290"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="291"/>
         <source>Replay selected session on the dashboard</source>
         <translation>הפעל מחדש את הסשן הנבחר בלוח הבקרה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="291"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="292"/>
         <source>Reset</source>
         <translation>אפס</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="292"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="293"/>
         <source>Reset to Auto Layout</source>
         <translation>אפס לפריסה אוטומטית</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="293"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="294"/>
         <source>Restore</source>
         <translation>שחזור</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="294"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="295"/>
         <source>Restore Backup</source>
         <translation>שחזור גיבוי</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="295"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="296"/>
         <source>Restore Project</source>
         <translation>שחזור פרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="296"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="297"/>
         <source>Restore a recent automatic snapshot of the current project</source>
         <translation>שחזור תמונת מצב אוטומטית אחרונה של הפרויקט הנוכחי</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="297"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="298"/>
         <source>Restore the project file from this session file</source>
         <translation>שחזור קובץ הפרויקט מקובץ סשן זה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="298"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="299"/>
         <source>Resume</source>
         <translation>המשך</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="299"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="300"/>
         <source>Review project, link, and script diagnostics</source>
         <translation>סקור אבחון פרויקט, קישור וסקריפט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="300"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="301"/>
         <source>Run API commands and script macros interactively</source>
         <translation>הרצת פקודות API ומאקרו סקריפט באופן אינטראקטיבי</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="301"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="302"/>
         <source>Save</source>
         <translation>שמור</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="302"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="303"/>
         <source>Save As</source>
         <translation>שמור בשם</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="303"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="304"/>
         <source>Save Project</source>
         <translation>שמור פרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="304"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="305"/>
         <source>Save Project As</source>
         <translation>שמור פרויקט בשם</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="305"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="306"/>
         <source>Search</source>
         <translation>חיפוש</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="306"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="307"/>
         <source>Search and run any Serial Studio command</source>
         <translation>חפש והרץ כל פקודה של Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="307"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="308"/>
         <source>Seed Aliases from Titles</source>
         <translation>יצירת כינויים מכותרות</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="308"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="309"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>בחר תקשורת Bluetooth Low Energy</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="309"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="310"/>
         <source>Select CAN Bus communication (Pro)</source>
         <translation>בחר תקשורת CAN Bus (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="310"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="311"/>
         <source>Select HID device communication (Pro)</source>
         <translation>בחר תקשורת התקן HID (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="311"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="312"/>
         <source>Select MODBUS communication (Pro)</source>
         <translation>בחר תקשורת MODBUS (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="312"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="313"/>
         <source>Select Serial port (UART) communication</source>
         <translation>בחר תקשורת יציאה טורית (UART)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="313"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="314"/>
         <source>Select TCP/UDP network communication</source>
         <translation>בחר תקשורת רשת TCP/UDP</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="314"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="315"/>
         <source>Select audio input device (Pro)</source>
         <translation>בחר התקן קלט אודיו (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="315"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="316"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>בחר תקשורת צינור תהליך (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="316"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="317"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>בחר תקשורת USB גולמית (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="317"/>
         <source>Session Database</source>
-        <translation>מסד נתוני סשן</translation>
+        <translation type="vanished">מסד נתוני סשן</translation>
+    </message>
+    <message>
+        <source>Sessions</source>
+        <translation type="vanished">סשנים</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="318"/>
-        <source>Sessions</source>
-        <translation>סשנים</translation>
-    </message>
-    <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="319"/>
         <source>Set a password and lock the Project Editor</source>
         <translation>הגדרת סיסמה ונעילת עורך הפרויקט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="320"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="319"/>
         <source>Set a password to prevent session deletions</source>
         <translation>הגדרת סיסמה למניעת מחיקת סשנים</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="321"/>
         <source>Shared Memory Help</source>
-        <translation>עזרה לזיכרון משותף</translation>
+        <translation type="vanished">עזרה לזיכרון משותף</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="322"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="320"/>
         <source>Show</source>
         <translation>הצג</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="323"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="321"/>
         <source>Show All Hidden Groups</source>
         <translation>הצג את כל הקבוצות המוסתרות</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="324"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="322"/>
         <source>Show application info and license details</source>
         <translation>הצגת מידע על האפליקציה ופרטי רישיון</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="325"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="323"/>
         <source>Show this dataset as a 2D plot</source>
         <translation>הצג מערך נתונים זה כגרף דו-ממדי</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="326"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="324"/>
         <source>Show this dataset as a bar or level</source>
         <translation>הצג מערך נתונים זה כעמודה או רמה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="327"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="325"/>
         <source>Show this dataset as a compass</source>
         <translation>הצג מערך נתונים זה כמצפן</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="328"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="326"/>
         <source>Show this dataset as a gauge</source>
         <translation>הצג מערך נתונים זה כמד</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="329"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="327"/>
         <source>Show this dataset as a waterfall plot</source>
         <translation>הצג מערך נתונים זה כגרף מפל</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="330"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="328"/>
         <source>Show this dataset as an FFT plot</source>
         <translation>הצג מערך נתונים זה כגרף FFT</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="331"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="329"/>
         <source>Show this dataset as an LED indicator</source>
         <translation>הצג מערך נתונים זה כאינדיקטור LED</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="332"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="330"/>
         <source>Show this dataset as an analog meter</source>
         <translation>הצג מערך נתונים זה כמד אנלוגי</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="333"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="331"/>
         <source>Show timestamps in the console</source>
         <translation>הצגת חותמות זמן בקונסולה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="334"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="332"/>
         <source>Slider</source>
         <translation>סליידר</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="335"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="333"/>
         <source>Start Menu</source>
         <translation>תפריט התחלה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="336"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="334"/>
         <source>Stopwatch</source>
         <translation>שעון עצר</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="337"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="335"/>
         <source>Switch to Console Only mode (no parsing)</source>
         <translation>מעבר למצב קונסולה בלבד (ללא ניתוח)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="338"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="336"/>
         <source>Switch to Project File mode (parse via a project)</source>
         <translation>מעבר למצב קובץ פרויקט (ניתוח באמצעות פרויקט)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="339"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="337"/>
         <source>Switch to Quick Plot mode (comma-separated values)</source>
         <translation>מעבר למצב תרשים מהיר (ערכים מופרדים בפסיקים)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="340"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="338"/>
         <source>Table</source>
         <translation>טבלה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="341"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="339"/>
         <source>Text Field</source>
         <translation>שדה טקסט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="342"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="340"/>
         <source>Toggle</source>
         <translation>מתג</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="343"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="341"/>
         <source>Toggle hexadecimal console display</source>
         <translation>החלף תצוגת קונסול הקסדצימלית</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="344"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="342"/>
         <source>Tools</source>
         <translation>כלים</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="345"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="343"/>
         <source>Top Level</source>
         <translation>רמה עליונה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="346"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="344"/>
         <source>UART</source>
         <translation>UART</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="347"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="345"/>
         <source>USB</source>
         <translation>USB</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="348"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="346"/>
         <source>Undo</source>
         <translation>בטל</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="349"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="347"/>
         <source>Undo the last project edit</source>
         <translation>בטל את עריכת הפרויקט האחרונה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="350"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="348"/>
         <source>Unlock</source>
         <translation>בטל נעילה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="351"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="349"/>
+        <source>Variables Help</source>
+        <translation>עזרה על משתנים</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="350"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
         <translation>צפה בתיעוד מפורט ושאל שאלות ב-DeepWiki</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="352"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="351"/>
         <source>Visualizations</source>
         <translation>ויזואליזציות</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="353"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="352"/>
         <source>Watch another Serial Studio instance's dashboard over the network</source>
         <translation>צפה בלוח הבקרה של מופע Serial Studio אחר דרך הרשת</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="354"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="353"/>
         <source>Waterfall</source>
         <translation>מפל</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="355"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="354"/>
         <source>Web View</source>
         <translation>תצוגת אינטרנט</translation>
     </message>
@@ -5993,9 +6068,13 @@ v
         <translation>מאגר הבלוקים מוצה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="583"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, session DB, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
-        <translation>צרכן במורד הזרם (לוח בקרה, ייצוא CSV/MDF4, מסד נתוני סשן או מנוי API) אינו מתרוקן מהר מספיק, ולכן נתונים נשמטים מהתצוגה ומכל הקלטה פעילה. יש להשבית צרכן כבד או להפחית את קצב הנתונים.</translation>
+        <translation type="vanished">צרכן במורד הזרם (לוח בקרה, ייצוא CSV/MDF4, מסד נתוני סשן או מנוי API) אינו מתרוקן מהר מספיק, ולכן נתונים נשמטים מהתצוגה ומכל הקלטה פעילה. יש להשבית צרכן כבד או להפחית את קצב הנתונים.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="583"/>
+        <source>A downstream consumer (dashboard, CSV/MDF4 export, historian, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
+        <translation>צרכן במורד הזרם (לוח בקרה, ייצוא CSV/MDF4, היסטוריון או מנוי API) אינו מתרוקן מהר מספיק, ולכן נתונים מושמטים מהתצוגה ומכל הקלטה פעילה. השבת צרכן כבד או הפחת את קצב הנתונים.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="3050"/>
@@ -6021,8 +6100,12 @@ v
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="3118"/>
+        <source>Multi-Plot</source>
+        <translation>גרף מרובה</translation>
+    </message>
+    <message>
         <source>Multiple Plots</source>
-        <translation>תרשימים מרובים</translation>
+        <translation type="vanished">תרשימים מרובים</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="3239"/>
@@ -6517,9 +6600,13 @@ Any unsaved changes are lost. Continue?</source>
         <translation>בחר קובץ JavaScript לייבוא</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="399"/>
         <source>Select Painter Widget Template</source>
-        <translation>בחר תבנית Widget ציור</translation>
+        <translation type="vanished">בחר תבנית Widget ציור</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="399"/>
+        <source>Select Canvas Widget Template</source>
+        <translation>בחר תבנית ווידג'ט קנבס</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="400"/>
@@ -6554,12 +6641,8 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">קבוצות</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="597"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="610"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="611"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="636"/>
         <source>Shared Memory</source>
-        <translation>זיכרון משותף</translation>
+        <translation type="vanished">זיכרון משותף</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorSummaries.cpp" line="134"/>
@@ -6942,7 +7025,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>הצג כל עקומה כנגד זמן או כנגד מספר הדגימה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="413"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="414"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="314"/>
         <source>Logarithmic X Axis</source>
         <translation>ציר X לוגריתמי</translation>
@@ -6953,7 +7036,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>קנה מידה של ציר ה-X בעשרות חזקה; זמין כאשר מקור ציר ה-X הוא דגימות (לא זמן)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="426"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="427"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="327"/>
         <source>Logarithmic Y Axis</source>
         <translation>ציר Y לוגריתמי</translation>
@@ -7164,7 +7247,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>הגדרות חיבור</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="214"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="215"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="692"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1108"/>
         <source>General Information</source>
@@ -7329,172 +7412,184 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>מספר הפעמים לשליחת הפקודה בכל הפעלה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="226"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="227"/>
         <source>Untitled Dataset</source>
         <translation>Dataset ללא כותרת</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="227"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="228"/>
         <source>Dataset Title</source>
         <translation>כותרת Dataset</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="228"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="229"/>
         <source>Name of the dataset, used for labeling and identification</source>
         <translation>שם ה-Dataset, משמש לתיוג וזיהוי</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="238"/>
         <source>Virtual Dataset</source>
-        <translation>Dataset וירטואלי</translation>
+        <translation type="vanished">Dataset וירטואלי</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="239"/>
         <source>Virtual datasets compute their value from transforms and data tables, they do not require a frame index</source>
-        <translation>Datasets וירטואליים מחשבים את הערך שלהם מטרנספורמציות וטבלאות נתונים, אינם דורשים אינדקס Frame</translation>
+        <translation type="vanished">Datasets וירטואליים מחשבים את הערך שלהם מטרנספורמציות וטבלאות נתונים, אינם דורשים אינדקס Frame</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="250"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="251"/>
         <source>Hide on Dashboard</source>
         <translation>הסתר ב-Dashboard</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="251"/>
         <source>Suppress this dataset's standalone dashboard tile; the painter widget can still read its values</source>
-        <translation>דיכוי אריח לוח המחוונים העצמאי של מערך נתונים זה; ווידג'ט הציור עדיין יכול לקרוא את ערכיו</translation>
+        <translation type="vanished">דיכוי אריח לוח המחוונים העצמאי של מערך נתונים זה; ווידג'ט הציור עדיין יכול לקרוא את ערכיו</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="266"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="267"/>
         <source>Frame Index</source>
         <translation>אינדקס מסגרת</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="267"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="268"/>
         <source>Frame position used for aligning datasets in time</source>
         <translation>מיקום מסגרת המשמש ליישור מערכי נתונים בזמן</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="278"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="279"/>
         <source>Measurement Unit</source>
         <translation>יחידת מדידה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="277"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="278"/>
         <source>Volts, Amps, etc.</source>
         <translation>וולט, אמפר וכו׳</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="279"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="280"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
         <translation>יחידת מדידה, כגון וולט או אמפר (אופציונלי)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="323"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="324"/>
         <source>Automatic</source>
         <translation>אוטומטי</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="324"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="325"/>
         <source>Widget Color</source>
         <translation>צבע Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="325"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="326"/>
         <source>Custom display color for this dataset; automatic uses the theme palette</source>
         <translation>צבע תצוגה מותאם אישית עבור מערך נתונים זה; אוטומטי משתמש בפלטת הערכת הנושא</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="303"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="304"/>
         <source>Stable name</source>
         <translation>שם יציב</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="304"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="239"/>
+        <source>Computed Dataset</source>
+        <translation>Dataset מחושב</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="240"/>
+        <source>Computed datasets compute their value from transforms and shared variables, they do not require a frame index</source>
+        <translation>Datasets מחושבים מחשבים את הערך שלהם מטרנספורמציות ומשתנים משותפים, אינם דורשים אינדקס Frame</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="252"/>
+        <source>Suppress this dataset's standalone dashboard tile; the canvas widget can still read its values</source>
+        <translation>דיכוי אריח לוח המחוונים העצמאי של מערך נתונים זה; ווידג'ט הקנבס עדיין יכול לקרוא את ערכיו</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="305"/>
         <source>Script Alias</source>
         <translation>כינוי סקריפט</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="305"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="306"/>
         <source>Stable name for getDataset-style script/API lookups; must be unique (optional)</source>
         <translation>שם יציב לחיפושי סקריפט/API בסגנון getDataset; חייב להיות ייחודי (אופציונלי)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="345"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="346"/>
         <source>Lower bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>גבול תחתון של טווח ערכי מערך הנתונים; ווידג'טים ו-FFT חוזרים אליו כאשר הטווח שלהם עצמם לא מוגדר</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="357"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="358"/>
         <source>Upper bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>גבול עליון של טווח ערכי מערך הנתונים; ווידג'טים ו-FFT חוזרים אליו כאשר הטווח שלהם עצמם לא מוגדר</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="372"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="373"/>
         <source>Plot Settings</source>
         <translation>הגדרות גרף</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="386"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="387"/>
         <source>Enable Plot Widget</source>
         <translation>הפעלת ווידג'ט גרף</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="387"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="388"/>
         <source>Plot data in real-time</source>
         <translation>הצגת נתונים בזמן אמת בגרף</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="414"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="415"/>
         <source>Scale the X axis in decades; available when the X-Axis source is Samples or a dataset (not Time)</source>
         <translation>קנה מידה של ציר ה-X בעשרות חזקה; זמין כאשר מקור ציר ה-X הוא דגימות או מערך נתונים (לא זמן)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="427"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="428"/>
         <source>Scale the Y axis in decades; values at or below zero are clamped</source>
         <translation>קנה מידה של ציר ה-Y בעשרות חזקה; ערכים באפס או מתחתיו נחסמים</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="479"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="480"/>
         <source>Peak Ballistics</source>
         <translation>בליסטיקת שיא</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="480"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="481"/>
         <source>Analyzer-style display: peaks rise instantly and decay smoothly over the release time</source>
         <translation>תצוגה בסגנון מנתח: שיאים עולים באופן מיידי ודועכים בצורה חלקה לאורך זמן השחרור</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="492"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="493"/>
         <source>Ballistics Release (ms)</source>
         <translation>שחרור בליסטיקה (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="493"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="494"/>
         <source>Decay time for the ballistics display (50-5000 ms)</source>
         <translation>זמן דעיכה לתצוגת בליסטיקה (50-5000 ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="549"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="550"/>
         <source>FFT Window Function</source>
         <translation>פונקציית חלון FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="550"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="551"/>
         <source>Window applied before the transform to reduce spectral leakage; affects both the FFT plot and the waterfall</source>
         <translation>חלון המוחל לפני הטרנספורמציה כדי להפחית דליפה ספקטרלית; משפיע גם על עלילת FFT וגם על המפל</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="576"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="577"/>
         <source>Logarithmic Frequency Axis</source>
         <translation>ציר תדר לוגריתמי</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="739"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="740"/>
         <source>Hold Min/Max Markers</source>
         <translation>החזקת סמני מינימום/מקסימום</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="740"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="741"/>
         <source>Show hold markers at the lowest and highest values observed since the last data reset</source>
         <translation>הצג סמני החזקה בערכים הנמוכים והגבוהים ביותר שנצפו מאז איפוס הנתונים האחרון</translation>
     </message>
@@ -7503,12 +7598,12 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">קנה מידה של ציר התדר FFT בעשוריות כך שאוקטבות נמוכות יישארו קריאות</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="693"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="694"/>
         <source>Fixed decimal places for the value display; overrides the format (-1 = auto)</source>
         <translation>מספר מקומות עשרוניים קבוע לתצוגת הערך; דורס את הפורמט (1- = אוטומטי)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="400"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="401"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="298"/>
         <source>X-Axis Source</source>
         <translation>מקור ציר X</translation>
@@ -7534,57 +7629,57 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">גבול עליון לטווח התצוגה של הגרף</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="442"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="443"/>
         <source>Frequency Analysis</source>
         <translation>ניתוח תדרים</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="455"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="456"/>
         <source>Enable FFT Analysis</source>
         <translation>הפעל ניתוח FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="456"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="457"/>
         <source>Perform frequency-domain analysis of the dataset</source>
         <translation>בצע ניתוח בתחום התדר של מערך הנתונים</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="466"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="467"/>
         <source>Enable Waterfall Plot</source>
         <translation>הפעל גרף מפל</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="467"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="468"/>
         <source>Show a scrolling spectrogram of frequency content over time (Pro)</source>
         <translation>הצג ספקטרוגרמה גוללת של תוכן תדרים לאורך זמן (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="508"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="509"/>
         <source>Waterfall Y Axis</source>
         <translation>ציר Y של מפל</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="509"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="510"/>
         <source>Choose Time (default) or any dataset whose value drives the Y axis -- produces a Campbell diagram when bound to e.g. RPM</source>
         <translation>בחר זמן (ברירת מחדל) או כל מערך נתונים שערכו מניע את ציר Y -- מייצר דיאגרמת Campbell כאשר מקושר למשל ל-RPM</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="534"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="535"/>
         <source>FFT Window Size</source>
         <translation>גודל חלון FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="535"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="536"/>
         <source>Number of samples used for each FFT calculation window</source>
         <translation>מספר הדגימות המשמשות לכל חלון חישוב FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="563"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="564"/>
         <source>FFT Sampling Rate (Hz, required)</source>
         <translation>קצב דגימה FFT (Hz, נדרש)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="564"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="565"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
         <translation>תדר הדגימה המשמש ל-FFT (ב-Hz)</translation>
     </message>
@@ -7605,17 +7700,17 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">גבול עליון לנורמליזציה של נתונים</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="619"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="620"/>
         <source>Widget Settings</source>
         <translation>הגדרות Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="635"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="636"/>
         <source>Widget</source>
         <translation>Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="636"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="637"/>
         <source>Select the visual widget used to display this dataset</source>
         <translation>בחירת ה-widget החזותי המשמש להצגת מערך נתונים זה</translation>
     </message>
@@ -7637,29 +7732,29 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="731"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="662"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="689"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="663"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="690"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="366"/>
         <source>Auto</source>
         <translation>אוטומטי</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="663"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="664"/>
         <source>Tick Count</source>
         <translation>מספר סימונים</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="664"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="665"/>
         <source>Major-tick count on the dial scale (0 = auto-fit to widget size)</source>
         <translation>מספר הסימונים הראשיים על סולם החוגה (0 = התאמה אוטומטית לגודל הווידג'ט)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="678"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="679"/>
         <source>Label Format</source>
         <translation>עיצוב תווית</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="679"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="680"/>
         <source>Decimal places or notation used on tick labels and the value display</source>
         <translation>מספר המקומות העשרוניים או הסימון המשמש בתוויות הסימונים ובתצוגת הערך</translation>
     </message>
@@ -7700,22 +7795,22 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">מפעיל התראה חזותית כאשר הערך עולה על סף זה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="755"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="756"/>
         <source>LED Display Settings</source>
         <translation>הגדרות תצוגת LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="768"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="769"/>
         <source>Show in LED Panel</source>
         <translation>הצג בלוח LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="769"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="770"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>הפעלת ניטור מצב חזותי באמצעות תצוגת LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="782"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="783"/>
         <source>LED On Threshold (required)</source>
         <translation>סף הדלקת LED (נדרש)</translation>
     </message>
@@ -7724,9 +7819,13 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">נורית LED נדלקת כאשר הערך מגיע לסף זה או עולה עליו</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="455"/>
         <source>Edit Painter Code</source>
-        <translation>ערוך קוד ציור</translation>
+        <translation type="vanished">ערוך קוד ציור</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="455"/>
+        <source>Edit Canvas Code</source>
+        <translation>ערוך קוד קנבס</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="479"/>
@@ -7935,8 +8034,17 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="713"/>
-        <source>Multiple Plot</source>
+        <source>Multi-Plot</source>
         <translation>גרף מרובה</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="717"/>
+        <source>Canvas Widget</source>
+        <translation>ווידג'ט קנבס</translation>
+    </message>
+    <message>
+        <source>Multiple Plot</source>
+        <translation type="vanished">גרף מרובה</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="714"/>
@@ -7954,9 +8062,8 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>תצוגת תמונה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="717"/>
         <source>Painter Widget</source>
-        <translation>וידג'ט ציור</translation>
+        <translation type="vanished">וידג'ט ציור</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="718"/>
@@ -8106,7 +8213,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>טווח ערכים</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="344"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="345"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1199"/>
         <source>Minimum Value</source>
         <translation>ערך מינימלי</translation>
@@ -8118,6 +8225,14 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>ווידג'טים של לוח הבקרה</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="597"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="610"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="611"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="636"/>
+        <source>Variables</source>
+        <translation>משתנים</translation>
+    </message>
+    <message>
         <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="870"/>
         <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="874"/>
         <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="875"/>
@@ -8125,55 +8240,55 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>לולאת בקרה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="356"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="357"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1208"/>
         <source>Maximum Value</source>
         <translation>ערך מקסימלי</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="401"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="402"/>
         <source>Choose Time or a dataset to drive the X-Axis in plots</source>
         <translation>בחר זמן או מערך נתונים להנעת ציר ה-X בגרפים</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="577"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="578"/>
         <source>Scale the frequency axis in decades so low octaves stay readable; applies to both the FFT plot and the waterfall</source>
         <translation>קנה מידה של ציר התדר בעשוריות כך שאוקטבות נמוכות יישארו קריאות; חל גם על עלילת FFT וגם על המפל</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="590"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="714"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="591"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="715"/>
         <source>Minimum Value (optional)</source>
         <translation>ערך מינימלי (אופציונלי)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="591"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="592"/>
         <source>Lower bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>גבול תחתון לנורמליזציה של נתונים; ברירת מחדל לטווח הערכים של מערך הנתונים כאשר לא מוגדר</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="603"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="726"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="604"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="727"/>
         <source>Maximum Value (optional)</source>
         <translation>ערך מקסימלי (אופציונלי)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="604"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="605"/>
         <source>Upper bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>גבול עליון לנורמליזציה של נתונים; ברירת מחדל לטווח הערכים של מערך הנתונים כאשר לא מוגדר</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="715"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="716"/>
         <source>Lower bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>גבול תחתון של טווח המחוון או העמודה; ברירת מחדל לטווח הערכים של מערך הנתונים כאשר לא מוגדר</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="727"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="728"/>
         <source>Upper bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>גבול עליון של טווח המחוון או העמודה; ברירת מחדל לטווח הערכים של מערך הנתונים כאשר לא מוגדר</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="692"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="693"/>
         <source>Decimal Points</source>
         <translation>נקודות עשרוניות</translation>
     </message>
@@ -8187,7 +8302,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>דולק</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="783"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="784"/>
         <source>LED lights up when value meets or exceeds this threshold; define alarm bands for multi-state colors</source>
         <translation>נורית LED נדלקת כאשר הערך מגיע לסף זה או עולה עליו; הגדרת טווחי אזעקה עבור צבעים מרובי מצבים</translation>
     </message>
@@ -8941,6 +9056,11 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>מד חדש</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1452"/>
+        <source>Edit Canvas Datasets</source>
+        <translation>ערוך Datasets קנבס</translation>
+    </message>
+    <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="2187"/>
         <source>Duplicate Selection</source>
         <translation>שכפל בחירה</translation>
@@ -8975,9 +9095,8 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>תרשים מפל חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1452"/>
         <source>Edit Painter Datasets</source>
-        <translation>ערוך מערכי נתונים של Painter</translation>
+        <translation type="vanished">ערוך מערכי נתונים של Painter</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1471"/>
@@ -9076,9 +9195,8 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>טבלה משותפת</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="223"/>
         <source>register</source>
-        <translation>רגיסטר</translation>
+        <translation type="vanished">רגיסטר</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="917"/>
@@ -9135,14 +9253,12 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>שינוי שם פעולה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="398"/>
         <source>New Register</source>
-        <translation>רגיסטר חדש</translation>
+        <translation type="vanished">רגיסטר חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="421"/>
         <source>Rename Register</source>
-        <translation>שינוי שם רגיסטר</translation>
+        <translation type="vanished">שינוי שם רגיסטר</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1200"/>
@@ -9153,9 +9269,8 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>לא ניתן לבטל פעולה זו.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="456"/>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
-        <translation>פעולה זו תסיר %1 רגיסטר(ים) יחד עם הטבלה. לא ניתן לבטל פעולה זו.</translation>
+        <translation type="vanished">פעולה זו תסיר %1 רגיסטר(ים) יחד עם הטבלה. לא ניתן לבטל פעולה זו.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1199"/>
@@ -9176,20 +9291,52 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>מחק טבלה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="214"/>
         <source>Add Register</source>
-        <translation>הוספת רגיסטר</translation>
+        <translation type="vanished">הוספת רגיסטר</translation>
+    </message>
+    <message>
+        <source>Delete Register</source>
+        <translation type="vanished">מחק רגיסטר</translation>
+    </message>
+    <message>
+        <source>Edit Register</source>
+        <translation type="vanished">עריכת רגיסטר</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="214"/>
+        <source>Add Variable</source>
+        <translation>הוסף משתנה</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="223"/>
+        <source>variable</source>
+        <translation>משתנה</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="253"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="482"/>
-        <source>Delete Register</source>
-        <translation>מחק רגיסטר</translation>
+        <source>Delete Variable</source>
+        <translation>מחק משתנה</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="284"/>
-        <source>Edit Register</source>
-        <translation>עריכת רגיסטר</translation>
+        <source>Edit Variable</source>
+        <translation>ערוך משתנה</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="398"/>
+        <source>New Variable</source>
+        <translation>משתנה חדש</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="421"/>
+        <source>Rename Variable</source>
+        <translation>שנה שם משתנה</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="456"/>
+        <source>This removes %1 variable(s) along with the table. This action cannot be undone.</source>
+        <translation>פעולה זו תסיר %1 משתנה/ים יחד עם הטבלה. לא ניתן לבטל פעולה זו.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="506"/>
@@ -9584,9 +9731,14 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>DataTablesView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="35"/>
         <source>Shared Memory</source>
-        <translation>זיכרון משותף</translation>
+        <translation type="vanished">זיכרון משותף</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="35"/>
+        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="223"/>
+        <source>Variables</source>
+        <translation>משתנים</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="187"/>
@@ -9615,8 +9767,12 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="213"/>
+        <source>Open help documentation for variables</source>
+        <translation>פתח תיעוד עזרה עבור משתנים</translation>
+    </message>
+    <message>
         <source>Open help documentation for shared memory</source>
-        <translation>פתח תיעוד עזרה עבור זיכרון משותף</translation>
+        <translation type="vanished">פתח תיעוד עזרה עבור זיכרון משותף</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="222"/>
@@ -9624,9 +9780,8 @@ Valid format: 01 A2 FF 3C</source>
         <translation>כותרת</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="223"/>
         <source>Registers</source>
-        <translation>רגיסטרים</translation>
+        <translation type="vanished">רגיסטרים</translation>
     </message>
     <message>
         <source>Name</source>
@@ -9682,9 +9837,8 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>DatabaseExplorer</name>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="38"/>
         <source>Sessions</source>
-        <translation>סשנים</translation>
+        <translation type="vanished">סשנים</translation>
     </message>
     <message>
         <source>Open</source>
@@ -9761,6 +9915,11 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <source>Restore the project file from this session file</source>
         <translation type="vanished">שחזור קובץ הפרויקט מקובץ סשן זה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="38"/>
+        <source>Historian</source>
+        <translation>היסטוריון</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="298"/>
@@ -10943,6 +11102,11 @@ Valid format: 01 A2 FF 3C</source>
         <translation>%1 רגיסטרים</translation>
     </message>
     <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="834"/>
+        <source>Variables</source>
+        <translation>משתנים</translation>
+    </message>
+    <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="409"/>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="743"/>
         <source>empty</source>
@@ -11053,9 +11217,8 @@ Valid format: 01 A2 FF 3C</source>
         <translation>פלטים</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="834"/>
         <source>Shared Memory</source>
-        <translation>זיכרון משותף</translation>
+        <translation type="vanished">זיכרון משותף</translation>
     </message>
     <message>
         <source>Bar Panel</source>
@@ -11891,6 +12054,11 @@ Valid format: 01 A2 FF 3C</source>
         <translation>בקרות</translation>
     </message>
     <message>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="326"/>
+        <source>Edit the JavaScript that draws this canvas widget</source>
+        <translation>ערוך את קוד JavaScript שמצייר את וידג'ט הקנבס הזה</translation>
+    </message>
+    <message>
         <source>Thermometer</source>
         <translation type="vanished">מדחום</translation>
     </message>
@@ -11968,9 +12136,8 @@ Valid format: 01 A2 FF 3C</source>
         <translation>ערוך קוד</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="326"/>
         <source>Edit the JavaScript that draws this painter widget</source>
-        <translation>ערוך את קוד JavaScript שמצייר את ווידג'ט הציור הזה</translation>
+        <translation type="vanished">ערוך את קוד JavaScript שמצייר את ווידג'ט הציור הזה</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="339"/>
@@ -17883,17 +18050,20 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>Painter</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Painter.qml" line="56"/>
         <source>Painter Widget Error</source>
-        <translation>שגיאת וידג׳ט ציור</translation>
+        <translation type="vanished">שגיאת וידג׳ט ציור</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Painter.qml" line="56"/>
+        <source>Canvas Widget Error</source>
+        <translation>שגיאת וידג'ט קנבס</translation>
     </message>
 </context>
 <context>
     <name>PainterCodeDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="30"/>
         <source>Painter Widget Code Editor</source>
-        <translation>עורך קוד וידג׳ט ציור</translation>
+        <translation type="vanished">עורך קוד וידג׳ט ציור</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="76"/>
@@ -17906,9 +18076,8 @@ Add groups above to poll multiple register types.</source>
         <translation>ייבוא</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="91"/>
         <source>Import painter code from a .js file</source>
-        <translation>ייבוא קוד ציור מקובץ .js</translation>
+        <translation type="vanished">ייבוא קוד ציור מקובץ .js</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="99"/>
@@ -17916,9 +18085,8 @@ Add groups above to poll multiple register types.</source>
         <translation>תבנית</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="102"/>
         <source>Select a built-in painter template</source>
-        <translation>בחר תבנית ציור מובנית</translation>
+        <translation type="vanished">בחר תבנית ציור מובנית</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="108"/>
@@ -17926,9 +18094,28 @@ Add groups above to poll multiple register types.</source>
         <translation>עיצוב</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="113"/>
         <source>Reformat the painter code</source>
-        <translation>עצב מחדש את קוד הציור</translation>
+        <translation type="vanished">עצב מחדש את קוד הציור</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="30"/>
+        <source>Canvas Widget Code Editor</source>
+        <translation>עורך קוד וידג'ט קנבס</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="91"/>
+        <source>Import canvas code from a .js file</source>
+        <translation>ייבוא קוד קנבס מקובץ .js</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="102"/>
+        <source>Select a built-in canvas template</source>
+        <translation>בחר תבנית קנבס מובנית</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="113"/>
+        <source>Reformat the canvas code</source>
+        <translation>עצב מחדש את קוד הקנבס</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="119"/>
@@ -17994,9 +18181,13 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>PainterTestDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="28"/>
         <source>Painter Live Preview</source>
-        <translation>תצוגה מקדימה חיה של Painter</translation>
+        <translation type="vanished">תצוגה מקדימה חיה של Painter</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="28"/>
+        <source>Canvas Live Preview</source>
+        <translation>תצוגה מקדימה חיה של קנבס</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="32"/>
@@ -18927,18 +19118,35 @@ Click Refresh to update the list.</source>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="173"/>
-        <source>Add a custom JavaScript-rendered painter widget</source>
-        <translation>הוספת ווידג'ט ציור מותאם אישית מבוסס JavaScript</translation>
+        <source>Add a custom JavaScript-rendered canvas widget</source>
+        <translation>הוסף וידג'ט קנבס מותאם אישית מעובד ב-JavaScript</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="174"/>
-        <source>Painter widgets require a Pro license, adding one will fall back to a data grid</source>
-        <translation>וידג'טי ציור דורשים רישיון Pro, הוספת אחד תחזור לרשת נתונים</translation>
+        <source>Canvas widgets require a Pro license, adding one will fall back to a data grid</source>
+        <translation>וידג'טי קנבס דורשים רישיון Pro, הוספת אחד יחזור לטבלת נתונים</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="175"/>
+        <source>Canvas Widget</source>
+        <translation>Widget קנבס</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="188"/>
+        <source>Multi-Plot</source>
+        <translation>גרף מרובה</translation>
+    </message>
+    <message>
+        <source>Add a custom JavaScript-rendered painter widget</source>
+        <translation type="vanished">הוספת ווידג'ט ציור מותאם אישית מבוסס JavaScript</translation>
+    </message>
+    <message>
+        <source>Painter widgets require a Pro license, adding one will fall back to a data grid</source>
+        <translation type="vanished">וידג'טי ציור דורשים רישיון Pro, הוספת אחד תחזור לרשת נתונים</translation>
+    </message>
+    <message>
         <source>Painter Widget</source>
-        <translation>וידג'ט ציור</translation>
+        <translation type="vanished">וידג'ט ציור</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="179"/>
@@ -18951,9 +19159,8 @@ Click Refresh to update the list.</source>
         <translation>לוח עמודות</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="188"/>
         <source>Multiple Plot</source>
-        <translation>גרף מרובה</translation>
+        <translation type="vanished">גרף מרובה</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="193"/>
@@ -18994,8 +19201,12 @@ Click Refresh to update the list.</source>
         <translation>לוח עמודות</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="415"/>
         <source>Multiple Plot</source>
+        <translation type="vanished">גרף מרובה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="415"/>
+        <source>Multi-Plot</source>
         <translation>גרף מרובה</translation>
     </message>
     <message>
@@ -19030,8 +19241,12 @@ Click Refresh to update the list.</source>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="450"/>
+        <source>Canvas Widget</source>
+        <translation>Widget קנבס</translation>
+    </message>
+    <message>
         <source>Painter Widget</source>
-        <translation>וידג'ט ציור</translation>
+        <translation type="vanished">וידג'ט ציור</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="711"/>
@@ -20413,14 +20628,22 @@ function parse(%1) { ... }
         <translation>table() דורש שם טבלה תחילה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="436"/>
         <source>table() needs a register name second</source>
-        <translation>table() דורש שם רגיסטר שני</translation>
+        <translation type="vanished">table() דורש שם רגיסטר שני</translation>
+    </message>
+    <message>
+        <source>unknown register '%1.%2'</source>
+        <translation type="vanished">רגיסטר לא ידוע '%1.%2'</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="436"/>
+        <source>table() needs a variable name second</source>
+        <translation>table() דורש שם משתנה שני</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="441"/>
-        <source>unknown register '%1.%2'</source>
-        <translation>רגיסטר לא ידוע '%1.%2'</translation>
+        <source>unknown variable '%1.%2'</source>
+        <translation>משתנה לא ידוע '%1.%2'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="459"/>
@@ -20986,9 +21209,13 @@ function parse(%1) { ... }
         <translation>רשתות נתונים</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="299"/>
         <source>Multiple Data Plots</source>
-        <translation>תרשימי נתונים מרובים</translation>
+        <translation type="vanished">תרשימי נתונים מרובים</translation>
+    </message>
+    <message>
+        <location filename="../../src/SerialStudio.cpp" line="299"/>
+        <source>Multi-Plots</source>
+        <translation>גרפים מרובים</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="302"/>
@@ -21056,6 +21283,11 @@ function parse(%1) { ... }
         <translation>מדים</translation>
     </message>
     <message>
+        <location filename="../../src/SerialStudio.cpp" line="363"/>
+        <source>Canvas Widgets</source>
+        <translation>Widgets קנבס</translation>
+    </message>
+    <message>
         <source>Thermometers</source>
         <translation type="vanished">מדחומים</translation>
     </message>
@@ -21095,9 +21327,8 @@ function parse(%1) { ... }
         <translation>מפלי מים</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="363"/>
         <source>Painter Widgets</source>
-        <translation>ווידג'טי ציור</translation>
+        <translation type="vanished">ווידג'טי ציור</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="367"/>
@@ -22684,8 +22915,12 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="323"/>
+        <source>Historian</source>
+        <translation>היסטוריון</translation>
+    </message>
+    <message>
         <source>Session Recording</source>
-        <translation>הקלטת סשן</translation>
+        <translation type="vanished">הקלטת סשן</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="344"/>
@@ -22919,8 +23154,12 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="741"/>
+        <source>Historian</source>
+        <translation>היסטוריון</translation>
+    </message>
+    <message>
         <source>Session Database</source>
-        <translation>מסד נתוני סשן</translation>
+        <translation type="vanished">מסד נתוני סשן</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="751"/>
@@ -23405,8 +23644,12 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="259"/>
+        <source>(computed)</source>
+        <translation>(מחושב)</translation>
+    </message>
+    <message>
         <source>(virtual)</source>
-        <translation>(וירטואלי)</translation>
+        <translation type="vanished">(וירטואלי)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="326"/>
@@ -23536,8 +23779,12 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableFolderView.qml" line="197"/>
+        <source>Variables</source>
+        <translation>משתנים</translation>
+    </message>
+    <message>
         <source>Registers</source>
-        <translation>רגיסטרים</translation>
+        <translation type="vanished">רגיסטרים</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableFolderView.qml" line="287"/>
@@ -24927,14 +25174,12 @@ function parse(%1) { ... }
 <context>
     <name>UserTableView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="176"/>
         <source>Add Register</source>
-        <translation>הוספת רגיסטר</translation>
+        <translation type="vanished">הוספת רגיסטר</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="179"/>
         <source>Add register</source>
-        <translation>הוספת רגיסטר</translation>
+        <translation type="vanished">הוספת רגיסטר</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="186"/>
@@ -24952,9 +25197,8 @@ function parse(%1) { ... }
         <translation>ייבוא</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="199"/>
         <source>Import registers from CSV</source>
-        <translation>ייבוא רגיסטרים מ-CSV</translation>
+        <translation type="vanished">ייבוא רגיסטרים מ-CSV</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="206"/>
@@ -24962,9 +25206,28 @@ function parse(%1) { ... }
         <translation>ייצוא</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="209"/>
         <source>Export registers to CSV</source>
-        <translation>ייצוא רגיסטרים ל-CSV</translation>
+        <translation type="vanished">ייצוא רגיסטרים ל-CSV</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="176"/>
+        <source>Add Variable</source>
+        <translation>הוסף משתנה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="179"/>
+        <source>Add variable</source>
+        <translation>הוסף משתנה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="199"/>
+        <source>Import variables from CSV</source>
+        <translation>ייבוא משתנים מ-CSV</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="209"/>
+        <source>Export variables to CSV</source>
+        <translation>ייצוא משתנים ל-CSV</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="221"/>
@@ -24993,8 +25256,27 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="253"/>
+        <source>Open help documentation for variables</source>
+        <translation>פתח תיעוד עזרה עבור משתנים</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="294"/>
+        <source>Variable Name</source>
+        <translation>שם משתנה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="512"/>
+        <source>Delete variable</source>
+        <translation>מחק משתנה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="530"/>
+        <source>No variables.</source>
+        <translation>אין משתנים.</translation>
+    </message>
+    <message>
         <source>Open help documentation for shared memory</source>
-        <translation>פתח תיעוד עזרה עבור זיכרון משותף</translation>
+        <translation type="vanished">פתח תיעוד עזרה עבור זיכרון משותף</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="293"/>
@@ -25002,9 +25284,8 @@ function parse(%1) { ... }
         <translation>הרשאות</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="294"/>
         <source>Register Name</source>
-        <translation>שם רגיסטר</translation>
+        <translation type="vanished">שם רגיסטר</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="295"/>
@@ -25027,14 +25308,12 @@ function parse(%1) { ... }
         <translation>העתק קוד גישה %1 ללוח</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="512"/>
         <source>Delete register</source>
-        <translation>מחק רגיסטר</translation>
+        <translation type="vanished">מחק רגיסטר</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="530"/>
         <source>No registers.</source>
-        <translation>אין רגיסטרים.</translation>
+        <translation type="vanished">אין רגיסטרים.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="580"/>

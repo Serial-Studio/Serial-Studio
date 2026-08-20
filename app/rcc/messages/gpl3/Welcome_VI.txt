@@ -14,7 +14,7 @@ Tính năng Pro:
 → Hình ảnh hóa MQTT, XY và 3D
 → Trình điều khiển Âm thanh, CAN Bus, Modbus, USB, HID và Process I/O
 → Tiện ích đầu ra, xuất MDF4 và truyền XMODEM/YMODEM/ZMODEM
-→ Cơ sở dữ liệu phiên, Bảng dữ liệu và biến đổi giá trị (JS + Lua)
+→ Historian, Biến và biến đổi giá trị (JS + Lua)
 → Dự án đa nguồn và không gian làm việc bảng điều khiển tùy chỉnh
 → Giấy phép thương mại (không có nghĩa vụ GPL)
 

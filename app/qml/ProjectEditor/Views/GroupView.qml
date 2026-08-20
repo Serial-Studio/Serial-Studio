@@ -323,7 +323,7 @@ Widgets.Pane {
               Layout.alignment: Qt.AlignVCenter
               onClicked: painterCodeDialog.showDialog()
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "edit-code", 24)
-              ToolTip.text: qsTr("Edit the JavaScript that draws this painter widget")
+              ToolTip.text: qsTr("Edit the JavaScript that draws this canvas widget")
             }
           }
 

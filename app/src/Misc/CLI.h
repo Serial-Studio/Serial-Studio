@@ -116,8 +116,7 @@ struct CliOptions {
     "shortcut-path", "Path of the shortcut that launched this process (Pro)", "path"};
   QCommandLineOption csvExportOpt{"csv-export", "Enable CSV export immediately on startup (Pro)"};
   QCommandLineOption mdfExportOpt{"mdf-export", "Enable MDF4 export immediately on startup (Pro)"};
-  QCommandLineOption sessionExportOpt{"session-export",
-                                      "Enable session database export on startup (Pro)"};
+  QCommandLineOption sessionExportOpt{"session-export", "Enable historian export on startup (Pro)"};
   QCommandLineOption consoleExportOpt{"console-export",
                                       "Enable console log export on startup (Pro)"};
   QCommandLineOption actionsPanelOpt{"actions-panel",
@@ -146,7 +145,7 @@ struct CliOptions {
     "Run offline-certificate verifier self-test vectors and exit (Pro)"};
   QCommandLineOption verifySessionOpt{
     "verify-session",
-    "Verify an archived session database's reproducibility and exit; prints a JSON verdict "
+    "Verify an archived historian database's reproducibility and exit; prints a JSON verdict "
     "(spec 0044, Pro). Pair with --headless for offscreen operation",
     "file"};
   QCommandLineOption verifySessionIdOpt{

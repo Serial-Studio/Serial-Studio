@@ -1266,9 +1266,8 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation>Liệt kê các nguồn trong dự án này</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="427"/>
         <source>What is a session database, and why would I use one?</source>
-        <translation>Cơ sở dữ liệu phiên là gì và tại sao tôi nên sử dụng nó?</translation>
+        <translation type="vanished">Cơ sở dữ liệu phiên là gì và tại sao tôi nên sử dụng nó?</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="428"/>
@@ -1361,9 +1360,18 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation>Xây dựng không gian làm việc tổng quan điều hành</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="450"/>
         <source>Add a painter widget for a custom visualization</source>
-        <translation>Thêm widget painter cho trực quan hóa tùy chỉnh</translation>
+        <translation type="vanished">Thêm widget painter cho trực quan hóa tùy chỉnh</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="427"/>
+        <source>What is the historian, and why would I use it?</source>
+        <translation>Historian là gì và tại sao tôi nên sử dụng nó?</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="450"/>
+        <source>Add a canvas widget for a custom visualization</source>
+        <translation>Thêm widget canvas cho trực quan hóa tùy chỉnh</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="451"/>
@@ -2686,118 +2694,122 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="38"/>
+        <source>Add Canvas</source>
+        <translation>Thêm Canvas</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="39"/>
         <source>Add Compass</source>
         <translation>Thêm La Bàn</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="39"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="40"/>
         <source>Add Data Source</source>
         <translation>Thêm Nguồn Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="40"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="41"/>
         <source>Add Data Table</source>
         <translation>Thêm Bảng Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="41"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="42"/>
         <source>Add Dataset</source>
         <translation>Thêm Tập Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="42"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="43"/>
         <source>Add Device</source>
         <translation>Thêm Thiết Bị</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="43"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="44"/>
         <source>Add External Window</source>
         <translation>Thêm Cửa Sổ Ngoài</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="44"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="45"/>
         <source>Add FFT Plot</source>
         <translation>Thêm Biểu Đồ FFT</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="45"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="46"/>
         <source>Add GPS Map</source>
         <translation>Thêm Bản Đồ GPS</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="46"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="47"/>
         <source>Add Gauge</source>
         <translation>Thêm Đồng Hồ Đo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="47"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="48"/>
         <source>Add Group</source>
         <translation>Thêm Nhóm</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="48"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="49"/>
         <source>Add Gyroscope</source>
         <translation>Thêm Con Quay Hồi Chuyển</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="49"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="50"/>
         <source>Add Image View</source>
         <translation>Thêm Khung Xem Hình Ảnh</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="50"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="51"/>
         <source>Add LED Indicator</source>
         <translation>Thêm Đèn Báo LED</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="51"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="52"/>
         <source>Add Level Indicator</source>
         <translation>Thêm Chỉ Báo Mức</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="52"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="53"/>
         <source>Add Multi-Plot</source>
         <translation>Thêm Đồ Thị Đa Trục</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="53"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="54"/>
         <source>Add Output</source>
         <translation>Thêm Đầu Ra</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="54"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="55"/>
         <source>Add Output Button</source>
         <translation>Thêm Nút Đầu Ra</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="55"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="56"/>
         <source>Add Output Knob</source>
         <translation>Thêm Núm Xoay Đầu Ra</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="56"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="57"/>
         <source>Add Output Panel</source>
         <translation>Thêm Bảng Điều Khiển Đầu Ra</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="57"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="58"/>
         <source>Add Output Slider</source>
         <translation>Thêm Thanh Trượt Đầu Ra</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="58"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="59"/>
         <source>Add Output Text Field</source>
         <translation>Thêm Trường Văn Bản Đầu Ra</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="59"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="60"/>
         <source>Add Output Toggle</source>
         <translation>Thêm Công Tắc Đầu Ra</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="60"/>
         <source>Add Painter</source>
-        <translation>Thêm Widget Vẽ</translation>
+        <translation type="vanished">Thêm Widget Vẽ</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="61"/>
@@ -2805,14 +2817,18 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation>Thêm Biểu Đồ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="62"/>
         <source>Add Register</source>
-        <translation>Thêm Thanh Ghi</translation>
+        <translation type="vanished">Thêm Thanh Ghi</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="62"/>
+        <source>Add Shared Table</source>
+        <translation>Thêm Bảng Chia Sẻ</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="63"/>
-        <source>Add Shared Table</source>
-        <translation>Thêm Bảng Chia Sẻ</translation>
+        <source>Add Variable</source>
+        <translation>Thêm Biến</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="64"/>
@@ -3000,39 +3016,51 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation>Thêm đồ thị với nhiều tín hiệu</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="101"/>
         <source>Add a register to this shared table</source>
-        <translation>Thêm thanh ghi vào bảng chia sẻ này</translation>
+        <translation type="vanished">Thêm thanh ghi vào bảng chia sẻ này</translation>
+    </message>
+    <message>
+        <source>Add a script-drawn painter group</source>
+        <translation type="vanished">Thêm nhóm vẽ bằng script</translation>
+    </message>
+    <message>
+        <source>Add a shared-memory table</source>
+        <translation type="vanished">Thêm bảng bộ nhớ chia sẻ</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="101"/>
+        <source>Add a script-drawn canvas group</source>
+        <translation>Thêm nhóm vẽ canvas bằng script</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="102"/>
-        <source>Add a script-drawn painter group</source>
-        <translation>Thêm nhóm vẽ bằng script</translation>
+        <source>Add a shared variable table</source>
+        <translation>Thêm bảng biến chia sẻ</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="103"/>
-        <source>Add a shared-memory table</source>
-        <translation>Thêm bảng bộ nhớ chia sẻ</translation>
-    </message>
-    <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="104"/>
         <source>Add a slider control</source>
         <translation>Thêm điều khiển thanh trượt</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="105"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="104"/>
         <source>Add a text field control</source>
         <translation>Thêm điều khiển trường văn bản</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="106"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="105"/>
         <source>Add a toggle control</source>
         <translation>Thêm điều khiển chuyển đổi</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="107"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="106"/>
         <source>Add a top-level folder in this section</source>
         <translation>Thêm một thư mục cấp cao nhất trong phần này</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="107"/>
+        <source>Add a variable to this shared table</source>
+        <translation>Thêm biến vào bảng chia sẻ này</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="108"/>
@@ -3176,766 +3204,811 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="136"/>
+        <source>Canvas</source>
+        <translation>Canvas</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="137"/>
+        <source>Canvas Widget</source>
+        <translation>Widget Canvas</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="138"/>
         <source>Chat with an AI to build and edit your project</source>
         <translation>Trò Chuyện với AI để Xây Dựng và Chỉnh Sửa Dự Án</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="137"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="139"/>
         <source>Check device permissions, adapters, and host reachability</source>
         <translation>Kiểm tra quyền thiết bị, bộ chuyển đổi và khả năng kết nối máy chủ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="138"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="140"/>
         <source>Clean Up Unresolved Widgets</source>
         <translation>Dọn Dẹp Các Widget Chưa Được Phân Giải</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="139"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="141"/>
         <source>Clear All Workspaces</source>
         <translation>Xóa Tất Cả Không Gian Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="140"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="142"/>
         <source>Clear Console</source>
         <translation>Xóa Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="141"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="143"/>
         <source>Clear Window</source>
         <translation>Xóa Cửa Sổ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="142"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="144"/>
         <source>Clear the console output</source>
         <translation>Xóa đầu ra của bảng điều khiển</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="143"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="145"/>
         <source>Clock</source>
         <translation>Đồng Hồ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="144"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="146"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="145"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="147"/>
         <source>Close Window</source>
         <translation>Đóng Cửa Sổ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="146"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="148"/>
         <source>Close session file</source>
         <translation>Đóng tệp phiên</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="147"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="149"/>
         <source>Collapse All</source>
         <translation>Thu Gọn Tất Cả</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="148"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="150"/>
         <source>Collapse Duplicates</source>
         <translation>Thu Gọn Trùng Lặp</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="149"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="151"/>
         <source>Collapse repeated console lines</source>
         <translation>Thu gọn các dòng bảng điều khiển lặp lại</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="150"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="152"/>
         <source>Collapse the project tree to its overview</source>
         <translation>Thu gọn cây dự án về chế độ tổng quan</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="151"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="153"/>
         <source>Command Palette</source>
         <translation>Bảng Lệnh</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="152"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="154"/>
         <source>Compare Project</source>
         <translation>So Sánh Dự Án</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="153"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="155"/>
         <source>Compare the selected session against the project open in the editor</source>
         <translation>So Sánh Phiên Đã Chọn với Dự Án Đang Mở trong Trình Chỉnh Sửa</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="154"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="156"/>
         <source>Compass</source>
         <translation>La Bàn</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="155"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="157"/>
         <source>Configure the MQTT publisher</source>
         <translation>Cấu Hình Nhà Xuất Bản MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="156"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="158"/>
         <source>Connect</source>
         <translation>Kết Nối</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="157"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="159"/>
         <source>Connect or disconnect from the configured device</source>
         <translation>Kết nối hoặc ngắt kết nối khỏi thiết bị đã cấu hình</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="158"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="160"/>
         <source>Connection Diagnostics</source>
         <translation>Chẩn Đoán Kết Nối</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="159"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="161"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="160"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="162"/>
         <source>Console Echo</source>
         <translation>Echo Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="161"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="163"/>
         <source>Console Only Mode</source>
         <translation>Chế Độ Chỉ Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="162"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="164"/>
         <source>Console Timestamps</source>
         <translation>Dấu Thời Gian Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="163"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="165"/>
         <source>Console Transcript</source>
         <translation>Bản Ghi Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="164"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="166"/>
         <source>Create a new JSON project</source>
         <translation>Tạo dự án JSON mới</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="165"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="167"/>
         <source>Customize Workspaces</source>
         <translation>Tùy Chỉnh Không Gian Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="166"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="168"/>
         <source>Data Grid</source>
         <translation>Lưới Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="167"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="169"/>
         <source>Dataset</source>
         <translation>Tập Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="168"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="170"/>
         <source>Dataset Container</source>
         <translation>Vùng Chứa Tập Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="169"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="171"/>
         <source>Delete</source>
         <translation>Xóa</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="170"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="172"/>
         <source>Delete the selected session</source>
         <translation>Xóa phiên đã chọn</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="171"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="173"/>
         <source>Delete this item</source>
         <translation>Xóa Mục Này</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="172"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="174"/>
         <source>Deploy</source>
         <translation>Triển Khai</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="173"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="175"/>
         <source>Deploy Operator App</source>
         <translation>Triển Khai Ứng Dụng Điều Hành</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="174"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="176"/>
         <source>Disconnect</source>
         <translation>Ngắt Kết Nối</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="175"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="177"/>
         <source>Drop workspace widgets whose source is gone</source>
         <translation>Loại Bỏ Widget Không Gian Làm Việc Có Nguồn Đã Mất</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="176"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="178"/>
         <source>Duplicate</source>
         <translation>Nhân Bản</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="177"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="179"/>
         <source>Duplicate this item</source>
         <translation>Nhân Bản Mục Này</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="178"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="180"/>
         <source>Echo transmitted data in the console</source>
         <translation>Hiển thị dữ liệu truyền đi trong bảng điều khiển</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="179"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="181"/>
+        <source>Edit Canvas Code</source>
+        <translation>Chỉnh Sửa Mã Canvas</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="182"/>
         <source>Edit Control Loop</source>
         <translation>Chỉnh Sửa Vòng Lặp Điều Khiển</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="180"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="183"/>
         <source>Edit Frame Parser</source>
         <translation>Chỉnh Sửa Bộ Phân Tích Frame</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="181"/>
-        <source>Edit Painter Code</source>
-        <translation>Chỉnh Sửa Mã Painter</translation>
+        <location filename="../../src/UI/CommandStrings.cpp" line="193"/>
+        <source>Export Variables</source>
+        <translation>Xuất Biến</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="182"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="195"/>
+        <source>Export this table's variables to CSV</source>
+        <translation>Xuất các biến của bảng này sang CSV</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="219"/>
+        <source>Import Variables</source>
+        <translation>Nhập Biến</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="220"/>
+        <source>Import this table's variables from CSV</source>
+        <translation>Nhập các biến của bảng này từ CSV</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="263"/>
+        <source>Open the historian documentation</source>
+        <translation>Mở tài liệu historian</translation>
+    </message>
+    <message>
+        <source>Edit Painter Code</source>
+        <translation type="vanished">Chỉnh Sửa Mã Painter</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="184"/>
         <source>Edit Transform Code</source>
         <translation>Chỉnh Sửa Mã Transform</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="183"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="185"/>
         <source>Edit Workspace Widgets</source>
         <translation>Chỉnh Sửa Widget Workspace</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="184"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="186"/>
         <source>Edit workspaces manually instead of using the automatic layout</source>
         <translation>Chỉnh sửa workspace thủ công thay vì sử dụng bố cục tự động</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="185"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="187"/>
         <source>Examples</source>
         <translation>Ví Dụ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="186"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="188"/>
         <source>Expand All</source>
         <translation>Mở Rộng Tất Cả</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="187"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="189"/>
         <source>Expand every item in the project tree</source>
         <translation>Mở rộng mọi mục trong cây dự án</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="188"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="190"/>
         <source>Export</source>
         <translation>Xuất</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="189"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="191"/>
         <source>Export CSV</source>
         <translation>Xuất CSV</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="190"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="192"/>
         <source>Export PDF</source>
         <translation>Xuất PDF</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="191"/>
         <source>Export Registers</source>
-        <translation>Xuất Register</translation>
+        <translation type="vanished">Xuất Register</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="192"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="194"/>
         <source>Export selected session to CSV</source>
         <translation>Xuất phiên đã chọn sang CSV</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="193"/>
         <source>Export this table's registers to CSV</source>
-        <translation>Xuất các register của bảng này sang CSV</translation>
+        <translation type="vanished">Xuất các register của bảng này sang CSV</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="194"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="196"/>
         <source>Extensions</source>
         <translation>Tiện Ích Mở Rộng</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="195"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="197"/>
         <source>FFT Plot</source>
         <translation>Biểu Đồ FFT</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="196"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="198"/>
         <source>File Transmission</source>
         <translation>Truyền Tệp</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="197"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="199"/>
         <source>Fill every empty dataset alias from its title</source>
         <translation>Điền mọi bí danh dataset trống từ tiêu đề của nó</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="198"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="200"/>
         <source>Freeze Dashboard</source>
         <translation>Đóng Băng Bảng Điều Khiển</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="199"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="201"/>
         <source>Full Screen</source>
         <translation>Toàn Màn Hình</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="200"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="202"/>
         <source>GPS Map</source>
         <translation>Bản Đồ GPS</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="201"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="203"/>
         <source>Gauge</source>
         <translation>Đồng Hồ Đo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="202"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="204"/>
         <source>Generate a PDF report for the selected session</source>
         <translation>Tạo báo cáo PDF cho phiên đã chọn</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="203"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="205"/>
         <source>Generate a project from a Protocol Buffers (.proto) schema</source>
         <translation>Tạo dự án từ lược đồ Protocol Buffers (.proto)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="204"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="206"/>
         <source>Generic</source>
         <translation>Chung</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="205"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="207"/>
         <source>Group</source>
         <translation>Nhóm</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="206"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="208"/>
         <source>Gyroscope</source>
         <translation>Con Quay Hồi Chuyển</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="207"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="209"/>
         <source>HID</source>
         <translation>HID</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="208"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="210"/>
         <source>Help</source>
         <translation>Trợ Giúp</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="209"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="211"/>
         <source>Help Center</source>
         <translation>Trung Tâm Trợ Giúp</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="210"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="212"/>
         <source>Hex Display</source>
         <translation>Hiển Thị Hex</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="211"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="213"/>
         <source>Hide</source>
         <translation>Ẩn</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="212"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="214"/>
         <source>Hide this item from the dashboard and frame building</source>
         <translation>Ẩn mục này khỏi bảng điều khiển và xây dựng khung</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="213"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="215"/>
+        <source>Historian</source>
+        <translation>Historian</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="216"/>
         <source>Image</source>
         <translation>Hình Ảnh</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="214"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="217"/>
         <source>Image View</source>
         <translation>Khung Xem Hình Ảnh</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="215"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="218"/>
         <source>Import Protobuf Schema</source>
         <translation>Nhập Lược Đồ Protobuf</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="216"/>
         <source>Import Registers</source>
-        <translation>Nhập Thanh Ghi</translation>
+        <translation type="vanished">Nhập Thanh Ghi</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="217"/>
         <source>Import this table's registers from CSV</source>
-        <translation>Nhập các thanh ghi của bảng này từ CSV</translation>
+        <translation type="vanished">Nhập các thanh ghi của bảng này từ CSV</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="218"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="221"/>
         <source>Knob</source>
         <translation>Núm Xoay</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="219"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="222"/>
         <source>LED Indicator</source>
         <translation>Đèn Báo LED</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="220"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="223"/>
         <source>Level Indicator</source>
         <translation>Chỉ Báo Mức</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="221"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="224"/>
         <source>License Management</source>
         <translation>Quản Lý Giấy Phép</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="222"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="225"/>
         <source>Lock</source>
         <translation>Khóa</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="223"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="226"/>
         <source>Lock Project Editor</source>
         <translation>Khóa Trình Soạn Thảo Dự Án</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="224"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="227"/>
         <source>MDF4 File</source>
         <translation>Tệp MDF4</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="225"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="228"/>
         <source>MQTT Publisher</source>
         <translation>MQTT Publisher</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="226"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="229"/>
         <source>Macros</source>
         <translation>Macro</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="227"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="230"/>
         <source>Make every hidden group visible again</source>
         <translation>Hiển thị lại tất cả các nhóm đã ẩn</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="228"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="231"/>
         <source>Manage your Serial Studio Pro license</source>
         <translation>Quản lý giấy phép Serial Studio Pro của bạn</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="229"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="232"/>
         <source>Meter</source>
         <translation>Đồng Hồ Đo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="230"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="233"/>
         <source>Minimize Window</source>
         <translation>Thu Nhỏ Cửa Sổ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="231"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="234"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="232"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="235"/>
         <source>Move Down</source>
         <translation>Di Chuyển Xuống</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="233"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="236"/>
         <source>Move Up</source>
         <translation>Di Chuyển Lên</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="234"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="237"/>
         <source>Move this item down among its siblings</source>
         <translation>Di chuyển mục này xuống trong các mục cùng cấp</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="235"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="238"/>
         <source>Move this item out of every folder</source>
         <translation>Di chuyển mục này ra khỏi mọi thư mục</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="236"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="239"/>
         <source>Move this item up among its siblings</source>
         <translation>Di chuyển mục này lên trong các mục cùng cấp</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="237"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="240"/>
         <source>Move to Folder</source>
         <translation>Di Chuyển đến Thư Mục</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="238"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="241"/>
         <source>Multi-Plot</source>
         <translation>Đồ Thị Đa Trục</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="239"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="242"/>
         <source>Navigate Back</source>
         <translation>Điều Hướng Quay Lại</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="240"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="243"/>
         <source>Navigate Forward</source>
         <translation>Điều Hướng Tiến</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="241"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="244"/>
         <source>Network</source>
         <translation>Mạng</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="242"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="245"/>
         <source>New</source>
         <translation>Mới</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="243"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="246"/>
         <source>New Folder</source>
         <translation>Thư Mục Mới</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="244"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="247"/>
         <source>New Project</source>
         <translation>Dự Án Mới</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="245"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="248"/>
         <source>New Sub-Folder</source>
         <translation>Thư Mục Con Mới</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="246"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="249"/>
         <source>Next Workspace</source>
         <translation>Không Gian Làm Việc Tiếp Theo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="247"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="250"/>
         <source>Notifications</source>
         <translation>Thông Báo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="248"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="251"/>
         <source>Open</source>
         <translation>Mở</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="249"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="252"/>
         <source>Open CSV</source>
         <translation>Mở CSV</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="250"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="253"/>
         <source>Open MDF4</source>
         <translation>Mở MDF4</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="251"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="254"/>
         <source>Open Project</source>
         <translation>Mở Dự Án</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="252"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="255"/>
         <source>Open a session file</source>
         <translation>Mở tệp phiên</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="253"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="256"/>
         <source>Open an existing JSON project</source>
         <translation>Mở dự án JSON hiện có</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="254"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="257"/>
         <source>Open application settings and preferences</source>
         <translation>Mở cài đặt và tùy chọn ứng dụng</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="255"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="258"/>
         <source>Open the Assistant</source>
         <translation>Mở Trợ Lý</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="256"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="259"/>
         <source>Open the Project Editor documentation</source>
         <translation>Mở tài liệu Trình Chỉnh Sửa Dự Án</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="257"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="260"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
         <translation>Mở Trình Chỉnh Sửa Dự Án để tạo hoặc chỉnh sửa bố cục JSON của bạn</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="258"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="261"/>
+        <source>Open the canvas script for this group</source>
+        <translation>Mở script canvas cho nhóm này</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="262"/>
         <source>Open the frame parser for this data source</source>
         <translation>Mở bộ phân tích frame cho nguồn dữ liệu này</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="259"/>
         <source>Open the painter script for this group</source>
-        <translation>Mở script vẽ cho nhóm này</translation>
+        <translation type="vanished">Mở script vẽ cho nhóm này</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="260"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="264"/>
         <source>Open the project control loop</source>
         <translation>Mở vòng lặp điều khiển của dự án</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="261"/>
         <source>Open the session database documentation</source>
-        <translation>Mở tài liệu hướng dẫn cơ sở dữ liệu phiên làm việc</translation>
+        <translation type="vanished">Mở tài liệu hướng dẫn cơ sở dữ liệu phiên làm việc</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="262"/>
         <source>Open the shared-memory documentation</source>
-        <translation>Mở tài liệu bộ nhớ dùng chung</translation>
+        <translation type="vanished">Mở tài liệu bộ nhớ dùng chung</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="263"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="265"/>
         <source>Open the value transform for this dataset</source>
         <translation>Mở phép biến đổi giá trị cho tập dữ liệu này</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="264"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="266"/>
+        <source>Open the variables documentation</source>
+        <translation>Mở tài liệu biến</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="267"/>
         <source>Open this workspace to edit its widgets</source>
         <translation>Mở không gian làm việc này để chỉnh sửa các widget</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="265"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="268"/>
         <source>Output</source>
         <translation>Đầu Ra</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="266"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="269"/>
         <source>Output Panel</source>
         <translation>Bảng Điều Khiển Đầu Ra</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="267"/>
         <source>Painter</source>
-        <translation>Painter</translation>
+        <translation type="vanished">Painter</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="268"/>
         <source>Painter Widget</source>
-        <translation>Widget Vẽ</translation>
+        <translation type="vanished">Widget Vẽ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="269"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="270"/>
         <source>Pause</source>
         <translation>Tạm Dừng</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="270"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="271"/>
         <source>Play a CSV file as if it were live sensor data</source>
         <translation>Phát tệp CSV như thể đó là dữ liệu cảm biến trực tiếp</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="271"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="272"/>
         <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
         <translation>Phát tệp MDF4 như thể đó là dữ liệu cảm biến trực tiếp (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="272"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="273"/>
         <source>Plot</source>
         <translation>Biểu Đồ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="273"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="274"/>
         <source>Preferences</source>
         <translation>Tùy Chọn</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="274"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="275"/>
         <source>Previous Workspace</source>
         <translation>Không Gian Làm Việc Trước</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="275"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="276"/>
         <source>Problem Center</source>
         <translation>Trung Tâm Vấn Đề</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="276"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="277"/>
         <source>Process</source>
         <translation>Tiến Trình</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="277"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="278"/>
         <source>Project Editor</source>
         <translation>Trình Soạn Thảo Dự Án</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="278"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="279"/>
         <source>Project File Mode</source>
         <translation>Chế Độ Tệp Dự Án</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="279"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="280"/>
         <source>Protobuf</source>
         <translation>Protobuf</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="280"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="281"/>
         <source>Quick Plot Mode</source>
         <translation>Chế Độ Biểu Đồ Nhanh</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="281"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="282"/>
         <source>Quit</source>
         <translation>Thoát</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="282"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="283"/>
         <source>Rebuild the automatic workspace layout</source>
         <translation>Xây dựng lại bố cục không gian làm việc tự động</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="283"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="284"/>
         <source>Redo</source>
         <translation>Làm Lại</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="284"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="285"/>
         <source>Redo the last undone project edit</source>
         <translation>Làm lại thao tác chỉnh sửa dự án vừa hoàn tác</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="285"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="286"/>
         <source>Remote Dashboard</source>
         <translation>Bảng Điều Khiển từ Xa</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="286"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="287"/>
         <source>Remove every user workspace</source>
         <translation>Xóa mọi không gian làm việc của người dùng</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="287"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="288"/>
         <source>Rename</source>
         <translation>Đổi Tên</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="288"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="289"/>
         <source>Rename this item</source>
         <translation>Đổi tên mục này</translation>
     </message>
@@ -3944,337 +4017,339 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation type="vanished">Khôi Phục</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="289"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="290"/>
         <source>Replay</source>
         <translation>Phát Lại</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="290"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="291"/>
         <source>Replay selected session on the dashboard</source>
         <translation>Phát lại phiên đã chọn trên bảng điều khiển</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="291"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="292"/>
         <source>Reset</source>
         <translation>Đặt Lại</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="292"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="293"/>
         <source>Reset to Auto Layout</source>
         <translation>Đặt Lại về Bố Cục Tự Động</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="293"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="294"/>
         <source>Restore</source>
         <translation>Khôi Phục</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="294"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="295"/>
         <source>Restore Backup</source>
         <translation>Khôi Phục Bản Sao Lưu</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="295"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="296"/>
         <source>Restore Project</source>
         <translation>Khôi Phục Dự Án</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="296"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="297"/>
         <source>Restore a recent automatic snapshot of the current project</source>
         <translation>Khôi phục bản sao lưu tự động gần đây của dự án hiện tại</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="297"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="298"/>
         <source>Restore the project file from this session file</source>
         <translation>Khôi phục tệp dự án từ tệp phiên này</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="298"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="299"/>
         <source>Resume</source>
         <translation>Tiếp Tục</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="299"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="300"/>
         <source>Review project, link, and script diagnostics</source>
         <translation>Xem lại chẩn đoán dự án, liên kết và script</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="300"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="301"/>
         <source>Run API commands and script macros interactively</source>
         <translation>Chạy lệnh API và macro script tương tác</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="301"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="302"/>
         <source>Save</source>
         <translation>Lưu</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="302"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="303"/>
         <source>Save As</source>
         <translation>Lưu dưới Dạng</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="303"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="304"/>
         <source>Save Project</source>
         <translation>Lưu Dự Án</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="304"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="305"/>
         <source>Save Project As</source>
         <translation>Lưu Dự Án dưới Dạng</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="305"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="306"/>
         <source>Search</source>
         <translation>Tìm Kiếm</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="306"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="307"/>
         <source>Search and run any Serial Studio command</source>
         <translation>Tìm kiếm và chạy bất kỳ lệnh Serial Studio nào</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="307"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="308"/>
         <source>Seed Aliases from Titles</source>
         <translation>Tạo Bí Danh từ Tiêu Đề</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="308"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="309"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>Chọn kết nối Bluetooth Low Energy</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="309"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="310"/>
         <source>Select CAN Bus communication (Pro)</source>
         <translation>Chọn giao tiếp CAN Bus (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="310"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="311"/>
         <source>Select HID device communication (Pro)</source>
         <translation>Chọn giao tiếp thiết bị HID (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="311"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="312"/>
         <source>Select MODBUS communication (Pro)</source>
         <translation>Chọn giao tiếp Modbus (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="312"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="313"/>
         <source>Select Serial port (UART) communication</source>
         <translation>Chọn giao tiếp cổng nối tiếp (UART)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="313"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="314"/>
         <source>Select TCP/UDP network communication</source>
         <translation>Chọn giao tiếp mạng TCP/UDP</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="314"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="315"/>
         <source>Select audio input device (Pro)</source>
         <translation>Chọn thiết bị đầu vào âm thanh (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="315"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="316"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>Chọn giao tiếp qua ống tiến trình (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="316"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="317"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>Chọn giao tiếp USB thô (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="317"/>
         <source>Session Database</source>
-        <translation>Cơ Sở Dữ Liệu Phiên</translation>
+        <translation type="vanished">Cơ Sở Dữ Liệu Phiên</translation>
+    </message>
+    <message>
+        <source>Sessions</source>
+        <translation type="vanished">Phiên</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="318"/>
-        <source>Sessions</source>
-        <translation>Phiên</translation>
-    </message>
-    <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="319"/>
         <source>Set a password and lock the Project Editor</source>
         <translation>Đặt mật khẩu và khóa Trình Chỉnh Sửa Dự Án</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="320"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="319"/>
         <source>Set a password to prevent session deletions</source>
         <translation>Đặt mật khẩu để ngăn xóa phiên</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="321"/>
         <source>Shared Memory Help</source>
-        <translation>Trợ Giúp Bộ Nhớ Chia Sẻ</translation>
+        <translation type="vanished">Trợ Giúp Bộ Nhớ Chia Sẻ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="322"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="320"/>
         <source>Show</source>
         <translation>Hiển Thị</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="323"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="321"/>
         <source>Show All Hidden Groups</source>
         <translation>Hiển Thị Tất Cả Nhóm Ẩn</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="324"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="322"/>
         <source>Show application info and license details</source>
         <translation>Hiển thị thông tin ứng dụng và chi tiết giấy phép</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="325"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="323"/>
         <source>Show this dataset as a 2D plot</source>
         <translation>Hiển thị tập dữ liệu này dưới dạng biểu đồ 2D</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="326"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="324"/>
         <source>Show this dataset as a bar or level</source>
         <translation>Hiển thị tập dữ liệu này dưới dạng thanh hoặc mức</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="327"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="325"/>
         <source>Show this dataset as a compass</source>
         <translation>Hiển thị tập dữ liệu này dưới dạng la bàn</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="328"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="326"/>
         <source>Show this dataset as a gauge</source>
         <translation>Hiển thị tập dữ liệu này dưới dạng đồng hồ đo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="329"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="327"/>
         <source>Show this dataset as a waterfall plot</source>
         <translation>Hiển thị tập dữ liệu này dưới dạng biểu đồ thác nước</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="330"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="328"/>
         <source>Show this dataset as an FFT plot</source>
         <translation>Hiển thị tập dữ liệu này dưới dạng biểu đồ FFT</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="331"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="329"/>
         <source>Show this dataset as an LED indicator</source>
         <translation>Hiển thị tập dữ liệu này dưới dạng đèn báo LED</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="332"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="330"/>
         <source>Show this dataset as an analog meter</source>
         <translation>Hiển thị tập dữ liệu này dưới dạng đồng hồ đo analog</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="333"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="331"/>
         <source>Show timestamps in the console</source>
         <translation>Hiển thị dấu thời gian trong bảng điều khiển</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="334"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="332"/>
         <source>Slider</source>
         <translation>Thanh Trượt</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="335"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="333"/>
         <source>Start Menu</source>
         <translation>Menu Khởi Động</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="336"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="334"/>
         <source>Stopwatch</source>
         <translation>Đồng Hồ Bấm Giờ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="337"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="335"/>
         <source>Switch to Console Only mode (no parsing)</source>
         <translation>Chuyển sang chế độ Chỉ Bảng Điều Khiển (không phân tích)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="338"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="336"/>
         <source>Switch to Project File mode (parse via a project)</source>
         <translation>Chuyển sang chế độ Tệp Dự Án (phân tích qua dự án)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="339"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="337"/>
         <source>Switch to Quick Plot mode (comma-separated values)</source>
         <translation>Chuyển sang chế độ Vẽ Đồ Thị Nhanh (giá trị phân tách bằng dấu phẩy)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="340"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="338"/>
         <source>Table</source>
         <translation>Bảng</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="341"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="339"/>
         <source>Text Field</source>
         <translation>Trường Văn Bản</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="342"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="340"/>
         <source>Toggle</source>
         <translation>Công Tắc</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="343"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="341"/>
         <source>Toggle hexadecimal console display</source>
         <translation>Chuyển đổi hiển thị console thập lục phân</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="344"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="342"/>
         <source>Tools</source>
         <translation>Công Cụ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="345"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="343"/>
         <source>Top Level</source>
         <translation>Cấp Cao Nhất</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="346"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="344"/>
         <source>UART</source>
         <translation>UART</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="347"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="345"/>
         <source>USB</source>
         <translation>USB</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="348"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="346"/>
         <source>Undo</source>
         <translation>Hoàn Tác</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="349"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="347"/>
         <source>Undo the last project edit</source>
         <translation>Hoàn tác thao tác chỉnh sửa dự án cuối cùng</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="350"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="348"/>
         <source>Unlock</source>
         <translation>Mở Khóa</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="351"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="349"/>
+        <source>Variables Help</source>
+        <translation>Trợ Giúp Biến</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="350"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
         <translation>Xem tài liệu chi tiết và đặt câu hỏi trên DeepWiki</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="352"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="351"/>
         <source>Visualizations</source>
         <translation>Trực Quan Hóa</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="353"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="352"/>
         <source>Watch another Serial Studio instance's dashboard over the network</source>
         <translation>Theo dõi bảng điều khiển của một phiên bản Serial Studio khác qua mạng</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="354"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="353"/>
         <source>Waterfall</source>
         <translation>Thác Nước</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="355"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="354"/>
         <source>Web View</source>
         <translation>Khung Xem Web</translation>
     </message>
@@ -5993,9 +6068,13 @@ v
         <translation>Bộ nhớ khối đã cạn kiệt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="583"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, session DB, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
-        <translation>Một thành phần tiêu thụ ở phía sau (dashboard, xuất CSV/MDF4, cơ sở dữ liệu phiên hoặc API subscriber) không xử lý đủ nhanh, do đó dữ liệu đang bị mất khỏi màn hình hiển thị và khỏi bất kỳ bản ghi đang hoạt động nào. Tắt các thành phần tiêu tốn nhiều tài nguyên hoặc giảm tốc độ dữ liệu.</translation>
+        <translation type="vanished">Một thành phần tiêu thụ ở phía sau (dashboard, xuất CSV/MDF4, cơ sở dữ liệu phiên hoặc API subscriber) không xử lý đủ nhanh, do đó dữ liệu đang bị mất khỏi màn hình hiển thị và khỏi bất kỳ bản ghi đang hoạt động nào. Tắt các thành phần tiêu tốn nhiều tài nguyên hoặc giảm tốc độ dữ liệu.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="583"/>
+        <source>A downstream consumer (dashboard, CSV/MDF4 export, historian, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
+        <translation>Một consumer phía sau (dashboard, xuất CSV/MDF4, historian, hoặc API subscriber) không xử lý đủ nhanh, nên dữ liệu đang bị loại bỏ khỏi màn hình hiển thị và khỏi bất kỳ bản ghi đang hoạt động nào. Tắt consumer nặng hoặc giảm tốc độ dữ liệu.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="3050"/>
@@ -6021,8 +6100,12 @@ v
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="3118"/>
+        <source>Multi-Plot</source>
+        <translation>Đồ Thị Đa Trục</translation>
+    </message>
+    <message>
         <source>Multiple Plots</source>
-        <translation>Nhiều Biểu Đồ</translation>
+        <translation type="vanished">Nhiều Biểu Đồ</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="3239"/>
@@ -6517,9 +6600,13 @@ Mọi thay đổi chưa lưu sẽ bị mất. Tiếp tục?</translation>
         <translation>Chọn tệp Javascript để nhập</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="399"/>
         <source>Select Painter Widget Template</source>
-        <translation>Chọn Mẫu Widget Painter</translation>
+        <translation type="vanished">Chọn Mẫu Widget Painter</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="399"/>
+        <source>Select Canvas Widget Template</source>
+        <translation>Chọn Mẫu Widget Canvas</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="400"/>
@@ -6554,12 +6641,8 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation type="vanished">Nhóm</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="597"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="610"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="611"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="636"/>
         <source>Shared Memory</source>
-        <translation>Bộ Nhớ Dùng Chung</translation>
+        <translation type="vanished">Bộ Nhớ Dùng Chung</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorSummaries.cpp" line="134"/>
@@ -6942,7 +7025,7 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation>Vẽ đồ thị mỗi đường cong theo thời gian hoặc theo số mẫu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="413"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="414"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="314"/>
         <source>Logarithmic X Axis</source>
         <translation>Trục X Logarit</translation>
@@ -6953,7 +7036,7 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation>Chia tỷ lệ trục X theo thập phân; khả dụng khi nguồn Trục X là Mẫu (không phải Thời Gian)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="426"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="427"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="327"/>
         <source>Logarithmic Y Axis</source>
         <translation>Trục Y Logarit</translation>
@@ -7164,7 +7247,7 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation>Cài Đặt Kết Nối</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="214"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="215"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="692"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1108"/>
         <source>General Information</source>
@@ -7329,172 +7412,184 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation>Số lần gửi lệnh trong mỗi lần kích hoạt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="226"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="227"/>
         <source>Untitled Dataset</source>
         <translation>Dataset Chưa Đặt Tên</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="227"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="228"/>
         <source>Dataset Title</source>
         <translation>Tiêu Đề Dataset</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="228"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="229"/>
         <source>Name of the dataset, used for labeling and identification</source>
         <translation>Tên của dataset, dùng để gắn nhãn và nhận dạng</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="238"/>
         <source>Virtual Dataset</source>
-        <translation>Dataset Ảo</translation>
+        <translation type="vanished">Dataset Ảo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="239"/>
         <source>Virtual datasets compute their value from transforms and data tables, they do not require a frame index</source>
-        <translation>Dataset ảo tính toán giá trị từ các phép biến đổi và bảng dữ liệu, không yêu cầu chỉ số khung</translation>
+        <translation type="vanished">Dataset ảo tính toán giá trị từ các phép biến đổi và bảng dữ liệu, không yêu cầu chỉ số khung</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="250"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="251"/>
         <source>Hide on Dashboard</source>
         <translation>Ẩn trên Dashboard</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="251"/>
         <source>Suppress this dataset's standalone dashboard tile; the painter widget can still read its values</source>
-        <translation>Ẩn ô dashboard riêng của dataset này; widget vẽ vẫn có thể đọc các giá trị của nó</translation>
+        <translation type="vanished">Ẩn ô dashboard riêng của dataset này; widget vẽ vẫn có thể đọc các giá trị của nó</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="266"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="267"/>
         <source>Frame Index</source>
         <translation>Chỉ Số Frame</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="267"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="268"/>
         <source>Frame position used for aligning datasets in time</source>
         <translation>Vị trí frame dùng để căn chỉnh các dataset theo thời gian</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="278"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="279"/>
         <source>Measurement Unit</source>
         <translation>Đơn Vị Đo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="277"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="278"/>
         <source>Volts, Amps, etc.</source>
         <translation>Volt, Ampe, v.v.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="279"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="280"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
         <translation>Đơn vị đo lường, chẳng hạn như volt hoặc ampe (tùy chọn)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="323"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="324"/>
         <source>Automatic</source>
         <translation>Tự Động</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="324"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="325"/>
         <source>Widget Color</source>
         <translation>Màu Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="325"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="326"/>
         <source>Custom display color for this dataset; automatic uses the theme palette</source>
         <translation>Màu hiển thị tùy chỉnh cho tập dữ liệu này; tự động sử dụng bảng màu chủ đề</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="303"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="304"/>
         <source>Stable name</source>
         <translation>Tên ổn định</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="304"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="239"/>
+        <source>Computed Dataset</source>
+        <translation>Dataset Tính Toán</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="240"/>
+        <source>Computed datasets compute their value from transforms and shared variables, they do not require a frame index</source>
+        <translation>Dataset tính toán tính giá trị từ các phép biến đổi và biến chia sẻ, không yêu cầu chỉ số khung</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="252"/>
+        <source>Suppress this dataset's standalone dashboard tile; the canvas widget can still read its values</source>
+        <translation>Ẩn ô dashboard riêng của dataset này; widget canvas vẫn có thể đọc các giá trị của nó</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="305"/>
         <source>Script Alias</source>
         <translation>Bí Danh Script</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="305"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="306"/>
         <source>Stable name for getDataset-style script/API lookups; must be unique (optional)</source>
         <translation>Tên ổn định cho tra cứu script/API kiểu getDataset; phải là duy nhất (tùy chọn)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="345"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="346"/>
         <source>Lower bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>Giới hạn dưới của phạm vi giá trị dataset; các widget và FFT sẽ dùng giá trị này khi phạm vi riêng của chúng không được thiết lập</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="357"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="358"/>
         <source>Upper bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>Giới hạn trên của phạm vi giá trị dataset; các widget và FFT sẽ dùng giá trị này khi phạm vi riêng của chúng không được thiết lập</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="372"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="373"/>
         <source>Plot Settings</source>
         <translation>Cài Đặt Biểu Đồ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="386"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="387"/>
         <source>Enable Plot Widget</source>
         <translation>Bật Widget Biểu Đồ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="387"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="388"/>
         <source>Plot data in real-time</source>
         <translation>Vẽ dữ liệu theo thời gian thực</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="414"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="415"/>
         <source>Scale the X axis in decades; available when the X-Axis source is Samples or a dataset (not Time)</source>
         <translation>Chia tỷ lệ trục X theo thập phân; khả dụng khi nguồn Trục X là Mẫu hoặc một dataset (không phải Thời Gian)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="427"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="428"/>
         <source>Scale the Y axis in decades; values at or below zero are clamped</source>
         <translation>Chia tỷ lệ trục Y theo thập phân; các giá trị bằng hoặc nhỏ hơn không được giới hạn</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="479"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="480"/>
         <source>Peak Ballistics</source>
         <translation>Đạn Đạo Đỉnh</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="480"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="481"/>
         <source>Analyzer-style display: peaks rise instantly and decay smoothly over the release time</source>
         <translation>Hiển thị kiểu phân tích: đỉnh tăng ngay lập tức và giảm mượt mà theo thời gian giải phóng</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="492"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="493"/>
         <source>Ballistics Release (ms)</source>
         <translation>Thời Gian Phát Đạn Đạo (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="493"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="494"/>
         <source>Decay time for the ballistics display (50-5000 ms)</source>
         <translation>Thời gian giảm cho hiển thị đạn đạo (50-5000 ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="549"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="550"/>
         <source>FFT Window Function</source>
         <translation>Hàm Cửa Sổ FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="550"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="551"/>
         <source>Window applied before the transform to reduce spectral leakage; affects both the FFT plot and the waterfall</source>
         <translation>Cửa sổ được áp dụng trước phép biến đổi để giảm rò rỉ phổ; ảnh hưởng đến cả biểu đồ FFT và biểu đồ thác nước</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="576"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="577"/>
         <source>Logarithmic Frequency Axis</source>
         <translation>Trục Tần Số Logarit</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="739"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="740"/>
         <source>Hold Min/Max Markers</source>
         <translation>Giữ Điểm Đánh Dấu Min/max</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="740"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="741"/>
         <source>Show hold markers at the lowest and highest values observed since the last data reset</source>
         <translation>Hiển thị điểm đánh dấu giữ tại giá trị thấp nhất và cao nhất quan sát được kể từ lần đặt lại dữ liệu cuối cùng</translation>
     </message>
@@ -7503,12 +7598,12 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation type="vanished">Chia tỷ lệ trục tần số FFT theo thập phân để các quãng tám thấp vẫn dễ đọc</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="693"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="694"/>
         <source>Fixed decimal places for the value display; overrides the format (-1 = auto)</source>
         <translation>Số chữ số thập phân cố định cho hiển thị giá trị; ghi đè định dạng (-1 = tự động)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="400"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="401"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="298"/>
         <source>X-Axis Source</source>
         <translation>Nguồn Trục X</translation>
@@ -7534,57 +7629,57 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation type="vanished">Giới hạn trên cho phạm vi hiển thị biểu đồ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="442"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="443"/>
         <source>Frequency Analysis</source>
         <translation>Phân Tích Tần Số</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="455"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="456"/>
         <source>Enable FFT Analysis</source>
         <translation>Bật Phân Tích FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="456"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="457"/>
         <source>Perform frequency-domain analysis of the dataset</source>
         <translation>Thực hiện phân tích miền tần số của tập dữ liệu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="466"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="467"/>
         <source>Enable Waterfall Plot</source>
         <translation>Bật Biểu Đồ Waterfall</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="467"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="468"/>
         <source>Show a scrolling spectrogram of frequency content over time (Pro)</source>
         <translation>Hiển thị phổ tần số cuộn theo thời gian (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="508"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="509"/>
         <source>Waterfall Y Axis</source>
         <translation>Trục Y Thác Nước</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="509"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="510"/>
         <source>Choose Time (default) or any dataset whose value drives the Y axis -- produces a Campbell diagram when bound to e.g. RPM</source>
         <translation>Chọn Thời Gian (mặc định) hoặc bất kỳ tập dữ liệu nào có giá trị điều khiển trục Y -- tạo biểu đồ Campbell khi liên kết với RPM chẳng hạn</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="534"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="535"/>
         <source>FFT Window Size</source>
         <translation>Kích Thước Cửa Sổ FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="535"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="536"/>
         <source>Number of samples used for each FFT calculation window</source>
         <translation>Số lượng mẫu sử dụng cho mỗi cửa sổ tính toán FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="563"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="564"/>
         <source>FFT Sampling Rate (Hz, required)</source>
         <translation>Tần Số Lấy Mẫu FFT (Hz, bắt buộc)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="564"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="565"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
         <translation>Tần số lấy mẫu sử dụng cho FFT (tính bằng Hz)</translation>
     </message>
@@ -7605,17 +7700,17 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation type="vanished">Giới hạn trên cho chuẩn hóa dữ liệu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="619"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="620"/>
         <source>Widget Settings</source>
         <translation>Cài Đặt Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="635"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="636"/>
         <source>Widget</source>
         <translation>Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="636"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="637"/>
         <source>Select the visual widget used to display this dataset</source>
         <translation>Chọn widget trực quan dùng để hiển thị tập dữ liệu này</translation>
     </message>
@@ -7637,29 +7732,29 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="731"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="662"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="689"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="663"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="690"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="366"/>
         <source>Auto</source>
         <translation>Tự Động</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="663"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="664"/>
         <source>Tick Count</source>
         <translation>Số Lượng Vạch Chia</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="664"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="665"/>
         <source>Major-tick count on the dial scale (0 = auto-fit to widget size)</source>
         <translation>Số lượng vạch chia chính trên thang đo (0 = tự động điều chỉnh theo kích thước widget)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="678"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="679"/>
         <source>Label Format</source>
         <translation>Định Dạng Nhãn</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="679"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="680"/>
         <source>Decimal places or notation used on tick labels and the value display</source>
         <translation>Số chữ số thập phân hoặc ký hiệu được sử dụng trên nhãn vạch chia và hiển thị giá trị</translation>
     </message>
@@ -7700,22 +7795,22 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation type="vanished">Kích hoạt cảnh báo trực quan khi giá trị vượt quá ngưỡng này</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="755"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="756"/>
         <source>LED Display Settings</source>
         <translation>Cài Đặt Hiển Thị LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="768"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="769"/>
         <source>Show in LED Panel</source>
         <translation>Hiển Thị trong Bảng LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="769"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="770"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>Bật giám sát trạng thái trực quan bằng màn hình LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="782"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="783"/>
         <source>LED On Threshold (required)</source>
         <translation>Ngưỡng Bật LED (bắt buộc)</translation>
     </message>
@@ -7724,9 +7819,13 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation type="vanished">LED sáng lên khi giá trị đạt hoặc vượt ngưỡng này</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="455"/>
         <source>Edit Painter Code</source>
-        <translation>Chỉnh Sửa Mã Painter</translation>
+        <translation type="vanished">Chỉnh Sửa Mã Painter</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="455"/>
+        <source>Edit Canvas Code</source>
+        <translation>Chỉnh Sửa Mã Canvas</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="479"/>
@@ -7935,8 +8034,17 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="713"/>
-        <source>Multiple Plot</source>
+        <source>Multi-Plot</source>
         <translation>Đồ Thị Đa Trục</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="717"/>
+        <source>Canvas Widget</source>
+        <translation>Widget Canvas</translation>
+    </message>
+    <message>
+        <source>Multiple Plot</source>
+        <translation type="vanished">Đồ Thị Đa Trục</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="714"/>
@@ -7954,9 +8062,8 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation>Khung Xem Hình Ảnh</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="717"/>
         <source>Painter Widget</source>
-        <translation>Widget Vẽ</translation>
+        <translation type="vanished">Widget Vẽ</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="718"/>
@@ -8106,7 +8213,7 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation>Phạm Vi Giá Trị</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="344"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="345"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1199"/>
         <source>Minimum Value</source>
         <translation>Giá Trị Tối Thiểu</translation>
@@ -8118,6 +8225,14 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation>Widget Bảng Điều Khiển</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="597"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="610"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="611"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="636"/>
+        <source>Variables</source>
+        <translation>Biến</translation>
+    </message>
+    <message>
         <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="870"/>
         <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="874"/>
         <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="875"/>
@@ -8125,55 +8240,55 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation>Vòng Lặp Điều Khiển</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="356"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="357"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1208"/>
         <source>Maximum Value</source>
         <translation>Giá Trị Tối Đa</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="401"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="402"/>
         <source>Choose Time or a dataset to drive the X-Axis in plots</source>
         <translation>Chọn Thời Gian hoặc một dataset để điều khiển trục X trong các biểu đồ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="577"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="578"/>
         <source>Scale the frequency axis in decades so low octaves stay readable; applies to both the FFT plot and the waterfall</source>
         <translation>Chia tỷ lệ trục tần số theo thập phân để các quãng tám thấp vẫn dễ đọc; áp dụng cho cả biểu đồ FFT và biểu đồ thác nước</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="590"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="714"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="591"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="715"/>
         <source>Minimum Value (optional)</source>
         <translation>Giá Trị Tối Thiểu (tùy chọn)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="591"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="592"/>
         <source>Lower bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>Giới hạn dưới cho chuẩn hóa dữ liệu; sử dụng phạm vi giá trị của tập dữ liệu khi không được thiết lập</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="603"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="726"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="604"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="727"/>
         <source>Maximum Value (optional)</source>
         <translation>Giá Trị Tối Đa (tùy chọn)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="604"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="605"/>
         <source>Upper bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>Giới hạn trên cho chuẩn hóa dữ liệu; sử dụng phạm vi giá trị của tập dữ liệu khi không được thiết lập</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="715"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="716"/>
         <source>Lower bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>Giới hạn dưới của phạm vi đồng hồ đo hoặc thanh; sử dụng phạm vi giá trị của tập dữ liệu khi không được thiết lập</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="727"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="728"/>
         <source>Upper bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>Giới hạn trên của phạm vi đồng hồ đo hoặc thanh; sử dụng phạm vi giá trị của tập dữ liệu khi không được thiết lập</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="692"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="693"/>
         <source>Decimal Points</source>
         <translation>Số Chữ Số Thập Phân</translation>
     </message>
@@ -8187,7 +8302,7 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation>Bật</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="783"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="784"/>
         <source>LED lights up when value meets or exceeds this threshold; define alarm bands for multi-state colors</source>
         <translation>LED sáng lên khi giá trị đạt hoặc vượt ngưỡng này; định nghĩa các dải cảnh báo cho màu sắc đa trạng thái</translation>
     </message>
@@ -8941,6 +9056,11 @@ Chỉ bật cho các script bạn tin tưởng và đã kiểm tra ở chế đ�
         <translation>Đồng Hồ Đo Mới</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1452"/>
+        <source>Edit Canvas Datasets</source>
+        <translation>Chỉnh Sửa Dataset Canvas</translation>
+    </message>
+    <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="2187"/>
         <source>Duplicate Selection</source>
         <translation>Nhân Bản Lựa Chọn</translation>
@@ -8975,9 +9095,8 @@ Chỉ bật cho các script bạn tin tưởng và đã kiểm tra ở chế đ�
         <translation>Thác Nước Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1452"/>
         <source>Edit Painter Datasets</source>
-        <translation>Chỉnh Sửa Tập Dữ Liệu Vẽ</translation>
+        <translation type="vanished">Chỉnh Sửa Tập Dữ Liệu Vẽ</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1471"/>
@@ -9076,9 +9195,8 @@ Chỉ bật cho các script bạn tin tưởng và đã kiểm tra ở chế đ�
         <translation>Bảng Dùng Chung</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="223"/>
         <source>register</source>
-        <translation>thanh ghi</translation>
+        <translation type="vanished">thanh ghi</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="917"/>
@@ -9135,14 +9253,12 @@ Chỉ bật cho các script bạn tin tưởng và đã kiểm tra ở chế đ�
         <translation>Đổi Tên Hành Động</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="398"/>
         <source>New Register</source>
-        <translation>Thanh Ghi Mới</translation>
+        <translation type="vanished">Thanh Ghi Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="421"/>
         <source>Rename Register</source>
-        <translation>Đổi Tên Thanh Ghi</translation>
+        <translation type="vanished">Đổi Tên Thanh Ghi</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1200"/>
@@ -9153,9 +9269,8 @@ Chỉ bật cho các script bạn tin tưởng và đã kiểm tra ở chế đ�
         <translation>Hành động này không thể hoàn tác.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="456"/>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
-        <translation>Thao tác này sẽ xóa %1 thanh ghi cùng với bảng. Hành động này không thể hoàn tác.</translation>
+        <translation type="vanished">Thao tác này sẽ xóa %1 thanh ghi cùng với bảng. Hành động này không thể hoàn tác.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1199"/>
@@ -9176,20 +9291,52 @@ Chỉ bật cho các script bạn tin tưởng và đã kiểm tra ở chế đ�
         <translation>Xóa Bảng</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="214"/>
         <source>Add Register</source>
-        <translation>Thêm Thanh Ghi</translation>
+        <translation type="vanished">Thêm Thanh Ghi</translation>
+    </message>
+    <message>
+        <source>Delete Register</source>
+        <translation type="vanished">Xóa Thanh Ghi</translation>
+    </message>
+    <message>
+        <source>Edit Register</source>
+        <translation type="vanished">Chỉnh Sửa Thanh Ghi</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="214"/>
+        <source>Add Variable</source>
+        <translation>Thêm Biến</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="223"/>
+        <source>variable</source>
+        <translation>biến</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="253"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="482"/>
-        <source>Delete Register</source>
-        <translation>Xóa Thanh Ghi</translation>
+        <source>Delete Variable</source>
+        <translation>Xóa Biến</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="284"/>
-        <source>Edit Register</source>
-        <translation>Chỉnh Sửa Thanh Ghi</translation>
+        <source>Edit Variable</source>
+        <translation>Chỉnh Sửa Biến</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="398"/>
+        <source>New Variable</source>
+        <translation>Biến Mới</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="421"/>
+        <source>Rename Variable</source>
+        <translation>Đổi Tên Biến</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="456"/>
+        <source>This removes %1 variable(s) along with the table. This action cannot be undone.</source>
+        <translation>Thao tác này sẽ xóa %1 biến cùng với bảng. Hành động này không thể hoàn tác.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="506"/>
@@ -9584,9 +9731,14 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>DataTablesView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="35"/>
         <source>Shared Memory</source>
-        <translation>Bộ Nhớ Chia Sẻ</translation>
+        <translation type="vanished">Bộ Nhớ Chia Sẻ</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="35"/>
+        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="223"/>
+        <source>Variables</source>
+        <translation>Biến</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="187"/>
@@ -9615,8 +9767,12 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="213"/>
+        <source>Open help documentation for variables</source>
+        <translation>Mở tài liệu trợ giúp về biến</translation>
+    </message>
+    <message>
         <source>Open help documentation for shared memory</source>
-        <translation>Mở tài liệu trợ giúp về bộ nhớ chia sẻ</translation>
+        <translation type="vanished">Mở tài liệu trợ giúp về bộ nhớ chia sẻ</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="222"/>
@@ -9624,9 +9780,8 @@ Valid format: 01 A2 FF 3C</source>
         <translation>Tiêu Đề</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="223"/>
         <source>Registers</source>
-        <translation>Thanh Ghi</translation>
+        <translation type="vanished">Thanh Ghi</translation>
     </message>
     <message>
         <source>Name</source>
@@ -9682,9 +9837,8 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>DatabaseExplorer</name>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="38"/>
         <source>Sessions</source>
-        <translation>Phiên</translation>
+        <translation type="vanished">Phiên</translation>
     </message>
     <message>
         <source>Open</source>
@@ -9761,6 +9915,11 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <source>Restore the project file from this session file</source>
         <translation type="vanished">Khôi phục tệp dự án từ tệp phiên này</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="38"/>
+        <source>Historian</source>
+        <translation>Lịch Sử Dữ Liệu</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="298"/>
@@ -10943,6 +11102,11 @@ Valid format: 01 A2 FF 3C</source>
         <translation>%1 thanh ghi</translation>
     </message>
     <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="834"/>
+        <source>Variables</source>
+        <translation>Biến</translation>
+    </message>
+    <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="409"/>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="743"/>
         <source>empty</source>
@@ -11053,9 +11217,8 @@ Valid format: 01 A2 FF 3C</source>
         <translation>Đầu Ra</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="834"/>
         <source>Shared Memory</source>
-        <translation>Bộ Nhớ Chia Sẻ</translation>
+        <translation type="vanished">Bộ Nhớ Chia Sẻ</translation>
     </message>
     <message>
         <source>Bar Panel</source>
@@ -11891,6 +12054,11 @@ Valid format: 01 A2 FF 3C</source>
         <translation>Điều Khiển</translation>
     </message>
     <message>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="326"/>
+        <source>Edit the JavaScript that draws this canvas widget</source>
+        <translation>Chỉnh sửa mã JavaScript vẽ widget canvas này</translation>
+    </message>
+    <message>
         <source>Thermometer</source>
         <translation type="vanished">Nhiệt Kế</translation>
     </message>
@@ -11968,9 +12136,8 @@ Valid format: 01 A2 FF 3C</source>
         <translation>Chỉnh Sửa Mã</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="326"/>
         <source>Edit the JavaScript that draws this painter widget</source>
-        <translation>Chỉnh sửa mã JavaScript vẽ widget painter này</translation>
+        <translation type="vanished">Chỉnh sửa mã JavaScript vẽ widget painter này</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="339"/>
@@ -17883,17 +18050,20 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
 <context>
     <name>Painter</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Painter.qml" line="56"/>
         <source>Painter Widget Error</source>
-        <translation>Lỗi Widget Painter</translation>
+        <translation type="vanished">Lỗi Widget Painter</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Painter.qml" line="56"/>
+        <source>Canvas Widget Error</source>
+        <translation>Lỗi Widget Canvas</translation>
     </message>
 </context>
 <context>
     <name>PainterCodeDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="30"/>
         <source>Painter Widget Code Editor</source>
-        <translation>Trình Soạn Mã Widget Vẽ</translation>
+        <translation type="vanished">Trình Soạn Mã Widget Vẽ</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="76"/>
@@ -17906,9 +18076,8 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
         <translation>Nhập</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="91"/>
         <source>Import painter code from a .js file</source>
-        <translation>Nhập mã vẽ từ tệp .js</translation>
+        <translation type="vanished">Nhập mã vẽ từ tệp .js</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="99"/>
@@ -17916,9 +18085,8 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
         <translation>Mẫu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="102"/>
         <source>Select a built-in painter template</source>
-        <translation>Chọn mẫu vẽ tích hợp sẵn</translation>
+        <translation type="vanished">Chọn mẫu vẽ tích hợp sẵn</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="108"/>
@@ -17926,9 +18094,28 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
         <translation>Định Dạng</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="113"/>
         <source>Reformat the painter code</source>
-        <translation>Định dạng lại mã vẽ</translation>
+        <translation type="vanished">Định dạng lại mã vẽ</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="30"/>
+        <source>Canvas Widget Code Editor</source>
+        <translation>Trình Soạn Mã Widget Canvas</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="91"/>
+        <source>Import canvas code from a .js file</source>
+        <translation>Nhập mã canvas từ tệp .js</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="102"/>
+        <source>Select a built-in canvas template</source>
+        <translation>Chọn mẫu canvas tích hợp sẵn</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="113"/>
+        <source>Reformat the canvas code</source>
+        <translation>Định dạng lại mã canvas</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="119"/>
@@ -17994,9 +18181,13 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
 <context>
     <name>PainterTestDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="28"/>
         <source>Painter Live Preview</source>
-        <translation>Xem Trước Trực Tiếp Painter</translation>
+        <translation type="vanished">Xem Trước Trực Tiếp Painter</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="28"/>
+        <source>Canvas Live Preview</source>
+        <translation>Xem Trước Trực Tiếp Canvas</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="32"/>
@@ -18927,18 +19118,35 @@ Nhấn Làm Mới để cập nhật danh sách.</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="173"/>
-        <source>Add a custom JavaScript-rendered painter widget</source>
-        <translation>Thêm widget vẽ tùy chỉnh được render bằng JavaScript</translation>
+        <source>Add a custom JavaScript-rendered canvas widget</source>
+        <translation>Thêm widget canvas tùy chỉnh được render bằng JavaScript</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="174"/>
-        <source>Painter widgets require a Pro license, adding one will fall back to a data grid</source>
-        <translation>Widget Painter yêu cầu giấy phép Pro, thêm widget này sẽ quay về dạng lưới dữ liệu</translation>
+        <source>Canvas widgets require a Pro license, adding one will fall back to a data grid</source>
+        <translation>Widget Canvas yêu cầu giấy phép Pro, thêm widget này sẽ quay về dạng lưới dữ liệu</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="175"/>
+        <source>Canvas Widget</source>
+        <translation>Widget Canvas</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="188"/>
+        <source>Multi-Plot</source>
+        <translation>Đồ Thị Đa Trục</translation>
+    </message>
+    <message>
+        <source>Add a custom JavaScript-rendered painter widget</source>
+        <translation type="vanished">Thêm widget vẽ tùy chỉnh được render bằng JavaScript</translation>
+    </message>
+    <message>
+        <source>Painter widgets require a Pro license, adding one will fall back to a data grid</source>
+        <translation type="vanished">Widget Painter yêu cầu giấy phép Pro, thêm widget này sẽ quay về dạng lưới dữ liệu</translation>
+    </message>
+    <message>
         <source>Painter Widget</source>
-        <translation>Widget Painter</translation>
+        <translation type="vanished">Widget Painter</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="179"/>
@@ -18951,9 +19159,8 @@ Nhấn Làm Mới để cập nhật danh sách.</translation>
         <translation>Bảng Thanh</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="188"/>
         <source>Multiple Plot</source>
-        <translation>Biểu Đồ Đa Trục</translation>
+        <translation type="vanished">Biểu Đồ Đa Trục</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="193"/>
@@ -18994,9 +19201,13 @@ Nhấn Làm Mới để cập nhật danh sách.</translation>
         <translation>Bảng Thanh</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="415"/>
         <source>Multiple Plot</source>
-        <translation>Đa Biểu Đồ</translation>
+        <translation type="vanished">Đa Biểu Đồ</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="415"/>
+        <source>Multi-Plot</source>
+        <translation>Đồ Thị Đa Trục</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="420"/>
@@ -19030,8 +19241,12 @@ Nhấn Làm Mới để cập nhật danh sách.</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="450"/>
+        <source>Canvas Widget</source>
+        <translation>Widget Canvas</translation>
+    </message>
+    <message>
         <source>Painter Widget</source>
-        <translation>Widget Vẽ</translation>
+        <translation type="vanished">Widget Vẽ</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="711"/>
@@ -20413,14 +20628,22 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation>table() cần tên bảng trước</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="436"/>
         <source>table() needs a register name second</source>
-        <translation>table() cần tên thanh ghi thứ hai</translation>
+        <translation type="vanished">table() cần tên thanh ghi thứ hai</translation>
+    </message>
+    <message>
+        <source>unknown register '%1.%2'</source>
+        <translation type="vanished">thanh ghi không xác định '%1.%2'</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="436"/>
+        <source>table() needs a variable name second</source>
+        <translation>table() cần tên biến thứ hai</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="441"/>
-        <source>unknown register '%1.%2'</source>
-        <translation>thanh ghi không xác định '%1.%2'</translation>
+        <source>unknown variable '%1.%2'</source>
+        <translation>biến không xác định '%1.%2'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="459"/>
@@ -20986,9 +21209,13 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation>Lưới Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="299"/>
         <source>Multiple Data Plots</source>
-        <translation>Nhiều Biểu Đồ Dữ Liệu</translation>
+        <translation type="vanished">Nhiều Biểu Đồ Dữ Liệu</translation>
+    </message>
+    <message>
+        <location filename="../../src/SerialStudio.cpp" line="299"/>
+        <source>Multi-Plots</source>
+        <translation>Đồ Thị Đa Trục</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="302"/>
@@ -21056,6 +21283,11 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation>Đồng Hồ Đo</translation>
     </message>
     <message>
+        <location filename="../../src/SerialStudio.cpp" line="363"/>
+        <source>Canvas Widgets</source>
+        <translation>Widget Canvas</translation>
+    </message>
+    <message>
         <source>Thermometers</source>
         <translation type="vanished">Nhiệt Kế</translation>
     </message>
@@ -21095,9 +21327,8 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation>Thác Nước</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="363"/>
         <source>Painter Widgets</source>
-        <translation>Widget Vẽ</translation>
+        <translation type="vanished">Widget Vẽ</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="367"/>
@@ -22684,8 +22915,12 @@ Không còn cần tham số phân tách nữa.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="323"/>
+        <source>Historian</source>
+        <translation>Lịch Sử</translation>
+    </message>
+    <message>
         <source>Session Recording</source>
-        <translation>Ghi Phiên</translation>
+        <translation type="vanished">Ghi Phiên</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="344"/>
@@ -22919,8 +23154,12 @@ Không còn cần tham số phân tách nữa.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="741"/>
+        <source>Historian</source>
+        <translation>Lịch Sử</translation>
+    </message>
+    <message>
         <source>Session Database</source>
-        <translation>Cơ Sở Dữ Liệu Phiên</translation>
+        <translation type="vanished">Cơ Sở Dữ Liệu Phiên</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="751"/>
@@ -23405,8 +23644,12 @@ Không còn cần tham số phân tách nữa.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="259"/>
+        <source>(computed)</source>
+        <translation>(được tính toán)</translation>
+    </message>
+    <message>
         <source>(virtual)</source>
-        <translation>(ảo)</translation>
+        <translation type="vanished">(ảo)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="326"/>
@@ -23536,8 +23779,12 @@ Không còn cần tham số phân tách nữa.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableFolderView.qml" line="197"/>
+        <source>Variables</source>
+        <translation>Biến</translation>
+    </message>
+    <message>
         <source>Registers</source>
-        <translation>Thanh Ghi</translation>
+        <translation type="vanished">Thanh Ghi</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableFolderView.qml" line="287"/>
@@ -24899,14 +25146,12 @@ Không còn cần tham số phân tách nữa.</translation>
 <context>
     <name>UserTableView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="176"/>
         <source>Add Register</source>
-        <translation>Thêm Thanh Ghi</translation>
+        <translation type="vanished">Thêm Thanh Ghi</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="179"/>
         <source>Add register</source>
-        <translation>Thêm thanh ghi</translation>
+        <translation type="vanished">Thêm thanh ghi</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="186"/>
@@ -24924,9 +25169,8 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation>Nhập</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="199"/>
         <source>Import registers from CSV</source>
-        <translation>Nhập thanh ghi từ CSV</translation>
+        <translation type="vanished">Nhập thanh ghi từ CSV</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="206"/>
@@ -24934,9 +25178,28 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation>Xuất</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="209"/>
         <source>Export registers to CSV</source>
-        <translation>Xuất thanh ghi ra CSV</translation>
+        <translation type="vanished">Xuất thanh ghi ra CSV</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="176"/>
+        <source>Add Variable</source>
+        <translation>Thêm Biến</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="179"/>
+        <source>Add variable</source>
+        <translation>Thêm biến</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="199"/>
+        <source>Import variables from CSV</source>
+        <translation>Nhập biến từ CSV</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="209"/>
+        <source>Export variables to CSV</source>
+        <translation>Xuất biến ra CSV</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="221"/>
@@ -24965,8 +25228,27 @@ Không còn cần tham số phân tách nữa.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="253"/>
+        <source>Open help documentation for variables</source>
+        <translation>Mở tài liệu trợ giúp về biến</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="294"/>
+        <source>Variable Name</source>
+        <translation>Tên Biến</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="512"/>
+        <source>Delete variable</source>
+        <translation>Xóa biến</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="530"/>
+        <source>No variables.</source>
+        <translation>Không có biến.</translation>
+    </message>
+    <message>
         <source>Open help documentation for shared memory</source>
-        <translation>Mở tài liệu trợ giúp về bộ nhớ chia sẻ</translation>
+        <translation type="vanished">Mở tài liệu trợ giúp về bộ nhớ chia sẻ</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="293"/>
@@ -24974,9 +25256,8 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation>Quyền</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="294"/>
         <source>Register Name</source>
-        <translation>Tên Thanh Ghi</translation>
+        <translation type="vanished">Tên Thanh Ghi</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="295"/>
@@ -24999,14 +25280,12 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation>Sao chép mã truy cập %1 vào clipboard</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="512"/>
         <source>Delete register</source>
-        <translation>Xóa thanh ghi</translation>
+        <translation type="vanished">Xóa thanh ghi</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="530"/>
         <source>No registers.</source>
-        <translation>Không có thanh ghi.</translation>
+        <translation type="vanished">Không có thanh ghi.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="580"/>

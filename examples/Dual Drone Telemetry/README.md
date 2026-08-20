@@ -8,7 +8,7 @@ A multi-source drone telemetry simulator that shows Serial Studio receiving and 
 
 Two simulated drones fly different flight profiles over the Swiss Alps near Zermatt, each transmitting telemetry and synthetic camera imagery over separate TCP connections.
 
-> Connecting both drones at once, the Image View camera feeds, the output control panels, and the Painter state visualizer need a Serial Studio Pro license. See [serial-studio.com](https://serial-studio.com/) for details.
+> Connecting both drones at once, the Image View camera feeds, the output control panels, and the Canvas state visualizer need a Serial Studio Pro license. See [serial-studio.com](https://serial-studio.com/) for details.
 
 | Drone        | Port  | Flight pattern                   | Altitude   | Camera style                          |
 |--------------|-------|----------------------------------|------------|---------------------------------------|
@@ -121,7 +121,7 @@ Each drone has eight widget groups on the dashboard.
 | Flight     | Gauges + Bars | Airspeed, altitude, and vertical speed |
 | Power      | Gauges + Bars | Battery voltage, current draw, and charge level |
 | Controls   | Output Panel  | Throttle, heading, camera toggle, takeoff, RTH, and crash per drone |
-| State      | Painter       | Scripted live state visualizer driven by the telemetry datasets |
+| State      | Canvas        | Scripted live state visualizer driven by the telemetry datasets |
 
 ## Flight models
 
@@ -148,7 +148,7 @@ Both drones have low-battery (0-20%) and low-voltage (18-21 V) alarm bands that 
 
 - Python 3.6+.
 - `opencv-python` and `numpy` (optional, for camera imagery).
-- Serial Studio Pro (multi-source, Image View, Output Panel, and Painter).
+- Serial Studio Pro (multi-source, Image View, Output Panel, and Canvas).
 
 <!--
   SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial

@@ -433,12 +433,12 @@ struct Parser {
     return false;
 
   if (p.lx.current.kind != TokenKind::Identifier)
-    return parseFail(p, QObject::tr("table() needs a register name second"));
+    return parseFail(p, QObject::tr("table() needs a variable name second"));
 
   const QStringView register_name = p.lx.current.text;
   const qint64 handle             = (*p.tables)(table_name, register_name);
   if (handle < 0)
-    return parseFail(p, QObject::tr("unknown register '%1.%2'").arg(table_name, register_name));
+    return parseFail(p, QObject::tr("unknown variable '%1.%2'").arg(table_name, register_name));
 
   nextToken(p.lx);
   if (!expectSymbol(p, ")"))

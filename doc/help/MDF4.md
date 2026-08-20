@@ -2,7 +2,7 @@
 
 Serial Studio Pro can export incoming telemetry to MDF4 files during a live session and replay saved MDF4 files through the same data pipeline. MDF4 is an ASAM-standard binary format for measurement data, widely used in automotive and industrial testing alongside CAN, LIN, FlexRay, and analog channels. This page covers what MDF4 is, when to pick it over CSV, and how export and playback work in Serial Studio.
 
-For text-based logging and the broader "what file format should I pick?" comparison, see [CSV Export & Playback](CSV-Export-Playback.md). For project-scoped, queryable session storage with replay metadata and tagging, see [Session Database](Session-Database.md).
+For text-based logging and the broader "what file format should I pick?" comparison, see [CSV Export & Playback](CSV-Export-Playback.md). For project-scoped, queryable session storage with replay metadata and tagging, see the [Historian](Session-Database.md).
 
 ## MDF4 basics
 
@@ -143,7 +143,7 @@ For one-off conversions, `asammdf` exports MDF4 to CSV, Parquet, HDF5, MATLAB `.
 ## See also
 
 - [CSV Export & Playback](CSV-Export-Playback.md): text-based logging and replay, when MDF4 tooling is overkill.
-- [Session Database](Session-Database.md): SQLite-backed project archive with built-in replay.
+- [Historian](Session-Database.md): SQLite-backed project archive with built-in replay.
 - [Session Reports](Session-Reports.md): rendered HTML/PDF summaries of recorded sessions.
 - [Drivers: CAN Bus](Drivers-CAN-Bus.md): the canonical source for MDF4-style automotive recordings.
 - [Threading and Timing Guarantees](Threading-and-Timing.md): what timestamps in exported MDF4 files mean.

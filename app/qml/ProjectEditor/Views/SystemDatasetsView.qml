@@ -256,7 +256,7 @@ Widgets.Pane {
               elide: Text.ElideRight
               font: Cpp_Misc_CommonFonts.monoFont
               color: rowDelegate.textColor
-              text: modelData.isVirtual ? modelData.title + " " + qsTr("(virtual)")
+              text: modelData.isVirtual ? modelData.title + " " + qsTr("(computed)")
                                         : modelData.title
             }
 

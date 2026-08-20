@@ -236,9 +236,9 @@ void DataModel::ProjectEditor::addGeneralSection(CustomModel* model, const Datas
   item_virtual->setData(CheckBox, WidgetType);
   item_virtual->setData(dataset.virtual_, EditableValue);
   item_virtual->setData(kDatasetView_Virtual, ParameterType);
-  item_virtual->setData(tr("Virtual Dataset"), ParameterName);
-  item_virtual->setData(tr("Virtual datasets compute their value from transforms and data tables, "
-                           "they do not require a frame index"), ParameterDescription);
+  item_virtual->setData(tr("Computed Dataset"), ParameterName);
+  item_virtual->setData(tr("Computed datasets compute their value from transforms and shared "
+                           "variables, they do not require a frame index"), ParameterDescription);
   model->appendRow(item_virtual);
 
   if (PropertyHooks::insidePainterGroup(dataset, m_projectModelRef)) {
@@ -250,7 +250,7 @@ void DataModel::ProjectEditor::addGeneralSection(CustomModel* model, const Datas
     item_hide_on_dashboard->setData(kDatasetView_HideOnDashboard, ParameterType);
     item_hide_on_dashboard->setData(tr("Hide on Dashboard"), ParameterName);
     item_hide_on_dashboard->setData(tr("Suppress this dataset's standalone dashboard tile; the "
-                                       "painter widget can still read its values"),
+                                       "canvas widget can still read its values"),
                                     ParameterDescription);
     model->appendRow(item_hide_on_dashboard);
   }

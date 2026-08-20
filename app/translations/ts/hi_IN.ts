@@ -1250,6 +1250,11 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>API कुंजियाँ प्रबंधित करें…</translation>
     </message>
     <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="427"/>
+        <source>What is the historian, and why would I use it?</source>
+        <translation>हिस्टोरियन क्या है, और मैं इसका उपयोग क्यों करूं?</translation>
+    </message>
+    <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="428"/>
         <source>CSV vs MDF4 export - what is the difference?</source>
         <translation>CSV बनाम MDF4 एक्सपोर्ट - क्या अंतर है?</translation>
@@ -1258,6 +1263,11 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <location filename="../../qml/AI/AssistantPanel.qml" line="431"/>
         <source>Plot, Bar, and Gauge - when to use each?</source>
         <translation>Plot, Bar, और Gauge - प्रत्येक का उपयोग कब करें?</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="450"/>
+        <source>Add a canvas widget for a custom visualization</source>
+        <translation>कस्टम विज़ुअलाइज़ेशन के लिए कैनवास विजेट जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="503"/>
@@ -1310,9 +1320,8 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>मुझे बताएं कि इस प्रोजेक्ट में पहले से क्या है</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="427"/>
         <source>What is a session database, and why would I use one?</source>
-        <translation>सेशन डेटाबेस क्या है, और मैं इसका उपयोग क्यों करूं?</translation>
+        <translation type="vanished">सेशन डेटाबेस क्या है, और मैं इसका उपयोग क्यों करूं?</translation>
     </message>
     <message>
         <source>CSV vs MDF4 export — what is the difference?</source>
@@ -1403,9 +1412,8 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>एक्ज़ीक्यूटिव ओवरव्यू वर्कस्पेस बनाएं</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="450"/>
         <source>Add a painter widget for a custom visualization</source>
-        <translation>कस्टम विज़ुअलाइज़ेशन के लिए पेंटर विजेट जोड़ें</translation>
+        <translation type="vanished">कस्टम विज़ुअलाइज़ेशन के लिए पेंटर विजेट जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="451"/>
@@ -2698,118 +2706,122 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="38"/>
+        <source>Add Canvas</source>
+        <translation>कैनवास जोड़ें</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="39"/>
         <source>Add Compass</source>
         <translation>कंपास जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="39"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="40"/>
         <source>Add Data Source</source>
         <translation>डेटा सोर्स जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="40"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="41"/>
         <source>Add Data Table</source>
         <translation>डेटा टेबल जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="41"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="42"/>
         <source>Add Dataset</source>
         <translation>डेटासेट जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="42"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="43"/>
         <source>Add Device</source>
         <translation>डिवाइस जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="43"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="44"/>
         <source>Add External Window</source>
         <translation>बाहरी विंडो जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="44"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="45"/>
         <source>Add FFT Plot</source>
         <translation>FFT प्लॉट जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="45"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="46"/>
         <source>Add GPS Map</source>
         <translation>GPS मैप जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="46"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="47"/>
         <source>Add Gauge</source>
         <translation>गेज जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="47"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="48"/>
         <source>Add Group</source>
         <translation>समूह जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="48"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="49"/>
         <source>Add Gyroscope</source>
         <translation>जायरोस्कोप जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="49"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="50"/>
         <source>Add Image View</source>
         <translation>इमेज व्यू जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="50"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="51"/>
         <source>Add LED Indicator</source>
         <translation>LED संकेतक जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="51"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="52"/>
         <source>Add Level Indicator</source>
         <translation>लेवल इंडिकेटर जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="52"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="53"/>
         <source>Add Multi-Plot</source>
         <translation>मल्टी-प्लॉट जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="53"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="54"/>
         <source>Add Output</source>
         <translation>आउटपुट जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="54"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="55"/>
         <source>Add Output Button</source>
         <translation>आउटपुट बटन जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="55"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="56"/>
         <source>Add Output Knob</source>
         <translation>आउटपुट नॉब जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="56"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="57"/>
         <source>Add Output Panel</source>
         <translation>आउटपुट पैनल जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="57"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="58"/>
         <source>Add Output Slider</source>
         <translation>आउटपुट स्लाइडर जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="58"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="59"/>
         <source>Add Output Text Field</source>
         <translation>आउटपुट टेक्स्ट फ़ील्ड जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="59"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="60"/>
         <source>Add Output Toggle</source>
         <translation>आउटपुट टॉगल जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="60"/>
         <source>Add Painter</source>
-        <translation>पेंटर जोड़ें</translation>
+        <translation type="vanished">पेंटर जोड़ें</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="61"/>
@@ -2817,14 +2829,18 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>प्लॉट जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="62"/>
         <source>Add Register</source>
-        <translation>रजिस्टर जोड़ें</translation>
+        <translation type="vanished">रजिस्टर जोड़ें</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="62"/>
+        <source>Add Shared Table</source>
+        <translation>साझा टेबल जोड़ें</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="63"/>
-        <source>Add Shared Table</source>
-        <translation>साझा टेबल जोड़ें</translation>
+        <source>Add Variable</source>
+        <translation>वेरिएबल जोड़ें</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="64"/>
@@ -3012,39 +3028,51 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>एकाधिक सिग्नल के साथ प्लॉट जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="101"/>
         <source>Add a register to this shared table</source>
-        <translation>इस साझा टेबल में एक रजिस्टर जोड़ें</translation>
+        <translation type="vanished">इस साझा टेबल में एक रजिस्टर जोड़ें</translation>
+    </message>
+    <message>
+        <source>Add a script-drawn painter group</source>
+        <translation type="vanished">स्क्रिप्ट-ड्रॉन पेंटर ग्रुप जोड़ें</translation>
+    </message>
+    <message>
+        <source>Add a shared-memory table</source>
+        <translation type="vanished">साझा-मेमोरी टेबल जोड़ें</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="101"/>
+        <source>Add a script-drawn canvas group</source>
+        <translation>स्क्रिप्ट-ड्रॉन कैनवास ग्रुप जोड़ें</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="102"/>
-        <source>Add a script-drawn painter group</source>
-        <translation>स्क्रिप्ट-ड्रॉन पेंटर ग्रुप जोड़ें</translation>
+        <source>Add a shared variable table</source>
+        <translation>साझा वेरिएबल टेबल जोड़ें</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="103"/>
-        <source>Add a shared-memory table</source>
-        <translation>साझा-मेमोरी टेबल जोड़ें</translation>
-    </message>
-    <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="104"/>
         <source>Add a slider control</source>
         <translation>स्लाइडर कंट्रोल जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="105"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="104"/>
         <source>Add a text field control</source>
         <translation>टेक्स्ट फ़ील्ड कंट्रोल जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="106"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="105"/>
         <source>Add a toggle control</source>
         <translation>टॉगल कंट्रोल जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="107"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="106"/>
         <source>Add a top-level folder in this section</source>
         <translation>इस सेक्शन में टॉप-लेवल फ़ोल्डर जोड़ें</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="107"/>
+        <source>Add a variable to this shared table</source>
+        <translation>इस साझा टेबल में एक वेरिएबल जोड़ें</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="108"/>
@@ -3188,766 +3216,811 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="136"/>
+        <source>Canvas</source>
+        <translation>कैनवास</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="137"/>
+        <source>Canvas Widget</source>
+        <translation>कैनवास विजेट</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="138"/>
         <source>Chat with an AI to build and edit your project</source>
         <translation>अपना प्रोजेक्ट बनाने और संपादित करने के लिए AI से चैट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="137"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="139"/>
         <source>Check device permissions, adapters, and host reachability</source>
         <translation>डिवाइस अनुमतियाँ, एडाप्टर और होस्ट पहुँच की जाँच करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="138"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="140"/>
         <source>Clean Up Unresolved Widgets</source>
         <translation>अनरिज़ॉल्व्ड विजेट साफ़ करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="139"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="141"/>
         <source>Clear All Workspaces</source>
         <translation>सभी वर्कस्पेस साफ़ करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="140"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="142"/>
         <source>Clear Console</source>
         <translation>कंसोल साफ़ करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="141"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="143"/>
         <source>Clear Window</source>
         <translation>विंडो साफ़ करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="142"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="144"/>
         <source>Clear the console output</source>
         <translation>कंसोल आउटपुट साफ़ करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="143"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="145"/>
         <source>Clock</source>
         <translation>घड़ी</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="144"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="146"/>
         <source>Close</source>
         <translation>बंद करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="145"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="147"/>
         <source>Close Window</source>
         <translation>विंडो बंद करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="146"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="148"/>
         <source>Close session file</source>
         <translation>सेशन फ़ाइल बंद करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="147"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="149"/>
         <source>Collapse All</source>
         <translation>सभी संक्षिप्त करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="148"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="150"/>
         <source>Collapse Duplicates</source>
         <translation>डुप्लिकेट संक्षिप्त करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="149"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="151"/>
         <source>Collapse repeated console lines</source>
         <translation>दोहराई गई कंसोल लाइनें संक्षिप्त करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="150"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="152"/>
         <source>Collapse the project tree to its overview</source>
         <translation>प्रोजेक्ट ट्री को इसके अवलोकन तक संक्षिप्त करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="151"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="153"/>
         <source>Command Palette</source>
         <translation>कमांड पैलेट</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="152"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="154"/>
         <source>Compare Project</source>
         <translation>प्रोजेक्ट की तुलना करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="153"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="155"/>
         <source>Compare the selected session against the project open in the editor</source>
         <translation>संपादक में खुले प्रोजेक्ट के विरुद्ध चयनित सत्र की तुलना करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="154"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="156"/>
         <source>Compass</source>
         <translation>कंपास</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="155"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="157"/>
         <source>Configure the MQTT publisher</source>
         <translation>MQTT पब्लिशर कॉन्फ़िगर करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="156"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="158"/>
         <source>Connect</source>
         <translation>कनेक्ट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="157"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="159"/>
         <source>Connect or disconnect from the configured device</source>
         <translation>कॉन्फ़िगर किए गए डिवाइस से कनेक्ट या डिस्कनेक्ट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="158"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="160"/>
         <source>Connection Diagnostics</source>
         <translation>कनेक्शन डायग्नोस्टिक्स</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="159"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="161"/>
         <source>Console</source>
         <translation>कंसोल</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="160"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="162"/>
         <source>Console Echo</source>
         <translation>कंसोल इको</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="161"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="163"/>
         <source>Console Only Mode</source>
         <translation>केवल कंसोल मोड</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="162"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="164"/>
         <source>Console Timestamps</source>
         <translation>कंसोल टाइमस्टैम्प</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="163"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="165"/>
         <source>Console Transcript</source>
         <translation>कंसोल ट्रांसक्रिप्ट</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="164"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="166"/>
         <source>Create a new JSON project</source>
         <translation>नया JSON प्रोजेक्ट बनाएँ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="165"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="167"/>
         <source>Customize Workspaces</source>
         <translation>वर्कस्पेसेज़ कस्टमाइज़ करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="166"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="168"/>
         <source>Data Grid</source>
         <translation>डेटा ग्रिड</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="167"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="169"/>
         <source>Dataset</source>
         <translation>डेटासेट</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="168"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="170"/>
         <source>Dataset Container</source>
         <translation>डेटासेट कंटेनर</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="169"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="171"/>
         <source>Delete</source>
         <translation>डिलीट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="170"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="172"/>
         <source>Delete the selected session</source>
         <translation>चयनित सेशन को डिलीट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="171"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="173"/>
         <source>Delete this item</source>
         <translation>इस आइटम को डिलीट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="172"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="174"/>
         <source>Deploy</source>
         <translation>डिप्लॉय करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="173"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="175"/>
         <source>Deploy Operator App</source>
         <translation>ऑपरेटर ऐप डिप्लॉय करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="174"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="176"/>
         <source>Disconnect</source>
         <translation>डिस्कनेक्ट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="175"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="177"/>
         <source>Drop workspace widgets whose source is gone</source>
         <translation>वर्कस्पेस विजेट्स ड्रॉप करें जिनका स्रोत गायब है</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="176"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="178"/>
         <source>Duplicate</source>
         <translation>डुप्लिकेट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="177"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="179"/>
         <source>Duplicate this item</source>
         <translation>इस आइटम को डुप्लिकेट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="178"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="180"/>
         <source>Echo transmitted data in the console</source>
         <translation>कंसोल में ट्रांसमिट किए गए डेटा को इको करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="179"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="181"/>
+        <source>Edit Canvas Code</source>
+        <translation>कैनवास कोड एडिट करें</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="182"/>
         <source>Edit Control Loop</source>
         <translation>कंट्रोल लूप एडिट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="180"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="183"/>
         <source>Edit Frame Parser</source>
         <translation>फ़्रेम पार्सर एडिट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="181"/>
-        <source>Edit Painter Code</source>
-        <translation>पेंटर कोड एडिट करें</translation>
+        <location filename="../../src/UI/CommandStrings.cpp" line="193"/>
+        <source>Export Variables</source>
+        <translation>वेरिएबल एक्सपोर्ट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="182"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="195"/>
+        <source>Export this table's variables to CSV</source>
+        <translation>इस टेबल के वेरिएबल CSV में एक्सपोर्ट करें</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="219"/>
+        <source>Import Variables</source>
+        <translation>वेरिएबल आयात करें</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="220"/>
+        <source>Import this table's variables from CSV</source>
+        <translation>इस टेबल के वेरिएबल CSV से आयात करें</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="263"/>
+        <source>Open the historian documentation</source>
+        <translation>हिस्टोरियन दस्तावेज़ीकरण खोलें</translation>
+    </message>
+    <message>
+        <source>Edit Painter Code</source>
+        <translation type="vanished">पेंटर कोड एडिट करें</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="184"/>
         <source>Edit Transform Code</source>
         <translation>ट्रांसफ़ॉर्म कोड एडिट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="183"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="185"/>
         <source>Edit Workspace Widgets</source>
         <translation>वर्कस्पेस विजेट एडिट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="184"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="186"/>
         <source>Edit workspaces manually instead of using the automatic layout</source>
         <translation>ऑटोमैटिक लेआउट के बजाय वर्कस्पेस मैन्युअली एडिट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="185"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="187"/>
         <source>Examples</source>
         <translation>उदाहरण</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="186"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="188"/>
         <source>Expand All</source>
         <translation>सभी विस्तृत करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="187"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="189"/>
         <source>Expand every item in the project tree</source>
         <translation>प्रोजेक्ट ट्री में प्रत्येक आइटम को विस्तृत करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="188"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="190"/>
         <source>Export</source>
         <translation>एक्सपोर्ट</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="189"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="191"/>
         <source>Export CSV</source>
         <translation>CSV एक्सपोर्ट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="190"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="192"/>
         <source>Export PDF</source>
         <translation>PDF एक्सपोर्ट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="191"/>
         <source>Export Registers</source>
-        <translation>रजिस्टर एक्सपोर्ट करें</translation>
+        <translation type="vanished">रजिस्टर एक्सपोर्ट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="192"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="194"/>
         <source>Export selected session to CSV</source>
         <translation>चयनित सेशन को CSV में एक्सपोर्ट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="193"/>
         <source>Export this table's registers to CSV</source>
-        <translation>इस टेबल के रजिस्टर CSV में एक्सपोर्ट करें</translation>
+        <translation type="vanished">इस टेबल के रजिस्टर CSV में एक्सपोर्ट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="194"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="196"/>
         <source>Extensions</source>
         <translation>एक्सटेंशन</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="195"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="197"/>
         <source>FFT Plot</source>
         <translation>FFT प्लॉट</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="196"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="198"/>
         <source>File Transmission</source>
         <translation>फ़ाइल ट्रांसमिशन</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="197"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="199"/>
         <source>Fill every empty dataset alias from its title</source>
         <translation>हर खाली डेटासेट एलियास को उसके टाइटल से भरें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="198"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="200"/>
         <source>Freeze Dashboard</source>
         <translation>डैशबोर्ड फ्रीज़ करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="199"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="201"/>
         <source>Full Screen</source>
         <translation>फुल स्क्रीन</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="200"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="202"/>
         <source>GPS Map</source>
         <translation>GPS मैप</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="201"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="203"/>
         <source>Gauge</source>
         <translation>गेज</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="202"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="204"/>
         <source>Generate a PDF report for the selected session</source>
         <translation>चयनित सेशन के लिए PDF रिपोर्ट जेनरेट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="203"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="205"/>
         <source>Generate a project from a Protocol Buffers (.proto) schema</source>
         <translation>Protocol Buffers (.proto) स्कीमा से प्रोजेक्ट जेनरेट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="204"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="206"/>
         <source>Generic</source>
         <translation>जेनेरिक</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="205"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="207"/>
         <source>Group</source>
         <translation>समूह</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="206"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="208"/>
         <source>Gyroscope</source>
         <translation>जायरोस्कोप</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="207"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="209"/>
         <source>HID</source>
         <translation>HID</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="208"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="210"/>
         <source>Help</source>
         <translation>सहायता</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="209"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="211"/>
         <source>Help Center</source>
         <translation>सहायता केंद्र</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="210"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="212"/>
         <source>Hex Display</source>
         <translation>हेक्स डिस्प्ले</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="211"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="213"/>
         <source>Hide</source>
         <translation>छुपाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="212"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="214"/>
         <source>Hide this item from the dashboard and frame building</source>
         <translation>इस आइटम को डैशबोर्ड और फ़्रेम बिल्डिंग से छुपाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="213"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="215"/>
+        <source>Historian</source>
+        <translation>हिस्टोरियन</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="216"/>
         <source>Image</source>
         <translation>छवि</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="214"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="217"/>
         <source>Image View</source>
         <translation>इमेज व्यू</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="215"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="218"/>
         <source>Import Protobuf Schema</source>
         <translation>Protobuf स्कीमा इम्पोर्ट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="216"/>
         <source>Import Registers</source>
-        <translation>रजिस्टर आयात करें</translation>
+        <translation type="vanished">रजिस्टर आयात करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="217"/>
         <source>Import this table's registers from CSV</source>
-        <translation>इस तालिका के रजिस्टर CSV से आयात करें</translation>
+        <translation type="vanished">इस तालिका के रजिस्टर CSV से आयात करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="218"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="221"/>
         <source>Knob</source>
         <translation>नॉब</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="219"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="222"/>
         <source>LED Indicator</source>
         <translation>LED इंडिकेटर</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="220"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="223"/>
         <source>Level Indicator</source>
         <translation>लेवल इंडिकेटर</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="221"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="224"/>
         <source>License Management</source>
         <translation>लाइसेंस प्रबंधन</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="222"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="225"/>
         <source>Lock</source>
         <translation>लॉक करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="223"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="226"/>
         <source>Lock Project Editor</source>
         <translation>प्रोजेक्ट एडिटर लॉक करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="224"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="227"/>
         <source>MDF4 File</source>
         <translation>MDF4 फ़ाइल</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="225"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="228"/>
         <source>MQTT Publisher</source>
         <translation>MQTT प्रकाशक</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="226"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="229"/>
         <source>Macros</source>
         <translation>मैक्रो</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="227"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="230"/>
         <source>Make every hidden group visible again</source>
         <translation>सभी छिपे हुए समूहों को फिर से दृश्यमान बनाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="228"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="231"/>
         <source>Manage your Serial Studio Pro license</source>
         <translation>अपने Serial Studio Pro लाइसेंस का प्रबंधन करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="229"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="232"/>
         <source>Meter</source>
         <translation>मीटर</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="230"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="233"/>
         <source>Minimize Window</source>
         <translation>विंडो मिनिमाइज़ करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="231"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="234"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="232"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="235"/>
         <source>Move Down</source>
         <translation>नीचे ले जाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="233"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="236"/>
         <source>Move Up</source>
         <translation>ऊपर ले जाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="234"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="237"/>
         <source>Move this item down among its siblings</source>
         <translation>इस आइटम को इसके सहोदरों में नीचे ले जाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="235"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="238"/>
         <source>Move this item out of every folder</source>
         <translation>इस आइटम को सभी फ़ोल्डर से बाहर ले जाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="236"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="239"/>
         <source>Move this item up among its siblings</source>
         <translation>इस आइटम को इसके सहोदरों में ऊपर ले जाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="237"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="240"/>
         <source>Move to Folder</source>
         <translation>फ़ोल्डर में ले जाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="238"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="241"/>
         <source>Multi-Plot</source>
         <translation>मल्टी-प्लॉट</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="239"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="242"/>
         <source>Navigate Back</source>
         <translation>वापस जाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="240"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="243"/>
         <source>Navigate Forward</source>
         <translation>आगे नेविगेट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="241"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="244"/>
         <source>Network</source>
         <translation>नेटवर्क</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="242"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="245"/>
         <source>New</source>
         <translation>नया</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="243"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="246"/>
         <source>New Folder</source>
         <translation>नया फ़ोल्डर</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="244"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="247"/>
         <source>New Project</source>
         <translation>नया प्रोजेक्ट</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="245"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="248"/>
         <source>New Sub-Folder</source>
         <translation>नया उप-फ़ोल्डर</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="246"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="249"/>
         <source>Next Workspace</source>
         <translation>अगला वर्कस्पेस</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="247"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="250"/>
         <source>Notifications</source>
         <translation>सूचनाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="248"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="251"/>
         <source>Open</source>
         <translation>खोलें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="249"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="252"/>
         <source>Open CSV</source>
         <translation>CSV खोलें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="250"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="253"/>
         <source>Open MDF4</source>
         <translation>MDF4 खोलें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="251"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="254"/>
         <source>Open Project</source>
         <translation>प्रोजेक्ट खोलें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="252"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="255"/>
         <source>Open a session file</source>
         <translation>सेशन फ़ाइल खोलें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="253"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="256"/>
         <source>Open an existing JSON project</source>
         <translation>मौजूदा JSON प्रोजेक्ट खोलें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="254"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="257"/>
         <source>Open application settings and preferences</source>
         <translation>एप्लिकेशन सेटिंग्स और प्राथमिकताएं खोलें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="255"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="258"/>
         <source>Open the Assistant</source>
         <translation>असिस्टेंट खोलें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="256"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="259"/>
         <source>Open the Project Editor documentation</source>
         <translation>प्रोजेक्ट एडिटर दस्तावेज़ खोलें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="257"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="260"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
         <translation>अपना JSON लेआउट बनाने या संशोधित करने के लिए प्रोजेक्ट एडिटर खोलें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="258"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="261"/>
+        <source>Open the canvas script for this group</source>
+        <translation>इस ग्रुप के लिए कैनवास स्क्रिप्ट खोलें</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="262"/>
         <source>Open the frame parser for this data source</source>
         <translation>इस डेटा स्रोत के लिए फ़्रेम पार्सर खोलें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="259"/>
         <source>Open the painter script for this group</source>
-        <translation>इस ग्रुप के लिए पेंटर स्क्रिप्ट खोलें</translation>
+        <translation type="vanished">इस ग्रुप के लिए पेंटर स्क्रिप्ट खोलें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="260"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="264"/>
         <source>Open the project control loop</source>
         <translation>प्रोजेक्ट कंट्रोल लूप खोलें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="261"/>
         <source>Open the session database documentation</source>
-        <translation>सत्र डेटाबेस दस्तावेज़ीकरण खोलें</translation>
+        <translation type="vanished">सत्र डेटाबेस दस्तावेज़ीकरण खोलें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="262"/>
         <source>Open the shared-memory documentation</source>
-        <translation>शेयर्ड-मेमोरी डॉक्यूमेंटेशन खोलें</translation>
+        <translation type="vanished">शेयर्ड-मेमोरी डॉक्यूमेंटेशन खोलें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="263"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="265"/>
         <source>Open the value transform for this dataset</source>
         <translation>इस डेटासेट के लिए वैल्यू ट्रांसफ़ॉर्म खोलें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="264"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="266"/>
+        <source>Open the variables documentation</source>
+        <translation>वेरिएबल दस्तावेज़ीकरण खोलें</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="267"/>
         <source>Open this workspace to edit its widgets</source>
         <translation>इस वर्कस्पेस को खोलकर इसके विजेट संपादित करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="265"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="268"/>
         <source>Output</source>
         <translation>आउटपुट</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="266"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="269"/>
         <source>Output Panel</source>
         <translation>आउटपुट पैनल</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="267"/>
         <source>Painter</source>
-        <translation>पेंटर</translation>
+        <translation type="vanished">पेंटर</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="268"/>
         <source>Painter Widget</source>
-        <translation>पेंटर विजेट</translation>
+        <translation type="vanished">पेंटर विजेट</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="269"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="270"/>
         <source>Pause</source>
         <translation>रोकें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="270"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="271"/>
         <source>Play a CSV file as if it were live sensor data</source>
         <translation>CSV फ़ाइल को लाइव सेंसर डेटा की तरह चलाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="271"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="272"/>
         <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
         <translation>MDF4 फ़ाइल को लाइव सेंसर डेटा की तरह चलाएं (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="272"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="273"/>
         <source>Plot</source>
         <translation>प्लॉट</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="273"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="274"/>
         <source>Preferences</source>
         <translation>प्राथमिकताएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="274"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="275"/>
         <source>Previous Workspace</source>
         <translation>पिछला वर्कस्पेस</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="275"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="276"/>
         <source>Problem Center</source>
         <translation>समस्या केंद्र</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="276"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="277"/>
         <source>Process</source>
         <translation>प्रोसेस</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="277"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="278"/>
         <source>Project Editor</source>
         <translation>प्रोजेक्ट एडिटर</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="278"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="279"/>
         <source>Project File Mode</source>
         <translation>प्रोजेक्ट फ़ाइल मोड</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="279"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="280"/>
         <source>Protobuf</source>
         <translation>Protobuf</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="280"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="281"/>
         <source>Quick Plot Mode</source>
         <translation>क्विक प्लॉट मोड</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="281"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="282"/>
         <source>Quit</source>
         <translation>बाहर निकलें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="282"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="283"/>
         <source>Rebuild the automatic workspace layout</source>
         <translation>स्वचालित वर्कस्पेस लेआउट को पुनर्निर्मित करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="283"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="284"/>
         <source>Redo</source>
         <translation>पुनः करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="284"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="285"/>
         <source>Redo the last undone project edit</source>
         <translation>अंतिम पूर्ववत किए गए प्रोजेक्ट संपादन को पुनः करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="285"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="286"/>
         <source>Remote Dashboard</source>
         <translation>रिमोट डैशबोर्ड</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="286"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="287"/>
         <source>Remove every user workspace</source>
         <translation>प्रत्येक उपयोगकर्ता वर्कस्पेस को हटाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="287"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="288"/>
         <source>Rename</source>
         <translation>नाम बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="288"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="289"/>
         <source>Rename this item</source>
         <translation>इस आइटम का नाम बदलें</translation>
     </message>
@@ -3956,337 +4029,339 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">रिकवर करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="289"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="290"/>
         <source>Replay</source>
         <translation>रीप्ले करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="290"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="291"/>
         <source>Replay selected session on the dashboard</source>
         <translation>चयनित सेशन को डैशबोर्ड पर रीप्ले करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="291"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="292"/>
         <source>Reset</source>
         <translation>रीसेट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="292"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="293"/>
         <source>Reset to Auto Layout</source>
         <translation>स्वचालित लेआउट पर रीसेट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="293"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="294"/>
         <source>Restore</source>
         <translation>पुनर्स्थापित करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="294"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="295"/>
         <source>Restore Backup</source>
         <translation>बैकअप पुनर्स्थापित करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="295"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="296"/>
         <source>Restore Project</source>
         <translation>प्रोजेक्ट रिस्टोर करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="296"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="297"/>
         <source>Restore a recent automatic snapshot of the current project</source>
         <translation>वर्तमान प्रोजेक्ट का हालिया स्वचालित स्नैपशॉट पुनर्स्थापित करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="297"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="298"/>
         <source>Restore the project file from this session file</source>
         <translation>इस सेशन फ़ाइल से प्रोजेक्ट फ़ाइल रिस्टोर करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="298"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="299"/>
         <source>Resume</source>
         <translation>पुनः आरंभ करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="299"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="300"/>
         <source>Review project, link, and script diagnostics</source>
         <translation>प्रोजेक्ट, लिंक और स्क्रिप्ट डायग्नोस्टिक्स की समीक्षा करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="300"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="301"/>
         <source>Run API commands and script macros interactively</source>
         <translation>API कमांड और स्क्रिप्ट मैक्रो इंटरैक्टिव रूप से चलाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="301"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="302"/>
         <source>Save</source>
         <translation>सहेजें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="302"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="303"/>
         <source>Save As</source>
         <translation>इस रूप में सहेजें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="303"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="304"/>
         <source>Save Project</source>
         <translation>प्रोजेक्ट सहेजें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="304"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="305"/>
         <source>Save Project As</source>
         <translation>प्रोजेक्ट इस रूप में सहेजें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="305"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="306"/>
         <source>Search</source>
         <translation>खोजें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="306"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="307"/>
         <source>Search and run any Serial Studio command</source>
         <translation>कोई भी Serial Studio कमांड खोजें और चलाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="307"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="308"/>
         <source>Seed Aliases from Titles</source>
         <translation>शीर्षकों से उपनाम बीज करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="308"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="309"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>Bluetooth Low Energy संचार चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="309"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="310"/>
         <source>Select CAN Bus communication (Pro)</source>
         <translation>CAN Bus संचार चुनें (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="310"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="311"/>
         <source>Select HID device communication (Pro)</source>
         <translation>HID डिवाइस संचार चुनें (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="311"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="312"/>
         <source>Select MODBUS communication (Pro)</source>
         <translation>MODBUS संचार चुनें (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="312"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="313"/>
         <source>Select Serial port (UART) communication</source>
         <translation>सीरियल पोर्ट (UART) संचार चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="313"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="314"/>
         <source>Select TCP/UDP network communication</source>
         <translation>TCP/UDP नेटवर्क संचार चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="314"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="315"/>
         <source>Select audio input device (Pro)</source>
         <translation>ऑडियो इनपुट डिवाइस चुनें (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="315"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="316"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>प्रोसेस पाइप संचार चुनें (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="316"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="317"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>रॉ USB संचार चुनें (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="317"/>
         <source>Session Database</source>
-        <translation>सेशन डेटाबेस</translation>
+        <translation type="vanished">सेशन डेटाबेस</translation>
+    </message>
+    <message>
+        <source>Sessions</source>
+        <translation type="vanished">सेशन</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="318"/>
-        <source>Sessions</source>
-        <translation>सेशन</translation>
-    </message>
-    <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="319"/>
         <source>Set a password and lock the Project Editor</source>
         <translation>पासवर्ड सेट करें और प्रोजेक्ट एडिटर लॉक करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="320"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="319"/>
         <source>Set a password to prevent session deletions</source>
         <translation>सेशन हटाने से रोकने के लिए पासवर्ड सेट करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="321"/>
         <source>Shared Memory Help</source>
-        <translation>साझा मेमोरी सहायता</translation>
+        <translation type="vanished">साझा मेमोरी सहायता</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="322"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="320"/>
         <source>Show</source>
         <translation>दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="323"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="321"/>
         <source>Show All Hidden Groups</source>
         <translation>सभी छिपे हुए ग्रुप्स दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="324"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="322"/>
         <source>Show application info and license details</source>
         <translation>एप्लिकेशन जानकारी और लाइसेंस विवरण दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="325"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="323"/>
         <source>Show this dataset as a 2D plot</source>
         <translation>इस डेटासेट को 2D प्लॉट के रूप में दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="326"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="324"/>
         <source>Show this dataset as a bar or level</source>
         <translation>इस डेटासेट को बार या लेवल के रूप में दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="327"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="325"/>
         <source>Show this dataset as a compass</source>
         <translation>इस डेटासेट को कंपास के रूप में दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="328"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="326"/>
         <source>Show this dataset as a gauge</source>
         <translation>इस डेटासेट को गेज के रूप में दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="329"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="327"/>
         <source>Show this dataset as a waterfall plot</source>
         <translation>इस डेटासेट को वॉटरफॉल प्लॉट के रूप में दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="330"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="328"/>
         <source>Show this dataset as an FFT plot</source>
         <translation>इस डेटासेट को FFT प्लॉट के रूप में दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="331"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="329"/>
         <source>Show this dataset as an LED indicator</source>
         <translation>इस डेटासेट को LED इंडिकेटर के रूप में दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="332"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="330"/>
         <source>Show this dataset as an analog meter</source>
         <translation>इस डेटासेट को एनालॉग मीटर के रूप में दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="333"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="331"/>
         <source>Show timestamps in the console</source>
         <translation>कंसोल में टाइमस्टैम्प दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="334"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="332"/>
         <source>Slider</source>
         <translation>स्लाइडर</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="335"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="333"/>
         <source>Start Menu</source>
         <translation>स्टार्ट मेनू</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="336"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="334"/>
         <source>Stopwatch</source>
         <translation>स्टॉपवॉच</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="337"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="335"/>
         <source>Switch to Console Only mode (no parsing)</source>
         <translation>केवल कंसोल मोड पर स्विच करें (कोई पार्सिंग नहीं)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="338"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="336"/>
         <source>Switch to Project File mode (parse via a project)</source>
         <translation>प्रोजेक्ट फ़ाइल मोड पर स्विच करें (प्रोजेक्ट के माध्यम से पार्स करें)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="339"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="337"/>
         <source>Switch to Quick Plot mode (comma-separated values)</source>
         <translation>क्विक प्लॉट मोड पर स्विच करें (कॉमा-सेपरेटेड वैल्यू)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="340"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="338"/>
         <source>Table</source>
         <translation>टेबल</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="341"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="339"/>
         <source>Text Field</source>
         <translation>टेक्स्ट फ़ील्ड</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="342"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="340"/>
         <source>Toggle</source>
         <translation>टॉगल</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="343"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="341"/>
         <source>Toggle hexadecimal console display</source>
         <translation>हेक्साडेसिमल कंसोल डिस्प्ले टॉगल करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="344"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="342"/>
         <source>Tools</source>
         <translation>टूल्स</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="345"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="343"/>
         <source>Top Level</source>
         <translation>शीर्ष स्तर</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="346"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="344"/>
         <source>UART</source>
         <translation>UART</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="347"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="345"/>
         <source>USB</source>
         <translation>USB</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="348"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="346"/>
         <source>Undo</source>
         <translation>पूर्ववत करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="349"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="347"/>
         <source>Undo the last project edit</source>
         <translation>अंतिम प्रोजेक्ट संपादन को पूर्ववत करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="350"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="348"/>
         <source>Unlock</source>
         <translation>अनलॉक करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="351"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="349"/>
+        <source>Variables Help</source>
+        <translation>वेरिएबल सहायता</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/CommandStrings.cpp" line="350"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
         <translation>DeepWiki पर विस्तृत दस्तावेज़ देखें और प्रश्न पूछें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="352"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="351"/>
         <source>Visualizations</source>
         <translation>विज़ुअलाइज़ेशन</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="353"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="352"/>
         <source>Watch another Serial Studio instance's dashboard over the network</source>
         <translation>नेटवर्क पर किसी अन्य Serial Studio इंस्टेंस के डैशबोर्ड को देखें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="354"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="353"/>
         <source>Waterfall</source>
         <translation>वॉटरफॉल</translation>
     </message>
     <message>
-        <location filename="../../src/UI/CommandStrings.cpp" line="355"/>
+        <location filename="../../src/UI/CommandStrings.cpp" line="354"/>
         <source>Web View</source>
         <translation>वेब व्यू</translation>
     </message>
@@ -6046,10 +6121,20 @@ v
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="583"/>
+        <source>A downstream consumer (dashboard, CSV/MDF4 export, historian, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
+        <translation>डाउनस्ट्रीम कंज्यूमर (डैशबोर्ड, CSV/MDF4 एक्सपोर्ट, हिस्टोरियन, या API सब्सक्राइबर) पर्याप्त तेज़ी से डेटा प्रोसेस नहीं कर पा रहा है, इसलिए डिस्प्ले और सक्रिय रिकॉर्डिंग से डेटा ड्रॉप हो रहा है। किसी भारी कंज्यूमर को अक्षम करें या डेटा रेट कम करें।</translation>
+    </message>
+    <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="3090"/>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="3228"/>
         <source>Channel %1</source>
         <translation>चैनल %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3118"/>
+        <source>Multi-Plot</source>
+        <translation>मल्टी-प्लॉट</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="3239"/>
@@ -6068,9 +6153,8 @@ v
         <translation>ब्लॉक पूल समाप्त हो गया</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="583"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, session DB, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
-        <translation>एक डाउनस्ट्रीम उपभोक्ता (डैशबोर्ड, CSV/MDF4 एक्सपोर्ट, सत्र DB, या API सब्सक्राइबर) पर्याप्त तेज़ी से ड्रेन नहीं कर रहा है, इसलिए डेटा डिस्प्ले से और किसी भी सक्रिय रिकॉर्डिंग से छोड़ा जा रहा है। किसी भारी उपभोक्ता को अक्षम करें या डेटा दर कम करें।</translation>
+        <translation type="vanished">एक डाउनस्ट्रीम उपभोक्ता (डैशबोर्ड, CSV/MDF4 एक्सपोर्ट, सत्र DB, या API सब्सक्राइबर) पर्याप्त तेज़ी से ड्रेन नहीं कर रहा है, इसलिए डेटा डिस्प्ले से और किसी भी सक्रिय रिकॉर्डिंग से छोड़ा जा रहा है। किसी भारी उपभोक्ता को अक्षम करें या डेटा दर कम करें।</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="2764"/>
@@ -6101,9 +6185,8 @@ v
         <translation>क्विक प्लॉट डेटा</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3118"/>
         <source>Multiple Plots</source>
-        <translation>मल्टीपल प्लॉट</translation>
+        <translation type="vanished">मल्टीपल प्लॉट</translation>
     </message>
 </context>
 <context>
@@ -6601,9 +6684,13 @@ Any unsaved changes are lost. Continue?</source>
         <translation>आयात करने के लिए Javascript फ़ाइल चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="399"/>
         <source>Select Painter Widget Template</source>
-        <translation>पेंटर विजेट टेम्पलेट चुनें</translation>
+        <translation type="vanished">पेंटर विजेट टेम्पलेट चुनें</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="399"/>
+        <source>Select Canvas Widget Template</source>
+        <translation>कैनवास विजेट टेम्पलेट चुनें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="400"/>
@@ -6668,7 +6755,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>प्रत्येक वक्र को समय या सैंपल संख्या के विरुद्ध प्लॉट करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="413"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="414"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="314"/>
         <source>Logarithmic X Axis</source>
         <translation>लॉगरिदमिक X अक्ष</translation>
@@ -6679,7 +6766,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>X अक्ष को दशकों में स्केल करें; उपलब्ध जब X-Axis स्रोत Samples हो (Time नहीं)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="426"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="427"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="327"/>
         <source>Logarithmic Y Axis</source>
         <translation>लॉगरिदमिक Y अक्ष</translation>
@@ -6835,22 +6922,20 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>इमेज कॉन्फ़िगरेशन</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="238"/>
         <source>Virtual Dataset</source>
-        <translation>वर्चुअल डेटासेट</translation>
+        <translation type="vanished">वर्चुअल डेटासेट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="239"/>
         <source>Virtual datasets compute their value from transforms and data tables, they do not require a frame index</source>
-        <translation>वर्चुअल डेटासेट अपना मान ट्रांसफ़ॉर्म और डेटा टेबल से कंप्यूट करते हैं, उन्हें फ़्रेम इंडेक्स की आवश्यकता नहीं होती</translation>
+        <translation type="vanished">वर्चुअल डेटासेट अपना मान ट्रांसफ़ॉर्म और डेटा टेबल से कंप्यूट करते हैं, उन्हें फ़्रेम इंडेक्स की आवश्यकता नहीं होती</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="577"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="578"/>
         <source>Scale the frequency axis in decades so low octaves stay readable; applies to both the FFT plot and the waterfall</source>
         <translation>आवृत्ति अक्ष को दशकों में स्केल करें ताकि निम्न ऑक्टेव पठनीय रहें; FFT प्लॉट और वॉटरफ़ॉल दोनों पर लागू होता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="693"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="694"/>
         <source>Fixed decimal places for the value display; overrides the format (-1 = auto)</source>
         <translation>मान प्रदर्शन के लिए निश्चित दशमलव स्थान; प्रारूप को ओवरराइड करता है (-1 = स्वतः)</translation>
     </message>
@@ -6880,12 +6965,8 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">ग्रुप्स</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="597"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="610"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="611"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="636"/>
         <source>Shared Memory</source>
-        <translation>शेयर्ड मेमोरी</translation>
+        <translation type="vanished">शेयर्ड मेमोरी</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorSummaries.cpp" line="134"/>
@@ -7282,7 +7363,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>कनेक्शन सेटिंग्स</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="214"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="215"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="692"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1108"/>
         <source>General Information</source>
@@ -7447,137 +7528,151 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>प्रत्येक ट्रिगर पर कमांड भेजने की संख्या</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="226"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="227"/>
         <source>Untitled Dataset</source>
         <translation>शीर्षकहीन डेटासेट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="227"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="228"/>
         <source>Dataset Title</source>
         <translation>डेटासेट शीर्षक</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="228"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="229"/>
         <source>Name of the dataset, used for labeling and identification</source>
         <translation>डेटासेट का नाम, लेबलिंग और पहचान के लिए उपयोग किया जाता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="250"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="251"/>
         <source>Hide on Dashboard</source>
         <translation>डैशबोर्ड पर छिपाएँ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="251"/>
         <source>Suppress this dataset's standalone dashboard tile; the painter widget can still read its values</source>
-        <translation>इस डेटासेट की स्वतंत्र डैशबोर्ड टाइल को दबाएँ; पेंटर विजेट अभी भी इसके मान पढ़ सकता है</translation>
+        <translation type="vanished">इस डेटासेट की स्वतंत्र डैशबोर्ड टाइल को दबाएँ; पेंटर विजेट अभी भी इसके मान पढ़ सकता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="323"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="324"/>
         <source>Automatic</source>
         <translation>स्वचालित</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="324"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="325"/>
         <source>Widget Color</source>
         <translation>विजेट रंग</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="325"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="326"/>
         <source>Custom display color for this dataset; automatic uses the theme palette</source>
         <translation>इस डेटासेट के लिए कस्टम प्रदर्शन रंग; स्वचालित थीम पैलेट का उपयोग करता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="303"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="304"/>
         <source>Stable name</source>
         <translation>स्थिर नाम</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="304"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="239"/>
+        <source>Computed Dataset</source>
+        <translation>कंप्यूटेड डेटासेट</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="240"/>
+        <source>Computed datasets compute their value from transforms and shared variables, they do not require a frame index</source>
+        <translation>कंप्यूटेड डेटासेट अपना मान ट्रांसफ़ॉर्म और साझा वेरिएबल से कंप्यूट करते हैं, उन्हें फ़्रेम इंडेक्स की आवश्यकता नहीं होती</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="252"/>
+        <source>Suppress this dataset's standalone dashboard tile; the canvas widget can still read its values</source>
+        <translation>इस डेटासेट की स्वतंत्र डैशबोर्ड टाइल को दबाएँ; कैनवास विजेट अभी भी इसके मान पढ़ सकता है</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="305"/>
         <source>Script Alias</source>
         <translation>स्क्रिप्ट उपनाम</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="305"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="306"/>
         <source>Stable name for getDataset-style script/API lookups; must be unique (optional)</source>
         <translation>getDataset-स्टाइल स्क्रिप्ट/API लुकअप के लिए स्थिर नाम; अद्वितीय होना चाहिए (वैकल्पिक)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="345"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="346"/>
         <source>Lower bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>डेटासेट वैल्यू रेंज की निचली सीमा; विजेट और FFT इस पर फॉलबैक करते हैं जब उनकी अपनी रेंज सेट नहीं होती</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="357"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="358"/>
         <source>Upper bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>डेटासेट वैल्यू रेंज की ऊपरी सीमा; विजेट और FFT इस पर फॉलबैक करते हैं जब उनकी अपनी रेंज सेट नहीं होती</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="401"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="402"/>
         <source>Choose Time or a dataset to drive the X-Axis in plots</source>
         <translation>प्लॉट में X-Axis चलाने के लिए Time या डेटासेट चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="414"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="415"/>
         <source>Scale the X axis in decades; available when the X-Axis source is Samples or a dataset (not Time)</source>
         <translation>X अक्ष को दशकों में स्केल करें; उपलब्ध जब X-Axis स्रोत Samples या डेटासेट हो (Time नहीं)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="427"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="428"/>
         <source>Scale the Y axis in decades; values at or below zero are clamped</source>
         <translation>Y अक्ष को दशकों में स्केल करें; शून्य या उससे कम मान क्लैम्प किए जाते हैं</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="442"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="443"/>
         <source>Frequency Analysis</source>
         <translation>फ्रीक्वेंसी विश्लेषण</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="479"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="480"/>
         <source>Peak Ballistics</source>
         <translation>पीक बैलिस्टिक्स</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="480"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="481"/>
         <source>Analyzer-style display: peaks rise instantly and decay smoothly over the release time</source>
         <translation>विश्लेषक-शैली डिस्प्ले: पीक तुरंत बढ़ते हैं और रिलीज़ समय के दौरान सुचारू रूप से क्षय होते हैं</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="492"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="493"/>
         <source>Ballistics Release (ms)</source>
         <translation>बैलिस्टिक्स रिलीज़ (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="493"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="494"/>
         <source>Decay time for the ballistics display (50-5000 ms)</source>
         <translation>बैलिस्टिक्स डिस्प्ले के लिए क्षय समय (50-5000 ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="509"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="510"/>
         <source>Choose Time (default) or any dataset whose value drives the Y axis -- produces a Campbell diagram when bound to e.g. RPM</source>
         <translation>समय (डिफ़ॉल्ट) या कोई भी डेटासेट चुनें जिसका मान Y अक्ष को संचालित करता है -- उदाहरण के लिए RPM से बाइंड करने पर कैंपबेल आरेख उत्पन्न करता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="549"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="550"/>
         <source>FFT Window Function</source>
         <translation>FFT विंडो फ़ंक्शन</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="550"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="551"/>
         <source>Window applied before the transform to reduce spectral leakage; affects both the FFT plot and the waterfall</source>
         <translation>स्पेक्ट्रल लीकेज को कम करने के लिए ट्रांसफ़ॉर्म से पहले लागू की गई विंडो; FFT प्लॉट और वॉटरफ़ॉल दोनों को प्रभावित करती है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="576"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="577"/>
         <source>Logarithmic Frequency Axis</source>
         <translation>लघुगणकीय आवृत्ति अक्ष</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="739"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="740"/>
         <source>Hold Min/Max Markers</source>
         <translation>Min/Max मार्कर होल्ड करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="740"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="741"/>
         <source>Show hold markers at the lowest and highest values observed since the last data reset</source>
         <translation>अंतिम डेटा रीसेट के बाद से देखे गए न्यूनतम और अधिकतम मानों पर होल्ड मार्कर दिखाएं</translation>
     </message>
@@ -7586,39 +7681,39 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">FFT आवृत्ति अक्ष को दशकों में स्केल करें ताकि निम्न ऑक्टेव पठनीय रहें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="590"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="714"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="591"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="715"/>
         <source>Minimum Value (optional)</source>
         <translation>न्यूनतम मान (वैकल्पिक)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="591"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="592"/>
         <source>Lower bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>डेटा सामान्यीकरण के लिए निचली सीमा; अनसेट छोड़ने पर डेटासेट मान रेंज पर वापस आता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="603"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="726"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="604"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="727"/>
         <source>Maximum Value (optional)</source>
         <translation>अधिकतम मान (वैकल्पिक)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="604"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="605"/>
         <source>Upper bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>डेटा सामान्यीकरण के लिए ऊपरी सीमा; अनसेट छोड़ने पर डेटासेट मान रेंज पर वापस आता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="715"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="716"/>
         <source>Lower bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>गेज या बार रेंज की निचली सीमा; अनसेट छोड़ने पर डेटासेट मान रेंज पर वापस आता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="727"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="728"/>
         <source>Upper bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>गेज या बार रेंज की ऊपरी सीमा; अनसेट छोड़ने पर डेटासेट मान रेंज पर वापस आता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="692"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="693"/>
         <source>Decimal Points</source>
         <translation>दशमलव बिंदु</translation>
     </message>
@@ -7632,14 +7727,13 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>चालू</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="783"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="784"/>
         <source>LED lights up when value meets or exceeds this threshold; define alarm bands for multi-state colors</source>
         <translation>LED इस थ्रेशोल्ड को पूरा करने या पार करने पर प्रकाशित होता है; मल्टी-स्टेट रंगों के लिए अलार्म बैंड परिभाषित करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="717"/>
         <source>Painter Widget</source>
-        <translation>पेंटर विजेट</translation>
+        <translation type="vanished">पेंटर विजेट</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="718"/>
@@ -7677,7 +7771,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>वर्कस्पेसेज़ साफ़ करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="266"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="267"/>
         <source>Frame Index</source>
         <translation>फ़्रेम इंडेक्स</translation>
     </message>
@@ -7688,6 +7782,14 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>डैशबोर्ड विजेट</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="597"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="610"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="611"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="636"/>
+        <source>Variables</source>
+        <translation>वेरिएबल</translation>
+    </message>
+    <message>
         <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="870"/>
         <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="874"/>
         <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="875"/>
@@ -7695,42 +7797,42 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>नियंत्रण लूप</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="267"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="268"/>
         <source>Frame position used for aligning datasets in time</source>
         <translation>समय में डेटासेट को संरेखित करने के लिए उपयोग की जाने वाली फ़्रेम स्थिति</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="278"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="279"/>
         <source>Measurement Unit</source>
         <translation>माप इकाई</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="277"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="278"/>
         <source>Volts, Amps, etc.</source>
         <translation>वोल्ट, एम्पीयर, आदि।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="279"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="280"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
         <translation>माप की इकाई, जैसे वोल्ट या एम्पीयर (वैकल्पिक)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="372"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="373"/>
         <source>Plot Settings</source>
         <translation>प्लॉट सेटिंग्स</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="386"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="387"/>
         <source>Enable Plot Widget</source>
         <translation>प्लॉट विजेट सक्षम करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="387"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="388"/>
         <source>Plot data in real-time</source>
         <translation>रियल-टाइम में डेटा प्लॉट करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="400"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="401"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="298"/>
         <source>X-Axis Source</source>
         <translation>X-अक्ष स्रोत</translation>
@@ -7760,27 +7862,27 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">FFT कॉन्फ़िगरेशन</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="455"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="456"/>
         <source>Enable FFT Analysis</source>
         <translation>FFT विश्लेषण सक्षम करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="456"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="457"/>
         <source>Perform frequency-domain analysis of the dataset</source>
         <translation>डेटासेट का फ़्रीक्वेंसी-डोमेन विश्लेषण करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="466"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="467"/>
         <source>Enable Waterfall Plot</source>
         <translation>वॉटरफॉल प्लॉट सक्षम करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="467"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="468"/>
         <source>Show a scrolling spectrogram of frequency content over time (Pro)</source>
         <translation>समय के साथ फ्रीक्वेंसी सामग्री का स्क्रॉलिंग स्पेक्ट्रोग्राम दिखाएं (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="508"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="509"/>
         <source>Waterfall Y Axis</source>
         <translation>वॉटरफॉल Y अक्ष</translation>
     </message>
@@ -7789,22 +7891,22 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="obsolete">समय (डिफ़ॉल्ट) या कोई भी डेटासेट चुनें जिसका मान Y अक्ष को संचालित करता है — उदाहरण के लिए RPM से बाइंड करने पर कैंपबेल आरेख उत्पन्न करता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="534"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="535"/>
         <source>FFT Window Size</source>
         <translation>FFT विंडो आकार</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="535"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="536"/>
         <source>Number of samples used for each FFT calculation window</source>
         <translation>प्रत्येक FFT गणना विंडो के लिए उपयोग किए गए नमूनों की संख्या</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="563"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="564"/>
         <source>FFT Sampling Rate (Hz, required)</source>
         <translation>FFT सैंपलिंग रेट (Hz, आवश्यक)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="564"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="565"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
         <translation>FFT के लिए उपयोग की गई सैंपलिंग फ़्रीक्वेंसी (Hz में)</translation>
     </message>
@@ -7825,17 +7927,17 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">डेटा नॉर्मलाइज़ेशन के लिए ऊपरी सीमा</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="619"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="620"/>
         <source>Widget Settings</source>
         <translation>विजेट सेटिंग्स</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="635"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="636"/>
         <source>Widget</source>
         <translation>विजेट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="636"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="637"/>
         <source>Select the visual widget used to display this dataset</source>
         <translation>इस डेटासेट को डिस्प्ले करने के लिए उपयोग किया जाने वाला विज़ुअल विजेट चुनें</translation>
     </message>
@@ -7857,29 +7959,29 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="731"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="662"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="689"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="663"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="690"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="366"/>
         <source>Auto</source>
         <translation>स्वतः</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="663"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="664"/>
         <source>Tick Count</source>
         <translation>टिक संख्या</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="664"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="665"/>
         <source>Major-tick count on the dial scale (0 = auto-fit to widget size)</source>
         <translation>डायल स्केल पर मुख्य-टिक संख्या (0 = विजेट आकार में स्वतः फ़िट)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="678"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="679"/>
         <source>Label Format</source>
         <translation>लेबल फ़ॉर्मेट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="679"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="680"/>
         <source>Decimal places or notation used on tick labels and the value display</source>
         <translation>टिक लेबल और मान प्रदर्शन में उपयोग किए गए दशमलव स्थान या संकेतन</translation>
     </message>
@@ -7920,22 +8022,22 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">मान इस थ्रेशोल्ड से अधिक होने पर विज़ुअल अलार्म ट्रिगर करता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="755"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="756"/>
         <source>LED Display Settings</source>
         <translation>LED डिस्प्ले सेटिंग्स</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="768"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="769"/>
         <source>Show in LED Panel</source>
         <translation>LED पैनल में दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="769"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="770"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>LED डिस्प्ले का उपयोग करके विज़ुअल स्टेटस मॉनिटरिंग सक्षम करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="782"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="783"/>
         <source>LED On Threshold (required)</source>
         <translation>LED ऑन थ्रेशोल्ड (आवश्यक)</translation>
     </message>
@@ -7944,9 +8046,13 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">LED इस थ्रेशोल्ड को पूरा करने या पार करने पर प्रकाशित होता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="455"/>
         <source>Edit Painter Code</source>
-        <translation>पेंटर कोड एडिट करें</translation>
+        <translation type="vanished">पेंटर कोड एडिट करें</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="455"/>
+        <source>Edit Canvas Code</source>
+        <translation>कैनवास कोड एडिट करें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="479"/>
@@ -8145,8 +8251,12 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="713"/>
+        <source>Multi-Plot</source>
+        <translation>मल्टी-प्लॉट</translation>
+    </message>
+    <message>
         <source>Multiple Plot</source>
-        <translation>मल्टीपल प्लॉट</translation>
+        <translation type="vanished">मल्टीपल प्लॉट</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="714"/>
@@ -8162,6 +8272,11 @@ Add %4 dataset(s) using the template's defaults?</source>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="716"/>
         <source>Image View</source>
         <translation>इमेज व्यू</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="717"/>
+        <source>Canvas Widget</source>
+        <translation>कैनवास विजेट</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="719"/>
@@ -8306,13 +8421,13 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>मान रेंज</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="344"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="345"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1199"/>
         <source>Minimum Value</source>
         <translation>न्यूनतम मान</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="356"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="357"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1208"/>
         <source>Maximum Value</source>
         <translation>अधिकतम मान</translation>
@@ -9037,6 +9152,11 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>नया मीटर</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1452"/>
+        <source>Edit Canvas Datasets</source>
+        <translation>कैनवास डेटासेट एडिट करें</translation>
+    </message>
+    <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="2187"/>
         <source>Duplicate Selection</source>
         <translation>चयन डुप्लिकेट करें</translation>
@@ -9071,9 +9191,8 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>नया वॉटरफॉल</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1452"/>
         <source>Edit Painter Datasets</source>
-        <translation>पेंटर डेटासेट संपादित करें</translation>
+        <translation type="vanished">पेंटर डेटासेट संपादित करें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1471"/>
@@ -9172,9 +9291,8 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>साझा टेबल</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="223"/>
         <source>register</source>
-        <translation>रजिस्टर</translation>
+        <translation type="vanished">रजिस्टर</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="917"/>
@@ -9231,14 +9349,12 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>एक्शन का नाम बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="398"/>
         <source>New Register</source>
-        <translation>नया रजिस्टर</translation>
+        <translation type="vanished">नया रजिस्टर</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="421"/>
         <source>Rename Register</source>
-        <translation>रजिस्टर का नाम बदलें</translation>
+        <translation type="vanished">रजिस्टर का नाम बदलें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1200"/>
@@ -9249,9 +9365,8 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>यह क्रिया पूर्ववत नहीं की जा सकती।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="456"/>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
-        <translation>यह टेबल के साथ %1 रजिस्टर हटा देगा। यह क्रिया पूर्ववत नहीं की जा सकती।</translation>
+        <translation type="vanished">यह टेबल के साथ %1 रजिस्टर हटा देगा। यह क्रिया पूर्ववत नहीं की जा सकती।</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1199"/>
@@ -9272,20 +9387,52 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>टेबल डिलीट करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="214"/>
         <source>Add Register</source>
-        <translation>रजिस्टर जोड़ें</translation>
+        <translation type="vanished">रजिस्टर जोड़ें</translation>
+    </message>
+    <message>
+        <source>Delete Register</source>
+        <translation type="vanished">रजिस्टर डिलीट करें</translation>
+    </message>
+    <message>
+        <source>Edit Register</source>
+        <translation type="vanished">रजिस्टर संपादित करें</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="214"/>
+        <source>Add Variable</source>
+        <translation>वेरिएबल जोड़ें</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="223"/>
+        <source>variable</source>
+        <translation>वेरिएबल</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="253"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="482"/>
-        <source>Delete Register</source>
-        <translation>रजिस्टर डिलीट करें</translation>
+        <source>Delete Variable</source>
+        <translation>वेरिएबल डिलीट करें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="284"/>
-        <source>Edit Register</source>
-        <translation>रजिस्टर संपादित करें</translation>
+        <source>Edit Variable</source>
+        <translation>वेरिएबल संपादित करें</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="398"/>
+        <source>New Variable</source>
+        <translation>नया वेरिएबल</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="421"/>
+        <source>Rename Variable</source>
+        <translation>वेरिएबल का नाम बदलें</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="456"/>
+        <source>This removes %1 variable(s) along with the table. This action cannot be undone.</source>
+        <translation>यह टेबल के साथ %1 वेरिएबल हटा देगा। यह क्रिया पूर्ववत नहीं की जा सकती।</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="506"/>
@@ -9680,9 +9827,14 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>DataTablesView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="35"/>
         <source>Shared Memory</source>
-        <translation>शेयर्ड मेमोरी</translation>
+        <translation type="vanished">शेयर्ड मेमोरी</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="35"/>
+        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="223"/>
+        <source>Variables</source>
+        <translation>वेरिएबल्स</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="187"/>
@@ -9711,8 +9863,12 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="213"/>
+        <source>Open help documentation for variables</source>
+        <translation>वेरिएबल्स के लिए सहायता दस्तावेज़ खोलें</translation>
+    </message>
+    <message>
         <source>Open help documentation for shared memory</source>
-        <translation>शेयर्ड मेमोरी के लिए सहायता दस्तावेज़ खोलें</translation>
+        <translation type="vanished">शेयर्ड मेमोरी के लिए सहायता दस्तावेज़ खोलें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="222"/>
@@ -9720,9 +9876,8 @@ Valid format: 01 A2 FF 3C</source>
         <translation>शीर्षक</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="223"/>
         <source>Registers</source>
-        <translation>रजिस्टर</translation>
+        <translation type="vanished">रजिस्टर</translation>
     </message>
     <message>
         <source>Name</source>
@@ -9778,9 +9933,8 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>DatabaseExplorer</name>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="38"/>
         <source>Sessions</source>
-        <translation>सेशन</translation>
+        <translation type="vanished">सेशन</translation>
     </message>
     <message>
         <source>Open</source>
@@ -9857,6 +10011,11 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <source>Restore the project file from this session file</source>
         <translation type="vanished">इस सेशन फ़ाइल से प्रोजेक्ट फ़ाइल रिस्टोर करें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="38"/>
+        <source>Historian</source>
+        <translation>हिस्टोरियन</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="298"/>
@@ -11023,6 +11182,11 @@ Valid format: 01 A2 FF 3C</source>
         <translation>%1 रजिस्टर</translation>
     </message>
     <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="834"/>
+        <source>Variables</source>
+        <translation>वेरिएबल</translation>
+    </message>
+    <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="409"/>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="743"/>
         <source>empty</source>
@@ -11133,9 +11297,8 @@ Valid format: 01 A2 FF 3C</source>
         <translation>आउटपुट</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="834"/>
         <source>Shared Memory</source>
-        <translation>शेयर्ड मेमोरी</translation>
+        <translation type="vanished">शेयर्ड मेमोरी</translation>
     </message>
     <message>
         <source>Bar Panel</source>
@@ -11991,6 +12154,11 @@ Valid format: 01 A2 FF 3C</source>
         <translation>कंट्रोल्स</translation>
     </message>
     <message>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="326"/>
+        <source>Edit the JavaScript that draws this canvas widget</source>
+        <translation>JavaScript एडिट करें जो इस कैनवास विजेट को ड्रॉ करता है</translation>
+    </message>
+    <message>
         <source>Thermometer</source>
         <translation type="vanished">थर्मामीटर</translation>
     </message>
@@ -12068,9 +12236,8 @@ Valid format: 01 A2 FF 3C</source>
         <translation>कोड एडिट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="326"/>
         <source>Edit the JavaScript that draws this painter widget</source>
-        <translation>JavaScript एडिट करें जो इस पेंटर विजेट को ड्रॉ करता है</translation>
+        <translation type="vanished">JavaScript एडिट करें जो इस पेंटर विजेट को ड्रॉ करता है</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="339"/>
@@ -18397,17 +18564,20 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>Painter</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Painter.qml" line="56"/>
         <source>Painter Widget Error</source>
-        <translation>पेंटर विजेट एरर</translation>
+        <translation type="vanished">पेंटर विजेट एरर</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Painter.qml" line="56"/>
+        <source>Canvas Widget Error</source>
+        <translation>कैनवास विजेट एरर</translation>
     </message>
 </context>
 <context>
     <name>PainterCodeDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="30"/>
         <source>Painter Widget Code Editor</source>
-        <translation>पेंटर विजेट कोड एडिटर</translation>
+        <translation type="vanished">पेंटर विजेट कोड एडिटर</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="76"/>
@@ -18420,9 +18590,8 @@ Add groups above to poll multiple register types.</source>
         <translation>इम्पोर्ट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="91"/>
         <source>Import painter code from a .js file</source>
-        <translation>.js फ़ाइल से पेंटर कोड इम्पोर्ट करें</translation>
+        <translation type="vanished">.js फ़ाइल से पेंटर कोड इम्पोर्ट करें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="99"/>
@@ -18430,9 +18599,8 @@ Add groups above to poll multiple register types.</source>
         <translation>टेम्पलेट</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="102"/>
         <source>Select a built-in painter template</source>
-        <translation>बिल्ट-इन पेंटर टेम्पलेट चुनें</translation>
+        <translation type="vanished">बिल्ट-इन पेंटर टेम्पलेट चुनें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="108"/>
@@ -18440,9 +18608,28 @@ Add groups above to poll multiple register types.</source>
         <translation>फ़ॉर्मेट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="113"/>
         <source>Reformat the painter code</source>
-        <translation>पेंटर कोड को फिर से फ़ॉर्मेट करें</translation>
+        <translation type="vanished">पेंटर कोड को फिर से फ़ॉर्मेट करें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="30"/>
+        <source>Canvas Widget Code Editor</source>
+        <translation>कैनवास विजेट कोड एडिटर</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="91"/>
+        <source>Import canvas code from a .js file</source>
+        <translation>.js फ़ाइल से कैनवास कोड इम्पोर्ट करें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="102"/>
+        <source>Select a built-in canvas template</source>
+        <translation>बिल्ट-इन कैनवास टेम्पलेट चुनें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="113"/>
+        <source>Reformat the canvas code</source>
+        <translation>कैनवास कोड रीफ़ॉर्मेट करें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="119"/>
@@ -18508,9 +18695,13 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>PainterTestDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="28"/>
         <source>Painter Live Preview</source>
-        <translation>पेंटर लाइव पूर्वावलोकन</translation>
+        <translation type="vanished">पेंटर लाइव पूर्वावलोकन</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="28"/>
+        <source>Canvas Live Preview</source>
+        <translation>कैनवास लाइव प्रीव्यू</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="32"/>
@@ -19445,18 +19636,35 @@ Click Refresh to update the list.</source>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="173"/>
-        <source>Add a custom JavaScript-rendered painter widget</source>
-        <translation>कस्टम JavaScript-रेंडर्ड पेंटर विजेट जोड़ें</translation>
+        <source>Add a custom JavaScript-rendered canvas widget</source>
+        <translation>कस्टम JavaScript-रेंडर किया गया कैनवास विजेट जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="174"/>
-        <source>Painter widgets require a Pro license, adding one will fall back to a data grid</source>
-        <translation>पेंटर विजेट के लिए Pro लाइसेंस आवश्यक है, एक जोड़ने पर डेटा ग्रिड में वापस आ जाएगा</translation>
+        <source>Canvas widgets require a Pro license, adding one will fall back to a data grid</source>
+        <translation>कैनवास विजेट के लिए Pro लाइसेंस आवश्यक है, एक जोड़ने पर डेटा ग्रिड में बदल जाएगा</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="175"/>
+        <source>Canvas Widget</source>
+        <translation>कैनवास विजेट</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="188"/>
+        <source>Multi-Plot</source>
+        <translation>मल्टी-प्लॉट</translation>
+    </message>
+    <message>
+        <source>Add a custom JavaScript-rendered painter widget</source>
+        <translation type="vanished">कस्टम JavaScript-रेंडर्ड पेंटर विजेट जोड़ें</translation>
+    </message>
+    <message>
+        <source>Painter widgets require a Pro license, adding one will fall back to a data grid</source>
+        <translation type="vanished">पेंटर विजेट के लिए Pro लाइसेंस आवश्यक है, एक जोड़ने पर डेटा ग्रिड में वापस आ जाएगा</translation>
+    </message>
+    <message>
         <source>Painter Widget</source>
-        <translation>पेंटर विजेट</translation>
+        <translation type="vanished">पेंटर विजेट</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="179"/>
@@ -19469,9 +19677,8 @@ Click Refresh to update the list.</source>
         <translation>बार पैनल</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="188"/>
         <source>Multiple Plot</source>
-        <translation>मल्टीपल प्लॉट</translation>
+        <translation type="vanished">मल्टीपल प्लॉट</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorCommandBindings.qml" line="193"/>
@@ -19512,9 +19719,13 @@ Click Refresh to update the list.</source>
         <translation>बार पैनल</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="415"/>
         <source>Multiple Plot</source>
-        <translation>मल्टीपल प्लॉट</translation>
+        <translation type="vanished">मल्टीपल प्लॉट</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="415"/>
+        <source>Multi-Plot</source>
+        <translation>मल्टी-प्लॉट</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="420"/>
@@ -19548,8 +19759,12 @@ Click Refresh to update the list.</source>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="450"/>
+        <source>Canvas Widget</source>
+        <translation>कैनवास विजेट</translation>
+    </message>
+    <message>
         <source>Painter Widget</source>
-        <translation>पेंटर विजेट</translation>
+        <translation type="vanished">पेंटर विजेट</translation>
     </message>
     <message>
         <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="711"/>
@@ -20939,14 +21154,22 @@ function parse(%1) { ... }
         <translation>table() को पहले टेबल नाम चाहिए</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="436"/>
         <source>table() needs a register name second</source>
-        <translation>table() को दूसरे स्थान पर रजिस्टर नाम चाहिए</translation>
+        <translation type="vanished">table() को दूसरे स्थान पर रजिस्टर नाम चाहिए</translation>
+    </message>
+    <message>
+        <source>unknown register '%1.%2'</source>
+        <translation type="vanished">अज्ञात रजिस्टर '%1.%2'</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="436"/>
+        <source>table() needs a variable name second</source>
+        <translation>table() को दूसरे स्थान पर वेरिएबल नाम चाहिए</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="441"/>
-        <source>unknown register '%1.%2'</source>
-        <translation>अज्ञात रजिस्टर '%1.%2'</translation>
+        <source>unknown variable '%1.%2'</source>
+        <translation>अज्ञात वेरिएबल '%1.%2'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="459"/>
@@ -21516,9 +21739,13 @@ function parse(%1) { ... }
         <translation>डेटा ग्रिड</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="299"/>
         <source>Multiple Data Plots</source>
-        <translation>मल्टीपल डेटा प्लॉट</translation>
+        <translation type="vanished">मल्टीपल डेटा प्लॉट</translation>
+    </message>
+    <message>
+        <location filename="../../src/SerialStudio.cpp" line="299"/>
+        <source>Multi-Plots</source>
+        <translation>मल्टी-प्लॉट्स</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="302"/>
@@ -21586,6 +21813,11 @@ function parse(%1) { ... }
         <translation>मीटर</translation>
     </message>
     <message>
+        <location filename="../../src/SerialStudio.cpp" line="363"/>
+        <source>Canvas Widgets</source>
+        <translation>कैनवास विजेट्स</translation>
+    </message>
+    <message>
         <source>Thermometers</source>
         <translation type="vanished">थर्मामीटर</translation>
     </message>
@@ -21625,9 +21857,8 @@ function parse(%1) { ... }
         <translation>वॉटरफॉल</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="363"/>
         <source>Painter Widgets</source>
-        <translation>पेंटर विजेट</translation>
+        <translation type="vanished">पेंटर विजेट</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="367"/>
@@ -23264,8 +23495,12 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="323"/>
+        <source>Historian</source>
+        <translation>हिस्टोरियन</translation>
+    </message>
+    <message>
         <source>Session Recording</source>
-        <translation>सेशन रिकॉर्डिंग</translation>
+        <translation type="vanished">सेशन रिकॉर्डिंग</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="344"/>
@@ -23497,6 +23732,11 @@ function parse(%1) { ... }
         <translation>रोकें</translation>
     </message>
     <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="741"/>
+        <source>Historian</source>
+        <translation>हिस्टोरियन</translation>
+    </message>
+    <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="767"/>
         <source>Recordings are saved in the Serial Studio workspace folder</source>
         <translation>रिकॉर्डिंग Serial Studio वर्कस्पेस फ़ोल्डर में सहेजी जाती हैं</translation>
@@ -23563,9 +23803,8 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>MDF4 फ़ाइल</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="741"/>
         <source>Session Database</source>
-        <translation>सत्र डेटाबेस</translation>
+        <translation type="vanished">सत्र डेटाबेस</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="751"/>
@@ -24047,9 +24286,8 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>इकाइयाँ</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="259"/>
         <source>(virtual)</source>
-        <translation>(वर्चुअल)</translation>
+        <translation type="vanished">(वर्चुअल)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="326"/>
@@ -24070,6 +24308,11 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="164"/>
         <source>Search…</source>
         <translation>खोजें…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="259"/>
+        <source>(computed)</source>
+        <translation>(computed)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="352"/>
@@ -24184,8 +24427,12 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableFolderView.qml" line="197"/>
+        <source>Variables</source>
+        <translation>वेरिएबल्स</translation>
+    </message>
+    <message>
         <source>Registers</source>
-        <translation>रजिस्टर</translation>
+        <translation type="vanished">रजिस्टर</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableFolderView.qml" line="287"/>
@@ -25603,14 +25850,12 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>UserTableView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="176"/>
         <source>Add Register</source>
-        <translation>रजिस्टर जोड़ें</translation>
+        <translation type="vanished">रजिस्टर जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="179"/>
         <source>Add register</source>
-        <translation>रजिस्टर जोड़ें</translation>
+        <translation type="vanished">रजिस्टर जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="186"/>
@@ -25628,9 +25873,8 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>इम्पोर्ट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="199"/>
         <source>Import registers from CSV</source>
-        <translation>CSV से रजिस्टर इम्पोर्ट करें</translation>
+        <translation type="vanished">CSV से रजिस्टर इम्पोर्ट करें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="206"/>
@@ -25638,9 +25882,28 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>एक्सपोर्ट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="209"/>
         <source>Export registers to CSV</source>
-        <translation>रजिस्टर को CSV में एक्सपोर्ट करें</translation>
+        <translation type="vanished">रजिस्टर को CSV में एक्सपोर्ट करें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="176"/>
+        <source>Add Variable</source>
+        <translation>वेरिएबल जोड़ें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="179"/>
+        <source>Add variable</source>
+        <translation>वेरिएबल जोड़ें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="199"/>
+        <source>Import variables from CSV</source>
+        <translation>CSV से वेरिएबल्स इम्पोर्ट करें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="209"/>
+        <source>Export variables to CSV</source>
+        <translation>CSV में वेरिएबल्स एक्सपोर्ट करें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="221"/>
@@ -25669,8 +25932,27 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="253"/>
+        <source>Open help documentation for variables</source>
+        <translation>वेरिएबल्स के लिए सहायता दस्तावेज़ खोलें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="294"/>
+        <source>Variable Name</source>
+        <translation>वेरिएबल का नाम</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="512"/>
+        <source>Delete variable</source>
+        <translation>वेरिएबल हटाएं</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="530"/>
+        <source>No variables.</source>
+        <translation>कोई वेरिएबल नहीं।</translation>
+    </message>
+    <message>
         <source>Open help documentation for shared memory</source>
-        <translation>शेयर्ड मेमोरी के लिए सहायता दस्तावेज़ खोलें</translation>
+        <translation type="vanished">शेयर्ड मेमोरी के लिए सहायता दस्तावेज़ खोलें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="293"/>
@@ -25678,9 +25960,8 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>अनुमतियाँ</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="294"/>
         <source>Register Name</source>
-        <translation>रजिस्टर का नाम</translation>
+        <translation type="vanished">रजिस्टर का नाम</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="295"/>
@@ -25703,14 +25984,12 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>एक्सेस कोड %1 को क्लिपबोर्ड पर कॉपी करें</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="512"/>
         <source>Delete register</source>
-        <translation>रजिस्टर डिलीट करें</translation>
+        <translation type="vanished">रजिस्टर डिलीट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="530"/>
         <source>No registers.</source>
-        <translation>कोई रजिस्टर नहीं।</translation>
+        <translation type="vanished">कोई रजिस्टर नहीं।</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="580"/>

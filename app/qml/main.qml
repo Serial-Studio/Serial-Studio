@@ -412,7 +412,7 @@ Item {
   }
 
   //
-  // Database explorer (Pro): lazy DialogLoader keeps its QSettings out of operator builds
+  // Historian (Pro): lazy DialogLoader keeps its QSettings out of operator builds
   //
   DialogLoader {
     id: dbExplorerLoader
@@ -742,7 +742,7 @@ Item {
   }
 
   //
-  // Database explorer: author-only by default; in operator mode requires
+  // Historian: author-only by default; in operator mode requires
   // session-export ON, and pins the explorer to the project's session DB.
   //
   function showDatabaseExplorer() {

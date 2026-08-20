@@ -13,5 +13,5 @@ Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 ← MQTT, XY, והדמיה ב-3D
 ← מנהלי התקנים לאודיו, CAN Bus, Modbus, USB, HID, ו-Process I/O
 ← ווידג'טים לפלט, ייצוא MDF4, והעברות XMODEM/YMODEM/ZMODEM
-← מסד נתונים של סשן, טבלאות נתונים, ושינויי ערכים (JS + Lua)
+← Historian, משתנים ושינויי ערכים (JS + Lua)
 ← פרויקטים מרובי מקורות ומרחבי עבודה מותאמים אישית

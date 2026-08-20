@@ -320,7 +320,7 @@ Widgets.Pane {
           opacity: enabled ? 1 : 0.5
           visible: Cpp_CommercialBuild
           palette.highlight: "#2e7dd1"
-          text: qsTr("Session Recording")
+          text: qsTr("Historian")
           Layout.alignment: Qt.AlignLeft
           enabled: root.dataExportAllowed
           checked: Cpp_CommercialBuild

@@ -412,7 +412,7 @@ QtObject {
 
   readonly property QtObject cmdAddGroupMultiPlot: QtObject {
     readonly property bool visible: root.singleTarget
-    function run() { root.addGroup(qsTr("Multiple Plot"), SerialStudio.MultiPlot) }
+    function run() { root.addGroup(qsTr("Multi-Plot"), SerialStudio.MultiPlot) }
   }
 
   readonly property QtObject cmdAddGroupPlot3D: QtObject {
@@ -447,7 +447,7 @@ QtObject {
 
   readonly property QtObject cmdAddGroupPainter: QtObject {
     readonly property bool visible: root.singleTarget
-    function run() { root.addGroup(qsTr("Painter Widget"), SerialStudio.Painter) }
+    function run() { root.addGroup(qsTr("Canvas Widget"), SerialStudio.Painter) }
   }
 
   //

@@ -154,7 +154,7 @@ the ribbon and the palette.
   survive only between two visible neighbours (no hand-written `visible:` on dividers). A
   `dynamic` handler returns the objects it created so they are destroyed with the rest.
 - **Row kinds:** the tree stamps `TreeItemKind` on every menu-bearing row, including the six that
-  used to carry none (project root, frame parser, and the Dashboard Widgets / Shared Memory /
+  used to carry none (project root, frame parser, and the Dashboard Widgets / Variables /
   Dataset Values / Workspaces headers). The blank spacer row stays unkinded and inert.
 - **Pro entries** are gated with `enabled: Cpp_CommercialBuild` in the binding, or `proGated` on a
   container node — *not* with the manifest `pro` flag, which deletes the command from the catalog

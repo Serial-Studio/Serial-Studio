@@ -52,7 +52,7 @@ project.dataset.getByTitle { title: "Channel A", groupId: 0 }
 project.dataset.getByUniqueId { uniqueId: 10001 }
 assistant.dataset.resolve { path: "Audio/Channel A" }
 
-// Inside transforms / painter scripts: read peers via the API
+// Inside transforms / canvas scripts: read peers via the API
 const v = datasetGetFinal(uid)        // uid from the response above
 ```
 
@@ -98,7 +98,7 @@ workspaces start at 5000.
    │     2. setDatasetRaw(uniqueId, raw)                         │
    │     3. if transformCode: final = transform(raw)             │
    │        - sees: all raw, final of EARLIER datasets only,     │
-   │                Constants + persisted Computed register      │
+   │                Constants + persisted Computed variable      │
    │                values (writes from prior frames + this one) │
    │     4. setDatasetFinal(uniqueId, final)                     │
    ├─────────────────────────────────────────────────────────────┤
@@ -106,10 +106,10 @@ workspaces start at 5000.
    └─────────────────────────────────────────────────────────────┘
          │
          ├─► Dashboard widgets (visualization update on UI tick, 60 Hz default)
-         │       └─► Painter onFrame() then paint(ctx,w,h) per painter widget
+         │       └─► Canvas onFrame() then paint(ctx,w,h) per canvas widget
          ├─► CSV / MDF4 export workers (lock-free queue, batch on worker thread)
          ├─► API / gRPC / MQTT publishers
-         └─► Session DB writer (Pro)
+         └─► Historian writer (Pro)
 ```
 
 The cycle in prose form, for each parsed frame in a source:
@@ -117,35 +117,35 @@ The cycle in prose form, for each parsed frame in a source:
 1. **Datasets walk in (group order, then dataset order within group).**
    For each dataset:
    1. Read raw value from `parse()[index - 1]`.
-   2. Write to the data table: `setDatasetRaw(uniqueId, value)`.
+   2. Write to the shared table: `setDatasetRaw(uniqueId, value)`.
    3. If `transformCode` is non-empty, call `transform(value)`. The
       transform sees:
-      - All Constant registers (read-only).
-      - All Computed registers carrying whatever value was last written,
+      - All Constant variables (read-only).
+      - All Computed variables carrying whatever value was last written,
         either by an earlier dataset in this frame OR by any dataset
-        in a previous frame. Computed registers persist; nothing wipes
+        in a previous frame. Computed variables persist; nothing wipes
         them between frames.
       - Raw values of EARLIER datasets in this frame only (single-pass
-        walk); a later dataset's raw register still holds the previous
+        walk); a later dataset's raw variable still holds the previous
         frame's value.
       - Final values of EARLIER datasets in this frame only.
-   4. Write the result to the data table: `setDatasetFinal(uniqueId, value)`.
+   4. Write the result to the shared table: `setDatasetFinal(uniqueId, value)`.
 2. **TimestampedFramePtr fans out.** One shared object reaches the
    dashboard, CSV/MDF4 export, the API server, gRPC, MQTT, and
-   Sessions. They all see the same final values.
+   the Historian. They all see the same final values.
 
 So: a transform on dataset C in group 1 can read final values of
 datasets A and B that came earlier in the same group (or earlier
 groups). It cannot read final values of D or later, because they haven't
 run yet.
 
-**Painters run on the UI refresh tick, NOT on every parsed frame.** The
+**Canvas scripts run on the UI refresh tick, NOT on every parsed frame.** The
 dashboard repaints at 60 Hz by default (configurable 1-240 via
-`dashboard.setFps`); if frames arrive faster, the painter
-samples whichever frame was latest at tick time. A painter reading
+`dashboard.setFps`); if frames arrive faster, the canvas widget
+samples whichever frame was latest at tick time. A canvas script reading
 `datasetGetFinal(uid)` always sees the most recent fully-processed
 value, but might skip intermediate frames between two `onFrame()`
-calls. Don't put per-frame accumulators in painter `onFrame()`; that
+calls. Don't put per-frame accumulators in canvas `onFrame()`; that
 belongs in a transform, where every frame fires.
 
 ## Cross-source transforms: what's visible
@@ -153,7 +153,7 @@ belongs in a transform, where every frame fires.
 `hotpathRxSourceFrame(sourceId, data)` processes one source's frame at
 a time. Each source has its own dataset list and parser.
 
-The **data table store is shared across sources**. So:
+The **table store is shared across sources**. So:
 
 - A transform in `sourceId=0` can `tableGet` / `datasetGetFinal` values
   written by `sourceId=1`, but it sees whatever was *last written*,
@@ -180,23 +180,23 @@ When `step` isn't set by the driver, FrameBuilder estimates it from
 the chunk size and the previous chunk's timestamp. Audio drivers
 populate it directly; UART / network usually leave it 0.
 
-## Data table edges: missing keys, type coercion
+## Shared-table edges: missing keys, type coercion
 
 `tableGet(table, register)` and `datasetGetRaw / datasetGetFinal(uid)`:
 
 - **Missing key returns `undefined` (JS) / `nil` (Lua) AND logs a
-  one-shot warning per (table, register) miss to the runtime console.**
+  one-shot warning per (table, variable) miss to the runtime console.**
   No throw. Always `if (val === undefined) ...` or `if val == nil
   then ...`. The warning helps catch typos; look for
   `[DataTableStore] Missing register ...` in the runtime log on first
   occurrence.
-- **Numeric vs string is preserved.** A register written by `tableSet`
+- **Numeric vs string is preserved.** A variable written by `tableSet`
   with a number stays numeric; written with a string stays string. Don't
   rely on coercion. When you need a number, call `Number(val)` /
   `tonumber(val)` first.
-- **`tableSet` only writes Computed registers.** Writing to a Constant
-  register name silently no-ops.
-- **Computed registers persist across frames.** Nothing resets them
+- **`tableSet` only writes Computed variables.** Writing to a Constant
+  variable name silently no-ops.
+- **Computed variables persist across frames.** Nothing resets them
   between frames. A value written in frame N is still visible in frame
   N+1 (and N+1000) unless overwritten. This is the natural model for
   filter state, integrators, latched flags, and derivatives. It is also the
@@ -213,7 +213,7 @@ populate it directly; UART / network usually leave it 0.
   that collides across folders resolves to only one of them.
 
 `__datasets__` is the auto-generated system table. Each dataset has
-two registers: `raw:<uniqueId>` and `final:<uniqueId>` (also mirrored as
+two variables: `raw:<uniqueId>` and `final:<uniqueId>` (also mirrored as
 `raw:<alias>` / `final:<alias>` when the dataset has a user-set alias). You
 almost never read those directly; `datasetGetRaw` / `datasetGetFinal` are
 the typed shortcuts (each accepts a numeric `uniqueId` or a string `alias`)

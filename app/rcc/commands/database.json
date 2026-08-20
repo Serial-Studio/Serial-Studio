@@ -28,7 +28,7 @@
       "tooltip": "Compare the selected session against the project open in the editor",
       "kind": "action", "contexts": [], "pro": true },
     { "id": "db.help", "title": "Help", "icon": "commands/help",
-      "tooltip": "Open the session database documentation",
+      "tooltip": "Open the historian documentation",
       "kind": "action", "contexts": [], "pro": true }
   ]
 }

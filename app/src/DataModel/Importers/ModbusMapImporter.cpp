@@ -789,7 +789,7 @@ QJsonObject DataModel::ModbusMapImporter::buildProject() const
 }
 
 /**
- * @brief Builds a Dataset for one register entry: a virtual dataset whose Lua transform reads
+ * @brief Builds a Dataset for one register entry: a computed dataset whose Lua transform reads
  *        the value back from the block's data table.
  */
 DataModel::Dataset DataModel::ModbusMapImporter::buildDatasetFromEntry(const RegisterEntry& entry,

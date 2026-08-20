@@ -25,7 +25,7 @@ namespace Sessions {
 
 /**
  * @brief Wire format for a stream block's samples (spec 0054): IEEE-754 float64, explicitly
- *        little-endian, `frames * 8` bytes. Session databases move between machines, so host
+ *        little-endian, `frames * 8` bytes. Historian databases move between machines, so host
  *        order would let a foreign file misdecode silently instead of being byte-identical
  *        everywhere. Encoder and decoder live together so the two halves cannot drift apart.
  */

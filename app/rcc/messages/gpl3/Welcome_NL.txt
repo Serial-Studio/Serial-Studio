@@ -15,7 +15,7 @@ Pro functies:
 → MQTT-, XY- en 3D-visualisatie
 → Audio-, CAN Bus-, Modbus-, USB-, HID- en Process-I/O-drivers
 → Output-widgets, MDF4-export en XMODEM/YMODEM/ZMODEM-overdracht
-→ Sessiedatabase, Data Tables en waardetransformaties (JS + Lua)
+→ Historian, Variabelen en waardetransformaties (JS + Lua)
 → Multi-bron-projecten en aangepaste werkruimtes
 → Commerciële licentie (geen GPL-verplichtingen)
 

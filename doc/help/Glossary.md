@@ -2,6 +2,10 @@
 
 A quick reference for the terms used throughout Serial Studio and this documentation. Entries are alphabetical. Where a concept has its own page, the entry links to it.
 
+## Acquisition pipeline
+
+The performance-critical path from incoming bytes to the dashboard. It runs at 256 kHz+ without per-frame allocation. See [The Acquisition Pipeline](Data-Hotpath.md).
+
 ## Action
 
 A user-defined command bound to a button on the dashboard or to an incoming trigger. Actions send bytes back to the device, run on a timer, or fire on a condition. See [Actions](Actions.md).
@@ -18,7 +22,7 @@ The no-code frame parser. You describe the frame layout with a JSON descriptor a
 
 The center panel that shows raw incoming bytes before any parsing, in ASCII or hexadecimal. It is also the full view in Console Only mode. Used to confirm a device is sending data and to check baud and framing.
 
-## Control Script
+## Control Loop
 
 The optional `setup()` / `loop()` script that runs alongside a project to drive output, automate the device, or compute derived values. See [Control Loop](Control-Script.md).
 
@@ -44,7 +48,7 @@ An add-on that extends Serial Studio: a theme, a frame parser, a project templat
 
 ## Folder
 
-A named, collapsible container in the Project Editor that organizes groups, data tables, or workspaces. Folders nest to any depth, are purely organizational, and exist in every edition. A leaf group folder also collapses into one aggregated dashboard workspace. See [Organizing with folders](Project-Editor.md#organizing-with-folders).
+A named, collapsible container in the Project Editor that organizes groups, shared tables, or workspaces. Folders nest to any depth, are purely organizational, and exist in every edition. A leaf group folder also collapses into one aggregated dashboard workspace. See [Organizing with folders](Project-Editor.md#organizing-with-folders).
 
 ## Frame
 
@@ -66,10 +70,6 @@ The logic that turns a raw frame into an ordered list of values. It can be the B
 
 A container that holds related datasets and maps them onto a composite widget such as a GPS Map, 3D Plot, or Data Grid. Groups organize the project tree. See [Project Editor](Project-Editor.md).
 
-## Hotpath
-
-The performance-critical path from incoming bytes to the dashboard. It runs at 256 kHz+ without per-frame allocation. See [The Data Hotpath](Data-Hotpath.md).
-
 ## Notification
 
 A dashboard-level event — Info, Warning, or Critical — posted from frame parsers, dataset transforms, output widget scripts, C++ code, or the MCP API. Events are grouped into free-form channels and shown in the Notification Log widget, with an optional native OS desktop notification. Notifications are a Pro feature. See [Notifications](Notifications.md).
@@ -84,7 +84,7 @@ An external program (a Python script or a native binary) that connects to Serial
 
 ## Pro / Free
 
-Serial Studio ships in a free GPL edition and a commercial Pro edition. Pro adds output widgets, Modbus, CAN Bus, MDF4, 3D, Image View, Waterfall, file-transfer protocols, the Session Database, and more. See [Pro vs Free Features](Pro-vs-Free.md).
+Serial Studio ships in a free GPL edition and a commercial Pro edition. Pro adds output widgets, Modbus, CAN Bus, MDF4, 3D, Image View, Waterfall, file-transfer protocols, the Historian, and more. See [Pro vs Free Features](Pro-vs-Free.md).
 
 ## Project file (`.ssproj`)
 

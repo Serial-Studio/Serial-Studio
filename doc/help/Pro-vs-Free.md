@@ -14,12 +14,12 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 **Pro version:**
 - Everything in the free version, plus:
 - Advanced protocols: MQTT, Modbus, CAN Bus, Audio Input, raw USB, HID, Process I/O.
-- Pro widgets: 3D Plot, Waterfall (spectrogram), Image View (live camera feed), Painter (user-scripted Canvas2D widget).
+- Pro widgets: 3D Plot, Waterfall (spectrogram), Image View (live camera feed), Canvas (user-scripted Canvas2D widget).
 - Output (control) widgets: buttons, toggles, sliders, knobs, text fields, and the Output Panel.
 - Multi-device projects (several data sources in one dashboard).
 - Binary Direct mode (byte-array parsing without string conversion).
 - MDF4 file export and playback.
-- Session Database recording, explorer, and PDF reports.
+- Historian recording, browsing, and PDF reports.
 - File transfers over XMODEM, YMODEM, and ZMODEM.
 - In-app AI Assistant (bring your own API key).
 - Commercial use rights.
@@ -69,14 +69,14 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 | | XY Plot (phase diagrams) | ✅ | ✅ |
 | | Waterfall (spectrogram, order tracking) | ❌ | ✅ |
 | | Image View (live camera/image feed) | ❌ | ✅ |
-| | Painter (user-scripted Canvas2D widget) | ❌ | ✅ |
+| | Canvas (user-scripted Canvas2D widget) | ❌ | ✅ |
 | | Output (Control) Widgets + Output Panel | ❌ | ✅ |
 | **Data Export** | | | |
 | | CSV Export | ✅ | ✅ |
 | | CSV Playback/Import | ✅ | ✅ |
 | | MDF4 (MF4) Export | ❌ | ✅ |
 | | MDF4 Playback | ❌ | ✅ |
-| | Session Database (SQLite recording + reports) | ❌ | ✅ |
+| | Historian (SQLite recording + reports) | ❌ | ✅ |
 | **Dashboard Features** | | | |
 | | Real-time 60 FPS Updates | ✅ | ✅ |
 | | Multi-window Support | ✅ | ✅ |
@@ -243,12 +243,12 @@ function parse(frame) {
 
 **Learn more:** [Widget Reference - Waterfall](Widget-Reference.md#waterfall-pro)
 
-### Painter Widget
+### Canvas Widget
 
 **What it is:** A user-scripted dashboard widget. The script defines a JavaScript `paint(ctx, w, h)` callback that renders directly into the widget's bitmap on every dashboard tick. Use it when no built-in widget covers the required visualization.
 
 **How it works:**
-- Each Painter widget is bound to one project group. The script reads group datasets through a `datasets` global and dashboard tick metadata through `frame.number` / `frame.timestampMs`.
+- Each Canvas widget is bound to one project group. The script reads group datasets through a `datasets` global and dashboard tick metadata through `frame.number` / `frame.timestampMs`.
 - An optional `onFrame()` callback runs once per tick before `paint()` for time-domain bookkeeping (ring buffers, peak-hold decay, integrators).
 - The drawing API is Canvas2D-shaped (`fillRect`, `arc`, `bezierCurveTo`, `fillText`, `drawImage`, transforms, paths). Linear, radial, and conic gradients (`createLinearGradient`, `createRadialGradient`, `createConicGradient`) and image patterns (`createPattern`) are supported.
 - Eighteen built-in templates are bundled with Serial Studio, including oscilloscope, sparkline grid, dial gauge, polar plot, radar sweep, artificial horizon, heatmap, LED matrix, vector field, and XY scope. Templates are plain `.js` files and can be copied as starting points.
@@ -260,7 +260,7 @@ function parse(frame) {
 - Domain-specific instruments (radar PPI, polar plots, vector fields, attitude indicators)
 - One-off visualizations during prototyping
 
-**Learn more:** [Painter Widget](Painter-Widget.md)
+**Learn more:** [Canvas Widget](Painter-Widget.md)
 
 ### Raw USB
 
@@ -372,13 +372,13 @@ function parse(frame) {
 
 **Learn more:** [Data Sources - Multi-device mode](Data-Sources.md#multi-device-mode)
 
-### Session Database
+### Historian
 
-**What it is:** Recording of complete sessions (parsed frames, raw bytes, data-table snapshots, and project metadata) into a single SQLite `.db` file.
+**What it is:** Recording of complete sessions (parsed frames, raw bytes, table snapshots, and project metadata) into a single SQLite `.db` file.
 
-**How it works:** The Database Explorer browses, tags, and exports stored sessions. The SQLite Player replays a recorded session through the live pipeline, so dashboards behave identically on recorded data. Session Reports turn the same database into a styled PDF with charts.
+**How it works:** The Historian browses, tags, and exports stored sessions. The SQLite Player replays a recorded session through the live pipeline, so dashboards behave identically on recorded data. Session Reports turn the same database into a styled PDF with charts.
 
-**Learn more:** [Session Database](Session-Database.md) | [Session Reports](Session-Reports.md)
+**Learn more:** [Historian](Session-Database.md) | [Session Reports](Session-Reports.md)
 
 ### File Transmission
 
@@ -446,9 +446,9 @@ systems, non-commercial university research, and home automation.
 - Commercial and business use rights.
 - MQTT, Modbus, CAN Bus, and Audio Input.
 - Raw USB (bulk/isochronous via libusb), HID, and Process I/O.
-- 3D plots, Waterfall (spectrogram), Painter, and live Image View (camera feeds).
+- 3D plots, Waterfall (spectrogram), Canvas, and live Image View (camera feeds).
 - Output (control) widgets and multi-device projects.
-- MDF4 export and playback, plus the Session Database.
+- MDF4 export and playback, plus the Historian.
 - File transfers (XMODEM/YMODEM/ZMODEM) and the in-app AI Assistant.
 - Binary Direct mode.
 - Email support.
@@ -643,7 +643,7 @@ Yes, for Pro customers. Contact alex@serial-studio.com for rates and availabilit
 |---|--------------|-----|
 | **Best for** | Hobbyists, students, open-source | Professionals, businesses, industry |
 | **Protocols** | Basic (Serial, Network, BLE) | Advanced (MQTT, Modbus, CAN, Audio, Raw USB, HID, Process I/O) |
-| **Widgets** | Standard (incl. XY Plot) | Standard + 3D Plot, Waterfall, Image View, Painter, Output widgets |
+| **Widgets** | Standard (incl. XY Plot) | Standard + 3D Plot, Waterfall, Image View, Canvas, Output widgets |
 | **Performance** | Hex/Base64 decoding | Binary Direct mode |
 | **Export** | CSV | CSV + MDF4 |
 | **Commercial use** | ❌ | ✅ |

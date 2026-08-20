@@ -1,14 +1,14 @@
-# Data Tables
+# Variables
 
-Shared registers that any dataset transform can read and write. Use them for project-wide constants (calibration factors, thresholds, scale values) and for computed values that flow between transforms, either within a single frame or across frames (running filters, integrators, latched state).
+Shared variables that any dataset transform can read and write. Use them for project-wide constants (calibration factors, thresholds, scale values) and for computed values that flow between transforms, either within a single frame or across frames (running filters, integrators, latched state).
 
 ## Overview
 
-A **data table** is a named collection of **registers**. Each register has a name, a type, and a default value, and it stores either a number or a string. Tables are defined once in the Project Editor and saved with the project file. At runtime, every transform can read and write them through a small four-function API.
+A **shared table** is a named collection of **variables**. Each variable has a name, a type, and a default value, and it stores either a number or a string. Tables are defined once in the Project Editor and saved with the project file. At runtime, every transform can read and write them through a small four-function API.
 
 ```mermaid
 flowchart LR
-    A["Dataset 1<br/>transform()"] -->|tableSet| C["Data Table"]
+    A["Dataset 1<br/>transform()"] -->|tableSet| C["Shared Table"]
     C -->|tableGet| B["Dataset 2<br/>transform()"]
     D["Project File"] -->|defaults| C
 ```
@@ -19,9 +19,9 @@ Tables are useful when:
 - One transform derives a value (total current, RMS error, CRC) that another transform needs to consume.
 - You want a named, typed place for "magic numbers" instead of hard-coding them inside transform scripts.
 
-## Register types
+## Variable types
 
-Every register is one of two types:
+Every variable is one of two types:
 
 | Type         | Written at                     | Readable by    | Lifetime                                    |
 |--------------|--------------------------------|----------------|---------------------------------------------|
@@ -30,20 +30,20 @@ Every register is one of two types:
 
 Constants are the right tool for configuration: sensor slopes, offsets, thresholds, full-scale ranges. They can't be modified by `tableSet()` at runtime.
 
-Computed registers behave like ordinary memory: once you write a value, it stays there until you (or another transform) write again. That matches the way state lives in control and embedded systems: Kalman states, integrators, PID controllers, edge counters, latched flags. If you specifically want a register to start each frame at a known value, write that value at the top of an early transform with `tableSet()`.
+Computed variables behave like ordinary memory: once you write a value, it stays there until you (or another transform) write again. That matches the way state lives in control and embedded systems: Kalman states, integrators, PID controllers, edge counters, latched flags. If you specifically want a variable to start each frame at a known value, write that value at the top of an early transform with `tableSet()`.
 
 ## The system table
 
-Serial Studio maintains one built-in table called `__datasets__`, generated automatically from your project. You don't define it. It surfaces in the Project Editor only as a read-only **Dataset Values** node under Shared Memory, which lists each dataset's unique ID and its `datasetGetFinal()` access code; you can't edit it. It mirrors every dataset as two registers:
+Serial Studio maintains one built-in table called `__datasets__`, generated automatically from your project. You don't define it. It surfaces in the Project Editor only as a read-only **Dataset Values** node under Variables, which lists each dataset's unique ID and its `datasetGetFinal()` access code; you can't edit it. It mirrors every dataset as two variables:
 
-| Register          | Contents                                                          |
+| Variable          | Contents                                                          |
 |-------------------|-------------------------------------------------------------------|
 | `raw:<uniqueId>`  | Raw value from the frame parser, before the dataset's transform runs |
 | `final:<uniqueId>`| Final value after the dataset's transform has run                 |
 
 `<uniqueId>` is the integer unique ID shown next to each dataset in the Project Editor. For the rules around `uniqueId`, `datasetId`, and `index`, see the [Dataset Identity Model](Identity-Model.md).
 
-If a dataset has an alias set (the **Script Alias** field in the Project Editor), the same two registers are also exposed under that name, `raw:<alias>` and `final:<alias>`. This is how a Control Loop or the API reads a dataset value by alias: `tableGet("__datasets__", "final:ATAM1-CH1")` resolves the same value that `datasetGetFinal("ATAM1-CH1")` returns from a transform.
+If a dataset has an alias set (the **Script Alias** field in the Project Editor), the same two variables are also exposed under that name, `raw:<alias>` and `final:<alias>`. This is how a Control Loop or the API reads a dataset value by alias: `tableGet("__datasets__", "final:ATAM1-CH1")` resolves the same value that `datasetGetFinal("ATAM1-CH1")` returns from a transform.
 
 In practice you'll rarely read `__datasets__` directly. The convenience functions `datasetGetRaw(uid)` and `datasetGetFinal(uid)` wrap it with a cleaner API and are the recommended way to read dataset values inside a transform.
 
@@ -53,8 +53,8 @@ Four functions are injected into every transform engine. Lua and JavaScript beha
 
 | Function                       | Arguments                               | Returns |
 |--------------------------------|-----------------------------------------|---------|
-| `tableGet(table, reg)`         | table name, register name               | number / string / nil (Lua) / undefined (JS) |
-| `tableSet(table, reg, value)`  | table name, register name, number or string | nothing (no-op if the register is a constant or doesn't exist) |
+| `tableGet(table, reg)`         | table name, variable name               | number / string / nil (Lua) / undefined (JS) |
+| `tableSet(table, reg, value)`  | table name, variable name, number or string | nothing (no-op if the variable is a constant or doesn't exist) |
 | `datasetGetRaw(uniqueId \| alias)`   | integer uniqueId or alias string        | number / string / nil / undefined |
 | `datasetGetFinal(uniqueId \| alias)` | integer uniqueId or alias string        | number / string / nil / undefined |
 
@@ -85,7 +85,7 @@ function transform(value)
 end
 ```
 
-**Compute a derived value in a virtual dataset:**
+**Compute a derived value in a computed dataset:**
 
 ```lua
 function transform(value)
@@ -96,7 +96,7 @@ function transform(value)
 end
 ```
 
-See [Dataset Value Transforms](Dataset-Transforms.md#data-table-api) for the per-language quick reference, including the equivalent JavaScript examples.
+See [Dataset Value Transforms](Dataset-Transforms.md#table-api) for the per-language quick reference, including the equivalent JavaScript examples.
 
 ## Processing order and visibility
 
@@ -110,25 +110,25 @@ That gives these guarantees:
 
 - `datasetGetRaw(uid)` returns a meaningful value only for the current dataset and for datasets earlier in project order. A dataset later in the order still holds whatever raw value the previous frame left there, because its raw write hasn't happened yet.
 - `datasetGetFinal(uid)` only returns a meaningful value for datasets that have already been transformed (that is, datasets earlier in the same group, or in an earlier group).
-- Computed registers written by earlier transforms are visible to later ones, inside the same frame and on every subsequent frame, until the next write.
+- Computed variables written by earlier transforms are visible to later ones, inside the same frame and on every subsequent frame, until the next write.
 
-If dataset B depends on dataset A's final value, make sure A is listed before B in the Project Editor tree. Otherwise `datasetGetFinal(A)` will return whatever the previous frame left in the register, almost certainly not what you want.
+If dataset B depends on dataset A's final value, make sure A is listed before B in the Project Editor tree. Otherwise `datasetGetFinal(A)` will return whatever the previous frame left in the variable, almost certainly not what you want.
 
 ## Defining tables in the Project Editor
 
 1. Open the project in the Project Editor.
-2. Select the **Shared Memory** node in the tree.
+2. Select the **Variables** node in the tree.
 3. Click **Add Shared Table** and give it a name (for example `calibration` or `runtime`).
-4. Add registers with **Add Register**. For each register, set:
-   - **Register Name.** Unique within the table.
-   - **Permissions.** **Read-Only** (a Constant register) or **Read/Write** (a Computed register).
-   - **Default Value.** The numeric or string value used at project load. Read-Only (Constant) registers stay at this value for the whole session; Read/Write (Computed) registers start the session at this value and hold whatever transforms write thereafter.
+4. Add variables with **Add Variable**. For each variable, set:
+   - **Variable Name.** Unique within the table.
+   - **Permissions.** **Read-Only** (a Constant variable) or **Read/Write** (a Computed variable).
+   - **Default Value.** The numeric or string value used at project load. Read-Only (Constant) variables stay at this value for the whole session; Read/Write (Computed) variables start the session at this value and hold whatever transforms write thereafter.
 
 Tables are saved with the project file. When the project is shared, anyone opening it gets the same table definitions and defaults.
 
 ### Naming rules
 
-Table and register names are free-form strings, but keep them short and descriptive. They appear as string literals in every transform that uses them. Avoid whitespace and non-ASCII characters to keep scripts readable. The name `__datasets__` is reserved for the built-in system table.
+Table and variable names are free-form strings, but keep them short and descriptive. They appear as string literals in every transform that uses them. Avoid whitespace and non-ASCII characters to keep scripts readable. The name `__datasets__` is reserved for the built-in system table.
 
 ## Common use cases
 
@@ -138,11 +138,11 @@ Here's a tour of patterns that come up repeatedly in real projects. Each one is 
 
 Problem: several datasets share the same calibration, and every firmware rev, lab recalibration, or field swap forces you to edit each transform by hand.
 
-Solution: store the calibration in a Constant register and read it from the transform.
+Solution: store the calibration in a Constant variable and read it from the transform.
 
 Table `calibration`:
 
-| Register | Type     | Default | Purpose                       |
+| Variable | Type     | Default | Purpose                       |
 |----------|----------|---------|-------------------------------|
 | `slope`  | Constant | `0.01`  | V per ADC count               |
 | `offset` | Constant | `0.0`   | Zero-offset in volts          |
@@ -159,15 +159,15 @@ When the sensor is recalibrated, edit the defaults in the Project Editor. Every 
 
 ### Unit conversions that change per deployment
 
-Same pattern, different use. A register called `units_per_count` lets you keep one generic transform but ship the project to customers on metric or imperial units without code changes. Good candidates: `m_to_ft`, `c_to_f`, `psi_to_bar`, `counts_per_rev`.
+Same pattern, different use. A variable called `units_per_count` lets you keep one generic transform but ship the project to customers on metric or imperial units without code changes. Good candidates: `m_to_ft`, `c_to_f`, `psi_to_bar`, `counts_per_rev`.
 
 ### Thresholds and alarm limits
 
-Store your warning and critical levels in Constant registers and let a transform return a status code that downstream widgets can color by:
+Store your warning and critical levels in Constant variables and let a transform return a status code that downstream widgets can color by:
 
 Table `limits`:
 
-| Register  | Type     | Default |
+| Variable  | Type     | Default |
 |-----------|----------|---------|
 | `warn_lo` | Constant | `10`    |
 | `warn_hi` | Constant | `80`    |
@@ -186,11 +186,11 @@ function transform(value)
 end
 ```
 
-Pair this with a [virtual dataset](Dataset-Transforms.md#virtual-datasets) so the status has its own channel without consuming a frame index.
+Pair this with a [computed dataset](Dataset-Transforms.md#computed-datasets) so the status has its own channel without consuming a frame index.
 
 ### Derived quantities from other datasets
 
-The classic case: compute power from voltage and current. Create a virtual dataset whose transform reads both channels with `datasetGetFinal()`. The ordering rule matters: both source datasets must come before the derived one in project order.
+The classic case: compute power from voltage and current. Create a computed dataset whose transform reads both channels with `datasetGetFinal()`. The ordering rule matters: both source datasets must come before the derived one in project order.
 
 Assume voltage has uniqueId 10, current has 11:
 
@@ -209,11 +209,11 @@ Other classics that fit this shape: IMU accelerometer magnitude `sqrt(axÂ² + ayÂ
 
 ### Cross-dataset scratch pad
 
-If two transforms both need the output of an expensive calculation (an FFT peak, a filtered value, a CRC), compute it once in an earlier dataset, publish it to a Computed register, and read it from the later datasets. The value persists, so the downstream readers see whatever the earlier transform last wrote, within the same frame or carried over from the previous frame if the upstream transform didn't run this time.
+If two transforms both need the output of an expensive calculation (an FFT peak, a filtered value, a CRC), compute it once in an earlier dataset, publish it to a Computed variable, and read it from the later datasets. The value persists, so the downstream readers see whatever the earlier transform last wrote, within the same frame or carried over from the previous frame if the upstream transform didn't run this time.
 
 Table `runtime`:
 
-| Register      | Type     | Default |
+| Variable      | Type     | Default |
 |---------------|----------|---------|
 | `filtered_v`  | Computed | `0`     |
 
@@ -236,7 +236,7 @@ end
 
 ### Quality flags that downstream transforms respect
 
-Set a Computed register to a "data valid" flag from one transform and have the others branch on it. Useful when a single out-of-range channel should taint several derived channels:
+Set a Computed variable to a "data valid" flag from one transform and have the others branch on it. Useful when a single out-of-range channel should taint several derived channels:
 
 ```lua
 -- Range check on a temperature probe
@@ -262,7 +262,7 @@ end
 
 ### Tunable filter parameters
 
-Put the knob (cutoff, alpha, window size) in a Constant register. Keep the filter's running state in a Computed register (or a transform-local upvalue; both work, since Computed registers persist). That separates *configuration* (in a Constant) from *running state*, and lets you re-tune the filter without editing its code.
+Put the knob (cutoff, alpha, window size) in a Constant variable. Keep the filter's running state in a Computed variable (or a transform-local upvalue; both work, since Computed variables persist). That separates *configuration* (in a Constant) from *running state*, and lets you re-tune the filter without editing its code.
 
 ```lua
 function transform(value)
@@ -277,11 +277,11 @@ end
 
 ### Cross-frame state: integrators, derivatives, latches
 
-Because Computed registers hold the last value written, they're a natural place for state that has to survive between frames, the things every controls engineer recognizes: integrators, derivatives, edge counters, peak detectors, latched alarms. A discrete-time derivative `dT/dt`:
+Because Computed variables hold the last value written, they're a natural place for state that has to survive between frames, the things every controls engineer recognizes: integrators, derivatives, edge counters, peak detectors, latched alarms. A discrete-time derivative `dT/dt`:
 
 Table `runtime`:
 
-| Register        | Type     | Default |
+| Variable        | Type     | Default |
 |-----------------|----------|---------|
 | `last_temp`     | Computed | `0`     |
 | `last_t_ms`     | Computed | `0`     |
@@ -308,7 +308,7 @@ end
 
 ### Nameplate and identity strings
 
-Registers can hold strings, not just numbers. A Constant register with a device serial number, firmware version, or site ID is occasionally useful when a transform produces a string output (for a log message, an MQTT topic, or a console line).
+Variables can hold strings, not just numbers. A Constant variable with a device serial number, firmware version, or site ID is occasionally useful when a transform produces a string output (for a log message, an MQTT topic, or a console line).
 
 ```lua
 function transform(value)
@@ -319,32 +319,32 @@ end
 
 ### What *not* to do
 
-- **Don't put arrays in a register.** Registers are scalars. Use multiple registers or multiple datasets.
-- **Don't use a data table as a configuration dialog.** Tables persist with the project file, so editing a Constant register always means saving the project. For UI knobs that change at runtime, use an Output widget instead.
-- **Don't assume "first frame" gives sentinel zeros.** Computed registers start at their declared default at project load and then hold whatever transforms write. If your transform depends on detecting the very first sample, branch on `info.frameNumber == 1` rather than on a register being "still zero".
+- **Don't put arrays in a variable.** Variables are scalars. Use multiple variables or multiple datasets.
+- **Don't use a shared table as a configuration dialog.** Tables persist with the project file, so editing a Constant variable always means saving the project. For UI knobs that change at runtime, use an Output widget instead.
+- **Don't assume "first frame" gives sentinel zeros.** Computed variables start at their declared default at project load and then hold whatever transforms write. If your transform depends on detecting the very first sample, branch on `info.frameNumber == 1` rather than on a variable being "still zero".
 
-## Virtual datasets
+## Computed datasets
 
-A virtual dataset has no Frame Index. It receives no value from the frame parser and computes its entire output from transforms. Pair a virtual dataset with a transform that reads other datasets or table registers, and you can add a derived channel that's plotted, exported, and broadcast to the API alongside the real data.
+A computed dataset has no Frame Index. It receives no value from the frame parser and computes its entire output from transforms. Pair a computed dataset with a transform that reads other datasets or table variables, and you can add a derived channel that's plotted, exported, and broadcast to the API alongside the real data.
 
-See [Virtual Datasets](Dataset-Transforms.md#virtual-datasets) in the Dataset Transforms reference for usage patterns.
+See [Computed Datasets](Dataset-Transforms.md#computed-datasets) in the Dataset Transforms reference for usage patterns.
 
 ## Multi-source projects
 
-Data tables are shared across all sources in a project. A transform on source A can read a computed register written by a transform on source B, as long as both transforms run within the same frame cycle. In practice, per-source frames are processed independently, so cross-source table communication is rarely useful. Prefer keeping each source's tables self-contained unless you specifically need to fuse values across sources.
+Shared tables span all sources in a project. A transform on source A can read a computed variable written by a transform on source B, as long as both transforms run within the same frame cycle. In practice, per-source frames are processed independently, so cross-source table communication is rarely useful. Prefer keeping each source's tables self-contained unless you specifically need to fuse values across sources.
 
 ## Rules and limitations
 
-1. Registers hold a number or a string, not arrays or tables. For a vector of values, use multiple registers or multiple datasets.
-2. `tableSet()` on a constant register has no effect. Constants are frozen at project load, and Serial Studio logs a warning to the Console panel when the write is attempted.
-3. `tableSet()` on a register that doesn't exist is also ignored. There's no auto-creation. Define the register in the Project Editor first.
-4. Computed registers hold their last written value indefinitely. If you want one to start each frame at a known value, write that value with `tableSet()` at the top of an early transform.
-5. The `__datasets__` table name is reserved for the built-in system table. The Project Editor doesn't stop you from naming a user table `__datasets__`; avoid it anyway to prevent a naming collision with the system table's registers.
-6. Table and register names are case-sensitive.
+1. Variables hold a number or a string, not arrays or tables. For a vector of values, use multiple variables or multiple datasets.
+2. `tableSet()` on a constant variable has no effect. Constants are frozen at project load, and Serial Studio logs a warning to the Console panel when the write is attempted.
+3. `tableSet()` on a variable that doesn't exist is also ignored. There's no auto-creation. Define the variable in the Project Editor first.
+4. Computed variables hold their last written value indefinitely. If you want one to start each frame at a known value, write that value with `tableSet()` at the top of an early transform.
+5. The `__datasets__` table name is reserved for the built-in system table. The Project Editor doesn't stop you from naming a user table `__datasets__`; avoid it anyway to prevent a naming collision with the system table's variables.
+6. Table and variable names are case-sensitive.
 
 ## See also
 
-- [Dataset Value Transforms](Dataset-Transforms.md): how to write the `transform(value)` function and call the data-table API.
+- [Dataset Value Transforms](Dataset-Transforms.md): how to write the `transform(value)` function and call the table API.
 - [Project Editor](Project-Editor.md): where tables are defined.
 - [Data Flow](Data-Flow.md): where transforms and tables sit in the overall pipeline.
 - [Frame Parser Scripting](JavaScript-API.md): `parse(frame)` produces the raw values that transforms consume.

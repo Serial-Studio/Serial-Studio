@@ -211,6 +211,10 @@ unconditionally — check with a sample first if you think you need to, and neve
 
 ## Data Tables — Central Data Bus
 
+User-facing naming (2026-08-19): the Project Editor section is **Variables**, table entries are
+**variables**. Internally everything below keeps the original register/table vocabulary
+(`RegisterDef`, `registers` JSON array, `project.dataTable.*` command ids).
+
 - `DataModel::DataTableStore`: flat pre-allocated register store, **no hotpath allocation**.
 - **System table `__datasets__`**: auto-generated. Two registers per dataset:
   `raw:<uniqueId>`, `final:<uniqueId>`. Populated by FrameBuilder during parsing.

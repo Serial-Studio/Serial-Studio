@@ -1,38 +1,38 @@
-# Painter Widget
+# Canvas Widget
 
-The Painter widget (Pro) provides a Canvas-2D drawing surface. One per
+The Canvas widget (Pro) provides a Canvas-2D drawing surface. One per
 group with `widgetType: 8` (GroupWidget enum at create time). Bind code
 via `project.painter.setCode{groupId, code}`.
 
-**Painter scripts are JavaScript-only.** The Lua-first guidance in
+**Canvas scripts are JavaScript-only.** The Lua-first guidance in
 the `frame_parsers` and `transforms` skills does NOT apply here. The
-reason is concrete: painters draw via Canvas2D, which only exists as a
+reason is concrete: canvas scripts draw via Canvas2D, which only exists as a
 QJSEngine API surface. There is no Lua canvas API to expose; porting
 one would be a large effort for marginal benefit. Don't try to author
-painter code in Lua; it will not compile.
+canvas code in Lua; it will not compile.
 
-To pin a painter to a workspace, use `widgetType: "painter"`
+To pin a canvas widget to a workspace, use `widgetType: "painter"`
 (preferred; the back-compat integer enum is `22`) on `addWidget`.
 
-## Decision: when to use a painter
+## Decision: when to use a canvas widget
 
 - **Don't** for standard widgets (gauge, plot, bar, LED, compass); those
-  are dataset options, not painters. Painter is one or two orders of
+  are dataset options, not canvas scripts. Canvas is one or two orders of
   magnitude more code.
 - **Do** for visualizations the standard widgets can't express: status
   grids combining many datasets, custom dial faces, schematics with live
   values, oscilloscope-style traces, polar/radar plots, vector fields,
   segmented displays, pixel-pushed image outputs.
 
-A painter group can be **empty** (zero datasets). Read peer datasets via
-`datasetGetFinal(uniqueId)` instead of duplicating data into the painter
+A canvas group can be **empty** (zero datasets). Read peer datasets via
+`datasetGetFinal(uniqueId)` instead of duplicating data into the canvas
 group.
 
 ## Entry points
 
 - **`paint(ctx, w, h)`: REQUIRED.** Called every UI tick (60 Hz
   default, configurable 1-240 via `dashboard.setFps`) to
-  redraw the canvas, **whether or not new data arrived**, so painters
+  redraw the canvas, **whether or not new data arrived**, so canvas widgets
   can animate (clocks, eased camera moves) without waiting for a frame.
   The function name is `paint`, not `draw`, not `render`. The engine
   looks up `globalThis.paint` by name.
@@ -65,14 +65,14 @@ latest at tick time; if no data is arriving it does not fire at all, while
   arrived.
 - **Per-frame work (rolling EMA, per-sample integration, alarm
   detection that must see every value)** → DOES NOT belong in
-  `onFrame`. The painter will skip frames between two ticks. Move that
+  `onFrame`. The canvas widget will skip frames between two ticks. Move that
   computation into a per-dataset **transform**, where every parsed
-  frame fires; the painter then reads the transform's output via
+  frame fires; the canvas script then reads the transform's output via
   `datasetGetFinal(uniqueId)`.
 - **Pure layout / drawing** → keep in `paint`. It runs against
   whatever `onFrame` last computed.
 
-### Recipe: spectrum analyzer painter
+### Recipe: spectrum analyzer canvas
 
 ```js
 // Top-level: bootstrap once at compile time
@@ -117,7 +117,7 @@ changes. With it, `paint` only laces lines through the cached
 ## Iteration workflow
 
 1. Get current code: `project.painter.getCode{groupId}` (returns empty
-   string if the group has no painter set yet).
+   string if the group has no canvas code set yet).
 2. Get the peer dataset uniqueIds you'll read:
    `project.dataset.list` returns `uniqueId` per dataset.
 3. Read tables you'll reference: `project.dataTable.list` then
@@ -171,12 +171,12 @@ canvas tracks light/dark theme switches automatically.
 
 ## Design: readability before cleverness
 
-A painter that looks technically impressive but takes the operator three
-seconds to read is a worse painter than a boring DataGrid. Apply these
+A canvas widget that looks technically impressive but takes the operator three
+seconds to read is a worse widget than a boring DataGrid. Apply these
 before you tune visuals:
 
 - **One primary signal per canvas.** If you're tempted to overlay four
-  traces, two needles, and a status grid on one painter, split it into
+  traces, two needles, and a status grid on one canvas, split it into
   two groups. Hick's Law: each extra independently-readable element adds
   decision time. Cap visible primitives (distinct shape kinds, not
   draw calls) at ~5 before you ask whether a second tile would be clearer.
@@ -202,7 +202,7 @@ before you tune visuals:
   the UI feels laggy regardless of how good the visualization is. Push heavy math
   into transforms (per-frame, runs on the frame thread); keep `onFrame`
   bounded; keep `paint` to layout + draw against cached arrays.
-- **Peak-End on time-series.** When the painter renders a rolling window,
+- **Peak-End on time-series.** When the canvas renders a rolling window,
   the operator's memory of "is this healthy" is anchored by the most
   recent value AND the worst value in view. Highlight both (a faint
   marker on the current sample and a labeled max/min) instead of
@@ -211,13 +211,13 @@ before you tune visuals:
   ~10% margin so axis labels, units, and current-value readouts have
   room to render without clipping when the tile is resized.
 
-These are guidance, not lint rules. The Painter dryRun won't catch a
+These are guidance, not lint rules. The Canvas dryRun won't catch a
 color-only alarm or a 600 ms onFrame; the operator will. If you're
 unsure whether a design choice helps, ask the user before pushing.
 
 ## arc / moveTo discipline
 
-The Painter renderer requires `moveTo` BEFORE `arc` to start a new
+The Canvas renderer requires `moveTo` BEFORE `arc` to start a new
 subpath. Without `moveTo`, the arc is implicitly connected to the
 previous path endpoint and may render a stray chord:
 

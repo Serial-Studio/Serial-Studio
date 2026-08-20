@@ -452,7 +452,7 @@ void DataModel::ProjectEditor::setCurrentGroupPainterCode(const QString& code)
     return;
 
   m_selectedGroup.painterCode = code;
-  m_projectModelRef.setNextUndoHint(tr("Edit Painter Code"),
+  m_projectModelRef.setNextUndoHint(tr("Edit Canvas Code"),
                                     QStringLiteral("painter-code:%1").arg(m_selectedGroup.groupId));
   m_projectModelRef.updateGroup(m_selectedGroup.groupId, m_selectedGroup, false);
   Q_EMIT currentGroupPainterCodeChanged();
@@ -710,11 +710,11 @@ void DataModel::ProjectEditor::generateComboBoxModels()
   m_groupWidgets.insert(QStringLiteral("datagrid"), tr("Data Grid"));
   m_groupWidgets.insert(QStringLiteral("map"), tr("GPS Map"));
   m_groupWidgets.insert(QStringLiteral("gyro"), tr("Gyroscope"));
-  m_groupWidgets.insert(QStringLiteral("multiplot"), tr("Multiple Plot"));
+  m_groupWidgets.insert(QStringLiteral("multiplot"), tr("Multi-Plot"));
   m_groupWidgets.insert(QStringLiteral("accelerometer"), tr("Accelerometer"));
   m_groupWidgets.insert(QStringLiteral("plot3d"), tr("3D Plot"));
   m_groupWidgets.insert(QStringLiteral("image"), tr("Image View"));
-  m_groupWidgets.insert(QStringLiteral("painter"), tr("Painter Widget"));
+  m_groupWidgets.insert(QStringLiteral("painter"), tr("Canvas Widget"));
   m_groupWidgets.insert(QStringLiteral("webview"), tr("Web View"));
   m_groupWidgets.insert(QLatin1String(""), tr("None"));
 

@@ -47,7 +47,7 @@ The widget set started with line plots, gauges, bar charts, and a GPS map in lat
 
 - **XY plot** (November 2024) for arbitrary x/y mappings instead of time-on-x.
 - **3D plot** (May 2025). A hand-rolled CPU 2.5D painter, intentionally not Qt3D, so it works without a discrete GPU and still draws thousands of points smoothly.
-- **Image View** (live camera feed) and **Painter widget** (a scriptable Canvas2D-style canvas driven by a JavaScript `paint(ctx, w, h)` callback, May 2026) for visualizations that don't fit any of the standard widgets.
+- **Image View** (live camera feed) and **Canvas widget** (a scriptable Canvas2D-style canvas driven by a JavaScript `paint(ctx, w, h)` callback, May 2026) for visualizations that don't fit any of the standard widgets.
 - **FFT Plot** and **Waterfall / spectrogram** (April 2026). They share the same per-dataset FFT settings, and the waterfall can also run in *Campbell mode*, where rows are placed by another dataset's value (e.g. RPM) for order-tracking analysis.
 
 ### The 1.0 to 2.0 rewrite
@@ -58,7 +58,7 @@ The 2.0 release was effectively a new application sharing a name with the old on
 
 ### The 2.0 to 3.0 rewrite
 
-Where 2.0 was a UI and parser rewrite, 3.0 was a data-path rewrite. The IO layer dropped its singletons. `FrameBuilder` and `FrameReader` were redesigned around a lock-free single-producer/single-consumer pipeline. The dashboard moved to a zero-allocation hot path that targets 256 kHz+ frame rates.
+Where 2.0 was a UI and parser rewrite, 3.0 was a data-path rewrite. The IO layer dropped its singletons. `FrameBuilder` and `FrameReader` were redesigned around a lock-free single-producer/single-consumer pipeline. The dashboard moved to a zero-allocation acquisition pipeline that targets 256 kHz+ frame rates.
 
 Qwt was retired and replaced by **QtGraphs** plus a set of custom Qt Quick widgets. That removed a heavy third-party dependency, unified styling across the app, and let widgets share a single render loop with the rest of the QML scene. The visible feature set didn't change much across that boundary. The invisible one (throughput, memory behavior, threading, dependency footprint) changed completely.
 
@@ -68,8 +68,8 @@ The 3.x line that followed (v3.0.0 in October 2024 through v3.2.7 in March 2026)
 
 Where the 2.0 → 3.0 work was a data-path rewrite under a roughly fixed feature set, the 3.0 → 4.0 work (4.0 is the current HEAD) is a rewrite of *scope*. The aim shifted from "show telemetry well" to "run a workstation someone can be handed for a shift," and that pulled in the pieces an industrial deployment expects:
 
-- A **shared data bus** (Data Tables) and **per-dataset transforms**, so calibration and derived values live in the project instead of in firmware. A **Lua 5.4 engine** landed alongside JavaScript for both frame parsing and transforms.
-- A **Session Database** with replay and PDF reports, so a run can be recorded, queried, and re-examined later.
+- A **shared data bus** (Variables) and **per-dataset transforms**, so calibration and derived values live in the project instead of in firmware. A **Lua 5.4 engine** landed alongside JavaScript for both frame parsing and transforms.
+- A **Historian** with replay and PDF reports, so a run can be recorded, queried, and re-examined later.
 - **Output (control) widgets** and a **Control Loop / scripting SDK**, so Serial Studio can drive a device, not just read it.
 - **Operator deployments** and a **Project Lock**, so an engineer can hand a fixed dashboard to an operator without exposing the editor.
 - A **bidirectional AI integration**, where the same command surface is reachable by external agents (MCP/gRPC) and by an in-app assistant.
@@ -80,13 +80,13 @@ None of this is a clean break the way the earlier rewrites were. The data path f
 
 The features below are the 4.0 surface in detail. Together they are what turned Serial Studio from a viewer into a small industrial platform.
 
-### Data Tables: a shared data bus
+### Variables: a shared data bus
 
-Datasets are no longer islands. Every project carries an auto-generated **system table** with `raw:<id>` and `final:<id>` registers for every dataset, plus user-defined tables of `Constant` (project-time) and `Computed` (per-frame) registers. Frame parsers, value transforms, and output widgets all read and write the same registers, which means a sensor calibration written once is reusable everywhere. See [Data Tables](Data-Tables.md).
+Datasets are no longer islands. Every project carries an auto-generated **system table** with `raw:<id>` and `final:<id>` variables for every dataset, plus user-defined tables of `Constant` (project-time) and `Computed` (per-frame) variables. Frame parsers, value transforms, and output widgets all read and write the same variables, which means a sensor calibration written once is reusable everywhere. See [Variables](Data-Tables.md).
 
 ### Per-dataset value transforms
 
-Each dataset can carry a small Lua or JavaScript snippet, `function transform(value) → number`, that runs every frame. Transforms compile once when the project loads and call into a shared engine per source, so an EMA, a unit conversion, or a calibration curve costs roughly a function call per frame. Transforms can derive **virtual datasets** (no frame index, computed entirely from other registers), which is how things like running averages, rate-of-change, and derived KPIs become first-class datasets. See [Dataset Value Transforms](Dataset-Transforms.md).
+Each dataset can carry a small Lua or JavaScript snippet, `function transform(value) → number`, that runs every frame. Transforms compile once when the project loads and call into a shared engine per source, so an EMA, a unit conversion, or a calibration curve costs roughly a function call per frame. Transforms can derive **computed datasets** (no frame index, computed entirely from other variables), which is how things like running averages, rate-of-change, and derived KPIs become first-class datasets. See [Dataset Value Transforms](Dataset-Transforms.md).
 
 ### Output (control) widgets (Pro)
 
@@ -94,11 +94,11 @@ Buttons, toggles, sliders, knobs, text fields, and a freeform Output Panel send 
 
 ### Control Loop and the scripting SDK
 
-Output widgets cover button-press commands; the Control Loop covers automation. A project carries one `setup()` / `loop()` script, the same mental model as an Arduino sketch, that Serial Studio runs on a worker thread over the life of a connection. Through the I/O scripting SDK (`io.*`: device writes, `deviceWriteAndWait` handshakes, latest-frame capture, `dashboardTick`) the loop can send wake-up sequences, poll registers on a timer, keep a link alive, or step a state machine, without touching firmware. The loop runs off the data hotpath and is bounded by a watchdog, so a slow script can't stall parsing or the UI. See [Control Loop](Control-Script.md).
+Output widgets cover button-press commands; the Control Loop covers automation. A project carries one `setup()` / `loop()` script, the same mental model as an Arduino sketch, that Serial Studio runs on a worker thread over the life of a connection. Through the I/O scripting SDK (`io.*`: device writes, `deviceWriteAndWait` handshakes, latest-frame capture, `dashboardTick`) the loop can send wake-up sequences, poll registers on a timer, keep a link alive, or step a state machine, without touching firmware. The loop runs off the acquisition pipeline and is bounded by a watchdog, so a slow script can't stall parsing or the UI. See [Control Loop](Control-Script.md).
 
-### Session Database (Pro)
+### Historian (Pro)
 
-Serial Studio Pro can record sessions into a SQLite `.db` file. Parsed frames, raw bytes, data-table snapshots, and project metadata all live in one file. The Database Explorer browses, tags, and exports sessions. The SQLite Player replays a stored session through the live FrameBuilder pipeline so dashboards and reports work identically on recorded data. Session Reports turn the same database into a styled PDF with cover, test info, summary, and per-parameter chart sections. See [Session Database](Session-Database.md) and [Session Reports](Session-Reports.md).
+Serial Studio Pro can record sessions into a SQLite `.db` file. Parsed frames, raw bytes, table snapshots, and project metadata all live in one file. The Historian browses, tags, and exports sessions. The SQLite Player replays a stored session through the live FrameBuilder pipeline so dashboards and reports work identically on recorded data. Session Reports turn the same database into a styled PDF with cover, test info, summary, and per-parameter chart sections. See [Historian](Session-Database.md) and [Session Reports](Session-Reports.md).
 
 ### File transmission
 

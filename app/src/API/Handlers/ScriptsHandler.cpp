@@ -42,7 +42,7 @@ static const QList<detail::Kind>& kinds()
      QStringLiteral(":/scripts/painter/templates.json"),
      QStringLiteral(":/scripts/painter/"),
      QStringLiteral(".js"),
-     QStringLiteral("Painter widget JavaScript -- canvas-2D programs that "
+     QStringLiteral("Canvas widget JavaScript -- canvas-2D programs that "
      "render group widgets. Use with project.painter.setCode.")},
     { QStringLiteral("frame_parser_js"),
      QStringLiteral(":/scripts/parser/templates.json"),

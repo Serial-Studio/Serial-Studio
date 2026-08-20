@@ -13,5 +13,5 @@ Fonctionnalités Pro disponibles :
 → Visualisation MQTT, XY et 3D
 → Pilotes Audio, CAN Bus, Modbus, USB, HID et Process I/O
 → Widgets de sortie, export MDF4 et transferts XMODEM/YMODEM/ZMODEM
-→ Base de données de sessions, Data Tables et transformations (JS + Lua)
+→ Historian, Variables et transformations (JS + Lua)
 → Projets multi-sources et espaces de travail personnalisés

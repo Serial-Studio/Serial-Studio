@@ -27,7 +27,7 @@ Window {
   minimumHeight: 480
   flags: Qt.Dialog
   modality: Qt.ApplicationModal
-  title: qsTr("Painter Widget Code Editor")
+  title: qsTr("Canvas Widget Code Editor")
   color: Cpp_ThemeManager.colors["window"]
 
   function showDialog() {
@@ -88,7 +88,7 @@ Window {
           horizontalLayout: true
           onClicked: editor.importFile()
           Layout.alignment: Qt.AlignVCenter
-          ToolTip.text: qsTr("Import painter code from a .js file")
+          ToolTip.text: qsTr("Import canvas code from a .js file")
           icon.source: Cpp_Misc_IconRegistry.icon("code", "open", 16)
         }
 
@@ -99,7 +99,7 @@ Window {
           text: qsTr("Template")
           Layout.alignment: Qt.AlignVCenter
           onClicked: editor.selectTemplate()
-          ToolTip.text: qsTr("Select a built-in painter template")
+          ToolTip.text: qsTr("Select a built-in canvas template")
           icon.source: Cpp_Misc_IconRegistry.icon("code", "template", 16)
         }
 
@@ -110,7 +110,7 @@ Window {
           horizontalLayout: true
           onClicked: editor.formatDocument()
           Layout.alignment: Qt.AlignVCenter
-          ToolTip.text: qsTr("Reformat the painter code")
+          ToolTip.text: qsTr("Reformat the canvas code")
           icon.source: Cpp_Misc_IconRegistry.icon("code", "reload", 16)
         }
 

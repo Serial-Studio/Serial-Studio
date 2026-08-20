@@ -194,7 +194,7 @@ Widgets.Pane {
         Layout.fillWidth: true
         columns: [
           { title: qsTr("Title"),    width: 280 },
-          { title: qsTr("Registers"), width: -1 }
+          { title: qsTr("Variables"), width: -1 }
         ]
       }
 

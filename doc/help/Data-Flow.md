@@ -14,9 +14,9 @@ flowchart TD
     B --> C["Input Buffer"]
     C --> D["Frame Reader"]
     D --> E["Frame Builder"]
-    E --> T["Transforms &<br/>Data Tables"]
+    E --> T["Transforms &<br/>Variables"]
     T --> F["Dashboard"]
-    T -->|export| G["CSV · MDF4 · API · Session DB"]
+    T -->|export| G["CSV · MDF4 · API · Historian"]
 ```
 
 ## Stage 1: device and driver
@@ -48,7 +48,7 @@ The frame builder turns each complete frame into a structured record of groups a
 
 1. Split the frame string on commas.
 2. If the first row is all non-numeric, treat it as column headers.
-3. Auto-generate a Data Grid group and a MultiPlot group.
+3. Auto-generate a Data Grid group and a Multi-Plot group.
 4. Assign values to auto-created datasets.
 
 No project file needed. This mode targets rapid prototyping with CSV-formatted serial output.
@@ -59,8 +59,8 @@ No project file needed. This mode targets rapid prototyping with CSV-formatted s
 2. Call the `parse(frame)` function in your chosen scripting engine (Lua 5.4 or JavaScript).
 3. The function returns a list of values (or a 2D list for multi-frame output).
 4. Map returned values to datasets by their Frame Index.
-5. For each dataset, apply its optional `transform(value)` function to convert the raw value into an engineering value. The walk is single-pass, in group then dataset order: a transform can read any dataset's raw value, but reading the final value of a dataset that comes later in the order returns the previous frame's result. Transforms can also read project constants and publish computed registers in the project's [Data Tables](Data-Tables.md); computed registers persist across frames. See [Dataset Value Transforms](Dataset-Transforms.md).
-6. Build the final frame with the populated dataset values. Virtual datasets (datasets with no Frame Index) are filled entirely by their transform at this point.
+5. For each dataset, apply its optional `transform(value)` function to convert the raw value into an engineering value. The walk is single-pass, in group then dataset order: a transform can read any dataset's raw value, but reading the final value of a dataset that comes later in the order returns the previous frame's result. Transforms can also read project constants and publish computed variables in the project's [shared tables](Data-Tables.md); computed variables persist across frames. See [Dataset Value Transforms](Dataset-Transforms.md).
+6. Build the final frame with the populated dataset values. Computed datasets (datasets with no Frame Index) are filled entirely by their transform at this point.
 
 ### Multi-source projects (Pro)
 
@@ -74,11 +74,11 @@ Widget rendering is capped at a configurable refresh rate. The default is 60 Hz,
 
 ## Stage 6: export (optional parallel path)
 
-When CSV export, MDF4 export, the session database, or the API server is active, every frame is also handed to the export workers. Each export target writes data in the background, so disk I/O and network traffic never block the dashboard or slow down the pipeline.
+When CSV export, MDF4 export, the Historian, or the API server is active, every frame is also handed to the export workers. Each export target writes data in the background, so disk I/O and network traffic never block the dashboard or slow down the pipeline.
 
 - **CSV** writes one file per session under `Documents/Serial Studio/CSV/`. See [CSV Export & Playback](CSV-Export-Playback.md).
 - **MDF4 (Pro)** writes a binary measurement file suitable for automotive and high-rate workflows.
-- **Session Database (Pro)** appends every frame, raw byte, and data-table snapshot to a per-project SQLite file that you can browse, tag, and replay later. See [Session Database](Session-Database.md).
+- **Historian (Pro)** appends every frame, raw byte, and table snapshot to a per-project SQLite file that you can browse, tag, and replay later. See [Historian](Session-Database.md).
 - **API** on port 7777 serializes frames to JSON and broadcasts them to connected clients using MCP (JSON-RPC 2.0) or the legacy protocol. See the [API Reference](API-Reference.md).
 
 ## Troubleshooting data flow
@@ -108,10 +108,10 @@ When CSV export, MDF4 export, the session database, or the API server is active,
 - [Project Editor](Project-Editor.md): configure frame parsing and dashboard layout.
 - [Frame Parser Scripting](JavaScript-API.md): full Lua and JavaScript parser reference.
 - [Dataset Value Transforms](Dataset-Transforms.md): per-dataset calibration, filtering, and unit conversion.
-- [Data Tables](Data-Tables.md): shared constants and computed registers used by transforms.
-- [Session Database](Session-Database.md): record, tag, and replay sessions through the same pipeline.
+- [Variables](Data-Tables.md): shared constants and computed variables used by transforms.
+- [Historian](Session-Database.md): record, tag, and replay sessions through the same pipeline.
 - [Widget Reference](Widget-Reference.md): all 15+ widget types and their data requirements.
 - [Communication Protocols](Communication-Protocols.md): protocol comparison and setup.
 - [Troubleshooting](Troubleshooting.md): fixes for common problems.
 - [Threading and Timing Guarantees](Threading-and-Timing.md): which thread each stage runs on and what timing guarantees hold.
-- [The Data Hotpath](Data-Hotpath.md): the technical deep dive into this pipeline, for advanced users and plugin authors.
+- [The Acquisition Pipeline](Data-Hotpath.md): the technical deep dive into this pipeline, for advanced users and plugin authors.

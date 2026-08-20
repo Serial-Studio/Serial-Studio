@@ -1,15 +1,15 @@
 # Benchmark Dialog
 
 The Benchmark dialog measures how fast the machine you're running on can extract, parse, and
-visualize frames through Serial Studio's data pipeline. It drives the real hot path, not a
+visualize frames through Serial Studio's data pipeline. It drives the real acquisition pipeline, not a
 synthetic micro-benchmark, so the numbers it reports are the throughput your hardware would
 sustain on live data. Use it to verify a build, compare machines, or check that a
 parser or transform change hasn't regressed throughput.
 
 This page describes the interactive, in-app dialog. For the headless form used in CI and
-deployment gating, see [Command-Line Interface](Command-Line-Interface.md#hotpath-benchmark);
+deployment gating, see [Command-Line Interface](Command-Line-Interface.md#acquisition-pipeline-benchmark);
 both run the same `HotpathBenchmark` engine. For the architecture being measured, see
-[The Data Hotpath](Data-Hotpath.md) and [Threading and Timing Guarantees](Threading-and-Timing.md).
+[The Acquisition Pipeline](Data-Hotpath.md) and [Threading and Timing Guarantees](Threading-and-Timing.md).
 
 ## Opening the dialog
 
@@ -76,9 +76,9 @@ dashboard, not to gate a build. Their throughput is expected to be lower than th
 ## Why the interface freezes
 
 A warning in the dialog states that the window stops responding while the benchmark runs. This
-is by design, and it's the same property that makes the hot path fast:
+is by design, and it's the same property that makes the acquisition pipeline fast:
 
-- **The hot path is single-threaded on the main thread.** `FrameReader` and `FrameBuilder` run
+- **The pipeline is single-threaded on the main thread.** `FrameReader` and `FrameBuilder` run
   on the main (GUI) thread; the benchmark drives them flat-out in a tight loop, so the event
   loop can't repaint until the loop returns. See
   [Threading and Timing Guarantees](Threading-and-Timing.md#framereader-and-framebuilder-run-on-the-main-thread)
@@ -119,7 +119,7 @@ it comes back automatically.
 A failing gated phase usually means the machine is too slow for the default 256 kHz target, the
 build is unoptimized (a debug build, or one without the shipped PGO profile), or a parser /
 transform change regressed throughput. The headless
-[CLI form](Command-Line-Interface.md#hotpath-benchmark) is what CI uses to enforce these gates
+[CLI form](Command-Line-Interface.md#acquisition-pipeline-benchmark) is what CI uses to enforce these gates
 per pull request and on the shipped binary; the dialog is the same measurement on demand.
 
 **Copy** places the results table on the clipboard as a Markdown report; **Clear** empties the
@@ -128,11 +128,11 @@ available while a benchmark is running.
 
 ## See also
 
-- [The Data Hotpath](Data-Hotpath.md): the pipeline being measured, stage by stage.
-- [Threading and Timing Guarantees](Threading-and-Timing.md): why the hot path is
+- [The Acquisition Pipeline](Data-Hotpath.md): the pipeline being measured, stage by stage.
+- [Threading and Timing Guarantees](Threading-and-Timing.md): why the pipeline is
   single-threaded and what that guarantees.
 - [Frame Parser Scripting](JavaScript-API.md): the `parse()` API and the Lua-vs-JavaScript
   performance characteristics the benchmark quantifies.
-- [Command-Line Interface](Command-Line-Interface.md#hotpath-benchmark): the headless benchmark
+- [Command-Line Interface](Command-Line-Interface.md#acquisition-pipeline-benchmark): the headless benchmark
   used for CI and deployment gating.
 - [Operation Modes](Operation-Modes.md): the Project File mode the benchmark runs under.

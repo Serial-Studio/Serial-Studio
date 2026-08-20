@@ -515,13 +515,13 @@ static void datasetSchemaPart1(QJsonObject& props)
                                      QJsonArray()));
   props.insert(Keys::Virtual,
                datasetSchemaProperty("boolean",
-                                     "Virtual datasets compute their value from transforms and "
-                                     "data tables, they do not require a frame index",
+                                     "Computed datasets compute their value from transforms and "
+                                     "shared variables, they do not require a frame index",
                                      QJsonArray()));
   props.insert(Keys::HideOnDashboard,
                datasetSchemaProperty("boolean",
                                      "Suppress this dataset's standalone dashboard tile; the "
-                                     "painter widget can still read its values",
+                                     "canvas widget can still read its values",
                                      QJsonArray()));
   props.insert(Keys::Index,
                datasetSchemaProperty("integer",

@@ -15,7 +15,7 @@ Funcții Pro:
 → Vizualizare MQTT, XY și 3D
 → Drivere Audio, CAN Bus, Modbus, USB, HID și Process I/O
 → Widget-uri de ieșire, export MDF4 și transferuri XMODEM/YMODEM/ZMODEM
-→ Bază de date sesiuni, Data Tables și transformări (JS + Lua)
+→ Historian, Variabile și transformări (JS + Lua)
 → Proiecte multi-sursă și spații de lucru personalizate
 → Licență comercială (fără obligații GPL)
 

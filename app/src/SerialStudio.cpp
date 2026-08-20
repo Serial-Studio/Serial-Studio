@@ -296,7 +296,7 @@ QString SerialStudio::dashboardWidgetTitle(const DashboardWidget w)
       return tr("Data Grids");
       break;
     case DashboardMultiPlot:
-      return tr("Multiple Data Plots");
+      return tr("Multi-Plots");
       break;
     case DashboardAccelerometer:
       return tr("Accelerometers");
@@ -360,7 +360,7 @@ QString SerialStudio::dashboardWidgetTitle(const DashboardWidget w)
       return tr("Waterfalls");
       break;
     case DashboardPainter:
-      return tr("Painter Widgets");
+      return tr("Canvas Widgets");
       break;
 #endif
     case DashboardExtension:

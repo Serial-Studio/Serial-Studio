@@ -817,7 +817,7 @@ Item {
       }
 
       //
-      // Shared Memory root at device level, centred on its tables.
+      // Variables root at device level, centred on its tables.
       //
       newNodes.push({
         type:        "shared-memory",
@@ -831,7 +831,7 @@ Item {
         y:           smCenter - nodeH / 2,
         w:           nodeW,
         h:           nodeH,
-        label:       qsTr("Shared Memory"),
+        label:       qsTr("Variables"),
         icon:        Cpp_Misc_IconRegistry.icon("editor", "shared-memory", 24),
         badge:       ""
       })

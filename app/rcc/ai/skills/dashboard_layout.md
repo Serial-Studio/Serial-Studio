@@ -240,7 +240,7 @@ write-form (`pltMin`). Re-issue with the right name.
 ## Group widget shape (separate from per-dataset flags)
 
 A **group** also carries its own widget shape, which determines the
-GROUP-level tile (DataGrid, MultiPlot, Accelerometer, GPS, Painter,
+GROUP-level tile (DataGrid, MultiPlot, Accelerometer, GPS, Canvas,
 …). This is independent of the per-dataset bitflags above and uses a
 DIFFERENT enum: `GroupWidget`.
 

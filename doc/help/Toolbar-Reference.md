@@ -37,7 +37,7 @@ The toolbar runs along the top of the window, left to right, grouped into sectio
 |--------|------|--------------|-------|
 | **Assistant** **(Pro)** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/toolbar/ai.svg" width="16" height="16"> | Opens the [AI Assistant](AI-Assistant.md) to build and edit a project by chatting. | In the free build this button is **Extensions** instead, opening the [extension manager](Extensions.md). |
 | **Deploy** **(Pro)** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/toolbar/deploy.svg" width="16" height="16"> | Opens the shortcut generator to build a standalone [operator app](Operator-Deployments.md) for the current project. | |
-| **Sessions** **(Pro)** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/toolbar/sessions.svg" width="16" height="16"> | Opens the [Session Database](Session-Database.md) explorer to browse, replay, and export recorded sessions. | |
+| **Historian** **(Pro)** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/toolbar/sessions.svg" width="16" height="16"> | Opens the [Historian](Session-Database.md) to browse, replay, and export recorded sessions. | |
 | **Extensions** **(Pro)** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/toolbar/extensions-small.svg" width="16" height="16"> | Browse and install [extensions](Extensions.md). | In the free build, the section's first button is Extensions; in Pro it lives here alongside the AI tools. |
 
 ### Preferences and driver selection
@@ -99,7 +99,7 @@ Switches that arm recording for the session. Each writes to a separate file or s
 | Switch | What it records | Reference |
 |--------|-----------------|-----------|
 | **CSV Spreadsheet** | A `.csv` of every parsed frame. | [CSV Export & Playback](CSV-Export-Playback.md) |
-| **Session Recording** **(Pro)** | A SQLite session in the database. | [Session Database](Session-Database.md) |
+| **Session Recording** **(Pro)** | A SQLite session in the database. | [Historian](Session-Database.md) |
 | **MDF4 Recording** **(Pro)** | An ASAM MDF4 measurement file. | [MDF4](MDF4.md) |
 | **Console Log** | A transcript of the raw console stream. | |
 
@@ -117,7 +117,7 @@ The Start menu opens from the leftmost taskbar button. It is the dashboard's mai
 | **Auto Layout** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/start/auto-layout.svg" width="16" height="16"> | Toggles automatic tiling of dashboard windows. | Toggle. |
 | **Full Screen** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/start/full-screen.svg" width="16" height="16"> | Toggles the main window between full-screen and windowed. | Toggle. |
 | **Add External Window** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/start/external-window.svg" width="16" height="16"> | Opens a second dashboard window (for a multi-monitor layout). | |
-| **Export** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/start/export.svg" width="16" height="16"> | Submenu of recording toggles: CSV File, MDF4 File **(Pro)**, Console Transcript, and Session Database **(Pro)**. | Mirrors the Setup panel's export switches. |
+| **Export** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/start/export.svg" width="16" height="16"> | Submenu of recording toggles: CSV File, MDF4 File **(Pro)**, Console Transcript, and Historian **(Pro)**. | Mirrors the Setup panel's export switches. |
 | **Tools** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/start/tools.svg" width="16" height="16"> | Submenu: Console, Notifications **(Pro)**, Clock, Stopwatch, Preferences, Sessions **(Pro)**, File Transmission **(Pro)**, AI Assistant **(Pro)**. | Toggles the utility widgets and opens the tool windows. |
 | **Help Center** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/start/help.svg" width="16" height="16"> | Opens this documentation. | |
 | **Pause / Resume** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/start/pause.svg" width="16" height="16"> <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/start/resume.svg" width="16" height="16"> | Pauses or resumes data reception for the whole session. | Toggle. |
@@ -199,9 +199,9 @@ The [Project Editor](Project-Editor.md) has its own toolbar for building the pro
 | **Group** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/project-editor/toolbar/add-group.svg" width="16" height="16"> | A generic dataset group. |
 | **Image** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/project-editor/toolbar/image.svg" width="16" height="16"> | An [Image View](Widget-Reference.md#image-view-pro) (Pro). |
 | **Web View** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/project-editor/toolbar/add-webview.svg" width="16" height="16"> | A web viewer. |
-| **Painter** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/project-editor/toolbar/add-painter.svg" width="16" height="16"> | A [Painter](Painter-Widget.md) widget (Pro). |
+| **Canvas** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/project-editor/toolbar/add-painter.svg" width="16" height="16"> | A [Canvas](Painter-Widget.md) widget (Pro). |
 | **Table** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/project-editor/toolbar/add-datagrid.svg" width="16" height="16"> | A Data Grid. |
-| **Multi-Plot** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/project-editor/toolbar/add-multiplot.svg" width="16" height="16"> | A [MultiPlot](Plots.md). |
+| **Multi-Plot** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/project-editor/toolbar/add-multiplot.svg" width="16" height="16"> | A [Multi-Plot](Plots.md). |
 | **3D Plot** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/project-editor/toolbar/add-plot3d.svg" width="16" height="16"> | A 3D Plot (Pro). |
 | **Accelerometer** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/project-editor/toolbar/add-accelerometer.svg" width="16" height="16"> | An accelerometer group. |
 | **Gyroscope** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/project-editor/toolbar/add-gyroscope.svg" width="16" height="16"> | A gyroscope group. |
@@ -242,9 +242,9 @@ A few conventions are shared across widgets:
 | **Reset View** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/return.svg" width="16" height="16"> | Returns pan and zoom to the default; disabled until you have zoomed or panned. |
 | **Axis Range Settings** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/toolbar/settings.svg" width="16" height="16"> | Pins fixed minimum and maximum axis values. |
 
-### MultiPlot
+### Multi-Plot
 
-The MultiPlot toolbar matches the Plot toolbar, minus **Show Area Under Plot** (which does not apply to overlaid curves). A per-curve legend with show / hide switches sits beside the chart.
+The Multi-Plot toolbar matches the Plot toolbar, minus **Show Area Under Plot** (which does not apply to overlaid curves). A per-curve legend with show / hide switches sits beside the chart.
 
 | Button | Icon | What it does |
 |--------|------|--------------|
@@ -343,7 +343,7 @@ These widgets have no toolbar; their interaction is direct:
 - **Gyroscope** and **LED Panel** are display-only.
 - **Stopwatch** has its own **Start / Stop**, **Lap**, and **Reset** buttons and a lap table; see [Widget Reference](Widget-Reference.md#stopwatch).
 - **Output** controls (button, slider, toggle, knob, text field) are interactive inputs that send values to the device; see [Output Controls](Output-Controls.md).
-- **Painter** (Pro) renders entirely from its user script and has no toolbar; see [Painter Widget](Painter-Widget.md).
+- **Canvas** (Pro) renders entirely from its user script and has no toolbar; see [Canvas Widget](Painter-Widget.md).
 
 ## Console toolbar
 

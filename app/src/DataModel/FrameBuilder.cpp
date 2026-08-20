@@ -580,7 +580,7 @@ SS_COLD void DataModel::FrameBuilder::notePoolExhausted()
       Q_ARG(QString, QStringLiteral("FrameBuilder")),
       Q_ARG(QString, tr("Block pool exhausted")),
       Q_ARG(QString,
-            tr("A downstream consumer (dashboard, CSV/MDF4 export, session DB, or API "
+            tr("A downstream consumer (dashboard, CSV/MDF4 export, historian, or API "
                "subscriber) is not draining fast enough, so data is being dropped from the "
                "display and from any active recording. Disable a heavy consumer or reduce "
                "the data rate.")));
@@ -3115,7 +3115,7 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList& channels)
     multiplot.groupId  = 1;
     multiplot.uniqueId = runtime_group_unique_id(1);
     multiplot.datasets = datasets;
-    multiplot.title    = tr("Multiple Plots");
+    multiplot.title    = tr("Multi-Plot");
     multiplot.widget   = QStringLiteral("multiplot");
     for (size_t i = 0; i < multiplot.datasets.size(); ++i) {
       multiplot.datasets[i].groupId  = 1;

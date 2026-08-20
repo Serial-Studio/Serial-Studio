@@ -48,7 +48,7 @@ The same configuration is scriptable through the [API](API-Reference.md) command
 |-------|--------|
 | **Enable Publishing** | Master toggle. When off, nothing leaves the broker side regardless of what the rest of the project does. |
 | **Payload** | Selects the wire format. See [Payload modes](#payload-modes) below for the four options. |
-| **Publish Rate (Hz)** | How many times per second the publisher drains its queues and pushes to the broker. Clamped to 1-30 Hz; default 10. The hotpath enqueues at full speed; the worker thread aggregates everything that arrived during the tick into one bulk publish at this cadence, so a slow broker or unreliable network never blocks frame parsing or the dashboard. |
+| **Publish Rate (Hz)** | How many times per second the publisher drains its queues and pushes to the broker. Clamped to 1-30 Hz; default 10. The acquisition pipeline enqueues at full speed; the worker thread aggregates everything that arrived during the tick into one bulk publish at this cadence, so a slow broker or unreliable network never blocks frame parsing or the dashboard. |
 | **Topic Base** | Base topic for the published payload. Required for traffic; when empty, the Publisher stays connected but publishes nothing. |
 | **Script Topic** | (Visible only when **Payload** is `Custom Script`.) Topic the user script publishes to. Defaults to **Topic Base** when blank. |
 | **Publish Notifications** | When on, dashboard notifications are mirrored to MQTT. |
@@ -182,7 +182,7 @@ Run this after editing broker credentials or TLS settings to catch authenticatio
 
 ## Publishing from frame parsers
 
-The Publisher also exposes a `mqttPublish(topic, payload, qos = 0, retain = false)` function, injected wherever the [Data Tables](Data-Tables.md) scripting API is available: frame parsers, dataset transforms, and [Painter widget](Painter-Widget.md) scripts. It pushes computed values to arbitrary topics independent of the **Payload** mode:
+The Publisher also exposes a `mqttPublish(topic, payload, qos = 0, retain = false)` function, injected wherever the [Variables](Data-Tables.md) scripting API is available: frame parsers, dataset transforms, and [Canvas widget](Painter-Widget.md) scripts. It pushes computed values to arbitrary topics independent of the **Payload** mode:
 
 - Emitting derived metrics (a rolling average, a CRC-validated subset of fields) on their own topics.
 - Mirroring a small fraction of high-rate data to a low-rate topic for cheap remote dashboards.
@@ -209,7 +209,7 @@ Use **Custom Script** mode when the script's main job is shaping the publish pay
 - [Notifications](Notifications.md): the event source that feeds **Publish Notifications**.
 - [API Reference](API-Reference.md): the JSON frame schema used by `Dashboard Data (JSON)` mode.
 - [Frame Parser Scripting](JavaScript-API.md): where `mqttPublish()` is callable from.
-- [Data Tables](Data-Tables.md): the scripting environment that injects `mqttPublish()`.
+- [Variables](Data-Tables.md): the scripting environment that injects `mqttPublish()`.
 - [Protocol Setup Guides](Protocol-Setup-Guides.md): step-by-step MQTT setup in the project editor.
 - [Pro vs Free Features](Pro-vs-Free.md): MQTT publishing is a Pro feature.
 - [Troubleshooting](Troubleshooting.md): general troubleshooting guide.

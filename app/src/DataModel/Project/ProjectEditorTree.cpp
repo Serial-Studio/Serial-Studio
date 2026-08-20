@@ -577,7 +577,7 @@ QHash<int, QStandardItem*> DataModel::ProjectEditor::appendGroupFolderItems(
 }
 
 /**
- * @brief Appends the "Shared Memory" subtree (Pro only) with system + user tables.
+ * @brief Appends the "Variables" subtree (Pro only) with system + user tables.
  */
 void DataModel::ProjectEditor::appendSharedMemoryTreeItems(QStandardItem* root,
                                                            QHash<QString, bool>& expandedStates)
@@ -594,7 +594,7 @@ void DataModel::ProjectEditor::appendSharedMemoryTreeItems(QStandardItem* root,
 
   const auto& userTables = m_projectModelRef.tables();
   bool includeSharedRoot =
-    !filterActive || matches(tr("Shared Memory")) || matches(tr("Dataset Values"));
+    !filterActive || matches(tr("Variables")) || matches(tr("Dataset Values"));
   if (!includeSharedRoot) {
     for (const auto& t : userTables) {
       if (matches(t.name)) {
@@ -607,8 +607,8 @@ void DataModel::ProjectEditor::appendSharedMemoryTreeItems(QStandardItem* root,
   if (!includeSharedRoot)
     return;
 
-  auto* tablesRoot = new QStandardItem(tr("Shared Memory"));
-  tablesRoot->setData(tr("Shared Memory"), TreeViewText);
+  auto* tablesRoot = new QStandardItem(tr("Variables"));
+  tablesRoot->setData(tr("Variables"), TreeViewText);
   tablesRoot->setData(registry.icon(QStringLiteral("editor"), QStringLiteral("shared-memory"), 16),
                       TreeViewIcon);
   tablesRoot->setData(-1, TreeViewFrameIndex);
@@ -633,7 +633,7 @@ void DataModel::ProjectEditor::appendSharedMemoryTreeItems(QStandardItem* root,
   QHash<int, QStandardItem*> folderItems;
   if (showTableFolders)
     folderItems =
-      appendTableFolderItems(tablesRoot, root->text() + "/" + tr("Shared Memory"), expandedStates);
+      appendTableFolderItems(tablesRoot, root->text() + "/" + tr("Variables"), expandedStates);
 
   for (const auto& table : userTables) {
     if (filterActive && !matches(table.name))

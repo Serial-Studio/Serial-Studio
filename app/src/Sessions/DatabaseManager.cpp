@@ -444,7 +444,7 @@ QVariantMap Sessions::DatabaseManager::sessionMetadata(int sessionId) const
 }
 
 /**
- * @brief Redirects new session databases to @p path (spec-0044 verifier child process only).
+ * @brief Redirects new historian databases to @p path (spec-0044 verifier child process only).
  *        Empty restores the canonical workspace location. The export worker reads this on its
  *        own thread, so the override may only change while no recording session is open: the
  *        worker enable/close handoff is what orders the access.

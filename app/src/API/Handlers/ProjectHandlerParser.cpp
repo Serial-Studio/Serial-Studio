@@ -1037,7 +1037,7 @@ API::CommandResponse API::Handlers::ProjectHandler::painterDryRun(const QString&
     QJsonObject result;
     result[QStringLiteral("ok")] = false;
     result[QStringLiteral("compileError")] =
-      QStringLiteral("Script compiled but did not define paint(ctx, w, h). Painter scripts "
+      QStringLiteral("Script compiled but did not define paint(ctx, w, h). Canvas scripts "
                      "MUST define `function paint(ctx, w, h)`. The function is named "
                      "`paint`, not `draw` or `render`.");
     return CommandResponse::makeSuccess(id, result);
@@ -1394,7 +1394,7 @@ API::CommandResponse API::Handlers::ProjectHandler::endToEndDryRun(const QString
     QStringLiteral("rawCells[i] maps to dataset.index = i+1. The table API "
                    "(tableGet/tableSet/datasetGetRaw/datasetGetFinal) is NOT injected in "
                    "this dry-run -- transforms that read other datasets will see 0/null. "
-                   "Virtual datasets show their transform applied to the raw cell at "
-                   "their index (which is normally 0/unset for virtual entries).");
+                   "Computed datasets show their transform applied to the raw cell at "
+                   "their index (which is normally 0/unset for computed entries).");
   return CommandResponse::makeSuccess(id, result);
 }

@@ -2209,7 +2209,7 @@ static const QHash<QString, QString>& scopeDescriptions()
     {QStringLiteral("ui"),
      QStringLiteral("Window state, layouts, widget settings, active group.")},
     {QStringLiteral("sessions"),
-     QStringLiteral("Session database export (Pro).")},
+     QStringLiteral("Historian export (Pro).")},
     {QStringLiteral("licensing"),
      QStringLiteral("License activation, validation, trial mode.")},
     {QStringLiteral("notifications"),

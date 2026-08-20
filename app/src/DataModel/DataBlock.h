@@ -292,7 +292,7 @@ SS_FORCE_INLINE void write_block_sample(
 
 /**
  * @brief Records sample @p index's pre-transform value. MDF4 writes it as a "(raw)" channel, the
- *        session database stores it beside the final, and spec-0044 verification compares the two
+ *        historian database stores it beside the final, and spec-0044 verification compares the two
  *        to tell a parse-stage divergence from a transform-stage one -- so a column that carries
  *        raw must carry it for every sample, not just the ones a transform changed.
  */

@@ -12,6 +12,6 @@ Pro-funktioner:
 → MQTT-, XY- och 3D-visualisering
 → Audio-, CAN Bus-, Modbus-, USB-, HID- och Process-I/O-drivrutiner
 → Output-widgetar, MDF4-export och XMODEM/YMODEM/ZMODEM-överföring
-→ Sessionsdatabas, Data Tables och värdetransformer (JS + Lua)
+→ Historian, Variabler och värdetransformer (JS + Lua)
 → Multikällsprojekt och anpassade arbetsytor
 → Prioriterad support

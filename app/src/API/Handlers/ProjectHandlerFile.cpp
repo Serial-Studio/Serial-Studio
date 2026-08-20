@@ -970,7 +970,7 @@ static void validateDataset(const DataModel::Dataset& d,
     addIssue(issues,
              QStringLiteral("warning"),
              dloc,
-             QStringLiteral("Non-virtual dataset has index 0; nothing maps to it"));
+             QStringLiteral("Non-computed dataset has index 0; nothing maps to it"));
 
   if (!d.virtual_ && datasetIndexes.contains(d.index)) {
     ok = false;

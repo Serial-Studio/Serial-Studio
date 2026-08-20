@@ -14,9 +14,9 @@ flowchart TD
     Root --> Group["Group Widgets"]
     Root --> Dataset["Dataset Widgets"]
 
-    Group --> G1["Data Grid · MultiPlot<br/>Accelerometer · Gyroscope"]
+    Group --> G1["Data Grid · Multi-Plot<br/>Accelerometer · Gyroscope"]
     Group --> G2["GPS Map · LED Panel<br/>3D Plot · Image View"]
-    Group --> G3["Painter (user-scripted)<br/>Web View"]
+    Group --> G3["Canvas (user-scripted)<br/>Web View"]
 
     Dataset --> D1["Plot · FFT Plot · Waterfall<br/>Bar · Gauge · Compass · Meter"]
 
@@ -49,7 +49,7 @@ flowchart TD
 - Configuration: set `widgetMin`/`widgetMax` per dataset for the track range; define
   alarm bands for severity coloring.
 
-### MultiPlot
+### Multi-Plot
 
 - Widget key: `"multiplot"`.
 - Overlays multiple dataset curves on shared axes.
@@ -131,7 +131,7 @@ flowchart TD
 - No datasets required inside the group. The widget reads raw image bytes directly from the transport stream.
 - Pro license required.
 
-### Painter (Pro)
+### Canvas (Pro)
 
 - Widget key: `"painter"`.
 - User-scripted dashboard widget. The script defines a JavaScript `paint(ctx, w, h)` callback (and an optional `onFrame()` callback) that renders directly into the widget's bitmap on every dashboard tick.
@@ -139,7 +139,7 @@ flowchart TD
 - The script reads the group's datasets through a `datasets` global and dashboard tick metadata through `frame.number` / `frame.timestampMs`.
 - Best for visualizations not covered by any built-in widget: instrument mimics, project-specific layouts, lab-equipment-style readouts.
 - Repaints at the dashboard refresh rate (60 Hz by default, configurable 1-240 Hz). A 250 ms watchdog terminates the script if a single call does not return.
-- See the [Painter Widget](Painter-Widget.md) reference for the full API.
+- See the [Canvas Widget](Painter-Widget.md) reference for the full API.
 - Pro license required.
 
 ### Web View
@@ -245,7 +245,7 @@ Bands may have gaps (the dataset's default background shows through), may overla
 
 **Notifications.** When the value enters a band with severity ≥ Warning, Serial Studio posts a notification (`Warning` or `Critical` level, with the band's `label` in the subtitle). Alarm tracking runs per dataset at the dashboard level, so notifications fire even when the widget displaying the dataset is hidden or not instantiated. A 3-second per-dataset cooldown suppresses oscillation spam.
 
-**Legacy compatibility.** Project files written by older Serial Studio releases carry `alarmEnabled` / `alarmLow` / `alarmHigh` instead of `alarmBands`. On load, those are converted to two `Warning`-severity bands (`[wgtMin..alarmLow]` and `[alarmHigh..wgtMax]`). The legacy keys are not written back; re-saved projects carry only `alarmBands`. For painter scripts (Pro), `dataset.alarmLow` and `dataset.alarmHigh` remain readable as derived values (first / last `Warning+` band edges) so existing scripts keep working.
+**Legacy compatibility.** Project files written by older Serial Studio releases carry `alarmEnabled` / `alarmLow` / `alarmHigh` instead of `alarmBands`. On load, those are converted to two `Warning`-severity bands (`[wgtMin..alarmLow]` and `[alarmHigh..wgtMax]`). The legacy keys are not written back; re-saved projects carry only `alarmBands`. For canvas scripts (Pro), `dataset.alarmLow` and `dataset.alarmHigh` remain readable as derived values (first / last `Warning+` band edges) so existing scripts keep working.
 
 ## Utility widgets
 
@@ -272,14 +272,14 @@ Clock and Stopwatch are dashboard-level utility widgets. They are not attached t
 |---------------|---------|----------------|--------------|----------------------------------------------|
 | Data Grid     | Group   | `datagrid`     | 1+           | (none)                                       |
 | Bar Panel     | Group   | `barpanel`     | 1+           | `widgetMin`/`widgetMax`, `alarmBands[]`, `barPanelStyle` |
-| MultiPlot     | Group   | `multiplot`    | 1+           | `graph: true` on datasets                    |
+| Multi-Plot    | Group   | `multiplot`    | 1+           | `graph: true` on datasets                    |
 | GPS Map       | Group   | `map`          | 2-3          | lat, lon, (alt) datasets                     |
 | Gyroscope     | Group   | `gyro`         | 3            | yaw, pitch, roll                             |
 | Accelerometer | Group   | `accelerometer`| 3            | x, y, z accel                                |
 | LED Panel     | Group   | auto           | 1+           | `led: true`, `alarmBands[]` or legacy `ledHigh` |
 | 3D Plot       | Group   | `plot3d`       | 0+           | x, y, z coords (Pro)                         |
 | Image View    | Group   | `image`        | 0            | binary stream (Pro)                          |
-| Painter       | Group   | `painter`      | 0+           | user `paint(ctx, w, h)` JS script (Pro)      |
+| Canvas        | Group   | `painter`      | 0+           | user `paint(ctx, w, h)` JS script (Pro)      |
 | Web View      | Group   | `webview`      | 0            | `webViewUrl` (Qt WebEngine build)            |
 | Plot          | Dataset | auto           | n/a          | `graph: true`, `plotMin`/`plotMax`           |
 | FFT Plot      | Dataset | auto           | n/a          | `fft: true`, `fftSamples`, `fftSamplingRate` |

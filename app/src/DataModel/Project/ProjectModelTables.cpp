@@ -211,7 +211,7 @@ void DataModel::ProjectModel::addRegister(const QString& table,
                                           bool computed,
                                           const QVariant& defaultValue)
 {
-  const ProjectUndoScope undo_scope{*this, tr("Add Register")};
+  const ProjectUndoScope undo_scope{*this, tr("Add Variable")};
   const int idx = findTableIndexByPath(table);
   if (idx < 0)
     return;
@@ -220,7 +220,7 @@ void DataModel::ProjectModel::addRegister(const QString& table,
 
   QString base = registerName.simplified();
   if (base.isEmpty())
-    base = tr("register");
+    base = tr("variable");
 
   QString unique     = base;
   int suffix         = 2;
@@ -250,7 +250,7 @@ void DataModel::ProjectModel::addRegister(const QString& table,
  */
 void DataModel::ProjectModel::deleteRegister(const QString& table, const QString& registerName)
 {
-  const ProjectUndoScope undo_scope{*this, tr("Delete Register")};
+  const ProjectUndoScope undo_scope{*this, tr("Delete Variable")};
   const int idx = findTableIndexByPath(table);
   if (idx < 0)
     return;
@@ -281,7 +281,7 @@ bool DataModel::ProjectModel::updateRegister(const QString& table,
                                              bool computed,
                                              const QVariant& defaultValue)
 {
-  const ProjectUndoScope undo_scope{*this, tr("Edit Register")};
+  const ProjectUndoScope undo_scope{*this, tr("Edit Variable")};
   const int idx = findTableIndexByPath(table);
   if (idx < 0)
     return false;
@@ -343,7 +343,7 @@ QVariantList DataModel::ProjectModel::registersForTable(const QString& table) co
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Prompts for a new shared-memory table name and appends it on accept,
+ * @brief Prompts for a new shared table name and appends it on accept,
  * deferring the tree selection via singleShot(0) so the queued tablesChanged
  * tree rebuild lands before the new row is selected.
  */
@@ -395,10 +395,10 @@ void DataModel::ProjectModel::promptAddRegister(const QString& table)
 
   bool okName           = false;
   const QString regName = QInputDialog::getText(nullptr,
-                                                tr("New Register"),
+                                                tr("New Variable"),
                                                 tr("Name:"),
                                                 QLineEdit::Normal,
-                                                QStringLiteral("register"),
+                                                QStringLiteral("variable"),
                                                 &okName);
 
   if (!okName || regName.trimmed().isEmpty())
@@ -418,7 +418,7 @@ void DataModel::ProjectModel::promptRenameRegister(const QString& table,
 
   bool ok            = false;
   const QString name = QInputDialog::getText(
-    nullptr, tr("Rename Register"), tr("Name:"), QLineEdit::Normal, registerName, &ok);
+    nullptr, tr("Rename Variable"), tr("Name:"), QLineEdit::Normal, registerName, &ok);
 
   if (!ok || name.trimmed().isEmpty() || name.trimmed() == registerName)
     return;
@@ -453,7 +453,7 @@ void DataModel::ProjectModel::confirmDeleteTable(const QString& name)
   const QString informative =
     registerCount == 0
       ? tr("This action cannot be undone.")
-      : tr("This removes %1 register(s) along with the table. This action cannot be undone.")
+      : tr("This removes %1 variable(s) along with the table. This action cannot be undone.")
           .arg(registerCount);
 
   const int choice = Misc::Utilities::showMessageBox(tr("Delete \"%1\"?").arg(leaf),
@@ -479,7 +479,7 @@ void DataModel::ProjectModel::confirmDeleteRegister(const QString& table,
   const int choice = Misc::Utilities::showMessageBox(tr("Delete \"%1\"?").arg(registerName),
                                                      tr("This action cannot be undone."),
                                                      QMessageBox::Warning,
-                                                     tr("Delete Register"),
+                                                     tr("Delete Variable"),
                                                      QMessageBox::Yes | QMessageBox::Cancel,
                                                      QMessageBox::Cancel);
 

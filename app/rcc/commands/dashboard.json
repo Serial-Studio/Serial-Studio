@@ -140,7 +140,7 @@
     },
     {
       "id": "export.database",
-      "title": "Session Database",
+      "title": "Historian",
       "icon": "commands/database-export",
       "kind": "toggle",
       "contexts": [

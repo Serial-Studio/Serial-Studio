@@ -323,7 +323,7 @@ void API::Handlers::DashboardHandler::registerQueryCommands()
                    "the project frame structure if no device frame has arrived yet. Unlike "
                    "dashboard.reprocess (which no-ops until a real frame exists and never feeds "
                    "exporters), this lets a control script that only writes tables (tableSet()) "
-                   "render table-driven virtual datasets from the very first loop(), and it also "
+                   "render table-driven computed datasets from the very first loop(), and it also "
                    "fans the synthesized frame out to the enabled export sinks "
                    "(CSV/MDF4/session/MQTT/API). SDK: dashboardTick()."),
     emptySchema,

@@ -416,7 +416,7 @@ QString API::CommandRegistry::dryRunHintForScriptCommand(const QString& commandN
 {
   if (commandName == QStringLiteral("project.painter.setCode"))
     return QStringLiteral("Re-validate with project.painter.dryRun{code} before setCode. "
-                          "Painter scripts are JavaScript-only. Fetch the API surface "
+                          "Canvas scripts are JavaScript-only. Fetch the API surface "
                           "with meta.fetchScriptingDocs{kind:'painter_js'}.");
 
   if (commandName == QStringLiteral("project.frameParser.setCode"))

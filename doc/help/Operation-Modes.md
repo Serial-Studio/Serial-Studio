@@ -77,7 +77,7 @@ Pick the "Quick Plot (Comma Separated Values)" radio button in the Setup panel.
 When a connection is established, Serial Studio reads each line, splits on commas, and creates a dashboard with:
 
 - A Data Grid widget showing all current values.
-- A MultiPlot widget overlaying all channels on a single time-series chart.
+- A Multi-Plot widget overlaying all channels on a single time-series chart.
 - Individual per-channel plots.
 
 No project file required. No JavaScript parsing involved.

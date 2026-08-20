@@ -246,7 +246,7 @@
             {
               "type": "command",
               "id": "editor.addPainter",
-              "title": "Painter"
+              "title": "Canvas"
             },
             {
               "type": "command",

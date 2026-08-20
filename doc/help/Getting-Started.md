@@ -7,7 +7,7 @@ Serial Studio is a cross-platform telemetry dashboard for visualizing real-time 
 **Core capabilities:**
 
 - **Data sources.** Serial/UART, TCP/UDP, and Bluetooth LE are included in the free edition. MQTT, Modbus, CAN Bus, Audio input, raw USB, HID, and Process I/O are available in Pro.
-- **15+ widget types.** Plot, MultiPlot, FFT Plot, Bar, Gauge, Compass, Meter, Gyroscope, Accelerometer, GPS Map, Data Grid, LED Panel, Terminal, 3D Plot (Pro), Image View (Pro), plus Clock and Stopwatch utility widgets. The Plot widget can take its X axis from another dataset for XY/scatter plots. Bar, Gauge, Meter, and Compass each ship as a two-page swipe view (analog face + large digital readout) so the same tile shows both a quick-glance summary and the exact numeric value.
+- **15+ widget types.** Plot, Multi-Plot, FFT Plot, Bar, Gauge, Compass, Meter, Gyroscope, Accelerometer, GPS Map, Data Grid, LED Panel, Terminal, 3D Plot (Pro), Image View (Pro), plus Clock and Stopwatch utility widgets. The Plot widget can take its X axis from another dataset for XY/scatter plots. Bar, Gauge, Meter, and Compass each ship as a two-page swipe view (analog face + large digital readout) so the same tile shows both a quick-glance summary and the exact numeric value.
 - **Export.** Save sessions to CSV or MDF4 (Pro) for offline analysis.
 - **Performance.** Built with Qt 6 and C++20, aimed at 256 kHz+ data rates.
 - **Three operation modes.** Console Only for inspecting the raw stream, Quick Plot for instant CSV visualization, and Project File for fully customized dashboards.
@@ -181,7 +181,7 @@ Click the **Connect** button in the toolbar. Then:
 
 1. The Console panel displays raw incoming CSV data.
 2. After a moment, Serial Studio detects valid frames and switches to the Dashboard.
-3. The Dashboard shows a Data Grid with your current values and a MultiPlot with one line per CSV field.
+3. The Dashboard shows a Data Grid with your current values and a Multi-Plot with one line per CSV field.
 
 That's all. No project file, no JSON, just connect and visualize.
 
@@ -260,7 +260,7 @@ Console Only turns Serial Studio into a bidirectional terminal. No frame detecti
 | Configuration needed | None |
 | Data format          | Comma-separated numeric values |
 | Line terminator      | `\n`, `\r`, or `\r\n` |
-| Dashboard generated  | Automatic (Data Grid + MultiPlot) |
+| Dashboard generated  | Automatic (Data Grid + Multi-Plot) |
 | Best for             | Prototyping, quick debugging, simple sensors |
 
 Quick Plot treats each line as a frame and each comma-separated field as a dataset. It auto-creates one plot per field. It's the fastest way to get data on screen, but you don't get to pick widget types, labels, or units.

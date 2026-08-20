@@ -46,7 +46,7 @@ File actions sit on the left; the rest of the toolbar is "add" buttons grouped b
 - **Add Device** (Pro). Add another data source for multi-device projects.
 - **Output / Action / Slider / Toggle / Knob / Text Field / Button.** Add an [output control](Output-Controls.md) panel or an [action](Actions.md).
 - **Dataset / Plot / FFT Plot / Gauge / Level Indicator / Compass / LED Indicator.** Add a dataset to the selected group, pre-configured for that widget.
-- **Group / Image / Web View / Painter / Table / Multi-Plot / 3D Plot / Accelerometer / Gyroscope / GPS Map.** Add a group with the matching group widget (Image, Painter, and 3D Plot are Pro).
+- **Group / Image / Web View / Canvas / Table / Multi-Plot / 3D Plot / Accelerometer / Gyroscope / GPS Map.** Add a group with the matching group widget (Image, Canvas, and 3D Plot are Pro).
 
 Every button, with its icon, is listed in the [Toolbar & Button Reference](Toolbar-Reference.md#project-editor-toolbar).
 
@@ -93,15 +93,15 @@ Select the project root in the tree and the right panel switches to the **Projec
 
 1. **Sources** (devices). One card per data source, with its bus type, frame detection, and decoder.
 2. **Frame parsers and actions**. The parser script attached to each source, plus any global action buttons.
-3. **Groups**. The dataset containers and group-level widgets (Multiplot, GPS, Accelerometer, etc.).
+3. **Groups**. The dataset containers and group-level widgets (Multi-Plot, GPS, Accelerometer, etc.).
 4. **Datasets**. Per-dataset pills, with their transform block (if any) drawn between the group and the dataset pill.
 
-Data tables, output widgets, and workspaces are drawn alongside as their own cards. Arrows show how parsed bytes flow into datasets and how transforms feed downstream consumers.
+Shared tables, output widgets, and workspaces are drawn alongside as their own cards. Arrows show how parsed bytes flow into datasets and how transforms feed downstream consumers.
 
 The diagram is interactive:
 
-- **Double-click any block** to jump into the matching configuration form. Double-clicking a source card opens that source's settings; a group card opens the group form; a dataset pill opens the dataset form; a frame-parser card opens the script editor; an action card opens the action form; a data-table card opens the table editor; an output-widget card opens the output editor.
-- **Right-click any block** for a context menu tailored to that node: add a sibling group, add a dataset to that group, rename, move up or down, duplicate, delete, and edit the frame parser or painter code. Right-clicking empty background opens the "add source / add table / add action" shortcuts. This lets you grow a project once the high-level shape is in place without walking back through the tree on the left.
+- **Double-click any block** to jump into the matching configuration form. Double-clicking a source card opens that source's settings; a group card opens the group form; a dataset pill opens the dataset form; a frame-parser card opens the script editor; an action card opens the action form; a shared-table card opens the table editor; an output-widget card opens the output editor.
+- **Right-click any block** for a context menu tailored to that node: add a sibling group, add a dataset to that group, rename, move up or down, duplicate, delete, and edit the frame parser or canvas code. Right-clicking empty background opens the "add source / add table / add action" shortcuts. This lets you grow a project once the high-level shape is in place without walking back through the tree on the left.
 - **Ctrl+scroll wheel** zooms the diagram in and out; plain scrolling pans it (Shift+scroll pans horizontally). The toolbar has a reset-zoom button.
 
 The overview is useful as a sanity check ("does my group widget have the three datasets it needs?") and as a navigation surface once a project gets too large to keep entirely in the tree.
@@ -113,7 +113,7 @@ Once a project grows past a handful of groups, the flat tree gets long. Folders 
 Three independent folder trees exist, one per branch:
 
 - **Group folders** organize groups.
-- **Table folders** organize [data tables](Data-Tables.md).
+- **Table folders** organize [shared tables](Data-Tables.md).
 - **Workspace folders** organize [workspaces](Toolbar-Reference.md#a-note-on-workspaces).
 
 A folder in one branch cannot hold an item from another (a group folder holds groups, not tables). Items left outside any folder stay at the top level of their branch.
@@ -130,7 +130,7 @@ Groups
 
 ### Creating and filling folders
 
-- **Add a folder.** Select the branch root (Groups, Data Tables, or Workspaces) and click **Add Folder** in the toolbar, or right-click the branch and choose **New Folder**.
+- **Add a folder.** Select the branch root (Groups, Variables, or Workspaces) and click **Add Folder** in the toolbar, or right-click the branch and choose **New Folder**.
 - **Nest a folder.** Select an existing folder and click **Add Sub-folder**, or right-click it and choose **New Sub-Folder**. Folders nest to any depth.
 - **Move an item in.** Right-click a group, table, workspace, or folder and use the **Move to Folder** submenu. It mirrors the folder tree, so you can drop the item into any folder at any depth, or back to the top level.
 - **Add items directly into a folder.** With a folder selected, the matching add button (**Add Group**, **Add Shared Table**, **Add Workspace**) creates the new item already filed inside it.
@@ -211,7 +211,7 @@ Groups organize related datasets and determine which group-level widget is used 
 | GPS Map         | Geographic tracking on a map       | 2 or 3 (lat, lon, optional alt) |
 | 3D Plot (Pro)   | 3D scatter/trajectory              | Exactly 3 (X, Y, Z)  |
 | Image View (Pro)| Binary image stream                | None (image data in frame) |
-| Painter Widget (Pro)| Custom JavaScript-rendered canvas | Any number          |
+| Canvas Widget (Pro)| Custom JavaScript-rendered canvas | Any number          |
 | Web View        | Embedded web page                  | Any number           |
 | None            | No group widget. Datasets shown individually | Any number |
 

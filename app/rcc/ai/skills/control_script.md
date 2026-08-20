@@ -1,6 +1,6 @@
-# Control Script and the SerialStudio SDK
+# Control Loop and the SerialStudio SDK
 
-Serial Studio projects can carry an Arduino-style **control script** that
+Serial Studio projects can carry an Arduino-style **control loop** that
 automates a connected device: a `setup()` function runs once when the device
 connects, and a `loop()` function runs repeatedly while it stays connected.
 This is the place to send wake-up handshakes, poll a device on a timer, or send
@@ -24,7 +24,7 @@ the data hotpath), and is stored in the project file.
 
 ## The SerialStudio SDK (natural API wrappers)
 
-Every script engine (control script, frame parser, transforms) has a generated
+Every script engine (control loop, frame parser, transforms) has a generated
 `SerialStudio` library on top of the raw `apiCall(method, params)` gateway. It
 turns verbose calls into natural, positional ones:
 
@@ -60,9 +60,9 @@ source itself: `meta.fetchScriptingDocs{kind: 'sdk_js'}` (or `'sdk_lua'`). It
 lists every callable wrapper, so you never have to guess a function name or
 argument order. All SDK symbols also appear in the code-editor autocomplete.
 
-## Reading data: newFrame(), refreshDashboard(), ensureDashboard() (control script ONLY)
+## Reading data: newFrame(), refreshDashboard(), ensureDashboard() (control loop ONLY)
 
-These prelude helpers exist only inside the control script engine (they are
+These prelude helpers exist only inside the control loop engine (they are
 gated on its bridge; frame parsers and transforms do not have them). Together
 they close the See -> Decide -> Act loop:
 
@@ -82,9 +82,9 @@ they close the See -> Decide -> Act loop:
   writes made while the device is silent do not render until you call this.
   Call it on state transitions, not every `loop()` pass (each call appends one
   point to plot-enabled datasets). **It updates the dashboard ONLY: exports
-  (CSV/MDF4/Session DB/MQTT/gRPC) are fed exclusively by frames the frame
+  (CSV/MDF4/Historian/MQTT/gRPC) are fed exclusively by frames the frame
   parser publishes, and the parser publishes a frame only when `parse()`
-  returns a non-empty result.** If the dashboard is driven from data tables and
+  returns a non-empty result.** If the dashboard is driven from shared tables and
   the parser would otherwise have nothing to return, make `parse()` return
   dummy data (e.g. `return [0];`) so a frame still flows to the export
   fan-out. A parser that returns `[]` keeps the dashboard alive via
@@ -99,16 +99,16 @@ they close the See -> Decide -> Act loop:
   gauge, compass, led, waterfall (or a raw `options` bitfield). Created items are real
   project edits and persist with the project.
 
-Control scripts also get the data-table globals `tableGet(table, register)` and
+Control loops also get the shared-table globals `tableGet(table, register)` and
 `tableSet(table, register, value)` (`table` is the full `/`-joined folder
 path for a table inside folders; a top-level table is its bare name),
 marshalled through
 `project.dataTable.getValue` / `setValue` (each call is a thread round-trip:
 read once per `loop()` pass, not in tight inner loops). `tableGet` returns
-`undefined` for unknown registers, so `tableGet(t, r) || fallback` works.
+`undefined` for unknown variables, so `tableGet(t, r) || fallback` works.
 `datasetGetRaw` / `datasetGetFinal` remain parser/transform-only. To read a
 dataset value here, go through the `__datasets__` system table: `tableGet` (or
-`project.dataTable.getValue`) on register `raw:<uniqueId>` / `final:<uniqueId>`,
+`project.dataTable.getValue`) on variable `raw:<uniqueId>` / `final:<uniqueId>`,
 also mirrored as `raw:<alias>` / `final:<alias>` when the dataset has an alias.
 
 Canonical communication-loss watchdog (tables + refreshDashboard):
@@ -182,14 +182,14 @@ often:
   `writeCharacteristic`, `listServices`, `listCharacteristics`. If you cannot
   find a command in `sdk_js`, it does not exist.
 - **Calling script functions from the console.** A function you define in the
-  control script (e.g. a `zeroSensor()` helper) is NOT reachable as
+  control loop (e.g. a `zeroSensor()` helper) is NOT reachable as
   `SerialStudio.controlScript.zeroSensor()` or from the console. Control-script
   functions only run via `setup()`/`loop()`. For a user-triggerable one-shot,
   use an Action, not a console call.
 - **Double-exporting from a control-loop project.** When the script owns the
   values (writes tables, calls `dashboardTick()` to render AND export), the frame
   parser MUST return empty (`[]` / `{}`). A non-empty parser return publishes its
-  own frame, so every value lands in CSV/MDF4/Session DB/MQTT twice and the two
+  own frame, so every value lands in CSV/MDF4/Historian/MQTT twice and the two
   paths race in the export records. `refreshDashboard()` is the view-only variant
   (never exports), and works from the first `loop()`. The opposite, parser-driven
   pattern — `parse()` writes the tables and returns `[0]` so each real arriving
@@ -198,7 +198,7 @@ often:
 
 ## Pacing loop() with delay()
 
-`loop()` runs as fast as it can be scheduled. Call `delay(ms)` (control script
+`loop()` runs as fast as it can be scheduled. Call `delay(ms)` (control loop
 only) to pace it, exactly like Arduino. `delay` blocks only the script's worker
 thread, never the dashboard or frame parsing, and the runtime watchdog is paused
 for the sleep so a long wait is not flagged as a hang.
@@ -210,7 +210,7 @@ function loop() {
 }
 ```
 
-## Managing the control script from the API
+## Managing the control loop from the API
 
 The `controlScript.*` commands let tools and other scripts inspect, validate,
 and replace the script:
@@ -243,7 +243,7 @@ can never fire from a previous connection's frame.
 
 ## Leave source and connection setup to the user
 
-A control script automates a device that the user has **already configured and
+A control loop automates a device that the user has **already configured and
 connected** in the I/O panel. Do not try to create, configure, or connect a data
 source from a script, and especially not a BLE source: picking the adapter,
 scanning, choosing the device, and connecting is interactive and unreliable to
@@ -262,11 +262,11 @@ The BLE **service and notify characteristic are configured on the source and
 saved in the project** (by UUID). The driver applies them after discovery and
 only then reports "connected", so by the time `setup()` runs, the service is
 selected and the notify characteristic is subscribed. **Do not select the
-service or notify characteristic from a control script.** A script that calls
+service or notify characteristic from a control loop.** A script that calls
 `io.ble.selectServiceByUuid(...)` / `io.ble.setNotifyCharacteristic(...)` fights
 the driver for ownership and races discovery; leave both to the project.
 
-A control script's only BLE job is the **write handshake**:
+A control loop's only BLE job is the **write handshake**:
 
 - `io.ble.writeCharacteristic("fff1", "<hex>", SerialStudio.Hex)` -- send commands.
 
@@ -282,10 +282,10 @@ exist for advanced one-off cases, but are not the path for a normal project.
 A real pattern for a split read/write BLE probe (service `FFF0`, write `FFF1`,
 notify `FFF2`) that streams only after a vendor command sequence. The service
 and notify characteristic are set on the source and saved in the project, so the
-control script is just the handshake; a binary frame parser turns the
+control loop is just the handshake; a binary frame parser turns the
 notifications into datasets.
 
-Control script (handshake only):
+Control loop (handshake only):
 
 ```javascript
 const WRITE_UUID  = "fff1";

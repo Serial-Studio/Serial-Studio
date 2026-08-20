@@ -1,6 +1,6 @@
 # AI Assistant
 
-A chat-based assistant that lives inside Serial Studio and edits the project for you. Open it from the main toolbar (the **Assistant** button next to *Extensions*) or from the **Project Editor** toolbar, describe what you want to build, and the assistant configures sources, groups, datasets, frame parsers, transforms, output widgets, painters, and workspaces by calling the same in-process API your scripts and the MCP server already use.
+A chat-based assistant that lives inside Serial Studio and edits the project for you. Open it from the main toolbar (the **Assistant** button next to *Extensions*) or from the **Project Editor** toolbar, describe what you want to build, and the assistant configures sources, groups, datasets, frame parsers, transforms, output widgets, canvas widgets, and workspaces by calling the same in-process API your scripts and the MCP server already use.
 
 It is **bring-your-own-key**. You pick a provider (Anthropic, OpenAI, Google Gemini, DeepSeek, Groq, Mistral, OpenRouter, or a local model server) and paste an API key once. The key is encrypted on this machine and never leaves your computer except to talk to the provider you selected. The local-server option lets you run everything offline against Ollama, llama.cpp, LM Studio, or vLLM.
 
@@ -21,7 +21,7 @@ Typical things people ask it to do:
 - "Suggest dashboard widgets for this data."
 - "Build me a workspace called *Engine* with the RPM gauge, oil-pressure plot, and the alarm panel."
 - "Add a moving-average transform to dataset *Speed*."
-- "Open the painter widget docs and walk me through writing one for a compass."
+- "Open the canvas widget docs and walk me through writing one for a compass."
 
 The four chips on the empty-conversation card are starter prompts (one per category, reshuffled each time the card appears). Click one to send it straight to the assistant.
 
@@ -111,7 +111,7 @@ While the assistant is working you'll see a thin animated stripe under the messa
 Read this before pasting anything sensitive. Every message you send goes to the provider you chose. Specifically:
 
 - **Sent on every turn**: your message, the conversation history so far, the tool catalog, and a snapshot of the live project state (sources, groups, datasets, frame parser code, transforms, and so on; the same JSON your `.ssproj` would contain). Frame parser scripts and transform scripts are part of that snapshot.
-- **Not sent**: live telemetry data, your raw serial bytes, your dashboard frames, your CSV/MDF4 logs, your session database, the API key for any *other* provider.
+- **Not sent**: live telemetry data, your raw serial bytes, your dashboard frames, your CSV/MDF4 logs, your Historian database, the API key for any *other* provider.
 - **Stored where**: the API key is encrypted on this machine via Serial Studio's per-machine key derivation. The conversation history lives only in memory for the current panel session. Closing the dialog (or clicking the trash) clears it.
 
 If your project file contains commercial firmware code or proprietary protocol notes inside frame parsers or transforms, that text will travel to the provider with each turn. Treat the provider's data-handling policy as the relevant constraint, not Serial Studio's.
@@ -143,7 +143,7 @@ Yes. That's exactly what the **Confirm** tier is for. The card shows the command
 Not unless you let it. Connection-state changes (`io.connect`, `io.disconnect`, `io.setPaused`) and every `set*` on every driver are device-gated: blocked by default, and the assistant can only read your device list and current configuration. Tick **Allow device control** in the top bar and those commands become available as Always-confirm actions (you approve each call, even when Auto-approve edits is on).
 
 **Can it write data to my device?**
-Direct MCP write commands are device-gated: `console.send` (text/serial writes) and `io.writeData` (raw binary writes), alongside every driver `set*` and every connection-state command, are blocked until you tick **Allow device control** (then they ask for approval per call). A second group is blocked outright with no UI override: `licensing.*` mutations. MQTT broker credentials get a different guard: `project.mqtt.publisher.setConfig` and `project.mqtt.subscriber.setConfig` are Always-confirm, and the matching `getConfig` commands never return the stored password. The assistant can, however, propose **frame parser / transform / painter code that calls `deviceWrite()` or `actionFire()`** (scripting APIs that push bytes back to the device or trigger an existing project Action whenever the script decides to). Pushing the script is a **Confirm** tier action, so you see the exact code before it lands. Once approved and connected, the script will fire on incoming frames — review the logic carefully before approving anything that writes on every frame. For one-shot user-triggered commands, prefer an [Output Control](Output-Controls.md).
+Direct MCP write commands are device-gated: `console.send` (text/serial writes) and `io.writeData` (raw binary writes), alongside every driver `set*` and every connection-state command, are blocked until you tick **Allow device control** (then they ask for approval per call). A second group is blocked outright with no UI override: `licensing.*` mutations. MQTT broker credentials get a different guard: `project.mqtt.publisher.setConfig` and `project.mqtt.subscriber.setConfig` are Always-confirm, and the matching `getConfig` commands never return the stored password. The assistant can, however, propose **frame parser / transform / canvas code that calls `deviceWrite()` or `actionFire()`** (scripting APIs that push bytes back to the device or trigger an existing project Action whenever the script decides to). Pushing the script is a **Confirm** tier action, so you see the exact code before it lands. Once approved and connected, the script will fire on incoming frames — review the logic carefully before approving anything that writes on every frame. For one-shot user-triggered commands, prefer an [Output Control](Output-Controls.md).
 
 **Why does my project state show up in the prompt?**
 So the assistant can answer "what sources are configured?", "which datasets feed this group?", or "is the frame parser doing what I think it is?" without first running ten read-only tool calls. The state snapshot lives outside the cached prefix so it can change between turns without invalidating the cache.
@@ -161,6 +161,6 @@ File an issue on the Serial Studio GitHub repo. Include the prompt, the reply, a
 - [Backups & Recovery](Backup-Recovery.md): the rolling snapshots behind every restore and undo.
 - [Frame Parser Scripting](JavaScript-API.md): JavaScript and Lua frame parser API.
 - [Dataset Value Transforms](Dataset-Transforms.md): per-dataset transform scripts.
-- [Painter Widget](Painter-Widget.md): the painter API the assistant references when asked to write one.
+- [Canvas Widget](Painter-Widget.md): the canvas widget API the assistant references when asked to write one.
 - [Output Controls](Output-Controls.md): output widget framework, including transmit-function generation.
 - [Pro vs Free Features](Pro-vs-Free.md): what's included with a Pro license.

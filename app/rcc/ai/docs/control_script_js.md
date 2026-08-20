@@ -1,6 +1,6 @@
-# Control Script (JavaScript) — Runtime Reference
+# Control Loop (JavaScript) — Runtime Reference
 
-The control script is an Arduino-style automation script owned by the project. It runs on a
+The control loop is an Arduino-style automation script owned by the project. It runs on a
 dedicated worker thread whenever a device is connected in Project mode.
 
 ## Commands
@@ -42,23 +42,23 @@ nothing executes (no `apiCall`, no `tableSet` side effects).
 | `newFrame(sourceId?)` | Latest received frame, returned exactly once per arrival; `null` when nothing new. Fields: `sourceId`, `sequence`, `timestampMs` (monotonic clock; never compare with `Date.now()`), `ageMs` (milliseconds since arrival; use this for staleness/watchdogs), `values` (the parser tokens, with `valueCount` and optional `base64`), `text`. |
 | `refreshDashboard()` | Re-runs every dataset transform from the last received values and republishes to the dashboard (no export side effects). Call after `tableSet()` writes so they render while the device is silent. |
 | `ensureDashboard(spec)` | Declaratively create missing groups/datasets (matched by title / parser index). Existing items are never modified; memoized, so calling it every `loop()` is free. |
-| `dashboardTick()` | Wraps `dashboard.tick`: synthesizes a frame from current dataset values and fans it out to every consumer (dashboard AND CSV/MDF4/session/MQTT/API exports), unlike `refreshDashboard()`, which has no export side effects. |
-| `tableGet(table, register)` | Read a data-table register; `undefined` when missing (so `tableGet(t, r) \|\| fallback` works). |
-| `tableSet(table, register, value)` | Write a Computed register; rejected for parser-owned or constant registers. Follow with `refreshDashboard()` to render. |
+| `dashboardTick()` | Wraps `dashboard.tick`: synthesizes a frame from current dataset values and fans it out to every consumer (dashboard AND CSV/MDF4/Historian/MQTT/API exports), unlike `refreshDashboard()`, which has no export side effects. |
+| `tableGet(table, register)` | Read a shared-table variable; `undefined` when missing (so `tableGet(t, r) \|\| fallback` works). |
+| `tableSet(table, register, value)` | Write a Computed variable; rejected for parser-owned or constant variables. Follow with `refreshDashboard()` to render. |
 | `notify(level, ...)`, `notifyInfo`, `notifyWarning`, `notifyCritical`, `notifyClear` | Notification center (Pro). Accept `(title)`, `(title, subtitle)`, or `(channel, title, subtitle)`. Constants `Info`, `Warning`, `Critical`. |
 | `modbusWriteRegister/Coil/Float`, `canSendFrame`, `canSendValue` | Pure protocol encoders returning byte strings for transmission. |
 | `io.*`, `project.*`, `dashboard.*`, ... | Generated SDK wrappers over `apiCall` for every API command (e.g. `io.getLatestFrame()`, `io.writeData(...)`, `io.ble.writeCharacteristic(uuid, hex, SerialStudio.Hex)`). |
 | `console.log(...)` | Goes to the application log. |
 
-**Not available in control scripts** (those bridges only exist in transform / output-widget /
-painter contexts): `deviceWrite` (use `io.writeData` via `apiCall`), `actionFire`,
+**Not available in control loops** (those bridges only exist in transform / output-widget /
+canvas contexts): `deviceWrite` (use `io.writeData` via `apiCall`), `actionFire`,
 `datasetGetRaw` / `datasetGetFinal` (read `project.dataTable.getValue` or `dashboard.getData`
 instead), `clearPlots` / `setPlotPoints` / other `__ss_db` dashboard toggles (use the
 `dashboard.*` API commands).
 
 A dataset's raw/final value is still reachable here through the `__datasets__` system
 table: `project.dataTable.getValue { table: "__datasets__", name: "raw:<uniqueId>" }`
-(or `"final:<uniqueId>"`). If the dataset has a user-set `alias`, the register is also
+(or `"final:<uniqueId>"`). If the dataset has a user-set `alias`, the variable is also
 mirrored as `raw:<alias>` / `final:<alias>`.
 
 ## Canonical watchdog (connect-cycle safe)

@@ -2181,7 +2181,7 @@ service SerialStudioTypedAPI {
   // Return the last N samples (timestamp + value pairs) for each plot-enabled dataset. Use to debug "the values look wrong" complaints without polling dashboard.getData repeatedly. Only returns datasets whose plt flag is on; toggle it via project.dataset.setOption first if you need history for a different dataset.
   rpc DashboardTailFrames(DashboardTailFramesRequest) returns (CommandResponse);
 
-  // Force a dashboard render from the current table/dataset state, synthesizing the project frame structure if no device frame has arrived yet. Unlike dashboard.reprocess (which no-ops until a real frame exists and never feeds exporters), this lets a control script that only writes tables (tableSet()) render table-driven virtual datasets from the very first loop(), and it also fans the synthesized frame out to the enabled export sinks (CSV/MDF4/session/MQTT/API). SDK: dashboardTick().
+  // Force a dashboard render from the current table/dataset state, synthesizing the project frame structure if no device frame has arrived yet. Unlike dashboard.reprocess (which no-ops until a real frame exists and never feeds exporters), this lets a control script that only writes tables (tableSet()) render table-driven computed datasets from the very first loop(), and it also fans the synthesized frame out to the enabled export sinks (CSV/MDF4/session/MQTT/API). SDK: dashboardTick().
   rpc DashboardTick(DashboardTickRequest) returns (CommandResponse);
 
   // Check whether this machine is set up to connect: serial-port permissions and the exact command that fixes them on Linux, Bluetooth adapter power and permission, audio inputs, and whether the configured host or broker resolves and accepts a connection. THE first call when a connection fails or the Connect button does nothing. Returns immediately with the instant results already complete; slower reachability probes finish in the background. Optional param: bus.
@@ -2667,25 +2667,25 @@ service SerialStudioTypedAPI {
   // Create a new empty table (params: name="Shared Table")
   rpc ProjectDataTableAdd(ProjectDataTableAddRequest) returns (CommandResponse);
 
-  // Append a register (params: table, name, computed=true, defaultValue=0)
+  // Append a variable (params: table, name, computed=true, defaultValue=0)
   rpc ProjectDataTableAddRegister(ProjectDataTableAddRegisterRequest) returns (CommandResponse);
 
-  // Delete a table and all its registers (params: name). Pass dryRun:true to return the register list that WOULD be deleted without committing.
+  // Delete a table and all its variables (params: name). Pass dryRun:true to return the variable list that WOULD be deleted without committing.
   rpc ProjectDataTableDelete(ProjectDataTableDeleteRequest) returns (CommandResponse);
 
-  // Delete a register (params: table, name). Pass dryRun:true to return what WOULD be deleted without committing.
+  // Delete a variable (params: table, name). Pass dryRun:true to return what WOULD be deleted without committing.
   rpc ProjectDataTableDeleteRegister(ProjectDataTableDeleteRegisterRequest) returns (CommandResponse);
 
-  // Return the register list for a table (params: name). name may be the bare table name or its full "/"-joined folder path.
+  // Return the variable list for a table (params: name). name may be the bare table name or its full "/"-joined folder path.
   rpc ProjectDataTableGet(ProjectDataTableGetRequest) returns (CommandResponse);
 
-  // Return a register's LIVE runtime value from the data-table store (params: table, name). This is the same store the parser/transform tableGet() reads; control scripts use it through the tableGet() global.
+  // Return a variable's LIVE runtime value from the data-table store (params: table, name). This is the same store the parser/transform tableGet() reads; control scripts use it through the tableGet() global.
   rpc ProjectDataTableGetValue(ProjectDataTableGetValueRequest) returns (CommandResponse);
 
-  // Return a register's LIVE runtime value by handle (params: handle). A stale or invalid handle yields found=false. Mirrors tableGetH().
+  // Return a variable's LIVE runtime value by handle (params: handle). A stale or invalid handle yields found=false. Mirrors tableGetH().
   rpc ProjectDataTableGetValueH(ProjectDataTableGetValueHRequest) returns (CommandResponse);
 
-  // Resolve a register to a reusable numeric handle for the fast get/set path (params: table, name). Returns handle=-1 for an unknown register. Mirrors the parser/transform tableHandle() global.
+  // Resolve a variable to a reusable numeric handle for the fast get/set path (params: table, name). Returns handle=-1 for an unknown variable. Mirrors the parser/transform tableHandle() global.
   rpc ProjectDataTableHandle(ProjectDataTableHandleRequest) returns (CommandResponse);
 
   // List all user-defined data tables. Each entry has name (bare), path (full "/"-joined folder path), and registerCount. Pass path to get/getValue/handle for a table that lives inside folders.
@@ -2694,13 +2694,13 @@ service SerialStudioTypedAPI {
   // Rename a table (params: oldName, newName)
   rpc ProjectDataTableRename(ProjectDataTableRenameRequest) returns (CommandResponse);
 
-  // Write a register's LIVE runtime value into the data-table store (params: table, name, value). Same effect as a parser/transform tableSet(); control scripts use it through the tableSet() global. Constant registers reject writes.
+  // Write a variable's LIVE runtime value into the data-table store (params: table, name, value). Same effect as a parser/transform tableSet(); control scripts use it through the tableSet() global. Constant variables reject writes.
   rpc ProjectDataTableSetValue(ProjectDataTableSetValueRequest) returns (CommandResponse);
 
-  // Write a register's LIVE runtime value by handle (params: handle, value). A stale, invalid, or constant-register handle yields written=false. Mirrors tableSetH().
+  // Write a variable's LIVE runtime value by handle (params: handle, value). A stale, invalid, or constant-variable handle yields written=false. Mirrors tableSetH().
   rpc ProjectDataTableSetValueH(ProjectDataTableSetValueHRequest) returns (CommandResponse);
 
-  // Update a register (params: table, name, newName?, computed?, defaultValue?)
+  // Update a variable (params: table, name, newName?, computed?, defaultValue?)
   rpc ProjectDataTableUpdateRegister(ProjectDataTableUpdateRegisterRequest) returns (CommandResponse);
 
   // Add a dataset to a group. A dataset is one channel of incoming data: it gets one column in CSV/MDF4 export, one entry in the frame parser's output array (its `index` field), and zero or more dashboard widgets driven by the `options` bitflags.
@@ -2910,10 +2910,10 @@ service SerialStudioTypedAPI {
   // Compile a painter program WITHOUT touching the live project. Verifies that paint(ctx, w, h) exists and that the script compiles cleanly; does NOT actually render to a canvas. Returns ok / lastError. Params: code (string).
   rpc ProjectPainterDryRun(ProjectPainterDryRunRequest) returns (CommandResponse);
 
-  // Get the painter widget JS for a group (params: groupId)
+  // Get the canvas widget JS for a group (params: groupId)
   rpc ProjectPainterGetCode(ProjectPainterGetCodeRequest) returns (CommandResponse);
 
-  // Set the painter widget code for a group (params: groupId, code). **JavaScript only** -- painter scripts run in QJSEngine, not Lua. Available globals: ctx (2D canvas context, QPainter-like), w, h (canvas dimensions), datasetGetFinal(uid)/datasetGetRaw(uid). The entry point is paint(ctx, w, h) and an optional zero-arg onFrame() callback. Validate with project.painter.dryRun before setCode. **Always call meta.fetchScriptingDocs{kind:'painter_js'} first** for the full API surface and worked examples -- don't invent canvas methods from JS DOM Canvas, the surface is QPainter-shaped.
+  // Set the canvas widget code for a group (params: groupId, code). **JavaScript only** -- canvas scripts run in QJSEngine, not Lua. Available globals: ctx (2D canvas context, QPainter-like), w, h (canvas dimensions), datasetGetFinal(uid)/datasetGetRaw(uid). The entry point is paint(ctx, w, h) and an optional zero-arg onFrame() callback. Validate with project.painter.dryRun before setCode. **Always call meta.fetchScriptingDocs{kind:'painter_js'} first** for the full API surface and worked examples -- don't invent canvas methods from JS DOM Canvas, the surface is QPainter-shaped.
   rpc ProjectPainterSetCode(ProjectPainterSetCodeRequest) returns (CommandResponse);
 
   // Replay the most recently undone project-document step. Returns {performed:false, reason} when there is nothing to redo. Any new mutation after an undo discards the redo tail.
@@ -3072,7 +3072,7 @@ service SerialStudioTypedAPI {
   // List all tags defined in the open database
   rpc SessionsListTags(SessionsListTagsRequest) returns (CommandResponse);
 
-  // Open a session database file for browsing (params: filePath)
+  // Open a historian database file for browsing (params: filePath)
   rpc SessionsOpenDatabase(SessionsOpenDatabaseRequest) returns (CommandResponse);
 
   // Compare a stored session (or every session with a tag) against a candidate project in a child process (async; poll sessions.getRegression; params: sessionId | tag, projectPath?, projectJson?)

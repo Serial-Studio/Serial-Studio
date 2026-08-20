@@ -424,7 +424,7 @@ Widgets.SmartDialog {
                 qsTr("List the sources in this project")
               ],
               "concepts": [
-                qsTr("What is a session database, and why would I use one?"),
+                qsTr("What is the historian, and why would I use it?"),
                 qsTr("CSV vs MDF4 export - what is the difference?"),
                 qsTr("What is a frame parser, and when do I need one?"),
                 qsTr("When should I use Lua vs JavaScript for the parser?"),
@@ -447,7 +447,7 @@ Widgets.SmartDialog {
               "visualize": [
                 qsTr("Suggest dashboard widgets for my data"),
                 qsTr("Build an executive overview workspace"),
-                qsTr("Add a painter widget for a custom visualization"),
+                qsTr("Add a canvas widget for a custom visualization"),
                 qsTr("Show Plot, FFT, and Waterfall for one dataset"),
                 qsTr("Group my datasets into useful workspaces")
               ]

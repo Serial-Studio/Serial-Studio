@@ -1,4 +1,4 @@
-# The data hotpath
+# The acquisition pipeline
 
 A technical reference for how a single byte travels from a connected device to a rendered widget,
 and how the frame parser and dataset transforms plug into that pipeline. If you're looking for
@@ -7,7 +7,8 @@ the high-level user view, start with [Data Flow](Data-Flow.md). For threading-sp
 [Threading and Timing Guarantees](Threading-and-Timing.md). This page is for advanced users,
 plugin authors, and anyone debugging throughput, latency, or timing problems.
 
-The hotpath is the chain of components that runs once per received frame at full data rate.
+The acquisition pipeline is the chain of components that runs once per received frame at full
+data rate.
 Serial Studio targets sustained data rates above 256 kHz, so every stage on this path avoids
 allocations, copies, and cross-thread context switches.
 
@@ -28,7 +29,7 @@ Each arrow is either a direct in-thread call or a `Qt::DirectConnection` signal.
 queued connections are avoided on this path: at 10 kHz they fill Qt's event queue faster than
 the consumer can drain it, and the FrameReader's bounded queue starts dropping frames.
 
-MDF4 export, the Session Database, and the MQTT bridge are Pro-only; a free build compiles
+MDF4 export, the Historian, and the MQTT bridge are Pro-only; a free build compiles
 those sinks out and skips them in fan-out.
 
 ### Stage 1: driver
@@ -94,18 +95,18 @@ object. It runs three things in order:
    [Frame Parser Scripting](JavaScript-API.md) for the full API.
 3. Per-dataset **transforms** (`transform(value)`) are called in group then dataset order. A
    transform can read raw values from any dataset and final values from datasets earlier in
-   the order, plus shared registers from [Data Tables](Data-Tables.md). See
+   the order, plus shared variables from [Variables](Data-Tables.md). See
    [Dataset Value Transforms](Dataset-Transforms.md).
 
 In Quick Plot mode, steps 1 and 2 are replaced by a built-in line splitter that treats commas
-as the field separator. In Console-Only mode, the FrameBuilder hotpath is a no-op: bytes go
+as the field separator. In Console-Only mode, the FrameBuilder stage is a no-op: bytes go
 straight to the terminal via `DeviceManager::rawDataReceived`.
 
 When a single captured chunk expands into N logical frames, FrameBuilder publishes them at
 `data->timestamp + step * i`, so a dropped or coalesced read on the driver side does not
 collapse all the frames into a single instant.
 
-The parser and transforms are the only points on the hotpath where user code runs. Both run
+The parser and transforms are the only points in the pipeline where user code runs. Both run
 under a runtime watchdog and are wrapped so that a thrown error, infinite loop, or non-finite
 return value falls back to the safe path: the raw value, or an empty frame. Errors do not
 interrupt the data stream. Transform watchdogs use a 100 ms budget; for JavaScript transforms
@@ -143,7 +144,7 @@ one sink is active (cached in `m_anyAsyncSink`):
 
 - the dashboard (pooled frame, no copy),
 - the CSV and MDF4 (Pro) export workers,
-- the Session Database (Pro),
+- the Historian (Pro),
 - the API server (port 7777, MCP and legacy JSON-RPC),
 - the gRPC server (when built with `ENABLE_GRPC`),
 - the MQTT bridge (Pro).
@@ -155,7 +156,7 @@ queues, so writing to disk or the network never blocks the dashboard.
 ## Timestamp ownership
 
 The driver owns time. Every component downstream of the driver propagates the timestamp
-attached to the captured chunk; nothing on the hotpath calls `steady_clock::now()` to stamp a
+attached to the captured chunk; nothing in the pipeline calls `steady_clock::now()` to stamp a
 frame after the fact.
 
 - `IO::CapturedData` carries the chunk timestamp.
@@ -173,7 +174,7 @@ export or report. Patching a downstream stage to "fix" timing usually masks an e
 
 ## Performance characteristics
 
-The hotpath is designed around three rules:
+The acquisition pipeline is designed around three rules:
 
 1. **No allocations after init.** `FrameBuilder` reuses one `Frame` per source and draws
    each `TimestampedFramePtr` from a fixed-size slot pool (`acquireFrame`) as an aliasing
@@ -201,11 +202,11 @@ To measure this pipeline end-to-end on your own hardware, the [Benchmark Dialog]
 (About > Benchmark) drives the real `FrameReader` -> `FrameBuilder` -> consumer chain and
 reports sustained frames/second per stage and per parser language, gated against the targets
 above. The same engine runs headless for CI; see
-[Command-Line Interface](Command-Line-Interface.md#hotpath-benchmark).
+[Command-Line Interface](Command-Line-Interface.md#acquisition-pipeline-benchmark).
 
 ## Where the parser and transforms fit
 
-The parser and transforms are the user-visible parts of the hotpath. Everything else is
+The parser and transforms are the user-visible parts of the pipeline. Everything else is
 fixed; the parser and transforms are where you add custom protocol logic and signal
 conditioning without rebuilding the application.
 
@@ -228,10 +229,10 @@ A few things to keep in mind:
   one*. Heavy work in a transform that runs at 10 kHz across 50 datasets adds up quickly.
 - Transforms can read raw values from any dataset and final values from datasets that come
   earlier in group / dataset order; reading a later dataset's final value returns the
-  previous frame's result. They can also publish to computed registers in the
-  project's [Data Tables](Data-Tables.md), which other transforms can then read, in the
-  same frame or in any later frame, since computed registers persist.
-- Computed registers hold their last written value indefinitely. For per-dataset state
+  previous frame's result. They can also publish to computed variables in the
+  project's [shared tables](Data-Tables.md), which other transforms can then read, in the
+  same frame or in any later frame, since computed variables persist.
+- Computed variables hold their last written value indefinitely. For per-dataset state
   isolated from other datasets, transform-local upvalues (top-level `local` in Lua,
   top-level `var`/`let` in JavaScript) are still the lightest option.
 - A transform can return a string for label-style datasets. Non-finite numbers (`NaN`,
@@ -240,13 +241,13 @@ A few things to keep in mind:
 For the full parser and transform API, see [Frame Parser Scripting](JavaScript-API.md) and
 [Dataset Value Transforms](Dataset-Transforms.md).
 
-## Debugging the hotpath
+## Debugging the pipeline
 
 | Symptom | Where to look |
 |---|---|
 | `[FrameReader] Frame queue full -- frame dropped` in the log | A downstream consumer is too slow. Check parser and transform CPU cost first; a transform that does HTTP calls or string-heavy work will saturate the path. |
 | Timestamps drift or cluster | Driver stamping. Check that the driver fills `frameStep` and that any cross-thread post captures `SteadyClock::now()` before queueing. |
-| Same-instant timestamps in CSV or the Session DB | Coarse clock granularity (often Windows). The export-side monotonic helper preserves order, but per-frame resolution is hardware-bound. |
+| Same-instant timestamps in CSV or the Historian | Coarse clock granularity (often Windows). The export-side monotonic helper preserves order, but per-frame resolution is hardware-bound. |
 | Parser appears to skip frames | Check the operation mode (Console-Only skips the parser by design) and the delimiter configuration. In multi-source projects, each source has its own parser engine; an error in one source does not affect the others. |
 | Transform changes don't take effect | Transforms are compiled once when the project loads or the connection opens. Re-open the connection or reload the project. |
 | High CPU but the dashboard is smooth | The bottleneck is upstream of the dashboard. Profile the parser and transforms; the dashboard refresh rate cap doesn't affect parser load. |
@@ -260,7 +261,7 @@ Treat these as load-bearing:
 - `CircularBuffer` is single-producer / single-consumer. Never make it MPMC.
 - `Dashboard` is main-thread only. It receives the same `TimestampedFramePtr` that export
   workers receive, and reads from `frame->data` directly.
-- Export workers (CSV, MDF4 (Pro), Session Database (Pro), API, gRPC, MQTT (Pro)) consume
+- Export workers (CSV, MDF4 (Pro), Historian (Pro), API, gRPC, MQTT (Pro)) consume
   from lock-free queues on worker threads. They never block the main thread.
 
 If you're writing a plugin or a new driver, follow the existing drivers (see `BluetoothLE.h`
@@ -272,9 +273,9 @@ and `BluetoothLE.cpp` as the canonical reference) and keep these invariants inta
 - [Frame Parser Scripting](JavaScript-API.md): full Lua and JavaScript `parse()` reference.
 - [Dataset Value Transforms](Dataset-Transforms.md): per-dataset calibration, filtering, and
   unit conversion.
-- [Data Tables](Data-Tables.md): shared constants and computed registers used by transforms.
+- [Variables](Data-Tables.md): shared constants and computed variables used by transforms.
 - [Operation Modes](Operation-Modes.md): how Project File, Quick Plot, and Console-Only modes
-  shape the hotpath.
+  shape the pipeline.
 - [Benchmark Dialog](Benchmark.md): the interactive tool that drives this exact pipeline and
   reports its sustained throughput against the 256 kHz gates.
 - [Communication Protocols](Communication-Protocols.md): protocol comparison and per-driver

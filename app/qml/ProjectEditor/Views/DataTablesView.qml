@@ -32,7 +32,7 @@ Widgets.Pane {
 
   implicitWidth: 0
   implicitHeight: 0
-  title: qsTr("Shared Memory")
+  title: qsTr("Variables")
   icon: Cpp_Misc_IconRegistry.icon("editor", "shared-memory", 16)
 
   actionComponent: EditorNavActions {}
@@ -210,7 +210,7 @@ Widgets.Pane {
               Layout.alignment: Qt.AlignVCenter
               onClicked: app.showHelpCenter("data-tables")
               icon.source: Cpp_Misc_IconRegistry.icon("code", "help", 24)
-              ToolTip.text: qsTr("Open help documentation for shared memory")
+              ToolTip.text: qsTr("Open help documentation for variables")
             }
           }
         }
@@ -220,7 +220,7 @@ Widgets.Pane {
         Layout.fillWidth: true
         columns: [
           { title: qsTr("Title"),     width: 280 },
-          { title: qsTr("Registers"), width: -1  }
+          { title: qsTr("Variables"), width: -1  }
         ]
       }
 

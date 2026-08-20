@@ -14,7 +14,7 @@ Funkcje Pro:
 → Wizualizacja MQTT, XY i 3D
 → Sterowniki Audio, CAN Bus, Modbus, USB, HID i Process I/O
 → Widżety wyjściowe, eksport MDF4 i transfery XMODEM/YMODEM/ZMODEM
-→ Baza sesji, Data Tables i transformacje wartości (JS + Lua)
+→ Historian, Zmienne i transformacje wartości (JS + Lua)
 → Projekty wieloźródłowe i niestandardowe przestrzenie robocze
 → Licencja komercyjna (bez zobowiązań GPL)
 

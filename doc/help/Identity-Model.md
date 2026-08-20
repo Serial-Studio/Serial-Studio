@@ -44,13 +44,13 @@ Treat the integer as opaque: it's allocated, not derived. Two assumptions you'd 
 - You **cannot** recover `(sourceId, groupId, datasetId)` from a `uniqueId` by arithmetic. The legacy formula `sourceId * 1'000'000 + groupId * 10'000 + datasetId` is only used as a one-shot back-fill when loading a project file from before this scheme existed; once the project is saved again, the values are persisted and no longer follow the formula.
 - You **cannot** guess what `uniqueId` a new dataset will receive. It's just the next value from the project's counter (`nextUniqueId`).
 
-`uniqueId` is what transform scripts and Data Tables use, because they need a single key that's stable across sources. It's what you read from the live data API and what the system data table (`__datasets__`) uses for its `raw:<uniqueId>` and `final:<uniqueId>` registers. The Group struct has its own `uniqueId` field with the same semantics, used inside workspace widget refs.
+`uniqueId` is what transform scripts and shared tables use, because they need a single key that's stable across sources. It's what you read from the live data API and what the system table (`__datasets__`) uses for its `raw:<uniqueId>` and `final:<uniqueId>` variables. The Group struct has its own `uniqueId` field with the same semantics, used inside workspace widget refs.
 
 ### `alias`
 
 An optional, human-readable name for a dataset, set in the **Script Alias** field of the Project Editor's dataset form. Empty by default. Unlike the numeric IDs, you choose it, and the editor requires it to be unique across the project. Like `uniqueId`, it survives reorders, renames, and moves between sources; unlike `uniqueId`, it is a name you pick (for example `ATAM1-CH1`) rather than a number the counter allocates.
 
-The alias is a second key for the same dataset, not a replacement for `uniqueId`. `uniqueId` stays the persisted identity that stored cross-references point at (x-axis, waterfall, and workspace refs remain numeric); the alias is layered on top for scripts and the API to read by. Transform and frame-parser scripts accept it wherever they accept a `uniqueId`: `datasetGetRaw("ATAM1-CH1")` and `datasetGetFinal("ATAM1-CH1")` look up by alias, and the `__datasets__` table exposes `raw:<alias>` and `final:<alias>` registers alongside the numeric ones. A string argument is always an alias and a number is always a `uniqueId`, so the two never coerce into each other.
+The alias is a second key for the same dataset, not a replacement for `uniqueId`. `uniqueId` stays the persisted identity that stored cross-references point at (x-axis, waterfall, and workspace refs remain numeric); the alias is layered on top for scripts and the API to read by. Transform and frame-parser scripts accept it wherever they accept a `uniqueId`: `datasetGetRaw("ATAM1-CH1")` and `datasetGetFinal("ATAM1-CH1")` look up by alias, and the `__datasets__` table exposes `raw:<alias>` and `final:<alias>` variables alongside the numeric ones. A string argument is always an alias and a number is always a `uniqueId`, so the two never coerce into each other.
 
 In a project with hundreds of datasets an alias like `ATAM1-CH1` is self-documenting where a bare number is not, and it stays meaningful across restructuring (re-import, copy-paste) that hands a dataset a fresh `uniqueId`. The Project Editor tree context menu has a **Seed Aliases from Titles** action that fills every empty alias from its dataset title, deduplicated, and leaves existing aliases untouched.
 
@@ -62,8 +62,8 @@ In a project with hundreds of datasets an alias like `ATAM1-CH1` is self-documen
 | `groupId`  | Group-scoped API calls (`project.group.update`, dataset CRUD addressing)                         |
 | `datasetId`| Dataset CRUD addressing (`project.dataset.update`, `project.dataset.setOptions`, `project.dataset.delete`) |
 | `index`    | Maps each slot of the parser's returned array to a dataset; set per dataset in the Project Editor |
-| `uniqueId` | Live-data API (`dashboard.getData`, `dashboard.tailFrames`), transform scripts (`datasetGetRaw(uniqueId)`, `datasetGetFinal(uniqueId)`), Data Tables (`raw:<uniqueId>`, `final:<uniqueId>`) |
-| `alias`    | Optional user-chosen name; script dataset lookups (`datasetGetRaw("name")`, `datasetGetFinal("name")`), Data Tables (`raw:<alias>`, `final:<alias>`), and any API parameter that accepts a `uniqueId` |
+| `uniqueId` | Live-data API (`dashboard.getData`, `dashboard.tailFrames`), transform scripts (`datasetGetRaw(uniqueId)`, `datasetGetFinal(uniqueId)`), shared tables (`raw:<uniqueId>`, `final:<uniqueId>`) |
+| `alias`    | Optional user-chosen name; script dataset lookups (`datasetGetRaw("name")`, `datasetGetFinal("name")`), shared tables (`raw:<alias>`, `final:<alias>`), and any API parameter that accepts a `uniqueId` |
 
 ## Rule of thumb
 
@@ -74,7 +74,7 @@ The mental shortcut that covers 95% of cases:
 In other words:
 
 - Editing or deleting a dataset? Address it by the group it lives in plus its slot inside that group.
-- Reading a live value, looking up a Data Tables register, calling `datasetGetRaw` / `datasetGetFinal` from a transform? Use `uniqueId`, or the dataset's alias if you've set one.
+- Reading a live value, looking up a table variable, calling `datasetGetRaw` / `datasetGetFinal` from a transform? Use `uniqueId`, or the dataset's alias if you've set one.
 - Wiring a frame-parser script to pick the right column out of the parsed frame? That's `index`.
 
 ## Lifecycle gotchas
@@ -104,7 +104,7 @@ If something is ever ambiguous, default to looking it up fresh from the project 
 
 - [Project Editor](Project-Editor.md): where datasets, groups, and sources are created and where their IDs come from.
 - [Frame Parser Scripting](JavaScript-API.md): the parser that picks values out of the frame and assigns them to datasets by `index`.
-- [Dataset Value Transforms](Dataset-Transforms.md): per-dataset scripts that read and write registers by `uniqueId`.
-- [Data Tables](Data-Tables.md): the system table (`__datasets__`) keyed by `raw:<uniqueId>` and `final:<uniqueId>`.
+- [Dataset Value Transforms](Dataset-Transforms.md): per-dataset scripts that read and write variables by `uniqueId`.
+- [Variables](Data-Tables.md): the system table (`__datasets__`) keyed by `raw:<uniqueId>` and `final:<uniqueId>`.
 - [API Reference](API-Reference.md): the JSON-RPC surface that exposes mutating CRUD by `(groupId, datasetId)` and live reads by `uniqueId`.
 - [Glossary](Glossary.md): definitions for `uniqueId`, `datasetId`, and frame `index`.

@@ -35,7 +35,7 @@ Widgets.SmartWindow {
   property alias preferredHeight: layout.implicitHeight
   title: Cpp_Sessions_Manager.isOpen
          ? Cpp_Sessions_Manager.fileName
-         : qsTr("Sessions")
+         : qsTr("Historian")
 
   //
   // Operator mode pins the explorer to the project DB and hides destructive controls

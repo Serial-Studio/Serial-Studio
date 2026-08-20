@@ -127,7 +127,7 @@ For per-channel sample rates, channel-level units and metadata, or smaller files
 ## See also
 
 - [MDF4 Export & Playback](MDF4.md): binary logging with per-channel sample rates and channel metadata (Pro).
-- [Session Database](Session-Database.md): SQLite-backed project archive with built-in replay (Pro).
+- [Historian](Session-Database.md): SQLite-backed project archive with built-in replay (Pro).
 - [Getting Started](Getting-Started.md): initial setup and first connection.
 - [Operation Modes](Operation-Modes.md): Quick Plot vs Project File mode.
 - [Project Editor](Project-Editor.md): define datasets and dashboard layout.

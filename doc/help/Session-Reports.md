@@ -1,10 +1,10 @@
 # Session Reports (Pro)
 
-Serial Studio Pro can export any recorded session as a **self-contained HTML report** or a **PDF**. The report includes a cover page, session metadata, per-parameter summary statistics, and one interactive Chart.js plot per numeric dataset. It's a share-ready artifact for teammates, customers, or a lab notebook, generated from the same SQLite session database used by the [Session Explorer](Session-Database.md).
+Serial Studio Pro can export any recorded session as a **self-contained HTML report** or a **PDF**. The report includes a cover page, session metadata, per-parameter summary statistics, and one interactive Chart.js plot per numeric dataset. It's a share-ready artifact for teammates, customers, or a lab notebook, generated from the same SQLite database used by the [Historian](Session-Database.md).
 
 ## Generating a report
 
-1. Open the **Session Explorer** from the **Sessions** button on the toolbar.
+1. Open the **Historian** from the **Historian** button on the toolbar.
 2. Select a recorded session.
 3. Click **Generate Report** in the session detail pane.
 4. Configure branding, page, and section options in the dialog (see [Options](#options)).
@@ -75,7 +75,7 @@ Charts use **Chart.js 4.x**, bundled inside Serial Studio. No network access is 
 
 Long sessions are downsampled to a maximum of **10,000 points per chart** using first/min/max/last bucket decimation across 2,500 equal-count buckets. This preserves the signal envelope (peaks and valleys survive) while keeping charts responsive even for sessions with millions of samples.
 
-If you need the full-resolution data, export the session to **CSV** from the Session Explorer instead.
+If you need the full-resolution data, export the session to **CSV** from the Historian instead.
 
 ### Numeric formatting
 
@@ -89,6 +89,6 @@ Tick labels use scientific notation for values with magnitude below 10⁻³ or a
 
 ## See also
 
-- [Session Database](Session-Database.md): where sessions are recorded and browsed.
+- [Historian](Session-Database.md): where sessions are recorded and browsed.
 - [CSV Export & Playback](CSV-Export-Playback.md): for full-resolution tabular exports.
 - [Pro vs Free Features](Pro-vs-Free.md): full list of Pro-only features.

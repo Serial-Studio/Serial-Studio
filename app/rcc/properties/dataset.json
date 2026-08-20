@@ -693,8 +693,8 @@
       "persist": "whenTrue",
       "section": "general",
       "widget": "CheckBox",
-      "label": "Virtual Dataset",
-      "description": "Virtual datasets compute their value from transforms and data tables, they do not require a frame index",
+      "label": "Computed Dataset",
+      "description": "Computed datasets compute their value from transforms and shared variables, they do not require a frame index",
       "onCommit": "onVirtualChanged",
       "undo": {
         "label": "Edit Dataset",
@@ -717,7 +717,7 @@
       "section": "general",
       "widget": "CheckBox",
       "label": "Hide on Dashboard",
-      "description": "Suppress this dataset's standalone dashboard tile; the painter widget can still read its values",
+      "description": "Suppress this dataset's standalone dashboard tile; the canvas widget can still read its values",
       "visibleWhen": "insidePainterGroup",
       "undo": {
         "label": "Edit Dataset",

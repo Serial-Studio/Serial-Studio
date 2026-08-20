@@ -12,7 +12,7 @@ the parser is set, the export is running, etc.
 
 ## project.snapshot (project-only composite)
 
-Sources, groups + datasets, workspaces summary, and data tables summary
+Sources, groups + datasets, workspaces summary, and shared-tables summary
 in one call. Pass `verbose: true` to also include source-level frame
 settings and parser source code. Cheaper than `meta.snapshot` when you
 don't need IO/dashboard/sessions/mqtt/etc. status.
@@ -25,7 +25,7 @@ Walks the loaded project and reports issues at three tiers:
   references missing source, duplicate dataset index within a group,
   parser fails to compile, FFT enabled with 0 samples.
 - `warning`: likely-wrong but not crashing. Untitled groups/datasets,
-  empty groups (except painter), action with no payload.
+  empty groups (except canvas), action with no payload.
 - `info`: design notes. Source has no parser, will drop frames silently.
 
 `ok: false` only when an error-tier issue is present. Call this after
@@ -120,7 +120,7 @@ made the calls. Don't pretend a recall tool exists.
    surfaces this: `rows[0]` will be partial and subsequent rows empty.
 3. Common cause for transforms: missing `function transform(value) {}`
    wrapping (the IIFE handles isolation but `transform` must exist).
-4. Common cause for painters: function name `draw` instead of `paint`,
+4. Common cause for canvas scripts: function name `draw` instead of `paint`,
    or `bootstrap` (doesn't exist; top-level is bootstrap).
 
 ### "Pipeline dryRun returns zero frames"
@@ -160,7 +160,7 @@ string dataset `alias` (string = alias, number = uniqueId, no coercion); an
 unknown alias misses exactly like an unknown `uniqueId`. Look in the runtime log for
 `[DataTableStore] Missing register <table>/<reg>` or
 `[DataTableStore] datasetGet... called with unknown uniqueId N`.
-The warning fires on the FIRST miss per (table, register) pair --
+The warning fires on the FIRST miss per (table, variable) pair --
 subsequent calls stay silent to avoid spam, so don't expect the log
 to keep filling.
 

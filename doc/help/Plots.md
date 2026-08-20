@@ -7,9 +7,9 @@ Serial Studio's line plots turn a stream of numbers into a moving chart. This pa
 | Widget       | Source  | Curves | Enable with                           |
 |--------------|---------|--------|---------------------------------------|
 | **Plot**     | Dataset | One    | `graph: true` on a dataset            |
-| **MultiPlot**| Group   | Many   | Set the group's widget to MultiPlot (plots every dataset in the group) |
+| **Multi-Plot**| Group   | Many   | Set the group's widget to Multi-Plot (plots every dataset in the group) |
 
-A **Plot** draws a single signal. A **MultiPlot** overlays several signals from the same group on one chart with a shared axis and a color legend, which is the right choice when you want to compare channels (the three axes of an accelerometer, several thermocouples, a setpoint against a measured value).
+A **Plot** draws a single signal. A **Multi-Plot** overlays several signals from the same group on one chart with a shared axis and a color legend, which is the right choice when you want to compare channels (the three axes of an accelerometer, several thermocouples, a setpoint against a measured value).
 
 Both are configured in the [Project Editor](Project-Editor.md) and behave the same way at runtime. Everything below applies to both unless noted.
 
@@ -27,7 +27,7 @@ A **time** plot scrolls: it shows the most recent window of data, spanning `[-T,
 
 Two settings control how much history a plot keeps, and both sit next to each other in two places: the **Time Range** and **Point Count** fields in the Project Editor's project toolbar, and the same two fields on the **Dashboard** tab of the **Settings** dialog. **Time Range** is the width `T` of the scrolling time window, in seconds (it sets how far back a time plot looks). **Point Count** is the number of samples retained per signal, which sizes the history buffer and is the window width for a plot drawn against sample number rather than time. The Project Editor values are saved into the project file (as `plotTimeRange` and `pointCount`); the Settings dialog applies them to the live dashboard.
 
-A **custom X axis** plots one dataset against another instead of against time, producing XY traces (a phase plot, an I-V curve, a Lissajous figure). This mode is available only on a **Plot**; a **MultiPlot** group's shared X axis is limited to Time or Samples.
+A **custom X axis** plots one dataset against another instead of against time, producing XY traces (a phase plot, an I-V curve, a Lissajous figure). This mode is available only on a **Plot**; a **Multi-Plot** group's shared X axis is limited to Time or Samples.
 
 The Y axis auto-scales to fit the data by default. Pin it to a fixed range with `pltMin` / `pltMax` in the Project Editor, or from the **Axis Range** dialog on the toolbar.
 
@@ -69,7 +69,7 @@ There are three **modes**:
 
 Auto is the everyday choice and matches the Auto button on a scope. Use Normal for an intermittent signal you don't want redrawn by noise, and Single to freeze one event.
 
-On a **MultiPlot**, the **Source** setting picks which curve the trigger watches. All curves are captured together and stay aligned to that one signal.
+On a **Multi-Plot**, the **Source** setting picks which curve the trigger watches. All curves are captured together and stay aligned to that one signal.
 
 ### Timing: width and rate
 
@@ -92,7 +92,7 @@ Plots draw from a decimating ring buffer sized to the time range, so a plot stay
 | You want to                                  | Use                          |
 |----------------------------------------------|------------------------------|
 | Watch one signal over time                   | Plot                         |
-| Compare several signals on one chart          | MultiPlot                    |
+| Compare several signals on one chart          | Multi-Plot                    |
 | Plot one value against another               | Plot with a custom X axis    |
-| Read the shape of a repeating waveform        | Plot or MultiPlot with Sweep |
+| Read the shape of a repeating waveform        | Plot or Multi-Plot with Sweep |
 | See a frequency spectrum                      | FFT Plot (see [Widget Reference](Widget-Reference.md#fft-plot)) |

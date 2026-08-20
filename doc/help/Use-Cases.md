@@ -14,7 +14,7 @@ Real-world applications of Serial Studio across industries, education, and hobby
 - [Medical and Health Devices](#medical-and-health-devices)
 - [Industrial and Manufacturing](#industrial-and-manufacturing)
 - [Home Automation](#home-automation)
-- [Custom Visualizations (Painter Widget)](#custom-visualizations-painter-widget)
+- [Custom Visualizations (Canvas Widget)](#custom-visualizations-canvas-widget)
 
 ## Robotics and Automation
 
@@ -368,7 +368,7 @@ Real-world applications of Serial Studio across industries, education, and hobby
 **Solution:** NanoVNA antenna analyzer exports data via USB serial:
 - Serial Studio plots:
   - SWR across frequency sweep (2-30 MHz)
-  - Smith chart (Painter widget, Pro)
+  - Smith chart (Canvas widget, Pro)
   - Return loss (S11 parameter)
 
 **Hardware:** NanoVNA or custom RF bridge + AD8302
@@ -543,15 +543,15 @@ Real-world applications of Serial Studio across industries, education, and hobby
 **Data Analysis:** CSV export identifies inefficient operation times
 **Energy Savings:** 15% reduction after optimizing thermostat schedule
 
-## Custom Visualizations (Painter Widget)
+## Custom Visualizations (Canvas Widget)
 
-The Painter widget exposes a JavaScript `paint(ctx, w, h)` callback against a
+The Canvas widget exposes a JavaScript `paint(ctx, w, h)` callback against a
 Canvas2D-style context backed by QPainter. An optional `onFrame()` runs once per
 dashboard tick before `paint()` for time-domain bookkeeping (ring buffers, peak
 hold decay, integrators). A 250 ms watchdog terminates the script if a single
 call does not return.
 
-Painter is a Pro feature.
+Canvas is a Pro feature.
 
 ### Phosphor-style Oscilloscope
 **Problem:** The built-in line plot does not match the appearance of a CRT
@@ -565,7 +565,7 @@ on a phosphor-green CRT background:
   synchronous channels
 
 **Hardware:** Any UART/USB device pushing one or more analog channels.
-**Pro Feature Used:** Painter widget, `oscilloscope.js` / `xy_scope.js` templates
+**Pro Feature Used:** Canvas widget, `oscilloscope.js` / `xy_scope.js` templates
 
 ### Artificial Horizon for Drones / Model Aircraft
 **Problem:** A 3D attitude widget is more than required for a pilot view; the
@@ -580,7 +580,7 @@ a fixed aircraft symbol.
 
 **Hardware:** Pixhawk / Betaflight flight controller streaming MAVLink, or any
 source providing pitch and roll.
-**Pro Feature Used:** Painter widget, `horizon.js` template
+**Pro Feature Used:** Canvas widget, `horizon.js` template
 
 ### Lab Equipment Mimic
 **Problem:** A test bench dashboard needs to reproduce the appearance of the
@@ -596,7 +596,7 @@ tick layout, and label fonts to match the original instrument:
 
 **Hardware:** Any sensor exposing a single bounded value (load cell,
 thermocouple, RPM encoder).
-**Pro Feature Used:** Painter widget, `dial_gauge.js` template
+**Pro Feature Used:** Canvas widget, `dial_gauge.js` template
 
 ### Audio VU Meter and Multi-Channel Bargraphs
 **Problem:** An audio engineer requires VU-style meters with peak hold across
@@ -611,7 +611,7 @@ render segmented LED-style bars with peak markers:
 
 **Hardware:** Any audio input device (USB microphone, audio interface, sound
 card input).
-**Pro Feature Used:** Painter widget, Audio driver, `audio_meter.js` /
+**Pro Feature Used:** Canvas widget, Audio driver, `audio_meter.js` /
 `bar_peak_hold.js` templates
 
 ### Order-Tracking and Polar Diagnostics
@@ -626,7 +626,7 @@ versus angle that the built-in widgets do not provide.
   the same dashboard
 
 **Hardware:** Accelerometer plus tachometer on the rotating shaft.
-**Pro Feature Used:** Painter widget, Waterfall widget, `polar_plot.js`
+**Pro Feature Used:** Canvas widget, Waterfall widget, `polar_plot.js`
 template
 
 ## Getting Started with Your Use Case

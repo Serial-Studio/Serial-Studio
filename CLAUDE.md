@@ -123,7 +123,14 @@ in all internal identifiers — `SerialStudio::Native`, `CFrameParser`, `NativeT
 user-facing strings/docs say Built-In. Parametrized C++ templates configured via a JSON
 descriptor, no user code). Per-dataset value transforms in JS or Lua. Pro features: Output
 widgets, Modbus, CAN Bus, MDF4, 3D, ImageView, Waterfall, file-transfer protocols (X/Y/ZMODEM),
-Modbus map importer, Session Database.
+Modbus map importer, Historian (per-session SQLite recording; "Session Database" pre-2026-08).
+User-facing renames of 2026-08-19 — internal identifiers unchanged: Historian (was Session
+Database; `Sessions::` namespace, `sessions.*` API, "Session Databases" folder stay), Variables
+(was Shared Memory; registers → variables in UI/docs, `RegisterDef`/`registers` JSON stay),
+Computed Dataset (was Virtual Dataset; `virtual_` field + `"Virtual"` JSON key stay), Canvas
+Widget (was Painter; `"painter"` widget key, `project.painter.*` API, Painter* classes stay).
+In doc/help the hotpath is called the "acquisition pipeline" — code, benchmarks, and internal
+docs keep "hotpath".
 
 ## Sub-Documentation
 

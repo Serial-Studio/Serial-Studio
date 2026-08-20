@@ -277,7 +277,7 @@ QJsonObject DataModel::DBCImporter::projectFromMessages(
 }
 
 /**
- * @brief Builds a Dataset for a CAN signal: a virtual dataset whose Lua transform reads the
+ * @brief Builds a Dataset for a CAN signal: a computed dataset whose Lua transform reads the
  *        signal's physical value back from the message's data table.
  */
 DataModel::Dataset DataModel::DBCImporter::buildDatasetFromSignal(

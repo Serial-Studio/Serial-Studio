@@ -128,7 +128,7 @@ inline QJsonObject buildDatasetObject(const DataModel::Dataset& dataset,
 
   if (dataset.virtual_)
     explanations[QStringLiteral("virtual")] =
-      QStringLiteral("Virtual dataset: value comes from transform(), not a parser-output slot");
+      QStringLiteral("Computed dataset: value comes from transform(), not a parser-output slot");
 
   if (dataset.index == 0 && !dataset.virtual_)
     explanations[QStringLiteral("index")] =

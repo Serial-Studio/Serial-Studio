@@ -1328,8 +1328,8 @@ void API::Handlers::ProjectHandler::registerPainterCodeCommands()
 
   registry.registerCommand(
     QStringLiteral("project.painter.setCode"),
-    QStringLiteral("Set the painter widget code for a group (params: groupId, code). "
-                   "**JavaScript only** -- painter scripts run in QJSEngine, not Lua. "
+    QStringLiteral("Set the canvas widget code for a group (params: groupId, code). "
+                   "**JavaScript only** -- canvas scripts run in QJSEngine, not Lua. "
                    "Available globals: ctx (2D canvas context, QPainter-like), w, h "
                    "(canvas dimensions), datasetGetFinal(uid)/datasetGetRaw(uid). The "
                    "entry point is paint(ctx, w, h) and an optional zero-arg onFrame() "
@@ -1344,14 +1344,14 @@ void API::Handlers::ProjectHandler::registerPainterCodeCommands()
        QStringLiteral("Target group id (from project.group.list)")              },
       {   QStringLiteral("code"),
        QStringLiteral("string"),
-       QStringLiteral("Painter widget JS source. Must define paint(ctx, w, h) and may "
+       QStringLiteral("Canvas widget JS source. Must define paint(ctx, w, h) and may "
        "define a zero-arg onFrame(). Replaces any existing code for the group.")}
   }),
     &painterSetCode);
 
   registry.registerCommand(
     QStringLiteral("project.painter.getCode"),
-    QStringLiteral("Get the painter widget JS for a group "
+    QStringLiteral("Get the canvas widget JS for a group "
                    "(params: groupId)"),
     makeSchema({
       {QStringLiteral("groupId"), QStringLiteral("integer"), QStringLiteral("Target group id")}

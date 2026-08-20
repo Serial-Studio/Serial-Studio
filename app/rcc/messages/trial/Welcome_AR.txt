@@ -13,5 +13,5 @@ Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 ← التصور باستخدام MQTT وXY و3D
 ← برامج تشغيل الصوت وCAN Bus وModbus وUSB وHID وProcess I/O
 ← أدوات الإخراج وتصدير MDF4 ونقل XMODEM/YMODEM/ZMODEM
-← قاعدة بيانات الجلسات وجداول البيانات وتحويل القيم (JS + Lua)
+← Historian، المتغيرات، وتحويل القيم (JS + Lua)
 ← مشاريع متعددة المصادر ومساحات عمل لوحة تحكم مخصصة

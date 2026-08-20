@@ -53,7 +53,7 @@ Item {
       width: Math.min(parent.width - 32, 480)
 
       Label {
-        text: qsTr("Painter Widget Error")
+        text: qsTr("Canvas Widget Error")
         color: Cpp_ThemeManager.colors["error"]
         Layout.alignment: Qt.AlignHCenter
         font: Cpp_Misc_CommonFonts.boldUiFont

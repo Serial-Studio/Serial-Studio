@@ -14,7 +14,7 @@ Pro 기능:
 → MQTT, XY 및 3D 시각화
 → Audio, CAN Bus, Modbus, USB, HID 및 Process I/O 드라이버
 → 출력 위젯, MDF4 내보내기, XMODEM/YMODEM/ZMODEM 전송
-→ 세션 데이터베이스, Data Tables, 값 변환 (JS + Lua)
+→ 히스토리안, 변수, 값 변환 (JS + Lua)
 → 다중 소스 프로젝트 및 사용자 정의 워크스페이스
 → 상업적 라이선스 (GPL 의무 없음)
 

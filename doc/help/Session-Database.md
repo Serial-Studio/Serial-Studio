@@ -1,26 +1,26 @@
-# Session Database (Pro)
+# Historian (Pro)
 
 Serial Studio Pro can record every connected session to a per-project SQLite database. You can browse, tag, annotate, export to CSV, and replay those sessions through the full dashboard exactly as they originally arrived. The result is a searchable archive of every run, without the per-file sprawl of CSV exports.
 
 ## Recording pipeline
 
-Recording runs in parallel with the dashboard. Frames, raw bytes, and data-table snapshots are enqueued lock-free on the main thread, then written by a background worker in batched transactions, so disk I/O never blocks the data path.
+Recording runs in parallel with the dashboard. Frames, raw bytes, and table snapshots are enqueued lock-free on the main thread, then written by a background worker in batched transactions, so disk I/O never blocks the data path.
 
 ```mermaid
 flowchart LR
     A["Device"] --> B["Frame Builder"]
     B --> C["Dashboard"]
-    B --> D["Session DB"]
+    B --> D["Historian"]
     A -.raw bytes.-> D
 ```
 
 ## Turning recording on
 
-Open the **Device Setup** panel and, under **Data Export**, toggle **Session Recording**. The first frame after you flip the toggle opens (or appends to) the project's session database. Recording stops automatically when the device disconnects, and the session's end timestamp is written at that point.
+Open the **Device Setup** panel and, under **Data Export**, toggle **Session Recording**. The first frame after you flip the toggle opens (or appends to) the project's Historian database. Recording stops automatically when the device disconnects, and the session's end timestamp is written at that point.
 
 There's nothing to configure. Serial Studio picks the path, creates the schema on first use, and handles file lifecycle.
 
-Recording and the explorer can also be driven programmatically: the [API](API-Reference.md) exposes `sessions.setExportEnabled`, `sessions.getStatus`, `sessions.list`, `sessions.replay`, `sessions.exportToCsv`, `sessions.delete`, and the tagging commands (`sessions.addTag`, `sessions.assignTag`, `sessions.setNotes`). The `--session-export` flag in the [Command-Line Interface](Command-Line-Interface.md) turns recording on at startup.
+Recording and the Historian can also be driven programmatically: the [API](API-Reference.md) exposes `sessions.setExportEnabled`, `sessions.getStatus`, `sessions.list`, `sessions.replay`, `sessions.exportToCsv`, `sessions.delete`, and the tagging commands (`sessions.addTag`, `sessions.assignTag`, `sessions.setNotes`). The `--session-export` flag in the [Command-Line Interface](Command-Line-Interface.md) turns recording on at startup.
 
 ### File location
 
@@ -42,17 +42,17 @@ Each session captures three per-sample streams, keyed by session ID and nanoseco
 |------------------|--------------------|----------|
 | Frame values     | `readings`         | Per-dataset raw and final values at each frame |
 | Raw bytes        | `raw_bytes`        | Every byte that arrived on the driver, exactly as received |
-| Data tables      | `table_snapshots`  | Registers of user data tables, captured on change at a 1 Hz poll |
+| Shared tables    | `table_snapshots`  | Variables of user shared tables, captured on change at a 1 Hz poll |
 | Session metadata | `sessions`         | Project title, start time, end time, embedded project JSON, notes |
 | Column layout    | `columns`          | Dataset title, group, units, widget type, virtual flag |
 
 The embedded project JSON in `sessions.project_json` is a snapshot of the project at the moment recording started. That's how a session recorded with one version of the project can replay faithfully later, even if the live project has changed in the meantime.
 
-Both raw bytes and parsed frames are captured. Replay re-renders widgets from the stored parsed (final) values; the raw byte stream is archived for inspection, CSV, or external analysis, but it is not re-parsed during replay. Tables and computed registers are polled once a second and only changed registers are written, so `table_snapshots` is not a per-frame record like `readings` and `raw_bytes`.
+Both raw bytes and parsed frames are captured. Replay re-renders widgets from the stored parsed (final) values; the raw byte stream is archived for inspection, CSV, or external analysis, but it is not re-parsed during replay. Tables and computed variables are polled once a second and only changed variables are written, so `table_snapshots` is not a per-frame record like `readings` and `raw_bytes`.
 
-## Session Explorer
+## The Historian window
 
-Open the Session Explorer from the **Sessions** button on the toolbar or the start menu. It opens one project's session database and lists every session recorded in that file, newest first. For each session you can:
+Open the Historian from the **Historian** button on the toolbar or the start menu. It opens one project's database and lists every session recorded in that file, newest first. For each session you can:
 
 - **Replay.** Feed the recorded frames back through the Frame Builder and dashboard. The project embedded with the session is restored automatically, so widgets render the way they did during the original run.
 - **Export to CSV.** Write the session's frames to a CSV file in the workspace. Final (post-transform) values are emitted one column per dataset, plus a timestamp column.
@@ -83,20 +83,20 @@ Replay is read-only. It doesn't modify the recorded session, and toggling CSV or
 
 ## Performance notes
 
-Sessions are written in Write-Ahead-Logging (WAL) mode with `synchronous=NORMAL`, batched up to 1,024 frames and 1,000 raw-byte entries per transaction. That's enough to keep up with sustained data rates in the tens of kHz on SSD storage, while still letting the explorer read the database concurrently with a live recording.
+Sessions are written in Write-Ahead-Logging (WAL) mode with `synchronous=NORMAL`, batched up to 1,024 frames and 1,000 raw-byte entries per transaction. That's enough to keep up with sustained data rates in the tens of kHz on SSD storage, while still letting the Historian read the database concurrently with a live recording.
 
-Session DBs grow linearly with data rate and session length. There's no built-in retention policy: old sessions stick around until you delete them from the explorer. For long-running archive projects, consider exporting important sessions to MDF4 periodically and deleting them from the database.
+Historian databases grow linearly with data rate and session length. There's no built-in retention policy: old sessions stick around until you delete them from the Historian. For long-running archive projects, consider exporting important sessions to MDF4 periodically and deleting them from the database.
 
-## CSV, MDF4, session database, or report: which one?
+## CSV, MDF4, Historian, or report: which one?
 
 | Goal                                                              | Best option               |
 |-------------------------------------------------------------------|---------------------------|
 | Hand a single file to a collaborator who uses Excel or pandas     | CSV export                |
 | Long recordings, high data rates, automotive toolchain            | [MDF4 export](MDF4.md) (Pro) |
-| Archive every run of a project, then search, tag, or replay later | Session database (Pro)    |
+| Archive every run of a project, then search, tag, or replay later | Historian (Pro)           |
 | A shareable, printable summary with charts for a customer or lab notebook | Session report (Pro) |
 
-CSV and MDF4 produce one file per session. The session database produces one file per project, indexed by session, with replay and metadata built in. Session reports are rendered on demand from the database: one HTML or PDF per session, ready to email or archive. They're not mutually exclusive: you can use all of them together.
+CSV and MDF4 produce one file per session. The Historian produces one file per project, indexed by session, with replay and metadata built in. Session reports are rendered on demand from the database: one HTML or PDF per session, ready to email or archive. They're not mutually exclusive: you can use all of them together.
 
 ## See also
 
@@ -105,5 +105,5 @@ CSV and MDF4 produce one file per session. The session database produces one fil
 - [MDF4 Export & Playback](MDF4.md): binary logging with per-channel sample rates and channel metadata (Pro).
 - [Data Flow](Data-Flow.md): where session recording sits in the overall pipeline.
 - [Dataset Value Transforms](Dataset-Transforms.md): transforms contribute to the recorded final values.
-- [Data Tables](Data-Tables.md): recorded in `table_snapshots` alongside frames.
+- [Variables](Data-Tables.md): recorded in `table_snapshots` alongside frames.
 - [Pro vs Free Features](Pro-vs-Free.md): full list of Pro-only features.

@@ -10,7 +10,7 @@ needs to interpret data from one or more devices.
   host), and its own frame parser. A project can have multiple sources;
   `sourceId = 0` is the default.
 - **Group**: a logical bundle of related datasets, with a display widget
-  type (DataGrid, MultiPlot, Accelerometer, GPS, Painter, ...). One
+  type (DataGrid, MultiPlot, Accelerometer, GPS, Canvas, ...). One
   group → one tile-shape on the dashboard.
 - **Dataset**: one channel of incoming numeric (or string) data. Maps
   one position in the parser's output array. Has visualization options
@@ -29,7 +29,7 @@ Project
 │       └── transformCode (optional, runs after parse)
 ├── actions[]            (toolbar buttons)
 ├── workspaces[]         (dashboard tabs; pin widgets here)
-└── tables[]             (data-bus registers; central state)
+└── tables[]             (data-bus variables; central state)
 ```
 
 ## Before you read further: `project.batch` exists
@@ -48,7 +48,7 @@ The model's most-used reads:
 
 ```
 project.snapshot        // PREFERRED for broad context: sources, groups +
-                        // datasets, workspaces summary, data tables summary
+                        // datasets, workspaces summary, shared-tables summary
                         // -- one round trip. Pass verbose=true for parser
                         // code + source-level frame settings.
 project.getStatus       // top-level: title, modified, mode, counts
@@ -56,7 +56,7 @@ project.group.list      // every group + datasetSummary + compatibleWidgetTypes
 project.dataset.list    // every dataset across all groups
 project.source.list     // every source with bus + parser info
 project.workspace.list  // every dashboard tab
-project.dataTable.list  // every user-defined data table
+project.dataTable.list  // every user-defined shared table
 project.validate        // semantic consistency check
 meta.snapshot           // composite across ALL subsystems (io + dashboard +
                         // project); broader than project.snapshot
@@ -378,33 +378,33 @@ See the `frame_parsers` skill for the full pipeline picture and the
 `project.frameParser.dryRun` shape that lets you exercise extraction
 + decoder + parser end-to-end before pushing code.
 
-### Constant vs Computed registers (data tables)
+### Constant vs Computed variables (shared tables)
 
 | Kind       | Lifetime       | Writable at runtime?                      | Use for                                                |
 |------------|----------------|-------------------------------------------|--------------------------------------------------------|
 | Constant   | Whole session  | NO (project-static; `tableSet` no-ops)    | Calibration coefficients, thresholds, gains            |
 | Computed   | Whole session  | YES via `tableSet`                        | Filter/integrator state, latched flags, cross-frame totals |
 
-Computed registers hold the last value written **indefinitely**; there
+Computed variables hold the last value written **indefinitely**; there
 is no per-frame reset. The `defaultValue` is the starting value at
-project load only. If you want a Computed register to start each frame
+project load only. If you want a Computed variable to start each frame
 at a known value, write that value yourself with `tableSet` at the top
 of an early transform. For per-dataset state isolated from other
 datasets, a top-level upvalue in the transform script is still the
 lightest option (see the `transforms` skill).
 
-`project.dataTable.get { name }` returns each register's `type` field
+`project.dataTable.get { name }` returns each variable's `type` field
 (`"Constant"` or `"Computed"`) along with its current value. Read it
 when you need to know the kind without inspecting the raw project
 JSON.
 
-### Virtual datasets: auto-detected on save
+### Computed datasets: auto-detected on save
 
-A virtual dataset has no slot in the parser's output array; its value
+A computed dataset has no slot in the parser's output array; its value
 comes entirely from its `transformCode` (typically reading peers via
 `datasetGetRaw / datasetGetFinal` / `tableGet`). Set `virtual: true`
 on creation, OR write a transform whose body never references `value`
-(the save path auto-flags those as virtual). Explicit setting is
+(the save path auto-flags those as computed). Explicit setting is
 still recommended for clarity.
 
 ### Reordering: move endpoints

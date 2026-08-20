@@ -14,7 +14,7 @@ Recursos Pro:
 → Visualização MQTT, XY e 3D
 → Drivers Audio, CAN Bus, Modbus, USB, HID e Process I/O
 → Widgets de saída, exportação MDF4 e transferências XMODEM/YMODEM/ZMODEM
-→ Banco de dados de sessões, Data Tables e transformações (JS + Lua)
+→ Historian, Variáveis e transformações (JS + Lua)
 → Projetos multifonte e áreas de trabalho personalizadas
 → Licença comercial (sem obrigações GPL)
 

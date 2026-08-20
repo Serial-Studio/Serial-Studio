@@ -113,7 +113,7 @@
     },
     {
       "id": "app.sessions",
-      "title": "Sessions",
+      "title": "Historian",
       "icon": "commands/sessions",
       "tooltip": "Browse, replay, and export recorded sessions",
       "kind": "action",

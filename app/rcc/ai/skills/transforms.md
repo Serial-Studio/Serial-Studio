@@ -6,7 +6,7 @@ dashboard sees the value. They turn a raw value into the displayed value.
 ## Picking a language
 
 Three exist. **Expression (`language: 3`) first** when the transform is
-arithmetic on this sample, its siblings, or a table register: no engine,
+arithmetic on this sample, its siblings, or a table variable: no engine,
 no allocation, cheapest at rate. See the section below for its syntax.
 
 Otherwise **Lua (`language: 1`) is the default**: measurably faster on
@@ -51,7 +51,7 @@ referencing a sibling by name. History: `sample(name, k)` up to 256 back,
 with a bare or braced name, NEVER a quoted string. Lines starting with
 `#` are comments.
 
-Data tables are readable with `table(name, register)` (`v * table(cal, scale)`),
+Shared tables are readable with `table(name, register)` (`v * table(cal, scale)`),
 read-only: a write needs Lua or JavaScript. Table access is a frame-lane
 feature; on a stream-lane source `table()` is a compile error.
 
@@ -64,21 +64,21 @@ reported once and the dataset publishes its raw value, so a wrong
 expression fails the same silent way a language mismatch does: always
 pass `language: 3` when you write one.
 
-## Virtual vs non-virtual: when to flip the flag
+## Computed vs regular datasets: when to flip the flag
 
 `virtual: true` means **compute-only**: the dataset has no slot in the
 frame, the parser supplies no value for it, and its output is built
-entirely from peer datasets, table registers, or constants. **Do not**
+entirely from peer datasets, table variables, or constants. **Do not**
 flip `virtual` on a regular dataset just because it has a transform.
 Most transforms (unit conversion, calibration, smoothing, deadband,
 hysteresis) operate on a parser-supplied `value` and stay
-**non-virtual**.
+**regular**.
 
 **Rule of thumb.** If the transform USES its `value` argument, the
-dataset is non-virtual. If it ignores `value` and reads only from
-`datasetGetRaw` / `datasetGetFinal` / `tableGet`, it's virtual.
+dataset is regular. If it ignores `value` and reads only from
+`datasetGetRaw` / `datasetGetFinal` / `tableGet`, it's computed.
 
-**Virtual.** Power [W] = Voltage × Current. No parser slot; the value
+**Computed.** Power [W] = Voltage × Current. No parser slot; the value
 is computed from two peer datasets. Set `virtual: true`:
 
 ```lua
@@ -87,7 +87,7 @@ function transform(_v)
 end
 ```
 
-**Non-virtual.** km/h from a m/s sensor reading. The parser writes
+**Regular.** km/h from a m/s sensor reading. The parser writes
 m/s into `value`, the transform converts units. Leave `virtual: false`
 (the default):
 
@@ -99,7 +99,7 @@ end
 
 Same rule for EMA smoothing, ADC-counts → volts, gear-ratio applied
 to RPM, and deadband filters: anything that touches `value` is a regular
-transform, not a virtual dataset.
+transform, not a computed dataset.
 
 ```
 project.dataset.add {groupId, options: ["plot"]}     -- creates dataset N
@@ -116,7 +116,7 @@ project.dataset.update {                              -- flip ONLY for compute-o
 **Auto-detect on save.** The save path inspects each dataset's transform
 body. If `transformCode` is non-empty AND the body **never references
 `value`**, the dataset is auto-flagged `virtual: true`. So a Power-style
-transform is detected as virtual on save even if you forgot the flag,
+transform is detected as computed on save even if you forgot the flag,
 but the dataset stays empty until that save. Set `virtual` explicitly
 when you push compute-only code.
 
@@ -126,11 +126,11 @@ only when the transform is compute-only. If you wrote a regular
 `value`-using transform on a dataset that has no parser slot, the fix
 is usually to assign `index` (give it a slot), not to flip `virtual`.
 
-### Why prefer virtual datasets over an extra parser slot
+### Why prefer computed datasets over an extra parser slot
 
 You COULD parse-and-emit a derived value from the frame parser
 directly (so the parser writes `channels[N] = computeSpeed(...)` and
-a regular dataset reads slot N). Don't. Virtual datasets are the
+a regular dataset reads slot N). Don't. Computed datasets are the
 right shape because:
 
 - **Separation of concerns.** Frame parsers turn bytes into raw
@@ -141,19 +141,19 @@ right shape because:
   exercises a transform in isolation. You can't dry-run a derived
   channel that lives inside `parse()`; you'd have to invent fake
   byte frames every iteration.
-- **Cross-source reach.** A virtual dataset's transform can read
+- **Cross-source reach.** A computed dataset's transform can read
   `datasetGetFinal(uniqueId)` of any dataset, including peers from
-  *other* sources via the shared data table. A parser only sees its
+  *other* sources via the shared tables. A parser only sees its
   own source's bytes.
-- **Unit + range hygiene.** Virtual datasets carry their own
+- **Unit + range hygiene.** Computed datasets carry their own
   `units`, `plotMin/Max`, `widgetMin/Max`, alarms, and widget
   bitflags. They show up cleanly in the project tree, the dashboard,
   and CSV/MDF4 exports. A computation hidden inside the parser has
   no presence in the schema.
-- **Templates.** A virtual dataset (transform + units + widget
+- **Templates.** A computed dataset (transform + units + widget
   config) is the unit you copy across projects. Parser code is
   source-bus-specific; transforms are portable.
-- **Performance.** Virtual datasets share the source's transform
+- **Performance.** Computed datasets share the source's transform
   engine (no extra QJSEngine / Lua state per derivation). A bloated
   parser, by contrast, runs every byte through one big function on
   every frame, allocating intermediate arrays.
@@ -214,16 +214,16 @@ declare `let alpha = 0.2` without clobbering each other.
 
 ## Tables: the central data bus
 
-Transforms read and write two kinds of registers:
+Transforms read and write two kinds of variables:
 
-**System table** (`__datasets__`, always present): two registers per
+**System table** (`__datasets__`, always present): two variables per
 dataset, `raw:<uniqueId>` and `final:<uniqueId>` (also mirrored as
 `raw:<alias>` / `final:<alias>` when the dataset has a user-set alias).
 Read-only. Convenience helpers: `datasetGetRaw(uniqueId | "alias")` and
 `datasetGetFinal(uniqueId | "alias")`. Use those instead of
 `tableGet('__datasets__', 'raw:<uid>')`.
 
-**User tables**: project-defined. Two register types:
+**User tables**: project-defined. Two variable types:
 
 - `Constant`: single value across the session. Set when declared. Use for
   calibration coefficients, lookup tables, configuration flags.
@@ -239,7 +239,7 @@ tableSet(tableName, registerName, value)       // user tables only
 tableHandle(tableName, registerName)           // -> handle (number), or -1; resolve ONCE at load
 tableHandleMany(tableName, registerNames)      // -> array of handles
 tableGetH(handle)                              // read by handle (fast path; no name lookup)
-tableSetH(handle, value)                       // write by handle (computed registers only)
+tableSetH(handle, value)                       // write by handle (computed variables only)
 datasetGetRaw(uniqueId | "alias")              // EARLIER dataset = this frame, later = previous frame
 datasetGetFinal(uniqueId | "alias")            // EARLIER datasets only
 ```
@@ -250,7 +250,7 @@ uniqueId (no coercion). An unknown alias returns `undefined` with a one-time
 warning. An `alias` is an optional, unique, user-set name from the Project
 Editor; it survives `uniqueId` renumbering.
 
-For a transform that hits the same registers every frame, resolve handles
+For a transform that hits the same variables every frame, resolve handles
 once in a top-level variable and use `tableGetH`/`tableSetH`; a stale handle
 after a table edit is a safe no-op. A table inside folders is addressed by
 its full path — parent folder titles joined with `/`, then the table name
@@ -267,7 +267,7 @@ Datasets are processed in group-array then dataset-array order. Inside a
 transform you can read:
 
 - raw values of **earlier** datasets in this frame (single-pass walk;
-  a later dataset's raw register still holds the previous frame's value)
+  a later dataset's raw variable still holds the previous frame's value)
 - final values of **earlier** datasets only
 
 Trying to read `datasetGetFinal` of a dataset processed later returns
@@ -278,16 +278,16 @@ emitted) — never a guaranteed 0.
 ## When to use what
 
 - **Per-dataset state across frames** (EMA, last value, deadband): use a
-  top-level `let`/`local` in the transform. Cheaper than a table register
+  top-level `let`/`local` in the transform. Cheaper than a table variable
   and isolated to the one dataset.
 - **State shared across datasets and frames** (a filter whose output
   several downstream channels read; a derivative tracked at frame
-  cadence; a latched alarm): use a Computed register, which persists.
+  cadence; a latched alarm): use a Computed variable, which persists.
 - **Shared *constants*** (calibration coefficients used by N channels,
-  lookup tables, full-scale ranges): use a Constant register.
+  lookup tables, full-scale ranges): use a Constant variable.
 - **Cross-dataset compute within one frame** (speed from dx and dt that
   arrive together): use `datasetGetRaw` to read a peer, OR write to a
-  Computed register in the earlier transform and `tableGet` it from the
+  Computed variable in the earlier transform and `tableGet` it from the
   later one.
 
 ## Examples (Lua, preferred)

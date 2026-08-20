@@ -38,8 +38,8 @@ QtObject {
   readonly property bool operatorMode: typeof app !== "undefined" && app.runtimeMode
 
   //
-  // Session-database command behavior, keyed by manifest id (Sessions is a Pro-only
-  // surface, so this file is loaded solely inside the commercial Database Explorer).
+  // Historian command behavior, keyed by manifest id (Sessions is a Pro-only
+  // surface, so this file is loaded solely inside the commercial Historian dialog).
   //
   readonly property var map: ({
     "db.open": root.cmdDbOpen,

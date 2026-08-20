@@ -1,11 +1,11 @@
 # Threading and Timing Guarantees
 
-A short, honest description of what Serial Studio's hot path guarantees, what it doesn't, and why the threading model looks the way it does. If you're integrating Serial Studio into something time-sensitive or trying to figure out where to expect jitter, read this once.
+A short, honest description of what Serial Studio's acquisition pipeline guarantees, what it doesn't, and why the threading model looks the way it does. If you're integrating Serial Studio into something time-sensitive or trying to figure out where to expect jitter, read this once.
 
 ## TL;DR
 
 - **Not a hard real-time system.** Serial Studio is built on Qt's event loop. There are no scheduling deadlines, no jitter bounds, and no preemption guarantees. Don't run a flight controller through it.
-- **Soft real-time, high throughput.** The hot path targets 256 kHz+ frame rates with zero allocations and lock-free queues. In practice, modern desktop hardware sustains that comfortably.
+- **Soft real-time, high throughput.** The acquisition pipeline targets 256 kHz+ frame rates with zero allocations and lock-free queues. In practice, modern desktop hardware sustains that comfortably.
 - **Source-owned timestamps.** Frames are time-stamped at the driver boundary, not at display or export. The dashboard you see and the CSV you export carry the same timestamp.
 - **Threading is per-driver and intentional.** Some drivers spawn their own threads; some lean on Qt's async I/O. Frame parsing happens on the main thread by design. Export and persistence happen off the main thread.
 
@@ -13,10 +13,10 @@ A short, honest description of what Serial Studio's hot path guarantees, what it
 
 ### Guaranteed
 
-- **Order preservation.** Frames are delivered to consumers in the order the driver produced them. The hot path uses a single-producer/single-consumer ring (`moodycamel::ReaderWriterQueue`) that's FIFO by construction.
-- **Source-derived timestamps.** Every parsed frame carries a `steady_clock` timestamp set at acquisition. Dashboard, CSV, MDF4, API, gRPC, MQTT, and the session database all see the same instant for the same frame. No consumer re-stamps.
+- **Order preservation.** Frames are delivered to consumers in the order the driver produced them. The pipeline uses a single-producer/single-consumer ring (`moodycamel::ReaderWriterQueue`) that's FIFO by construction.
+- **Source-derived timestamps.** Every parsed frame carries a `steady_clock` timestamp set at acquisition. Dashboard, CSV, MDF4, API, gRPC, MQTT, and the Historian all see the same instant for the same frame. No consumer re-stamps.
 - **No frame loss in steady state.** If your CPU can keep up with the producer, the queue stays drained and nothing is dropped. If it can't, you'll see `[FrameReader] Frame queue full -- frame dropped` in the log. That message is the canary; treat it as a real signal, not a warning.
-- **Zero allocation on the hot path.** No `new`, no `make_shared`, no `QByteArray::append` after init. Each `TimestampedFramePtr` comes from a fixed-size slot pool inside `FrameBuilder` and is shared (refcounted) across every consumer; the slot is recycled when the last consumer drops the pointer. The pool falls back to a one-shot `make_shared` and logs a single warning only if every slot is in flight at once, which means a downstream consumer is not draining.
+- **Zero allocation in the pipeline.** No `new`, no `make_shared`, no `QByteArray::append` after init. Each `TimestampedFramePtr` comes from a fixed-size slot pool inside `FrameBuilder` and is shared (refcounted) across every consumer; the slot is recycled when the last consumer drops the pointer. The pool falls back to a one-shot `make_shared` and logs a single warning only if every slot is in flight at once, which means a downstream consumer is not draining.
 - **Crash isolation across consumers.** A slow MQTT publish or a failing CSV write won't block FrameBuilder or the dashboard. Each consumer has its own worker thread and its own queue.
 
 ### Not guaranteed
@@ -71,7 +71,7 @@ Everything that consumes a parsed frame except the dashboard runs off the main t
 
 - **CSV export.**
 - **MDF4 export.**
-- **Session database** (Pro). The SQLite writer batches inserts in WAL mode; raw bytes go through a second lock-free queue.
+- **Historian** (Pro). The SQLite writer batches inserts in WAL mode; raw bytes go through a second lock-free queue.
 - **MQTT publisher.**
 - **API server.** All TCP client sockets are serviced on the server's own worker thread, off the main thread, so a slow client can't stall the pipeline.
 - **gRPC server** (when enabled).
@@ -114,8 +114,8 @@ A few specific guarantees fall out of this:
 
 - Logging telemetry from a test stand or a vehicle, where a few-millisecond uncertainty is invisible against the duration of the run.
 - FFT and waterfall analysis at audio rates. The 48 kHz pipeline is a daily-driver use case.
-- CAN Bus and Modbus monitoring. These protocols cap at rates well below the hot path's headroom.
-- Recording sessions for offline analysis. The session database preserves the original timestamps; load them back into Python or MATLAB and you've got the original time series.
+- CAN Bus and Modbus monitoring. These protocols cap at rates well below the pipeline's headroom.
+- Recording sessions for offline analysis. The Historian preserves the original timestamps; load them back into Python or MATLAB and you've got the original time series.
 
 ### When you should look elsewhere
 
@@ -127,13 +127,13 @@ A few specific guarantees fall out of this:
 
 - **"My CSV timestamps look chunky on Windows."** Windows' `steady_clock` ticks at ~15 ms. Same-tick frames did happen at the same time as far as the kernel is concerned. The export worker's `monotonicFrameNs` is what makes them strictly increasing for SQL/CSV ordering, but the visible chunks reflect real clock granularity.
 - **"My dashboard is laggy at 100 kHz."** It isn't. The dashboard ticks at the UI refresh rate (60 Hz by default) on purpose, not at the input rate. Open the session report or the CSV after the run; that's the full-rate data.
-- **"A widget skips frames."** Widgets sample on their tick, not per frame. They're not supposed to render every frame. The export and session-database paths see every frame; the UI doesn't need to.
-- **"My transform makes the dashboard stutter."** Transforms run on the main thread because they read peer-dataset values that are also on the main thread. A heavy transform (regex, JSON parsing, tight Lua loops) will block. Profile it. If you genuinely need expensive math per frame, do it offline against the session database.
+- **"A widget skips frames."** Widgets sample on their tick, not per frame. They're not supposed to render every frame. The export and Historian paths see every frame; the UI doesn't need to.
+- **"My transform makes the dashboard stutter."** Transforms run on the main thread because they read peer-dataset values that are also on the main thread. A heavy transform (regex, JSON parsing, tight Lua loops) will block. Profile it. If you genuinely need expensive math per frame, do it offline against the Historian database.
 
 ## See also
 
 - [Data Flow](Data-Flow.md): the high-level user view of how data moves from device to dashboard.
-- [The Data Hotpath](Data-Hotpath.md): the technical deep dive into FrameReader, FrameBuilder, and the lock-free queues.
-- [Benchmark Dialog](Benchmark.md): measures the single-threaded hot path on your hardware; the UI freeze it warns about is this threading model in action.
+- [The Acquisition Pipeline](Data-Hotpath.md): the technical deep dive into FrameReader, FrameBuilder, and the lock-free queues.
+- [Benchmark Dialog](Benchmark.md): measures the single-threaded pipeline on your hardware; the UI freeze it warns about is this threading model in action.
 - [Data Sources](Data-Sources.md): per-driver capability summary, including where each driver sits in the threading model.
-- [Drivers — Audio Input](Drivers-Audio.md): the canonical proof-of-concept for the high-throughput hot path.
+- [Drivers — Audio Input](Drivers-Audio.md): the canonical proof-of-concept for the high-throughput pipeline.

@@ -41,7 +41,7 @@ namespace Sessions {
 class Player;
 
 /**
- * @brief Owns the session database file and backs the Database Explorer UI.
+ * @brief Owns the historian database file and backs the Historian UI.
  */
 class DatabaseManager : public QObject {
   // clang-format off

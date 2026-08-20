@@ -132,7 +132,7 @@ void API::Handlers::SessionsHandler::registerBrowsingCommands()
     schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("filePath")};
     registry.registerCommand(
       QStringLiteral("sessions.openDatabase"),
-      QStringLiteral("Open a session database file for browsing (params: filePath)"),
+      QStringLiteral("Open a historian database file for browsing (params: filePath)"),
       schema,
       &openDatabase);
   }
@@ -433,7 +433,7 @@ API::CommandResponse API::Handlers::SessionsHandler::getCanonicalDbPath(const QS
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Open a session database file by path.
+ * @brief Open a historian database file by path.
  */
 API::CommandResponse API::Handlers::SessionsHandler::openDatabase(const QString& id,
                                                                   const QJsonObject& params)

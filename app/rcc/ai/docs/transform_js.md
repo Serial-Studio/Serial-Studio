@@ -3,8 +3,8 @@
 A transform turns a raw numeric (or string) dataset value into the value the
 dashboard plots, displays, and exports. Transforms run on every frame, in
 declared dataset order. They are independent per dataset. (When the project's
-opt-in `changeDrivenTransforms` property is on, a virtual dataset's transform is
-skipped on a frame where none of the table registers/datasets it reads changed;
+opt-in `changeDrivenTransforms` property is on, a computed dataset's transform is
+skipped on a frame where none of the table variables/datasets it reads changed;
 input discovery is automatic, so scripts are unaffected.)
 
 ## Contract
@@ -22,13 +22,13 @@ function transform(value) {
   rejects the transform's output and the dashboard uses the **raw** value
   instead. (No exception, just a fallback.)
 
-## Virtual vs non-virtual
+## Computed vs regular datasets
 
 Set `virtual: true` on the dataset **only** when the transform has no
 parser-supplied `value`, i.e. its output is built purely from peers,
 tables, or constants (e.g. `Power = Voltage × Current`). A transform
 that USES `value` (unit conversion like `km/h = m/s × 3.6`, EMA
-smoothing, calibration, deadband) stays non-virtual. Rule of thumb: if
+smoothing, calibration, deadband) stays a regular dataset. Rule of thumb: if
 the body references the `value` argument, leave `virtual` alone.
 
 ## Isolation
@@ -46,18 +46,18 @@ That means top-level `var/let/const` are private per dataset, even when
 several datasets in the same source share a JS engine. Two datasets can
 both define `let alpha = 0.2` without clobbering each other.
 
-## Data table API: the central data bus
+## Shared-table API: the central data bus
 
-Transforms read from and write to two kinds of registers.
+Transforms read from and write to two kinds of variables.
 
-**System table** (`__datasets__`, always present): two registers per
+**System table** (`__datasets__`, always present): two variables per
 dataset, `raw:<uniqueId>` and `final:<uniqueId>`, populated by the
 FrameBuilder during parsing. Read-only from a transform. You almost
 never read it via `tableGet`; use the convenience helpers below, which
 are faster and more legible.
 
 **User tables**: defined in the project (create via
-`project.dataTable.add` + `project.dataTable.addRegister`). Each register
+`project.dataTable.add` + `project.dataTable.addRegister`). Each variable
 is one of two types:
 
 - `Constant`: single immutable value across the session. Set once at
@@ -78,7 +78,7 @@ tableSet(tableName, registerName, value)       // user-table writes only
 tableHandle(tableName, registerName)           // -> handle (number), or -1; resolve ONCE at load
 tableHandleMany(tableName, registerNames)      // -> array of handles
 tableGetH(handle)                              // read by handle (fast path; no name lookup)
-tableSetH(handle, value)                       // write by handle (computed registers only)
+tableSetH(handle, value)                       // write by handle (computed variables only)
 datasetGetRaw(uniqueId | "alias")              // raw value; EARLIER dataset = this frame, later = previous frame
 datasetGetFinal(uniqueId | "alias")            // final value of an EARLIER dataset (this frame)
 ```
@@ -88,9 +88,9 @@ arg is ALWAYS an alias, a number ALWAYS a uniqueId — no coercion, so
 `datasetGetRaw("128")` is not `datasetGetRaw(128)`. An unknown alias returns
 `undefined` (one-time warning), same as an unknown `uniqueId`. An alias is an
 optional, unique, user-set name from the Project Editor; it survives `uniqueId`
-renumbering and mirrors as `__datasets__` registers `raw:<alias>` / `final:<alias>`.
+renumbering and mirrors as `__datasets__` variables `raw:<alias>` / `final:<alias>`.
 
-For a transform that hits the same registers every call, resolve handles once in a top-level
+For a transform that hits the same variables every call, resolve handles once in a top-level
 variable and use `tableGetH`/`tableSetH` instead of the name-keyed calls. A stale handle (after a
 table-definition edit) is a safe no-op; the script re-resolves on its next load.
 
@@ -136,15 +136,15 @@ when peer reads return stale values.
 - **Per-dataset state across frames** (EMA, last-seen value, deadband
   hysteresis): use a top-level `let`/`var` in your transform script. The
   IIFE wrapping keeps each dataset's locals private. Cheaper than a
-  table register and isolated to the one dataset.
+  table variable and isolated to the one dataset.
 - **State shared across datasets and frames** (a filter whose output
   several downstream channels read, a long-running integrator, a
-  latched alarm): use a Computed register, which persists.
+  latched alarm): use a Computed variable, which persists.
 - **Shared *constants*** (calibration coefficients used by N channels,
-  lookup tables, full-scale ranges): use a Constant register.
+  lookup tables, full-scale ranges): use a Constant variable.
 - **Cross-dataset derived values within one frame** (compute speed from
   dx and dt that arrive in the same frame): use `datasetGetRaw` to read a
-  peer dataset, OR write to a Computed register in the earlier transform
+  peer dataset, OR write to a Computed variable in the earlier transform
   and `tableGet` it from the later one.
 
 ## Examples
@@ -188,10 +188,10 @@ function transform(dx) {
 }
 ```
 
-### Running integrator via Computed register
+### Running integrator via Computed variable
 
 ```js
-// Computed register Trip.litresUsed (defaultValue 0) persists across
+// Computed variable Trip.litresUsed (defaultValue 0) persists across
 // frames, so the running total accumulates session-long.
 function transform(litresPerHour, info) {
   if (!info) return tableGet('Trip', 'litresUsed') || 0;
