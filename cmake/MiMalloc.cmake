@@ -139,6 +139,16 @@ function(target_link_mimalloc target)
     return()
   endif()
 
+  # The Windows redirect DLL patches malloc at load time and must initialize before the CRT. A
+  # Debug build loads the debug CRT (ucrtbased) first, so the redirect loses the race, falls back
+  # to the system heap, and a half-redirected allocator over the debug CRT crashes on the first
+  # cross-boundary free. mimalloc is a release-hotpath optimization only, so skip it here rather
+  # than ship a Debug build that fails to launch.
+  if(WIN32 AND MSVC AND CMAKE_BUILD_TYPE STREQUAL "Debug")
+    message(STATUS "mimalloc disabled for Windows Debug build (${target})")
+    return()
+  endif()
+
   # Expose <mimalloc.h> so the app can tune runtime options (see main.cpp). The macro gates those
   # calls out of builds where the override is absent (SS_USE_MIMALLOC=OFF, sanitizers, other OSes).
   target_compile_definitions(${target} PRIVATE SS_MIMALLOC_ACTIVE=1)
