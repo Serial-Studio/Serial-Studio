@@ -602,9 +602,11 @@ jobs:
         fi
 
         for m in libsoftokn3 libfreebl3 libfreeblpriv3 libnssckbi libnssdbm3; do
-          if [ -f "AppDir-compat/usr/lib/$m.so" ]; then
-            mv "AppDir-compat/usr/lib/$m.so" AppDir-compat/usr/shared/lib/
-          fi
+          src="AppDir-compat/usr/lib/$m.so"
+          dst="AppDir-compat/usr/shared/lib/$m.so"
+          [ -f "$src" ] || continue
+          [ -e "$dst" ] || mv "$src" "$dst"
+          rm -f "$src"
         done
 
         for m in libnss_files.so.2 libnss_dns.so.2 libnss_resolve.so.2; do
@@ -1345,9 +1347,11 @@ jobs:
         fi
 
         for m in libsoftokn3 libfreebl3 libfreeblpriv3 libnssckbi libnssdbm3; do
-          if [ -f "AppDir-compat/usr/lib/$m.so" ]; then
-            mv "AppDir-compat/usr/lib/$m.so" AppDir-compat/usr/shared/lib/
-          fi
+          src="AppDir-compat/usr/lib/$m.so"
+          dst="AppDir-compat/usr/shared/lib/$m.so"
+          [ -f "$src" ] || continue
+          [ -e "$dst" ] || mv "$src" "$dst"
+          rm -f "$src"
         done
 
         for m in libnss_files.so.2 libnss_dns.so.2 libnss_resolve.so.2; do
