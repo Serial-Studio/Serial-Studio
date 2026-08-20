@@ -490,6 +490,7 @@ QString Sessions::Verifier::reparseSession(const QString& projectJson,
 
   const bool fed = feedArchivedBytes(injectTimestamps);
 
+  builder.flushOpenBlocks();
   exporter.flushWorker();
   exporter.closeFile();
   exporter.setExportEnabled(false);
@@ -563,6 +564,7 @@ bool Sessions::Verifier::feedArchivedBytes(bool injectTimestamps)
       m_chunkBudgetExceeded = true;
 
     if (sinceFlush >= kFlushEveryFrames) {
+      builder.flushOpenBlocks();
       exporter.flushWorker();
       QCoreApplication::processEvents();
       sinceFlush = 0;

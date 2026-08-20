@@ -425,29 +425,26 @@ def test_timestamp_pipeline_starts_in_driver_and_shares_parsed_frames():
     assert "m_queue.try_enqueue(std::move(ptr))" in reader_cpp
 
     assert "void hotpathRxFrame(const IO::CapturedDataPtr& data);" in builder_h
-    assert (
-        "void hotpathTxFrame(const DataModel::TimestampedFramePtr& frame);" in builder_h
-    )
-    # Since spec 0051 the builder runs on the pipeline thread and hands the pooled frame to
-    # the dashboard through PipelineHost's SPSC ring, drained on the GUI display tick; it must
-    # never call into UI::Dashboard directly from the frame path again.
-    assert "pipeline.publishFrameToDashboard(frame);" in builder_cpp
+
+    # Spec 0055 unified frame publication on a single pooled DataBlock lane: the
+    # per-frame TimestampedFrame TX path (hotpathTxFrame / acquireFrame) is gone.
+    # The builder stages parsed rows and flushes a pooled block to the dashboard
+    # through PipelineHost's SPSC ring, drained on the GUI display tick; it must
+    # never call into UI::Dashboard directly from the frame path.
+    assert "void hotpathTxFrame" not in builder_h
+    assert "pipeline.publishBlockToDashboard(block);" in builder_cpp
+    assert "publishFrameToDashboard" not in builder_cpp
     assert "dashboard.hotpathRxFrame(" not in builder_cpp
+
+    # Source owns time: each row's stamp is derived from the driver's timestamp
+    # (data->timestamp + step * i), never a builder-side clock.
     assert "const auto frameTs = data->timestamp + step * i;" in builder_cpp
-    # Hotpath fan-out draws each TimestampedFramePtr from a fixed-size slot
-    # pool (acquireFrame) so we never heap-allocate per frame.
-    assert "hotpathTxFrame(acquireFrame(m_frame, frameTs));" in builder_cpp
-    assert (
-        "std::make_shared<DataModel::TimestampedFrame>(m_frame, frameTs)"
-        not in builder_cpp
-    ), "FrameBuilder hotpath must use acquireFrame() pool, not std::make_shared"
     assert "updateTimestampedFramesEnabled" not in builder_cpp
     assert "nextTimestampedFrameTime" not in builder_cpp
 
-    assert (
-        "void hotpathRxFrame(const DataModel::TimestampedFramePtr& frame);"
-        in dashboard_h
-    )
+    # The dashboard no longer receives per-frame TimestampedFrame pushes; pooled
+    # blocks arrive over the pipeline ring, so the old hotpath frame slot is gone.
+    assert "void hotpathTxFrame" not in dashboard_h
     assert (
         "void hotpathTxRawBytes(int deviceId, const IO::CapturedDataPtr& data);"
         in sessions_h
@@ -532,11 +529,11 @@ def test_frame_reader_buffer_overflow_log_is_throttled():
 
 
 def test_frame_builder_pool_scan_copies_no_shared_ptr():
-    """The pool-slot scan must not copy a slot's shared_ptr per iteration. The
-    allocator probes free slots via use_count() == 1 (the pool holds the only
-    reference) inside claimPoolSlot(), and acquireFrame binds the chosen slot by
-    const reference and returns through the aliasing TimestampedFramePtr ctor --
-    no per-frame control block, no copy in the scan."""
+    """The pool-slot allocator must not copy a slot's shared_ptr while probing.
+    claimPoolSlot delegates to the pool policy with a free-slot predicate that
+    reads use_count() == 1 (the pool holds the only reference) without copying the
+    slot, and the chosen slot is bound by const reference and mutated through a raw
+    pointer -- no per-frame control block, no copy in the scan."""
     text = _read("app/src/DataModel/FrameBuilder.cpp")
 
     scan = re.search(
@@ -546,27 +543,17 @@ def test_frame_builder_pool_scan_copies_no_shared_ptr():
     assert scan is not None, "claimPoolSlot body must be present"
     scan_body = scan.group(0)
 
-    # The scan probes the pool's own reference count -- no shared_ptr copy, no CAS.
-    assert "if (m_framePool[idx].use_count() != 1)" in scan_body
+    # The free-slot probe reads the pool's own reference count -- no copy, no CAS.
+    assert "m_framePool[slot].use_count() == 1" in scan_body
     assert "compare_exchange_strong" not in scan_body, "scan must not CAS a slot flag"
     assert (
-        "auto slotPtr = m_framePool[idx];" not in scan_body
+        "auto slotPtr = m_framePool[" not in scan_body
     ), "scan must not copy a slot shared_ptr"
 
-    body = re.search(
-        r"DataModel::TimestampedFramePtr DataModel::FrameBuilder::acquireFrame\("
-        r"\s*const DataModel::Frame& src, const DataModel::TimestampedFrame::SteadyTimePoint& ts\)"
-        r"\s*\{[\s\S]*?\n\}",
-        text,
-    )
-    assert body is not None, "acquireFrame body must be present"
-    snippet = body.group(0)
-
-    # The claimed slot is bound by reference, mutated through a raw pointer, and
-    # returned via the aliasing ctor -- the only incref happens at construction.
-    assert "const auto& slotOwner = m_framePool[idx];" in snippet
-    assert "auto* slotRaw         = slotOwner.get();" in snippet
-    assert "return TimestampedFramePtr(slotOwner, &slotRaw->frame);" in snippet
+    # The claimed slot is bound by const reference and mutated through a raw
+    # pointer -- no per-frame shared_ptr copy on the publish path.
+    assert "const auto& slotOwner = m_framePool[idx];" in text
+    assert "auto* slotRaw         = slotOwner.get();" in text
 
 
 # ----------------------------------------------------------------------------------
@@ -1064,24 +1051,26 @@ def test_dashboard_snapshots_and_restores_time_rings_on_reconfigure():
     text = _read("app/src/UI/Dashboard.cpp")
     header = _read("app/src/UI/Dashboard.h")
 
-    # The four helpers must be declared and defined.
+    # The four helpers must be declared and defined. The ring type is DSP::EnvelopeRing
+    # since the spec 0057 cascading-envelope rework (was DSP::TimeRing).
     for sig in (
-        "QHash<qint64, DSP::TimeRing> snapshotPlotTimeRings() const;",
-        "QHash<qint64, std::vector<DSP::TimeRing>> snapshotMultiplotTimeRings() const;",
-        "void restorePlotTimeRings(QHash<qint64, DSP::TimeRing>& snapshot);",
-        "void restoreMultiplotTimeRings(QHash<qint64, std::vector<DSP::TimeRing>>& snapshot);",
+        "QHash<qint64, DSP::EnvelopeRing> snapshotPlotTimeRings() const;",
+        "QHash<qint64, std::vector<DSP::EnvelopeRing>> snapshotMultiplotTimeRings() const;",
+        "void restorePlotTimeRings(QHash<qint64, DSP::EnvelopeRing>& snapshot);",
+        "void restoreMultiplotTimeRings(QHash<qint64, std::vector<DSP::EnvelopeRing>>& snapshot);",
     ):
         assert sig in header, f"missing in Dashboard.h: {sig}"
 
     # restorePlotTimeRings handles both same-shape splice and different-shape replay.
+    # Shape/interval are read off the base level (level0) of the envelope ring.
     plot_restore = re.search(
         r"void UI::Dashboard::restorePlotTimeRings\([\s\S]*?\n\}",
         text,
     )
     assert plot_restore is not None
     snippet = plot_restore.group(0)
-    assert "live.time.capacity() == kept.time.capacity()" in snippet
-    assert "qFuzzyCompare(live.interval, kept.interval)" in snippet
+    assert "live.level0.time.capacity() == kept.level0.time.capacity()" in snippet
+    assert "qFuzzyCompare(live.level0.interval, kept.level0.interval)" in snippet
     assert "live = std::move(kept);" in snippet
     assert "replayTimeRing(kept, live);" in snippet
 
@@ -1092,8 +1081,14 @@ def test_dashboard_snapshots_and_restores_time_rings_on_reconfigure():
     )
     assert multi_restore is not None
     multi_snippet = multi_restore.group(0)
-    assert "live[j].time.capacity() == kept[j].time.capacity()" in multi_snippet
-    assert "qFuzzyCompare(live[j].interval, kept[j].interval)" in multi_snippet
+    assert (
+        "live[j].level0.time.capacity() == kept[j].level0.time.capacity()"
+        in multi_snippet
+    )
+    assert (
+        "qFuzzyCompare(live[j].level0.interval, kept[j].level0.interval)"
+        in multi_snippet
+    )
     assert "live[j] = std::move(kept[j]);" in multi_snippet
     assert "replayTimeRing(kept[j], live[j]);" in multi_snippet
 

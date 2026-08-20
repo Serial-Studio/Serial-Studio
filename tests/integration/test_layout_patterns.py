@@ -16,6 +16,19 @@ SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 import pytest
 
 # ---------------------------------------------------------------------------
+# Guard: the layout pattern lives on a dashboard session, which headless CI
+# has no GUI to create. Skip the whole file there, matching test_window_layout.
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture(autouse=True)
+def _require_session(api_client):
+    status = api_client.command("ui.window.getStatus")
+    if not status.get("sessionActive", True):
+        pytest.skip("No dashboard session active (headless mode)")
+
+
+# ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
 

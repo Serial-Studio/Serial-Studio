@@ -83,7 +83,7 @@ def audio_source(api_client):
         pytest.skip("no audio input device present")
 
     api_client.command("io.setBusType", {"busType": 3})
-    api_client.command("io.audio.setInputDevice", {"index": 0})
+    api_client.command("io.audio.setInputDevice", {"deviceIndex": 0})
     time.sleep(0.2)
     return devices[0]
 
