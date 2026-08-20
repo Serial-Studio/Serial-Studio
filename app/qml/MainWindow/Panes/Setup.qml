@@ -320,9 +320,9 @@ Widgets.Pane {
           opacity: enabled ? 1 : 0.5
           visible: Cpp_CommercialBuild
           palette.highlight: "#2e7dd1"
-          text: qsTr("Historian")
           Layout.alignment: Qt.AlignLeft
           enabled: root.dataExportAllowed
+          text: qsTr("Historian Database")
           checked: Cpp_CommercialBuild
                    && root.dataExportAllowed
                    && Cpp_Sessions_Export.exportEnabled
