@@ -142,7 +142,7 @@ void TstExpressionTransform::tableRegisters()
 
   Program program;
   QVERIFY(!compile("table(cal, missing)", names, tables, program, error));
-  QVERIFY(error.contains(QStringLiteral("unknown register")));
+  QVERIFY(error.contains(QStringLiteral("unknown variable")));
 
   QVERIFY(!compile("table(cal, scale)", names, program, error));
   QVERIFY(error.contains(QStringLiteral("not available")));
