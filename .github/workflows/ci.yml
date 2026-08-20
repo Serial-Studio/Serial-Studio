@@ -594,8 +594,18 @@ jobs:
 
         DLOPEN_LIBS=$(find AppDir-compat/usr/plugins AppDir-compat/usr/qml -type f -name '*.so*' 2>/dev/null || true)
 
+        # Pre-create shared/lib as a real directory: when it is absent and usr/lib exists,
+        # lib4bin symlinks shared/lib -> ../lib, so the whole closure lands in usr/lib and
+        # the coverage checks below then delete the only copy.
+        mkdir -p AppDir-compat/usr/shared/lib
+
         ./sharun-aio lib4bin --dst-dir AppDir-compat/usr --with-sharun --hard-links --with-hooks \
           "$BIN_SRC"/* $DLOPEN_LIBS
+
+        if [ -L AppDir-compat/usr/shared/lib ]; then
+          echo "::error::usr/shared/lib is a symlink into usr/lib; compat conversion unsafe"
+          exit 1
+        fi
 
         if [ -n "$WEBPROC_DIR" ] && [ "$WEBPROC_DIR" != "AppDir-compat/usr/bin" ]; then
           ln -f AppDir-compat/usr/bin/QtWebEngineProcess "$WEBPROC_DIR/QtWebEngineProcess"
@@ -1339,8 +1349,18 @@ jobs:
 
         DLOPEN_LIBS=$(find AppDir-compat/usr/plugins AppDir-compat/usr/qml -type f -name '*.so*' 2>/dev/null || true)
 
+        # Pre-create shared/lib as a real directory: when it is absent and usr/lib exists,
+        # lib4bin symlinks shared/lib -> ../lib, so the whole closure lands in usr/lib and
+        # the coverage checks below then delete the only copy.
+        mkdir -p AppDir-compat/usr/shared/lib
+
         ./sharun-aio lib4bin --dst-dir AppDir-compat/usr --with-sharun --hard-links --with-hooks \
           "$BIN_SRC"/* $DLOPEN_LIBS
+
+        if [ -L AppDir-compat/usr/shared/lib ]; then
+          echo "::error::usr/shared/lib is a symlink into usr/lib; compat conversion unsafe"
+          exit 1
+        fi
 
         if [ -n "$WEBPROC_DIR" ] && [ "$WEBPROC_DIR" != "AppDir-compat/usr/bin" ]; then
           ln -f AppDir-compat/usr/bin/QtWebEngineProcess "$WEBPROC_DIR/QtWebEngineProcess"
