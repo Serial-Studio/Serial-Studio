@@ -40,7 +40,7 @@ Each session captures three per-sample streams, keyed by session ID and nanoseco
 
 | Data             | Table              | Contents |
 |------------------|--------------------|----------|
-| Frame values     | `readings`         | Per-dataset raw and final values at each frame |
+| Dataset values   | `blocks`           | Per-dataset final and pre-transform values for every published block, numeric and text |
 | Raw bytes        | `raw_bytes`        | Every byte that arrived on the driver, exactly as received |
 | Shared tables    | `table_snapshots`  | Variables of user shared tables, captured on change at a 1 Hz poll |
 | Session metadata | `sessions`         | Project title, start time, end time, embedded project JSON, notes |
@@ -48,7 +48,84 @@ Each session captures three per-sample streams, keyed by session ID and nanoseco
 
 The embedded project JSON in `sessions.project_json` is a snapshot of the project at the moment recording started. That's how a session recorded with one version of the project can replay faithfully later, even if the live project has changed in the meantime.
 
-Both raw bytes and parsed frames are captured. Replay re-renders widgets from the stored parsed (final) values; the raw byte stream is archived for inspection, CSV, or external analysis, but it is not re-parsed during replay. Tables and computed variables are polled once a second and only changed variables are written, so `table_snapshots` is not a per-frame record like `readings` and `raw_bytes`.
+Both raw bytes and parsed values are captured. Replay re-renders widgets from the stored parsed (final) values; the raw byte stream is archived for inspection, CSV, or external analysis, but it is not re-parsed during replay. Tables and computed variables are polled once a second and only changed variables are written, so `table_snapshots` is not a per-frame record like `blocks` and `raw_bytes`.
+
+Databases recorded by older versions store per-frame rows in `readings` and `stream_blocks` instead of `blocks`. Current builds still read those tables for replay and CSV export, but no longer write them; `sessions.capture_format` records which format a session uses (`2` for the block format, `1` or NULL for the legacy per-frame format).
+
+## Database format
+
+The Historian file is a standard SQLite 3 database: no custom container, no compression, no encryption. Any SQLite client can open it directly, so recorded sessions are usable from your own software without going through Serial Studio at all. The schema is created with `PRAGMA user_version = 4` and evolves additively (new columns and tables are added, existing ones are never renamed or reordered), so queries that name their columns keep working across application upgrades.
+
+The database runs in Write-Ahead-Logging mode, so reading it while Serial Studio is recording is safe. Open it read-only from external tools (`file:...?mode=ro` in SQLite URI syntax); an external writer holding a lock can stall or corrupt an active recording.
+
+### Timestamps
+
+Every `*_ns` column is a 64-bit signed integer counting nanoseconds from the session's first recorded sample, not from the Unix epoch. The wall-clock anchor is `sessions.started_at`, an ISO 8601 local timestamp such as `2026-08-20T14:03:11`; add a `timestamp_ns` value to it to place a sample in calendar time. `sessions.ended_at` uses the same format. Within `raw_bytes`, timestamps are strictly increasing: entries that arrive in the same nanosecond are stepped forward by 1 ns so ordering is unambiguous.
+
+### Sample data: the `blocks` table
+
+One row per dataset per published block, for frame-driven and stream-driven sources alike. Join `blocks` to `columns` on `(session_id, unique_id)` to resolve the dataset's title, group, units, and widget type.
+
+| Column | Meaning |
+|--------|---------|
+| `session_id`, `unique_id`, `source_id` | Session, dataset, and stream source the row belongs to |
+| `block_number` | Publication counter, increasing per session |
+| `frames` | Number of samples encoded in the blobs of this row |
+| `t0_ns`, `t_end_ns` | Timestamps of the first and last sample in the block |
+| `dt_ns` | Sample period. Non-zero: sample *i* sits at `t0_ns + i * dt_ns`. Zero: the block is irregular and per-sample offsets live in `times` |
+| `is_numeric` | 1 when every sample in the block is numeric |
+| `min_value`, `max_value`, `sum_value`, `finite_count` | Precomputed statistics over the finite final values, NULL when the block has none |
+
+The sample payloads are binary blobs, all little-endian regardless of the recording machine:
+
+| Column | Encoding |
+|--------|----------|
+| `values_blob` | `frames` IEEE-754 float64 values (8 bytes each): the final, post-transform values |
+| `raw_values` | Same encoding, the pre-transform values; NULL when the block carries no pre-transform twin. Frame-driven sources always write it, so without a transform it duplicates `values_blob` |
+| `texts` | `frames` entries, each a uint32 byte count followed by that many UTF-8 bytes: the final text values; NULL for numeric-only datasets |
+| `raw_texts` | Same encoding as `texts`, the pre-transform text; NULL unless the dataset has both |
+| `times` | `frames` int64 values: per-sample nanosecond offsets from `t0_ns`; present only when `dt_ns` is 0 |
+
+A blob whose length does not match `frames` (times 8 for the fixed-width blobs) is truncated or foreign; reject it rather than decoding past its end.
+
+### Metadata tables
+
+- **`sessions`**: one row per recording. Besides the fields listed above, it carries `app_version`, `capture_format`, `repro_class` (the verifier's reproducibility classification), `frames_dropped` and `overflow_bytes` (link-loss counters), `raw_sha256` and `readings_sha256` (integrity fingerprints checked by the built-in verifier), and `view_state` (the dashboard layout at recording time).
+- **`columns`**: the per-session dataset catalog: `unique_id`, `title`, `group_title`, `units`, `widget`, `is_virtual`, plus `source_id` and `source_title` for stream sources.
+- **`raw_bytes`**: `data` is the received byte stream as a BLOB, `device_id` distinguishes devices on multi-device links.
+- **`table_snapshots`**: `table_name` and `register_name` identify the shared-table variable; exactly one of `numeric_value` or `string_value` is set.
+- **`tags`** and **`session_tags`**: the tag catalog (labels unique, case-insensitive) and the session-to-tag join table.
+- **`project_metadata`**: key/value store. `created_at` stamps database creation; `lock_password_hash` appears when the database is locked. The lock only blocks deletion inside Serial Studio; the file itself is never encrypted.
+- **`verifications`**: append-only log of verifier runs with timestamp, application version, verdict, and detail JSON.
+- **`readings`**, **`stream_blocks`**: legacy per-frame and stream-sample tables, present for databases recorded before the block format. `readings` stores one row per dataset per frame (`raw_*` and `final_*` value pairs); `stream_blocks` stores float64 sample blobs with the same encoding as `values_blob`.
+
+### Reading a session from Python
+
+```python
+import sqlite3
+import struct
+
+db = sqlite3.connect("file:My Project.db?mode=ro", uri=True)
+
+for sid, started in db.execute("SELECT session_id, started_at FROM sessions"):
+    print(sid, started)
+
+query = """
+  SELECT b.t0_ns, b.dt_ns, b.frames, b.values_blob, b.times
+  FROM blocks b
+  JOIN columns c ON c.session_id = b.session_id AND c.unique_id = b.unique_id
+  WHERE b.session_id = ? AND c.title = 'Temperature'
+  ORDER BY b.t0_ns
+"""
+for t0, dt, frames, blob, times in db.execute(query, (1,)):
+    values = struct.unpack(f"<{frames}d", blob)
+    if dt:
+        stamps = [t0 + i * dt for i in range(frames)]
+    else:
+        stamps = [t0 + off for off in struct.unpack(f"<{frames}q", times)]
+```
+
+Each iteration yields one block: `values` holds the final values and `stamps` their session-relative timestamps in nanoseconds. The same pattern with `raw_values` recovers pre-transform values, and `texts` decodes by walking uint32 length prefixes.
 
 ## The Historian window
 
