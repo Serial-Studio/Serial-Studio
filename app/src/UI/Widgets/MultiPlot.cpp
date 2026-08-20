@@ -862,11 +862,14 @@ void Widgets::MultiPlot::padDerivedRange()
 }
 
 /**
- * @brief Selects the padding strategy for the current m_minY/m_maxY pair.
+ * @brief Selects the padding strategy for the current m_minY/m_maxY pair. An empty scan
+ *        leaves the min > max sentinels (no visible curves yet), which would otherwise
+ *        overflow the padding into an infinite axis range that spins QtGraphs' tick-anchor
+ *        loop forever.
  */
 void Widgets::MultiPlot::applyDerivedYBounds()
 {
-  if (!std::isfinite(m_minY) || !std::isfinite(m_maxY)) {
+  if (!std::isfinite(m_minY) || !std::isfinite(m_maxY) || m_minY > m_maxY) {
     m_minY = 0;
     m_maxY = 1;
     return;

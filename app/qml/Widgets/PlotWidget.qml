@@ -314,6 +314,20 @@ Item {
   }
 
   //
+  // QtGraphs normalizes the tick anchor with an unbounded add/subtract loop, so a non-finite
+  // or far-out-of-range anchor freezes the app inside updatePolish: clamp into [min, max]
+  //
+  function safeTickAnchor(desired, min, max) {
+    const lo = Math.min(min, max)
+    const hi = Math.max(min, max)
+    const anchor = isFinite(desired) ? desired : (isFinite(lo) ? lo : 0)
+    if (!isFinite(lo) || !isFinite(hi))
+      return isFinite(anchor) ? anchor : 0
+
+    return Math.max(lo, Math.min(hi, anchor))
+  }
+
+  //
   // Mantissa of a tick period (1, 2 or 5), tolerant of floating-point scaling
   //
   function tickMantissa(interval) {
@@ -964,7 +978,8 @@ Item {
       visible: root.yLabelVisible
       tickInterval: root.yTickInterval
       labelDecimals: root.tickDecimals(root.yTickInterval)
-      tickAnchor: root.logY ? Math.ceil(root.yMin) : root.yMin
+      tickAnchor: root.safeTickAnchor(root.logY ? Math.ceil(root.yMin) : root.yMin,
+                                      root.yMin, root.yMax)
       subTickCount: root.subTicksFor(root.yTickInterval, root.logY)
 
       labelDelegate: Item {
@@ -1001,7 +1016,9 @@ Item {
       tickInterval: root.xTickInterval
       labelDecimals: root.tickDecimals(root.xTickInterval)
       subTickCount: root.subTicksFor(root.xTickInterval, root.logX)
-      tickAnchor: root.logX ? Math.ceil(root.xMin) : (root.xZeroSet ? root.xZero : root.xMin)
+      tickAnchor: root.safeTickAnchor(root.logX ? Math.ceil(root.xMin)
+                                                : (root.xZeroSet ? root.xZero : root.xMin),
+                                      root.xMin, root.xMax)
 
       labelDelegate: Item {
         id: _xLabelItem

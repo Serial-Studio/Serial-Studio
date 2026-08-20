@@ -602,7 +602,11 @@ jobs:
           mv "$WEBPROC" "$BIN_SRC/"
         fi
 
-        DLOPEN_LIBS=$(find AppDir-compat/usr/plugins AppDir-compat/usr/qml -type f -name '*.so*' 2>/dev/null || true)
+        # usr/lib rides along as explicit input: libraries that are only dlopened (NSS's
+        # libsoftokn3 and friends) are reachable from no executable or plugin, so ldd-driven
+        # dependency walking alone would drop them and their private deps (libsqlite3).
+        DLOPEN_LIBS=$(find AppDir-compat/usr/plugins AppDir-compat/usr/qml AppDir-compat/usr/lib \
+          -type f -name '*.so*' 2>/dev/null || true)
 
         # Pre-create shared/lib as a real directory: when it is absent and usr/lib exists,
         # lib4bin symlinks shared/lib -> ../lib, so the whole closure lands in usr/lib and
@@ -1372,7 +1376,11 @@ jobs:
           mv "$WEBPROC" "$BIN_SRC/"
         fi
 
-        DLOPEN_LIBS=$(find AppDir-compat/usr/plugins AppDir-compat/usr/qml -type f -name '*.so*' 2>/dev/null || true)
+        # usr/lib rides along as explicit input: libraries that are only dlopened (NSS's
+        # libsoftokn3 and friends) are reachable from no executable or plugin, so ldd-driven
+        # dependency walking alone would drop them and their private deps (libsqlite3).
+        DLOPEN_LIBS=$(find AppDir-compat/usr/plugins AppDir-compat/usr/qml AppDir-compat/usr/lib \
+          -type f -name '*.so*' 2>/dev/null || true)
 
         # Pre-create shared/lib as a real directory: when it is absent and usr/lib exists,
         # lib4bin symlinks shared/lib -> ../lib, so the whole closure lands in usr/lib and

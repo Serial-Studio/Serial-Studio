@@ -416,7 +416,7 @@ Widgets.Pane {
         taskBar: root.taskBar
         taskbarView: _taskbar
         Layout.leftMargin: -1
-        Layout.rightMargin: -1
+        Layout.rightMargin: -2
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.minimumWidth: 480
@@ -647,10 +647,6 @@ Widgets.Pane {
       model: _paletteModel
       title: qsTr("Command Palette")
       titleIcon: "qrc:/icons/buttons/workspaces.svg"
-
-      //
-      // Parented to the host window so the dialog centers on the whole window, not the Loader.
-      //
       parent: root.hostWindow ? root.hostWindow.contentItem : root
     }
   }

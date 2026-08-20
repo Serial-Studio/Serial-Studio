@@ -3732,9 +3732,9 @@ void DataModel::FrameBuilder::compileTransformsExpr(TransformEngine& engine,
     return -1;
   };
 
-  const DataModel::Expression::TableResolver tables = [this](QStringView table,
+  const DataModel::Expression::TableResolver tables = [this](QStringView table_name,
                                                              QStringView reg) -> qint64 {
-    return m_tableStore.handleOf(table.toString(), reg.toString());
+    return m_tableStore.handleOf(table_name.toString(), reg.toString());
   };
 
   for (const auto& entry : entries) {
