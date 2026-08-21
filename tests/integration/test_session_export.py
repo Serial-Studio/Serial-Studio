@@ -130,6 +130,52 @@ def _row_count(path: Path, table: str) -> int:
             return 0
 
 
+def _sample_count(path: Path) -> int:
+    """Samples recorded for the session, spec-0055 schema aware.
+
+    Spec 0055 (commit f4e26ef04) unified both lanes onto the `blocks` table:
+    one row per dataset-column per published block, `frames` holding that
+    block's sample count. The legacy `readings` table is created for back-compat
+    but never written. Sum `frames` so the count survives the schema switch, and
+    fall back to a `readings` row count for pre-0055 archives.
+    """
+    if not path.exists():
+        return 0
+
+    with sqlite3.connect(str(path)) as conn:
+        try:
+            total = conn.execute(
+                "SELECT COALESCE(SUM(frames), 0) FROM blocks"
+            ).fetchone()[0]
+            if total:
+                return int(total)
+        except sqlite3.OperationalError:
+            pass
+        try:
+            return conn.execute("SELECT COUNT(*) FROM readings").fetchone()[0]
+        except sqlite3.OperationalError:
+            return 0
+
+
+def _recorded_unique_ids(path: Path) -> set[int]:
+    """Distinct dataset uids that received samples, spec-0055 schema aware."""
+    if not path.exists():
+        return set()
+
+    with sqlite3.connect(str(path)) as conn:
+        for table in ("blocks", "readings"):
+            try:
+                uids = {
+                    r[0]
+                    for r in conn.execute(f"SELECT DISTINCT unique_id FROM {table}")
+                }
+            except sqlite3.OperationalError:
+                continue
+            if uids:
+                return uids
+    return set()
+
+
 # ---------------------------------------------------------------------------
 # Basic flag toggling
 # ---------------------------------------------------------------------------
@@ -247,8 +293,8 @@ def test_session_records_project_file_frames(
     # And that at least one session + reading + column row made it in
     assert _row_count(db_path, "sessions") >= 1
     assert (
-        _row_count(db_path, "readings") >= 5
-    ), "fewer readings than expected — timer may not have drained the queue"
+        _sample_count(db_path) >= 5
+    ), "fewer samples than expected — timer may not have drained the queue"
     assert (
         _row_count(db_path, "columns") >= 1
     ), "columns table is empty — replay would fail with 'missing column definitions'"
@@ -324,7 +370,7 @@ def test_quickplot_session_writes_column_rows(
     )
 
     # And there should be actual data, otherwise the test is meaningless
-    assert _row_count(db_path, "readings") >= 5
+    assert _sample_count(db_path) >= 5
 
     # Source title is the NOT NULL column that originally broke the INSERT —
     # assert it's an empty string, not NULL, for every recorded column.
@@ -375,14 +421,13 @@ def test_quickplot_session_loads_for_replay(
 
     with sqlite3.connect(str(db_path)) as conn:
         column_uids = {r[0] for r in conn.execute("SELECT unique_id FROM columns")}
-        reading_uids = {
-            r[0] for r in conn.execute("SELECT DISTINCT unique_id FROM readings")
-        }
+    reading_uids = _recorded_unique_ids(db_path)
 
     assert column_uids, "columns table is empty — replay would abort"
-    assert reading_uids, "readings table is empty — test setup is wrong"
+    assert reading_uids, "blocks table is empty — test setup is wrong"
     assert reading_uids.issubset(column_uids), (
-        f"readings reference uids not in columns: {reading_uids - column_uids}. "
+        f"recorded samples reference uids not in columns: "
+        f"{reading_uids - column_uids}. "
         f"The replay path won't be able to map them back to dataset metadata."
     )
 

@@ -126,17 +126,27 @@ def clean_state(api_client):
 
 
 @pytest.fixture
-def device_simulator():
+def device_simulator(api_client):
     """
     Provide a device simulator for testing.
 
-    Automatically starts and stops the simulator.
+    Automatically starts and stops the simulator. Depends on api_client so the
+    app is disconnected from the simulator BEFORE the listening socket is torn
+    down: without this, fixture finalization order (a test that lists
+    clean_state or api_client after device_simulator) stops the simulator while
+    the app is still connected, and the app logs a mid-session device drop.
     """
     sim = DeviceSimulator(host="127.0.0.1", port=9000, protocol="tcp")
     sim.start()
 
     yield sim
 
+    try:
+        if api_client.is_connected():
+            api_client.disconnect_device()
+            time.sleep(0.1)
+    except Exception:
+        pass
     sim.stop()
 
 

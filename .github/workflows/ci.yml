@@ -471,13 +471,16 @@ jobs:
 
     #
     # linuxdeploy plus its Qt plugin build the AppDir; the SQL drivers and the TIFF reader are
-    # pruned first so the image carries only what the app loads. Two things the tool cannot bundle
-    # by itself are added afterwards: the offscreen platform plugin, since linuxdeploy ships xcb
-    # and wayland only while the integration tests run headless, and Qt WebEngine's NSS crypto
-    # backends, which NSS dlopen()s (softokn/freebl/nssckbi) so an ldd-based bundler never sees
-    # them and leaves a half-bundled NSS that crashes against the host's newer copies. No AppImage
-    # is packed here: the compat conversion below produces the only Linux AppImage shipped, so
-    # this AppDir is purely the input tree for the deb/rpm and compat steps
+    # pruned first so the image carries only what the app loads. linuxdeploy-plugin-qt deploys
+    # ONLY libqxcb by default, so the wayland platform plugins are requested explicitly via
+    # EXTRA_PLATFORM_PLUGINS and their shell/decoration/graphics integration plugin dirs are
+    # copied by hand — without them Plasma/GNOME wayland sessions are forced through
+    # XWayland+GLX. Two more things the tool cannot bundle by itself are added afterwards: the
+    # offscreen platform plugin (the integration tests run headless), and Qt WebEngine's NSS
+    # crypto backends, which NSS dlopen()s (softokn/freebl/nssckbi) so an ldd-based bundler
+    # never sees them and leaves a half-bundled NSS that crashes against the host's newer
+    # copies. No AppImage is packed here: the compat conversion below produces the only Linux
+    # AppImage shipped, so this AppDir is purely the input tree for the deb/rpm/compat steps
     #
     - name: '📦 Create AppDir'
       run: |
@@ -488,6 +491,7 @@ jobs:
         chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
 
         export QML_SOURCES_PATHS="${{env.QML_DIR}}"
+        export EXTRA_PLATFORM_PLUGINS="libqwayland-generic.so;libqwayland-egl.so"
 
         QT_PLUGINS_PATH="${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/plugins"
         rm -f "$QT_PLUGINS_PATH/imageformats/libqtiff.so"
@@ -499,6 +503,17 @@ jobs:
           cp -r "$QT_PLUGINS_PATH/canbus/"* AppDir/usr/plugins/canbus/ || echo "Warning: Could not copy canbus plugins"
         else
           echo "Warning: Qt canbus plugins not found at $QT_PLUGINS_PATH/canbus"
+        fi
+
+        for d in wayland-decoration-client wayland-graphics-integration-client wayland-shell-integration; do
+          if [ -d "$QT_PLUGINS_PATH/$d" ]; then
+            mkdir -p "AppDir/usr/plugins/$d"
+            cp -r "$QT_PLUGINS_PATH/$d/"* "AppDir/usr/plugins/$d/"
+          fi
+        done
+        if [ ! -f AppDir/usr/plugins/platforms/libqwayland-generic.so ]; then
+          echo "::error::wayland platform plugin missing from AppDir"
+          exit 1
         fi
 
         mkdir -p AppDir/usr/plugins/platforms
@@ -594,9 +609,37 @@ jobs:
           exit 1
         fi
 
+        # The closure carries GLVND's dispatch libs (libGLX/libEGL/libOpenGL) but those
+        # resolve the actual vendor driver by dlopen, and sharun's loader never searches the
+        # host's /usr/lib — with no bundled vendor the GLX/EGL vendor list is empty and Qt
+        # aborts with "Could not initialize GLX" on every desktop host (offscreen smoke runs
+        # never see it). Bundle Mesa's vendor libs and DRI drivers explicitly (dlopen-only:
+        # the ldd walk cannot find them); sharun auto-sets LIBGL_DRIVERS_PATH,
+        # __EGL_VENDOR_LIBRARY_DIRS and GBM_BACKENDS_PATH when the bundled dirs exist.
+        # NVIDIA-driver hosts fall back to bundled Mesa instead of aborting.
+        sudo apt-get install -y -q libgl1-mesa-dri libglx-mesa0 libegl-mesa0 >/dev/null
+        GL_VENDOR_LIBS=$(find /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu /usr/lib64 \
+          -maxdepth 1 \( -name 'libGLX_mesa.so*' -o -name 'libEGL_mesa.so*' \
+          -o -name 'libglapi.so*' -o -name 'libgallium*.so*' -o -name 'libgbm.so*' \) \
+          2>/dev/null || true)
+        if [ -z "$GL_VENDOR_LIBS" ]; then
+          echo "::error::Mesa GLX/EGL vendor libraries not found on build host"
+          exit 1
+        fi
+        DRI_DIR=$(find /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu /usr/lib64 \
+          -maxdepth 1 -type d -name dri 2>/dev/null | head -n1 || true)
+        if [ -z "$DRI_DIR" ] || ! ls "$DRI_DIR"/*.so >/dev/null 2>&1; then
+          echo "::error::Mesa DRI driver directory not found on build host"
+          exit 1
+        fi
+        GBM_DIR=$(find /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu /usr/lib64 \
+          -maxdepth 1 -type d -name gbm 2>/dev/null | head -n1 || true)
+        GBM_LIBS=""
+        [ -n "$GBM_DIR" ] && GBM_LIBS=$(ls "$GBM_DIR"/*.so 2>/dev/null || true)
+
         LD_LIBRARY_PATH="$PWD/AppDir-compat/usr/lib" \
           ./sharun-aio lib4bin --dst-dir AppDir-compat/usr --with-sharun --hard-links --with-hooks \
-          "$BIN_SRC"/* $DLOPEN_LIBS $TLS_LIBS
+          "$BIN_SRC"/* $DLOPEN_LIBS $TLS_LIBS $GL_VENDOR_LIBS "$DRI_DIR"/*.so $GBM_LIBS
 
         if ! find AppDir-compat/usr/shared/lib -name 'libssl.so.3*' | grep -q .; then
           echo "::error::libssl.so.3 missing from compat bundle; TLS would fail on legacy hosts"
@@ -607,6 +650,42 @@ jobs:
           echo "::error::usr/shared/lib is a symlink into usr/lib; compat conversion unsafe"
           exit 1
         fi
+
+        # Re-create the vendor discovery layout sharun keys on: DRI drivers under
+        # shared/lib/dri (hardlinks to the flattened closure copies), GBM backends under
+        # shared/lib/gbm, and the GLVND EGL vendor JSON under usr/share/glvnd with its
+        # library_path reduced to a bare soname so it resolves inside the bundle.
+        mkdir -p AppDir-compat/usr/shared/lib/dri
+        for f in "$DRI_DIR"/*.so; do
+          b=$(basename "$f")
+          if [ ! -f "AppDir-compat/usr/shared/lib/$b" ]; then
+            echo "::error::DRI driver $b missing from compat closure"
+            exit 1
+          fi
+          ln -f "AppDir-compat/usr/shared/lib/$b" "AppDir-compat/usr/shared/lib/dri/$b"
+        done
+        if [ -n "$GBM_LIBS" ]; then
+          mkdir -p AppDir-compat/usr/shared/lib/gbm
+          for f in $GBM_LIBS; do
+            b=$(basename "$f")
+            [ -f "AppDir-compat/usr/shared/lib/$b" ] || continue
+            ln -f "AppDir-compat/usr/shared/lib/$b" "AppDir-compat/usr/shared/lib/gbm/$b"
+          done
+        fi
+        if [ ! -d /usr/share/glvnd/egl_vendor.d ]; then
+          echo "::error::/usr/share/glvnd/egl_vendor.d not found on build host"
+          exit 1
+        fi
+        mkdir -p AppDir-compat/usr/share/glvnd
+        cp -a /usr/share/glvnd/egl_vendor.d AppDir-compat/usr/share/glvnd/
+        sed -i -e 's|/usr/lib.*/||g' AppDir-compat/usr/share/glvnd/egl_vendor.d/*.json
+        grep -rq 'libEGL_mesa' AppDir-compat/usr/share/glvnd/egl_vendor.d
+        for probe in libGLX_mesa.so.0 libEGL_mesa.so.0; do
+          if ! find AppDir-compat/usr/shared/lib -maxdepth 1 -name "$probe*" | grep -q .; then
+            echo "::error::$probe missing from compat bundle; GL would abort on desktop hosts"
+            exit 1
+          fi
+        done
 
         if [ -n "$WEBPROC_DIR" ] && [ "$WEBPROC_DIR" != "AppDir-compat/usr/bin" ]; then
           ln -f AppDir-compat/usr/bin/QtWebEngineProcess "$WEBPROC_DIR/QtWebEngineProcess"
@@ -743,6 +822,21 @@ jobs:
 
         docker run --rm -v "$PWD:/pkg:ro" -e QT_QPA_PLATFORM=offscreen -e HOME=/tmp debian:10 \
           bash -ec "sed -i -e 's|deb.debian.org|archive.debian.org|g' -e '/security.debian.org/d' /etc/apt/sources.list; apt-get update -qq || true; apt-get install -y -q /pkg/$DEB || dpkg -i /pkg/$DEB; ${{env.UNIXNAME}} --version"
+
+        # Windowed gate: every check above runs offscreen, which is how a bundle with no
+        # GLX/EGL vendor libraries once sailed through CI and aborted on real desktops with
+        # "Could not initialize GLX". Xvfb + xcb forces the bundled GLVND stack to resolve a
+        # vendor and create a GL context; the GUI must still be alive when the kill fires.
+        command -v xvfb-run >/dev/null || sudo apt-get install -y -q xvfb
+        set +e
+        timeout -k 10 25 xvfb-run -a -s "-screen 0 1280x800x24" \
+          env QT_QPA_PLATFORM=xcb HOME=/tmp ./squashfs-root/AppRun
+        rc=$?
+        set -e
+        if [ "$rc" != 137 ] && [ "$rc" != 124 ]; then
+          echo "::error::windowed smoke exited early (rc=$rc); compat GL stack is broken"
+          exit 1
+        fi
 
         rm -rf squashfs-root
 
@@ -1201,13 +1295,16 @@ jobs:
 
     #
     # linuxdeploy plus its Qt plugin build the AppDir; the SQL drivers and the TIFF reader are
-    # pruned first so the image carries only what the app loads. Two things the tool cannot bundle
-    # by itself are added afterwards: the offscreen platform plugin, since linuxdeploy ships xcb
-    # and wayland only while the integration tests run headless, and Qt WebEngine's NSS crypto
-    # backends, which NSS dlopen()s (softokn/freebl/nssckbi) so an ldd-based bundler never sees
-    # them and leaves a half-bundled NSS that crashes against the host's newer copies. No AppImage
-    # is packed here: the compat conversion below produces the only Linux AppImage shipped, so
-    # this AppDir is purely the input tree for the deb/rpm and compat steps
+    # pruned first so the image carries only what the app loads. linuxdeploy-plugin-qt deploys
+    # ONLY libqxcb by default, so the wayland platform plugins are requested explicitly via
+    # EXTRA_PLATFORM_PLUGINS and their shell/decoration/graphics integration plugin dirs are
+    # copied by hand — without them Plasma/GNOME wayland sessions are forced through
+    # XWayland+GLX. Two more things the tool cannot bundle by itself are added afterwards: the
+    # offscreen platform plugin (the integration tests run headless), and Qt WebEngine's NSS
+    # crypto backends, which NSS dlopen()s (softokn/freebl/nssckbi) so an ldd-based bundler
+    # never sees them and leaves a half-bundled NSS that crashes against the host's newer
+    # copies. No AppImage is packed here: the compat conversion below produces the only Linux
+    # AppImage shipped, so this AppDir is purely the input tree for the deb/rpm/compat steps
     #
     - name: '📦 Create AppDir'
       run: |
@@ -1218,6 +1315,7 @@ jobs:
         chmod +x linuxdeploy-plugin-qt-aarch64.AppImage
 
         export QML_SOURCES_PATHS="${{env.QML_DIR}}"
+        export EXTRA_PLATFORM_PLUGINS="libqwayland-generic.so;libqwayland-egl.so"
 
         QT_PLUGINS_PATH="${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/plugins"
         rm -f "$QT_PLUGINS_PATH/imageformats/libqtiff.so"
@@ -1229,6 +1327,17 @@ jobs:
           cp -r "$QT_PLUGINS_PATH/canbus/"* AppDir/usr/plugins/canbus/ || echo "Warning: Could not copy canbus plugins"
         else
           echo "Warning: Qt canbus plugins not found at $QT_PLUGINS_PATH/canbus"
+        fi
+
+        for d in wayland-decoration-client wayland-graphics-integration-client wayland-shell-integration; do
+          if [ -d "$QT_PLUGINS_PATH/$d" ]; then
+            mkdir -p "AppDir/usr/plugins/$d"
+            cp -r "$QT_PLUGINS_PATH/$d/"* "AppDir/usr/plugins/$d/"
+          fi
+        done
+        if [ ! -f AppDir/usr/plugins/platforms/libqwayland-generic.so ]; then
+          echo "::error::wayland platform plugin missing from AppDir"
+          exit 1
         fi
 
         mkdir -p AppDir/usr/plugins/platforms
@@ -1318,9 +1427,32 @@ jobs:
           exit 1
         fi
 
+        # GLVND dispatch is bundled but resolves vendors by dlopen, invisible to the host's
+        # /usr/lib under sharun — bundle Mesa vendors + DRI drivers or GL aborts on desktop
+        # hosts (see the x64 stage for the full rationale)
+        sudo apt-get install -y -q libgl1-mesa-dri libglx-mesa0 libegl-mesa0 >/dev/null
+        GL_VENDOR_LIBS=$(find /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu /usr/lib64 \
+          -maxdepth 1 \( -name 'libGLX_mesa.so*' -o -name 'libEGL_mesa.so*' \
+          -o -name 'libglapi.so*' -o -name 'libgallium*.so*' -o -name 'libgbm.so*' \) \
+          2>/dev/null || true)
+        if [ -z "$GL_VENDOR_LIBS" ]; then
+          echo "::error::Mesa GLX/EGL vendor libraries not found on build host"
+          exit 1
+        fi
+        DRI_DIR=$(find /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu /usr/lib64 \
+          -maxdepth 1 -type d -name dri 2>/dev/null | head -n1 || true)
+        if [ -z "$DRI_DIR" ] || ! ls "$DRI_DIR"/*.so >/dev/null 2>&1; then
+          echo "::error::Mesa DRI driver directory not found on build host"
+          exit 1
+        fi
+        GBM_DIR=$(find /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu /usr/lib64 \
+          -maxdepth 1 -type d -name gbm 2>/dev/null | head -n1 || true)
+        GBM_LIBS=""
+        [ -n "$GBM_DIR" ] && GBM_LIBS=$(ls "$GBM_DIR"/*.so 2>/dev/null || true)
+
         LD_LIBRARY_PATH="$PWD/AppDir-compat/usr/lib" \
           ./sharun-aio lib4bin --dst-dir AppDir-compat/usr --with-sharun --hard-links --with-hooks \
-          "$BIN_SRC"/* $DLOPEN_LIBS $TLS_LIBS
+          "$BIN_SRC"/* $DLOPEN_LIBS $TLS_LIBS $GL_VENDOR_LIBS "$DRI_DIR"/*.so $GBM_LIBS
 
         if ! find AppDir-compat/usr/shared/lib -name 'libssl.so.3*' | grep -q .; then
           echo "::error::libssl.so.3 missing from compat bundle; TLS would fail on legacy hosts"
@@ -1331,6 +1463,38 @@ jobs:
           echo "::error::usr/shared/lib is a symlink into usr/lib; compat conversion unsafe"
           exit 1
         fi
+
+        mkdir -p AppDir-compat/usr/shared/lib/dri
+        for f in "$DRI_DIR"/*.so; do
+          b=$(basename "$f")
+          if [ ! -f "AppDir-compat/usr/shared/lib/$b" ]; then
+            echo "::error::DRI driver $b missing from compat closure"
+            exit 1
+          fi
+          ln -f "AppDir-compat/usr/shared/lib/$b" "AppDir-compat/usr/shared/lib/dri/$b"
+        done
+        if [ -n "$GBM_LIBS" ]; then
+          mkdir -p AppDir-compat/usr/shared/lib/gbm
+          for f in $GBM_LIBS; do
+            b=$(basename "$f")
+            [ -f "AppDir-compat/usr/shared/lib/$b" ] || continue
+            ln -f "AppDir-compat/usr/shared/lib/$b" "AppDir-compat/usr/shared/lib/gbm/$b"
+          done
+        fi
+        if [ ! -d /usr/share/glvnd/egl_vendor.d ]; then
+          echo "::error::/usr/share/glvnd/egl_vendor.d not found on build host"
+          exit 1
+        fi
+        mkdir -p AppDir-compat/usr/share/glvnd
+        cp -a /usr/share/glvnd/egl_vendor.d AppDir-compat/usr/share/glvnd/
+        sed -i -e 's|/usr/lib.*/||g' AppDir-compat/usr/share/glvnd/egl_vendor.d/*.json
+        grep -rq 'libEGL_mesa' AppDir-compat/usr/share/glvnd/egl_vendor.d
+        for probe in libGLX_mesa.so.0 libEGL_mesa.so.0; do
+          if ! find AppDir-compat/usr/shared/lib -maxdepth 1 -name "$probe*" | grep -q .; then
+            echo "::error::$probe missing from compat bundle; GL would abort on desktop hosts"
+            exit 1
+          fi
+        done
 
         if [ -n "$WEBPROC_DIR" ] && [ "$WEBPROC_DIR" != "AppDir-compat/usr/bin" ]; then
           ln -f AppDir-compat/usr/bin/QtWebEngineProcess "$WEBPROC_DIR/QtWebEngineProcess"
@@ -1462,6 +1626,19 @@ jobs:
 
         docker run --rm -v "$PWD:/pkg:ro" -e QT_QPA_PLATFORM=offscreen -e HOME=/tmp debian:10 \
           bash -ec "sed -i -e 's|deb.debian.org|archive.debian.org|g' -e '/security.debian.org/d' /etc/apt/sources.list; apt-get update -qq || true; apt-get install -y -q /pkg/$DEB || dpkg -i /pkg/$DEB; ${{env.UNIXNAME}} --version"
+
+        # Windowed gate — mirror of the x64 stage: offscreen checks cannot see a missing
+        # GLX/EGL vendor; Xvfb + xcb must keep the GUI alive until the kill fires
+        command -v xvfb-run >/dev/null || sudo apt-get install -y -q xvfb
+        set +e
+        timeout -k 10 25 xvfb-run -a -s "-screen 0 1280x800x24" \
+          env QT_QPA_PLATFORM=xcb HOME=/tmp ./squashfs-root/AppRun
+        rc=$?
+        set -e
+        if [ "$rc" != 137 ] && [ "$rc" != 124 ]; then
+          echo "::error::windowed smoke exited early (rc=$rc); compat GL stack is broken"
+          exit 1
+        fi
 
         rm -rf squashfs-root
 

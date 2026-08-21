@@ -45,6 +45,7 @@ class DeviceSimulator:
         self._thread: Optional[threading.Thread] = None
         self._running = False
         self._client_socket: Optional[socket.socket] = None
+        self._client_lock = threading.Lock()
 
     def start(self) -> None:
         """Start the simulator server."""
@@ -55,7 +56,7 @@ class DeviceSimulator:
             self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self._socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             self._socket.bind((self.host, self.port))
-            self._socket.listen(1)
+            self._socket.listen(8)
             self._socket.settimeout(1.0)
         else:
             self._socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -71,12 +72,14 @@ class DeviceSimulator:
         """Stop the simulator server."""
         self._running = False
 
-        if self._client_socket:
+        with self._client_lock:
+            client = self._client_socket
+            self._client_socket = None
+        if client:
             try:
-                self._client_socket.close()
+                client.close()
             except Exception:
                 pass
-            self._client_socket = None
 
         if self._socket:
             try:
@@ -95,12 +98,20 @@ class DeviceSimulator:
             if self.protocol == "tcp":
                 try:
                     client, addr = self._socket.accept()
-                    if self._client_socket:
+                    if self._is_dead_peer(client):
                         try:
-                            self._client_socket.close()
+                            client.close()
                         except Exception:
                             pass
-                    self._client_socket = client
+                        continue
+                    with self._client_lock:
+                        previous = self._client_socket
+                        self._client_socket = client
+                    if previous is not None:
+                        try:
+                            previous.close()
+                        except Exception:
+                            pass
                     self._monitor_client(client)
                 except socket.timeout:
                     continue
@@ -109,6 +120,26 @@ class DeviceSimulator:
             else:
                 break
 
+    @staticmethod
+    def _is_dead_peer(client: socket.socket) -> bool:
+        """True when the freshly-accepted peer has already hung up.
+
+        Serial Studio's TCP dial opens a throwaway probe connection before the
+        real one (Network.cpp probeTcpOnce). The probe handshakes and closes
+        immediately, so if we latched it as the client, the next accepted (real)
+        connection would close it out from under an in-flight send -> EBADF /
+        "No client connected" / silently-dropped frames. A peek that returns EOF
+        means the peer already closed (the probe); BlockingIOError means a live
+        client that simply has not sent yet -- keep that one.
+        """
+        try:
+            peeked = client.recv(1, socket.MSG_PEEK | socket.MSG_DONTWAIT)
+            return peeked == b""
+        except BlockingIOError:
+            return False
+        except OSError:
+            return True
+
     def _monitor_client(self, client: socket.socket) -> None:
         """Spawn a thread that clears _client_socket when the remote side closes."""
         import select
@@ -116,7 +147,10 @@ class DeviceSimulator:
         def _watch() -> None:
             try:
                 while self._running and self._client_socket is client:
-                    readable, _, _ = select.select([client], [], [], 0.5)
+                    try:
+                        readable, _, _ = select.select([client], [], [], 0.5)
+                    except OSError:
+                        break
                     if not readable:
                         continue
                     try:
@@ -125,9 +159,15 @@ class DeviceSimulator:
                             break
                     except Exception:
                         break
+                    # The app wrote back (deviceWrite/ACK); we never consume, so
+                    # the socket stays readable forever. Sleep instead of spinning
+                    # a full core -- the GIL contention is what widens the probe
+                    # race on loaded CI runners.
+                    time.sleep(0.05)
             finally:
-                if self._client_socket is client:
-                    self._client_socket = None
+                with self._client_lock:
+                    if self._client_socket is client:
+                        self._client_socket = None
 
         t = threading.Thread(target=_watch, daemon=True)
         t.start()
@@ -143,12 +183,16 @@ class DeviceSimulator:
             raise RuntimeError("Simulator not started")
 
         if self.protocol == "tcp":
-            if not self._client_socket:
+            with self._client_lock:
+                sock = self._client_socket
+            if sock is None:
                 raise RuntimeError("No client connected")
             try:
-                self._client_socket.sendall(frame)
-            except (BrokenPipeError, ConnectionResetError):
-                self._client_socket = None
+                sock.sendall(frame)
+            except (BrokenPipeError, ConnectionResetError, OSError):
+                with self._client_lock:
+                    if self._client_socket is sock:
+                        self._client_socket = None
                 raise RuntimeError("Client disconnected")
         else:
             self._socket.sendto(frame, (self.host, self.port))
@@ -222,11 +266,18 @@ class DeviceSimulator:
         if self.protocol != "tcp":
             return True
 
+        # Require the same socket to persist across one poll interval before
+        # declaring the link up: the app's pre-dial probe connection can briefly
+        # latch here, and returning on the immediate first sight of it would hand
+        # the test a socket that is about to close.
+        stable: Optional[socket.socket] = None
         start_time = time.time()
         while time.time() - start_time < timeout:
-            if self._client_socket:
+            current = self._client_socket
+            if current is not None and current is stable:
                 return True
-            time.sleep(0.1)
+            stable = current
+            time.sleep(0.12)
         return False
 
     @staticmethod

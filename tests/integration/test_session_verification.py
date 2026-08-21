@@ -26,6 +26,7 @@ SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
 import json
 import shutil
 import sqlite3
+import struct
 import time
 from pathlib import Path
 
@@ -294,10 +295,23 @@ def test_tampered_reading_attributed_to_archive(
     copy_path = tmp_path / "tampered.db"
     shutil.copy(db_path, copy_path)
     with sqlite3.connect(str(copy_path)) as conn:
+        # Spec 0055 (commit f4e26ef04) unified samples into the `blocks` table;
+        # the legacy `readings` table is created but never written, so tampering
+        # it changes nothing. Flip the first little-endian float64 in the earliest
+        # numeric block so the archive's value fingerprint no longer matches,
+        # keeping the blob length and `frames` count intact.
+        row = conn.execute(
+            "SELECT block_id, values_blob FROM blocks "
+            "WHERE is_numeric = 1 ORDER BY block_id ASC LIMIT 1"
+        ).fetchone()
+        assert row is not None, "no numeric block to tamper — recording is empty"
+        block_id, blob = row[0], bytes(row[1])
+        assert len(blob) >= 8, "block value blob too short to tamper"
+        first = struct.unpack_from("<d", blob, 0)[0]
+        mutated = struct.pack("<d", first + 1.0) + blob[8:]
         conn.execute(
-            "UPDATE readings SET final_numeric_value = final_numeric_value + 1, "
-            "final_string_value = 'tampered' WHERE reading_id = "
-            "(SELECT MIN(reading_id) FROM readings)"
+            "UPDATE blocks SET values_blob = ? WHERE block_id = ?",
+            (sqlite3.Binary(mutated), block_id),
         )
         conn.commit()
 

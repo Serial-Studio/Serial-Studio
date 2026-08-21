@@ -251,12 +251,16 @@ def test_transform_edit_is_value_drift(
     db_path = _record_session(api_client, device_simulator, "Regress Value")
     session_id = _open_archive(api_client, db_path)
 
+    # The transform parameter MUST be named `value`: a transform whose code lacks
+    # the free identifier `value` is auto-classified as a computed/virtual dataset
+    # (ProjectModelLoading resolveDatasetVirtualFlags), which the regression diff
+    # skips -- yielding a false `identical` verdict instead of `value-drift`.
     api_client.command(
         "project.dataset.setTransformCode",
         {
             "groupId": 0,
             "datasetId": 0,
-            "code": "function transform(v) { return v * 10; }",
+            "code": "function transform(value) { return value * 10; }",
             "language": 0,
         },
     )
@@ -468,7 +472,7 @@ def test_golden_tag_sweep(api_client, device_simulator, clean_state, regress_ava
         {
             "groupId": 0,
             "datasetId": 0,
-            "code": "function transform(v) { return v + 1; }",
+            "code": "function transform(value) { return value + 1; }",
             "language": 0,
         },
     )
