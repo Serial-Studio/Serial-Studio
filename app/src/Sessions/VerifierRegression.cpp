@@ -60,7 +60,6 @@ static bool regressBitEqual(double a, double b)
  */
 struct RegenCursor {
   Sessions::ReadingCursor cursor;
-  qint64 first_chunk   = 0;
   bool valid           = false;
   qint64 chunk         = 0;
   qint64 rank          = 0;
@@ -73,9 +72,8 @@ struct RegenCursor {
   /**
    * @brief Prepares and executes the ordered readings query, then loads the first row.
    */
-  [[nodiscard]] bool open(QSqlDatabase& db, int sessionId, qint64 uniqueId, qint64 firstChunk)
+  [[nodiscard]] bool open(QSqlDatabase& db, int sessionId, qint64 uniqueId)
   {
-    first_chunk = firstChunk;
     if (!cursor.open(db, sessionId, uniqueId))
       return false;
 
@@ -98,7 +96,7 @@ struct RegenCursor {
     if (!valid)
       return;
 
-    chunk         = row.timestampNs / Sessions::Verifier::kChunkStepNs + first_chunk;
+    chunk         = row.timestampNs / Sessions::Verifier::kChunkStepNs;
     rank          = row.timestampNs % Sessions::Verifier::kChunkStepNs;
     raw_numeric   = row.rawNumeric;
     raw_string    = row.rawString;
@@ -390,7 +388,6 @@ QString Sessions::Verifier::replayBothSides()
   if (m_chunkBudgetExceeded)
     return QStringLiteral("chunk-budget-exceeded");
 
-  m_baselineFirstChunk = m_firstFrameChunk;
   m_replayStats.insert(QStringLiteral("baseline"), replaySideStats());
 
   m_readers.clear();
@@ -406,7 +403,6 @@ QString Sessions::Verifier::replayBothSides()
   if (!candidateError.isEmpty())
     return candidateError;
 
-  m_candidateFirstChunk = m_firstFrameChunk;
   m_replayStats.insert(QStringLiteral("candidate"), replaySideStats());
   m_feedExcludedDevices.clear();
   return QString();
@@ -679,8 +675,7 @@ bool Sessions::Verifier::diffRegenPair(QSqlDatabase& baseDb,
     }
 
     RegenCursor base, cand;
-    if (!base.open(baseDb, baseSession, uid, m_baselineFirstChunk)
-        || !cand.open(candDb, candSession, uid, m_candidateFirstChunk))
+    if (!base.open(baseDb, baseSession, uid) || !cand.open(candDb, candSession, uid))
       return false;
 
     m_datasetReports.append(diffRegressDataset(title, uid, m_finalsVerifiable, stamps, base, cand));

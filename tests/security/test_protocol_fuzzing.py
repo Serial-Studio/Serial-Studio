@@ -5,12 +5,12 @@ Protocol Fuzzing Test Suite for Serial Studio API
 This test uses fuzzing techniques to find crashes, hangs, and unexpected
 behavior in the API protocol implementation.
 
-Attack vectors:
+Probe vectors:
 - Malformed protocol messages
 - Invalid state sequences
-- Boundary condition exploitation
+- Boundary condition probing
 - Binary data injection
-- Encoding confusion attacks
+- Encoding confusion probes
 
 Copyright (C) 2020-2025 Alex Spataru
 SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial

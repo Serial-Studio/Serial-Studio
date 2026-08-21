@@ -103,7 +103,7 @@ Menu {
         continue
 
       if (pendingSeparator) {
-        const separator = _separatorComponent.createObject(menu)
+        const separator = _separatorComponent.createObject(menu.contentItem)
         menu.insertItem(menu.count, separator)
         built.push({ "type": "separator", "obj": separator, "owner": menu })
         pendingSeparator = false
@@ -133,6 +133,7 @@ Menu {
 
   //
   // Creates one command entry, unless no binding set provides it or the binding hides it.
+  // Parented to the menu's contentItem: a Menu is a Popup, not an Item, and Qt warns on it.
   //
   function createCommand(menu, node) {
     const behavior = root.model.binding(node.id)
@@ -147,7 +148,7 @@ Menu {
     if (behavior.title !== undefined && behavior.title.length > 0)
       label = behavior.title
 
-    const item = _itemComponent.createObject(menu, {
+    const item = _itemComponent.createObject(menu.contentItem, {
                                                "text": label,
                                                "behavior": behavior,
                                                "checkable": node.kind === "toggle",

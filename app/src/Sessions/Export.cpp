@@ -166,7 +166,8 @@ Sessions::ExportWorker::ExportWorker(
   const QByteArray* viewStateSnapshot,
   const std::atomic<bool>* controlScriptSeen,
   const std::atomic<quint64>* linkDroppedFrames,
-  const std::atomic<quint64>* linkOverflowBytes)
+  const std::atomic<quint64>* linkOverflowBytes,
+  const std::atomic<bool>* pinBaselineToInjectionEpoch)
   : DataModel::FrameConsumerWorker<DataModel::DataBlockPtr>(blockQueue, enabled, queueSize)
   , m_dbOpen(false)
   , m_sessionId(-1)
@@ -182,6 +183,7 @@ Sessions::ExportWorker::ExportWorker(
   , m_controlScriptSeen(controlScriptSeen)
   , m_linkDroppedFrames(linkDroppedFrames)
   , m_linkOverflowBytes(linkOverflowBytes)
+  , m_pinBaselineToInjectionEpoch(pinBaselineToInjectionEpoch)
 {
   SS_ASSERT_LOG(rawQueue != nullptr);
   SS_ASSERT_LOG(snapshotQueue != nullptr);
@@ -193,6 +195,7 @@ Sessions::ExportWorker::ExportWorker(
   SS_ASSERT_LOG(controlScriptSeen != nullptr);
   SS_ASSERT_LOG(linkDroppedFrames != nullptr);
   SS_ASSERT_LOG(linkOverflowBytes != nullptr);
+  SS_ASSERT_LOG(pinBaselineToInjectionEpoch != nullptr);
 }
 
 /**
@@ -393,7 +396,9 @@ void Sessions::ExportWorker::processItems(const std::vector<DataModel::DataBlock
     if (!m_dbOpen)
       return;
 
-    m_steadyBaseline = items.front()->t0;
+    m_steadyBaseline = m_pinBaselineToInjectionEpoch->load(std::memory_order_relaxed)
+                       ? DataModel::TimestampedFrame::SteadyTimePoint{}
+                       : items.front()->t0;
     resetMonotonicClock();
   }
 
@@ -935,6 +940,7 @@ Sessions::Export::Export()
   , m_tableSnapshotQueue(1024)
   , m_operationMode(static_cast<int>(AppState::instance().operationMode()))
   , m_controlScriptSeen(false)
+  , m_pinBaselineToInjectionEpoch(false)
   , m_linkDroppedFrames(0)
   , m_linkOverflowBytes(0)
   , m_lastLinkDroppedSample(0)
@@ -1225,6 +1231,17 @@ void Sessions::Export::setSettingsPersistent(const bool persistent)
 }
 
 /**
+ * @brief Pins the worker's steady baseline to the fixed injection epoch, not the first block's t0,
+ *        so the spec-0047 regression replay decodes each reading to a (chunk, rank) provenance key
+ *        that depends on the input frame alone. A first-accepted-frame baseline instead shifts the
+ *        key by the frames a side rejected first, mispairing the sides as false value drift.
+ */
+void Sessions::Export::setRegressionBaselinePinned(const bool pinned)
+{
+  m_pinBaselineToInjectionEpoch.store(pinned, std::memory_order_relaxed);
+}
+
+/**
  * @brief Re-baselines the link-loss delta accumulators and the control-script sticky flag at
  *        session open, so pre-session drops never count against the new session.
  */
@@ -1391,7 +1408,8 @@ DataModel::FrameConsumerWorkerBase* Sessions::Export::createWorker()
                              &m_viewStateSnapshot,
                              &m_controlScriptSeen,
                              &m_linkDroppedFrames,
-                             &m_linkOverflowBytes);
+                             &m_linkOverflowBytes,
+                             &m_pinBaselineToInjectionEpoch);
   connect(w,
           &DataModel::FrameConsumerWorkerBase::resourceOpenChanged,
           this,

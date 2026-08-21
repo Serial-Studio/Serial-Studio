@@ -160,8 +160,6 @@ private:
   QJsonObject m_replayStats;
   QSet<int> m_feedExcludedDevices;
   QList<int> m_candidateRemovedDevices;
-  qint64 m_baselineFirstChunk;
-  qint64 m_candidateFirstChunk;
 
   std::map<int, std::unique_ptr<IO::FrameReader>> m_readers;
 };

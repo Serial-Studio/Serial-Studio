@@ -36,7 +36,7 @@ pytest tests/integration/test_csv_export.py::test_csv_export_basic -v
 | Category    | Directory             | Requires Serial Studio | Description                                  |
 |-------------|-----------------------|------------------------|----------------------------------------------|
 | Integration | `tests/integration/`  | Yes                    | Functional tests against a live API          |
-| Security    | `tests/security/`     | Yes                    | Penetration and adversarial tests            |
+| Security    | `tests/security/`     | Yes                    | Resilience and boundary tests            |
 | Performance | `tests/performance/`  | Yes                    | Throughput benchmarks                        |
 | Scripts     | `tests/scripts/`      | No (Node.js only)      | Unit tests for JS frame-parser scripts       |
 | C++ units   | `app/tests/`          | No (ctest, not pytest) | Qt Test suites over selected production TUs  |
@@ -96,16 +96,16 @@ pytest tests/integration/ -m "project" -v
 
 ## Security tests (`tests/security/`)
 
-Adversarial tests against the TCP API server. They do not reset state between runs, and they use a dedicated `security_client` fixture that tolerates disconnections.
+Boundary tests against the TCP API server. They do not reset state between runs, and they use a dedicated `security_client` fixture that tolerates disconnections.
 
 | File                           | What it covers |
 |--------------------------------|----------------|
-| `test_api_security.py`         | JSON exploits, injection attacks, buffer abuse, batch exploits, connection exhaustion |
-| `test_api_vulnerabilities.py`  | Input validation bypass, command injection, state manipulation, info disclosure |
-| `test_denial_of_service.py`    | Memory exhaustion, CPU spikes, connection floods, Slowloris, amplification, queue overflow |
-| `test_exploit_techniques.py`   | Race conditions, integer overflow, parser confusion, timing attacks, deserialization |
-| `test_zero_day_adversarial.py` | JS sandbox escape, prototype pollution, null-byte injection, terminal escape injection |
-| `test_protocol_fuzzing.py`     | Malformed protocol messages, encoding confusion, framing attacks |
+| `test_api_security.py`         | JSON probes, injection probes, buffer abuse, batch probes, connection exhaustion |
+| `test_api_weaknesses.py`  | Input validation bypass, command injection, state manipulation, info disclosure |
+| `test_resource_exhaustion.py`    | Memory exhaustion, CPU spikes, connection floods, Slowloris, amplification, queue overflow |
+| `test_probe_techniques.py`   | Race conditions, integer overflow, parser confusion, timing probes, deserialization |
+| `test_unknown_input_boundary.py` | JS sandbox escape, prototype pollution, null-byte injection, terminal escape injection |
+| `test_protocol_fuzzing.py`     | Malformed protocol messages, encoding confusion, framing probes |
 | `test_access_control.py`       | Auth bypass, privilege escalation, cross-client interference, info disclosure |
 
 ```bash
@@ -115,11 +115,11 @@ pytest tests/security/ -v
 # Skip tests that may crash or hang the server
 pytest tests/security/ -m "not destructive" -v
 
-# Critical vulnerabilities only
+# Critical weaknesses only
 pytest tests/security/ -m "security and critical" -v
 
-# DoS tests only
-pytest tests/security/ -m "dos" -v
+# Resource_exhaustion tests only
+pytest tests/security/ -m "resource_exhaustion" -v
 
 # Or run the convenience shell script
 bash tests/security/run_all_security_tests.sh
@@ -264,7 +264,7 @@ pytest -m "destructive"              # Tests that may crash or hang the server
 | Marker        | Meaning |
 |---------------|---------|
 | `integration` | Requires a running Serial Studio instance |
-| `security`    | Security and penetration tests |
+| `security`    | Security and robustness tests |
 | `performance` | Benchmarks |
 | `slow`        | Takes a long time |
 | `csv`         | CSV export or player tests |
@@ -273,11 +273,11 @@ pytest -m "destructive"              # Tests that may crash or hang the server
 | `uart`        | UART driver tests |
 | `ble`         | Bluetooth LE driver tests |
 | `fuzzing`     | Fuzzing and chaos tests |
-| `dos`         | Denial-of-service tests |
+| `resource_exhaustion`         | Resource-exhaustion tests |
 | `destructive` | May crash or hang the server |
 | `critical`    | Critical severity security checks |
 | `high`        | High severity security checks |
-| `exploit`     | Active exploitation attempts |
+| `probe`     | Active probing attempts |
 
 ## Directory structure
 
@@ -312,14 +312,14 @@ tests/
 │   ├── test_workflows.py               # End-to-end: configure, connect, receive, export
 │   └── test_fuzzy.py                   # Malformed JSON, binary garbage, unicode, chaos
 │
-├── security/                           # Penetration and adversarial tests
-│   ├── conftest.py                     # Security fixtures (vuln_tracker, check_server_alive)
-│   ├── test_api_security.py            # JSON exploits, injection attacks, buffer abuse
-│   ├── test_api_vulnerabilities.py     # Input validation bypass, parsing exploits
-│   ├── test_denial_of_service.py       # CPU/memory/connection exhaustion
+├── security/                           # Resilience and boundary tests
+│   ├── conftest.py                     # Security fixtures (finding_tracker, check_server_alive)
+│   ├── test_api_security.py            # JSON probes, injection probes, buffer abuse
+│   ├── test_api_weaknesses.py     # Input validation bypass, parsing probes
+│   ├── test_resource_exhaustion.py       # CPU/memory/connection exhaustion
 │   ├── test_protocol_fuzzing.py        # Malformed protocol messages, encoding confusion
-│   ├── test_exploit_techniques.py      # Race conditions, integer overflow, timing attacks
-│   ├── test_zero_day_adversarial.py    # Sandbox escape, prototype pollution, ReDoS
+│   ├── test_probe_techniques.py      # Race conditions, integer overflow, timing probes
+│   ├── test_unknown_input_boundary.py    # Sandbox escape, prototype pollution, ReDoS
 │   ├── test_access_control.py          # Auth bypass, privilege escalation
 │   └── run_all_security_tests.sh       # Run all security tests at once
 │
@@ -381,7 +381,7 @@ Security tests have additional fixtures in `security/conftest.py`:
 | Fixture              | What it does |
 |----------------------|--------------|
 | `security_client`    | API client that does not reset state between tests |
-| `vuln_tracker`       | Logs discovered vulnerabilities for reporting |
+| `finding_tracker`       | Logs discovered weaknesses for reporting |
 | `check_server_alive` | Verifies the server did not crash after a test |
 
 Script tests expose a single fixture in `scripts/conftest.py`:

@@ -91,8 +91,6 @@ Sessions::Verifier::Verifier(const Options& options)
   , m_lastFeedChunks(0)
   , m_lastFeedFrames(0)
   , m_chunkBudgetExceeded(false)
-  , m_baselineFirstChunk(-1)
-  , m_candidateFirstChunk(-1)
 {}
 
 /**
@@ -484,9 +482,12 @@ QString Sessions::Verifier::reparseSession(const QString& projectJson,
 
   static auto& exporter = Sessions::Export::instance();
   exporter.setSettingsPersistent(false);
+  exporter.setRegressionBaselinePinned(injectTimestamps);
   exporter.setExportEnabled(true);
-  if (!exporter.exportEnabled())
+  if (!exporter.exportEnabled()) {
+    exporter.setRegressionBaselinePinned(false);
     return QStringLiteral("export-start-failed");
+  }
 
   const bool fed = feedArchivedBytes(injectTimestamps);
 
@@ -494,6 +495,7 @@ QString Sessions::Verifier::reparseSession(const QString& projectJson,
   exporter.flushWorker();
   exporter.closeFile();
   exporter.setExportEnabled(false);
+  exporter.setRegressionBaselinePinned(false);
   builder.setParseBudgetEnabled(true);
   DatabaseManager::setDbPathOverride(QString());
   return fed ? QString() : QStringLiteral("feed-failed");

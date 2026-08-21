@@ -69,67 +69,67 @@ echo "=========================================="
 
 python3 "$SCRIPT_DIR/test_protocol_fuzzing.py" 2>&1 | tee -a "$REPORT_FILE"
 
-# Test 3: DoS Attacks
+# Test 3: Resource Exhaustion
 echo ""
 echo "=========================================="
-echo "Running DoS Attack Tests"
+echo "Running Resource Exhaustion Tests"
 echo "=========================================="
 {
     echo ""
     echo "=========================================="
-    echo "3. DoS Attack Tests"
+    echo "3. Resource Exhaustion Tests"
     echo "=========================================="
 } >> "$REPORT_FILE"
 
-python3 "$SCRIPT_DIR/test_dos_attacks.py" 2>&1 | tee -a "$REPORT_FILE"
+python3 "$SCRIPT_DIR/test_resource_exhaustion.py" 2>&1 | tee -a "$REPORT_FILE"
 
 # Test 4: Authentication Bypass
 echo ""
 echo "=========================================="
-echo "Running Authentication Bypass Tests"
+echo "Running Access Control Tests"
 echo "=========================================="
 {
     echo ""
     echo "=========================================="
-    echo "4. Authentication Bypass Tests"
+    echo "4. Access Control Tests"
     echo "=========================================="
 } >> "$REPORT_FILE"
 
-python3 "$SCRIPT_DIR/test_auth_bypass.py" 2>&1 | tee -a "$REPORT_FILE"
+python3 "$SCRIPT_DIR/test_access_control.py" 2>&1 | tee -a "$REPORT_FILE"
 
-# Test 5: Advanced Exploits
+# Test 5: Robustness Techniques
 echo ""
 echo "=========================================="
-echo "Running Advanced Exploitation Tests"
+echo "Running Robustness Techniques Tests"
 echo "=========================================="
 {
     echo ""
     echo "=========================================="
-    echo "5. Advanced Exploitation Tests"
+    echo "5. Robustness Techniques Tests"
     echo "=========================================="
 } >> "$REPORT_FILE"
 
-python3 "$SCRIPT_DIR/test_advanced_exploits.py" 2>&1 | tee -a "$REPORT_FILE"
+python3 "$SCRIPT_DIR/test_robustness_techniques.py" 2>&1 | tee -a "$REPORT_FILE"
 
-# Test 6: Weaponized Exploit Chain
+# Test 6: Instrumented Probe Suite
 echo ""
 echo "=========================================="
-echo "Running Weaponized Exploit Chain"
+echo "Running Instrumented Probe Suite"
 echo "=========================================="
 {
     echo ""
     echo "=========================================="
-    echo "6. Weaponized Exploit Chain"
+    echo "6. Instrumented Probe Suite"
     echo "=========================================="
 } >> "$REPORT_FILE"
 
 echo ""
-echo "⚠️  WARNING: The weaponized exploit chain will attempt"
-echo "    to fully compromise the target system."
+echo "⚠️  WARNING: The instrumented probe suite will attempt"
+echo "    to stress the target system to failure."
 echo "    Press Ctrl+C to skip, or Enter to proceed..."
 read
 
-python3 "$SCRIPT_DIR/weaponized_exploits.py" 2>&1 | tee -a "$REPORT_FILE"
+python3 "$SCRIPT_DIR/security_probe_suite.py" 2>&1 | tee -a "$REPORT_FILE"
 
 # Final check
 echo ""
@@ -160,4 +160,4 @@ echo "All Tests Complete"
 echo "=========================================="
 echo "Report saved to: $REPORT_FILE"
 echo ""
-echo "Review the report to see all discovered vulnerabilities."
+echo "Review the report to see all discovered weaknesses."

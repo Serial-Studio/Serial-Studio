@@ -638,9 +638,44 @@ jobs:
         GBM_LIBS=""
         [ -n "$GBM_DIR" ] && GBM_LIBS=$(ls "$GBM_DIR"/*.so 2>/dev/null || true)
 
+        # The bundled libasound carries the build host's plugin dir baked in
+        # (/usr/lib/<triplet>/alsa-lib), which does not exist on RHEL-family hosts; their
+        # alsa.conf routes the default PCM through "pulse", so every device probe logs a
+        # missing libasound_module_pcm_pulse.so and falls back to raw hw. Bundle the pulse
+        # plugins and point ALSA_PLUGIN_DIR at them through sharun's .env (PipeWire hosts
+        # reach them via pipewire-pulse).
+        sudo apt-get install -y -q libasound2-plugins >/dev/null
+        ALSA_PLUGIN_SRC=$(find /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu /usr/lib64 \
+          -maxdepth 1 -type d -name alsa-lib 2>/dev/null | head -n1 || true)
+        ALSA_PLUGINS=""
+        [ -n "$ALSA_PLUGIN_SRC" ] && ALSA_PLUGINS=$(ls "$ALSA_PLUGIN_SRC"/libasound_module_*_pulse.so \
+          2>/dev/null || true)
+        if [ -z "$ALSA_PLUGINS" ]; then
+          echo "::error::ALSA pulse plugins not found on build host"
+          exit 1
+        fi
+
         LD_LIBRARY_PATH="$PWD/AppDir-compat/usr/lib" \
           ./sharun-aio lib4bin --dst-dir AppDir-compat/usr --with-sharun --hard-links --with-hooks \
-          "$BIN_SRC"/* $DLOPEN_LIBS $TLS_LIBS $GL_VENDOR_LIBS "$DRI_DIR"/*.so $GBM_LIBS
+          "$BIN_SRC"/* $DLOPEN_LIBS $TLS_LIBS $GL_VENDOR_LIBS "$DRI_DIR"/*.so $GBM_LIBS \
+          $ALSA_PLUGINS
+
+        mkdir -p AppDir-compat/usr/shared/lib/alsa-lib
+        for f in $ALSA_PLUGINS; do
+          b=$(basename "$f")
+          dst="AppDir-compat/usr/shared/lib/alsa-lib/$b"
+          if [ ! -e "$dst" ]; then
+            src="AppDir-compat/usr/shared/lib/$b"
+            [ -f "$src" ] && ln -f "$src" "$dst"
+          fi
+          if [ ! -e "$dst" ]; then
+            echo "::error::ALSA plugin $b missing from compat closure"
+            exit 1
+          fi
+        done
+        if ! grep -q '^ALSA_PLUGIN_DIR=' AppDir-compat/usr/.env 2>/dev/null; then
+          echo 'ALSA_PLUGIN_DIR=${SHARUN_DIR}/shared/lib/alsa-lib' >> AppDir-compat/usr/.env
+        fi
 
         if ! find AppDir-compat/usr/shared/lib -name 'libssl.so.3*' | grep -q .; then
           echo "::error::libssl.so.3 missing from compat bundle; TLS would fail on legacy hosts"
@@ -1464,9 +1499,44 @@ jobs:
         GBM_LIBS=""
         [ -n "$GBM_DIR" ] && GBM_LIBS=$(ls "$GBM_DIR"/*.so 2>/dev/null || true)
 
+        # The bundled libasound carries the build host's plugin dir baked in
+        # (/usr/lib/<triplet>/alsa-lib), which does not exist on RHEL-family hosts; their
+        # alsa.conf routes the default PCM through "pulse", so every device probe logs a
+        # missing libasound_module_pcm_pulse.so and falls back to raw hw. Bundle the pulse
+        # plugins and point ALSA_PLUGIN_DIR at them through sharun's .env (PipeWire hosts
+        # reach them via pipewire-pulse).
+        sudo apt-get install -y -q libasound2-plugins >/dev/null
+        ALSA_PLUGIN_SRC=$(find /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu /usr/lib64 \
+          -maxdepth 1 -type d -name alsa-lib 2>/dev/null | head -n1 || true)
+        ALSA_PLUGINS=""
+        [ -n "$ALSA_PLUGIN_SRC" ] && ALSA_PLUGINS=$(ls "$ALSA_PLUGIN_SRC"/libasound_module_*_pulse.so \
+          2>/dev/null || true)
+        if [ -z "$ALSA_PLUGINS" ]; then
+          echo "::error::ALSA pulse plugins not found on build host"
+          exit 1
+        fi
+
         LD_LIBRARY_PATH="$PWD/AppDir-compat/usr/lib" \
           ./sharun-aio lib4bin --dst-dir AppDir-compat/usr --with-sharun --hard-links --with-hooks \
-          "$BIN_SRC"/* $DLOPEN_LIBS $TLS_LIBS $GL_VENDOR_LIBS "$DRI_DIR"/*.so $GBM_LIBS
+          "$BIN_SRC"/* $DLOPEN_LIBS $TLS_LIBS $GL_VENDOR_LIBS "$DRI_DIR"/*.so $GBM_LIBS \
+          $ALSA_PLUGINS
+
+        mkdir -p AppDir-compat/usr/shared/lib/alsa-lib
+        for f in $ALSA_PLUGINS; do
+          b=$(basename "$f")
+          dst="AppDir-compat/usr/shared/lib/alsa-lib/$b"
+          if [ ! -e "$dst" ]; then
+            src="AppDir-compat/usr/shared/lib/$b"
+            [ -f "$src" ] && ln -f "$src" "$dst"
+          fi
+          if [ ! -e "$dst" ]; then
+            echo "::error::ALSA plugin $b missing from compat closure"
+            exit 1
+          fi
+        done
+        if ! grep -q '^ALSA_PLUGIN_DIR=' AppDir-compat/usr/.env 2>/dev/null; then
+          echo 'ALSA_PLUGIN_DIR=${SHARUN_DIR}/shared/lib/alsa-lib' >> AppDir-compat/usr/.env
+        fi
 
         if ! find AppDir-compat/usr/shared/lib -name 'libssl.so.3*' | grep -q .; then
           echo "::error::libssl.so.3 missing from compat bundle; TLS would fail on legacy hosts"

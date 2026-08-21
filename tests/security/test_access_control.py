@@ -3,9 +3,9 @@
 Authentication and Authorization Bypass Test Suite
 
 Tests for authentication weaknesses, authorization bypasses, and
-privilege escalation vulnerabilities in the Serial Studio API.
+privilege escalation weaknesses in the Serial Studio API.
 
-Attack categories:
+Probe categories:
 - No authentication testing
 - Authorization bypass attempts
 - Privilege escalation
@@ -35,12 +35,16 @@ class AuthBypassTester:
     def __init__(self, host="127.0.0.1", port=7777):
         self.host = host
         self.port = port
-        self.vulnerabilities = []
+        self.weaknesses = []
 
-    def log_vulnerability(self, severity, category, description):
-        """Log a discovered vulnerability"""
-        vuln = {"severity": severity, "category": category, "description": description}
-        self.vulnerabilities.append(vuln)
+    def log_weakness(self, severity, category, description):
+        """Log a discovered weakness"""
+        finding = {
+            "severity": severity,
+            "category": category,
+            "description": description,
+        }
+        self.weaknesses.append(finding)
         print(f"[{severity}] {category}: {description}")
 
 
@@ -54,7 +58,7 @@ def test_no_authentication(tester):
         with SerialStudioClient() as client:
             result = client.command("api.getCommands")
 
-            tester.log_vulnerability(
+            tester.log_weakness(
                 "HIGH",
                 "No Authentication",
                 "API accepts connections without any authentication",
@@ -84,7 +88,7 @@ def test_no_authentication(tester):
                     sensitive_commands.append(cmd_name)
 
             if sensitive_commands:
-                tester.log_vulnerability(
+                tester.log_weakness(
                     "CRITICAL",
                     "Authorization",
                     f"Unauthenticated access to {len(sensitive_commands)} sensitive commands",
@@ -100,7 +104,7 @@ def test_no_authentication(tester):
 @pytest.mark.xfail(
     reason="On POSIX, connect() to 0.0.0.0 is routed to loopback regardless of the "
     "server's bind address, so this cannot distinguish a LocalHost-bound server "
-    "(the default) from an all-interfaces one; it is a false positive, not a vuln.",
+    "(the default) from an all-interfaces one; it is a false positive, not a finding.",
     strict=False,
 )
 def test_network_binding(tester):
@@ -120,7 +124,7 @@ def test_network_binding(tester):
         try:
             with SerialStudioClient("0.0.0.0", 7777) as client:
                 client.command("api.getCommands")
-                tester.log_vulnerability(
+                tester.log_weakness(
                     "CRITICAL",
                     "Network Exposure",
                     "API accessible from all network interfaces (0.0.0.0)",
@@ -143,14 +147,14 @@ def test_origin_validation(tester):
     # Test 1: Send requests with fake origins
     print("  - Testing origin header validation...")
 
-    malicious_origins = [
-        "http://attacker.com",
+    untrusted_origins = [
+        "http://client.com",
         "http://evil.example.com",
         "http://192.168.1.100",
         "file:///etc/passwd",
     ]
 
-    for origin in malicious_origins:
+    for origin in untrusted_origins:
         try:
             # TCP doesn't have HTTP headers, but test at protocol level
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -202,7 +206,7 @@ def test_command_authorization(tester):
             pass
 
     if accessible_privileged:
-        tester.log_vulnerability(
+        tester.log_weakness(
             "CRITICAL",
             "Authorization Bypass",
             f"Unauthenticated access to {len(accessible_privileged)} privileged commands",
@@ -224,8 +228,8 @@ def test_data_injection(tester):
             client.configure_network(host="127.0.0.1", port=9999, socket_type="tcp")
 
             # Try to send raw data
-            malicious_data = b"INJECTED_DATA\r\n"
-            encoded = base64.b64encode(malicious_data).decode()
+            untrusted_data = b"INJECTED_DATA\r\n"
+            encoded = base64.b64encode(untrusted_data).decode()
 
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.connect((tester.host, tester.port))
@@ -247,7 +251,7 @@ def test_data_injection(tester):
                 parsed = {}
 
             if parsed.get("success") is True or "bytesWritten" in parsed:
-                tester.log_vulnerability(
+                tester.log_weakness(
                     "HIGH",
                     "Data Injection",
                     "Unauthenticated raw data injection to device",
@@ -261,7 +265,7 @@ def test_data_injection(tester):
 
 @pytest.mark.xfail(
     reason="The API server is localhost-only and unauthenticated by design; "
-    "controlling the dashboard and frame parser is its purpose, not a vuln.",
+    "controlling the dashboard and frame parser is its purpose, not a finding.",
     strict=False,
 )
 def test_configuration_tampering(tester):
@@ -285,7 +289,7 @@ def test_configuration_tampering(tester):
             new_fps = new_status.get("fps", 24)
 
             if new_fps == 1:
-                tester.log_vulnerability(
+                tester.log_weakness(
                     "MEDIUM",
                     "Configuration Tampering",
                     "Unauthenticated modification of dashboard settings",
@@ -309,10 +313,10 @@ def test_configuration_tampering(tester):
         with SerialStudioClient() as client:
             # Try to modify critical parsing settings
             result = client.configure_frame_parser(
-                start_sequence="HACKED", end_sequence="OWNED", operation_mode=1
+                start_sequence="TAMPERED", end_sequence="OWNED", operation_mode=1
             )
 
-            tester.log_vulnerability(
+            tester.log_weakness(
                 "HIGH",
                 "Configuration Tampering",
                 "Unauthenticated modification of frame parser settings",
@@ -345,7 +349,7 @@ def test_project_manipulation(tester):
             for path in dangerous_paths:
                 try:
                     client.load_project(path)
-                    tester.log_vulnerability(
+                    tester.log_weakness(
                         "CRITICAL",
                         "Path Traversal",
                         f"Successfully loaded file: {path}",
@@ -358,12 +362,12 @@ def test_project_manipulation(tester):
     except Exception as e:
         print(f"    File loading test error: {e}")
 
-    # Test 2: Create malicious project
-    print("  - Testing malicious project creation...")
+    # Test 2: Create untrusted project
+    print("  - Testing untrusted project creation...")
 
     try:
         with SerialStudioClient() as client:
-            malicious_project = {
+            untrusted_project = {
                 "title": "<script>alert('XSS')</script>",
                 "frameParser": {
                     "startSequence": "'; DROP TABLE datasets; --",
@@ -373,11 +377,11 @@ def test_project_manipulation(tester):
             }
 
             try:
-                result = client.load_project_from_json(malicious_project)
-                print("    Loaded project with malicious content")
+                result = client.load_project_from_json(untrusted_project)
+                print("    Loaded project with untrusted content")
                 # Check if it's properly sanitized
             except APIError as e:
-                print(f"    Malicious project rejected: {e}")
+                print(f"    Untrusted project rejected: {e}")
 
     except Exception as e:
         print(f"    Project creation test error: {e}")
@@ -404,7 +408,7 @@ def test_information_disclosure(tester):
                     leaked_info.append(key)
 
             if leaked_info:
-                tester.log_vulnerability(
+                tester.log_weakness(
                     "LOW",
                     "Information Disclosure",
                     f"Status command leaks {len(leaked_info)} potentially sensitive fields",
@@ -431,7 +435,7 @@ def test_information_disclosure(tester):
                     leak in error_msg
                     for leak in ["path", "line", "file", "stack", "trace", "version"]
                 ):
-                    tester.log_vulnerability(
+                    tester.log_weakness(
                         "LOW",
                         "Information Disclosure",
                         f"Error messages leak internal details: {e.message[:100]}",
@@ -472,7 +476,7 @@ def test_cross_client_interference(tester):
         fps = status.get("fps", 0)
 
         if fps == 10:
-            tester.log_vulnerability(
+            tester.log_weakness(
                 "MEDIUM",
                 "Client Isolation",
                 "No client isolation - shared global state",
@@ -531,11 +535,11 @@ def main():
         print("AUTHENTICATION & AUTHORIZATION REPORT")
         print("=" * 80)
 
-        print(f"\nTotal issues found: {len(tester.vulnerabilities)}")
+        print(f"\nTotal issues found: {len(tester.weaknesses)}")
 
         by_severity = {}
-        for vuln in tester.vulnerabilities:
-            sev = vuln["severity"]
+        for finding in tester.weaknesses:
+            sev = finding["severity"]
             by_severity[sev] = by_severity.get(sev, 0) + 1
 
         for severity in ["CRITICAL", "HIGH", "MEDIUM", "LOW"]:
@@ -544,9 +548,9 @@ def main():
                 print(f"  {severity}: {count}")
 
         print("\nDetailed findings:")
-        for i, vuln in enumerate(tester.vulnerabilities, 1):
-            print(f"{i}. [{vuln['severity']}] {vuln['category']}")
-            print(f"   {vuln['description']}")
+        for i, finding in enumerate(tester.weaknesses, 1):
+            print(f"{i}. [{finding['severity']}] {finding['category']}")
+            print(f"   {finding['description']}")
 
         print("\n" + "=" * 80)
 

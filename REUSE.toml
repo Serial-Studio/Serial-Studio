@@ -88,6 +88,11 @@ SPDX-FileCopyrightText = "2006 Ivan Sagalaev and other contributors"
 SPDX-License-Identifier = "BSD-3-Clause"
 
 [[annotations]]
+path = ["app/rcc/vendor/katex*", "app/rcc/vendor/katex-fonts/**"]
+SPDX-FileCopyrightText = "2013-2020 Khan Academy and other contributors"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
 path = ["app/rcc/vendor/mermaid*"]
 SPDX-FileCopyrightText = "2014-2025 Knut Sveidqvist"
 SPDX-License-Identifier = "MIT"

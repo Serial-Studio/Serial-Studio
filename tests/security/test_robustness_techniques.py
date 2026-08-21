@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """
-Advanced Exploitation Suite for Serial Studio
+Advanced Probing Suite for Serial Studio
 
-This module contains sophisticated attack techniques designed to bypass
-security controls and exploit subtle vulnerabilities.
+This module contains sophisticated probe techniques designed to bypass
+security controls and probe subtle weaknesses.
 
-Attack categories:
-- Race conditions and TOCTOU attacks
+Probe categories:
+- Race conditions and TOCTOU probes
 - Integer overflows and underflows
 - Memory corruption attempts
 - Parser state confusion
-- Side-channel timing attacks
+- Side-channel timing probes
 - Thread exhaustion
 - File descriptor exhaustion
 - Logic bugs in state machines
@@ -35,32 +35,32 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from utils.api_client import SerialStudioClient, APIError
 
 
-class AdvancedExploiter:
-    """Advanced exploitation techniques"""
+class AdvancedProber:
+    """Advanced probing techniques"""
 
     def __init__(self, host="127.0.0.1", port=7777):
         self.host = host
         self.port = port
-        self.exploits = []
+        self.probes = []
         self.crashes = []
 
-    def log_exploit(self, name, success, details):
-        """Log exploitation attempt"""
+    def log_probe(self, name, success, details):
+        """Log probing attempt"""
         result = {"name": name, "success": success, "details": details}
-        self.exploits.append(result)
+        self.probes.append(result)
         if success:
-            print(f"[PWNED] {name}: {details}")
+            print(f"[FLAGGED] {name}: {details}")
         else:
             print(f"[BLOCKED] {name}: {details}")
 
 
 @pytest.mark.timeout(60)
-def test_race_conditions(exploiter):
-    """Exploit race conditions in connection/disconnection"""
-    print("\n[*] Testing race condition exploits...")
+def test_race_conditions(prober):
+    """Probe race conditions in connection/disconnection"""
+    print("\n[*] Testing race condition probes...")
 
-    # Attack 1: TOCTOU - Connect/Disconnect race
-    print("  - TOCTOU attack on connect/disconnect state...")
+    # Probe 1: TOCTOU - Connect/Disconnect race
+    print("  - TOCTOU probe on connect/disconnect state...")
 
     stop_flag = threading.Event()
 
@@ -92,20 +92,20 @@ def test_race_conditions(exploiter):
     try:
         with SerialStudioClient() as client:
             client.command("api.getCommands")
-            exploiter.log_exploit(
+            prober.log_probe(
                 "TOCTOU Connect/Disconnect",
                 False,
                 "Server survived race condition",
             )
     except:
-        exploiter.log_exploit(
+        prober.log_probe(
             "TOCTOU Connect/Disconnect", True, "Server crashed or unresponsive!"
         )
 
     for t in threads:
         t.join(timeout=5)
 
-    # Attack 2: Race on configuration changes
+    # Probe 2: Race on configuration changes
     print("  - Racing configuration changes...")
 
     def race_config():
@@ -123,7 +123,7 @@ def test_race_conditions(exploiter):
     for t in threads:
         t.join(timeout=5)
 
-    # Attack 3: Race on frame parser reset
+    # Probe 3: Race on frame parser reset
     print("  - Racing frame parser resets...")
 
     def race_parser():
@@ -147,16 +147,16 @@ def test_race_conditions(exploiter):
     for t in threads:
         t.join(timeout=10)
 
-    successful = [e for e in exploiter.exploits if e["success"]]
-    assert not successful, f"Exploit succeeded: {successful}"
+    successful = [e for e in prober.probes if e["success"]]
+    assert not successful, f"Probe succeeded: {successful}"
 
 
 @pytest.mark.timeout(90)
-def test_integer_overflow(exploiter):
-    """Test integer overflow vulnerabilities"""
-    print("\n[*] Testing integer overflow exploits...")
+def test_integer_overflow(prober):
+    """Test integer overflow weaknesses"""
+    print("\n[*] Testing integer overflow probes...")
 
-    # Attack 1: Overflow FPS value
+    # Probe 1: Overflow FPS value
     print("  - Testing FPS integer overflow...")
     overflow_values = [
         2147483647,  # Max int32
@@ -172,27 +172,25 @@ def test_integer_overflow(exploiter):
         try:
             with SerialStudioClient(timeout=3.0) as client:
                 result = client.command("dashboard.setFps", {"fps": val})
-                exploiter.log_exploit(
-                    "Integer Overflow FPS", True, f"Accepted value: {val}"
-                )
+                prober.log_probe("Integer Overflow FPS", True, f"Accepted value: {val}")
         except (APIError, TimeoutError, ConnectionError):
             # Server rejected or timed out - expected for invalid values
             pass
 
-    # Attack 2: Overflow time range value
+    # Probe 2: Overflow time range value
     print("  - Testing time range integer overflow...")
     for val in overflow_values:
         try:
             with SerialStudioClient(timeout=3.0) as client:
                 result = client.command("dashboard.setTimeRange", {"seconds": val})
-                exploiter.log_exploit(
+                prober.log_probe(
                     "Integer Overflow TimeRange", True, f"Accepted value: {val}"
                 )
         except (APIError, TimeoutError, ConnectionError):
             # Server rejected or timed out - expected for invalid values
             pass
 
-    # Attack 3: Negative array indices
+    # Probe 3: Negative array indices
     print("  - Testing negative array access...")
     try:
         with SerialStudioClient() as client:
@@ -202,15 +200,15 @@ def test_integer_overflow(exploiter):
     except:
         pass
 
-    successful = [e for e in exploiter.exploits if e["success"]]
-    assert not successful, f"Exploit succeeded: {successful}"
+    successful = [e for e in prober.probes if e["success"]]
+    assert not successful, f"Probe succeeded: {successful}"
 
 
-def test_memory_corruption(exploiter):
+def test_memory_corruption(prober):
     """Attempt memory corruption through buffer overflows"""
-    print("\n[*] Testing memory corruption attacks...")
+    print("\n[*] Testing memory corruption probes...")
 
-    # Attack 1: Overflow frame delimiters
+    # Probe 1: Overflow frame delimiters
     print("  - Overflowing frame delimiter buffers...")
     huge_delimiter = "A" * (1024 * 1024 * 10)  # 10MB delimiter
 
@@ -221,62 +219,64 @@ def test_memory_corruption(exploiter):
                 end_sequence=huge_delimiter,
                 operation_mode=0,
             )
-            exploiter.log_exploit(
+            prober.log_probe(
                 "Delimiter Buffer Overflow", True, "10MB delimiter accepted"
             )
     except:
-        exploiter.log_exploit(
-            "Delimiter Buffer Overflow", False, "Huge delimiter rejected"
-        )
+        prober.log_probe("Delimiter Buffer Overflow", False, "Huge delimiter rejected")
 
-    # Attack 2: Corrupt JSON with extreme nesting
+    # Probe 2: Corrupt JSON with extreme nesting
     print("  - Deep JSON nesting to overflow stack...")
     depth = 100000
     nested = '{"a":' * depth + "1" + "}" * depth
 
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.connect((exploiter.host, exploiter.port))
+        sock.connect((prober.host, prober.port))
         sock.sendall(nested.encode() + b"\n")
         sock.settimeout(2.0)
         response = sock.recv(4096)
         sock.close()
 
         if not response or b"error" not in response.lower():
-            exploiter.log_exploit(
+            prober.log_probe(
                 "JSON Stack Overflow", True, f"{depth} level nesting accepted"
             )
     except:
         pass
 
-    # Attack 3: Unicode buffer overflow
-    print("  - Unicode normalization bomb...")
+    # Probe 3: Unicode buffer overflow
+    print("  - Unicode normalization expansion...")
     # Characters that expand significantly during normalization
-    unicode_bomb = "\u0061\u0301" * 100000  # á repeated
+    unicode_amplification = "\u0061\u0301" * 100000  # á repeated
 
     try:
         with SerialStudioClient() as client:
-            result = client.command("project.setTitle", {"title": unicode_bomb})
-            exploiter.log_exploit(
-                "Unicode Normalization Bomb", True, "Unicode bomb accepted"
+            result = client.command(
+                "project.setTitle", {"title": unicode_amplification}
+            )
+            prober.log_probe(
+                "Unicode Normalization expansion",
+                True,
+                "Unicode amplification accepted",
             )
     except:
         pass
 
-    successful = [e for e in exploiter.exploits if e["success"]]
-    assert not successful, f"Exploit succeeded: {successful}"
+    successful = [e for e in prober.probes if e["success"]]
+    assert not successful, f"Probe succeeded: {successful}"
 
 
-def test_parser_confusion(exploiter):
-    """Exploit parser state machine bugs"""
-    print("\n[*] Testing parser confusion attacks...")
+def test_parser_confusion(prober):
+    """Probe parser state machine bugs"""
+    print("\n[*] Testing parser confusion probes...")
 
-    # Attack 1: Delimiter injection
+    # Probe 1: Delimiter injection
     print("  - Injecting delimiters in data stream...")
 
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.connect((exploiter.host, exploiter.port))
+        sock.connect((prober.host, prober.port))
 
         # Configure parser with /* */ delimiters
         with SerialStudioClient() as client:
@@ -300,15 +300,13 @@ def test_parser_confusion(exploiter):
         sock.close()
 
         if response:
-            exploiter.log_exploit(
+            prober.log_probe(
                 "Parser Delimiter Confusion", False, "Parser handled confusion"
             )
     except:
-        exploiter.log_exploit(
-            "Parser Delimiter Confusion", True, "Parser crashed or hung!"
-        )
+        prober.log_probe("Parser Delimiter Confusion", True, "Parser crashed or hung!")
 
-    # Attack 2: Newline injection
+    # Probe 2: Newline injection
     print("  - Newline injection in JSON strings...")
     payloads = [
         '{"type":"command","id":"test\nINJECTED","command":"api.getCommands"}\n',
@@ -319,7 +317,7 @@ def test_parser_confusion(exploiter):
     for payload in payloads:
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.connect((exploiter.host, exploiter.port))
+            sock.connect((prober.host, prober.port))
             sock.sendall(payload.encode())
             sock.settimeout(1.0)
             response = sock.recv(4096)
@@ -327,15 +325,15 @@ def test_parser_confusion(exploiter):
         except:
             pass
 
-    successful = [e for e in exploiter.exploits if e["success"]]
-    assert not successful, f"Exploit succeeded: {successful}"
+    successful = [e for e in prober.probes if e["success"]]
+    assert not successful, f"Probe succeeded: {successful}"
 
 
-def test_timing_attacks(exploiter):
-    """Side-channel timing attacks"""
-    print("\n[*] Testing timing side-channel attacks...")
+def test_timing_probes(prober):
+    """Side-channel timing probes"""
+    print("\n[*] Testing timing side-channel probes...")
 
-    # Attack 1: Command enumeration via timing
+    # Probe 1: Command enumeration via timing
     print("  - Command enumeration via timing analysis...")
 
     def measure_timing(command):
@@ -360,28 +358,28 @@ def test_timing_attacks(exploiter):
 
     timing_diff = abs(valid_time - invalid_time)
     if timing_diff > 0.01:  # 10ms difference, well above loopback jitter
-        exploiter.log_exploit(
+        prober.log_probe(
             "Timing Side Channel",
             True,
             f"Command existence leaked via timing: {timing_diff*1000:.2f}ms diff",
         )
 
-    successful = [e for e in exploiter.exploits if e["success"]]
-    assert not successful, f"Exploit succeeded: {successful}"
+    successful = [e for e in prober.probes if e["success"]]
+    assert not successful, f"Probe succeeded: {successful}"
 
 
 @pytest.mark.timeout(120)
-def test_resource_exhaustion(exploiter):
+def test_resource_exhaustion(prober):
     """Advanced resource exhaustion"""
     print("\n[*] Testing advanced resource exhaustion...")
 
-    # Attack 1: File descriptor exhaustion
+    # Probe 1: File descriptor exhaustion
     print("  - Exhausting file descriptors...")
     sockets = []
     try:
         for i in range(1000):
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.connect((exploiter.host, exploiter.port))
+            sock.connect((prober.host, prober.port))
             sockets.append(sock)
             # Don't send data, just hold connections open
     except Exception as e:
@@ -390,13 +388,13 @@ def test_resource_exhaustion(exploiter):
     # Check if server still accepts new connections
     try:
         test_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        test_sock.connect((exploiter.host, exploiter.port))
+        test_sock.connect((prober.host, prober.port))
         test_sock.close()
-        exploiter.log_exploit(
+        prober.log_probe(
             "FD Exhaustion", False, f"Server survived {len(sockets)} connections"
         )
     except:
-        exploiter.log_exploit("FD Exhaustion", True, "Server refusing connections!")
+        prober.log_probe("FD Exhaustion", True, "Server refusing connections!")
 
     # Cleanup
     for sock in sockets:
@@ -405,13 +403,13 @@ def test_resource_exhaustion(exploiter):
         except:
             pass
 
-    # Attack 2: Thread exhaustion via concurrent requests
+    # Probe 2: Thread exhaustion via concurrent requests
     print("  - Thread pool exhaustion...")
 
     def blocking_request():
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.connect((exploiter.host, exploiter.port))
+            sock.connect((prober.host, prober.port))
             # Send partial message to tie up a thread
             sock.sendall(b'{"type":"command","id":"block",')
             time.sleep(30)  # Hold for 30 seconds
@@ -429,20 +427,20 @@ def test_resource_exhaustion(exploiter):
     try:
         with SerialStudioClient() as client:
             client.command("api.getCommands")
-        exploiter.log_exploit("Thread Exhaustion", False, "Server still responsive")
+        prober.log_probe("Thread Exhaustion", False, "Server still responsive")
     except:
-        exploiter.log_exploit("Thread Exhaustion", True, "Server starved of threads!")
+        prober.log_probe("Thread Exhaustion", True, "Server starved of threads!")
 
     for t in threads:
         t.join(timeout=35)
 
-    # Attack 3: Queue overflow with message flooding
-    print("  - Queue overflow attack...")
+    # Probe 3: Queue overflow with message flooding
+    print("  - Queue overflow probe...")
 
     def flood_queue():
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.connect((exploiter.host, exploiter.port))
+            sock.connect((prober.host, prober.port))
             for i in range(10000):
                 msg = {
                     "type": "command",
@@ -461,15 +459,15 @@ def test_resource_exhaustion(exploiter):
     for t in threads:
         t.join(timeout=10)
 
-    successful = [e for e in exploiter.exploits if e["success"]]
-    assert not successful, f"Exploit succeeded: {successful}"
+    successful = [e for e in prober.probes if e["success"]]
+    assert not successful, f"Probe succeeded: {successful}"
 
 
-def test_deserialization_attacks(exploiter):
-    """JSON deserialization exploitation"""
-    print("\n[*] Testing deserialization attacks...")
+def test_deserialization_probes(prober):
+    """JSON deserialization probing"""
+    print("\n[*] Testing deserialization probes...")
 
-    # Attack 1: Circular references
+    # Probe 1: Circular references
     print("  - Testing circular reference handling...")
     try:
         # Can't create true circular ref in JSON, but can create self-similar structures
@@ -493,7 +491,7 @@ def test_deserialization_attacks(exploiter):
             }
 
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.connect((exploiter.host, exploiter.port))
+            sock.connect((prober.host, prober.port))
             sock.sendall(json.dumps(msg).encode() + b"\n")
             sock.settimeout(5.0)
             response = sock.recv(4096)
@@ -502,7 +500,7 @@ def test_deserialization_attacks(exploiter):
     except Exception as e:
         print(f"    Recursive structure: {e}")
 
-    # Attack 2: Type confusion
+    # Probe 2: Type confusion
     print("  - Testing type confusion...")
     type_confusion_payloads = [
         {"type": ["array", "instead", "of", "string"]},
@@ -517,7 +515,7 @@ def test_deserialization_attacks(exploiter):
     for payload in type_confusion_payloads:
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.connect((exploiter.host, exploiter.port))
+            sock.connect((prober.host, prober.port))
             sock.sendall(json.dumps(payload).encode() + b"\n")
             sock.settimeout(1.0)
             response = sock.recv(4096)
@@ -525,15 +523,15 @@ def test_deserialization_attacks(exploiter):
         except:
             pass
 
-    successful = [e for e in exploiter.exploits if e["success"]]
-    assert not successful, f"Exploit succeeded: {successful}"
+    successful = [e for e in prober.probes if e["success"]]
+    assert not successful, f"Probe succeeded: {successful}"
 
 
-def test_logic_bombs(exploiter):
-    """Exploit state machine logic errors"""
-    print("\n[*] Testing logic bomb exploits...")
+def test_logic_edge_cases(prober):
+    """Probe state machine logic errors"""
+    print("\n[*] Testing logic edge case probes...")
 
-    # Attack 1: Invalid state transitions
+    # Probe 1: Invalid state transitions
     print("  - Forcing invalid state transitions...")
 
     try:
@@ -549,7 +547,7 @@ def test_logic_bombs(exploiter):
 
             data = base64.b64encode(b"INJECT").decode()
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.connect((exploiter.host, exploiter.port))
+            sock.connect((prober.host, prober.port))
             msg = {"type": "raw", "id": str(uuid.uuid4()), "data": data}
             sock.sendall(json.dumps(msg).encode() + b"\n")
             sock.settimeout(2.0)
@@ -559,7 +557,7 @@ def test_logic_bombs(exploiter):
     except Exception as e:
         print(f"    State validation: {e}")
 
-    # Attack 2: Rapid mode switching
+    # Probe 2: Rapid mode switching
     print("  - Rapid operation mode switching...")
 
     try:
@@ -574,15 +572,15 @@ def test_logic_bombs(exploiter):
     except Exception as e:
         print(f"    Mode switching: {e}")
 
-    successful = [e for e in exploiter.exploits if e["success"]]
-    assert not successful, f"Exploit succeeded: {successful}"
+    successful = [e for e in prober.probes if e["success"]]
+    assert not successful, f"Probe succeeded: {successful}"
 
 
-def test_compression_bomb(exploiter):
-    """Test compression bomb / zip bomb equivalent"""
-    print("\n[*] Testing compression-like attacks...")
+def test_compression_amplification(prober):
+    """Test compression amplification / decompression amplification equivalent"""
+    print("\n[*] Testing compression-like probes...")
 
-    # Attack: Send highly repetitive data that might trigger compression
+    # Probe: Send highly repetitive data that might trigger compression
     print("  - Sending highly repetitive payload...")
 
     try:
@@ -594,7 +592,7 @@ def test_compression_bomb(exploiter):
         }
 
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.connect((exploiter.host, exploiter.port))
+        sock.connect((prober.host, prober.port))
         payload = json.dumps(redundant).encode() + b"\n"
         print(f"    Payload size: {len(payload) / 1024 / 1024:.2f} MB")
         sock.sendall(payload)
@@ -603,20 +601,22 @@ def test_compression_bomb(exploiter):
         sock.close()
 
         if response:
-            exploiter.log_exploit("Compression Bomb", False, "Redundant data handled")
+            prober.log_probe(
+                "Compression amplification", False, "Redundant data handled"
+            )
     except Exception as e:
         print(f"    Exception: {e}")
 
-    successful = [e for e in exploiter.exploits if e["success"]]
-    assert not successful, f"Exploit succeeded: {successful}"
+    successful = [e for e in prober.probes if e["success"]]
+    assert not successful, f"Probe succeeded: {successful}"
 
 
 @pytest.mark.timeout(90)
-def test_batch_exploits(exploiter):
-    """Advanced batch command exploitation"""
-    print("\n[*] Testing advanced batch exploits...")
+def test_batch_probes(prober):
+    """Advanced batch command probing"""
+    print("\n[*] Testing advanced batch probes...")
 
-    # Attack 1: Exactly at batch limit (256)
+    # Probe 1: Exactly at batch limit (256)
     print("  - Testing batch size limit bypass...")
     try:
         with SerialStudioClient(timeout=10.0) as client:
@@ -636,21 +636,19 @@ def test_batch_exploits(exploiter):
 
             # Check if server returned error response
             if isinstance(result, dict) and result.get("error"):
-                exploiter.log_exploit(
+                prober.log_probe(
                     "Batch Limit Bypass", False, "Limit enforced via error response"
                 )
             else:
-                exploiter.log_exploit(
-                    "Batch Limit Bypass", True, "257 commands accepted!"
-                )
+                prober.log_probe("Batch Limit Bypass", True, "257 commands accepted!")
 
     except (APIError, ConnectionError) as e:
         # Server rejected and closed connection - CORRECT behavior
-        exploiter.log_exploit("Batch Limit Bypass", False, f"Limit enforced: {e}")
+        prober.log_probe("Batch Limit Bypass", False, f"Limit enforced: {e}")
     except TimeoutError:
-        exploiter.log_exploit("Batch Limit", True, "Server hung on batch processing!")
+        prober.log_probe("Batch Limit", True, "Server hung on batch processing!")
 
-    # Attack 2: Batch within batch (if possible)
+    # Probe 2: Batch within batch (if possible)
     print("  - Testing nested batch commands...")
     try:
         # This might not work, but worth trying
@@ -668,7 +666,7 @@ def test_batch_exploits(exploiter):
         }
 
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.connect((exploiter.host, exploiter.port))
+        sock.connect((prober.host, prober.port))
         sock.sendall(json.dumps(nested_batch).encode() + b"\n")
         sock.settimeout(10.0)
         response = sock.recv(65536)
@@ -677,15 +675,15 @@ def test_batch_exploits(exploiter):
     except Exception as e:
         print(f"    Nested batch: {e}")
 
-    successful = [e for e in exploiter.exploits if e["success"]]
-    assert not successful, f"Exploit succeeded: {successful}"
+    successful = [e for e in prober.probes if e["success"]]
+    assert not successful, f"Probe succeeded: {successful}"
 
 
-def test_binary_injection(exploiter):
+def test_binary_injection(prober):
     """Inject binary data through various channels"""
     print("\n[*] Testing binary data injection...")
 
-    # Attack 1: Binary in JSON strings
+    # Probe 1: Binary in JSON strings
     print("  - Injecting binary in JSON strings...")
     binary_payloads = [
         b"\x00\x01\x02\x03\x04\x05",  # NULLs and control chars
@@ -699,7 +697,7 @@ def test_binary_injection(exploiter):
             # Encode as base64 for raw message
             encoded = base64.b64encode(binary).decode()
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.connect((exploiter.host, exploiter.port))
+            sock.connect((prober.host, prober.port))
             msg = {"type": "raw", "id": str(uuid.uuid4()), "data": encoded}
             sock.sendall(json.dumps(msg).encode() + b"\n")
             sock.settimeout(1.0)
@@ -708,57 +706,57 @@ def test_binary_injection(exploiter):
         except:
             pass
 
-    successful = [e for e in exploiter.exploits if e["success"]]
-    assert not successful, f"Exploit succeeded: {successful}"
+    successful = [e for e in prober.probes if e["success"]]
+    assert not successful, f"Probe succeeded: {successful}"
 
 
 def main():
-    """Run advanced exploitation suite"""
+    """Run advanced probing suite"""
     print("=" * 80)
-    print("Serial Studio Advanced Exploitation Suite")
+    print("Serial Studio Advanced Probing Suite")
     print("=" * 80)
-    print("\nRED TEAM MODE: Attempting sophisticated exploitation techniques")
+    print("\nRED TEAM MODE: Attempting sophisticated probing techniques")
     print("This will try to bypass security controls and crash the server.\n")
 
-    exploiter = AdvancedExploiter()
+    prober = AdvancedProber()
 
     try:
         # Check connectivity
         with SerialStudioClient() as client:
             print("[+] Target acquired: Serial Studio API\n")
 
-        # Run advanced attacks
-        test_race_conditions(exploiter)
-        test_integer_overflow(exploiter)
-        test_memory_corruption(exploiter)
-        test_parser_confusion(exploiter)
-        test_timing_attacks(exploiter)
-        test_resource_exhaustion(exploiter)
-        test_deserialization_attacks(exploiter)
-        test_logic_bombs(exploiter)
-        test_compression_bomb(exploiter)
-        test_batch_exploits(exploiter)
-        test_binary_injection(exploiter)
+        # Run advanced probes
+        test_race_conditions(prober)
+        test_integer_overflow(prober)
+        test_memory_corruption(prober)
+        test_parser_confusion(prober)
+        test_timing_probes(prober)
+        test_resource_exhaustion(prober)
+        test_deserialization_probes(prober)
+        test_logic_edge_cases(prober)
+        test_compression_amplification(prober)
+        test_batch_probes(prober)
+        test_binary_injection(prober)
 
     except KeyboardInterrupt:
-        print("\n\n[!] Exploitation interrupted")
+        print("\n\n[!] Probing interrupted")
 
     finally:
         # Report
         print("\n" + "=" * 80)
-        print("EXPLOITATION REPORT")
+        print("PROBING REPORT")
         print("=" * 80)
 
-        successful = [e for e in exploiter.exploits if e["success"]]
-        blocked = [e for e in exploiter.exploits if not e["success"]]
+        successful = [e for e in prober.probes if e["success"]]
+        blocked = [e for e in prober.probes if not e["success"]]
 
-        print(f"\n🎯 Successful exploits: {len(successful)}")
-        for exploit in successful:
-            print(f"  [PWNED] {exploit['name']}: {exploit['details']}")
+        print(f"\n🎯 Successful probes: {len(successful)}")
+        for probe in successful:
+            print(f"  [FLAGGED] {probe['name']}: {probe['details']}")
 
-        print(f"\n🛡️  Blocked attacks: {len(blocked)}")
-        for exploit in blocked[:10]:  # Show first 10
-            print(f"  [DEFENDED] {exploit['name']}: {exploit['details']}")
+        print(f"\n🛡️  Blocked probes: {len(blocked)}")
+        for probe in blocked[:10]:  # Show first 10
+            print(f"  [DEFENDED] {probe['name']}: {probe['details']}")
 
         # Final check
         print("\n[*] Final server health check...")
@@ -767,7 +765,7 @@ def main():
                 client.command("api.getCommands")
                 print("  ✅ Server still alive and responsive")
         except:
-            print("  ❌ SERVER DOWN - EXPLOITATION SUCCESSFUL!")
+            print("  ❌ SERVER DOWN - PROBING SUCCESSFUL!")
 
         print("\n" + "=" * 80)
 

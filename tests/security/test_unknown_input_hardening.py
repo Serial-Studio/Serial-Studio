@@ -1,21 +1,21 @@
 """
-Zero-Day Level Adversarial Security Tests for Serial Studio
+Unknown-input Level Boundary Security Tests for Serial Studio
 
-This test suite targets attack vectors NOT covered by the existing security
-tests. It focuses on subtle, advanced exploitation techniques that a
-sophisticated attacker (or an AI-assisted attacker) might use.
+This test suite targets probe vectors NOT covered by the existing security
+tests. It focuses on subtle, advanced probing techniques that a
+sophisticated client (or an AI-assisted client) might use.
 
-Attack categories covered:
+Probe categories covered:
 - JavaScript sandbox escape via frameParserCode
 - Prototype pollution via __proto__ / constructor injection
 - UTF-8 overlong encoding to bypass path filters
-- JSON key collision / hash flooding DoS
+- JSON key collision / hash flooding Resource_exhaustion
 - State desynchronization via partial message boundaries
 - Null byte injection for C++ string truncation
 - Double/triple URL encoding for filter bypass
 - Cross-client request forgery (shared global state abuse)
 - Frame injection through data path
-- Checksum algorithm confusion attacks
+- Checksum algorithm confusion probes
 - Heap spray via predictable allocation patterns
 - Use-after-free triggers via rapid resource lifecycle
 - ANSI escape injection through terminal data path
@@ -24,13 +24,13 @@ Attack categories covered:
 - Integer truncation (int64 -> int32 narrowing)
 - Deserialization gadget chains
 - Memory disclosure via error message analysis
-- Symlink/junction path attacks
+- Symlink/junction path probes
 - ReDoS via crafted delimiter patterns
 
 Run with:
-    pytest tests/security/test_zero_day_adversarial.py -v
-    pytest tests/security/test_zero_day_adversarial.py -v -m "not destructive"
-    pytest tests/security/test_zero_day_adversarial.py -v -k "sandbox"
+    pytest tests/security/test_unknown_input_boundary.py -v
+    pytest tests/security/test_unknown_input_boundary.py -v -m "not destructive"
+    pytest tests/security/test_unknown_input_boundary.py -v -k "sandbox"
 
 Copyright (C) 2020-2025 Alex Spataru
 SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
@@ -112,22 +112,22 @@ def make_cmd(command, params=None):
 class TestJavaScriptSandboxEscape:
     """
     CRITICAL: The FrameParser uses QJSEngine with AllExtensions.
-    If frameParserCode can be set via API, an attacker could execute
+    If frameParserCode can be set via API, an client could execute
     arbitrary JavaScript with full engine privileges.
     """
 
-    MALICIOUS_SCRIPTS = [
+    UNTRUSTED_SCRIPTS = [
         # Attempt to access file system
         (
             "fs_access",
             "function parse(f){var fs=require('fs');"
-            "fs.writeFileSync('/tmp/pwned','OWNED');return f.split(',');}",
+            "fs.writeFileSync('/tmp/flagged','OWNED');return f.split(',');}",
         ),
         # Attempt process spawning
         (
             "process_spawn",
             "function parse(f){var p=require('child_process');"
-            "p.execSync('id > /tmp/pwned');return f.split(',');}",
+            "p.execSync('id > /tmp/flagged');return f.split(',');}",
         ),
         # Attempt to read environment variables
         (
@@ -162,9 +162,9 @@ class TestJavaScriptSandboxEscape:
             "function parse(f){var q=Qt;if(q&&q.application)"
             "return [q.application.applicationName];return f.split(',');}",
         ),
-        # Timer bomb (setTimeout abuse)
+        # Timer amplification (setTimeout abuse)
         (
-            "timer_bomb",
+            "timer_amplification",
             "function parse(f){for(var i=0;i<1e6;i++)"
             "setTimeout(function(){},0);return f.split(',');}",
         ),
@@ -177,12 +177,12 @@ class TestJavaScriptSandboxEscape:
 
     @pytest.mark.parametrize(
         "name,script",
-        MALICIOUS_SCRIPTS,
-        ids=[s[0] for s in MALICIOUS_SCRIPTS],
+        UNTRUSTED_SCRIPTS,
+        ids=[s[0] for s in UNTRUSTED_SCRIPTS],
     )
     def test_js_sandbox_escape(self, security_client, check_server_alive, name, script):
         """
-        Attempt to inject malicious JavaScript via frameParserCode.
+        Attempt to inject untrusted JavaScript via frameParserCode.
 
         Expected: Server should either reject the script, sandbox it safely,
         or not expose frameParserCode configuration via API at all.
@@ -203,11 +203,11 @@ class TestJavaScriptSandboxEscape:
                 "project.frameParser.setCode", {"code": script}
             )
             # If accepted, verify it didn't actually execute
-            if name == "fs_access" and os.path.exists("/tmp/pwned"):
-                os.remove("/tmp/pwned")
+            if name == "fs_access" and os.path.exists("/tmp/flagged"):
+                os.remove("/tmp/flagged")
                 pytest.fail(
                     "CRITICAL: JavaScript sandbox escape! "
-                    "File written to /tmp/pwned via frameParserCode"
+                    "File written to /tmp/flagged via frameParserCode"
                 )
 
         except Exception:
@@ -220,10 +220,10 @@ class TestJavaScriptSandboxEscape:
     def test_js_code_via_project_json(self, security_client, check_server_alive):
         """
         Attempt JS injection via project.loadJson with frameParserCode.
-        This is the most likely attack path since project files contain JS.
+        This is the most likely probe path since project files contain JS.
         """
-        malicious_project = {
-            "title": "Malicious Project",
+        untrusted_project = {
+            "title": "Untrusted Project",
             "frameParserCode": (
                 "function parse(f){"
                 "var x=new XMLHttpRequest();"
@@ -240,15 +240,15 @@ class TestJavaScriptSandboxEscape:
         }
 
         try:
-            security_client.command("project.loadJson", {"config": malicious_project})
+            security_client.command("project.loadJson", {"config": untrusted_project})
         except Exception:
             pass
 
         assert check_server_alive(
             wait_time=2.0
-        ), "Server crashed on malicious project load with JS code"
+        ), "Server crashed on untrusted project load with JS code"
 
-    def test_js_code_length_bomb(self, security_client, check_server_alive):
+    def test_js_code_length_amplification(self, security_client, check_server_alive):
         """
         Send extremely large JavaScript code to exhaust parser memory.
         """
@@ -277,7 +277,7 @@ class TestJavaScriptSandboxEscape:
 @pytest.mark.critical
 class TestPrototypePollution:
     """
-    JSON __proto__ and constructor pollution attacks.
+    JSON __proto__ and constructor pollution probes.
     If Qt's JSON parser doesn't sanitize these keys, internal objects
     could be polluted, leading to property injection or code execution.
     """
@@ -285,7 +285,7 @@ class TestPrototypePollution:
     POLLUTION_PAYLOADS = [
         {"__proto__": {"isAdmin": True, "role": "root"}},
         {"constructor": {"prototype": {"isAdmin": True}}},
-        {"__proto__": {"toString": "pwned"}},
+        {"__proto__": {"toString": "flagged"}},
         {"__proto__": {"valueOf": 42}},
         {"__proto__": {"__proto__": {"__proto__": {"deep": "pollution"}}}},
         {"constructor": {"name": "EvilConstructor"}},
@@ -330,7 +330,7 @@ class TestPrototypePollution:
         payloads = [
             b'{"type":"command","id":"x","command":"api.getCommands","__proto__":{"polluted":true}}\n',
             b'{"type":"command","id":"x","command":"project.setTitle","params":{"title":"test","__proto__":{"admin":true}}}\n',
-            b'{"type":"command","id":"x","command":"api.getCommands","constructor":{"prototype":{"pwned":true}}}\n',
+            b'{"type":"command","id":"x","command":"api.getCommands","constructor":{"prototype":{"flagged":true}}}\n',
         ]
 
         for payload in payloads:
@@ -340,13 +340,13 @@ class TestPrototypePollution:
 
 
 # ===================================================================
-# 3. UTF-8 OVERLONG ENCODING / ENCODING ATTACKS
+# 3. UTF-8 OVERLONG ENCODING / ENCODING PROBES
 # ===================================================================
 
 
 @pytest.mark.security
 @pytest.mark.critical
-class TestEncodingAttacks:
+class TestEncodingProbes:
     """
     UTF-8 overlong encoding, invalid sequences, and encoding confusion
     to bypass input validation filters.
@@ -631,7 +631,7 @@ class TestStateDesync:
 
 
 # ===================================================================
-# 6. HASH COLLISION DoS
+# 6. HASH COLLISION Resource_exhaustion
 # ===================================================================
 
 
@@ -650,7 +650,11 @@ class TestHashCollisionDoS:
         """
         # Generate keys with common prefixes (poor hash distribution)
         num_keys = 10000
-        payload = {"type": "command", "id": "hash-dos", "command": "api.getCommands"}
+        payload = {
+            "type": "command",
+            "id": "hash-resource_exhaustion",
+            "command": "api.getCommands",
+        }
         params = {}
         for i in range(num_keys):
             # Keys with same hash bucket (many hash functions are weak on these)
@@ -661,10 +665,10 @@ class TestHashCollisionDoS:
         response, error = raw_send(json.dumps(payload).encode() + b"\n", timeout=10.0)
         elapsed = time.time() - start
 
-        # If parsing took > 5s, hash collision DoS is likely working
+        # If parsing took > 5s, hash collision Resource_exhaustion is likely working
         if elapsed > 5.0:
             pytest.fail(
-                f"Potential hash collision DoS: {num_keys} keys took "
+                f"Potential hash collision Resource_exhaustion: {num_keys} keys took "
                 f"{elapsed:.2f}s to parse"
             )
 
@@ -705,16 +709,16 @@ class TestHashCollisionDoS:
 
 
 @pytest.mark.security
-class TestCrossClientAttacks:
+class TestCrossClientProbes:
     """
-    Exploit shared global state to affect other clients.
+    Probe shared global state to affect other clients.
     Since Serial Studio uses singletons, one client's actions
     affect all other clients.
     """
 
     def test_sabotage_via_config_change(self, check_server_alive):
         """
-        One malicious client changes frame parser config while another
+        One untrusted client changes frame parser config while another
         client is receiving data, causing data corruption.
         """
         sabotage_complete = threading.Event()
@@ -756,7 +760,7 @@ class TestCrossClientAttacks:
             finally:
                 sabotage_complete.set()
 
-        def victim():
+        def target():
             """Normal client trying to read dashboard data."""
             try:
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -777,7 +781,7 @@ class TestCrossClientAttacks:
                 pass
 
         t1 = threading.Thread(target=saboteur)
-        t2 = threading.Thread(target=victim)
+        t2 = threading.Thread(target=target)
 
         t1.start()
         t2.start()
@@ -785,7 +789,7 @@ class TestCrossClientAttacks:
         t1.join(timeout=10)
         t2.join(timeout=10)
 
-        assert check_server_alive(), "Server crashed during cross-client attack"
+        assert check_server_alive(), "Server crashed during cross-client probe"
 
 
 # ===================================================================
@@ -807,7 +811,7 @@ class TestFrameInjection:
         If the frame parser doesn't sanitize, this could be
         re-interpreted as an API command.
         """
-        malicious_frames = [
+        untrusted_frames = [
             # JSON command disguised as frame data
             base64.b64encode(b'{"type":"command","command":"io.connect"}').decode(),
             # Start/end delimiters embedded in data
@@ -816,7 +820,7 @@ class TestFrameInjection:
             base64.b64encode(b'{"type":"raw","data":"nested"}\n').decode(),
         ]
 
-        for encoded_data in malicious_frames:
+        for encoded_data in untrusted_frames:
             msg = {
                 "type": "raw",
                 "id": str(uuid.uuid4()),
@@ -861,7 +865,7 @@ class TestFrameInjection:
 @pytest.mark.security
 class TestChecksumConfusion:
     """
-    Exploit checksum algorithm switching to bypass integrity checks.
+    Probe checksum algorithm switching to bypass integrity checks.
     """
 
     def test_rapid_checksum_algorithm_switching(
@@ -1077,14 +1081,14 @@ class TestTerminalEscapeInjection:
     - Changing terminal title (information exfiltration)
     - Redefining keyboard mappings
     - Writing to arbitrary screen positions
-    - Exploiting terminal emulator vulnerabilities
+    - Probing terminal emulator weaknesses
     """
 
     ESCAPE_PAYLOADS = [
         # Set terminal title (information exfiltration)
-        b"\x1b]0;PWNED\x07",
+        b"\x1b]0;FLAGGED\x07",
         # Set terminal icon name
-        b"\x1b]1;PWNED\x07",
+        b"\x1b]1;FLAGGED\x07",
         # Cursor to home position + clear screen
         b"\x1b[H\x1b[2J",
         # Save cursor, move to top, write, restore
@@ -1100,7 +1104,7 @@ class TestTerminalEscapeInjection:
         # Sixel graphics (can cause buffer overflows in some terminals)
         b"\x1bPq" + b"#0;2;0;0;0" * 1000 + b"\x1b\\",
         # iTerm2-specific: file transfer attempt
-        b"\x1b]1337;File=inline=1:" + base64.b64encode(b"MALICIOUS") + b"\x07",
+        b"\x1b]1337;File=inline=1:" + base64.b64encode(b"UNTRUSTED") + b"\x07",
         # Bracketed paste mode manipulation
         b"\x1b[200~INJECTED_PASTE\x1b[201~",
     ]
@@ -1125,7 +1129,7 @@ class TestTerminalEscapeInjection:
 
 
 # ===================================================================
-# 12. INTEGER TRUNCATION ATTACKS
+# 12. INTEGER TRUNCATION PROBES
 # ===================================================================
 
 
@@ -1194,7 +1198,7 @@ class TestIntegerTruncation:
                 accepted_fps < 1 or accepted_fps > self.FPS_MAX_VALID
             ):
                 pytest.fail(
-                    f"VULNERABILITY: Server accepted FPS={accepted_fps} "
+                    f"WEAKNESS: Server accepted FPS={accepted_fps} "
                     f"(input: {value}). Valid range is 1-{self.FPS_MAX_VALID}. "
                     f"This causes UI timer to fire at absurd rates."
                 )
@@ -1242,7 +1246,7 @@ class TestIntegerTruncation:
                     pass
 
                 pytest.fail(
-                    f"VULNERABILITY: Server accepted timeRange={accepted} s "
+                    f"WEAKNESS: Server accepted timeRange={accepted} s "
                     f"(input: {value}). Valid window is 0.001-"
                     f"{self.TIME_RANGE_MAX_VALID} s."
                 )
@@ -1284,8 +1288,8 @@ class TestIntegerTruncation:
 class TestHeapSpray:
     """
     Create many objects of predictable size to fill the heap with
-    controlled data. This sets up exploitation of use-after-free
-    or heap overflow vulnerabilities.
+    controlled data. This sets up probing of use-after-free
+    or heap overflow weaknesses.
 
     NOTE: Intensity is deliberately reduced to avoid test timeouts.
     The goal is to detect crashes/UAF, not to actually exhaust memory.
@@ -1394,17 +1398,17 @@ class TestDeserializationGadgets:
 
     def test_json_billion_laughs(self, check_server_alive):
         """
-        JSON equivalent of XML billion laughs attack.
+        JSON equivalent of XML billion laughs probe.
         Create deeply nested arrays that expand exponentially.
         """
         # Each level doubles the data
-        bomb = "[]"
+        amplification = "[]"
         for _ in range(25):
-            bomb = f"[{bomb},{bomb}]"
+            amplification = f"[{amplification},{amplification}]"
 
         payload = (
-            b'{"type":"command","id":"bomb","command":"project.loadJson",'
-            b'"params":{"config":' + bomb.encode() + b"}}\n"
+            b'{"type":"command","id":"amplification","command":"project.loadJson",'
+            b'"params":{"config":' + amplification.encode() + b"}}\n"
         )
 
         # Only send first 10MB (billion laughs can be much larger)
@@ -1568,7 +1572,7 @@ class TestMemoryDisclosure:
 
 
 # ===================================================================
-# 16. UNICODE HOMOGRAPH ATTACKS
+# 16. UNICODE HOMOGRAPH PROBES
 # ===================================================================
 
 
@@ -1625,7 +1629,7 @@ class TestUnicodeHomographs:
 
 @pytest.mark.security
 @pytest.mark.destructive
-class TestProjectComplexityBomb:
+class TestProjectComplexityAmplification:
     """
     Create projects with extreme complexity to exhaust CPU and memory
     during project loading and dashboard initialization.
@@ -1638,7 +1642,7 @@ class TestProjectComplexityBomb:
         """
         # JsonValidator allows maxArraySize=10000 per array
         project = {
-            "title": "Complexity Bomb",
+            "title": "Complexity Amplification",
             "groups": [
                 {
                     "title": f"Group_{i}",
@@ -1664,7 +1668,7 @@ class TestProjectComplexityBomb:
 
         assert check_server_alive(
             wait_time=3.0
-        ), f"Server crashed on complexity bomb ({elapsed:.2f}s)"
+        ), f"Server crashed on complexity amplification ({elapsed:.2f}s)"
 
     def test_deeply_nested_group_structure(self, check_server_alive):
         """
@@ -1709,7 +1713,7 @@ class TestProjectComplexityBomb:
         complex_js += "return f.split(',');}"
 
         project = {
-            "title": "JS Bomb",
+            "title": "JS Amplification",
             "frameParserCode": complex_js,
             "groups": [
                 {
@@ -1733,9 +1737,9 @@ class TestProjectComplexityBomb:
 
 @pytest.mark.security
 @pytest.mark.critical
-class TestSymlinkAttacks:
+class TestSymlinkProbes:
     """
-    Path manipulation attacks using symlinks, junctions, and special
+    Path manipulation probes using symlinks, junctions, and special
     filesystem paths.
     """
 
@@ -2038,7 +2042,7 @@ class TestTimingOracle:
                     f"  Valid commands avg: {avg_valid*1000:.2f}ms\n"
                     f"  Invalid commands avg: {avg_invalid*1000:.2f}ms\n"
                     f"  Difference: {timing_diff_ms:.2f}ms\n"
-                    f"  An attacker can enumerate valid commands via timing"
+                    f"  An client can enumerate valid commands via timing"
                 )
 
         assert check_server_alive(), "Server crashed during timing analysis"
@@ -2148,12 +2152,12 @@ class TestTypeFieldConfusion:
 
 
 # ===================================================================
-# 23. RESPONSE PARSING ATTACKS (Reflected)
+# 23. RESPONSE PARSING PROBES (Reflected)
 # ===================================================================
 
 
 @pytest.mark.security
-class TestReflectedAttacks:
+class TestReflectedProbes:
     """
     Send payloads that, when reflected in error messages, could be
     dangerous to downstream consumers (XSS, log injection, etc.).
@@ -2183,7 +2187,7 @@ class TestReflectedAttacks:
     )
     def test_reflected_payload_in_title(self, security_client, payload):
         """
-        Set project title to a malicious payload, then read it back.
+        Set project title to a untrusted payload, then read it back.
         The payload should be stored as-is (not executed) or sanitized.
         """
         try:

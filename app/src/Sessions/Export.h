@@ -119,7 +119,8 @@ public:
                const QByteArray* viewStateSnapshot,
                const std::atomic<bool>* controlScriptSeen,
                const std::atomic<quint64>* linkDroppedFrames,
-               const std::atomic<quint64>* linkOverflowBytes);
+               const std::atomic<quint64>* linkOverflowBytes,
+               const std::atomic<bool>* pinBaselineToInjectionEpoch);
   ~ExportWorker() override;
 
   void closeResources() override;
@@ -177,6 +178,7 @@ private:
   const std::atomic<bool>* m_controlScriptSeen;
   const std::atomic<quint64>* m_linkDroppedFrames;
   const std::atomic<quint64>* m_linkOverflowBytes;
+  const std::atomic<bool>* m_pinBaselineToInjectionEpoch;
 };
 
 /**
@@ -223,6 +225,7 @@ public slots:
   void setupExternalConnections();
   void setExportEnabled(const bool enabled);
   void setSettingsPersistent(const bool persistent);
+  void setRegressionBaselinePinned(const bool pinned);
   void ingestBlock(const DataModel::DataBlockPtr& block);
   void hotpathTxRawBytes(int deviceId, const IO::CapturedDataPtr& data);
 
@@ -264,6 +267,7 @@ private:
   QTimer m_viewStateDebounce;
 
   alignas(kCacheLine) std::atomic<bool> m_controlScriptSeen;
+  alignas(kCacheLine) std::atomic<bool> m_pinBaselineToInjectionEpoch;
   alignas(kCacheLine) std::atomic<quint64> m_linkDroppedFrames;
   alignas(kCacheLine) std::atomic<quint64> m_linkOverflowBytes;
   quint64 m_lastLinkDroppedSample;

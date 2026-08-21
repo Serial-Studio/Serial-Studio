@@ -18,28 +18,28 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from utils.api_client import SerialStudioClient, APIError
 
 
-class VulnerabilityTracker:
-    """Track discovered vulnerabilities during security tests"""
+class WeaknessTracker:
+    """Track discovered weaknesses during security tests"""
 
     def __init__(self):
-        self.vulnerabilities = []
-        self.exploits = []
+        self.weaknesses = []
+        self.probes = []
         self.crashes = []
 
-    def log_vulnerability(self, severity, category, description, payload=None):
-        """Log a discovered vulnerability"""
-        vuln = {
+    def log_weakness(self, severity, category, description, payload=None):
+        """Log a discovered weakness"""
+        finding = {
             "severity": severity,
             "category": category,
             "description": description,
             "payload": payload,
         }
-        self.vulnerabilities.append(vuln)
+        self.weaknesses.append(finding)
 
-    def log_exploit(self, name, success, details):
-        """Log an exploitation attempt"""
-        exploit = {"name": name, "success": success, "details": details}
-        self.exploits.append(exploit)
+    def log_probe(self, name, success, details):
+        """Log an probing attempt"""
+        probe = {"name": name, "success": success, "details": details}
+        self.probes.append(probe)
 
     def log_crash(self, category, payload, error):
         """Log a server crash"""
@@ -47,20 +47,20 @@ class VulnerabilityTracker:
         self.crashes.append(crash)
 
     def get_summary(self):
-        """Get vulnerability summary"""
+        """Get weakness summary"""
         return {
-            "total_vulnerabilities": len(self.vulnerabilities),
-            "total_exploits": len(self.exploits),
+            "total_weaknesses": len(self.weaknesses),
+            "total_probes": len(self.probes),
             "total_crashes": len(self.crashes),
-            "successful_exploits": len([e for e in self.exploits if e["success"]]),
+            "successful_probes": len([e for e in self.probes if e["success"]]),
             "by_severity": self._count_by_severity(),
         }
 
     def _count_by_severity(self):
-        """Count vulnerabilities by severity"""
+        """Count weaknesses by severity"""
         counts = {}
-        for vuln in self.vulnerabilities:
-            severity = vuln["severity"]
+        for finding in self.weaknesses:
+            severity = finding["severity"]
             counts[severity] = counts.get(severity, 0) + 1
         return counts
 
@@ -118,9 +118,9 @@ def security_client(api_server_required):
 
 
 @pytest.fixture
-def vuln_tracker():
-    """Provide a vulnerability tracker for test session"""
-    return VulnerabilityTracker()
+def finding_tracker():
+    """Provide a weakness tracker for test session"""
+    return WeaknessTracker()
 
 
 @pytest.fixture
@@ -209,7 +209,7 @@ def test_isolation(request):
 
     # Slightly longer delay after stress/destructive tests (reduced to fit within timeout)
     if any(
-        mark.name in ["destructive", "dos", "exploit"]
+        mark.name in ["destructive", "resource_exhaustion", "probe"]
         for mark in request.node.iter_markers()
     ):
         time.sleep(0.5)
@@ -217,18 +217,18 @@ def test_isolation(request):
 
 def pytest_configure(config):
     """Configure pytest with security-specific markers"""
-    config.addinivalue_line("markers", "security: security and penetration tests")
+    config.addinivalue_line("markers", "security: security and robustness tests")
     config.addinivalue_line(
         "markers",
-        "exploit: active exploitation attempts (may crash server)",
+        "probe: active probing attempts (may crash server)",
     )
-    config.addinivalue_line("markers", "dos: denial of service attacks")
-    config.addinivalue_line("markers", "fuzzing: fuzzing tests")
-    config.addinivalue_line("markers", "critical: tests for critical vulnerabilities")
-    config.addinivalue_line("markers", "high: tests for high severity vulnerabilities")
     config.addinivalue_line(
-        "markers", "medium: tests for medium severity vulnerabilities"
+        "markers", "resource_exhaustion: resource exhaustion probes"
     )
+    config.addinivalue_line("markers", "fuzzing: fuzzing tests")
+    config.addinivalue_line("markers", "critical: tests for critical weaknesses")
+    config.addinivalue_line("markers", "high: tests for high severity weaknesses")
+    config.addinivalue_line("markers", "medium: tests for medium severity weaknesses")
     config.addinivalue_line(
         "markers",
         "destructive: tests that may crash or hang the server (run with caution)",
@@ -250,15 +250,15 @@ def pytest_collection_modifyitems(config, items):
         if any(
             pattern in test_name
             for pattern in [
-                "dos",
+                "resource_exhaustion",
                 "flood",
                 "exhaust",
-                "bomb",
+                "amplification",
                 "slowloris",
                 "amplification",
             ]
         ):
-            item.add_marker(pytest.mark.dos)
+            item.add_marker(pytest.mark.resource_exhaustion)
             item.add_marker(pytest.mark.destructive)
 
         if any(pattern in test_name for pattern in ["fuzz", "random", "malformed"]):
@@ -267,14 +267,14 @@ def pytest_collection_modifyitems(config, items):
         if any(
             pattern in test_name
             for pattern in [
-                "exploit",
-                "weaponized",
+                "probe",
+                "instrumented",
                 "race",
                 "overflow",
                 "corruption",
             ]
         ):
-            item.add_marker(pytest.mark.exploit)
+            item.add_marker(pytest.mark.probe)
             item.add_marker(pytest.mark.destructive)
 
         # Mark slow tests
@@ -296,21 +296,21 @@ def pytest_report_header(config):
         return [
             "",
             "Serial Studio Security Test Suite",
-            "⚠️  These tests actively attempt to exploit vulnerabilities",
+            "⚠️  These tests actively attempt to probe weaknesses",
             "=" * 70,
         ]
 
 
 @pytest.fixture
-def exploiter(api_server_required):
+def prober(api_server_required):
     """
-    Provide an AdvancedExploiter instance for exploit technique tests.
+    Provide an AdvancedProber instance for probe technique tests.
 
-    Used by test_exploit_techniques.py
+    Used by test_probe_techniques.py
     """
-    from security.test_exploit_techniques import AdvancedExploiter
+    from security.test_probe_techniques import AdvancedProber
 
-    return AdvancedExploiter()
+    return AdvancedProber()
 
 
 @pytest.fixture
@@ -323,8 +323,8 @@ def tester(request, api_server_required):
     """
     module_name = request.module.__name__
 
-    if "test_api_vulnerabilities" in module_name:
-        from security.test_api_vulnerabilities import SecurityTester
+    if "test_api_weaknesses" in module_name:
+        from security.test_api_weaknesses import SecurityTester
 
         return SecurityTester()
     elif "test_access_control" in module_name:
@@ -337,7 +337,7 @@ def tester(request, api_server_required):
         return DoSTester()
     else:
         # Default fallback
-        from security.test_api_vulnerabilities import SecurityTester
+        from security.test_api_weaknesses import SecurityTester
 
         return SecurityTester()
 
@@ -362,22 +362,18 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
         passed = len(terminalreporter.stats.get("passed", []))
         failed = len(terminalreporter.stats.get("failed", []))
 
-        terminalreporter.write_line(
-            f"Tests passed: {passed} (vulnerabilities defended)"
-        )
-        terminalreporter.write_line(
-            f"Tests failed: {failed} (vulnerabilities exploited)"
-        )
+        terminalreporter.write_line(f"Tests passed: {passed} (weaknesses defended)")
+        terminalreporter.write_line(f"Tests failed: {failed} (weaknesses triggered)")
 
         if failed > 0:
             terminalreporter.write_line(
-                "\n⚠️  VULNERABILITIES FOUND - Review failed tests for details",
+                "\n⚠️  WEAKNESSES FOUND - Review failed tests for details",
                 red=True,
                 bold=True,
             )
         else:
             terminalreporter.write_line(
-                "\n✅  All security tests passed - No exploitable vulnerabilities found",
+                "\n✅  All security tests passed - No susceptible weaknesses found",
                 green=True,
                 bold=True,
             )
