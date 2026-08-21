@@ -652,34 +652,37 @@ jobs:
           exit 1
         fi
 
-        # Re-create the vendor discovery layout sharun keys on: DRI drivers under
-        # shared/lib/dri (hardlinks to the flattened closure copies; Mesa 25+ ships the
-        # per-driver names as symlinks to one dril/gallium megadriver, which lib4bin
-        # flattens only under its real name, so fall back to the resolved target), GBM
-        # backends under shared/lib/gbm, and the GLVND EGL vendor JSON under
-        # usr/share/glvnd with its library_path reduced to a bare soname so it resolves
-        # inside the bundle.
+        # Verify (and backfill) the vendor discovery layout sharun keys on: DRI drivers
+        # under shared/lib/dri, GBM backends under shared/lib/gbm, and the GLVND EGL
+        # vendor JSON under usr/share/glvnd with its library_path reduced to a bare
+        # soname so it resolves inside the bundle. lib4bin keys destinations off the
+        # SOURCE dir, so Mesa 25's symlinked per-driver names already land in
+        # shared/lib/dri pointing at the flattened dril/gallium megadriver — the loops
+        # only create the per-name link when lib4bin left the driver flattened in the
+        # closure root (pre-DRIL Mesa), and fail on names resolvable in neither spot.
         mkdir -p AppDir-compat/usr/shared/lib/dri
         for f in "$DRI_DIR"/*.so; do
           b=$(basename "$f")
-          src="AppDir-compat/usr/shared/lib/$b"
-          if [ ! -f "$src" ]; then
-            src="AppDir-compat/usr/shared/lib/$(basename "$(readlink -f "$f")")"
+          dst="AppDir-compat/usr/shared/lib/dri/$b"
+          if [ ! -e "$dst" ]; then
+            src="AppDir-compat/usr/shared/lib/$b"
+            [ -f "$src" ] || src="AppDir-compat/usr/shared/lib/$(basename "$(readlink -f "$f")")"
+            [ -f "$src" ] && ln -f "$src" "$dst"
           fi
-          if [ ! -f "$src" ]; then
+          if [ ! -e "$dst" ]; then
             echo "::error::DRI driver $b missing from compat closure"
             exit 1
           fi
-          ln -f "$src" "AppDir-compat/usr/shared/lib/dri/$b"
         done
         if [ -n "$GBM_LIBS" ]; then
           mkdir -p AppDir-compat/usr/shared/lib/gbm
           for f in $GBM_LIBS; do
             b=$(basename "$f")
+            dst="AppDir-compat/usr/shared/lib/gbm/$b"
+            [ -e "$dst" ] && continue
             src="AppDir-compat/usr/shared/lib/$b"
             [ -f "$src" ] || src="AppDir-compat/usr/shared/lib/$(basename "$(readlink -f "$f")")"
-            [ -f "$src" ] || continue
-            ln -f "$src" "AppDir-compat/usr/shared/lib/gbm/$b"
+            [ -f "$src" ] && ln -f "$src" "$dst"
           done
         fi
         if [ ! -d /usr/share/glvnd/egl_vendor.d ]; then
@@ -1478,24 +1481,26 @@ jobs:
         mkdir -p AppDir-compat/usr/shared/lib/dri
         for f in "$DRI_DIR"/*.so; do
           b=$(basename "$f")
-          src="AppDir-compat/usr/shared/lib/$b"
-          if [ ! -f "$src" ]; then
-            src="AppDir-compat/usr/shared/lib/$(basename "$(readlink -f "$f")")"
+          dst="AppDir-compat/usr/shared/lib/dri/$b"
+          if [ ! -e "$dst" ]; then
+            src="AppDir-compat/usr/shared/lib/$b"
+            [ -f "$src" ] || src="AppDir-compat/usr/shared/lib/$(basename "$(readlink -f "$f")")"
+            [ -f "$src" ] && ln -f "$src" "$dst"
           fi
-          if [ ! -f "$src" ]; then
+          if [ ! -e "$dst" ]; then
             echo "::error::DRI driver $b missing from compat closure"
             exit 1
           fi
-          ln -f "$src" "AppDir-compat/usr/shared/lib/dri/$b"
         done
         if [ -n "$GBM_LIBS" ]; then
           mkdir -p AppDir-compat/usr/shared/lib/gbm
           for f in $GBM_LIBS; do
             b=$(basename "$f")
+            dst="AppDir-compat/usr/shared/lib/gbm/$b"
+            [ -e "$dst" ] && continue
             src="AppDir-compat/usr/shared/lib/$b"
             [ -f "$src" ] || src="AppDir-compat/usr/shared/lib/$(basename "$(readlink -f "$f")")"
-            [ -f "$src" ] || continue
-            ln -f "$src" "AppDir-compat/usr/shared/lib/gbm/$b"
+            [ -f "$src" ] && ln -f "$src" "$dst"
           done
         fi
         if [ ! -d /usr/share/glvnd/egl_vendor.d ]; then
