@@ -23,10 +23,11 @@
 
 // Regenerate with: python3 scripts/generate-property-registry.py
 
-#include <optional>
-#include <QJsonArray>
-
 #include "API/Handlers/ProjectHandler.h"
+
+#include <QJsonArray>
+#include <optional>
+
 #include "DataModel/Project/PropertyHooks.h"
 #include "DataModel/ProjectModel.h"
 #include "SerialStudio.h"

@@ -24,6 +24,7 @@
 // Regenerate with: python3 scripts/generate-property-registry.py
 
 #include "DataModel/Generated/DatasetRegistry.h"
+
 #include "DataModel/ProjectEditor.h"
 #include "DataModel/ProjectModel.h"
 #include "Misc/IconRegistry.h"
