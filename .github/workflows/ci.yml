@@ -472,10 +472,11 @@ jobs:
     #
     # linuxdeploy plus its Qt plugin build the AppDir; the SQL drivers and the TIFF reader are
     # pruned first so the image carries only what the app loads. linuxdeploy-plugin-qt deploys
-    # ONLY libqxcb by default, so the wayland platform plugins are requested explicitly via
-    # EXTRA_PLATFORM_PLUGINS and their shell/decoration/graphics integration plugin dirs are
-    # copied by hand — without them Plasma/GNOME wayland sessions are forced through
-    # XWayland+GLX. Two more things the tool cannot bundle by itself are added afterwards: the
+    # ONLY libqxcb by default, so the wayland platform plugin is requested explicitly via
+    # EXTRA_PLATFORM_PLUGINS (a single libqwayland.so since Qt 6.10 merged the generic/egl
+    # pair and moved the client into qtbase) and its shell/decoration/graphics integration
+    # plugin dirs are copied by hand — without them Plasma/GNOME wayland sessions are forced
+    # through XWayland+GLX. Two more things the tool cannot bundle by itself are added afterwards: the
     # offscreen platform plugin (the integration tests run headless), and Qt WebEngine's NSS
     # crypto backends, which NSS dlopen()s (softokn/freebl/nssckbi) so an ldd-based bundler
     # never sees them and leaves a half-bundled NSS that crashes against the host's newer
@@ -491,7 +492,7 @@ jobs:
         chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
 
         export QML_SOURCES_PATHS="${{env.QML_DIR}}"
-        export EXTRA_PLATFORM_PLUGINS="libqwayland-generic.so;libqwayland-egl.so"
+        export EXTRA_PLATFORM_PLUGINS="libqwayland.so"
 
         QT_PLUGINS_PATH="${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/plugins"
         rm -f "$QT_PLUGINS_PATH/imageformats/libqtiff.so"
@@ -511,7 +512,7 @@ jobs:
             cp -r "$QT_PLUGINS_PATH/$d/"* "AppDir/usr/plugins/$d/"
           fi
         done
-        if [ ! -f AppDir/usr/plugins/platforms/libqwayland-generic.so ]; then
+        if [ ! -f AppDir/usr/plugins/platforms/libqwayland.so ]; then
           echo "::error::wayland platform plugin missing from AppDir"
           exit 1
         fi
@@ -1296,10 +1297,11 @@ jobs:
     #
     # linuxdeploy plus its Qt plugin build the AppDir; the SQL drivers and the TIFF reader are
     # pruned first so the image carries only what the app loads. linuxdeploy-plugin-qt deploys
-    # ONLY libqxcb by default, so the wayland platform plugins are requested explicitly via
-    # EXTRA_PLATFORM_PLUGINS and their shell/decoration/graphics integration plugin dirs are
-    # copied by hand — without them Plasma/GNOME wayland sessions are forced through
-    # XWayland+GLX. Two more things the tool cannot bundle by itself are added afterwards: the
+    # ONLY libqxcb by default, so the wayland platform plugin is requested explicitly via
+    # EXTRA_PLATFORM_PLUGINS (a single libqwayland.so since Qt 6.10 merged the generic/egl
+    # pair and moved the client into qtbase) and its shell/decoration/graphics integration
+    # plugin dirs are copied by hand — without them Plasma/GNOME wayland sessions are forced
+    # through XWayland+GLX. Two more things the tool cannot bundle by itself are added afterwards: the
     # offscreen platform plugin (the integration tests run headless), and Qt WebEngine's NSS
     # crypto backends, which NSS dlopen()s (softokn/freebl/nssckbi) so an ldd-based bundler
     # never sees them and leaves a half-bundled NSS that crashes against the host's newer
@@ -1315,7 +1317,7 @@ jobs:
         chmod +x linuxdeploy-plugin-qt-aarch64.AppImage
 
         export QML_SOURCES_PATHS="${{env.QML_DIR}}"
-        export EXTRA_PLATFORM_PLUGINS="libqwayland-generic.so;libqwayland-egl.so"
+        export EXTRA_PLATFORM_PLUGINS="libqwayland.so"
 
         QT_PLUGINS_PATH="${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/plugins"
         rm -f "$QT_PLUGINS_PATH/imageformats/libqtiff.so"
@@ -1335,7 +1337,7 @@ jobs:
             cp -r "$QT_PLUGINS_PATH/$d/"* "AppDir/usr/plugins/$d/"
           fi
         done
-        if [ ! -f AppDir/usr/plugins/platforms/libqwayland-generic.so ]; then
+        if [ ! -f AppDir/usr/plugins/platforms/libqwayland.so ]; then
           echo "::error::wayland platform plugin missing from AppDir"
           exit 1
         fi
