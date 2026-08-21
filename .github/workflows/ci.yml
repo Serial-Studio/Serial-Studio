@@ -311,6 +311,7 @@ jobs:
           -DSS_UNITY_BUILD=ON \
           -DUSE_SYSTEM_ZLIB=ON \
           -DUSE_SYSTEM_EXPAT=ON \
+          -DSS_INAPP_TESTS=ON \
           -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_PREFIX_PATH="${{github.workspace}}/grpc-prefix;${CMAKE_PREFIX_PATH}" \
           -DBUILD_COMMERCIAL=ON \
@@ -377,6 +378,7 @@ jobs:
           -DSS_UNITY_BUILD=ON \
           -DUSE_SYSTEM_ZLIB=ON \
           -DUSE_SYSTEM_EXPAT=ON \
+          -DSS_INAPP_TESTS=ON \
           -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_PREFIX_PATH="${{github.workspace}}/grpc-prefix;${CMAKE_PREFIX_PATH}" \
           -DBUILD_COMMERCIAL=ON \
@@ -1100,6 +1102,7 @@ jobs:
           -DSS_UNITY_BUILD=ON \
           -DUSE_SYSTEM_ZLIB=ON \
           -DUSE_SYSTEM_EXPAT=ON \
+          -DSS_INAPP_TESTS=ON \
           -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_PREFIX_PATH="${{github.workspace}}/grpc-prefix;${CMAKE_PREFIX_PATH}" \
           -DBUILD_COMMERCIAL=ON \
@@ -1166,6 +1169,7 @@ jobs:
           -DSS_UNITY_BUILD=ON \
           -DUSE_SYSTEM_ZLIB=ON \
           -DUSE_SYSTEM_EXPAT=ON \
+          -DSS_INAPP_TESTS=ON \
           -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_PREFIX_PATH="${{github.workspace}}/grpc-prefix;${CMAKE_PREFIX_PATH}" \
           -DBUILD_COMMERCIAL=ON \
