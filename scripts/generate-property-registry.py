@@ -694,10 +694,11 @@ def render_serialization(manifest: dict) -> str:
     }
 
     lines: list[str] = [LICENSE.rstrip(), "", BANNER.rstrip(), ""]
-    lines += ['#include "DataModel/Frame.h"', "", "#include <QJsonArray>", ""]
+    lines += ["#include <QJsonArray>", ""]
     lines += [
-        '#include "SerialStudio.h"',
+        '#include "DataModel/Frame.h"',
         '#include "DataModel/Project/PropertyHooks.h"',
+        '#include "SerialStudio.h"',
         "",
     ]
     lines += ["// clang-format off", ""]
@@ -995,7 +996,6 @@ def render_form(manifest: dict) -> str:
     lines: list[str] = [LICENSE.rstrip(), "", BANNER.rstrip(), ""]
     lines += [
         '#include "DataModel/Generated/DatasetRegistry.h"',
-        "",
         '#include "DataModel/ProjectEditor.h"',
         '#include "DataModel/ProjectModel.h"',
         '#include "Misc/IconRegistry.h"',
@@ -1487,11 +1487,10 @@ def render_api(manifest: dict) -> str:
 
     lines: list[str] = [LICENSE.rstrip(), "", BANNER.rstrip(), ""]
     lines += [
-        '#include "API/Handlers/ProjectHandler.h"',
-        "",
-        "#include <QJsonArray>",
         "#include <optional>",
+        "#include <QJsonArray>",
         "",
+        '#include "API/Handlers/ProjectHandler.h"',
         '#include "DataModel/Project/PropertyHooks.h"',
         '#include "DataModel/ProjectModel.h"',
         '#include "SerialStudio.h"',
