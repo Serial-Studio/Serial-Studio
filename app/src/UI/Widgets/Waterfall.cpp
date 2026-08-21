@@ -67,7 +67,7 @@ static constexpr double kLn10          = 2.302585092994046;
 /**
  * @brief Integer-exponent 10^n via table lookup; falls back to std::pow if out of band.
  */
-static inline double fastPow10(double exponent) noexcept
+static inline double waterfallFastPow10(double exponent) noexcept
 {
   static constexpr double kTable[] = {
     1e-15, 1e-14, 1e-13, 1e-12, 1e-11, 1e-10, 1e-9, 1e-8, 1e-7, 1e-6, 1e-5,
@@ -1166,7 +1166,7 @@ std::vector<double> Widgets::Waterfall::collectFreqTicks(double wMin, double wMa
     for (const double m : mants) {
       const double w = dec + std::log10(m);
       if (w >= wMin - 1e-9 && w <= wMax + 1e-9)
-        out.push_back(m * fastPow10(dec));
+        out.push_back(m * waterfallFastPow10(dec));
     }
   }
 
@@ -1591,7 +1591,7 @@ Widgets::Waterfall::AxisTicks Widgets::Waterfall::computeFreqTicks(double maxFre
 
   const double target  = std::max(2, targetCount);
   const double raw     = maxFreq / target;
-  const double base    = fastPow10(std::floor(std::log10(raw)));
+  const double base    = waterfallFastPow10(std::floor(std::log10(raw)));
   const double cands[] = {1.0, 2.0, 5.0, 10.0};
 
   double step = base;

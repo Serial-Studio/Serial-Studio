@@ -38,16 +38,6 @@ static constexpr std::size_t kAudioQueueCapacity = 1024;
 // Continuous-clock resync bound: jitter under this is absorbed, drift over it snaps to wall time
 static constexpr std::chrono::milliseconds kAudioClockResync{50};
 
-/**
- * @brief Logs a driver failure to the console. Drivers never raise modal dialogs: a modal pumps
- *        the event loop, so one raised from a connect or error stack lets queued work retire the
- *        very driver still on that stack (spec 0056).
- */
-static void logDriverError(const QString& title, const QString& text)
-{
-  qWarning().noquote() << QStringLiteral("[%1] %2").arg(title, text);
-}
-
 //--------------------------------------------------------------------------------------------------
 // Utility functions
 //--------------------------------------------------------------------------------------------------

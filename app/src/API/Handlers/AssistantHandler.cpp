@@ -302,7 +302,7 @@ API::CommandResponse API::Handlers::AssistantHandler::workspacePlan(const QStrin
 /**
  * @brief Returns the project.* dryRun command for a given script kind, or empty on unknown.
  */
-static QString dryRunCommandForKind(const QString& kind)
+static QString dryRunAssistantCommandForKind(const QString& kind)
 {
   if (kind == QStringLiteral("frame_parser"))
     return QStringLiteral("project.frameParser.dryRun");
@@ -359,7 +359,7 @@ API::CommandResponse API::Handlers::AssistantHandler::scriptDryRun(const QString
                                                                    const QJsonObject& params)
 {
   const auto kind  = params.value(QStringLiteral("kind")).toString();
-  const auto inner = dryRunCommandForKind(kind);
+  const auto inner = dryRunAssistantCommandForKind(kind);
   if (inner.isEmpty())
     return unknownKindError(
       id, kind, QStringLiteral("frame_parser, transform, painter, output_widget, end_to_end"));
@@ -376,7 +376,7 @@ API::CommandResponse API::Handlers::AssistantHandler::scriptApply(const QString&
                                                                   const QJsonObject& params)
 {
   const auto kind     = params.value(QStringLiteral("kind")).toString();
-  const auto dryInner = dryRunCommandForKind(kind);
+  const auto dryInner = dryRunAssistantCommandForKind(kind);
   const auto setInner = setCodeCommandForKind(kind);
   if (dryInner.isEmpty() || setInner.isEmpty())
     return unknownKindError(

@@ -48,7 +48,7 @@ static constexpr int kMaxDependencies     = 64;
  * @brief Returns the translated text for the shared "Problems" translation context, which the
  *        problem-center panel and the API surface both read.
  */
-[[nodiscard]] static QString trProblem(const char* text)
+[[nodiscard]] static QString trManifestProblem(const char* text)
 {
   return QCoreApplication::translate("Problems", text);
 }
@@ -56,11 +56,11 @@ static constexpr int kMaxDependencies     = 64;
 /**
  * @brief Assembles one rejection finding; the checker id is stamped by the problem center.
  */
-[[nodiscard]] static Finding makeFinding(Severity severity,
-                                         const char* code,
-                                         const QString& title,
-                                         const QString& explanation,
-                                         const QString& remedy)
+[[nodiscard]] static Finding makeManifestFinding(Severity severity,
+                                                 const char* code,
+                                                 const QString& title,
+                                                 const QString& explanation,
+                                                 const QString& remedy)
 {
   Finding finding;
   finding.severity    = severity;
@@ -201,15 +201,16 @@ static void readConfigProperty(const QJsonObject& obj, Descriptor& out, QList<Fi
 
   const bool badChoice = property.type == QStringLiteral("choice") && property.options.isEmpty();
   if (property.id.isEmpty() || !kTypes.contains(property.type) || badChoice) {
-    findings.append(makeFinding(
+    findings.append(makeManifestFinding(
       Misc::ProblemCenter::Error,
       "widget-config-invalid",
-      trProblem("Widget extension declares an unusable setting"),
-      trProblem("Package \"%1\" declares a setting that has no id, an unsupported type, or an "
-                "empty choice list, so its settings form cannot be built.")
+      trManifestProblem("Widget extension declares an unusable setting"),
+      trManifestProblem(
+        "Package \"%1\" declares a setting that has no id, an unsupported type, or an "
+        "empty choice list, so its settings form cannot be built.")
         .arg(out.id),
-      trProblem("Ask the package author to declare each setting with an id and one of the "
-                "supported types: bool, int, double, string, choice.")));
+      trManifestProblem("Ask the package author to declare each setting with an id and one of the "
+                        "supported types: bool, int, double, string, choice.")));
     return;
   }
 
@@ -267,15 +268,17 @@ static void readDependencies(const QJsonObject& block, Descriptor& out)
   const bool hasBlock = manifest.value(QStringLiteral("widget")).isObject();
 
   if (!isWidget || !hasBlock || out.id.isEmpty() || out.title.isEmpty()) {
-    findings.append(makeFinding(
+    findings.append(makeManifestFinding(
       Misc::ProblemCenter::Error,
       "widget-manifest-invalid",
-      trProblem("Widget extension manifest is not usable"),
-      trProblem("The manifest in \"%1\" is missing its id, title, \"type\": \"widget\", or the "
-                "\"widget\" block, so the package cannot be registered.")
+      trManifestProblem("Widget extension manifest is not usable"),
+      trManifestProblem(
+        "The manifest in \"%1\" is missing its id, title, \"type\": \"widget\", or the "
+        "\"widget\" block, so the package cannot be registered.")
         .arg(directory),
-      trProblem("Compare the manifest against the widget manifest reference and reinstall the "
-                "package.")));
+      trManifestProblem(
+        "Compare the manifest against the widget manifest reference and reinstall the "
+        "package.")));
     return false;
   }
 
@@ -294,28 +297,30 @@ static void readDependencies(const QJsonObject& block, Descriptor& out)
 {
   const auto replaces = block.value(QStringLiteral("replaces")).toString().trimmed();
   if (!replaces.isEmpty() && !bundled) {
-    findings.append(makeFinding(
+    findings.append(makeManifestFinding(
       Misc::ProblemCenter::Error,
       "widget-replaces-forbidden",
-      trProblem("Widget extension may not replace a built-in widget"),
-      trProblem("Package \"%1\" declares that it replaces the built-in widget \"%2\". Only "
-                "packages shipped inside the application may do that.")
+      trManifestProblem("Widget extension may not replace a built-in widget"),
+      trManifestProblem("Package \"%1\" declares that it replaces the built-in widget \"%2\". Only "
+                        "packages shipped inside the application may do that.")
         .arg(out.id, replaces),
-      trProblem("Remove the \"replaces\" key from the package, or uninstall the package.")));
+      trManifestProblem(
+        "Remove the \"replaces\" key from the package, or uninstall the package.")));
     return false;
   }
 
   const bool claimsBuiltin = UI::WidgetExtensions::isReservedId(out.id);
   if (claimsBuiltin && !(bundled && replaces == out.id)) {
-    findings.append(makeFinding(
+    findings.append(makeManifestFinding(
       Misc::ProblemCenter::Error,
       "widget-id-reserved",
-      trProblem("Widget extension uses a reserved identifier"),
-      trProblem("Package \"%1\" claims an identifier that belongs to a built-in widget, so it was "
-                "not registered.")
+      trManifestProblem("Widget extension uses a reserved identifier"),
+      trManifestProblem(
+        "Package \"%1\" claims an identifier that belongs to a built-in widget, so it was "
+        "not registered.")
         .arg(out.id),
-      trProblem("Ask the package author to publish it under a unique identifier, such as a "
-                "reverse-domain name.")));
+      trManifestProblem("Ask the package author to publish it under a unique identifier, such as a "
+                        "reverse-domain name.")));
     return false;
   }
 
@@ -338,28 +343,31 @@ static void readDependencies(const QJsonObject& block, Descriptor& out)
   const auto declared   = QVersionNumber::fromString(apiVersion);
   if (!apiVersion.isEmpty()
       && (declared.isNull() || declared.majorVersion() > host.majorVersion())) {
-    findings.append(makeFinding(
+    findings.append(makeManifestFinding(
       Misc::ProblemCenter::Error,
       "widget-api-version",
-      trProblem("Widget extension needs a newer manifest format"),
-      trProblem("Package \"%1\" declares manifest version %2, which this build (%3) cannot read.")
+      trManifestProblem("Widget extension needs a newer manifest format"),
+      trManifestProblem(
+        "Package \"%1\" declares manifest version %2, which this build (%3) cannot read.")
         .arg(out.id, apiVersion, UI::WidgetExtensions::hostApiVersion()),
-      trProblem("Update Serial Studio, or install a build of the package that targets this "
-                "version.")));
+      trManifestProblem("Update Serial Studio, or install a build of the package that targets this "
+                        "version.")));
     return false;
   }
 
   const auto compat = block.value(QStringLiteral("hostCompat")).toString();
   if (!UI::widgetVersionInRange(UI::WidgetExtensions::hostApiVersion(), compat)) {
-    findings.append(makeFinding(
+    findings.append(makeManifestFinding(
       Misc::ProblemCenter::Error,
       "widget-host-incompatible",
-      trProblem("Widget extension is not compatible with this version"),
-      trProblem("Package \"%1\" supports widget API %2, but this build provides %3, so it was not "
-                "loaded.")
+      trManifestProblem("Widget extension is not compatible with this version"),
+      trManifestProblem(
+        "Package \"%1\" supports widget API %2, but this build provides %3, so it was not "
+        "loaded.")
         .arg(out.id, compat, UI::WidgetExtensions::hostApiVersion()),
-      trProblem("Check the package for an update, or keep using the Serial Studio version it was "
-                "built for.")));
+      trManifestProblem(
+        "Check the package for an update, or keep using the Serial Studio version it was "
+        "built for.")));
     return false;
   }
 
@@ -393,14 +401,16 @@ static void readDependencies(const QJsonObject& block, Descriptor& out)
 
   const bool contained = containedInPackage(directory, entry);
   if (!contained || !QFileInfo::exists(directory + QStringLiteral("/") + entry)) {
-    findings.append(makeFinding(
+    findings.append(makeManifestFinding(
       Misc::ProblemCenter::Error,
       "widget-qml-missing",
-      trProblem("Widget extension has no usable QML file"),
-      trProblem("Package \"%1\" declares \"%2\" as its widget file, but that file is missing from "
-                "the package or points outside it.")
+      trManifestProblem("Widget extension has no usable QML file"),
+      trManifestProblem(
+        "Package \"%1\" declares \"%2\" as its widget file, but that file is missing from "
+        "the package or points outside it.")
         .arg(out.id, entry),
-      trProblem("Reinstall the package; if the problem persists, report it to its author.")));
+      trManifestProblem(
+        "Reinstall the package; if the problem persists, report it to its author.")));
     return false;
   }
 

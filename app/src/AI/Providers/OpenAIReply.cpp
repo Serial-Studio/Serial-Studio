@@ -23,9 +23,9 @@
 #include "AI/SseEventReader.h"
 #include "Misc/JsonValidator.h"
 
-static constexpr int kInitialResponseTimeoutMs = 120 * 1000;
-static const char* const kOpenAIEndpoint       = "https://api.openai.com/v1/chat/completions";
-static const char* const kOpenAIAuthHeader     = "Authorization";
+static constexpr int kOpenAIInitialResponseTimeoutMs = 120 * 1000;
+static const char* const kOpenAIEndpoint             = "https://api.openai.com/v1/chat/completions";
+static const char* const kOpenAIAuthHeader           = "Authorization";
 
 //--------------------------------------------------------------------------------------------------
 // Construction
@@ -72,7 +72,7 @@ AI::OpenAIReply::OpenAIReply(QNetworkAccessManager& nam,
   , m_requestBody(requestBody)
   , m_reply(nullptr)
   , m_sse(new SseEventReader(this))
-  , m_transferTimeoutMs(transferTimeoutMs > 0 ? transferTimeoutMs : kInitialResponseTimeoutMs)
+  , m_transferTimeoutMs(transferTimeoutMs > 0 ? transferTimeoutMs : kOpenAIInitialResponseTimeoutMs)
   , m_parseThinkTags(parseThinkTags)
   , m_thinkScan(ThinkScan::Detect)
   , m_finished(false)

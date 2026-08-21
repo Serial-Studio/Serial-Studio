@@ -62,7 +62,7 @@ static constexpr int kMaxOfferedMigrations = 64;
  *        corpus); bit is LuaJIT's native bitwise library, the compat layer's foundation.
  *        ffi and jit are deliberately absent in every mode: sandbox escape.
  */
-static const luaL_Reg kSafeLibs[] = {
+static const luaL_Reg kLuaSafeLibs[] = {
   {    "_G",   luaopen_base},
   { "table",  luaopen_table},
   {"string", luaopen_string},
@@ -107,7 +107,7 @@ static void openSafeLibs(lua_State* L)
 {
   SS_ASSERT(L != nullptr, return);
 
-  for (const luaL_Reg* lib = kSafeLibs; lib->func; ++lib) {
+  for (const luaL_Reg* lib = kLuaSafeLibs; lib->func; ++lib) {
     luaL_requiref(L, lib->name, lib->func, 1);
     lua_pop(L, 1);
   }

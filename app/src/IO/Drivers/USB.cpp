@@ -50,15 +50,6 @@ constexpr int kHotplugFallbackIntervalMs = 2000;
 constexpr int kIsoDrainTimeoutMs         = 2000;
 constexpr int kMaxControlLength          = 4096;
 
-/**
- * @brief Queues an error box so it opens once the current stack has returned: a modal spins the
- *        event loop, and raising one mid open()/error stack re-enters the stack it was raised from.
- */
-static void logDriverError(const QString& title, const QString& text)
-{
-  qWarning().noquote() << QStringLiteral("[%1] %2").arg(title, text);
-}
-
 //--------------------------------------------------------------------------------------------------
 // Constructor, destructor & singleton
 //--------------------------------------------------------------------------------------------------

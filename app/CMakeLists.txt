@@ -1518,31 +1518,35 @@ endif()
 #
 # SS_UNITY_BUILD=ON batches this target's C++ sources into unity TUs to cut compile
 # time; CI compiles the application twice per platform (PGO generate + use) with no
-# compiler cache, so the savings land on every push. Default is OFF: local builds,
-# the ss_unit_tests tier, and every lib/ third-party target are unaffected. Both PGO
-# stages must configure with the same value -- the batch layout determines the
-# object-file <-> profile-data mapping, and it has to be identical across stages.
+# compiler cache, so the savings land on every push. Batch size 8 is the sweet spot:
+# it amortizes header parsing while keeping enough TUs for the build to parallelize
+# (batch 0 -- one monolithic jumbo TU -- serializes the whole target on one compiler
+# process). Default is OFF: local builds, the ss_unit_tests tier, and every lib/
+# third-party target are unaffected. Both PGO stages must configure with the same
+# value -- the unity layout determines the object-file <-> profile-data mapping, and
+# it has to be identical across stages.
 #
 # /bigobj: a unity TU on the MSVC ABI (cl.exe and clang-cl) can exceed the default
 # COFF section limit; the flag lifts it and has no codegen effect.
 #
-# Exclusions (SKIP_UNITY_BUILD_INCLUSION):
+# Exclusions (SKIP_UNITY_BUILD_INCLUSION) are generated/vendored TUs only:
 #   - rcc-generated TUs: every rcc output defines the same file-local symbols
-#     (qt_resource_data/name/struct), so no two of them may share a batch.
-#   - The list below: TUs whose file-local names (file-scope static or
-#     const/constexpr objects, anonymous-namespace members, file-scope
-#     `using namespace`) collide with another TU's when concatenated. Derived from
-#     a tree-sitter scan of every app TU (2026-08-14) and kept exhaustive even for
-#     pairs that sit in different batches today, because batch membership shifts
-#     whenever sources are added. A CI "redefinition"/"ambiguous" error inside a
-#     unity_*_cxx.cxx TU means a new collision: add the offending file here, or
-#     rename its file-local helper.
+#     (qt_resource_data/name/struct), so no two of them may share the jumbo TU.
 #   - src/ThirdParty/*.cpp: vendored single-file libraries full of file-local
 #     symbols. (miniaudio.cpp, tweetnacl.c and the proto-generated TUs are already
 #     excluded implicitly -- per-source COMPILE_OPTIONS/COMPILE_FLAGS opt a file out
 #     of unity -- but they are pinned here so a warning-flag cleanup cannot silently
 #     pull ~90k-line miniaudio into a batch. NativeWindow_macOS.mm is skipped in the
 #     platform block above.)
+#
+# First-party TUs are NOT excluded: every file-local name is unique app-wide, verified
+# by compiling the whole target as ONE monolithic jumbo TU (batch size 0) on 2026-08-20
+# (shared logDriverError moved into HAL_Driver, colliding helpers/constants renamed with
+# subsystem prefixes, file-scope `using namespace` directives contained in namespace
+# blocks). A "redefinition"/"ambiguous"/-Wshadow diagnostic inside a unity_*_cxx.cxx TU
+# means a NEW collision: rename the file-local helper or contain the directive -- do not
+# add the file to the exclusion list. To re-verify the full closure, build once with
+# UNITY_BUILD_BATCH_SIZE 0: batching only hides collisions, it never removes them.
 #
 #---------------------------------------------------------------------------------------------------
 
@@ -1561,61 +1565,8 @@ if(SS_UNITY_BUILD)
   )
 
   set_source_files_properties(
-    src/AI/ContextBuilder.cpp
-    src/AI/Conversation.cpp
-    src/AI/Providers/AnthropicReply.cpp
-    src/AI/Providers/GeminiReply.cpp
-    src/AI/Providers/OpenAIReply.cpp
-    src/AI/ToolDispatcher.cpp
-    src/API/Handlers/AssistantHandler.cpp
-    src/API/Handlers/NotificationsHandler.cpp
-    src/CSV/Player.cpp
-    src/Console/Export.cpp
-    src/DataModel/Editors/CodeFormatter.cpp
-    src/DataModel/Importers/ProtoImporter.cpp
-    src/DataModel/Project/ProjectModelLoading.cpp
-    src/DataModel/Scripting/ControlScript.cpp
-    src/DataModel/Scripting/ControlScriptWorker.cpp
-    src/DataModel/Scripting/DashboardApi.cpp
-    src/DataModel/Scripting/DeviceWriteApi.cpp
-    src/DataModel/Scripting/JsWatchdog.cpp
-    src/DataModel/Scripting/JsWatchdogThread.cpp
-    src/DataModel/Scripting/LuaMigration.cpp
-    src/DataModel/Scripting/LuaScriptEngine.cpp
-    src/DataModel/Scripting/MacroRunner.cpp
-    src/DataModel/Scripting/MacroWorker.cpp
-    src/IO/Drivers/CANBus.cpp
-    src/IO/Drivers/CANBus/GsUsbCanBackend.cpp
-    src/IO/Drivers/HID.cpp
-    src/IO/Drivers/MQTT.cpp
-    src/IO/Drivers/Modbus.cpp
-    src/IO/Drivers/Network.cpp
-    src/IO/Drivers/UART.cpp
-    src/IO/Drivers/USB.cpp
-    src/Licensing/GuardSelfTest.cpp
-    src/Licensing/OfflineSelfTest.cpp
-    src/MDF4/Export.cpp
-    src/MDF4/Player.cpp
-    src/MQTT/PublisherScript.cpp
-    src/Misc/Diagnostics/AudioChecks.cpp
-    src/Misc/Diagnostics/BluetoothChecks.cpp
-    src/Misc/Diagnostics/SerialChecks.cpp
-    src/Misc/Examples.cpp
-    src/Misc/HelpCenter.cpp
-    src/Misc/Problems/ExtensionCheckers.cpp
-    src/Misc/Problems/LinkCheckers.cpp
-    src/Misc/Problems/ProjectCheckers.cpp
-    src/Misc/Problems/ScriptCheckers.cpp
-    src/Sessions/Player.cpp
     src/ThirdParty/ed25519_verify.cpp
     src/ThirdParty/miniaudio.cpp
-    src/UI/WidgetExtensionManifest.cpp
-    src/UI/WidgetExtensions.cpp
-    src/UI/Widgets/Output/PanelLayout.cpp
-    src/UI/Widgets/Plot3D.cpp
-    src/UI/Widgets/PlotAreaFill.cpp
-    src/UI/Widgets/PlotCurve.cpp
-    src/UI/Widgets/Waterfall.cpp
     PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
   )
 endif()

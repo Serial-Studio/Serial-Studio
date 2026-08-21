@@ -41,8 +41,8 @@
 #include "Misc/Utilities.h"
 #include "SSAssert.h"
 
-static constexpr int kDialDeadlineMs = 5000;
-static constexpr int kDialPaceMs     = 250;
+static constexpr int kNetworkDialDeadlineMs = 5000;
+static constexpr int kNetworkDialPaceMs     = 250;
 
 #ifdef Q_OS_WIN
 using ProbeSocket                           = SOCKET;
@@ -119,16 +119,6 @@ static void closeProbeSocket(ProbeSocket handle)
   const int flags = ::fcntl(handle, F_GETFL, 0);
   return flags != -1 && ::fcntl(handle, F_SETFL, flags | O_NONBLOCK) != -1;
 #endif
-}
-
-/**
- * @brief Logs a driver failure to the console. Drivers never raise modal dialogs: a modal pumps
- *        the event loop, so one raised from a connect or error stack lets queued work retire the
- *        very driver still on that stack (spec 0056).
- */
-static void logDriverError(const QString& title, const QString& text)
-{
-  qWarning().noquote() << QStringLiteral("[%1] %2").arg(title, text);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -447,10 +437,10 @@ static bool waitForTcpEndpoint(const QString& host, quint16 port, QString& reaso
   QElapsedTimer deadline;
   deadline.start();
 
-  while (deadline.elapsed() < kDialDeadlineMs) {
+  while (deadline.elapsed() < kNetworkDialDeadlineMs) {
     bool refusedAny = false;
     for (const addrinfo* it = resolved; it != nullptr; it = it->ai_next) {
-      const int remaining = kDialDeadlineMs - static_cast<int>(deadline.elapsed());
+      const int remaining = kNetworkDialDeadlineMs - static_cast<int>(deadline.elapsed());
       if (remaining <= 0)
         break;
 
@@ -469,7 +459,7 @@ static bool waitForTcpEndpoint(const QString& host, quint16 port, QString& reaso
       return false;
     }
 
-    QThread::msleep(kDialPaceMs);
+    QThread::msleep(kNetworkDialPaceMs);
   }
 
   reason = QObject::tr("Connection timed out");
@@ -494,7 +484,7 @@ bool IO::Drivers::Network::dialTcpBlocking(const QString& host, const QIODevice:
   }
 
   m_tcpSocket->connectToHost(host, tcpPort(), mode);
-  if (!m_tcpSocket->waitForConnected(kDialDeadlineMs)) {
+  if (!m_tcpSocket->waitForConnected(kNetworkDialDeadlineMs)) {
     const QString finalReason = m_tcpSocket->errorString();
     m_tcpSocket->abort();
     logDriverError(

@@ -34,18 +34,19 @@
 // GitHub URL helpers
 //--------------------------------------------------------------------------------------------------
 
-static const QString kDevSlug     = QStringLiteral("dev");
-static const QString kDevRef      = QStringLiteral("master");
-static const QString kGitHubRepo  = QStringLiteral("Serial-Studio/Serial-Studio");
-static const QString kSite        = QStringLiteral("https://serial-studio.com");
-static const QString kVersionsUrl = kSite + QStringLiteral("/help/versions.json");
+static const QString kDevSlug              = QStringLiteral("dev");
+static const QString kDevRef               = QStringLiteral("master");
+static const QString kHelpCenterGitHubRepo = QStringLiteral("Serial-Studio/Serial-Studio");
+static const QString kSite                 = QStringLiteral("https://serial-studio.com");
+static const QString kVersionsUrl          = kSite + QStringLiteral("/help/versions.json");
 
 /**
  * @brief Returns the raw.githubusercontent.com base URL of doc/help at @a ref.
  */
 static QString baseUrl(const QString& ref)
 {
-  return QStringLiteral("https://raw.githubusercontent.com/%1/%2/doc/help/").arg(kGitHubRepo, ref);
+  return QStringLiteral("https://raw.githubusercontent.com/%1/%2/doc/help/")
+    .arg(kHelpCenterGitHubRepo, ref);
 }
 
 /**

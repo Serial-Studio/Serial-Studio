@@ -818,7 +818,9 @@ ScalarRange defaultRangeFor(DataModel::ProtoScalar s)
 
 }  // namespace detail::proto
 
-using namespace detail::proto;
+namespace DataModel {
+
+using namespace ::detail::proto;
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access
@@ -1840,3 +1842,5 @@ int DataModel::ProtoImporter::countFieldsRecursive(const ProtoMessage& message,
   visited.remove(&message);
   return n;
 }
+
+}  // namespace DataModel

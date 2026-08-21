@@ -31,7 +31,10 @@ extern "C" {
 /**
  * @brief Calls lua_pcall under a C++ try/catch -- escaped exceptions become LUA_ERRRUN.
  */
-[[nodiscard]] static int guardedPcall(lua_State* L, int nargs, int nresults, int msgh) noexcept
+[[nodiscard]] static int publisherGuardedPcall(lua_State* L,
+                                               int nargs,
+                                               int nresults,
+                                               int msgh) noexcept
 {
   try {
     return lua_pcall(L, nargs, nresults, msgh);
@@ -50,7 +53,7 @@ extern "C" {
 /**
  * @brief Lua atpanic handler that throws so abort() is never reached.
  */
-static int luaPanicHandler(lua_State* L)
+static int publisherLuaPanicHandler(lua_State* L)
 {
   const char* msg = lua_tostring(L, -1);
   qWarning() << "[PublisherScript] Lua panic:" << (msg ? msg : "<unknown>");
@@ -60,7 +63,7 @@ static int luaPanicHandler(lua_State* L)
 /**
  * @brief Loads a sandboxed library set into a fresh Lua state.
  */
-static void openSafeLibs(lua_State* L)
+static void openPublisherSafeLibs(lua_State* L)
 {
   static const luaL_Reg kSafeLibs[] = {
     {    "_G",   luaopen_base},
@@ -133,8 +136,8 @@ bool MQTT::PublisherScript::compile(const QString& source, int language, QString
       return false;
     }
 
-    lua_atpanic(m_luaState, luaPanicHandler);
-    openSafeLibs(m_luaState);
+    lua_atpanic(m_luaState, publisherLuaPanicHandler);
+    openPublisherSafeLibs(m_luaState);
     DataModel::installLuaCompat(m_luaState);
 
     lua_pushlightuserdata(m_luaState, this);
@@ -146,7 +149,7 @@ bool MQTT::PublisherScript::compile(const QString& source, int language, QString
     m_deadline            = QDeadlineTimer(kRuntimeWatchdogMs);
     int status            = luaL_loadstring(m_luaState, utf8.constData());
     if (status == LUA_OK)
-      status = guardedPcall(m_luaState, 0, LUA_MULTRET, 0);
+      status = publisherGuardedPcall(m_luaState, 0, LUA_MULTRET, 0);
 
     m_deadline = QDeadlineTimer(QDeadlineTimer::Forever);
     if (status != LUA_OK) {
@@ -238,7 +241,7 @@ bool MQTT::PublisherScript::run(const QByteArray& frame, QByteArray& payloadOut,
     lua_pushlstring(m_luaState, frame.constData(), static_cast<size_t>(frame.size()));
 
     m_deadline       = QDeadlineTimer(kRuntimeWatchdogMs);
-    const int status = guardedPcall(m_luaState, 1, 1, 0);
+    const int status = publisherGuardedPcall(m_luaState, 1, 1, 0);
     m_deadline       = QDeadlineTimer(QDeadlineTimer::Forever);
     if (status != LUA_OK) {
       errorOut = QString::fromUtf8(lua_tostring(m_luaState, -1));

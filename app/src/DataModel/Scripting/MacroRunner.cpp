@@ -58,10 +58,10 @@ extern "C" {
 // Constants
 //--------------------------------------------------------------------------------------------------
 
-static constexpr int kLuaDeadlineMs       = 30000;
-static constexpr int kLuaHookInstructions = 10000;
-static constexpr int kShutdownWaitSlices  = 140;
-static constexpr int kShutdownWaitSliceMs = 50;
+static constexpr int kLuaDeadlineMs            = 30000;
+static constexpr int kLuaHookInstructions      = 10000;
+static constexpr int kMacroShutdownWaitSlices  = 140;
+static constexpr int kMacroShutdownWaitSliceMs = 50;
 
 //--------------------------------------------------------------------------------------------------
 // Lua glue (GUI thread)
@@ -197,8 +197,8 @@ DataModel::MacroRunner::~MacroRunner()
     m_worker->requestTeardown();
 
   m_thread->quit();
-  for (int i = 0; i < kShutdownWaitSlices; ++i) {
-    if (m_thread->wait(kShutdownWaitSliceMs))
+  for (int i = 0; i < kMacroShutdownWaitSlices; ++i) {
+    if (m_thread->wait(kMacroShutdownWaitSliceMs))
       break;
 
     if (qApp)

@@ -40,11 +40,11 @@ constexpr int kMaxBridgedColumns = 262144;
 /**
  * @brief Encodes a premultiplied vertex color for QSGVertexColorMaterial.
  */
-static void setVertexColor(QSGGeometry::ColoredPoint2D& vertex,
-                           const float x,
-                           const float y,
-                           const QColor& color,
-                           double alpha)
+static void setFillVertexColor(QSGGeometry::ColoredPoint2D& vertex,
+                               const float x,
+                               const float y,
+                               const QColor& color,
+                               double alpha)
 {
   SS_ASSERT(alpha >= 0.0 && alpha <= 1.0, alpha = std::clamp(alpha, 0.0, 1.0));
 
@@ -429,15 +429,15 @@ void Widgets::PlotAreaFill::emitColumns(QSGGeometry::ColoredPoint2D* vertices,
     if (j > 0) {
       vertices[j] = vertices[j - 1];
       ++j;
-      setVertexColor(vertices[j++], x0, y_top, m_fillColor, a_top);
+      setFillVertexColor(vertices[j++], x0, y_top, m_fillColor, a_top);
     }
 
-    setVertexColor(vertices[j++], x0, y_top, m_fillColor, a_top);
-    setVertexColor(vertices[j++], x1, y_top, m_fillColor, a_top);
-    setVertexColor(vertices[j++], x0, base_y, m_fillColor, kMinAlpha);
-    setVertexColor(vertices[j++], x1, base_y, m_fillColor, kMinAlpha);
-    setVertexColor(vertices[j++], x0, y_bot, m_fillColor, a_bot);
-    setVertexColor(vertices[j++], x1, y_bot, m_fillColor, a_bot);
+    setFillVertexColor(vertices[j++], x0, y_top, m_fillColor, a_top);
+    setFillVertexColor(vertices[j++], x1, y_top, m_fillColor, a_top);
+    setFillVertexColor(vertices[j++], x0, base_y, m_fillColor, kMinAlpha);
+    setFillVertexColor(vertices[j++], x1, base_y, m_fillColor, kMinAlpha);
+    setFillVertexColor(vertices[j++], x0, y_bot, m_fillColor, a_bot);
+    setFillVertexColor(vertices[j++], x1, y_bot, m_fillColor, a_bot);
   }
 
   // code-verify off

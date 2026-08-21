@@ -14,7 +14,8 @@
 
 #include "Misc/CommonFonts.h"
 
-using namespace Widgets::Output;
+namespace Widgets::Output {
+
 using OWT = DataModel::OutputWidgetType;
 
 //--------------------------------------------------------------------------------------------------
@@ -263,3 +264,5 @@ QVector<PanelLayout::Rect> PanelLayout::compute(const std::vector<DataModel::Out
 
   return result;
 }
+
+}  // namespace Widgets::Output

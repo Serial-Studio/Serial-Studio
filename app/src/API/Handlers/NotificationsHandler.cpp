@@ -28,7 +28,7 @@
 /**
  * @brief Reusable "accepts channel/title/subtitle strings" schema chunk.
  */
-[[nodiscard]] static QJsonObject stringProp(const QString& description)
+[[nodiscard]] static QJsonObject notificationStringProp(const QString& description)
 {
   QJsonObject p;
   p[QStringLiteral("type")]        = QStringLiteral("string");
@@ -80,9 +80,11 @@ void API::Handlers::NotificationsHandler::registerCommands()
   emptySchema[QStringLiteral("properties")] = QJsonObject();
 
   QJsonObject eventProps;
-  eventProps[QStringLiteral("channel")]  = stringProp(QStringLiteral("Channel ID (free-form)"));
-  eventProps[QStringLiteral("title")]    = stringProp(QStringLiteral("Event title"));
-  eventProps[QStringLiteral("subtitle")] = stringProp(QStringLiteral("Event detail (optional)"));
+  eventProps[QStringLiteral("channel")] =
+    notificationStringProp(QStringLiteral("Channel ID (free-form)"));
+  eventProps[QStringLiteral("title")] = notificationStringProp(QStringLiteral("Event title"));
+  eventProps[QStringLiteral("subtitle")] =
+    notificationStringProp(QStringLiteral("Event detail (optional)"));
 
   {
     QJsonObject props              = eventProps;
@@ -104,11 +106,12 @@ void API::Handlers::NotificationsHandler::registerCommands()
 
   {
     QJsonObject props;
-    props[QStringLiteral("channel")] = stringProp(QStringLiteral("Filter by channel (optional)"));
-    props[QStringLiteral("limit")]   = QJsonObject{
-        {       QStringLiteral("type"),QStringLiteral("integer")                                       },
-        {QStringLiteral("description"),
-         QStringLiteral("Max entries to return (0 = all, default 0)")}
+    props[QStringLiteral("channel")] =
+      notificationStringProp(QStringLiteral("Filter by channel (optional)"));
+    props[QStringLiteral("limit")] = QJsonObject{
+      {       QStringLiteral("type"),QStringLiteral("integer")                                     },
+      {QStringLiteral("description"),
+       QStringLiteral("Max entries to return (0 = all, default 0)")}
     };
     registry.registerCommand(
       QStringLiteral("notifications.list"),
@@ -129,7 +132,7 @@ void API::Handlers::NotificationsHandler::registerCommands()
 
   {
     QJsonObject props;
-    props[QStringLiteral("channel")] = stringProp(QStringLiteral("Channel to clear"));
+    props[QStringLiteral("channel")] = notificationStringProp(QStringLiteral("Channel to clear"));
     registry.registerCommand(QStringLiteral("notifications.clearChannel"),
                              QStringLiteral("Erase every event posted to the given channel"),
                              makeSchema(props, QJsonArray{QStringLiteral("channel")}),

@@ -50,7 +50,7 @@
 #  include "SSAssert.h"
 #  include "UI/Dashboard.h"
 
-static constexpr int kMaxSeekWindowRows = 262144;
+static constexpr int kSessionMaxSeekWindowRows = 262144;
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access
@@ -807,7 +807,7 @@ void Sessions::Player::setProgress(const double progress)
 
 /**
  * @brief First row of the scrub window ending at @p target: walks back until the plot time
- *        range is covered (never fewer than points() rows), capped at kMaxSeekWindowRows so
+ *        range is covered (never fewer than points() rows), capped at kSessionMaxSeekWindowRows so
  *        dense recordings bound the per-tick cost.
  */
 int Sessions::Player::seekWindowStartRow(int target) const
@@ -821,10 +821,10 @@ int Sessions::Player::seekWindowStartRow(int target) const
   const double targetSec = m_timestampsNs[static_cast<size_t>(target)] / 1e9;
 
   const int minStart = qMax(0, target - qMax(1, dashboard.points()) + 1);
-  const int capStart = qMax(0, target - kMaxSeekWindowRows + 1);
+  const int capStart = qMax(0, target - kSessionMaxSeekWindowRows + 1);
 
   int start = minStart;
-  for (int i = 0; i < kMaxSeekWindowRows && start > capStart; ++i) {
+  for (int i = 0; i < kSessionMaxSeekWindowRows && start > capStart; ++i) {
     const double sec = m_timestampsNs[static_cast<size_t>(start - 1)] / 1e9;
     if (targetSec - sec > range)
       break;
@@ -904,7 +904,7 @@ void Sessions::Player::performSeekSettle()
 /**
  * @brief Forward-fills NaN gaps and backfills the leading run from the first stored value.
  */
-static void fillSeekGaps(QVector<double>& values)
+static void fillSessionSeekGaps(QVector<double>& values)
 {
   int firstSet = -1;
   const int n  = values.size();
@@ -1012,7 +1012,7 @@ void Sessions::Player::buildSeekWindow(int startRow,
   m_seekQuery->finish();
 
   for (auto it = series.begin(); it != series.end(); ++it)
-    fillSeekGaps(it.value());
+    fillSessionSeekGaps(it.value());
 }
 
 /**
@@ -1361,7 +1361,7 @@ void Sessions::Player::fillSeekWindowFromBlocks(int startRow,
   q.finish();
 
   for (auto it = series.begin(); it != series.end(); ++it)
-    fillSeekGaps(it.value());
+    fillSessionSeekGaps(it.value());
 }
 
 /**

@@ -36,7 +36,7 @@
 using Finding  = Misc::ProblemCenter::Finding;
 using Severity = Misc::ProblemCenter::Severity;
 
-static const QString kJumpDataset = QStringLiteral("dataset");
+static const QString kScriptJumpDataset = QStringLiteral("dataset");
 
 //--------------------------------------------------------------------------------------------------
 // Shared helpers
@@ -45,7 +45,7 @@ static const QString kJumpDataset = QStringLiteral("dataset");
 /**
  * @brief Returns the translated text for the shared "Problems" translation context.
  */
-[[nodiscard]] static QString trProblem(const char* text)
+[[nodiscard]] static QString trScriptProblem(const char* text)
 {
   return QCoreApplication::translate("Problems", text);
 }
@@ -53,13 +53,13 @@ static const QString kJumpDataset = QStringLiteral("dataset");
 /**
  * @brief Assembles one finding; the checker id is stamped by the problem center after the run.
  */
-[[nodiscard]] static Finding makeFinding(Severity severity,
-                                         const char* code,
-                                         const QString& title,
-                                         const QString& explanation,
-                                         const QString& remedy,
-                                         int entityUniqueId,
-                                         const QString& jump)
+[[nodiscard]] static Finding makeScriptFinding(Severity severity,
+                                               const char* code,
+                                               const QString& title,
+                                               const QString& explanation,
+                                               const QString& remedy,
+                                               int entityUniqueId,
+                                               const QString& jump)
 {
   Finding finding;
   finding.severity       = severity;
@@ -76,36 +76,36 @@ static const QString kJumpDataset = QStringLiteral("dataset");
  * @brief Maps a live error counter onto a decade bucket, so the finding text stays identical while
  *        the failure keeps repeating and the panel is not reset once per second.
  */
-[[nodiscard]] static QString bucketLabel(quint64 value)
+[[nodiscard]] static QString scriptBucketLabel(quint64 value)
 {
   if (value >= 1000000)
-    return trProblem("more than a million times");
+    return trScriptProblem("more than a million times");
 
   if (value >= 100000)
-    return trProblem("more than 100,000 times");
+    return trScriptProblem("more than 100,000 times");
 
   if (value >= 10000)
-    return trProblem("more than 10,000 times");
+    return trScriptProblem("more than 10,000 times");
 
   if (value >= 1000)
-    return trProblem("more than 1,000 times");
+    return trScriptProblem("more than 1,000 times");
 
   if (value >= 100)
-    return trProblem("more than 100 times");
+    return trScriptProblem("more than 100 times");
 
   if (value >= 10)
-    return trProblem("more than 10 times");
+    return trScriptProblem("more than 10 times");
 
   if (value > 1)
-    return trProblem("a few times");
+    return trScriptProblem("a few times");
 
-  return trProblem("once");
+  return trScriptProblem("once");
 }
 
 /**
  * @brief Returns a printable name for a source, falling back to its identity when untitled.
  */
-[[nodiscard]] static QString sourceLabel(int sourceId)
+[[nodiscard]] static QString scriptSourceLabel(int sourceId)
 {
   static auto& project = DataModel::ProjectModel::instance();
 
@@ -114,14 +114,14 @@ static const QString kJumpDataset = QStringLiteral("dataset");
     if (source.sourceId == sourceId && !source.title.isEmpty())
       return source.title;
 
-  return trProblem("Source %1").arg(sourceId);
+  return trScriptProblem("Source %1").arg(sourceId);
 }
 
 /**
  * @brief Returns a printable name for the dataset that owns a failing transform, falling back to
  *        its identity when the dataset is untitled or already gone.
  */
-[[nodiscard]] static QString datasetLabel(int uniqueId)
+[[nodiscard]] static QString scriptDatasetLabel(int uniqueId)
 {
   static auto& project = DataModel::ProjectModel::instance();
 
@@ -132,7 +132,7 @@ static const QString kJumpDataset = QStringLiteral("dataset");
         return dataset.title;
   }
 
-  return trProblem("Dataset %1").arg(uniqueId);
+  return trScriptProblem("Dataset %1").arg(uniqueId);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -145,16 +145,17 @@ static const QString kJumpDataset = QStringLiteral("dataset");
  */
 static void reportDisabledEngine(const DataModel::ScriptStat& stat, QList<Finding>& out)
 {
-  out.append(makeFinding(Misc::ProblemCenter::Error,
-                         "parser-disabled",
-                         trProblem("Frame parser was switched off"),
-                         trProblem("The frame parser of \"%1\" exceeded its time budget on too "
-                                   "many consecutive frames and was switched off. Last error: %2")
-                           .arg(sourceLabel(stat.sourceId), stat.lastError),
-                         trProblem("Simplify the parser so it returns within the frame budget, "
-                                   "then reload the script to re-enable it."),
-                         -1,
-                         QString()));
+  out.append(makeScriptFinding(
+    Misc::ProblemCenter::Error,
+    "parser-disabled",
+    trScriptProblem("Frame parser was switched off"),
+    trScriptProblem("The frame parser of \"%1\" exceeded its time budget on too "
+                    "many consecutive frames and was switched off. Last error: %2")
+      .arg(scriptSourceLabel(stat.sourceId), stat.lastError),
+    trScriptProblem("Simplify the parser so it returns within the frame budget, "
+                    "then reload the script to re-enable it."),
+    -1,
+    QString()));
 }
 
 /**
@@ -162,16 +163,16 @@ static void reportDisabledEngine(const DataModel::ScriptStat& stat, QList<Findin
  */
 static void reportParserErrors(const DataModel::ScriptStat& stat, QList<Finding>& out)
 {
-  out.append(
-    makeFinding(Misc::ProblemCenter::Warning,
-                "parser-errors",
-                trProblem("Frame parser is failing"),
-                trProblem("The frame parser of \"%1\" has failed %2. Last error: %3")
-                  .arg(sourceLabel(stat.sourceId), bucketLabel(stat.errorCount), stat.lastError),
-                trProblem("Open the frame parser and fix the reported error; frames that "
-                          "fail to parse produce no dataset values."),
-                -1,
-                QString()));
+  out.append(makeScriptFinding(
+    Misc::ProblemCenter::Warning,
+    "parser-errors",
+    trScriptProblem("Frame parser is failing"),
+    trScriptProblem("The frame parser of \"%1\" has failed %2. Last error: %3")
+      .arg(scriptSourceLabel(stat.sourceId), scriptBucketLabel(stat.errorCount), stat.lastError),
+    trScriptProblem("Open the frame parser and fix the reported error; frames that "
+                    "fail to parse produce no dataset values."),
+    -1,
+    QString()));
 }
 
 /**
@@ -216,15 +217,16 @@ static void checkTransformErrors(QList<Finding>& out)
     lastError = builder.lastTransformError();
   });
 
-  out.append(makeFinding(Misc::ProblemCenter::Warning,
-                         "transform-errors",
-                         trProblem("A value transform is failing"),
-                         trProblem("The transform of \"%1\" has failed %2, so the dataset shows "
-                                   "its untransformed value. Last error: %3")
-                           .arg(datasetLabel(uniqueId), bucketLabel(fails), lastError),
-                         trProblem("Open the dataset's transform and fix the reported error."),
-                         uniqueId,
-                         kJumpDataset));
+  out.append(
+    makeScriptFinding(Misc::ProblemCenter::Warning,
+                      "transform-errors",
+                      trScriptProblem("A value transform is failing"),
+                      trScriptProblem("The transform of \"%1\" has failed %2, so the dataset shows "
+                                      "its untransformed value. Last error: %3")
+                        .arg(scriptDatasetLabel(uniqueId), scriptBucketLabel(fails), lastError),
+                      trScriptProblem("Open the dataset's transform and fix the reported error."),
+                      uniqueId,
+                      kScriptJumpDataset));
 }
 
 //--------------------------------------------------------------------------------------------------

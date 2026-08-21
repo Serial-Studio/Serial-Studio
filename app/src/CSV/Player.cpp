@@ -48,7 +48,7 @@
 #include "SSAssert.h"
 #include "UI/Dashboard.h"
 
-static constexpr double kInvMs          = 1.0 / 1000.0;
+static constexpr double kCsvInvMs       = 1.0 / 1000.0;
 static constexpr int kMaxSeekWindowRows = 262144;
 static constexpr int kDefaultIntervalMs = 1000;
 
@@ -1221,7 +1221,7 @@ bool CSV::Player::recomputeMsUntilNext(qint64& msUntilNext)
   }
 
   const double start   = (m_startSeconds >= 0.0) ? m_startSeconds : 0.0;
-  const double target  = start + (m_elapsedTimer.elapsed() * kInvMs);
+  const double target  = start + (m_elapsedTimer.elapsed() * kCsvInvMs);
   const double nextSec = rowSecondsSinceStart(next);
   const double deltaMs = (nextSec - target) * 1000.0;
 
@@ -1278,7 +1278,7 @@ void CSV::Player::updateData()
     const QDeadlineTimer budget(kCatchUpBudgetMs);
 
     const double start  = (m_startSeconds >= 0.0) ? m_startSeconds : 0.0;
-    const double target = start + (m_elapsedTimer.elapsed() * kInvMs);
+    const double target = start + (m_elapsedTimer.elapsed() * kCsvInvMs);
     const int targetRow = catchUpTargetRow(target);
     const int stride    = qMax(1, (targetRow - m_framePos) / kCatchUpMaxInjects);
 
@@ -1436,7 +1436,7 @@ bool CSV::Player::promptUserForDateTimeOrInterval(QByteArrayView firstDataRow)
 
   if (nonInteractive()) {
     m_tsMode          = PlayerTimestampMode::Interval;
-    m_intervalSeconds = kDefaultIntervalMs * kInvMs;
+    m_intervalSeconds = kDefaultIntervalMs * kCsvInvMs;
     return true;
   }
 
@@ -1467,7 +1467,7 @@ bool CSV::Player::promptUserForDateTimeOrInterval(QByteArrayView firstDataRow)
 
     if (ok) {
       m_tsMode          = PlayerTimestampMode::Interval;
-      m_intervalSeconds = interval * kInvMs;
+      m_intervalSeconds = interval * kCsvInvMs;
       return true;
     }
   }

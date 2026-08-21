@@ -34,7 +34,7 @@
 /**
  * @brief Neutralizes any forged <untrusted> delimiter inside untrusted payload text.
  */
-static QString neutralizeUntrustedDelimiter(const QString& payload)
+static QString neutralizeHistoryDelimiter(const QString& payload)
 {
   QString out = payload;
   out.replace(QStringLiteral("</untrusted"), QStringLiteral("< /untrusted"), Qt::CaseInsensitive);
@@ -2390,7 +2390,7 @@ void AI::Conversation::recordToolResult(const QString& callId,
   wrapped += QStringLiteral("<untrusted source=\"");
   wrapped += sourceTag.toHtmlEscaped();
   wrapped += QStringLiteral("\">\n");
-  wrapped += neutralizeUntrustedDelimiter(QString::fromUtf8(contentBytes));
+  wrapped += neutralizeHistoryDelimiter(QString::fromUtf8(contentBytes));
   wrapped += QStringLiteral("\n</untrusted>");
 
   QJsonObject block;

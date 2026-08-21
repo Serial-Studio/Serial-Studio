@@ -699,7 +699,8 @@ struct TransformScanner {
 /**
  * @brief Tries to enter a comment at code[i]; returns true and advances i when entered.
  */
-static bool tryEnterComment(const QString& code, int n, int& i, bool isLua, TransformScanner& s)
+static bool tryEnterTransformComment(
+  const QString& code, int n, int& i, bool isLua, TransformScanner& s)
 {
   const QChar c    = code[i];
   const QChar next = (i + 1 < n) ? code[i + 1] : QChar();
@@ -810,7 +811,7 @@ static bool transformBodyReferencesValue(const QString& code, int language)
     if (advanceInsideToken(code, n, i, isLua, s))
       continue;
 
-    if (tryEnterComment(code, n, i, isLua, s))
+    if (tryEnterTransformComment(code, n, i, isLua, s))
       continue;
 
     const QChar c = code[i];

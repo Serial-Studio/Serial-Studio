@@ -63,7 +63,7 @@ static constexpr auto kWrongTierCert =
 /**
  * @brief Reports a single check and returns 1 on failure, 0 on success.
  */
-[[nodiscard]] static int expect(const char* name, bool condition)
+[[nodiscard]] static int offlineExpect(const char* name, bool condition)
 {
   if (condition) {
     qInfo().noquote() << "  PASS" << name;
@@ -99,35 +99,36 @@ static constexpr auto kWrongTierCert =
   const QString machine(kTestMachineId);
 
   int fails  = 0;
-  fails     += expect("good certificate accepted",
-                  statusIs(good, machine, kTestNowSecs, Licensing::CertStatus::Valid));
+  fails     += offlineExpect("good certificate accepted",
+                         statusIs(good, machine, kTestNowSecs, Licensing::CertStatus::Valid));
 
   auto decoded  = QByteArray::fromBase64(good);
   decoded[3]    = static_cast<char>(decoded[3] ^ 0x01);
-  fails        += expect(
+  fails        += offlineExpect(
     "payload bit-flip rejected (bad signature)",
     statusIs(decoded.toBase64(), machine, kTestNowSecs, Licensing::CertStatus::BadSignature));
 
-  fails += expect(
+  fails += offlineExpect(
     "wrong machine rejected",
     statusIs(
       good, QStringLiteral("SS-OTHER"), kTestNowSecs, Licensing::CertStatus::MachineMismatch));
 
-  fails += expect(
+  fails += offlineExpect(
     "expired certificate rejected",
     statusIs(QByteArray(kExpiredCert), machine, kTestNowSecs, Licensing::CertStatus::Expired));
 
-  fails += expect(
+  fails += offlineExpect(
     "empty-tier certificate rejected",
     statusIs(QByteArray(kWrongTierCert), machine, kTestNowSecs, Licensing::CertStatus::WrongTier));
 
-  fails += expect("garbage input rejected (malformed)",
-                  statusIs(QByteArray("!!not a certificate!!"),
-                           machine,
-                           kTestNowSecs,
-                           Licensing::CertStatus::Malformed));
+  fails += offlineExpect("garbage input rejected (malformed)",
+                         statusIs(QByteArray("!!not a certificate!!"),
+                                  machine,
+                                  kTestNowSecs,
+                                  Licensing::CertStatus::Malformed));
 
-  fails += expect("truncated certificate rejected (malformed)",
+  fails +=
+    offlineExpect("truncated certificate rejected (malformed)",
                   statusIs(good.left(8), machine, kTestNowSecs, Licensing::CertStatus::Malformed));
   return fails;
 }
@@ -155,8 +156,8 @@ static constexpr auto kWrongTierCert =
   const auto floored = Licensing::MonotonicClock::nowFloored(settings, crypt);
   settings.clear();
 
-  return expect("clock floored to previously observed future (rewind blocked)",
-                floored >= future.addSecs(-60));
+  return offlineExpect("clock floored to previously observed future (rewind blocked)",
+                       floored >= future.addSecs(-60));
 }
 
 //--------------------------------------------------------------------------------------------------

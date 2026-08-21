@@ -46,7 +46,7 @@
 #  include "Licensing/CommercialToken.h"
 #endif
 
-static constexpr int kMaxSeekWindowRows = 262144;
+static constexpr int kMdf4MaxSeekWindowRows = 262144;
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access
@@ -597,7 +597,7 @@ void MDF4::Player::setProgress(const double progress)
 
 /**
  * @brief First row of the scrub window ending at @p target: walks back until the plot time
- *        range is covered (never fewer than points() rows), capped at kMaxSeekWindowRows so
+ *        range is covered (never fewer than points() rows), capped at kMdf4MaxSeekWindowRows so
  *        dense recordings bound the per-tick cost.
  */
 int MDF4::Player::seekWindowStartRow(int target) const
@@ -610,10 +610,10 @@ int MDF4::Player::seekWindowStartRow(int target) const
   const double targetSec = m_timestamps[static_cast<size_t>(target)];
 
   const int minStart = qMax(0, target - qMax(1, dashboard.points()) + 1);
-  const int capStart = qMax(0, target - kMaxSeekWindowRows + 1);
+  const int capStart = qMax(0, target - kMdf4MaxSeekWindowRows + 1);
 
   int start = minStart;
-  for (int i = 0; i < kMaxSeekWindowRows && start > capStart; ++i) {
+  for (int i = 0; i < kMdf4MaxSeekWindowRows && start > capStart; ++i) {
     const double sec = m_timestamps[static_cast<size_t>(start - 1)];
     if (targetSec - sec > range)
       break;
@@ -692,9 +692,9 @@ void MDF4::Player::performSeekSettle()
 /**
  * @brief Forward-fills NaN gaps in a seek series and backfills the leading run from the
  *        first stored value (sparse channel groups leave frames inactive; mirrors the
- *        Sessions player's fillSeekGaps so absent samples hold instead of dropping to 0).
+ *        Sessions player's fillMdf4SeekGaps so absent samples hold instead of dropping to 0).
  */
-static void fillSeekGaps(QVector<double>& values)
+static void fillMdf4SeekGaps(QVector<double>& values)
 {
   int firstSet = -1;
   const int n  = values.size();
@@ -753,7 +753,7 @@ void MDF4::Player::buildSeekWindow(int startRow,
         ok ? m_numeric[static_cast<size_t>(column)][row] : std::numeric_limits<double>::quiet_NaN();
     }
 
-    fillSeekGaps(values);
+    fillMdf4SeekGaps(values);
   }
 }
 

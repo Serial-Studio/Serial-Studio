@@ -86,7 +86,7 @@ option(ENABLE_GRPC             "Enable gRPC server support"            OFF)
 option(SS_USE_MIMALLOC         "Use the mimalloc allocator override (FetchContent from GitHub)" ON)
 option(SS_BUILD_TESTS          "Build the C++ unit-test tier"          OFF)
 option(SS_INAPP_TESTS          "Expose the in-app --selftest suites"   OFF)
-option(SS_UNITY_BUILD          "Batch app sources into unity TUs (CI compile-time)" OFF)
+option(SS_UNITY_BUILD          "Monolithic jumbo build of app sources (CI compile-time)" OFF)
 
 option(WITH_WEBENGINE          "Build against Qt WebEngine (markdown viewers, PDF reports)" ON)
 

@@ -41,7 +41,7 @@
 
 static constexpr int kLoopRearmMs       = 1;
 static constexpr int kDelaySliceMs      = 50;
-static constexpr int kMaxDelayMs        = 3600000;
+static constexpr int kControlMaxDelayMs = 3600000;
 static constexpr int kRuntimeWatchdogMs = 2000;
 static constexpr int kReplyPollSliceMs  = 5;
 static constexpr int kMaxReplyWaitMs    = 30000;
@@ -305,7 +305,7 @@ QVariantMap DataModel::ControlApiBridge::writeAndWait(const QJSValue& data,
  */
 void DataModel::ControlApiBridge::delay(int milliseconds)
 {
-  const int total = qBound(0, milliseconds, kMaxDelayMs);
+  const int total = qBound(0, milliseconds, kControlMaxDelayMs);
   for (int slept = 0; slept < total; slept += kDelaySliceMs) {
     if (s_shutdownRequested.load(std::memory_order_acquire))
       return;

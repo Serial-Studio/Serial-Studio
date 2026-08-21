@@ -40,7 +40,7 @@ static constexpr int kPollIntervalMs = 20;
 /**
  * @brief Returns the steady-clock reading in nanoseconds shared by arm() and the scan.
  */
-static qint64 steadyNowNs()
+static qint64 watchdogSteadyNowNs()
 {
   using namespace std::chrono;
   return duration_cast<nanoseconds>(steady_clock::now().time_since_epoch()).count();
@@ -161,7 +161,7 @@ void DataModel::JsWatchdogThread::unregisterWatchdog(JsWatchdog* watchdog)
  */
 void DataModel::JsWatchdogThread::interruptExpired()
 {
-  const qint64 now = steadyNowNs();
+  const qint64 now = watchdogSteadyNowNs();
 
   QMutexLocker locker(&m_mutex);
   for (auto* watchdog : m_watchdogs) {

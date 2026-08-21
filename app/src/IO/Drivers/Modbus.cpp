@@ -49,16 +49,6 @@ static constexpr int kDialDeadlineMs = 5000;
 #include "SerialStudio.h"
 
 /**
- * @brief Logs a driver failure to the console. Drivers never raise modal dialogs: a modal pumps
- *        the event loop, so one raised from a connect or error stack lets queued work retire the
- *        very driver still on that stack (spec 0056).
- */
-static void logDriverError(const QString& title, const QString& text)
-{
-  qWarning().noquote() << QStringLiteral("[%1] %2").arg(title, text);
-}
-
-/**
  * @brief Maps the UI parity index to the corresponding QSerialPort::Parity enum.
  */
 [[nodiscard]] static QSerialPort::Parity parityFromIndex(quint8 index) noexcept

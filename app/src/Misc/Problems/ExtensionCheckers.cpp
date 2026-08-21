@@ -35,8 +35,8 @@
 using Finding  = Misc::ProblemCenter::Finding;
 using Severity = Misc::ProblemCenter::Severity;
 
-static const QString kJumpGroup   = QStringLiteral("group");
-static const QString kJumpDataset = QStringLiteral("dataset");
+static const QString kExtensionJumpGroup   = QStringLiteral("group");
+static const QString kExtensionJumpDataset = QStringLiteral("dataset");
 
 //--------------------------------------------------------------------------------------------------
 // Shared helpers
@@ -45,7 +45,7 @@ static const QString kJumpDataset = QStringLiteral("dataset");
 /**
  * @brief Returns the translated text for the shared "Problems" translation context.
  */
-[[nodiscard]] static QString trProblem(const char* text)
+[[nodiscard]] static QString trExtensionProblem(const char* text)
 {
   return QCoreApplication::translate("Problems", text);
 }
@@ -89,11 +89,13 @@ static void checkEntityReference(const QString& widget,
     out.append(makeEntityFinding(
       Misc::ProblemCenter::Error,
       QStringLiteral("widget-not-installed"),
-      trProblem("Project uses a widget extension that is not installed"),
-      trProblem("\"%1\" is set to the widget extension \"%2\", which is not installed, so the "
-                "dashboard shows a placeholder instead.")
+      trExtensionProblem("Project uses a widget extension that is not installed"),
+      trExtensionProblem(
+        "\"%1\" is set to the widget extension \"%2\", which is not installed, so the "
+        "dashboard shows a placeholder instead.")
         .arg(entityTitle, widget),
-      trProblem("Install the extension from the extension manager, or choose another widget."),
+      trExtensionProblem(
+        "Install the extension from the extension manager, or choose another widget."),
       uniqueId,
       jump));
     return;
@@ -103,11 +105,13 @@ static void checkEntityReference(const QString& widget,
     out.append(makeEntityFinding(
       Misc::ProblemCenter::Warning,
       QStringLiteral("widget-consent-required"),
-      trProblem("Widget extension is waiting for your permission"),
-      trProblem("\"%1\" uses the widget extension \"%2\". Extensions run with the same privileges "
-                "as Serial Studio itself, so it stays inactive until you allow it.")
+      trExtensionProblem("Widget extension is waiting for your permission"),
+      trExtensionProblem(
+        "\"%1\" uses the widget extension \"%2\". Extensions run with the same privileges "
+        "as Serial Studio itself, so it stays inactive until you allow it.")
         .arg(entityTitle, widget),
-      trProblem("Open the widget and allow the extension to run, or choose another widget."),
+      trExtensionProblem(
+        "Open the widget and allow the extension to run, or choose another widget."),
       uniqueId,
       jump));
 }
@@ -138,11 +142,12 @@ static void checkProjectReferences(QList<Finding>& out)
   const auto& groups = project.groups();
   for (const auto& group : groups) {
     if (!group.widget.isEmpty() && !UI::WidgetExtensions::isReservedId(group.widget))
-      checkEntityReference(group.widget, group.title, group.uniqueId, kJumpGroup, out);
+      checkEntityReference(group.widget, group.title, group.uniqueId, kExtensionJumpGroup, out);
 
     for (const auto& dataset : group.datasets)
       if (!dataset.widget.isEmpty() && !UI::WidgetExtensions::isReservedId(dataset.widget))
-        checkEntityReference(dataset.widget, dataset.title, dataset.uniqueId, kJumpDataset, out);
+        checkEntityReference(
+          dataset.widget, dataset.title, dataset.uniqueId, kExtensionJumpDataset, out);
   }
 }
 

@@ -44,7 +44,9 @@
 #include "IO/Drivers/CANBus/GsUsbProtocol.h"
 #include "SSAssert.h"
 
-using namespace IO::Drivers::GsUsb;
+namespace IO::Drivers {
+
+using namespace GsUsb;
 
 //--------------------------------------------------------------------------------------------------
 // gs_usb device identity & transfer geometry
@@ -67,10 +69,10 @@ constexpr GsUsbId kGsUsbIds[] = {
 };
 
 // Transfer geometry
-constexpr int kBulkReadBufSize        = 2048;
-constexpr unsigned int kReadTimeoutMs = 100;
-constexpr unsigned int kCtrlTimeoutMs = 1000;
-constexpr unsigned int kWriteTimeout  = 1000;
+constexpr int kGsUsbBulkReadBufSize        = 2048;
+constexpr unsigned int kGsUsbReadTimeoutMs = 100;
+constexpr unsigned int kCtrlTimeoutMs      = 1000;
+constexpr unsigned int kWriteTimeout       = 1000;
 
 // TX echo confirmation: poll cadence and the deadline after which an un-echoed transmit fails
 constexpr int kTxTimeoutPollMs       = 250;
@@ -756,7 +758,7 @@ void IO::Drivers::GsUsbCanBackend::checkTxTimeouts()
  */
 void IO::Drivers::GsUsbCanBackend::readLoop()
 {
-  unsigned char buffer[kBulkReadBufSize];
+  unsigned char buffer[kGsUsbBulkReadBufSize];
 
   const bool fdMode   = m_fdActive;
   const int frameSize = m_rxFrameSize;
@@ -764,7 +766,7 @@ void IO::Drivers::GsUsbCanBackend::readLoop()
   while (m_running.load(std::memory_order_relaxed)) {
     int transferred = 0;
     const int rc    = libusb_bulk_transfer(
-      m_handle, m_inEndpoint, buffer, kBulkReadBufSize, &transferred, kReadTimeoutMs);
+      m_handle, m_inEndpoint, buffer, kGsUsbBulkReadBufSize, &transferred, kGsUsbReadTimeoutMs);
 
     if (rc == LIBUSB_ERROR_TIMEOUT)
       continue;
@@ -831,7 +833,7 @@ void IO::Drivers::GsUsbCanBackend::readLoop()
  * @brief Signals the read loop to exit and joins the worker thread, the same bounded quit+wait
  *        USB and HID use. Never terminate(): the loop is inside libusb, which would be left
  *        holding its internal locks, and the freed transfer state is what the next open reuses.
- *        The kReadTimeoutMs bulk-read deadline is what makes the loop exit promptly.
+ *        The kGsUsbReadTimeoutMs bulk-read deadline is what makes the loop exit promptly.
  */
 void IO::Drivers::GsUsbCanBackend::stopReadThread()
 {
@@ -1057,3 +1059,5 @@ int IO::Drivers::GsUsbCanBackend::controlIn(std::uint8_t request,
                                  length,
                                  kCtrlTimeoutMs);
 }
+
+}  // namespace IO::Drivers

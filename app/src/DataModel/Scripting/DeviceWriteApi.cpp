@@ -88,7 +88,7 @@ static qint64 performDeviceWrite(int sourceId, const QByteArray& data, QString& 
 /**
  * @brief Pushes a {ok, error?} table onto the Lua stack.
  */
-static void pushLuaResult(lua_State* L, bool ok, const QString& errorMsg)
+static void pushLuaWriteResult(lua_State* L, bool ok, const QString& errorMsg)
 {
   lua_createtable(L, 0, ok ? 1 : 2);
 
@@ -110,7 +110,7 @@ static int luaDeviceWrite(lua_State* L)
   const int defaultSourceId = static_cast<int>(lua_tointeger(L, lua_upvalueindex(1)));
 
   if (!lua_isstring(L, 1)) {
-    pushLuaResult(L, false, QStringLiteral("deviceWrite: data must be a string"));
+    pushLuaWriteResult(L, false, QStringLiteral("deviceWrite: data must be a string"));
     return 1;
   }
 
@@ -120,7 +120,7 @@ static int luaDeviceWrite(lua_State* L)
   int sourceId = defaultSourceId;
   if (lua_gettop(L) >= 2 && !lua_isnil(L, 2)) {
     if (!lua_isnumber(L, 2)) {
-      pushLuaResult(L, false, QStringLiteral("deviceWrite: sourceId must be a number"));
+      pushLuaWriteResult(L, false, QStringLiteral("deviceWrite: sourceId must be a number"));
       return 1;
     }
     sourceId = static_cast<int>(lua_tointeger(L, 2));
@@ -128,13 +128,13 @@ static int luaDeviceWrite(lua_State* L)
 
   const QByteArray bytes(str, static_cast<int>(len));
   if (bytes.isEmpty()) {
-    pushLuaResult(L, false, QStringLiteral("deviceWrite: data is empty"));
+    pushLuaWriteResult(L, false, QStringLiteral("deviceWrite: data is empty"));
     return 1;
   }
 
   QString errorMsg;
   const qint64 written = performDeviceWrite(sourceId, bytes, errorMsg);
-  pushLuaResult(L, written > 0 && errorMsg.isEmpty(), errorMsg);
+  pushLuaWriteResult(L, written > 0 && errorMsg.isEmpty(), errorMsg);
   return 1;
 }
 
@@ -304,14 +304,14 @@ static bool fireActionByPublicId(int actionId, QString& errorMsgOut)
 static int luaActionFire(lua_State* L)
 {
   if (!lua_isnumber(L, 1)) {
-    pushLuaResult(L, false, QStringLiteral("actionFire: actionId must be a number"));
+    pushLuaWriteResult(L, false, QStringLiteral("actionFire: actionId must be a number"));
     return 1;
   }
 
   const int actionId = static_cast<int>(lua_tointeger(L, 1));
   QString errorMsg;
   const bool ok = fireActionByPublicId(actionId, errorMsg);
-  pushLuaResult(L, ok, errorMsg);
+  pushLuaWriteResult(L, ok, errorMsg);
   return 1;
 }
 

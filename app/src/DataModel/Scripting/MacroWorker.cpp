@@ -34,11 +34,11 @@
 // Constants
 //--------------------------------------------------------------------------------------------------
 
-static constexpr int kMacroWatchdogMs   = 5000;
-static constexpr int kMacroDelaySliceMs = 50;
-static constexpr int kMacroMaxDelayMs   = 3600000;
-static constexpr int kReplyPollSliceMs  = 5;
-static constexpr int kMaxReplyWaitMs    = 30000;
+static constexpr int kMacroWatchdogMs       = 5000;
+static constexpr int kMacroDelaySliceMs     = 50;
+static constexpr int kMacroMaxDelayMs       = 3600000;
+static constexpr int kMacroReplyPollSliceMs = 5;
+static constexpr int kMacroMaxReplyWaitMs   = 30000;
 
 //--------------------------------------------------------------------------------------------------
 // Macro apiCall bridge (worker thread)
@@ -198,14 +198,14 @@ QVariantMap DataModel::MacroApiBridge::writeAndWait(const QJSValue& data,
     return !reply.isEmpty();
   };
 
-  const int budget = qBound(0, timeoutMs, kMaxReplyWaitMs);
+  const int budget = qBound(0, timeoutMs, kMacroMaxReplyWaitMs);
   QByteArray reply;
   bool satisfied = false;
-  for (int waited = 0; waited <= budget && !satisfied; waited += kReplyPollSliceMs) {
+  for (int waited = 0; waited <= budget && !satisfied; waited += kMacroReplyPollSliceMs) {
     if (stopRequested())
       break;
 
-    QThread::msleep(static_cast<unsigned long>(kReplyPollSliceMs));
+    QThread::msleep(static_cast<unsigned long>(kMacroReplyPollSliceMs));
     QMetaObject::invokeMethod(m_marshaller,
                               "pollReply",
                               Qt::BlockingQueuedConnection,

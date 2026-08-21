@@ -161,7 +161,7 @@ static void reportNoPorts(QList<Result>& out)
 /**
  * @brief Reports a previously selected port that the system no longer enumerates.
  */
-static void reportMissingSelection(QList<Result>& out)
+static void reportSerialMissingSelection(QList<Result>& out)
 {
   QSettings settings;
   const auto selected = settings.value(QStringLiteral("IO_Serial_SelectedDevice")).toString();
@@ -222,6 +222,6 @@ static void reportInaccessiblePorts(QList<Result>& out)
 void Misc::Diagnostics::SerialChecks::collect(QList<Result>& out)
 {
   reportNoPorts(out);
-  reportMissingSelection(out);
+  reportSerialMissingSelection(out);
   reportInaccessiblePorts(out);
 }

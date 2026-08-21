@@ -79,7 +79,7 @@ using detail::lua::Token;
 using detail::lua::TokenKind;
 
 static constexpr int kMaxScanSteps = 100000;
-static constexpr int kMaxDepth     = 64;
+static constexpr int kLuaMaxDepth  = 64;
 static constexpr int kMaxRewrites  = 8192;
 
 //--------------------------------------------------------------------------------------------------
@@ -271,7 +271,7 @@ static constexpr int kMaxRewrites  = 8192;
 /**
  * @brief Splits the script into tokens, failing on an unterminated string or long comment.
  */
-[[nodiscard]] static bool tokenize(const QString& source, std::vector<Token>& out)
+[[nodiscard]] static bool tokenizeLuaSource(const QString& source, std::vector<Token>& out)
 {
   out.clear();
   const qsizetype n = source.size();
@@ -614,7 +614,7 @@ static constexpr int kMaxRewrites  = 8192;
                                               int depth,
                                               qsizetype& first)
 {
-  if (i < 0 || depth > kMaxDepth)
+  if (i < 0 || depth > kLuaMaxDepth)
     return false;
 
   const Token& token = v[i];
@@ -797,7 +797,7 @@ static constexpr int kMaxRewrites  = 8192;
   changed = false;
 
   std::vector<Token> v;
-  if (!tokenize(source, v))
+  if (!tokenizeLuaSource(source, v))
     return false;
 
   Target target{-1, 0, false};
@@ -851,7 +851,7 @@ static constexpr int kMaxRewrites  = 8192;
 bool DataModel::LuaMigration::usesLua53Operators(const QString& script)
 {
   std::vector<Token> v;
-  if (!tokenize(script, v))
+  if (!tokenizeLuaSource(script, v))
     return false;
 
   Target target{-1, 0, false};

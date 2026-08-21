@@ -23,7 +23,7 @@
 #include "AI/SseEventReader.h"
 #include "Misc/JsonValidator.h"
 
-static constexpr int kInitialResponseTimeoutMs = 120 * 1000;
+static constexpr int kGeminiInitialResponseTimeoutMs = 120 * 1000;
 
 /**
  * @brief Returns a redacted form of a Gemini URL with the key query stripped.
@@ -74,7 +74,7 @@ AI::GeminiReply::GeminiReply(QNetworkAccessManager& nam,
   req.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("application/json"));
   req.setRawHeader("x-goog-api-key", apiKey.toUtf8());
   req.setRawHeader("accept", "text/event-stream");
-  req.setTransferTimeout(kInitialResponseTimeoutMs);
+  req.setTransferTimeout(kGeminiInitialResponseTimeoutMs);
 
   qCDebug(serialStudioAI) << "POST gemini url=" << redactUrl(endpoint)
                           << "key=" << KeyVault::redact(apiKey)

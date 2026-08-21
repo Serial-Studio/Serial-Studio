@@ -533,6 +533,13 @@ jobs:
         /tmp/ldnp-venv/bin/pip install \
           "git+https://github.com/linuxdeploy/linuxdeploy-plugin-native_packages.git@91638818c35a240d0874b7de9cdab0cb3d3655ea"
 
+        # ldnp writes %files entries unquoted, so rpmbuild splits paths that contain
+        # spaces (the compat AppDir bundles ALSA UCM profiles like
+        # "Google Nexus 7 ALC5642.conf"); quote every entry in the spec template
+        sed -i 's|^{{ file }}$|"{{ file }}"|' \
+          /tmp/ldnp-venv/lib/python3.*/site-packages/ldnp/templates/rpm/spec
+        grep -q '^"{{ file }}"$' /tmp/ldnp-venv/lib/python3.*/site-packages/ldnp/templates/rpm/spec
+
         export LINUXDEPLOY_OUTPUT_APP_NAME="${{env.UNIXNAME}}"
         export LINUXDEPLOY_OUTPUT_VERSION="${{env.VERSION}}"
         export LDNP_META_PACKAGE_NAME="${{env.UNIXNAME}}"
@@ -1314,6 +1321,13 @@ jobs:
         /tmp/ldnp-venv/bin/pip install --upgrade pip
         /tmp/ldnp-venv/bin/pip install \
           "git+https://github.com/linuxdeploy/linuxdeploy-plugin-native_packages.git@91638818c35a240d0874b7de9cdab0cb3d3655ea"
+
+        # ldnp writes %files entries unquoted, so rpmbuild splits paths that contain
+        # spaces (the compat AppDir bundles ALSA UCM profiles like
+        # "Google Nexus 7 ALC5642.conf"); quote every entry in the spec template
+        sed -i 's|^{{ file }}$|"{{ file }}"|' \
+          /tmp/ldnp-venv/lib/python3.*/site-packages/ldnp/templates/rpm/spec
+        grep -q '^"{{ file }}"$' /tmp/ldnp-venv/lib/python3.*/site-packages/ldnp/templates/rpm/spec
 
         export LINUXDEPLOY_OUTPUT_APP_NAME="${{env.UNIXNAME}}"
         export LINUXDEPLOY_OUTPUT_VERSION="${{env.VERSION}}"

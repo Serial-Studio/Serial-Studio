@@ -77,7 +77,7 @@ using Misc::Diagnostics::Verdict;
  * @brief Reports a Bluetooth permission the system has refused. The status is read, never
  *        requested, so a run cannot raise a permission dialog the user did not ask for.
  */
-static void reportPermission(QList<Result>& out)
+static void reportBluetoothPermission(QList<Result>& out)
 {
 #if QT_CONFIG(permissions)
   auto* app = QCoreApplication::instance();
@@ -152,6 +152,6 @@ void Misc::Diagnostics::BluetoothChecks::collect(QList<Result>& out)
   if (!reportPlatformSupport(out))
     return;
 
-  reportPermission(out);
+  reportBluetoothPermission(out);
   reportAdapter(out);
 }

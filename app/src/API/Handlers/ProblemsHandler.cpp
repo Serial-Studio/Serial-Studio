@@ -22,8 +22,8 @@
 // Constants
 //--------------------------------------------------------------------------------------------------
 
-constexpr int kMaxFindings     = 200;
-constexpr int kDefaultFindings = 50;
+constexpr int kHandlerMaxFindings = 200;
+constexpr int kDefaultFindings    = 50;
 
 //--------------------------------------------------------------------------------------------------
 // Serialization helpers
@@ -196,7 +196,7 @@ API::CommandResponse API::Handlers::ProblemsHandler::list(const QString& id,
   if (limit <= 0)
     limit = kDefaultFindings;
 
-  limit = qMin(limit, kMaxFindings);
+  limit = qMin(limit, kHandlerMaxFindings);
 
   const auto checkerId = params.value(QStringLiteral("checkerId")).toString();
   return CommandResponse::makeSuccess(id, buildFindingsResult(severity, checkerId, limit));

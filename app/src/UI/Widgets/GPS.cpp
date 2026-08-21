@@ -55,7 +55,7 @@ constexpr int WEATHER_GIBS_MAX_ZOOM = 9;
 constexpr double kInvTile = 1.0 / 256.0;
 constexpr double kInv360  = 1.0 / 360.0;
 constexpr double kInv180  = 1.0 / 180.0;
-constexpr double kInv120  = 1.0 / 120.0;
+constexpr double kGpsInv120  = 1.0 / 120.0;
 constexpr double kInvPi   = 1.0 / M_PI;
 constexpr auto CLOUD_URL = "https://clouds.matteason.co.uk/images/4096x2048/clouds-alpha.png";
 
@@ -1173,7 +1173,7 @@ void Widgets::GPS::wheelEvent(QWheelEvent* event)
 
   double newZoom;
   if (isTouchpad)
-    newZoom = m_zoom + delta * kInv120 * zoomStep;
+    newZoom = m_zoom + delta * kGpsInv120 * zoomStep;
   else
     newZoom = m_zoom + (delta > 0 ? zoomStep : -zoomStep);
 

@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <chrono>
 #include <memory>
+#include <QDebug>
 #include <QIODevice>
 #include <QJsonObject>
 #include <QList>
@@ -242,6 +243,16 @@ protected:
   }
 
   void publishSampleBlock(const IO::SampleBlockPtr& block) { Q_EMIT sampleBlockReceived(block); }
+
+  /**
+   * @brief Logs a driver failure to the console. Drivers never raise modal dialogs: a modal pumps
+   *        the event loop, so one raised from a connect or error stack lets queued work retire the
+   *        very driver still on that stack (spec 0056).
+   */
+  static void logDriverError(const QString& title, const QString& text)
+  {
+    qWarning().noquote() << QStringLiteral("[%1] %2").arg(title, text);
+  }
 
 private:
   bool m_openReportArmed;

@@ -64,7 +64,7 @@ static quint64 s_totalOverflowBytes  = 0;
 /**
  * @brief Returns the translated text for the shared "Problems" translation context.
  */
-[[nodiscard]] static QString trProblem(const char* text)
+[[nodiscard]] static QString trLinkProblem(const char* text)
 {
   return QCoreApplication::translate("Problems", text);
 }
@@ -72,11 +72,11 @@ static quint64 s_totalOverflowBytes  = 0;
 /**
  * @brief Assembles one finding; the checker id is stamped by the problem center after the run.
  */
-[[nodiscard]] static Finding makeFinding(Severity severity,
-                                         const char* code,
-                                         const QString& title,
-                                         const QString& explanation,
-                                         const QString& remedy)
+[[nodiscard]] static Finding makeLinkFinding(Severity severity,
+                                             const char* code,
+                                             const QString& title,
+                                             const QString& explanation,
+                                             const QString& remedy)
 {
   Finding finding;
   finding.severity    = severity;
@@ -94,24 +94,24 @@ static quint64 s_totalOverflowBytes  = 0;
 [[nodiscard]] static QString bucketLabel(quint64 value)
 {
   if (value >= 1000000)
-    return trProblem("more than a million");
+    return trLinkProblem("more than a million");
 
   if (value >= 100000)
-    return trProblem("more than 100,000");
+    return trLinkProblem("more than 100,000");
 
   if (value >= 10000)
-    return trProblem("more than 10,000");
+    return trLinkProblem("more than 10,000");
 
   if (value >= 1000)
-    return trProblem("more than 1,000");
+    return trLinkProblem("more than 1,000");
 
   if (value >= 100)
-    return trProblem("more than 100");
+    return trLinkProblem("more than 100");
 
   if (value >= 10)
-    return trProblem("more than 10");
+    return trLinkProblem("more than 10");
 
-  return trProblem("a few");
+  return trLinkProblem("a few");
 }
 
 /**
@@ -121,12 +121,12 @@ static quint64 s_totalOverflowBytes  = 0;
 [[nodiscard]] static QString rateBand(double rate)
 {
   if (rate >= 0.5)
-    return trProblem("More than half");
+    return trLinkProblem("More than half");
 
   if (rate >= 0.2)
-    return trProblem("More than a fifth");
+    return trLinkProblem("More than a fifth");
 
-  return trProblem("More than one in twenty");
+  return trLinkProblem("More than one in twenty");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -260,14 +260,15 @@ static void reportNoFrames(QList<Finding>& out)
   if (s_noFrameTicks < kSustainTicks)
     return;
 
-  out.append(makeFinding(Misc::ProblemCenter::Error,
-                         "bytes-without-frames",
-                         trProblem("Data is arriving but no frames are extracted"),
-                         trProblem("The link has received %1 bytes over the last few seconds "
-                                   "without completing a single frame.")
-                           .arg(bucketLabel(s_windowBytes)),
-                         trProblem("Check the frame detection mode and the start/end delimiters "
-                                   "of the source; they must match what the device sends.")));
+  out.append(
+    makeLinkFinding(Misc::ProblemCenter::Error,
+                    "bytes-without-frames",
+                    trLinkProblem("Data is arriving but no frames are extracted"),
+                    trLinkProblem("The link has received %1 bytes over the last few seconds "
+                                  "without completing a single frame.")
+                      .arg(bucketLabel(s_windowBytes)),
+                    trLinkProblem("Check the frame detection mode and the start/end delimiters "
+                                  "of the source; they must match what the device sends.")));
 }
 
 /**
@@ -279,14 +280,15 @@ static void reportNoParsedFrames(QList<Finding>& out)
   if (s_noParseTicks < kSustainTicks)
     return;
 
-  out.append(makeFinding(Misc::ProblemCenter::Error,
-                         "frames-without-values",
-                         trProblem("Frames are arriving but none are parsed"),
-                         trProblem("%1 frames were extracted from the link over the last few "
-                                   "seconds, and none of them produced dataset values.")
-                           .arg(bucketLabel(s_windowExtracted)),
-                         trProblem("Open the frame parser and confirm it returns one value per "
-                                   "dataset for the frames the device sends.")));
+  out.append(
+    makeLinkFinding(Misc::ProblemCenter::Error,
+                    "frames-without-values",
+                    trLinkProblem("Frames are arriving but none are parsed"),
+                    trLinkProblem("%1 frames were extracted from the link over the last few "
+                                  "seconds, and none of them produced dataset values.")
+                      .arg(bucketLabel(s_windowExtracted)),
+                    trLinkProblem("Open the frame parser and confirm it returns one value per "
+                                  "dataset for the frames the device sends.")));
 }
 
 /**
@@ -303,15 +305,16 @@ static void reportChecksumFailures(QList<Finding>& out)
   if (rate < kChecksumWarnRate)
     return;
 
-  out.append(makeFinding(Misc::ProblemCenter::Warning,
-                         "checksum-failures",
-                         trProblem("Frames are failing the checksum"),
-                         trProblem("%1 of the frames received on this link failed the configured "
-                                   "checksum and were discarded.")
-                           .arg(rateBand(rate)),
-                         trProblem("Confirm the checksum algorithm of the source matches the "
-                                   "device, and check the link for noise or a baud-rate "
-                                   "mismatch.")));
+  out.append(
+    makeLinkFinding(Misc::ProblemCenter::Warning,
+                    "checksum-failures",
+                    trLinkProblem("Frames are failing the checksum"),
+                    trLinkProblem("%1 of the frames received on this link failed the configured "
+                                  "checksum and were discarded.")
+                      .arg(rateBand(rate)),
+                    trLinkProblem("Confirm the checksum algorithm of the source matches the "
+                                  "device, and check the link for noise or a baud-rate "
+                                  "mismatch.")));
 }
 
 /**
@@ -322,14 +325,15 @@ static void reportDroppedFrames(QList<Finding>& out)
   if (s_totalDroppedFrames == 0)
     return;
 
-  out.append(makeFinding(Misc::ProblemCenter::Warning,
-                         "dropped-frames",
-                         trProblem("Frames are being dropped"),
-                         trProblem("The frame queue overflowed and %1 frames were discarded "
-                                   "before they could be processed.")
-                           .arg(bucketLabel(s_totalDroppedFrames)),
-                         trProblem("Lower the data rate, simplify the frame parser, or reduce the "
-                                   "number of widgets on the dashboard.")));
+  out.append(
+    makeLinkFinding(Misc::ProblemCenter::Warning,
+                    "dropped-frames",
+                    trLinkProblem("Frames are being dropped"),
+                    trLinkProblem("The frame queue overflowed and %1 frames were discarded "
+                                  "before they could be processed.")
+                      .arg(bucketLabel(s_totalDroppedFrames)),
+                    trLinkProblem("Lower the data rate, simplify the frame parser, or reduce the "
+                                  "number of widgets on the dashboard.")));
 }
 
 /**
@@ -339,15 +343,15 @@ static void reportDroppedFrames(QList<Finding>& out)
 [[nodiscard]] static QString dutyBand(double duty)
 {
   if (duty >= 0.9)
-    return trProblem("almost all");
+    return trLinkProblem("almost all");
 
   if (duty >= 0.5)
-    return trProblem("more than half");
+    return trLinkProblem("more than half");
 
   if (duty >= 0.25)
-    return trProblem("more than a quarter");
+    return trLinkProblem("more than a quarter");
 
-  return trProblem("a significant share");
+  return trLinkProblem("a significant share");
 }
 
 /**
@@ -357,12 +361,12 @@ static void reportDroppedFrames(QList<Finding>& out)
 [[nodiscard]] static QString thinningBand(int decimateN)
 {
   if (decimateN >= 10)
-    return trProblem("most of its frames are being dropped");
+    return trLinkProblem("most of its frames are being dropped");
 
   if (decimateN >= 4)
-    return trProblem("roughly one in several frames is processed");
+    return trLinkProblem("roughly one in several frames is processed");
 
-  return trProblem("every second or third frame is processed");
+  return trLinkProblem("every second or third frame is processed");
 }
 
 /**
@@ -386,7 +390,7 @@ static void reportDroppedFrames(QList<Finding>& out)
   if (!title.isEmpty())
     return title;
 
-  return trProblem("Source %1").arg(sourceId);
+  return trLinkProblem("Source %1").arg(sourceId);
 }
 
 /**
@@ -404,15 +408,15 @@ static void reportParseThinning(QList<Finding>& out)
     if (load.decimateN <= 1)
       continue;
 
-    auto finding = makeFinding(
+    auto finding = makeLinkFinding(
       Misc::ProblemCenter::Warning,
       "parse-thinning",
-      trProblem("Dashboard data from \"%1\" is being thinned").arg(sourceLabel(load.sourceId)),
-      trProblem("Scripts for this source are using %1 of the available parse "
-                "capacity, so %2 until its load falls back under the fair share.")
+      trLinkProblem("Dashboard data from \"%1\" is being thinned").arg(sourceLabel(load.sourceId)),
+      trLinkProblem("Scripts for this source are using %1 of the available parse "
+                    "capacity, so %2 until its load falls back under the fair share.")
         .arg(dutyBand(load.duty), thinningBand(load.decimateN)),
-      trProblem("Simplify or batch the source's parser and transform scripts, lower "
-                "its data rate, or move heavy math into native pre-processing."));
+      trLinkProblem("Simplify or batch the source's parser and transform scripts, lower "
+                    "its data rate, or move heavy math into native pre-processing."));
 
     finding.entityUniqueId = load.sourceId;
     out.append(finding);
@@ -427,14 +431,15 @@ static void reportBufferOverflow(QList<Finding>& out)
   if (s_totalOverflowBytes == 0)
     return;
 
-  out.append(makeFinding(Misc::ProblemCenter::Warning,
-                         "buffer-overflow",
-                         trProblem("The receive buffer is overflowing"),
-                         trProblem("%1 bytes were discarded because the receive buffer filled up "
-                                   "before the data could be read.")
-                           .arg(bucketLabel(s_totalOverflowBytes)),
-                         trProblem("Lower the data rate, or confirm the frames end with the "
-                                   "configured delimiter so the buffer is drained.")));
+  out.append(
+    makeLinkFinding(Misc::ProblemCenter::Warning,
+                    "buffer-overflow",
+                    trLinkProblem("The receive buffer is overflowing"),
+                    trLinkProblem("%1 bytes were discarded because the receive buffer filled up "
+                                  "before the data could be read.")
+                      .arg(bucketLabel(s_totalOverflowBytes)),
+                    trLinkProblem("Lower the data rate, or confirm the frames end with the "
+                                  "configured delimiter so the buffer is drained.")));
 }
 
 //--------------------------------------------------------------------------------------------------

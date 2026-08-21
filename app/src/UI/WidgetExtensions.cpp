@@ -50,7 +50,7 @@ static const QString kDeclinePrefix = QStringLiteral("WidgetExtensionDecline/");
 /**
  * @brief Returns the translated text for the shared "Problems" translation context.
  */
-[[nodiscard]] static QString trProblem(const char* text)
+[[nodiscard]] static QString trPackageProblem(const char* text)
 {
   return QCoreApplication::translate("Problems", text);
 }
@@ -58,11 +58,11 @@ static const QString kDeclinePrefix = QStringLiteral("WidgetExtensionDecline/");
 /**
  * @brief Assembles one catalog finding; the checker id is stamped by the problem center.
  */
-[[nodiscard]] static Finding makeFinding(Misc::ProblemCenter::Severity severity,
-                                         const QString& code,
-                                         const QString& title,
-                                         const QString& explanation,
-                                         const QString& remedy)
+[[nodiscard]] static Finding makePackageFinding(Misc::ProblemCenter::Severity severity,
+                                                const QString& code,
+                                                const QString& title,
+                                                const QString& explanation,
+                                                const QString& remedy)
 {
   Finding finding;
   finding.severity    = severity;
@@ -368,13 +368,13 @@ void UI::WidgetExtensions::declineConsent(const QString& id)
  */
 void UI::WidgetExtensions::reportLoadFailure(const QString& id, const QString& error)
 {
-  const auto title = descriptor(id).title.isEmpty() ? id : descriptor(id).title;
-  const auto finding =
-    makeFinding(Misc::ProblemCenter::Error,
-                QStringLiteral("widget-load-failed"),
-                trProblem("Widget extension failed to load"),
-                trProblem("The widget \"%1\" could not be created: %2").arg(title, error),
-                trProblem("Update or reinstall the package, then reload the project."));
+  const auto title   = descriptor(id).title.isEmpty() ? id : descriptor(id).title;
+  const auto finding = makePackageFinding(
+    Misc::ProblemCenter::Error,
+    QStringLiteral("widget-load-failed"),
+    trPackageProblem("Widget extension failed to load"),
+    trPackageProblem("The widget \"%1\" could not be created: %2").arg(title, error),
+    trPackageProblem("Update or reinstall the package, then reload the project."));
 
   if (m_findings.contains(finding))
     return;
@@ -547,13 +547,13 @@ void UI::WidgetExtensions::loadPackage(const QString& directory, bool bundled)
     return;
 
   if (!file.open(QFile::ReadOnly)) {
-    m_findings.append(
-      makeFinding(Misc::ProblemCenter::Error,
-                  QStringLiteral("widget-manifest-unreadable"),
-                  trProblem("Widget extension manifest cannot be read"),
-                  trProblem("The manifest in \"%1\" could not be opened.").arg(directory),
-                  trProblem("Check the file permissions of the package folder, then reinstall "
-                            "the extension.")));
+    m_findings.append(makePackageFinding(
+      Misc::ProblemCenter::Error,
+      QStringLiteral("widget-manifest-unreadable"),
+      trPackageProblem("Widget extension manifest cannot be read"),
+      trPackageProblem("The manifest in \"%1\" could not be opened.").arg(directory),
+      trPackageProblem("Check the file permissions of the package folder, then reinstall "
+                       "the extension.")));
     return;
   }
 
@@ -562,14 +562,14 @@ void UI::WidgetExtensions::loadPackage(const QString& directory, bool bundled)
 
   const auto parsed = Misc::JsonValidator::parseAndValidate(file.readAll(), limits);
   if (!parsed.valid || !parsed.document.isObject()) {
-    m_findings.append(
-      makeFinding(Misc::ProblemCenter::Error,
-                  QStringLiteral("widget-manifest-invalid"),
-                  trProblem("Widget extension manifest is not valid JSON"),
-                  trProblem("The manifest in \"%1\" could not be parsed: %2")
-                    .arg(directory, parsed.errorMessage),
-                  trProblem("Reinstall the package; if the problem persists, report it to its "
-                            "author.")));
+    m_findings.append(makePackageFinding(
+      Misc::ProblemCenter::Error,
+      QStringLiteral("widget-manifest-invalid"),
+      trPackageProblem("Widget extension manifest is not valid JSON"),
+      trPackageProblem("The manifest in \"%1\" could not be parsed: %2")
+        .arg(directory, parsed.errorMessage),
+      trPackageProblem("Reinstall the package; if the problem persists, report it to its "
+                       "author.")));
     return;
   }
 
@@ -580,15 +580,15 @@ void UI::WidgetExtensions::loadPackage(const QString& directory, bool bundled)
 
   const auto& id = result.descriptor.id;
   if (m_descriptors.contains(id)) {
-    m_findings.append(
-      makeFinding(Misc::ProblemCenter::Warning,
-                  QStringLiteral("widget-package-shadowed"),
-                  trProblem("Widget extension is already registered"),
-                  trProblem("A package with the identifier \"%1\" is already loaded, so the copy "
-                            "in \"%2\" was ignored.")
-                    .arg(id, directory),
-                  trProblem("Uninstall the duplicate copy from the workspace extensions "
-                            "folder.")));
+    m_findings.append(makePackageFinding(
+      Misc::ProblemCenter::Warning,
+      QStringLiteral("widget-package-shadowed"),
+      trPackageProblem("Widget extension is already registered"),
+      trPackageProblem("A package with the identifier \"%1\" is already loaded, so the copy "
+                       "in \"%2\" was ignored.")
+        .arg(id, directory),
+      trPackageProblem("Uninstall the duplicate copy from the workspace extensions "
+                       "folder.")));
     return;
   }
 
@@ -623,17 +623,17 @@ void UI::WidgetExtensions::resolveDependencies()
       const auto code  = dependency.required ? QStringLiteral("widget-dependency-missing")
                                              : QStringLiteral("widget-dependency-optional");
       const auto title = dependency.required
-                         ? trProblem("Widget extension is missing a required extension")
-                         : trProblem("Widget extension is missing an optional extension");
+                         ? trPackageProblem("Widget extension is missing a required extension")
+                         : trPackageProblem("Widget extension is missing an optional extension");
 
-      m_findings.append(
-        makeFinding(severity,
-                    code,
-                    title,
-                    trProblem("Package \"%1\" depends on \"%2\" %3, which is not installed or is "
-                              "a different version.")
-                      .arg(id, dependency.id, dependency.versionRange),
-                    trProblem("Install \"%1\" from the extension manager.").arg(dependency.id)));
+      m_findings.append(makePackageFinding(
+        severity,
+        code,
+        title,
+        trPackageProblem("Package \"%1\" depends on \"%2\" %3, which is not installed or is "
+                         "a different version.")
+          .arg(id, dependency.id, dependency.versionRange),
+        trPackageProblem("Install \"%1\" from the extension manager.").arg(dependency.id)));
 
       if (dependency.required)
         dropped.append(id);
