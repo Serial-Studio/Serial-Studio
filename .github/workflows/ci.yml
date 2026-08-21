@@ -626,9 +626,25 @@ jobs:
         # executables were moved out of the AppDir, which breaks their $ORIGIN RUNPATH, so
         # the libraries only they need (Widgets, Bluetooth, Mqtt, mimalloc, ...) vanish from
         # the closure unless the AppDir library dir is on LD_LIBRARY_PATH for the conversion.
+        # Qt's openssl TLS backend dlopens libssl at runtime (no NEEDED entry), so the ldd
+        # walk never sees it; on OpenSSL 1.1 hosts (Debian 10) the backend then rejects the
+        # host library and every HTTPS request fails. Bundle the build host's OpenSSL 3 pair
+        # explicitly; it is safe because the compat bundle carries the matching glibc.
+        TLS_LIBS=$(find /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu /usr/lib64 \
+          -maxdepth 1 \( -name 'libssl.so.3*' -o -name 'libcrypto.so.3*' \) 2>/dev/null || true)
+        if [ -z "$TLS_LIBS" ]; then
+          echo "::error::libssl.so.3/libcrypto.so.3 not found on build host"
+          exit 1
+        fi
+
         LD_LIBRARY_PATH="$PWD/AppDir-compat/usr/lib" \
           ./sharun-aio lib4bin --dst-dir AppDir-compat/usr --with-sharun --hard-links --with-hooks \
-          "$BIN_SRC"/* $DLOPEN_LIBS
+          "$BIN_SRC"/* $DLOPEN_LIBS $TLS_LIBS
+
+        if ! find AppDir-compat/usr/shared/lib -name 'libssl.so.3*' | grep -q .; then
+          echo "::error::libssl.so.3 missing from compat bundle; TLS would fail on legacy hosts"
+          exit 1
+        fi
 
         if [ -L AppDir-compat/usr/shared/lib ]; then
           echo "::error::usr/shared/lib is a symlink into usr/lib; compat conversion unsafe"
@@ -1409,9 +1425,25 @@ jobs:
         # executables were moved out of the AppDir, which breaks their $ORIGIN RUNPATH, so
         # the libraries only they need (Widgets, Bluetooth, Mqtt, mimalloc, ...) vanish from
         # the closure unless the AppDir library dir is on LD_LIBRARY_PATH for the conversion.
+        # Qt's openssl TLS backend dlopens libssl at runtime (no NEEDED entry), so the ldd
+        # walk never sees it; on OpenSSL 1.1 hosts (Debian 10) the backend then rejects the
+        # host library and every HTTPS request fails. Bundle the build host's OpenSSL 3 pair
+        # explicitly; it is safe because the compat bundle carries the matching glibc.
+        TLS_LIBS=$(find /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu /usr/lib64 \
+          -maxdepth 1 \( -name 'libssl.so.3*' -o -name 'libcrypto.so.3*' \) 2>/dev/null || true)
+        if [ -z "$TLS_LIBS" ]; then
+          echo "::error::libssl.so.3/libcrypto.so.3 not found on build host"
+          exit 1
+        fi
+
         LD_LIBRARY_PATH="$PWD/AppDir-compat/usr/lib" \
           ./sharun-aio lib4bin --dst-dir AppDir-compat/usr --with-sharun --hard-links --with-hooks \
-          "$BIN_SRC"/* $DLOPEN_LIBS
+          "$BIN_SRC"/* $DLOPEN_LIBS $TLS_LIBS
+
+        if ! find AppDir-compat/usr/shared/lib -name 'libssl.so.3*' | grep -q .; then
+          echo "::error::libssl.so.3 missing from compat bundle; TLS would fail on legacy hosts"
+          exit 1
+        fi
 
         if [ -L AppDir-compat/usr/shared/lib ]; then
           echo "::error::usr/shared/lib is a symlink into usr/lib; compat conversion unsafe"
