@@ -2,7 +2,7 @@
 spec: 0064-export-replay-fidelity
 phase: tasks
 status: in-progress   # draft -> approved -> in-progress -> done
-updated: 2026-08-18
+updated: 2026-08-20
 ---
 
 # Tasks 0064 — Export and Replay Fidelity
@@ -246,3 +246,36 @@ cmake -S . -B build/tests -DSS_BUILD_TESTS=ON && ctest --test-dir build/tests -R
 
 # 5. real BADAQ: record with all three sources, expect ~635 populated CSV columns
 ```
+
+## Task 12 — Dense-lane session replay decimation (2026-08-20 amendment, R11)
+
+Reported: audio Quick Plot session replays distorted with a dead FFT; the session data is
+complete; CSV/MDF4 replays of equivalent captures are fine. Root cause and design in the spec.md
+and plan.md amendments of the same date.
+
+- [ ] **T12.1** `PlayerStreamBlockIndex` gains a `fromBlocks` tag so one index and one replay walk
+      serve both the legacy `stream_blocks` table and spec-0055 dense `blocks` rows.
+- [ ] **T12.2** `loadBlockTimestampIndex` indexes each dense row (`dt_ns != 0`) into
+      `streamBlocks` (block_id/source/uid/t0/dt/frames), skipping rows whose `frames` is
+      non-positive or above `kMaxBlockFrames`; timestamp index contribution unchanged (t0 only).
+- [ ] **T12.3** Merged stream-block index stable-sorted by `(t0Ns, sourceId, rowId)` after both
+      loads — the grouping walk assumes same-source contiguity at equal t0.
+- [ ] **T12.4** `fetchStreamSamples` takes the index entry and fetches
+      `blocks.values_blob` or `stream_blocks.samples` by tag; both decode via
+      `unpackStreamSamples`; blob-length mismatch still fails loudly.
+- [ ] **T12.5** `frameValuesFromBlocks` gains `AND dt_ns = 0` so a dense block's t0 sample is not
+      double-published through the frame lane.
+- [ ] **T12.6** `teardownLocalDb` resets the new prepared query.
+- [ ] **T12.7** Lint: `python scripts/code-verify.py --check` clean on the four touched files.
+- [ ] **T12.7b** Maintainer test round 1 (2026-08-20): dashboard never appeared during an audio
+      Quick Plot session replay. Cause: `replayChannels` reaches `ensureStructurePublished`
+      through the staging path, but `replayBlock` published values only — a dense-only replay
+      never announces a structure, so the dashboard builds zero widgets and `available` never
+      flips. Fix: `replayBlock` ensures the source's structure (ProjectFile mode, source frame
+      from `m_frame`) before its first publish, same as a live source's first block; repeat cost
+      is one `structureIsCurrent` probe.
+- [ ] **T12.8** **AC11 (maintainer, needs a build):** audio Quick Plot session replays with an
+      undistorted waveform and a live FFT; scrub + settle do not blank the audio plots.
+- [ ] **T12.9** **AC12 (maintainer):** mixed frame-lane + dense-lane session replays both lanes;
+      no new recording is created during replay (R8).
+- [ ] **T12.10** **AC13 (maintainer):** a legacy `stream_blocks` recording still replays.

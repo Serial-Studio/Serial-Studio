@@ -87,6 +87,8 @@ option(SS_USE_MIMALLOC         "Use the mimalloc allocator override (FetchConten
 option(SS_BUILD_TESTS          "Build the C++ unit-test tier"          OFF)
 option(SS_INAPP_TESTS          "Expose the in-app --selftest suites"   OFF)
 option(SS_UNITY_BUILD          "Monolithic jumbo build of app sources (CI compile-time)" OFF)
+set(SS_UNITY_BATCH_SIZE 8 CACHE STRING
+    "Sources per unity TU when SS_UNITY_BUILD=ON (0 = one monolithic TU)")
 
 option(WITH_WEBENGINE          "Build against Qt WebEngine (markdown viewers, PDF reports)" ON)
 

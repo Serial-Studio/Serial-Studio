@@ -26,9 +26,10 @@ class QSqlDatabase;
 namespace Sessions {
 
 /**
- * @brief One stream block's index entry (spec 0054). Metadata only: the samples blob stays on
- *        disk and is fetched per block at playback, so replay memory stays flat in session
- *        length instead of scaling with it.
+ * @brief One dense block's index entry (spec 0054; spec-0055 rows join via @c fromBlocks).
+ *        Metadata only: the samples blob stays on disk and is fetched per block at playback, so
+ *        replay memory stays flat in session length instead of scaling with it. @c rowId is
+ *        @c stream_block_id or @c block_id depending on the owning table.
  */
 struct PlayerStreamBlockIndex {
   qint64 rowId;
@@ -37,6 +38,7 @@ struct PlayerStreamBlockIndex {
   qint64 t0Ns;
   qint64 dtNs;
   qint64 frames;
+  bool fromBlocks;
 };
 
 /**

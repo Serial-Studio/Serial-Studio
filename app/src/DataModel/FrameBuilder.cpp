@@ -3319,9 +3319,10 @@ void DataModel::FrameBuilder::publishBlock(const DataModel::DataBlockPtr& block)
 }
 
 /**
- * @brief Publishes an already-decoded replay block with the recording sinks masked. The session
- *        player builds these from its stored sample blobs, so a dense recording replays through the
- *        same tail a live source uses without a stand-in driver or a second worker in between.
+ * @brief Publishes an already-decoded replay block with the recording sinks masked, announcing
+ *        the source's structure first exactly like a live source's first block: a dense-only
+ *        replay has no frame-lane traffic to publish the layout, and without a snapshot the
+ *        dashboard never builds a widget (R11).
  */
 void DataModel::FrameBuilder::replayBlock(const DataModel::DataBlockPtr& block)
 {
@@ -3334,6 +3335,13 @@ void DataModel::FrameBuilder::replayBlock(const DataModel::DataBlockPtr& block)
 
   if (block->samples <= 0)
     return;
+
+  if (!structureIsCurrent(block->sourceId) && m_operationMode == SerialStudio::ProjectFile
+      && !m_frame.groups.empty()) {
+    const DataModel::Frame& srcFrame = ensureSourceFrame(block->sourceId);
+    if (!srcFrame.groups.empty())
+      ensureStructurePublished(block->sourceId, srcFrame);
+  }
 
   const bool previousMask = m_maskSinks;
   m_maskSinks             = true;

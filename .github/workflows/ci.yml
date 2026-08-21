@@ -77,6 +77,13 @@ env:
   GRPC_REPO: alex-spataru/gRPC-Builds
 
   #
+  # Unity build batch size (sources per unity TU). Single source of truth for
+  # every configure site: both PGO stages must see the identical value or the
+  # unity TU layout diverges and profile data is silently dropped.
+  #
+  SS_UNITY_BATCH: 16
+
+  #
   # Test gating: tagged releases always block on the live pytest suite; this
   # flag only controls whether continuous (untagged) builds block as well.
   #
@@ -309,6 +316,7 @@ jobs:
           -DENABLE_PGO=ON \
           -DPGO_STAGE=GENERATE \
           -DSS_UNITY_BUILD=ON \
+          -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
           -DUSE_SYSTEM_ZLIB=ON \
           -DUSE_SYSTEM_EXPAT=ON \
           -DSS_INAPP_TESTS=ON \
@@ -376,6 +384,7 @@ jobs:
           -DENABLE_PGO=ON \
           -DPGO_STAGE=USE \
           -DSS_UNITY_BUILD=ON \
+          -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
           -DUSE_SYSTEM_ZLIB=ON \
           -DUSE_SYSTEM_EXPAT=ON \
           -DSS_INAPP_TESTS=ON \
@@ -459,8 +468,6 @@ jobs:
         printf '%%_gpg_sign_cmd_extra_args --batch --pinentry-mode loopback --passphrase-file %s\n' \
           "$PASSFILE" >> ~/.rpmmacros
         echo "SS_GPG_SIGN=1" >> "$GITHUB_ENV"
-        echo "LDAI_SIGN=1" >> "$GITHUB_ENV"
-        echo "LDAI_SIGN_KEY=$GPG_KEY_ID" >> "$GITHUB_ENV"
 
     #
     # linuxdeploy plus its Qt plugin build the AppDir; the SQL drivers and the TIFF reader are
@@ -468,9 +475,11 @@ jobs:
     # by itself are added afterwards: the offscreen platform plugin, since linuxdeploy ships xcb
     # and wayland only while the integration tests run headless, and Qt WebEngine's NSS crypto
     # backends, which NSS dlopen()s (softokn/freebl/nssckbi) so an ldd-based bundler never sees
-    # them and leaves a half-bundled NSS that crashes against the host's newer copies
+    # them and leaves a half-bundled NSS that crashes against the host's newer copies. No AppImage
+    # is packed here: the compat conversion below produces the only Linux AppImage shipped, so
+    # this AppDir is purely the input tree for the deb/rpm and compat steps
     #
-    - name: '📦 Create AppImage'
+    - name: '📦 Create AppDir'
       run: |
         cd "build/app"
         wget https://github.com/linuxdeploy/linuxdeploy/releases/download/1-alpha-20240109-1/linuxdeploy-x86_64.AppImage
@@ -484,7 +493,7 @@ jobs:
         rm -f "$QT_PLUGINS_PATH/imageformats/libqtiff.so"
         find "$QT_PLUGINS_PATH/sqldrivers" -name 'libqsql*.so' ! -name 'libqsqlite.so' -delete
 
-        ./linuxdeploy-x86_64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i ../../app/deploy/linux/${{env.UNIXNAME}}.svg -d ../../app/deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
+        ./linuxdeploy-x86_64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i ../../app/deploy/linux/${{env.UNIXNAME}}.svg -d ../../app/deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt
         mkdir -p AppDir/usr/plugins/canbus
         if [ -d "$QT_PLUGINS_PATH/canbus" ]; then
           cp -r "$QT_PLUGINS_PATH/canbus/"* AppDir/usr/plugins/canbus/ || echo "Warning: Could not copy canbus plugins"
@@ -514,73 +523,21 @@ jobs:
           exit 1
         fi
 
-        printf '{"packageType":"appimage","arch":"x86_64"}\n' > AppDir/usr/bin/ss-config.json
-
-        ./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
-
         rm linuxdeploy-x86_64.AppImage
         rm linuxdeploy-plugin-qt-x86_64.AppImage
 
-        mv *.AppImage ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage
-
     #
-    # Reuses the AppDir from the step above through linuxdeploy-plugin-native_packages, then reads
-    # ss-config.json back out of each package to prove the stamp survived
+    # Spec 0065: the glibc-bundled conversion is the ONLY Linux packaging path — every Linux
+    # artifact ships the build host's glibc as a matched set behind an in-process loader
+    # redirect, so one package set runs on everything from Debian 10 / RHEL 8 up. A COPY of
+    # the AppDir is converted with sharun/lib4bin: sharun hands library dirs to the bundled
+    # ld-linux via --library-path instead of exporting LD_LIBRARY_PATH, so QProcess children
+    # keep a clean host environment. The full library closure (executables plus every
+    # dlopened plugin/QML module) is consolidated into usr/shared/lib because moving the
+    # executables breaks their $ORIGIN-relative RUNPATH; usr/lib is dropped only after a
+    # coverage check proves every library it held is present there.
     #
-    - name: '📦 Create .deb and .rpm packages'
-      run: |
-        set -euo pipefail
-        python3 -m venv /tmp/ldnp-venv
-        /tmp/ldnp-venv/bin/pip install --upgrade pip
-        /tmp/ldnp-venv/bin/pip install \
-          "git+https://github.com/linuxdeploy/linuxdeploy-plugin-native_packages.git@91638818c35a240d0874b7de9cdab0cb3d3655ea"
-
-        # ldnp writes %files entries unquoted, so rpmbuild splits paths that contain
-        # spaces (the compat AppDir bundles ALSA UCM profiles like
-        # "Google Nexus 7 ALC5642.conf"); quote every entry in the spec template
-        sed -i 's|^{{ file }}$|"{{ file }}"|' \
-          /tmp/ldnp-venv/lib/python3.*/site-packages/ldnp/templates/rpm/spec
-        grep -q '^"{{ file }}"$' /tmp/ldnp-venv/lib/python3.*/site-packages/ldnp/templates/rpm/spec
-
-        export LINUXDEPLOY_OUTPUT_APP_NAME="${{env.UNIXNAME}}"
-        export LINUXDEPLOY_OUTPUT_VERSION="${{env.VERSION}}"
-        export LDNP_META_PACKAGE_NAME="${{env.UNIXNAME}}"
-        export LDNP_META_DESCRIPTION="${{env.DESCRIPTION}}"
-        export LDNP_META_SHORT_DESCRIPTION="${{env.DESCRIPTION}}"
-        export LDNP_META_ARCHITECTURE="amd64"
-        export LDNP_META_BUILD_ARCH="x86_64"
-
-        printf '{"packageType":"deb","arch":"x86_64"}\n' > build/app/AppDir/usr/bin/ss-config.json
-        /tmp/ldnp-venv/bin/linuxdeploy-plugin-native_packages \
-          --appdir build/app/AppDir \
-          --build deb
-
-        printf '{"packageType":"rpm","arch":"x86_64"}\n' > build/app/AppDir/usr/bin/ss-config.json
-        /tmp/ldnp-venv/bin/linuxdeploy-plugin-native_packages \
-          --appdir build/app/AppDir \
-          --build rpm
-
-        mv "${{env.UNIXNAME}}"_*.deb "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.deb"
-        mv "${{env.UNIXNAME}}"_*.rpm "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.rpm"
-
-        dpkg-deb --fsys-tarfile "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.deb" \
-          | tar -xO --wildcards '*/ss-config.json' | grep -q '"packageType":"deb"'
-        rpm2cpio "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.rpm" \
-          | cpio --quiet -i --to-stdout '*ss-config.json' | grep -q '"packageType":"rpm"'
-
-    #
-    # Spec 0065: glibc-compat packages for legacy hosts (RHEL 8 / Debian 10, glibc <= 2.28).
-    # A COPY of the AppDir is converted with sharun/lib4bin so it carries the build host's
-    # glibc as a matched set behind an in-process loader redirect: sharun hands library dirs
-    # to the bundled ld-linux via --library-path instead of exporting LD_LIBRARY_PATH, so
-    # QProcess children keep a clean host environment. Runs after the deb/rpm step because
-    # that step rewrites ss-config.json inside AppDir in place. The full library closure
-    # (executables plus every dlopened plugin/QML module) is consolidated into usr/shared/lib
-    # because moving the executables breaks their $ORIGIN-relative RUNPATH; usr/lib is
-    # dropped only after a coverage check proves every library it held is present there.
-    # The regular AppDir and the three existing artifacts are never touched.
-    #
-    - name: '📦 Create compat packages (glibc-bundled)'
+    - name: '📦 Create AppImage (glibc-bundled)'
       env:
         GPG_KEY_ID: ${{secrets.GPG_KEY_ID}}
       run: |
@@ -600,7 +557,7 @@ jobs:
         chmod +x appimagetool
 
         cp -a AppDir AppDir-compat
-        printf '{"packageType":"appimage-compat","arch":"x86_64"}\n' > AppDir-compat/usr/bin/ss-config.json
+        printf '{"packageType":"appimage","arch":"x86_64"}\n' > AppDir-compat/usr/bin/ss-config.json
 
         BIN_SRC=$(mktemp -d)
         mv "AppDir-compat/usr/bin/${{env.UNIXNAME}}" "$BIN_SRC/"
@@ -701,24 +658,35 @@ jobs:
         rm -rf AppDir-compat/usr/lib
         rm -rf "$BIN_SRC"
 
-        COMPAT_APPIMAGE="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64-compat.AppImage"
+        APPIMAGE="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage"
         if [ "${SS_GPG_SIGN:-0}" = "1" ]; then
-          ARCH=x86_64 ./appimagetool --sign --sign-key "$GPG_KEY_ID" AppDir-compat "$COMPAT_APPIMAGE"
+          ARCH=x86_64 ./appimagetool --sign --sign-key "$GPG_KEY_ID" AppDir-compat "$APPIMAGE"
         else
-          ARCH=x86_64 ./appimagetool AppDir-compat "$COMPAT_APPIMAGE"
+          ARCH=x86_64 ./appimagetool AppDir-compat "$APPIMAGE"
         fi
         rm sharun-aio appimagetool
-        mv "$COMPAT_APPIMAGE" "../../$COMPAT_APPIMAGE"
+        mv "$APPIMAGE" "../../$APPIMAGE"
 
     #
-    # Same ldnp venv as the regular packages over the converted AppDir, so the compat deb and
-    # rpm differ from the regular ones only by their input tree. ldnp emits minimal metadata
-    # (no ELF find-requires), which is what keeps the packages installable on glibc 2.28
-    # hosts; the smoke step below proves that per run instead of trusting it
+    # linuxdeploy-plugin-native_packages over the converted AppDir. ldnp emits minimal
+    # metadata (no ELF find-requires), which is what keeps the packages installable on
+    # glibc 2.28 hosts; the smoke step below proves that per run instead of trusting it
     #
-    - name: '📦 Create compat .deb and .rpm packages'
+    - name: '📦 Create .deb and .rpm packages (glibc-bundled)'
       run: |
         set -euo pipefail
+        python3 -m venv /tmp/ldnp-venv
+        /tmp/ldnp-venv/bin/pip install --upgrade pip
+        /tmp/ldnp-venv/bin/pip install \
+          "git+https://github.com/linuxdeploy/linuxdeploy-plugin-native_packages.git@91638818c35a240d0874b7de9cdab0cb3d3655ea"
+
+        # ldnp writes %files entries unquoted, so rpmbuild splits paths that contain
+        # spaces (the converted AppDir bundles ALSA UCM profiles like
+        # "Google Nexus 7 ALC5642.conf"); quote every entry in the spec template
+        sed -i 's|^{{ file }}$|"{{ file }}"|' \
+          /tmp/ldnp-venv/lib/python3.*/site-packages/ldnp/templates/rpm/spec
+        grep -q '^"{{ file }}"$' /tmp/ldnp-venv/lib/python3.*/site-packages/ldnp/templates/rpm/spec
+
         export LINUXDEPLOY_OUTPUT_APP_NAME="${{env.UNIXNAME}}"
         export LINUXDEPLOY_OUTPUT_VERSION="${{env.VERSION}}"
         export LDNP_META_PACKAGE_NAME="${{env.UNIXNAME}}"
@@ -727,23 +695,23 @@ jobs:
         export LDNP_META_ARCHITECTURE="amd64"
         export LDNP_META_BUILD_ARCH="x86_64"
 
-        printf '{"packageType":"deb-compat","arch":"x86_64"}\n' > build/app/AppDir-compat/usr/bin/ss-config.json
+        printf '{"packageType":"deb","arch":"x86_64"}\n' > build/app/AppDir-compat/usr/bin/ss-config.json
         /tmp/ldnp-venv/bin/linuxdeploy-plugin-native_packages \
           --appdir build/app/AppDir-compat \
           --build deb
 
-        printf '{"packageType":"rpm-compat","arch":"x86_64"}\n' > build/app/AppDir-compat/usr/bin/ss-config.json
+        printf '{"packageType":"rpm","arch":"x86_64"}\n' > build/app/AppDir-compat/usr/bin/ss-config.json
         /tmp/ldnp-venv/bin/linuxdeploy-plugin-native_packages \
           --appdir build/app/AppDir-compat \
           --build rpm
 
-        mv "${{env.UNIXNAME}}"_*.deb "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64-compat.deb"
-        mv "${{env.UNIXNAME}}"_*.rpm "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64-compat.rpm"
+        mv "${{env.UNIXNAME}}"_*.deb "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.deb"
+        mv "${{env.UNIXNAME}}"_*.rpm "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.rpm"
 
-        dpkg-deb --fsys-tarfile "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64-compat.deb" \
-          | tar -xO --wildcards '*/ss-config.json' | grep -q '"packageType":"deb-compat"'
-        rpm2cpio "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64-compat.rpm" \
-          | cpio --quiet -i --to-stdout '*ss-config.json' | grep -q '"packageType":"rpm-compat"'
+        dpkg-deb --fsys-tarfile "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.deb" \
+          | tar -xO --wildcards '*/ss-config.json' | grep -q '"packageType":"deb"'
+        rpm2cpio "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.rpm" \
+          | cpio --quiet -i --to-stdout '*ss-config.json' | grep -q '"packageType":"rpm"'
 
     #
     # The glibc-2.28 ground truth: bare rockylinux:8 (AppImage extract + rpm install) and
@@ -751,16 +719,16 @@ jobs:
     # the runner itself. A bare container has nothing preinstalled, so an incomplete bundle
     # or an unsatisfiable dependency set fails here instead of on a user's machine
     #
-    - name: '🧪 Smoke test compat packages (glibc 2.28 gate)'
+    - name: '🧪 Smoke test packages (glibc 2.28 gate)'
       run: |
         set -euo pipefail
-        COMPAT_APPIMAGE="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64-compat.AppImage"
-        COMPAT_DEB="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64-compat.deb"
-        COMPAT_RPM="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64-compat.rpm"
+        APPIMAGE="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage"
+        DEB="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.deb"
+        RPM="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.rpm"
 
-        chmod +x "$COMPAT_APPIMAGE"
-        ./"$COMPAT_APPIMAGE" --appimage-extract >/dev/null
-        grep -q '"packageType":"appimage-compat"' squashfs-root/usr/bin/ss-config.json
+        chmod +x "$APPIMAGE"
+        ./"$APPIMAGE" --appimage-extract >/dev/null
+        grep -q '"packageType":"appimage"' squashfs-root/usr/bin/ss-config.json
 
         env QT_QPA_PLATFORM=offscreen ./squashfs-root/AppRun --version
         env QT_QPA_PLATFORM=offscreen ./squashfs-root/AppRun --selftest
@@ -771,10 +739,10 @@ jobs:
           rockylinux:8 /app/AppRun --selftest
 
         docker run --rm -v "$PWD:/pkg:ro" -e QT_QPA_PLATFORM=offscreen -e HOME=/tmp rockylinux:8 \
-          bash -ec "dnf install -y -q --nogpgcheck /pkg/$COMPAT_RPM && ${{env.UNIXNAME}} --version"
+          bash -ec "dnf install -y -q --nogpgcheck /pkg/$RPM && ${{env.UNIXNAME}} --version"
 
         docker run --rm -v "$PWD:/pkg:ro" -e QT_QPA_PLATFORM=offscreen -e HOME=/tmp debian:10 \
-          bash -ec "sed -i -e 's|deb.debian.org|archive.debian.org|g' -e '/security.debian.org/d' /etc/apt/sources.list; apt-get update -qq || true; apt-get install -y -q /pkg/$COMPAT_DEB || dpkg -i /pkg/$COMPAT_DEB; ${{env.UNIXNAME}} --version"
+          bash -ec "sed -i -e 's|deb.debian.org|archive.debian.org|g' -e '/security.debian.org/d' /etc/apt/sources.list; apt-get update -qq || true; apt-get install -y -q /pkg/$DEB || dpkg -i /pkg/$DEB; ${{env.UNIXNAME}} --version"
 
         rm -rf squashfs-root
 
@@ -797,31 +765,22 @@ jobs:
         DEB="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.deb"
         RPM="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.rpm"
         BIN="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64"
-        COMPAT_APPIMAGE="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64-compat.AppImage"
-        COMPAT_DEB="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64-compat.deb"
-        COMPAT_RPM="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64-compat.rpm"
         cp "build/app/${{env.UNIXNAME}}" "$BIN"
 
         gpg --export --armor "$GPG_KEY_ID" > signing-public-key.asc
 
         rpm --import signing-public-key.asc
-        for r in "$RPM" "$COMPAT_RPM"; do
-          rpmsign --addsign "$r"
-          rpm -Kv "$r"
-          rpm -K "$r" | grep -qi 'signatures OK'
-        done
+        rpmsign --addsign "$RPM"
+        rpm -Kv "$RPM"
+        rpm -K "$RPM" | grep -qi 'signatures OK'
 
-        for d in "$DEB" "$COMPAT_DEB"; do
-          debsigs --sign=origin --default-key="$GPG_KEY_ID" "$d"
-          ar t "$d" | grep -q '_gpgorigin'
-        done
+        debsigs --sign=origin --default-key="$GPG_KEY_ID" "$DEB"
+        ar t "$DEB" | grep -q '_gpgorigin'
 
-        for a in "$APPIMAGE" "$COMPAT_APPIMAGE"; do
-          chmod +x "$a"
-          ./"$a" --appimage-signature | grep -q 'BEGIN PGP SIGNATURE'
-        done
+        chmod +x "$APPIMAGE"
+        ./"$APPIMAGE" --appimage-signature | grep -q 'BEGIN PGP SIGNATURE'
 
-        for f in "$APPIMAGE" "$DEB" "$RPM" "$BIN" "$COMPAT_APPIMAGE" "$COMPAT_DEB" "$COMPAT_RPM"; do
+        for f in "$APPIMAGE" "$DEB" "$RPM" "$BIN"; do
           gpg --batch --yes --pinentry-mode loopback \
             ${GPG_PASSPHRASE:+--passphrase "$GPG_PASSPHRASE"} \
             --local-user "$GPG_KEY_ID" \
@@ -830,7 +789,8 @@ jobs:
         done
 
     #
-    # Release artifact: the AppImage users download
+    # Release artifact: the Linux AppImage users download — the glibc-bundled build (spec
+    # 0065) runs on everything from Debian 10 / RHEL 8 up, so it is the only one shipped
     #
     - name: '📤 Upload artifact: AppImage'
       uses: actions/upload-artifact@v5
@@ -857,33 +817,6 @@ jobs:
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.rpm
 
     #
-    # Release artifact: glibc-compat AppImage for legacy hosts (spec 0065)
-    #
-    - name: '📤 Upload artifact: compat AppImage (x64)'
-      uses: actions/upload-artifact@v5
-      with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64-compat.AppImage
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64-compat.AppImage
-
-    #
-    # Release artifact: glibc-compat Debian package (spec 0065)
-    #
-    - name: '📤 Upload artifact: compat .deb (x64)'
-      uses: actions/upload-artifact@v5
-      with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64-compat.deb
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64-compat.deb
-
-    #
-    # Release artifact: glibc-compat RPM package (spec 0065)
-    #
-    - name: '📤 Upload artifact: compat .rpm (x64)'
-      uses: actions/upload-artifact@v5
-      with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64-compat.rpm
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64-compat.rpm
-
-    #
     # Detached signatures plus the raw binary and the public key, so a user can verify without
     # trusting the release page; ignored when signing was skipped
     #
@@ -896,9 +829,6 @@ jobs:
           ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage.asc
           ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.deb.asc
           ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.rpm.asc
-          ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64-compat.AppImage.asc
-          ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64-compat.deb.asc
-          ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64-compat.rpm.asc
           ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64
           ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.asc
           signing-public-key.asc
@@ -1116,6 +1046,7 @@ jobs:
           -DENABLE_PGO=ON \
           -DPGO_STAGE=GENERATE \
           -DSS_UNITY_BUILD=ON \
+          -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
           -DUSE_SYSTEM_ZLIB=ON \
           -DUSE_SYSTEM_EXPAT=ON \
           -DSS_INAPP_TESTS=ON \
@@ -1183,6 +1114,7 @@ jobs:
           -DENABLE_PGO=ON \
           -DPGO_STAGE=USE \
           -DSS_UNITY_BUILD=ON \
+          -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
           -DUSE_SYSTEM_ZLIB=ON \
           -DUSE_SYSTEM_EXPAT=ON \
           -DSS_INAPP_TESTS=ON \
@@ -1266,8 +1198,6 @@ jobs:
         printf '%%_gpg_sign_cmd_extra_args --batch --pinentry-mode loopback --passphrase-file %s\n' \
           "$PASSFILE" >> ~/.rpmmacros
         echo "SS_GPG_SIGN=1" >> "$GITHUB_ENV"
-        echo "LDAI_SIGN=1" >> "$GITHUB_ENV"
-        echo "LDAI_SIGN_KEY=$GPG_KEY_ID" >> "$GITHUB_ENV"
 
     #
     # linuxdeploy plus its Qt plugin build the AppDir; the SQL drivers and the TIFF reader are
@@ -1275,9 +1205,11 @@ jobs:
     # by itself are added afterwards: the offscreen platform plugin, since linuxdeploy ships xcb
     # and wayland only while the integration tests run headless, and Qt WebEngine's NSS crypto
     # backends, which NSS dlopen()s (softokn/freebl/nssckbi) so an ldd-based bundler never sees
-    # them and leaves a half-bundled NSS that crashes against the host's newer copies
+    # them and leaves a half-bundled NSS that crashes against the host's newer copies. No AppImage
+    # is packed here: the compat conversion below produces the only Linux AppImage shipped, so
+    # this AppDir is purely the input tree for the deb/rpm and compat steps
     #
-    - name: '📦 Create AppImage'
+    - name: '📦 Create AppDir'
       run: |
         cd "build/app"
         wget https://github.com/linuxdeploy/linuxdeploy/releases/download/1-alpha-20240109-1/linuxdeploy-aarch64.AppImage
@@ -1291,7 +1223,7 @@ jobs:
         rm -f "$QT_PLUGINS_PATH/imageformats/libqtiff.so"
         find "$QT_PLUGINS_PATH/sqldrivers" -name 'libqsql*.so' ! -name 'libqsqlite.so' -delete
 
-        ./linuxdeploy-aarch64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i ../../app/deploy/linux/${{env.UNIXNAME}}.svg -d ../../app/deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
+        ./linuxdeploy-aarch64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i ../../app/deploy/linux/${{env.UNIXNAME}}.svg -d ../../app/deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt
         mkdir -p AppDir/usr/plugins/canbus
         if [ -d "$QT_PLUGINS_PATH/canbus" ]; then
           cp -r "$QT_PLUGINS_PATH/canbus/"* AppDir/usr/plugins/canbus/ || echo "Warning: Could not copy canbus plugins"
@@ -1321,65 +1253,15 @@ jobs:
           exit 1
         fi
 
-        printf '{"packageType":"appimage","arch":"arm64"}\n' > AppDir/usr/bin/ss-config.json
-
-        ./linuxdeploy-aarch64.AppImage --appdir AppDir --output appimage
-
         rm linuxdeploy-aarch64.AppImage
         rm linuxdeploy-plugin-qt-aarch64.AppImage
 
-        mv *.AppImage ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage
-
     #
-    # Reuses the AppDir from the step above through linuxdeploy-plugin-native_packages, then reads
-    # ss-config.json back out of each package to prove the stamp survived
+    # Spec 0065: the glibc-bundled conversion is the ONLY Linux packaging path — faithful
+    # mirror of the x64 stage (see the x64 job for the full rationale); only arch strings
+    # differ
     #
-    - name: '📦 Create .deb and .rpm packages'
-      run: |
-        set -euo pipefail
-        python3 -m venv /tmp/ldnp-venv
-        /tmp/ldnp-venv/bin/pip install --upgrade pip
-        /tmp/ldnp-venv/bin/pip install \
-          "git+https://github.com/linuxdeploy/linuxdeploy-plugin-native_packages.git@91638818c35a240d0874b7de9cdab0cb3d3655ea"
-
-        # ldnp writes %files entries unquoted, so rpmbuild splits paths that contain
-        # spaces (the compat AppDir bundles ALSA UCM profiles like
-        # "Google Nexus 7 ALC5642.conf"); quote every entry in the spec template
-        sed -i 's|^{{ file }}$|"{{ file }}"|' \
-          /tmp/ldnp-venv/lib/python3.*/site-packages/ldnp/templates/rpm/spec
-        grep -q '^"{{ file }}"$' /tmp/ldnp-venv/lib/python3.*/site-packages/ldnp/templates/rpm/spec
-
-        export LINUXDEPLOY_OUTPUT_APP_NAME="${{env.UNIXNAME}}"
-        export LINUXDEPLOY_OUTPUT_VERSION="${{env.VERSION}}"
-        export LDNP_META_PACKAGE_NAME="${{env.UNIXNAME}}"
-        export LDNP_META_DESCRIPTION="${{env.DESCRIPTION}}"
-        export LDNP_META_SHORT_DESCRIPTION="${{env.DESCRIPTION}}"
-        export LDNP_META_ARCHITECTURE="arm64"
-        export LDNP_META_BUILD_ARCH="aarch64"
-
-        printf '{"packageType":"deb","arch":"arm64"}\n' > build/app/AppDir/usr/bin/ss-config.json
-        /tmp/ldnp-venv/bin/linuxdeploy-plugin-native_packages \
-          --appdir build/app/AppDir \
-          --build deb
-
-        printf '{"packageType":"rpm","arch":"arm64"}\n' > build/app/AppDir/usr/bin/ss-config.json
-        /tmp/ldnp-venv/bin/linuxdeploy-plugin-native_packages \
-          --appdir build/app/AppDir \
-          --build rpm
-
-        mv "${{env.UNIXNAME}}"_*.deb "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.deb"
-        mv "${{env.UNIXNAME}}"_*.rpm "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.rpm"
-
-        dpkg-deb --fsys-tarfile "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.deb" \
-          | tar -xO --wildcards '*/ss-config.json' | grep -q '"packageType":"deb"'
-        rpm2cpio "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.rpm" \
-          | cpio --quiet -i --to-stdout '*ss-config.json' | grep -q '"packageType":"rpm"'
-
-    #
-    # Spec 0065: glibc-compat packages for legacy hosts — faithful mirror of the x64 stage
-    # (see the x64 job for the full rationale); only arch strings differ
-    #
-    - name: '📦 Create compat packages (glibc-bundled)'
+    - name: '📦 Create AppImage (glibc-bundled)'
       env:
         GPG_KEY_ID: ${{secrets.GPG_KEY_ID}}
       run: |
@@ -1399,7 +1281,7 @@ jobs:
         chmod +x appimagetool
 
         cp -a AppDir AppDir-compat
-        printf '{"packageType":"appimage-compat","arch":"arm64"}\n' > AppDir-compat/usr/bin/ss-config.json
+        printf '{"packageType":"appimage","arch":"arm64"}\n' > AppDir-compat/usr/bin/ss-config.json
 
         BIN_SRC=$(mktemp -d)
         mv "AppDir-compat/usr/bin/${{env.UNIXNAME}}" "$BIN_SRC/"
@@ -1500,22 +1382,33 @@ jobs:
         rm -rf AppDir-compat/usr/lib
         rm -rf "$BIN_SRC"
 
-        COMPAT_APPIMAGE="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64-compat.AppImage"
+        APPIMAGE="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage"
         if [ "${SS_GPG_SIGN:-0}" = "1" ]; then
-          ARCH=aarch64 ./appimagetool --sign --sign-key "$GPG_KEY_ID" AppDir-compat "$COMPAT_APPIMAGE"
+          ARCH=aarch64 ./appimagetool --sign --sign-key "$GPG_KEY_ID" AppDir-compat "$APPIMAGE"
         else
-          ARCH=aarch64 ./appimagetool AppDir-compat "$COMPAT_APPIMAGE"
+          ARCH=aarch64 ./appimagetool AppDir-compat "$APPIMAGE"
         fi
         rm sharun-aio appimagetool
-        mv "$COMPAT_APPIMAGE" "../../$COMPAT_APPIMAGE"
+        mv "$APPIMAGE" "../../$APPIMAGE"
 
     #
-    # Same ldnp venv as the regular packages over the converted AppDir — mirror of the x64
-    # compat packaging step
+    # ldnp over the converted AppDir — mirror of the x64 packaging step
     #
-    - name: '📦 Create compat .deb and .rpm packages'
+    - name: '📦 Create .deb and .rpm packages (glibc-bundled)'
       run: |
         set -euo pipefail
+        python3 -m venv /tmp/ldnp-venv
+        /tmp/ldnp-venv/bin/pip install --upgrade pip
+        /tmp/ldnp-venv/bin/pip install \
+          "git+https://github.com/linuxdeploy/linuxdeploy-plugin-native_packages.git@91638818c35a240d0874b7de9cdab0cb3d3655ea"
+
+        # ldnp writes %files entries unquoted, so rpmbuild splits paths that contain
+        # spaces (the converted AppDir bundles ALSA UCM profiles like
+        # "Google Nexus 7 ALC5642.conf"); quote every entry in the spec template
+        sed -i 's|^{{ file }}$|"{{ file }}"|' \
+          /tmp/ldnp-venv/lib/python3.*/site-packages/ldnp/templates/rpm/spec
+        grep -q '^"{{ file }}"$' /tmp/ldnp-venv/lib/python3.*/site-packages/ldnp/templates/rpm/spec
+
         export LINUXDEPLOY_OUTPUT_APP_NAME="${{env.UNIXNAME}}"
         export LINUXDEPLOY_OUTPUT_VERSION="${{env.VERSION}}"
         export LDNP_META_PACKAGE_NAME="${{env.UNIXNAME}}"
@@ -1524,37 +1417,37 @@ jobs:
         export LDNP_META_ARCHITECTURE="arm64"
         export LDNP_META_BUILD_ARCH="aarch64"
 
-        printf '{"packageType":"deb-compat","arch":"arm64"}\n' > build/app/AppDir-compat/usr/bin/ss-config.json
+        printf '{"packageType":"deb","arch":"arm64"}\n' > build/app/AppDir-compat/usr/bin/ss-config.json
         /tmp/ldnp-venv/bin/linuxdeploy-plugin-native_packages \
           --appdir build/app/AppDir-compat \
           --build deb
 
-        printf '{"packageType":"rpm-compat","arch":"arm64"}\n' > build/app/AppDir-compat/usr/bin/ss-config.json
+        printf '{"packageType":"rpm","arch":"arm64"}\n' > build/app/AppDir-compat/usr/bin/ss-config.json
         /tmp/ldnp-venv/bin/linuxdeploy-plugin-native_packages \
           --appdir build/app/AppDir-compat \
           --build rpm
 
-        mv "${{env.UNIXNAME}}"_*.deb "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64-compat.deb"
-        mv "${{env.UNIXNAME}}"_*.rpm "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64-compat.rpm"
+        mv "${{env.UNIXNAME}}"_*.deb "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.deb"
+        mv "${{env.UNIXNAME}}"_*.rpm "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.rpm"
 
-        dpkg-deb --fsys-tarfile "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64-compat.deb" \
-          | tar -xO --wildcards '*/ss-config.json' | grep -q '"packageType":"deb-compat"'
-        rpm2cpio "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64-compat.rpm" \
-          | cpio --quiet -i --to-stdout '*ss-config.json' | grep -q '"packageType":"rpm-compat"'
+        dpkg-deb --fsys-tarfile "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.deb" \
+          | tar -xO --wildcards '*/ss-config.json' | grep -q '"packageType":"deb"'
+        rpm2cpio "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.rpm" \
+          | cpio --quiet -i --to-stdout '*ss-config.json' | grep -q '"packageType":"rpm"'
 
     #
     # The glibc-2.28 ground truth on arm64 — mirror of the x64 smoke gate
     #
-    - name: '🧪 Smoke test compat packages (glibc 2.28 gate)'
+    - name: '🧪 Smoke test packages (glibc 2.28 gate)'
       run: |
         set -euo pipefail
-        COMPAT_APPIMAGE="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64-compat.AppImage"
-        COMPAT_DEB="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64-compat.deb"
-        COMPAT_RPM="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64-compat.rpm"
+        APPIMAGE="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage"
+        DEB="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.deb"
+        RPM="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.rpm"
 
-        chmod +x "$COMPAT_APPIMAGE"
-        ./"$COMPAT_APPIMAGE" --appimage-extract >/dev/null
-        grep -q '"packageType":"appimage-compat"' squashfs-root/usr/bin/ss-config.json
+        chmod +x "$APPIMAGE"
+        ./"$APPIMAGE" --appimage-extract >/dev/null
+        grep -q '"packageType":"appimage"' squashfs-root/usr/bin/ss-config.json
 
         env QT_QPA_PLATFORM=offscreen ./squashfs-root/AppRun --version
         env QT_QPA_PLATFORM=offscreen ./squashfs-root/AppRun --selftest
@@ -1565,10 +1458,10 @@ jobs:
           rockylinux:8 /app/AppRun --selftest
 
         docker run --rm -v "$PWD:/pkg:ro" -e QT_QPA_PLATFORM=offscreen -e HOME=/tmp rockylinux:8 \
-          bash -ec "dnf install -y -q --nogpgcheck /pkg/$COMPAT_RPM && ${{env.UNIXNAME}} --version"
+          bash -ec "dnf install -y -q --nogpgcheck /pkg/$RPM && ${{env.UNIXNAME}} --version"
 
         docker run --rm -v "$PWD:/pkg:ro" -e QT_QPA_PLATFORM=offscreen -e HOME=/tmp debian:10 \
-          bash -ec "sed -i -e 's|deb.debian.org|archive.debian.org|g' -e '/security.debian.org/d' /etc/apt/sources.list; apt-get update -qq || true; apt-get install -y -q /pkg/$COMPAT_DEB || dpkg -i /pkg/$COMPAT_DEB; ${{env.UNIXNAME}} --version"
+          bash -ec "sed -i -e 's|deb.debian.org|archive.debian.org|g' -e '/security.debian.org/d' /etc/apt/sources.list; apt-get update -qq || true; apt-get install -y -q /pkg/$DEB || dpkg -i /pkg/$DEB; ${{env.UNIXNAME}} --version"
 
         rm -rf squashfs-root
 
@@ -1591,31 +1484,22 @@ jobs:
         DEB="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.deb"
         RPM="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.rpm"
         BIN="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64"
-        COMPAT_APPIMAGE="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64-compat.AppImage"
-        COMPAT_DEB="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64-compat.deb"
-        COMPAT_RPM="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64-compat.rpm"
         cp "build/app/${{env.UNIXNAME}}" "$BIN"
 
         gpg --export --armor "$GPG_KEY_ID" > signing-public-key.asc
 
         rpm --import signing-public-key.asc
-        for r in "$RPM" "$COMPAT_RPM"; do
-          rpmsign --addsign "$r"
-          rpm -Kv "$r"
-          rpm -K "$r" | grep -qi 'signatures OK'
-        done
+        rpmsign --addsign "$RPM"
+        rpm -Kv "$RPM"
+        rpm -K "$RPM" | grep -qi 'signatures OK'
 
-        for d in "$DEB" "$COMPAT_DEB"; do
-          debsigs --sign=origin --default-key="$GPG_KEY_ID" "$d"
-          ar t "$d" | grep -q '_gpgorigin'
-        done
+        debsigs --sign=origin --default-key="$GPG_KEY_ID" "$DEB"
+        ar t "$DEB" | grep -q '_gpgorigin'
 
-        for a in "$APPIMAGE" "$COMPAT_APPIMAGE"; do
-          chmod +x "$a"
-          ./"$a" --appimage-signature | grep -q 'BEGIN PGP SIGNATURE'
-        done
+        chmod +x "$APPIMAGE"
+        ./"$APPIMAGE" --appimage-signature | grep -q 'BEGIN PGP SIGNATURE'
 
-        for f in "$APPIMAGE" "$DEB" "$RPM" "$BIN" "$COMPAT_APPIMAGE" "$COMPAT_DEB" "$COMPAT_RPM"; do
+        for f in "$APPIMAGE" "$DEB" "$RPM" "$BIN"; do
           gpg --batch --yes --pinentry-mode loopback \
             ${GPG_PASSPHRASE:+--passphrase "$GPG_PASSPHRASE"} \
             --local-user "$GPG_KEY_ID" \
@@ -1624,7 +1508,8 @@ jobs:
         done
 
     #
-    # Release artifact: the AppImage users download
+    # Release artifact: the Linux AppImage users download — the glibc-bundled build (spec
+    # 0065) runs on everything from Debian 10 / RHEL 8 up, so it is the only one shipped
     #
     - name: '📤 Upload artifact: AppImage'
       uses: actions/upload-artifact@v5
@@ -1651,33 +1536,6 @@ jobs:
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.rpm
 
     #
-    # Release artifact: glibc-compat AppImage for legacy hosts (spec 0065)
-    #
-    - name: '📤 Upload artifact: compat AppImage (arm64)'
-      uses: actions/upload-artifact@v5
-      with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64-compat.AppImage
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64-compat.AppImage
-
-    #
-    # Release artifact: glibc-compat Debian package (spec 0065)
-    #
-    - name: '📤 Upload artifact: compat .deb (arm64)'
-      uses: actions/upload-artifact@v5
-      with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64-compat.deb
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64-compat.deb
-
-    #
-    # Release artifact: glibc-compat RPM package (spec 0065)
-    #
-    - name: '📤 Upload artifact: compat .rpm (arm64)'
-      uses: actions/upload-artifact@v5
-      with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64-compat.rpm
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64-compat.rpm
-
-    #
     # Detached signatures plus the raw binary and the public key, so a user can verify without
     # trusting the release page; ignored when signing was skipped
     #
@@ -1690,9 +1548,6 @@ jobs:
           ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage.asc
           ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.deb.asc
           ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.rpm.asc
-          ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64-compat.AppImage.asc
-          ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64-compat.deb.asc
-          ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64-compat.rpm.asc
           ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64
           ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.asc
           signing-public-key.asc
@@ -1812,6 +1667,7 @@ jobs:
           -DENABLE_PGO=ON \
           -DPGO_STAGE=GENERATE \
           -DSS_UNITY_BUILD=ON \
+          -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
           -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_OSX_DEPLOYMENT_TARGET=14.0 \
           -DCMAKE_OSX_ARCHITECTURES="arm64" \
@@ -1875,6 +1731,7 @@ jobs:
           -DENABLE_PGO=ON \
           -DPGO_STAGE=USE \
           -DSS_UNITY_BUILD=ON \
+          -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
           -DLLVM_PROFDATA=$(xcrun -f llvm-profdata) \
           -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_OSX_DEPLOYMENT_TARGET=14.0 \
@@ -2092,6 +1949,7 @@ jobs:
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
           -DSS_UNITY_BUILD=ON \
+          -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
           -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_OSX_DEPLOYMENT_TARGET=14.0 \
           -DCMAKE_OSX_ARCHITECTURES="x86_64" \
@@ -2422,6 +2280,7 @@ jobs:
           -DENABLE_PGO=ON `
           -DPGO_STAGE=GENERATE `
           -DSS_UNITY_BUILD=ON `
+          -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} `
           -DCMAKE_BUILD_TYPE=Release `
           -DBUILD_COMMERCIAL=ON `
           -DBUILD_GPL3=OFF
@@ -2489,6 +2348,7 @@ jobs:
           -DENABLE_PGO=ON `
           -DPGO_STAGE=USE `
           -DSS_UNITY_BUILD=ON `
+          -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} `
           -DSS_PACKAGE_TYPE=msi `
           -DCMAKE_BUILD_TYPE=Release `
           -DBUILD_COMMERCIAL=ON `

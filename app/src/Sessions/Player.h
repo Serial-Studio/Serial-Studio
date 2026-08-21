@@ -150,7 +150,8 @@ private:
   void mergeStreamBlockTimes();
   void injectStreamBlocksAt(qint64 timestampNs);
   void replayStreamGroup(int sourceId, std::size_t first, std::size_t last);
-  [[nodiscard]] bool fetchStreamSamples(qint64 rowId, qint64 frames, std::vector<double>& out);
+  [[nodiscard]] bool fetchStreamSamples(const PlayerStreamBlockIndex& entry,
+                                        std::vector<double>& out);
   void processFrameBatch(int startFrame, int endFrame);
   void anchorSteadyBase(int frameIndex);
   [[nodiscard]] int seekWindowStartRow(int target) const;
@@ -201,6 +202,7 @@ private:
 
   std::vector<PlayerStreamBlockIndex> m_streamBlocks;
   std::optional<QSqlQuery> m_streamBlobQuery;
+  std::optional<QSqlQuery> m_denseBlobQuery;
   std::vector<std::vector<double>> m_streamChannelBuf;
 
   QMap<int, int> m_columnToSource;

@@ -595,6 +595,7 @@ void Sessions::Player::teardownLocalDb()
   m_frameQuery.reset();
   m_seekQuery.reset();
   m_streamBlobQuery.reset();
+  m_denseBlobQuery.reset();
   m_frameQueryPrepared = false;
   m_seekQueryPrepared  = false;
 
@@ -1365,8 +1366,10 @@ void Sessions::Player::fillSeekWindowFromBlocks(int startRow,
 }
 
 /**
- * @brief Spec-0055 twin of the cursor-row read: the blocks containing @p timestampNs are those
- *        whose indexed span covers it, and the sample at that exact instant is the replayed cell.
+ * @brief Spec-0055 twin of the cursor-row read: the irregular blocks containing @p timestampNs
+ *        are those whose indexed span covers it, and the sample at that exact instant is the
+ *        replayed cell. Dense rows (dt_ns != 0) are excluded: they replay whole through the
+ *        stream-block lane (R11), and injecting their t0 sample here would publish it twice.
  */
 QHash<int, QString> Sessions::Player::frameValuesFromBlocks(qint64 timestampNs)
 {
@@ -1374,8 +1377,8 @@ QHash<int, QString> Sessions::Player::frameValuesFromBlocks(qint64 timestampNs)
 
   QSqlQuery q(*m_db);
   q.setForwardOnly(true);
-  q.prepare(QStringLiteral("SELECT %1 FROM blocks WHERE session_id = ? AND t0_ns <= ? "
-                           "AND t_end_ns >= ? ORDER BY block_id")
+  q.prepare(QStringLiteral("SELECT %1 FROM blocks WHERE session_id = ? AND dt_ns = 0 "
+                           "AND t0_ns <= ? AND t_end_ns >= ? ORDER BY block_id")
               .arg(QLatin1String(Sessions::kBlockColumns)));
   q.bindValue(0, m_sessionId);
   q.bindValue(1, timestampNs);
@@ -1517,36 +1520,41 @@ void Sessions::Player::mergeStreamBlockTimes()
 }
 
 /**
- * @brief Reads one block's samples blob by rowid and decodes it from canonical little-endian
+ * @brief Reads one dense block's samples blob by rowid -- from `stream_blocks` (spec 0054) or
+ *        `blocks` (spec 0055) per the entry's tag -- and decodes it from canonical little-endian
  *        float64. Rejects a blob whose length is not `frames * 8` rather than decoding past its
  *        end -- a truncated or foreign file must fail loudly, not silently misplay.
  */
-bool Sessions::Player::fetchStreamSamples(qint64 rowId, qint64 frames, std::vector<double>& out)
+bool Sessions::Player::fetchStreamSamples(const PlayerStreamBlockIndex& entry,
+                                          std::vector<double>& out)
 {
-  SS_ASSERT(frames >= 0, return false);
+  SS_ASSERT(entry.frames >= 0, return false);
 
   if (!m_db || !m_db->isOpen()) [[unlikely]]
     return false;
 
-  if (!m_streamBlobQuery) {
-    m_streamBlobQuery.emplace(*m_db);
-    m_streamBlobQuery->setForwardOnly(true);
-    m_streamBlobQuery->prepare("SELECT samples FROM stream_blocks WHERE stream_block_id = ?");
+  auto& blobQuery = entry.fromBlocks ? m_denseBlobQuery : m_streamBlobQuery;
+  if (!blobQuery) {
+    blobQuery.emplace(*m_db);
+    blobQuery->setForwardOnly(true);
+    blobQuery->prepare(entry.fromBlocks
+                         ? QStringLiteral("SELECT values_blob FROM blocks WHERE block_id = ?")
+                         : QStringLiteral("SELECT samples FROM stream_blocks "
+                                          "WHERE stream_block_id = ?"));
   }
 
-  m_streamBlobQuery->bindValue(0, rowId);
-  if (!m_streamBlobQuery->exec() || !m_streamBlobQuery->next()) [[unlikely]] {
-    qWarning() << "[Sessions::Player] stream block fetch failed:"
-               << m_streamBlobQuery->lastError().text();
+  blobQuery->bindValue(0, entry.rowId);
+  if (!blobQuery->exec() || !blobQuery->next()) [[unlikely]] {
+    qWarning() << "[Sessions::Player] stream block fetch failed:" << blobQuery->lastError().text();
     return false;
   }
 
-  const QByteArray blob = m_streamBlobQuery->value(0).toByteArray();
-  m_streamBlobQuery->finish();
+  const QByteArray blob = blobQuery->value(0).toByteArray();
+  blobQuery->finish();
 
-  if (!unpackStreamSamples(blob, frames, out)) [[unlikely]] {
-    qWarning() << "[Sessions::Player] stream block" << rowId << "has" << blob.size()
-               << "bytes, expected" << (frames * kStreamSampleBytes);
+  if (!unpackStreamSamples(blob, entry.frames, out)) [[unlikely]] {
+    qWarning() << "[Sessions::Player] stream block" << entry.rowId << "has" << blob.size()
+               << "bytes, expected" << (entry.frames * kStreamSampleBytes);
     return false;
   }
 
@@ -1571,6 +1579,8 @@ void Sessions::Player::replayStreamGroup(int sourceId, std::size_t first, std::s
     return;
 
   m_streamChannelBuf.resize(columns.size());
+  for (auto& channel : m_streamChannelBuf)
+    channel.clear();
 
   QHash<int, std::size_t> uidToSlot;
   for (std::size_t c = 0; c < columns.size(); ++c)
@@ -1585,7 +1595,7 @@ void Sessions::Player::replayStreamGroup(int sourceId, std::size_t first, std::s
     if (slotIt == uidToSlot.constEnd())
       continue;
 
-    if (fetchStreamSamples(entry.rowId, entry.frames, m_streamChannelBuf[slotIt.value()]))
+    if (fetchStreamSamples(entry, m_streamChannelBuf[slotIt.value()]))
       frames = std::max(frames, entry.frames);
   }
 

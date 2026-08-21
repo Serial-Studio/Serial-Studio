@@ -17,10 +17,12 @@
 
 #  include <algorithm>
 #  include <QDateTime>
+#  include <QDebug>
 #  include <QObject>
 #  include <QSqlDatabase>
 #  include <QSqlError>
 #  include <QSqlQuery>
+#  include <tuple>
 
 #  include "Sessions/BlockReader.h"
 
@@ -168,10 +170,10 @@ bool Sessions::PlayerLoaderWorker::loadTimestampIndex(QSqlDatabase& db,
 }
 
 /**
- * @brief Spec-0055 twin of loadTimestampIndex. Frame-lane blocks contribute every sample instant,
- *        but a dense uniform-grid block contributes only its start: a 48 kHz capture would
- *        otherwise materialise ~29 M timestamps per 10 minutes and make the player step one audio
- *        sample at a time, which is what the pre-0055 per-block stream index avoided.
+ * @brief Spec-0055 twin of loadTimestampIndex. Frame-lane blocks contribute every sample instant;
+ *        a dense block contributes only its start (48 kHz would otherwise materialise ~29 M
+ *        timestamps per 10 minutes) and joins the stream-block index instead (R11), so playback
+ *        replays it whole through the sink-masked block lane, never one sample per step.
  */
 bool Sessions::PlayerLoaderWorker::loadBlockTimestampIndex(QSqlDatabase& db,
                                                            int sessionId,
@@ -180,7 +182,7 @@ bool Sessions::PlayerLoaderWorker::loadBlockTimestampIndex(QSqlDatabase& db,
 {
   QSqlQuery q(db);
   q.setForwardOnly(true);
-  q.prepare("SELECT t0_ns, dt_ns, frames, times FROM blocks "
+  q.prepare("SELECT block_id, source_id, unique_id, t0_ns, dt_ns, frames, times FROM blocks "
             "WHERE session_id = ? ORDER BY t0_ns ASC, block_id ASC");
   q.bindValue(0, sessionId);
   if (!q.exec()) {
@@ -196,18 +198,35 @@ bool Sessions::PlayerLoaderWorker::loadBlockTimestampIndex(QSqlDatabase& db,
       return false;
     }
 
-    const qint64 t0Ns = q.value(0).toLongLong();
-    const qint64 dtNs = q.value(1).toLongLong();
+    const qint64 t0Ns = q.value(3).toLongLong();
+    const qint64 dtNs = q.value(4).toLongLong();
 
     if (dtNs != 0) {
       payload.timestampsNs.push_back(t0Ns);
       ++row;
+
+      const qint64 frames = q.value(5).toLongLong();
+      if (frames <= 0 || frames > kMaxBlockFrames) {
+        qWarning() << "[Sessions::PlayerLoader] skipping dense block" << q.value(0).toLongLong()
+                   << "with invalid frame count" << frames;
+        continue;
+      }
+
+      PlayerStreamBlockIndex entry;
+      entry.rowId      = q.value(0).toLongLong();
+      entry.sourceId   = q.value(1).toInt();
+      entry.uniqueId   = q.value(2).toInt();
+      entry.t0Ns       = t0Ns;
+      entry.dtNs       = dtNs;
+      entry.frames     = frames;
+      entry.fromBlocks = true;
+      payload.streamBlocks.push_back(entry);
       continue;
     }
 
     stamps.clear();
     if (!Sessions::expandBlockTimes(
-          t0Ns, dtNs, q.value(2).toLongLong(), q.value(3).toByteArray(), stamps)) {
+          t0Ns, dtNs, q.value(5).toLongLong(), q.value(6).toByteArray(), stamps)) {
       errorOut = tr("Corrupt block timing in session %1").arg(sessionId);
       return false;
     }
@@ -254,12 +273,13 @@ bool Sessions::PlayerLoaderWorker::loadStreamBlockIndex(QSqlDatabase& db,
     }
 
     PlayerStreamBlockIndex entry;
-    entry.rowId    = q.value(0).toLongLong();
-    entry.sourceId = q.value(1).toInt();
-    entry.uniqueId = q.value(2).toInt();
-    entry.t0Ns     = q.value(3).toLongLong();
-    entry.dtNs     = q.value(4).toLongLong();
-    entry.frames   = q.value(5).toLongLong();
+    entry.rowId      = q.value(0).toLongLong();
+    entry.sourceId   = q.value(1).toInt();
+    entry.uniqueId   = q.value(2).toInt();
+    entry.t0Ns       = q.value(3).toLongLong();
+    entry.dtNs       = q.value(4).toLongLong();
+    entry.frames     = q.value(5).toLongLong();
+    entry.fromBlocks = false;
     payload.streamBlocks.push_back(entry);
     ++row;
   }
@@ -350,6 +370,17 @@ void Sessions::PlayerLoaderWorker::openAndLoad(const QString& filePath, int sess
     closeAndEmit(db);
     return;
   }
+
+  // code-verify off
+  // The player's block walk groups consecutive entries by (t0, source); the two per-table ORDER BY
+  // clauses guarantee neither cross-table order nor same-source contiguity at equal t0.
+  // code-verify on
+  std::stable_sort(payload->streamBlocks.begin(),
+                   payload->streamBlocks.end(),
+                   [](const PlayerStreamBlockIndex& a, const PlayerStreamBlockIndex& b) {
+                     return std::tie(a.t0Ns, a.sourceId, a.rowId)
+                          < std::tie(b.t0Ns, b.sourceId, b.rowId);
+                   });
 
   if (payload->timestampsNs.empty() && payload->streamBlocks.empty()) {
     payload->error = tr("The selected session does not contain any frames.");

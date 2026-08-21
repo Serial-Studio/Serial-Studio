@@ -1,7 +1,7 @@
 ---
 spec: 0064-export-replay-fidelity
 title: Export and Replay Fidelity
-status: done          # closed 2026-08-20
+status: in-progress   # closed 2026-08-20, reopened same day for the dense-replay amendment below
 created: 2026-08-18
 author: Alex Spataru
 ---
@@ -191,3 +191,44 @@ run. Every symptom is a data-fidelity failure, so this spec treats them as one p
   header and MDF4 channel naming, which would catch accidental schema reordering but would need
   regenerating whenever a column label legitimately changes. **Recommendation: assert ordering and
   membership, not bytes.**
+
+## Amendment 2026-08-20 — Dense-lane session replay is decimated to block rate
+
+### Problem
+
+Session replay of a recording whose data came through the dense stream lane (audio, and any future
+uniform-rate source) plays back a tiny fraction of the recorded samples. The reported case: an
+audio Quick Plot session replays with a visibly distorted waveform and a dead FFT, while the data
+in the session file is complete and the CSV and MDF4 replays of equivalent captures play correctly.
+
+Mechanism, proven by reading against the spec-0055 storage layout:
+
+- The recorder stores dense uniform blocks in `blocks` with `dt_ns != 0` and a full samples blob
+  (up to 4096 samples per row at 48 kHz). The data on disk is correct.
+- The player's timestamp index deliberately keeps only each dense block's `t0` (a 48 kHz capture
+  would otherwise materialise ~29 M timestamps), so playback steps at block rate (~12 Hz).
+- At each step the player reads the frame's values with an **exact timestamp match**, which for a
+  dense block matches exactly one sample — the one at `t0`. The other ~4095 samples per block are
+  never replayed. The waveform aliases down to block rate and the FFT window never fills.
+- The full-block replay machinery built for spec 0054 (`stream_blocks` → decode →
+  sink-masked block publish) still exists but reads only the legacy `stream_blocks` table, which
+  spec 0055 recordings leave empty. Nobody ported dense replay onto the unified `blocks` table.
+
+### Requirement
+
+11. **R11** — Replaying a session recording reproduces dense stream-lane data at its recorded
+    sample rate, not at the playback step rate. Every sample of every dense block reaches the
+    dashboard's plot and FFT paths, through the sink-masked replay publish (R8 holds unchanged).
+    Legacy `stream_blocks` recordings and per-sample (`readings` / irregular `blocks`) recordings
+    keep replaying exactly as before (R9 holds unchanged).
+
+### Acceptance Criteria (amendment)
+
+- [ ] **AC11** — Maintainer check: record an audio Quick Plot session, replay it. The waveform is
+      undistorted at the recorded rate and the FFT widget shows the live spectrum during playback.
+      Scrubbing and settling do not blank the audio plots.
+- [ ] **AC12** — A session recorded from a mixed project (frame-lane + dense-lane sources) replays
+      both lanes: frame-lane values at their instants, dense blocks whole. Replay creates no new
+      recording file or session row (R8 re-check).
+- [ ] **AC13** — A legacy spec-0054 recording with a populated `stream_blocks` table still replays
+      (fixture or archived file).

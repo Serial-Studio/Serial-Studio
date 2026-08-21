@@ -274,3 +274,53 @@ the published-but-silent-source diagnostic, which needs no new component.
 - `qt-cpp-review` before handoff — the change is on the hotpath and in a threading-sensitive
   module, which is exactly its remit.
 - `python scripts/sanitize-commit.py` before the commit.
+
+## Amendment 2026-08-20 — Dense-lane session replay (R11)
+
+### Approach
+
+Port the spec-0054 full-block replay lane onto the spec-0055 `blocks` table. The writer already
+discriminates the two block kinds: `uniform_grid()` (i.e. `DataBlock::dt != 0`) stores
+`dt_ns != 0` and no times blob; irregular frame-lane blocks store `dt_ns = 0` with explicit
+offsets. The reader adopts the same discriminator end to end:
+
+- **Loader** (`PlayerLoaderWorker::loadBlockTimestampIndex`): a dense row (`dt_ns != 0`) keeps
+  contributing only its `t0` to the timestamp index (unchanged), and now *also* emits a
+  `PlayerStreamBlockIndex` entry — `block_id` as the row id, `source_id`, `unique_id`, `t0_ns`,
+  `dt_ns`, `frames` — tagged `fromBlocks = true`. Rows with `frames <= 0` or
+  `frames > kMaxBlockFrames` are skipped. The legacy `stream_blocks` index loads as before with
+  `fromBlocks = false`. After both loads the merged vector is stable-sorted by
+  `(t0Ns, sourceId, rowId)` — the grouping walk in `injectStreamBlocksAt` assumes same-source
+  contiguity at equal `t0`, which the legacy per-table `ORDER BY` never actually guaranteed for
+  multi-source instants.
+- **Playback** (`Sessions::Player`): `injectStreamBlocksAt` / `replayStreamGroup` are unchanged in
+  shape; `fetchStreamSamples` takes the index entry and reads the blob from
+  `blocks.values_blob WHERE block_id = ?` or `stream_blocks.samples WHERE stream_block_id = ?` by
+  the entry's tag (two prepared queries, same `unpackStreamSamples` codec — the writer uses
+  `packStreamSamples` for both tables). The decoded block publishes through
+  `FrameBuilder::replayBlock`, which masks the sinks (R8) and self-marshals to the builder thread;
+  generation 0 blocks bypass the dashboard's structure quarantine by design.
+- **Per-sample lane** (`frameValuesFromBlocks`): the cursor query gains `AND dt_ns = 0` so a dense
+  block's `t0` sample is not injected a second time through the frame lane — and each step stops
+  decoding whole 4096-sample blobs to pick one value. Scalar widgets read dense values from the
+  block drain, same as live.
+- **Seek** (`fillSeekWindowFromBlocks`): unchanged. Dense blocks keep contributing their exact-t0
+  sample to the scrub preview (today's behavior); the settle pass's `processFrameBatch` now also
+  replays the window's dense blocks whole, so FFT and frame-fed widgets recover at rest, which is
+  what the settle docstring already promises.
+
+### Files
+
+| File | Change |
+|------|--------|
+| `app/src/Sessions/PlayerLoaderWorker.h` | `PlayerStreamBlockIndex::fromBlocks` tag. |
+| `app/src/Sessions/PlayerLoaderWorker.cpp` | Dense rows indexed into `streamBlocks`; merged sort. |
+| `app/src/Sessions/Player.h` | `m_denseBlobQuery`; `fetchStreamSamples(entry, out)` signature. |
+| `app/src/Sessions/Player.cpp` | Entry-tagged blob fetch; `AND dt_ns = 0` on the frame query. |
+
+### Invariants preserved
+
+R8: the only publish is `replayBlock` (sink-masked). R9: no schema change, read-side only, legacy
+`stream_blocks` and `readings` lanes untouched. Threading: player stays on the GUI thread,
+`replayBlock` marshals itself asynchronously, no new connections, no per-block blocking wait.
+Hotpath: untouched — no live-capture file changes.

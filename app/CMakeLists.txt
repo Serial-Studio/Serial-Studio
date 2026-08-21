@@ -1518,10 +1518,11 @@ endif()
 #
 # SS_UNITY_BUILD=ON batches this target's C++ sources into unity TUs to cut compile
 # time; CI compiles the application twice per platform (PGO generate + use) with no
-# compiler cache, so the savings land on every push. Batch size 8 is the sweet spot:
-# it amortizes header parsing while keeping enough TUs for the build to parallelize
-# (batch 0 -- one monolithic jumbo TU -- serializes the whole target on one compiler
-# process). Default is OFF: local builds, the ss_unit_tests tier, and every lib/
+# compiler cache, so the savings land on every push. SS_UNITY_BATCH_SIZE (cache var,
+# default 8) sets sources per TU: it amortizes header parsing while keeping enough TUs
+# for the build to parallelize (batch 0 -- one monolithic jumbo TU -- serializes the
+# whole target on one compiler process, so keep the TU count above the runner's core
+# count). Default is OFF: local builds, the ss_unit_tests tier, and every lib/
 # third-party target are unaffected. Both PGO stages must configure with the same
 # value -- the unity layout determines the object-file <-> profile-data mapping, and
 # it has to be identical across stages.
@@ -1546,14 +1547,14 @@ endif()
 # blocks). A "redefinition"/"ambiguous"/-Wshadow diagnostic inside a unity_*_cxx.cxx TU
 # means a NEW collision: rename the file-local helper or contain the directive -- do not
 # add the file to the exclusion list. To re-verify the full closure, build once with
-# UNITY_BUILD_BATCH_SIZE 0: batching only hides collisions, it never removes them.
+# -DSS_UNITY_BATCH_SIZE=0: batching only hides collisions, it never removes them.
 #
 #---------------------------------------------------------------------------------------------------
 
 if(SS_UNITY_BUILD)
   set_target_properties(${PROJECT_EXECUTABLE} PROPERTIES
     UNITY_BUILD ON
-    UNITY_BUILD_BATCH_SIZE 8
+    UNITY_BUILD_BATCH_SIZE ${SS_UNITY_BATCH_SIZE}
   )
 
   if(MSVC)
