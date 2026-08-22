@@ -151,7 +151,7 @@
     "plot3d_x_axis":"#e04b5a",
     "plot3d_y_axis":"#7fbf3f",
     "plot3d_z_axis":"#3391e6",
-    "plot3d_axis_text":"#232629",
+    "plot3d_axis_text":"#FFFFFF",
     "plot3d_grid_major":"#A0A7B0",
     "plot3d_grid_minor":"#5f6670",
     "plot3d_background_inner":"#eff0f1",
