@@ -103,6 +103,13 @@ Widgets.Pane {
       selectionBehavior: TableView.SelectRows
       selectionMode: TableView.ExtendedSelection
 
+      Rectangle {
+        z: -1
+        parent: treeView
+        anchors.fill: parent
+        color: Cpp_ThemeManager.colors["base"]
+      }
+
       //
       // Force layout walk so contentHeight is known before scrolling.
       //

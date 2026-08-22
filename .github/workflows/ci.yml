@@ -129,6 +129,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y \
           build-essential \
+          ninja-build \
           fakeroot \
           libcups2-dev \
           libnss3 \
@@ -309,7 +310,7 @@ jobs:
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
-        cmake -B build \
+        cmake -B build -G Ninja \
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
@@ -329,7 +330,7 @@ jobs:
     # Builds the instrumented binary the two training runs profile
     #
     - name: '🚧 Build application (instrumented)'
-      run: cmake --build build --config Release -j$(getconf _NPROCESSORS_ONLN)
+      run: cmake --build build --config Release
 
     #
     # Pro widgets are license-gated, so an unactivated training run profiles the wrong code;
@@ -377,7 +378,7 @@ jobs:
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
-        cmake -B build \
+        cmake -B build -G Ninja \
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
@@ -397,7 +398,7 @@ jobs:
     # The binary that ships, and the one every gate below measures
     #
     - name: '🚧 Build application (PGO optimized)'
-      run: cmake --build build --config Release -j$(getconf _NPROCESSORS_ONLN)
+      run: cmake --build build --config Release
 
     #
     # The CI throughput gate: nine tiers scaled off --min-fps, hard failure on any of them
@@ -1003,6 +1004,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y \
           build-essential \
+          ninja-build \
           fakeroot \
           libcups2-dev \
           libnss3 \
@@ -1181,7 +1183,7 @@ jobs:
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
-        cmake -B build \
+        cmake -B build -G Ninja \
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
@@ -1201,7 +1203,7 @@ jobs:
     # Builds the instrumented binary the two training runs profile
     #
     - name: '🚧 Build application (instrumented)'
-      run: cmake --build build --config Release -j$(getconf _NPROCESSORS_ONLN)
+      run: cmake --build build --config Release
 
     #
     # Pro widgets are license-gated, so an unactivated training run profiles the wrong code;
@@ -1249,7 +1251,7 @@ jobs:
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
-        cmake -B build \
+        cmake -B build -G Ninja \
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
@@ -1269,7 +1271,7 @@ jobs:
     # The binary that ships, and the one every gate below measures
     #
     - name: '🚧 Build application (PGO optimized)'
-      run: cmake --build build --config Release -j$(getconf _NPROCESSORS_ONLN)
+      run: cmake --build build --config Release
 
     #
     # The CI throughput gate: nine tiers scaled off --min-fps, hard failure on any of them
@@ -1929,7 +1931,7 @@ jobs:
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
-        cmake -B build \
+        cmake -B build -G Ninja \
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
@@ -1948,7 +1950,7 @@ jobs:
     # Builds the instrumented arm64 binary the training runs profile
     #
     - name: '🚧 Build application (instrumented, arm64)'
-      run: cmake --build build --config Release -j$(getconf _NPROCESSORS_ONLN)
+      run: cmake --build build --config Release
 
     #
     # Pro widgets are license-gated, so an unactivated training run profiles the wrong code;
@@ -1993,7 +1995,7 @@ jobs:
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
-        cmake -B build \
+        cmake -B build -G Ninja \
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
@@ -2013,7 +2015,7 @@ jobs:
     # The arm64 half of the universal binary the merge job assembles
     #
     - name: '🚧 Build application (PGO optimized, arm64)'
-      run: cmake --build build --config Release -j$(getconf _NPROCESSORS_ONLN)
+      run: cmake --build build --config Release
 
     #
     # The CI throughput gate: nine tiers scaled off --min-fps, hard failure on any of them
@@ -2213,7 +2215,7 @@ jobs:
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
-        cmake -B build \
+        cmake -B build -G Ninja \
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
@@ -2230,7 +2232,7 @@ jobs:
     # Builds the x86_64 slice
     #
     - name: '🚧 Build application (x86_64)'
-      run: cmake --build build --config Release -j$(getconf _NPROCESSORS_ONLN)
+      run: cmake --build build --config Release
 
     #
     # continue-on-error: throughput under Rosetta says nothing about native x86_64 hardware, so
@@ -2558,7 +2560,7 @@ jobs:
     # Builds the instrumented binary the two training runs profile
     #
     - name: '🚧 Build application (instrumented)'
-      run: cmake --build build --config Release -j $env:NUMBER_OF_PROCESSORS
+      run: cmake --build build --config Release
 
     #
     # Pro widgets are license-gated, so an unactivated training run profiles the wrong code;
@@ -2627,7 +2629,7 @@ jobs:
     # The binary that ships, and the one every gate below measures
     #
     - name: '🚧 Build application (PGO optimized)'
-      run: cmake --build build --config Release -j $env:NUMBER_OF_PROCESSORS
+      run: cmake --build build --config Release
 
     #
     # The throughput gate reads HOTPATH_PASS out of benchmark.txt: Start-Process loses the child's

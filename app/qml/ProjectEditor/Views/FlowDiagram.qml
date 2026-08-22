@@ -223,11 +223,15 @@ Item {
         centerY = cursorY + nodeH / 2
         cursorY += nodeH + vGap
       } else {
+        const slot   = slotH(pills.length)
+        const chipsH = pills.length * (chipH + vGap) - vGap
+        let chipY    = cursorY + (slot - chipsH) / 2
         for (let di = 0; di < pills.length; ++di) {
-          chipYs.push(cursorY)
-          cursorY += chipH + vGap
+          chipYs.push(chipY)
+          chipY += chipH + vGap
         }
-        centerY = (chipYs[0] + chipYs[chipYs.length - 1] + chipH) / 2
+        centerY  = cursorY + slot / 2
+        cursorY += slot + vGap
       }
 
       const cardY = centerY - nodeH / 2
