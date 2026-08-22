@@ -1,14 +1,14 @@
 {
   "spec": "0039-session-context",
   "regenerate": "python scripts/code-verify.py --singleton-census --accept",
-  "total": 1690,
+  "total": 1691,
   "files": 209,
   "buckets": {
     "root": 156,
     "accessor": 68,
     "ctor-capture": 105,
     "deferred": 20,
-    "static-cache": 1218,
+    "static-cache": 1219,
     "loose": 123
   },
   "per_class": {
@@ -19,7 +19,7 @@
     "UI::Dashboard": 85,
     "DataModel::FrameBuilder": 79,
     "Misc::IconRegistry": 48,
-    "Misc::ThemeManager": 43,
+    "Misc::ThemeManager": 44,
     "Misc::TimerEvents": 33,
     "Console::Handler": 30,
     "API::Server": 29,
@@ -1954,13 +1954,13 @@
       }
     },
     "app/src/Platform/NativeWindow_macOS.mm": {
-      "total": 1,
+      "total": 2,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 1,
+        "static-cache": 2,
         "loose": 0
       }
     },
