@@ -46,17 +46,15 @@ SS_COLD SS_NEVER_INLINE void SSAssertDetail::reportSoftAssert(const char* expr,
                           << func;
 }
 
+#ifndef QT_NO_DEBUG
 /**
  * @brief Resolves the abort policy once per process: debug builds abort so a broken invariant stays
- *        loud, SS_ASSERT_NONFATAL makes them take the recovery branch so tests can exercise it, and
- *        release builds never abort.
+ *        loud, SS_ASSERT_NONFATAL makes them take the recovery branch so tests can exercise it.
+ *        Release builds never abort (SS_ASSERT_IS_FATAL folds to false in the header).
  */
 bool SSAssertDetail::softAssertIsFatal()
 {
-#ifdef QT_NO_DEBUG
-  return false;
-#else
   static const bool fatal = !qEnvironmentVariableIsSet("SS_ASSERT_NONFATAL");
   return fatal;
-#endif
 }
+#endif

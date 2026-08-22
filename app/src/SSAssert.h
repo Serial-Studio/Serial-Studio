@@ -77,16 +77,30 @@ SS_COLD SS_NEVER_INLINE void reportSoftAssert(const char* expr,
                                               int line,
                                               const char* func);
 
+#ifndef QT_NO_DEBUG
 /**
  * @brief Whether a failed assertion aborts the process: true in debug builds unless
- *        SS_ASSERT_NONFATAL is set in the environment, always false under QT_NO_DEBUG.
+ *        SS_ASSERT_NONFATAL is set in the environment.
  */
 [[nodiscard]] bool softAssertIsFatal();
+#endif
 }  // namespace SSAssertDetail
 
 //--------------------------------------------------------------------------------------------------
 // Reporting primitive
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Abort policy as seen by the assertion macros. Under QT_NO_DEBUG it is the literal false,
+ *        not an out-of-line call: every TU then folds the abort branch identically, whereas a call
+ *        the PGO pre-inliner can resolve only in the unity TU holding SSAssert.cpp gives that TU's
+ *        copies of inline SS_ASSERT users a different control-flow hash (profile discarded).
+ */
+#ifdef QT_NO_DEBUG
+#  define SS_ASSERT_IS_FATAL() false
+#else
+#  define SS_ASSERT_IS_FATAL() ::SSAssertDetail::softAssertIsFatal()
+#endif
 
 /**
  * @brief Reports one failure per source site. The per-site latch is a relaxed atomic exchange so a
@@ -110,27 +124,27 @@ SS_COLD SS_NEVER_INLINE void reportSoftAssert(const char* expr,
  *        unless SS_ASSERT_NONFATAL is set. Cost when the condition holds is one correctly-predicted
  *        not-taken branch: no allocation, no atomic, no call.
  */
-#define SS_ASSERT(cond, action)                  \
-  do {                                           \
-    if (SS_UNLIKELY(!(cond))) {                  \
-      SS_ASSERT_REPORT(#cond);                   \
-      if (::SSAssertDetail::softAssertIsFatal()) \
-        qt_assert(#cond, __FILE__, __LINE__);    \
-      action;                                    \
-    }                                            \
+#define SS_ASSERT(cond, action)               \
+  do {                                        \
+    if (SS_UNLIKELY(!(cond))) {               \
+      SS_ASSERT_REPORT(#cond);                \
+      if (SS_ASSERT_IS_FATAL())               \
+        qt_assert(#cond, __FILE__, __LINE__); \
+      action;                                 \
+    }                                         \
   } while (0)
 
 /**
  * @brief Checks an invariant that has no meaningful recovery: reports once and proceeds. Reach for
  *        this only after failing to name a recovery action; SS_ASSERT is the default.
  */
-#define SS_ASSERT_LOG(cond)                      \
-  do {                                           \
-    if (SS_UNLIKELY(!(cond))) {                  \
-      SS_ASSERT_REPORT(#cond);                   \
-      if (::SSAssertDetail::softAssertIsFatal()) \
-        qt_assert(#cond, __FILE__, __LINE__);    \
-    }                                            \
+#define SS_ASSERT_LOG(cond)                   \
+  do {                                        \
+    if (SS_UNLIKELY(!(cond))) {               \
+      SS_ASSERT_REPORT(#cond);                \
+      if (SS_ASSERT_IS_FATAL())               \
+        qt_assert(#cond, __FILE__, __LINE__); \
+    }                                         \
   } while (0)
 
 /**

@@ -632,10 +632,12 @@ void releaseAdjustedArgv()
 // code-verify on
 
 /**
- * @brief Pins @p len bytes at @p ptr into physical memory (best effort): page-fault stalls on
- *        the frame-scan buffers become latency spikes at rate. Returns true when pinned.
+ * @brief Pins @p len bytes at @p ptr into physical memory (best effort) so page faults on the
+ *        frame-scan buffers cannot spike latency at rate. Never inlined: the PGO pre-inliner
+ *        folding this body into only AppPlatform.cpp's unity TU gives that TU's copies of the
+ *        inline DSP::FixedQueue callers a different control-flow hash (profile discarded).
  */
-bool lockMemoryResident(const void* ptr, size_t len)
+SS_NEVER_INLINE bool lockMemoryResident(const void* ptr, size_t len)
 {
   if (!ptr || len == 0) [[unlikely]]
     return false;
@@ -702,9 +704,9 @@ void registerIngestThreadWithMmcss()
 
 /**
  * @brief Releases a lockMemoryResident() pin so the lock quota is returned before the
- *        underlying allocation is freed or recycled.
+ *        underlying allocation is freed or recycled. Never inlined, same reason as the pin.
  */
-void unlockMemoryResident(const void* ptr, size_t len)
+SS_NEVER_INLINE void unlockMemoryResident(const void* ptr, size_t len)
 {
   if (!ptr || len == 0) [[unlikely]]
     return;
