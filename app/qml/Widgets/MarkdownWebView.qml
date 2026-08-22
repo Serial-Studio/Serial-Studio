@@ -23,6 +23,8 @@ import QtQuick
 import QtWebEngine
 import QtQuick.Controls
 
+import "MarkdownIcons.js" as MarkdownIcons
+
 //
 // Chromium-backed markdown viewer. Loaded only when Cpp_HasWebEngine is true,
 // so the QtWebEngine import is never resolved on builds without WebEngine.
@@ -50,7 +52,7 @@ Item {
     if (!ready)
       return
 
-    var md = root.markdown
+    var md = MarkdownIcons.resolve(root.markdown, 16)
     if (!md || md === "") {
       view.runJavaScript("document.getElementById('content').innerHTML = '';")
       return

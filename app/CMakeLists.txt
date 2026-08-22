@@ -723,6 +723,7 @@ set(QML_SOURCES
   qml/Widgets/LineField.qml
   qml/Widgets/FileDropArea.qml
   qml/Widgets/IconButton.qml
+  qml/Widgets/MarkdownIcons.js
   qml/Widgets/MarkdownTextView.qml
   qml/Widgets/MenuButton.qml
   qml/Widgets/MiniWindow.qml
@@ -1391,7 +1392,7 @@ serial_studio_sign(${PROJECT_EXECUTABLE})
 #
 #---------------------------------------------------------------------------------------------------
 
-set_source_files_properties(qml/Widgets/Dashboard/ValueFormat.js
+set_source_files_properties(qml/Widgets/Dashboard/ValueFormat.js qml/Widgets/MarkdownIcons.js
   PROPERTIES QT_QML_SKIP_QMLDIR_ENTRY FALSE)
 
 qt_add_qml_module(

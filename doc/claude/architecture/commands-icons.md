@@ -34,6 +34,13 @@ role alongside the resolved-URL role so each surface resolves at its own display
 (taskbar 16, palette cells 32) from one model — user-picked workspace icons keep the
 `Misc::IconEngine` inline-SVG path and leave `iconId` empty.
 
+**Help-manual icons (`doc/help/*.md`):** never a raw-GitHub artwork URL. Write
+`<img src="cmd:<command id>[:checked]" alt="…" width="16" height="16">` for anything that is
+a command, `<img src="icon:<category>/<name>" …>` for non-command buttons (widget toolbars).
+`app/qml/Widgets/MarkdownIcons.js` rewrites both through `Cpp_UI_CommandRegistry.command()` +
+`Cpp_Misc_IconRegistry.iconById()` before either markdown viewer renders; unknown ids serve
+the placeholder. On GitHub the unknown scheme degrades to the `alt` text.
+
 **Legacy paths:** old `qrc:/icons/…` URLs persisted in user project files are remapped by
 `Misc::legacyIconPath()` (generated table, consulted in `IconEngine::resolveActionIconSource`).
 Regenerate with `scripts/generate-legacy-icons.py` only if the migration manifest changes.

@@ -22,6 +22,8 @@
 import QtQuick
 import QtQuick.Controls
 
+import "MarkdownIcons.js" as MarkdownIcons
+
 //
 // Plain rich-text markdown viewer used when WebEngine is unavailable.
 // Renders Cpp markdown through Qt's built-in MarkdownText format.
@@ -53,7 +55,8 @@ Rectangle {
       color: Cpp_ThemeManager.colors["text"]
       selectionColor: Cpp_ThemeManager.colors["highlight"]
       selectedTextColor: Cpp_ThemeManager.colors["highlighted_text"]
-      text: root.markdown.length > 0 ? root.markdown : root.placeholderText
+      text: root.markdown.length > 0 ? MarkdownIcons.resolve(root.markdown, 16)
+                                     : root.placeholderText
 
       onLinkActivated: function(link) {
         Qt.openUrlExternally(link)
