@@ -302,15 +302,13 @@ def pytest_report_header(config):
 
 
 @pytest.fixture
-def prober(api_server_required):
+def prober(request, api_server_required):
     """
     Provide an AdvancedProber instance for probe technique tests.
 
-    Used by test_probe_techniques.py
+    Used by test_robustness_techniques.py
     """
-    from security.test_probe_techniques import AdvancedProber
-
-    return AdvancedProber()
+    return request.module.AdvancedProber()
 
 
 @pytest.fixture
@@ -318,28 +316,19 @@ def tester(request, api_server_required):
     """
     Provide the appropriate Tester instance for security tests.
 
-    Dynamically instantiates the correct tester class based on which
-    test module is requesting the fixture.
+    Resolves the tester class from the requesting module so that a file
+    rename never leaves the fixture pointing at a module that no longer
+    exists.
     """
-    module_name = request.module.__name__
+    module = request.module
+    for name in ("SecurityTester", "AuthBypassTester", "DoSTester"):
+        cls = getattr(module, name, None)
+        if cls is not None:
+            return cls()
 
-    if "test_api_weaknesses" in module_name:
-        from security.test_api_weaknesses import SecurityTester
+    from security.test_api_input_hardening import SecurityTester
 
-        return SecurityTester()
-    elif "test_access_control" in module_name:
-        from security.test_access_control import AuthBypassTester
-
-        return AuthBypassTester()
-    elif "test_denial_of_service" in module_name:
-        from security.test_denial_of_service import DoSTester
-
-        return DoSTester()
-    else:
-        # Default fallback
-        from security.test_api_weaknesses import SecurityTester
-
-        return SecurityTester()
+    return SecurityTester()
 
 
 @pytest.fixture

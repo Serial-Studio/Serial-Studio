@@ -15,15 +15,11 @@ and contain the same application; pick the format that fits your distribution.
 A [Flathub package](https://flathub.org/apps/com.serial_studio.Serial-Studio) is also
 available; it follows Flatpak's own signing and update mechanism and is not covered here.
 
-Each format also exists as a `-compat` variant for distributions older than the standard
-packages support; see the Legacy distributions section below.
+Every package bundles its own C runtime (glibc) next to the application, so one package set
+runs on any distribution from the Debian 10 / RHEL 8 generation onward; see the Supported
+distributions section below.
 
 ## Signing key
-
-> **Warning:** package signing was introduced after version 4.0.3, so the 4.0.3 packages are
-> unsigned and fail the verification steps below. Signed packages are currently available
-> from the [continuous build](https://github.com/Serial-Studio/Serial-Studio/releases/tag/continuous)
-> only; version 4.0.3 will be the first signed release.
 
 Release packages are signed with the Serial Studio release key:
 
@@ -96,14 +92,7 @@ chmod +x Serial-Studio-Pro-*-Linux-x64.AppImage
 ./Serial-Studio-Pro-*-Linux-x64.AppImage
 ```
 
-If launching fails with a FUSE error, install `libfuse2` (recent Ubuntu releases ship only
-FUSE 3 by default):
-
-```bash
-sudo apt update && sudo apt install libfuse2
-```
-
-Without FUSE, the AppImage still works via self-extraction:
+If launching fails with a FUSE error, the AppImage still works via self-extraction:
 
 ```bash
 ./Serial-Studio-Pro-*-Linux-x64.AppImage --appimage-extract
@@ -116,29 +105,17 @@ The AppImage embeds a GPG signature from the release key. Display it with:
 ./Serial-Studio-Pro-*-Linux-x64.AppImage --appimage-signature
 ```
 
-## Legacy distributions (glibc 2.28)
+## Supported distributions
 
-The standard packages require glibc 2.34 or newer because they ship the official Qt
-libraries. Older distributions from the RHEL 8 / Debian 10 generation refuse to start them
-with an error such as `version 'GLIBC_2.34' not found`.
+All three formats ship the build host's glibc as a matched set and launch the application
+through that bundled runtime, so the host's glibc version does not matter. The tested baseline
+is RHEL 8 / Rocky Linux 8 and Debian 10 (glibc 2.28), on both x86_64 and ARM64; every
+release is smoke-tested against it. External programs started by Serial Studio (for example
+through the Process driver) still run against the host's own libraries.
 
-For those systems, every release also includes `-compat` variants of all three formats:
-
-| Format   | File name |
-|----------|-----------|
-| AppImage | `Serial-Studio-Pro-<version>-Linux-<arch>-compat.AppImage` |
-| DEB      | `Serial-Studio-Pro-<version>-Linux-<arch>-compat.deb`      |
-| RPM      | `Serial-Studio-Pro-<version>-Linux-<arch>-compat.rpm`      |
-
-The compat packages bundle their own C runtime next to the application and launch it through
-that runtime, so the host's glibc version no longer matters. External programs started by
-Serial Studio (for example through the Process driver) still run against the host's own
-libraries. The tested baseline is RHEL 8 / Rocky Linux 8 and Debian 10 (glibc 2.28), on both
-x86_64 and ARM64.
-
-Installation and signature verification work exactly as described for the standard formats;
-the compat packages are signed with the same release key. On distributions with glibc 2.34
-or newer, prefer the standard packages; the compat variants run there too but are larger.
+Releases up to 4.0.3 shipped the official Qt libraries against the host glibc and refused to
+start on older systems with an error such as `version 'GLIBC_2.34' not found`; updating to
+the current release resolves it.
 
 ## Serial port permissions
 

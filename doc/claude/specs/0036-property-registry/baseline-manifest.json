@@ -58,7 +58,7 @@
     },
     {
       "path": "examples/Modbus PLC Simulator/Modbus PLC Simulator.ssproj",
-      "sha256": "4094bf8206dd767e07c3b71265a5a45ac8e317e644e59859f740dfc16873591c"
+      "sha256": "e11db17bb363ee4753acd71097511fab9239c65a065cefe2094cb338302e840b"
     },
     {
       "path": "examples/OBD-II/OBD-II.ssproj",
@@ -66,11 +66,11 @@
     },
     {
       "path": "examples/Protobuf Example/Protobuf Example.ssproj",
-      "sha256": "255e567b912722573377ca19c37a2db17d1c110d9d9810d67ecb4aa715f07da4"
+      "sha256": "0753686cd4e748f48e25773fce667fed02a92ff28075a1bc98a7e5326e9e33c8"
     },
     {
       "path": "examples/RC Plane Simulator/RC Plane Simulator.ssproj",
-      "sha256": "8d48234a916c387f7107d4453288bdc533f49c2103d6cdf8928a3de5146bce5e"
+      "sha256": "35f90d726b08136d44be33ce27bea95e36d6a1be6cd6699a40718fad43de87fd"
     },
     {
       "path": "examples/System Monitor/system-monitor.ssproj",
@@ -86,7 +86,7 @@
     },
     {
       "path": "examples/Vibration Test Rig/VibrationTestRig.ssproj",
-      "sha256": "1b014fdf3ec0b7da51ea401257a9f3c1ff6412dd913534e588a53f21ccab846b"
+      "sha256": "ddbf395e7d682688f301566f1c4fbfb7e747de7f08f8a7dd1befe466db56dc4a"
     }
   ]
 }

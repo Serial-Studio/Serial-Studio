@@ -469,6 +469,7 @@
         }
     ],
     "hexadecimalDelimiters": false,
+    "luaFastMode": false,
     "mqttPublisher": {
         "alpnEnabled": false,
         "alpnProtocol": "x-amzn-mqtt-ca",
@@ -552,8 +553,8 @@
         "RC Plane Simulator/Device A": true,
         "RC Plane Simulator/Device A/Frame Parser": false,
         "RC Plane Simulator/MQTT Publisher": false,
-        "RC Plane Simulator/Shared Memory": true,
-        "RC Plane Simulator/Shared Memory/Dataset Values": false,
+        "RC Plane Simulator/Variables": true,
+        "RC Plane Simulator/Variables/Dataset Values": false,
         "RC Plane Simulator/Workspaces": true,
         "RC Plane Simulator/Workspaces/Accelerometer": false,
         "RC Plane Simulator/Workspaces/All Data": false,

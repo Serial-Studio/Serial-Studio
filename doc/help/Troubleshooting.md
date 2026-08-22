@@ -59,24 +59,13 @@ Quick solutions to common Serial Studio issues. If you can't find your problem h
 
 ### Linux: AppImage error "fuse: failed to exec fusermount"
 
-**Problem:** AppImage requires FUSE to run.
+**Problem:** The AppImage mounts itself through FUSE and the host has no working FUSE setup.
 
 **Solution:**
-Install libfuse2:
-
-**Ubuntu/Debian:**
+Extract the AppImage and run the contents directly:
 ```bash
-sudo apt install libfuse2
-```
-
-**Fedora:**
-```bash
-sudo dnf install fuse-libs
-```
-
-**Arch Linux:**
-```bash
-sudo pacman -S fuse2
+./Serial-Studio-Pro-*.AppImage --appimage-extract
+./squashfs-root/AppRun
 ```
 
 ### Linux: Serial port permission denied

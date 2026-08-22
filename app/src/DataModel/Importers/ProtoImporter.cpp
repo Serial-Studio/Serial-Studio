@@ -1484,8 +1484,8 @@ void DataModel::ProtoImporter::emitScoreDispatcher(QString& code)
   code += QStringLiteral("    local tag, np = readVarint(buf, p, bufLen)\n");
   code += QStringLiteral("    if np == p then return -1 end\n");
   code += QStringLiteral("    p = np\n");
-  code += QStringLiteral("    local fieldNum = tag >> 3\n");
-  code += QStringLiteral("    local wt = tag & 7\n");
+  code += QStringLiteral("    local fieldNum = math.floor(tag / 8)\n");
+  code += QStringLiteral("    local wt = tag % 8\n");
   code += QStringLiteral("    local e = tbl[fieldNum]\n");
   code += QStringLiteral("    if e ~= nil then\n");
   code += QStringLiteral("      if e.wire == wt then good = good + 1\n");
@@ -1563,27 +1563,30 @@ void DataModel::ProtoImporter::emitVarintAndSignedReaders(QString& code)
   code += QStringLiteral("    local b = buf[p]\n");
   code += QStringLiteral("    if b == nil then return v, p end\n");
   code += QStringLiteral("    p = p + 1\n");
-  code += QStringLiteral("    v = v + (b & 0x7f) * mul\n");
-  code += QStringLiteral("    if (b & 0x80) == 0 then return v, p end\n");
+  code += QStringLiteral("    v = v + (b % 128) * mul\n");
+  code += QStringLiteral("    if b < 128 then return v, p end\n");
   code += QStringLiteral("    mul = mul * 128\n");
   code += QStringLiteral("  end\n");
   code += QStringLiteral("  return v, p\n");
-  code += QStringLiteral("end\n\n");
+  code += QStringLiteral("end\n");
+  code += QStringLiteral("\n");
 
   code += QStringLiteral("local function zigzag(n)\n");
-  code += QStringLiteral("  if (n & 1) == 0 then return n // 2 end\n");
-  code += QStringLiteral("  return -((n + 1) // 2)\n");
-  code += QStringLiteral("end\n\n");
+  code += QStringLiteral("  if n % 2 == 0 then return n / 2 end\n");
+  code += QStringLiteral("  return -((n + 1) / 2)\n");
+  code += QStringLiteral("end\n");
+  code += QStringLiteral("\n");
 
   code += QStringLiteral("local function signed32(n)\n");
   code += QStringLiteral("  if n >= 0x80000000 then return n - 0x100000000 end\n");
   code += QStringLiteral("  return n\n");
-  code += QStringLiteral("end\n\n");
-
+  code += QStringLiteral("end\n");
+  code += QStringLiteral("\n");
   code += QStringLiteral("local function signed64(n)\n");
   code += QStringLiteral("  if n >= 0x8000000000000000 then return n - 0x10000000000000000 end\n");
   code += QStringLiteral("  return n\n");
-  code += QStringLiteral("end\n\n");
+  code += QStringLiteral("end\n");
+  code += QStringLiteral("\n");
 
   code += QStringLiteral("local function bytesToString(buf, p, n, bufLen)\n");
   code += QStringLiteral("  if n <= 0 or p < 1 then return \"\" end\n");
@@ -1594,52 +1597,79 @@ void DataModel::ProtoImporter::emitVarintAndSignedReaders(QString& code)
   code += QStringLiteral("  for i = 1, n do\n");
   code += QStringLiteral("    local b = buf[p + i - 1]\n");
   code += QStringLiteral("    if b == nil then break end\n");
-  code += QStringLiteral("    t[i] = string.char(b & 0xff)\n");
+  code += QStringLiteral("    t[i] = string.char(b % 256)\n");
   code += QStringLiteral("  end\n");
   code += QStringLiteral("  return table.concat(t)\n");
-  code += QStringLiteral("end\n\n");
+  code += QStringLiteral("end\n");
+  code += QStringLiteral("\n");
 }
 
 /**
  * @brief Emits readFixed32/64, readSFixed32/64, readFloat32/64 little-endian helpers.
+ *        Pure arithmetic: LuaJIT ships neither string.unpack nor Lua 5.3 bit operators.
  */
 void DataModel::ProtoImporter::emitFixedAndFloatReaders(QString& code)
 {
+  code += QStringLiteral("local function readLE(buf, p, n)\n");
+  code += QStringLiteral("  local v = 0\n");
+  code += QStringLiteral("  for i = n - 1, 0, -1 do\n");
+  code += QStringLiteral("    v = v * 256 + ((buf[p + i] or 0) % 256)\n");
+  code += QStringLiteral("  end\n");
+  code += QStringLiteral("  return v\n");
+  code += QStringLiteral("end\n");
+  code += QStringLiteral("\n");
+
   code += QStringLiteral("local function readFixed32(buf, p, bufLen)\n");
   code += QStringLiteral("  if p < 1 or p + 3 > bufLen then return 0, p + 4 end\n");
-  code +=
-    QStringLiteral("  return string.unpack(\"<I4\", bytesToString(buf, p, 4, bufLen)), p + 4\n");
-  code += QStringLiteral("end\n\n");
-
+  code += QStringLiteral("  return readLE(buf, p, 4), p + 4\n");
+  code += QStringLiteral("end\n");
+  code += QStringLiteral("\n");
   code += QStringLiteral("local function readSFixed32(buf, p, bufLen)\n");
   code += QStringLiteral("  if p < 1 or p + 3 > bufLen then return 0, p + 4 end\n");
-  code +=
-    QStringLiteral("  return string.unpack(\"<i4\", bytesToString(buf, p, 4, bufLen)), p + 4\n");
-  code += QStringLiteral("end\n\n");
+  code += QStringLiteral("  return signed32(readLE(buf, p, 4)), p + 4\n");
+  code += QStringLiteral("end\n");
+  code += QStringLiteral("\n");
 
   code += QStringLiteral("local function readFloat32(buf, p, bufLen)\n");
   code += QStringLiteral("  if p < 1 or p + 3 > bufLen then return 0, p + 4 end\n");
-  code +=
-    QStringLiteral("  return string.unpack(\"<f\", bytesToString(buf, p, 4, bufLen)), p + 4\n");
-  code += QStringLiteral("end\n\n");
+  code += QStringLiteral("  local b1, b2 = (buf[p + 3] or 0) % 256, (buf[p + 2] or 0) % 256\n");
+  code += QStringLiteral("  local sign = b1 >= 128 and -1 or 1\n");
+  code += QStringLiteral("  local expo = (b1 % 128) * 2 + math.floor(b2 / 128)\n");
+  code += QStringLiteral("  local mant = (b2 % 128) * 65536 + readLE(buf, p, 2)\n");
+  code += QStringLiteral("  if expo == 0 then return sign * mant * 2 ^ (-126 - 23), p + 4 end\n");
+  code += QStringLiteral("  if expo == 255 then\n");
+  code += QStringLiteral("    if mant == 0 then return sign * math.huge, p + 4 end\n");
+  code += QStringLiteral("    return 0 / 0, p + 4\n");
+  code += QStringLiteral("  end\n");
+  code += QStringLiteral("  return sign * (1 + mant / 2 ^ 23) * 2 ^ (expo - 127), p + 4\n");
+  code += QStringLiteral("end\n");
+  code += QStringLiteral("\n");
 
   code += QStringLiteral("local function readFixed64(buf, p, bufLen)\n");
   code += QStringLiteral("  if p < 1 or p + 7 > bufLen then return 0, p + 8 end\n");
-  code +=
-    QStringLiteral("  return string.unpack(\"<I8\", bytesToString(buf, p, 8, bufLen)), p + 8\n");
-  code += QStringLiteral("end\n\n");
-
+  code += QStringLiteral("  return readLE(buf, p, 8), p + 8\n");
+  code += QStringLiteral("end\n");
+  code += QStringLiteral("\n");
   code += QStringLiteral("local function readSFixed64(buf, p, bufLen)\n");
   code += QStringLiteral("  if p < 1 or p + 7 > bufLen then return 0, p + 8 end\n");
-  code +=
-    QStringLiteral("  return string.unpack(\"<i8\", bytesToString(buf, p, 8, bufLen)), p + 8\n");
-  code += QStringLiteral("end\n\n");
+  code += QStringLiteral("  return signed64(readLE(buf, p, 8)), p + 8\n");
+  code += QStringLiteral("end\n");
+  code += QStringLiteral("\n");
 
   code += QStringLiteral("local function readFloat64(buf, p, bufLen)\n");
   code += QStringLiteral("  if p < 1 or p + 7 > bufLen then return 0, p + 8 end\n");
-  code +=
-    QStringLiteral("  return string.unpack(\"<d\", bytesToString(buf, p, 8, bufLen)), p + 8\n");
-  code += QStringLiteral("end\n\n");
+  code += QStringLiteral("  local b1, b2 = (buf[p + 7] or 0) % 256, (buf[p + 6] or 0) % 256\n");
+  code += QStringLiteral("  local sign = b1 >= 128 and -1 or 1\n");
+  code += QStringLiteral("  local expo = (b1 % 128) * 16 + math.floor(b2 / 16)\n");
+  code += QStringLiteral("  local mant = (b2 % 16) * 2 ^ 48 + readLE(buf, p, 6)\n");
+  code += QStringLiteral("  if expo == 0 then return sign * mant * 2 ^ (-1022 - 52), p + 8 end\n");
+  code += QStringLiteral("  if expo == 2047 then\n");
+  code += QStringLiteral("    if mant == 0 then return sign * math.huge, p + 8 end\n");
+  code += QStringLiteral("    return 0 / 0, p + 8\n");
+  code += QStringLiteral("  end\n");
+  code += QStringLiteral("  return sign * (1 + mant / 2 ^ 52) * 2 ^ (expo - 1023), p + 8\n");
+  code += QStringLiteral("end\n");
+  code += QStringLiteral("\n");
 }
 
 /**
@@ -1693,8 +1723,8 @@ void DataModel::ProtoImporter::emitDecoderParseMsg(QString& code)
   code += QStringLiteral("    local tag, np = readVarint(buf, p, bufLen)\n");
   code += QStringLiteral("    if np == p then break end\n");
   code += QStringLiteral("    p = np\n");
-  code += QStringLiteral("    local fieldNum = tag >> 3\n");
-  code += QStringLiteral("    local wt = tag & 7\n");
+  code += QStringLiteral("    local fieldNum = math.floor(tag / 8)\n");
+  code += QStringLiteral("    local wt = tag % 8\n");
   code += QStringLiteral("    local e = tbl[fieldNum]\n");
   code += QStringLiteral("    if e == nil or e.wire ~= wt then\n");
   code += QStringLiteral("      p = skipWire(buf, p, wt, bufLen)\n");

@@ -301,6 +301,7 @@
         }
     ],
     "hexadecimalDelimiters": false,
+    "luaFastMode": false,
     "mqttPublisher": {
         "alpnEnabled": false,
         "alpnProtocol": "x-amzn-mqtt-ca",
@@ -376,8 +377,8 @@
         "Vibration Test Rig/Dashboard Widgets/Vibration Gauge": true,
         "Vibration Test Rig/Dashboard Widgets/Vibration Gauge/Vibration (RMS)": false,
         "Vibration Test Rig/MQTT Publisher": false,
-        "Vibration Test Rig/Shared Memory": true,
-        "Vibration Test Rig/Shared Memory/Dataset Values": false,
+        "Vibration Test Rig/Variables": true,
+        "Vibration Test Rig/Variables/Dataset Values": false,
         "Vibration Test Rig/Vibration Test Rig (UDP)": true,
         "Vibration Test Rig/Vibration Test Rig (UDP)/Frame Parser": false,
         "Vibration Test Rig/Workspaces": true,

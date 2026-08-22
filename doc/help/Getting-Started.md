@@ -64,12 +64,6 @@ chmod +x Serial-Studio-Pro-*.AppImage
 ./Serial-Studio-Pro-*.AppImage
 ```
 
-You may need `libfuse2` first:
-
-```bash
-sudo apt update && sudo apt install libfuse2
-```
-
 **Flatpak (Flathub):**
 
 ```bash

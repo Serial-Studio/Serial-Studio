@@ -102,12 +102,6 @@ chmod +x Serial-Studio-Pro-4.x.x-Linux-x64.AppImage
 ./Serial-Studio-Pro-4.x.x-Linux-x64.AppImage
 ```
 
-If it fails to launch, install `libfuse2`:
-
-```bash
-sudo apt install libfuse2
-```
-
 **Alternative: Flatpak (GPLv3).**
 
 ```bash
@@ -481,17 +475,18 @@ See the [examples folder](https://github.com/Serial-Studio/Serial-Studio/tree/ma
 
 ### AppImage won't launch on Linux
 
-**Error: `cannot open shared object file`.**
+**Error: `fuse: failed to exec fusermount`.**
 
-Install the missing library:
+The AppImage mounts itself through FUSE. Without it, extract and run the contents instead:
 
 ```bash
-sudo apt install libfuse2
+./Serial-Studio-Pro-*.AppImage --appimage-extract
+./squashfs-root/AppRun
 ```
 
-**Error: `glibc version too old`.**
+**Error: `version 'GLIBC_x.yy' not found`.**
 
-The ARM64 AppImage needs Ubuntu 24.04+ (glibc 2.38+). Upgrade the OS or use the Flatpak version.
+Current packages bundle their own glibc and run on any distribution from the Debian 10 / RHEL 8 generation onward, so this error only appears with releases up to 4.0.3. Update to a newer release.
 
 ## Pro vs GPL
 

@@ -67,12 +67,6 @@ chmod +x Serial-Studio-Pro-<version>-Linux-x64.AppImage
 ./Serial-Studio-Pro-<version>-Linux-x64.AppImage
 ```
 
-If the AppImage fails to launch, your system is probably missing `libfuse2`:
-
-```bash
-sudo apt install libfuse2
-```
-
 For better desktop integration (menu entries, icons, updates), use [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher).
 
 #### Flatpak (Flathub)
@@ -83,8 +77,9 @@ Serial Studio is on [Flathub](https://flathub.org/apps/com.serial_studio.Serial-
 
 An ARM64 AppImage is available for Raspberry Pi and similar boards. It runs well on Raspberry Pi 4/5 and on integrated graphics. Requirements:
 
-- A 64-bit Linux distro equivalent to or newer than Ubuntu 24.04 (needs `glibc 2.38`)
-- `libfuse2` installed
+- A 64-bit Linux distro (Raspberry Pi OS 64-bit, Ubuntu, Debian, etc.)
+
+All Linux packages (AppImage, DEB, RPM, x64 and ARM64) bundle their own glibc, so they run on any distribution from the Debian 10 / RHEL 8 generation onward (releases up to 4.0.3 required a newer host glibc); no minimum glibc version is required on the host.
 
 ## Features
 
@@ -130,7 +125,7 @@ A first connection takes about five minutes.
 - Grab the latest release for your platform (see [Download](#download)).
 - **Windows:** run the installer. Allow "Unknown developer" if prompted.
 - **macOS:** drag to Applications, then right-click and choose Open the first time.
-- **Linux:** `chmod +x` the AppImage and run it. You may need `sudo apt install libfuse2`.
+- **Linux:** `chmod +x` the AppImage and run it.
 
 ### 2. Connect your device
 
