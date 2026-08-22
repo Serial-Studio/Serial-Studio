@@ -21,10 +21,12 @@
 
 #include "API/CommandRegistry.h"
 
+#include <optional>
 #include <QCoreApplication>
 #include <QJsonArray>
 #include <QSet>
 
+#include "API/PathPolicy.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
 #include "Misc/BackupManager.h"
@@ -176,6 +178,50 @@ static const QSet<QString>& destructiveCommandSet()
 }
 
 /**
+ * @brief Commands whose filePath parameter must be rejected before any expensive
+ *        pre-command side effects such as project snapshots.
+ */
+static bool commandAllowsMissingTargetPath(const QString& name)
+{
+  return name == QStringLiteral("project.save");
+}
+
+/**
+ * @brief Commands which need to use the file path security policy.
+ */
+static bool commandUsesFilePathPolicy(const QString& name)
+{
+  static const QSet<QString> kSet = {
+    QStringLiteral("project.open"),
+    QStringLiteral("project.save"),
+    QStringLiteral("csvPlayer.open"),
+    QStringLiteral("mdf4Player.open"),
+  };
+  return kSet.contains(name);
+}
+
+/**
+ * @brief Filters allowed file paths before executing a file path command.
+ */
+static std::optional<API::CommandResponse> rejectDisallowedFilePath(const QString& name,
+                                                                    const QString& id,
+                                                                    const QJsonObject& params)
+{
+  if (!commandUsesFilePathPolicy(name) || !params.contains(QStringLiteral("filePath")))
+    return std::nullopt;
+
+  const QString filePath = params.value(QStringLiteral("filePath")).toString();
+  if (filePath.isEmpty())
+    return std::nullopt;
+
+  if (API::isPathAllowed(filePath, commandAllowsMissingTargetPath(name)))
+    return std::nullopt;
+
+  return API::CommandResponse::makeError(
+    id, API::ErrorCode::InvalidParam, QStringLiteral("filePath is not allowed"));
+}
+
+/**
  * @brief Queues a single FrameBuilder re-sync on the event loop so the live dashboard
  *        picks up programmatic project edits; a burst of mutating commands (project.batch,
  *        rapid tool calls) collapses into one apply.
@@ -233,6 +279,9 @@ API::CommandResponse API::CommandRegistry::execute(const QString& name,
 {
   if (!hasCommand(name))
     return buildUnknownCommandResponse(name, id);
+
+  if (const auto rejected = rejectDisallowedFilePath(name, id, params))
+    return *rejected;
 
   const bool isDryRun = params.value(QStringLiteral("dryRun")).toBool(false);
   QString preMutationBackup;
