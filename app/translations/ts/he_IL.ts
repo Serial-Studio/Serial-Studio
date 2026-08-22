@@ -457,12 +457,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1969"/>
+        <location filename="../../src/API/Server.cpp" line="1974"/>
         <source>API server</source>
         <translation>שרת API</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1969"/>
+        <location filename="../../src/API/Server.cpp" line="1974"/>
         <source>Invalid pending connection</source>
         <translation>חיבור ממתין לא חוקי</translation>
     </message>
@@ -7025,7 +7025,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>הצג כל עקומה כנגד זמן או כנגד מספר הדגימה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="414"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="413"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="314"/>
         <source>Logarithmic X Axis</source>
         <translation>ציר X לוגריתמי</translation>
@@ -7036,7 +7036,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>קנה מידה של ציר ה-X בעשרות חזקה; זמין כאשר מקור ציר ה-X הוא דגימות (לא זמן)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="427"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="426"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="327"/>
         <source>Logarithmic Y Axis</source>
         <translation>ציר Y לוגריתמי</translation>
@@ -7247,7 +7247,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>הגדרות חיבור</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="215"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="214"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="692"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1108"/>
         <source>General Information</source>
@@ -7412,17 +7412,17 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>מספר הפעמים לשליחת הפקודה בכל הפעלה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="227"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="226"/>
         <source>Untitled Dataset</source>
         <translation>Dataset ללא כותרת</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="228"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="227"/>
         <source>Dataset Title</source>
         <translation>כותרת Dataset</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="229"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="228"/>
         <source>Name of the dataset, used for labeling and identification</source>
         <translation>שם ה-Dataset, משמש לתיוג וזיהוי</translation>
     </message>
@@ -7435,7 +7435,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Datasets וירטואליים מחשבים את הערך שלהם מטרנספורמציות וטבלאות נתונים, אינם דורשים אינדקס Frame</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="251"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="250"/>
         <source>Hide on Dashboard</source>
         <translation>הסתר ב-Dashboard</translation>
     </message>
@@ -7444,152 +7444,152 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">דיכוי אריח לוח המחוונים העצמאי של מערך נתונים זה; ווידג'ט הציור עדיין יכול לקרוא את ערכיו</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="267"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="266"/>
         <source>Frame Index</source>
         <translation>אינדקס מסגרת</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="268"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="267"/>
         <source>Frame position used for aligning datasets in time</source>
         <translation>מיקום מסגרת המשמש ליישור מערכי נתונים בזמן</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="279"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="278"/>
         <source>Measurement Unit</source>
         <translation>יחידת מדידה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="278"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="277"/>
         <source>Volts, Amps, etc.</source>
         <translation>וולט, אמפר וכו׳</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="280"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="279"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
         <translation>יחידת מדידה, כגון וולט או אמפר (אופציונלי)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="324"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="323"/>
         <source>Automatic</source>
         <translation>אוטומטי</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="325"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="324"/>
         <source>Widget Color</source>
         <translation>צבע Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="326"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="325"/>
         <source>Custom display color for this dataset; automatic uses the theme palette</source>
         <translation>צבע תצוגה מותאם אישית עבור מערך נתונים זה; אוטומטי משתמש בפלטת הערכת הנושא</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="304"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="303"/>
         <source>Stable name</source>
         <translation>שם יציב</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="239"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="238"/>
         <source>Computed Dataset</source>
         <translation>Dataset מחושב</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="240"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="239"/>
         <source>Computed datasets compute their value from transforms and shared variables, they do not require a frame index</source>
         <translation>Datasets מחושבים מחשבים את הערך שלהם מטרנספורמציות ומשתנים משותפים, אינם דורשים אינדקס Frame</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="252"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="251"/>
         <source>Suppress this dataset's standalone dashboard tile; the canvas widget can still read its values</source>
         <translation>דיכוי אריח לוח המחוונים העצמאי של מערך נתונים זה; ווידג'ט הקנבס עדיין יכול לקרוא את ערכיו</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="305"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="304"/>
         <source>Script Alias</source>
         <translation>כינוי סקריפט</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="306"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="305"/>
         <source>Stable name for getDataset-style script/API lookups; must be unique (optional)</source>
         <translation>שם יציב לחיפושי סקריפט/API בסגנון getDataset; חייב להיות ייחודי (אופציונלי)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="346"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="345"/>
         <source>Lower bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>גבול תחתון של טווח ערכי מערך הנתונים; ווידג'טים ו-FFT חוזרים אליו כאשר הטווח שלהם עצמם לא מוגדר</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="358"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="357"/>
         <source>Upper bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>גבול עליון של טווח ערכי מערך הנתונים; ווידג'טים ו-FFT חוזרים אליו כאשר הטווח שלהם עצמם לא מוגדר</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="373"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="372"/>
         <source>Plot Settings</source>
         <translation>הגדרות גרף</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="387"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="386"/>
         <source>Enable Plot Widget</source>
         <translation>הפעלת ווידג'ט גרף</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="388"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="387"/>
         <source>Plot data in real-time</source>
         <translation>הצגת נתונים בזמן אמת בגרף</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="415"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="414"/>
         <source>Scale the X axis in decades; available when the X-Axis source is Samples or a dataset (not Time)</source>
         <translation>קנה מידה של ציר ה-X בעשרות חזקה; זמין כאשר מקור ציר ה-X הוא דגימות או מערך נתונים (לא זמן)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="428"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="427"/>
         <source>Scale the Y axis in decades; values at or below zero are clamped</source>
         <translation>קנה מידה של ציר ה-Y בעשרות חזקה; ערכים באפס או מתחתיו נחסמים</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="480"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="479"/>
         <source>Peak Ballistics</source>
         <translation>בליסטיקת שיא</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="481"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="480"/>
         <source>Analyzer-style display: peaks rise instantly and decay smoothly over the release time</source>
         <translation>תצוגה בסגנון מנתח: שיאים עולים באופן מיידי ודועכים בצורה חלקה לאורך זמן השחרור</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="493"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="492"/>
         <source>Ballistics Release (ms)</source>
         <translation>שחרור בליסטיקה (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="494"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="493"/>
         <source>Decay time for the ballistics display (50-5000 ms)</source>
         <translation>זמן דעיכה לתצוגת בליסטיקה (50-5000 ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="550"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="549"/>
         <source>FFT Window Function</source>
         <translation>פונקציית חלון FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="551"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="550"/>
         <source>Window applied before the transform to reduce spectral leakage; affects both the FFT plot and the waterfall</source>
         <translation>חלון המוחל לפני הטרנספורמציה כדי להפחית דליפה ספקטרלית; משפיע גם על עלילת FFT וגם על המפל</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="577"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="576"/>
         <source>Logarithmic Frequency Axis</source>
         <translation>ציר תדר לוגריתמי</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="740"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="739"/>
         <source>Hold Min/Max Markers</source>
         <translation>החזקת סמני מינימום/מקסימום</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="741"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="740"/>
         <source>Show hold markers at the lowest and highest values observed since the last data reset</source>
         <translation>הצג סמני החזקה בערכים הנמוכים והגבוהים ביותר שנצפו מאז איפוס הנתונים האחרון</translation>
     </message>
@@ -7598,12 +7598,12 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">קנה מידה של ציר התדר FFT בעשוריות כך שאוקטבות נמוכות יישארו קריאות</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="694"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="693"/>
         <source>Fixed decimal places for the value display; overrides the format (-1 = auto)</source>
         <translation>מספר מקומות עשרוניים קבוע לתצוגת הערך; דורס את הפורמט (1- = אוטומטי)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="401"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="400"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="298"/>
         <source>X-Axis Source</source>
         <translation>מקור ציר X</translation>
@@ -7629,57 +7629,57 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">גבול עליון לטווח התצוגה של הגרף</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="443"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="442"/>
         <source>Frequency Analysis</source>
         <translation>ניתוח תדרים</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="456"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="455"/>
         <source>Enable FFT Analysis</source>
         <translation>הפעל ניתוח FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="457"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="456"/>
         <source>Perform frequency-domain analysis of the dataset</source>
         <translation>בצע ניתוח בתחום התדר של מערך הנתונים</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="467"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="466"/>
         <source>Enable Waterfall Plot</source>
         <translation>הפעל גרף מפל</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="468"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="467"/>
         <source>Show a scrolling spectrogram of frequency content over time (Pro)</source>
         <translation>הצג ספקטרוגרמה גוללת של תוכן תדרים לאורך זמן (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="509"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="508"/>
         <source>Waterfall Y Axis</source>
         <translation>ציר Y של מפל</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="510"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="509"/>
         <source>Choose Time (default) or any dataset whose value drives the Y axis -- produces a Campbell diagram when bound to e.g. RPM</source>
         <translation>בחר זמן (ברירת מחדל) או כל מערך נתונים שערכו מניע את ציר Y -- מייצר דיאגרמת Campbell כאשר מקושר למשל ל-RPM</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="535"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="534"/>
         <source>FFT Window Size</source>
         <translation>גודל חלון FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="536"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="535"/>
         <source>Number of samples used for each FFT calculation window</source>
         <translation>מספר הדגימות המשמשות לכל חלון חישוב FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="564"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="563"/>
         <source>FFT Sampling Rate (Hz, required)</source>
         <translation>קצב דגימה FFT (Hz, נדרש)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="565"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="564"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
         <translation>תדר הדגימה המשמש ל-FFT (ב-Hz)</translation>
     </message>
@@ -7700,17 +7700,17 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">גבול עליון לנורמליזציה של נתונים</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="620"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="619"/>
         <source>Widget Settings</source>
         <translation>הגדרות Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="636"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="635"/>
         <source>Widget</source>
         <translation>Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="637"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="636"/>
         <source>Select the visual widget used to display this dataset</source>
         <translation>בחירת ה-widget החזותי המשמש להצגת מערך נתונים זה</translation>
     </message>
@@ -7732,29 +7732,29 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="731"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="663"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="690"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="662"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="689"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="366"/>
         <source>Auto</source>
         <translation>אוטומטי</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="664"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="663"/>
         <source>Tick Count</source>
         <translation>מספר סימונים</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="665"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="664"/>
         <source>Major-tick count on the dial scale (0 = auto-fit to widget size)</source>
         <translation>מספר הסימונים הראשיים על סולם החוגה (0 = התאמה אוטומטית לגודל הווידג'ט)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="679"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="678"/>
         <source>Label Format</source>
         <translation>עיצוב תווית</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="680"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="679"/>
         <source>Decimal places or notation used on tick labels and the value display</source>
         <translation>מספר המקומות העשרוניים או הסימון המשמש בתוויות הסימונים ובתצוגת הערך</translation>
     </message>
@@ -7795,22 +7795,22 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">מפעיל התראה חזותית כאשר הערך עולה על סף זה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="756"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="755"/>
         <source>LED Display Settings</source>
         <translation>הגדרות תצוגת LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="769"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="768"/>
         <source>Show in LED Panel</source>
         <translation>הצג בלוח LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="770"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="769"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>הפעלת ניטור מצב חזותי באמצעות תצוגת LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="783"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="782"/>
         <source>LED On Threshold (required)</source>
         <translation>סף הדלקת LED (נדרש)</translation>
     </message>
@@ -8213,7 +8213,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>טווח ערכים</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="345"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="344"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1199"/>
         <source>Minimum Value</source>
         <translation>ערך מינימלי</translation>
@@ -8240,55 +8240,55 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>לולאת בקרה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="357"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="356"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1208"/>
         <source>Maximum Value</source>
         <translation>ערך מקסימלי</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="402"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="401"/>
         <source>Choose Time or a dataset to drive the X-Axis in plots</source>
         <translation>בחר זמן או מערך נתונים להנעת ציר ה-X בגרפים</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="578"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="577"/>
         <source>Scale the frequency axis in decades so low octaves stay readable; applies to both the FFT plot and the waterfall</source>
         <translation>קנה מידה של ציר התדר בעשוריות כך שאוקטבות נמוכות יישארו קריאות; חל גם על עלילת FFT וגם על המפל</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="591"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="715"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="590"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="714"/>
         <source>Minimum Value (optional)</source>
         <translation>ערך מינימלי (אופציונלי)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="592"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="591"/>
         <source>Lower bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>גבול תחתון לנורמליזציה של נתונים; ברירת מחדל לטווח הערכים של מערך הנתונים כאשר לא מוגדר</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="604"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="727"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="603"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="726"/>
         <source>Maximum Value (optional)</source>
         <translation>ערך מקסימלי (אופציונלי)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="605"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="604"/>
         <source>Upper bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>גבול עליון לנורמליזציה של נתונים; ברירת מחדל לטווח הערכים של מערך הנתונים כאשר לא מוגדר</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="716"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="715"/>
         <source>Lower bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>גבול תחתון של טווח המחוון או העמודה; ברירת מחדל לטווח הערכים של מערך הנתונים כאשר לא מוגדר</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="728"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="727"/>
         <source>Upper bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>גבול עליון של טווח המחוון או העמודה; ברירת מחדל לטווח הערכים של מערך הנתונים כאשר לא מוגדר</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="693"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="692"/>
         <source>Decimal Points</source>
         <translation>נקודות עשרוניות</translation>
     </message>
@@ -8302,7 +8302,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>דולק</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="784"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="783"/>
         <source>LED lights up when value meets or exceeds this threshold; define alarm bands for multi-state colors</source>
         <translation>נורית LED נדלקת כאשר הערך מגיע לסף זה או עולה עליו; הגדרת טווחי אזעקה עבור צבעים מרובי מצבים</translation>
     </message>
@@ -11056,59 +11056,59 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>FlowDiagram</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="453"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="457"/>
         <source>Frame Parser</source>
         <translation>מנתח מסגרות</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="460"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="464"/>
         <source>Device %1</source>
         <translation>התקן %1</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="248"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="252"/>
         <source>Group</source>
         <translation>קבוצה</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="375"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="791"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="379"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="795"/>
         <source>Folder</source>
         <translation>תיקייה</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="644"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="648"/>
         <source>Action</source>
         <translation>פעולה</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="537"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="541"/>
         <source>Output Panel</source>
         <translation>לוח פלט</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="573"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="577"/>
         <source>Control</source>
         <translation>בקרה</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="729"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="733"/>
         <source>Table</source>
         <translation>טבלה</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="743"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="747"/>
         <source>%1 regs</source>
         <translation>%1 רגיסטרים</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="834"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="838"/>
         <source>Variables</source>
         <translation>משתנים</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="409"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="743"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="413"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="747"/>
         <source>empty</source>
         <translation>ריק</translation>
     </message>
@@ -11117,12 +11117,12 @@ Valid format: 01 A2 FF 3C</source>
         <translation type="vanished">סקריפט בקרה</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="878"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="882"/>
         <source>MQTT Publisher</source>
         <translation>מפרסם MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1278"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1282"/>
         <source>Open the transform code editor for this dataset.</source>
         <translation>פתח את עורך קוד ההמרה עבור מערך נתונים זה.</translation>
     </message>
@@ -11207,12 +11207,12 @@ Valid format: 01 A2 FF 3C</source>
         <translation type="vanished">מדחום</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="407"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="411"/>
         <source>Control Loop</source>
         <translation>לולאת בקרה</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="606"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="610"/>
         <source>Outputs</source>
         <translation>פלטים</translation>
     </message>
@@ -16056,7 +16056,7 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
 <context>
     <name>MarkdownWebView</name>
     <message>
-        <location filename="../../qml/Widgets/MarkdownWebView.qml" line="36"/>
+        <location filename="../../qml/Widgets/MarkdownWebView.qml" line="38"/>
         <source>Copied to Clipboard</source>
         <translation>הועתק ללוח</translation>
     </message>
@@ -19358,7 +19358,7 @@ Click Refresh to update the list.</source>
         <translation type="vanished">רמה עליונה</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="398"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="405"/>
         <source>Move Here</source>
         <translation>העבר לכאן</translation>
     </message>

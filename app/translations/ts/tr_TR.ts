@@ -461,12 +461,12 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1969"/>
+        <location filename="../../src/API/Server.cpp" line="1974"/>
         <source>API server</source>
         <translation>API sunucusu</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1969"/>
+        <location filename="../../src/API/Server.cpp" line="1974"/>
         <source>Invalid pending connection</source>
         <translation>Geçersiz bekleyen bağlantı</translation>
     </message>
@@ -6755,7 +6755,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>Her eğriyi zamana veya örnek numarasına göre çiz</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="414"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="413"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="314"/>
         <source>Logarithmic X Axis</source>
         <translation>Logaritmik X Ekseni</translation>
@@ -6766,7 +6766,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>X eksenini ondalık olarak ölçeklendir; yalnızca X Ekseni kaynağı Örnekler olduğunda kullanılabilir (Zaman değil)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="427"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="426"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="327"/>
         <source>Logarithmic Y Axis</source>
         <translation>Logaritmik Y Ekseni</translation>
@@ -6930,12 +6930,12 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Sanal veri kümeleri değerlerini dönüşümler ve veri tablolarından hesaplar, çerçeve indeksi gerektirmez</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="578"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="577"/>
         <source>Scale the frequency axis in decades so low octaves stay readable; applies to both the FFT plot and the waterfall</source>
         <translation>Frekans eksenini dekatlarda ölçeklendir, böylece düşük oktavlar okunabilir kalır; hem FFT grafiğine hem de şelale görünümüne uygulanır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="694"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="693"/>
         <source>Fixed decimal places for the value display; overrides the format (-1 = auto)</source>
         <translation>Değer gösterimi için sabit ondalık basamaklar; formatı geçersiz kılar (-1 = otomatik)</translation>
     </message>
@@ -7363,7 +7363,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>Bağlantı Ayarları</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="215"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="214"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="692"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1108"/>
         <source>General Information</source>
@@ -7528,22 +7528,22 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>Her tetiklemede komutun kaç kez gönderileceği</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="227"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="226"/>
         <source>Untitled Dataset</source>
         <translation>Adsız Veri Kümesi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="228"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="227"/>
         <source>Dataset Title</source>
         <translation>Veri Kümesi Başlığı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="229"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="228"/>
         <source>Name of the dataset, used for labeling and identification</source>
         <translation>Veri kümesinin adı, etiketleme ve tanımlama için kullanılır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="251"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="250"/>
         <source>Hide on Dashboard</source>
         <translation>Panoda Gizle</translation>
     </message>
@@ -7552,127 +7552,127 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Bu veri kümesinin bağımsız pano kutucuğunu gizle; painter widget değerlerini okumaya devam edebilir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="324"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="323"/>
         <source>Automatic</source>
         <translation>Otomatik</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="325"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="324"/>
         <source>Widget Color</source>
         <translation>Widget Rengi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="326"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="325"/>
         <source>Custom display color for this dataset; automatic uses the theme palette</source>
         <translation>Bu veri kümesi için özel görüntüleme rengi; otomatik seçeneği tema paletini kullanır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="304"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="303"/>
         <source>Stable name</source>
         <translation>Sabit ad</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="239"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="238"/>
         <source>Computed Dataset</source>
         <translation>Hesaplanmış Veri Kümesi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="240"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="239"/>
         <source>Computed datasets compute their value from transforms and shared variables, they do not require a frame index</source>
         <translation>Hesaplanmış veri kümeleri değerlerini dönüşümler ve paylaşılan değişkenlerden hesaplar, çerçeve indeksi gerektirmez</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="252"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="251"/>
         <source>Suppress this dataset's standalone dashboard tile; the canvas widget can still read its values</source>
         <translation>Bu veri kümesinin bağımsız pano kutucuğunu gizle; tuval widget değerlerini okumaya devam edebilir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="305"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="304"/>
         <source>Script Alias</source>
         <translation>Betik Takma Adı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="306"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="305"/>
         <source>Stable name for getDataset-style script/API lookups; must be unique (optional)</source>
         <translation>GetDataset tarzı betik/API aramaları için sabit ad; benzersiz olmalıdır (isteğe bağlı)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="346"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="345"/>
         <source>Lower bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>Veri kümesi değer aralığının alt sınırı; widget'lar ve FFT kendi aralıkları ayarlanmadığında buna geri döner</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="358"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="357"/>
         <source>Upper bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>Veri kümesi değer aralığının üst sınırı; widget'lar ve FFT kendi aralıkları ayarlanmadığında buna geri döner</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="402"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="401"/>
         <source>Choose Time or a dataset to drive the X-Axis in plots</source>
         <translation>Grafiklerde X eksenini sürmek için Zaman veya bir veri kümesi seçin</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="415"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="414"/>
         <source>Scale the X axis in decades; available when the X-Axis source is Samples or a dataset (not Time)</source>
         <translation>X eksenini ondalık olarak ölçeklendir; yalnızca X Ekseni kaynağı Örnekler veya bir veri kümesi olduğunda kullanılabilir (Zaman değil)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="428"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="427"/>
         <source>Scale the Y axis in decades; values at or below zero are clamped</source>
         <translation>Y eksenini ondalık olarak ölçeklendir; sıfır veya altındaki değerler sınırlandırılır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="443"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="442"/>
         <source>Frequency Analysis</source>
         <translation>Frekans Analizi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="480"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="479"/>
         <source>Peak Ballistics</source>
         <translation>Tepe Balistiği</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="481"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="480"/>
         <source>Analyzer-style display: peaks rise instantly and decay smoothly over the release time</source>
         <translation>Analizör tarzı görüntüleme: tepe noktaları anında yükselir ve serbest bırakma süresi boyunca yumuşak bir şekilde azalır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="493"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="492"/>
         <source>Ballistics Release (ms)</source>
         <translation>Balistik Serbest Bırakma (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="494"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="493"/>
         <source>Decay time for the ballistics display (50-5000 ms)</source>
         <translation>Balistik görüntüleme için azalma süresi (50-5000 ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="510"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="509"/>
         <source>Choose Time (default) or any dataset whose value drives the Y axis -- produces a Campbell diagram when bound to e.g. RPM</source>
         <translation>Zaman (varsayılan) veya Y eksenini yönlendiren herhangi bir veri kümesi seçin -- örneğin RPM'e bağlandığında Campbell diyagramı üretir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="550"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="549"/>
         <source>FFT Window Function</source>
         <translation>FFT Pencere Fonksiyonu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="551"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="550"/>
         <source>Window applied before the transform to reduce spectral leakage; affects both the FFT plot and the waterfall</source>
         <translation>Spektral sızıntıyı azaltmak için dönüşümden önce uygulanan pencere; hem FFT grafiğini hem de şelale görünümünü etkiler</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="577"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="576"/>
         <source>Logarithmic Frequency Axis</source>
         <translation>Logaritmik Frekans Ekseni</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="740"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="739"/>
         <source>Hold Min/Max Markers</source>
         <translation>Min/maks İşaretleyicileri Tut</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="741"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="740"/>
         <source>Show hold markers at the lowest and highest values observed since the last data reset</source>
         <translation>Son veri sıfırlamasından bu yana gözlemlenen en düşük ve en yüksek değerlerde tutma işaretçilerini göster</translation>
     </message>
@@ -7681,39 +7681,39 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">FFT frekans eksenini dekatlarda ölçeklendir, böylece düşük oktavlar okunabilir kalır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="591"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="715"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="590"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="714"/>
         <source>Minimum Value (optional)</source>
         <translation>Maksimum Değer (isteğe bağlı)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="592"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="591"/>
         <source>Lower bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>Veri normalizasyonu için alt sınır; ayarlanmadığında veri kümesi değer aralığına geri döner</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="604"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="727"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="603"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="726"/>
         <source>Maximum Value (optional)</source>
         <translation>Minimum Değer (isteğe bağlı)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="605"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="604"/>
         <source>Upper bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>Veri normalizasyonu için üst sınır; ayarlanmadığında veri kümesi değer aralığına geri döner</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="716"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="715"/>
         <source>Lower bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>Gösterge veya çubuk aralığının alt sınırı; ayarlanmadığında veri kümesi değer aralığına geri döner</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="728"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="727"/>
         <source>Upper bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>Gösterge veya çubuk aralığının üst sınırı; ayarlanmadığında veri kümesi değer aralığına geri döner</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="693"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="692"/>
         <source>Decimal Points</source>
         <translation>Ondalık Noktalar</translation>
     </message>
@@ -7727,7 +7727,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>Açık</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="784"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="783"/>
         <source>LED lights up when value meets or exceeds this threshold; define alarm bands for multi-state colors</source>
         <translation>LED, değer bu eşiği karşıladığında veya aştığında yanar; çok durumlu renkler için alarm aralıkları tanımlayın</translation>
     </message>
@@ -7771,7 +7771,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>Çalışma Alanlarını Temizle</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="267"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="266"/>
         <source>Frame Index</source>
         <translation>Çerçeve İndeksi</translation>
     </message>
@@ -7797,42 +7797,42 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>Kontrol Döngüsü</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="268"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="267"/>
         <source>Frame position used for aligning datasets in time</source>
         <translation>Veri kümelerini zamanda hizalamak için kullanılan çerçeve konumu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="279"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="278"/>
         <source>Measurement Unit</source>
         <translation>Ölçüm Birimi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="278"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="277"/>
         <source>Volts, Amps, etc.</source>
         <translation>Volt, Amper, vb.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="280"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="279"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
         <translation>Volt veya amper gibi ölçüm birimi (isteğe bağlı)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="373"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="372"/>
         <source>Plot Settings</source>
         <translation>Grafik Ayarları</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="387"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="386"/>
         <source>Enable Plot Widget</source>
         <translation>Grafik Widget'ını Etkinleştir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="388"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="387"/>
         <source>Plot data in real-time</source>
         <translation>Verileri gerçek zamanlı olarak grafikle</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="401"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="400"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="298"/>
         <source>X-Axis Source</source>
         <translation>X Ekseni Kaynağı</translation>
@@ -7862,27 +7862,27 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">FFT Yapılandırması</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="456"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="455"/>
         <source>Enable FFT Analysis</source>
         <translation>FFT Analizini Etkinleştir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="457"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="456"/>
         <source>Perform frequency-domain analysis of the dataset</source>
         <translation>Veri kümesinin frekans-alanı analizini gerçekleştir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="467"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="466"/>
         <source>Enable Waterfall Plot</source>
         <translation>Waterfall Grafiğini Etkinleştir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="468"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="467"/>
         <source>Show a scrolling spectrogram of frequency content over time (Pro)</source>
         <translation>Zaman içinde frekans içeriğinin kayan spektrogramını göster (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="509"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="508"/>
         <source>Waterfall Y Axis</source>
         <translation>Waterfall Y Ekseni</translation>
     </message>
@@ -7891,22 +7891,22 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Zaman (varsayılan) veya Y eksenini yönlendiren herhangi bir veri kümesi seçin — örneğin RPM'e bağlandığında Campbell diyagramı üretir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="535"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="534"/>
         <source>FFT Window Size</source>
         <translation>FFT Pencere Boyutu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="536"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="535"/>
         <source>Number of samples used for each FFT calculation window</source>
         <translation>Her FFT hesaplama penceresi için kullanılan örnek sayısı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="564"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="563"/>
         <source>FFT Sampling Rate (Hz, required)</source>
         <translation>FFT Örnekleme Hızı (Hz, gerekli)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="565"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="564"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
         <translation>FFT için kullanılan örnekleme frekansı (Hz cinsinden)</translation>
     </message>
@@ -7927,17 +7927,17 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Veri normalizasyonu için üst sınır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="620"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="619"/>
         <source>Widget Settings</source>
         <translation>Widget Ayarları</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="636"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="635"/>
         <source>Widget</source>
         <translation>Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="637"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="636"/>
         <source>Select the visual widget used to display this dataset</source>
         <translation>Bu veri kümesini görüntülemek için kullanılan görsel widget'ı seçin</translation>
     </message>
@@ -7959,29 +7959,29 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="731"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="663"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="690"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="662"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="689"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="366"/>
         <source>Auto</source>
         <translation>Otomatik</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="664"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="663"/>
         <source>Tick Count</source>
         <translation>İşaret Sayısı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="665"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="664"/>
         <source>Major-tick count on the dial scale (0 = auto-fit to widget size)</source>
         <translation>Kadran ölçeğindeki ana işaret sayısı (0 = widget boyutuna otomatik sığdır)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="679"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="678"/>
         <source>Label Format</source>
         <translation>Etiket Biçimi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="680"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="679"/>
         <source>Decimal places or notation used on tick labels and the value display</source>
         <translation>İşaret etiketlerinde ve değer gösteriminde kullanılan ondalık basamak veya gösterim</translation>
     </message>
@@ -8022,22 +8022,22 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Değer bu eşiği aştığında görsel bir alarm tetikler</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="756"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="755"/>
         <source>LED Display Settings</source>
         <translation>LED Ekran Ayarları</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="769"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="768"/>
         <source>Show in LED Panel</source>
         <translation>LED Panelinde Göster</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="770"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="769"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>LED ekran kullanarak görsel durum izlemeyi etkinleştir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="783"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="782"/>
         <source>LED On Threshold (required)</source>
         <translation>LED Açık Eşiği (gerekli)</translation>
     </message>
@@ -8421,13 +8421,13 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>Değer Aralığı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="345"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="344"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1199"/>
         <source>Minimum Value</source>
         <translation>Minimum Değer</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="357"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="356"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1208"/>
         <source>Maximum Value</source>
         <translation>Maksimum Değer</translation>
@@ -11152,43 +11152,43 @@ Geçerli biçim: 01 A2 FF 3C</translation>
 <context>
     <name>FlowDiagram</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="453"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="457"/>
         <source>Frame Parser</source>
         <translation>Frame Ayrıştırıcı</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="460"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="464"/>
         <source>Device %1</source>
         <translation>Cihaz %1</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="537"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="541"/>
         <source>Output Panel</source>
         <translation>Çıkış Paneli</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="573"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="577"/>
         <source>Control</source>
         <translation>Kontrol</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="729"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="733"/>
         <source>Table</source>
         <translation>Tablo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="743"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="747"/>
         <source>%1 regs</source>
         <translation>%1 kayıt</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="834"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="838"/>
         <source>Variables</source>
         <translation>Değişkenler</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="409"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="743"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="413"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="747"/>
         <source>empty</source>
         <translation>boş</translation>
     </message>
@@ -11197,12 +11197,12 @@ Geçerli biçim: 01 A2 FF 3C</translation>
         <translation type="vanished">Kontrol Betiği</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="878"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="882"/>
         <source>MQTT Publisher</source>
         <translation>MQTT Yayıncı</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1278"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1282"/>
         <source>Open the transform code editor for this dataset.</source>
         <translation>Bu veri kümesi için dönüşüm kod düzenleyicisini aç.</translation>
     </message>
@@ -11287,12 +11287,12 @@ Geçerli biçim: 01 A2 FF 3C</translation>
         <translation type="vanished">Termometre</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="407"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="411"/>
         <source>Control Loop</source>
         <translation>Kontrol Döngüsü</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="606"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="610"/>
         <source>Outputs</source>
         <translation>Çıkışlar</translation>
     </message>
@@ -11393,18 +11393,18 @@ Geçerli biçim: 01 A2 FF 3C</translation>
         <translation type="vanished">Kontrol Döngüsünü Düzenle…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="248"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="252"/>
         <source>Group</source>
         <translation>Grup</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="375"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="791"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="379"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="795"/>
         <source>Folder</source>
         <translation>Klasör</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="644"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="648"/>
         <source>Action</source>
         <translation>Eylem</translation>
     </message>
@@ -16554,7 +16554,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
 <context>
     <name>MarkdownWebView</name>
     <message>
-        <location filename="../../qml/Widgets/MarkdownWebView.qml" line="36"/>
+        <location filename="../../qml/Widgets/MarkdownWebView.qml" line="38"/>
         <source>Copied to Clipboard</source>
         <translation>Panoya Kopyalandı</translation>
     </message>
@@ -19876,7 +19876,7 @@ Listeyi güncellemek için Yenile'ye tıklayın.</translation>
         <translation type="vanished">Üst Düzey</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="398"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="405"/>
         <source>Move Here</source>
         <translation>Buraya Taşı</translation>
     </message>

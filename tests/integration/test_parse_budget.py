@@ -33,15 +33,19 @@ from utils import DeviceSimulator
 
 HEAVY_PORT = 9000
 LIGHT_PORT = 9001
+HEAVY_BURST = 8
 
-# Bounded busy-loop transform: ~25 ms/frame on the dev machine, so a ~200 fps
-# stream oversubscribes one core about 5x (decisively past the 0.90 engage
-# threshold -- 800k iterations measured right AT the threshold and made the
-# test a coin flip), while staying well under the 100 ms per-frame watchdog.
+# Bounded busy-loop transform: ~2.5 ms/frame on the dev machine, ~10 ms on a loaded
+# CI runner. Oversubscription comes from the OFFERED rate (HEAVY_BURST frames per
+# 4 ms send, ~2 kHz) rather than per-frame cost: the recovery AC needs 10 Hz of this
+# transform to fit under the 0.45 fair share on the slowest runner (4M iterations
+# measured ~100 ms/frame there, so the heavy source could never un-thin), while
+# engagement needs offered load decisively past the 0.90 threshold (5x on the dev
+# machine, far more on CI).
 HEAVY_TRANSFORM = (
     "function transform(value)\n"
     "  local s = 0\n"
-    "  for i = 1, 4000000 do\n"
+    "  for i = 1, 400000 do\n"
     "    s = s + i\n"
     "  end\n"
     "  return value\n"
@@ -128,12 +132,18 @@ class _CounterStream:
     """Streams monotonically-counting framed values until stopped."""
 
     def __init__(
-        self, simulator: DeviceSimulator, start: bytes, end: bytes, interval: float
+        self,
+        simulator: DeviceSimulator,
+        start: bytes,
+        end: bytes,
+        interval: float,
+        burst: int = 1,
     ):
         self._simulator = simulator
         self._start = start
         self._end = end
         self._interval = interval
+        self._burst = burst
         self._counter = 0
         self._running = threading.Event()
         self._thread: threading.Thread | None = None
@@ -149,15 +159,18 @@ class _CounterStream:
             self._thread.join(timeout=2.0)
             self._thread = None
 
-    def set_interval(self, interval: float) -> None:
+    def set_interval(self, interval: float, burst: int = 1) -> None:
         self._interval = interval
+        self._burst = burst
 
     def _loop(self) -> None:
         while self._running.is_set():
-            self._counter += 1
-            frame = self._start + str(self._counter).encode() + b"," + b"0" + self._end
+            payload = b""
+            for _ in range(self._burst):
+                self._counter += 1
+                payload += self._start + str(self._counter).encode() + b",0" + self._end
             try:
-                self._simulator.send_frame(frame)
+                self._simulator.send_frame(payload)
             except Exception:
                 return
             time.sleep(self._interval)
@@ -232,7 +245,7 @@ def budget_env(api_client, clean_state):
     assert heavy_sim.wait_for_connection(timeout=5.0), "heavy simulator never connected"
     assert light_sim.wait_for_connection(timeout=5.0), "light simulator never connected"
 
-    heavy = _CounterStream(heavy_sim, b"/*", b"*/", interval=0.004)
+    heavy = _CounterStream(heavy_sim, b"/*", b"*/", interval=0.004, burst=HEAVY_BURST)
     light = _CounterStream(light_sim, b"<<", b">>", interval=0.1)
 
     yield api_client, heavy, light
@@ -265,9 +278,13 @@ class TestParseBudgetFairShare:
 
         heavy_series, light_series = _sample_values(api, seconds=2.0, period=0.1)
 
-        assert _distinct(light_series) >= 12, (
-            f"light source starved: {_distinct(light_series)} distinct values "
-            f"in 2 s (expected ~20 at 10 Hz): {light_series}"
+        # Counter DELTA, not distinct polls: a loaded runner answers getData slowly enough
+        # that 2 s yields well under 20 polls, which caps distinct values below any
+        # threshold however live the source is.
+        light_advanced = light_series[-1] - light_series[0]
+        assert light_advanced >= 12, (
+            f"light source starved: counter advanced {light_advanced} in 2 s "
+            f"(expected ~20 at 10 Hz): {light_series}"
         )
         assert _distinct(heavy_series) >= 4, (
             f"heavy source frozen in lockstep steps: {_distinct(heavy_series)} "

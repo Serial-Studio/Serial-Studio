@@ -1349,7 +1349,10 @@ void API::Server::processNoNewlineBuffer(QTcpSocket* socket, ConnectionState& st
 }
 
 /**
- * @brief Attempts to parse buffered data as a complete JSON message.
+ * @brief Attempts to parse buffered data as a complete JSON message. Parsing waits for the
+ *        closing bracket: a newline-less body arrives in many chunks, and re-parsing the
+ *        whole partial buffer per chunk is quadratic (a 1 MB body stalled the GUI thread
+ *        for seconds and timed out the next commands).
  */
 void API::Server::processBufferedJson(QTcpSocket* socket,
                                       ConnectionState& state,
@@ -1373,6 +1376,13 @@ void API::Server::processBufferedJson(QTcpSocket* socket,
     return;
   }
 
+  const char firstChar = trimmed.at(0);
+  const char lastChar  = trimmed.back();
+  const bool complete =
+    (firstChar == '{' && lastChar == '}') || (firstChar == '[' && lastChar == ']');
+  if (!complete)
+    return;
+
   if (exceedsJsonDepthLimit(trimmed, kMaxApiJsonDepth)) {
     qWarning() << "[API] JSON depth limit exceeded (buffered):" << state.peerAddress << ":"
                << state.peerPort << "- Max depth:" << kMaxApiJsonDepth;
@@ -1389,15 +1399,10 @@ void API::Server::processBufferedJson(QTcpSocket* socket,
   QString type;
   QJsonObject json;
   try {
-    const char firstChar = trimmed.at(0);
-    const char lastChar  = trimmed.back();
-    const bool complete =
-      (firstChar == '{' && lastChar == '}') || (firstChar == '[' && lastChar == ']');
-
     if (API::parseMessage(trimmed, type, json) || MCP::isMCPMessage(trimmed)) {
       handleJsonMessage(socket, state, trimmed);
       buffer.clear();
-    } else if (complete) {
+    } else {
       sendResponseToSocket(
         socket,
         CommandResponse::makeError(

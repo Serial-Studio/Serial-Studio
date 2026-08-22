@@ -461,12 +461,12 @@ Habilite apenas em redes confiáveis. Clientes não confiáveis podem ler dados 
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1969"/>
+        <location filename="../../src/API/Server.cpp" line="1974"/>
         <source>API server</source>
         <translation>Servidor da API</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1969"/>
+        <location filename="../../src/API/Server.cpp" line="1974"/>
         <source>Invalid pending connection</source>
         <translation>Conexão pendente inválida</translation>
     </message>
@@ -6755,7 +6755,7 @@ Adicionar %4 dataset(s) usando os padrões do modelo?</translation>
         <translation>Plotar cada curva contra o tempo ou contra o número da amostra</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="414"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="413"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="314"/>
         <source>Logarithmic X Axis</source>
         <translation>Eixo X Logarítmico</translation>
@@ -6766,7 +6766,7 @@ Adicionar %4 dataset(s) usando os padrões do modelo?</translation>
         <translation>Escala o eixo X em décadas; disponível quando a origem do Eixo X é Amostras (não Tempo)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="427"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="426"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="327"/>
         <source>Logarithmic Y Axis</source>
         <translation>Eixo Y Logarítmico</translation>
@@ -6930,12 +6930,12 @@ Adicionar %4 dataset(s) usando os padrões do modelo?</translation>
         <translation type="vanished">Datasets virtuais calculam seu valor a partir de transformações e tabelas de dados, não requerem um índice de frame</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="578"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="577"/>
         <source>Scale the frequency axis in decades so low octaves stay readable; applies to both the FFT plot and the waterfall</source>
         <translation>Escala o eixo de frequência em décadas para que as oitavas baixas permaneçam legíveis; aplica-se tanto ao gráfico FFT quanto à cascata</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="694"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="693"/>
         <source>Fixed decimal places for the value display; overrides the format (-1 = auto)</source>
         <translation>Casas decimais fixas para a exibição do valor; substitui o formato (-1 = auto)</translation>
     </message>
@@ -7363,7 +7363,7 @@ Adicionar %4 dataset(s) usando os padrões do modelo?</translation>
         <translation>Configurações de Conexão</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="215"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="214"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="692"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1108"/>
         <source>General Information</source>
@@ -7528,22 +7528,22 @@ Adicionar %4 dataset(s) usando os padrões do modelo?</translation>
         <translation>Número de vezes para enviar o comando em cada disparo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="227"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="226"/>
         <source>Untitled Dataset</source>
         <translation>Dataset sem Título</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="228"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="227"/>
         <source>Dataset Title</source>
         <translation>Título do Dataset</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="229"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="228"/>
         <source>Name of the dataset, used for labeling and identification</source>
         <translation>Nome do dataset, usado para rotulagem e identificação</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="251"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="250"/>
         <source>Hide on Dashboard</source>
         <translation>Ocultar no Dashboard</translation>
     </message>
@@ -7552,127 +7552,127 @@ Adicionar %4 dataset(s) usando os padrões do modelo?</translation>
         <translation type="vanished">Suprimir o bloco individual deste dataset no dashboard; o widget painter ainda pode ler seus valores</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="324"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="323"/>
         <source>Automatic</source>
         <translation>Automático</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="325"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="324"/>
         <source>Widget Color</source>
         <translation>Cor do Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="326"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="325"/>
         <source>Custom display color for this dataset; automatic uses the theme palette</source>
         <translation>Cor de exibição personalizada para este dataset; automático usa a paleta do tema</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="304"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="303"/>
         <source>Stable name</source>
         <translation>Nome estável</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="239"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="238"/>
         <source>Computed Dataset</source>
         <translation>Dataset Computado</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="240"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="239"/>
         <source>Computed datasets compute their value from transforms and shared variables, they do not require a frame index</source>
         <translation>Datasets computados calculam seu valor a partir de transformações e variáveis compartilhadas, não requerem um índice de frame</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="252"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="251"/>
         <source>Suppress this dataset's standalone dashboard tile; the canvas widget can still read its values</source>
         <translation>Suprimir o bloco individual deste dataset no dashboard; o widget canvas ainda pode ler seus valores</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="305"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="304"/>
         <source>Script Alias</source>
         <translation>Alias de Script</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="306"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="305"/>
         <source>Stable name for getDataset-style script/API lookups; must be unique (optional)</source>
         <translation>Nome estável para buscas de script/API no estilo getDataset; deve ser único (opcional)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="346"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="345"/>
         <source>Lower bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>Limite inferior da faixa de valores do dataset; widgets e FFT recorrem a ele quando sua própria faixa não está definida</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="358"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="357"/>
         <source>Upper bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>Limite superior da faixa de valores do dataset; widgets e FFT recorrem a ele quando sua própria faixa não está definida</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="402"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="401"/>
         <source>Choose Time or a dataset to drive the X-Axis in plots</source>
         <translation>Escolha Tempo ou um dataset para controlar o Eixo X nos gráficos</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="415"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="414"/>
         <source>Scale the X axis in decades; available when the X-Axis source is Samples or a dataset (not Time)</source>
         <translation>Escala o eixo X em décadas; disponível quando a origem do Eixo X é Amostras ou um dataset (não Tempo)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="428"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="427"/>
         <source>Scale the Y axis in decades; values at or below zero are clamped</source>
         <translation>Escala o eixo Y em décadas; valores iguais ou menores que zero são limitados</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="443"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="442"/>
         <source>Frequency Analysis</source>
         <translation>Análise de Frequência</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="480"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="479"/>
         <source>Peak Ballistics</source>
         <translation>Balística de Picos</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="481"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="480"/>
         <source>Analyzer-style display: peaks rise instantly and decay smoothly over the release time</source>
         <translation>Exibição estilo analisador: picos sobem instantaneamente e decaem suavemente ao longo do tempo de liberação</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="493"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="492"/>
         <source>Ballistics Release (ms)</source>
         <translation>Liberação da Balística (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="494"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="493"/>
         <source>Decay time for the ballistics display (50-5000 ms)</source>
         <translation>Tempo de decaimento para a exibição balística (50-5000 ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="510"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="509"/>
         <source>Choose Time (default) or any dataset whose value drives the Y axis -- produces a Campbell diagram when bound to e.g. RPM</source>
         <translation>Escolha Tempo (padrão) ou qualquer conjunto de dados cujo valor controla o eixo Y -- produz um diagrama de Campbell quando vinculado a, por exemplo, RPM</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="550"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="549"/>
         <source>FFT Window Function</source>
         <translation>Função de Janela FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="551"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="550"/>
         <source>Window applied before the transform to reduce spectral leakage; affects both the FFT plot and the waterfall</source>
         <translation>Janela aplicada antes da transformada para reduzir vazamento espectral; afeta tanto o gráfico FFT quanto a cascata</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="577"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="576"/>
         <source>Logarithmic Frequency Axis</source>
         <translation>Eixo de Frequência Logarítmico</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="740"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="739"/>
         <source>Hold Min/Max Markers</source>
         <translation>Manter Marcadores Mín/máx</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="741"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="740"/>
         <source>Show hold markers at the lowest and highest values observed since the last data reset</source>
         <translation>Mostrar marcadores de retenção nos valores mais baixos e mais altos observados desde a última redefinição de dados</translation>
     </message>
@@ -7681,39 +7681,39 @@ Adicionar %4 dataset(s) usando os padrões do modelo?</translation>
         <translation type="vanished">Escala o eixo de frequência FFT em décadas para que as oitavas baixas permaneçam legíveis</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="591"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="715"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="590"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="714"/>
         <source>Minimum Value (optional)</source>
         <translation>Valor Mínimo (opcional)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="592"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="591"/>
         <source>Lower bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>Limite inferior para normalização de dados; retorna à faixa de valores do conjunto de dados quando não definido</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="604"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="727"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="603"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="726"/>
         <source>Maximum Value (optional)</source>
         <translation>Valor Máximo (opcional)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="605"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="604"/>
         <source>Upper bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>Limite superior para normalização de dados; retorna à faixa de valores do conjunto de dados quando não definido</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="716"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="715"/>
         <source>Lower bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>Limite inferior da faixa do medidor ou barra; retorna à faixa de valores do conjunto de dados quando não definido</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="728"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="727"/>
         <source>Upper bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>Limite superior da faixa do medidor ou barra; retorna à faixa de valores do conjunto de dados quando não definido</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="693"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="692"/>
         <source>Decimal Points</source>
         <translation>Casas Decimais</translation>
     </message>
@@ -7727,7 +7727,7 @@ Adicionar %4 dataset(s) usando os padrões do modelo?</translation>
         <translation>Ligado</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="784"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="783"/>
         <source>LED lights up when value meets or exceeds this threshold; define alarm bands for multi-state colors</source>
         <translation>O LED acende quando o valor atinge ou excede este limite; defina faixas de alarme para cores de múltiplos estados</translation>
     </message>
@@ -7771,7 +7771,7 @@ Adicionar %4 dataset(s) usando os padrões do modelo?</translation>
         <translation>Limpar Espaços de Trabalho</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="267"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="266"/>
         <source>Frame Index</source>
         <translation>Índice do Frame</translation>
     </message>
@@ -7797,42 +7797,42 @@ Adicionar %4 dataset(s) usando os padrões do modelo?</translation>
         <translation>Loop de Controle</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="268"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="267"/>
         <source>Frame position used for aligning datasets in time</source>
         <translation>Posição do frame usada para alinhar datasets no tempo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="279"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="278"/>
         <source>Measurement Unit</source>
         <translation>Unidade de Medida</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="278"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="277"/>
         <source>Volts, Amps, etc.</source>
         <translation>Volts, Amperes, etc.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="280"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="279"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
         <translation>Unidade de medida, como volts ou amperes (opcional)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="373"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="372"/>
         <source>Plot Settings</source>
         <translation>Configurações do Gráfico</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="387"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="386"/>
         <source>Enable Plot Widget</source>
         <translation>Habilitar Widget de Gráfico</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="388"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="387"/>
         <source>Plot data in real-time</source>
         <translation>Plotar dados em tempo real</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="401"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="400"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="298"/>
         <source>X-Axis Source</source>
         <translation>Origem do Eixo X</translation>
@@ -7862,27 +7862,27 @@ Adicionar %4 dataset(s) usando os padrões do modelo?</translation>
         <translation type="vanished">Configuração de FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="456"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="455"/>
         <source>Enable FFT Analysis</source>
         <translation>Habilitar Análise FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="457"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="456"/>
         <source>Perform frequency-domain analysis of the dataset</source>
         <translation>Realizar análise no domínio da frequência do conjunto de dados</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="467"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="466"/>
         <source>Enable Waterfall Plot</source>
         <translation>Habilitar Gráfico de Cascata</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="468"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="467"/>
         <source>Show a scrolling spectrogram of frequency content over time (Pro)</source>
         <translation>Exibe um espectrograma deslizante do conteúdo de frequência ao longo do tempo (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="509"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="508"/>
         <source>Waterfall Y Axis</source>
         <translation>Eixo Y da Cascata</translation>
     </message>
@@ -7891,22 +7891,22 @@ Adicionar %4 dataset(s) usando os padrões do modelo?</translation>
         <translation type="vanished">Escolha Tempo (padrão) ou qualquer conjunto de dados cujo valor controla o eixo Y — produz um diagrama de Campbell quando vinculado a, por exemplo, RPM</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="535"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="534"/>
         <source>FFT Window Size</source>
         <translation>Tamanho da Janela FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="536"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="535"/>
         <source>Number of samples used for each FFT calculation window</source>
         <translation>Número de amostras usadas para cada janela de cálculo FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="564"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="563"/>
         <source>FFT Sampling Rate (Hz, required)</source>
         <translation>Taxa de Amostragem FFT (Hz, obrigatório)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="565"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="564"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
         <translation>Frequência de amostragem usada para FFT (em Hz)</translation>
     </message>
@@ -7927,17 +7927,17 @@ Adicionar %4 dataset(s) usando os padrões do modelo?</translation>
         <translation type="vanished">Limite superior para normalização de dados</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="620"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="619"/>
         <source>Widget Settings</source>
         <translation>Configurações do Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="636"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="635"/>
         <source>Widget</source>
         <translation>Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="637"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="636"/>
         <source>Select the visual widget used to display this dataset</source>
         <translation>Selecione o widget visual usado para exibir este conjunto de dados</translation>
     </message>
@@ -7959,29 +7959,29 @@ Adicionar %4 dataset(s) usando os padrões do modelo?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="731"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="663"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="690"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="662"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="689"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="366"/>
         <source>Auto</source>
         <translation>Automático</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="664"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="663"/>
         <source>Tick Count</source>
         <translation>Contagem de Marcações</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="665"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="664"/>
         <source>Major-tick count on the dial scale (0 = auto-fit to widget size)</source>
         <translation>Contagem de marcações principais na escala do mostrador (0 = ajuste automático ao tamanho do widget)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="679"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="678"/>
         <source>Label Format</source>
         <translation>Formato do Rótulo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="680"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="679"/>
         <source>Decimal places or notation used on tick labels and the value display</source>
         <translation>Casas decimais ou notação usada nos rótulos de marcação e na exibição do valor</translation>
     </message>
@@ -8022,22 +8022,22 @@ Adicionar %4 dataset(s) usando os padrões do modelo?</translation>
         <translation type="vanished">Aciona um alarme visual quando o valor excede este limite</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="756"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="755"/>
         <source>LED Display Settings</source>
         <translation>Configurações de Display LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="769"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="768"/>
         <source>Show in LED Panel</source>
         <translation>Mostrar no Painel LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="770"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="769"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>Habilita monitoramento visual de status usando um display LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="783"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="782"/>
         <source>LED On Threshold (required)</source>
         <translation>Limite de Ativação do LED (obrigatório)</translation>
     </message>
@@ -8421,13 +8421,13 @@ Adicionar %4 dataset(s) usando os padrões do modelo?</translation>
         <translation>Faixa de Valores</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="345"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="344"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1199"/>
         <source>Minimum Value</source>
         <translation>Valor Mínimo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="357"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="356"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1208"/>
         <source>Maximum Value</source>
         <translation>Valor Máximo</translation>
@@ -11152,43 +11152,43 @@ Formato válido: 01 A2 FF 3C</translation>
 <context>
     <name>FlowDiagram</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="453"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="457"/>
         <source>Frame Parser</source>
         <translation>Analisador de Frame</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="460"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="464"/>
         <source>Device %1</source>
         <translation>Dispositivo %1</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="537"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="541"/>
         <source>Output Panel</source>
         <translation>Painel de Saída</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="573"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="577"/>
         <source>Control</source>
         <translation>Controle</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="729"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="733"/>
         <source>Table</source>
         <translation>Tabela</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="743"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="747"/>
         <source>%1 regs</source>
         <translation>%1 regs</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="834"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="838"/>
         <source>Variables</source>
         <translation>Variáveis</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="409"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="743"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="413"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="747"/>
         <source>empty</source>
         <translation>vazio</translation>
     </message>
@@ -11197,12 +11197,12 @@ Formato válido: 01 A2 FF 3C</translation>
         <translation type="vanished">Script de Controle</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="878"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="882"/>
         <source>MQTT Publisher</source>
         <translation>Publicador MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1278"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1282"/>
         <source>Open the transform code editor for this dataset.</source>
         <translation>Abrir o editor de código de transformação para este dataset.</translation>
     </message>
@@ -11287,12 +11287,12 @@ Formato válido: 01 A2 FF 3C</translation>
         <translation type="vanished">Termômetro</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="407"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="411"/>
         <source>Control Loop</source>
         <translation>Loop de Controle</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="606"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="610"/>
         <source>Outputs</source>
         <translation>Saídas</translation>
     </message>
@@ -11393,18 +11393,18 @@ Formato válido: 01 A2 FF 3C</translation>
         <translation type="vanished">Editar Loop de Controle…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="248"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="252"/>
         <source>Group</source>
         <translation>Grupo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="375"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="791"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="379"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="795"/>
         <source>Folder</source>
         <translation>Pasta</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="644"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="648"/>
         <source>Action</source>
         <translation>Ação</translation>
     </message>
@@ -16554,7 +16554,7 @@ Forne­ça as credenciais necessárias.</translation>
 <context>
     <name>MarkdownWebView</name>
     <message>
-        <location filename="../../qml/Widgets/MarkdownWebView.qml" line="36"/>
+        <location filename="../../qml/Widgets/MarkdownWebView.qml" line="38"/>
         <source>Copied to Clipboard</source>
         <translation>Copiado para a Área de Transferência</translation>
     </message>
@@ -19876,7 +19876,7 @@ Clique em Atualizar para atualizar a lista.</translation>
         <translation type="vanished">Nível Superior</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="398"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="405"/>
         <source>Move Here</source>
         <translation>Mover para Aqui</translation>
     </message>

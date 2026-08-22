@@ -461,12 +461,12 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1969"/>
+        <location filename="../../src/API/Server.cpp" line="1974"/>
         <source>API server</source>
         <translation>API-server</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1969"/>
+        <location filename="../../src/API/Server.cpp" line="1974"/>
         <source>Invalid pending connection</source>
         <translation>Ogiltig väntande anslutning</translation>
     </message>
@@ -6755,7 +6755,7 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>Rita varje kurva mot tid eller mot sampelnummer</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="414"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="413"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="314"/>
         <source>Logarithmic X Axis</source>
         <translation>Logaritmisk X-axel</translation>
@@ -6766,7 +6766,7 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>Skala X-axeln i dekader; tillgänglig när X-axelkällan är Samplingar (inte Tid)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="427"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="426"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="327"/>
         <source>Logarithmic Y Axis</source>
         <translation>Logaritmisk Y-axel</translation>
@@ -6930,12 +6930,12 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">Virtuella datauppsättningar beräknar sitt värde från transformeringar och datatabeller, de kräver inget ramindex</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="578"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="577"/>
         <source>Scale the frequency axis in decades so low octaves stay readable; applies to both the FFT plot and the waterfall</source>
         <translation>Skala frekvensaxeln i dekader så att låga oktaver förblir läsbara; gäller både FFT-plotten och vattenfallet</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="694"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="693"/>
         <source>Fixed decimal places for the value display; overrides the format (-1 = auto)</source>
         <translation>Fasta decimaler för värdevisningen; åsidosätter formatet (-1 = auto)</translation>
     </message>
@@ -7363,7 +7363,7 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>Anslutningsinställningar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="215"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="214"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="692"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1108"/>
         <source>General Information</source>
@@ -7528,22 +7528,22 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>Antal gånger kommandot ska skickas vid varje utlösning</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="227"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="226"/>
         <source>Untitled Dataset</source>
         <translation>Namnlös Datamängd</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="228"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="227"/>
         <source>Dataset Title</source>
         <translation>Datamängdstitel</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="229"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="228"/>
         <source>Name of the dataset, used for labeling and identification</source>
         <translation>Namn på datamängden, används för märkning och identifiering</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="251"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="250"/>
         <source>Hide on Dashboard</source>
         <translation>Dölj på Instrumentpanelen</translation>
     </message>
@@ -7552,127 +7552,127 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">Undertryck detta datasets fristående instrumentpanelspanel; painter-widgeten kan fortfarande läsa dess värden</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="324"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="323"/>
         <source>Automatic</source>
         <translation>Automatisk</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="325"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="324"/>
         <source>Widget Color</source>
         <translation>Widgetfärg</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="326"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="325"/>
         <source>Custom display color for this dataset; automatic uses the theme palette</source>
         <translation>Anpassad visningsfärg för detta dataset; automatisk använder temats palett</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="304"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="303"/>
         <source>Stable name</source>
         <translation>Stabilt namn</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="239"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="238"/>
         <source>Computed Dataset</source>
         <translation>Beräknad Datauppsättning</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="240"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="239"/>
         <source>Computed datasets compute their value from transforms and shared variables, they do not require a frame index</source>
         <translation>Beräknade datauppsättningar beräknar sitt värde från transformeringar och delade variabler, de kräver inget ramindex</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="252"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="251"/>
         <source>Suppress this dataset's standalone dashboard tile; the canvas widget can still read its values</source>
         <translation>Undertryck detta datasets fristående instrumentpanelspanel; canvas-widgeten kan fortfarande läsa dess värden</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="305"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="304"/>
         <source>Script Alias</source>
         <translation>Skriptalias</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="306"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="305"/>
         <source>Stable name for getDataset-style script/API lookups; must be unique (optional)</source>
         <translation>Stabilt namn för getDataset-stil skript/API-uppslagningar; måste vara unikt (valfritt)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="346"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="345"/>
         <source>Lower bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>Nedre gräns för datauppsättningens värdeområde; widgets och FFT använder detta som standard när deras eget område inte är angivet</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="358"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="357"/>
         <source>Upper bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>Övre gräns för datauppsättningens värdeområde; widgets och FFT använder detta som standard när deras eget område inte är angivet</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="402"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="401"/>
         <source>Choose Time or a dataset to drive the X-Axis in plots</source>
         <translation>Välj Tid eller en datauppsättning för att styra X-axeln i diagram</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="415"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="414"/>
         <source>Scale the X axis in decades; available when the X-Axis source is Samples or a dataset (not Time)</source>
         <translation>Skala X-axeln i dekader; tillgänglig när X-axelkällan är Samplingar eller en datauppsättning (inte Tid)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="428"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="427"/>
         <source>Scale the Y axis in decades; values at or below zero are clamped</source>
         <translation>Skala Y-axeln i dekader; värden vid eller under noll begränsas</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="443"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="442"/>
         <source>Frequency Analysis</source>
         <translation>Frekvensanalys</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="480"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="479"/>
         <source>Peak Ballistics</source>
         <translation>Toppballistik</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="481"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="480"/>
         <source>Analyzer-style display: peaks rise instantly and decay smoothly over the release time</source>
         <translation>Analysatorliknande visning: toppar stiger omedelbart och avtar mjukt över frisläppningstiden</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="493"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="492"/>
         <source>Ballistics Release (ms)</source>
         <translation>Ballistisk Frisläppning (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="494"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="493"/>
         <source>Decay time for the ballistics display (50-5000 ms)</source>
         <translation>Avklingningstid för ballistikvisningen (50-5000 ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="510"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="509"/>
         <source>Choose Time (default) or any dataset whose value drives the Y axis -- produces a Campbell diagram when bound to e.g. RPM</source>
         <translation>Välj Tid (standard) eller valfri datamängd vars värde styr Y-axeln -- producerar ett Campbell-diagram när det binds till t.ex. RPM</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="550"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="549"/>
         <source>FFT Window Function</source>
         <translation>FFT-fönsterfunktion</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="551"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="550"/>
         <source>Window applied before the transform to reduce spectral leakage; affects both the FFT plot and the waterfall</source>
         <translation>Fönster som appliceras före transformationen för att minska spektralläckage; påverkar både FFT-plotten och vattenfallet</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="577"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="576"/>
         <source>Logarithmic Frequency Axis</source>
         <translation>Logaritmisk Frekvensaxel</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="740"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="739"/>
         <source>Hold Min/Max Markers</source>
         <translation>Behåll Min/max-markörer</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="741"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="740"/>
         <source>Show hold markers at the lowest and highest values observed since the last data reset</source>
         <translation>Visa hållmarkörer vid de lägsta och högsta värdena som observerats sedan senaste dataåterställningen</translation>
     </message>
@@ -7681,39 +7681,39 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">Skala FFT-frekvensaxeln i dekader så att låga oktaver förblir läsbara</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="591"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="715"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="590"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="714"/>
         <source>Minimum Value (optional)</source>
         <translation>Minimivärde (valfritt)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="592"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="591"/>
         <source>Lower bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>Nedre gräns för datanormalisering; återgår till datasetets värdeområde om den lämnas odefinierad</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="604"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="727"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="603"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="726"/>
         <source>Maximum Value (optional)</source>
         <translation>Maximivärde (valfritt)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="605"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="604"/>
         <source>Upper bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>Övre gräns för datanormalisering; återgår till datasetets värdeområde om den lämnas odefinierad</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="716"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="715"/>
         <source>Lower bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>Nedre gräns för mätare- eller stapelområdet; återgår till datasetets värdeområde om den lämnas odefinierad</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="728"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="727"/>
         <source>Upper bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>Övre gräns för mätare- eller stapelområdet; återgår till datasetets värdeområde om den lämnas odefinierad</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="693"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="692"/>
         <source>Decimal Points</source>
         <translation>Decimalpunkter</translation>
     </message>
@@ -7727,7 +7727,7 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>På</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="784"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="783"/>
         <source>LED lights up when value meets or exceeds this threshold; define alarm bands for multi-state colors</source>
         <translation>LED lyser när värdet når eller överskrider detta tröskelvärde; definiera larmband för flertillståndsfärger</translation>
     </message>
@@ -7771,7 +7771,7 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>Rensa Arbetsytor</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="267"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="266"/>
         <source>Frame Index</source>
         <translation>Ramindex</translation>
     </message>
@@ -7797,42 +7797,42 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>Kontrollslinga</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="268"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="267"/>
         <source>Frame position used for aligning datasets in time</source>
         <translation>Ramposition som används för att tidsjustera datamängder</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="279"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="278"/>
         <source>Measurement Unit</source>
         <translation>Mätenhet</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="278"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="277"/>
         <source>Volts, Amps, etc.</source>
         <translation>Volt, Ampere, etc.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="280"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="279"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
         <translation>Mätenhet, såsom volt eller ampere (valfritt)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="373"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="372"/>
         <source>Plot Settings</source>
         <translation>Diagraminställningar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="387"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="386"/>
         <source>Enable Plot Widget</source>
         <translation>Aktivera Diagramwidget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="388"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="387"/>
         <source>Plot data in real-time</source>
         <translation>Rita data i realtid</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="401"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="400"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="298"/>
         <source>X-Axis Source</source>
         <translation>X-axelkälla</translation>
@@ -7862,27 +7862,27 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">FFT-konfiguration</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="456"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="455"/>
         <source>Enable FFT Analysis</source>
         <translation>Aktivera FFT-analys</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="457"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="456"/>
         <source>Perform frequency-domain analysis of the dataset</source>
         <translation>Utför frekvensdomänanalys av datasetet</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="467"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="466"/>
         <source>Enable Waterfall Plot</source>
         <translation>Aktivera Vattenfallsdiagram</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="468"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="467"/>
         <source>Show a scrolling spectrogram of frequency content over time (Pro)</source>
         <translation>Visa ett rullande spektrogram av frekvensinnehåll över tid (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="509"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="508"/>
         <source>Waterfall Y Axis</source>
         <translation>Vattenfall Y-axel</translation>
     </message>
@@ -7891,22 +7891,22 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">Välj Tid (standard) eller valfri datamängd vars värde styr Y-axeln — producerar ett Campbell-diagram när det binds till t.ex. RPM</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="535"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="534"/>
         <source>FFT Window Size</source>
         <translation>FFT-fönsterstorlek</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="536"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="535"/>
         <source>Number of samples used for each FFT calculation window</source>
         <translation>Antal sampel som används för varje FFT-beräkningsfönster</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="564"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="563"/>
         <source>FFT Sampling Rate (Hz, required)</source>
         <translation>FFT-samplingsfrekvens (Hz, krävs)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="565"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="564"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
         <translation>Samplingsfrekvens som används för FFT (i Hz)</translation>
     </message>
@@ -7927,17 +7927,17 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">Övre gräns för datanormalisering</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="620"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="619"/>
         <source>Widget Settings</source>
         <translation>Widget-inställningar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="636"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="635"/>
         <source>Widget</source>
         <translation>Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="637"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="636"/>
         <source>Select the visual widget used to display this dataset</source>
         <translation>Välj den visuella widget som används för att visa detta dataset</translation>
     </message>
@@ -7959,29 +7959,29 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="731"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="663"/>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="690"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="662"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="689"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="366"/>
         <source>Auto</source>
         <translation>Auto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="664"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="663"/>
         <source>Tick Count</source>
         <translation>Antal Markeringar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="665"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="664"/>
         <source>Major-tick count on the dial scale (0 = auto-fit to widget size)</source>
         <translation>Antal huvudmarkeringar på urtavlans skala (0 = anpassa automatiskt till widgetens storlek)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="679"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="678"/>
         <source>Label Format</source>
         <translation>Etikettformat</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="680"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="679"/>
         <source>Decimal places or notation used on tick labels and the value display</source>
         <translation>Decimaler eller notation som används på markeringsetiketter och värdevisningen</translation>
     </message>
@@ -8022,22 +8022,22 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">Utlöser ett visuellt larm när värdet överskrider detta tröskelvärde</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="756"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="755"/>
         <source>LED Display Settings</source>
         <translation>Inställningar för LED-display</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="769"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="768"/>
         <source>Show in LED Panel</source>
         <translation>Visa i LED-Panel</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="770"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="769"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>Aktivera visuell statusövervakning med en LED-display</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="783"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="782"/>
         <source>LED On Threshold (required)</source>
         <translation>LED-tröskelvärde för På (obligatoriskt)</translation>
     </message>
@@ -8421,13 +8421,13 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>Värdeområde</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="345"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="344"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1199"/>
         <source>Minimum Value</source>
         <translation>Minimivärde</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="357"/>
+        <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="356"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="1208"/>
         <source>Maximum Value</source>
         <translation>Maximivärde</translation>
@@ -11152,43 +11152,43 @@ Giltigt format: 01 A2 FF 3C</translation>
 <context>
     <name>FlowDiagram</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="453"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="457"/>
         <source>Frame Parser</source>
         <translation>Frame-parser</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="460"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="464"/>
         <source>Device %1</source>
         <translation>Enhet %1</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="537"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="541"/>
         <source>Output Panel</source>
         <translation>Utdatapanel</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="573"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="577"/>
         <source>Control</source>
         <translation>Kontroll</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="729"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="733"/>
         <source>Table</source>
         <translation>Tabell</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="743"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="747"/>
         <source>%1 regs</source>
         <translation>%1 reg</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="834"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="838"/>
         <source>Variables</source>
         <translation>Variabler</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="409"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="743"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="413"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="747"/>
         <source>empty</source>
         <translation>tom</translation>
     </message>
@@ -11197,12 +11197,12 @@ Giltigt format: 01 A2 FF 3C</translation>
         <translation type="vanished">Kontrollskript</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="878"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="882"/>
         <source>MQTT Publisher</source>
         <translation>MQTT-utgivare</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1278"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1282"/>
         <source>Open the transform code editor for this dataset.</source>
         <translation>Öppna transformationskodredigeraren för denna datauppsättning.</translation>
     </message>
@@ -11287,12 +11287,12 @@ Giltigt format: 01 A2 FF 3C</translation>
         <translation type="vanished">Termometer</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="407"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="411"/>
         <source>Control Loop</source>
         <translation>Kontrollslinga</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="606"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="610"/>
         <source>Outputs</source>
         <translation>Utgångar</translation>
     </message>
@@ -11393,18 +11393,18 @@ Giltigt format: 01 A2 FF 3C</translation>
         <translation type="vanished">Redigera Kontrollslinga…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="248"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="252"/>
         <source>Group</source>
         <translation>Grupp</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="375"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="791"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="379"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="795"/>
         <source>Folder</source>
         <translation>Mapp</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="644"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="648"/>
         <source>Action</source>
         <translation>Åtgärd</translation>
     </message>
@@ -16554,7 +16554,7 @@ Ange nödvändiga inloggningsuppgifter.</translation>
 <context>
     <name>MarkdownWebView</name>
     <message>
-        <location filename="../../qml/Widgets/MarkdownWebView.qml" line="36"/>
+        <location filename="../../qml/Widgets/MarkdownWebView.qml" line="38"/>
         <source>Copied to Clipboard</source>
         <translation>Kopierat till Urklipp</translation>
     </message>
@@ -19876,7 +19876,7 @@ Klicka på Uppdatera för att uppdatera listan.</translation>
         <translation type="vanished">Toppnivå</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="398"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="405"/>
         <source>Move Here</source>
         <translation>Flytta Hit</translation>
     </message>

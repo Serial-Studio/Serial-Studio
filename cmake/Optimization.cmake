@@ -504,18 +504,18 @@ if(ENABLE_PGO)
             /USEPROFILE:PGD=${PGO_PROFILE_DIR}/profile.pgd
          )
       elseif(MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-         # -Werror=profile-instr-out-of-date is the GENERATE/USE drift tripwire: a function
-         # whose control flow changed between the two configures gets its profile silently
-         # dropped; failing the build surfaces that instead. (SS_NO_PGO-excluded functions
-         # fall under -Wprofile-instr-unprofiled, which stays a warning.)
+         # GENERATE/USE drift shows up as -Wbackend-plugin "function control flow change
+         # detected (hash mismatch)" warnings, one per function, with the discarded count.
+         # -Wprofile-instr-out-of-date never fires here: it belongs to frontend
+         # instrumentation (-fprofile-instr-use), not the IR PGO (-fprofile-use) used below.
+         # Not promoted to -Werror: COMDAT template copies (QList<T>::reserve) legitimately
+         # hash differently across unity TUs and report "0 count discarded".
          add_compile_options(
             /clang:-fprofile-use=${PROFDATA_FILE}
-            /clang:-Werror=profile-instr-out-of-date
          )
       elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang")
          add_compile_options(
             -fprofile-use=${PROFDATA_FILE}
-            -Werror=profile-instr-out-of-date
          )
          add_link_options(
             -fprofile-use=${PROFDATA_FILE}
