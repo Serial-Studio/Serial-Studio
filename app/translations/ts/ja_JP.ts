@@ -6807,6 +6807,11 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>バーの向き: 自動、水平行、または垂直列</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="468"/>
+        <source>Network</source>
+        <translation>ネットワーク</translation>
+    </message>
+    <message>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="494"/>
         <source>Frame Detection</source>
         <translation>フレーム検出</translation>
@@ -7313,9 +7318,8 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>シリアルポート</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="468"/>
         <source>Network Socket</source>
-        <translation>ネットワークソケット</translation>
+        <translation type="vanished">ネットワークソケット</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="468"/>
@@ -12405,9 +12409,13 @@ Valid format: 01 A2 FF 3C</source>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="322"/>
         <source>Network Socket</source>
-        <translation>ネットワークソケット</translation>
+        <translation type="vanished">ネットワークソケット</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="322"/>
+        <source>Network</source>
+        <translation>ネットワーク</translation>
     </message>
     <message>
         <location filename="../../src/IO/ConnectionManager.cpp" line="323"/>
@@ -26530,12 +26538,12 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Output::Base</name>
     <message>
-        <location filename="../../src/UI/Widgets/Output/Base.cpp" line="169"/>
+        <location filename="../../src/UI/Widgets/Output/Base.cpp" line="171"/>
         <source>Transmit script timed out after %1 ms</source>
         <translation>送信スクリプトが%1ミリ秒後にタイムアウトしました</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Output/Base.cpp" line="185"/>
+        <location filename="../../src/UI/Widgets/Output/Base.cpp" line="187"/>
         <source>Payload exceeds maximum size</source>
         <translation>ペイロードが最大サイズを超えています</translation>
     </message>

@@ -6807,6 +6807,11 @@ Ajouter %4 jeu(x) de données en utilisant les valeurs par défaut du modèle ?<
         <translation>Orientation de la barre : automatique, rangées horizontales ou colonnes verticales</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="468"/>
+        <source>Network</source>
+        <translation>Réseau</translation>
+    </message>
+    <message>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="494"/>
         <source>Frame Detection</source>
         <translation>Détection de Trame</translation>
@@ -7313,9 +7318,8 @@ Ajouter %4 jeu(x) de données en utilisant les valeurs par défaut du modèle ?<
         <translation>Port Série</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="468"/>
         <source>Network Socket</source>
-        <translation>Socket Réseau</translation>
+        <translation type="vanished">Socket Réseau</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="468"/>
@@ -12405,9 +12409,13 @@ Format valide : 01 A2 FF 3C</translation>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="322"/>
         <source>Network Socket</source>
-        <translation>Socket Réseau</translation>
+        <translation type="vanished">Socket Réseau</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="322"/>
+        <source>Network</source>
+        <translation>Réseau</translation>
     </message>
     <message>
         <location filename="../../src/IO/ConnectionManager.cpp" line="323"/>
@@ -26558,12 +26566,12 @@ Je comprends qu'à son expiration, je devrai acheter une licence ou compiler la 
 <context>
     <name>Widgets::Output::Base</name>
     <message>
-        <location filename="../../src/UI/Widgets/Output/Base.cpp" line="169"/>
+        <location filename="../../src/UI/Widgets/Output/Base.cpp" line="171"/>
         <source>Transmit script timed out after %1 ms</source>
         <translation>Délai d'expiration du script de transmission après %1 ms</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Output/Base.cpp" line="185"/>
+        <location filename="../../src/UI/Widgets/Output/Base.cpp" line="187"/>
         <source>Payload exceeds maximum size</source>
         <translation>La charge utile dépasse la taille maximale</translation>
     </message>

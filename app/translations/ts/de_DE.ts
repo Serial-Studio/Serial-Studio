@@ -6807,6 +6807,11 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>Balkenausrichtung: automatisch, horizontale Zeilen oder vertikale Spalten</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="468"/>
+        <source>Network</source>
+        <translation>Netzwerk</translation>
+    </message>
+    <message>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="494"/>
         <source>Frame Detection</source>
         <translation>Frame-erkennung</translation>
@@ -7313,9 +7318,8 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>Serielle Schnittstelle</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="468"/>
         <source>Network Socket</source>
-        <translation>Netzwerk-socket</translation>
+        <translation type="vanished">Netzwerk-socket</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="468"/>
@@ -12405,9 +12409,13 @@ Gültiges Format: 01 A2 FF 3C</translation>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="322"/>
         <source>Network Socket</source>
-        <translation>Netzwerk-socket</translation>
+        <translation type="vanished">Netzwerk-socket</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="322"/>
+        <source>Network</source>
+        <translation>Netzwerk</translation>
     </message>
     <message>
         <location filename="../../src/IO/ConnectionManager.cpp" line="323"/>
@@ -26558,12 +26566,12 @@ Es ist klar, dass nach Ablauf eine Lizenz erworben oder die GPLv3-Version erstel
 <context>
     <name>Widgets::Output::Base</name>
     <message>
-        <location filename="../../src/UI/Widgets/Output/Base.cpp" line="169"/>
+        <location filename="../../src/UI/Widgets/Output/Base.cpp" line="171"/>
         <source>Transmit script timed out after %1 ms</source>
         <translation>Übertragungsskript nach %1 ms abgelaufen</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Output/Base.cpp" line="185"/>
+        <location filename="../../src/UI/Widgets/Output/Base.cpp" line="187"/>
         <source>Payload exceeds maximum size</source>
         <translation>Nutzdaten überschreiten maximale Größe</translation>
     </message>

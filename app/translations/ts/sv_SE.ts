@@ -6807,6 +6807,11 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>Stapelorientering: automatisk, horisontella rader eller vertikala kolumner</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="468"/>
+        <source>Network</source>
+        <translation>Nätverk</translation>
+    </message>
+    <message>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="494"/>
         <source>Frame Detection</source>
         <translation>Ramdetektering</translation>
@@ -7313,9 +7318,8 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>Seriell Port</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="468"/>
         <source>Network Socket</source>
-        <translation>Nätverksuttag</translation>
+        <translation type="vanished">Nätverksuttag</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="468"/>
@@ -12405,9 +12409,13 @@ Giltigt format: 01 A2 FF 3C</translation>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="322"/>
         <source>Network Socket</source>
-        <translation>Nätverksuttag</translation>
+        <translation type="vanished">Nätverksuttag</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="322"/>
+        <source>Network</source>
+        <translation>Nätverk</translation>
     </message>
     <message>
         <location filename="../../src/IO/ConnectionManager.cpp" line="323"/>
@@ -26530,12 +26538,12 @@ Jag förstår att när den löper ut måste jag köpa en licens eller bygga GPLv
 <context>
     <name>Widgets::Output::Base</name>
     <message>
-        <location filename="../../src/UI/Widgets/Output/Base.cpp" line="169"/>
+        <location filename="../../src/UI/Widgets/Output/Base.cpp" line="171"/>
         <source>Transmit script timed out after %1 ms</source>
         <translation>Överföringsskript överskred tidsgränsen efter %1 ms</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Output/Base.cpp" line="185"/>
+        <location filename="../../src/UI/Widgets/Output/Base.cpp" line="187"/>
         <source>Payload exceeds maximum size</source>
         <translation>Nyttolast överskrider maximal storlek</translation>
     </message>

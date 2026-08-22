@@ -6807,6 +6807,11 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
         <translation>Orientamento barra: automatico, righe orizzontali o colonne verticali</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="468"/>
+        <source>Network</source>
+        <translation>Rete</translation>
+    </message>
+    <message>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="494"/>
         <source>Frame Detection</source>
         <translation>Rilevamento Frame</translation>
@@ -7313,9 +7318,8 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
         <translation>Porta Seriale</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="468"/>
         <source>Network Socket</source>
-        <translation>Socket di Rete</translation>
+        <translation type="vanished">Socket di Rete</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="468"/>
@@ -12405,9 +12409,13 @@ Formato valido: 01 A2 FF 3C</translation>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="322"/>
         <source>Network Socket</source>
-        <translation>Socket di Rete</translation>
+        <translation type="vanished">Socket di Rete</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="322"/>
+        <source>Network</source>
+        <translation>Rete</translation>
     </message>
     <message>
         <location filename="../../src/IO/ConnectionManager.cpp" line="323"/>
@@ -26558,12 +26566,12 @@ Comprendo che alla scadenza dovrò acquistare una licenza o compilare la version
 <context>
     <name>Widgets::Output::Base</name>
     <message>
-        <location filename="../../src/UI/Widgets/Output/Base.cpp" line="169"/>
+        <location filename="../../src/UI/Widgets/Output/Base.cpp" line="171"/>
         <source>Transmit script timed out after %1 ms</source>
         <translation>Timeout dello script di trasmissione dopo %1 ms</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Output/Base.cpp" line="185"/>
+        <location filename="../../src/UI/Widgets/Output/Base.cpp" line="187"/>
         <source>Payload exceeds maximum size</source>
         <translation>Il payload supera la dimensione massima</translation>
     </message>
