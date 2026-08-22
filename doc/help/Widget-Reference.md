@@ -32,7 +32,7 @@ flowchart TD
 - Displays all datasets in a tabular format with titles, values, and units.
 - Best for: overview of multiple channels, status monitoring.
 - Configuration: none required beyond adding datasets to the group.
-- Supports pause/resume.
+- Supports pause/resume, with different semantics than a Plot widget: a paused Data Grid stops refreshing, and Resume pulls a fresh snapshot of current values immediately, discarding whatever arrived while paused. A paused Plot, by contrast, just stops appending new samples to its buffer and keeps its existing history intact.
 
 ### Bar Panel
 
@@ -69,6 +69,7 @@ flowchart TD
 - Best for: vehicle tracking, drone telemetry, field measurements.
 - Requires: datasets with latitude, longitude, and optionally altitude.
 - Needs an internet connection for map tiles. Previously viewed areas are cached.
+- Only the first base map style is free; the additional styles in the **Base Map** dropdown require Pro.
 
 ### Gyroscope
 
@@ -169,7 +170,7 @@ flowchart TD
 
 - Auto-created for datasets with `fft: true`.
 - Real-time frequency spectrum analysis via Fast Fourier Transform (KissFFT).
-- Configurable FFT window size: 8 to 16384 samples (powers of 2). Default 256.
+- Configurable FFT window size: 8 to 262144 samples (powers of 2). Default 256.
 - Selectable window function applied before the transform to reduce spectral leakage (15 options, from Rectangular to Flat Top). Default Blackman-Harris. The same window is used by the Waterfall widget.
 - Configurable sampling rate determines the frequency axis (default 100 Hz).
 - Configurable frequency range via `fftMin` and `fftMax`.
@@ -235,15 +236,15 @@ Bar, Gauge, Meter, Bar Panel, and LED Panel widgets render one or more **alarm b
 | Field      | Type   | Required | Notes |
 |------------|--------|----------|-------|
 | `min`      | double | yes      | Lower bound of the band (inclusive). |
-| `max`      | double | yes      | Upper bound of the band (exclusive at top of range). |
-| `severity` | int    | yes      | `0` = Info, `1` = OK, `2` = Warning, `3` = Critical. Drives the default color and whether the band raises a notification on entry. |
+| `max`      | double | yes      | Upper bound of the band (inclusive: a value is in the band when `min <= value <= max`). |
+| `severity` | int    | yes      | `0` = Info, `1` = OK, `2` = Warning, `3` = Critical. Drives the default color and whether the band raises a notification on entry. This is a separate scale from [notification](Notifications.md) `level` (`0` = Info, `1` = Warning, `2` = Critical): a band entering `Warning` (2) or `Critical` (3) posts a notification at the matching `Warning` or `Critical` level, but a band's `Info` (0) or `OK` (1) severity never posts one. The numbers look alike but come from different scales — don't read one against the other. |
 | `color`    | string | no       | Hex override (`"#rrggbb"`). When empty, the severity's theme color is used (theme switches re-tint live). |
 | `label`    | string | no       | Optional human-readable name. Surfaces in the band-edge notification subtitle and next to the dataset title on LED panels. |
 | `blink`    | bool   | no       | When `true`, LED panels flash the LED while the value sits in this band. Defaults to `false`. |
 
-Bands may have gaps (the dataset's default background shows through), may overlap (later bands paint over earlier ones), and need not cover the full range. Editing is via the **Alarm Bands** button in the dataset toolbar (next to **Transform**), which opens a dedicated dialog with presets (Tachometer, Speedometer, Engine Temperature, Pressure, Battery Voltage, Fuel Level, Signal Strength, CPU / System Load, OK / Warning / Critical, Indicator (On / Off), Fault Indicator), per-band color picker, severity selector, blink toggle, and a live preview strip.
+Bands may have gaps, may overlap, and need not cover the full range. Overlaps resolve to the FIRST matching band in list order, not the last. A gap only leaves the painted track/background uncolored: the bar fill or needle itself still takes a band's color, clamped to whichever band is nearest. Editing is via the **Alarm Bands** button in the dataset toolbar (next to **Transform**), which opens a dedicated dialog with presets (Tachometer, Speedometer, Engine Temperature, Pressure, Battery Voltage, Fuel Level, Signal Strength, CPU / System Load, OK / Warning / Critical, Indicator (On / Off), Fault Indicator), per-band color picker, severity selector, blink toggle, and a live preview strip.
 
-**Notifications.** When the value enters a band with severity ≥ Warning, Serial Studio posts a notification (`Warning` or `Critical` level, with the band's `label` in the subtitle). Alarm tracking runs per dataset at the dashboard level, so notifications fire even when the widget displaying the dataset is hidden or not instantiated. A 3-second per-dataset cooldown suppresses oscillation spam.
+**Notifications.** When the value enters a band with severity ≥ Warning, Serial Studio posts a notification on the "Alarms" channel: band severity 2 posts `Warning`, severity 3 posts `Critical` (with the band's `label` in the subtitle). Alarm tracking runs per dataset at the dashboard level, so notifications fire even when the widget displaying the dataset is hidden or not instantiated. The cooldown is per severity tier, not per dataset: a Warning is suppressed for 3 seconds by a recent Warning or Critical, but a Critical is only suppressed by a recent Critical, so escalating from Warning to Critical always posts immediately.
 
 **Legacy compatibility.** Project files written by older Serial Studio releases carry `alarmEnabled` / `alarmLow` / `alarmHigh` instead of `alarmBands`. On load, those are converted to two `Warning`-severity bands (`[wgtMin..alarmLow]` and `[alarmHigh..wgtMax]`). The legacy keys are not written back; re-saved projects carry only `alarmBands`. For canvas scripts (Pro), `dataset.alarmLow` and `dataset.alarmHigh` remain readable as derived values (first / last `Warning+` band edges) so existing scripts keep working.
 
@@ -312,14 +313,18 @@ Every dataset in a project file supports these visualization-related fields:
 | `plotMax`          | double | 0       | Plot Y-axis maximum (0 = auto-scale). C++ field `pltMax`. |
 | `widgetMin`        | double | 0       | Widget (bar/gauge/meter) minimum. C++ field `wgtMin`. |
 | `widgetMax`        | double | 0       | Widget (bar/gauge/meter) maximum. C++ field `wgtMax`. |
+| `displayTickCount` | int    | 5       | Major-tick count on the dial scale (0 = auto-fit to widget size). Editor label "Tick Count". |
+| `displayFormat`    | string | `"0d"`  | Decimal places or notation used on tick labels and the value display. Editor label "Label Format". |
+| `decimalPoints`    | int    | -1      | Fixed decimal places for the value display; overrides `displayFormat` (-1 = auto). Editor label "Decimal Points". |
+| `extremeHold`      | bool   | false   | Shows tick marks at the lowest and highest values observed since the last data reset. Editor label "Hold Min/Max Markers". |
 | `ledHigh`          | double | 80      | LED activation threshold (used only when `alarmBands` is empty). |
 | `alarmBands`       | array  | `[]`    | Colored value bands for bar/gauge/meter widgets and LED panels. Each entry: `{min, max, severity, color?, label?, blink?}`; see [Alarm bands](#alarm-bands). Legacy `alarmEnabled` / `alarmLow` / `alarmHigh` keys from older releases are still read and migrated to bands on load, but no longer written. |
-| `fftSamples`       | int    | 256     | FFT window size (power of 2, 8 to 16384). |
+| `fftSamples`       | int    | 256     | FFT window size (power of 2, 8 to 262144). |
 | `fftWindow`        | int    | 5       | FFT window function, applied to both the FFT plot and the waterfall: 0 = Rectangular, 1 = Bartlett, 2 = Hann, 3 = Hamming, 4 = Blackman, 5 = Blackman-Harris, 6 = Nuttall, 7 = Blackman-Nuttall, 8 = Flat Top, 9 = Welch, 10 = Bartlett-Hann, 11 = Bohman, 12 = Cosine, 13 = Lanczos, 14 = Parzen. |
 | `fftSamplingRate`  | int    | 100     | FFT sampling rate in Hz. |
 | `fftMin`           | double | 0       | FFT frequency axis minimum. |
 | `fftMax`           | double | 0       | FFT frequency axis maximum. |
-| `xAxis`            | int    | -2      | X-axis source: `-2` = time (default), or the `uniqueId` of another dataset for an XY plot. C++ field `xAxisId`. |
+| `xAxis`            | int    | -2      | X-axis source: `-2` = time (default), `-1` = sample count (the **Samples** choice in the X-Axis Source combo), or the `uniqueId` of another dataset for an XY plot. C++ field `xAxisId`. |
 
 ## Dashboard layout
 

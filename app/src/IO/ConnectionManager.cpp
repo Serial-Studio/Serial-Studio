@@ -319,7 +319,7 @@ QStringList IO::ConnectionManager::availableBuses() const
 {
   QStringList list;
   list.append(tr("UART/COM"));
-  list.append(tr("Network Socket"));
+  list.append(tr("Network"));
   list.append(tr("Bluetooth LE"));
 #ifdef BUILD_COMMERCIAL
   list.append(tr("Audio"));

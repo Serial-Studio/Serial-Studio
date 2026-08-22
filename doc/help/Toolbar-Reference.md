@@ -62,7 +62,7 @@ The driver buttons are a single-choice group: the active driver's label is shown
 | Button | Icon | What it does | Notes |
 |--------|------|--------------|-------|
 | **About** | <img src="cmd:app.about" alt="About" width="16" height="16"> | Shows application info and license details. | Authoring mode only. |
-| **Examples** | <img src="cmd:app.examples" alt="Examples" width="16" height="16"> | Browses the bundled example projects. | Authoring mode only. |
+| **Examples** | <img src="cmd:app.examples" alt="Examples" width="16" height="16"> | Browses example projects, downloaded from GitHub on first open (internet required). | Authoring mode only. |
 | **Help Center** | <img src="cmd:app.helpCenter" alt="Help Center" width="16" height="16"> | Opens this documentation, the FAQ, and the wiki. | Available to operators too. |
 | **AI Wiki & Chat** | <img src="cmd:app.deepwiki" alt="AI Wiki & Chat" width="16" height="16"> | Opens the DeepWiki documentation site in your browser, where you can ask questions about Serial Studio. | Authoring mode only. |
 
@@ -94,16 +94,18 @@ Three radio buttons pick the [operation mode](Operation-Modes.md):
 
 ### Data export
 
-Switches that arm recording for the session. Each writes to a separate file or store and can be toggled independently. CSV Spreadsheet, Session Recording, and MDF4 Recording are disabled in Console Only mode; the Console Log switch stays available:
+Switches that arm recording for the session. Each writes to a separate file or store and can be toggled independently. CSV Spreadsheet, Historian Database, and MDF4 Recording are disabled in Console Only mode; the Console Log switch stays available:
 
 | Switch | What it records | Reference |
 |--------|-----------------|-----------|
 | **CSV Spreadsheet** | A `.csv` of every parsed frame. | [CSV Export & Playback](CSV-Export-Playback.md) |
-| **Session Recording** **(Pro)** | A SQLite session in the database. | [Historian](Session-Database.md) |
+| **Historian Database** **(Pro)** | A SQLite session in the database. | [Historian](Session-Database.md) |
 | **MDF4 Recording** **(Pro)** | An ASAM MDF4 measurement file. | [MDF4](MDF4.md) |
-| **Console Log** | A transcript of the raw console stream. | |
+| **Console Log** **(Pro)** | A transcript of the raw console stream. | |
 
 For a project with two or more data sources, the panel replaces the single-driver controls with an **Open Project Editor** button, because the source list is defined in the project. See [Data Sources](Data-Sources.md).
+
+**Console Log file location.** Each transcript is written under the workspace's `Console/<subfolder>/` directory, where `<subfolder>` is the project title (ProjectFile mode), `Quick Plot`, or `Console` (Console Only mode). The file is named `yyyy_MMM_dd HH_mm_ss.txt`, with `_deviceN` appended for a multi-device Console Only session. ANSI escape sequences are stripped before writing, and the file is UTF-8 with a byte-order mark.
 
 ## Dashboard Start menu
 
@@ -117,10 +119,10 @@ The Start menu opens from the leftmost taskbar button. It is the dashboard's mai
 | **Auto Layout** | <img src="cmd:dashboard.autoLayout" alt="Auto Layout" width="16" height="16"> | Toggles automatic tiling of dashboard windows. | Toggle. |
 | **Full Screen** | <img src="cmd:app.fullScreen" alt="Full Screen" width="16" height="16"> | Toggles the main window between full-screen and windowed. | Toggle. |
 | **Add External Window** | <img src="cmd:window.external" alt="Add External Window" width="16" height="16"> | Opens a second dashboard window (for a multi-monitor layout). | |
-| **Export** | <img src="icon:commands/export" alt="export" width="16" height="16"> | Submenu of recording toggles: CSV File, MDF4 File **(Pro)**, Console Transcript, and Historian **(Pro)**. | Mirrors the Setup panel's export switches. |
+| **Export** | <img src="icon:commands/export" alt="export" width="16" height="16"> | Submenu of recording toggles: CSV File, MDF4 File **(Pro)**, Console Transcript **(Pro)**, and Historian **(Pro)**. | Mirrors the Setup panel's export switches. |
 | **Tools** | <img src="cmd:dashboard.startMenu" alt="Start Menu" width="16" height="16"> | Submenu: Console, Notifications **(Pro)**, Clock, Stopwatch, Preferences, Sessions **(Pro)**, File Transmission **(Pro)**, AI Assistant **(Pro)**. | Toggles the utility widgets and opens the tool windows. |
 | **Help Center** | <img src="cmd:app.helpCenter" alt="Help Center" width="16" height="16"> | Opens this documentation. | |
-| **Pause / Resume** | <img src="cmd:io.pause" alt="Pause" width="16" height="16"> <img src="cmd:io.pause:checked" alt="Pause" width="16" height="16"> | Pauses or resumes data reception for the whole session. | Toggle. |
+| **Pause / Resume** | <img src="cmd:io.pause" alt="Pause" width="16" height="16"> <img src="cmd:io.pause:checked" alt="Pause" width="16" height="16"> | Pauses or resumes data reception for the whole session. Pausing also closes any open CSV or MDF4 export file; resuming starts a new one. | Toggle. |
 | **Reset** | <img src="cmd:dashboard.reset" alt="Reset" width="16" height="16"> | Clears the dashboard's plotted history and rotates every active recorder (CSV, MDF4, console, database) so the next frame starts a fresh file or session. | |
 | **Disconnect / Quit** | <img src="cmd:io.disconnect" alt="Disconnect" width="16" height="16"> <img src="cmd:app.quit" alt="Quit" width="16" height="16"> | Disconnects the device. In an operator deployment this entry is **Quit** and closes the app instead. | |
 
@@ -297,7 +299,7 @@ See the [Waterfall](Widget-Reference.md#waterfall-pro) entry for details.
 | **Zoom In / Zoom Out** | <img src="icon:commands/zoom-in" alt="zoom in" width="16" height="16"> <img src="icon:commands/zoom-out" alt="zoom out" width="16" height="16"> | Changes the map zoom level. |
 | **Show Weather** | <img src="icon:commands/weather" alt="weather" width="16" height="16"> | Overlays a live weather layer. |
 | **NASA Weather Overlay** | <img src="icon:commands/nasa" alt="nasa" width="16" height="16"> | Overlays the NASA GIBS imagery layer. |
-| **Base Map** | <img src="icon:commands/map" alt="map" width="16" height="16"> | A dropdown that selects the map style (street, satellite, terrain, and so on). |
+| **Base Map** | <img src="icon:commands/map" alt="map" width="16" height="16"> | A dropdown that selects the map style (street, satellite, terrain, and so on). The first style is free; the additional styles require Pro. |
 
 ### 3D Plot (Pro)
 
@@ -347,11 +349,19 @@ These widgets have no toolbar; their interaction is direct:
 
 ## Console toolbar
 
-The [console](Operation-Modes.md#console-only-mode) terminal has a send row and an options row rather than an icon toolbar.
+The [console](Operation-Modes.md#console-only-mode) terminal has a ribbon toolbar above the output and a send row below it.
+
+**Ribbon toolbar**, left to right:
+
+- **Utilities** group: **Clear** (wipes the console output), **Find** (opens the in-console search bar), **Collapse** (collapses repeated lines into a single entry), **Annotations** (opens the byte-annotation panel), and **Pause / Resume** (freezes the console display; data keeps logging in the background).
+- **Format** group: **Text** and **Hex** buttons switch the display mode.
+- **Settings** button opens a popup with **Show Timestamp**, **Echo**, **Emulate VT-100**, and **ANSI Colors** checkboxes (ANSI Colors is enabled only while VT-100 emulation is on) and a **Scrollback Lines** field.
+
+With **Emulate VT-100** on, keystrokes typed into the console view are translated to VT-100 escape sequences and sent to the connected device, turning the console into an interactive terminal.
 
 **Send row:** an **Attach** button for [file transmission](File-Transmission.md), an input box that sends on Enter or the **Send** button, a **HEX** toggle to send hexadecimal, and dropdowns for line ending and checksum. On a multi-device project a device selector picks the target.
 
-**Options row:** **Show Timestamp**, **Echo**, **Emulate VT-100**, and **ANSI Colors** checkboxes, a **Display** mode dropdown, and a **Clear** button. Right-click the terminal for **Copy**, **Select all**, and **Clear**.
+Right-click the terminal for **Copy**, **Select all**, and **Clear**.
 
 ## Notification log
 

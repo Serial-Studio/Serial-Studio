@@ -12,7 +12,7 @@ Step-by-step setup instructions for every communication protocol supported by Se
 
 1. Open Serial Studio.
 2. In the **Setup Panel**, select **UART/COM** from the I/O Interface dropdown. Alternatively, click the **UART** button in the toolbar if visible.
-3. Select the COM port (Windows) or `/dev/ttyUSBx` / `/dev/ttyACMx` (Linux/macOS) from the **COM Port** dropdown. If the port does not appear, check the Troubleshooting entries for this driver.
+3. Select the COM port (Windows), `/dev/ttyUSBx` / `/dev/ttyACMx` (Linux), or `/dev/cu.usbserial-*` (macOS) from the **COM Port** dropdown. If the port does not appear, check the Troubleshooting entries for this driver.
 4. Set the **Baud Rate** to match your device. Default: 9600. Common values: 9600, 115200, 921600. The field is editable, so rates not in the list can be typed directly.
 5. **Data Bits** defaults to 8, **Parity** to None, **Stop Bits** to 1, and **Flow Control** to None; change any of these to match your device.
 6. Leave **Send DTR Signal** enabled (the default) if your device uses DTR for reset signaling, as Arduino boards do; disable it if a DTR pulse resets your device unexpectedly.
@@ -621,8 +621,8 @@ Full driver reference: [Process I/O](Drivers-Process-IO.md).
 1. In the **Setup Panel**, select **Process** from the I/O Interface dropdown.
 2. Set the **Mode** to **Named Pipe**.
 3. Enter the **Pipe Path**, or click **Browse** to select it.
-   - Linux/macOS: `/tmp/myfifo` (create with `mkfifo /tmp/myfifo` beforehand).
-   - Windows: `\\.\pipe\MyPipeName`.
+   - Linux/macOS: `/tmp/myfifo`. Serial Studio creates the FIFO automatically if it doesn't already exist.
+   - Windows: `\\.\pipe\MyPipeName`. The external process must create the named pipe before you connect.
 4. Optionally click **Pick Running Process…** to choose a running process and derive a pipe-path suggestion from it.
 5. Click **Connect**.
 
@@ -630,7 +630,7 @@ Serial Studio opens the named pipe for reading and streams data into the pipelin
 
 ### Troubleshooting
 
-- **Cannot open pipe:** Verify the pipe exists before connecting. On Linux/macOS, create it with `mkfifo /path/to/pipe`. On Windows, the pipe must be created by the writing process before Serial Studio connects.
+- **Cannot open pipe:** On Windows, the pipe must be created by the writing process before Serial Studio connects. On Linux/macOS, Serial Studio creates the FIFO itself if it's missing; if opening still fails, check that the path is writable and not already claimed by another process.
 - **No data:** Ensure the external process is actively writing to the pipe. Named pipes block until both reader and writer are connected.
 
 Full driver reference: [Process I/O](Drivers-Process-IO.md).

@@ -286,8 +286,9 @@ Pro only.
 ### How do I connect via TCP/UDP?
 
 1. Select **Network Socket** as the data source, then set the socket type to TCP or UDP.
-2. Enter the IP address and port (for example `192.168.1.100:8080`).
-3. Click **Connect**.
+2. Enter the **Remote Address** (the device's IP address or hostname) and **Remote Port** (the device's listening port for TCP, or the port it sends to for UDP).
+3. For UDP, also set the **Local Port** field — the port Serial Studio binds to receive datagrams. Leave it `0` for automatic assignment unless the device expects a fixed destination port.
+4. Click **Connect**.
 
 Example: a Python script sending UDP to Serial Studio:
 
@@ -683,7 +684,7 @@ void loop() {
 }
 ```
 
-In Serial Studio, use a JavaScript frame parser to validate the checksum and extract the data.
+In Serial Studio, use a JavaScript frame parser to validate the checksum and extract the data. This example prints the checksum as decimal text on its own line, so it cannot be verified by Serial Studio's built-in per-source checksum check: that feature expects the raw check bytes appended to the end of the same frame, not a separate line of digits.
 
 ### Can Serial Studio control my Arduino (send data back)?
 

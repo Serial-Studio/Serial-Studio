@@ -254,7 +254,7 @@
     "schemaVersion": 3,
     "sources": [
         {
-            "busType": 1,
+            "busType": 0,
             "checksum": "",
             "checksumAlgorithm": "",
             "connection": {

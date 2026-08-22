@@ -55,7 +55,7 @@ report `n/a` in the Result column.
 | **Data pipeline** | Raw `FrameReader` extraction only: delimiter scan and dequeue, no parse. | 1024 K frames/s |
 | **Built-In parser (numeric)** | Native C++ template over numeric channels. | 1024 K frames/s |
 | **Built-In parser (mixed)** | Native template with trailing non-numeric string tokens. | 512 K frames/s |
-| **Lua parser (numeric)** | `parse()` in Lua 5.4 over numeric channels. | 256 K frames/s |
+| **Lua parser (numeric)** | `parse()` in Lua (LuaJIT 2.1, 5.1 syntax with compatibility shims) over numeric channels. | 256 K frames/s |
 | **JavaScript parser (numeric)** | `parse()` in `QJSEngine` over the same channels. | 128 K frames/s |
 | **Lua parser (mixed)** | Lua `parse()` over the mixed workload. | 128 K frames/s |
 | **JavaScript parser (mixed)** | JavaScript `parse()` over the mixed workload. | 64 K frames/s |
@@ -73,16 +73,26 @@ The same per-language ranking is described in
 The informational phases exist to show the cost of fanning out to consumers and to the
 dashboard, not to gate a build. Their throughput is expected to be lower than the gated phases.
 
+The dialog gates seven phases this way: the data pipeline plus the six parser tiers above. The
+headless CI form (`--benchmark-hotpath`) gates two more on top of those, for nine total: **Lua +
+data export** and **Lua + dashboard**, each floored at 128 K frames/s (half the Lua-mixed
+target) so a regression on a consumer path can't ship silently even though raw parsing still
+passes. Those two rows still print `n/a` and never fail in the interactive dialog; the extra
+floor is CI-only.
+
 ## Why the interface freezes
 
 A warning in the dialog states that the window stops responding while the benchmark runs. This
 is by design, and it's the same property that makes the acquisition pipeline fast:
 
-- **The pipeline is single-threaded on the main thread.** `FrameReader` and `FrameBuilder` run
-  on the main (GUI) thread; the benchmark drives them flat-out in a tight loop, so the event
-  loop can't repaint until the loop returns. See
-  [Threading and Timing Guarantees](Threading-and-Timing.md#framereader-and-framebuilder-run-on-the-main-thread)
-  for why frame parsing lives on the main thread.
+- **The dialog borrows `FrameReader` and `FrameBuilder` onto the GUI thread for the run.**
+  Normally both live on a dedicated pipeline thread, away from the GUI. To drive them with
+  plain synchronous calls against your live session, the dialog relocates them onto the GUI
+  thread before the run and hands them back when it ends. With the objects on the GUI thread,
+  the benchmark's tight loop blocks that thread's event loop, so it can't repaint until the
+  loop returns. See
+  [Threading and Timing Guarantees](Threading-and-Timing.md#framereader-and-framebuilder-run-on-a-dedicated-pipeline-thread)
+  for where frame parsing normally lives and why.
 - **Each phase pumps events about every 16 ms.** Every phase yields briefly to the event loop on
   a fixed 16 ms interval so the spinner and progress bar repaint while it runs; the wall-clock
   spent on each pump is discounted from the measurement so a repaint never deflates throughput.
@@ -119,8 +129,9 @@ it comes back automatically.
 A failing gated phase usually means the machine is too slow for the default 256 kHz target, the
 build is unoptimized (a debug build, or one without the shipped PGO profile), or a parser /
 transform change regressed throughput. The headless
-[CLI form](Command-Line-Interface.md#acquisition-pipeline-benchmark) is what CI uses to enforce these gates
-per pull request and on the shipped binary; the dialog is the same measurement on demand.
+[CLI form](Command-Line-Interface.md#acquisition-pipeline-benchmark) is what CI uses to enforce
+all nine gates per pull request and on the shipped binary; the dialog runs the same measurement
+on demand, gated more narrowly at seven.
 
 **Copy** places the results table on the clipboard as a Markdown report; **Clear** empties the
 results table; **Close** dismisses the dialog (also clearing the table). None of these are
@@ -129,8 +140,8 @@ available while a benchmark is running.
 ## See also
 
 - [The Acquisition Pipeline](Data-Hotpath.md): the pipeline being measured, stage by stage.
-- [Threading and Timing Guarantees](Threading-and-Timing.md): why the pipeline is
-  single-threaded and what that guarantees.
+- [Threading and Timing Guarantees](Threading-and-Timing.md): where the pipeline normally runs,
+  why it's single-threaded internally, and what that guarantees.
 - [Frame Parser Scripting](JavaScript-API.md): the `parse()` API and the Lua-vs-JavaScript
   performance characteristics the benchmark quantifies.
 - [Command-Line Interface](Command-Line-Interface.md#acquisition-pipeline-benchmark): the headless benchmark

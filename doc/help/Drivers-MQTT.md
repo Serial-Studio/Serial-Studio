@@ -45,8 +45,13 @@ When you select **MQTT Subscriber** as the **Bus Type** for a source, the projec
 | **SSL Protocol** | TLS protocol family. One of Any Protocol, DTLS 1.2 or Later, Secure Protocols Only, TLS 1.2, TLS 1.3, or TLS 1.3 or Later. Default Secure Protocols Only. |
 | **Peer Verify Mode** | One of Auto Verify Peer, None, Query Peer, or Verify Peer. Default Auto Verify Peer. |
 | **Peer Verify Depth** | Maximum certificate chain length accepted. Default `10`; `0` = unlimited. |
+| **Client Certificate** | Path to a PEM client certificate, for mutual TLS. Optional; leave empty for ordinary CA-only (server-authentication) TLS. |
+| **Private Key** | Path to the client certificate's private key. Defaults to the certificate file itself when left empty. |
+| **Key Passphrase** | Passphrase for an encrypted private key, if the key requires one. |
 
-The main window's **Setup** pane shows the same configuration with two extras: a **Regenerate** button beside **Client ID**, and a **CA Certificates** row whose **Load From Folder…** button imports PEM certificates for self-signed brokers. The Setup pane omits **Auto Keep Alive** and shortens a few labels (**Version**, **Use SSL/TLS**, **Peer Verify**, **Verify Depth**); the fields are otherwise the same.
+The main window's **Setup** pane shows the same configuration with a few extras: a **Regenerate** button beside **Client ID**, a **CA Certificates** row whose **Load From Folder…** button imports PEM certificates for self-signed brokers, and **Browse…** buttons beside **Client Certificate** and **Private Key** (both hidden unless **SSL/TLS Enabled** is on). The Setup pane omits **Auto Keep Alive** and shortens a few labels (**Version**, **Use SSL/TLS**, **Peer Verify**, **Verify Depth**); the fields are otherwise the same.
+
+**Credential storage.** Broker username/password and the private key passphrase are obfuscated with SimpleCrypt inside the application's settings store (`QSettings`), not held in the OS keychain — protect the settings file accordingly.
 
 The same fields are scriptable through the [API](API-Reference.md) commands `project.mqtt.subscriber.getConfig`, `project.mqtt.subscriber.setConfig`, and `project.mqtt.subscriber.getStatus`. `setConfig` patches only the keys you pass and schedules a reconnect when the driver is connected.
 

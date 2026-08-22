@@ -112,7 +112,7 @@ Read this before pasting anything sensitive. Every message you send goes to the 
 
 - **Sent on every turn**: your message, the conversation history so far, the tool catalog, and a snapshot of the live project state (sources, groups, datasets, frame parser code, transforms, and so on; the same JSON your `.ssproj` would contain). Frame parser scripts and transform scripts are part of that snapshot.
 - **Not sent**: live telemetry data, your raw serial bytes, your dashboard frames, your CSV/MDF4 logs, your Historian database, the API key for any *other* provider.
-- **Stored where**: the API key is encrypted on this machine via Serial Studio's per-machine key derivation. The conversation history lives only in memory for the current panel session. Closing the dialog (or clicking the trash) clears it.
+- **Stored where**: the API key is encrypted on this machine via Serial Studio's per-machine key derivation. Conversation history is written to local JSON files (one per chat, plus an index) in the app's data directory, and survives closing the dialog and restarting the app. Clicking the trash deletes that chat's JSON file.
 
 If your project file contains commercial firmware code or proprietary protocol notes inside frame parsers or transforms, that text will travel to the provider with each turn. Treat the provider's data-handling policy as the relevant constraint, not Serial Studio's.
 

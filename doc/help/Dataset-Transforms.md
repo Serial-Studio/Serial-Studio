@@ -74,7 +74,7 @@ Lines starting with `#` are comments and run to the end of the line.
 | Name | Value |
 |------|-------|
 | `v`  | This sample's raw value |
-| `t`  | Seconds since the frame stream started |
+| `t`  | The frame's timestamp in seconds, on the app's monotonic clock (same clock as the JS transform's `info.timestampMs`). Not zero-based at stream start: use `dt`, or subtract the first sample's `t`, for an elapsed-time value. |
 | `dt` | Seconds since the previous sample |
 | `n`  | Sample index, starting at 0 |
 | `pi`, `e`, `nan`, `inf` | Constants |
@@ -241,6 +241,8 @@ end
 ```
 
 Use computed datasets for derived metrics (averages, ratios, sums, percentage-of-total) that should show up on the dashboard and be exported alongside the raw channels, but that aren't present in the wire format.
+
+**Auto-detection.** You don't have to tick the checkbox yourself: on project load, any dataset whose transform code never references the free identifier `value` (as opposed to `something.value` or `obj:value`) is flagged computed automatically, and its Frame Index field greys out. Write a transform that reads `value` at least once if you want the dataset to stay driven by the incoming frame.
 
 In Lua, use `local function` for helpers so they share the isolation:
 
@@ -515,11 +517,11 @@ end
 
 Full reference, including argument types and longer examples (GPS fix reset, mode-driven workspace switching, focus mode): see [Controlling the dashboard](JavaScript-API.md#controlling-the-dashboard-clearplots-and-friends) in the Frame Parser Scripting Reference.
 
-## Using the Transform Editor
+## Using the transform dialog
 
 1. Select a dataset in the Project Editor tree.
 2. Click the **Transform** button in the dataset toolbar.
-3. The Transform Editor opens with:
+3. A dialog opens (titled "Dataset Value Transform", or "Transform — &lt;dataset title&gt;" once one is set) with:
    - **Language selector.** Lua, JavaScript, or Expression. Defaults to the source's frame parser language, but each dataset can pick its own.
    - **Template dropdown.** 34 ready-made transforms for common operations. Disabled for Expression.
    - **Code editor.** Syntax-highlighted, with auto-completion.
@@ -702,7 +704,7 @@ end
 5. Each dataset picks its own transform language (Lua, JavaScript, or Expression); datasets on the same source can mix them. The source's frame parser language is only the default when none is picked. Rules 1 to 4 describe the `transform()` function and apply to Lua and JavaScript; an Expression dataset has no function and publishes the value of its single expression.
 6. Datasets on the same source share one underlying scripting engine, but each dataset's top-level state is isolated. In JavaScript, declare stateful variables with `var`: an implicit (undeclared) global is written to the shared engine and leaks across datasets. In Lua each dataset chunk has its own environment, so bare globals (and `function foo() end` at chunk top level) stay isolated per dataset; `local` is still recommended for clarity and consistency with the JavaScript rule.
 7. The engine is sandboxed: no file I/O, no network, no OS commands.
-8. Transforms run on every incoming frame, so keep them fast. Avoid unbounded loops or heavy computation.
+8. Transforms run on every incoming frame, so keep them fast. Avoid unbounded loops or heavy computation. A per-call watchdog kills a transform after 100 ms (Lua: a deadline armed before the call; JavaScript: an interrupt armed once per frame); a timed-out transform logs a warning and falls back to the raw value, same as rule 4.
 
 ## See also
 

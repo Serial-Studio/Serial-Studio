@@ -196,13 +196,19 @@ function modbusWriteFloat(address, value) {
   return String.fromCharCode((a >> 8) & 0xFF, a & 0xFF, b[0], b[1], b[2], b[3]);
 }
 function canSendFrame(id, payload) {
-  var canId = id & 0xFFFF, data = '';
+  var data = '';
   if (typeof payload === 'string')
     data = payload;
   else if (Array.isArray(payload))
     for (var i = 0; i < payload.length; i++)
       data += String.fromCharCode(payload[i] & 0xFF);
-  return String.fromCharCode((canId >> 8) & 0xFF, canId & 0xFF, data.length) + data;
+  if (id > 0x7FF) {
+    var extId = id & 0x1FFFFFFF;
+    return String.fromCharCode(0x80 | ((extId >> 24) & 0x1F), (extId >> 16) & 0xFF,
+                                (extId >> 8) & 0xFF, extId & 0xFF, data.length) + data;
+  }
+  var stdId = id & 0x7FF;
+  return String.fromCharCode((stdId >> 8) & 0xFF, stdId & 0xFF, data.length) + data;
 }
 function canSendValue(id, value, bytes) {
   bytes = bytes || 2;

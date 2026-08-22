@@ -7,7 +7,7 @@ A short, honest description of what Serial Studio's acquisition pipeline guarant
 - **Not a hard real-time system.** Serial Studio is built on Qt's event loop. There are no scheduling deadlines, no jitter bounds, and no preemption guarantees. Don't run a flight controller through it.
 - **Soft real-time, high throughput.** The acquisition pipeline targets 256 kHz+ frame rates with zero allocations and lock-free queues. In practice, modern desktop hardware sustains that comfortably.
 - **Source-owned timestamps.** Frames are time-stamped at the driver boundary, not at display or export. The dashboard you see and the CSV you export carry the same timestamp.
-- **Threading is per-driver and intentional.** Some drivers spawn their own threads; some lean on Qt's async I/O. Frame parsing happens on the main thread by design. Export and persistence happen off the main thread.
+- **Threading is per-driver at the edges, unified in the middle.** Some drivers spawn their own threads; some lean on Qt's async I/O. Either way, frame parsing happens on one dedicated pipeline thread, never the GUI thread, by design. Export and persistence happen off that thread too, on their own worker threads.
 
 ## What is and isn't guaranteed
 
@@ -16,7 +16,7 @@ A short, honest description of what Serial Studio's acquisition pipeline guarant
 - **Order preservation.** Frames are delivered to consumers in the order the driver produced them. The pipeline uses a single-producer/single-consumer ring (`moodycamel::ReaderWriterQueue`) that's FIFO by construction.
 - **Source-derived timestamps.** Every parsed frame carries a `steady_clock` timestamp set at acquisition. Dashboard, CSV, MDF4, API, gRPC, MQTT, and the Historian all see the same instant for the same frame. No consumer re-stamps.
 - **No frame loss in steady state.** If your CPU can keep up with the producer, the queue stays drained and nothing is dropped. If it can't, you'll see `[FrameReader] Frame queue full -- frame dropped` in the log. That message is the canary; treat it as a real signal, not a warning.
-- **Zero allocation in the pipeline.** No `new`, no `make_shared`, no `QByteArray::append` after init. Each `TimestampedFramePtr` comes from a fixed-size slot pool inside `FrameBuilder` and is shared (refcounted) across every consumer; the slot is recycled when the last consumer drops the pointer. The pool falls back to a one-shot `make_shared` and logs a single warning only if every slot is in flight at once, which means a downstream consumer is not draining.
+- **Zero allocation in the pipeline.** No `new`, no `make_shared`, no `QByteArray::append` after init. `FrameBuilder` stages each parsed frame's values into a pooled `DataBlock` (pre-sized columns, no per-frame allocation) and flushes it to the dashboard and every active export sink when the display tick advances or the block reaches its sample cap, whichever comes first. The dashboard reads the pooled block directly; sinks get one shared trimmed copy. A block's pool slot is recycled once every reader has dropped it (detected by a `use_count()` probe), and only falls back to a one-shot allocation if every slot is in flight at once, which means a downstream consumer is not draining.
 - **Crash isolation across consumers.** A slow MQTT publish or a failing CSV write won't block FrameBuilder or the dashboard. Each consumer has its own worker thread and its own queue.
 
 ### Not guaranteed
@@ -29,22 +29,24 @@ A short, honest description of what Serial Studio's acquisition pipeline guarant
 
 ## Threading model in practice
 
-The actual thread layout depends on which driver you've selected.
+Every driver's bytes eventually land on one dedicated processing thread ("FramePipeline",
+owned by `IO::PipelineHost`), where `FrameReader`, the frame parser engines, and `FrameBuilder`
+all live. What differs per driver is how many thread hops it takes to get there.
 
-### Drivers with their own threads
+### Drivers with their own I/O thread
 
-These drivers are explicit about owning a thread:
+These drivers are explicit about owning a thread for I/O:
 
 - **HID** (`hidapi`) runs a blocking `hid_read` loop on its own `QThread`.
 - **USB** (`libusb`) runs the libusb event loop on one thread and the bulk/isochronous read loop on another.
-- **Process I/O** runs the pipe read loop on its own `QThread` so the main thread isn't blocked on `read()` from a child process or named pipe.
+- **Process I/O** runs the pipe read loop on its own `QThread` so the GUI thread isn't blocked on `read()` from a child process or named pipe.
 - **Audio** runs a high-priority worker thread driven by a 10 ms `Qt::PreciseTimer` to pull samples from miniaudio. The audio backend itself also delivers callbacks on internal device threads.
 
-For these drivers, `HAL_Driver::dataReceived` is emitted from the worker thread and Qt's `AutoConnection` promotes the hop to `Qt::QueuedConnection` automatically. The frame data crosses one thread boundary on the way to `FrameReader`.
+For these drivers, `HAL_Driver::dataReceived` is emitted from the I/O worker thread and Qt's `AutoConnection` promotes the hop into the pipeline thread to a `Qt::QueuedConnection` automatically. The frame data crosses one thread boundary (I/O thread to pipeline thread) on the way to `FrameReader`.
 
 ### Drivers riding Qt's event loop
 
-These drivers don't spawn threads. They use Qt's async I/O facilities, which run on whatever thread the driver lives on (the main thread, in practice):
+These drivers don't spawn an I/O thread. They use Qt's async I/O facilities, which run on whatever thread the driver lives on (the GUI thread, in practice):
 
 - **UART** (`QSerialPort`)
 - **Network** (`QTcpSocket`, `QUdpSocket`)
@@ -53,21 +55,39 @@ These drivers don't spawn threads. They use Qt's async I/O facilities, which run
 - **Modbus** (`QModbusDevice`)
 - **MQTT** (`QMqttClient`)
 
-For these drivers, `dataReceived` fires on the main thread and the connection to `FrameReader` is a same-thread dispatch. No copy, no event-queue insertion.
+For these drivers, `dataReceived` fires on the GUI thread. `FrameReader` still lives on the
+pipeline thread, not the GUI thread, so this hop is a queued cross-thread dispatch too, same as
+for drivers with their own I/O thread.
 
-This is not laziness; it's a measured choice. The Qt classes for these protocols are already non-blocking and deliver bytes via signals. Wrapping them in a worker thread would only add a queued cross-thread emit per frame, which at high rates is the most expensive thing you can do in Qt.
+Either way, the queued hop happens once per received chunk, not once per parsed frame — a chunk
+from a single `read()` or socket notification can carry many frames, and splitting it into
+frames is `FrameReader`'s job. Keeping that split off the GUI thread amortizes the cross-thread
+cost across however many frames the chunk contains, instead of paying it once per frame.
 
-### FrameReader and FrameBuilder run on the main thread
+### FrameReader and FrameBuilder run on a dedicated pipeline thread
 
 This is the part that most often surprises people, so the rationale is worth stating outright.
 
-> **Why FrameReader is on the main thread:** moving it to a worker thread means every emit of `HAL_Driver::dataReceived` becomes a `QMetaCallEvent` allocation, an event-queue insertion, and a deferred dispatch on the receiving thread. At 256 kHz that's hundreds of thousands of allocations per second, and it dominates the profile. Serial Studio tried this. There were no gains. The CPU and memory cost of the cross-thread hop wiped out anything won by parallelizing the parser. The current design has been validated against UART, audio at 48 kHz+, network, CAN, and Modbus through experience, bug reports, and a fair amount of blood. If it keeps up with audio's FFT pipeline, it keeps up with almost everything else.
+Since spec 0051 M3, `FrameReader`, the frame parser engines, and `FrameBuilder` all live on
+`IO::PipelineHost`'s own processing thread, never the GUI thread. Everything downstream of the
+chunk queue — delimiter scanning, decoding, `parse()`, transforms, staging values into a pooled
+`DataBlock` — runs as ordinary same-thread function calls on that one thread, so none of it pays
+a per-frame cross-thread cost. Only two rates ever cross a thread boundary on the frame path:
+chunk rate coming in from the driver, and display-tick rate going out to the GUI, where the
+dashboard drains finished `DataBlock`s from a lock-free ring on `Dashboard::onDisplayTick`.
+Running the split and the parse on a thread of their own keeps a slow parser or transform from
+also stalling paint and input handling; running everything inside that thread as plain calls,
+never queued signals, keeps the per-frame cost down. The design has been validated against UART,
+audio at 48 kHz+, network, CAN, and Modbus through experience, bug reports, and a fair amount of
+blood.
 
-The connection from `DeviceManager::frameReady` to `ConnectionManager::onFrameReady` is `Qt::DirectConnection` for the same reason: a queued main-thread-to-main-thread hop is pure overhead.
+`FrameReader::processData` and `PipelineHost::routeFrames` (which hands a completed frame to
+`FrameBuilder`) are both plain same-thread calls on the pipeline thread for the same reason: a
+queued same-thread hop is pure overhead.
 
 ### Consumers run on worker threads
 
-Everything that consumes a parsed frame except the dashboard runs off the main thread, on a `FrameConsumer` worker:
+Everything that consumes a parsed frame except the dashboard runs off the pipeline thread, on a `FrameConsumer` worker:
 
 - **CSV export.**
 - **MDF4 export.**
@@ -76,11 +96,11 @@ Everything that consumes a parsed frame except the dashboard runs off the main t
 - **API server.** All TCP client sockets are serviced on the server's own worker thread, off the main thread, so a slow client can't stall the pipeline.
 - **gRPC server** (when enabled).
 
-The main thread enqueues a shared `TimestampedFramePtr` into each consumer's queue and moves on. The worker drains its queue on its own clock. A blocked or slow consumer can only fill its own queue; it can't back-pressure the producer.
+The pipeline thread flushes a shared, trimmed copy of the current `DataBlock` into each consumer's queue and moves on — one copy per flush, made only while at least one such consumer is active, not one per frame. The worker drains its queue on its own clock. A blocked or slow consumer can only fill its own queue; it can't back-pressure the producer.
 
-### Dashboard runs on the main thread
+### Dashboard runs on the GUI thread
 
-The dashboard reads from the same `TimestampedFramePtr` everyone else reads from, on the main thread, on the UI tick (default 60 Hz, configurable from 1 to 240 Hz). It samples the latest frame; it doesn't process every frame. At 256 kHz input and a 60 Hz tick, the dashboard is rendering one out of roughly 4,300 frames. Everything else has already been logged or exported by the consumer threads.
+The dashboard drains finished `DataBlock`s from a lock-free ring fed by the pipeline thread, on the GUI thread, on the UI tick (default 60 Hz, configurable from 1 to 240 Hz). It renders whatever has accumulated in the ring since the last tick; it doesn't render every frame. At 256 kHz input and a 60 Hz tick, the dashboard is rendering roughly one flush out of every 4,300 frames' worth of data. Everything else has already been logged or exported by the consumer threads.
 
 This is the right tradeoff for a UI: a 250 kHz refresh would melt the GPU and the user can't see it anyway.
 
@@ -92,18 +112,26 @@ A frame's timestamp is set once, at the driver boundary, and never overwritten.
 Driver
   │ HAL_Driver::publishReceivedData(data, timestamp)
   ▼ (CapturedDataPtr carries timestamp + frameStep)
-FrameReader (main thread)
+FrameReader (pipeline thread)
   │ splits chunk into N logical frames, propagates per-frame timestamps
   ▼
-FrameBuilder (main thread)
+FrameBuilder (pipeline thread)
   │ when one captured chunk expands into N parsed frames,
   │ publishes them at timestamp + step·i
   ▼
-TimestampedFramePtr → Dashboard, CSV, MDF4, API, gRPC, Sessions, MQTT
+DataBlock (pooled) → SPSC ring → Dashboard
+                    → clone_block_trimmed → CSV, MDF4, API, gRPC, Sessions, MQTT
 ```
 
 A few specific guarantees fall out of this:
 
+- **The per-frame spread inside one chunk is opt-in, not universal.** `frameStep` defaults to
+  1 ns, so on a driver that never sets it — UART, network, and most of the other transports
+  above — N frames extracted from one read still carry timestamps within nanoseconds of each
+  other; the driver never measured their real spacing, so there's nothing truer to interpolate
+  from. Only a driver that knows its own sample cadence fills in a real `frameStep`. Audio is
+  the example: it computes `frameStep` from the device sample rate and back-dates the chunk so
+  the interpolation across `step·i` reflects when each sample was captured.
 - **Audio backdates.** When miniaudio hands over a buffer of N samples at sample rate `sr`, the audio driver back-dates the timestamp to `now - (N-1)/sr`. The first sample in the buffer carries the correct acquisition time, not the time the OS got around to calling our callback.
 - **Drivers that post to the main thread capture the timestamp before posting.** Anywhere a driver uses `QMetaObject::invokeMethod` to forward bytes to the main thread, it captures `SteadyClock::now()` in the originating thread first. Default-constructed timestamps would fire on the receiving thread, which is almost always wrong.
 - **Export workers don't re-stamp.** They derive strictly-increasing offsets from `monotonicFrameNs(frame->timestamp, baseline)` to break ties when the OS clock is too coarse. That's a safety net, not a clock source.
@@ -128,12 +156,12 @@ A few specific guarantees fall out of this:
 - **"My CSV timestamps look chunky on Windows."** Windows' `steady_clock` ticks at ~15 ms. Same-tick frames did happen at the same time as far as the kernel is concerned. The export worker's `monotonicFrameNs` is what makes them strictly increasing for SQL/CSV ordering, but the visible chunks reflect real clock granularity.
 - **"My dashboard is laggy at 100 kHz."** It isn't. The dashboard ticks at the UI refresh rate (60 Hz by default) on purpose, not at the input rate. Open the session report or the CSV after the run; that's the full-rate data.
 - **"A widget skips frames."** Widgets sample on their tick, not per frame. They're not supposed to render every frame. The export and Historian paths see every frame; the UI doesn't need to.
-- **"My transform makes the dashboard stutter."** Transforms run on the main thread because they read peer-dataset values that are also on the main thread. A heavy transform (regex, JSON parsing, tight Lua loops) will block. Profile it. If you genuinely need expensive math per frame, do it offline against the Historian database.
+- **"My transform makes the dashboard stutter."** Transforms run on the pipeline thread because they read peer-dataset values that are also staged on the pipeline thread. A heavy transform (regex, JSON parsing, tight Lua loops) will block that thread and delay every block flush behind it. Profile it. If you genuinely need expensive math per frame, do it offline against the Historian database.
 
 ## See also
 
 - [Data Flow](Data-Flow.md): the high-level user view of how data moves from device to dashboard.
 - [The Acquisition Pipeline](Data-Hotpath.md): the technical deep dive into FrameReader, FrameBuilder, and the lock-free queues.
-- [Benchmark Dialog](Benchmark.md): measures the single-threaded pipeline on your hardware; the UI freeze it warns about is this threading model in action.
+- [Benchmark Dialog](Benchmark.md): measures the pipeline's throughput on your hardware by temporarily relocating it onto the GUI thread; the UI freeze it warns about is that relocation in action.
 - [Data Sources](Data-Sources.md): per-driver capability summary, including where each driver sits in the threading model.
 - [Drivers — Audio Input](Drivers-Audio.md): the canonical proof-of-concept for the high-throughput pipeline.

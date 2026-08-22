@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project simulates and visualizes the Lorenz attractor, a chaotic system of differential equations, entirely inside [Serial Studio](https://serial-studio.github.io/). There is no external generator: a JavaScript control loop integrates the Lorenz trajectory in real time, writes the ($x$, $y$, $z$) values into a data table, and ticks the dashboard so the plots render. No data ever arrives from the network.
+This project simulates and visualizes the Lorenz attractor, a chaotic system of differential equations, entirely inside [Serial Studio](https://serial-studio.com/). There is no external generator: a JavaScript control loop integrates the Lorenz trajectory in real time, writes the ($x$, $y$, $z$) values into a data table, and ticks the dashboard so the plots render. No data ever arrives from the network.
 
 The Lorenz system, introduced by Edward Lorenz in 1963, is a set of three coupled differential equations commonly used to model atmospheric convection. Its iconic butterfly-shaped attractor is a symbol of chaos theory. For more, see [this article](https://marksmath.org/visualization/LorenzExperiment/).
 
@@ -54,7 +54,7 @@ Because the loop free-runs (the worker re-arms it about once per millisecond), t
 
 ## Requirements
 
-- **Serial Studio.** Download the latest version from [here](https://serial-studio.github.io/).
+- **Serial Studio.** Download the latest version from [here](https://serial-studio.com/).
 
 ## Running the example
 

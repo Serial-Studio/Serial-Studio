@@ -1789,7 +1789,7 @@ bool DataModel::ProjectModel::populateFixedLayoutGroup(DataModel::Group& grp,
   if (widget == SerialStudio::GPS) {
     // code-verify off
     ThreeAxisLayout layout{
-      "map",
+      "gps",
       {         "lat",           "lon",          "alt"},
       {           "°",             "°",            "m"},
       {tr("Latitude"), tr("Longitude"), tr("Altitude")},

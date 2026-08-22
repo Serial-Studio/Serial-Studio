@@ -38,6 +38,9 @@ private:
   static CommandResponse setInterfaceIndex(const QString& id, const QJsonObject& params);
   static CommandResponse setBitrate(const QString& id, const QJsonObject& params);
   static CommandResponse setCanFD(const QString& id, const QJsonObject& params);
+  static CommandResponse setDataBitrate(const QString& id, const QJsonObject& params);
+  static CommandResponse setLoopback(const QString& id, const QJsonObject& params);
+  static CommandResponse setListenOnly(const QString& id, const QJsonObject& params);
 
   static CommandResponse getConfiguration(const QString& id, const QJsonObject& params);
   static CommandResponse getPluginList(const QString& id, const QJsonObject& params);

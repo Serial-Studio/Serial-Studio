@@ -1,5 +1,7 @@
 # Canvas widget
 
+*Formerly called the Painter widget. The feature and the `"painter"` widget key are unchanged — only the name shown in the UI and docs changed.*
+
 The Canvas widget is a Pro dashboard widget that exposes a JavaScript `paint(ctx, w, h)` callback. The script renders directly into the widget's bitmap on every dashboard tick. Use it when no built-in widget covers the visualization required by the project.
 
 Canvas is a Pro feature.

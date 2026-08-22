@@ -28,6 +28,8 @@ flowchart LR
 
 CSV export is toggled in the Setup panel of the main window, under **Data Export**. Turn on the **CSV Spreadsheet** switch before or during a live connection. Once it's on, Serial Studio writes every incoming frame to a CSV file on a background thread, so dashboard performance isn't affected. The switch is disabled in Console Only mode (no project/frame structure to export); switch to Quick Plot or Project File mode first.
 
+**Quick Plot doubles every channel.** Quick Plot builds both a Data Grid group and a Multi-Plot group from the same channels, and both groups are exported, so a three-channel Quick Plot session produces six value columns in the CSV, not three — one pair of duplicate columns per channel.
+
 ### File location
 
 Exported CSV files land under your workspace folder (Documents/Serial Studio by default; configurable in Settings) in a structured hierarchy:
@@ -56,9 +58,15 @@ The CSV file contains a header row followed by one row per received frame.
 Elapsed (s),GroupName/DatasetName,GroupName/DatasetName,...
 ```
 
-The first column, labeled `Elapsed (s)`, is elapsed time in seconds since the session started, with nanosecond precision (for example `0.000000000`, `0.016384512`). The remaining columns correspond to each dataset defined in the project, ordered by unique ID. Header labels are formed as `GroupName/DatasetName` (prefixed with `SourceName/` when a project has multiple data sources) so you can trace each column back to the project structure.
+The first column, labeled `Elapsed (s)`, is elapsed time in seconds since the session started, with nanosecond precision (for example `0.000000000`, `0.016384512`). The remaining columns correspond to each dataset defined in the project, ordered by unique ID. Header labels are formed as `GroupName/DatasetName`, prefixed with `SourceName/` whenever the owning source has a non-empty title — including a single-source project, if its source is titled — so you can trace each column back to the project structure.
 
-**Data rows.** Each row is one complete frame. Cells hold the numeric or string values of each dataset at that point in time.
+The file opens with a UTF-8 byte-order mark. Most tools handle this transparently; pandas needs `encoding="utf-8-sig"` to read the file without leaving a `﻿` in the first header cell. Any cell whose text starts with `=`, `+`, `-`, `@`, a tab, or a carriage return is prefixed with an apostrophe before being written (unless the cell is purely numeric), which stops spreadsheet software from evaluating it as a formula.
+
+**Data rows.** For a single-source project, each row is one complete frame. For a multi-source project, rows are sparse: one row per distinct sample instant, with a source's columns left empty on any row where that source didn't produce a sample at that instant. Cells hold the numeric or string values of each dataset at that point in time.
+
+### Row interval
+
+CSV export writes rows in one of two modes, set by **Row Interval (ms)** in the Preferences dialog's **Export** tab: `0` (the default) writes one row per received frame, on the raw data timing. A nonzero value N instead writes one row every N milliseconds, each row a snapshot of the latest value of every dataset at that instant; the interval applies live, so changing it mid-export takes effect on the next snapshot.
 
 ### File lifecycle
 
@@ -84,7 +92,8 @@ To replay a recorded CSV file:
 
 When a CSV file opens, Serial Studio looks at the first column to figure out the timestamp format:
 
-- **Decimal seconds** (for example `0.0`, `1.5`, `3.016`): used directly as elapsed time. This is the format Serial Studio's own export produces.
+- **Numeric, with a recognized unit in the header:** a bracketed unit (`time(ms)`, `t [us]`) or a `_unit` suffix (`time_ms`) on the header cell selects the scale — seconds, milliseconds (`ms`), microseconds (`us`), or nanoseconds (`ns`), by name or common abbreviation. This is the format Serial Studio's own export produces (`Elapsed (s)`).
+- **Numeric, with no recognizable unit in the header:** Serial Studio shows a **Timestamp Units** prompt asking whether the column is Seconds, Milliseconds, or Microseconds; seconds is preselected.
 - **Date/time strings** (for example `2026/03/17 15:30:05`): parsed into absolute timestamps and converted to elapsed offsets.
 - **Unrecognizable format:** Serial Studio prompts you to either pick an existing column to use as the timestamp, or set a fixed interval between rows (in milliseconds) — useful for CSV files from tools that don't record timestamps at all.
 
@@ -107,7 +116,7 @@ During playback, the CSV Player feeds each row through the same data pipeline as
 
 ### Multi-source CSV files
 
-For projects with multiple data sources, the CSV Player maps columns back to their respective source IDs. Each column is associated with a source based on the dataset's unique ID recorded in the header. Reconstructed per-source frames go back into the pipeline at the right routing.
+For projects with multiple data sources, the CSV Player maps columns back to their respective source IDs. The header carries labels only, not machine-readable IDs: the mapping is positional, built from the currently loaded project's export schema in unique-ID order, and matched against the file's data columns in that same order. This means the project loaded during playback must be the same one that produced the file (or one with an identical dataset/unique-ID layout) — the player has no way to recover source or dataset identity from header text alone. Reconstructed per-source frames go back into the pipeline at the right routing.
 
 ### Speed control
 

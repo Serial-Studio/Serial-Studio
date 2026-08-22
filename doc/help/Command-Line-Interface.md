@@ -84,7 +84,7 @@ pipeline.
 | Option | Argument | Description |
 |--------|----------|-------------|
 | `--modbus-rtu` | `port` | Connect to a Modbus RTU device. |
-| `--modbus-tcp` | `host[:port]` | Connect to a Modbus TCP server (port defaults to 502). |
+| `--modbus-tcp` | `host[:port]` | Connect to a Modbus TCP server (port defaults to 502, the IANA-registered Modbus port). This differs from the GUI Modbus driver's own default of 5020 — check which surface you are configuring. |
 | `--modbus-slave` | `address` | Slave address (1-247, default 1). |
 | `--modbus-poll` | `interval` | Poll interval in ms (50-60000, default 100). |
 | `--modbus-baud` | `rate` | RTU baud rate (default 9600). |

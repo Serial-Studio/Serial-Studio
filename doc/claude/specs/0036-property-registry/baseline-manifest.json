@@ -6,7 +6,7 @@
   "projects": [
     {
       "path": "examples/BLE Battery/BLE Battery Level.ssproj",
-      "sha256": "6f3f04f58fb8eb24383ecc17c5591d72b647d1d6907ad0f8cbf666f57201f9e3"
+      "sha256": "eb339d77c0c232c9a7c5b945100a778aae965d5f4fc9ea8df9f4e8544596fb44"
     },
     {
       "path": "examples/CAN Bus Example/ecu_simulator.ssproj",
@@ -34,27 +34,27 @@
     },
     {
       "path": "examples/IMU Simulator/imu_batched.ssproj",
-      "sha256": "e4ed1a45c36d753d316a69e210da30173b672cca3e9d271b100f2d8fe2028f42"
+      "sha256": "62dd052de7c572f768b05d5be11dcc46dab2b39bae31c5b96f66edd9c5042ab0"
     },
     {
       "path": "examples/ISS Tracker/iss-tracker.ssproj",
-      "sha256": "25adeefaf3fb7dc2102c2e7e29cb63f22c125e1cb7bc7830a47c245e463a9100"
+      "sha256": "49ddad91088013e5386782d33af0da40d8df29c9fc7ca375bf33f2631ae5287a"
     },
     {
       "path": "examples/LTE modem/LTE Modem.ssproj",
-      "sha256": "02c2c9316a9fb11bfdd075632945dad082c70aa5220797ba3bf314ef4a46e967"
+      "sha256": "87a71a57543000f02ff4413e225a2a880c6dcfaeb670374efae481a3f1b6bd18"
     },
     {
       "path": "examples/LorenzAttractor/LorenzAttractor.ssproj",
-      "sha256": "5d004a3bb04b8a23e86b73381b664b7e67a64e2661bda4298b13e6ce53b43da7"
+      "sha256": "96b045159e8e4c3f23a83000300eae57379f8f35e0e3c4938ad772a5855d9ac8"
     },
     {
       "path": "examples/MPU6050/MPU6050.ssproj",
-      "sha256": "aa33af8a1ef918c120fd4b7006b5851c351c5317eecca9e3325832a505429dae"
+      "sha256": "8c174c7bfe5f514e19675b6584d75cd4e248f1a2ca323f44029bf84822518c7b"
     },
     {
       "path": "examples/MQTT Subscriber Example/HSL Helsinki Public Transit.ssproj",
-      "sha256": "bb99c4a1f3f5ad563732a062aa0fd1e46eab4ed9de5cc6bd44203854d34f9be0"
+      "sha256": "823beefe85667f782a38b1348037f9e7b687f22720708402c68e55bc500fa756"
     },
     {
       "path": "examples/Modbus PLC Simulator/Modbus PLC Simulator.ssproj",
@@ -62,7 +62,7 @@
     },
     {
       "path": "examples/OBD-II/OBD-II.ssproj",
-      "sha256": "e1e44102f83d0b7254a053cc03c01f2a6e4ac287065748d58fa3143c418cc2f3"
+      "sha256": "c428357e5d9401a6939d6614676ab67f1d3df4a483b6a9a72901d1fea6993900"
     },
     {
       "path": "examples/Protobuf Example/Protobuf Example.ssproj",
@@ -74,11 +74,11 @@
     },
     {
       "path": "examples/System Monitor/system-monitor.ssproj",
-      "sha256": "cc944601cf09be1584f8b2bd47cc2d7027ca0e679de2f9245c46c6c3796618df"
+      "sha256": "953afa6e23e4e1f48cca980a70db5c00e7ef5e5117d1f48befff25930ec03c05"
     },
     {
       "path": "examples/Testo T549i/Testo T549i.ssproj",
-      "sha256": "f0222814d3f88b7b2506f95c983eee904a7fbdf1c853375b2842a322d53a7bbd"
+      "sha256": "5f7f2f75763246d9a052fb1357804a40d6011fb8f0cfa8748575b9029c6e9e8d"
     },
     {
       "path": "examples/TinyGPS/TinyGPS.ssproj",

@@ -1,5 +1,7 @@
 # Variables
 
+*Formerly called Data Tables. The feature and the `RegisterDef`/`registers` project JSON keys are unchanged — only the name shown in the UI and docs changed.*
+
 Shared variables that any dataset transform can read and write. Use them for project-wide constants (calibration factors, thresholds, scale values) and for computed values that flow between transforms, either within a single frame or across frames (running filters, integrators, latched state).
 
 ## Overview

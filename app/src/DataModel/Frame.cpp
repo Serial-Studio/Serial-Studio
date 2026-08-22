@@ -207,6 +207,8 @@ bool DataModel::read(OutputWidget& w, const QJsonObject& obj)
   w.stepSize         = SerialStudio::toDouble(ss_jsr(obj, Keys::OutputStepSize, 1));
   w.initialValue     = SerialStudio::toDouble(ss_jsr(obj, Keys::OutputInitialValue, 0));
   w.monoIcon         = ss_jsr(obj, Keys::OutputMonoIcon, false).toBool();
+  w.onLabel          = ss_jsr(obj, Keys::OutputOnLabel, "").toString().simplified();
+  w.offLabel         = ss_jsr(obj, Keys::OutputOffLabel, "").toString().simplified();
   w.transmitFunction = obj.value(Keys::TransmitFunction).toString();
   w.txEncoding       = ss_jsr(obj, Keys::OutputTxEncoding, 0).toInt();
 

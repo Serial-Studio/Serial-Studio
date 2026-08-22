@@ -702,8 +702,8 @@ void CSV::Player::openFile(const QString& filePath)
 /**
  * @brief Foreground quick pass over the first rows only: skips a UTF-8 BOM, captures the
  *        header, detects the timestamp mode, and prompts when neither format matches. Any
- *        finite number is an elapsed column, negatives included -- multi-source recordings
- *        written before the exporter latched its origin start below zero.
+ *        finite non-negative number is treated as an elapsed column; a negative value is
+ *        rejected as having no usable time (PlayerLoaderWorker::extractTimestamp).
  */
 bool CSV::Player::runQuickPass()
 {

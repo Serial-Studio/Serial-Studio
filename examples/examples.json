@@ -19,7 +19,7 @@
     "hasProjectFile": false,
     "projectFileName": "",
     "hasScreenshot": true,
-    "requiresPro": true
+    "requiresPro": false
   },
   {
     "id": "BLE Battery",
@@ -46,7 +46,7 @@
   {
     "id": "CAN Bus Example",
     "title": "CAN Bus ECU Simulator",
-    "description": "Demonstrates CAN bus usage with a physics-based ECU simulator that sends realistic vehicle data and DBC file import for automatic dashboard generation.",
+    "description": "Demonstrates CAN bus usage with a physics-based ECU simulator that sends realistic vehicle data and DBC file import for automatic dashboard generation. Needs the widget-extension example installed for its custom level-bar widget.",
     "category": "Industrial Automation",
     "difficulty": "Intermediate",
     "hasProjectFile": true,
@@ -134,7 +134,7 @@
   {
     "id": "LorenzAttractor",
     "title": "Lorenz Attractor",
-    "description": "Simulates and visualizes the Lorenz attractor, a chaotic system of differential equations, using an Arduino or Python UDP version for real-time plotting.",
+    "description": "Simulates and visualizes the Lorenz attractor, a chaotic system of differential equations, entirely inside Serial Studio via a JavaScript Control Loop that integrates the trajectory and ticks the dashboard directly, with no external generator.",
     "category": "Simulation",
     "difficulty": "Advanced",
     "hasProjectFile": true,
@@ -256,7 +256,7 @@
   {
     "id": "Testo T549i",
     "title": "Testo T549i Refrigeration Pressure Probe",
-    "description": "Automates a Testo T549i BLE pressure probe: a Control Loop sends the vendor enable handshake, a binary frame parser decodes the raw stream, and Lua transforms derive bar and psi engineering units shown on a gauge.",
+    "description": "Automates a Testo T549i BLE pressure probe: a Control Loop sends the vendor enable handshake, a binary frame parser decodes the raw stream, and a Lua transform derives the psi engineering unit shown on a gauge.",
     "category": "Sensors & Hardware",
     "difficulty": "Intermediate",
     "hasProjectFile": true,
@@ -289,8 +289,8 @@
   },
   {
     "id": "Vibration Test Rig",
-    "title": "Vibration Test Rig (Painter + Waterfall)",
-    "description": "Simulates a motor sweeping RPM with imbalance, bearing-defect harmonics, and stereo enclosure noise. Drives a Campbell-mode waterfall, a scripted Painter VU meter, and a live system-schematic Painter widget from one UDP stream.",
+    "title": "Vibration Test Rig (Canvas Widget + Waterfall)",
+    "description": "Simulates a motor sweeping RPM with imbalance, bearing-defect harmonics, and stereo enclosure noise. Drives a Campbell-mode waterfall, a scripted Canvas Widget VU meter, and a live system-schematic Canvas Widget from one UDP stream.",
     "category": "Simulation",
     "difficulty": "Intermediate",
     "hasProjectFile": true,
@@ -307,6 +307,17 @@
     "hasProjectFile": true,
     "projectFileName": "OBD-II.ssproj",
     "hasScreenshot": true,
+    "requiresPro": false
+  },
+  {
+    "id": "widget-extension",
+    "title": "Level Bar Widget Extension",
+    "description": "A complete widget extension package (info.json + QML) implementing a horizontal level bar for one numeric dataset, with a colour choice and an optional numeric readout. A template to copy and adapt for your own installable dataset widgets.",
+    "category": "Tools & Utilities",
+    "difficulty": "Intermediate",
+    "hasProjectFile": false,
+    "projectFileName": "",
+    "hasScreenshot": false,
     "requiresPro": false
   }
 ]

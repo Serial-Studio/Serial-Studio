@@ -12,7 +12,7 @@ You can also browse and download examples directly from Serial Studio via the **
 | [API Test](API%20Test) | Python API client with interactive REPL and test suite | Intermediate | Yes |
 | [BLE Battery](BLE%20Battery) | BLE Battery Service level monitor | Beginner | |
 | [Camera Telemetry](Camera%20Telemetry) | Live camera video plus image analytics over UDP | Intermediate | Yes |
-| [CAN Bus Example](CAN%20Bus%20Example) | ECU simulator with DBC file import | Intermediate | Yes |
+| [CAN Bus Example](CAN%20Bus%20Example) | ECU simulator with DBC file import (needs the widget-extension example installed) | Intermediate | Yes |
 | [csv2wav](csv2wav) | Convert Audio I/O recordings to WAV files | Intermediate | Yes |
 | [Dual Drone Telemetry](Dual%20Drone%20Telemetry) | Multi-source two-drone simulator with synthetic camera feeds | Advanced | Yes |
 | [EM Wave Simulator](EM%20Wave%20Simulator) | Propagating electromagnetic plane wave visualizer | Advanced | Yes |
@@ -36,12 +36,21 @@ You can also browse and download examples directly from Serial Studio via the **
 | [TinyGPS](TinyGPS) | GPS location tracker with map widget | Beginner | |
 | [UDP Function Generator](UDP%20Function%20Generator) | Multi-waveform signal generator over UDP | Beginner | |
 | [Vibration Test Rig](Vibration%20Test%20Rig) | Motor RPM sweep driving a Campbell-mode waterfall and two scripted Canvas widgets | Intermediate | Yes |
+| [widget-extension](widget-extension) | Level Bar widget extension template (info.json + QML) for a custom dataset widget | Intermediate | |
 
 ## Getting started
 
 1. Open the example's folder and read the README for hardware and software requirements.
 2. Upload the firmware (if applicable) or run the companion script.
 3. Open Serial Studio, load the `.ssproj` project file (if provided), and connect.
+
+Several examples (e.g. RC Plane Simulator, Modbus PLC Simulator, CAN Bus Example) auto-launch
+their companion Python script from the project's Control Loop as soon as the connection opens,
+so step 2 is a no-op for those — make sure Python 3 and any extra libraries are installed
+first. If a required package (e.g. `pymodbus` for Modbus PLC Simulator, `opencv-python` for
+Camera Telemetry) is missing, the auto-launched script can fail silently in the background with
+no dashboard data and no obvious error in Serial Studio itself; check the example's README for
+its exact dependencies if nothing shows up after connecting.
 
 ## Requirements
 

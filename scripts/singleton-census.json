@@ -1,19 +1,19 @@
 {
   "spec": "0039-session-context",
   "regenerate": "python scripts/code-verify.py --singleton-census --accept",
-  "total": 1691,
+  "total": 1694,
   "files": 209,
   "buckets": {
     "root": 156,
     "accessor": 68,
     "ctor-capture": 105,
     "deferred": 20,
-    "static-cache": 1219,
+    "static-cache": 1222,
     "loose": 123
   },
   "per_class": {
     "DataModel::ProjectModel": 217,
-    "IO::ConnectionManager": 214,
+    "IO::ConnectionManager": 217,
     "AppState": 131,
     "CommandRegistry": 101,
     "UI::Dashboard": 85,
@@ -293,13 +293,13 @@
       }
     },
     "app/src/API/Handlers/CANBusHandler.cpp": {
-      "total": 10,
+      "total": 13,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 10,
+        "static-cache": 13,
         "loose": 0
       }
     },

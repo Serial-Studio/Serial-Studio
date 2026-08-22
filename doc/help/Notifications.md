@@ -10,7 +10,7 @@ Notifications are a single shared bus. Any caller can post an event; the dashboa
 
 | Field      | Type   | Purpose |
 |------------|--------|---------|
-| `level`    | int    | `0` = Info, `1` = Warning, `2` = Critical. |
+| `level`    | int    | `0` = Info, `1` = Warning, `2` = Critical. This is a separate scale from a [dataset's alarm band](Widget-Reference.md#alarm-bands) `severity` (`0` = Info, `1` = OK, `2` = Warning, `3` = Critical): a band posts a notification only on entering `Warning` or `Critical` severity, at the matching notification level. The numbers look alike but come from different scales. |
 | `channel`  | string | Free-form label (for example `"Power Events"`, `"Engine"`). Spaces allowed. |
 | `title`    | string | Short event headline shown in bold in the log. |
 | `subtitle` | string | Optional detail line shown under the title with word wrap. |

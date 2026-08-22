@@ -3,6 +3,9 @@
 Decodes NAV-PVT, NAV-SAT, NAV-SOL and NAV-POSLLH messages from u-blox
 GNSS receivers. Values latch between frames.
 
+Each frame is a fixed 20-value row; only the channels listed below are
+ever written. Channels not listed are unused and always read back empty.
+
 ## Wire Format
 
 The parser expects sync-stripped messages:
@@ -32,6 +35,6 @@ The parser expects sync-stripped messages:
 
 ## Pipeline Notes
 
-Select the **Binary (raw bytes)** decoder with a `B5 62` start delimiter
+Select the **Binary (Direct)** decoder with a `B5 62` start delimiter
 (**Hex Delimiters** enabled) so the frame reader strips the sync
 characters.

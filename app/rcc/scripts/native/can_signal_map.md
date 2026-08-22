@@ -42,5 +42,5 @@ Physical values are computed as `raw * factor + offset`.
 
 ## Pipeline Notes
 
-Select the **Binary (raw bytes)** decoder with no frame delimiters; the
+Select the **Binary (Direct)** decoder with no frame delimiters; the
 CAN Bus driver delivers one frame per message.

@@ -21,17 +21,17 @@ Runs on Windows, macOS, Linux, and Raspberry Pi.
 
 **Connect to a device.** Serial/UART, Bluetooth LE, and TCP/UDP in the GPL build. MQTT, Modbus TCP/RTU, CAN Bus, audio input, raw USB (libusb), HID (hidapi), and Process I/O are Pro. Multiple devices in one project is also Pro.
 
-**Visualize data.** 15+ widgets in the GPL build: line plots, gauges, bar charts, meters, GPS maps, FFT spectrum, accelerometer, gyroscope, compass, data grids, LED panels, terminal, multi-channel plots, plus a Clock and Stopwatch utility widget pair. Bar, Gauge, Compass, and Meter each render as a two-page swipe view (page 0 is the analog face, page 1 is a large digital readout), so a single tile shows both the trend at a glance and the exact value. Pro adds 3D Plot, XY Plot, Waterfall (spectrogram), Image View (live camera), and the Canvas widget. Canvas is a JavaScript `paint(ctx, w, h)` callback with a Canvas2D-style API and 18 templates: oscilloscope, polar plot, artificial horizon, audio VU, dial gauge, heatmap, sparklines, vector field, XY scope, and others.
+**Visualize data.** 17 widgets in the GPL build: line plots, gauges, bar charts, meters, GPS maps, FFT spectrum, accelerometer, gyroscope, compass, data grids, LED panels, terminal, multi-channel plots, web view, bar panel, plus a Clock and Stopwatch utility widget pair. Bar, Gauge, Compass, and Meter each render as a two-page swipe view (page 0 is the analog face, page 1 is a large digital readout), so a single tile shows both the trend at a glance and the exact value. Pro adds 3D Plot, XY Plot, Waterfall (spectrogram), Image View (live camera), the Canvas widget, and output widgets (buttons, sliders, knobs, an Output Panel, and a Notification Log). Canvas is a JavaScript `paint(ctx, w, h)` callback with a Canvas2D-style API and 18 templates: oscilloscope, polar plot, artificial horizon, audio VU, dial gauge, heatmap, sparklines, vector field, XY scope, and others.
 
 **Build dashboards.** The Project Editor defines groups, datasets, and widgets through forms. Or skip the project file: print CSV from your device and Quick Plot draws it. Workspaces split big projects into tabs with a searchable taskbar.
 
-**Parse and transform data.** Frame parsers come in three flavors: Built-In templates (compiled C++ parsers you configure through a form, no code, the default for new projects), JavaScript, and Lua 5.4. 28 script templates cover MAVLink, NMEA 0183/2000, UBX, SiRF, RTCM, MessagePack, TLV, COBS, SLIP, JSON, XML, YAML, INI, Modbus, and others. Per-dataset transforms (EMA, scaling, calibration, unit conversion) run every frame as short JS or Lua snippets. Variables act as a shared bus so transforms can derive computed datasets from each other.
+**Parse and transform data.** Frame parsers come in three flavors: Built-In templates (compiled C++ parsers you configure through a form, no code, the default for new projects), JavaScript, and Lua (LuaJIT 2.1, 5.1 syntax with compatibility shims). 28 script templates cover MAVLink, NMEA 0183/2000, UBX, SiRF, RTCM, MessagePack, TLV, COBS, SLIP, JSON, XML, YAML, INI, Modbus, and others. Per-dataset transforms (EMA, scaling, calibration, unit conversion) run every frame as short JS or Lua snippets. Variables act as a shared bus so transforms can derive computed datasets from each other.
 
 **Send commands back (Pro).** Buttons, toggles, sliders, knobs, text fields, and freeform output panels run JS templates that emit GCode, SCPI, Modbus, NMEA, CAN, or whatever your device speaks. Actions run on demand or on a timer.
 
 **Record and replay.** CSV export in the GPL build. MDF4 import/export, session recording (frames and raw bytes) into SQLite, PDF session reports, and XMODEM/YMODEM/ZMODEM file transfer are Pro.
 
-**Automate it.** A TCP API on port 7777 with 300+ commands. A gRPC server on port 8888 mirrors the same command set with protobuf and live frame streaming. An MCP server wraps the same surface for Claude Desktop or any other MCP host.
+**Automate it.** A TCP API on port 7777 with 360+ commands. A gRPC server on port 8888 mirrors the same command set with protobuf and live frame streaming. An MCP server wraps the same surface for Claude Desktop or any other MCP host.
 
 **AI Assistant for project editing (Pro).** A bring-your-own-key chat panel that edits the project. Eight providers: Anthropic, OpenAI, Google Gemini, DeepSeek, Groq, Mistral, OpenRouter, and local OpenAI-compatible endpoints (Ollama, llama.cpp, LM Studio, vLLM) for offline use. Mutating actions show an Approve/Deny card first. See the [AI Assistant docs](./doc/help/AI-Assistant.md).
 
@@ -92,10 +92,10 @@ All Linux packages (AppImage, DEB, RPM, x64 and ARM64) bundle their own glibc, s
 ### At a glance
 
 - **Protocols:** Serial/UART, Bluetooth LE, and TCP/UDP in the GPL build. MQTT, Modbus TCP/RTU, CAN Bus, Audio, raw USB (libusb), HID (hidapi), and Process I/O are Pro.
-- **Visualization:** 15+ widgets, including line plots, gauges, bar charts, meters, GPS maps, FFT, waterfall (spectrogram), accelerometer, gyroscope, compass, data grids, 3D views, live camera feed, plus Clock and Stopwatch utility widgets (some Pro). Bar, Gauge, Compass, and Meter each include a swipeable digital readout page alongside the analog face.
+- **Visualization:** 23 widgets, including line plots, gauges, bar charts, meters, GPS maps, FFT, waterfall (spectrogram), accelerometer, gyroscope, compass, data grids, 3D views, live camera feed, plus Clock and Stopwatch utility widgets (some Pro). Bar, Gauge, Compass, and Meter each include a swipeable digital readout page alongside the analog face.
 - **Canvas widget (Pro):** scriptable Canvas2D-style canvas driven by a JS `paint(ctx, w, h)` callback. Watchdog-protected QJSEngine, persistent script state across frames, 18 templates (oscilloscope, polar plot, artificial horizon, audio VU meter, dial gauge, heatmap, LED matrix, sparklines, vector field, XY scope, and more).
 - **Output widgets:** buttons, toggles, sliders, knobs, text fields, and freeform panels, with JS templates for GCode, SCPI, Modbus, NMEA, CAN, and more (Pro).
-- **Custom parsing:** Built-In template, JavaScript, or Lua 5.4 frame parsers, plus 28 script templates (MAVLink, NMEA 0183/2000, UBX, SiRF, RTCM, MessagePack, TLV, COBS, SLIP, JSON, XML, YAML, INI, Modbus, and more).
+- **Custom parsing:** Built-In template, JavaScript, or Lua (LuaJIT 2.1, 5.1 syntax with compatibility shims) frame parsers, plus 28 script templates (MAVLink, NMEA 0183/2000, UBX, SiRF, RTCM, MessagePack, TLV, COBS, SLIP, JSON, XML, YAML, INI, Modbus, and more).
 - **Per-dataset transforms:** short JS or Lua snippets to filter, scale, calibrate, or derive values every frame.
 - **Variables:** shared bus for system datasets, user-defined constants and computed variables, and computed datasets built entirely from transforms.
 - **Workspaces:** split large projects into focused dashboard tabs, with a taskbar search.
@@ -181,7 +181,7 @@ First time using it? Start with the [getting started guide](./doc/help/Getting-S
 - **Quick start:** connect an Arduino or ESP32 and visualize data in five minutes.
 - **Dashboard creation:** build layouts in the Project Editor and split them into workspaces.
 - **Protocol support:** Serial/UART, Bluetooth LE, MQTT, Modbus TCP/RTU, CAN Bus, TCP/UDP, Audio, raw USB, HID, Process I/O.
-- **Frame parsing:** handle binary protocols, checksums, and custom formats with Built-In templates, JavaScript, or Lua 5.4.
+- **Frame parsing:** handle binary protocols, checksums, and custom formats with Built-In templates, JavaScript, or Lua (LuaJIT 2.1, 5.1 syntax with compatibility shims).
 - **Per-dataset transforms:** EMA filters, scaling, calibration, and computed datasets via Variables.
 - **Output widgets:** send commands back with buttons, sliders, knobs, toggles, and output panels (Pro).
 - **Canvas widget:** write your own dashboard widget in JavaScript when the built-ins don't fit (Pro).
@@ -190,7 +190,7 @@ First time using it? Start with the [getting started guide](./doc/help/Getting-S
 - **MDF4 playback and export:** CAN Bus, LIN, FlexRay, and analog (Pro).
 - **Historian:** record, tag, export, and replay full sessions from SQLite (Pro).
 - **Session reports:** export HTML or PDF reports with interactive Chart.js plots (Pro).
-- **TCP API:** 300+ commands for programmatic control (see [API Client](./examples/API%20Test)).
+- **TCP API:** 360+ commands for programmatic control (see [API Client](./examples/API%20Test)).
 
 ## Building Serial Studio
 

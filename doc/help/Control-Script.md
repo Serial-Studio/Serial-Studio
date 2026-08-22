@@ -1,5 +1,7 @@
 # Control Loop (setup / loop)
 
+*Formerly called the Control Script. The feature is unchanged — only the name shown in the UI and docs changed.*
+
 The Control Loop automates a connected device the way an Arduino sketch does. You write two functions, `setup()` and `loop()`, and Serial Studio calls them over the life of the connection: `setup()` once when the device connects, `loop()` repeatedly while it stays connected (paced by `delay()`, as the loop() pacing section explains). Both functions can drive the connection through Serial Studio's I/O API, so the loop can send wake-up handshakes, poll registers, issue keep-alives, or step a state machine without any firmware changes on the device.
 
 The Control Loop automates a device you have **already set up and connected**. It is not where you create or connect a data source: choose the bus, device, and connection in the I/O panel first, then write the loop to drive that open connection. This matters most for Bluetooth LE, where scanning, selecting the device, and connecting are interactive steps best done by hand; once the BLE device is connected, the loop can select its service and notify characteristic by UUID and write commands (see the BLE example below).

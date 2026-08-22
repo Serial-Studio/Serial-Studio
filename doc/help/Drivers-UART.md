@@ -66,7 +66,7 @@ UART is the protocol; the physical layer is separate. Serial Studio works with a
 - **RS-232**: ±3 V to ±15 V, single-ended, full-duplex over separate TX and RX wires. Cable lengths up to about 15 m. The classic 9-pin DE-9 connector found on PC serial ports.
 - **RS-485**: differential signalling on two wires (A and B). Tolerates cable runs up to 1200 m and supports multi-drop buses (one master plus many slaves on the same pair). Native operation is half-duplex; a 4-wire variant supports full-duplex. This is the physical layer used by Modbus RTU and many industrial buses.
 
-A USB-to-serial adapter converts USB to TTL or RS-232 levels. To Serial Studio, all of them appear as a COM port on Windows or as `/dev/ttyUSB0` / `/dev/tty.usbserial-XXXX` on Linux and macOS.
+A USB-to-serial adapter converts USB to TTL or RS-232 levels. To Serial Studio, all of them appear as a COM port on Windows or as `/dev/ttyUSB0` / `/dev/cu.usbserial-XXXX` on Linux and macOS.
 
 ## How Serial Studio uses it
 
@@ -85,7 +85,7 @@ The UART driver wraps Qt's `QSerialPort`. Settings exposed in the Setup Panel ma
 
 On Linux and macOS the **COM Port** field is editable: type a device path missing from the list (for example `/dev/ttyAMA0`) and press Enter to register it. On macOS each adapter is listed once, as its `cu.*` device; the `tty.*` duplicates are hidden.
 
-`QSerialPort` uses Qt's event loop for non-blocking reads, so the UART driver runs entirely on the main thread; bytes arrive there and feed the FrameReader directly. See [Threading and Timing Guarantees](Threading-and-Timing.md) for the rationale.
+`QSerialPort` uses Qt's event loop for non-blocking reads; incoming bytes are handed off to the acquisition pipeline thread, where the FrameReader assembles them into frames. See [Threading and Timing Guarantees](Threading-and-Timing.md) for the rationale.
 
 The same settings are scriptable through the `io.uart.*` commands of the [JSON-RPC API](API-Reference.md): `setDevice` (by path), `setPortIndex`, `setBaudRate`, `setParity`, `setDataBits`, `setStopBits`, `setFlowControl`, `setDtrEnabled`, and `setAutoReconnect`, plus the read-only `listPorts`, `listBaudRates`, and `getConfig`. `setBaudRate` takes the rate itself (`baudRate`, bits per second); the other line settings take a zero-based index into the option list in the same order as the Setup Panel (`parityIndex` 2 = Odd, `stopBitsIndex` 1 = 1.5, `flowControlIndex` 1 = RTS/CTS). When the in-app AI issues these commands, they sit behind the **Allow device control** toggle.
 

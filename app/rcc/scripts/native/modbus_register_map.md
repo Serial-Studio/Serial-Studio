@@ -44,5 +44,5 @@ next. Register values are scaled as `value * scale + offset`.
 
 ## Pipeline Notes
 
-Select the **Binary (raw bytes)** decoder with no frame delimiters; the
+Select the **Binary (Direct)** decoder with no frame delimiters; the
 Modbus driver delivers one response per frame.

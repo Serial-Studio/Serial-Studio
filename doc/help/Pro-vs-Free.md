@@ -17,7 +17,6 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 - Pro widgets: 3D Plot, Waterfall (spectrogram), Image View (live camera feed), Canvas (user-scripted Canvas2D widget).
 - Output (control) widgets: buttons, toggles, sliders, knobs, text fields, and the Output Panel.
 - Multi-device projects (several data sources in one dashboard).
-- Binary Direct mode (byte-array parsing without string conversion).
 - MDF4 file export and playback.
 - Historian recording, browsing, and PDF reports.
 - File transfers over XMODEM, YMODEM, and ZMODEM.
@@ -49,7 +48,7 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 | | Plain Text (UTF-8) Decoding | ✅ | ✅ |
 | | Hexadecimal Decoding | ✅ | ✅ |
 | | Base64 Decoding | ✅ | ✅ |
-| | Binary (Direct) Mode | ❌ | ✅ |
+| | Binary (Direct) Mode | ✅ | ✅ |
 | | Frame Parsers (JavaScript, Lua, Built-In templates) | ✅ | ✅ |
 | | Checksum Validation | ✅ | ✅ |
 | **Visualization Widgets** | | | |
@@ -66,7 +65,7 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 | | LED Panel | ✅ | ✅ |
 | | Web View (embedded web page) | ✅ | ✅ |
 | | 3D Plot | ❌ | ✅ |
-| | XY Plot (phase diagrams) | ✅ | ✅ |
+| | XY Plot (phase diagrams) | ❌ | ✅ |
 | | Waterfall (spectrogram, order tracking) | ❌ | ✅ |
 | | Image View (live camera/image feed) | ❌ | ✅ |
 | | Canvas (user-scripted Canvas2D widget) | ❌ | ✅ |
@@ -106,6 +105,35 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 | | Community Support (GitHub) | ✅ | ✅ |
 | | Email Support | ❌ | ✅ |
 | | Priority Bug Fixes | ❌ | ✅ |
+
+## Binary (Direct) Mode
+
+**What it is:** Decoder mode that passes raw binary data directly to the parser as a byte
+array (values 0-255), without string conversion. Available in both the free and Pro
+versions.
+
+**Why it matters:**
+- **No conversion overhead:** bytes reach the parser without encoding/decoding
+- **Lossless:** binary protocols are handled byte for byte
+- **Lower latency:** suited to high-frequency data
+
+**When you need it:**
+- Custom binary protocols
+- High-frequency data logging (>100 Hz)
+- Low-latency requirements
+- Byte-perfect parsing needed
+
+**Example:**
+```javascript
+// Binary (Direct) mode
+// Input: Raw byte array [0x12, 0x34, 0x56, 0x78]
+function parse(frame) {
+    // frame = [0x12, 0x34, 0x56, 0x78]
+    let value1 = (frame[0] << 8) | frame[1];  // 0x1234 = 4660
+    let value2 = (frame[2] << 8) | frame[3];  // 0x5678 = 22136
+    return [value1, value2];
+}
+```
 
 ## Pro-Only Feature Details
 
@@ -174,35 +202,6 @@ vibration analysis, musical instrument tuning, and general frequency or
 signal debugging.
 
 **Learn more:** [Protocol Setup Guide](Protocol-Setup-Guides.md#audio-input-setup-pro)
-
-### Binary (Direct) Mode
-
-**What it is:** Decoder mode that passes raw binary data directly to the JavaScript parser as a byte array (values 0-255), without string conversion.
-
-**Why it matters:**
-- **No conversion overhead:** bytes reach the parser without encoding/decoding
-- **Lossless:** binary protocols are handled byte for byte
-- **Lower latency:** suited to high-frequency data
-
-**When you need it:**
-- Custom binary protocols
-- High-frequency data logging (>100 Hz)
-- Low-latency requirements
-- Byte-perfect parsing needed
-
-**Example:**
-```javascript
-// Pro: Binary (Direct) mode
-// Input: Raw byte array [0x12, 0x34, 0x56, 0x78]
-function parse(frame) {
-    // frame = [0x12, 0x34, 0x56, 0x78]
-    let value1 = (frame[0] << 8) | frame[1];  // 0x1234 = 4660
-    let value2 = (frame[2] << 8) | frame[3];  // 0x5678 = 22136
-    return [value1, value2];
-}
-```
-
-**Free alternative:** Use Hexadecimal or Base64 decoder (with string conversion overhead)
 
 ### 3D Plot Widget
 
@@ -450,11 +449,13 @@ systems, non-commercial university research, and home automation.
 - Output (control) widgets and multi-device projects.
 - MDF4 export and playback, plus the Historian.
 - File transfers (XMODEM/YMODEM/ZMODEM) and the in-app AI Assistant.
-- Binary Direct mode.
 - Email support.
 
 Common cases: industrial automation, automotive diagnostics and telemetry,
 commercial products, and enterprise deployments.
+
+Binary (Direct) decoding is not on this list: it is ungated and available in the free
+version too (see [Binary (Direct) Mode](#binary-direct-mode) above).
 
 ## Pricing
 
@@ -601,8 +602,7 @@ Yes, for Pro customers. Contact alex@serial-studio.com for rates and availabilit
 | Create custom dashboard | ✅ | ✅ |
 | Plot sensor values | ✅ | ✅ |
 | Export to CSV | ✅ | ✅ |
-| Use Binary Direct mode | ❌ | ✅ |
-| **Result** | **Fully supported** | **Fully supported + performance options** |
+| **Result** | **Fully supported** | **Fully supported** |
 
 ### Industrial PLC Monitoring
 
@@ -643,8 +643,7 @@ Yes, for Pro customers. Contact alex@serial-studio.com for rates and availabilit
 |---|--------------|-----|
 | **Best for** | Hobbyists, students, open-source | Professionals, businesses, industry |
 | **Protocols** | Basic (Serial, Network, BLE) | Advanced (MQTT, Modbus, CAN, Audio, Raw USB, HID, Process I/O) |
-| **Widgets** | Standard (incl. XY Plot) | Standard + 3D Plot, Waterfall, Image View, Canvas, Output widgets |
-| **Performance** | Hex/Base64 decoding | Binary Direct mode |
+| **Widgets** | Standard | Standard + 3D Plot, XY Plot, Waterfall, Image View, Canvas, Output widgets |
 | **Export** | CSV | CSV + MDF4 |
 | **Commercial use** | ❌ | ✅ |
 | **Support** | Community | Email + Community |

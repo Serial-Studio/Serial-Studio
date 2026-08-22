@@ -465,7 +465,7 @@ void DataModel::ProjectEditor::buildSourceCommonRows(const DataModel::Source& so
   busItem->setData(tr("Bus Type"), ParameterName);
   busItem->setData(tr("Select the hardware interface for this input device"), ParameterDescription);
 
-  QStringList busTypes = {tr("Serial Port"), tr("Network Socket"), tr("Bluetooth LE")};
+  QStringList busTypes = {tr("Serial Port"), tr("Network"), tr("Bluetooth LE")};
 #ifdef BUILD_COMMERCIAL
   busTypes << tr("Audio Input") << tr("Modbus") << tr("CAN Bus") << tr("Raw USB")
            << tr("HID Device") << tr("Process") << tr("MQTT Subscriber");

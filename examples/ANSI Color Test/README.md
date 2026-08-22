@@ -60,11 +60,11 @@ This example exercises Serial Studio's ANSI color and VT-100 terminal emulation 
    - Set **Local Port** to **9000**
    - Click **Connect**
 
-2. **Enable ANSI Colors**:
+2. **Confirm ANSI Colors are on**:
    - Open the **Console** pane
-   - Check the **"Emulate VT-100"** checkbox first; **"ANSI Colors"** stays disabled
-     until VT-100 emulation is on
-   - Check the **"ANSI Colors"** checkbox
+   - Confirm **"Emulate VT-100"** and **"ANSI Colors"** are both checked (they're on by
+     default); note that **"ANSI Colors"** stays disabled until VT-100 emulation is on, so
+     if you had previously turned VT-100 off, re-enable it first
    - Optionally check **"Show Timestamp"** to see colored timestamps
 
 ### Troubleshooting

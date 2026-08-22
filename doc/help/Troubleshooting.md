@@ -197,6 +197,15 @@ sudo chmod 666 /dev/ttyUSB0  # Replace with your port
    - Verify delimiters match what device sends
    - Try "No Delimiters" mode temporarily
 
+#### Garbled or unreadable console output
+
+Data arrives, but the console shows nonsense instead of readable text. Two different causes look similar but need different fixes:
+
+- **Baud rate mismatch**: random accented characters, or a scatter of `U+FFFD` replacement marks (`�`) mixed with otherwise readable text. Every byte is misread because the UART clock and the device disagree on bit timing. Fix by matching the baud rate exactly to what the device sends.
+- **Wrong text encoding**: the same characters are wrong in the same places every time (for example, a degree symbol always renders as two garbage bytes). The bytes themselves are correct, but the console is decoding them as the wrong charset. Fix from the console's encoding/format setting, not the baud rate.
+
+If toggling the baud rate through the common values doesn't help, suspect encoding instead.
+
 ### Network Socket (TCP/UDP)
 
 #### Cannot connect to TCP socket
@@ -472,7 +481,7 @@ was written for a string input.
    -- Lua: frame[1] is the first byte (1-indexed)
    function parse(frame)
      if #frame < 4 then return {} end
-     return { (frame[1] << 8) | frame[2], (frame[3] << 8) | frame[4] }
+     return { bit.bor(bit.lshift(frame[1], 8), frame[2]), bit.bor(bit.lshift(frame[3], 8), frame[4]) }
    end
    ```
 
@@ -484,15 +493,14 @@ was written for a string input.
    }
    ```
 
-2. **Need `string.unpack` (floats, multi-byte fields)?** Convert the table to a string once
-   at the top of `parse()`:
+2. **Need multi-byte or float fields?** LuaJIT has no `string.pack`/`string.unpack`. Decode
+   directly from the byte table with the `bit` library and arithmetic:
 
    ```lua
    function parse(frame)
-     if type(frame) == "table" then
-       frame = string.char(table.unpack(frame))
-     end
-     -- string functions work from here on
+     if #frame < 4 then return {} end
+     local value = bit.lshift(frame[1], 8) + frame[2]  -- big-endian uint16
+     return { value }
    end
    ```
 

@@ -17,7 +17,7 @@ The project includes a control loop that selects the service and characteristic 
 
 Bluetooth Low Energy exposes battery level through the Battery Level characteristic, `0x2A19` (`uint8`, 0 to 100):
 
-- **Service UUID:** `0x180A`. This project is wired to the Device Information Service, where the test device (an iPhone) advertises its battery characteristic. Devices that follow the standard expose it under the Battery Service, `0x180F` instead; change the service UUID in the control loop to match your hardware.
+- **Service UUID:** `0x180F` (Battery Service), the standard service most BLE devices expose battery data under. Exception: an iPhone under test advertises its battery characteristic under the Device Information Service, `0x180A`, instead; if you're connecting to one, change `BATTERY_SERVICE_UUID` in the control loop (and the project's stored service UUID) to `0x180A`.
 - **Characteristic UUID:** `0x2A19`. Battery Level (`uint8`, 0 to 100).
 
 The bundled control loop picks the configured service, selects its first characteristic, subscribes to notifications, and independently polls the characteristic once per second regardless of subscription status. The frame parser and project settings decode the resulting 1-byte value.
@@ -54,5 +54,5 @@ function parse(frame) {
 1. Open Serial Studio and load `BLE Battery Level.ssproj`.
 2. Select Bluetooth LE as the input source.
 3. Pick your BLE device (for example your iPhone) and click Connect.
-4. The control loop selects the service (`0x180A` as shipped) and its battery characteristic (`0x2A19`) automatically.
+4. The control loop selects the service (`0x180F` as shipped) and its battery characteristic (`0x2A19`) automatically. Connecting to an iPhone? See the note above about switching to `0x180A`.
 5. Watch the gauge update in real time.

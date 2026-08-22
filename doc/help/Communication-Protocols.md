@@ -22,7 +22,7 @@ flowchart TD
 |--------------------|---------|-------------------------|----------------------------|----------------------------------------|
 | Serial/UART        | Free    | USB / RS-232 / RS-485   | 110 bps to 1 Mbps+         | Microcontrollers, embedded dev         |
 | TCP/UDP network    | Free    | Ethernet / WiFi         | Network-dependent          | WiFi-enabled boards, remote telemetry  |
-| Bluetooth LE       | Free    | 2.4 GHz radio           | ~1 Mbps                    | Battery-powered wireless sensors       |
+| Bluetooth LE       | Free    | 2.4 GHz radio           | ~250 kbps (practical payload) | Battery-powered wireless sensors       |
 | MQTT               | Pro     | Internet / LAN          | Network-dependent          | IoT cloud, distributed systems         |
 | Modbus             | Pro     | RS-485 / Ethernet       | 9600 bps to network speed  | PLCs, SCADA, industrial equipment      |
 | CAN Bus            | Pro     | Twisted pair            | Up to 1 Mbps (arbitration) | Automotive, industrial machinery       |
@@ -168,7 +168,7 @@ For the protocol vocabulary, see [MQTT Topics & Semantics](MQTT-Topics.md). The 
 
 ### Modbus
 
-Modbus is an industrial communication protocol for reading and writing registers on PLCs, SCADA devices, and other industrial equipment. Serial Studio Pro supports both Modbus RTU (over RS-485 serial) and Modbus TCP (over Ethernet/IP).
+Modbus is an industrial communication protocol for reading and writing registers on PLCs, SCADA devices, and other industrial equipment. Serial Studio Pro supports both Modbus RTU (over RS-485 serial) and Modbus TCP (over TCP/IP).
 
 **When to use it:**
 

@@ -361,6 +361,8 @@ struct alignas(8) OutputWidget {
   double initialValue   = 0;                         ///< Initial widget value
   QString icon;
   QString title;
+  QString onLabel;
+  QString offLabel;
   QString transmitFunction;
 };
 
@@ -380,6 +382,12 @@ static_assert(sizeof(OutputWidget) % alignof(OutputWidget) == 0, "Unaligned Outp
   obj.insert(Keys::OutputMaxValue, w.maxValue);
   obj.insert(Keys::OutputStepSize, w.stepSize);
   obj.insert(Keys::OutputInitialValue, w.initialValue);
+  if (!w.onLabel.isEmpty())
+    obj.insert(Keys::OutputOnLabel, w.onLabel);
+
+  if (!w.offLabel.isEmpty())
+    obj.insert(Keys::OutputOffLabel, w.offLabel);
+
   if (w.monoIcon)
     obj.insert(Keys::OutputMonoIcon, true);
 

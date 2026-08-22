@@ -1771,7 +1771,7 @@
             "checksumAlgorithm": "",
             "connection": {
                 "arguments": "",
-                "executable": "/Users/alex/Documents/GitHub/Serial-Studio/examples/System Monitor/system-monitor.sh",
+                "executable": "./system-monitor.sh",
                 "mode": 0,
                 "pipePath": "",
                 "workingDir": ""

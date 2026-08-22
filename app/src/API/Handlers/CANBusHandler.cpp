@@ -74,6 +74,33 @@ void API::Handlers::CANBusHandler::registerCommands()
   }),
                            &setCanFD);
 
+  registry.registerCommand(QStringLiteral("io.canbus.setDataBitrate"),
+                           QStringLiteral("Set CAN FD data-phase bitrate (params: dataBitrate)"),
+                           makeSchema({
+                             {QStringLiteral("dataBitrate"),
+                              QStringLiteral("integer"),
+                              QStringLiteral("CAN FD data-phase bitrate in bits per second")}
+  }),
+                           &setDataBitrate);
+
+  registry.registerCommand(QStringLiteral("io.canbus.setLoopback"),
+                           QStringLiteral("Enable/disable loopback mode (params: enabled)"),
+                           makeSchema({
+                             {QStringLiteral("enabled"),
+                              QStringLiteral("boolean"),
+                              QStringLiteral("Enable or disable loopback mode")}
+  }),
+                           &setLoopback);
+
+  registry.registerCommand(QStringLiteral("io.canbus.setListenOnly"),
+                           QStringLiteral("Enable/disable listen-only mode (params: enabled)"),
+                           makeSchema({
+                             {QStringLiteral("enabled"),
+                              QStringLiteral("boolean"),
+                              QStringLiteral("Enable or disable listen-only mode")}
+  }),
+                           &setListenOnly);
+
   registry.registerCommand(QStringLiteral("io.canbus.getConfig"),
                            QStringLiteral("Get current CAN bus configuration"),
                            empty,
@@ -215,6 +242,72 @@ API::CommandResponse API::Handlers::CANBusHandler::setCanFD(const QString& id,
   return CommandResponse::makeSuccess(id, result);
 }
 
+/**
+ * @brief Set CAN FD data-phase bitrate
+ */
+API::CommandResponse API::Handlers::CANBusHandler::setDataBitrate(const QString& id,
+                                                                  const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("dataBitrate"))) {
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: dataBitrate"));
+  }
+
+  const int dataBitrate = params.value(QStringLiteral("dataBitrate")).toInt();
+
+  if (dataBitrate <= 0) {
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("dataBitrate must be positive"));
+  }
+
+  static auto& connectionManager = IO::ConnectionManager::instance();
+  connectionManager.canBus()->setDataBitrate(static_cast<quint32>(dataBitrate));
+
+  QJsonObject result;
+  result[QStringLiteral("dataBitrate")] = dataBitrate;
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Enable or disable loopback mode
+ */
+API::CommandResponse API::Handlers::CANBusHandler::setLoopback(const QString& id,
+                                                               const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("enabled"))) {
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
+  }
+
+  const bool enabled             = params.value(QStringLiteral("enabled")).toBool();
+  static auto& connectionManager = IO::ConnectionManager::instance();
+  connectionManager.canBus()->setLoopback(enabled);
+
+  QJsonObject result;
+  result[QStringLiteral("enabled")] = enabled;
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Enable or disable listen-only mode
+ */
+API::CommandResponse API::Handlers::CANBusHandler::setListenOnly(const QString& id,
+                                                                 const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("enabled"))) {
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
+  }
+
+  const bool enabled             = params.value(QStringLiteral("enabled")).toBool();
+  static auto& connectionManager = IO::ConnectionManager::instance();
+  connectionManager.canBus()->setListenOnly(enabled);
+
+  QJsonObject result;
+  result[QStringLiteral("enabled")] = enabled;
+  return CommandResponse::makeSuccess(id, result);
+}
+
 //--------------------------------------------------------------------------------------------------
 // Getters
 //--------------------------------------------------------------------------------------------------
@@ -242,8 +335,11 @@ API::CommandResponse API::Handlers::CANBusHandler::getConfiguration(const QStrin
   if (canbus->interfaceIndex() < interfaceList.count())
     result[QStringLiteral("interfaceName")] = interfaceList.at(canbus->interfaceIndex());
 
-  result[QStringLiteral("bitrate")] = static_cast<qint64>(canbus->bitrate());
-  result[QStringLiteral("canFD")]   = canbus->canFD();
+  result[QStringLiteral("bitrate")]     = static_cast<qint64>(canbus->bitrate());
+  result[QStringLiteral("canFD")]       = canbus->canFD();
+  result[QStringLiteral("dataBitrate")] = static_cast<qint64>(canbus->dataBitrate());
+  result[QStringLiteral("loopback")]    = canbus->loopback();
+  result[QStringLiteral("listenOnly")]  = canbus->listenOnly();
 
   result[QStringLiteral("isOpen")]          = canbus->isOpen();
   result[QStringLiteral("configurationOk")] = canbus->configurationOk();

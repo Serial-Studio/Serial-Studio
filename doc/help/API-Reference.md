@@ -3160,7 +3160,7 @@ Get the project-wide frame parser configuration (delimiters, checksum, operation
   "frameDetection": 0
 }
 ```
-`startSequence`/`endSequence` are the primary (first) delimiters; `startSequences`/`endSequences` list every configured delimiter. `operationMode` is 0=ProjectFile, 1=DeviceSendsJSON (Console Only), 2=QuickPlot. `frameDetection` is 0-3 (End Delimiter Only, Start and End Delimiter, No Delimiters, Start Delimiter Only).
+`startSequence`/`endSequence` are the primary (first) delimiters; `startSequences`/`endSequences` list every configured delimiter. `operationMode` is 0=ProjectFile, 1=ConsoleOnly, 2=QuickPlot. `frameDetection` is 0-3 (End Delimiter Only, Start and End Delimiter, No Delimiters, Start Delimiter Only).
 
 #### 🟢 `project.frameParser.update`
 Configure frame parser delimiters, checksum, frame detection, and operation mode.
@@ -4972,13 +4972,9 @@ send_command "io.uart.setBaudRate" '{"baudRate": 115200}'
 
 #### Using netcat
 ```bash
-# Using netcat
+# The API server speaks newline-delimited JSON over a raw TCP socket, not HTTP --
+# curl cannot talk to it. Use nc or a language's raw socket API instead.
 echo '{"type":"command","id":"1","command":"io.getStatus"}' | nc localhost 7777
-
-# Using curl (if supported)
-curl -X POST http://localhost:7777 \
-  -H "Content-Type: application/json" \
-  -d '{"type":"command","id":"1","command":"io.getStatus"}'
 ```
 
 #### Python (Raw Socket)

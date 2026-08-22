@@ -35,6 +35,8 @@ Patched fields go at the top level of `params`, not inside an `options` object.
 
 A separate field unrelated to identity. `index` is the **frame offset**, that is, the position of the dataset's value inside the parsed frame. With a CSV like `25.3,1013.2,42` and three datasets, the first dataset has `index = 1`, the second `index = 2`, the third `index = 3`. (Index `0` is reserved.) Multiple datasets can share the same `index` if you want the same raw value styled in different ways. `index` has no relation to `datasetId` and the two often diverge.
 
+If a parsed frame has fewer fields than a dataset's `index` requires, that dataset keeps its previous value instead of clearing or erroring: the widget looks frozen rather than blank. This is the usual cause of a dashboard element that stops updating while others keep moving.
+
 ### `uniqueId`
 
 A single integer that identifies a dataset *globally* across the whole project. It's **persisted in the project file** (each dataset stores its `uniqueId` directly) and **assigned once** from a project-level counter when the dataset is created, duplicated, or imported. Reordering or renaming a dataset never changes its `uniqueId`.

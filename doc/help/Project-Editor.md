@@ -13,13 +13,17 @@ The diagram below shows the tree structure of a Serial Studio project file and h
 ```mermaid
 flowchart TD
     Root["Project Root"]
-    Root --> Groups
-    Root --> Actions
-    Root --> Sources["Sources · Pro"]
-    Groups --> G["Groups → Datasets"]
-    Actions --> A["Actions → Buttons"]
-    Sources --> S["Sources → Connections"]
+    Root --> CL["Control Loop"]
+    Root --> A["Action: ..."]
+    Root --> S["Source: ..."]
+    Root --> DW["Dashboard Widgets"]
+    S --> FP["Frame Parser"]
+    DW --> G["Group → Datasets"]
 ```
+
+Control Loop, every action, and every source sit directly under the project root — there is
+no intermediate "Actions" or "Sources" node. Groups are the exception: they are filed under a
+"Dashboard Widgets" node instead of sitting at the root.
 
 ### Frame index mapping
 
@@ -56,17 +60,17 @@ Shows the project's hierarchical structure:
 
 ```
 Project Root
-  Groups
+  Control Loop
+  Action: "Reset Device"
+  Source: "Main Device"
+    Frame Parser
+  Dashboard Widgets
     Group: "Sensors"
       Dataset: "Temperature"   [IDX 1]
       Dataset: "Humidity"      [IDX 2]
       Dataset: "Pressure"      [IDX 3]
     Group: "Status"
       Dataset: "Battery"       [IDX 4]
-  Actions
-    Action: "Reset Device"
-  Sources
-    Source: "Main Device"
 ```
 
 The number in brackets is the dataset's frame index: its position in the parsed data array. Click any item to edit its properties in the right panel.
@@ -81,7 +85,7 @@ You can trigger the same navigation three other ways:
 - **Alt+Left** (back) and **Alt+Right** (forward) from anywhere in the editor.
 - **Backspace** to go back, while the tree has keyboard focus. It never interferes with typing, because it only acts when a text field is not focused.
 
-On the right of the caption bar are folder shortcuts that act on the current selection: **New Folder**, **Move to Folder**, **Move Up**, and **Move Down**. Each button is enabled only when it applies to what is selected, and produces the same result as the matching entry in the right-click menu.
+On the right of the caption bar are **Move Up** and **Move Down**, which reorder the current selection among its siblings. Each button is enabled only when it applies to what is selected, and produces the same result as the matching entry in the right-click menu. **New Folder** and **Move to Folder** are not on the caption bar; reach them from the right-click context menu (New Folder is also available as an **Add Folder** button in the property panel when a branch root is selected — see [Organizing with folders](#organizing-with-folders) below).
 
 ### Property panel (right panel)
 
@@ -130,7 +134,7 @@ Groups
 
 ### Creating and filling folders
 
-- **Add a folder.** Select the branch root (Groups, Variables, or Workspaces) and click **Add Folder** in the toolbar, or right-click the branch and choose **New Folder**.
+- **Add a folder.** Select the branch root (Groups, Variables, or Workspaces); the property panel shows an **Add Folder** button in its own toolbar, or right-click the branch and choose **New Folder**.
 - **Nest a folder.** Select an existing folder and click **Add Sub-folder**, or right-click it and choose **New Sub-Folder**. Folders nest to any depth.
 - **Move an item in.** Right-click a group, table, workspace, or folder and use the **Move to Folder** submenu. It mirrors the folder tree, so you can drop the item into any folder at any depth, or back to the top level.
 - **Add items directly into a folder.** With a folder selected, the matching add button (**Add Group**, **Add Shared Table**, **Add Workspace**) creates the new item already filed inside it.
@@ -163,7 +167,10 @@ Folders are saved additively in the `.ssproj` file as `groupFolders`, `tableFold
 
 ### Step 2: configure frame parsing
 
-When the project root is selected, the property panel shows the frame-parsing settings: how the byte stream is sliced into frames, how each frame is decoded, and which parser turns it into values. They apply globally in single-source projects, or per-source in multi-source projects.
+Select the source in the tree (every project has at least one, named "Device A" by default,
+even single-device ones) to configure how the byte stream is sliced into frames, how each
+frame is decoded, and which parser turns it into values. These settings live on the source
+form; selecting the project root only shows the Project Title field.
 
 #### Detection, decoding, and integrity
 
@@ -178,6 +185,42 @@ These settings run *before* the parser and apply to every parser type (Built-In,
 | Checksum algorithm | Optional integrity check appended to each frame; frames that fail are dropped. | XOR-8, MOD-256, CRC-8, CRC-16, CRC-16-MODBUS, CRC-16-CCITT, Fletcher-16, CRC-32, Adler-32. |
 
 Picking the wrong decoder/detection pair silently mojibakes binary data or never produces a frame. The trap to remember: **Plain Text routes through `QString::fromUtf8`**, so any byte that is not valid UTF-8 (most binary payloads contain `0x00` or values above `0x7F`) is replaced with `U+FFFD` and the original bytes are lost. For anything non-text, pick **Binary (Direct)**.
+
+**Checksum parameters.** The algorithm names differ in polynomial, initial value, and byte
+order; picking the wrong one for a device that expects a specific profile makes every frame
+fail validation silently.
+
+| Algorithm | Width | Polynomial | Init | Reflect in/out | Byte order | Check (`"123456789"`) |
+|-----------|-------|------------|------|-----------------|------------|------------------------|
+| XOR-8 | 8-bit | - | 0x00 | - | single byte | `0x31` |
+| MOD-256 | 8-bit | - (modular sum) | 0x00 | - | single byte | `0xDD` |
+| CRC-8 | 8-bit | 0x31 | 0xFF | no / no | single byte | `0xF7` |
+| CRC-16 | 16-bit | 0x1021 | 0xFFFF | no / no | big-endian | `0x29B1` |
+| CRC-16-MODBUS | 16-bit | 0x8005 (reflected 0xA001) | 0xFFFF | yes / yes | **little-endian** | `0x4B37` |
+| CRC-16-CCITT | 16-bit | 0x1021 | 0x0000 | no / no | big-endian | `0x31C3` |
+| Fletcher-16 | 16-bit | - (modular sum) | 0 | - | big-endian | `0x1EDE` |
+| CRC-32 | 32-bit | 0x04C11DB7 (reflected 0xEDB88320) | 0xFFFFFFFF | yes / yes | big-endian | `0xCBF43926` |
+| Adler-32 | 32-bit | - (modular sum) | 1 | - | big-endian | `0x091E01DE` |
+
+The check column is the checksum value computed over the ASCII string `123456789`, useful to
+confirm a device implementation speaks the same profile. **CRC-16** and **CRC-16-CCITT**
+share the `0x1021` polynomial but not the initial value (`0xFFFF` vs. `0x0000`), so despite
+the similar name they produce different bytes for the same input and are not interchangeable.
+**CRC-16-MODBUS is the one exception to big-endian packing**: Serial Studio writes it
+least-significant-byte first; every other multi-byte checksum in this list is packed
+most-significant-byte first.
+
+Two defaults matter for hand-edited or very old project files: when a project's `sources`
+array is absent entirely (legacy single-source format), the frame detection method defaults
+to **Start + End Delimiter**; when an individual entry inside a `sources` array omits the key,
+it defaults to **End Delimiter Only** instead. New projects saved by the editor always write
+the key explicitly, so the two defaults only surface on hand-crafted or pre-multi-source
+files.
+
+Every saved source also writes both the short JSON alias (`checksum`, `decoder`) and the long
+name (`checksumAlgorithm`, `decoderMethod`); on load the long name wins if both are present.
+The short aliases are legacy, load-only compatibility fields - never target them when
+hand-editing a project file.
 
 #### Parser language
 
@@ -199,12 +242,13 @@ Groups organize related datasets and determine which group-level widget is used 
 
 1. Click one of the group buttons in the toolbar (**Group** for a plain container, or **Table**, **Multi-Plot**, **Accelerometer**, **Gyroscope**, **GPS Map**, and so on for a pre-configured one).
 2. Select the new group in the tree to configure it.
-3. Set the **Title** (for example "Environmental Sensors").
-4. Set the **Widget Type**:
+3. Set the **Group Title** (for example "Environmental Sensors").
+4. Set the **Composite Widget** (the group's widget-type selector):
 
 | Widget          | Description                        | Dataset requirements |
 |-----------------|------------------------------------|----------------------|
 | Data Grid       | Tabular view of all values         | Any number           |
+| Bar Panel       | One alarm-band-colored bar per dataset | Any number        |
 | Multiple Plot   | Overlaid time-series curves        | One or more          |
 | Accelerometer   | 3D acceleration visualization      | Exactly 3 (X, Y, Z)  |
 | Gyroscope       | 3D orientation visualization       | Exactly 3 (X, Y, Z)  |
@@ -225,7 +269,7 @@ Datasets map to individual data fields in your device's output.
 
 **General**
 
-- **Title.** Display label (for example "Temperature").
+- **Dataset Title.** Display label (for example "Temperature").
 - **Measurement Unit.** Measurement suffix (for example "deg C", "hPa", "%").
 - **Frame Index.** 1-based position in the parsed data array. If your device sends `23.5,1013,45.2`, then Temperature = 1, Pressure = 2, Humidity = 3.
 - **Widget.** Per-dataset visualization: Bar, Gauge, Compass, Meter, or None. All four render on the dashboard as a two-page swipe view — page 0 is the analog visualization and page 1 is a large monospace digital readout. The active page is saved per widget in the project file.
@@ -233,14 +277,14 @@ Datasets map to individual data fields in your device's output.
 
 **Plot Settings**
 
-- **Enable Plot Widget.** Enable time-series plotting.
+- **Enable Plot Widget.** Yes/No selector (not a checkbox); **Yes** plots this dataset as a time series.
 
 **FFT (frequency analysis)**
 
 - **Enable FFT Analysis.** Enable frequency-domain analysis.
 - **FFT Window Size.** Window size (64, 128, 256, 512, 1024, and so on).
 - **FFT Window Function.** Window applied before the transform to reduce spectral leakage; affects both the FFT plot and the waterfall. Default is **Blackman-Harris**. Options: Rectangular (None), Bartlett (Triangular), Hann, Hamming, Blackman, Blackman-Harris, Nuttall, Blackman-Nuttall, Flat Top, Welch, Bartlett-Hann, Bohman, Cosine (Sine), Lanczos, Parzen.
-- **FFT Sampling Rate.** In Hz. Has to match the actual data rate for correct frequency axis labeling.
+- **FFT Sampling Rate (Hz, required).** Has to match the actual data rate for correct frequency axis labeling.
 - **Minimum Value (optional) / Maximum Value (optional).** Y-axis range for the FFT plot; falls back to the General section's Minimum Value / Maximum Value when left unset.
 
 **Waterfall (Pro)**
@@ -297,8 +341,8 @@ Sources define where data comes from. Single-device projects have one implicit s
 2. Configure:
    - **Title.** Descriptive label (for example "Arduino Uno").
    - **Bus Type.** Serial Port, Network Socket, Bluetooth LE, or (Pro) Audio Input, Modbus, CAN Bus, Raw USB, HID Device, Process, MQTT Subscriber.
-   - **Frame Detection / Delimiters.** Per-source overrides (same options as the project root).
-   - **Data Conversion / Checksum.** Per-source overrides.
+   - **Frame Detection / Delimiters.** Same fields described in Step 2, configured independently per source.
+   - **Data Conversion / Checksum.** Same fields described in Step 2, configured independently per source.
    - **Connection Settings.** Bus-specific parameters (COM port, baud rate, IP address, and so on) saved with the project.
 
 Each source has its own Frame Parser tab for a per-source parser script.
@@ -338,11 +382,11 @@ function parse(frame) {
 }
 ```
 
-5. The parser code is stored in the project automatically as you type. Use the **Validate** button to check that the script compiles, and **Test With Sample Data** to run it against a sample frame.
+5. The parser code is stored in the project automatically as you type. Use the **Validate** button to check the script (syntax, and a runtime probe for the first source — see Step 7b), and **Test With Sample Data** to run it against a sample frame.
 
 **Rules:**
 
-- The function has to be named `parse` and has to accept exactly one argument.
+- The function has to be named `parse` and has to accept **at least one parameter** (the frame payload). JavaScript rejects the deprecated two-parameter `parse(frame, separator)` form specifically, but declaring extra unused parameters is otherwise allowed; Lua performs no arity check at all.
 - It has to return a table (Lua) or array (JavaScript). Each element maps to a dataset frame index.
 - Global variables declared outside `parse()` persist between calls. Useful for stateful protocols.
 - Use `console.log()` (both languages) or `print()` (Lua shorthand) to print debug messages to the Serial Studio terminal. The full `console` table (`log`, `debug`, `info`, `warn`, `error`) is available in JavaScript and Lua alike; `error` also raises an application notification, and `warn` does too when **Route Warnings to Notifications** is enabled in Settings (off by default).
@@ -360,12 +404,12 @@ end
 
 ### Step 7b: test the pipeline with the Test dialog
 
-The **Test With Sample Data** button on the parser toolbar opens the **Test Frame Parser** dialog. It runs the same byte-to-channels pipeline the live dashboard uses, so what you see here is what the dashboard would see for the same input. (The separate **Validate** button in the code-editor toolbar only checks that the script compiles.)
+The **Test With Sample Data** button on the parser toolbar opens the **Test Frame Parser** dialog. It runs the same byte-to-channels pipeline the live dashboard uses, so what you see here is what the dashboard would see for the same input. (The separate **Validate** button in the code-editor toolbar does more than check syntax: it compiles the script and then calls `parse()` with a runtime probe frame — trying `"0"`, a one-byte array, and `""` in turn — to catch errors that only surface when the function runs. The probe only fires for the first source in a multi-source project; additional sources are syntax-checked only.)
 
 The dialog has three sections:
 
 1. **Pipeline configuration.** Detection mode, start / end delimiter, hex-delimiter toggle, decoder method, and checksum algorithm. These are wired to the active source: editing them in the dialog rewrites the project source immediately, and the live frame reader picks up the change. There is no separate "Apply" step.
-2. **Frame data input.** A line edit for the raw stream bytes you want to test. Tick **HEX** to type bytes as space-separated hex pairs (`01 A2 FF 3C`) - the safe way to feed binary protocols. Plain text mode reads the field as UTF-8.
+2. **Frame data input.** A line edit for the raw stream bytes you want to test. Tick **Hex** to type bytes as space-separated hex pairs (`01 A2 FF 3C`) - the safe way to feed binary protocols. Plain text mode reads the field as UTF-8. Press **Return** in the field, or click **Evaluate** at the bottom of the dialog, to run the pipeline and populate the results below.
 3. **Pipeline results.** A stats line shows `frames extracted | bytes consumed | bytes buffered | dropped`. Below it, a tree expands each extracted frame into its raw bytes (hex), its decoder output (what the parser receives), and the parsed rows with one node per channel.
 
 Reading the tree top-down tells you exactly which stage failed:
@@ -392,7 +436,7 @@ Parser returns: ["23.5", "1013", "45.2"]
 
 - Frame indices are 1-based. Index 1 corresponds to array element 0.
 - Each index should be unique across the whole project.
-- The Project Editor auto-assigns the next available index when you add a dataset.
+- The Project Editor assigns one past the highest index currently in use when you add a dataset; it does not refill a gap left by a deleted dataset.
 
 ## Dataset value transforms
 
@@ -444,7 +488,7 @@ Reloading replaces the in-memory project. The **Restore** dialog still lists the
 1. Check the console for error messages.
 2. Add `console.log()` calls to inspect the raw frame and parsed output.
 3. Make sure the function always returns an array, never a string, object, or undefined.
-4. Use **Validate** to confirm the script compiles after editing the parser code.
+4. Use **Validate** to confirm the script is syntax- and runtime-clean after editing the parser code.
 
 ### Delimiter mismatch
 

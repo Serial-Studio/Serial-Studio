@@ -23,4 +23,4 @@ latched between frames.
 
 ## Pipeline Notes
 
-Select the **Binary (raw bytes)** decoder.
+Select the **Binary (Direct)** decoder.

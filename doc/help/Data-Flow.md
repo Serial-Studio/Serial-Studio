@@ -56,11 +56,16 @@ No project file needed. This mode targets rapid prototyping with CSV-formatted s
 ### Project File mode
 
 1. Apply the configured decoder (Plain Text (UTF-8), Hexadecimal, Base64, or Binary (Direct)) to turn raw bytes into a parse-ready form.
-2. Call the `parse(frame)` function in your chosen scripting engine (Lua 5.4 or JavaScript).
+2. Call the `parse(frame)` function in your chosen scripting engine (Lua (LuaJIT 2.1, 5.1 syntax with compatibility shims) or JavaScript).
 3. The function returns a list of values (or a 2D list for multi-frame output).
 4. Map returned values to datasets by their Frame Index.
 5. For each dataset, apply its optional `transform(value)` function to convert the raw value into an engineering value. The walk is single-pass, in group then dataset order: a transform can read any dataset's raw value, but reading the final value of a dataset that comes later in the order returns the previous frame's result. Transforms can also read project constants and publish computed variables in the project's [shared tables](Data-Tables.md); computed variables persist across frames. See [Dataset Value Transforms](Dataset-Transforms.md).
 6. Build the final frame with the populated dataset values. Computed datasets (datasets with no Frame Index) are filled entirely by their transform at this point.
+
+Frames aren't handed to the dashboard and export path one at a time. The frame builder stages
+each frame's values into a shared block and flushes that block to the dashboard and to every
+export sink when the display refreshes or when the block fills up, whichever comes first. No
+frame's data is skipped by this batching; it only changes how delivery is grouped.
 
 ### Multi-source projects (Pro)
 
@@ -91,7 +96,7 @@ When CSV export, MDF4 export, the Historian, or the API server is active, every 
 
 **Partial frames.** Delimiter mismatch. Your device may be sending `\r\n` while you configured only `\n`, or vice versa. Look at the raw hex in the console.
 
-**Dashboard not updating.** Check that dataset Frame Index values in the project file match the positions in your parsed data array. Index 1 maps to the first element returned by `parse()`.
+**Dashboard not updating.** Check that dataset Frame Index values in the project file match the positions in your parsed data array. Index 1 maps to the first element returned by `parse()`. If a frame returns fewer elements than a dataset's index needs, that dataset silently keeps its last value instead of clearing: a widget that's frozen (not blank) usually means the parser is returning a shorter array than expected on some frames.
 
 **High CPU with no dashboard.** The frame reader may be matching too many false frames. Tighten your delimiters or add checksum validation.
 

@@ -3,6 +3,9 @@
 Decodes ATTITUDE, VFR_HUD and GLOBAL_POSITION_INT messages from drones
 and autopilots. Values latch between frames.
 
+Each frame is a fixed 16-value row; only the channels listed below are
+ever written. Channels not listed are unused and always read back empty.
+
 ## Wire Format
 
 MAVLink v1 framing with the start marker included:
@@ -17,6 +20,16 @@ MAVLink v1 framing with the start marker included:
 |-----------|------|---------|-------------|
 | Protocol version | choice | MAVLink v1 | Selects the expected start marker (`0xFE` for v1, `0xFD` for v2). |
 
+**Known limitation:** the `v2` option only changes the expected start
+marker byte. It still parses the v1 header layout (message id at byte 5,
+payload starting at byte 6), not the v2 layout (10-byte header, 3-byte
+little-endian message id, payload starting at byte 10). Real MAVLink v2
+frames will have their message id and payload read from the wrong
+offsets and decode incorrectly. Use v1 senders until this is fixed.
+
+The frame's trailing CRC-16/X.25 checksum is not verified by this
+template, so a corrupted frame can still appear to parse.
+
 ## Output Channels
 
 | Channel | Value | Message |
@@ -29,5 +42,5 @@ MAVLink v1 framing with the start marker included:
 
 ## Pipeline Notes
 
-Select the **Binary (raw bytes)** decoder. Messages with other ids are
+Select the **Binary (Direct)** decoder. Messages with other ids are
 ignored; channels keep their previous values.

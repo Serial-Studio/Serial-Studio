@@ -9,7 +9,7 @@ command routing table. Values latch between frames.
 +CSQ: 25,99
 ```
 
-With the default table, `25` lands on channel 1 (RSSI) and `99` on
+With the default table, `25` writes to channel 1 (RSSI) and `99` to
 channel 2 (BER).
 
 ## Parameters

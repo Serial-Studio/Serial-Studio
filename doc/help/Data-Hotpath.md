@@ -3,7 +3,8 @@
 A technical reference for how a single byte travels from a connected device to a rendered widget,
 and how the frame parser and dataset transforms plug into that pipeline. If you're looking for
 the high-level user view, start with [Data Flow](Data-Flow.md). For threading-specific guarantees
-(what is and isn't guaranteed, why FrameReader stays on the main thread), see
+(what is and isn't guaranteed, why FrameReader and FrameBuilder run on a dedicated pipeline
+thread instead of the GUI thread), see
 [Threading and Timing Guarantees](Threading-and-Timing.md). This page is for advanced users,
 plugin authors, and anyone debugging throughput, latency, or timing problems.
 
@@ -16,18 +17,22 @@ allocations, copies, and cross-thread context switches.
 
 ```mermaid
 flowchart TD
-    A["Driver<br/>(driver thread or main)"] -->|CapturedDataPtr| B["FrameReader<br/>(main thread)"]
+    A["Driver<br/>(driver thread or GUI thread)"] -->|CapturedDataPtr<br/>queued, chunk rate| B["FrameReader<br/>(pipeline thread)"]
     B -->|enqueue| Q["Lock-free queue<br/>65536 slots"]
-    Q -->|dequeue| C["DeviceManager<br/>(main thread)"]
-    C -->|frameReady<br/>DirectConnection| D["ConnectionManager<br/>(main thread)"]
-    D --> E["FrameBuilder<br/>(main thread)"]
-    E -->|TimestampedFramePtr| F["Dashboard"]
-    E -->|TimestampedFramePtr| G["CSV / MDF4 / API / gRPC / Sessions / MQTT"]
+    Q -->|dequeue, direct call| R["PipelineHost::routeFrames<br/>(pipeline thread)"]
+    R --> E["FrameBuilder<br/>decode / parse / transforms<br/>(pipeline thread)"]
+    E -->|stage rows into pooled DataBlock| S["DataBlock<br/>flush on display tick or sample cap"]
+    S -->|SPSC ring, drained on<br/>Dashboard::onDisplayTick| F["Dashboard (GUI thread)"]
+    S -->|clone_block_trimmed,<br/>if any sink active| G["CSV / MDF4 / API / gRPC / Sessions / MQTT"]
 ```
 
-Each arrow is either a direct in-thread call or a `Qt::DirectConnection` signal. Same-thread
-queued connections are avoided on this path: at 10 kHz they fill Qt's event queue faster than
-the consumer can drain it, and the FrameReader's bounded queue starts dropping frames.
+The driver-to-`FrameReader` hop is a genuine cross-thread `QueuedConnection`, but it fires once
+per received chunk, not once per frame — a chunk can carry many frames, so the cost is amortized
+across all of them. Every hop after that lives entirely on the pipeline thread and is either a
+direct in-thread call or a `Qt::DirectConnection` signal: a queued connection between two objects
+already on the same thread is avoided there, because at 10+ kHz it would fill Qt's event queue
+faster than the consumer can drain it, and `FrameReader`'s bounded queue would start dropping
+frames.
 
 MDF4 export, the Historian, and the MQTT bridge are Pro-only; a free build compiles
 those sinks out and skips them in fan-out.
@@ -56,7 +61,7 @@ receiving thread and report fictional timing.
 
 ### Stage 2: frame reader
 
-`IO::FrameReader` runs on the main thread and owns a single producer / single consumer
+`IO::FrameReader` runs on the pipeline thread and owns a single producer / single consumer
 `CircularBuffer`. It scans the buffer for frame boundaries (start delimiter, end delimiter,
 both, or none) and pulls out one logical frame at a time.
 
@@ -76,18 +81,18 @@ the live FrameReader is destroyed and a new one is created via
 `ConnectionManager::resetFrameReader()` or `DeviceManager::reconfigure()`. There are no
 mutexes anywhere on this path.
 
-### Stage 3: device manager and connection manager
+### Stage 3: pipeline routing
 
-`DeviceManager::onReadyRead` drains the queue and emits `frameReady(deviceId, frame)` per
-dequeued frame, using `Qt::DirectConnection` so it lands in
-`ConnectionManager::onFrameReady` as a normal function call. `ConnectionManager` then routes
-the frame into `FrameBuilder::hotpathRxFrame` or, for multi-source projects,
-`hotpathRxSourceFrame(sourceId, data)`.
+`IO::PipelineHost::routeFrames` drains a `FrameReader`'s queue on the pipeline thread and routes
+each dequeued frame directly into `FrameBuilder::hotpathRxFrame` or, for multi-source projects,
+`hotpathRxSourceFrame(sourceId, data)`, as a plain same-thread call.
 
 ### Stage 4: frame builder, parser, and transforms
 
 `FrameBuilder` is where the project's parsing rules turn raw bytes into a populated `Frame`
-object. It runs three things in order:
+object. That `Frame` is a reused per-source staging buffer, not the object published downstream
+— once it's populated, `FrameBuilder` copies its values into the current `DataBlock` (see
+[Stage 5](#stage-5-fan-out) below). It runs three things in order:
 
 1. The selected **decoder** (Plain Text (UTF8), Hexadecimal, Base64, or Binary (Direct))
    converts the raw bytes into the form `parse()` expects.
@@ -102,9 +107,14 @@ In Quick Plot mode, steps 1 and 2 are replaced by a built-in line splitter that 
 as the field separator. In Console-Only mode, the FrameBuilder stage is a no-op: bytes go
 straight to the terminal via `DeviceManager::rawDataReceived`.
 
-When a single captured chunk expands into N logical frames, FrameBuilder publishes them at
-`data->timestamp + step * i`, so a dropped or coalesced read on the driver side does not
-collapse all the frames into a single instant.
+When a single captured chunk expands into N logical frames, FrameBuilder timestamps them at
+`data->timestamp + step * i`. That only spreads the N frames across real time when the driver
+filled in a real `frameStep`. `frameStep` defaults to 1 ns, and most transports (UART, network,
+BLE, CAN, Modbus, MQTT) never override it, so on those a coalesced read still timestamps all of
+its extracted frames within nanoseconds of the arrival instant — there's no measured cadence to
+interpolate from. The spread is opt-in, per driver: Audio is the example that fills in a real
+`frameStep` (computed from the device sample rate) precisely so a multi-sample buffer's frames
+land at their true capture times instead of all landing on the buffer's arrival time.
 
 The parser and transforms are the only points in the pipeline where user code runs. Both run
 under a runtime watchdog and are wrapped so that a thrown error, infinite loop, or non-finite
@@ -120,8 +130,9 @@ building the info table or object when it isn't used.
 #### Parser engine details
 
 - One engine instance per source, never shared across sources.
-- Lua uses an embedded Lua 5.4 interpreter with `base`, `table`, `string`, `math`, `utf8`, and
-  `coroutine` loaded. JavaScript uses Qt's `QJSEngine` with the Console and GC extensions only.
+- Lua uses an embedded LuaJIT 2.1 interpreter (Lua 5.1 syntax with compatibility shims) with
+  `base`, `table`, `string`, `math`, `utf8`, and `coroutine` loaded. JavaScript uses Qt's
+  `QJSEngine` with the Console and GC extensions only.
 - Each parser is compiled once when the project loads or the connection opens, then called
   many times. Compilation cost is paid up front, not per frame.
 
@@ -137,21 +148,27 @@ language.
 
 ### Stage 5: fan-out
 
-FrameBuilder produces exactly one `TimestampedFramePtr` per parsed frame in
-`hotpathTxFrame`. The dashboard receives that pooled pointer directly. The asynchronous
-sinks receive it through a single detached copy, made once per frame and only when at least
-one sink is active (cached in `m_anyAsyncSink`):
+FrameBuilder doesn't publish per frame. `stageFrameValues` appends each parsed frame's values as
+one row into the current per-source `DataBlock` — a pooled, pre-sized slot, no allocation — and
+`publishBlock` flushes that block when it reaches its sample cap (`kFrameBlockSampleCap`, 64;
+dense/stream sources use the larger `kStreamBlockSampleCap`, 4096) or when the display tick has
+moved since the block last flushed, whichever comes first:
 
-- the dashboard (pooled frame, no copy),
-- the CSV and MDF4 (Pro) export workers,
-- the Historian (Pro),
-- the API server (port 7777, MCP and legacy JSON-RPC),
-- the gRPC server (when built with `ENABLE_GRPC`),
-- the MQTT bridge (Pro).
+- the dashboard drains the pooled block straight from an SPSC ring on `Dashboard::onDisplayTick`
+  — no copy;
+- the asynchronous sinks below share a single detached, trimmed copy of the same block
+  (`clone_block_trimmed`), made once per flush and only when at least one sink is active (cached
+  in `m_anyAsyncSink`):
+  - the CSV and MDF4 (Pro) export workers,
+  - the Historian (Pro),
+  - the API server (port 7777, MCP and legacy JSON-RPC),
+  - the gRPC server (when built with `ENABLE_GRPC`),
+  - the MQTT bridge (Pro).
 
-The dashboard never copies the frame; the detached copy exists so a slow export backlog
-cannot pin the slot pool. Export workers run on dedicated threads and consume from lock-free
-queues, so writing to disk or the network never blocks the dashboard.
+The pipeline thread is the single producer for every one of those consumers. The dashboard never
+copies the block; the trimmed copy exists so a slow export backlog can't pin the pool slot the
+dashboard is reading. Export workers run on dedicated threads and consume from lock-free queues,
+so writing to disk or the network never blocks the dashboard.
 
 ## Timestamp ownership
 
@@ -162,7 +179,9 @@ frame after the fact.
 - `IO::CapturedData` carries the chunk timestamp.
 - `FrameReader::frameTimestamp(endOffsetExclusive)` walks pending chunks to assign each
   extracted logical frame the correct moment, advancing the per-chunk clock by `frameStep`.
-- `FrameBuilder` interpolates timestamps when one chunk expands into multiple frames.
+- `FrameBuilder` interpolates timestamps when one chunk expands into multiple frames, but only
+  to the resolution of the driver's `frameStep` — see the note in [Stage
+  4](#stage-4-frame-builder-parser-and-transforms) above.
 - Export workers derive strictly-increasing offsets via
   `FrameConsumerWorkerBase::monotonicFrameNs(frame->timestamp, baseline)`. That helper is a
   safety net against same-nanosecond collisions on coarse clocks (Windows `steady_clock` has
@@ -176,19 +195,20 @@ export or report. Patching a downstream stage to "fix" timing usually masks an e
 
 The acquisition pipeline is designed around three rules:
 
-1. **No allocations after init.** `FrameBuilder` reuses one `Frame` per source and draws
-   each `TimestampedFramePtr` from a fixed-size slot pool (`acquireFrame`) as an aliasing
-   shared_ptr that shares the slot's control block (no deleter, no per-frame control block);
-   a slot is recycled when its use_count drops back to 1, detected by a probe at the next
-   `acquireFrame`.
+1. **No allocations after init.** `FrameBuilder` reuses one `Frame` per source as a staging
+   buffer, and draws each `DataBlock` from a fixed-size slot pool (`claimBlockSlot`) as an
+   aliasing shared_ptr that shares the slot's control block (no deleter, no per-block control
+   block), with columns pre-sized once at bind; a slot is recycled once its use_count drops
+   back to 1, detected by a probe at the next `claimBlockSlot`.
    Parser engines are compiled once, `CircularBuffer` and lock-free queues are pre-sized,
    and per-source transform engines are looked up once per source switch (not per dataset).
-2. **No copy on the dashboard path.** The dashboard draws the pooled `TimestampedFramePtr`
-   directly. The only frame copy is the single detached one made for the asynchronous export
-   sinks, and only when one is active (gated on `m_anyAsyncSink`), so a slow sink can't pin
-   the slot pool.
-3. **No queued connections between main-thread objects.** Direct connections turn signal
-   emissions into ordinary function calls.
+2. **No copy on the dashboard path.** The dashboard draws the pooled `DataBlock` directly. The
+   only block copy is the single trimmed one made for the asynchronous export sinks
+   (`clone_block_trimmed`), and only when one is active (gated on `m_anyAsyncSink`), so a slow
+   sink can't pin the slot pool.
+3. **No queued connections between pipeline-thread objects.** Direct connections turn signal
+   emissions into ordinary function calls; the only queued hops on the frame path are the
+   chunk-rate crossing in from the driver and the display-tick-rate crossing out to the GUI.
 
 The cost per frame is dominated by:
 
@@ -256,13 +276,15 @@ For the full parser and transform API, see [Frame Parser Scripting](JavaScript-A
 
 Treat these as load-bearing:
 
-- `FrameReader` runs on the main thread. Its configuration is immutable; recreate the reader
-  to change delimiters, decoder, or checksum.
+- `FrameReader` and `FrameBuilder` run on `IO::PipelineHost`'s dedicated pipeline thread, never
+  the GUI thread. `FrameReader`'s configuration is immutable; recreate the reader to change
+  delimiters, decoder, or checksum.
 - `CircularBuffer` is single-producer / single-consumer. Never make it MPMC.
-- `Dashboard` is main-thread only. It receives the same `TimestampedFramePtr` that export
-  workers receive, and reads from `frame->data` directly.
-- Export workers (CSV, MDF4 (Pro), Historian (Pro), API, gRPC, MQTT (Pro)) consume
-  from lock-free queues on worker threads. They never block the main thread.
+- `Dashboard` is GUI-thread only. It drains the same pooled `DataBlock`s that export workers get
+  a trimmed copy of, from an SPSC ring on `Dashboard::onDisplayTick`, and reads dataset values
+  from the block directly.
+- Export workers (CSV, MDF4 (Pro), Historian (Pro), API, gRPC, MQTT (Pro)) consume from
+  lock-free queues on worker threads. They never block the pipeline thread or the GUI thread.
 
 If you're writing a plugin or a new driver, follow the existing drivers (see `BluetoothLE.h`
 and `BluetoothLE.cpp` as the canonical reference) and keep these invariants intact.

@@ -60,7 +60,7 @@ If you want to configure it yourself:
   }
   ```
 
-Add widgets to display real-time acceleration and gyroscope data, plus temperature. The bundled project groups the datasets as **Accelerometer** (`Accelerometer X/Y/Z` in m/s²), **Gyroscope** (`Gyro X/Y/Z` in deg/s), and **Temperature** (a bar widget with an alarm at 40 ℃).
+Add widgets to display real-time acceleration and gyroscope data, plus temperature. The bundled project groups the datasets as **Accelerometer** (`Accelerometer X/Y/Z` in m/s²), **Gyroscope** (`Gyro X/Y/Z` in deg/s), and **Temperature** (a bar widget).
 
 ![Serial Studio project setup](doc/project-setup.png)
 

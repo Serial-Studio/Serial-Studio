@@ -209,7 +209,7 @@ https://raw.githubusercontent.com/your-org/extensions/main/manifest.json
 
 Plugin state (open windows, settings, configurations) is saved in the project file alongside widget layout data. That means different projects can have different plugin setups.
 
-State is saved automatically when the device disconnects, when the plugin is stopped, or when Serial Studio exits. It's restored when the plugin starts or when a new device connects. Plugins that were running when Serial Studio closed are relaunched automatically the next time the dashboard becomes available (a device connects or a file player opens), unless you stopped them by hand.
+Serial Studio never calls `extensions.saveState` on its own: a plugin must call it explicitly (typically on device disconnect, on its own stop, or before Serial Studio exits) for its state to persist. State is restored when the plugin starts or when a new device connects. Plugins that were running when Serial Studio closed are relaunched automatically the next time the dashboard becomes available (a device connects or a file player opens), unless you stopped them by hand.
 
 For details on using the state persistence API from code, see the [Plugin Development](Plugin-Development.md) guide.
 

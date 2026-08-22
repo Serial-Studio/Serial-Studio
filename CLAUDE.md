@@ -93,7 +93,7 @@ lives in [tests/README.md](tests/README.md); read it before writing a test. What
 
 - **You don't build or launch the app, but you may drive a running one.** Integration,
   security, and performance tests drive a running Serial Studio over TCP — they need the app
-  up with **Settings → Miscellaneous → Enable API Server** (`localhost:7777`). The user
+  up with **Preferences → API & Plugins → Enable API Server** (`localhost:7777`). The user
   launches it; once up, you may run those tests and poke the API directly
   (`tests/utils/api_client.py`) to test hypotheses. Probe first: `nc -z 127.0.0.1 7777`.
 - **`tests/scripts/` is the exception you *can* run** — pure JS frame-parser unit tests, fresh

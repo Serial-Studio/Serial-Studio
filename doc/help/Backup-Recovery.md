@@ -21,13 +21,17 @@ Snapshots cover edits made inside Serial Studio. Changes that another program ma
 
 ## Where backups live
 
-Snapshots are plain `.ssproj` files (the same format as your project, stored compactly), grouped by project name:
+Snapshots are plain `.ssproj` files (the same format as your project, stored compactly), grouped into one subfolder per project:
 
 ```
-<AppData>/backups/<project-name>/<timestamp>[__label].ssproj
+<AppData>/backups/<project-basename>-<8 hex chars>/<timestamp>[__label].ssproj
 ```
 
-A project you have not saved yet is filed under `untitled`. The **Open Folder** button in the Recover Backup dialog reveals this location in your file manager.
+The subfolder name is the project file's base name plus a dash and the first 8 hex characters
+of the SHA1 hash of its full canonical path, so two projects that share a file name in
+different folders never share a backup history. A project you have not saved yet is filed
+under `untitled`. The **Open Folder** button in the Recover Backup dialog reveals this
+location in your file manager.
 
 Serial Studio keeps the **50 most recent** snapshots per project and deletes the oldest beyond that.
 

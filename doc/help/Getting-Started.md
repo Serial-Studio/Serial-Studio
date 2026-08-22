@@ -108,7 +108,7 @@ The toolbar runs along the top of the window:
 - **Project controls.** Open and edit project files. The **Project Editor** button opens the [Project Editor](Project-Editor.md).
 - **I/O interface selector.** Choose between UART, Network, Bluetooth, and in Pro: Modbus, CAN Bus, Audio, USB, HID, or Process.
 - **Connect/Disconnect button.** Starts or stops the data connection.
-- **Examples browser.** Load example projects bundled with Serial Studio to see working configurations.
+- **Examples browser.** Load example projects, downloaded from GitHub on first open (internet required), to see working configurations.
 - **CSV / MDF4 (Pro) playback.** Replay previously recorded sessions.
 
 For a button-by-button map of the toolbar, the Setup panel, the dashboard taskbar, and every widget toolbar, see the [Toolbar & Button Reference](Toolbar-Reference.md).
@@ -119,7 +119,7 @@ When you first connect, the console panel shows raw incoming data from your devi
 
 ### 3. Dashboard (center, replaces the console)
 
-Once Serial Studio parses at least one valid frame, the view switches from the Console to the Dashboard. The Dashboard shows real-time widgets (plots, gauges, maps, grids, and so on) arranged according to your configuration. You can toggle individual widgets on and off from the sidebar on the left.
+Once Serial Studio parses at least one valid frame, the view switches from the Console to the Dashboard. The Dashboard shows real-time widgets (plots, gauges, maps, grids, and so on) arranged according to your configuration. You can show, focus, or restore individual widgets from the taskbar's window buttons at the bottom of the dashboard.
 
 ### 4. Setup panel (right side, collapsible)
 
@@ -181,7 +181,7 @@ That's all. No project file, no JSON, just connect and visualize.
 
 ### Step 4: explore the dashboard
 
-- Use the Widgets sidebar on the left to show or hide individual plots.
+- Use the taskbar's window buttons at the bottom of the dashboard to show, focus, or restore individual widgets (see [Toolbar & Button Reference](Toolbar-Reference.md#dashboard-taskbar)).
 - Hover over plots to inspect values.
 - Enable CSV export in the Setup panel to record the session for later playback.
 

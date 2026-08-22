@@ -1577,10 +1577,10 @@ void API::Handlers::ProjectHandler::registerFrameParserDryRunCommands()
       "QString::fromUtf8 and corrupt non-ASCII bytes."),
     makeSchema(
       {
-        {    QStringLiteral("code"),QStringLiteral("string"),QStringLiteral("Frame parser source")            },
+        {    QStringLiteral("code"),QStringLiteral("string"),QStringLiteral("Frame parser source")                          },
         {QStringLiteral("language"),
          QStringLiteral("integer"),
-         QStringLiteral("0 = JavaScript, 1 = Lua")}
+         QStringLiteral("0 = JavaScript, 1 = Lua, 2 = Built-In (descriptor JSON)")}
   },
       {{QStringLiteral("inputBytes"),
         QStringLiteral("string"),

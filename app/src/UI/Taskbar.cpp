@@ -558,7 +558,7 @@ int UI::Taskbar::resolveWorkspaceRefWindowId(const DataModel::WidgetRef& ref) co
 }
 
 /**
- * @brief Populates the taskbar buttons for a user-defined workspace (id >= 1000).
+ * @brief Populates the taskbar buttons for a user-defined workspace (id >= 5000).
  */
 void UI::Taskbar::populateTaskbarFromWorkspace(int groupId)
 {
@@ -583,7 +583,7 @@ void UI::Taskbar::populateTaskbarFromWorkspace(int groupId)
 }
 
 /**
- * @brief Populates the taskbar buttons for an auto-generated group (id < 1000).
+ * @brief Populates the taskbar buttons for an auto-generated group (id < 5000).
  */
 void UI::Taskbar::populateTaskbarFromGroup(int groupId)
 {

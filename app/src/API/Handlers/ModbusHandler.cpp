@@ -72,7 +72,7 @@ void API::Handlers::ModbusHandler::registerCommonCommands()
     API::makeSchema({
       {QStringLiteral("intervalMs"),
        QStringLiteral("integer"),
-       QStringLiteral("Polling interval in milliseconds (minimum 10)")}
+       QStringLiteral("Polling interval in milliseconds (minimum 50)")}
   }),
     &setPollInterval);
 }

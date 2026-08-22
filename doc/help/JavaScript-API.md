@@ -16,13 +16,13 @@ You can switch between platforms at any time using the **Platform** dropdown in 
 
 | | Built-In | Lua | JavaScript |
 |---|---|---|---|
-| **Runtime** | Compiled C++ | Lua 5.4 | ECMAScript 7 / ES2016 |
+| **Runtime** | Compiled C++ | LuaJIT 2.1 (5.1 syntax, compatibility shims) | ECMAScript 7 / ES2016 |
 | **Authoring** | Template + parameters, no code | `parse()` script | `parse()` script |
 | **Performance** | Fastest (no interpreter) | Faster, lower overhead | Slower |
-| **Integer support** | Full native range | Native 64-bit integers | Numbers are IEEE 754 doubles only |
+| **Integer support** | Full native range | IEEE 754 doubles only (no native 64-bit ints) | Numbers are IEEE 754 doubles only |
 | **Timeout** | Not needed (bounded parsers) | 500 ms per call | 500 ms per call |
 | **Isolation** | Separate instance per source | Separate engine per source | Separate engine per source |
-| **Sandboxing** | No user code runs | `base`, `table`, `string`, `math`, `utf8`, `coroutine` libraries | Console and GC extensions |
+| **Sandboxing** | No user code runs | `base`, `table`, `string`, `math`, `bit`, `coroutine` libraries | Console and GC extensions |
 
 ## Built-In Templates
 
@@ -97,23 +97,30 @@ The `frame` parameter type depends on the Decoder Method selected in the Project
 | Decoder Method         | Lua `frame` Type             | JS `frame` Type              | Example Value                      |
 |------------------------|------------------------------|------------------------------|------------------------------------|
 | Plain Text (UTF-8)     | String                       | String                       | `"23.5,1013,45.2"`                 |
-| Hexadecimal            | String (hex pairs)           | String (hex pairs)           | `"03FF020035A0"`                   |
-| Base64                 | String (base64-encoded)      | String (base64-encoded)      | `"Av8CADWg"`                       |
+| Hexadecimal            | String (hex pairs)           | String (hex pairs)           | `"03ff020035a0"`                   |
+| Base64                 | String (base64-encoded)      | String (base64-encoded)      | `"A/8CADWg"`                       |
 | Binary (Direct)        | Table of numbers (0--255)    | Array of numbers (0--255)    | `{3, 255, 2, 0, 53, 160}`         |
 
 **Plain Text** is the default. The frame string contains whatever the device sent, decoded as UTF-8, with start/end delimiters already stripped.
 
 **Binary (Direct)** passes byte values directly. In Lua, this is a 1-indexed table; in JavaScript, a 0-indexed array.
 
-> **Binary trap:** with Binary (Direct), `frame` is **not a string**, so string functions fail on it. In Lua, `string.byte(frame, 1)` raises `bad argument #1 to 'byte' (string expected, got table)` and `frame:match(...)` raises `attempt to call a nil value (method 'match')` (tables have no `match` method); in JavaScript, `frame.split(",")` throws `frame.split is not a function`. Read bytes by indexing (`frame[1]` in Lua, `frame[0]` in JavaScript), as in Example 3 below. When you need `string.unpack` for multi-byte or float fields, convert the table to a string once at the top of `parse()`:
+> **Binary trap:** with Binary (Direct), `frame` is **not a string**, so string functions fail on it. In Lua, `string.byte(frame, 1)` raises `bad argument #1 to 'byte' (string expected, got table)` and `frame:match(...)` raises `attempt to call a nil value (method 'match')` (tables have no `match` method); in JavaScript, `frame.split(",")` throws `frame.split is not a function`. Read bytes by indexing (`frame[1]` in Lua, `frame[0]` in JavaScript), as in Example 3 below. LuaJIT has no `string.pack`/`string.unpack`: decode multi-byte or float fields with the `bit` library and manual arithmetic, reading straight from the byte table:
 >
 > ```lua
+> local function readFloat32(b1, b2, b3, b4)
+>   local sign = bit.band(b1, 0x80) ~= 0 and -1 or 1
+>   local expo = bit.band(b1, 0x7F) * 2 + bit.rshift(b2, 7)
+>   local mant = bit.band(b2, 0x7F) * 65536 + b3 * 256 + b4
+>   if expo == 0 then return sign * mant * 2 ^ (-126 - 23) end
+>   return sign * (1 + mant / 2 ^ 23) * 2 ^ (expo - 127)
+> end
+>
 > function parse(frame)
->   if type(frame) == "table" then
->     frame = string.char(table.unpack(frame))
->   end
 >   if #frame < 6 then return {} end
->   return { string.unpack("<f", frame, 1), string.unpack("<i2", frame, 5) }
+>   local temp  = readFloat32(frame[1], frame[2], frame[3], frame[4])
+>   local flags = bit.lshift(frame[5], 8) + frame[6]
+>   return { temp, flags }
 > end
 > ```
 >
@@ -127,7 +134,7 @@ The `frame` parameter type depends on the Decoder Method selected in the Project
 > }
 > ```
 
-> **Validation probe:** when a parser is saved, the editor test-runs `parse()` with tiny sample inputs before accepting it (`"0"` and `""` as strings in Lua, falling back to a one-element byte table `{0}` if both string probes fail; `"0"`, a one-byte array, and `""` in JavaScript). A function that reads fixed offsets without checking the frame length fails every probe with a runtime error such as `index out of range`, and the editor rejects it with a *"parse function contains an error"* message even though the code is fine for full-size frames. The length guards in the examples above are what make them pass: return an empty table/array when the frame is too short. The same guard matters on a live link, where a truncated frame will eventually arrive.
+> **Validation probe:** when a parser is saved, the editor test-runs `parse()` with tiny sample inputs before accepting it (`"0"` and `""` as strings in Lua, falling back to a one-element byte table `{0}` if both string probes fail; `"0"`, a one-byte array, and `""` in JavaScript), but only for source 0 (the first/global source). Parsers on additional sources of a multi-source project are **not** automatically probed on save; a broken parser there is only caught once it runs against a live frame or through **Test With Sample Data**. A function that reads fixed offsets without checking the frame length fails every probe with a runtime error such as `index out of range`, and the editor rejects it with a *"parse function contains an error"* message even though the code is fine for full-size frames. The length guards in the examples above are what make them pass: return an empty table/array when the frame is too short. The same guard matters on a live link, where a truncated frame will eventually arrive.
 
 ### Return Value
 
@@ -168,12 +175,8 @@ Return a table of tables (Lua) or array of arrays (JavaScript). Each inner table
 ```lua
 function parse(frame)
   local result = {}
-  for line in frame:gmatch("[^;]+") do
-    local row = {}
-    for field in line:gmatch("([^,]+)") do
-      row[#row + 1] = field
-    end
-    result[#result + 1] = row
+  for _, line in ipairs(frame:split(";")) do
+    result[#result + 1] = line:split(",")
   end
   return result
 end
@@ -189,7 +192,7 @@ Mix scalar values with sub-tables/arrays. Scalars repeat across generated frames
 ```lua
 function parse(frame)
   local parts = {}
-  for field in frame:gmatch("([^,]+)") do
+  for _, field in ipairs(frame:split(",")) do
     parts[#parts + 1] = tonumber(field) or field
   end
 
@@ -218,10 +221,10 @@ The Lua engine loads a safe subset of the standard library. The following module
 | Module | Key Functions |
 |--------|--------------|
 | **base** | `print`, `type`, `tonumber`, `tostring`, `pairs`, `ipairs`, `select`, `error`, `pcall`, `xpcall`, `assert`, `rawget`, `rawset`, `rawlen`, `rawequal`, `next`, `setmetatable`, `getmetatable` |
-| **string** | `string.byte`, `string.char`, `string.find`, `string.format`, `string.gmatch`, `string.gsub`, `string.len`, `string.lower`, `string.upper`, `string.match`, `string.pack`, `string.packsize`, `string.rep`, `string.reverse`, `string.sub`, `string.unpack` |
+| **string** | `string.byte`, `string.char`, `string.find`, `string.format`, `string.gmatch`, `string.gsub`, `string.len`, `string.lower`, `string.upper`, `string.match`, `string.rep`, `string.reverse`, `string.sub` |
 | **table** | `table.concat`, `table.insert`, `table.remove`, `table.sort`, `table.move`, `table.pack`, `table.unpack` |
 | **math** | `math.abs`, `math.ceil`, `math.floor`, `math.max`, `math.min`, `math.sqrt`, `math.sin`, `math.cos`, `math.tan`, `math.pi`, `math.huge`, `math.log`, `math.exp`, `math.random` |
-| **utf8** | `utf8.char`, `utf8.codes`, `utf8.codepoint`, `utf8.len`, `utf8.offset` |
+| **bit** | `bit.band`, `bit.bor`, `bit.bxor`, `bit.bnot`, `bit.lshift`, `bit.rshift`, `bit.tobit`, `bit.tohex` |
 
 **Serial Studio extensions** (added on top of the standard library):
 `string.split(s, sep)` (native — splits on the literal separator, keeps empty
@@ -232,9 +235,25 @@ and `unpack`.
 
 **Not available** (sandboxed): `io`, `os`, `debug`, `package`, `require`, `dofile`, `loadfile`, `load`.
 
-**Bitwise operators** (Lua 5.4 native): `&` (AND), `|` (OR), `~` (XOR), `<<` (left shift), `>>` (right shift), `~` (unary NOT). These are particularly useful for binary protocol parsing.
+**Bitwise operations**: LuaJIT's 5.1 grammar has no `& | ~ << >>` operators. Use the `bit` library instead: `bit.band(a, b)` (AND), `bit.bor(a, b)` (OR), `bit.bxor(a, b)` (XOR), `bit.bnot(a)` (NOT), `bit.lshift(a, n)` (left shift), `bit.rshift(a, n)` (right shift). If the editor detects `& | ~ << >> //` in code position it offers to rewrite the script to `bit.*` calls automatically (see Migrating from JavaScript to Lua).
 
-**Integer division**: `//` operator (e.g., `7 // 2 == 3`).
+**Integer division**: no `//` operator either. Use `math.floor(a / b)`.
+
+### Safe and Fast Execution Modes
+
+Each project has one Lua execution mode, **Fast Lua Execution**, off by default (Safe mode).
+
+**Safe mode (default):** the Lua state runs interpreted, with a debug hook that checks a
+500 ms deadline every 10,000 VM instructions. A parser call that blows the deadline is
+interrupted with `execution timed out after 500 ms`. Three consecutive timeouts on the same
+source disable that source's parser; fix the script and reload the project to re-enable it.
+
+**Fast mode:** the JIT compiler is forced on and the instruction-count hook is never
+installed. A JIT-compiled trace never fires a debug hook, so leaving the watchdog armed
+would be a silently dead safety control. This runs Lua parsers and transforms up to ~40x
+faster, but a script stuck in an infinite loop stalls its data source until you disconnect;
+nothing interrupts it. Enabling Fast mode from the UI requires confirming a warning dialog
+that names this tradeoff. Test scripts in Safe mode first, then switch once trusted.
 
 ### JavaScript Standard APIs
 
@@ -276,7 +295,7 @@ function parse(frame) {
 }
 ```
 
-Globals are reset when: the project is reloaded, parser code is edited and reapplied, or Serial Studio is restarted.
+Globals are reset when: the project is reloaded, parser code is edited and reapplied, or Serial Studio is restarted. A disconnect/reconnect on the source does **not** reset them: globals persist across reconnects, so a stale counter or state machine carries over unless one of the three events above fires.
 
 ### Fast table access with handles
 
@@ -302,11 +321,7 @@ function parse(frame) {
 **Lua:**
 ```lua
 function parse(frame)
-  local result = {}
-  for field in frame:gmatch("([^,]+)") do
-    result[#result + 1] = field
-  end
-  return result
+  return frame:split(",")
 end
 ```
 
@@ -351,8 +366,8 @@ function parse(frame)
   if #frame < 8 then return {} end
   if frame[1] ~= 0xAA or frame[2] ~= 0x55 then return {} end
 
-  local temp     = ((frame[3] << 8) | frame[4]) / 100.0
-  local pressure = ((frame[5] << 8) | frame[6]) / 10.0
+  local temp     = bit.bor(bit.lshift(frame[3], 8), frame[4]) / 100.0
+  local pressure = bit.bor(bit.lshift(frame[5], 8), frame[6]) / 10.0
   local humidity = frame[7]
   return {temp, pressure, humidity}
 end
@@ -380,7 +395,7 @@ local frameCount = 0
 function parse(frame)
   frameCount = frameCount + 1
   local result = {frameCount}
-  for field in frame:gmatch("([^,]+)") do
+  for _, field in ipairs(frame:split(",")) do
     result[#result + 1] = field
   end
   return result
@@ -399,16 +414,12 @@ function parse(frame)
   local checksumReceived = tonumber(checkHex, 16)
   local checksumCalc = 0
   for i = 1, #data do
-    checksumCalc = checksumCalc ~ data:byte(i)
+    checksumCalc = bit.bxor(checksumCalc, data:byte(i))
   end
 
   if checksumCalc ~= checksumReceived then return {} end
 
-  local result = {}
-  for field in data:gmatch("([^,]+)") do
-    result[#result + 1] = field
-  end
-  return result
+  return data:split(",")
 end
 ```
 
@@ -425,16 +436,14 @@ function parse(frame)
   local data = frame:sub(3)
 
   if msgType == "A" then
-    local i = 1
-    for field in data:gmatch("([^,]+)") do
-      envValues[i] = tonumber(field) or 0
-      i = i + 1
+    local fields = data:split(",")
+    for i = 1, #fields do
+      envValues[i] = tonumber(fields[i]) or 0
     end
   elseif msgType == "B" then
-    local i = 1
-    for field in data:gmatch("([^,]+)") do
-      powerValues[i] = tonumber(field) or 0
-      i = i + 1
+    local fields = data:split(",")
+    for i = 1, #fields do
+      powerValues[i] = tonumber(fields[i]) or 0
     end
   end
 
@@ -488,7 +497,7 @@ Every call is logged to the application log as `[deviceWrite] source=<id> bytes=
 ```lua
 function parse(frame)
   local values = {}
-  for field in frame:gmatch("([^,]+)") do
+  for _, field in ipairs(frame:split(",")) do
     values[#values + 1] = tonumber(field) or field
   end
 
@@ -553,8 +562,7 @@ Parsers can also trigger an existing project [Action](Actions.md) by its integer
 
 ```lua
 function parse(frame)
-  local values = {}
-  for f in frame:gmatch("([^,]+)") do values[#values + 1] = f end
+  local values = frame:split(",")
   if tonumber(values[1]) and tonumber(values[1]) < 5 then
     actionFire(3)   -- "Emergency Shutdown"
   end
@@ -692,7 +700,7 @@ local focused = false
 
 function parse(frame)
   local values = {}
-  for f in frame:gmatch("([^,]+)") do
+  for _, f in ipairs(frame:split(",")) do
     values[#values + 1] = tonumber(f) or f
   end
 
@@ -780,10 +788,7 @@ A second helper, `apiCallList()`, returns an array of every registered command n
 local lastFaultBit = 0
 
 function parse(frame)
-  local values = {}
-  for f in frame:gmatch("([^,]+)") do
-    values[#values + 1] = f
-  end
+  local values = frame:split(",")
 
   local fault = tonumber(values[4] or "0") or 0
   if fault ~= 0 and lastFaultBit == 0 then
@@ -833,7 +838,7 @@ end
 - **Avoid destructive commands from a parser.** Anything that mutates the project (`project.save`, `project.batch`, `groups.delete`) is fine from a one-time setup hook, but should not fire from the streaming pipeline.
 - **Pro features stay gated.** In GPL builds the commercial-tier handlers (Modbus, CAN, sessions, MDF4, MQTT...) are not registered, so `apiCall` returns `{ ok = false, errorCode = "UNKNOWN_COMMAND" }`. Check `ok` before assuming success.
 
-## Built-in Template Scripts
+## Parser Script Templates
 
 Serial Studio includes 28 ready-to-use parser templates, available in both Lua and JavaScript. Select a template from the **Select Template…** button in the frame parser editor toolbar (opens a template picker dialog):
 
@@ -868,6 +873,10 @@ Serial Studio includes 28 ready-to-use parser templates, available in both Lua a
 | XML Data                  | XML data                             |
 | YAML Data                 | YAML data                            |
 
+> **MessagePack decode subset:** the template decodes fixint (positive and negative), uint8/16/32, int8/16/32, float32, `nil`, booleans, and fixstr (up to 31 bytes), plus fixarray/array16 and fixmap/map16 for routing to channels. It does **not** decode float64 (`0xCB`), 64-bit ints (`0xCF`/`0xD3`), or str8/str16/str32; a value using one of those markers stops the decode. Python's `msgpack` library packs floats as float64 by default, so a stock Python-side simulator emitting `msgpack.packb(value)` produces frames this template can't decode past the first float field.
+>
+> **COBS decode scope:** the template only undoes byte-stuffing and emits one decimal channel per recovered byte; a payload packing floats, uint16 fields, or other multi-byte values inside the COBS frame still needs a scripted parser (Binary Direct decoder) to unpack those fields afterward.
+
 When you switch between Lua and JavaScript, Serial Studio automatically loads the same template in the new language.
 
 ## Per-Source Parsers
@@ -879,7 +888,7 @@ Each source runs in an isolated engine instance. Global variables in one source 
 ## Rules and Limitations
 
 1. The function **must** be named `parse` (case-sensitive).
-2. It must accept **at least one parameter** (the frame payload). In JavaScript, the deprecated two-parameter `parse(frame, separator)` form is explicitly rejected by the editor, but declaring extra unused parameters is otherwise allowed. Lua performs no arity or legacy-signature check; a `parse(frame, separator)` function runs with `separator` as `nil`.
+2. It must accept **at least one parameter** (the frame payload). In JavaScript, a two-parameter `parse(a, b)` is rejected regardless of the parameter names, not just the literal `frame, separator` spelling; three or more parameters are accepted. Lua performs no arity or legacy-signature check; a `parse(frame, separator)` function runs with `separator` as `nil`.
 3. It must return a table (Lua) or array (JavaScript). Not a string, number, or nil.
 4. Return an empty table/array for invalid or incomplete frames.
 5. **Synchronous only.** The engine never yields to the host, so the result must be ready when `parse()` returns. Lua's `coroutine` library is available, but it cannot make `parse()` asynchronous; the same goes for JavaScript Promises/async.
@@ -894,7 +903,7 @@ If you have an existing JavaScript parser and want to switch to Lua for better p
 
 | JavaScript | Lua |
 |---|---|
-| `frame.split(",")` | `for field in frame:gmatch("([^,]+)") do ... end` |
+| `frame.split(",")` | `frame:split(",")` |
 | `frame.length` | `#frame` |
 | `frame.indexOf("x")` | `frame:find("x", 1, true)` |
 | `parseInt(s, 16)` | `tonumber(s, 16)` |
@@ -904,8 +913,8 @@ If you have an existing JavaScript parser and want to switch to Lua for better p
 | `array[0]` (0-indexed) | `table[1]` (1-indexed) |
 | `var x = 0;` | `local x = 0` |
 | `for (var i = 0; ...)` | `for i = 1, n do ... end` |
-| `0xFF & mask` | `0xFF & mask` (same in Lua 5.4) |
-| `value << 8` | `value << 8` (same in Lua 5.4) |
+| `0xFF & mask` | `bit.band(0xFF, mask)` |
+| `value << 8` | `bit.lshift(value, 8)` |
 | `JSON.parse(frame)` | Manual extraction (see JSON template) |
 | `try { } catch(e) { }` | `pcall(function() ... end)` |
 | `console.log(x)` | `console.log(x)` or `print(x)` |
@@ -918,10 +927,7 @@ If you have an existing JavaScript parser and want to switch to Lua for better p
 ```lua
 function parse(frame)
   print("Frame:", frame, "| Type:", type(frame), "| Length:", #frame)
-  local result = {}
-  for field in frame:gmatch("([^,]+)") do
-    result[#result + 1] = field
-  end
+  local result = frame:split(",")
   print("Parsed " .. #result .. " fields")
   return result
 end

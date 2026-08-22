@@ -3,6 +3,9 @@
 Decodes RTCM3 reference-station and MSM7 message headers used in RTK
 positioning. Values latch between frames.
 
+Each frame is a fixed 16-value row; only the channels listed below are
+ever written. Channels not listed are unused and always read back empty.
+
 ## Wire Format
 
 ```
@@ -26,5 +29,5 @@ positioning. Values latch between frames.
 
 ## Pipeline Notes
 
-Select the **Binary (raw bytes)** decoder. The `0xD3` preamble must be
+Select the **Binary (Direct)** decoder. The `0xD3` preamble must be
 the first byte of each frame.

@@ -4,6 +4,9 @@ Decodes SiRF navigation messages (geodetic data, measurements, tracker
 and clock status) from SiRFstar GPS chipsets. Values latch between
 frames.
 
+Each frame is a fixed 20-value row; only the channels listed below are
+ever written. Channels not listed are unused and always read back empty.
+
 ## Wire Format
 
 The parser expects delimiter-stripped messages:
@@ -33,5 +36,5 @@ The parser expects delimiter-stripped messages:
 
 ## Pipeline Notes
 
-Select the **Binary (raw bytes)** decoder with `A0 A2` start and `B0 B3`
+Select the **Binary (Direct)** decoder with `A0 A2` start and `B0 B3`
 end delimiters (**Hex Delimiters** enabled).

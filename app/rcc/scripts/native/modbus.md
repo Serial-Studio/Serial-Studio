@@ -30,4 +30,4 @@ addressed channel. Exception responses are ignored.
 
 ## Pipeline Notes
 
-Select the **Binary (raw bytes)** decoder.
+Select the **Binary (Direct)** decoder.

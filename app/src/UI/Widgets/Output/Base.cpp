@@ -30,6 +30,8 @@ Widgets::Output::Base::Base(const DataModel::OutputWidget& config, QQuickItem* p
   , m_maxValue(config.maxValue)
   , m_stepSize(config.stepSize)
   , m_title(config.title)
+  , m_onLabel(config.onLabel)
+  , m_offLabel(config.offLabel)
   , m_txEncoding(static_cast<SerialStudio::TextEncoding>(config.txEncoding))
   , m_hasFn(false)
   , m_watchdog(&m_jsEngine, kTransmitWatchdogMs, QStringLiteral("transmit"))

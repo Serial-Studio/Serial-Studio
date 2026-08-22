@@ -24,5 +24,5 @@ accumulated big-endian (up to 8 bytes); unknown tags are skipped.
 
 ## Pipeline Notes
 
-Select the **Binary (raw bytes)** decoder. Entries that would run past
+Select the **Binary (Direct)** decoder. Entries that would run past
 the end of the frame are discarded.

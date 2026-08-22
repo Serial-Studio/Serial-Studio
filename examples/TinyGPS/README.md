@@ -43,7 +43,7 @@ $latitude,longitude,altitude;
 
 Serial Studio needs to be configured to parse the GPS data:
 
-1. **Download and install Serial Studio.** Visit [Serial Studio's website](https://serial-studio.github.io/) to download and install.
+1. **Download and install Serial Studio.** Visit [Serial Studio's website](https://serial-studio.com/) to download and install.
 2. **Open Serial Studio and import `TinyGPS.ssproj`.** Launch Serial Studio and load the `TinyGPS.ssproj` file from this project in the Project Editor. It has everything you need to interpret the Arduino's data.
 
 #### Building from scratch

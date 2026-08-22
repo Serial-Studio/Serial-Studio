@@ -48,7 +48,7 @@ The filtered signal is printed to serial so Serial Studio can visualize it.
 
 **Using Quick Plot:**
 
-1. **Download and install Serial Studio.** Visit [Serial Studio's website](https://serial-studio.github.io/) to download and install.
+1. **Download and install Serial Studio.** Visit [Serial Studio's website](https://serial-studio.com/) to download and install.
 2. **Open Serial Studio.**
    - Connect your Arduino to the computer.
    - Launch Serial Studio and pick the right serial port.

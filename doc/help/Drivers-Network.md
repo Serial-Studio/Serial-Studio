@@ -98,7 +98,7 @@ In Serial Studio, multicast is useful when:
 
 ## How Serial Studio uses it
 
-The Network driver wraps Qt's `QTcpSocket` and `QUdpSocket`. It lives on the main thread and uses Qt's async I/O; there is no dedicated thread (see [Threading and Timing Guarantees](Threading-and-Timing.md)).
+The Network driver wraps Qt's `QTcpSocket` and `QUdpSocket`. Incoming bytes are handed off to the acquisition pipeline thread for frame assembly (see [Threading and Timing Guarantees](Threading-and-Timing.md)). Opening a TCP connection is not purely asynchronous: the driver probes the resolved endpoint synchronously with a 5-second deadline, retrying a refused connection every 250 ms so a helper process that binds its listening socket late is still caught before the deadline expires. UDP sockets open immediately since there is no remote endpoint to dial.
 
 > **Serial Studio is a TCP client only.** It dials out to an existing TCP server. It does not listen for incoming TCP connections, and there is no setting to make it act as a server. If the device expects to push data to a listener, run a small TCP server in front of Serial Studio (see [Common pitfalls](#common-pitfalls)).
 
@@ -112,7 +112,7 @@ The Setup panel exposes these fields:
 | **Local Port** | UDP only | Port to bind for receiving; `0` = OS-assigned | 0 |
 | **Multicast** | UDP only | When checked, **Remote Address** is treated as a multicast group (e.g. `239.1.1.1`) and Serial Studio joins it on connect; the OS handles IGMP transparently | off |
 
-**Remote Address** accepts hostnames as well as IP literals. A hostname triggers a background DNS lookup, and the Connect button stays disabled until the name resolves. Clearing the address or a port field restores its default.
+**Remote Address** accepts hostnames as well as IP literals. The TCP dial resolves the hostname itself: a bad hostname surfaces as a "Host not found" dial error after clicking **Connect**, rather than as a disabled Connect button. Clearing the address or a port field restores its default.
 
 UDP uses a single socket; there is no separate Receiver / Sender / Multicast mode. Serial Studio binds **Local Port** to receive datagrams. Incoming datagrams are read one at a time, so on the receive side UDP preserves the message boundaries that TCP discards. Outbound data (actions, output controls, the console send line) is sent as datagrams to **Remote Address** / **Remote Port**.
 
@@ -123,7 +123,7 @@ For step-by-step setup, see the [Protocol Setup Guides, Network section](Protoco
 ## Common pitfalls
 
 - **Serial Studio cannot connect over TCP.** Confirm that the device or remote service is listening. From a terminal, `telnet host port` (or `nc host port`) tries the same connection; if that fails, the problem is in the network or the remote endpoint, not in Serial Studio.
-- **The device wants to push to a listener.** Serial Studio is TCP client only and cannot listen for inbound TCP connections. Stand up a small TCP server that the device connects to and point Serial Studio at that server. A 10-line Python script is enough (the [FAQ](FAQ.md) includes one); `ncat -lk <port>` and `socat` also work. To avoid running a relay at all, send the data over UDP, since Serial Studio binds a local port for that.
+- **The device wants to push to a listener.** Serial Studio is TCP client only and cannot listen for inbound TCP connections. Stand up a small TCP server that accepts the device's connection and re-serves the data to Serial Studio; `ncat -lk <port>` and `socat` also work. To avoid running a relay at all, send the data over UDP, since Serial Studio binds a local port for that.
 - **Firewall blocks the port.** On Windows, the Windows Firewall prompt may have been dismissed without granting access. Re-allow Serial Studio in Windows Firewall settings. On Linux, `ufw status` shows whether the port is blocked.
 - **Address already in use (UDP local port).** Another process is bound to the same port. Find it with `netstat -an | findstr :7777` (Windows) or `lsof -i :7777` (Linux/macOS). The error does not apply to TCP: Serial Studio is a TCP client and uses an OS-assigned ephemeral source port.
 - **UDP packets arrive out of order or get lost.** That is UDP working as designed, not a bug. If the application cannot tolerate it, switch to TCP or layer sequence numbers on top.

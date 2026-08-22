@@ -85,7 +85,7 @@ For Serial Studio, the operation is almost always Notify: select a characteristi
 
 ### MTU and throughput
 
-BLE is slow compared to USB or TCP. The default MTU (Maximum Transmission Unit) is 23 bytes, of which 20 are usable as payload after ATT overhead. Modern BLE 4.2+ devices negotiate larger MTUs (247 or more), but the practical ceiling on a single connection is around 1 to 2 Mbps under ideal conditions. Plan accordingly: 1 kHz of sensor data will struggle on BLE, and Wi-Fi (TCP or UDP) is the better choice in that case.
+BLE is slow compared to USB or TCP. The default MTU (Maximum Transmission Unit) is 23 bytes, of which 20 are usable as payload after ATT overhead. Modern BLE 4.2+ devices negotiate larger MTUs (247 or more), but the practical payload ceiling on a single connection is roughly 250 kbps (7.5 ms connection interval, 247-byte MTU), well under the radio's raw PHY rate. Plan accordingly: 1 kHz of sensor data will struggle on BLE, and Wi-Fi (TCP or UDP) is the better choice in that case.
 
 ## How Serial Studio uses it
 

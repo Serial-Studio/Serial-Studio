@@ -188,9 +188,11 @@
             "checksum": "",
             "checksumAlgorithm": "",
             "connection": {
-                "address": "api.open-notify.org",
-                "socketTypeIndex": 0,
-                "tcpPort": 80
+                "address": "127.0.0.1",
+                "socketTypeIndex": 1,
+                "udpLocalPort": 5005,
+                "udpMulticast": false,
+                "udpRemotePort": 5005
             },
             "decoder": 0,
             "decoderMethod": 0,

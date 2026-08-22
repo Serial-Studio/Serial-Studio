@@ -72,7 +72,7 @@ Pick the "Quick Plot (Comma Separated Values)" radio button in the Setup panel.
 - **Frame detection.** Line-based. Each line of text terminated by CR, LF, or CRLF is one frame.
 - **Data format.** Comma-separated numeric values. Each value maps to one channel.
 - **CSV delimiter.** Comma only. Other delimiters aren't supported in this mode.
-- **Header detection.** If the first received row is all non-numeric strings, those strings become channel labels on the dashboard.
+- **Header detection.** If the first received row is all non-numeric strings, those strings become channel labels on the dashboard. The check re-arms after every connect and stops at the first numeric frame: a device that starts sending numeric data before you press Connect skips the header row entirely and loses its labels.
 
 When a connection is established, Serial Studio reads each line, splits on commas, and creates a dashboard with:
 
@@ -132,7 +132,7 @@ Frame detection determines how Serial Studio finds the boundaries of each data f
 | **End Delimiter Only**      | 0         | A frame ends when the end delimiter is seen. The most common choice for line-terminated CSV data (for example delimiter = `\n`). |
 | **Start and End Delimiter** | 1         | A frame begins at the start delimiter and ends at the end delimiter. Use this for protocols that wrap data in markers (for example `$DATA...;\n`). |
 | **No Delimiters**           | 2         | All incoming data is passed directly to the frame parser script without delimiter-based splitting. Use this for length-prefixed or fixed-size binary protocols where the parser itself figures out frame boundaries. |
-| **Start Delimiter Only**    | 3         | A frame begins at one occurrence of the start delimiter and ends when the next occurrence is found. The second occurrence becomes the start of the next frame. |
+| **Start Delimiter Only**    | 3         | A frame begins at one occurrence of the start delimiter and ends when the next occurrence is found. The second occurrence becomes the start of the next frame. A frame is only released once that next start marker arrives, so the most recent frame sits buffered and unreleased until then; for a slow or paused sender (a 1 Hz source, for example), the dashboard runs one frame behind. |
 
 Delimiters can be specified as plain text or hexadecimal byte sequences (toggle "Hexadecimal Delimiters" in the Project Editor).
 

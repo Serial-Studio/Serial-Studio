@@ -24,7 +24,7 @@ Three ideas have stayed constant since 2020.
 
 1. **One tool, many devices.** You should not have to write a new dashboard every time you swap microcontrollers. Describe the data once in a project file, and Serial Studio takes care of the visualization.
 2. **The microcontroller stays simple.** The original blog post offered two modes. *Auto* had the device send a self-describing JSON frame. *Manual* had the device send bare CSV with the dashboard layout living on the PC, so embedded code stayed small. Modern Serial Studio kept the *Manual* idea and grew it. Today's project files configure frame parsing entirely on the PC, so firmware can keep printing comma-separated numbers.
-3. **GPL core, optional Pro.** The base build (Serial/UART, TCP/UDP, Bluetooth LE, 15+ widgets, Quick Plot, Project Editor, CSV export, Lua/JavaScript frame parsers) is GPL-3.0 and free forever. The Pro edition adds drivers and features that fund development without ever locking up what was already free. See [Pro vs Free](Pro-vs-Free.md) for the exact split.
+3. **GPL core, optional Pro.** The base build (Serial/UART, TCP/UDP, Bluetooth LE, 17 widgets, Quick Plot, Project Editor, CSV export, Lua/JavaScript frame parsers) is GPL-3.0 and free forever. The Pro edition adds drivers and features that fund development without ever locking up what was already free. See [Pro vs Free](Pro-vs-Free.md) for the exact split.
 
 ## How the project evolved
 
@@ -43,7 +43,7 @@ Serial Studio grew driver-by-driver as users brought new hardware to it. Most ad
 
 ### Visualization and analysis
 
-The widget set started with line plots, gauges, bar charts, and a GPS map in late 2020, and slowly grew into the current set of 15+ widgets. The bigger inflection points were:
+The widget set started with line plots, gauges, bar charts, and a GPS map in late 2020, and slowly grew into the current set of 23 widgets. The bigger inflection points were:
 
 - **XY plot** (November 2024) for arbitrary x/y mappings instead of time-on-x.
 - **3D plot** (May 2025). A hand-rolled CPU 2.5D painter, intentionally not Qt3D, so it works without a discrete GPU and still draws thousands of points smoothly.
@@ -68,7 +68,7 @@ The 3.x line that followed (v3.0.0 in October 2024 through v3.2.7 in March 2026)
 
 Where the 2.0 → 3.0 work was a data-path rewrite under a roughly fixed feature set, the 3.0 → 4.0 work (4.0 is the current HEAD) is a rewrite of *scope*. The aim shifted from "show telemetry well" to "run a workstation someone can be handed for a shift," and that pulled in the pieces an industrial deployment expects:
 
-- A **shared data bus** (Variables) and **per-dataset transforms**, so calibration and derived values live in the project instead of in firmware. A **Lua 5.4 engine** landed alongside JavaScript for both frame parsing and transforms.
+- A **shared data bus** (Variables) and **per-dataset transforms**, so calibration and derived values live in the project instead of in firmware. A **Lua (LuaJIT 2.1, 5.1 syntax with compatibility shims) engine** landed alongside JavaScript for both frame parsing and transforms.
 - A **Historian** with replay and PDF reports, so a run can be recorded, queried, and re-examined later.
 - **Output (control) widgets** and a **Control Loop / scripting SDK**, so Serial Studio can drive a device, not just read it.
 - **Operator deployments** and a **Project Lock**, so an engineer can hand a fixed dashboard to an operator without exposing the editor.
@@ -112,7 +112,7 @@ Two features aimed at the engineer-hands-off-to-operator workflow. A **deploymen
 
 Two complementary surfaces:
 
-- **MCP / TCP API on port 7777.** A JSON-RPC API with 300+ commands, wrapped in the Model Context Protocol so any MCP host (Claude Desktop, custom agents, automation scripts) can read live values, edit projects, control workspaces, manage sessions, and so on. A gRPC server exposes the same surface. See [API Reference](API-Reference.md) and [gRPC Server](gRPC-Server.md).
+- **MCP / TCP API on port 7777.** A JSON-RPC API with 360+ commands, wrapped in the Model Context Protocol so any MCP host (Claude Desktop, custom agents, automation scripts) can read live values, edit projects, control workspaces, manage sessions, and so on. A gRPC server exposes the same surface. See [API Reference](API-Reference.md) and [gRPC Server](gRPC-Server.md).
 - **In-app AI Assistant (Pro).** A bring-your-own-key chat panel that edits the project for you. Multiple providers are wired in: Anthropic, OpenAI, Google Gemini, DeepSeek, Groq, OpenRouter, and Mistral, plus any OpenAI-compatible local server (Ollama, llama.cpp, LM Studio, vLLM) for fully offline use. Mutating actions show an Approve/Deny card before they touch the project. See [AI Assistant](AI-Assistant.md).
 
 The Assistant uses the same command surface as the MCP API, so anything the API can do, the Assistant can do, and vice versa. The Assistant runs read-only commands automatically and asks for approval on anything that mutates the project. Connection control (connect/disconnect, `io.*` device settings) stays blocked unless the **Allow device control** toggle is on, and even then every such call requires an explicit confirmation, so a wrong answer cannot knock you offline mid-shift.

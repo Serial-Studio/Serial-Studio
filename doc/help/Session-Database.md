@@ -1,5 +1,7 @@
 # Historian (Pro)
 
+*Formerly called Session Database. The feature, its file layout, and its `sessions.*` API are unchanged — only the name shown in the UI and docs changed.*
+
 Serial Studio Pro can record every connected session to a per-project SQLite database. You can browse, tag, annotate, export to CSV, and replay those sessions through the full dashboard exactly as they originally arrived. The result is a searchable archive of every run, without the per-file sprawl of CSV exports.
 
 ## Recording pipeline
@@ -156,7 +158,7 @@ Playback controls mirror the CSV player:
 
 When replay starts, Serial Studio saves the current operation mode and project path. When it ends, they're restored automatically. You can replay a session while your live project differs, and switching back leaves you exactly where you were.
 
-Replay is read-only. It doesn't modify the recorded session, and toggling CSV or MDF4 export during replay creates new output files as usual.
+Replay is read-only. It doesn't modify the recorded session, and CSV/MDF4 export is suppressed while a player (CSV, MDF4, or Historian replay) is open, so replaying a session does not write new export files.
 
 ## Performance notes
 

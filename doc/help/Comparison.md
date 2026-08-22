@@ -88,7 +88,7 @@ MATLAB is industry-standard software for numerical computing and data analysis.
 
 - You need real-time monitoring without scripting.
 - You want multiple hardware interfaces without writing drivers.
-- Cost matters ($2,000+ for MATLAB vs free or low-cost for Serial Studio).
+- Cost matters ($2,150+ per year for MATLAB vs free or low-cost for Serial Studio).
 - You want to prototype quickly without learning MATLAB syntax.
 - Your embedded team doesn't have MATLAB licenses.
 

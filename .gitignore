@@ -25,6 +25,8 @@
 !/.claude/hooks/
 .code-report
 .doc-report
+/TODO.md
+/findings.md
 
 # General caches
 .cache

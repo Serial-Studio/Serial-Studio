@@ -22,5 +22,5 @@ One channel per decoded byte, in order, as decimal values 0-255.
 
 ## Pipeline Notes
 
-Select the **Binary (raw bytes)** decoder and a `C0` end delimiter with
+Select the **Binary (Direct)** decoder and a `C0` end delimiter with
 **Hex Delimiters** enabled, matching the SLIP framing byte.

@@ -4,6 +4,10 @@ This example shows how to use CAN bus with Serial Studio. It includes a car simu
 
 > CAN Bus support needs a Serial Studio Pro license. See [serial-studio.com](https://serial-studio.com/) for details.
 
+The bundled project (`ecu_simulator.ssproj`) uses the `com.example.level-bar` custom widget, so
+install the [widget-extension](../widget-extension) example first or that gauge falls back to a
+missing-widget placeholder.
+
 ![CAN Bus ECU Simulator](doc/screenshot.png)
 
 ## Quick Start (No Hardware Required!)

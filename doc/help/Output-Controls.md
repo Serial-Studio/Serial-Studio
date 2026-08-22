@@ -259,15 +259,15 @@ function transmit(value) {
 
 #### `modbusWriteCoil(address, on)`
 
-Writes a coil value (ON = 0xFF00, OFF = 0x0000).
+Writes the ON/OFF convention (ON = 0xFF00, OFF = 0x0000) to a holding register. This helper is presently an alias for `modbusWriteRegister()`: it packs the same 4-byte holding-register write and does not issue a native Modbus coil write (function code 5/15) — the driver always targets holding registers (function code 6/16). Use it when a downstream PLC program maps that holding register to a physical relay or coil; it will not work against a device that expects an actual coil write.
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `address` | Number | Coil address (0x0000–0xFFFF) |
+| `address` | Number | Holding register address (0x0000–0xFFFF) |
 | `on` | Boolean/Number | Truthy = ON, falsy = OFF |
 
 ```javascript
-// Toggle widget controlling a relay coil
+// Toggle widget writing ON/OFF to a holding register a PLC maps to a relay
 function transmit(value) {
   return modbusWriteCoil(0x0000, value);
 }
@@ -382,7 +382,7 @@ Both output controls and [Actions](Actions.md) send data to connected devices, b
 | Widget types | 5 (button, slider, toggle, text, knob) | Button only |
 | Data formatting | JavaScript `transmit()` function | Fixed TX Data + EOL |
 | Continuous values | Yes (slider, knob) | No |
-| Timer/auto-repeat | No | Yes (4 timer modes) |
+| Timer/auto-repeat | No | Yes (5 timer modes) |
 | Auto-execute on connect | No | Yes |
 | License | Pro | Free |
 
@@ -478,7 +478,7 @@ function transmit(value) {
 }
 ```
 
-Enable transmit function (coil at address 0x0000):
+Enable transmit function (holding register 0x0000 via the `modbusWriteCoil` alias, mapped to a relay downstream):
 ```javascript
 function transmit(value) {
   return modbusWriteCoil(0x0000, value);

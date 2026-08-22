@@ -276,7 +276,7 @@ Reads data from a child process's stdout or from a named pipe/FIFO. Any script o
 | Mode       | Description                                                     |
 |------------|-----------------------------------------------------------------|
 | Launch     | Spawns a child process and reads its combined stdout and stderr |
-| Named pipe | Opens an existing named pipe or FIFO for reading                |
+| Named pipe | Reads from a named pipe or FIFO. On POSIX the driver creates the FIFO itself if it doesn't already exist; on Windows the external process must create the named pipe first. |
 
 **Launch mode parameters:**
 
@@ -302,10 +302,9 @@ Reads data from a child process's stdout or from a named pipe/FIFO. Any script o
 
 **Quick start (Named Pipe mode):**
 
-1. Create a FIFO or named pipe from your external process.
-2. Select Process I/O and pick Named Pipe mode.
-3. Enter the pipe path.
-4. Click **Connect**.
+1. Select Process I/O and pick Named Pipe mode.
+2. Enter the pipe path. On POSIX, Serial Studio creates the FIFO automatically if it doesn't already exist; on Windows, the external process must create the named pipe before you connect.
+3. Click **Connect**.
 
 **Tips:**
 
