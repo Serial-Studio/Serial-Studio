@@ -27,7 +27,7 @@
 #include <iterator>
 #include <QByteArray>
 #include <QByteArrayView>
-#include <QOpcUaLocalizedText>
+#include <QDateTime>
 #include <QString>
 #include <QUuid>
 #include <QVariant>
@@ -203,14 +203,13 @@ inline void beginFrame(QByteArray& out)
 }
 
 /**
- * @brief Renders any OPC UA value as text for a string channel: LocalizedText carries its text,
- *        GUIDs and byte strings their canonical spellings, everything else its QVariant string.
+ * @brief Renders any value as text for a string channel: GUIDs and byte strings get their
+ *        canonical spellings, everything else its QVariant string. OPC UA types the driver
+ *        unwraps at ingestion (LocalizedText) never reach here, so this header stays Qt Core-only
+ *        and the ctest tier links no OPC UA module.
  */
 [[nodiscard]] inline QString stringPayload(const QVariant& value)
 {
-  if (value.canConvert<QOpcUaLocalizedText>())
-    return value.value<QOpcUaLocalizedText>().text();
-
   switch (value.typeId()) {
     case QMetaType::QUuid:
       return value.toUuid().toString(QUuid::WithoutBraces);

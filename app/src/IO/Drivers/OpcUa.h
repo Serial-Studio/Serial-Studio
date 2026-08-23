@@ -267,6 +267,7 @@ private:
   [[nodiscard]] static bool endpointAcceptsToken(const QOpcUaEndpointDescription& endpoint,
                                                  const int authMode);
   void markBad(int tag);
+  [[nodiscard]] static QVariant unwrapValue(const QVariant& value);
   void storeValue(int tag,
                   const QVariant& value,
                   QOpcUa::UaStatusCode status,

@@ -34,7 +34,7 @@
 Q_DECLARE_LOGGING_CATEGORY(lcOpcUa)
 
 static constexpr const char* kObjectsFolder = "ns=0;i=85";
-static constexpr int kMaxDepth              = 32;
+static constexpr int kOpcUaMaxDepth         = 32;
 static constexpr int kMaxNodesPerRead       = 200;
 static constexpr int kMaxUnitsInFlight      = 8;
 static constexpr int kMaxProbesInFlight     = 8;
@@ -641,7 +641,7 @@ void IO::Drivers::OpcUaTagModel::browse(Node* node)
   for (const Node* up = node; up; up = up->parent)
     ++depth;
 
-  if (depth > kMaxDepth)
+  if (depth > kOpcUaMaxDepth)
     return;
 
   auto* handle = m_client->node(node->nodeId);

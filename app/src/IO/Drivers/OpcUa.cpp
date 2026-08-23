@@ -28,6 +28,7 @@
 #include <QMessageBox>
 #include <QOpcUaAuthenticationInformation>
 #include <QOpcUaConnectionSettings>
+#include <QOpcUaLocalizedText>
 #include <QOpcUaMonitoringParameters>
 #include <QOpcUaReadItem>
 #include <QOpcUaUserTokenPolicy>
@@ -46,22 +47,22 @@
 
 Q_LOGGING_CATEGORY(lcOpcUa, "serialstudio.io.opcua")
 
-static constexpr int kDialDeadlineMs      = 15000;
-static constexpr int kMinIntervalMs       = 10;
-static constexpr int kMaxIntervalMs       = 60000;
-static constexpr int kDefaultIntervalMs   = 100;
-static constexpr qint64 kNsPerMs          = 1000000LL;
-static constexpr qint64 kMaxClockSkewMs   = 5000;
-static constexpr int kDefaultPort         = 4840;
-static constexpr int kDefaultReadLimit    = 200;
-static constexpr int kRequestTimeoutMs    = 10000;
-static constexpr int kSessionTimeoutMs    = 60000;
-static constexpr int kChannelLifetimeMs   = 600000;
-static constexpr int kWatchdogMs          = 1000;
-static constexpr int kSilenceFactor       = 6;
-static constexpr int kMinSilenceMs        = 3000;
-static constexpr const char* kBackendName = "open62541";
-static constexpr const char* kPolicyNone  = "http://opcfoundation.org/UA/SecurityPolicy#None";
+static constexpr int kOpcUaDialDeadlineMs    = 15000;
+static constexpr int kMinIntervalMs          = 10;
+static constexpr int kMaxIntervalMs          = 60000;
+static constexpr int kOpcUaDefaultIntervalMs = 100;
+static constexpr qint64 kNsPerMs             = 1000000LL;
+static constexpr qint64 kMaxClockSkewMs      = 5000;
+static constexpr int kDefaultPort            = 4840;
+static constexpr int kDefaultReadLimit       = 200;
+static constexpr int kRequestTimeoutMs       = 10000;
+static constexpr int kSessionTimeoutMs       = 60000;
+static constexpr int kChannelLifetimeMs      = 600000;
+static constexpr int kWatchdogMs             = 1000;
+static constexpr int kSilenceFactor          = 6;
+static constexpr int kMinSilenceMs           = 3000;
+static constexpr const char* kBackendName    = "open62541";
+static constexpr const char* kPolicyNone     = "http://opcfoundation.org/UA/SecurityPolicy#None";
 
 //--------------------------------------------------------------------------------------------------
 // Constructor/destructor
@@ -86,7 +87,7 @@ IO::Drivers::OpcUa::OpcUa()
   , m_clockValid(false)
   , m_authMode(0)
   , m_endpointIndex(-1)
-  , m_publishingInterval(kDefaultIntervalMs)
+  , m_publishingInterval(kOpcUaDefaultIntervalMs)
   , m_pendingMonitors(0)
   , m_failedMonitors(0)
   , m_revisedInterval(0)
@@ -183,7 +184,7 @@ void IO::Drivers::OpcUa::loadSettings()
   m_authMode    = m_settings.value("OpcUaDriver/authMode", 0).toInt();
   m_username    = m_settings.value("OpcUaDriver/username", QString()).toString();
   m_publishingInterval =
-    m_settings.value("OpcUaDriver/publishingInterval", kDefaultIntervalMs).toInt();
+    m_settings.value("OpcUaDriver/publishingInterval", kOpcUaDefaultIntervalMs).toInt();
   m_publishingInterval = qBound(kMinIntervalMs, m_publishingInterval, kMaxIntervalMs);
 
   const QUrl url(m_endpointUrl);
@@ -401,7 +402,7 @@ bool IO::Drivers::OpcUa::open(const QIODevice::OpenMode mode)
 
   m_connecting = true;
   m_lastError.clear();
-  m_dialTimer->start(kDialDeadlineMs);
+  m_dialTimer->start(kOpcUaDialDeadlineMs);
 
   if (hasSelectedEndpoint())
     m_client->connectToEndpoint(dialEndpoint());
@@ -448,7 +449,7 @@ QOpcUaClient* IO::Drivers::OpcUa::makeClient()
     return nullptr;
 
   QOpcUaConnectionSettings settings;
-  settings.setConnectTimeout(std::chrono::milliseconds(kDialDeadlineMs));
+  settings.setConnectTimeout(std::chrono::milliseconds(kOpcUaDialDeadlineMs));
   settings.setRequestTimeout(std::chrono::milliseconds(kRequestTimeoutMs));
   settings.setSessionTimeout(std::chrono::milliseconds(kSessionTimeoutMs));
   settings.setSecureChannelLifeTime(std::chrono::milliseconds(kChannelLifetimeMs));
@@ -588,7 +589,7 @@ void IO::Drivers::OpcUa::onLinkDropped(const QString& reason)
  */
 void IO::Drivers::OpcUa::onDialTimeout()
 {
-  failDial(tr("Timed out after %1 s").arg(kDialDeadlineMs / 1000));
+  failDial(tr("Timed out after %1 s").arg(kOpcUaDialDeadlineMs / 1000));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1102,6 +1103,18 @@ void IO::Drivers::OpcUa::onValueUpdated(int tag, const QVariant& value)
 }
 
 /**
+ * @brief Unwraps the one OPC UA-specific value type the wire vocabulary cannot see: LocalizedText
+ *        becomes its text here so OpcUaWire.h stays Qt Core-only for the ctest tier.
+ */
+QVariant IO::Drivers::OpcUa::unwrapValue(const QVariant& value)
+{
+  if (value.canConvert<QOpcUaLocalizedText>())
+    return value.value<QOpcUaLocalizedText>().text();
+
+  return value;
+}
+
+/**
  * @brief Writes a value into its slot(s); a bad status keeps the last good value and counts.
  *        Arrays fan out element-wise, extra elements are dropped, missing ones left latched.
  */
@@ -1126,7 +1139,7 @@ void IO::Drivers::OpcUa::storeValue(int tag,
     const auto list = value.toList();
     for (int i = 0; i < count && i < list.size() && first + i < m_slots.size(); ++i) {
       auto& slot    = m_slots[first + i];
-      slot.value    = list.at(i);
+      slot.value    = unwrapValue(list.at(i));
       slot.sourceTs = sourceTs;
       slot.dirty    = true;
       slot.bad      = false;
@@ -1137,7 +1150,7 @@ void IO::Drivers::OpcUa::storeValue(int tag,
 
   SS_ASSERT(first < m_slots.size(), return);
   auto& slot    = m_slots[first];
-  slot.value    = value;
+  slot.value    = unwrapValue(value);
   slot.sourceTs = sourceTs;
   slot.dirty    = true;
   slot.bad      = false;
