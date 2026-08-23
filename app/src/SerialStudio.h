@@ -175,6 +175,7 @@ public:
     HidDevice,
     Process,
     Mqtt,
+    OpcUa,
 #endif
   };
   Q_ENUM(BusType)

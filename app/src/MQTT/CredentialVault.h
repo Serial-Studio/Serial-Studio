@@ -33,11 +33,13 @@ struct Credentials {
 };
 
 /**
- * @brief Per-machine encrypted storage for MQTT broker credentials keyed by host:port.
+ * @brief Per-machine encrypted storage for broker/server credentials keyed by host:port. The
+ *        scope names the settings group ("mqtt" by default) so another driver can share the
+ *        vault without its entries colliding with the MQTT ones.
  */
 class CredentialVault {
 public:
-  CredentialVault();
+  explicit CredentialVault(const QString& scope = QStringLiteral("mqtt"));
 
   [[nodiscard]] Credentials credentials(const QString& host, quint16 port) const;
   [[nodiscard]] bool hasCredentials(const QString& host, quint16 port) const;
@@ -54,6 +56,7 @@ private:
   [[nodiscard]] static QString settingsKey(const QString& host, quint16 port);
 
 private:
+  QString m_group;
   mutable QSettings m_settings;
   mutable Licensing::SimpleCrypt m_simpleCrypt;
 };

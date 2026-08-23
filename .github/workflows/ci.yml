@@ -507,6 +507,13 @@ jobs:
           echo "Warning: Qt canbus plugins not found at $QT_PLUGINS_PATH/canbus"
         fi
 
+        mkdir -p AppDir/usr/plugins/opcua
+        if [ -d "$QT_PLUGINS_PATH/opcua" ]; then
+          cp -r "$QT_PLUGINS_PATH/opcua/"* AppDir/usr/plugins/opcua/ || echo "Warning: Could not copy opcua plugins"
+        else
+          echo "Warning: Qt opcua plugins not found at $QT_PLUGINS_PATH/opcua"
+        fi
+
         for d in wayland-decoration-client wayland-graphics-integration-client wayland-shell-integration; do
           if [ -d "$QT_PLUGINS_PATH/$d" ]; then
             mkdir -p "AppDir/usr/plugins/$d"
@@ -1378,6 +1385,13 @@ jobs:
           cp -r "$QT_PLUGINS_PATH/canbus/"* AppDir/usr/plugins/canbus/ || echo "Warning: Could not copy canbus plugins"
         else
           echo "Warning: Qt canbus plugins not found at $QT_PLUGINS_PATH/canbus"
+        fi
+
+        mkdir -p AppDir/usr/plugins/opcua
+        if [ -d "$QT_PLUGINS_PATH/opcua" ]; then
+          cp -r "$QT_PLUGINS_PATH/opcua/"* AppDir/usr/plugins/opcua/ || echo "Warning: Could not copy opcua plugins"
+        else
+          echo "Warning: Qt opcua plugins not found at $QT_PLUGINS_PATH/opcua"
         fi
 
         for d in wayland-decoration-client wayland-graphics-integration-client wayland-shell-integration; do
@@ -3050,6 +3064,7 @@ jobs:
             runs-on: ubuntu-24.04
             asset: Linux-x64.AppImage
             broker: true
+            opcua_sim: true
             marker_expr: "not destructive and not dos and not audio"
             timeout_method: signal
           - label: Linux-arm64
@@ -3057,6 +3072,7 @@ jobs:
             runs-on: ubuntu-24.04-arm
             asset: Linux-arm64.AppImage
             broker: true
+            opcua_sim: true
             marker_expr: "not destructive and not dos and not audio"
             timeout_method: signal
           - label: macOS
@@ -3064,6 +3080,7 @@ jobs:
             runs-on: macos-latest
             asset: macOS.dmg
             broker: true
+            opcua_sim: true
             marker_expr: "not destructive and not dos and not audio"
             timeout_method: signal
           - label: Windows
@@ -3071,7 +3088,8 @@ jobs:
             runs-on: windows-latest
             asset: Windows-Portable
             broker: false
-            marker_expr: "not destructive and not dos and not audio and not requires_broker"
+            opcua_sim: false
+            marker_expr: "not destructive and not dos and not audio and not requires_broker and not requires_opcua_sim"
             timeout_method: thread
     runs-on: ${{ matrix.runs-on }}
     defaults:
@@ -3179,6 +3197,18 @@ jobs:
         printf 'listener 1883 127.0.0.1\nallow_anonymous true\npersistence false\n' > /tmp/mosq.conf
         "$(brew --prefix mosquitto)/sbin/mosquitto" -d -c /tmp/mosq.conf
         for i in $(seq 1 15); do (echo > /dev/tcp/127.0.0.1/1883) >/dev/null 2>&1 && break; sleep 1; done
+
+    #
+    # The OPC UA bottling-line simulator on 127.0.0.1:4840 for the spec-0066 driver tests; the
+    # Windows leg runs no simulator and drops the requires_opcua_sim marker instead
+    #
+    - name: '🏭 Start OPC UA simulator'
+      if: matrix.opcua_sim
+      run: |
+        nohup python "examples/OPC UA PLC Simulator/opcua_plc_simulator.py" --port 4840 --rate 20 \
+          > /tmp/opcua-sim.log 2>&1 &
+        for i in $(seq 1 30); do (echo > /dev/tcp/127.0.0.1/4840) >/dev/null 2>&1 && break; sleep 1; done
+        (echo > /dev/tcp/127.0.0.1/4840) >/dev/null 2>&1 || { cat /tmp/opcua-sim.log; exit 1; }
 
     #
     # snd-aloop gives the audio driver a capture device; every command is tolerant because the
@@ -3462,6 +3492,10 @@ jobs:
     - name: '🦟 Stop Mosquitto'
       if: always() && matrix.broker
       run: pkill -f "mosquitto -d -c /tmp/mosq.conf" || true
+
+    - name: '🏭 Stop OPC UA simulator'
+      if: always() && matrix.opcua_sim
+      run: pkill -f "opcua_plc_simulator.py" || true
 
     #
     # junit XML plus the app's own output, which the assert scan reads from

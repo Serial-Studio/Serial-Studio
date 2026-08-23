@@ -1562,7 +1562,9 @@ bool IO::Drivers::Modbus::selectByIdentifier(const QJsonObject& id)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the Modbus configuration as a flat list of editable properties.
+ * @brief Returns the Modbus configuration as a flat list of editable properties; the register-group
+ *        array is always published, so a project saved with no groups clears them on load instead
+ *        of inheriting the previously opened project's.
  */
 QList<IO::DriverProperty> IO::Drivers::Modbus::driverProperties() const
 {
@@ -1598,9 +1600,6 @@ QList<IO::DriverProperty> IO::Drivers::Modbus::driverProperties() const
     appendTcpProperties(props);
   else
     appendRtuProperties(props);
-
-  if (m_registerGroups.isEmpty())
-    return props;
 
   QJsonArray groups_array;
   for (const auto& g : m_registerGroups) {
@@ -1689,7 +1688,8 @@ void IO::Drivers::Modbus::appendRtuProperties(QList<IO::DriverProperty>& props) 
 }
 
 /**
- * @brief Applies a single Modbus configuration change by key.
+ * @brief Applies a single Modbus configuration change by key; an empty registerGroups array clears
+ *        the groups instead of being ignored.
  */
 void IO::Drivers::Modbus::setDriverProperty(const QString& key, const QVariant& value)
 {
@@ -1763,9 +1763,6 @@ void IO::Drivers::Modbus::setDriverProperty(const QString& key, const QVariant& 
     for (const auto& item : list)
       array.append(QJsonValue::fromVariant(item));
   }
-
-  if (array.isEmpty())
-    return;
 
   clearRegisterGroups();
   for (const auto& item : array) {

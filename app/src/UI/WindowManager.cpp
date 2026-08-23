@@ -697,6 +697,33 @@ bool UI::WindowManager::restoreLayout(const QJsonObject& layout)
 }
 
 /**
+ * @brief Reads the per-window chrome state ("normal"/"minimized"/"closed") stored with the
+ *        layout, resolved to this session's window ids. The window manager only tiles what is
+ *        normal, so the taskbar owns applying these back onto its model.
+ */
+QMap<int, QString> UI::WindowManager::savedWindowStates(const QJsonObject& layout) const
+{
+  QMap<int, QString> states;
+  if (layout.isEmpty() || !layout.contains("geometries"))
+    return states;
+
+  const QHash<StableKey, int> stableLookup = buildStableKeyToWindowId();
+  const QJsonArray geometries              = layout["geometries"].toArray();
+
+  for (const auto& val : std::as_const(geometries)) {
+    const QJsonObject winGeom = val.toObject();
+    const int id              = resolveSavedWindowId(winGeom, stableLookup, m_windows);
+    const QString state       = winGeom.value("state").toString();
+    if (id < 0 || state.isEmpty())
+      continue;
+
+    states.insert(id, state);
+  }
+
+  return states;
+}
+
+/**
  * @brief Pre-stashes saved geometries so registerWindow can apply them per-window before first
  * paint, avoiding the minimumSize flash.
  */

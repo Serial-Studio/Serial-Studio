@@ -1,0 +1,1653 @@
+{
+    "actions": [
+    ],
+    "changeDrivenTransforms": false,
+    "frozen": true,
+    "groups": [
+        {
+            "datasets": [
+                {
+                    "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": false,
+                    "groupId": 0,
+                    "index": 1,
+                    "led": true,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Running",
+                    "uniqueId": 1,
+                    "units": "",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 1,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 0,
+                    "index": 2,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Level_pct",
+                    "uniqueId": 2,
+                    "units": "%",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 0,
+                    "index": 3,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Speed_bpm",
+                    "uniqueId": 3,
+                    "units": "bpm",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 3,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 0,
+                    "index": 4,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Bottles",
+                    "uniqueId": 4,
+                    "units": "",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 4,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": false,
+                    "groupId": 0,
+                    "index": 5,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Status",
+                    "uniqueId": 5,
+                    "units": "",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                }
+            ],
+            "title": "Filler",
+            "uniqueId": 0,
+            "widget": "datagrid"
+        },
+        {
+            "datasets": [
+                {
+                    "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": false,
+                    "groupId": 1,
+                    "index": 6,
+                    "led": true,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Running",
+                    "uniqueId": 7,
+                    "units": "",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 1,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 1,
+                    "index": 7,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Torque_Nm",
+                    "uniqueId": 8,
+                    "units": "Nm",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 1,
+                    "index": 8,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Jams",
+                    "uniqueId": 9,
+                    "units": "",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 3,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": false,
+                    "groupId": 1,
+                    "index": 9,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Status",
+                    "uniqueId": 10,
+                    "units": "",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                }
+            ],
+            "title": "Capper",
+            "uniqueId": 6,
+            "widget": "datagrid"
+        },
+        {
+            "datasets": [
+                {
+                    "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 2,
+                    "index": 10,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Inlet_C",
+                    "uniqueId": 12,
+                    "units": "C",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 2,
+                    "index": 11,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Outlet_C",
+                    "uniqueId": 13,
+                    "units": "C",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 2,
+                    "index": 12,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Zones_C[0]",
+                    "uniqueId": 14,
+                    "units": "C",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 3,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 2,
+                    "index": 13,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Zones_C[1]",
+                    "uniqueId": 15,
+                    "units": "C",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 4,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 2,
+                    "index": 14,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Zones_C[2]",
+                    "uniqueId": 16,
+                    "units": "C",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 5,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 2,
+                    "index": 15,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Zones_C[3]",
+                    "uniqueId": 17,
+                    "units": "C",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 6,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 2,
+                    "index": 16,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Zones_C[4]",
+                    "uniqueId": 18,
+                    "units": "C",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 7,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 2,
+                    "index": 17,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Zones_C[5]",
+                    "uniqueId": 19,
+                    "units": "C",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 8,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 2,
+                    "index": 18,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Heater_pct",
+                    "uniqueId": 20,
+                    "units": "%",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                }
+            ],
+            "title": "Pasteuriser",
+            "uniqueId": 11,
+            "widget": "datagrid"
+        },
+        {
+            "datasets": [
+                {
+                    "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 3,
+                    "index": 19,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Air_bar",
+                    "uniqueId": 22,
+                    "units": "bar",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 3,
+                    "index": 20,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "ChilledWater_C",
+                    "uniqueId": 23,
+                    "units": "C",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 3,
+                    "index": 21,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Power_kW",
+                    "uniqueId": 24,
+                    "units": "kW",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 3,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 3,
+                    "index": 22,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Frequency_Hz",
+                    "uniqueId": 25,
+                    "units": "Hz",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                }
+            ],
+            "title": "Utilities",
+            "uniqueId": 21,
+            "widget": "datagrid"
+        },
+        {
+            "datasets": [
+                {
+                    "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 4,
+                    "index": 23,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Uptime_s",
+                    "uniqueId": 27,
+                    "units": "s",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 4,
+                    "index": 24,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Cycle",
+                    "uniqueId": 28,
+                    "units": "",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 4,
+                    "index": 25,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "FaultySensor",
+                    "uniqueId": 29,
+                    "units": "",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 3,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 4,
+                    "index": 26,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Mood",
+                    "uniqueId": 30,
+                    "units": "",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                }
+            ],
+            "title": "Diagnostics",
+            "uniqueId": 26,
+            "widget": "datagrid"
+        }
+    ],
+    "hexadecimalDelimiters": false,
+    "luaFastMode": false,
+    "mqttPublisher": {
+        "alpnEnabled": false,
+        "alpnProtocol": "x-amzn-mqtt-ca",
+        "cleanSession": true,
+        "clientCertPath": "",
+        "customClientId": false,
+        "enabled": false,
+        "hostname": "127.0.0.1",
+        "keepAlive": 60,
+        "mode": 0,
+        "mqttVersion": 2,
+        "notificationTopic": "",
+        "peerVerifyDepth": 10,
+        "peerVerifyMode": 3,
+        "port": 1883,
+        "privateKeyPath": "",
+        "publishFrequency": 10,
+        "publishNotifications": false,
+        "scriptCode": "",
+        "scriptLanguage": 0,
+        "scriptTopic": "",
+        "sslEnabled": false,
+        "sslProtocol": 5,
+        "topicBase": ""
+    },
+    "nextUniqueId": 31,
+    "plotTimeRange": 10,
+    "pointCount": 100,
+    "schemaVersion": 3,
+    "sources": [
+        {
+            "busType": 10,
+            "checksum": "",
+            "checksumAlgorithm": "",
+            "connection": {
+                "authMode": 0,
+                "endpointUrl": "opc.tcp://127.0.0.1:4840/serialstudio/",
+                "password": "",
+                "publishingInterval": 100,
+                "tags": [
+                    {
+                        "id": "ns=2;s=Plant.Line1.Filler.Running",
+                        "max": 0,
+                        "min": 0,
+                        "n": 1,
+                        "name": "Running",
+                        "path": "Objects/Plant/Line1/Filler",
+                        "t": "bool",
+                        "unit": ""
+                    },
+                    {
+                        "id": "ns=2;s=Plant.Line1.Filler.Level_pct",
+                        "max": 0,
+                        "min": 0,
+                        "n": 1,
+                        "name": "Level_pct",
+                        "path": "Objects/Plant/Line1/Filler",
+                        "t": "f64",
+                        "unit": ""
+                    },
+                    {
+                        "id": "ns=2;s=Plant.Line1.Filler.Speed_bpm",
+                        "max": 0,
+                        "min": 0,
+                        "n": 1,
+                        "name": "Speed_bpm",
+                        "path": "Objects/Plant/Line1/Filler",
+                        "t": "f64",
+                        "unit": ""
+                    },
+                    {
+                        "id": "ns=2;s=Plant.Line1.Filler.Bottles",
+                        "max": 0,
+                        "min": 0,
+                        "n": 1,
+                        "name": "Bottles",
+                        "path": "Objects/Plant/Line1/Filler",
+                        "t": "u32",
+                        "unit": ""
+                    },
+                    {
+                        "id": "ns=2;s=Plant.Line1.Filler.Status",
+                        "max": 0,
+                        "min": 0,
+                        "n": 1,
+                        "name": "Status",
+                        "path": "Objects/Plant/Line1/Filler",
+                        "t": "str",
+                        "unit": ""
+                    },
+                    {
+                        "id": "ns=2;s=Plant.Line1.Capper.Running",
+                        "max": 0,
+                        "min": 0,
+                        "n": 1,
+                        "name": "Running",
+                        "path": "Objects/Plant/Line1/Capper",
+                        "t": "bool",
+                        "unit": ""
+                    },
+                    {
+                        "id": "ns=2;s=Plant.Line1.Capper.Torque_Nm",
+                        "max": 0,
+                        "min": 0,
+                        "n": 1,
+                        "name": "Torque_Nm",
+                        "path": "Objects/Plant/Line1/Capper",
+                        "t": "f32",
+                        "unit": ""
+                    },
+                    {
+                        "id": "ns=2;s=Plant.Line1.Capper.Jams",
+                        "max": 0,
+                        "min": 0,
+                        "n": 1,
+                        "name": "Jams",
+                        "path": "Objects/Plant/Line1/Capper",
+                        "t": "u16",
+                        "unit": ""
+                    },
+                    {
+                        "id": "ns=2;s=Plant.Line1.Capper.Status",
+                        "max": 0,
+                        "min": 0,
+                        "n": 1,
+                        "name": "Status",
+                        "path": "Objects/Plant/Line1/Capper",
+                        "t": "str",
+                        "unit": ""
+                    },
+                    {
+                        "id": "ns=2;s=Plant.Line1.Pasteuriser.Inlet_C",
+                        "max": 0,
+                        "min": 0,
+                        "n": 1,
+                        "name": "Inlet_C",
+                        "path": "Objects/Plant/Line1/Pasteuriser",
+                        "t": "f64",
+                        "unit": ""
+                    },
+                    {
+                        "id": "ns=2;s=Plant.Line1.Pasteuriser.Outlet_C",
+                        "max": 0,
+                        "min": 0,
+                        "n": 1,
+                        "name": "Outlet_C",
+                        "path": "Objects/Plant/Line1/Pasteuriser",
+                        "t": "f64",
+                        "unit": ""
+                    },
+                    {
+                        "id": "ns=2;s=Plant.Line1.Pasteuriser.Zones_C",
+                        "max": 0,
+                        "min": 0,
+                        "n": 6,
+                        "name": "Zones_C",
+                        "path": "Objects/Plant/Line1/Pasteuriser",
+                        "t": "f64",
+                        "unit": ""
+                    },
+                    {
+                        "id": "ns=2;s=Plant.Line1.Pasteuriser.Heater_pct",
+                        "max": 0,
+                        "min": 0,
+                        "n": 1,
+                        "name": "Heater_pct",
+                        "path": "Objects/Plant/Line1/Pasteuriser",
+                        "t": "u8",
+                        "unit": ""
+                    },
+                    {
+                        "id": "ns=2;s=Plant.Utilities.Air_bar",
+                        "max": 0,
+                        "min": 0,
+                        "n": 1,
+                        "name": "Air_bar",
+                        "path": "Objects/Plant/Utilities",
+                        "t": "f64",
+                        "unit": ""
+                    },
+                    {
+                        "id": "ns=2;s=Plant.Utilities.ChilledWater_C",
+                        "max": 0,
+                        "min": 0,
+                        "n": 1,
+                        "name": "ChilledWater_C",
+                        "path": "Objects/Plant/Utilities",
+                        "t": "f64",
+                        "unit": ""
+                    },
+                    {
+                        "id": "ns=2;s=Plant.Utilities.Power_kW",
+                        "max": 0,
+                        "min": 0,
+                        "n": 1,
+                        "name": "Power_kW",
+                        "path": "Objects/Plant/Utilities",
+                        "t": "f64",
+                        "unit": ""
+                    },
+                    {
+                        "id": "ns=2;s=Plant.Utilities.Frequency_Hz",
+                        "max": 0,
+                        "min": 0,
+                        "n": 1,
+                        "name": "Frequency_Hz",
+                        "path": "Objects/Plant/Utilities",
+                        "t": "f32",
+                        "unit": ""
+                    },
+                    {
+                        "id": "ns=2;s=Plant.Diagnostics.Uptime_s",
+                        "max": 0,
+                        "min": 0,
+                        "n": 1,
+                        "name": "Uptime_s",
+                        "path": "Objects/Plant/Diagnostics",
+                        "t": "i64",
+                        "unit": ""
+                    },
+                    {
+                        "id": "ns=2;s=Plant.Diagnostics.Cycle",
+                        "max": 0,
+                        "min": 0,
+                        "n": 1,
+                        "name": "Cycle",
+                        "path": "Objects/Plant/Diagnostics",
+                        "t": "i32",
+                        "unit": ""
+                    },
+                    {
+                        "id": "ns=2;s=Plant.Diagnostics.FaultySensor",
+                        "max": 0,
+                        "min": 0,
+                        "n": 1,
+                        "name": "FaultySensor",
+                        "path": "Objects/Plant/Diagnostics",
+                        "t": "f64",
+                        "unit": ""
+                    },
+                    {
+                        "id": "ns=2;s=Plant.Diagnostics.Mood",
+                        "max": 0,
+                        "min": 0,
+                        "n": 1,
+                        "name": "Mood",
+                        "path": "Objects/Plant/Diagnostics",
+                        "t": "i8",
+                        "unit": ""
+                    }
+                ],
+                "username": ""
+            },
+            "decoder": 3,
+            "decoderMethod": 3,
+            "frameDetection": 2,
+            "frameEnd": "",
+            "frameParserLanguage": 2,
+            "frameParserParams": {
+                "schema": [
+                    {
+                        "i": 0,
+                        "t": "bool"
+                    },
+                    {
+                        "i": 1,
+                        "t": "f64"
+                    },
+                    {
+                        "i": 2,
+                        "t": "f64"
+                    },
+                    {
+                        "i": 3,
+                        "t": "u32"
+                    },
+                    {
+                        "i": 4,
+                        "t": "str"
+                    },
+                    {
+                        "i": 5,
+                        "t": "bool"
+                    },
+                    {
+                        "i": 6,
+                        "t": "f32"
+                    },
+                    {
+                        "i": 7,
+                        "t": "u16"
+                    },
+                    {
+                        "i": 8,
+                        "t": "str"
+                    },
+                    {
+                        "i": 9,
+                        "t": "f64"
+                    },
+                    {
+                        "i": 10,
+                        "t": "f64"
+                    },
+                    {
+                        "i": 11,
+                        "t": "f64"
+                    },
+                    {
+                        "i": 12,
+                        "t": "f64"
+                    },
+                    {
+                        "i": 13,
+                        "t": "f64"
+                    },
+                    {
+                        "i": 14,
+                        "t": "f64"
+                    },
+                    {
+                        "i": 15,
+                        "t": "f64"
+                    },
+                    {
+                        "i": 16,
+                        "t": "f64"
+                    },
+                    {
+                        "i": 17,
+                        "t": "u8"
+                    },
+                    {
+                        "i": 18,
+                        "t": "f64"
+                    },
+                    {
+                        "i": 19,
+                        "t": "f64"
+                    },
+                    {
+                        "i": 20,
+                        "t": "f64"
+                    },
+                    {
+                        "i": 21,
+                        "t": "f32"
+                    },
+                    {
+                        "i": 22,
+                        "t": "i64"
+                    },
+                    {
+                        "i": 23,
+                        "t": "i32"
+                    },
+                    {
+                        "i": 24,
+                        "t": "f64"
+                    },
+                    {
+                        "i": 25,
+                        "t": "i8"
+                    }
+                ]
+            },
+            "frameParserTemplate": "opcua",
+            "frameStart": "",
+            "hexadecimalDelimiters": false,
+            "sourceId": 0,
+            "title": "OPC UA"
+        }
+    ],
+    "title": "OPC UA Bottling Line",
+    "treeExpansion": {
+        "": false,
+        "OPC UA Bottling Line": true,
+        "OPC UA Bottling Line/ ": false,
+        "OPC UA Bottling Line/Control Loop": false,
+        "OPC UA Bottling Line/Dashboard Widgets": true,
+        "OPC UA Bottling Line/Dashboard Widgets/Capper": true,
+        "OPC UA Bottling Line/Dashboard Widgets/Capper/Jams": false,
+        "OPC UA Bottling Line/Dashboard Widgets/Capper/Running": false,
+        "OPC UA Bottling Line/Dashboard Widgets/Capper/Status": false,
+        "OPC UA Bottling Line/Dashboard Widgets/Capper/Torque_Nm": false,
+        "OPC UA Bottling Line/Dashboard Widgets/Diagnostics": true,
+        "OPC UA Bottling Line/Dashboard Widgets/Diagnostics/Cycle": false,
+        "OPC UA Bottling Line/Dashboard Widgets/Diagnostics/FaultySensor": false,
+        "OPC UA Bottling Line/Dashboard Widgets/Diagnostics/Mood": false,
+        "OPC UA Bottling Line/Dashboard Widgets/Diagnostics/Uptime_s": false,
+        "OPC UA Bottling Line/Dashboard Widgets/Filler": true,
+        "OPC UA Bottling Line/Dashboard Widgets/Filler/Bottles": false,
+        "OPC UA Bottling Line/Dashboard Widgets/Filler/Level_pct": false,
+        "OPC UA Bottling Line/Dashboard Widgets/Filler/Running": false,
+        "OPC UA Bottling Line/Dashboard Widgets/Filler/Speed_bpm": false,
+        "OPC UA Bottling Line/Dashboard Widgets/Filler/Status": false,
+        "OPC UA Bottling Line/Dashboard Widgets/Pasteuriser": true,
+        "OPC UA Bottling Line/Dashboard Widgets/Pasteuriser/Heater_pct": false,
+        "OPC UA Bottling Line/Dashboard Widgets/Pasteuriser/Inlet_C": false,
+        "OPC UA Bottling Line/Dashboard Widgets/Pasteuriser/Outlet_C": false,
+        "OPC UA Bottling Line/Dashboard Widgets/Pasteuriser/Zones_C[0]": false,
+        "OPC UA Bottling Line/Dashboard Widgets/Pasteuriser/Zones_C[1]": false,
+        "OPC UA Bottling Line/Dashboard Widgets/Pasteuriser/Zones_C[2]": false,
+        "OPC UA Bottling Line/Dashboard Widgets/Pasteuriser/Zones_C[3]": false,
+        "OPC UA Bottling Line/Dashboard Widgets/Pasteuriser/Zones_C[4]": false,
+        "OPC UA Bottling Line/Dashboard Widgets/Pasteuriser/Zones_C[5]": false,
+        "OPC UA Bottling Line/Dashboard Widgets/Utilities": true,
+        "OPC UA Bottling Line/Dashboard Widgets/Utilities/Air_bar": false,
+        "OPC UA Bottling Line/Dashboard Widgets/Utilities/ChilledWater_C": false,
+        "OPC UA Bottling Line/Dashboard Widgets/Utilities/Frequency_Hz": false,
+        "OPC UA Bottling Line/Dashboard Widgets/Utilities/Power_kW": false,
+        "OPC UA Bottling Line/MQTT Publisher": false,
+        "OPC UA Bottling Line/OPC UA": true,
+        "OPC UA Bottling Line/OPC UA/Frame Parser": false,
+        "OPC UA Bottling Line/Variables": true,
+        "OPC UA Bottling Line/Variables/Dataset Values": false,
+        "OPC UA Bottling Line/Workspaces": true,
+        "OPC UA Bottling Line/Workspaces/All Data": false,
+        "OPC UA Bottling Line/Workspaces/Capper": false,
+        "OPC UA Bottling Line/Workspaces/Diagnostics": false,
+        "OPC UA Bottling Line/Workspaces/Filler": false,
+        "OPC UA Bottling Line/Workspaces/Overview": false,
+        "OPC UA Bottling Line/Workspaces/Pasteuriser": false,
+        "OPC UA Bottling Line/Workspaces/Utilities": false
+    },
+    "widgetSettings": {
+        "activeGroup": 1000,
+        "externalWindows": {
+            "data": [
+            ]
+        },
+        "layout:1000": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 546,
+                "canvasWidth": 1069,
+                "geometries": [
+                    {
+                        "height": 546,
+                        "id": 1,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 1,
+                        "width": 357,
+                        "x": 0,
+                        "y": 0
+                    },
+                    {
+                        "height": 578,
+                        "id": 6,
+                        "relativeIndex": 0,
+                        "state": "minimized",
+                        "widgetType": 8,
+                        "width": 534,
+                        "x": 534,
+                        "y": 0
+                    },
+                    {
+                        "height": 273,
+                        "id": 2,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 1,
+                        "width": 356,
+                        "x": 356,
+                        "y": 0
+                    },
+                    {
+                        "height": 289,
+                        "id": 7,
+                        "relativeIndex": 1,
+                        "state": "minimized",
+                        "widgetType": 8,
+                        "width": 534,
+                        "x": 534,
+                        "y": 288
+                    },
+                    {
+                        "height": 273,
+                        "id": 3,
+                        "relativeIndex": 2,
+                        "state": "normal",
+                        "widgetType": 1,
+                        "width": 356,
+                        "x": 356,
+                        "y": 272
+                    },
+                    {
+                        "height": 273,
+                        "id": 4,
+                        "relativeIndex": 3,
+                        "state": "normal",
+                        "widgetType": 1,
+                        "width": 356,
+                        "x": 711,
+                        "y": 0
+                    },
+                    {
+                        "height": 273,
+                        "id": 5,
+                        "relativeIndex": 4,
+                        "state": "normal",
+                        "widgetType": 1,
+                        "width": 356,
+                        "x": 711,
+                        "y": 272
+                    }
+                ],
+                "userReordered": false,
+                "windowOrder": [
+                    1,
+                    6,
+                    2,
+                    7,
+                    3,
+                    4,
+                    5
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 8
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 8
+                    },
+                    {
+                        "relativeIndex": 2,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 3,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 4,
+                        "widgetType": 1
+                    }
+                ]
+            }
+        },
+        "layout:1003": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 546,
+                "canvasWidth": 1069,
+                "geometries": [
+                    {
+                        "height": 273,
+                        "id": 2,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 1,
+                        "width": 535,
+                        "x": 0,
+                        "y": 0
+                    },
+                    {
+                        "height": 273,
+                        "id": 14,
+                        "relativeIndex": 3,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 534,
+                        "x": 534,
+                        "y": 0
+                    },
+                    {
+                        "height": 273,
+                        "id": 15,
+                        "relativeIndex": 4,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 535,
+                        "x": 0,
+                        "y": 272
+                    },
+                    {
+                        "height": 273,
+                        "id": 7,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 8,
+                        "width": 534,
+                        "x": 534,
+                        "y": 272
+                    }
+                ],
+                "userReordered": false,
+                "windowOrder": [
+                    2,
+                    14,
+                    15,
+                    7
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 3,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 4,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 8
+                    }
+                ]
+            }
+        },
+        "layout:1004": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 546,
+                "canvasWidth": 1069,
+                "geometries": [
+                    {
+                        "height": 273,
+                        "id": 3,
+                        "relativeIndex": 2,
+                        "state": "normal",
+                        "widgetType": 1,
+                        "width": 214,
+                        "x": 0,
+                        "y": 0
+                    },
+                    {
+                        "height": 273,
+                        "id": 16,
+                        "relativeIndex": 5,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 214,
+                        "x": 213,
+                        "y": 0
+                    },
+                    {
+                        "height": 273,
+                        "id": 17,
+                        "relativeIndex": 6,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 214,
+                        "x": 426,
+                        "y": 0
+                    },
+                    {
+                        "height": 273,
+                        "id": 18,
+                        "relativeIndex": 7,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 214,
+                        "x": 639,
+                        "y": 0
+                    },
+                    {
+                        "height": 273,
+                        "id": 19,
+                        "relativeIndex": 8,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 213,
+                        "x": 852,
+                        "y": 0
+                    },
+                    {
+                        "height": 273,
+                        "id": 20,
+                        "relativeIndex": 9,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 214,
+                        "x": 0,
+                        "y": 272
+                    },
+                    {
+                        "height": 273,
+                        "id": 21,
+                        "relativeIndex": 10,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 214,
+                        "x": 213,
+                        "y": 272
+                    },
+                    {
+                        "height": 273,
+                        "id": 22,
+                        "relativeIndex": 11,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 214,
+                        "x": 426,
+                        "y": 272
+                    },
+                    {
+                        "height": 273,
+                        "id": 23,
+                        "relativeIndex": 12,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 214,
+                        "x": 639,
+                        "y": 272
+                    },
+                    {
+                        "height": 273,
+                        "id": 24,
+                        "relativeIndex": 13,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 213,
+                        "x": 852,
+                        "y": 272
+                    }
+                ],
+                "userReordered": false,
+                "windowOrder": [
+                    3,
+                    16,
+                    17,
+                    18,
+                    19,
+                    20,
+                    21,
+                    22,
+                    23,
+                    24
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 2,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 5,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 6,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 7,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 8,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 9,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 10,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 11,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 12,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 13,
+                        "widgetType": 9
+                    }
+                ]
+            }
+        },
+        "layout:1006": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 546,
+                "canvasWidth": 1069,
+                "geometries": [
+                    {
+                        "height": 546,
+                        "id": 5,
+                        "relativeIndex": 4,
+                        "state": "normal",
+                        "widgetType": 1,
+                        "width": 357,
+                        "x": 0,
+                        "y": 0
+                    },
+                    {
+                        "height": 273,
+                        "id": 29,
+                        "relativeIndex": 18,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 356,
+                        "x": 356,
+                        "y": 0
+                    },
+                    {
+                        "height": 273,
+                        "id": 30,
+                        "relativeIndex": 19,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 356,
+                        "x": 356,
+                        "y": 272
+                    },
+                    {
+                        "height": 273,
+                        "id": 31,
+                        "relativeIndex": 20,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 356,
+                        "x": 711,
+                        "y": 0
+                    },
+                    {
+                        "height": 273,
+                        "id": 32,
+                        "relativeIndex": 21,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 356,
+                        "x": 711,
+                        "y": 272
+                    }
+                ],
+                "userReordered": false,
+                "windowOrder": [
+                    5,
+                    29,
+                    30,
+                    31,
+                    32
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 4,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 18,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 19,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 20,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 21,
+                        "widgetType": 9
+                    }
+                ]
+            }
+        }
+    },
+    "writerVersion": "4.0.3",
+    "writerVersionAtCreation": "4.0.3"
+}

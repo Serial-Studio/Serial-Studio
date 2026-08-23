@@ -13,7 +13,7 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 
 **Pro version:**
 - Everything in the free version, plus:
-- Advanced protocols: MQTT, Modbus, CAN Bus, Audio Input, raw USB, HID, Process I/O.
+- Advanced protocols: MQTT, Modbus, CAN Bus, OPC UA, Audio Input, raw USB, HID, Process I/O.
 - Pro widgets: 3D Plot, Waterfall (spectrogram), Image View (live camera feed), Canvas (user-scripted Canvas2D widget).
 - Output (control) widgets: buttons, toggles, sliders, knobs, text fields, and the Output Panel.
 - Multi-device projects (several data sources in one dashboard).
@@ -35,6 +35,7 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 | | MQTT Publish/Subscribe | ❌ | ✅ |
 | | Modbus RTU & TCP | ❌ | ✅ |
 | | CAN Bus (with DBC import) | ❌ | ✅ |
+| | OPC UA Client (tag browsing, subscriptions) | ❌ | ✅ |
 | | Audio Input (FFT analysis) | ❌ | ✅ |
 | | Raw USB (bulk/isochronous via libusb) | ❌ | ✅ |
 | | HID Devices (gamepads, custom HIDs via hidapi) | ❌ | ✅ |
@@ -191,6 +192,26 @@ function parse(frame) {
 - ECU development and testing
 
 **Learn more:** [Protocol Setup Guide](Protocol-Setup-Guides.md#can-bus-setup-pro)
+
+### OPC UA Client
+
+**What it is:** Client for OPC UA (IEC 62541), the tag-oriented interface modern PLCs, SCADA servers and gateways expose over Ethernet.
+
+**Used for:**
+- Discover a server's endpoints from `opc.tcp://host:port`
+- Browse the address space and tick the tags to monitor
+- Generate a project from the selection, units and ranges included
+- Subscribe to tags, with automatic fallback to timed reads
+
+**Use cases:**
+- Plant and line monitoring across mixed-vendor equipment
+- Reading tags behind a KEPServerEX, Ignition, or FactoryTalk Linx gateway
+- Siemens, Beckhoff, CODESYS, WAGO, B&R, and Schneider controllers
+- Batch logging with the server's own source timestamps
+
+**Note:** The bundled OPC UA backend is built without encryption, so this version connects to policy `None` endpoints only.
+
+**Learn more:** [OPC UA Driver](Drivers-OPC-UA.md)
 
 ### Audio Input
 
@@ -443,7 +464,7 @@ systems, non-commercial university research, and home automation.
 ### Pro adds:
 
 - Commercial and business use rights.
-- MQTT, Modbus, CAN Bus, and Audio Input.
+- MQTT, Modbus, CAN Bus, OPC UA, and Audio Input.
 - Raw USB (bulk/isochronous via libusb), HID, and Process I/O.
 - 3D plots, Waterfall (spectrogram), Canvas, and live Image View (camera feeds).
 - Output (control) widgets and multi-device projects.
@@ -610,6 +631,7 @@ Yes, for Pro customers. Contact alex@serial-studio.com for rates and availabilit
 |------|------|-----|
 | Connect via Ethernet | ✅ (TCP) | ✅ (TCP or Modbus TCP) |
 | Read Modbus registers | ❌ | ✅ |
+| Browse and read OPC UA tags | ❌ | ✅ |
 | Poll multiple registers | ❌ | ✅ |
 | Visualize PLC data | Partial | ✅ |
 | Export to CSV | ✅ | ✅ + MDF4 |
@@ -642,7 +664,7 @@ Yes, for Pro customers. Contact alex@serial-studio.com for rates and availabilit
 | | Free (GPLv3) | Pro |
 |---|--------------|-----|
 | **Best for** | Hobbyists, students, open-source | Professionals, businesses, industry |
-| **Protocols** | Basic (Serial, Network, BLE) | Advanced (MQTT, Modbus, CAN, Audio, Raw USB, HID, Process I/O) |
+| **Protocols** | Basic (Serial, Network, BLE) | Advanced (MQTT, Modbus, CAN, OPC UA, Audio, Raw USB, HID, Process I/O) |
 | **Widgets** | Standard | Standard + 3D Plot, XY Plot, Waterfall, Image View, Canvas, Output widgets |
 | **Export** | CSV | CSV + MDF4 |
 | **Commercial use** | ❌ | ✅ |

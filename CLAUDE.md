@@ -116,14 +116,15 @@ pytest tests/ -m "not destructive" -v     # skip server-crashing tests
 ## Project Overview
 
 Serial Studio: cross-platform telemetry dashboard, Qt 6.11.2 + C++20. Data sources: UART,
-TCP/UDP, BLE, Audio, Modbus, CAN Bus, MQTT, USB (libusb), HID (hidapi), Process I/O. 15+
-visualization widgets, 5 output (control) widgets, 256 kHz+ data rate (CI-gated; see below).
+TCP/UDP, BLE, Audio, Modbus, CAN Bus, MQTT, OPC UA (Qt OpcUa, policy None only), USB
+(libusb), HID (hidapi), Process I/O. 15+ visualization widgets, 5 output (control) widgets,
+256 kHz+ data rate (CI-gated; see below).
 Frame parsers in JavaScript (`QJSEngine`), Lua (embedded LuaJIT 2.1, 5.1 + shims; per-project
 Safe/Fast execution mode — spec 0051), or Built-In ("Native"
 in all internal identifiers — `SerialStudio::Native`, `CFrameParser`, `NativeTemplate`; only
 user-facing strings/docs say Built-In. Parametrized C++ templates configured via a JSON
 descriptor, no user code). Per-dataset value transforms in JS or Lua. Pro features: Output
-widgets, Modbus, CAN Bus, MDF4, 3D, ImageView, Waterfall, file-transfer protocols (X/Y/ZMODEM),
+widgets, Modbus, CAN Bus, OPC UA, MDF4, 3D, ImageView, Waterfall, file-transfer protocols (X/Y/ZMODEM),
 Modbus map importer, Historian (per-session SQLite recording; "Session Database" pre-2026-08).
 User-facing renames of 2026-08-19 — internal identifiers unchanged: Historian (was Session
 Database; `Sessions::` namespace, `sessions.*` API, "Session Databases" folder stay), Variables

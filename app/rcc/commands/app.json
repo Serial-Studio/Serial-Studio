@@ -490,6 +490,18 @@
       "category": "connection"
     },
     {
+      "id": "driver.opcua",
+      "title": "OPC UA",
+      "icon": "devices/opcua",
+      "tooltip": "Select OPC UA communication (Pro)",
+      "kind": "toggle",
+      "contexts": [
+        "app"
+      ],
+      "pro": true,
+      "category": "connection"
+    },
+    {
       "id": "mode.quickPlot",
       "title": "Quick Plot Mode",
       "icon": "widgets/plot",

@@ -420,9 +420,7 @@ QQuickItem* UI::Taskbar::nextActiveWindow(int delta) const
     if (!win)
       continue;
 
-    const auto state =
-      static_cast<TaskbarModel::WindowState>(row->data(TaskbarModel::WindowStateRole).toInt());
-    if (state == TaskbarModel::WindowClosed)
+    if (windowState(win) == TaskbarModel::WindowClosed)
       continue;
 
     windows.append(win);
@@ -747,6 +745,7 @@ void UI::Taskbar::showWindow(QQuickItem* window)
     if (id > -1) {
       setWindowState(id, UI::TaskbarModel::WindowNormal);
       setActiveWindow(window);
+      saveLayout();
     }
   }
 }
@@ -761,6 +760,7 @@ void UI::Taskbar::closeWindow(QQuickItem* window)
     if (id > -1) {
       setWindowState(id, UI::TaskbarModel::WindowClosed);
       setActiveWindow(nullptr);
+      saveLayout();
     }
   }
 }
@@ -775,6 +775,7 @@ void UI::Taskbar::minimizeWindow(QQuickItem* window)
     if (id > -1) {
       setWindowState(id, UI::TaskbarModel::WindowMinimized);
       setActiveWindow(nullptr);
+      saveLayout();
     }
   }
 }
@@ -862,16 +863,19 @@ void UI::Taskbar::registerWindow(const int id, QQuickItem* window)
     m_windowManager->setLayoutContext(layoutContextKey());
 
     const auto opMode = m_appState.operationMode();
-    bool restored     = false;
+    QJsonObject layout;
+    bool restored = false;
     if (opMode == SerialStudio::ProjectFile) {
-      const auto layout = m_projectModel.groupLayout(m_layoutScope, m_activeGroupId);
+      layout = m_projectModel.groupLayout(m_layoutScope, m_activeGroupId);
       if (!layout.isEmpty() && m_windowManager->restoreLayout(layout))
         restored = true;
     }
 
     m_windowManager->reconcileWindowOrder(taskbarWindowIds());
 
-    if (!restored)
+    if (restored)
+      applySavedWindowStates(layout);
+    else
       m_windowManager->loadLayout();
 
     m_restoringLayout = false;
@@ -893,11 +897,13 @@ void UI::Taskbar::startFocusCycle()
 
   const auto& order = m_windowManager->windowOrder();
   for (int id : order)
-    if (auto* win = windowData(id))
+    if (auto* win = windowData(id); win && windowState(win) == TaskbarModel::WindowNormal)
       m_focusCycleQueue.append(win);
 
-  if (m_focusCycleQueue.isEmpty())
+  if (m_focusCycleQueue.isEmpty()) {
+    setActiveWindow(nullptr);
     return;
+  }
 
   if (m_focusCycleQueue.size() == 1) {
     QQuickItem* only = m_focusCycleQueue.first();
@@ -955,6 +961,38 @@ void UI::Taskbar::setWindowState(const int id, const UI::TaskbarModel::WindowSta
 
   if (m_windowIDs.count() >= m_taskbarButtons->rowCount() && m_windowManager)
     m_windowManager->triggerLayoutUpdate();
+}
+
+/**
+ * @brief Re-applies the minimized/closed states saved with a restored layout. Written straight
+ *        onto the model rather than through setWindowState() so the canvas is retiled once
+ *        instead of once per window.
+ */
+void UI::Taskbar::applySavedWindowStates(const QJsonObject& layout)
+{
+  if (!m_windowManager)
+    return;
+
+  const auto states = m_windowManager->savedWindowStates(layout);
+  if (states.isEmpty())
+    return;
+
+  for (auto it = states.cbegin(); it != states.cend(); ++it) {
+    QStandardItem* item = findItemByWindowId(it.key());
+    if (!item)
+      continue;
+
+    auto state = TaskbarModel::WindowNormal;
+    if (it.value() == QStringLiteral("minimized"))
+      state = TaskbarModel::WindowMinimized;
+    else if (it.value() == QStringLiteral("closed"))
+      state = TaskbarModel::WindowClosed;
+
+    item->setData(state, TaskbarModel::WindowStateRole);
+  }
+
+  Q_EMIT windowStatesChanged();
+  m_windowManager->triggerLayoutUpdate();
 }
 
 //--------------------------------------------------------------------------------------------------

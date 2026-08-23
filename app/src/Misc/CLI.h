@@ -192,6 +192,17 @@ struct CliOptions {
   QCommandLineOption canbusBitrateOpt{
     "canbus-bitrate", "Sets CAN bus bitrate in bps (default: 500000)", "rate"};
   QCommandLineOption canbusFdOpt{"canbus-fd", "Enables CAN-FD mode"};
+  QCommandLineOption opcuaOpt{
+    "opcua", "Connects to an OPC UA server (e.g., opc.tcp://192.168.1.10:4840)", "url"};
+  QCommandLineOption opcuaUserOpt{
+    "opcua-user", "Sets the OPC UA username (enables username/password authentication)", "name"};
+  QCommandLineOption opcuaPassOpt{"opcua-pass", "Sets the OPC UA password", "password"};
+  QCommandLineOption opcuaIntervalOpt{
+    "opcua-interval", "Sets the OPC UA publishing interval in ms (10-60000, default: 100)", "ms"};
+  QCommandLineOption opcuaTagOpt{
+    "opcua-tag",
+    "Subscribes to a tag: nodeId[:type[:name]] (repeatable, type default f64)",
+    "spec"};
 #endif
 };
 
@@ -263,6 +274,7 @@ private:
   void setupModbusRtuConnection();
   void setupModbusTcpConnection();
   void setupCanbusConnection();
+  void setupOpcUaConnection();
   void applyModbusCommonOptions();
   void applyOperatorTaskbarSettings();
 #endif

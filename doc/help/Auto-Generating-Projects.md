@@ -107,6 +107,10 @@ The detailed format spec for CSV, XML, and JSON register maps lives in [Protocol
 
 You only need `address` and `name`; everything else has a default.
 
+## OPC UA tag browser
+
+The [OPC UA driver](Drivers-OPC-UA.md) generates projects from the server itself rather than from a vendor file: **Browse Tags...** in the Setup panel walks the server's address space, and **Generate Project** turns the ticked variables into one group per folder and one dataset per tag, typed after the server's data types, with a Built-In frame parser whose schema is written for you. Reopening the generated project reconnects and resubscribes without browsing again.
+
 ## Protobuf import
 
 [Protocol Buffers](https://protobuf.dev/) is a schema-defined binary serialization format from Google, widely used by drones, robotics stacks, and any device whose firmware was written against `protoc`. A `.proto` file declares messages, fields, scalar types, and tags; the device serialises one of those messages per frame and the receiver decodes it back into named values.

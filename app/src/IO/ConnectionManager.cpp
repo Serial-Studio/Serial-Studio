@@ -50,6 +50,7 @@
 #  include "IO/Drivers/HID.h"
 #  include "IO/Drivers/Modbus.h"
 #  include "IO/Drivers/MQTT.h"
+#  include "IO/Drivers/OpcUa.h"
 #  include "IO/Drivers/Process.h"
 #  include "IO/Drivers/USB.h"
 #  include "Licensing/CommercialToken.h"
@@ -95,6 +96,7 @@ IO::ConnectionManager::ConnectionManager()
   , m_hidUi(std::make_unique<IO::Drivers::HID>())
   , m_mqttUi(std::make_unique<IO::Drivers::MQTT>())
   , m_modbusUi(std::make_unique<IO::Drivers::Modbus>())
+  , m_opcUaUi(std::make_unique<IO::Drivers::OpcUa>())
   , m_processUi(std::make_unique<IO::Drivers::Process>())
   , m_usbUi(std::make_unique<IO::Drivers::USB>())
 #endif
@@ -139,6 +141,7 @@ IO::ConnectionManager::~ConnectionManager()
                     static_cast<QObject*>(m_hidUi.get()),
                     static_cast<QObject*>(m_mqttUi.get()),
                     static_cast<QObject*>(m_modbusUi.get()),
+                    static_cast<QObject*>(m_opcUaUi.get()),
                     static_cast<QObject*>(m_processUi.get()),
                     static_cast<QObject*>(m_usbUi.get())}) {
     if (drv)
@@ -329,6 +332,7 @@ QStringList IO::ConnectionManager::availableBuses() const
   list.append(tr("HID Device"));
   list.append(tr("Process"));
   list.append(tr("MQTT Subscriber"));
+  list.append(tr("OPC UA"));
 #endif
   return list;
 }
@@ -464,6 +468,14 @@ IO::Drivers::Modbus* IO::ConnectionManager::modbus() const noexcept
 }
 
 /**
+ * @brief Returns the UI-config OPC UA driver instance.
+ */
+IO::Drivers::OpcUa* IO::ConnectionManager::opcUa() const noexcept
+{
+  return m_opcUaUi.get();
+}
+
+/**
  * @brief Returns the UI-config Process driver instance.
  */
 IO::Drivers::Process* IO::ConnectionManager::process() const noexcept
@@ -515,6 +527,8 @@ IO::HAL_Driver* IO::ConnectionManager::activeUiDriver() const noexcept
       return m_processUi.get();
     case SerialStudio::BusType::Mqtt:
       return m_mqttUi.get();
+    case SerialStudio::BusType::OpcUa:
+      return m_opcUaUi.get();
 #endif
     default:
       return nullptr;
@@ -548,6 +562,8 @@ IO::HAL_Driver* IO::ConnectionManager::uiDriverForBusType(SerialStudio::BusType 
       return m_processUi.get();
     case SerialStudio::BusType::Mqtt:
       return m_mqttUi.get();
+    case SerialStudio::BusType::OpcUa:
+      return m_opcUaUi.get();
 #endif
     default:
       return nullptr;
@@ -982,6 +998,7 @@ void IO::ConnectionManager::setupExternalConnections()
   m_uartUi->setupExternalConnections();
 #ifdef BUILD_COMMERCIAL
   m_modbusUi->setupExternalConnections();
+  m_opcUaUi->setupExternalConnections();
   m_canBusUi->setupExternalConnections();
   m_usbUi->setupExternalConnections();
 #endif
@@ -1035,6 +1052,7 @@ void IO::ConnectionManager::setupExternalConnections()
   wireUiDriver(m_hidUi.get());
   wireUiDriver(m_mqttUi.get());
   wireUiDriver(m_modbusUi.get());
+  wireUiDriver(m_opcUaUi.get());
   wireUiDriver(m_processUi.get());
   wireUiDriver(m_usbUi.get());
 #endif
@@ -1118,6 +1136,7 @@ void IO::ConnectionManager::shutdownDrivers()
   m_hidUi.reset();
   m_mqttUi.reset();
   m_modbusUi.reset();
+  m_opcUaUi.reset();
   m_processUi.reset();
   m_usbUi.reset();
 #endif
@@ -2265,6 +2284,15 @@ std::unique_ptr<IO::HAL_Driver> IO::ConnectionManager::createDriver(
         return nullptr;
 
       return std::make_unique<IO::Drivers::MQTT>();
+    }
+    case SerialStudio::BusType::OpcUa: {
+      const auto& tk = Licensing::CommercialToken::current();
+      if (!tk.isValid() || !SS_LICENSE_GUARD())
+        return nullptr;
+
+      auto driver = std::make_unique<IO::Drivers::OpcUa>();
+      driver->setPersistent(false);
+      return driver;
     }
 #endif
     default:

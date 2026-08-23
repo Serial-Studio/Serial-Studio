@@ -177,6 +177,133 @@ def mosquitto_broker():
 
 
 @pytest.fixture
+def opcua_simulator():
+    """
+    Skip the test unless the OPC UA simulator answers on 127.0.0.1:4840.
+
+    CI launches `examples/OPC UA PLC Simulator/opcua_plc_simulator.py` before pytest;
+    local developers run it in another terminal (`pip install asyncua`). Returns the
+    endpoint URL so tests do not hardcode it.
+    """
+    import socket
+
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.settimeout(2.0)
+    try:
+        sock.connect(("127.0.0.1", 4840))
+    except (ConnectionRefusedError, OSError, socket.timeout):
+        pytest.skip("OPC UA simulator not reachable on 127.0.0.1:4840")
+    finally:
+        try:
+            sock.close()
+        except Exception:
+            pass
+
+    return {
+        "url": "opc.tcp://127.0.0.1:4840/serialstudio/",
+        "host": "127.0.0.1",
+        "port": 4840,
+    }
+
+
+@pytest.fixture
+def opcua_simulator_process():
+    """
+    Launch a private simulator instance the test fully controls (restart, flags).
+
+    Returns a factory `start(port, *flags)` yielding a handle with `.url`, `.stop()` and
+    `.restart()`. Skips when the asyncua package is missing. Every instance is stopped at
+    teardown.
+    """
+    import os
+    import socket
+    import subprocess
+    import sys
+
+    try:
+        import asyncua  # noqa: F401
+    except ImportError:
+        pytest.skip("asyncua is not installed (pip install -r tests/requirements.txt)")
+
+    script = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+        "examples",
+        "OPC UA PLC Simulator",
+        "opcua_plc_simulator.py",
+    )
+    handles = []
+
+    def _port_open(port: int) -> bool:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(0.5)
+        try:
+            sock.connect(("127.0.0.1", port))
+            return True
+        except (ConnectionRefusedError, OSError, socket.timeout):
+            return False
+        finally:
+            sock.close()
+
+    class Handle:
+        def __init__(self, port, flags):
+            self.port = port
+            self.flags = list(flags)
+            self.url = f"opc.tcp://127.0.0.1:{port}/serialstudio/"
+            self.proc = None
+            self._launch()
+
+        def _launch(self):
+            self.proc = subprocess.Popen(
+                [
+                    sys.executable,
+                    script,
+                    "--port",
+                    str(self.port),
+                    "--rate",
+                    "20",
+                    *self.flags,
+                ],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+            end = time.time() + 15.0
+            while time.time() < end:
+                if _port_open(self.port):
+                    return
+                if self.proc.poll() is not None:
+                    pytest.fail(
+                        f"simulator exited early with code {self.proc.returncode}"
+                    )
+                time.sleep(0.2)
+            pytest.fail(f"simulator did not open port {self.port} within 15 s")
+
+        def stop(self):
+            if self.proc and self.proc.poll() is None:
+                self.proc.terminate()
+                try:
+                    self.proc.wait(timeout=5.0)
+                except subprocess.TimeoutExpired:
+                    self.proc.kill()
+            end = time.time() + 5.0
+            while _port_open(self.port) and time.time() < end:
+                time.sleep(0.1)
+
+        def restart(self):
+            self.stop()
+            self._launch()
+
+    def start(port: int = 48410, *flags):
+        handle = Handle(port, flags)
+        handles.append(handle)
+        return handle
+
+    yield start
+
+    for handle in handles:
+        handle.stop()
+
+
+@pytest.fixture
 def mqtt_subscriber(mosquitto_broker):
     """
     Provide a paho-mqtt subscriber connected to the local broker.

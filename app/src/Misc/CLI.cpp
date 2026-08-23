@@ -27,6 +27,7 @@
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
+#include <QJsonObject>
 #include <QSettings>
 #include <QTimer>
 
@@ -39,6 +40,9 @@
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
+#ifdef BUILD_COMMERCIAL
+#  include "IO/Drivers/OpcUaWire.h"
+#endif
 #include "IO/FileTransmission.h"
 #include "Misc/ModuleManager.h"
 #include "Misc/TimerEvents.h"
@@ -159,6 +163,11 @@ void CLI::registerOptions()
   m_parser.addOption(m_opts.canbusOpt);
   m_parser.addOption(m_opts.canbusBitrateOpt);
   m_parser.addOption(m_opts.canbusFdOpt);
+  m_parser.addOption(m_opts.opcuaOpt);
+  m_parser.addOption(m_opts.opcuaUserOpt);
+  m_parser.addOption(m_opts.opcuaPassOpt);
+  m_parser.addOption(m_opts.opcuaIntervalOpt);
+  m_parser.addOption(m_opts.opcuaTagOpt);
 #endif
 }
 
@@ -699,6 +708,8 @@ void CLI::applyBusConfiguration()
     setupModbusTcpConnection();
   else if (m_parser.isSet(m_opts.canbusOpt))
     setupCanbusConnection();
+  else if (m_parser.isSet(m_opts.opcuaOpt))
+    setupOpcUaConnection();
 #endif
 }
 
@@ -1332,6 +1343,123 @@ void CLI::setupModbusTcpConnection()
   applyModbusSlave(m_parser, m_opts.modbusSlaveOpt);
   applyModbusPoll(m_parser, m_opts.modbusPollOpt);
   applyModbusRegisters(m_parser, m_opts.modbusRegisterOpt);
+  connectionManager.connectDevice();
+}
+
+/**
+ * @brief Parses nodeId[:type[:name]][:n=N][:unit=U] from the right, since node ids themselves
+ *        may contain ':'. Returns an empty object when the spec is malformed or names an unknown
+ *        type code.
+ */
+[[nodiscard]] static QJsonObject parseOpcUaTagSpec(const QString& spec)
+{
+  using IO::Drivers::OpcUaWire::Type;
+  using IO::Drivers::OpcUaWire::typeFromCode;
+
+  QString id   = spec;
+  QString type = QStringLiteral("f64");
+  QString name;
+  QString unit;
+  int arrayLen = 1;
+
+  auto body = spec;
+  for (int guard = 0; guard < 4; ++guard) {
+    const auto tail = body.section(QLatin1Char(':'), -1);
+    if (tail.startsWith(QLatin1String("n=")) && tail.mid(2).toInt() > 0) {
+      arrayLen = tail.mid(2).toInt();
+      body     = body.section(QLatin1Char(':'), 0, -2);
+      continue;
+    }
+
+    if (tail.startsWith(QLatin1String("unit="))) {
+      unit = tail.mid(5);
+      body = body.section(QLatin1Char(':'), 0, -2);
+      continue;
+    }
+
+    break;
+  }
+
+  id               = body;
+  const auto parts = body.split(QLatin1Char(':'));
+  if (parts.size() >= 3 && typeFromCode(parts.at(parts.size() - 2)) != Type::Invalid) {
+    name = parts.last();
+    type = parts.at(parts.size() - 2);
+    id   = parts.mid(0, parts.size() - 2).join(QLatin1Char(':'));
+  } else if (parts.size() >= 2 && typeFromCode(parts.last()) != Type::Invalid) {
+    type = parts.last();
+    id   = parts.mid(0, parts.size() - 1).join(QLatin1Char(':'));
+  } else if (parts.size() >= 2) {
+    return {};
+  }
+
+  if (id.isEmpty())
+    return {};
+
+  QJsonObject tag;
+  tag[QStringLiteral("id")]   = id;
+  tag[QStringLiteral("t")]    = type;
+  tag[QStringLiteral("n")]    = arrayLen;
+  tag[QStringLiteral("unit")] = unit;
+  tag[QStringLiteral("name")] = name.isEmpty() ? id : name;
+  return tag;
+}
+
+/**
+ * @brief Configures and connects an OPC UA session from CLI options (policy None, tags by node id).
+ */
+void CLI::setupOpcUaConnection()
+{
+  const QString url = m_parser.value(m_opts.opcuaOpt);
+  if (!url.startsWith(QLatin1String("opc.tcp://"))) {
+    qWarning() << "Invalid OPC UA endpoint. Expected: opc.tcp://host[:port][/path]";
+    return;
+  }
+
+  static auto& connectionManager = IO::ConnectionManager::instance();
+  auto* opcua                    = connectionManager.opcUa();
+  connectionManager.setBusType(SerialStudio::BusType::OpcUa);
+  opcua->setEndpointUrl(url);
+
+  if (m_parser.isSet(m_opts.opcuaUserOpt)) {
+    opcua->setAuthMode(1);
+    opcua->setUsername(m_parser.value(m_opts.opcuaUserOpt));
+    if (m_parser.isSet(m_opts.opcuaPassOpt))
+      opcua->setPassword(m_parser.value(m_opts.opcuaPassOpt));
+  } else {
+    opcua->setAuthMode(0);
+  }
+
+  if (m_parser.isSet(m_opts.opcuaIntervalOpt)) {
+    bool ok            = false;
+    const int interval = m_parser.value(m_opts.opcuaIntervalOpt).toInt(&ok);
+    if (ok && interval >= 10 && interval <= 60000)
+      opcua->setPublishingInterval(interval);
+    else
+      qWarning() << "Invalid OPC UA interval (10-60000 ms):"
+                 << m_parser.value(m_opts.opcuaIntervalOpt);
+  }
+
+  QJsonArray tags;
+  const auto specs = m_parser.values(m_opts.opcuaTagOpt);
+  for (const auto& spec : specs) {
+    const auto tag = parseOpcUaTagSpec(spec);
+    if (tag.isEmpty())
+      qWarning() << "Invalid OPC UA tag spec (nodeId[:type[:name]], known type code):" << spec;
+    else
+      tags.append(tag);
+  }
+
+  if (tags.isEmpty()) {
+    qWarning() << "No OPC UA tags given (--opcua-tag); nothing to subscribe to";
+    return;
+  }
+
+  opcua->setTags(tags);
+
+  if (!m_parser.isSet(m_opts.projectOpt) && !opcua->loadGeneratedProject())
+    qWarning() << "Could not generate a project for the OPC UA tags";
+
   connectionManager.connectDevice();
 }
 

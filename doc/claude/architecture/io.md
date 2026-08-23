@@ -6,7 +6,7 @@
 
 ## IO Architecture — No Singleton Drivers
 
-- 10 drivers, **public ctors**, no `static instance()`.
+- 11 drivers, **public ctors**, no `static instance()`.
 - `ConnectionManager` (singleton, `Cpp_IO_Manager`) owns one **UI-config** instance per type:
   `instance().uart()`, `.network()`, `.bluetoothLE()`, etc. QML context properties
   (`Cpp_IO_Serial`, etc.) point at these.
@@ -114,6 +114,42 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   (`SetupPanes/Hardware.qml` StackLayout gate; BLE's post-connect pickers exempt), and
   `ProjectModel::setSource0ConnectionSettings` no-ops on identical settings so persistence
   echoes cannot churn undo history or autosave.
+- **OPC UA (spec 0066) discovers before it dials, and publishes delta frames on a tick.**
+  `open()` creates a fresh client (`open62541` backend, policy None only: the shipped backend has
+  no encryption) with explicit `QOpcUaConnectionSettings`, and with no discovered endpoint selected
+  it runs `discoverEndpoints()` FIRST (`m_pendingDial`) — a synthetic `QOpcUaEndpointDescription`
+  carries no user-identity tokens and the backend refuses it. `dialEndpoint()` then dials the
+  discovered description with the user's typed host:port substituted: servers advertise their own
+  hostname, which rarely resolves from the engineering laptop. Endpoint selection requires
+  `policyIsNone` AND `endpointAcceptsToken(authMode)`, and an explicit pick survives re-discovery.
+  The ONE verdict is `stateChanged(Connected)` → `reportOpenFinished(true)` or the `failDial()`
+  funnel (`errorChanged` reason, Disconnected-while-dialing, 15 s `m_dialTimer`, discovery
+  failure) → `reportOpenFinished(false)`; an established drop queues `disconnectDevice(this)`.
+  On Connected it asks for one monitored item per tag; refused tags go to `m_polledTags` (batched
+  `readNodeAttributes`, chunked to `MaxNodesPerRead`, ONE read outstanding — a queued read behind
+  a slow PLC grows latency without bound), every refused item is refused *individually* and only
+  an all-refused verdict flips `m_pollMode`. `m_watchdog` (1 Hz) enters poll mode when nothing
+  arrived for `kSilenceFactor` publishing periods: a server that silently drops the subscription
+  otherwise leaves the dashboard frozen and the status reading "Subscribed". The revised
+  publishing interval is adopted from `monitoringStatus()` and drives both timers; a live interval
+  change goes through `modifyMonitoring`. Value quality is decided by the OPC UA **severity bits**
+  (Good and Uncertain publish, Bad keeps the last good value and lands in `badTags()`), never by
+  `!= Good`. `m_frameTimer` encodes only dirty slots into one `OpcUaWire` frame
+  (`[version][index u16][type u8][payload]*`, capped at `kMaxFrameBytes`, cursor rotated so high
+  indices cannot starve, buffer moved to the pipeline and re-reserved per tick) and calls
+  `publishReceivedData()` stamped with the earliest source timestamp mapped through a per-connect
+  steady-clock offset PLUS the server-to-local offset sampled at connect (un-NTP'd PLCs are
+  followed, not rejected; the stamp never goes backwards). The slot layout carries each slot's wire
+  type, so it is independent of `m_tags`; a tag edit during a live session is deferred and applied
+  on close. The `opcua` native template (`BinaryTemplates.cpp`, `BUILD_COMMERCIAL`) latches the
+  frame by the project's `schema` param (entries carry the node id) and rejects duplicate indices;
+  `tst_opcua_wire` pins the vocabulary. **`OpcUaTagModel` is strictly lazy**: one Browse per
+  expansion plus ONE batched Read for that level, Objects *and* Variables expandable (PLC structs
+  expose members as child Variables), units/EURange resolved only for ticked tags through a bounded
+  queue. Crawling the address space on open is what makes a picker unusable on a 100k-node gateway.
+  Only the UI-config instance persists (`setPersistent(false)` on the live one); the password lives
+  in `MQTT::CredentialVault` under the `opcua` scope. Diagnostics are pulled counters read by
+  `io.opcua.getStatus`.
 - **`sessionClosed` means the USER (or an API client / player takeover) ended the session** —
   it fires only from the explicit `disconnectDevice()` path. Driver-initiated drops,
   `rebuildDevices` churn, and failed dials never emit it: `API::ProcessLauncher` reaps every

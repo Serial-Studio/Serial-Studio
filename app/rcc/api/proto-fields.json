@@ -669,9 +669,30 @@
       "reserved": [],
       "next": 3
     },
+    "io.canbus.setDataBitrate": {
+      "fields": {
+        "dataBitrate": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
     "io.canbus.setInterfaceIndex": {
       "fields": {
         "interfaceIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.canbus.setListenOnly": {
+      "fields": {
+        "enabled": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.canbus.setLoopback": {
+      "fields": {
+        "enabled": 2
       },
       "reserved": [],
       "next": 3
@@ -922,6 +943,123 @@
       },
       "reserved": [],
       "next": 3
+    },
+    "io.opcua.addTag": {
+      "fields": {
+        "id": 2,
+        "name": 3,
+        "t": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "io.opcua.browse": {
+      "fields": {
+        "nodeId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.opcua.clearTags": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.opcua.discoverEndpoints": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.opcua.generateProject": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.opcua.getConfig": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.opcua.getStatus": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.opcua.listEndpoints": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.opcua.listTags": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.opcua.removeTag": {
+      "fields": {
+        "index": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.opcua.setAuthMode": {
+      "fields": {
+        "mode": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.opcua.setEndpointIndex": {
+      "fields": {
+        "index": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.opcua.setEndpointUrl": {
+      "fields": {
+        "url": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.opcua.setPassword": {
+      "fields": {
+        "password": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.opcua.setPublishingInterval": {
+      "fields": {
+        "intervalMs": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.opcua.setTags": {
+      "fields": {
+        "tags": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.opcua.setUsername": {
+      "fields": {
+        "username": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.opcua.startBrowse": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.opcua.stopBrowse": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
     },
     "io.process.getConfig": {
       "fields": {},

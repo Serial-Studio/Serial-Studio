@@ -570,6 +570,28 @@ ss_add_unit_test(tst_gsusb_protocol
 )
 
 #
+# OpcUaWire.h (spec 0066) is the delta-frame vocabulary the OPC UA driver encodes and the opcua
+# native template decodes; the suite links the template registry so the latch semantics are tested
+# through the real makeParser() path. Commercial-only TU, so the suite defines BUILD_COMMERCIAL.
+#
+ss_add_unit_test(tst_opcua_wire
+  SOURCES tst_opcua_wire.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/NativeTemplate.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/NativeTemplateRegistry.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextTemplates.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp
+          ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Core5Compat
+          Qt6::Gui
+)
+if(TARGET tst_opcua_wire)
+  target_compile_definitions(tst_opcua_wire PRIVATE BUILD_COMMERCIAL)
+endif()
+
+#
 # The Lua 5.1/5.2 compatibility shim plus the console and restricted-os sandbox. luajit is a real
 # dependency here and not an accident: the contract under test is what the shim installs into a
 # live lua_State, which no stub can stand in for.

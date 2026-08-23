@@ -946,6 +946,7 @@ void Misc::ModuleManager::registerCommercialContextProperties(QQmlContext* ctx)
   ctx->setContextProperty("Cpp_IO_Audio", ioManager->audio());
   ctx->setContextProperty("Cpp_IO_CANBus", ioManager->canBus());
   ctx->setContextProperty("Cpp_IO_Modbus", ioManager->modbus());
+  ctx->setContextProperty("Cpp_IO_OpcUa", ioManager->opcUa());
   ctx->setContextProperty("Cpp_IO_USB", ioManager->usb());
   ctx->setContextProperty("Cpp_IO_HID", ioManager->hid());
   ctx->setContextProperty("Cpp_IO_Process", ioManager->process());

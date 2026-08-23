@@ -141,6 +141,44 @@ Item {
   }
 
   //
+  // Shared styling for the monochrome taskbar buttons: without hover/press feedback they
+  // read as static glyphs instead of clickable controls
+  //
+  component TrayButton: Widgets.IconButton {
+    id: _tray
+
+    padding: 4
+    iconSize: 16
+    Layout.preferredWidth: 24
+    Layout.preferredHeight: 24
+    Layout.alignment: Qt.AlignVCenter
+    icon.color: _tray.enabled && (_tray.highlighted || _tray.hovered)
+                ? Cpp_ThemeManager.colors["taskbar_highlight"]
+                : Cpp_ThemeManager.colors["taskbar_text"]
+
+    background: Rectangle {
+      radius: 3
+      border.width: 1
+      border.color: Cpp_ThemeManager.colors["taskbar_checked_button_border"]
+      opacity: _tray.enabled && (_tray.highlighted || _tray.down) ? 1 : 0
+
+      Behavior on opacity { NumberAnimation { duration: 100 } }
+
+      gradient: Gradient {
+        GradientStop {
+          position: _tray.down ? 1 : 0
+          color: Cpp_ThemeManager.colors["taskbar_checked_button_top"]
+        }
+
+        GradientStop {
+          position: _tray.down ? 0 : 1
+          color: Cpp_ThemeManager.colors["taskbar_checked_button_bottom"]
+        }
+      }
+    }
+  }
+
+  //
   // Taskbar background
   //
   Rectangle {
@@ -662,15 +700,11 @@ Item {
         spacing: 4
         anchors.fill: parent
 
-        Widgets.IconButton {
-          iconSize: 24
-          background: Item{}
+        TrayButton {
+          iconSize: 12
           mirrorIconInRtl: true
-          Layout.preferredWidth: 24
-          Layout.preferredHeight: 24
           visible: buttonsContainer.showNavButtons
           icon.source: "qrc:/icons/buttons/backward.svg"
-          icon.color: Cpp_ThemeManager.colors["taskbar_text"]
           onClicked: {
             taskBar.activeWindow = null
             buttonsView.contentX = Math.max(0, buttonsView.contentX - 150)
@@ -748,16 +782,11 @@ Item {
           }
         }
 
-        Widgets.IconButton {
-          iconSize: 24
-          background: Item{}
+        TrayButton {
+          iconSize: 12
           mirrorIconInRtl: true
-          Layout.preferredWidth: 24
-          Layout.preferredHeight: 24
-          Layout.alignment: Qt.AlignVCenter
           visible: buttonsContainer.showNavButtons
           icon.source: "qrc:/icons/buttons/forward.svg"
-          icon.color: Cpp_ThemeManager.colors["taskbar_text"]
           onClicked: {
             taskBar.activeWindow = null
             buttonsView.contentX = Math.min(buttonsView.contentWidth - buttonsView.width, buttonsView.contentX + 150)
@@ -862,21 +891,13 @@ Item {
     // Auto-layout button: opens the layout gallery, which is where the pattern, the split
     // ratio and manual placement all live (spec 0053)
     //
-    Widgets.IconButton {
+    TrayButton {
       id: _layoutButton
 
-      iconSize: 16
-      background: Item{}
-      Layout.preferredWidth: 24
-      Layout.preferredHeight: 24
-      opacity: enabled ? 1 : 0.5
-      Layout.alignment: Qt.AlignVCenter
       enabled: !Cpp_UI_Dashboard.frozen
-      visible: !(app.runtimeMode && Cpp_UI_Dashboard.frozen)
       icon.source: "qrc:/icons/buttons/auto-layout.svg"
-      icon.color: taskBar.windowManager.autoLayoutEnabled ?
-                    Cpp_ThemeManager.colors["taskbar_highlight"] :
-                    Cpp_ThemeManager.colors["taskbar_text"]
+      highlighted: taskBar.windowManager.autoLayoutEnabled
+      visible: !(app.runtimeMode && Cpp_UI_Dashboard.frozen)
       onClicked: {
         taskBar.activeWindow = null
         _layoutPicker.open()
@@ -922,24 +943,17 @@ Item {
     //
     // Freeze dashboard button + passive frozen indicator (Pro)
     //
-    Widgets.IconButton {
+    TrayButton {
       id: _freezeButton
 
       readonly property bool freezeAllowed: Cpp_CommercialBuild
                                             && (Cpp_Licensing_LemonSqueezy.isActivated
                                                 || Cpp_Licensing_Trial.trialEnabled)
 
-      iconSize: 16
-      background: Item{}
-      Layout.preferredWidth: 24
-      Layout.preferredHeight: 24
-      Layout.alignment: Qt.AlignVCenter
-      visible: Cpp_AppState.operationMode === SerialStudio.ProjectFile && !app.runtimeMode
       opacity: freezeAllowed ? 1 : 0.5
+      highlighted: Cpp_UI_Dashboard.frozen
       icon.source: "qrc:/icons/buttons/freeze.svg"
-      icon.color: Cpp_UI_Dashboard.frozen ?
-                    Cpp_ThemeManager.colors["taskbar_highlight"] :
-                    Cpp_ThemeManager.colors["taskbar_text"]
+      visible: Cpp_AppState.operationMode === SerialStudio.ProjectFile && !app.runtimeMode
       ToolTip.delay: 700
       ToolTip.visible: hovered
       ToolTip.text: Cpp_UI_Dashboard.frozen ? qsTr("Unfreeze Dashboard")
@@ -955,16 +969,9 @@ Item {
     //
     // Edit workspace button (only for user workspaces)
     //
-    Widgets.IconButton {
-      iconSize: 16
-      background: Item{}
-      Layout.preferredWidth: 24
-      Layout.preferredHeight: 24
-      opacity: enabled ? 1 : 0.5
+    TrayButton {
       visible: !app.runtimeMode
-      Layout.alignment: Qt.AlignVCenter
       enabled: taskBar && taskBar.activeGroupId >= 1000
-      icon.color: Cpp_ThemeManager.colors["taskbar_text"]
       icon.source: "qrc:/icons/buttons/workspace-settings.svg"
       onClicked: {
         var model = taskBar.workspaceModel
@@ -988,12 +995,10 @@ Item {
       Layout.alignment: Qt.AlignVCenter
       visible: active && Cpp_MQTT_Publisher.enabled
       sourceComponent: Component {
-        Widgets.IconButton {
-          iconSize: 16
+        TrayButton {
           id: mqttIndicator
 
           anchors.fill: parent
-          background: Item{}
           icon.color: "transparent"
           opacity: Cpp_MQTT_Publisher.isConnected ? 1 : 0.5
           icon.source: Cpp_MQTT_Publisher.isConnected

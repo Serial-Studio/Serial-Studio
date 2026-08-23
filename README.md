@@ -9,7 +9,7 @@
 
 Connect an Arduino, ESP32, STM32, Raspberry Pi, Teensy, or anything else that speaks serial, Bluetooth, a network protocol, or an industrial bus. Describe the data format once in a project file. Serial Studio draws the plots, gauges, maps, and 3D views around it. Send commands back with buttons, sliders, and knobs. Record a session, replay it, export it as a PDF.
 
-It replaces the stack of separate tools this work usually requires: a serial monitor and serial plotter for Arduino and ESP32 development, a real-time telemetry dashboard, a data logger that records to CSV or SQLite, and a Modbus, CAN bus, or MQTT monitor for industrial and IoT systems.
+It replaces the stack of separate tools this work usually requires: a serial monitor and serial plotter for Arduino and ESP32 development, a real-time telemetry dashboard, a data logger that records to CSV or SQLite, and a Modbus, CAN bus, OPC UA, or MQTT monitor for industrial and IoT systems.
 
 Runs on Windows, macOS, Linux, and Raspberry Pi.
 
@@ -19,7 +19,7 @@ Runs on Windows, macOS, Linux, and Raspberry Pi.
 
 ## What you can do with it
 
-**Connect to a device.** Serial/UART, Bluetooth LE, and TCP/UDP in the GPL build. MQTT, Modbus TCP/RTU, CAN Bus, audio input, raw USB (libusb), HID (hidapi), and Process I/O are Pro. Multiple devices in one project is also Pro.
+**Connect to a device.** Serial/UART, Bluetooth LE, and TCP/UDP in the GPL build. MQTT, Modbus TCP/RTU, CAN Bus, OPC UA, audio input, raw USB (libusb), HID (hidapi), and Process I/O are Pro. Multiple devices in one project is also Pro.
 
 **Visualize data.** 17 widgets in the GPL build: line plots, gauges, bar charts, meters, GPS maps, FFT spectrum, accelerometer, gyroscope, compass, data grids, LED panels, terminal, multi-channel plots, web view, bar panel, plus a Clock and Stopwatch utility widget pair. Bar, Gauge, Compass, and Meter each render as a two-page swipe view (page 0 is the analog face, page 1 is a large digital readout), so a single tile shows both the trend at a glance and the exact value. Pro adds 3D Plot, XY Plot, Waterfall (spectrogram), Image View (live camera), the Canvas widget, and output widgets (buttons, sliders, knobs, an Output Panel, and a Notification Log). Canvas is a JavaScript `paint(ctx, w, h)` callback with a Canvas2D-style API and 18 templates: oscilloscope, polar plot, artificial horizon, audio VU, dial gauge, heatmap, sparklines, vector field, XY scope, and others.
 
@@ -35,7 +35,7 @@ Runs on Windows, macOS, Linux, and Raspberry Pi.
 
 **AI Assistant for project editing (Pro).** A bring-your-own-key chat panel that edits the project. Eight providers: Anthropic, OpenAI, Google Gemini, DeepSeek, Groq, Mistral, OpenRouter, and local OpenAI-compatible endpoints (Ollama, llama.cpp, LM Studio, vLLM) for offline use. Mutating actions show an Approve/Deny card first. See the [AI Assistant docs](./doc/help/AI-Assistant.md).
 
-**Vendor-document importers (Pro).** Feed the Modbus register-map importer a vendor CSV/XML/JSON and get a project. DBC import decodes CAN signals from the standard automotive files.
+**Vendor-document importers (Pro).** Feed the Modbus register-map importer a vendor CSV/XML/JSON and get a project. DBC import decodes CAN signals from the standard automotive files. For OPC UA servers there is nothing to import: browse the server's address space, tick the tags you want, and Serial Studio generates the project from them.
 
 ## Download
 
@@ -91,7 +91,7 @@ All Linux packages (AppImage, DEB, RPM, x64 and ARM64) bundle their own glibc, s
 
 ### At a glance
 
-- **Protocols:** Serial/UART, Bluetooth LE, and TCP/UDP in the GPL build. MQTT, Modbus TCP/RTU, CAN Bus, Audio, raw USB (libusb), HID (hidapi), and Process I/O are Pro.
+- **Protocols:** Serial/UART, Bluetooth LE, and TCP/UDP in the GPL build. MQTT, Modbus TCP/RTU, CAN Bus, OPC UA, Audio, raw USB (libusb), HID (hidapi), and Process I/O are Pro.
 - **Visualization:** 23 widgets, including line plots, gauges, bar charts, meters, GPS maps, FFT, waterfall (spectrogram), accelerometer, gyroscope, compass, data grids, 3D views, live camera feed, plus Clock and Stopwatch utility widgets (some Pro). Bar, Gauge, Compass, and Meter each include a swipeable digital readout page alongside the analog face.
 - **Canvas widget (Pro):** scriptable Canvas2D-style canvas driven by a JS `paint(ctx, w, h)` callback. Watchdog-protected QJSEngine, persistent script state across frames, 18 templates (oscilloscope, polar plot, artificial horizon, audio VU meter, dial gauge, heatmap, LED matrix, sparklines, vector field, XY scope, and more).
 - **Output widgets:** buttons, toggles, sliders, knobs, text fields, and freeform panels, with JS templates for GCode, SCPI, Modbus, NMEA, CAN, and more (Pro).
@@ -105,6 +105,7 @@ All Linux packages (AppImage, DEB, RPM, x64 and ARM64) bundle their own glibc, s
 - **Session reports:** export a session as a styled HTML or PDF with interactive Chart.js plots (Pro).
 - **File transfer:** XMODEM, YMODEM, and ZMODEM with CRC and crash recovery (Pro).
 - **Modbus register maps:** import CSV, XML, or JSON straight from vendor docs (Pro).
+- **OPC UA tag browser:** browse a server's address space, tick tags, and generate the project (Pro).
 - **CAN DBC import:** decoded signals for automotive and industrial work (Pro).
 - **Image view:** live JPEG or PNG camera streams alongside telemetry on the same connection (Pro).
 - **Multi-device:** several devices in one project, each with its own protocol (Pro).
@@ -180,7 +181,7 @@ First time using it? Start with the [getting started guide](./doc/help/Getting-S
 - **Installation** for Windows, macOS, Linux, and Raspberry Pi.
 - **Quick start:** connect an Arduino or ESP32 and visualize data in five minutes.
 - **Dashboard creation:** build layouts in the Project Editor and split them into workspaces.
-- **Protocol support:** Serial/UART, Bluetooth LE, MQTT, Modbus TCP/RTU, CAN Bus, TCP/UDP, Audio, raw USB, HID, Process I/O.
+- **Protocol support:** Serial/UART, Bluetooth LE, MQTT, Modbus TCP/RTU, CAN Bus, OPC UA, TCP/UDP, Audio, raw USB, HID, Process I/O.
 - **Frame parsing:** handle binary protocols, checksums, and custom formats with Built-In templates, JavaScript, or Lua (LuaJIT 2.1, 5.1 syntax with compatibility shims).
 - **Per-dataset transforms:** EMA filters, scaling, calibration, and computed datasets via Variables.
 - **Output widgets:** send commands back with buttons, sliders, knobs, toggles, and output panels (Pro).
@@ -237,7 +238,7 @@ You can also open `CMakeLists.txt` in Qt Creator or any CMake-aware IDE without 
 
 The default build is the GPLv3 edition. It includes the core: UART/TCP/UDP/BLE drivers, the Project Editor, Quick Plot and Console modes, the standard widgets (line plot, gauge, bar, GPS, FFT, accelerometer, gyroscope, compass, data grid, LED panel, terminal, multi-plot), Built-In, JavaScript, and Lua frame parsers, per-dataset transforms, CSV export, and the local TCP/MCP API.
 
-Pro-only modules are not built into the GPL edition: MQTT, Modbus, CAN Bus, Audio, USB, HID, Process I/O, multi-source projects, the 3D Plot, XY Plot, Waterfall, Image View, and Canvas widgets, the output widgets, MDF4 import/export, the Historian, session reports, XMODEM/YMODEM/ZMODEM file transfer, the Modbus register-map and CAN DBC importers, and the AI Assistant. Some of those depend on proprietary Qt modules (Modbus, CAN Bus, MQTT); others are commercial-licensed code in this repository. See [Pro vs Free Features](./doc/help/Pro-vs-Free.md) for the full matrix.
+Pro-only modules are not built into the GPL edition: MQTT, Modbus, CAN Bus, OPC UA, Audio, USB, HID, Process I/O, multi-source projects, the 3D Plot, XY Plot, Waterfall, Image View, and Canvas widgets, the output widgets, MDF4 import/export, the Historian, session reports, XMODEM/YMODEM/ZMODEM file transfer, the Modbus register-map and CAN DBC importers, and the AI Assistant. Some of those depend on proprietary Qt modules (Modbus, CAN Bus, MQTT, OPC UA); others are commercial-licensed code in this repository. See [Pro vs Free Features](./doc/help/Pro-vs-Free.md) for the full matrix.
 
 If you are a Pro user or have a commercial license, [contact the maintainer](mailto:alex@serial-studio.com) for build instructions and activation details.
 

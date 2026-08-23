@@ -1,21 +1,21 @@
 {
   "spec": "0039-session-context",
   "regenerate": "python scripts/code-verify.py --singleton-census --accept",
-  "total": 1694,
-  "files": 209,
+  "total": 1701,
+  "files": 211,
   "buckets": {
     "root": 156,
     "accessor": 68,
     "ctor-capture": 105,
     "deferred": 20,
-    "static-cache": 1222,
-    "loose": 123
+    "static-cache": 1228,
+    "loose": 124
   },
   "per_class": {
-    "DataModel::ProjectModel": 217,
-    "IO::ConnectionManager": 217,
-    "AppState": 131,
-    "CommandRegistry": 101,
+    "IO::ConnectionManager": 219,
+    "DataModel::ProjectModel": 218,
+    "AppState": 132,
+    "CommandRegistry": 102,
     "UI::Dashboard": 85,
     "DataModel::FrameBuilder": 79,
     "Misc::IconRegistry": 48,
@@ -26,9 +26,9 @@
     "Misc::WorkspaceManager": 27,
     "DataModel::NotificationCenter": 27,
     "Misc::CommonFonts": 27,
+    "Misc::Translator": 26,
     "API::CommandRegistry": 25,
     "Sessions::Export": 25,
-    "Misc::Translator": 25,
     "Licensing::LemonSqueezy": 23,
     "Sessions::DatabaseManager": 23,
     "CSV::Player": 22,
@@ -53,10 +53,10 @@
     "Misc::CrashTracker": 10,
     "MachineID": 9,
     "Licensing::Trial": 8,
+    "ConnectionManager": 8,
     "Assistant": 7,
     "Licensing::MachineID": 7,
     "API::CommandHandler": 7,
-    "ConnectionManager": 7,
     "AI::FileSandbox": 6,
     "ProjectModel": 6,
     "Licensing::OfflineLicense": 5,
@@ -498,6 +498,17 @@
         "ctor-capture": 0,
         "deferred": 0,
         "static-cache": 9,
+        "loose": 0
+      }
+    },
+    "app/src/API/Handlers/OpcUaHandler.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 2,
         "loose": 0
       }
     },
@@ -1447,6 +1458,17 @@
         "loose": 0
       }
     },
+    "app/src/IO/Drivers/OpcUa.cpp": {
+      "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 1
+      }
+    },
     "app/src/IO/Drivers/Process.cpp": {
       "total": 3,
       "buckets": {
@@ -1635,13 +1657,13 @@
       }
     },
     "app/src/Misc/CLI.cpp": {
-      "total": 43,
+      "total": 44,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 43,
+        "static-cache": 44,
         "loose": 0
       }
     },

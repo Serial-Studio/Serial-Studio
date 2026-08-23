@@ -447,6 +447,21 @@ Real-world applications of Serial Studio across industries, education, and hobby
 **Note:** Standard Modbus support without custom programming
 **Example:** Monitor a water treatment plant with 5 PLCs controlling pumps, valves, and sensors
 
+### OPC UA Tag Monitoring (PLC / SCADA)
+**Problem:** A line is controlled by PLCs and gateways that already publish an OPC UA address space, and engineers need a live dashboard of selected tags without writing an OPC UA client or buying a SCADA seat.
+
+**Solution:** Serial Studio Pro connects as an OPC UA client:
+- Discover the server's endpoints from `opc.tcp://host:port`, then browse the address space one level at a time
+- Tick the tags to monitor (whole folders included, up to 2048 channels) and generate the project from the selection
+- Subscribe to the ticked tags, with automatic fallback to timed reads when a server refuses subscriptions
+- Engineering units and `EURange` come straight from the server, so gauges and plots arrive pre-scaled
+- Frames are stamped with the server's own source timestamps, so recordings follow the device clock
+
+**Hardware:** Any OPC UA server: Siemens S7-1200/1500, Beckhoff TwinCAT, CODESYS runtimes, WAGO, B&R, Schneider, or a gateway such as KEPServerEX, Ignition, or FactoryTalk Linx
+**Data Protocol:** OPC UA (IEC 62541) over `opc.tcp`, policy `None` endpoints only in this version, anonymous or username/password login
+**Note:** No tag-list export or vendor document needed. The browser is the importer
+**Example:** Watch a bottling line's filler level, capper torque, and pasteuriser zone temperatures on one dashboard, logged to CSV for batch records
+
 ### CNC Machine Monitor
 **Problem:** Machine shop wants to track spindle load, feed rate, and tool wear.
 

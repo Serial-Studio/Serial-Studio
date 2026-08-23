@@ -171,6 +171,7 @@ public:
   patternPreview(int pattern, int count, int width, int height, int ratio) const;
   [[nodiscard]] Q_INVOKABLE QJsonObject serializeLayout() const;
   [[nodiscard]] Q_INVOKABLE bool restoreLayout(const QJsonObject& layout);
+  [[nodiscard]] QMap<int, QString> savedWindowStates(const QJsonObject& layout) const;
   [[nodiscard]] int firstTileWindowId() const;
   [[nodiscard]] const QVector<int>& windowOrder() const;
 

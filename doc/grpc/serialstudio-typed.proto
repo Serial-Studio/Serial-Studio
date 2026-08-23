@@ -548,9 +548,24 @@ message IoCanbusSetCanFdRequest {
   bool enabled = 2;
 }
 
+message IoCanbusSetDataBitrateRequest {
+  string id = 1;
+  int64 dataBitrate = 2;
+}
+
 message IoCanbusSetInterfaceIndexRequest {
   string id = 1;
   int64 interfaceIndex = 2;
+}
+
+message IoCanbusSetListenOnlyRequest {
+  string id = 1;
+  bool enabled = 2;
+}
+
+message IoCanbusSetLoopbackRequest {
+  string id = 1;
+  bool enabled = 2;
 }
 
 message IoCanbusSetPluginIndexRequest {
@@ -736,6 +751,94 @@ message IoNetworkSetUdpMulticastRequest {
 message IoNetworkSetUdpRemotePortRequest {
   string id = 1;
   int64 port = 2;
+}
+
+message IoOpcuaAddTagRequest {
+  string id = 1;
+  string id_param = 2;  // JSON name: id
+  string name = 3;
+  string t = 4;
+}
+
+message IoOpcuaBrowseRequest {
+  string id = 1;
+  string nodeId = 2;
+}
+
+message IoOpcuaClearTagsRequest {
+  string id = 1;
+}
+
+message IoOpcuaDiscoverEndpointsRequest {
+  string id = 1;
+}
+
+message IoOpcuaGenerateProjectRequest {
+  string id = 1;
+}
+
+message IoOpcuaGetConfigRequest {
+  string id = 1;
+}
+
+message IoOpcuaGetStatusRequest {
+  string id = 1;
+}
+
+message IoOpcuaListEndpointsRequest {
+  string id = 1;
+}
+
+message IoOpcuaListTagsRequest {
+  string id = 1;
+}
+
+message IoOpcuaRemoveTagRequest {
+  string id = 1;
+  int64 index = 2;
+}
+
+message IoOpcuaSetAuthModeRequest {
+  string id = 1;
+  int64 mode = 2;
+}
+
+message IoOpcuaSetEndpointIndexRequest {
+  string id = 1;
+  int64 index = 2;
+}
+
+message IoOpcuaSetEndpointUrlRequest {
+  string id = 1;
+  string url = 2;
+}
+
+message IoOpcuaSetPasswordRequest {
+  string id = 1;
+  string password = 2;
+}
+
+message IoOpcuaSetPublishingIntervalRequest {
+  string id = 1;
+  int64 intervalMs = 2;
+}
+
+message IoOpcuaSetTagsRequest {
+  string id = 1;
+  google.protobuf.ListValue tags = 2;
+}
+
+message IoOpcuaSetUsernameRequest {
+  string id = 1;
+  string username = 2;
+}
+
+message IoOpcuaStartBrowseRequest {
+  string id = 1;
+}
+
+message IoOpcuaStopBrowseRequest {
+  string id = 1;
 }
 
 message IoProcessGetConfigRequest {
@@ -2316,8 +2419,17 @@ service SerialStudioTypedAPI {
   // Enable/disable CAN FD (params: enabled)
   rpc IoCanbusSetCanFd(IoCanbusSetCanFdRequest) returns (CommandResponse);
 
+  // Set CAN FD data-phase bitrate (params: dataBitrate)
+  rpc IoCanbusSetDataBitrate(IoCanbusSetDataBitrateRequest) returns (CommandResponse);
+
   // Select CAN interface by index (params: interfaceIndex)
   rpc IoCanbusSetInterfaceIndex(IoCanbusSetInterfaceIndexRequest) returns (CommandResponse);
+
+  // Enable/disable listen-only mode (params: enabled)
+  rpc IoCanbusSetListenOnly(IoCanbusSetListenOnlyRequest) returns (CommandResponse);
+
+  // Enable/disable loopback mode (params: enabled)
+  rpc IoCanbusSetLoopback(IoCanbusSetLoopbackRequest) returns (CommandResponse);
 
   // Select CAN plugin by index (params: pluginIndex)
   rpc IoCanbusSetPluginIndex(IoCanbusSetPluginIndexRequest) returns (CommandResponse);
@@ -2438,6 +2550,63 @@ service SerialStudioTypedAPI {
 
   // Set UDP remote port (params: port)
   rpc IoNetworkSetUdpRemotePort(IoNetworkSetUdpRemotePortRequest) returns (CommandResponse);
+
+  // Append one tag (params: id, name, t; optional path, unit, n)
+  rpc IoOpcuaAddTag(IoOpcuaAddTagRequest) returns (CommandResponse);
+
+  // Fetch one level of the address space (params: nodeId; empty = Objects)
+  rpc IoOpcuaBrowse(IoOpcuaBrowseRequest) returns (CommandResponse);
+
+  // Remove every tag
+  rpc IoOpcuaClearTags(IoOpcuaClearTagsRequest) returns (CommandResponse);
+
+  // Request the server's endpoints; poll io.opcua.listEndpoints for the result
+  rpc IoOpcuaDiscoverEndpoints(IoOpcuaDiscoverEndpointsRequest) returns (CommandResponse);
+
+  // Generate a project from the tag list and load it into the editor
+  rpc IoOpcuaGenerateProject(IoOpcuaGenerateProjectRequest) returns (CommandResponse);
+
+  // Get current OPC UA configuration
+  rpc IoOpcuaGetConfig(IoOpcuaGetConfigRequest) returns (CommandResponse);
+
+  // Get session status and pulled diagnostics counters
+  rpc IoOpcuaGetStatus(IoOpcuaGetStatusRequest) returns (CommandResponse);
+
+  // Get discovered endpoints with their policy, mode and selectability
+  rpc IoOpcuaListEndpoints(IoOpcuaListEndpointsRequest) returns (CommandResponse);
+
+  // Get the configured tag list and wire schema
+  rpc IoOpcuaListTags(IoOpcuaListTagsRequest) returns (CommandResponse);
+
+  // Remove a tag by position (params: index)
+  rpc IoOpcuaRemoveTag(IoOpcuaRemoveTagRequest) returns (CommandResponse);
+
+  // Set authentication (params: mode - 0=anonymous, 1=username/password)
+  rpc IoOpcuaSetAuthMode(IoOpcuaSetAuthModeRequest) returns (CommandResponse);
+
+  // Select a discovered endpoint by row (params: index; -1 = typed URL)
+  rpc IoOpcuaSetEndpointIndex(IoOpcuaSetEndpointIndexRequest) returns (CommandResponse);
+
+  // Set the OPC UA endpoint URL (params: url, e.g. opc.tcp://host:4840/path)
+  rpc IoOpcuaSetEndpointUrl(IoOpcuaSetEndpointUrlRequest) returns (CommandResponse);
+
+  // Set the password (params: password; stored in the encrypted vault)
+  rpc IoOpcuaSetPassword(IoOpcuaSetPasswordRequest) returns (CommandResponse);
+
+  // Set the publishing interval in milliseconds (params: intervalMs)
+  rpc IoOpcuaSetPublishingInterval(IoOpcuaSetPublishingIntervalRequest) returns (CommandResponse);
+
+  // Replace the tag list (params: tags - array of {id, name, path, unit, t, n})
+  rpc IoOpcuaSetTags(IoOpcuaSetTagsRequest) returns (CommandResponse);
+
+  // Set the username (params: username)
+  rpc IoOpcuaSetUsername(IoOpcuaSetUsernameRequest) returns (CommandResponse);
+
+  // Open a browse session; poll io.opcua.browse once browsing is true
+  rpc IoOpcuaStartBrowse(IoOpcuaStartBrowseRequest) returns (CommandResponse);
+
+  // Close the browse session and commit the picker selection to the tag list
+  rpc IoOpcuaStopBrowse(IoOpcuaStopBrowseRequest) returns (CommandResponse);
 
   // Get complete Process driver configuration
   rpc IoProcessGetConfig(IoProcessGetConfigRequest) returns (CommandResponse);

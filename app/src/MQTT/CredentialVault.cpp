@@ -25,7 +25,8 @@ Q_LOGGING_CATEGORY(lcMqttVault, "serialstudio.mqtt.vault", QtCriticalMsg)
 /**
  * @brief Configures SimpleCrypt with the per-machine key and HMAC integrity.
  */
-MQTT::CredentialVault::CredentialVault()
+MQTT::CredentialVault::CredentialVault(const QString& scope)
+  : m_group(scope + QStringLiteral("/credentials"))
 {
   static auto& machineId = Licensing::MachineID::instance();
   m_simpleCrypt.setKey(machineId.machineSpecificKey());
@@ -46,7 +47,7 @@ MQTT::Credentials MQTT::CredentialVault::credentials(const QString& host, quint1
     return out;
 
   const auto key = settingsKey(host, port);
-  m_settings.beginGroup(QStringLiteral("mqtt/credentials"));
+  m_settings.beginGroup(m_group);
   const auto userCipher = m_settings.value(key + QStringLiteral("/user")).toString();
   const auto passCipher = m_settings.value(key + QStringLiteral("/pass")).toString();
   m_settings.endGroup();
@@ -79,7 +80,7 @@ bool MQTT::CredentialVault::hasCredentials(const QString& host, quint16 port) co
     return false;
 
   const auto key = settingsKey(host, port);
-  m_settings.beginGroup(QStringLiteral("mqtt/credentials"));
+  m_settings.beginGroup(m_group);
   const bool present = m_settings.contains(key + QStringLiteral("/user"))
                     || m_settings.contains(key + QStringLiteral("/pass"));
   m_settings.endGroup();
@@ -97,7 +98,7 @@ QString MQTT::CredentialVault::keyPassphrase(const QString& host, quint16 port) 
     return QString();
 
   const auto key = settingsKey(host, port);
-  m_settings.beginGroup(QStringLiteral("mqtt/credentials"));
+  m_settings.beginGroup(m_group);
   const auto cipher = m_settings.value(key + QStringLiteral("/keyPass")).toString();
   m_settings.endGroup();
 
@@ -129,7 +130,7 @@ void MQTT::CredentialVault::setCredentials(const QString& host,
     return;
 
   const auto key = settingsKey(host, port);
-  m_settings.beginGroup(QStringLiteral("mqtt/credentials"));
+  m_settings.beginGroup(m_group);
 
   if (username.isEmpty())
     m_settings.remove(key + QStringLiteral("/user"));
@@ -158,7 +159,7 @@ void MQTT::CredentialVault::setKeyPassphrase(const QString& host,
     return;
 
   const auto key = settingsKey(host, port);
-  m_settings.beginGroup(QStringLiteral("mqtt/credentials"));
+  m_settings.beginGroup(m_group);
 
   if (passphrase.isEmpty())
     m_settings.remove(key + QStringLiteral("/keyPass"));
@@ -177,7 +178,7 @@ void MQTT::CredentialVault::clear(const QString& host, quint16 port)
   if (host.isEmpty())
     return;
 
-  m_settings.beginGroup(QStringLiteral("mqtt/credentials"));
+  m_settings.beginGroup(m_group);
   m_settings.remove(settingsKey(host, port));
   m_settings.endGroup();
 }

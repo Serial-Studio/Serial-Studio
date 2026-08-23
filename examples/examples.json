@@ -177,6 +177,17 @@
     "requiresPro": true
   },
   {
+    "id": "OPC UA PLC Simulator",
+    "title": "OPC UA PLC Simulator",
+    "description": "Simulated bottling line served over OPC UA (asyncua): filler, capper, pasteuriser and utilities with typed tags, a float array, string status tags and a sensor that periodically reports a bad status.",
+    "category": "Industrial Automation",
+    "difficulty": "Intermediate",
+    "hasProjectFile": true,
+    "projectFileName": "OPC UA PLC Simulator.ssproj",
+    "hasScreenshot": true,
+    "requiresPro": true
+  },
+  {
     "id": "MPU6050",
     "title": "MPU6050 Accelerometer & Gyroscope",
     "description": "Visualizes motion and orientation data from an MPU6050 sensor connected to Arduino with real-time display on attitude indicators.",

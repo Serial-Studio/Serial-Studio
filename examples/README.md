@@ -28,6 +28,7 @@ You can also browse and download examples directly from Serial Studio via the **
 | [MQTT Subscriber Example](MQTT%20Subscriber%20Example) | Live Helsinki transit vehicle tracking over public MQTT | Intermediate | Yes |
 | [NI DAQmx](NI%20DAQmx) | NI DAQ device data acquisition bridge | Intermediate | |
 | [OBD-II](OBD-II) | OBD-II vehicle telemetry via ELM327 adapter | Intermediate | |
+| [OPC UA PLC Simulator](OPC%20UA%20PLC%20Simulator) | Bottling-line OPC UA server (asyncua) with typed tags, arrays, and bad-status handling | Intermediate | Yes |
 | [Protobuf Example](Protobuf%20Example) | Protocol Buffers schema import with binary auto-detect parsing | Intermediate | |
 | [PulseSensor](PulseSensor) | Heart rate PPG sensor with signal filtering | Beginner | |
 | [RC Plane Simulator](RC%20Plane%20Simulator) | RC plane flight telemetry simulator | Intermediate | |

@@ -381,6 +381,7 @@ io.canbus = io.canbus || {};
 io.hid = io.hid || {};
 io.modbus = io.modbus || {};
 io.network = io.network || {};
+io.opcua = io.opcua || {};
 io.process = io.process || {};
 io.uart = io.uart || {};
 io.usb = io.usb || {};
@@ -1000,10 +1001,28 @@ io.canbus.setCanFd = function(enabled) {
   return apiCall('io.canbus.setCanFd', p);
 };
 
+io.canbus.setDataBitrate = function(dataBitrate) {
+  var p = {};
+  p['dataBitrate'] = dataBitrate;
+  return apiCall('io.canbus.setDataBitrate', p);
+};
+
 io.canbus.setInterfaceIndex = function(interfaceIndex) {
   var p = {};
   p['interfaceIndex'] = interfaceIndex;
   return apiCall('io.canbus.setInterfaceIndex', p);
+};
+
+io.canbus.setListenOnly = function(enabled) {
+  var p = {};
+  p['enabled'] = enabled;
+  return apiCall('io.canbus.setListenOnly', p);
+};
+
+io.canbus.setLoopback = function(enabled) {
+  var p = {};
+  p['enabled'] = enabled;
+  return apiCall('io.canbus.setLoopback', p);
 };
 
 io.canbus.setPluginIndex = function(pluginIndex) {
@@ -1229,6 +1248,113 @@ io.network.setUdpRemotePort = function(port) {
   var p = {};
   p['port'] = port;
   return apiCall('io.network.setUdpRemotePort', p);
+};
+
+io.opcua.addTag = function(id, name, t) {
+  var p = {};
+  p['id'] = id;
+  p['name'] = name;
+  p['t'] = t;
+  return apiCall('io.opcua.addTag', p);
+};
+
+io.opcua.browse = function(nodeId) {
+  var p = {};
+  p['nodeId'] = nodeId;
+  return apiCall('io.opcua.browse', p);
+};
+
+io.opcua.clearTags = function() {
+  var p = {};
+  return apiCall('io.opcua.clearTags', p);
+};
+
+io.opcua.discoverEndpoints = function() {
+  var p = {};
+  return apiCall('io.opcua.discoverEndpoints', p);
+};
+
+io.opcua.generateProject = function() {
+  var p = {};
+  return apiCall('io.opcua.generateProject', p);
+};
+
+io.opcua.getConfig = function() {
+  var p = {};
+  return apiCall('io.opcua.getConfig', p);
+};
+
+io.opcua.getStatus = function() {
+  var p = {};
+  return apiCall('io.opcua.getStatus', p);
+};
+
+io.opcua.listEndpoints = function() {
+  var p = {};
+  return apiCall('io.opcua.listEndpoints', p);
+};
+
+io.opcua.listTags = function() {
+  var p = {};
+  return apiCall('io.opcua.listTags', p);
+};
+
+io.opcua.removeTag = function(index) {
+  var p = {};
+  p['index'] = index;
+  return apiCall('io.opcua.removeTag', p);
+};
+
+io.opcua.setAuthMode = function(mode) {
+  var p = {};
+  p['mode'] = mode;
+  return apiCall('io.opcua.setAuthMode', p);
+};
+
+io.opcua.setEndpointIndex = function(index) {
+  var p = {};
+  p['index'] = index;
+  return apiCall('io.opcua.setEndpointIndex', p);
+};
+
+io.opcua.setEndpointUrl = function(url) {
+  var p = {};
+  p['url'] = url;
+  return apiCall('io.opcua.setEndpointUrl', p);
+};
+
+io.opcua.setPassword = function(password) {
+  var p = {};
+  p['password'] = password;
+  return apiCall('io.opcua.setPassword', p);
+};
+
+io.opcua.setPublishingInterval = function(intervalMs) {
+  var p = {};
+  p['intervalMs'] = intervalMs;
+  return apiCall('io.opcua.setPublishingInterval', p);
+};
+
+io.opcua.setTags = function(tags) {
+  var p = {};
+  p['tags'] = tags;
+  return apiCall('io.opcua.setTags', p);
+};
+
+io.opcua.setUsername = function(username) {
+  var p = {};
+  p['username'] = username;
+  return apiCall('io.opcua.setUsername', p);
+};
+
+io.opcua.startBrowse = function() {
+  var p = {};
+  return apiCall('io.opcua.startBrowse', p);
+};
+
+io.opcua.stopBrowse = function() {
+  var p = {};
+  return apiCall('io.opcua.stopBrowse', p);
 };
 
 io.process.getConfig = function() {

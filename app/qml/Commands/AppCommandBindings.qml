@@ -83,7 +83,8 @@ QtObject {
     "driver.hid": root.cmdDriverHid,
     "driver.bluetooth": root.cmdDriverBluetooth,
     "driver.canbus": root.cmdDriverCanbus,
-    "driver.process": root.cmdDriverProcess
+    "driver.process": root.cmdDriverProcess,
+    "driver.opcua": root.cmdDriverOpcUa
   })
 
   //
@@ -325,5 +326,11 @@ QtObject {
     readonly property bool enabled: root.driverSelectionEnabled
     readonly property bool checked: Cpp_IO_Manager.busType === SerialStudio.Process
     function run() { Cpp_IO_Manager.busType = SerialStudio.Process }
+  }
+
+  readonly property QtObject cmdDriverOpcUa: QtObject {
+    readonly property bool enabled: root.driverSelectionEnabled
+    readonly property bool checked: Cpp_IO_Manager.busType === SerialStudio.OpcUa
+    function run() { Cpp_IO_Manager.busType = SerialStudio.OpcUa }
   }
 }

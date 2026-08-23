@@ -1274,6 +1274,19 @@
         ]
     },
     {
+        "description": "Set CAN FD data-phase bitrate (params: dataBitrate)",
+        "name": "io.canbus.setDataBitrate",
+        "properties": {
+            "dataBitrate": {
+                "description": "CAN FD data-phase bitrate in bits per second",
+                "type": "integer"
+            }
+        },
+        "required": [
+            "dataBitrate"
+        ]
+    },
+    {
         "description": "Select CAN interface by index (params: interfaceIndex)",
         "name": "io.canbus.setInterfaceIndex",
         "properties": {
@@ -1284,6 +1297,32 @@
         },
         "required": [
             "interfaceIndex"
+        ]
+    },
+    {
+        "description": "Enable/disable listen-only mode (params: enabled)",
+        "name": "io.canbus.setListenOnly",
+        "properties": {
+            "enabled": {
+                "description": "Enable or disable listen-only mode",
+                "type": "boolean"
+            }
+        },
+        "required": [
+            "enabled"
+        ]
+    },
+    {
+        "description": "Enable/disable loopback mode (params: enabled)",
+        "name": "io.canbus.setLoopback",
+        "properties": {
+            "enabled": {
+                "description": "Enable or disable loopback mode",
+                "type": "boolean"
+            }
+        },
+        "required": [
+            "enabled"
         ]
     },
     {
@@ -1554,7 +1593,7 @@
         "name": "io.modbus.setPollInterval",
         "properties": {
             "intervalMs": {
-                "description": "Polling interval in milliseconds (minimum 10)",
+                "description": "Polling interval in milliseconds (minimum 50)",
                 "type": "integer"
             }
         },
@@ -1744,6 +1783,221 @@
         },
         "required": [
             "port"
+        ]
+    },
+    {
+        "description": "Append one tag (params: id, name, t; optional path, unit, n)",
+        "name": "io.opcua.addTag",
+        "properties": {
+            "id": {
+                "description": "Variable node id",
+                "type": "string"
+            },
+            "name": {
+                "description": "Display name",
+                "type": "string"
+            },
+            "t": {
+                "description": "Type code: bool,i8,u8,i16,u16,i32,u32,i64,u64,f32,f64,str",
+                "type": "string"
+            }
+        },
+        "required": [
+            "id",
+            "name",
+            "t"
+        ]
+    },
+    {
+        "description": "Fetch one level of the address space (params: nodeId; empty = Objects)",
+        "name": "io.opcua.browse",
+        "properties": {
+            "nodeId": {
+                "description": "Folder node id (empty for the Objects folder)",
+                "type": "string"
+            }
+        },
+        "required": [
+            "nodeId"
+        ]
+    },
+    {
+        "description": "Remove every tag",
+        "name": "io.opcua.clearTags",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Request the server's endpoints; poll io.opcua.listEndpoints for the result",
+        "name": "io.opcua.discoverEndpoints",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Generate a project from the tag list and load it into the editor",
+        "name": "io.opcua.generateProject",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Get current OPC UA configuration",
+        "name": "io.opcua.getConfig",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Get session status and pulled diagnostics counters",
+        "name": "io.opcua.getStatus",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Get discovered endpoints with their policy, mode and selectability",
+        "name": "io.opcua.listEndpoints",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Get the configured tag list and wire schema",
+        "name": "io.opcua.listTags",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Remove a tag by position (params: index)",
+        "name": "io.opcua.removeTag",
+        "properties": {
+            "index": {
+                "description": "Zero-based tag position",
+                "type": "integer"
+            }
+        },
+        "required": [
+            "index"
+        ]
+    },
+    {
+        "description": "Set authentication (params: mode - 0=anonymous, 1=username/password)",
+        "name": "io.opcua.setAuthMode",
+        "properties": {
+            "mode": {
+                "description": "0 = anonymous, 1 = username/password",
+                "type": "integer"
+            }
+        },
+        "required": [
+            "mode"
+        ]
+    },
+    {
+        "description": "Select a discovered endpoint by row (params: index; -1 = typed URL)",
+        "name": "io.opcua.setEndpointIndex",
+        "properties": {
+            "index": {
+                "description": "Row in io.opcua.listEndpoints, or -1 for the typed URL",
+                "type": "integer"
+            }
+        },
+        "required": [
+            "index"
+        ]
+    },
+    {
+        "description": "Set the OPC UA endpoint URL (params: url, e.g. opc.tcp://host:4840/path)",
+        "name": "io.opcua.setEndpointUrl",
+        "properties": {
+            "url": {
+                "description": "opc.tcp:// endpoint URL",
+                "type": "string"
+            }
+        },
+        "required": [
+            "url"
+        ]
+    },
+    {
+        "description": "Set the password (params: password; stored in the encrypted vault)",
+        "name": "io.opcua.setPassword",
+        "properties": {
+            "password": {
+                "description": "Password for mode 1",
+                "type": "string"
+            }
+        },
+        "required": [
+            "password"
+        ]
+    },
+    {
+        "description": "Set the publishing interval in milliseconds (params: intervalMs)",
+        "name": "io.opcua.setPublishingInterval",
+        "properties": {
+            "intervalMs": {
+                "description": "Publishing interval in milliseconds (10-60000)",
+                "type": "integer"
+            }
+        },
+        "required": [
+            "intervalMs"
+        ]
+    },
+    {
+        "description": "Replace the tag list (params: tags - array of {id, name, path, unit, t, n})",
+        "name": "io.opcua.setTags",
+        "properties": {
+            "tags": {
+                "description": "Tag objects: id (node id), name, path, unit, t (type code), n (array len)",
+                "items": {
+                    "type": "string"
+                },
+                "type": "array"
+            }
+        },
+        "required": [
+            "tags"
+        ]
+    },
+    {
+        "description": "Set the username (params: username)",
+        "name": "io.opcua.setUsername",
+        "properties": {
+            "username": {
+                "description": "Username for mode 1",
+                "type": "string"
+            }
+        },
+        "required": [
+            "username"
+        ]
+    },
+    {
+        "description": "Open a browse session; poll io.opcua.browse once browsing is true",
+        "name": "io.opcua.startBrowse",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Close the browse session and commit the picker selection to the tag list",
+        "name": "io.opcua.stopBrowse",
+        "properties": {
+        },
+        "required": [
         ]
     },
     {
@@ -3686,7 +3940,7 @@
                 "type": "string"
             },
             "language": {
-                "description": "0 = JavaScript, 1 = Lua",
+                "description": "0 = JavaScript, 1 = Lua, 2 = Built-In (descriptor JSON)",
                 "type": "integer"
             },
             "operationMode": {

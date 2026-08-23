@@ -65,6 +65,10 @@
       "sha256": "c428357e5d9401a6939d6614676ab67f1d3df4a483b6a9a72901d1fea6993900"
     },
     {
+      "path": "examples/OPC UA PLC Simulator/OPC UA PLC Simulator.ssproj",
+      "sha256": "13d4af3471beb353b7711cb3be872a989f6ffb2f0e2ce2a7bfde494840a42522"
+    },
+    {
       "path": "examples/Protobuf Example/Protobuf Example.ssproj",
       "sha256": "0753686cd4e748f48e25773fce667fed02a92ff28075a1bc98a7e5326e9e33c8"
     },

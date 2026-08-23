@@ -211,6 +211,7 @@ private:
   void rebuildModel();
   void connectToRegistry();
   void startFocusCycle();
+  void applySavedWindowStates(const QJsonObject& layout);
   void mapWidgetToWindow(UI::WidgetID wid, int windowId);
   void populateTaskbarFromWorkspace(int groupId);
   void populateTaskbarFromGroup(int groupId);

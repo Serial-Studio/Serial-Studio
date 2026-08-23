@@ -198,6 +198,12 @@
   "file": "Drivers-Modbus.md"
  },
  {
+  "id": "drivers-opc-ua",
+  "title": "OPC UA",
+  "section": "Drivers",
+  "file": "Drivers-OPC-UA.md"
+ },
+ {
   "id": "drivers-can-bus",
   "title": "CAN Bus",
   "section": "Drivers",

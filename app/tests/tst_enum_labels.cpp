@@ -163,6 +163,7 @@ void TstEnumLabels::busTypeUnknownGapsFallBackToDefault_data()
   QTest::newRow("commercial-Audio-ordinal") << 3;
   QTest::newRow("commercial-ModBus-ordinal") << 4;
   QTest::newRow("commercial-Mqtt-ordinal") << 9;
+  QTest::newRow("commercial-OpcUa-ordinal") << 10;
   QTest::newRow("negative") << -1;
   QTest::newRow("far-out-of-range") << 100;
 }

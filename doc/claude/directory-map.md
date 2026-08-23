@@ -4,7 +4,8 @@
 app/src/
 ├── IO/              ConnectionManager, DeviceManager, CircularBuffer, FrameReader, FrameConfig,
 │                    PipelineHost (frame-processing thread), StreamWorker (typed stream lane)
-│   ├── Drivers/     UART, Network, BluetoothLE, Audio, CANBus, HID, Modbus, MQTT, Process, USB
+│   ├── Drivers/     UART, Network, BluetoothLE, Audio, CANBus, HID, Modbus, MQTT, Process, USB,
+│   │                OpcUa (+ OpcUaTagModel browse tree, OpcUaWire.h delta-frame vocabulary)
 │   └── FileTransmission/  Protocol base, XMODEM, YMODEM, ZMODEM, CRC utilities
 ├── Async/           TaskTree, RetryPolicy, AsyncClock — task-tree engine used by MQTT::Publisher
 │                    and the spec-0035 diagnostics probes; boundaries only, nothing per frame

@@ -260,6 +260,7 @@ class SerialStudioClient:
             "hiddevice": 7,
             "process": 8,
             "mqtt": 9,
+            "opcua": 10,
         }
 
         if bus_type.lower() not in bus_map:

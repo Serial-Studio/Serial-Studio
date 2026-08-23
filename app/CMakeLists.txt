@@ -85,6 +85,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #
 # Commercial-only modules:
 #   Qt6::Mqtt          - MQTT client for IoT protocols
+#   Qt6::OpcUa         - OPC UA client (open62541 backend)
 #   Qt6::SerialBus     - CAN Bus, Modbus TCP/RTU support
 #
 # Qt policies:
@@ -140,12 +141,14 @@ if(BUILD_COMMERCIAL)
     ${QT_MODULES}
     Mqtt
     Multimedia
+    OpcUa
     SerialBus
   )
   set(QT_LIBS
     ${QT_LIBS}
     Qt6::Mqtt
     Qt6::Multimedia
+    Qt6::OpcUa
     Qt6::SerialBus
   )
 endif()
@@ -758,6 +761,7 @@ if(BUILD_COMMERCIAL)
   set(HEADERS
     ${HEADERS}
     src/API/Handlers/ModbusHandler.h
+    src/API/Handlers/OpcUaHandler.h
     src/API/Handlers/CANBusHandler.h
     src/API/Handlers/MDF4ExportHandler.h
     src/API/Handlers/AudioHandler.h
@@ -786,6 +790,9 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/USB.h
     src/IO/Drivers/Process.h
     src/IO/Drivers/MQTT.h
+    src/IO/Drivers/OpcUa.h
+    src/IO/Drivers/OpcUaWire.h
+    src/IO/Drivers/OpcUaTagModel.h
     src/UI/Widgets/Plot3D.h
     src/UI/Widgets/ImageView.h
     src/UI/Widgets/ImageExport.h
@@ -863,6 +870,7 @@ if(BUILD_COMMERCIAL)
   set(SOURCES
     ${SOURCES}
     src/API/Handlers/ModbusHandler.cpp
+    src/API/Handlers/OpcUaHandler.cpp
     src/API/Handlers/CANBusHandler.cpp
     src/API/Handlers/MDF4ExportHandler.cpp
     src/API/Handlers/AudioHandler.cpp
@@ -891,6 +899,8 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/USB.cpp
     src/IO/Drivers/Process.cpp
     src/IO/Drivers/MQTT.cpp
+    src/IO/Drivers/OpcUa.cpp
+    src/IO/Drivers/OpcUaTagModel.cpp
     src/UI/Widgets/Plot3D.cpp
     src/UI/Widgets/ImageView.cpp
     src/UI/Widgets/ImageExport.cpp
@@ -982,6 +992,8 @@ if(BUILD_COMMERCIAL)
     qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml
+    qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml
+    qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml
     qml/ProjectEditor/Views/MqttPublisherView.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml
@@ -1723,10 +1735,6 @@ install(
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-# Bundle the MSVC runtime (vcruntime140, msvcp140, ...) app-local next to the
-# executable so the installer needs no separate VC++ redistributable. SKIP keeps
-# CMake from auto-installing into a default location; we place the resolved DLLs
-# into the runtime dir ourselves.
 if(MSVC)
   set(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP ON)
   include(InstallRequiredSystemLibraries)
@@ -1736,10 +1744,6 @@ if(MSVC)
   )
 endif()
 
-# CI-only packaging stamp: when SS_PACKAGE_TYPE is set (never for local builds), install an
-# ss-config.json beside the executable so the in-app updater can offer the matching package
-# format. Packages that CI post-processes (portable ZIP, MSIX, AppImage, deb, rpm, dmg)
-# overwrite this file in their own workflow steps; cpack payloads (MSI) ship it as-is.
 set(SS_PACKAGE_TYPE "" CACHE STRING "Package-type stamp for ss-config.json (CI use only)")
 if(SS_PACKAGE_TYPE)
   if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64|arm64|ARM64)$")

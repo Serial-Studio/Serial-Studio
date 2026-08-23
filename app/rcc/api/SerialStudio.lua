@@ -81,6 +81,7 @@ io.canbus = io.canbus or {}
 io.hid = io.hid or {}
 io.modbus = io.modbus or {}
 io.network = io.network or {}
+io.opcua = io.opcua or {}
 io.process = io.process or {}
 io.uart = io.uart or {}
 io.usb = io.usb or {}
@@ -700,10 +701,28 @@ function io.canbus.setCanFd(enabled)
   return apiCall('io.canbus.setCanFd', p)
 end
 
+function io.canbus.setDataBitrate(dataBitrate)
+  local p = {}
+  p['dataBitrate'] = dataBitrate
+  return apiCall('io.canbus.setDataBitrate', p)
+end
+
 function io.canbus.setInterfaceIndex(interfaceIndex)
   local p = {}
   p['interfaceIndex'] = interfaceIndex
   return apiCall('io.canbus.setInterfaceIndex', p)
+end
+
+function io.canbus.setListenOnly(enabled)
+  local p = {}
+  p['enabled'] = enabled
+  return apiCall('io.canbus.setListenOnly', p)
+end
+
+function io.canbus.setLoopback(enabled)
+  local p = {}
+  p['enabled'] = enabled
+  return apiCall('io.canbus.setLoopback', p)
 end
 
 function io.canbus.setPluginIndex(pluginIndex)
@@ -929,6 +948,113 @@ function io.network.setUdpRemotePort(port)
   local p = {}
   p['port'] = port
   return apiCall('io.network.setUdpRemotePort', p)
+end
+
+function io.opcua.addTag(id, name, t)
+  local p = {}
+  p['id'] = id
+  p['name'] = name
+  p['t'] = t
+  return apiCall('io.opcua.addTag', p)
+end
+
+function io.opcua.browse(nodeId)
+  local p = {}
+  p['nodeId'] = nodeId
+  return apiCall('io.opcua.browse', p)
+end
+
+function io.opcua.clearTags()
+  local p = {}
+  return apiCall('io.opcua.clearTags', p)
+end
+
+function io.opcua.discoverEndpoints()
+  local p = {}
+  return apiCall('io.opcua.discoverEndpoints', p)
+end
+
+function io.opcua.generateProject()
+  local p = {}
+  return apiCall('io.opcua.generateProject', p)
+end
+
+function io.opcua.getConfig()
+  local p = {}
+  return apiCall('io.opcua.getConfig', p)
+end
+
+function io.opcua.getStatus()
+  local p = {}
+  return apiCall('io.opcua.getStatus', p)
+end
+
+function io.opcua.listEndpoints()
+  local p = {}
+  return apiCall('io.opcua.listEndpoints', p)
+end
+
+function io.opcua.listTags()
+  local p = {}
+  return apiCall('io.opcua.listTags', p)
+end
+
+function io.opcua.removeTag(index)
+  local p = {}
+  p['index'] = index
+  return apiCall('io.opcua.removeTag', p)
+end
+
+function io.opcua.setAuthMode(mode)
+  local p = {}
+  p['mode'] = mode
+  return apiCall('io.opcua.setAuthMode', p)
+end
+
+function io.opcua.setEndpointIndex(index)
+  local p = {}
+  p['index'] = index
+  return apiCall('io.opcua.setEndpointIndex', p)
+end
+
+function io.opcua.setEndpointUrl(url)
+  local p = {}
+  p['url'] = url
+  return apiCall('io.opcua.setEndpointUrl', p)
+end
+
+function io.opcua.setPassword(password)
+  local p = {}
+  p['password'] = password
+  return apiCall('io.opcua.setPassword', p)
+end
+
+function io.opcua.setPublishingInterval(intervalMs)
+  local p = {}
+  p['intervalMs'] = intervalMs
+  return apiCall('io.opcua.setPublishingInterval', p)
+end
+
+function io.opcua.setTags(tags)
+  local p = {}
+  p['tags'] = tags
+  return apiCall('io.opcua.setTags', p)
+end
+
+function io.opcua.setUsername(username)
+  local p = {}
+  p['username'] = username
+  return apiCall('io.opcua.setUsername', p)
+end
+
+function io.opcua.startBrowse()
+  local p = {}
+  return apiCall('io.opcua.startBrowse', p)
+end
+
+function io.opcua.stopBrowse()
+  local p = {}
+  return apiCall('io.opcua.stopBrowse', p)
 end
 
 function io.process.getConfig()

@@ -221,6 +221,7 @@
         <file>icons/buttons/rising-edge.svg</file>
         <file>icons/buttons/save.svg</file>
         <file>icons/buttons/search.svg</file>
+        <file>icons/buttons/select-all.svg</file>
         <file>icons/buttons/send.svg</file>
         <file>icons/buttons/sidebar.svg</file>
         <file>icons/buttons/stopwatch-lap.svg</file>
@@ -429,6 +430,7 @@
         <file>icons/devices/16/canbus.svg</file>
         <file>icons/devices/16/hid.svg</file>
         <file>icons/devices/16/modbus.svg</file>
+        <file>icons/devices/16/opcua.svg</file>
         <file>icons/devices/16/mqtt.svg</file>
         <file>icons/devices/16/network.svg</file>
         <file>icons/devices/16/process.svg</file>
@@ -439,6 +441,7 @@
         <file>icons/devices/24/canbus.svg</file>
         <file>icons/devices/24/hid.svg</file>
         <file>icons/devices/24/modbus.svg</file>
+        <file>icons/devices/24/opcua.svg</file>
         <file>icons/devices/24/mqtt.svg</file>
         <file>icons/devices/24/network.svg</file>
         <file>icons/devices/24/process.svg</file>
@@ -449,6 +452,7 @@
         <file>icons/devices/32/canbus.svg</file>
         <file>icons/devices/32/hid.svg</file>
         <file>icons/devices/32/modbus.svg</file>
+        <file>icons/devices/32/opcua.svg</file>
         <file>icons/devices/32/mqtt.svg</file>
         <file>icons/devices/32/network.svg</file>
         <file>icons/devices/32/process.svg</file>
@@ -981,6 +985,7 @@
         <file>scripts/native/mavlink.md</file>
         <file>scripts/native/messagepack.md</file>
         <file>scripts/native/modbus.md</file>
+        <file>scripts/native/opcua.md</file>
         <file>scripts/native/modbus_register_map.md</file>
         <file>scripts/native/nmea_0183.md</file>
         <file>scripts/native/nmea_2000.md</file>

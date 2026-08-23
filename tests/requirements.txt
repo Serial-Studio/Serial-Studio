@@ -19,6 +19,9 @@ requests>=2.31.0
 # MQTT broker client for publisher/scripting tests
 paho-mqtt>=2.0.0
 
+# OPC UA server for the driver simulator example and its integration tests
+asyncua>=1.1.0
+
 # Data generation and validation
 faker>=19.0.0
 
