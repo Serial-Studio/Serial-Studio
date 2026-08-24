@@ -384,6 +384,49 @@ add_subdirectory(QSimpleUpdater)
 add_subdirectory(mdflib)
 
 #---------------------------------------------------------------------------------------------------
+# OPC UA stack: mbedTLS + open62541 (Pro edition only, spec 0067)
+#---------------------------------------------------------------------------------------------------
+#
+# mbedTLS is pinned to the 3.6 LTS line on purpose: open62541's crypto plugin guards its API use
+# with MBEDTLS_VERSION_NUMBER checks that stop at 3.x, and mbedTLS 4.x is a breaking PSA-only
+# release it does not handle. mbedTLS must be added BEFORE open62541, which links its targets.
+#
+# ENABLE_PROGRAMS/ENABLE_TESTING are off because neither is vendored (the tree carries only what
+# the library itself compiles), and mbedTLS disables its own install/export rules automatically
+# when it detects it is a subproject.
+#
+if(BUILD_COMMERCIAL AND SS_ENABLE_OPCUA)
+  set(ENABLE_TESTING             OFF CACHE BOOL "" FORCE)
+  set(ENABLE_PROGRAMS            OFF CACHE BOOL "" FORCE)
+  set(MBEDTLS_FATAL_WARNINGS     OFF CACHE BOOL "" FORCE)
+  set(GEN_FILES                  OFF CACHE BOOL "" FORCE)
+  set(USE_STATIC_MBEDTLS_LIBRARY ON  CACHE BOOL "" FORCE)
+  set(USE_SHARED_MBEDTLS_LIBRARY OFF CACHE BOOL "" FORCE)
+
+  add_subdirectory(mbedtls)
+  add_subdirectory(open62541)
+
+  foreach(_ss_mbed_target mbedtls mbedx509 mbedcrypto)
+    if(TARGET ${_ss_mbed_target})
+      if(MSVC)
+        target_compile_options(${_ss_mbed_target} PRIVATE /w)
+      else()
+        target_compile_options(${_ss_mbed_target} PRIVATE -w)
+      endif()
+    endif()
+  endforeach()
+endif()
+
+#
+# Defined unconditionally: app/CMakeLists.txt calls it in every configuration, and an undefined
+# command is a hard configure error in the builds that have no OPC UA stack.
+#
+if(NOT COMMAND target_link_open62541)
+  function(target_link_open62541 TARGET)
+  endfunction()
+endif()
+
+#---------------------------------------------------------------------------------------------------
 # libusb (Pro edition only)
 #---------------------------------------------------------------------------------------------------
 #

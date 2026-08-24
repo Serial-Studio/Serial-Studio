@@ -226,6 +226,35 @@ void IO::Drivers::OpcUa::setPersistent(const bool persistent) noexcept
 }
 
 /**
+ * @brief Points this UI-config instance at the per-source instance that owns the live session.
+ *        The pane and the API server both read the UI instance, but only the live one ever dials,
+ *        so without this hop every session counter and error they show is a default value.
+ */
+void IO::Drivers::OpcUa::setSessionPeer(OpcUa* peer)
+{
+  SS_ASSERT(peer != this, return);
+  if (m_sessionPeer == peer)
+    return;
+
+  m_sessionPeer = peer;
+  if (peer)
+    connect(
+      peer, &QObject::destroyed, this, &IO::Drivers::OpcUa::statusChanged, Qt::UniqueConnection);
+
+  Q_EMIT statusChanged();
+}
+
+/**
+ * @brief The live session whose state answers a status query, or nullptr when this instance is
+ *        itself the session. Only the persistent instance delegates, so the hop is always one
+ *        deep and can never recurse.
+ */
+const IO::Drivers::OpcUa* IO::Drivers::OpcUa::sessionPeer() const
+{
+  return m_persistent ? m_sessionPeer.data() : nullptr;
+}
+
+/**
  * @brief Closes the live session and cancels an in-flight dial; a user's disconnect is final.
  */
 void IO::Drivers::OpcUa::close()
@@ -1713,10 +1742,14 @@ int IO::Drivers::OpcUa::tagCount() const
 }
 
 /**
- * @brief One-line session status for the pane.
+ * @brief One-line session status for the pane, read from the live session when this instance
+ *        is the UI-config one.
  */
 QString IO::Drivers::OpcUa::statusText() const
 {
+  if (const auto* peer = sessionPeer())
+    return peer->statusText();
+
   if (m_connecting)
     return tr("Connecting to %1").arg(selectedEndpointUrl());
 
@@ -1750,6 +1783,9 @@ QString IO::Drivers::OpcUa::statusText() const
  */
 bool IO::Drivers::OpcUa::pollMode() const
 {
+  if (const auto* peer = sessionPeer())
+    return peer->pollMode();
+
   return m_pollMode;
 }
 
@@ -1758,6 +1794,9 @@ bool IO::Drivers::OpcUa::pollMode() const
  */
 int IO::Drivers::OpcUa::revisedInterval() const
 {
+  if (const auto* peer = sessionPeer())
+    return peer->revisedInterval();
+
   return m_revisedInterval;
 }
 
@@ -1818,10 +1857,14 @@ QJsonArray IO::Drivers::OpcUa::wireSchema() const
 }
 
 /**
- * @brief Pulled diagnostics snapshot (spec 0033: counters, never pushed).
+ * @brief Pulled diagnostics snapshot (spec 0033: counters, never pushed), read from the live
+ *        session when this instance is the UI-config one.
  */
 QJsonObject IO::Drivers::OpcUa::statusJson() const
 {
+  if (const auto* peer = sessionPeer())
+    return peer->statusJson();
+
   return QJsonObject{
     {      QStringLiteral("connected"),                               isOpen()},
     {     QStringLiteral("connecting"),                           m_connecting},

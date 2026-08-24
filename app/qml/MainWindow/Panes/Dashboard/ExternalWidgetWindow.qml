@@ -70,15 +70,30 @@ Widgets.SmartWindow {
   property int titlebarHeight: 0
 
   //
+  // Restated on every flags write, since rewriting flags rebuilds the native frame from the
+  // hints alone; Qt.CustomizeWindowHint stays out, or CSD/Win32 switch to explicit-hint mode.
+  //
+  readonly property int chromeFlags: Qt.Window
+                                     | Qt.WindowTitleHint
+                                     | Qt.WindowSystemMenuHint
+                                     | Qt.WindowMinMaxButtonsHint
+                                     | Qt.WindowCloseButtonHint
+
+  flags: window.chromeFlags
+
+  //
   // Driven by the owning canvas: keep this pop-out above a fullscreen dashboard so it is not
-  // hidden behind it. Only the stays-on-top bit is toggled, then native styling is re-applied.
+  // hidden behind it. Platform bits (the CSD frameless hint) survive, native styling re-applies.
   //
   property bool stayOnTop: false
   onStayOnTopChanged: {
+    let updated = window.flags | window.chromeFlags
     if (stayOnTop)
-      window.flags |= Qt.WindowStaysOnTopHint
+      updated |= Qt.WindowStaysOnTopHint
     else
-      window.flags &= ~Qt.WindowStaysOnTopHint
+      updated &= ~Qt.WindowStaysOnTopHint
+
+    window.flags = updated
 
     if (window.visible)
       Cpp_NativeWindow.addWindow(window, window.captionColor)

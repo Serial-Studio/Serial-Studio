@@ -433,6 +433,7 @@ class TestOpcUaSession:
     ):
         """R13: saving and reopening the generated project restores endpoint and tags."""
         import os
+        import shutil
 
         _require_pro(api_client)
         _configure(api_client, opcua_simulator["url"])
@@ -440,11 +441,17 @@ class TestOpcUaSession:
         path = os.path.join(temp_dir, "opcua-roundtrip.ssproj")
         api_client.command("project.save", {"filePath": path})
 
+        # Editing a driver while a project is open re-captures its settings into source[0] and
+        # autosaves them ~750 ms later, so the scrub below rewrites the very file this test then
+        # reopens. Verify against a copy taken while the saved state is still on disk.
+        saved = os.path.join(temp_dir, "opcua-roundtrip-saved.ssproj")
+        shutil.copyfile(path, saved)
+
         api_client.command("io.opcua.clearTags")
         api_client.command("io.opcua.setEndpointUrl", {"url": "opc.tcp://127.0.0.1:1/"})
         assert api_client.command("io.opcua.getConfig")["tagCount"] == 0
 
-        api_client.command("project.open", {"filePath": path})
+        api_client.command("project.open", {"filePath": saved})
         api_client.command("project.activate")
         cfg = _wait(
             lambda: (lambda c: c if c["tagCount"] == len(SMALL_TAGS) else None)(
@@ -454,7 +461,7 @@ class TestOpcUaSession:
         )
         assert cfg, "tag list did not come back from the project file"
         assert cfg["endpointUrl"] == opcua_simulator["url"]
-        with open(path, "r", encoding="utf-8") as fh:
+        with open(saved, "r", encoding="utf-8") as fh:
             assert "password" not in fh.read().lower().split('"username"')[-1][:200]
 
         _connect(api_client)

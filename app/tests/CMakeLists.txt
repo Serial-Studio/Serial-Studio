@@ -592,6 +592,28 @@ if(TARGET tst_opcua_wire)
 endif()
 
 #
+# OpcUaMarshal is the one seam between open62541's C vocabulary and the Qt types the driver
+# speaks (spec 0067), so it is the place a wrong conversion would otherwise reach the dashboard
+# unnoticed: a dropped source timestamp degrades silently to the local monotonic fallback, and a
+# collapsed array latches only its first element. Needs no server.
+#
+# Guarded on the target: the OPC UA stack is only built for BUILD_COMMERCIAL, so a GPL unit-test
+# configure has no open62541 to link and skips this suite the same way a missing source does.
+#
+if(TARGET open62541)
+  ss_add_unit_test(tst_opcua_marshal
+    SOURCES tst_opcua_marshal.cpp
+            ${SS_APP_SRC}/IO/Drivers/OpcUaMarshal.cpp
+            ${SS_APP_SRC}/SSAssert.cpp
+    LIBS    Qt6::Core
+            open62541
+  )
+  if(TARGET tst_opcua_marshal)
+    target_compile_definitions(tst_opcua_marshal PRIVATE BUILD_COMMERCIAL)
+  endif()
+endif()
+
+#
 # The Lua 5.1/5.2 compatibility shim plus the console and restricted-os sandbox. luajit is a real
 # dependency here and not an accident: the contract under test is what the shim installs into a
 # live lua_State, which no stub can stand in for.

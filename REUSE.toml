@@ -179,6 +179,19 @@ SPDX-FileCopyrightText = "2014-2025 Alex Spataru <alex@serial-studio.com>"
 SPDX-License-Identifier = "MIT"
 
 [[annotations]]
+path = ["lib/open62541/open62541.c", "lib/open62541/open62541.h", "lib/open62541/LICENSE"]
+SPDX-FileCopyrightText = "2014-2026 The open62541 authors"
+SPDX-License-Identifier = "MPL-2.0"
+
+# Mbed TLS is dual Apache-2.0 OR GPL-2.0-or-later; Serial Studio takes the Apache-2.0 arm, which
+# is the one compatible with both distribution terms this project ships under.
+[[annotations]]
+path = ["lib/mbedtls/**"]
+precedence = "override"
+SPDX-FileCopyrightText = "2006-2026 The Mbed TLS Contributors"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
 path = ["lib/CMakeLists.txt", "lib/OpenSSL/**"]
 SPDX-FileCopyrightText = "2020-2026 Alex Spataru <alex@serial-studio.com>"
 SPDX-License-Identifier = "GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial"

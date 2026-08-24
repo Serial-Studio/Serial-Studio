@@ -602,3 +602,48 @@ incurred by, or claims asserted against, such Contributor by reason of your
 accepting any such warranty or additional liability.
 
 _END OF TERMS AND CONDITIONS_
+
+## open62541
+
+Copyright (c) the open62541 authors.
+
+Licensed under the Mozilla Public License, Version 2.0 (the "License"); you may
+not use this file except in compliance with the License. You may obtain a copy
+of the License at:
+
+    https://mozilla.org/MPL/2.0/
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied.
+
+Source: [https://github.com/open62541/open62541](https://github.com/open62541/open62541)
+
+Serial Studio bundles the single-file distribution of open62541 1.5.7 and links
+it statically to provide its OPC UA client. Under section 3.2 of the License,
+the corresponding Source Code Form is available unmodified in `lib/open62541`
+of the Serial Studio repository, and from the project page above.
+
+## Mbed TLS
+
+Copyright The Mbed TLS Contributors.
+
+Mbed TLS is dual-licensed under the Apache License, Version 2.0 or the GNU
+General Public License, Version 2 or later. Serial Studio uses it under the
+Apache License, Version 2.0 (the "License"); you may not use this file except
+in compliance with the License. You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Source: [https://github.com/Mbed-TLS/mbedtls](https://github.com/Mbed-TLS/mbedtls)
+
+Serial Studio bundles Mbed TLS 3.6.7 and links it statically. It supplies the
+cryptography and X.509 certificate handling behind the OPC UA security
+policies. The bundled copy is unmodified upstream source with the test,
+program and documentation trees removed; it lives in `lib/mbedtls`.

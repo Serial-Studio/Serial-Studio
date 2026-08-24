@@ -2292,6 +2292,15 @@ std::unique_ptr<IO::HAL_Driver> IO::ConnectionManager::createDriver(
 
       auto driver = std::make_unique<IO::Drivers::OpcUa>();
       driver->setPersistent(false);
+      if (m_opcUaUi) {
+        m_opcUaUi->setSessionPeer(driver.get());
+        connect(driver.get(),
+                &IO::Drivers::OpcUa::statusChanged,
+                m_opcUaUi.get(),
+                &IO::Drivers::OpcUa::statusChanged,
+                Qt::UniqueConnection);
+      }
+
       return driver;
     }
 #endif

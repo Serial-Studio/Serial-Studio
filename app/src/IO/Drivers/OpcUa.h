@@ -35,6 +35,7 @@
 #include <QOpcUaNode>
 #include <QOpcUaProvider>
 #include <QOpcUaReadResult>
+#include <QPointer>
 #include <QSettings>
 #include <QString>
 #include <QStringList>
@@ -173,6 +174,7 @@ public:
 
   void close() override;
   void setPersistent(const bool persistent) noexcept;
+  void setSessionPeer(OpcUa* peer);
 
   [[nodiscard]] bool isOpen() const noexcept override;
   [[nodiscard]] bool isConnecting() const noexcept override;
@@ -275,6 +277,7 @@ private:
   void reserveFrame();
   void readServerLimits();
   [[nodiscard]] bool tagsFrozen() const;
+  [[nodiscard]] const OpcUa* sessionPeer() const;
   void applyDeferredTags();
   [[nodiscard]] CapturedData::SteadyTimePoint toSteady(const QDateTime& sourceTs);
   [[nodiscard]] static OpcUaWire::Type wireTypeFor(const OpcUaTag& tag) noexcept;
@@ -345,6 +348,7 @@ private:
   QOpcUaClient* m_browseClient;
   QOpcUaClient* m_discoveryClient;
   OpcUaTagModel* m_tagModel;
+  QPointer<OpcUa> m_sessionPeer;
   QList<Slot> m_slots;
   QList<int> m_firstIndex;
   QList<int> m_slotCount;

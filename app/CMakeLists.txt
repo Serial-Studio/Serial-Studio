@@ -85,8 +85,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #
 # Commercial-only modules:
 #   Qt6::Mqtt          - MQTT client for IoT protocols
-#   Qt6::OpcUa         - OPC UA client (open62541 backend)
 #   Qt6::SerialBus     - CAN Bus, Modbus TCP/RTU support
+#
+# OPC UA is moving off Qt6::OpcUa onto the open62541 static library vendored in lib/open62541,
+# which defines target_link_open62541() (called below). Qt6::OpcUa is still listed until the
+# driver port lands; see the TRANSITIONAL note in the commercial block.
 #
 # Qt policies:
 #   QTP0001=NEW - Use new Qt resource system (qt_add_resources)
@@ -141,17 +144,26 @@ if(BUILD_COMMERCIAL)
     ${QT_MODULES}
     Mqtt
     Multimedia
-    OpcUa
     SerialBus
   )
   set(QT_LIBS
     ${QT_LIBS}
     Qt6::Mqtt
     Qt6::Multimedia
-    Qt6::OpcUa
     Qt6::SerialBus
   )
+
+  #
+  # TRANSITIONAL (spec 0067, remove with T12-T14). OpcUa.h/OpcUaTagModel.h still include the
+  # QOpcUa* headers; the port onto OpcUaSession has not landed yet. Keeping the Qt module here
+  # lets the tree build while the new stack (lib/open62541, OpcUaMarshal, OpcUaSession) is
+  # compiled alongside it. Deleting these two lines is the last step of the port and is what
+  # spec 0067 R2 is verified against.
+  #
+  list(APPEND QT_MODULES OpcUa)
+  list(APPEND QT_LIBS Qt6::OpcUa)
 endif()
+
 
 find_package(
   Qt6 REQUIRED
@@ -792,6 +804,9 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/MQTT.h
     src/IO/Drivers/OpcUa.h
     src/IO/Drivers/OpcUaWire.h
+    src/IO/Drivers/OpcUaTypes.h
+    src/IO/Drivers/OpcUaMarshal.h
+    src/IO/Drivers/OpcUaSession.h
     src/IO/Drivers/OpcUaTagModel.h
     src/UI/Widgets/Plot3D.h
     src/UI/Widgets/ImageView.h
@@ -900,6 +915,8 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/Process.cpp
     src/IO/Drivers/MQTT.cpp
     src/IO/Drivers/OpcUa.cpp
+    src/IO/Drivers/OpcUaMarshal.cpp
+    src/IO/Drivers/OpcUaSession.cpp
     src/IO/Drivers/OpcUaTagModel.cpp
     src/UI/Widgets/Plot3D.cpp
     src/UI/Widgets/ImageView.cpp
@@ -1272,6 +1289,7 @@ target_link_libraries(
 )
 
 target_link_openssl(${PROJECT_EXECUTABLE})
+target_link_open62541(${PROJECT_EXECUTABLE})
 target_link_mimalloc(${PROJECT_EXECUTABLE})
 
 if(WIN32 AND MSVC)
