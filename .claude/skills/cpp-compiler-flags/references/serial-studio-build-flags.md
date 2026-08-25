@@ -27,16 +27,31 @@ GCC/MinGW.
 add_compile_definitions(NDEBUG)
 ```
 
-### Not used: -fcomplete-member-pointers
-Tried 2026-08-25 and reverted the same day. It is the right diagnostic for the MSVC-ABI
-member-pointer hazard (an incomplete base gives one TU a 20-byte generalized member pointer and
-another an 8-byte one; unity builds flip that by include order), but it cannot be enabled here:
-protobuf's `message_lite.h` declares `void (MessageLite::*clear)()` before `MessageLite` is
-complete, and `API/GRPC/GRPCServer.h` reaches `FrameBuilder.cpp`, `ConnectionManager.cpp`,
-`ModuleManager.cpp` and the benchmarks. Every macOS/Windows CI job configures `ENABLE_GRPC=ON`, so
-the flag breaks them all; a per-file `-fno-complete-member-pointers` would disable the check in
-exactly the TUs worth checking. Keep first-party classes complete before taking a pointer-to-member
-(see `PropertyHooks.h`) instead.
+### Always-on (app target's own C++ TUs, Clang family)
+```
+-fcomplete-member-pointers          # clang-cl form: /clang:-fcomplete-member-pointers
+```
+Hard error on a pointer-to-member whose class is still incomplete. The MSVC ABI picks the
+representation from the inheritance model, so an incomplete base gives one TU a 20-byte generalized
+member pointer and another an 8-byte one; unity builds flip that by include order (2026-08-25:
+`PropertyHooks::LiveProviderOptions` shipped storing dangling stack addresses).
+
+It is a lint, not an ABI mechanism -- it rejects every incomplete base that *would* be significant
+under the MSVC ABI, including consistent ones. protobuf's `message_lite.h` is a false positive: its
+`ClassData` forms `void (MessageLite::*clear)()` while `MessageLite` is incomplete in every TU
+including protobuf's own, so nothing is mismatched. Fixing the ABI instead is not on the table:
+`/vmg` is a whole-program switch every prebuilt dependency would have to share, and
+`__single_inheritance` on a forward declaration silently breaks when a base is added. Completing the
+type is the fix; the flag only finds the sites.
+
+Wiring: `cmake/Optimization.cmake` defines `SS_MEMPTR_STRICT_FLAGS` / `SS_MEMPTR_RELAXED_FLAGS`
+(empty for GCC and cl.exe, which have no equivalent). `app/CMakeLists.txt` applies the strict list to
+the app target under `$<COMPILE_LANGUAGE:CXX>` -- target-scoped so `lib/` third-party C++ is
+untouched, CXX-gated so vendored C sources never see it -- and its `ENABLE_GRPC` block subtracts it
+per-source, with `SKIP_UNITY_BUILD_INCLUSION`, from the TUs that reach a protobuf header:
+`API/GRPC/*.cpp`, the generated stubs, and the five first-party includers of `GRPCServer.h`
+(`FrameBuilder`, `ConnectionManager`, `ModuleManager`, both benchmarks). A new includer of
+`API/GRPC/*` must join that list or the gRPC build breaks.
 
 ### Per-toolchain production flags
 

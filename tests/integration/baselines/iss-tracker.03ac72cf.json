@@ -1,7 +1,6 @@
 {
   "actions": [],
   "changeDrivenTransforms": false,
-  "controlScriptCode": "/**\n * ISS Position Tracker - Control Loop\n * \n * Fetches ISS (International Space Station) location data from the\n * open-notify.org API every 5 seconds and sends it to Serial Studio.\n */\n\nfunction setup() {}\n\nfunction loop() {\n  const status = io.getStatus();\n  if (!status.isConnected) {\n    io.connect();\n    delay(300); \n  }\n\n  const host = \"api.open-notify.org\";\n  const path = \"/iss-now.json\";\n  const httpRequest = \n    \"GET \" + path + \" HTTP/1.1\\r\\n\" +\n    \"Host: \" + host + \"\\r\\n\" +\n    \"Connection: keep-alive\\r\\n\" +\n    \"User-Agent: SerialStudio ISS Tracker\\r\\n\" +\n    \"\\r\\n\";\n\n  io.writeData(httpRequest, SerialStudio.Text);\n \n  delay(5000);\n}\n",
   "frozen": false,
   "groups": [
     {
@@ -141,9 +140,9 @@
       "checksumAlgorithm": "",
       "decoder": 0,
       "decoderMethod": 0,
-      "frameDetection": 1,
+      "frameDetection": 2,
       "frameEnd": "},",
-      "frameParserCode": "/**\n * Frame parser that extracts latitude and longitude from ISS position JSON.\n */\nfunction parse(frame) {\n  if (frame.length === 0) {\n    return [];\n  }\n  \n  try {\n    var data = JSON.parse(frame + \"}\");\n    return [\n      data.latitude,\n      data.longitude\n    ];\n  } catch (e) {\n    console.warn(\"Failed to parse JSON: \" + e);\n    return [];\n  }\n}\n",
+      "frameParserCode": "function parse(frame) {\n  try {\n    const data = JSON.parse(frame);\n    const position = data.iss_position;\n    return [position.latitude, position.longitude, 0];\n  } catch (e) {\n    return [];\n  }\n}",
       "frameStart": "\"iss_position\":",
       "hexadecimalDelimiters": false,
       "sourceId": 0,

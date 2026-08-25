@@ -1116,6 +1116,39 @@ if(ENABLE_GRPC)
     src/API/GRPC/ConversionUtils.cpp
     ${PROTO_GENERATED_SRCS}
   )
+
+  #
+  # protobuf's message_lite.h forms `void (MessageLite::*clear)()` while MessageLite is still
+  # incomplete -- consistently, in every TU including protobuf's own, so nothing is actually
+  # mismatched -- but -fcomplete-member-pointers cannot tell a benign incomplete base from a
+  # dangerous one. Every TU that reaches a protobuf header opts back out. GRPCServer.h drags
+  # serialstudio.pb.h into the five first-party TUs listed here through their `#ifdef ENABLE_GRPC`
+  # includes, so this list is exactly `grep -l GRPC/ app/src` plus the generated stubs; a new
+  # includer must be added here or the gRPC build breaks. Coverage loss is near zero: the bug class
+  # lives in headers, and every header these TUs include is also included by TUs that keep the flag.
+  #
+  # SKIP_UNITY_BUILD_INCLUSION is mandatory, not tidiness -- a unity TU that batched one of these
+  # with a flag-carrying source would put the protobuf headers back under the diagnostic. CMake also
+  # drops sources with per-source COMPILE_OPTIONS out of unity batches; pinning it keeps that
+  # implicit behaviour from being the only thing holding the build up.
+  #
+  if(SS_MEMPTR_RELAXED_FLAGS)
+    set_source_files_properties(
+      src/API/GRPC/GRPCServer.cpp
+      src/API/GRPC/ProtoGenerator.cpp
+      src/API/GRPC/ConversionUtils.cpp
+      src/Benchmark/BenchmarkRunner.cpp
+      src/Benchmark/HotpathBenchmark.cpp
+      src/DataModel/FrameBuilder.cpp
+      src/IO/ConnectionManager.cpp
+      src/Misc/ModuleManager.cpp
+      ${PROTO_GENERATED_SRCS}
+      PROPERTIES
+        COMPILE_OPTIONS "${SS_MEMPTR_RELAXED_FLAGS}"
+        SKIP_UNITY_BUILD_INCLUSION ON
+    )
+  endif()
+
   set(HEADERS
     ${HEADERS}
     src/API/GRPC/GRPCServer.h
@@ -1277,6 +1310,19 @@ qt_add_executable(
 
 if(MSVC)
   target_compile_options(${PROJECT_EXECUTABLE} PRIVATE /W4)
+endif()
+
+#
+# -fcomplete-member-pointers (Clang family; see cmake/Optimization.cmake) turns a pointer-to-member
+# of an incomplete class into a hard error instead of a per-TU ABI coin flip. Target-scoped so lib/
+# third-party C++ is untouched, and CXX-gated so the vendored C sources compiled into this target
+# never see it. The TUs that pull protobuf/gRPC headers subtract it again in the ENABLE_GRPC block
+# above -- protobuf trips the diagnostic by design, not by mistake.
+#
+if(SS_MEMPTR_STRICT_FLAGS)
+  target_compile_options(${PROJECT_EXECUTABLE}
+    PRIVATE $<$<COMPILE_LANGUAGE:CXX>:${SS_MEMPTR_STRICT_FLAGS}>
+  )
 endif()
 
 target_link_libraries(
