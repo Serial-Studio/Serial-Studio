@@ -2196,6 +2196,16 @@ _ADVISORY_KINDS = frozenset(
         "cxx-function-too-long",
         "cxx-nesting-too-deep",
         "cxx-anonymous-namespace",
+        # Raw-ownership / raw-memory rules. Each looks for the absence of
+        # every sanctioned owner (Qt parent, delete, deleteLater, smart
+        # pointer) rather than for `new` itself -- the app has ~440 `new`
+        # sites and almost all of them are parented. Advisory: the analysis
+        # is intraprocedural, so an ownership transfer it cannot see reads
+        # as a leak, and a wrong CI failure on a legitimate handoff costs
+        # more than the report entry does.
+        "mem-unreleased-owning-member",
+        "mem-leaked-local-new",
+        "mem-memfn-nontrivial",
         # `while (cond)` has no syntactically-visible upper bound. NASA P10
         # rule 2 requires every loop to articulate one. We shipped a hard
         # GUI-thread freeze in WindowManager::tileGrid (May 2026) when
@@ -2442,6 +2452,22 @@ the kinds below are short labels.
 - `qt-header-member-init` — `int m_foo = 0;` inside a `Q_OBJECT` /
   `Q_GADGET` class body; move to the constructor member-init list.
 - `cxx-goto-or-jmp` — `goto` / `setjmp` / `longjmp` (NASA P10 rule 1).
+- `cxx-member-pointer-incomplete` — a `Class::*` declarator whose class
+  is only forward-declared in the translation unit (the file's quoted
+  `#include` closure carries a declaration but no definition). Under the
+  MSVC ABI a member pointer's representation follows the inheritance
+  model, so an incomplete class hands one TU a 20-byte generalized
+  pointer and another an 8-byte single-inheritance one — and unity-build
+  include order decides which. That ODR mismatch shipped on 2026-08-25
+  as `PropertyHooks::LiveProviderOptions` storing dangling stack
+  addresses. Fix: include the header that defines the class. This is
+  clang's `-fcomplete-member-pointers` re-implemented as a lint; the flag
+  itself cannot be enabled because it also rejects the consistent
+  incomplete bases in protobuf's `message_lite.h`. Scoped to `app/`;
+  classes the closure can't resolve (Qt, system, vendored) are skipped
+  rather than guessed at. **Blocking**: the app tree is at zero, and the
+  failure mode is a per-TU layout disagreement that is invisible at the
+  declaration under review.
 - `hotpath-allocation` — `new` / `make_shared` / `.append(` /
   `.push_back(` / bare `emit` inside a known hotpath method
   (`hotpathRxFrame`, `processData`, `applyTransform`, …).
@@ -2496,6 +2522,28 @@ the kinds below are short labels.
   drains a finite SPSC queue; `while (it.hasNext())` walks a fixed
   collection). Do-while (`} while (cond);`) is exempt — the trailing
   `while` is the loop closer, not a fresh opener.
+- `mem-unreleased-owning-member` — `m_x = new T(...)` where the `new`
+  gets no Qt parent argument and no `delete m_x` / `m_x->deleteLater()` /
+  `m_x->setParent(...)` / `WA_DeleteOnClose` exists anywhere under
+  `app/src`. The release index is repo-wide on purpose: the god-file
+  splits put a member's `new` and its `delete` in different TUs. Fix by
+  passing a parent, holding the member in a smart pointer, or releasing
+  it in the destructor.
+- `mem-leaked-local-new` — a local `T* p = new T(...)` with no parent
+  argument that never escapes its function: not passed to a call, not
+  returned, not deleted, not captured, not handed to `setParent` /
+  `reset` / `release`. `static` locals are exempt (the deliberate
+  immortal-allocation idiom, e.g. `Redactor`'s pattern table). Fix with
+  `std::unique_ptr`.
+- `mem-memfn-nontrivial` — `memcpy` / `memmove` / `memset` / `memcmp`
+  whose first or second argument is the object itself (`x` or `&x`, not
+  `x.data()`) and whose declared type is not trivially copyable
+  (`QString`, `QByteArray`, `QList`, `std::vector`, `std::shared_ptr`,
+  …). A byte-wise copy of an implicitly-shared Qt container duplicates
+  the d-pointer without the atomic refcount bump — two objects then free
+  one buffer. Types resolve innermost-scope-first (function locals and
+  parameters over class members), so the buffer idioms in `CircularBuffer`
+  and `StreamBlockCodec` don't fire.
 - `qt-missing-nodiscard` — non-void const member function in a header
   without `[[nodiscard]]`.
 - `doc-missing-brief-cpp` — `.cpp` function definition without a

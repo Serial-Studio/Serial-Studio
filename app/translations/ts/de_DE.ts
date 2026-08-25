@@ -13826,7 +13826,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::OpcUa</name>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="417"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="425"/>
         <source>OPC UA Initialization Failed</source>
         <translation>OPC Ua-initialisierung Fehlgeschlagen</translation>
     </message>
@@ -13835,30 +13835,31 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Das %1-Backend ist in diesem Build nicht verfügbar.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="614"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="622"/>
         <source>OPC UA Connection Failed</source>
         <translation>OPC Ua-verbindung Fehlgeschlagen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="615"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="623"/>
         <source>Unable to connect to "%1".</source>
         <translation>Verbindung zu „%1" nicht möglich.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="616"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="743"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="884"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2257"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="624"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="781"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="922"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2301"/>
         <source>"%1": %2</source>
         <translation>„%1": %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="632"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="640"/>
         <source>OPC UA Connection Lost</source>
         <translation>OPC Ua-verbindung Verloren</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="646"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="654"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="679"/>
         <source>Timed out after %1 s</source>
         <translation>Zeitüberschreitung nach %1 s</translation>
     </message>
@@ -13867,7 +13868,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Der Server hat die Verbindung geschlossen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="678"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="711"/>
         <source>The server closed the session</source>
         <translation>Der Server hat die Sitzung geschlossen</translation>
     </message>
@@ -13904,7 +13905,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Der Zertifikatsspeicher ist ungültig oder nicht lesbar</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2501"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2545"/>
         <source>The server certificate is not trusted</source>
         <translation>Das Serverzertifikat ist nicht vertrauenswürdig</translation>
     </message>
@@ -13913,13 +13914,13 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Unerwarteter Backend-Fehler</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="704"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="737"/>
         <source>"%1" is not a valid endpoint URL</source>
         <translation>"%1" ist keine gültige Endpunkt-URL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="705"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2257"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="738"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2301"/>
         <source>OPC UA Discovery</source>
         <translation>OPC Ua-erkennung</translation>
     </message>
@@ -13928,12 +13929,12 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Das %1-Backend ist in diesem Build nicht verfügbar</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="742"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="780"/>
         <source>Discovery failed: %1</source>
         <translation>Erkennung fehlgeschlagen: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="743"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="781"/>
         <source>OPC UA Discovery Failed</source>
         <translation>OPC Ua-erkennung Fehlgeschlagen</translation>
     </message>
@@ -13942,183 +13943,188 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Kein None-Policy-Endpunkt; sichere Kanäle werden in dieser Version nicht unterstützt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="409"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="417"/>
         <source>The connection is not configured: check the endpoint and the tag list</source>
         <translation>Die Verbindung ist nicht konfiguriert: Überprüfen Sie den Endpunkt und die Tag-Liste</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="416"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="713"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="424"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="746"/>
         <source>The %1 stack is not available in this build</source>
         <translation>Der %1-Stack ist in diesem Build nicht verfügbar</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="459"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="467"/>
         <source>The connection attempt could not be started</source>
         <translation>Der Verbindungsversuch konnte nicht gestartet werden</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="477"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="485"/>
         <source>OPC UA Certificate</source>
         <translation>OPC Ua-zertifikat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="478"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="486"/>
         <source>The client certificate could not be generated; secure channels will be refused.</source>
         <translation>Das Client-Zertifikat konnte nicht generiert werden; sichere Kanäle werden abgelehnt.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="773"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="786"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="779"/>
+        <source>The server did not answer within %1 s</source>
+        <translation>Der Server hat nicht innerhalb von %1 s geantwortet</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="811"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="824"/>
         <source>Endpoint discovery failed</source>
         <translation>Endpunkt-Erkennung fehlgeschlagen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="883"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="921"/>
         <source>OPC UA Monitored Item Refused</source>
         <translation>OPC UA Überwachtes Element Abgelehnt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="890"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="928"/>
         <source>the server refused every monitored item</source>
         <translation>der Server hat jedes überwachte Element abgelehnt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="910"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="948"/>
         <source>the server retired the subscription</source>
         <translation>Der Server hat das Abonnement zurückgezogen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="946"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="984"/>
         <source>OPC UA Subscription Unavailable</source>
         <translation>OPC UA Abonnement Nicht Verfügbar</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="947"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="985"/>
         <source>Falling back to polling: %1.</source>
         <translation>Rückfall auf Polling: %1.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="973"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1011"/>
         <source>no notification for %1 s</source>
         <translation>keine Benachrichtigung seit %1 s</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1026"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1064"/>
         <source>OPC UA Read Failed</source>
         <translation>OPC UA Lesen Fehlgeschlagen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1190"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1228"/>
         <source>OPC UA Type Mismatch</source>
         <translation>OPC UA Typkonflikt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1191"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1229"/>
         <source>Channel %1 is declared %2 but the server sends %3; the value is coerced.</source>
         <translation>Kanal %1 ist als %2 deklariert, aber der Server sendet %3; der Wert wird konvertiert.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1236"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1274"/>
         <source>Browse of %1 failed: %2</source>
         <translation>Durchsuchen von %1 fehlgeschlagen: %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1261"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1299"/>
         <source>"%1" is not a valid endpoint URL.</source>
         <translation>„%1" ist keine gültige Endpunkt-URL.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1268"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1306"/>
         <source>The %1 stack is not available in this build.</source>
         <translation>Der %1-Stack ist in diesem Build nicht verfügbar.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1275"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1313"/>
         <source>The browse session was closed by the server</source>
         <translation>Die Browse-Sitzung wurde vom Server geschlossen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1285"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1324"/>
         <source>The browse session could not be started</source>
         <translation>Die Browse-Sitzung konnte nicht gestartet werden</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1365"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1409"/>
         <source>Could not open a browse session on %1</source>
         <translation>Konnte keine Browse-Sitzung auf %1 öffnen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1392"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1436"/>
         <source>Failed to load generated project</source>
         <translation>Generiertes Projekt konnte nicht geladen werden</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1393"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1437"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>Das generierte Projekt-JSON konnte nicht geladen werden.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1407"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1451"/>
         <source>No tags selected</source>
         <translation>Keine Tags ausgewählt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1408"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1452"/>
         <source>Browse the server and select at least one tag before generating a project.</source>
         <translation>Durchsuchen Sie den Server und wählen Sie mindestens ein Tag aus, bevor Sie ein Projekt generieren.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1411"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1435"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1455"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1479"/>
         <source>OPC UA Project Generator</source>
         <translation>OPC UA Projekt-generator</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1430"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1474"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>Projekt mit %1 Gruppen und %2 Datensätzen erfolgreich generiert.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1433"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1477"/>
         <source>The project editor is now open for customization.</source>
         <translation>Der Projekt-Editor ist jetzt zur Anpassung geöffnet.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1481"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1525"/>
         <source>OPC UA Project</source>
         <translation>OPC UA Projekt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1486"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1530"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1513"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1557"/>
         <source>Tags</source>
         <translation>Tags</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1565"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1609"/>
         <source> (deprecated)</source>
         <translation>(veraltet)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1581"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2315"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1625"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2359"/>
         <source>None</source>
         <translation>Keine</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1583"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2315"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1627"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2359"/>
         <source>Sign</source>
         <translation>Signieren</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1585"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2315"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1629"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2359"/>
         <source>Sign and Encrypt</source>
         <translation>Signieren und Verschlüsseln</translation>
     </message>
@@ -14127,28 +14133,28 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Signieren &amp;&amp; Verschlüsseln</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1590"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2315"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1634"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2359"/>
         <source>Invalid</source>
         <translation>Ungültig</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2684"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2728"/>
         <source>Security Policy</source>
         <translation>Sicherheitsrichtlinie</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2692"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2736"/>
         <source>Security Mode</source>
         <translation>Sicherheitsmodus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2700"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2744"/>
         <source>User Certificate</source>
         <translation>Benutzerzertifikat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2707"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2751"/>
         <source>User Private Key</source>
         <translation>Privater Benutzerschlüssel</translation>
     </message>
@@ -14157,102 +14163,102 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Signieren &amp; Verschlüsseln</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1713"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1757"/>
         <source>Connecting to %1</source>
         <translation>Verbinde mit %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1716"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1760"/>
         <source>Not connected</source>
         <translation>Nicht verbunden</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1722"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1766"/>
         <source>Subscribing, %1 of %2 tags</source>
         <translation>Abonniere, %1 von %2 Tags</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1727"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1771"/>
         <source>Subscribed %1 tags, polling %2 refused, %3 Hz</source>
         <translation>%1 Tags abonniert, Polling %2 abgelehnt, %3 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1733"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1777"/>
         <source>Polling (server refused subscriptions), %1 tags, %2 Hz</source>
         <translation>Polling (Server lehnte Abonnements ab), %1 Tags, %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1737"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1781"/>
         <source>Subscribed, %1 tags, %2 Hz</source>
         <translation>Abonniert, %1 Tags, %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1775"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1819"/>
         <source>Anonymous</source>
         <translation>Anonym</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1775"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1819"/>
         <source>Username / Password</source>
         <translation>Benutzername / Passwort</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1775"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1819"/>
         <source>X.509 Certificate</source>
         <translation>X.509-zertifikat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2256"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2300"/>
         <source>No endpoint this build can open with the selected identity</source>
         <translation>Kein Endpunkt, den dieser Build mit der gewählten Identität öffnen kann</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2284"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2328"/>
         <source>%1 (deprecated)</source>
         <translation>%1 (veraltet)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2503"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2547"/>
         <source>The server certificate has expired</source>
         <translation>Das Serverzertifikat ist abgelaufen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2505"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2549"/>
         <source>The server certificate is not valid yet</source>
         <translation>Das Serverzertifikat ist noch nicht gültig</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2507"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2551"/>
         <source>The server certificate was not issued for this host</source>
         <translation>Das Serverzertifikat wurde nicht für diesen Host ausgestellt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2509"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2553"/>
         <source>The server certificate could not be parsed</source>
         <translation>Das Serverzertifikat konnte nicht geparst werden</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2646"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2690"/>
         <source>Endpoint URL</source>
         <translation>Endpunkt-URL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2653"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2697"/>
         <source>Authentication</source>
         <translation>Authentifizierung</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2661"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2705"/>
         <source>Username</source>
         <translation>Benutzername</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2668"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2712"/>
         <source>Password</source>
         <translation>Passwort</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2675"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2719"/>
         <source>Poll Interval (ms)</source>
         <translation>Abfrageintervall (ms)</translation>
     </message>

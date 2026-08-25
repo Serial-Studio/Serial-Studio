@@ -3699,6 +3699,623 @@ def singleton_census(path: Path, src_text: str) -> dict:
 
 
 # ---------------------------------------------------------------------------
+# Pointer-to-member whose class is still incomplete
+# ---------------------------------------------------------------------------
+#
+# Stands in for clang's `-fcomplete-member-pointers`, which the build cannot
+# carry: the flag rejects every incomplete member-pointer base that would be
+# significant under the MSVC ABI, consistent ones included, so protobuf's
+# `message_lite.h` forced a per-source opt-out list every new gRPC includer
+# had to join (wiring dropped in 52bb123ca).
+#
+# The bug it catches is real and shipped once. Under the MSVC ABI a member
+# pointer's representation follows the inheritance model, so an incomplete
+# class hands one TU a 20-byte generalized pointer and another an 8-byte
+# single-inheritance one; unity-build include order decides which. The ODR
+# mismatch reached a release as `PropertyHooks::LiveProviderOptions` storing
+# dangling stack addresses (2026-08-25).
+#
+# This rule re-applies the check to first-party `app/` code only -- the tree
+# the opt-out list never covered -- by walking the file's quoted-include
+# closure and asking whether the class was defined there or only declared.
+
+_MEMBER_POINTER_RE = re.compile(r"\b((?:[A-Za-z_]\w*::)*[A-Za-z_]\w*)::\s*\*")
+
+_QUOTED_INCLUDE_RE = re.compile(r'^[ \t]*#[ \t]*include[ \t]+"([^"]+)"', re.M)
+_ANGLE_INCLUDE_RE = re.compile(r"^[ \t]*#[ \t]*include[ \t]+<([^>]+)>", re.M)
+
+# Fixed bound for the include-closure walk (NASA P10 rule 2). app/src holds
+# ~700 headers; a closure past this is a resolver cycle, not a translation
+# unit, and the rule reports nothing rather than spinning.
+_MAX_CLOSURE_FILES = 2000
+
+# path -> (quoted includes, angle-include basenames, defined names, declared
+# names). Populated lazily and reused across files: a repo-wide run resolves
+# the same headers hundreds of times.
+_INCLUDE_FACTS: dict[str, tuple] = {}
+
+_CLASS_SPECIFIERS = ("class_specifier", "struct_specifier", "union_specifier")
+
+
+def _class_specifier_name(node, src: bytes) -> str:
+    """Return the simple (unqualified) name of a class/struct/union
+    specifier, or "" when it is anonymous. Templates and qualified
+    out-of-line names collapse to their last identifier component."""
+    name_node = node.child_by_field_name("name")
+    if name_node is None:
+        return ""
+    text = _node_text(name_node, src)
+    text = text.split("<", 1)[0]
+    return text.split("::")[-1].strip()
+
+
+def _class_completeness_facts(src: bytes) -> tuple[set, set]:
+    """Split every class/struct/union specifier in @p src into the names
+    defined here (a body is present) and the names merely declared."""
+    tree = _CPP_PARSER.parse(src)
+    defined: set[str] = set()
+    declared: set[str] = set()
+    for node in _walk(tree.root_node):
+        if node.type not in _CLASS_SPECIFIERS:
+            continue
+        name = _class_specifier_name(node, src)
+        if not name:
+            continue
+        if node.child_by_field_name("body") is not None:
+            defined.add(name)
+        else:
+            declared.add(name)
+    return defined, declared
+
+
+def _seed_include_facts(path: Path, text: str) -> None:
+    """Cache the facts for @p path from an in-memory buffer. The analyzed
+    file is read from `src_text`, which the formatter may already have
+    rewritten, not from disk."""
+    _INCLUDE_FACTS[str(path)] = _parse_include_facts(text)
+
+
+def _include_facts(path: Path) -> tuple:
+    """Parse @p path once and cache what the closure walk needs from it."""
+    key = str(path)
+    cached = _INCLUDE_FACTS.get(key)
+    if cached is not None:
+        return cached
+
+    try:
+        text = path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        text = ""
+
+    facts = _parse_include_facts(text)
+    _INCLUDE_FACTS[key] = facts
+    return facts
+
+
+def _parse_include_facts(text: str) -> tuple:
+    """Split @p text into (quoted includes, angle-include basenames, class
+    names defined here, class names only declared here)."""
+    defined, declared = (
+        _class_completeness_facts(text.encode("utf-8")) if text else (set(), set())
+    )
+    angles = {inc.rsplit("/", 1)[-1] for inc in _ANGLE_INCLUDE_RE.findall(text)}
+    return (
+        tuple(_QUOTED_INCLUDE_RE.findall(text)),
+        frozenset(angles),
+        frozenset(defined),
+        frozenset(declared),
+    )
+
+
+def _app_include_root(path: Path) -> Path | None:
+    """Locate `app/src` above @p path -- the one include root the app target
+    adds (`include_directories(src)` in app/CMakeLists.txt)."""
+    for parent in path.parents:
+        candidate = parent / "app" / "src"
+        if candidate.is_dir():
+            return candidate
+    return None
+
+
+def _include_closure(path: Path, root: Path | None) -> tuple[set, set, set]:
+    """Walk quoted includes from @p path and return the (defined, declared,
+    angle-included) name sets a compiler would see in that translation unit.
+    Quoted includes resolve against the including file's directory first,
+    then `app/src`; anything unresolvable (Qt, system, vendored) is left out
+    and its classes stay unknown rather than assumed incomplete."""
+    start = path.resolve()
+    seen = {start}
+    queue = [start]
+    defined: set[str] = set()
+    declared: set[str] = set()
+    angles: set[str] = set()
+
+    while queue and len(seen) < _MAX_CLOSURE_FILES:
+        current = queue.pop()
+        includes, angle_names, defs, decls = _include_facts(current)
+        defined |= defs
+        declared |= decls
+        angles |= angle_names
+        for inc in includes:
+            for base in (current.parent, root):
+                if base is None:
+                    continue
+                candidate = base / inc
+                if not candidate.is_file():
+                    continue
+                resolved = candidate.resolve()
+                if resolved not in seen:
+                    seen.add(resolved)
+                    queue.append(resolved)
+                break
+
+    return defined, declared, angles
+
+
+def _member_pointer_findings(
+    src_text: str, path: Path, fence_mask: list[bool]
+) -> list[Finding]:
+    """Flag `Class::*` declarators whose class is only forward-declared in
+    the translation unit -- what `-fcomplete-member-pointers` would reject."""
+    if not HAS_TREE_SITTER or _is_vendored_path(path):
+        return []
+    if path.suffix.lower() not in (".cpp", ".cc", ".cxx", ".mm", ".h", ".hpp", ".hxx"):
+        return []
+
+    if not _MEMBER_POINTER_RE.search(src_text):
+        return []
+
+    resolved = path.resolve()
+    root = _app_include_root(resolved)
+    if root is None or not resolved.is_relative_to(root.parent):
+        return []
+
+    usages: list[tuple[int, str]] = []
+    for i, raw in enumerate(src_text.split("\n"), start=1):
+        if "::" not in raw or "*" not in raw:
+            continue
+        if i - 1 < len(fence_mask) and fence_mask[i - 1]:
+            continue
+        scrubbed = _strip_strings_and_line_comments(raw)
+        for match in _MEMBER_POINTER_RE.finditer(scrubbed):
+            usages.append((i, match.group(1)))
+
+    if not usages:
+        return []
+
+    _seed_include_facts(resolved, src_text)
+    defined, declared, angles = _include_closure(resolved, root)
+    out: list[Finding] = []
+    reported: set[tuple[int, str]] = set()
+    for line, qualified in usages:
+        simple = qualified.split("::")[-1]
+        if simple in defined or simple in angles or simple not in declared:
+            continue
+        if (line, simple) in reported:
+            continue
+        reported.add((line, simple))
+        out.append(
+            Finding(
+                line,
+                "cxx-member-pointer-incomplete",
+                f"pointer-to-member `{qualified}::*` with `{simple}` only "
+                "forward-declared in this translation unit -- include the "
+                "header that defines it. The MSVC ABI sizes a member pointer "
+                "from the inheritance model, so include order picks the "
+                "layout and TUs disagree (clang would reject this under "
+                "`-fcomplete-member-pointers`)",
+            )
+        )
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Ownership of raw pointers and raw memory operations
+# ---------------------------------------------------------------------------
+#
+# Three rules that ask the two questions a raw pointer has to answer: who
+# frees this, and is this memory safe to move a byte at a time. Qt's parent
+# ownership covers most of the app, so each rule looks for the *absence* of
+# every sanctioned release path rather than for `new` itself -- flagging
+# `new` outright would report ~440 sites, almost all of them parented.
+#
+# All three ship advisory: the analysis is intraprocedural, so an ownership
+# transfer the rule cannot see (a container that adopts the pointer through
+# a typedef, a release in a TU the index skipped) reads as a leak.
+
+_LAST_PARSE: list = [b"", None]
+
+
+def _parsed_tree(src: bytes):
+    """Parse @p src, reusing the previous tree when the bytes are identical.
+    `analyze()` hands the same buffer to several rules in a row; a tree-sitter
+    parse of a 4000-line TU is the most expensive thing this module does."""
+    if src == _LAST_PARSE[0] and _LAST_PARSE[1] is not None:
+        return _LAST_PARSE[1]
+    tree = _CPP_PARSER.parse(src)
+    _LAST_PARSE[0] = src
+    _LAST_PARSE[1] = tree
+    return tree
+
+
+_PARENT_ARGUMENT_RE = re.compile(r"\bthis\b|[Pp]arent|activeWindow\s*\(")
+
+# Every sanctioned release path for a raw member pointer: explicit delete,
+# Qt's deferred delete, late reparenting, close-owns-it dialogs, and the
+# smart-pointer adoption forms.
+_MEMBER_RELEASE_RE = re.compile(
+    r"\bdelete\s*(?:\[\s*\])?\s*(m_[A-Za-z0-9_]+)\b"
+    r"|\b(m_[A-Za-z0-9_]+)\s*->\s*(?:deleteLater|setParent)\s*\("
+    r"|\b(m_[A-Za-z0-9_]+)\s*->\s*setAttribute\s*\(\s*Qt::WA_DeleteOnClose"
+    r"|\breset\s*\(\s*(m_[A-Za-z0-9_]+)\s*[),]"
+)
+
+# Calls that hand a raw local somewhere else -- ownership may travel with it,
+# so the local is no longer provably leaked.
+_OWNERSHIP_TRANSFER_CALLS = frozenset(
+    {"setParent", "deleteLater", "reset", "release", "take", "adopt"}
+)
+
+_ESCAPING_PARENTS = frozenset(
+    {
+        "argument_list",
+        "return_statement",
+        "delete_expression",
+        "assignment_expression",
+        "init_declarator",
+        "lambda_capture_specifier",
+        "initializer_list",
+        "co_return_statement",
+    }
+)
+
+# Types whose object representation cannot be copied byte-wise: refcounted
+# Qt containers (a raw copy duplicates the d-pointer without the atomic
+# increment), std containers, and the smart pointers.
+_NON_TRIVIAL_TYPES = frozenset(
+    _HEAVY_TYPES
+    | _REFCOUNTED_TYPES
+    | {
+        "QUrl",
+        "QRegularExpression",
+        "QScopedPointer",
+        "std::unique_ptr",
+        "std::function",
+        "std::any",
+        "std::optional",
+    }
+)
+
+_MEM_FUNCTIONS = frozenset(
+    {
+        "memcpy",
+        "memmove",
+        "memset",
+        "memcmp",
+        "std::memcpy",
+        "std::memmove",
+        "std::memset",
+        "std::memcmp",
+    }
+)
+
+# Fixed bound for the repo-wide release index (NASA P10 rule 2).
+_MAX_INDEX_FILES = 4000
+
+_RELEASED_MEMBERS: dict[str, frozenset] = {}
+
+
+def _released_member_names(root: Path) -> frozenset:
+    """Every `m_*` name released somewhere under @p root. The index is
+    repo-wide because the god-file splits (ProjectModel, ProjectEditor,
+    ProjectHandler) put a member's `new` and its `delete` in different TUs;
+    a per-file check would report every one of them."""
+    key = str(root)
+    cached = _RELEASED_MEMBERS.get(key)
+    if cached is not None:
+        return cached
+
+    names: set[str] = set()
+    count = 0
+    for candidate in sorted(root.rglob("*")):
+        if count >= _MAX_INDEX_FILES:
+            break
+        if candidate.suffix.lower() not in (".cpp", ".cc", ".cxx", ".mm", ".h", ".hpp"):
+            continue
+        count += 1
+        try:
+            text = candidate.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        for match in _MEMBER_RELEASE_RE.finditer(text):
+            names.add(next(g for g in match.groups() if g))
+
+    frozen = frozenset(names)
+    _RELEASED_MEMBERS[key] = frozen
+    return frozen
+
+
+def _new_expression_is_parented(node, src: bytes) -> bool:
+    """True when a `new T(...)` hands the object an owner: a Qt parent
+    (`this`, a `parent` argument, the active window) or an existing member
+    that acts as one (`new QVBoxLayout(m_outputGroup)`)."""
+    args = node.child_by_field_name("arguments")
+    if args is None:
+        return False
+    text = _node_text(args, src)
+    if _PARENT_ARGUMENT_RE.search(text):
+        return True
+    return any(part.strip().startswith("m_") for part in text.strip("()").split(","))
+
+
+def _assigned_member_new(node, src: bytes):
+    """Return (member name, new-expression) when @p node assigns a `new` to
+    an `m_*` member, either by assignment or in a constructor init list."""
+    if node.type == "assignment_expression":
+        left = node.child_by_field_name("left")
+        right = node.child_by_field_name("right")
+        if left is None or right is None or right.type != "new_expression":
+            return None
+        name = _node_text(left, src).split("->")[-1].split(".")[-1].strip()
+        return (name, right) if name.startswith("m_") else None
+
+    if node.type == "field_initializer":
+        field = node.child_by_field_name("field")
+        if field is None and node.children:
+            field = node.children[0]
+        if field is None:
+            return None
+        name = _node_text(field, src).strip()
+        if not name.startswith("m_"):
+            return None
+        for child in _walk(node):
+            if child.type == "new_expression":
+                return (name, child)
+    return None
+
+
+def _local_pointer_escapes(body, name: str, decl_node, src: bytes) -> bool:
+    """True when a raw local pointer leaves the declaration it was created
+    in -- passed to a call, returned, deleted, re-assigned, captured by a
+    lambda, or handed to an ownership-transfer method."""
+    for node in _walk(body):
+        if node.type != "identifier" or _node_text(node, src) != name:
+            continue
+        if node.start_byte == decl_node.start_byte:
+            continue
+        parent = node.parent
+        if parent is None:
+            continue
+        if parent.type in _ESCAPING_PARENTS:
+            return True
+        if parent.type == "field_expression" and parent.parent is not None:
+            field = parent.child_by_field_name("field")
+            if (
+                parent.parent.type == "call_expression"
+                and field is not None
+                and _node_text(field, src) in _OWNERSHIP_TRANSFER_CALLS
+            ):
+                return True
+    return False
+
+
+def _leaked_local_findings(body, src: bytes, fenced) -> list[Finding]:
+    """Flag `T* p = new T(...)` locals that no sanctioned owner ever claims."""
+    out: list[Finding] = []
+    for decl in _walk(body):
+        if decl.type != "declaration":
+            continue
+        if _node_text(decl, src).lstrip().startswith("static"):
+            continue
+        for child in decl.children:
+            if child.type != "init_declarator":
+                continue
+            value = child.child_by_field_name("value")
+            declarator = child.child_by_field_name("declarator")
+            if value is None or declarator is None or value.type != "new_expression":
+                continue
+            name = _node_text(declarator, src).replace("*", "").strip()
+            if not name.isidentifier():
+                continue
+            if _new_expression_is_parented(value, src):
+                continue
+            if _local_pointer_escapes(body, name, declarator, src):
+                continue
+            line = _line_of(decl)
+            if fenced(line):
+                continue
+            out.append(
+                Finding(
+                    line,
+                    "mem-leaked-local-new",
+                    f"`{name}` owns a raw `new` that nothing claims: no Qt "
+                    "parent, no `delete`, and the pointer never leaves this "
+                    "function. Hold it in `std::unique_ptr`, give it a "
+                    "parent, or mark the deliberate one-time allocation "
+                    "`static`",
+                )
+            )
+    return out
+
+
+def _ownership_findings(
+    src_text: str, path: Path, fence_mask: list[bool]
+) -> list[Finding]:
+    """Flag raw `new` whose result has no owner: an `m_*` member nothing
+    releases, and a local that never escapes its function."""
+    if not HAS_TREE_SITTER or _is_vendored_path(path):
+        return []
+    if path.suffix.lower() not in (".cpp", ".cc", ".cxx", ".mm", ".h", ".hpp"):
+        return []
+    if "new" not in src_text:
+        return []
+
+    resolved = path.resolve()
+    root = _app_include_root(resolved)
+    if root is None or not resolved.is_relative_to(root.parent):
+        return []
+
+    def fenced(line: int) -> bool:
+        idx = line - 1
+        return 0 <= idx < len(fence_mask) and fence_mask[idx]
+
+    src = src_text.encode("utf-8")
+    tree = _parsed_tree(src)
+    out: list[Finding] = []
+
+    for node in _walk(tree.root_node):
+        if node.type == "function_definition":
+            body = node.child_by_field_name("body")
+            if body is not None:
+                out.extend(_leaked_local_findings(body, src, fenced))
+            continue
+
+        assigned = _assigned_member_new(node, src)
+        if assigned is None:
+            continue
+        name, expression = assigned
+        if _new_expression_is_parented(expression, src):
+            continue
+        if name in _released_member_names(root):
+            continue
+        line = _line_of(node)
+        if fenced(line):
+            continue
+        out.append(
+            Finding(
+                line,
+                "mem-unreleased-owning-member",
+                f"`{name}` owns a raw `new` with no release path: no Qt "
+                "parent argument, and no `delete`, `deleteLater()`, "
+                "`setParent()` or `WA_DeleteOnClose` anywhere in the app "
+                "tree. Pass a parent, hold it in a smart pointer, or "
+                "release it in the destructor",
+            )
+        )
+    return out
+
+
+def _scope_declaration_types(node, src: bytes, out: dict) -> dict:
+    """Map declared names to their base type name inside @p node. Innermost
+    scope wins, so the caller fills the function scope over the class one."""
+    for decl in _walk(node):
+        if decl.type not in (
+            "declaration",
+            "field_declaration",
+            "parameter_declaration",
+        ):
+            continue
+        type_node = decl.child_by_field_name("type")
+        if type_node is None:
+            continue
+        base = _node_text(type_node, src)
+        base = base.replace("const", "").replace("&", "").replace("*", "").strip()
+        base = base.split("<")[0].strip()
+        for sub in _walk(decl):
+            if sub.type != "identifier" or sub.parent is None:
+                continue
+            if sub.parent.type in (
+                "init_declarator",
+                "declaration",
+                "field_declaration",
+                "array_declarator",
+                "parameter_declaration",
+                "reference_declarator",
+            ):
+                out.setdefault(_node_text(sub, src), base)
+    return out
+
+
+def _mem_operand_name(node, src: bytes) -> str:
+    """Return the identifier when a `mem*` argument is the object itself
+    (`x`, `&x`, `&this->x`) rather than a buffer it owns (`x.data()`)."""
+    current = node
+    while current.type in ("cast_expression", "parenthesized_expression"):
+        inner = current.child_by_field_name("value")
+        if inner is None:
+            return ""
+        current = inner
+    if current.type == "pointer_expression":
+        argument = current.child_by_field_name("argument")
+        if argument is None:
+            return ""
+        current = argument
+    if current.type == "identifier":
+        return _node_text(current, src)
+    if current.type == "field_expression":
+        argument = current.child_by_field_name("argument")
+        field = current.child_by_field_name("field")
+        if argument is not None and field is not None:
+            if _node_text(argument, src) == "this":
+                return _node_text(field, src)
+    return ""
+
+
+def _raw_memory_findings(
+    src_text: str, path: Path, fence_mask: list[bool]
+) -> list[Finding]:
+    """Flag `memcpy` / `memset` / `memcmp` over an object that is not
+    trivially copyable. A byte-wise copy of a QString duplicates the
+    d-pointer without the atomic refcount bump: two objects free one buffer."""
+    if not HAS_TREE_SITTER or _is_vendored_path(path):
+        return []
+    if path.suffix.lower() not in (".cpp", ".cc", ".cxx", ".mm", ".h", ".hpp"):
+        return []
+    if "mem" not in src_text:
+        return []
+
+    src = src_text.encode("utf-8")
+    tree = _parsed_tree(src)
+    fields: dict[str, str] = {}
+    for node in _walk(tree.root_node):
+        if node.type in ("class_specifier", "struct_specifier"):
+            body = node.child_by_field_name("body")
+            if body is not None:
+                _scope_declaration_types(body, src, fields)
+
+    out: list[Finding] = []
+    for call in _walk(tree.root_node):
+        if call.type != "call_expression":
+            continue
+        function = call.child_by_field_name("function")
+        if function is None or _node_text(function, src).strip() not in _MEM_FUNCTIONS:
+            continue
+        arguments = call.child_by_field_name("arguments")
+        if arguments is None:
+            continue
+        line = _line_of(call)
+        if 0 <= line - 1 < len(fence_mask) and fence_mask[line - 1]:
+            continue
+
+        scope = call
+        while scope is not None and scope.type != "function_definition":
+            scope = scope.parent
+        locals_map = _scope_declaration_types(scope, src, {}) if scope else {}
+
+        operands = [c for c in arguments.children if c.type not in ("(", ")", ",")]
+        for operand in operands[:2]:
+            name = _mem_operand_name(operand, src)
+            if not name:
+                continue
+            declared = locals_map.get(name, fields.get(name))
+            if declared not in _NON_TRIVIAL_TYPES:
+                continue
+            out.append(
+                Finding(
+                    line,
+                    "mem-memfn-nontrivial",
+                    f"`{_node_text(function, src).strip()}` over `{name}`, a "
+                    f"`{declared}` -- the type is not trivially copyable, so "
+                    "a byte-wise copy duplicates an owning pointer (double "
+                    "free) or writes over one (leak). Assign it, or operate "
+                    "on the buffer it owns (`.data()`)",
+                )
+            )
+            break
+    return out
+
+
+# ---------------------------------------------------------------------------
 # Public entry point
 # ---------------------------------------------------------------------------
 
@@ -3723,6 +4340,9 @@ def analyze(path: Path, src_text: str, fence_mask: list[bool]) -> list[Finding]:
         out.extend(_session_context_bypass_findings(src_text, path, fence_mask))
         out.extend(_context_ctor_findings(src_text, path, fence_mask))
         out.extend(_session_adopt_site_findings(src_text, path, fence_mask))
+        out.extend(_member_pointer_findings(src_text, path, fence_mask))
+        out.extend(_ownership_findings(src_text, path, fence_mask))
+        out.extend(_raw_memory_findings(src_text, path, fence_mask))
         return out
     if suffix == ".qml":
         out.extend(_qml_rules(src_text, path, fence_mask))

@@ -47,6 +47,7 @@ using StatusCode = std::uint32_t;
 
 inline constexpr StatusCode kStatusGood          = 0x00000000u;
 inline constexpr StatusCode kStatusBadInternal   = 0x80020000u;
+inline constexpr StatusCode kStatusBadTimeout    = 0x800A0000u;
 inline constexpr StatusCode kStatusSeverityMask  = 0xC0000000u;
 inline constexpr StatusCode kStatusUncertainBase = 0x40000000u;
 inline constexpr StatusCode kStatusBadBase       = 0x80000000u;

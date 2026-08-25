@@ -43,18 +43,20 @@
 
 Q_LOGGING_CATEGORY(lcOpcUa, "serialstudio.io.opcua")
 
-static constexpr int kOpcUaDialDeadlineMs    = 15000;
-static constexpr int kMinIntervalMs          = 10;
-static constexpr int kMaxIntervalMs          = 60000;
-static constexpr int kOpcUaDefaultIntervalMs = 100;
-static constexpr qint64 kNsPerMs             = 1000000LL;
-static constexpr qint64 kMaxClockSkewMs      = 5000;
-static constexpr int kDefaultPort            = 4840;
-static constexpr int kWatchdogMs             = 1000;
-static constexpr int kSilenceFactor          = 6;
-static constexpr int kMinSilenceMs           = 3000;
-static constexpr const char* kBackendName    = "open62541";
-static constexpr const char* kPolicyNone     = "http://opcfoundation.org/UA/SecurityPolicy#None";
+static constexpr int kOpcUaDialDeadlineMs      = 15000;
+static constexpr int kOpcUaBrowseDeadlineMs    = 15000;
+static constexpr int kOpcUaDiscoveryDeadlineMs = 8000;
+static constexpr int kMinIntervalMs            = 10;
+static constexpr int kMaxIntervalMs            = 60000;
+static constexpr int kOpcUaDefaultIntervalMs   = 100;
+static constexpr qint64 kNsPerMs               = 1000000LL;
+static constexpr qint64 kMaxClockSkewMs        = 5000;
+static constexpr int kDefaultPort              = 4840;
+static constexpr int kWatchdogMs               = 1000;
+static constexpr int kSilenceFactor            = 6;
+static constexpr int kMinSilenceMs             = 3000;
+static constexpr const char* kBackendName      = "open62541";
+static constexpr const char* kPolicyNone       = "http://opcfoundation.org/UA/SecurityPolicy#None";
 
 /**
  * @brief Every security policy this build can open, weakest first. Basic128Rsa15 and Basic256 are
@@ -106,6 +108,8 @@ IO::Drivers::OpcUa::OpcUa()
   , m_endpointUrl(QStringLiteral("opc.tcp://127.0.0.1:4840"))
   , m_securityMode(static_cast<int>(OpcUaTypes::SecurityMode::None))
   , m_dialTimer(new QTimer(this))
+  , m_discoveryTimer(new QTimer(this))
+  , m_browseTimer(new QTimer(this))
   , m_watchdog(new QTimer(this))
   , m_pollTimer(new QTimer(this))
   , m_frameTimer(new QTimer(this))
@@ -123,7 +127,11 @@ IO::Drivers::OpcUa::OpcUa()
   loadSettings();
 
   m_dialTimer->setSingleShot(true);
+  m_browseTimer->setSingleShot(true);
+  m_discoveryTimer->setSingleShot(true);
   connect(m_dialTimer, &QTimer::timeout, this, &IO::Drivers::OpcUa::onDialTimeout);
+  connect(m_browseTimer, &QTimer::timeout, this, &IO::Drivers::OpcUa::onBrowseTimeout);
+  connect(m_discoveryTimer, &QTimer::timeout, this, &IO::Drivers::OpcUa::onDiscoveryTimeout);
   connect(m_pollTimer, &QTimer::timeout, this, &IO::Drivers::OpcUa::onPollTick);
   connect(m_frameTimer, &QTimer::timeout, this, &IO::Drivers::OpcUa::onFrameTick);
   connect(m_watchdog, &QTimer::timeout, this, &IO::Drivers::OpcUa::onWatchdogTick);
@@ -646,6 +654,31 @@ void IO::Drivers::OpcUa::onDialTimeout()
   failDial(tr("Timed out after %1 s").arg(kOpcUaDialDeadlineMs / 1000));
 }
 
+/**
+ * @brief Discovery deadline, for a server that accepts the socket and then answers nothing: no
+ *        channel ever closes, so the session owes no verdict and only this one ends the wait. The
+ *        session is retired first, which is what keeps a late reply from reporting twice.
+ */
+void IO::Drivers::OpcUa::onDiscoveryTimeout()
+{
+  if (!m_discovering)
+    return;
+
+  teardownSession(m_discoverySession);
+  onEndpointsFinished({}, OpcUaTypes::kStatusBadTimeout);
+}
+
+/**
+ * @brief The same deadline for the picker's browse session, whose dial has no other bound.
+ */
+void IO::Drivers::OpcUa::onBrowseTimeout()
+{
+  if (!m_browsing)
+    return;
+
+  onBrowseFailed(tr("Timed out after %1 s").arg(kOpcUaBrowseDeadlineMs / 1000));
+}
+
 //--------------------------------------------------------------------------------------------------
 // Session signal handlers
 //--------------------------------------------------------------------------------------------------
@@ -721,6 +754,7 @@ void IO::Drivers::OpcUa::discoverEndpoints()
           &IO::Drivers::OpcUa::onEndpointsFinished);
 
   m_discovering = true;
+  m_discoveryTimer->start(kOpcUaDiscoveryDeadlineMs);
   Q_EMIT discoveringChanged();
 
   if (!m_discoverySession->discoverEndpoints(m_endpointUrl))
@@ -735,11 +769,15 @@ void IO::Drivers::OpcUa::onEndpointsFinished(const QList<OpcUaTypes::Endpoint>& 
                                              OpcUaTypes::StatusCode status)
 {
   m_discovering = false;
+  m_discoveryTimer->stop();
 
   if (!OpcUaTypes::isGood(status)) {
     m_endpoints.clear();
     publishEndpointSelection(-1);
-    m_lastError = tr("Discovery failed: %1").arg(OpcUaSession::describeStatus(status));
+    m_lastError =
+      status == OpcUaTypes::kStatusBadTimeout
+        ? tr("The server did not answer within %1 s").arg(kOpcUaDiscoveryDeadlineMs / 1000)
+        : tr("Discovery failed: %1").arg(OpcUaSession::describeStatus(status));
     logDriverError(tr("OPC UA Discovery Failed"), tr("\"%1\": %2").arg(m_endpointUrl, m_lastError));
   } else {
     const auto previous = m_endpointIndex >= 0 && m_endpointIndex < m_endpoints.size()
@@ -1277,6 +1315,7 @@ void IO::Drivers::OpcUa::startBrowse()
 
   tagModel()->preselect(m_tags);
   m_browsing = true;
+  m_browseTimer->start(kOpcUaBrowseDeadlineMs);
   Q_EMIT browsingChanged();
   prepareClientIdentity();
 
@@ -1313,6 +1352,7 @@ void IO::Drivers::OpcUa::stopBrowse()
   if (m_tagModel)
     m_tagModel->setSession(nullptr);
 
+  m_browseTimer->stop();
   teardownSession(m_browseSession);
   if (!m_browsing)
     return;
@@ -1332,6 +1372,7 @@ void IO::Drivers::OpcUa::cancelBrowse()
   if (m_tagModel)
     m_tagModel->setSession(nullptr);
 
+  m_browseTimer->stop();
   teardownSession(m_browseSession);
   if (!m_browsing)
     return;
@@ -1348,6 +1389,8 @@ void IO::Drivers::OpcUa::onBrowseConnected()
   if (!m_browseSession)
     return;
 
+  m_browseTimer->stop();
+
   tagModel()->setSession(m_browseSession);
   tagModel()->fetchMore(QModelIndex());
 }
@@ -1360,6 +1403,7 @@ void IO::Drivers::OpcUa::onBrowseFailed(const QString& reason)
   if (!m_browsing)
     return;
 
+  m_browseTimer->stop();
   reportTrustFailure(m_browseSession);
   m_lastError = reason.isEmpty()
                 ? tr("Could not open a browse session on %1").arg(selectedEndpointUrl())

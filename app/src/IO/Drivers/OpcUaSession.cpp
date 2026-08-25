@@ -545,9 +545,9 @@ void IO::Drivers::OpcUaSession::failDial(const QString& reason)
 
 /**
  * @brief Translates the stack's channel and session transitions into the three outcomes the
- *        driver understands: the endpoints are ready to fetch, the session is up, or the attempt
- *        is over. A mid-handshake channel close is NOT a failure: open62541 rebuilds the channel
- *        on purpose and those closes carry a GOOD status, so only a bad status is a verdict.
+ *        driver understands: endpoints ready to fetch, session up, or attempt over. Only a BAD
+ *        status is a verdict, since open62541 reopens the channel mid-handshake on purpose; a bad
+ *        one under Discovering ends the discovery, which nothing else ends before the deadline.
  */
 void IO::Drivers::OpcUaSession::handleStateChanged(int channelState,
                                                    int sessionState,
@@ -555,6 +555,12 @@ void IO::Drivers::OpcUaSession::handleStateChanged(int channelState,
 {
   if (m_intent == Intent::Discovering && channelState == UA_SECURECHANNELSTATE_OPEN) {
     requestEndpoints();
+    return;
+  }
+
+  if (m_intent == Intent::Discovering && channelState == UA_SECURECHANNELSTATE_CLOSED
+      && !isGood(status)) {
+    handleEndpoints({}, status);
     return;
   }
 

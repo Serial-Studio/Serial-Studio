@@ -118,6 +118,18 @@ failure precisely because a killed run writes no profile. The training runs *are
 representative workload that makes PGO help instead of hurt; the 256 kHz gate is a hard
 release gate on the shipped PGO binary. See [[ss-hotpath]].
 
+### Flags deliberately NOT enabled
+`-fcomplete-member-pointers` (clang family). Rejects a pointer-to-member whose class is still
+incomplete -- under the MSVC ABI the representation follows the inheritance model, so an
+incomplete class gives one TU a 20-byte generalized member pointer and another an 8-byte one,
+and unity-build include order picks which. Real bug (2026-08-25,
+`PropertyHooks::LiveProviderOptions` storing dangling stack addresses), but the flag also
+rejects the *consistent* incomplete bases inside protobuf's `message_lite.h`, so enabling it
+forced a per-source opt-out list that every new gRPC includer had to join. Wiring dropped in
+`52bb123ca`; the check now lives in `scripts/code-verify.py` as the `cxx-member-pointer-incomplete`
+advisory, scoped to `app/` where no opt-out list is needed. Don't re-add the flag -- extend the
+lint instead.
+
 ### DISABLE_LTO / sandboxed builds
 `PRODUCTION_OPTIMIZATION` + Flatpak (`FLATPAK_ID` env or `FLATPAK_BUILD`) -> `DISABLE_LTO=ON`
 and `ENABLE_HARDENING` forced ON. LTO is otherwise ON.

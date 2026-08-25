@@ -13826,7 +13826,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::OpcUa</name>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="417"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="425"/>
         <source>OPC UA Initialization Failed</source>
         <translation>OPC UA Başlatma Başarısız</translation>
     </message>
@@ -13835,30 +13835,31 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">%1 arka ucu bu derlemede mevcut değil.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="614"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="622"/>
         <source>OPC UA Connection Failed</source>
         <translation>OPC UA Bağlantısı Başarısız</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="615"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="623"/>
         <source>Unable to connect to "%1".</source>
         <translation>"%1" adresine bağlanılamıyor.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="616"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="743"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="884"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2257"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="624"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="781"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="922"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2301"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="632"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="640"/>
         <source>OPC UA Connection Lost</source>
         <translation>OPC UA Bağlantısı Kesildi</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="646"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="654"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="679"/>
         <source>Timed out after %1 s</source>
         <translation>%1 s sonra zaman aşımına uğradı</translation>
     </message>
@@ -13867,7 +13868,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Sunucu bağlantıyı kapattı</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="678"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="711"/>
         <source>The server closed the session</source>
         <translation>Sunucu oturumu kapattı</translation>
     </message>
@@ -13904,7 +13905,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Sertifika deposu geçersiz veya okunamıyor</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2501"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2545"/>
         <source>The server certificate is not trusted</source>
         <translation>Sunucu sertifikasına güvenilmiyor</translation>
     </message>
@@ -13913,13 +13914,13 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Beklenmeyen arka uç hatası</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="704"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="737"/>
         <source>"%1" is not a valid endpoint URL</source>
         <translation>"%1" geçerli bir uç nokta URL'si değil</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="705"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2257"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="738"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2301"/>
         <source>OPC UA Discovery</source>
         <translation>OPC UA Keşfi</translation>
     </message>
@@ -13928,12 +13929,12 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">%1 arka ucu bu derlemede mevcut değil</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="742"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="780"/>
         <source>Discovery failed: %1</source>
         <translation>Keşif başarısız: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="743"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="781"/>
         <source>OPC UA Discovery Failed</source>
         <translation>OPC UA Keşfi Başarısız</translation>
     </message>
@@ -13942,183 +13943,188 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">None-policy uç noktası yok; güvenli kanallar bu sürümde desteklenmiyor</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="409"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="417"/>
         <source>The connection is not configured: check the endpoint and the tag list</source>
         <translation>Bağlantı yapılandırılmamış: uç noktayı ve etiket listesini kontrol edin</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="416"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="713"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="424"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="746"/>
         <source>The %1 stack is not available in this build</source>
         <translation>%1 yığını bu derlemede mevcut değil</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="459"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="467"/>
         <source>The connection attempt could not be started</source>
         <translation>Bağlantı denemesi başlatılamadı</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="477"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="485"/>
         <source>OPC UA Certificate</source>
         <translation>OPC UA Sertifikası</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="478"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="486"/>
         <source>The client certificate could not be generated; secure channels will be refused.</source>
         <translation>İstemci sertifikası oluşturulamadı; güvenli kanallar reddedilecek.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="773"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="786"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="779"/>
+        <source>The server did not answer within %1 s</source>
+        <translation>Sunucu %1 s içinde yanıt vermedi</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="811"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="824"/>
         <source>Endpoint discovery failed</source>
         <translation>Uç nokta keşfi başarısız</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="883"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="921"/>
         <source>OPC UA Monitored Item Refused</source>
         <translation>OPC UA İzlenen Öğe Reddedildi</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="890"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="928"/>
         <source>the server refused every monitored item</source>
         <translation>sunucu tüm izlenen öğeleri reddetti</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="910"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="948"/>
         <source>the server retired the subscription</source>
         <translation>sunucu aboneliği sonlandırdı</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="946"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="984"/>
         <source>OPC UA Subscription Unavailable</source>
         <translation>OPC UA Abonelik Kullanılamıyor</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="947"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="985"/>
         <source>Falling back to polling: %1.</source>
         <translation>Yoklamaya geri dönülüyor: %1.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="973"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1011"/>
         <source>no notification for %1 s</source>
         <translation>%1 s boyunca bildirim yok</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1026"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1064"/>
         <source>OPC UA Read Failed</source>
         <translation>OPC UA Okuma Başarısız</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1190"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1228"/>
         <source>OPC UA Type Mismatch</source>
         <translation>OPC UA Tür Uyuşmazlığı</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1191"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1229"/>
         <source>Channel %1 is declared %2 but the server sends %3; the value is coerced.</source>
         <translation>Kanal %1, %2 olarak bildirilmiş ancak sunucu %3 gönderiyor; değer dönüştürülüyor.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1236"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1274"/>
         <source>Browse of %1 failed: %2</source>
         <translation>%1 taraması başarısız oldu: %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1261"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1299"/>
         <source>"%1" is not a valid endpoint URL.</source>
         <translation>"%1" geçerli bir uç nokta URL'si değil.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1268"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1306"/>
         <source>The %1 stack is not available in this build.</source>
         <translation>%1 yığını bu derlemede mevcut değil.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1275"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1313"/>
         <source>The browse session was closed by the server</source>
         <translation>Tarama oturumu sunucu tarafından kapatıldı</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1285"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1324"/>
         <source>The browse session could not be started</source>
         <translation>Tarama oturumu başlatılamadı</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1365"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1409"/>
         <source>Could not open a browse session on %1</source>
         <translation>%1 üzerinde tarama oturumu açılamadı</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1392"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1436"/>
         <source>Failed to load generated project</source>
         <translation>Oluşturulan proje yüklenemedi</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1393"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1437"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>Oluşturulan proje JSON dosyası yüklenemedi.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1407"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1451"/>
         <source>No tags selected</source>
         <translation>Hiçbir etiket seçilmedi</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1408"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1452"/>
         <source>Browse the server and select at least one tag before generating a project.</source>
         <translation>Proje oluşturmadan önce sunucuya göz atın ve en az bir etiket seçin.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1411"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1435"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1455"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1479"/>
         <source>OPC UA Project Generator</source>
         <translation>OPC UA Proje Oluşturucu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1430"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1474"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>%1 grup ve %2 veri kümesi ile proje başarıyla oluşturuldu.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1433"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1477"/>
         <source>The project editor is now open for customization.</source>
         <translation>Proje düzenleyici artık özelleştirme için açık.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1481"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1525"/>
         <source>OPC UA Project</source>
         <translation>OPC UA Projesi</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1486"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1530"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1513"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1557"/>
         <source>Tags</source>
         <translation>Etiketler</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1565"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1609"/>
         <source> (deprecated)</source>
         <translation>(kullanımdan kaldırıldı)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1581"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2315"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1625"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2359"/>
         <source>None</source>
         <translation>Yok</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1583"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2315"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1627"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2359"/>
         <source>Sign</source>
         <translation>İmzala</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1585"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2315"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1629"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2359"/>
         <source>Sign and Encrypt</source>
         <translation>İmzala ve Şifrele</translation>
     </message>
@@ -14127,28 +14133,28 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">İmzala &amp;&amp; Şifrele</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1590"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2315"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1634"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2359"/>
         <source>Invalid</source>
         <translation>Geçersiz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2684"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2728"/>
         <source>Security Policy</source>
         <translation>Güvenlik Politikası</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2692"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2736"/>
         <source>Security Mode</source>
         <translation>Güvenlik Modu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2700"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2744"/>
         <source>User Certificate</source>
         <translation>Kullanıcı Sertifikası</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2707"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2751"/>
         <source>User Private Key</source>
         <translation>Kullanıcı Özel Anahtarı</translation>
     </message>
@@ -14157,102 +14163,102 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">İmzala ve Şifrele</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1713"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1757"/>
         <source>Connecting to %1</source>
         <translation>%1 adresine bağlanılıyor</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1716"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1760"/>
         <source>Not connected</source>
         <translation>Bağlı değil</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1722"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1766"/>
         <source>Subscribing, %1 of %2 tags</source>
         <translation>Abone oluyor, %2 etiketten %1'i</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1727"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1771"/>
         <source>Subscribed %1 tags, polling %2 refused, %3 Hz</source>
         <translation>%1 etiket abone oldu, %2 yoklama reddedildi, %3 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1733"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1777"/>
         <source>Polling (server refused subscriptions), %1 tags, %2 Hz</source>
         <translation>Yoklama yapılıyor (sunucu abonelikleri reddetti), %1 etiket, %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1737"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1781"/>
         <source>Subscribed, %1 tags, %2 Hz</source>
         <translation>Abone olundu, %1 etiket, %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1775"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1819"/>
         <source>Anonymous</source>
         <translation>Anonim</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1775"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1819"/>
         <source>Username / Password</source>
         <translation>Kullanıcı Adı / Parola</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1775"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1819"/>
         <source>X.509 Certificate</source>
         <translation>X.509 Sertifikası</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2256"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2300"/>
         <source>No endpoint this build can open with the selected identity</source>
         <translation>Bu yapının seçilen kimlikle açabileceği bir uç nokta yok</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2284"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2328"/>
         <source>%1 (deprecated)</source>
         <translation>%1 (kullanımdan kaldırıldı)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2503"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2547"/>
         <source>The server certificate has expired</source>
         <translation>Sunucu sertifikasının süresi dolmuş</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2505"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2549"/>
         <source>The server certificate is not valid yet</source>
         <translation>Sunucu sertifikası henüz geçerli değil</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2507"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2551"/>
         <source>The server certificate was not issued for this host</source>
         <translation>Sunucu sertifikası bu ana bilgisayar için verilmemiş</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2509"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2553"/>
         <source>The server certificate could not be parsed</source>
         <translation>Sunucu sertifikası ayrıştırılamadı</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2646"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2690"/>
         <source>Endpoint URL</source>
         <translation>Uç Nokta URL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2653"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2697"/>
         <source>Authentication</source>
         <translation>Kimlik Doğrulama</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2661"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2705"/>
         <source>Username</source>
         <translation>Kullanıcı Adı</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2668"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2712"/>
         <source>Password</source>
         <translation>Parola</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2675"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2719"/>
         <source>Poll Interval (ms)</source>
         <translation>Yoklama Aralığı (ms)</translation>
     </message>

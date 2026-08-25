@@ -313,6 +313,8 @@ private slots:
                       const QList<OpcUaTypes::ReadRow>& rows,
                       OpcUaTypes::StatusCode status);
   void onDialTimeout();
+  void onDiscoveryTimeout();
+  void onBrowseTimeout();
   void onPollTick();
   void onFrameTick();
   void onWatchdogTick();
@@ -423,6 +425,8 @@ private:
   OpcUaTypes::CertInfo m_pendingTrust;
   QByteArray m_frame;
   QTimer* m_dialTimer;
+  QTimer* m_discoveryTimer;
+  QTimer* m_browseTimer;
   QTimer* m_watchdog;
   QTimer* m_pollTimer;
   QTimer* m_frameTimer;
