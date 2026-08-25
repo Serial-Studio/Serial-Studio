@@ -116,6 +116,12 @@ void CLI::registerOptions()
   m_parser.addOption(m_opts.udpOpt);
   m_parser.addOption(m_opts.udpRemoteOpt);
   m_parser.addOption(m_opts.udpMulticastOpt);
+  m_parser.addOption(m_opts.wsOpt);
+  m_parser.addOption(m_opts.httpOpt);
+  m_parser.addOption(m_opts.httpMethodOpt);
+  m_parser.addOption(m_opts.httpIntervalOpt);
+  m_parser.addOption(m_opts.httpHeaderOpt);
+  m_parser.addOption(m_opts.insecureTlsOpt);
   m_parser.addOption(m_opts.benchmarkHotpathOpt);
   m_parser.addOption(m_opts.minFpsOpt);
   m_parser.addOption(m_opts.benchmarkFramesOpt);
@@ -701,6 +707,10 @@ void CLI::applyBusConfiguration()
     setupTcpConnection(m_parser.value(m_opts.tcpOpt));
   else if (m_parser.isSet(m_opts.udpOpt))
     setupUdpConnection();
+  else if (m_parser.isSet(m_opts.wsOpt))
+    setupWebSocketConnection(m_parser.value(m_opts.wsOpt));
+  else if (m_parser.isSet(m_opts.httpOpt))
+    setupHttpConnection(m_parser.value(m_opts.httpOpt));
 #ifdef BUILD_COMMERCIAL
   else if (m_parser.isSet(m_opts.modbusRtuOpt))
     setupModbusRtuConnection();
@@ -714,7 +724,7 @@ void CLI::applyBusConfiguration()
 }
 
 //---------------------------------------------------------------------------------------------------
-// UART / TCP / UDP setup
+// UART / TCP / UDP / WebSocket / HTTP setup
 //---------------------------------------------------------------------------------------------------
 
 /**
@@ -765,6 +775,60 @@ void CLI::setupTcpConnection(const QString& tcpAddress)
   connectionManager.network()->setTcpSocket();
   connectionManager.network()->setRemoteAddress(parts[0]);
   connectionManager.network()->setTcpPort(port);
+  connectionManager.connectDevice();
+}
+
+/**
+ * @brief Configures and connects a WebSocket client from a CLI URL. Scheme validation is left to
+ *        the driver so the CLI and the UI reject exactly the same set of URLs.
+ */
+void CLI::setupWebSocketConnection(const QString& url)
+{
+  static auto& connectionManager = IO::ConnectionManager::instance();
+  connectionManager.setBusType(SerialStudio::BusType::Network);
+
+  auto* network = connectionManager.network();
+  network->setSocketType(IO::Drivers::Network::SocketType::WebSocket);
+  network->setWebSocketUrl(url);
+
+  if (m_parser.isSet(m_opts.insecureTlsOpt))
+    network->setIgnoreTlsErrors(true);
+
+  connectionManager.connectDevice();
+}
+
+/**
+ * @brief Configures and connects an HTTP polling source from CLI options.
+ */
+void CLI::setupHttpConnection(const QString& url)
+{
+  static auto& connectionManager = IO::ConnectionManager::instance();
+  connectionManager.setBusType(SerialStudio::BusType::Network);
+
+  auto* network = connectionManager.network();
+  network->setSocketType(IO::Drivers::Network::SocketType::Http);
+  network->setHttpUrl(url);
+
+  if (m_parser.isSet(m_opts.httpMethodOpt)) {
+    const QString method = m_parser.value(m_opts.httpMethodOpt).toUpper();
+    const int index      = network->httpMethods().indexOf(method);
+    if (index < 0) {
+      qWarning() << "Invalid HTTP method:" << method;
+      return;
+    }
+
+    network->setHttpMethodIndex(index);
+  }
+
+  if (m_parser.isSet(m_opts.httpIntervalOpt))
+    network->setHttpInterval(m_parser.value(m_opts.httpIntervalOpt).toInt());
+
+  if (m_parser.isSet(m_opts.httpHeaderOpt))
+    network->setHttpHeaders(m_parser.values(m_opts.httpHeaderOpt).join(QChar('\n')));
+
+  if (m_parser.isSet(m_opts.insecureTlsOpt))
+    network->setIgnoreTlsErrors(true);
+
   connectionManager.connectDevice();
 }
 

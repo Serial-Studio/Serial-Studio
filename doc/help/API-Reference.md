@@ -1067,9 +1067,9 @@ Set auto-reconnect behavior.
 python test_api.py send io.uart.setAutoReconnect -p autoReconnect=true
 ```
 
-### Network Driver Commands (9)
+### Network Driver Commands (17)
 
-TCP/UDP configuration:
+TCP, UDP, WebSocket and HTTP client configuration:
 
 #### 🟢 `io.network.getConfig`
 Get current network configuration.
@@ -1086,7 +1086,33 @@ Get current network configuration.
   "udpLocalPort": 0,
   "udpRemotePort": 8081,
   "udpMulticast": false,
+  "webSocketUrl": "ws://127.0.0.1:8080",
+  "webSocketFormatIndex": 0,
+  "httpUrl": "http://127.0.0.1:8080/",
+  "httpMethod": "GET",
+  "httpBody": "",
+  "httpHeaders": "",
+  "httpInterval": 1000,
+  "ignoreTlsErrors": false,
   "isOpen": false
+}
+```
+
+#### 🟢 `io.network.getStatus`
+Get the link state and the HTTP poll counters. The counters cover the current connection only and reset on each connect.
+
+**Parameters:** None
+
+**Returns:**
+```json
+{
+  "socketTypeIndex": 3,
+  "isOpen": true,
+  "isConnecting": false,
+  "pollsOk": 41,
+  "pollsFailed": 2,
+  "pollsSkipped": 0,
+  "consecutiveFailures": 0
 }
 ```
 
@@ -1100,7 +1126,9 @@ Get list of available socket types.
 {
   "socketTypes": [
     {"index": 0, "name": "TCP"},
-    {"index": 1, "name": "UDP"}
+    {"index": 1, "name": "UDP"},
+    {"index": 2, "name": "WebSocket"},
+    {"index": 3, "name": "HTTP"}
   ]
 }
 ```
@@ -1153,7 +1181,7 @@ python test_api.py send io.network.setUdpRemotePort -p port=9001
 Set socket type.
 
 **Parameters:**
-- `socketTypeIndex` (int): 0=TCP (client), 1=UDP. Serial Studio does not act as a TCP server.
+- `socketTypeIndex` (int): 0=TCP, 1=UDP, 2=WebSocket, 3=HTTP. Every transport is a client; Serial Studio never listens for inbound connections.
 
 **Example:**
 ```bash
@@ -1169,6 +1197,83 @@ Enable or disable UDP multicast.
 **Example:**
 ```bash
 python test_api.py send io.network.setUdpMulticast -p enabled=false
+```
+
+#### 🟢 `io.network.setWebSocketUrl`
+Set the WebSocket endpoint. Rejected with `InvalidParam` unless the scheme is `ws` or `wss`.
+
+**Parameters:**
+- `url` (string): `ws://host:port/path` or `wss://host:port/path`
+
+**Example:**
+```bash
+python test_api.py send io.network.setWebSocketUrl -p url=ws://127.0.0.1:8080/feed
+```
+
+#### 🟢 `io.network.setHttpUrl`
+Set the HTTP endpoint. Rejected with `InvalidParam` unless the scheme is `http` or `https`.
+
+**Parameters:**
+- `url` (string): `http://host:port/path` or `https://host:port/path`
+
+**Example:**
+```bash
+python test_api.py send io.network.setHttpUrl -p url=http://127.0.0.1:8080/telemetry
+```
+
+#### 🟢 `io.network.setHttpMethod`
+Set the HTTP method used for every request.
+
+**Parameters:**
+- `method` (string): `GET`, `POST`, `PUT`, `PATCH` or `DELETE`
+
+**Example:**
+```bash
+python test_api.py send io.network.setHttpMethod -p method=POST
+```
+
+#### 🟢 `io.network.setHttpBody`
+Set the body sent with every HTTP request. Ignored by servers that do not accept a body for the chosen method.
+
+**Parameters:**
+- `body` (string): Request body
+
+**Example:**
+```bash
+python test_api.py send io.network.setHttpBody -p body='{"probe":1}'
+```
+
+#### 🟢 `io.network.setHttpHeaders`
+Set the custom HTTP request headers. This is where API keys, bearer tokens and `Accept` go; there are no dedicated credential fields.
+
+**Parameters:**
+- `headers` (string): One `Name: Value` pair per line
+
+**Example:**
+```bash
+python test_api.py send io.network.setHttpHeaders -p headers='X-Api-Key: secret'
+```
+
+#### 🟢 `io.network.setHttpInterval`
+Set the HTTP poll interval. `0` disables polling: the source then issues a request only when data is written to it.
+
+**Parameters:**
+- `interval` (int): Milliseconds, `0` or 10-3600000
+
+**Example:**
+```bash
+python test_api.py send io.network.setHttpInterval -p interval=250
+```
+
+#### 🟢 `io.network.setIgnoreTlsErrors`
+Accept an untrusted certificate on `wss://` and `https://` endpoints. Off by default; every connection that uses the bypass reports it on the console.
+
+**Parameters:**
+- `enabled` (bool): true to bypass certificate verification
+
+**Example:**
+```bash
+python test_api.py send io.network.setIgnoreTlsErrors -p enabled=true
 ```
 
 #### 🟢 `io.network.lookup`

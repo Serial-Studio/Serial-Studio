@@ -1,18 +1,18 @@
 {
   "spec": "0039-session-context",
   "regenerate": "python scripts/code-verify.py --singleton-census --accept",
-  "total": 1701,
+  "total": 1704,
   "files": 211,
   "buckets": {
     "root": 156,
     "accessor": 68,
     "ctor-capture": 105,
     "deferred": 20,
-    "static-cache": 1228,
+    "static-cache": 1231,
     "loose": 124
   },
   "per_class": {
-    "IO::ConnectionManager": 219,
+    "IO::ConnectionManager": 222,
     "DataModel::ProjectModel": 218,
     "AppState": 132,
     "CommandRegistry": 102,
@@ -480,13 +480,13 @@
       }
     },
     "app/src/API/Handlers/NetworkHandler.cpp": {
-      "total": 10,
+      "total": 11,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 10,
+        "static-cache": 11,
         "loose": 0
       }
     },
@@ -1657,13 +1657,13 @@
       }
     },
     "app/src/Misc/CLI.cpp": {
-      "total": 44,
+      "total": 46,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 44,
+        "static-cache": 46,
         "loose": 0
       }
     },

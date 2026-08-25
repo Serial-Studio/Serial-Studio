@@ -19,107 +19,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
-// Winsock must precede anything that can reach <windows.h>, hence above the Qt includes
-#ifdef _WIN32
-#  include <winsock2.h>
-#  include <ws2tcpip.h>
-#else
-#  include <fcntl.h>
-#  include <netdb.h>
-#  include <poll.h>
-#  include <unistd.h>
-
-#  include <cerrno>
-#  include <sys/socket.h>
-#endif
-
-#include <QElapsedTimer>
-#include <QThread>
+#include "IO/Drivers/Network.h"
 
 #include "IO/ConnectionManager.h"
-#include "IO/Drivers/Network.h"
 #include "Misc/Utilities.h"
-#include "SSAssert.h"
 
-static constexpr int kNetworkDialDeadlineMs = 5000;
-static constexpr int kNetworkDialPaceMs     = 250;
-
-#ifdef Q_OS_WIN
-using ProbeSocket                           = SOCKET;
-using ProbeLen                              = int;
-using ProbePoll                             = WSAPOLLFD;
-static constexpr ProbeSocket kNoProbeSocket = INVALID_SOCKET;
-static constexpr int kProbeRefused          = WSAECONNREFUSED;
-#else
-using ProbeSocket                           = int;
-using ProbeLen                              = socklen_t;
-using ProbePoll                             = pollfd;
-static constexpr ProbeSocket kNoProbeSocket = -1;
-static constexpr int kProbeRefused          = ECONNREFUSED;
-#endif
-
-/**
- * @brief Waits for the probe socket to become writable; a wrapper because clang-cl refuses the
- *        dllimport'ed WSAPoll address as a constant expression.
- */
-static inline int probePoll(ProbePoll* fds, int timeoutMs)
-{
-#ifdef Q_OS_WIN
-  return ::WSAPoll(fds, 1, timeoutMs);
-#else
-  return ::poll(fds, 1, timeoutMs);
-#endif
-}
-
-/**
- * @brief Whether the last connect() merely started an asynchronous dial rather than failing.
- */
-[[nodiscard]] static bool probeConnectPending()
-{
-#ifdef Q_OS_WIN
-  return ::WSAGetLastError() == WSAEWOULDBLOCK;
-#else
-  return errno == EINPROGRESS;
-#endif
-}
-
-/**
- * @brief Whether the last connect() failed outright because the endpoint refused the connection.
- */
-[[nodiscard]] static bool probeLastErrorRefused()
-{
-#ifdef Q_OS_WIN
-  return ::WSAGetLastError() == WSAECONNREFUSED;
-#else
-  return errno == ECONNREFUSED;
-#endif
-}
-
-/**
- * @brief Closes a probe descriptor on either platform.
- */
-static void closeProbeSocket(ProbeSocket handle)
-{
-#ifdef Q_OS_WIN
-  ::closesocket(handle);
-#else
-  ::close(handle);
-#endif
-}
-
-/**
- * @brief Puts a probe descriptor in non-blocking mode so the connect can be bounded by select().
- */
-[[nodiscard]] static bool markProbeNonBlocking(ProbeSocket handle)
-{
-#ifdef Q_OS_WIN
-  u_long mode = 1;
-  return ::ioctlsocket(handle, FIONBIO, &mode) == 0;
-#else
-  const int flags = ::fcntl(handle, F_GETFL, 0);
-  return flags != -1 && ::fcntl(handle, F_SETFL, flags | O_NONBLOCK) != -1;
-#endif
-}
+static constexpr int kHttpMinIntervalMs = 10;
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access functions
@@ -132,8 +37,22 @@ IO::Drivers::Network::Network()
   : m_udpMulticast(false)
   , m_lookupActive(false)
   , m_lookupId(-1)
+  , m_socketType(SocketType::Tcp)
+  , m_webSocketFormat(0)
+  , m_ignoreTlsErrors(false)
+  , m_dialPending(false)
+  , m_httpMethod(0)
+  , m_httpInterval(defaultHttpInterval())
+  , m_httpActive(false)
+  , m_httpFailureLogged(false)
+  , m_pollsOk(0)
+  , m_pollsFailed(0)
+  , m_pollsSkipped(0)
+  , m_consecutiveFailures(0)
   , m_tcpSocket(new QTcpSocket)
   , m_udpSocket(new QUdpSocket)
+  , m_webSocket(new QWebSocket)
+  , m_httpManager(new QNetworkAccessManager)
 {
   // clang-format off
   auto socketType = m_settings.value("NetworkDriver/socketType", 0).toInt();
@@ -142,14 +61,30 @@ IO::Drivers::Network::Network()
   auto udpMulticastEnabled = m_settings.value("NetworkDriver/udpMulticastEnabled", false).toBool();
   auto udpLocalPort = m_settings.value("NetworkDriver/udpLocalPort", defaultUdpLocalPort()).toInt();
   auto udpRemotePort = m_settings.value("NetworkDriver/udpRemotePort", defaultUdpRemotePort()).toInt();
+  auto ignoreTlsErrors = m_settings.value("NetworkDriver/ignoreTlsErrors", false).toBool();
+  auto webSocketFormat = m_settings.value("NetworkDriver/webSocketFormat", 0).toInt();
+  auto webSocketUrl = m_settings.value("NetworkDriver/webSocketUrl", defaultWebSocketUrl()).toString();
+  auto httpBody = m_settings.value("NetworkDriver/httpBody", "").toString();
+  auto httpMethod = m_settings.value("NetworkDriver/httpMethod", 0).toInt();
+  auto httpHeaders = m_settings.value("NetworkDriver/httpHeaders", "").toString();
+  auto httpUrl = m_settings.value("NetworkDriver/httpUrl", defaultHttpUrl()).toString();
+  auto httpInterval = m_settings.value("NetworkDriver/httpInterval", defaultHttpInterval()).toInt();
   // clang-format on
 
   setTcpPort(tcpPort);
   setUdpLocalPort(udpLocalPort);
   setUdpRemotePort(udpRemotePort);
   setRemoteAddress(remoteAddress);
+  setWebSocketUrl(webSocketUrl);
+  setIgnoreTlsErrors(ignoreTlsErrors);
   setUdpMulticast(udpMulticastEnabled);
-  setSocketType(static_cast<QAbstractSocket::SocketType>(socketType));
+  setWebSocketFormatIndex(webSocketFormat);
+  setHttpUrl(httpUrl);
+  setHttpBody(httpBody);
+  setHttpHeaders(httpHeaders);
+  setHttpInterval(httpInterval);
+  setHttpMethodIndex(httpMethod);
+  setSocketTypeIndex(socketType);
 
   connect(
     this, &IO::Drivers::Network::addressChanged, this, &IO::Drivers::Network::configurationChanged);
@@ -159,6 +94,15 @@ IO::Drivers::Network::Network()
           &IO::Drivers::Network::configurationChanged);
   connect(
     this, &IO::Drivers::Network::portChanged, this, &IO::Drivers::Network::configurationChanged);
+  connect(this,
+          &IO::Drivers::Network::webSocketChanged,
+          this,
+          &IO::Drivers::Network::configurationChanged);
+  connect(
+    this, &IO::Drivers::Network::httpChanged, this, &IO::Drivers::Network::configurationChanged);
+
+  m_pollTimer.setSingleShot(false);
+  connect(&m_pollTimer, &QTimer::timeout, this, &IO::Drivers::Network::onPollTimeout);
 
   connect(
     m_tcpSocket, &QAbstractSocket::stateChanged, this, &IO::Drivers::Network::onTcpStateChanged);
@@ -166,7 +110,7 @@ IO::Drivers::Network::Network()
     Q_EMIT configurationChanged();
   });
 
-  connect(m_udpSocket, &QUdpSocket::errorOccurred, this, &IO::Drivers::Network::onErrorOccurred);
+  connect(m_udpSocket, &QUdpSocket::errorOccurred, this, &IO::Drivers::Network::onUdpError);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -184,24 +128,23 @@ IO::Drivers::Network::~Network()
 
   m_tcpSocket->deleteLater();
   m_udpSocket->deleteLater();
+  m_webSocket->deleteLater();
+  m_httpManager->deleteLater();
 }
 
 /**
- * @brief Closes the current network connection. Nothing may redial after close() returns: there
- *        are no dial or reopen timers left to cancel.
+ * @brief Closes every transport rather than the selected one: a socket type changed while a link
+ *        was up would otherwise strand the socket that is actually open. Nothing may redial after
+ *        close() returns: there are no dial or reopen timers left to cancel.
  */
 void IO::Drivers::Network::close()
 {
-  disconnect(m_tcpSocket, &QTcpSocket::readyRead, this, &IO::Drivers::Network::onReadyRead);
-  disconnect(m_udpSocket, &QUdpSocket::readyRead, this, &IO::Drivers::Network::onReadyRead);
-  disconnect(m_tcpSocket, &QTcpSocket::errorOccurred, this, &IO::Drivers::Network::onErrorOccurred);
+  closeTcp();
+  closeUdp();
+  closeHttp();
+  closeWebSocket();
 
-  m_tcpSocket->abort();
-  m_udpSocket->abort();
-  m_tcpSocket->close();
-  m_udpSocket->close();
-  m_tcpSocket->disconnectFromHost();
-  m_udpSocket->disconnectFromHost();
+  m_dialPending = false;
 }
 
 /**
@@ -209,16 +152,28 @@ void IO::Drivers::Network::close()
  */
 bool IO::Drivers::Network::isOpen() const noexcept
 {
-  if (socketType() == QAbstractSocket::TcpSocket)
-    return m_tcpSocket->isOpen() && tcpLinkUp();
+  if (socketType() == SocketType::Tcp)
+    return tcpOpen();
 
-  if (socketType() == QAbstractSocket::UdpSocket) {
-    const auto state = m_udpSocket->state();
-    return m_udpSocket->isOpen()
-        && (state == QUdpSocket::ConnectedState || state == QUdpSocket::BoundState);
-  }
+  if (socketType() == SocketType::Udp)
+    return udpOpen();
+
+  if (socketType() == SocketType::WebSocket)
+    return webSocketOpen();
+
+  if (socketType() == SocketType::Http)
+    return httpOpen();
 
   return false;
+}
+
+/**
+ * @brief Returns true while an asynchronous dial is in flight. TCP and UDP never report one:
+ *        both settle inside open(), and the return value is their whole verdict.
+ */
+bool IO::Drivers::Network::isConnecting() const noexcept
+{
+  return m_dialPending;
 }
 
 /**
@@ -226,10 +181,17 @@ bool IO::Drivers::Network::isOpen() const noexcept
  */
 bool IO::Drivers::Network::isReadable() const noexcept
 {
-  if (socketType() == QAbstractSocket::UdpSocket)
-    return m_udpSocket->isReadable();
-  else if (socketType() == QAbstractSocket::TcpSocket)
-    return m_tcpSocket->isReadable();
+  if (socketType() == SocketType::Tcp)
+    return tcpReadable();
+
+  if (socketType() == SocketType::Udp)
+    return udpReadable();
+
+  if (socketType() == SocketType::WebSocket)
+    return webSocketOpen();
+
+  if (socketType() == SocketType::Http)
+    return httpOpen();
 
   return false;
 }
@@ -239,10 +201,17 @@ bool IO::Drivers::Network::isReadable() const noexcept
  */
 bool IO::Drivers::Network::isWritable() const noexcept
 {
-  if (socketType() == QAbstractSocket::UdpSocket)
-    return m_udpSocket->isWritable();
-  else if (socketType() == QAbstractSocket::TcpSocket)
-    return m_tcpSocket->isWritable();
+  if (socketType() == SocketType::Tcp)
+    return tcpWritable();
+
+  if (socketType() == SocketType::Udp)
+    return udpWritable();
+
+  if (socketType() == SocketType::WebSocket)
+    return webSocketWritable();
+
+  if (socketType() == SocketType::Http)
+    return httpOpen();
 
   return false;
 }
@@ -255,10 +224,16 @@ bool IO::Drivers::Network::isWritable() const noexcept
  */
 bool IO::Drivers::Network::configurationOk() const noexcept
 {
-  if (socketType() == QAbstractSocket::UdpSocket)
-    return udpRemotePort() > 0;
+  if (socketType() == SocketType::Udp)
+    return udpConfigured();
 
-  return tcpPort() > 0;
+  if (socketType() == SocketType::WebSocket)
+    return webSocketConfigured();
+
+  if (socketType() == SocketType::Http)
+    return httpConfigured();
+
+  return tcpConfigured();
 }
 
 /**
@@ -266,19 +241,20 @@ bool IO::Drivers::Network::configurationOk() const noexcept
  */
 qint64 IO::Drivers::Network::write(const QByteArray& data)
 {
-  if (isWritable()) {
-    if (socketType() == QAbstractSocket::UdpSocket) {
-      const QHostAddress dest =
-        m_resolvedAddress.isNull() ? QHostAddress(m_address) : m_resolvedAddress;
-      if (dest.isNull())
-        return -1;
+  if (!isWritable())
+    return 0;
 
-      return m_udpSocket->writeDatagram(data, dest, udpRemotePort());
-    }
+  if (socketType() == SocketType::Tcp)
+    return writeTcp(data);
 
-    else if (socketType() == QAbstractSocket::TcpSocket)
-      return m_tcpSocket->write(data);
-  }
+  if (socketType() == SocketType::Udp)
+    return writeUdp(data);
+
+  if (socketType() == SocketType::WebSocket)
+    return writeWebSocket(data);
+
+  if (socketType() == SocketType::Http)
+    return writeHttp(data);
 
   return 0;
 }
@@ -291,240 +267,88 @@ bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
 {
   close();
 
-  auto hostAddr = remoteAddress();
-  if (hostAddr.isEmpty())
-    hostAddr = defaultAddress();
+  if (socketType() == SocketType::Tcp)
+    return openTcp(mode);
 
-  if (socketType() == QAbstractSocket::TcpSocket)
-    return dialTcpBlocking(hostAddr, mode);
+  if (socketType() == SocketType::Udp)
+    return openUdp(mode);
 
-  QIODevice* socket = nullptr;
+  if (socketType() == SocketType::WebSocket)
+    return openWebSocket(mode);
 
-  if (socketType() == QAbstractSocket::UdpSocket) {
-    if (!m_address.isEmpty() && m_resolvedAddress.isNull() && !m_lookupActive)
-      lookup(m_address);
+  if (socketType() == SocketType::Http)
+    return openHttp(mode);
 
-    if (!m_udpSocket->bind(udpLocalPort(),
-                           QAbstractSocket::ShareAddress | QAbstractSocket::ReuseAddressHint)) {
-      qWarning() << "UDP bind failed on port" << udpLocalPort() << ":"
-                 << m_udpSocket->errorString();
-      close();
-      return false;
-    }
-
-    enlargeUdpReceiveBuffer();
-    socket = static_cast<QIODevice*>(m_udpSocket);
-  }
-
-  if (socketType() == QAbstractSocket::UdpSocket && udpMulticast()) {
-    const QHostAddress literal(m_address);
-    const QHostAddress group = literal.isNull() ? m_resolvedAddress : literal;
-    if (group.isNull() || !m_udpSocket->joinMulticastGroup(group)) {
-      qWarning() << "UDP multicast join failed for" << m_address << ":"
-                 << m_udpSocket->errorString();
-      close();
-      return false;
-    }
-  }
-
-  if (socket && socket->open(mode)) {
-    connect(socket, &QIODevice::readyRead, this, &IO::Drivers::Network::onReadyRead);
-    return true;
-  }
-
-  close();
   return false;
 }
 
 /**
- * @brief Returns true for an established TCP link. The state alone is trustworthy because the
- *        blocking dial's waitForConnected() verdict is authoritative and every retry aborts a
- *        non-idle socket before redialing (the 2026-07 phantom-connect trigger was an abort and
- *        a dial racing in the same event-loop turn with the outcome read from signals).
+ * @brief Resolves the URL the active transport dials, reporting why an unusable one is unusable.
+ *        configurationOk() and open() both come through here: a second validation rule is how the
+ *        Connect button and the open path drifted apart for DNS once already.
  */
-bool IO::Drivers::Network::tcpLinkUp() const
+bool IO::Drivers::Network::urlForCurrentMode(QUrl& url, QString& reason) const
 {
-  return m_tcpSocket->state() == QAbstractSocket::ConnectedState;
-}
+  QString raw;
+  QStringList schemes;
 
-/**
- * @brief Waits inside the deadline for @p host:@p port to accept, re-pacing refused attempts (a
- *        script-launched helper needs a moment to bind). Each attempt uses a throwaway socket
- *        destroyed inside the blocked section: abort-and-redial churn on a run-loop-registered
- *        socket leaves stale CFSocket sources that crashed readFromSocket (2026-08-10, macOS).
- */
-/**
- * @brief Runs one bounded non-blocking connect against @p address, reporting an active refusal
- *        separately so the caller retries only while something is listening but not yet ready.
- *        poll() rather than select(): a descriptor past FD_SETSIZE overruns an fd_set, and the
- *        app holds session-DB, export and device descriptors alongside this one.
- */
-[[nodiscard]] static bool probeTcpOnce(const addrinfo* address, int timeoutMs, bool& refused)
-{
-  SS_ASSERT(address != nullptr, return false);
-  SS_ASSERT(timeoutMs >= 0, timeoutMs = 0);
+  if (socketType() == SocketType::WebSocket) {
+    raw     = m_webSocketUrl;
+    schemes = {QStringLiteral("ws"), QStringLiteral("wss")};
+  }
 
-  refused = false;
+  else if (socketType() == SocketType::Http) {
+    raw     = m_httpUrl;
+    schemes = {QStringLiteral("http"), QStringLiteral("https")};
+  }
 
-  const ProbeSocket handle =
-    ::socket(address->ai_family, address->ai_socktype, address->ai_protocol);
-  if (handle == kNoProbeSocket)
-    return false;
-
-  if (!markProbeNonBlocking(handle)) {
-    closeProbeSocket(handle);
+  else {
+    reason = tr("This socket type does not use a URL");
     return false;
   }
 
-  const int dialed =
-    ::connect(handle, address->ai_addr, static_cast<ProbeLen>(address->ai_addrlen));
-  if (dialed == 0) {
-    closeProbeSocket(handle);
-    return true;
-  }
-
-  if (!probeConnectPending()) {
-    refused = probeLastErrorRefused();
-    closeProbeSocket(handle);
+  const QString trimmed = raw.trimmed();
+  if (trimmed.isEmpty()) {
+    reason = tr("Enter a URL first");
     return false;
   }
 
-  ProbePoll pending{};
-  pending.fd     = handle;
-  pending.events = POLLOUT;
-
-  const int ready = probePoll(&pending, timeoutMs);
-  if (ready <= 0) {
-    closeProbeSocket(handle);
+  const QUrl parsed(trimmed, QUrl::StrictMode);
+  if (!parsed.isValid() || parsed.host().isEmpty()) {
+    reason = tr("\"%1\" is not a valid URL").arg(trimmed);
     return false;
   }
 
-  int error          = 0;
-  ProbeLen errorSize = sizeof(error);
-  const int queried =
-    ::getsockopt(handle, SOL_SOCKET, SO_ERROR, reinterpret_cast<char*>(&error), &errorSize);
-  closeProbeSocket(handle);
-
-  refused = (queried == 0 && error == kProbeRefused);
-  return queried == 0 && error == 0;
-}
-
-/**
- * @brief Waits for @p host:@p port to accept connections, retrying only while the endpoint
- *        actively refuses. Every resolved address is tried, as QTcpSocket::connectToHost() does:
- *        probing only the first record makes this stricter than the dial it gates, and a
- *        dual-stack host commonly resolves ::1 ahead of an IPv4-only listener.
- */
-static bool waitForTcpEndpoint(const QString& host, quint16 port, QString& reason)
-{
-  SS_ASSERT(port != 0, return false);
-  SS_ASSERT_LOG(!host.isEmpty());
-
-  addrinfo hints{};
-  hints.ai_family   = AF_UNSPEC;
-  hints.ai_socktype = SOCK_STREAM;
-  hints.ai_flags    = AI_ADDRCONFIG;
-
-  const QByteArray node    = host.toUtf8();
-  const QByteArray service = QByteArray::number(port);
-
-  addrinfo* resolved = nullptr;
-  if (::getaddrinfo(node.constData(), service.constData(), &hints, &resolved) != 0 || !resolved) {
-    reason = QObject::tr("Host not found");
+  if (!schemes.contains(parsed.scheme(), Qt::CaseInsensitive)) {
+    reason =
+      tr("\"%1\" must start with %2://").arg(trimmed, schemes.join(QStringLiteral(":// or ")));
     return false;
   }
 
-  QElapsedTimer deadline;
-  deadline.start();
-
-  while (deadline.elapsed() < kNetworkDialDeadlineMs) {
-    bool refusedAny = false;
-    for (const addrinfo* it = resolved; it != nullptr; it = it->ai_next) {
-      const int remaining = kNetworkDialDeadlineMs - static_cast<int>(deadline.elapsed());
-      if (remaining <= 0)
-        break;
-
-      bool refused = false;
-      if (probeTcpOnce(it, remaining, refused)) {
-        ::freeaddrinfo(resolved);
-        return true;
-      }
-
-      refusedAny = refusedAny || refused;
-    }
-
-    if (!refusedAny) {
-      reason = QObject::tr("Connection failed");
-      ::freeaddrinfo(resolved);
-      return false;
-    }
-
-    QThread::msleep(kNetworkDialPaceMs);
-  }
-
-  reason = QObject::tr("Connection timed out");
-  ::freeaddrinfo(resolved);
-  return false;
-}
-
-/**
- * @brief Dials TCP synchronously under the connect wait cursor and returns the final verdict.
- *        A throwaway probe absorbs the retry churn; the driver's own socket then connects
- *        exactly once per open(), never seeing an abort-and-redial cycle. The readyRead and
- *        errorOccurred handlers are wired only on success: dial failures are owned here.
- */
-bool IO::Drivers::Network::dialTcpBlocking(const QString& host, const QIODevice::OpenMode mode)
-{
-  QString reason;
-  if (!waitForTcpEndpoint(host, tcpPort(), reason)) {
-    logDriverError(
-      tr("Network socket error"),
-      tr("Cannot connect to %1:%2 (%3)").arg(host, QString::number(tcpPort()), reason));
-    return false;
-  }
-
-  m_tcpSocket->connectToHost(host, tcpPort(), mode);
-  if (!m_tcpSocket->waitForConnected(kNetworkDialDeadlineMs)) {
-    const QString finalReason = m_tcpSocket->errorString();
-    m_tcpSocket->abort();
-    logDriverError(
-      tr("Network socket error"),
-      tr("Cannot connect to %1:%2 (%3)").arg(host, QString::number(tcpPort()), finalReason));
-    return false;
-  }
-
-  connect(m_tcpSocket,
-          &QTcpSocket::readyRead,
-          this,
-          &IO::Drivers::Network::onReadyRead,
-          Qt::UniqueConnection);
-  connect(m_tcpSocket,
-          &QTcpSocket::errorOccurred,
-          this,
-          &IO::Drivers::Network::onErrorOccurred,
-          Qt::UniqueConnection);
+  url = parsed;
   return true;
 }
 
 /**
- * @brief Forwards every TCP state transition so ConnectionManager can refresh connected state.
+ * @brief Settles an asynchronous dial as successful. The base-class latch makes a second report
+ *        for the same attempt a no-op, so an established-link event cannot masquerade as one.
  */
-void IO::Drivers::Network::onTcpStateChanged()
+void IO::Drivers::Network::succeedDial()
 {
+  m_dialPending = false;
+  reportOpenFinished(true);
   Q_EMIT configurationChanged();
 }
 
 /**
- * @brief Requests a large kernel receive buffer on the bound UDP socket so a bursty high-rate
- *        sender is not dropped before the event loop drains it. Windows' default UDP SO_RCVBUF
- *        is only tens of KB and overflows under loopback floods (Linux/macOS default much
- *        higher); the OS caps the request to its allowed maximum.
+ * @brief Settles an asynchronous dial as failed. It only reports: ConnectionManager closes the
+ *        device itself on a failed verdict, so tearing down here as well would double-close.
  */
-void IO::Drivers::Network::enlargeUdpReceiveBuffer()
+void IO::Drivers::Network::failDial(const QString& reason)
 {
-  constexpr int kUdpReceiveBufferBytes = 8 * 1024 * 1024;
-  m_udpSocket->setSocketOption(QAbstractSocket::ReceiveBufferSizeSocketOption,
-                               kUdpReceiveBufferBytes);
+  m_dialPending = false;
+  logDriverError(tr("Network socket error"), reason);
+  reportOpenFinished(false, reason);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -572,21 +396,12 @@ bool IO::Drivers::Network::lookupActive() const
 }
 
 /**
- * @brief Returns the current socket type as an index of the list returned by socketType().
+ * @brief Returns the current socket type as an index of the socketTypes() list. The enumerator
+ *        numbering is that index, so this is a cast rather than a mapping.
  */
 int IO::Drivers::Network::socketTypeIndex() const
 {
-  switch (socketType()) {
-    case QAbstractSocket::TcpSocket:
-      return 0;
-      break;
-    case QAbstractSocket::UdpSocket:
-      return 1;
-      break;
-    default:
-      return -1;
-      break;
-  }
+  return static_cast<int>(socketType());
 }
 
 /**
@@ -605,13 +420,137 @@ QStringList IO::Drivers::Network::socketTypes() const
   QStringList list;
   list.append(QStringLiteral("TCP"));
   list.append(QStringLiteral("UDP"));
+  list.append(QStringLiteral("WebSocket"));
+  list.append(QStringLiteral("HTTP"));
   return list;
+}
+
+/**
+ * @brief Returns the HTTP methods, indexed as the property stores them.
+ */
+QStringList IO::Drivers::Network::httpMethods() const
+{
+  QStringList list;
+  list.append(QStringLiteral("GET"));
+  list.append(QStringLiteral("POST"));
+  list.append(QStringLiteral("PUT"));
+  list.append(QStringLiteral("PATCH"));
+  list.append(QStringLiteral("DELETE"));
+  return list;
+}
+
+/**
+ * @brief Returns the labels of the WebSocket send formats, indexed as the property stores them.
+ */
+QStringList IO::Drivers::Network::webSocketFormats() const
+{
+  QStringList list;
+  list.append(tr("Automatic"));
+  list.append(tr("Text"));
+  list.append(tr("Binary"));
+  return list;
+}
+
+/**
+ * @brief Returns the configured WebSocket endpoint.
+ */
+const QString& IO::Drivers::Network::webSocketUrl() const
+{
+  return m_webSocketUrl;
+}
+
+/**
+ * @brief Returns the WebSocket send format as an index of webSocketFormats().
+ */
+int IO::Drivers::Network::webSocketFormatIndex() const
+{
+  return m_webSocketFormat;
+}
+
+/**
+ * @brief Returns true when certificate verification is bypassed for the URL transports.
+ */
+bool IO::Drivers::Network::ignoreTlsErrors() const
+{
+  return m_ignoreTlsErrors;
+}
+
+/**
+ * @brief Returns the configured REST endpoint.
+ */
+const QString& IO::Drivers::Network::httpUrl() const
+{
+  return m_httpUrl;
+}
+
+/**
+ * @brief Returns the request body sent with every poll.
+ */
+const QString& IO::Drivers::Network::httpBody() const
+{
+  return m_httpBody;
+}
+
+/**
+ * @brief Returns the custom request headers, one @c Name: @c Value pair per line.
+ */
+const QString& IO::Drivers::Network::httpHeaders() const
+{
+  return m_httpHeaders;
+}
+
+/**
+ * @brief Returns the HTTP method as an index of httpMethods().
+ */
+int IO::Drivers::Network::httpMethodIndex() const
+{
+  return m_httpMethod;
+}
+
+/**
+ * @brief Returns the poll interval in milliseconds; 0 means requests are sent only on a write.
+ */
+int IO::Drivers::Network::httpInterval() const
+{
+  return m_httpInterval;
+}
+
+/**
+ * @brief Returns how many polls of this run returned a usable response.
+ */
+quint64 IO::Drivers::Network::pollsOk() const
+{
+  return m_pollsOk;
+}
+
+/**
+ * @brief Returns how many polls of this run failed.
+ */
+quint64 IO::Drivers::Network::pollsFailed() const
+{
+  return m_pollsFailed;
+}
+
+/**
+ * @brief Returns how many polls were skipped because the previous response had not arrived.
+ */
+quint64 IO::Drivers::Network::pollsSkipped() const
+{
+  return m_pollsSkipped;
+}
+
+/**
+ * @brief Returns the length of the current run of consecutive failures; a success resets it.
+ */
+quint64 IO::Drivers::Network::consecutiveFailures() const
+{
+  return m_consecutiveFailures;
 }
 
 /**
  * @brief Returns the active socket type (TCP or UDP).
  */
-QAbstractSocket::SocketType IO::Drivers::Network::socketType() const
+IO::Drivers::Network::SocketType IO::Drivers::Network::socketType() const
 {
   return m_socketType;
 }
@@ -621,7 +560,7 @@ QAbstractSocket::SocketType IO::Drivers::Network::socketType() const
  */
 void IO::Drivers::Network::setTcpSocket()
 {
-  setSocketType(QAbstractSocket::TcpSocket);
+  setSocketType(SocketType::Tcp);
 }
 
 /**
@@ -629,7 +568,7 @@ void IO::Drivers::Network::setTcpSocket()
  */
 void IO::Drivers::Network::setUdpSocket()
 {
-  setSocketType(QAbstractSocket::UdpSocket);
+  setSocketType(SocketType::Udp);
 }
 
 /**
@@ -726,26 +665,131 @@ void IO::Drivers::Network::setUdpMulticast(const bool enabled)
 }
 
 /**
- * @brief Changes the current socket type given an index of the socketTypes() list.
+ * @brief Changes the socket type given an index of the socketTypes() list. An index this build
+ *        does not know is ignored rather than applied, so a project written by a newer build
+ *        leaves this one on its previous transport instead of an unusable one.
  */
 void IO::Drivers::Network::setSocketTypeIndex(const int index)
 {
-  switch (index) {
-    case 0:
-      setTcpSocket();
-      break;
-    case 1:
-      setUdpSocket();
-      break;
-    default:
-      break;
-  }
+  if (index < 0 || index >= socketTypes().count())
+    return;
+
+  setSocketType(static_cast<SocketType>(index));
+}
+
+/**
+ * @brief Sets the WebSocket endpoint. The URL is stored as typed and validated at connect time,
+ *        so a half-typed address does not spend the edit fighting the field.
+ */
+void IO::Drivers::Network::setWebSocketUrl(const QString& url)
+{
+  if (m_webSocketUrl == url)
+    return;
+
+  m_webSocketUrl = url;
+  m_settings.setValue("NetworkDriver/webSocketUrl", url);
+  Q_EMIT webSocketChanged();
+}
+
+/**
+ * @brief Chooses how written payloads are framed: automatic, text, or binary.
+ */
+void IO::Drivers::Network::setWebSocketFormatIndex(const int index)
+{
+  if (m_webSocketFormat == index || index < 0 || index >= webSocketFormats().count())
+    return;
+
+  m_webSocketFormat = index;
+  m_settings.setValue("NetworkDriver/webSocketFormat", index);
+  Q_EMIT webSocketChanged();
+}
+
+/**
+ * @brief Enables or disables the certificate-verification bypass used by wss:// and https://.
+ */
+void IO::Drivers::Network::setIgnoreTlsErrors(const bool enabled)
+{
+  if (m_ignoreTlsErrors == enabled)
+    return;
+
+  m_ignoreTlsErrors = enabled;
+  m_settings.setValue("NetworkDriver/ignoreTlsErrors", enabled);
+  Q_EMIT ignoreTlsErrorsChanged();
+}
+
+/**
+ * @brief Sets the REST endpoint. Stored as typed and validated at connect time, so a half-typed
+ *        address does not spend the edit fighting the field.
+ */
+void IO::Drivers::Network::setHttpUrl(const QString& url)
+{
+  if (m_httpUrl == url)
+    return;
+
+  m_httpUrl = url;
+  m_settings.setValue("NetworkDriver/httpUrl", url);
+  Q_EMIT httpChanged();
+}
+
+/**
+ * @brief Sets the body sent with every request.
+ */
+void IO::Drivers::Network::setHttpBody(const QString& body)
+{
+  if (m_httpBody == body)
+    return;
+
+  m_httpBody = body;
+  m_settings.setValue("NetworkDriver/httpBody", body);
+  Q_EMIT httpChanged();
+}
+
+/**
+ * @brief Sets the custom request headers, one @c Name: @c Value pair per line.
+ */
+void IO::Drivers::Network::setHttpHeaders(const QString& headers)
+{
+  if (m_httpHeaders == headers)
+    return;
+
+  m_httpHeaders = headers;
+  m_settings.setValue("NetworkDriver/httpHeaders", headers);
+  Q_EMIT httpChanged();
+}
+
+/**
+ * @brief Selects the HTTP method by index of httpMethods().
+ */
+void IO::Drivers::Network::setHttpMethodIndex(const int index)
+{
+  if (m_httpMethod == index || index < 0 || index >= httpMethods().count())
+    return;
+
+  m_httpMethod = index;
+  m_settings.setValue("NetworkDriver/httpMethod", index);
+  Q_EMIT httpChanged();
+}
+
+/**
+ * @brief Sets the poll interval. Zero keeps the source silent until something is written; any
+ *        other value is floored, because a handful of microseconds between requests is a way to
+ *        hammer a public API by accident rather than a usable sample rate.
+ */
+void IO::Drivers::Network::setHttpInterval(const int interval)
+{
+  const int bounded = interval <= 0 ? 0 : qMax(interval, kHttpMinIntervalMs);
+  if (m_httpInterval == bounded)
+    return;
+
+  m_httpInterval = bounded;
+  m_settings.setValue("NetworkDriver/httpInterval", bounded);
+  Q_EMIT httpChanged();
 }
 
 /**
  * @brief Changes the socket type.
  */
-void IO::Drivers::Network::setSocketType(const QAbstractSocket::SocketType type)
+void IO::Drivers::Network::setSocketType(const SocketType type)
 {
   if (m_socketType == type)
     return;
@@ -753,25 +797,6 @@ void IO::Drivers::Network::setSocketType(const QAbstractSocket::SocketType type)
   m_socketType = type;
   m_settings.setValue("NetworkDriver/socketType", static_cast<int>(type));
   Q_EMIT socketTypeChanged();
-}
-
-/**
- * @brief Reads incoming data from the UDP/TCP ports.
- */
-void IO::Drivers::Network::onReadyRead()
-{
-  if (socketType() == QAbstractSocket::UdpSocket) {
-    constexpr int kMaxDatagramsPerRead = 256;
-    for (int n = 0; n < kMaxDatagramsPerRead && udpSocket()->hasPendingDatagrams(); ++n) {
-      const qint64 size = udpSocket()->pendingDatagramSize();
-      m_udpBuffer.resize(size);
-      udpSocket()->readDatagram(m_udpBuffer.data(), m_udpBuffer.size());
-      publishReceivedData(m_udpBuffer);
-    }
-  }
-
-  else if (socketType() == QAbstractSocket::TcpSocket)
-    publishReceivedData(tcpSocket()->readAll());
 }
 
 /**
@@ -808,24 +833,12 @@ QHostAddress IO::Drivers::Network::preferredAddress(const QList<QHostAddress>& a
 }
 
 /**
- * @brief Handles errors on an established link: report once, tear down, stay down. The TCP
- *        handler is wired only after a successful dial (dialTcpBlocking() owns dial failures);
- *        the box is queued on the connection manager because the teardown destroys this driver.
+ * @brief Handles an error on an established link: report once, tear down, stay down. Dial
+ *        failures never reach here, because dialTcpBlocking() owns them; the teardown is queued
+ *        on the connection manager because it destroys this driver.
  */
-void IO::Drivers::Network::onErrorOccurred(const QAbstractSocket::SocketError socketError)
+void IO::Drivers::Network::reportLinkError(const QString& error)
 {
-  if (socketType() == QAbstractSocket::UdpSocket
-      && socketError == QAbstractSocket::ConnectionRefusedError) [[unlikely]]
-    return;
-
-  QString error;
-  if (socketType() == QAbstractSocket::TcpSocket)
-    error = m_tcpSocket->errorString();
-  else if (socketType() == QAbstractSocket::UdpSocket)
-    error = m_udpSocket->errorString();
-  else
-    error = QString::number(socketError);
-
   static auto& connectionManager = ConnectionManager::instance();
   logDriverError(tr("Network socket error"), error);
   connectionManager.disconnectDevice(this);
@@ -841,7 +854,57 @@ void IO::Drivers::Network::onErrorOccurred(const QAbstractSocket::SocketError so
 QList<IO::DriverProperty> IO::Drivers::Network::driverProperties() const
 {
   QList<IO::DriverProperty> props;
+  appendSocketTypeProperty(props);
 
+  switch (socketType()) {
+    case SocketType::Tcp:
+      appendTcpProperties(props);
+      break;
+    case SocketType::Udp:
+      appendUdpProperties(props);
+      break;
+    case SocketType::WebSocket:
+      appendWebSocketProperties(props);
+      break;
+    case SocketType::Http:
+      appendHttpProperties(props);
+      break;
+  }
+
+  return props;
+}
+
+/**
+ * @brief Appends the TLS bypass row shared by the URL transports.
+ */
+void IO::Drivers::Network::appendTlsProperty(QList<IO::DriverProperty>& props) const
+{
+  IO::DriverProperty tls;
+  tls.key         = QStringLiteral("ignoreTlsErrors");
+  tls.label       = tr("Ignore TLS Errors");
+  tls.description = tr("Accept self-signed or mismatched certificates");
+  tls.type        = IO::DriverProperty::CheckBox;
+  tls.value       = m_ignoreTlsErrors;
+  props.append(tls);
+}
+
+/**
+ * @brief Applies the shared TLS property by key, reporting whether it was consumed.
+ */
+bool IO::Drivers::Network::applyTlsProperty(const QString& key, const QVariant& value)
+{
+  if (key != QLatin1String("ignoreTlsErrors"))
+    return false;
+
+  setIgnoreTlsErrors(value.toBool());
+  return true;
+}
+
+/**
+ * @brief Appends the transport selector, the one row every socket type shows.
+ */
+void IO::Drivers::Network::appendSocketTypeProperty(QList<IO::DriverProperty>& props) const
+{
   IO::DriverProperty socketTypeProp;
   socketTypeProp.key     = QStringLiteral("socketTypeIndex");
   socketTypeProp.label   = tr("Socket Type");
@@ -849,51 +912,31 @@ QList<IO::DriverProperty> IO::Drivers::Network::driverProperties() const
   socketTypeProp.value   = socketTypeIndex();
   socketTypeProp.options = socketTypes();
   props.append(socketTypeProp);
+}
 
+/**
+ * @brief Appends the remote address row shared by the host-and-port transports.
+ */
+void IO::Drivers::Network::appendAddressProperty(QList<IO::DriverProperty>& props) const
+{
   IO::DriverProperty addr;
   addr.key   = QStringLiteral("address");
   addr.label = tr("Remote Address");
   addr.type  = IO::DriverProperty::Text;
   addr.value = m_address;
   props.append(addr);
+}
 
-  if (m_socketType == QAbstractSocket::TcpSocket) {
-    IO::DriverProperty tcp;
-    tcp.key   = QStringLiteral("tcpPort");
-    tcp.label = tr("TCP Port");
-    tcp.type  = IO::DriverProperty::IntField;
-    tcp.value = m_tcpPort;
-    tcp.min   = 1;
-    tcp.max   = 65535;
-    props.append(tcp);
-  } else {
-    IO::DriverProperty udpLocal;
-    udpLocal.key   = QStringLiteral("udpLocalPort");
-    udpLocal.label = tr("UDP Local Port");
-    udpLocal.type  = IO::DriverProperty::IntField;
-    udpLocal.value = m_udpLocalPort;
-    udpLocal.min   = 0;
-    udpLocal.max   = 65535;
-    props.append(udpLocal);
+/**
+ * @brief Applies the shared address property by key, reporting whether it was consumed.
+ */
+bool IO::Drivers::Network::applyAddressProperty(const QString& key, const QVariant& value)
+{
+  if (key != QLatin1String("address"))
+    return false;
 
-    IO::DriverProperty udpRemote;
-    udpRemote.key   = QStringLiteral("udpRemotePort");
-    udpRemote.label = tr("UDP Remote Port");
-    udpRemote.type  = IO::DriverProperty::IntField;
-    udpRemote.value = m_udpRemotePort;
-    udpRemote.min   = 1;
-    udpRemote.max   = 65535;
-    props.append(udpRemote);
-
-    IO::DriverProperty multicast;
-    multicast.key   = QStringLiteral("udpMulticast");
-    multicast.label = tr("UDP Multicast");
-    multicast.type  = IO::DriverProperty::CheckBox;
-    multicast.value = m_udpMulticast;
-    props.append(multicast);
-  }
-
-  return props;
+  setRemoteAddress(value.toString());
+  return true;
 }
 
 /**
@@ -906,26 +949,20 @@ void IO::Drivers::Network::setDriverProperty(const QString& key, const QVariant&
     return;
   }
 
-  if (key == QLatin1String("address")) {
-    setRemoteAddress(value.toString());
+  if (applyAddressProperty(key, value))
     return;
-  }
 
-  if (key == QLatin1String("tcpPort")) {
-    setTcpPort(static_cast<quint16>(value.toInt()));
+  if (applyTcpProperty(key, value))
     return;
-  }
 
-  if (key == QLatin1String("udpLocalPort")) {
-    setUdpLocalPort(static_cast<quint16>(value.toInt()));
+  if (applyUdpProperty(key, value))
     return;
-  }
 
-  if (key == QLatin1String("udpRemotePort")) {
-    setUdpRemotePort(static_cast<quint16>(value.toInt()));
+  if (applyTlsProperty(key, value))
     return;
-  }
 
-  if (key == QLatin1String("udpMulticast"))
-    setUdpMulticast(value.toBool());
+  if (applyWebSocketProperty(key, value))
+    return;
+
+  (void)applyHttpProperty(key, value);
 }

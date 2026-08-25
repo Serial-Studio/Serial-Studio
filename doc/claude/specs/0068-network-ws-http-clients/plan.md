@@ -1,7 +1,7 @@
 ---
 spec: 0068-network-ws-http-clients
 phase: plan
-status: draft
+status: approved
 updated: 2026-08-25
 ---
 
@@ -24,19 +24,23 @@ is a `QWebSocket` member and the HTTP transport is a `QNetworkAccessManager` plu
 `Network` gains an `isConnecting()` override that is true **only** while a WS handshake or the
 HTTP opening request is in flight, and both report through the spec-0050 `reportOpenFinished()`
 latch exactly once per attempt — TCP keeps its synchronous `dialTcpBlocking()` verdict path
-untouched. The two new transports' method bodies go in their own translation units beside an
-otherwise-unmodified `Network.cpp`, so no working TCP/UDP line moves and the god-file problem
-never starts.
+untouched. The implementation is split **all four ways** behind the unchanged `Network.h`
+facade: `Network.cpp` keeps only the shared lifecycle, the four-way dispatchers and the
+property model, while `Network/NetworkTcp.cpp`, `NetworkUdp.cpp`, `NetworkWebSocket.cpp` and
+`NetworkHttp.cpp` each own one transport end to end — open, close, read, write, verdict and
+property block.
 
 ## Affected subsystems & files
 
 | File | Change |
 |------|--------|
-| `app/src/IO/Drivers/Network.h` | Nested `SocketType` Q_ENUM; retype the `socketType` property/accessors; add WS + HTTP properties, members, slots and the `isConnecting()` override |
-| `app/src/IO/Drivers/Network.cpp` | Ctor restores new settings; `close()`/`isOpen()`/`isReadable()`/`isWritable()`/`configurationOk()`/`write()`/`open()` gain the two new branches; `socketTypes()`, `socketTypeIndex()`, `setSocketTypeIndex()`, `driverProperties()`, `setDriverProperty()` extended. Existing TCP/UDP bodies unchanged |
-| `app/src/IO/Drivers/NetworkWebSocket.cpp` | **New TU.** `Network`'s WebSocket members: dial, handshake verdict, `textMessageReceived`/`binaryMessageReceived` → publish, write, TLS-error opt-in, teardown |
-| `app/src/IO/Drivers/NetworkHttp.cpp` | **New TU.** `Network`'s HTTP members: request builder (method/headers/body), opening request + verdict, poll timer, reply handling, failure counters, write-as-request |
-| `app/CMakeLists.txt` | `WebSockets` in `QT_MODULES` / `Qt6::WebSockets` in `QT_LIBS` (free build, both lists — not the `BUILD_COMMERCIAL` block); the two new `.cpp` files in the source list |
+| `app/src/IO/Drivers/Network.h` | Unchanged as a facade: nested `SocketType` Q_ENUM; retype the `socketType` property/accessors; add WS + HTTP properties, members, per-transport private helpers, slots and the `isConnecting()` override |
+| `app/src/IO/Drivers/Network.cpp` | **Reduced to the core.** Ctor/dtor, the four-way dispatchers (`open`, `close`, `isOpen`, `isReadable`, `isWritable`, `configurationOk`, `write`, `isConnecting`), socket-type plumbing, DNS lookup, shared dial-verdict funnel, and the `driverProperties()`/`setDriverProperty()` dispatch |
+| `app/src/IO/Drivers/Network/NetworkTcp.cpp` | **New TU (moved).** The Winsock/BSD include block, the probe statics (`probePoll`, `probeConnectPending`, `probeLastErrorRefused`, `closeProbeSocket`, `markProbeNonBlocking`, `probeTcpOnce`, `waitForTcpEndpoint`), `dialTcpBlocking`, `tcpLinkUp`, `onTcpStateChanged`, plus the extracted `openTcp`/`closeTcp`/`writeTcp`/`onTcpReadyRead` and the TCP property block |
+| `app/src/IO/Drivers/Network/NetworkUdp.cpp` | **New TU (moved).** `enlargeUdpReceiveBuffer`, plus the extracted `openUdp`/`closeUdp`/`writeUdp`/`onUdpReadyRead` (multicast join, datagram drain) and the UDP property block |
+| `app/src/IO/Drivers/Network/NetworkWebSocket.cpp` | **New TU.** Dial, handshake verdict, `textMessageReceived`/`binaryMessageReceived` → publish, write, TLS-error opt-in, teardown, WS property block |
+| `app/src/IO/Drivers/Network/NetworkHttp.cpp` | **New TU.** Request builder (method/headers/body), opening request + verdict, poll timer, reply handling, failure counters, write-as-request, HTTP property block |
+| `app/CMakeLists.txt` | `WebSockets` in `QT_MODULES` / `Qt6::WebSockets` in `QT_LIBS` (free build, both lists — not the `BUILD_COMMERCIAL` block); the four new `.cpp` files in the source list |
 | `app/src/Misc/Diagnostics/NetworkChecks.cpp` | `:242` compares `socketType() != QAbstractSocket::TcpSocket`; retype to the new enum. Probing checks stay TCP-only (a URL probe is out of scope) |
 | `app/src/API/EnumLabels.cpp` | `:63` `"Network (TCP/UDP)"` → a label covering four transports |
 | `app/src/API/Handlers/NetworkHandler.h` | Declare the new command handlers |
@@ -61,6 +65,38 @@ never starts.
 | `tests/requirements.txt` | `websockets>=12.0` for the WS test server |
 
 ## Architecture & data flow
+
+**Translation-unit layout.** One class, one facade header, five TUs — the shape
+`ProjectModel` / `ProjectEditor` already use (`app/src/DataModel/Project/`, residual left at the
+original path). `scripts/tu-cutter.py` performs the mechanical part: its manifest names
+`dest_dir: app/src/IO/Drivers/Network`, `residual: app/src/IO/Drivers/Network.cpp`, and assigns
+each existing whole block to its transport TU. The splitter refuses to cut unless the parsed
+blocks reconstruct the original file exactly, which is what makes moving the TCP probe stack and
+the UDP buffer code safe to do by tool rather than by hand.
+
+The per-transport TUs are reached through one private helper family on `Network`, so the
+dispatchers in the residual carry no transport logic of their own:
+
+| Dispatcher (residual) | Delegates to |
+|-----------------------|--------------|
+| `open(mode)` | `openTcp` / `openUdp` / `openWebSocket` / `openHttp` |
+| `close()` | `closeTcp` / `closeUdp` / `closeWebSocket` / `closeHttp` — **all four unconditionally**, see below |
+| `write(data)` | `writeTcp` / `writeUdp` / `writeWebSocket` / `writeHttp` |
+| `isOpen` / `isReadable` / `isWritable` / `configurationOk` / `isConnecting` | the matching per-transport predicate |
+| `driverProperties()` | `appendTcpProperties(list)` etc. — each TU contributes its own rows after the shared Socket Type row |
+| `setDriverProperty(k,v)` | `applyTcpProperty(k,v)` etc. — each returns `true` when it consumed the key |
+
+`close()` is the one dispatcher that deliberately does **not** branch on the current socket
+type: it tears every transport down. This preserves today's behaviour (the current `close()`
+aborts both sockets regardless of mode) and it is what makes a socket-type change while a link
+is up safe — branching here would strand a live socket the moment the enum moved. The teardown
+finality constraint in the spec depends on this.
+
+Two incidental wins from cutting TCP out: the `#ifdef _WIN32` Winsock-before-Qt include block
+stops sitting at the top of a file three other transports must also compile through, and
+`onReadyRead()`'s TCP/UDP `if`-chain disappears — each transport wires its own receive slot at
+open time instead. That is a signal-wiring change to existing code, and the existing wiring in
+`open()` / `dialTcpBlocking()` / `close()` was read in full before planning it.
 
 **Object graph.** `Network` gains three members: `QWebSocket* m_webSocket`,
 `QNetworkAccessManager* m_httpManager`, `QTimer m_pollTimer`, plus a `QPointer<QNetworkReply>`
@@ -220,12 +256,13 @@ and none is added).
 
 Three candidate shapes were sketched before settling: **Fat driver** (everything inside
 `Network.cpp`), **Transport strategy** (an abstract transport interface with four
-implementations), and **Same class, new TUs** (one `Network` class whose new transports live in
-their own translation units).
+implementations), and **Same class, per-transport TUs** (one `Network` class, one TU per
+transport behind the facade header).
 
 | Decision | Options | Chosen + why |
 |----------|---------|--------------|
-| Driver structure | (A) Fat driver — all four transports in `Network.cpp`, ~1700 lines; (B) Transport strategy — abstract interface + 4 impls, cleanest separation but rewrites working TCP/UDP code and multiplies the objects `ConnectionManager`/`CLI`/`NetworkChecks` reason about; (C) Same class, new TUs | **C.** It is the repo's existing answer to this exact problem (`ProjectModel`/`ProjectEditor` split across per-concern TUs behind one facade header), it moves **zero** lines of working TCP/UDP code, and it keeps the single `Network*` every consumer already holds. B is the better design in the abstract and the wrong one to buy with a rewrite of code the spec does not touch. |
+| Driver structure | (A) Fat driver — all four transports in `Network.cpp`, ~1700 lines; (B) Transport strategy — abstract interface + 4 impls, cleanest separation but a class hierarchy the `ConnectionManager`/`CLI`/`NetworkChecks` consumers would have to reason about; (C) Same class, per-transport TUs | **C, split all four ways** (maintainer call, 2026-08-25). It is the repo's existing answer to this problem (`ProjectModel`/`ProjectEditor` behind one facade header) and it keeps the single `Network*` every consumer holds. Splitting only the *new* transports was considered and rejected: it buys a smaller diff at the cost of a residual where TCP and UDP stay tangled while WS and HTTP are clean — separating halfway is the worse end state. |
+| Cut mechanism | (A) `scripts/tu-cutter.py` manifest for whole blocks + hand extraction for the branch bodies; (B) All by hand | **A.** The splitter's refuse-unless-it-reconstructs-exactly check covers the bulk move (probe stack, dial, UDP buffer). Only the bodies extracted *out of* the `open`/`close`/`write`/`onReadyRead` branches are hand work, and they are reviewed as a behaviour-preserving refactor in their own task. |
 | Transport enumerator | (A) Keep `QAbstractSocket::SocketType`, invent sentinel values; (B) Nested `Network::SocketType` Q_ENUM; (C) `SerialStudio::NetworkSocketType` in the global vocabulary header | **B.** Qt's enum cannot legally name a WebSocket or an HTTP client, so (A) is a lie in the type system. Only the driver, `NetworkChecks.cpp:242` and the tests use the typed form — everything else crosses the boundary as the integer index — so the global header (C) would buy nothing. |
 | HTTP Connect verdict | (A) A separate `HEAD`/`GET` probe before the first poll; (B) The first real configured request *is* the probe, and its body is published; (C) No probe — connect optimistically | **B.** (A) issues a `HEAD` that many REST endpoints answer with 405, turning a healthy API into a failed connect, and for a `POST` mode it means two side-effecting requests per session. (B) gives R11 its verdict with no extra traffic and delivers an initial reading immediately. (C) fails R11. |
 | Headers editor | (A) One `Text` driver property, `Name: Value` per line; (B) A new `DriverProperty::KeyValueList` type | **A.** (B) would touch the generic property form renderer used by every driver's Project Editor page — scope well outside this spec. A single string persists through `captureSourceSettings()` with no serializer change and renders as a `TextArea` in the Setup pane. |
@@ -236,6 +273,19 @@ their own translation units).
 
 ## Risks & mitigations
 
+- **Regressing TCP or UDP while splitting them out.** This is now the largest risk in the plan
+  and it is a self-inflicted one: the spec changes nothing about TCP/UDP behaviour, yet the
+  four-way split moves and re-shapes their code. The hazards are specific — the Winsock-first
+  include order must survive the move into `NetworkTcp.cpp`; `dialTcpBlocking()`'s
+  wire-handlers-only-on-success rule and the throwaway-probe-per-attempt rule are load-bearing
+  against the 2026-08-10 macOS `readFromSocket` crash; the UDP multicast join must stay ordered
+  after `bind()` and before the `QIODevice::open()`; and `close()` must keep tearing down every
+  transport rather than only the selected one. *Mitigation:* the split lands as its own
+  task with **no behaviour change and no new transport in the same step**, driven by
+  `tu-cutter.py` (which refuses a cut that does not reconstruct the file exactly) for the whole
+  blocks; the hand-extracted branch bodies are diffed function-by-function against the
+  originals; and TCP + UDP are re-verified against `DeviceSimulator` before the WS/HTTP work
+  starts. The split step is separately revertable.
 - **A wedged Connect button** — the bug class spec 0050 exists to kill. Both new modes dial
   async, so a path that reports only success (or reports twice) breaks the toolbar. *Mitigation:*
   every terminating WS/HTTP outcome funnels through one private `failDial(reason)` /
@@ -270,6 +320,11 @@ their own translation units).
 
 - **Unit (you can run):** none. `tests/scripts/` covers JS frame parsers; this change adds no
   parser behaviour.
+- **Split gate (runs before any new transport is written):** with only the four-way split
+  applied and no WS/HTTP code present, `tests/integration/test_api_drivers.py` and a
+  `DeviceSimulator`-backed TCP connect + UDP datagram round-trip must pass exactly as they do on
+  `master`, and `git diff --stat` must show the moved bodies unchanged apart from their
+  qualification. A regression here is a revert, not a fix-forward.
 - **Integration (maintainer runs the app with the API server on `localhost:7777`):**
   - `tests/integration/test_api_drivers.py` — extended socket-type round-trip: all four indices
     set and read back through `io.network.getConfig`, with 0 and 1 asserting the pre-existing

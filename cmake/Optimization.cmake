@@ -61,10 +61,6 @@ include_guard(GLOBAL)
 # guards: per-TU unwind tables here, protected bootstraps around every VM setup path, and pcall
 # around every script entry.
 #
-# Every Clang-family toolchain (Clang, AppleClang, clang-cl via /clang:, IntelLLVM) also compiles
-# C++ with -fcomplete-member-pointers, so a pointer-to-member to a forward-declared class is a hard
-# error instead of a per-TU ABI coin flip. GCC and cl.exe have no equivalent and are skipped.
-#
 # Architecture baselines: x86-64 -> -march=x86-64-v2 (SSE4.2, 2012+ CPUs); aarch64 -> armv8-a (plus
 # -latomic); armv7l -> armv7-a -mfpu=neon -mfloat-abi=hard (hardfloat pinned so a soft-float
 # toolchain cannot silently emit an ABI-mismatched binary).
@@ -72,6 +68,45 @@ include_guard(GLOBAL)
 # Sandboxed builds (Flatpak/Flathub, detected via FLATPAK_ID) disable LTO and auto-enable hardening.
 #
 #---------------------------------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------------------------------
+# Strict member-pointer diagnostics (Clang family, app target only)
+#---------------------------------------------------------------------------------------------------
+#
+# Under the MSVC ABI a pointer-to-member's representation is picked from the class's inheritance
+# model, and an incomplete class forces the conservative generalized form. One TU that sees the
+# class incomplete gets a 20-byte generalized member pointer, another that sees it complete gets an
+# 8-byte one; unity-build include order decides which, and the ODR mismatch ships as a constructor
+# storing dangling stack addresses (2026-08-25: PropertyHooks::LiveProviderOptions).
+#
+# -fcomplete-member-pointers makes that a hard error. It is a LINT, not an ABI mechanism: it rejects
+# every incomplete base whose representation "would be significant under the MSVC ABI", including
+# the ones that are consistent everywhere. protobuf's message_lite.h is exactly that case -- its
+# ClassData forms `void (MessageLite::*clear)()` while MessageLite is still incomplete, in every TU
+# including protobuf's own, so all TUs agree and nothing is broken. The flag cannot tell the two
+# apart, so it is applied to the app target's own C++ and subtracted per-source from the TUs that
+# pull protobuf/gRPC headers (app/CMakeLists.txt, ENABLE_GRPC block). Fixing the ABI instead is not
+# an option: /vmg is a whole-program switch every prebuilt dependency would have to share, and
+# __single_inheritance on a forward declaration is a promise that breaks silently when a base is
+# added. Completing the type is the fix; this flag only finds the sites.
+#
+# GCC and cl.exe have no equivalent and get an empty list. CXX-gating and target scoping happen at
+# the use site so the vendored C targets and lib/ third-party C++ never see it.
+#
+#---------------------------------------------------------------------------------------------------
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|IntelLLVM")
+   if(MSVC)
+      set(SS_MEMPTR_STRICT_FLAGS  /clang:-fcomplete-member-pointers)
+      set(SS_MEMPTR_RELAXED_FLAGS /clang:-fno-complete-member-pointers)
+   else()
+      set(SS_MEMPTR_STRICT_FLAGS  -fcomplete-member-pointers)
+      set(SS_MEMPTR_RELAXED_FLAGS -fno-complete-member-pointers)
+   endif()
+else()
+   set(SS_MEMPTR_STRICT_FLAGS  "")
+   set(SS_MEMPTR_RELAXED_FLAGS "")
+endif()
 
 if(PRODUCTION_OPTIMIZATION)
    if(DEFINED ENV{FLATPAK_ID} OR FLATPAK_BUILD)
@@ -100,21 +135,6 @@ if(PRODUCTION_OPTIMIZATION)
          -funwind-tables
          -fasynchronous-unwind-tables
       )
-   endif()
-
-   # -fcomplete-member-pointers rejects a pointer-to-member whose class is still incomplete. Under
-   # the MSVC ABI the representation is picked from the inheritance model, so an incomplete base
-   # hands one TU a 20-byte generalized member pointer and another an 8-byte one. That ODR mismatch
-   # flips on and off with unity-build include order, and ships as a constructor storing dangling
-   # stack addresses (2026-08-25: PropertyHooks::LiveProviderOptions). Clang family only;
-   # GCC and cl.exe have no equivalent. CXX-gated so the vendored C targets (luajit, mbedtls,
-   # open62541, hidapi, OpenSSL) never see it; clang-cl reaches it through /clang:.
-   if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|IntelLLVM")
-      if(MSVC)
-         add_compile_options($<$<COMPILE_LANGUAGE:CXX>:/clang:-fcomplete-member-pointers>)
-      else()
-         add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-fcomplete-member-pointers>)
-      endif()
    endif()
 
    if(WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND MINGW)

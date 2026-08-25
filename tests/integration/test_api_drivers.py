@@ -121,6 +121,20 @@ def test_network_driver_configuration(api_client, clean_state):
     assert config["socketTypeIndex"] == 1
     assert config["udpRemotePort"] == 9001
 
+    # Spec 0068 appended WebSocket (2) and HTTP (3). The TCP and UDP fields above must keep
+    # their names and values, so re-select each and read the same keys back.
+    for index, key, value in ((0, "tcpPort", 9000), (1, "udpRemotePort", 9001)):
+        api_client.command("io.network.setSocketType", {"socketTypeIndex": index})
+        config = api_client.command("io.network.getConfig")
+        assert config["socketTypeIndex"] == index
+        assert config[key] == value
+
+    api_client.command("io.network.setSocketType", {"socketTypeIndex": 2})
+    assert api_client.command("io.network.getConfig")["socketTypeIndex"] == 2
+
+    api_client.command("io.network.setSocketType", {"socketTypeIndex": 3})
+    assert api_client.command("io.network.getConfig")["socketTypeIndex"] == 3
+
 
 @pytest.mark.integration
 def test_ble_driver_status(api_client, clean_state):

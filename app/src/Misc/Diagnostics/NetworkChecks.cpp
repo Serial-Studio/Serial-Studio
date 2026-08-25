@@ -232,14 +232,15 @@ void Misc::Diagnostics::NetworkChecks::TcpProbeTask::onErrorOccurred(
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Reads the network source's TCP endpoint; UDP carries no connection to probe.
+ * @brief Reads the network source's TCP endpoint. Only TCP is probed: UDP carries no connection,
+ *        and the URL transports are not reachable through a host-and-port probe.
  */
 [[nodiscard]] static bool networkEndpoint(QString& host, quint16& port)
 {
   static auto& manager = IO::ConnectionManager::instance();
 
   auto* network = manager.network();
-  if (network == nullptr || network->socketType() != QAbstractSocket::TcpSocket)
+  if (network == nullptr || network->socketType() != IO::Drivers::Network::SocketType::Tcp)
     return false;
 
   host = network->remoteAddress();

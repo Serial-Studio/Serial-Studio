@@ -275,7 +275,7 @@ class SerialStudioClient:
         socket_type: str = "tcp",
     ) -> None:
         """Configure network driver for device simulation."""
-        socket_type_map = {"tcp": 0, "udp": 1}
+        socket_type_map = {"tcp": 0, "udp": 1, "websocket": 2, "http": 3}
 
         commands = [
             {"command": "io.setBusType", "params": {"busType": 1}},

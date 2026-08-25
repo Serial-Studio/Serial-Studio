@@ -890,6 +890,11 @@
       "reserved": [],
       "next": 2
     },
+    "io.network.getStatus": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
     "io.network.listSocketTypes": {
       "fields": {},
       "reserved": [],
@@ -898,6 +903,48 @@
     "io.network.lookup": {
       "fields": {
         "host": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.network.setHttpBody": {
+      "fields": {
+        "body": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.network.setHttpHeaders": {
+      "fields": {
+        "headers": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.network.setHttpInterval": {
+      "fields": {
+        "interval": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.network.setHttpMethod": {
+      "fields": {
+        "method": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.network.setHttpUrl": {
+      "fields": {
+        "url": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.network.setIgnoreTlsErrors": {
+      "fields": {
+        "enabled": 2
       },
       "reserved": [],
       "next": 3
@@ -944,6 +991,13 @@
       "reserved": [],
       "next": 3
     },
+    "io.network.setWebSocketUrl": {
+      "fields": {
+        "url": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
     "io.opcua.addTag": {
       "fields": {
         "id": 2,
@@ -970,7 +1024,19 @@
       "reserved": [],
       "next": 2
     },
+    "io.opcua.exportCertificate": {
+      "fields": {
+        "path": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
     "io.opcua.generateProject": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.opcua.getCertificate": {
       "fields": {},
       "reserved": [],
       "next": 2
@@ -995,9 +1061,26 @@
       "reserved": [],
       "next": 2
     },
+    "io.opcua.listTrusted": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.opcua.regenerateCertificate": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
     "io.opcua.removeTag": {
       "fields": {
         "index": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.opcua.revokeTrust": {
+      "fields": {
+        "fingerprint": 2
       },
       "reserved": [],
       "next": 3
@@ -1023,6 +1106,13 @@
       "reserved": [],
       "next": 3
     },
+    "io.opcua.setIdentityType": {
+      "fields": {
+        "type": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
     "io.opcua.setPassword": {
       "fields": {
         "password": 2
@@ -1037,12 +1127,34 @@
       "reserved": [],
       "next": 3
     },
+    "io.opcua.setSecurityMode": {
+      "fields": {
+        "mode": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.opcua.setSecurityPolicy": {
+      "fields": {
+        "policy": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
     "io.opcua.setTags": {
       "fields": {
         "tags": 2
       },
       "reserved": [],
       "next": 3
+    },
+    "io.opcua.setUserCertificate": {
+      "fields": {
+        "certificate": 2,
+        "key": 3
+      },
+      "reserved": [],
+      "next": 4
     },
     "io.opcua.setUsername": {
       "fields": {
@@ -1060,6 +1172,13 @@
       "fields": {},
       "reserved": [],
       "next": 2
+    },
+    "io.opcua.trustServer": {
+      "fields": {
+        "fingerprint": 2
+      },
+      "reserved": [],
+      "next": 3
     },
     "io.process.getConfig": {
       "fields": {},

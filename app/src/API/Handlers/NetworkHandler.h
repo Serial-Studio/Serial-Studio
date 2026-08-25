@@ -24,6 +24,8 @@
 #include "API/CommandProtocol.h"
 
 namespace API {
+class CommandRegistry;
+
 namespace Handlers {
 /**
  * @brief Registers API commands for IO::Drivers::Network operations.
@@ -33,16 +35,26 @@ public:
   static void registerCommands();
 
 private:
+  static void registerUrlTransportCommands(CommandRegistry& registry);
+
   static CommandResponse setRemoteAddress(const QString& id, const QJsonObject& params);
   static CommandResponse setTcpPort(const QString& id, const QJsonObject& params);
   static CommandResponse setUdpLocalPort(const QString& id, const QJsonObject& params);
   static CommandResponse setUdpRemotePort(const QString& id, const QJsonObject& params);
   static CommandResponse setSocketType(const QString& id, const QJsonObject& params);
   static CommandResponse setUdpMulticast(const QString& id, const QJsonObject& params);
+  static CommandResponse setWebSocketUrl(const QString& id, const QJsonObject& params);
+  static CommandResponse setHttpUrl(const QString& id, const QJsonObject& params);
+  static CommandResponse setHttpMethod(const QString& id, const QJsonObject& params);
+  static CommandResponse setHttpBody(const QString& id, const QJsonObject& params);
+  static CommandResponse setHttpHeaders(const QString& id, const QJsonObject& params);
+  static CommandResponse setHttpInterval(const QString& id, const QJsonObject& params);
+  static CommandResponse setIgnoreTlsErrors(const QString& id, const QJsonObject& params);
   static CommandResponse lookup(const QString& id, const QJsonObject& params);
 
   static CommandResponse getConfiguration(const QString& id, const QJsonObject& params);
   static CommandResponse getSocketTypes(const QString& id, const QJsonObject& params);
+  static CommandResponse getStatus(const QString& id, const QJsonObject& params);
 };
 
 }  // namespace Handlers

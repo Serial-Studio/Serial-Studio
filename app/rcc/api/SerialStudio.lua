@@ -903,6 +903,11 @@ function io.network.getConfig()
   return apiCall('io.network.getConfig', p)
 end
 
+function io.network.getStatus()
+  local p = {}
+  return apiCall('io.network.getStatus', p)
+end
+
 function io.network.listSocketTypes()
   local p = {}
   return apiCall('io.network.listSocketTypes', p)
@@ -912,6 +917,42 @@ function io.network.lookup(host)
   local p = {}
   p['host'] = host
   return apiCall('io.network.lookup', p)
+end
+
+function io.network.setHttpBody(body)
+  local p = {}
+  p['body'] = body
+  return apiCall('io.network.setHttpBody', p)
+end
+
+function io.network.setHttpHeaders(headers)
+  local p = {}
+  p['headers'] = headers
+  return apiCall('io.network.setHttpHeaders', p)
+end
+
+function io.network.setHttpInterval(interval)
+  local p = {}
+  p['interval'] = interval
+  return apiCall('io.network.setHttpInterval', p)
+end
+
+function io.network.setHttpMethod(method)
+  local p = {}
+  p['method'] = method
+  return apiCall('io.network.setHttpMethod', p)
+end
+
+function io.network.setHttpUrl(url)
+  local p = {}
+  p['url'] = url
+  return apiCall('io.network.setHttpUrl', p)
+end
+
+function io.network.setIgnoreTlsErrors(enabled)
+  local p = {}
+  p['enabled'] = enabled
+  return apiCall('io.network.setIgnoreTlsErrors', p)
 end
 
 function io.network.setRemoteAddress(address)
@@ -950,6 +991,12 @@ function io.network.setUdpRemotePort(port)
   return apiCall('io.network.setUdpRemotePort', p)
 end
 
+function io.network.setWebSocketUrl(url)
+  local p = {}
+  p['url'] = url
+  return apiCall('io.network.setWebSocketUrl', p)
+end
+
 function io.opcua.addTag(id, name, t)
   local p = {}
   p['id'] = id
@@ -974,9 +1021,20 @@ function io.opcua.discoverEndpoints()
   return apiCall('io.opcua.discoverEndpoints', p)
 end
 
+function io.opcua.exportCertificate(path)
+  local p = {}
+  p['path'] = path
+  return apiCall('io.opcua.exportCertificate', p)
+end
+
 function io.opcua.generateProject()
   local p = {}
   return apiCall('io.opcua.generateProject', p)
+end
+
+function io.opcua.getCertificate()
+  local p = {}
+  return apiCall('io.opcua.getCertificate', p)
 end
 
 function io.opcua.getConfig()
@@ -999,10 +1057,26 @@ function io.opcua.listTags()
   return apiCall('io.opcua.listTags', p)
 end
 
+function io.opcua.listTrusted()
+  local p = {}
+  return apiCall('io.opcua.listTrusted', p)
+end
+
+function io.opcua.regenerateCertificate()
+  local p = {}
+  return apiCall('io.opcua.regenerateCertificate', p)
+end
+
 function io.opcua.removeTag(index)
   local p = {}
   p['index'] = index
   return apiCall('io.opcua.removeTag', p)
+end
+
+function io.opcua.revokeTrust(fingerprint)
+  local p = {}
+  p['fingerprint'] = fingerprint
+  return apiCall('io.opcua.revokeTrust', p)
 end
 
 function io.opcua.setAuthMode(mode)
@@ -1023,6 +1097,12 @@ function io.opcua.setEndpointUrl(url)
   return apiCall('io.opcua.setEndpointUrl', p)
 end
 
+function io.opcua.setIdentityType(type)
+  local p = {}
+  p['type'] = type
+  return apiCall('io.opcua.setIdentityType', p)
+end
+
 function io.opcua.setPassword(password)
   local p = {}
   p['password'] = password
@@ -1035,10 +1115,29 @@ function io.opcua.setPublishingInterval(intervalMs)
   return apiCall('io.opcua.setPublishingInterval', p)
 end
 
+function io.opcua.setSecurityMode(mode)
+  local p = {}
+  p['mode'] = mode
+  return apiCall('io.opcua.setSecurityMode', p)
+end
+
+function io.opcua.setSecurityPolicy(policy)
+  local p = {}
+  p['policy'] = policy
+  return apiCall('io.opcua.setSecurityPolicy', p)
+end
+
 function io.opcua.setTags(tags)
   local p = {}
   p['tags'] = tags
   return apiCall('io.opcua.setTags', p)
+end
+
+function io.opcua.setUserCertificate(certificate, key)
+  local p = {}
+  p['certificate'] = certificate
+  p['key'] = key
+  return apiCall('io.opcua.setUserCertificate', p)
 end
 
 function io.opcua.setUsername(username)
@@ -1055,6 +1154,12 @@ end
 function io.opcua.stopBrowse()
   local p = {}
   return apiCall('io.opcua.stopBrowse', p)
+end
+
+function io.opcua.trustServer(fingerprint)
+  local p = {}
+  p['fingerprint'] = fingerprint
+  return apiCall('io.opcua.trustServer', p)
 end
 
 function io.process.getConfig()

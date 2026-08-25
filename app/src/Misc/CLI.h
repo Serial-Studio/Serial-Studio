@@ -85,6 +85,19 @@ struct CliOptions {
   QCommandLineOption udpRemoteOpt{
     "udp-remote", "Specifies UDP remote target (e.g., 192.168.1.100:8080)", "host:port"};
   QCommandLineOption udpMulticastOpt{"udp-multicast", "Enables multicast mode for UDP"};
+  QCommandLineOption wsOpt{
+    "ws", "Connects to a WebSocket endpoint (e.g., ws://192.168.1.100:8080/feed)", "url"};
+  QCommandLineOption httpOpt{
+    "http", "Polls an HTTP endpoint (e.g., https://api.example.com/telemetry)", "url"};
+  QCommandLineOption httpMethodOpt{"http-method", "Sets the HTTP method (default: GET)", "verb"};
+  QCommandLineOption httpIntervalOpt{
+    "http-interval",
+    "Sets the HTTP poll interval in ms; 0 sends only on write (default: 1000)",
+    "ms"};
+  QCommandLineOption httpHeaderOpt{
+    "http-header", "Adds an HTTP request header; repeatable", "name: value"};
+  QCommandLineOption insecureTlsOpt{
+    "insecure-tls", "Accepts untrusted certificates on wss:// and https:// endpoints"};
   QCommandLineOption benchmarkHotpathOpt{
     "benchmark-hotpath", "Run the in-process frame-extraction throughput benchmark and exit"};
   QCommandLineOption minFpsOpt{
@@ -266,6 +279,8 @@ private:
   void setupUartConnection();
   void setupTcpConnection(const QString& tcpAddress);
   void setupUdpConnection();
+  void setupWebSocketConnection(const QString& url);
+  void setupHttpConnection(const QString& url);
 
 #ifdef BUILD_COMMERCIAL
   int activateLicense(QApplication& app, const QString& licenseKey);

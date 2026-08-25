@@ -5521,28 +5521,28 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>Значение</translation>
     </message>
     <message>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
     <message>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Resume</source>
         <translation>Возобновить</translation>
     </message>
     <message>
-        <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="323"/>
+        <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
         <source>Awaiting data…</source>
         <translation>Ожидание данных…</translation>
     </message>
     <message>
-        <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="390"/>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="378"/>
+        <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="390"/>
         <source>Open %1 in a separate window</source>
         <translation>Открыть %1 в отдельном окне</translation>
     </message>
@@ -8864,15 +8864,15 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>Сохранить Проект Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="160"/>
         <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="456"/>
+        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="160"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Файлы Проектов Serial Studio (*.ssproj)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1555"/>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="181"/>
         <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="447"/>
+        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="181"/>
         <source>Untitled Project</source>
         <translation>Проект Без Названия</translation>
     </message>
@@ -9296,9 +9296,9 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>Z</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="440"/>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="233"/>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="440"/>
         <source>Workspace</source>
         <translation>Рабочее Пространство</translation>
     </message>
@@ -9324,8 +9324,6 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2047"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2074"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2093"/>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="594"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="421"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="440"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="464"/>
@@ -9338,6 +9336,8 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="379"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="399"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="421"/>
+        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
+        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="594"/>
         <source>Name:</source>
         <translation>Название:</translation>
     </message>
@@ -9376,10 +9376,10 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">Переименовать Регистр</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1200"/>
+        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="2355"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="455"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="480"/>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="2355"/>
+        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1200"/>
         <source>This action cannot be undone.</source>
         <translation>Это действие нельзя отменить.</translation>
     </message>
@@ -9388,9 +9388,9 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">Это удалит %1 регистр(ов) вместе с таблицей. Это действие нельзя отменить.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1199"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="459"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="479"/>
+        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1199"/>
         <source>Delete "%1"?</source>
         <translation>Удалить "%1"?</translation>
     </message>
@@ -9475,8 +9475,8 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>Импортировать CSV Таблицы</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="440"/>
+        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
         <source>New Workspace</source>
         <translation>Новое Рабочее Пространство</translation>
     </message>
@@ -9539,8 +9539,8 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>Добавить Папку</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="586"/>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="710"/>
+        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="586"/>
         <source>Move Group</source>
         <translation>Переместить Группу</translation>
     </message>
@@ -13626,9 +13626,10 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Network</name>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="481"/>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="491"/>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="830"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="350"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="843"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="264"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="274"/>
         <source>Network socket error</source>
         <translation>Ошибка сетевого сокета</translation>
     </message>
@@ -13637,40 +13638,189 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Истекло время ожидания подключения к %1:%2.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="482"/>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="492"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="265"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="275"/>
         <source>Cannot connect to %1:%2 (%3)</source>
         <translation>Невозможно подключиться к %1:%2 (%3)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="847"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="306"/>
+        <source>This socket type does not use a URL</source>
+        <translation>Этот тип сокета не использует URL</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="312"/>
+        <source>Enter a URL first</source>
+        <translation>Сначала введите URL</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="318"/>
+        <source>"%1" is not a valid URL</source>
+        <translation>"%1" не является допустимым URL</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="324"/>
+        <source>"%1" must start with %2://</source>
+        <translation>"%1" должен начинаться с %2://</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="448"/>
+        <source>Automatic</source>
+        <translation>Автоматически</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="449"/>
+        <source>Text</source>
+        <translation>Текст</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="450"/>
+        <source>Binary</source>
+        <translation>Двоичный</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="884"/>
+        <source>Ignore TLS Errors</source>
+        <translation>Игнорировать Ошибки TLS</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="885"/>
+        <source>Accept self-signed or mismatched certificates</source>
+        <translation>Принимать самоподписанные или несоответствующие сертификаты</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="910"/>
         <source>Socket Type</source>
         <translation>Тип Сокета</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="855"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="924"/>
         <source>Remote Address</source>
         <translation>Удалённый Адрес</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="863"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="393"/>
         <source>TCP Port</source>
         <translation>TCP-Порт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="872"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkUdp.cpp" line="172"/>
         <source>UDP Local Port</source>
         <translation>Локальный UDP-Порт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="881"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkUdp.cpp" line="181"/>
         <source>UDP Remote Port</source>
         <translation>Удалённый UDP-Порт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="890"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkUdp.cpp" line="190"/>
         <source>UDP Multicast</source>
         <translation>UDP Multicast</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="75"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="96"/>
+        <source>HTTP error</source>
+        <translation>Ошибка HTTP</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="96"/>
+        <source>The request could not be sent</source>
+        <translation>Не удалось отправить запрос</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="266"/>
+        <source>HTTP source recovered</source>
+        <translation>HTTP-источник восстановлен</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="266"/>
+        <source>%1 is answering again</source>
+        <translation>%1 снова отвечает</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="277"/>
+        <source>HTTP poll failed</source>
+        <translation>Опрос HTTP не удался</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="296"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkWebSocket.cpp" line="216"/>
+        <source>TLS verification bypassed</source>
+        <translation>Проверка TLS обойдена</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="297"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkWebSocket.cpp" line="217"/>
+        <source>Continuing to %1 despite: %2</source>
+        <translation>Продолжение к %1 несмотря на: %2</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="310"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkWebSocket.cpp" line="249"/>
+        <source>URL</source>
+        <translation>URL</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="311"/>
+        <source>REST endpoint, for example %1</source>
+        <translation>Конечная точка REST, например %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="318"/>
+        <source>Method</source>
+        <translation>Метод</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="326"/>
+        <source>Poll Interval (ms)</source>
+        <translation>Интервал Опроса (мс)</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="327"/>
+        <source>Use 0 to request only when data is sent</source>
+        <translation>Используйте 0 для запроса только при отправке данных</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="336"/>
+        <source>Request Body</source>
+        <translation>Тело Запроса</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="343"/>
+        <source>Request Headers</source>
+        <translation>Заголовки Запроса</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="344"/>
+        <source>One %1 pair per line</source>
+        <translation>Одна пара %1 на строку</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkWebSocket.cpp" line="52"/>
+        <source>WebSocket error</source>
+        <translation>Ошибка WebSocket</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkWebSocket.cpp" line="176"/>
+        <source>The connection closed during the handshake</source>
+        <translation>Соединение закрыто во время рукопожатия</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkWebSocket.cpp" line="180"/>
+        <source>The remote peer closed the connection</source>
+        <translation>Удалённый узел закрыл соединение</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkWebSocket.cpp" line="250"/>
+        <source>WebSocket endpoint, for example %1</source>
+        <translation>Конечная точка WebSocket, например %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkWebSocket.cpp" line="257"/>
+        <source>Send Format</source>
+        <translation>Формат Отправки</translation>
     </message>
 </context>
 <context>
@@ -17623,8 +17773,8 @@ Would you like to open the download page?</source>
         <translation>Не удалось записать Info.plist: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Средство создания ярлыков Windows недоступно на этой платформе.</translation>
     </message>
@@ -17655,8 +17805,8 @@ Would you like to open the download page?</source>
         <translation>Сбой сохранения файла .lnk (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>Средство создания ярлыков macOS недоступно на этой платформе.</translation>
     </message>
@@ -18676,35 +18826,86 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>Network</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="78"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="106"/>
         <source>Socket Type</source>
         <translation>Тип Сокета</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="137"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="166"/>
         <source>Remote Address</source>
         <translation>Удалённый Адрес</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="99"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="127"/>
         <source>Local Port</source>
         <translation>Локальный Порт</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="106"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="134"/>
         <source>Type 0 for automatic port</source>
         <translation>Введите 0 для автоматического порта</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="165"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="203"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="195"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="233"/>
         <source>Remote Port</source>
         <translation>Удалённый Порт</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="238"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="268"/>
         <source>Multicast</source>
         <translation>Multicast</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="294"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="346"/>
+        <source>URL</source>
+        <translation>URL</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="323"/>
+        <source>Send Format</source>
+        <translation>Формат Отправки</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="375"/>
+        <source>Method</source>
+        <translation>Метод</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="398"/>
+        <source>Poll Interval</source>
+        <translation>Интервал Опроса</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="407"/>
+        <source>Milliseconds; 0 sends only on write</source>
+        <translation>Миллисекунды; 0 отправляет только при записи</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="431"/>
+        <source>Request Body</source>
+        <translation>Тело Запроса</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="439"/>
+        <source>Optional</source>
+        <translation>Необязательно</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="459"/>
+        <source>Request Headers</source>
+        <translation>Заголовки Запроса</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="480"/>
+        <source>One %1 pair per line</source>
+        <translation>Одна пара %1 на строку</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="496"/>
+        <source>Ignore TLS Errors</source>
+        <translation>Игнорировать Ошибки TLS</translation>
     </message>
 </context>
 <context>
@@ -21305,8 +21506,8 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="485"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="257"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="485"/>
         <source>Frame Parser Disabled</source>
         <translation>Парсер Кадров Отключён</translation>
     </message>
@@ -21372,8 +21573,8 @@ Serial Studio может переписать неподдерживаемые �
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="675"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="540"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="675"/>
         <source>Missing Parse Function</source>
         <translation>Отсутствует Функция Parse</translation>
     </message>
@@ -21389,8 +21590,8 @@ function parse(frame) ... end</source>
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="738"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="592"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="738"/>
         <source>Parse Function Runtime Error</source>
         <translation>Ошибка Выполнения Функции Parse</translation>
     </message>
@@ -21566,12 +21767,12 @@ function parse(%1) { ... }
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="843"/>
+        <location filename="../../src/Misc/CLI.cpp" line="907"/>
         <source>Project file not found</source>
         <translation>Файл проекта не найден</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="844"/>
+        <location filename="../../src/Misc/CLI.cpp" line="908"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -21580,17 +21781,17 @@ function parse(%1) { ... }
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="847"/>
+        <location filename="../../src/Misc/CLI.cpp" line="911"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Удалить этот ярлык?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="851"/>
+        <location filename="../../src/Misc/CLI.cpp" line="915"/>
         <source>Delete Shortcut</source>
         <translation>Удалить Ярлык</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="853"/>
+        <location filename="../../src/Misc/CLI.cpp" line="917"/>
         <source>Quit</source>
         <translation>Выход</translation>
     </message>
@@ -21889,17 +22090,17 @@ function parse(%1) { ... }
         <translation>Не удалось прочитать структуру файла. Файл может быть поврежден.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="433"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="205"/>
         <source>Host not found</source>
         <translation>Узел не найден</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="457"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="229"/>
         <source>Connection failed</source>
         <translation>Ошибка подключения</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="465"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="237"/>
         <source>Connection timed out</source>
         <translation>Истекло время ожидания подключения</translation>
     </message>
@@ -22003,6 +22204,16 @@ function parse(%1) { ... }
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="661"/>
         <source>malformed expression</source>
         <translation>неправильное выражение</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="57"/>
+        <source>Server answered HTTP %1</source>
+        <translation>Сервер ответил HTTP %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="59"/>
+        <source>The server sent no response</source>
+        <translation>Сервер не отправил ответ</translation>
     </message>
 </context>
 <context>

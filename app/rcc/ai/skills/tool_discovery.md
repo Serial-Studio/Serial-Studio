@@ -102,7 +102,7 @@ each one blindly; pick by the device class the user is asking about:
 | `io.canbus.*`    | CAN bus (load `can_modbus` skill)           |
 | `io.hid.*`       | USB HID gamepads / sensors                  |
 | `io.modbus.*`    | Modbus RTU/TCP (load `can_modbus` skill)    |
-| `io.network.*`   | TCP / UDP                                   |
+| `io.network.*`   | TCP / UDP / WebSocket / HTTP (all clients)  |
 | `io.process.*`   | Subprocess stdout (Pro)                     |
 | `io.uart.*`      | UART / serial port (most projects start here)|
 

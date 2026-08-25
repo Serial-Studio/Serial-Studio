@@ -27,15 +27,16 @@ GCC/MinGW.
 add_compile_definitions(NDEBUG)
 ```
 
-### Always-on (every Clang-family C++ TU, when PRODUCTION_OPTIMIZATION)
-```
--fcomplete-member-pointers          # clang-cl form: /clang:-fcomplete-member-pointers
-# Hard error on a pointer-to-member whose class is still incomplete. The MSVC ABI picks the
-# representation from the inheritance model, so an incomplete base gives one TU a 20-byte
-# generalized member pointer and another an 8-byte one; unity builds flip that by include order.
-# CXX-gated via $<COMPILE_LANGUAGE:CXX> so the vendored C targets never see it.
-# GCC and cl.exe have no equivalent and are skipped.
-```
+### Not used: -fcomplete-member-pointers
+Tried 2026-08-25 and reverted the same day. It is the right diagnostic for the MSVC-ABI
+member-pointer hazard (an incomplete base gives one TU a 20-byte generalized member pointer and
+another an 8-byte one; unity builds flip that by include order), but it cannot be enabled here:
+protobuf's `message_lite.h` declares `void (MessageLite::*clear)()` before `MessageLite` is
+complete, and `API/GRPC/GRPCServer.h` reaches `FrameBuilder.cpp`, `ConnectionManager.cpp`,
+`ModuleManager.cpp` and the benchmarks. Every macOS/Windows CI job configures `ENABLE_GRPC=ON`, so
+the flag breaks them all; a per-file `-fno-complete-member-pointers` would disable the check in
+exactly the TUs worth checking. Keep first-party classes complete before taking a pointer-to-member
+(see `PropertyHooks.h`) instead.
 
 ### Per-toolchain production flags
 

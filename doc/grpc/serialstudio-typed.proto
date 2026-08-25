@@ -714,6 +714,10 @@ message IoNetworkGetConfigRequest {
   string id = 1;
 }
 
+message IoNetworkGetStatusRequest {
+  string id = 1;
+}
+
 message IoNetworkListSocketTypesRequest {
   string id = 1;
 }
@@ -723,6 +727,36 @@ message IoNetworkLookupRequest {
   string host = 2;
 }
 
+message IoNetworkSetHttpBodyRequest {
+  string id = 1;
+  string body = 2;
+}
+
+message IoNetworkSetHttpHeadersRequest {
+  string id = 1;
+  string headers = 2;
+}
+
+message IoNetworkSetHttpIntervalRequest {
+  string id = 1;
+  int64 interval = 2;
+}
+
+message IoNetworkSetHttpMethodRequest {
+  string id = 1;
+  string method = 2;  // enum: "GET", "POST", "PUT", "PATCH", "DELETE"
+}
+
+message IoNetworkSetHttpUrlRequest {
+  string id = 1;
+  string url = 2;
+}
+
+message IoNetworkSetIgnoreTlsErrorsRequest {
+  string id = 1;
+  bool enabled = 2;
+}
+
 message IoNetworkSetRemoteAddressRequest {
   string id = 1;
   string address = 2;
@@ -730,7 +764,7 @@ message IoNetworkSetRemoteAddressRequest {
 
 message IoNetworkSetSocketTypeRequest {
   string id = 1;
-  int64 socketTypeIndex = 2;  // enum: 0, 1
+  int64 socketTypeIndex = 2;  // enum: 0, 1, 2, 3
 }
 
 message IoNetworkSetTcpPortRequest {
@@ -753,6 +787,11 @@ message IoNetworkSetUdpRemotePortRequest {
   int64 port = 2;
 }
 
+message IoNetworkSetWebSocketUrlRequest {
+  string id = 1;
+  string url = 2;
+}
+
 message IoOpcuaAddTagRequest {
   string id = 1;
   string id_param = 2;  // JSON name: id
@@ -773,7 +812,16 @@ message IoOpcuaDiscoverEndpointsRequest {
   string id = 1;
 }
 
+message IoOpcuaExportCertificateRequest {
+  string id = 1;
+  string path = 2;
+}
+
 message IoOpcuaGenerateProjectRequest {
+  string id = 1;
+}
+
+message IoOpcuaGetCertificateRequest {
   string id = 1;
 }
 
@@ -793,9 +841,22 @@ message IoOpcuaListTagsRequest {
   string id = 1;
 }
 
+message IoOpcuaListTrustedRequest {
+  string id = 1;
+}
+
+message IoOpcuaRegenerateCertificateRequest {
+  string id = 1;
+}
+
 message IoOpcuaRemoveTagRequest {
   string id = 1;
   int64 index = 2;
+}
+
+message IoOpcuaRevokeTrustRequest {
+  string id = 1;
+  string fingerprint = 2;
 }
 
 message IoOpcuaSetAuthModeRequest {
@@ -813,6 +874,11 @@ message IoOpcuaSetEndpointUrlRequest {
   string url = 2;
 }
 
+message IoOpcuaSetIdentityTypeRequest {
+  string id = 1;
+  int64 type = 2;
+}
+
 message IoOpcuaSetPasswordRequest {
   string id = 1;
   string password = 2;
@@ -823,9 +889,25 @@ message IoOpcuaSetPublishingIntervalRequest {
   int64 intervalMs = 2;
 }
 
+message IoOpcuaSetSecurityModeRequest {
+  string id = 1;
+  int64 mode = 2;
+}
+
+message IoOpcuaSetSecurityPolicyRequest {
+  string id = 1;
+  string policy = 2;
+}
+
 message IoOpcuaSetTagsRequest {
   string id = 1;
   google.protobuf.ListValue tags = 2;
+}
+
+message IoOpcuaSetUserCertificateRequest {
+  string id = 1;
+  string certificate = 2;
+  string key = 3;
 }
 
 message IoOpcuaSetUsernameRequest {
@@ -839,6 +921,11 @@ message IoOpcuaStartBrowseRequest {
 
 message IoOpcuaStopBrowseRequest {
   string id = 1;
+}
+
+message IoOpcuaTrustServerRequest {
+  string id = 1;
+  string fingerprint = 2;
 }
 
 message IoProcessGetConfigRequest {
@@ -2527,16 +2614,37 @@ service SerialStudioTypedAPI {
   // Get current network configuration
   rpc IoNetworkGetConfig(IoNetworkGetConfigRequest) returns (CommandResponse);
 
+  // Get link state and HTTP poll counters
+  rpc IoNetworkGetStatus(IoNetworkGetStatusRequest) returns (CommandResponse);
+
   // Get available socket types
   rpc IoNetworkListSocketTypes(IoNetworkListSocketTypesRequest) returns (CommandResponse);
 
   // Perform DNS lookup (params: host)
   rpc IoNetworkLookup(IoNetworkLookupRequest) returns (CommandResponse);
 
+  // Set the HTTP request body (params: body)
+  rpc IoNetworkSetHttpBody(IoNetworkSetHttpBodyRequest) returns (CommandResponse);
+
+  // Set custom HTTP request headers (params: headers, one Name: Value per line)
+  rpc IoNetworkSetHttpHeaders(IoNetworkSetHttpHeadersRequest) returns (CommandResponse);
+
+  // Set the HTTP poll interval in ms (params: interval; 0 = only on write)
+  rpc IoNetworkSetHttpInterval(IoNetworkSetHttpIntervalRequest) returns (CommandResponse);
+
+  // Set the HTTP method (params: method - GET, POST, PUT, PATCH or DELETE)
+  rpc IoNetworkSetHttpMethod(IoNetworkSetHttpMethodRequest) returns (CommandResponse);
+
+  // Set the HTTP endpoint URL (params: url)
+  rpc IoNetworkSetHttpUrl(IoNetworkSetHttpUrlRequest) returns (CommandResponse);
+
+  // Accept untrusted certificates on wss:// and https:// (params: enabled)
+  rpc IoNetworkSetIgnoreTlsErrors(IoNetworkSetIgnoreTlsErrorsRequest) returns (CommandResponse);
+
   // Set remote host address (params: address)
   rpc IoNetworkSetRemoteAddress(IoNetworkSetRemoteAddressRequest) returns (CommandResponse);
 
-  // Set socket type (params: socketTypeIndex - 0=TCP, 1=UDP)
+  // Set socket type (params: socketTypeIndex - 0=TCP, 1=UDP, 2=WebSocket, 3=HTTP)
   rpc IoNetworkSetSocketType(IoNetworkSetSocketTypeRequest) returns (CommandResponse);
 
   // Set TCP port (params: port)
@@ -2551,6 +2659,9 @@ service SerialStudioTypedAPI {
   // Set UDP remote port (params: port)
   rpc IoNetworkSetUdpRemotePort(IoNetworkSetUdpRemotePortRequest) returns (CommandResponse);
 
+  // Set the WebSocket endpoint URL (params: url)
+  rpc IoNetworkSetWebSocketUrl(IoNetworkSetWebSocketUrlRequest) returns (CommandResponse);
+
   // Append one tag (params: id, name, t; optional path, unit, n)
   rpc IoOpcuaAddTag(IoOpcuaAddTagRequest) returns (CommandResponse);
 
@@ -2563,8 +2674,14 @@ service SerialStudioTypedAPI {
   // Request the server's endpoints; poll io.opcua.listEndpoints for the result
   rpc IoOpcuaDiscoverEndpoints(IoOpcuaDiscoverEndpointsRequest) returns (CommandResponse);
 
+  // Write the client certificate to a file (params: path); the key is never exported
+  rpc IoOpcuaExportCertificate(IoOpcuaExportCertificateRequest) returns (CommandResponse);
+
   // Generate a project from the tag list and load it into the editor
   rpc IoOpcuaGenerateProject(IoOpcuaGenerateProjectRequest) returns (CommandResponse);
+
+  // Get this installation's OPC UA client certificate
+  rpc IoOpcuaGetCertificate(IoOpcuaGetCertificateRequest) returns (CommandResponse);
 
   // Get current OPC UA configuration
   rpc IoOpcuaGetConfig(IoOpcuaGetConfigRequest) returns (CommandResponse);
@@ -2578,10 +2695,19 @@ service SerialStudioTypedAPI {
   // Get the configured tag list and wire schema
   rpc IoOpcuaListTags(IoOpcuaListTagsRequest) returns (CommandResponse);
 
+  // List the accepted server certificates
+  rpc IoOpcuaListTrusted(IoOpcuaListTrustedRequest) returns (CommandResponse);
+
+  // Replace the client certificate and key; every server must trust it again
+  rpc IoOpcuaRegenerateCertificate(IoOpcuaRegenerateCertificateRequest) returns (CommandResponse);
+
   // Remove a tag by position (params: index)
   rpc IoOpcuaRemoveTag(IoOpcuaRemoveTagRequest) returns (CommandResponse);
 
-  // Set authentication (params: mode - 0=anonymous, 1=username/password)
+  // Withdraw a previously accepted server certificate (params: fingerprint)
+  rpc IoOpcuaRevokeTrust(IoOpcuaRevokeTrustRequest) returns (CommandResponse);
+
+  // Set authentication (params: mode - 0=anonymous, 1=username/password, 2=certificate)
   rpc IoOpcuaSetAuthMode(IoOpcuaSetAuthModeRequest) returns (CommandResponse);
 
   // Select a discovered endpoint by row (params: index; -1 = typed URL)
@@ -2590,14 +2716,26 @@ service SerialStudioTypedAPI {
   // Set the OPC UA endpoint URL (params: url, e.g. opc.tcp://host:4840/path)
   rpc IoOpcuaSetEndpointUrl(IoOpcuaSetEndpointUrlRequest) returns (CommandResponse);
 
+  // Alias of io.opcua.setAuthMode (params: type)
+  rpc IoOpcuaSetIdentityType(IoOpcuaSetIdentityTypeRequest) returns (CommandResponse);
+
   // Set the password (params: password; stored in the encrypted vault)
   rpc IoOpcuaSetPassword(IoOpcuaSetPasswordRequest) returns (CommandResponse);
 
   // Set the publishing interval in milliseconds (params: intervalMs)
   rpc IoOpcuaSetPublishingInterval(IoOpcuaSetPublishingIntervalRequest) returns (CommandResponse);
 
+  // Set the message security mode (params: mode - 1=None, 2=Sign, 3=SignAndEncrypt)
+  rpc IoOpcuaSetSecurityMode(IoOpcuaSetSecurityModeRequest) returns (CommandResponse);
+
+  // Set the security policy (params: policy - full URI or short name)
+  rpc IoOpcuaSetSecurityPolicy(IoOpcuaSetSecurityPolicyRequest) returns (CommandResponse);
+
   // Replace the tag list (params: tags - array of {id, name, path, unit, t, n})
   rpc IoOpcuaSetTags(IoOpcuaSetTagsRequest) returns (CommandResponse);
+
+  // Set the X.509 identity files (params: certificate, key - paths on disk)
+  rpc IoOpcuaSetUserCertificate(IoOpcuaSetUserCertificateRequest) returns (CommandResponse);
 
   // Set the username (params: username)
   rpc IoOpcuaSetUsername(IoOpcuaSetUsernameRequest) returns (CommandResponse);
@@ -2607,6 +2745,9 @@ service SerialStudioTypedAPI {
 
   // Close the browse session and commit the picker selection to the tag list
   rpc IoOpcuaStopBrowse(IoOpcuaStopBrowseRequest) returns (CommandResponse);
+
+  // Accept the server certificate the last attempt was refused over (params: fingerprint)
+  rpc IoOpcuaTrustServer(IoOpcuaTrustServerRequest) returns (CommandResponse);
 
   // Get complete Process driver configuration
   rpc IoProcessGetConfig(IoProcessGetConfigRequest) returns (CommandResponse);

@@ -60,7 +60,7 @@ QString API::EnumLabels::busTypeLabel(int value)
     case SerialStudio::BusType::UART:
       return QStringLiteral("UART (serial port)");
     case SerialStudio::BusType::Network:
-      return QStringLiteral("Network (TCP/UDP)");
+      return QStringLiteral("Network (TCP/UDP/WebSocket/HTTP)");
     case SerialStudio::BusType::BluetoothLE:
       return QStringLiteral("Bluetooth LE");
 #ifdef BUILD_COMMERCIAL

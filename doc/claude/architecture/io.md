@@ -114,6 +114,27 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   (`SetupPanes/Hardware.qml` StackLayout gate; BLE's post-connect pickers exempt), and
   `ProjectModel::setSource0ConnectionSettings` no-ops on identical settings so persistence
   echoes cannot churn undo history or autosave.
+- **The Network driver is one class, four transports, five TUs (spec 0068).** `Network.h` is the
+  facade; `Network.cpp` holds the ctor/dtor, the four-way dispatchers and the property model, and
+  `Drivers/Network/Network{Tcp,Udp,WebSocket,Http}.cpp` each own one transport end to end. The
+  selector is the driver's own `Network::SocketType` enum (`Tcp=0, Udp=1, WebSocket=2, Http=3`)
+  because Qt's socket-type enum cannot name the last two; the NUMBERING is the socket-type index
+  persisted by project files, `io.network.setSocketType`, the CLI and the AI corpus, so it is
+  append-only. Two dispatchers do NOT branch on the current type: `close()` tears down
+  every transport (a type changed while a link is up would otherwise strand the open socket) and
+  `setDriverProperty()` offers each key to every transport (`applyConnectionSettings()` replays all
+  stored keys on project load, so gating on the active type silently drops settings). TCP and UDP
+  keep their synchronous verdicts; **WebSocket and HTTP dial async**, so `isConnecting()` is
+  overridden and returns `m_dialPending`, true only for those two. Their verdict funnels are
+  `succeedDial()` / `failDial()`, and `failDial()` only REPORTS, because `onDriverOpenFinished`
+  already closes the device on `ok == false` and tearing down there too double-closes. HTTP's opening
+  request IS the connect verdict (no separate HEAD probe: many REST endpoints answer 405, and a
+  POST source would fire two side-effecting requests per session) and its body publishes like any
+  poll. Only ONE reply is ever in flight; an overlapping poll tick increments a skip counter and
+  returns. A post-connect poll failure keeps the link UP, logs once per failure run, and counts
+  (`pollsOk`/`pollsFailed`/`pollsSkipped`/`consecutiveFailures`, pulled by `io.network.getStatus`,
+  never pushed). `urlForCurrentMode()` is the SINGLE validation rule shared by `configurationOk()`
+  and `open()`.
 - **OPC UA (specs 0066/0067) owns its stack, discovers before it dials, and publishes delta
   frames on a tick.** The protocol stack is `lib/open62541` (1.5.7 amalgamation) over
   `lib/mbedtls` (3.6 LTS), both vendored and statically linked; **`Qt6::OpcUa` is not used and

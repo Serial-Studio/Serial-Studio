@@ -1203,6 +1203,11 @@ io.network.getConfig = function() {
   return apiCall('io.network.getConfig', p);
 };
 
+io.network.getStatus = function() {
+  var p = {};
+  return apiCall('io.network.getStatus', p);
+};
+
 io.network.listSocketTypes = function() {
   var p = {};
   return apiCall('io.network.listSocketTypes', p);
@@ -1212,6 +1217,42 @@ io.network.lookup = function(host) {
   var p = {};
   p['host'] = host;
   return apiCall('io.network.lookup', p);
+};
+
+io.network.setHttpBody = function(body) {
+  var p = {};
+  p['body'] = body;
+  return apiCall('io.network.setHttpBody', p);
+};
+
+io.network.setHttpHeaders = function(headers) {
+  var p = {};
+  p['headers'] = headers;
+  return apiCall('io.network.setHttpHeaders', p);
+};
+
+io.network.setHttpInterval = function(interval) {
+  var p = {};
+  p['interval'] = interval;
+  return apiCall('io.network.setHttpInterval', p);
+};
+
+io.network.setHttpMethod = function(method) {
+  var p = {};
+  p['method'] = method;
+  return apiCall('io.network.setHttpMethod', p);
+};
+
+io.network.setHttpUrl = function(url) {
+  var p = {};
+  p['url'] = url;
+  return apiCall('io.network.setHttpUrl', p);
+};
+
+io.network.setIgnoreTlsErrors = function(enabled) {
+  var p = {};
+  p['enabled'] = enabled;
+  return apiCall('io.network.setIgnoreTlsErrors', p);
 };
 
 io.network.setRemoteAddress = function(address) {
@@ -1250,6 +1291,12 @@ io.network.setUdpRemotePort = function(port) {
   return apiCall('io.network.setUdpRemotePort', p);
 };
 
+io.network.setWebSocketUrl = function(url) {
+  var p = {};
+  p['url'] = url;
+  return apiCall('io.network.setWebSocketUrl', p);
+};
+
 io.opcua.addTag = function(id, name, t) {
   var p = {};
   p['id'] = id;
@@ -1274,9 +1321,20 @@ io.opcua.discoverEndpoints = function() {
   return apiCall('io.opcua.discoverEndpoints', p);
 };
 
+io.opcua.exportCertificate = function(path) {
+  var p = {};
+  p['path'] = path;
+  return apiCall('io.opcua.exportCertificate', p);
+};
+
 io.opcua.generateProject = function() {
   var p = {};
   return apiCall('io.opcua.generateProject', p);
+};
+
+io.opcua.getCertificate = function() {
+  var p = {};
+  return apiCall('io.opcua.getCertificate', p);
 };
 
 io.opcua.getConfig = function() {
@@ -1299,10 +1357,26 @@ io.opcua.listTags = function() {
   return apiCall('io.opcua.listTags', p);
 };
 
+io.opcua.listTrusted = function() {
+  var p = {};
+  return apiCall('io.opcua.listTrusted', p);
+};
+
+io.opcua.regenerateCertificate = function() {
+  var p = {};
+  return apiCall('io.opcua.regenerateCertificate', p);
+};
+
 io.opcua.removeTag = function(index) {
   var p = {};
   p['index'] = index;
   return apiCall('io.opcua.removeTag', p);
+};
+
+io.opcua.revokeTrust = function(fingerprint) {
+  var p = {};
+  p['fingerprint'] = fingerprint;
+  return apiCall('io.opcua.revokeTrust', p);
 };
 
 io.opcua.setAuthMode = function(mode) {
@@ -1323,6 +1397,12 @@ io.opcua.setEndpointUrl = function(url) {
   return apiCall('io.opcua.setEndpointUrl', p);
 };
 
+io.opcua.setIdentityType = function(type) {
+  var p = {};
+  p['type'] = type;
+  return apiCall('io.opcua.setIdentityType', p);
+};
+
 io.opcua.setPassword = function(password) {
   var p = {};
   p['password'] = password;
@@ -1335,10 +1415,29 @@ io.opcua.setPublishingInterval = function(intervalMs) {
   return apiCall('io.opcua.setPublishingInterval', p);
 };
 
+io.opcua.setSecurityMode = function(mode) {
+  var p = {};
+  p['mode'] = mode;
+  return apiCall('io.opcua.setSecurityMode', p);
+};
+
+io.opcua.setSecurityPolicy = function(policy) {
+  var p = {};
+  p['policy'] = policy;
+  return apiCall('io.opcua.setSecurityPolicy', p);
+};
+
 io.opcua.setTags = function(tags) {
   var p = {};
   p['tags'] = tags;
   return apiCall('io.opcua.setTags', p);
+};
+
+io.opcua.setUserCertificate = function(certificate, key) {
+  var p = {};
+  p['certificate'] = certificate;
+  p['key'] = key;
+  return apiCall('io.opcua.setUserCertificate', p);
 };
 
 io.opcua.setUsername = function(username) {
@@ -1355,6 +1454,12 @@ io.opcua.startBrowse = function() {
 io.opcua.stopBrowse = function() {
   var p = {};
   return apiCall('io.opcua.stopBrowse', p);
+};
+
+io.opcua.trustServer = function(fingerprint) {
+  var p = {};
+  p['fingerprint'] = fingerprint;
+  return apiCall('io.opcua.trustServer', p);
 };
 
 io.process.getConfig = function() {

@@ -2,7 +2,6 @@
     "actions": [
     ],
     "changeDrivenTransforms": false,
-    "controlScriptCode": "/**\n * ISS Position Tracker - Control Loop\n * \n * Fetches ISS (International Space Station) location data from the\n * open-notify.org API every 5 seconds and sends it to Serial Studio.\n */\n\nfunction setup() {}\n\nfunction loop() {\n  const status = io.getStatus();\n  if (!status.isConnected) {\n    io.connect();\n    delay(300); \n  }\n\n  const host = \"api.open-notify.org\";\n  const path = \"/iss-now.json\";\n  const httpRequest = \n    \"GET \" + path + \" HTTP/1.1\\r\\n\" +\n    \"Host: \" + host + \"\\r\\n\" +\n    \"Connection: keep-alive\\r\\n\" +\n    \"User-Agent: SerialStudio ISS Tracker\\r\\n\" +\n    \"\\r\\n\";\n\n  io.writeData(httpRequest, SerialStudio.Text);\n \n  delay(5000);\n}\n",
     "frozen": false,
     "groups": [
         {
@@ -106,6 +105,7 @@
         }
     ],
     "hexadecimalDelimiters": false,
+    "luaFastMode": false,
     "mqttPublisher": {
         "alpnEnabled": false,
         "alpnProtocol": "x-amzn-mqtt-ca",
@@ -141,9 +141,13 @@
             "checksum": "",
             "checksumAlgorithm": "",
             "connection": {
-                "address": "api.open-notify.org",
-                "socketTypeIndex": 0,
-                "tcpPort": 80
+                "httpBody": "",
+                "httpHeaders": "",
+                "httpInterval": 5000,
+                "httpMethodIndex": 0,
+                "httpUrl": "http://api.open-notify.org/iss-now.json",
+                "ignoreTlsErrors": false,
+                "socketTypeIndex": 3
             },
             "decoder": 0,
             "decoderMethod": 0,
@@ -157,6 +161,28 @@
         }
     ],
     "title": "ISS Tracker",
+    "treeExpansion": {
+        "": false,
+        "ISS Tracker": true,
+        "ISS Tracker/ ": false,
+        "ISS Tracker/Control Loop": false,
+        "ISS Tracker/Dashboard Widgets": true,
+        "ISS Tracker/Dashboard Widgets/3D Model": true,
+        "ISS Tracker/Dashboard Widgets/ISS Position": true,
+        "ISS Tracker/Dashboard Widgets/ISS Position/Altitude": false,
+        "ISS Tracker/Dashboard Widgets/ISS Position/Latitude": false,
+        "ISS Tracker/Dashboard Widgets/ISS Position/Longitude": false,
+        "ISS Tracker/Device A": true,
+        "ISS Tracker/Device A/Frame Parser": false,
+        "ISS Tracker/MQTT Publisher": false,
+        "ISS Tracker/Variables": true,
+        "ISS Tracker/Variables/Dataset Values": false,
+        "ISS Tracker/Workspaces": true,
+        "ISS Tracker/Workspaces/3D Model": false,
+        "ISS Tracker/Workspaces/All Data": false,
+        "ISS Tracker/Workspaces/ISS Position": false,
+        "ISS Tracker/Workspaces/Overview": false
+    },
     "widgetSettings": {
         "5:0:-1": {
             "mapType": 0,

@@ -5521,28 +5521,28 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>値</translation>
     </message>
     <message>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Pause</source>
         <translation>一時停止</translation>
     </message>
     <message>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Resume</source>
         <translation>再開</translation>
     </message>
     <message>
-        <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="323"/>
+        <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
         <source>Awaiting data…</source>
         <translation>データ待機中…</translation>
     </message>
     <message>
-        <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="390"/>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="378"/>
+        <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="390"/>
         <source>Open %1 in a separate window</source>
         <translation>%1を別ウィンドウで開く</translation>
     </message>
@@ -8864,15 +8864,15 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>Serial Studioプロジェクトを保存</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="160"/>
         <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="456"/>
+        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="160"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Serial Studioプロジェクトファイル (*.ssproj)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1555"/>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="181"/>
         <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="447"/>
+        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="181"/>
         <source>Untitled Project</source>
         <translation>無題のプロジェクト</translation>
     </message>
@@ -9296,9 +9296,9 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>Z</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="440"/>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="233"/>
         <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="440"/>
         <source>Workspace</source>
         <translation>ワークスペース</translation>
     </message>
@@ -9324,8 +9324,6 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2047"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2074"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2093"/>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="594"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="421"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="440"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="464"/>
@@ -9338,6 +9336,8 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="379"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="399"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="421"/>
+        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
+        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="594"/>
         <source>Name:</source>
         <translation>名前:</translation>
     </message>
@@ -9376,10 +9376,10 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">レジスタ名を変更</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1200"/>
+        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="2355"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="455"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="480"/>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="2355"/>
+        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1200"/>
         <source>This action cannot be undone.</source>
         <translation>この操作は元に戻せません。</translation>
     </message>
@@ -9388,9 +9388,9 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">これにより、テーブルと共に %1 個のレジスタが削除されます。この操作は元に戻せません。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1199"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="459"/>
         <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="479"/>
+        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1199"/>
         <source>Delete "%1"?</source>
         <translation>"%1" を削除しますか？</translation>
     </message>
@@ -9475,8 +9475,8 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>テーブルCSVをインポート</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
         <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="440"/>
+        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
         <source>New Workspace</source>
         <translation>新規ワークスペース</translation>
     </message>
@@ -9539,8 +9539,8 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>フォルダーを追加</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="586"/>
         <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="710"/>
+        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="586"/>
         <source>Move Group</source>
         <translation>グループを移動</translation>
     </message>
@@ -13626,9 +13626,10 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Network</name>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="481"/>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="491"/>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="830"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="350"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="843"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="264"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="274"/>
         <source>Network socket error</source>
         <translation>ネットワークソケットエラー</translation>
     </message>
@@ -13637,40 +13638,189 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">%1:%2への接続がタイムアウトしました。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="482"/>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="492"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="265"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="275"/>
         <source>Cannot connect to %1:%2 (%3)</source>
         <translation>%1:%2 に接続できません (%3)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="847"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="306"/>
+        <source>This socket type does not use a URL</source>
+        <translation>このソケットタイプは URL を使用しません</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="312"/>
+        <source>Enter a URL first</source>
+        <translation>最初に URL を入力してください</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="318"/>
+        <source>"%1" is not a valid URL</source>
+        <translation>"%1" は有効な URL ではありません</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="324"/>
+        <source>"%1" must start with %2://</source>
+        <translation>"%1" は %2:// で始まる必要があります</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="448"/>
+        <source>Automatic</source>
+        <translation>自動</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="449"/>
+        <source>Text</source>
+        <translation>テキスト</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="450"/>
+        <source>Binary</source>
+        <translation>バイナリ</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="884"/>
+        <source>Ignore TLS Errors</source>
+        <translation>TLS エラーを無視</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="885"/>
+        <source>Accept self-signed or mismatched certificates</source>
+        <translation>自己署名証明書または不一致の証明書を受け入れる</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="910"/>
         <source>Socket Type</source>
         <translation>ソケットタイプ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="855"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="924"/>
         <source>Remote Address</source>
         <translation>リモートアドレス</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="863"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="393"/>
         <source>TCP Port</source>
         <translation>TCPポート</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="872"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkUdp.cpp" line="172"/>
         <source>UDP Local Port</source>
         <translation>UDPローカルポート</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="881"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkUdp.cpp" line="181"/>
         <source>UDP Remote Port</source>
         <translation>UDPリモートポート</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="890"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkUdp.cpp" line="190"/>
         <source>UDP Multicast</source>
         <translation>UDPマルチキャスト</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="75"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="96"/>
+        <source>HTTP error</source>
+        <translation>HTTP エラー</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="96"/>
+        <source>The request could not be sent</source>
+        <translation>リクエストを送信できませんでした</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="266"/>
+        <source>HTTP source recovered</source>
+        <translation>HTTP ソースが復旧しました</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="266"/>
+        <source>%1 is answering again</source>
+        <translation>%1 が再び応答しています</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="277"/>
+        <source>HTTP poll failed</source>
+        <translation>HTTP ポーリングが失敗しました</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="296"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkWebSocket.cpp" line="216"/>
+        <source>TLS verification bypassed</source>
+        <translation>TLS 検証がバイパスされました</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="297"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkWebSocket.cpp" line="217"/>
+        <source>Continuing to %1 despite: %2</source>
+        <translation>%2 にもかかわらず %1 への接続を続行します</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="310"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkWebSocket.cpp" line="249"/>
+        <source>URL</source>
+        <translation>URL</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="311"/>
+        <source>REST endpoint, for example %1</source>
+        <translation>REST エンドポイント、例: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="318"/>
+        <source>Method</source>
+        <translation>メソッド</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="326"/>
+        <source>Poll Interval (ms)</source>
+        <translation>ポーリング間隔（ms）</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="327"/>
+        <source>Use 0 to request only when data is sent</source>
+        <translation>データ送信時のみリクエストする場合は 0 を使用</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="336"/>
+        <source>Request Body</source>
+        <translation>リクエストボディ</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="343"/>
+        <source>Request Headers</source>
+        <translation>リクエストヘッダー</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="344"/>
+        <source>One %1 pair per line</source>
+        <translation>1行につき1つの %1 ペア</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkWebSocket.cpp" line="52"/>
+        <source>WebSocket error</source>
+        <translation>WebSocket エラー</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkWebSocket.cpp" line="176"/>
+        <source>The connection closed during the handshake</source>
+        <translation>ハンドシェイク中に接続が切断されました</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkWebSocket.cpp" line="180"/>
+        <source>The remote peer closed the connection</source>
+        <translation>リモートピアが接続を切断しました</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkWebSocket.cpp" line="250"/>
+        <source>WebSocket endpoint, for example %1</source>
+        <translation>WebSocket エンドポイント、例: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkWebSocket.cpp" line="257"/>
+        <source>Send Format</source>
+        <translation>送信形式</translation>
     </message>
 </context>
 <context>
@@ -17623,8 +17773,8 @@ Would you like to open the download page?</source>
         <translation>Info.plistを書き込めませんでした: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Windowsショートカット作成機能はこのプラットフォームでは利用できません。</translation>
     </message>
@@ -17655,8 +17805,8 @@ Would you like to open the download page?</source>
         <translation>.lnkファイルの保存に失敗しました（HRESULT 0x%1）。</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>macOSショートカット作成機能はこのプラットフォームでは利用できません。</translation>
     </message>
@@ -18676,35 +18826,86 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>Network</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="78"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="106"/>
         <source>Socket Type</source>
         <translation>ソケットタイプ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="137"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="166"/>
         <source>Remote Address</source>
         <translation>リモートアドレス</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="99"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="127"/>
         <source>Local Port</source>
         <translation>ローカルポート</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="106"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="134"/>
         <source>Type 0 for automatic port</source>
         <translation>自動ポートの場合は0を入力</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="165"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="203"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="195"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="233"/>
         <source>Remote Port</source>
         <translation>リモートポート</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="238"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="268"/>
         <source>Multicast</source>
         <translation>マルチキャスト</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="294"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="346"/>
+        <source>URL</source>
+        <translation>URL</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="323"/>
+        <source>Send Format</source>
+        <translation>送信形式</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="375"/>
+        <source>Method</source>
+        <translation>メソッド</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="398"/>
+        <source>Poll Interval</source>
+        <translation>ポーリング間隔</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="407"/>
+        <source>Milliseconds; 0 sends only on write</source>
+        <translation>ミリ秒; 0 は書き込み時のみ送信</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="431"/>
+        <source>Request Body</source>
+        <translation>リクエストボディ</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="439"/>
+        <source>Optional</source>
+        <translation>オプション</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="459"/>
+        <source>Request Headers</source>
+        <translation>リクエストヘッダー</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="480"/>
+        <source>One %1 pair per line</source>
+        <translation>1行につき1つの%1ペア</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="496"/>
+        <source>Ignore TLS Errors</source>
+        <translation>TLSエラーを無視</translation>
     </message>
 </context>
 <context>
@@ -21305,8 +21506,8 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="485"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="257"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="485"/>
         <source>Frame Parser Disabled</source>
         <translation>フレームパーサーが無効化されました</translation>
     </message>
@@ -21372,8 +21573,8 @@ Serial Studio はサポートされていない演算子を bit.* 呼び出し�
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="675"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="540"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="675"/>
         <source>Missing Parse Function</source>
         <translation>Parse関数が見つかりません</translation>
     </message>
@@ -21389,8 +21590,8 @@ function parse(frame) ... end</source>
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="738"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="592"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="738"/>
         <source>Parse Function Runtime Error</source>
         <translation>Parse関数ランタイムエラー</translation>
     </message>
@@ -21566,12 +21767,12 @@ function parse(%1) { ... }
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="843"/>
+        <location filename="../../src/Misc/CLI.cpp" line="907"/>
         <source>Project file not found</source>
         <translation>プロジェクトファイルが見つかりません</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="844"/>
+        <location filename="../../src/Misc/CLI.cpp" line="908"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -21580,17 +21781,17 @@ function parse(%1) { ... }
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="847"/>
+        <location filename="../../src/Misc/CLI.cpp" line="911"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>このショートカットを削除しますか？</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="851"/>
+        <location filename="../../src/Misc/CLI.cpp" line="915"/>
         <source>Delete Shortcut</source>
         <translation>ショートカットを削除</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="853"/>
+        <location filename="../../src/Misc/CLI.cpp" line="917"/>
         <source>Quit</source>
         <translation>終了</translation>
     </message>
@@ -21889,17 +22090,17 @@ function parse(%1) { ... }
         <translation>ファイル構造の読み取りに失敗しました。ファイルが破損している可能性があります。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="433"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="205"/>
         <source>Host not found</source>
         <translation>ホストが見つかりません</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="457"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="229"/>
         <source>Connection failed</source>
         <translation>接続に失敗しました</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="465"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="237"/>
         <source>Connection timed out</source>
         <translation>接続がタイムアウトしました</translation>
     </message>
@@ -22003,6 +22204,16 @@ function parse(%1) { ... }
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="661"/>
         <source>malformed expression</source>
         <translation>式の形式が正しくありません</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="57"/>
+        <source>Server answered HTTP %1</source>
+        <translation>サーバーがHTTP %1を応答しました</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="59"/>
+        <source>The server sent no response</source>
+        <translation>サーバーから応答がありませんでした</translation>
     </message>
 </context>
 <context>

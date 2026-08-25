@@ -79,6 +79,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #   Qt6::Svg           - SVG rendering support
 #   Qt6::Sql           - Database abstraction layer (for settings)
 #   Qt6::Bluetooth     - Bluetooth LE device discovery and communication
+#   Qt6::Network       - TCP/UDP sockets and the HTTP client of the Network driver
+#   Qt6::WebSockets    - WebSocket client for the Network driver (spec 0068)
 #   Qt6::SerialPort    - RS-232/RS-485 serial communication
 #   Qt6::Core5Compat   - Qt 5 compatibility (TextCodec, etc.)
 #   Qt6::LinguistTools - Internationalization (lupdate, lrelease)
@@ -107,8 +109,10 @@ set(QT_MODULES
   Quick
   Graphs
   Widgets
+  Network
   Bluetooth
   SerialPort
+  WebSockets
   Core5Compat
   LinguistTools
   QuickControls2
@@ -123,8 +127,10 @@ set(QT_LIBS
   Qt6::Quick
   Qt6::Graphs
   Qt6::Widgets
+  Qt6::Network
   Qt6::Bluetooth
   Qt6::SerialPort
+  Qt6::WebSockets
   Qt6::Core5Compat
   Qt6::QuickControls2
 )
@@ -309,6 +315,10 @@ set(SOURCES
   src/API/Handlers/StreamHandler.cpp
   src/API/Handlers/AssistantHandler.cpp
   src/IO/Drivers/Network.cpp
+  src/IO/Drivers/Network/NetworkTcp.cpp
+  src/IO/Drivers/Network/NetworkUdp.cpp
+  src/IO/Drivers/Network/NetworkWebSocket.cpp
+  src/IO/Drivers/Network/NetworkHttp.cpp
   src/IO/Drivers/UART.cpp
   src/IO/Drivers/BluetoothLE.cpp
   src/IO/Checksum.cpp

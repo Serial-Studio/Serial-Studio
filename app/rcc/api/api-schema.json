@@ -1675,6 +1675,14 @@
         ]
     },
     {
+        "description": "Get link state and HTTP poll counters",
+        "name": "io.network.getStatus",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
         "description": "Get available socket types",
         "name": "io.network.listSocketTypes",
         "properties": {
@@ -1696,6 +1704,95 @@
         ]
     },
     {
+        "description": "Set the HTTP request body (params: body)",
+        "name": "io.network.setHttpBody",
+        "properties": {
+            "body": {
+                "description": "Body sent with every HTTP request",
+                "type": "string"
+            }
+        },
+        "required": [
+            "body"
+        ]
+    },
+    {
+        "description": "Set custom HTTP request headers (params: headers, one Name: Value per line)",
+        "name": "io.network.setHttpHeaders",
+        "properties": {
+            "headers": {
+                "description": "Custom request headers, one Name: Value pair per line",
+                "type": "string"
+            }
+        },
+        "required": [
+            "headers"
+        ]
+    },
+    {
+        "description": "Set the HTTP poll interval in ms (params: interval; 0 = only on write)",
+        "name": "io.network.setHttpInterval",
+        "properties": {
+            "interval": {
+                "description": "Poll interval in milliseconds (0, or 10-3600000)",
+                "maximum": 3600000,
+                "minimum": 0,
+                "type": "integer"
+            }
+        },
+        "required": [
+            "interval"
+        ]
+    },
+    {
+        "description": "Set the HTTP method (params: method - GET, POST, PUT, PATCH or DELETE)",
+        "name": "io.network.setHttpMethod",
+        "properties": {
+            "method": {
+                "default": "GET",
+                "description": "HTTP method",
+                "enum": [
+                    "GET",
+                    "POST",
+                    "PUT",
+                    "PATCH",
+                    "DELETE"
+                ],
+                "type": "string"
+            }
+        },
+        "required": [
+            "method"
+        ]
+    },
+    {
+        "description": "Set the HTTP endpoint URL (params: url)",
+        "name": "io.network.setHttpUrl",
+        "properties": {
+            "url": {
+                "default": "http://127.0.0.1:8080/",
+                "description": "REST endpoint (http:// or https://)",
+                "type": "string"
+            }
+        },
+        "required": [
+            "url"
+        ]
+    },
+    {
+        "description": "Accept untrusted certificates on wss:// and https:// (params: enabled)",
+        "name": "io.network.setIgnoreTlsErrors",
+        "properties": {
+            "enabled": {
+                "description": "Bypass certificate verification",
+                "type": "boolean"
+            }
+        },
+        "required": [
+            "enabled"
+        ]
+    },
+    {
         "description": "Set remote host address (params: address)",
         "name": "io.network.setRemoteAddress",
         "properties": {
@@ -1710,15 +1807,17 @@
         ]
     },
     {
-        "description": "Set socket type (params: socketTypeIndex - 0=TCP, 1=UDP)",
+        "description": "Set socket type (params: socketTypeIndex - 0=TCP, 1=UDP, 2=WebSocket, 3=HTTP)",
         "name": "io.network.setSocketType",
         "properties": {
             "socketTypeIndex": {
                 "default": 0,
-                "description": "Socket type index (0=TCP, 1=UDP)",
+                "description": "Socket type index (0=TCP, 1=UDP, 2=WebSocket, 3=HTTP)",
                 "enum": [
                     0,
-                    1
+                    1,
+                    2,
+                    3
                 ],
                 "type": "integer"
             }
@@ -1786,6 +1885,20 @@
         ]
     },
     {
+        "description": "Set the WebSocket endpoint URL (params: url)",
+        "name": "io.network.setWebSocketUrl",
+        "properties": {
+            "url": {
+                "default": "ws://127.0.0.1:8080",
+                "description": "WebSocket endpoint (ws:// or wss://)",
+                "type": "string"
+            }
+        },
+        "required": [
+            "url"
+        ]
+    },
+    {
         "description": "Append one tag (params: id, name, t; optional path, unit, n)",
         "name": "io.opcua.addTag",
         "properties": {
@@ -1838,8 +1951,29 @@
         ]
     },
     {
+        "description": "Write the client certificate to a file (params: path); the key is never exported",
+        "name": "io.opcua.exportCertificate",
+        "properties": {
+            "path": {
+                "description": "Destination path for the DER certificate",
+                "type": "string"
+            }
+        },
+        "required": [
+            "path"
+        ]
+    },
+    {
         "description": "Generate a project from the tag list and load it into the editor",
         "name": "io.opcua.generateProject",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Get this installation's OPC UA client certificate",
+        "name": "io.opcua.getCertificate",
         "properties": {
         },
         "required": [
@@ -1878,6 +2012,22 @@
         ]
     },
     {
+        "description": "List the accepted server certificates",
+        "name": "io.opcua.listTrusted",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Replace the client certificate and key; every server must trust it again",
+        "name": "io.opcua.regenerateCertificate",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
         "description": "Remove a tag by position (params: index)",
         "name": "io.opcua.removeTag",
         "properties": {
@@ -1891,11 +2041,24 @@
         ]
     },
     {
-        "description": "Set authentication (params: mode - 0=anonymous, 1=username/password)",
+        "description": "Withdraw a previously accepted server certificate (params: fingerprint)",
+        "name": "io.opcua.revokeTrust",
+        "properties": {
+            "fingerprint": {
+                "description": "SHA-256 fingerprint from io.opcua.listTrusted",
+                "type": "string"
+            }
+        },
+        "required": [
+            "fingerprint"
+        ]
+    },
+    {
+        "description": "Set authentication (params: mode - 0=anonymous, 1=username/password, 2=certificate)",
         "name": "io.opcua.setAuthMode",
         "properties": {
             "mode": {
-                "description": "0 = anonymous, 1 = username/password",
+                "description": "0 = anonymous, 1 = username/password, 2 = X.509 certificate",
                 "type": "integer"
             }
         },
@@ -1930,6 +2093,19 @@
         ]
     },
     {
+        "description": "Alias of io.opcua.setAuthMode (params: type)",
+        "name": "io.opcua.setIdentityType",
+        "properties": {
+            "type": {
+                "description": "0 = anonymous, 1 = username/password, 2 = X.509 certificate",
+                "type": "integer"
+            }
+        },
+        "required": [
+            "type"
+        ]
+    },
+    {
         "description": "Set the password (params: password; stored in the encrypted vault)",
         "name": "io.opcua.setPassword",
         "properties": {
@@ -1956,6 +2132,32 @@
         ]
     },
     {
+        "description": "Set the message security mode (params: mode - 1=None, 2=Sign, 3=SignAndEncrypt)",
+        "name": "io.opcua.setSecurityMode",
+        "properties": {
+            "mode": {
+                "description": "1 = None, 2 = Sign, 3 = Sign and Encrypt",
+                "type": "integer"
+            }
+        },
+        "required": [
+            "mode"
+        ]
+    },
+    {
+        "description": "Set the security policy (params: policy - full URI or short name)",
+        "name": "io.opcua.setSecurityPolicy",
+        "properties": {
+            "policy": {
+                "description": "None, Basic128Rsa15, Basic256, Basic256Sha256, Aes128_Sha256_RsaOaep or Aes256_Sha256_RsaPss",
+                "type": "string"
+            }
+        },
+        "required": [
+            "policy"
+        ]
+    },
+    {
         "description": "Replace the tag list (params: tags - array of {id, name, path, unit, t, n})",
         "name": "io.opcua.setTags",
         "properties": {
@@ -1969,6 +2171,24 @@
         },
         "required": [
             "tags"
+        ]
+    },
+    {
+        "description": "Set the X.509 identity files (params: certificate, key - paths on disk)",
+        "name": "io.opcua.setUserCertificate",
+        "properties": {
+            "certificate": {
+                "description": "Path to the user certificate (DER or PEM)",
+                "type": "string"
+            },
+            "key": {
+                "description": "Path to the private key",
+                "type": "string"
+            }
+        },
+        "required": [
+            "certificate",
+            "key"
         ]
     },
     {
@@ -1998,6 +2218,19 @@
         "properties": {
         },
         "required": [
+        ]
+    },
+    {
+        "description": "Accept the server certificate the last attempt was refused over (params: fingerprint)",
+        "name": "io.opcua.trustServer",
+        "properties": {
+            "fingerprint": {
+                "description": "SHA-256 fingerprint reported by the failed attempt",
+                "type": "string"
+            }
+        },
+        "required": [
+            "fingerprint"
         ]
     },
     {
