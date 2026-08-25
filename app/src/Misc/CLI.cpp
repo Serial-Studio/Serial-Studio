@@ -701,25 +701,51 @@ void CLI::applyVisualizationOptions()
  */
 void CLI::applyBusConfiguration()
 {
-  if (m_parser.isSet(m_opts.uartOpt) || m_parser.isSet(m_opts.baudOpt))
+  if (m_parser.isSet(m_opts.uartOpt) || m_parser.isSet(m_opts.baudOpt)) {
     setupUartConnection();
-  else if (m_parser.isSet(m_opts.tcpOpt))
+    return;
+  }
+
+  if (m_parser.isSet(m_opts.tcpOpt)) {
     setupTcpConnection(m_parser.value(m_opts.tcpOpt));
-  else if (m_parser.isSet(m_opts.udpOpt))
+    return;
+  }
+
+  if (m_parser.isSet(m_opts.udpOpt)) {
     setupUdpConnection();
-  else if (m_parser.isSet(m_opts.wsOpt))
+    return;
+  }
+
+  if (m_parser.isSet(m_opts.wsOpt)) {
     setupWebSocketConnection(m_parser.value(m_opts.wsOpt));
-  else if (m_parser.isSet(m_opts.httpOpt))
+    return;
+  }
+
+  if (m_parser.isSet(m_opts.httpOpt)) {
     setupHttpConnection(m_parser.value(m_opts.httpOpt));
+    return;
+  }
+
 #ifdef BUILD_COMMERCIAL
-  else if (m_parser.isSet(m_opts.modbusRtuOpt))
+  if (m_parser.isSet(m_opts.modbusRtuOpt)) {
     setupModbusRtuConnection();
-  else if (m_parser.isSet(m_opts.modbusTcpOpt))
+    return;
+  }
+
+  if (m_parser.isSet(m_opts.modbusTcpOpt)) {
     setupModbusTcpConnection();
-  else if (m_parser.isSet(m_opts.canbusOpt))
+    return;
+  }
+
+  if (m_parser.isSet(m_opts.canbusOpt)) {
     setupCanbusConnection();
-  else if (m_parser.isSet(m_opts.opcuaOpt))
+    return;
+  }
+
+  if (m_parser.isSet(m_opts.opcuaOpt)) {
     setupOpcUaConnection();
+    return;
+  }
 #endif
 }
 
