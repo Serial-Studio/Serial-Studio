@@ -10862,7 +10862,7 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>ExternalWidgetWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="237"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="252"/>
         <source>The widget could not be created.</source>
         <translation>تعذّر إنشاء عنصر الواجهة.</translation>
     </message>
@@ -13568,324 +13568,433 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::OpcUa</name>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="386"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="417"/>
         <source>OPC UA Initialization Failed</source>
         <translation>فشل تهيئة OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="387"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1314"/>
         <source>The %1 backend is not available in this build.</source>
-        <translation>الواجهة الخلفية %1 غير متوفرة في هذا الإصدار.</translation>
+        <translation type="vanished">الواجهة الخلفية %1 غير متوفرة في هذا الإصدار.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="559"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="614"/>
         <source>OPC UA Connection Failed</source>
         <translation>فشل اتصال OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="560"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="615"/>
         <source>Unable to connect to "%1".</source>
         <translation>تعذر الاتصال بـ "%1".</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="561"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="726"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="752"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="928"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="616"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="743"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="884"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2257"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="577"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="632"/>
         <source>OPC UA Connection Lost</source>
         <translation>فُقد اتصال OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="591"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="646"/>
         <source>Timed out after %1 s</source>
         <translation>انتهت المهلة بعد %1 ثانية</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="621"/>
         <source>The server closed the connection</source>
-        <translation>أغلق الخادم الاتصال</translation>
+        <translation type="vanished">أغلق الخادم الاتصال</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="623"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="678"/>
         <source>The server closed the session</source>
         <translation>أغلق الخادم الجلسة</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="635"/>
         <source>Invalid endpoint URL</source>
-        <translation>عنوان نقطة النهاية غير صالح</translation>
+        <translation type="vanished">عنوان نقطة النهاية غير صالح</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="638"/>
         <source>Access denied (bad credentials or anonymous login refused)</source>
-        <translation>تم رفض الوصول (بيانات اعتماد خاطئة أو رفض تسجيل الدخول المجهول)</translation>
+        <translation type="vanished">تم رفض الوصول (بيانات اعتماد خاطئة أو رفض تسجيل الدخول المجهول)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="641"/>
         <source>Connection error (server unreachable or refused)</source>
-        <translation>خطأ في الاتصال (الخادم غير قابل للوصول أو رفض الاتصال)</translation>
+        <translation type="vanished">خطأ في الاتصال (الخادم غير قابل للوصول أو رفض الاتصال)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="645"/>
         <source>The server does not accept this authentication mode</source>
-        <translation>الخادم لا يقبل وضع المصادقة هذا</translation>
+        <translation type="vanished">الخادم لا يقبل وضع المصادقة هذا</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="648"/>
         <source>The endpoint description was rejected (unsupported security policy)</source>
-        <translation>تم رفض وصف نقطة النهاية (سياسة أمان غير مدعومة)</translation>
+        <translation type="vanished">تم رفض وصف نقطة النهاية (سياسة أمان غير مدعومة)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="651"/>
         <source>The endpoint offers no matching user identity token</source>
-        <translation>نقطة النهاية لا توفر رمز هوية مستخدم مطابق</translation>
+        <translation type="vanished">نقطة النهاية لا توفر رمز هوية مستخدم مطابق</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="654"/>
         <source>The security policy is not supported by this build</source>
-        <translation>سياسة الأمان غير مدعومة في هذا الإصدار</translation>
+        <translation type="vanished">سياسة الأمان غير مدعومة في هذا الإصدار</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="657"/>
         <source>The certificate store is invalid or unreadable</source>
-        <translation>مخزن الشهادات غير صالح أو غير قابل للقراءة</translation>
+        <translation type="vanished">مخزن الشهادات غير صالح أو غير قابل للقراءة</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="660"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2501"/>
         <source>The server certificate is not trusted</source>
         <translation>شهادة الخادم غير موثوقة</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="663"/>
         <source>Unexpected backend error</source>
-        <translation>حدث خطأ غير متوقع في الواجهة الخلفية</translation>
+        <translation type="vanished">حدث خطأ غير متوقع في الواجهة الخلفية</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="685"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="704"/>
         <source>"%1" is not a valid endpoint URL</source>
         <translation>"%1" ليس عنوان URL صالح لنقطة النهاية</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="686"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="752"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="705"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2257"/>
         <source>OPC UA Discovery</source>
         <translation>اكتشاف OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="694"/>
         <source>The %1 backend is not available in this build</source>
-        <translation>الواجهة الخلفية %1 غير متوفرة في هذا الإصدار</translation>
+        <translation type="vanished">الواجهة الخلفية %1 غير متوفرة في هذا الإصدار</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="725"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="742"/>
         <source>Discovery failed: %1</source>
         <translation>فشل الاكتشاف: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="726"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="743"/>
         <source>OPC UA Discovery Failed</source>
         <translation>فشل اكتشاف OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="751"/>
         <source>No None-policy endpoint; secure channels are not supported in this version</source>
-        <translation>لا توجد نقطة نهاية بسياسة None؛ القنوات الآمنة غير مدعومة في هذا الإصدار</translation>
+        <translation type="vanished">لا توجد نقطة نهاية بسياسة None؛ القنوات الآمنة غير مدعومة في هذا الإصدار</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="776"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="789"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="409"/>
+        <source>The connection is not configured: check the endpoint and the tag list</source>
+        <translation>الاتصال غير مُهيأ: تحقق من نقطة النهاية وقائمة الوسوم</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="416"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="713"/>
+        <source>The %1 stack is not available in this build</source>
+        <translation>مكدس %1 غير متوفر في هذا الإصدار</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="459"/>
+        <source>The connection attempt could not be started</source>
+        <translation>تعذر بدء محاولة الاتصال</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="477"/>
+        <source>OPC UA Certificate</source>
+        <translation>شهادة OPC UA</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="478"/>
+        <source>The client certificate could not be generated; secure channels will be refused.</source>
+        <translation>تعذر إنشاء شهادة العميل؛ سيتم رفض القنوات الآمنة.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="773"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="786"/>
         <source>Endpoint discovery failed</source>
         <translation>فشل اكتشاف نقطة النهاية</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="927"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="883"/>
         <source>OPC UA Monitored Item Refused</source>
         <translation>عنصر OPC UA المراقب مرفوض</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="938"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="890"/>
         <source>the server refused every monitored item</source>
         <translation>رفض الخادم كل عنصر مراقب</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="986"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="910"/>
+        <source>the server retired the subscription</source>
+        <translation>سحب الخادم الاشتراك</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="946"/>
         <source>OPC UA Subscription Unavailable</source>
         <translation>اشتراك OPC UA غير متاح</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="987"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="947"/>
         <source>Falling back to polling: %1.</source>
         <translation>العودة إلى الاستقصاء: %1.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1013"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="973"/>
         <source>no notification for %1 s</source>
         <translation>لا يوجد إشعار لمدة %1 ث</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1069"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1026"/>
         <source>OPC UA Read Failed</source>
         <translation>فشلت قراءة OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1236"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1190"/>
         <source>OPC UA Type Mismatch</source>
         <translation>عدم تطابق نوع OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1237"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1191"/>
         <source>Channel %1 is declared %2 but the server sends %3; the value is coerced.</source>
         <translation>القناة %1 معلنة كـ %2 لكن الخادم يرسل %3؛ تم تحويل القيمة.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1282"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1236"/>
         <source>Browse of %1 failed: %2</source>
         <translation>فشل استعراض %1: %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1307"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1261"/>
         <source>"%1" is not a valid endpoint URL.</source>
         <translation>"%1" ليس عنوان URL صالحاً لنقطة النهاية.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1400"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1268"/>
+        <source>The %1 stack is not available in this build.</source>
+        <translation>مكدس %1 غير متوفر في هذا الإصدار.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1275"/>
+        <source>The browse session was closed by the server</source>
+        <translation>أغلق الخادم جلسة الاستعراض</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1285"/>
+        <source>The browse session could not be started</source>
+        <translation>تعذر بدء جلسة الاستعراض</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1365"/>
         <source>Could not open a browse session on %1</source>
         <translation>تعذر فتح جلسة استعراض على %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1424"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1392"/>
         <source>Failed to load generated project</source>
         <translation>فشل تحميل المشروع المُنشأ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1425"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1393"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>تعذر تحميل JSON للمشروع المُنشأ.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1439"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1407"/>
         <source>No tags selected</source>
         <translation>لم يتم تحديد أي وسوم</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1440"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1408"/>
         <source>Browse the server and select at least one tag before generating a project.</source>
         <translation>استعرض الخادم وحدد وسماً واحداً على الأقل قبل إنشاء المشروع.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1443"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1467"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1411"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1435"/>
         <source>OPC UA Project Generator</source>
         <translation>مُنشئ مشروع OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1462"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1430"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>تم إنشاء المشروع بنجاح مع %1 مجموعة و %2 مجموعة بيانات.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1465"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1433"/>
         <source>The project editor is now open for customization.</source>
         <translation>محرر المشروع مفتوح الآن للتخصيص.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1513"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1481"/>
         <source>OPC UA Project</source>
         <translation>مشروع OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1518"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1486"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1545"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1513"/>
         <source>Tags</source>
         <translation>الوسوم</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1596"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1565"/>
+        <source> (deprecated)</source>
+        <translation>(مُهمل)</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1581"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2315"/>
         <source>None</source>
         <translation>بدون</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1598"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1583"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2315"/>
         <source>Sign</source>
         <translation>توقيع</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1599"/>
-        <source>Sign &amp; Encrypt</source>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1585"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2315"/>
+        <source>Sign and Encrypt</source>
         <translation>توقيع وتشفير</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1708"/>
+        <source>Sign &amp;&amp; Encrypt</source>
+        <translation type="vanished">توقيع وتشفير</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1590"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2315"/>
+        <source>Invalid</source>
+        <translation>غير صالح</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2684"/>
+        <source>Security Policy</source>
+        <translation>سياسة الأمان</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2692"/>
+        <source>Security Mode</source>
+        <translation>وضع الأمان</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2700"/>
+        <source>User Certificate</source>
+        <translation>شهادة المستخدم</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2707"/>
+        <source>User Private Key</source>
+        <translation>المفتاح الخاص للمستخدم</translation>
+    </message>
+    <message>
+        <source>Sign &amp; Encrypt</source>
+        <translation type="vanished">توقيع وتشفير</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1713"/>
         <source>Connecting to %1</source>
         <translation>الاتصال بـ %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1711"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1716"/>
         <source>Not connected</source>
         <translation>غير متصل</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1717"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1722"/>
         <source>Subscribing, %1 of %2 tags</source>
         <translation>الاشتراك، %1 من %2 وسم</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1722"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1727"/>
         <source>Subscribed %1 tags, polling %2 refused, %3 Hz</source>
         <translation>تم الاشتراك بـ %1 وسم، رفض الاستقصاء لـ %2، %3 هرتز</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1728"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1733"/>
         <source>Polling (server refused subscriptions), %1 tags, %2 Hz</source>
         <translation>الاستقصاء (رفض الخادم الاشتراكات)، %1 وسم، %2 هرتز</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1732"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1737"/>
         <source>Subscribed, %1 tags, %2 Hz</source>
         <translation>تم الاشتراك، %1 وسم، %2 هرتز</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1764"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1775"/>
         <source>Anonymous</source>
         <translation>مجهول</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1764"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1775"/>
         <source>Username / Password</source>
         <translation>اسم المستخدم / كلمة المرور</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2123"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1775"/>
+        <source>X.509 Certificate</source>
+        <translation>شهادة X.509</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2256"/>
+        <source>No endpoint this build can open with the selected identity</source>
+        <translation>لا توجد نقطة نهاية يمكن لهذا الإصدار فتحها بالهوية المحددة</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2284"/>
+        <source>%1 (deprecated)</source>
+        <translation>%1 (مهمل)</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2503"/>
+        <source>The server certificate has expired</source>
+        <translation>انتهت صلاحية شهادة الخادم</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2505"/>
+        <source>The server certificate is not valid yet</source>
+        <translation>شهادة الخادم غير صالحة بعد</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2507"/>
+        <source>The server certificate was not issued for this host</source>
+        <translation>شهادة الخادم لم تُصدر لهذا المضيف</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2509"/>
+        <source>The server certificate could not be parsed</source>
+        <translation>تعذر تحليل شهادة الخادم</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2646"/>
         <source>Endpoint URL</source>
         <translation>عنوان URL للنقطة الطرفية</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2130"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2653"/>
         <source>Authentication</source>
         <translation>المصادقة</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2138"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2661"/>
         <source>Username</source>
         <translation>اسم المستخدم</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2145"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2668"/>
         <source>Password</source>
         <translation>كلمة المرور</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2152"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2675"/>
         <source>Poll Interval (ms)</source>
         <translation>فترة الاستقصاء (ميلي ثانية)</translation>
     </message>
@@ -13893,19 +14002,18 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::OpcUaTagModel</name>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUaTagModel.cpp" line="299"/>
+        <location filename="../../src/IO/Drivers/OpcUaTagModel.cpp" line="293"/>
         <source>read</source>
         <translation>قراءة</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUaTagModel.cpp" line="299"/>
+        <location filename="../../src/IO/Drivers/OpcUaTagModel.cpp" line="293"/>
         <source>no read</source>
         <translation>بدون قراءة</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUaTagModel.cpp" line="649"/>
         <source>invalid node id</source>
-        <translation>معرّف عقدة غير صالح</translation>
+        <translation type="vanished">معرّف عقدة غير صالح</translation>
     </message>
 </context>
 <context>
@@ -18273,72 +18381,196 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>OpcUa</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="49"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="51"/>
         <source>Endpoint</source>
         <translation>نقطة النهاية</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="71"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="73"/>
         <source>Discover</source>
         <translation>اكتشاف</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="86"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="88"/>
         <source>Poll Interval (ms)</source>
         <translation>فترة الاستقصاء (ميلي ثانية)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="93"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="95"/>
         <source>10-60000</source>
         <translation>10-60000</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="107"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="109"/>
         <source>Security</source>
         <translation>الأمان</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="150"/>
-        <source>Secure channels are not supported in this version</source>
-        <translation>القنوات الآمنة غير مدعومة في هذا الإصدار</translation>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="152"/>
+        <source>This endpoint offers no user identity token the selected authentication mode can present</source>
+        <translation>نقطة النهاية هذه لا توفر رمز هوية مستخدم يمكن لوضع المصادقة المحدد تقديمه</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="158"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="160"/>
+        <source>Policy</source>
+        <translation>السياسة</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="176"/>
+        <source>Mode</source>
+        <translation>الوضع</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="183"/>
+        <source>Sign</source>
+        <translation>توقيع</translation>
+    </message>
+    <message>
+        <source>Sign &amp;&amp; Encrypt</source>
+        <translation type="vanished">توقيع وتشفير</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="203"/>
+        <source>This policy is deprecated by the OPC Foundation (SHA-1 / RSA-1.5). Use it only for controllers that support nothing better.</source>
+        <translation>هذه السياسة مهملة من قبل مؤسسة OPC (SHA-1 / RSA-1.5). استخدمها فقط للمتحكمات التي لا تدعم أفضل منها.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="261"/>
+        <source>Certificate</source>
+        <translation>الشهادة</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="275"/>
+        <source>No certificate selected</source>
+        <translation>لم يتم تحديد شهادة</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="279"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="304"/>
+        <source>Browse…</source>
+        <translation>استعراض…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="286"/>
+        <source>Private Key</source>
+        <translation>المفتاح الخاص</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="300"/>
+        <source>No private key selected</source>
+        <translation>لم يتم تحديد مفتاح خاص</translation>
+    </message>
+    <message>
+        <source>Credentials travel in the clear on this channel. Choose a policy other than None with Sign &amp; Encrypt to protect them.</source>
+        <translation type="vanished">تنتقل بيانات الاعتماد بشكل غير مشفر على هذه القناة. اختر سياسة غير None مع Sign &amp; Encrypt لحمايتها.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="183"/>
+        <source>Sign and Encrypt</source>
+        <translation>توقيع وتشفير</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="320"/>
+        <source>Credentials travel in the clear on this channel. Choose a policy other than None with Sign and Encrypt to protect them.</source>
+        <translation>تنتقل بيانات الاعتماد بشكل غير مشفر على هذه القناة. اختر سياسة غير None مع توقيع وتشفير لحمايتها.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="327"/>
+        <source>Identity</source>
+        <translation>الهوية</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="344"/>
+        <source>Generated on the first secure connection</source>
+        <translation>يتم إنشاؤه عند أول اتصال آمن</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="352"/>
+        <source>Export…</source>
+        <translation>تصدير…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="358"/>
+        <source>Replace</source>
+        <translation>استبدال</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="439"/>
+        <source>Export Client Certificate</source>
+        <translation>تصدير شهادة العميل</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="440"/>
+        <source>Certificate (*.der)</source>
+        <translation>الشهادة (*.der)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="440"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="448"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="456"/>
+        <source>All files (*)</source>
+        <translation>جميع الملفات (*)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="447"/>
+        <source>Select User Certificate</source>
+        <translation>اختر شهادة المستخدم</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="448"/>
+        <source>Certificate (*.der *.pem *.crt)</source>
+        <translation>الشهادة (*.der *.pem *.crt)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="455"/>
+        <source>Select Private Key</source>
+        <translation>اختر المفتاح الخاص</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="456"/>
+        <source>Private key (*.der *.pem *.key)</source>
+        <translation>المفتاح الخاص (*.der *.pem *.key)</translation>
+    </message>
+    <message>
+        <source>Secure channels are not supported in this version</source>
+        <translation type="vanished">القنوات الآمنة غير مدعومة في هذا الإصدار</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="210"/>
         <source>Authentication</source>
         <translation>المصادقة</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="174"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="226"/>
         <source>Username</source>
         <translation>اسم المستخدم</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="191"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="243"/>
         <source>Password</source>
         <translation>كلمة المرور</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="218"/>
         <source>Credentials are sent unencrypted: this version only opens None-policy channels.</source>
-        <translation>يتم إرسال بيانات الاعتماد دون تشفير: هذا الإصدار يفتح قنوات بسياسة None فقط.</translation>
+        <translation type="vanished">يتم إرسال بيانات الاعتماد دون تشفير: هذا الإصدار يفتح قنوات بسياسة None فقط.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="236"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="384"/>
         <source>Browse Tags…</source>
         <translation>استعراض الوسوم…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="247"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="395"/>
         <source>Generate Project</source>
         <translation>إنشاء المشروع</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="265"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="413"/>
         <source>%1 tag(s) selected</source>
         <translation>تم تحديد %1 وسم</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="266"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="414"/>
         <source>No tags selected</source>
         <translation>لم يتم تحديد أي وسوم</translation>
     </message>
@@ -18389,6 +18621,59 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="453"/>
         <source>OK</source>
         <translation>موافق</translation>
+    </message>
+</context>
+<context>
+    <name>OpcUaTrustDialog</name>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="42"/>
+        <source>Untrusted OPC UA Server</source>
+        <translation>خادم OPC UA غير موثوق</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="84"/>
+        <source>Check the fingerprint against the one the server operator gave you before accepting. Accepting records the decision for this installation; it does not reconnect, so press Connect again afterwards.</source>
+        <translation>تحقق من البصمة مقابل تلك التي قدمها مشغل الخادم قبل القبول. القبول يسجل القرار لهذا التثبيت؛ لا يعيد الاتصال، لذا اضغط اتصال مرة أخرى بعد ذلك.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="108"/>
+        <source>Subject:</source>
+        <translation>الموضوع:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="119"/>
+        <source>Issuer:</source>
+        <translation>المُصدِر:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="130"/>
+        <source>Application URI:</source>
+        <translation>عنوان URI للتطبيق:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="141"/>
+        <source>Fingerprint:</source>
+        <translation>البصمة:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="152"/>
+        <source>Valid From:</source>
+        <translation>صالح من:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="162"/>
+        <source>Valid Until:</source>
+        <translation>صالح حتى:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="188"/>
+        <source>Reject</source>
+        <translation>رفض</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="193"/>
+        <source>Trust This Server</source>
+        <translation>الوثوق بهذا الخادم</translation>
     </message>
 </context>
 <context>

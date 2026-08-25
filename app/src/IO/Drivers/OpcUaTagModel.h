@@ -28,15 +28,13 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QList>
-#include <QOpcUaClient>
-#include <QOpcUaNode>
-#include <QOpcUaReadResult>
-#include <QOpcUaReferenceDescription>
 #include <QQueue>
 #include <QString>
 #include <QVariant>
 
 #include "IO/Drivers/OpcUa.h"
+#include "IO/Drivers/OpcUaSession.h"
+#include "IO/Drivers/OpcUaTypes.h"
 #include "IO/Drivers/OpcUaWire.h"
 
 namespace IO {
@@ -109,16 +107,42 @@ public:
   [[nodiscard]] static OpcUaWire::Type wireTypeFromValue(const QVariant& value) noexcept;
 
 public slots:
-  void setClient(QOpcUaClient* client);
+  void setSession(OpcUaSession* session);
   void clear();
   void preselect(const QList<OpcUaTag>& tags);
   void setChecked(const QModelIndex& index, const bool checked);
   void selectAllReadable();
 
 private slots:
-  void onAttributesRead(const QList<QOpcUaReadResult>& results, QOpcUa::UaStatusCode status);
+  void onAttributesRead(quint32 token,
+                        const QList<OpcUaTypes::ReadRow>& rows,
+                        OpcUaTypes::StatusCode status);
+  void onBrowseReply(quint32 token,
+                     const QString& nodeId,
+                     const QList<OpcUaTypes::ReferenceRow>& children,
+                     OpcUaTypes::StatusCode status);
 
 private:
+  /**
+   * @brief Why a node is being browsed. One node can be browsed for all three reasons at once,
+   *        so the session's reply token carries this back rather than the node id alone.
+   */
+  enum class Purpose : quint8 {
+    Level,
+    Probe,
+    Units,
+  };
+
+  /**
+   * @brief Read-reply routing tokens. A ticked variable's EngineeringUnits property is also an
+   *        ordinary child row of that variable, so a reply keyed on node id alone cannot say
+   *        whether it belongs to the level read or to the units lookup.
+   */
+  enum Token : quint32 {
+    LevelRead = 1,
+    UnitRead  = 2,
+  };
+
   /**
    * @brief One address-space row; children are owned through the vector. Objects and Variables
    *        are both expandable until a browse proves a node has no children.
@@ -169,13 +193,34 @@ private:
     {}
   };
 
+  /**
+   * @brief A browse still on the wire, and what its reply means.
+   */
+  struct PendingBrowse {
+    Node* node;
+    Purpose purpose;
+
+    PendingBrowse() : node(nullptr), purpose(Purpose::Level) {}
+  };
+
+  /**
+   * @brief A property whose Value is being read for a ticked variable: EngineeringUnits gives the
+   *        unit string, EURange the display bounds.
+   */
+  struct UnitTarget {
+    Node* node;
+    bool range;
+
+    UnitTarget() : node(nullptr), range(false) {}
+  };
+
   [[nodiscard]] Node* nodeAt(const QModelIndex& index) const;
   [[nodiscard]] Node* findNode(Node* from, const QString& nodeId) const;
   [[nodiscard]] QModelIndex indexOf(Node* node) const;
   [[nodiscard]] bool selectable(const Node* node) const noexcept;
-  [[nodiscard]] QString resolveNodeId(const QOpcUaExpandedNodeId& id) const;
+  [[nodiscard]] QString resolveNodeId(const OpcUaTypes::ReferenceRow& row) const;
   [[nodiscard]] std::unique_ptr<Node> makeChild(Node* parent,
-                                                const QOpcUaReferenceDescription& ref) const;
+                                                const OpcUaTypes::ReferenceRow& row) const;
 
   void browse(Node* node);
   void readLevel(Node* node);
@@ -188,29 +233,37 @@ private:
   void queueUnits(Node* node);
   void pumpUnitQueue();
   void applyAttribute(Node* node,
-                      QOpcUa::NodeAttribute attribute,
+                      OpcUaTypes::NodeAttribute attribute,
                       const QVariant& value,
-                      QOpcUa::UaStatusCode status);
+                      OpcUaTypes::StatusCode status);
   void finishAttributes(Node* node);
   void onBrowseFinished(Node* node,
-                        const QList<QOpcUaReferenceDescription>& children,
-                        QOpcUa::UaStatusCode status);
-  void onUnitsBrowsed(Node* node, const QList<QOpcUaReferenceDescription>& children);
+                        const QList<OpcUaTypes::ReferenceRow>& children,
+                        OpcUaTypes::StatusCode status);
+  void onProbeFinished(Node* node,
+                       const QList<OpcUaTypes::ReferenceRow>& children,
+                       OpcUaTypes::StatusCode status);
+  void onUnitsBrowsed(Node* node, const QList<OpcUaTypes::ReferenceRow>& children);
+  void applyUnitValue(const UnitTarget& target,
+                      const QVariant& value,
+                      OpcUaTypes::StatusCode status);
+  [[nodiscard]] quint32 issueBrowse(Node* node, Purpose purpose);
   void applySelectAll(Node* node);
   void collectSelected(const Node* node, QList<OpcUaTag>& out) const;
   void countSelected(const Node* node, int& count, int& indices) const;
   void countSelectable(const Node* node, int& checked, int& selectable) const;
-  void retireHandle(QOpcUaNode* handle);
   void publishBusy();
 
-  QOpcUaClient* m_client;
+  OpcUaSession* m_session;
   std::unique_ptr<Node> m_root;
-  QList<QOpcUaNode*> m_handles;
   QList<OpcUaTag> m_preselected;
   QHash<QString, Node*> m_index;
   QHash<QString, Node*> m_pendingReads;
+  QHash<quint32, PendingBrowse> m_browseTokens;
   QQueue<Node*> m_probeQueue;
   QQueue<Node*> m_unitQueue;
+  QHash<QString, UnitTarget> m_unitTargets;
+  quint32 m_nextToken;
   int m_unitsInFlight;
   int m_probesInFlight;
   int m_pendingBrowses;

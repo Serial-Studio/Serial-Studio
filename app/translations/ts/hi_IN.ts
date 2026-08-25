@@ -10958,7 +10958,7 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>ExternalWidgetWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="237"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="252"/>
         <source>The widget could not be created.</source>
         <translation>विजेट नहीं बनाया जा सका।</translation>
     </message>
@@ -13676,324 +13676,433 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::OpcUa</name>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="386"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="417"/>
         <source>OPC UA Initialization Failed</source>
         <translation>OPC UA आरंभीकरण विफल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="387"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1314"/>
         <source>The %1 backend is not available in this build.</source>
-        <translation>%1 बैकएंड इस बिल्ड में उपलब्ध नहीं है।</translation>
+        <translation type="vanished">%1 बैकएंड इस बिल्ड में उपलब्ध नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="559"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="614"/>
         <source>OPC UA Connection Failed</source>
         <translation>OPC UA कनेक्शन विफल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="560"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="615"/>
         <source>Unable to connect to "%1".</source>
         <translation>"%1" से कनेक्ट करने में असमर्थ।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="561"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="726"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="752"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="928"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="616"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="743"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="884"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2257"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="577"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="632"/>
         <source>OPC UA Connection Lost</source>
         <translation>OPC UA कनेक्शन खो गया</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="591"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="646"/>
         <source>Timed out after %1 s</source>
         <translation>%1 s के बाद टाइमआउट हो गया</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="621"/>
         <source>The server closed the connection</source>
-        <translation>सर्वर ने कनेक्शन बंद कर दिया</translation>
+        <translation type="vanished">सर्वर ने कनेक्शन बंद कर दिया</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="623"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="678"/>
         <source>The server closed the session</source>
         <translation>सर्वर ने सेशन बंद कर दिया</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="635"/>
         <source>Invalid endpoint URL</source>
-        <translation>अमान्य एंडपॉइंट URL</translation>
+        <translation type="vanished">अमान्य एंडपॉइंट URL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="638"/>
         <source>Access denied (bad credentials or anonymous login refused)</source>
-        <translation>एक्सेस अस्वीकृत (गलत क्रेडेंशियल या अनाम लॉगिन अस्वीकृत)</translation>
+        <translation type="vanished">एक्सेस अस्वीकृत (गलत क्रेडेंशियल या अनाम लॉगिन अस्वीकृत)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="641"/>
         <source>Connection error (server unreachable or refused)</source>
-        <translation>कनेक्शन त्रुटि (सर्वर अप्राप्य या अस्वीकृत)</translation>
+        <translation type="vanished">कनेक्शन त्रुटि (सर्वर अप्राप्य या अस्वीकृत)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="645"/>
         <source>The server does not accept this authentication mode</source>
-        <translation>सर्वर इस प्रमाणीकरण मोड को स्वीकार नहीं करता</translation>
+        <translation type="vanished">सर्वर इस प्रमाणीकरण मोड को स्वीकार नहीं करता</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="648"/>
         <source>The endpoint description was rejected (unsupported security policy)</source>
-        <translation>एंडपॉइंट विवरण अस्वीकृत (असमर्थित सुरक्षा नीति)</translation>
+        <translation type="vanished">एंडपॉइंट विवरण अस्वीकृत (असमर्थित सुरक्षा नीति)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="651"/>
         <source>The endpoint offers no matching user identity token</source>
-        <translation>एंडपॉइंट कोई मेल खाता उपयोगकर्ता पहचान टोकन प्रदान नहीं करता</translation>
+        <translation type="vanished">एंडपॉइंट कोई मेल खाता उपयोगकर्ता पहचान टोकन प्रदान नहीं करता</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="654"/>
         <source>The security policy is not supported by this build</source>
-        <translation>सुरक्षा नीति इस बिल्ड द्वारा समर्थित नहीं है</translation>
+        <translation type="vanished">सुरक्षा नीति इस बिल्ड द्वारा समर्थित नहीं है</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="657"/>
         <source>The certificate store is invalid or unreadable</source>
-        <translation>प्रमाणपत्र स्टोर अमान्य या अपठनीय है</translation>
+        <translation type="vanished">प्रमाणपत्र स्टोर अमान्य या अपठनीय है</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="660"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2501"/>
         <source>The server certificate is not trusted</source>
         <translation>सर्वर प्रमाणपत्र विश्वसनीय नहीं है</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="663"/>
         <source>Unexpected backend error</source>
-        <translation>अप्रत्याशित बैकएंड त्रुटि</translation>
+        <translation type="vanished">अप्रत्याशित बैकएंड त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="685"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="704"/>
         <source>"%1" is not a valid endpoint URL</source>
         <translation>"%1" एक मान्य एंडपॉइंट URL नहीं है</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="686"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="752"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="705"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2257"/>
         <source>OPC UA Discovery</source>
         <translation>OPC UA खोज</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="694"/>
         <source>The %1 backend is not available in this build</source>
-        <translation>%1 बैकएंड इस बिल्ड में उपलब्ध नहीं है</translation>
+        <translation type="vanished">%1 बैकएंड इस बिल्ड में उपलब्ध नहीं है</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="725"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="742"/>
         <source>Discovery failed: %1</source>
         <translation>खोज विफल: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="726"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="743"/>
         <source>OPC UA Discovery Failed</source>
         <translation>OPC UA खोज विफल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="751"/>
         <source>No None-policy endpoint; secure channels are not supported in this version</source>
-        <translation>कोई None-policy एंडपॉइंट नहीं; सुरक्षित चैनल इस संस्करण में समर्थित नहीं हैं</translation>
+        <translation type="vanished">कोई None-policy एंडपॉइंट नहीं; सुरक्षित चैनल इस संस्करण में समर्थित नहीं हैं</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="776"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="789"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="409"/>
+        <source>The connection is not configured: check the endpoint and the tag list</source>
+        <translation>कनेक्शन कॉन्फ़िगर नहीं है: एंडपॉइंट और टैग सूची जाँचें</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="416"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="713"/>
+        <source>The %1 stack is not available in this build</source>
+        <translation>%1 स्टैक इस बिल्ड में उपलब्ध नहीं है</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="459"/>
+        <source>The connection attempt could not be started</source>
+        <translation>कनेक्शन प्रयास प्रारंभ नहीं किया जा सका</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="477"/>
+        <source>OPC UA Certificate</source>
+        <translation>OPC UA प्रमाणपत्र</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="478"/>
+        <source>The client certificate could not be generated; secure channels will be refused.</source>
+        <translation>क्लाइंट प्रमाणपत्र जनरेट नहीं हो सका; सुरक्षित चैनल अस्वीकृत किए जाएंगे।</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="773"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="786"/>
         <source>Endpoint discovery failed</source>
         <translation>एंडपॉइंट खोज विफल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="927"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="883"/>
         <source>OPC UA Monitored Item Refused</source>
         <translation>OPC UA मॉनिटर्ड आइटम अस्वीकृत</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="938"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="890"/>
         <source>the server refused every monitored item</source>
         <translation>सर्वर ने प्रत्येक मॉनिटर्ड आइटम को अस्वीकार कर दिया</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="986"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="910"/>
+        <source>the server retired the subscription</source>
+        <translation>सर्वर ने सब्सक्रिप्शन रिटायर कर दी</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="946"/>
         <source>OPC UA Subscription Unavailable</source>
         <translation>OPC UA सब्सक्रिप्शन अनुपलब्ध</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="987"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="947"/>
         <source>Falling back to polling: %1.</source>
         <translation>पोलिंग पर वापस जा रहे हैं: %1.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1013"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="973"/>
         <source>no notification for %1 s</source>
         <translation>%1 s के लिए कोई नोटिफिकेशन नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1069"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1026"/>
         <source>OPC UA Read Failed</source>
         <translation>OPC UA रीड विफल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1236"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1190"/>
         <source>OPC UA Type Mismatch</source>
         <translation>OPC UA टाइप बेमेल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1237"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1191"/>
         <source>Channel %1 is declared %2 but the server sends %3; the value is coerced.</source>
         <translation>चैनल %1 को %2 घोषित किया गया है लेकिन सर्वर %3 भेजता है; मान को बाध्य किया गया है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1282"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1236"/>
         <source>Browse of %1 failed: %2</source>
         <translation>%1 का ब्राउज़ विफल: %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1307"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1261"/>
         <source>"%1" is not a valid endpoint URL.</source>
         <translation>"%1" मान्य एंडपॉइंट URL नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1400"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1268"/>
+        <source>The %1 stack is not available in this build.</source>
+        <translation>%1 स्टैक इस बिल्ड में उपलब्ध नहीं है।</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1275"/>
+        <source>The browse session was closed by the server</source>
+        <translation>सर्वर ने ब्राउज़ सेशन बंद कर दिया</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1285"/>
+        <source>The browse session could not be started</source>
+        <translation>ब्राउज़ सेशन प्रारंभ नहीं किया जा सका</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1365"/>
         <source>Could not open a browse session on %1</source>
         <translation>%1 पर ब्राउज़ सेशन नहीं खोला जा सका</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1424"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1392"/>
         <source>Failed to load generated project</source>
         <translation>जेनरेट किया गया प्रोजेक्ट लोड नहीं हो सका</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1425"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1393"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>जेनरेट किया गया प्रोजेक्ट JSON लोड नहीं हो सका।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1439"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1407"/>
         <source>No tags selected</source>
         <translation>कोई टैग चयनित नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1440"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1408"/>
         <source>Browse the server and select at least one tag before generating a project.</source>
         <translation>प्रोजेक्ट जेनरेट करने से पहले सर्वर ब्राउज़ करें और कम से कम एक टैग चुनें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1443"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1467"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1411"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1435"/>
         <source>OPC UA Project Generator</source>
         <translation>OPC UA प्रोजेक्ट जेनरेटर</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1462"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1430"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>%1 ग्रुप और %2 डेटासेट के साथ प्रोजेक्ट सफलतापूर्वक जेनरेट किया गया।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1465"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1433"/>
         <source>The project editor is now open for customization.</source>
         <translation>प्रोजेक्ट एडिटर अब अनुकूलन के लिए खुला है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1513"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1481"/>
         <source>OPC UA Project</source>
         <translation>OPC UA प्रोजेक्ट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1518"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1486"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1545"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1513"/>
         <source>Tags</source>
         <translation>टैग</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1596"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1565"/>
+        <source> (deprecated)</source>
+        <translation>(पदावनत)</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1581"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2315"/>
         <source>None</source>
         <translation>कोई नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1598"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1583"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2315"/>
         <source>Sign</source>
         <translation>हस्ताक्षर</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1599"/>
-        <source>Sign &amp; Encrypt</source>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1585"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2315"/>
+        <source>Sign and Encrypt</source>
         <translation>हस्ताक्षर और एन्क्रिप्ट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1708"/>
+        <source>Sign &amp;&amp; Encrypt</source>
+        <translation type="vanished">हस्ताक्षर और एन्क्रिप्ट</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1590"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2315"/>
+        <source>Invalid</source>
+        <translation>अमान्य</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2684"/>
+        <source>Security Policy</source>
+        <translation>सुरक्षा नीति</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2692"/>
+        <source>Security Mode</source>
+        <translation>सुरक्षा मोड</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2700"/>
+        <source>User Certificate</source>
+        <translation>उपयोगकर्ता प्रमाणपत्र</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2707"/>
+        <source>User Private Key</source>
+        <translation>उपयोगकर्ता निजी कुंजी</translation>
+    </message>
+    <message>
+        <source>Sign &amp; Encrypt</source>
+        <translation type="vanished">हस्ताक्षर और एन्क्रिप्ट</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1713"/>
         <source>Connecting to %1</source>
         <translation>%1 से कनेक्ट हो रहा है</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1711"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1716"/>
         <source>Not connected</source>
         <translation>कनेक्ट नहीं है</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1717"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1722"/>
         <source>Subscribing, %1 of %2 tags</source>
         <translation>सब्सक्राइब हो रहा है, %2 में से %1 टैग</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1722"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1727"/>
         <source>Subscribed %1 tags, polling %2 refused, %3 Hz</source>
         <translation>%1 टैग सब्सक्राइब किए गए, %2 पोलिंग अस्वीकृत, %3 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1728"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1733"/>
         <source>Polling (server refused subscriptions), %1 tags, %2 Hz</source>
         <translation>पोलिंग (सर्वर ने सब्सक्रिप्शन अस्वीकृत किए), %1 टैग, %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1732"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1737"/>
         <source>Subscribed, %1 tags, %2 Hz</source>
         <translation>सब्सक्राइब किया गया, %1 टैग, %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1764"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1775"/>
         <source>Anonymous</source>
         <translation>अनाम</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1764"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1775"/>
         <source>Username / Password</source>
         <translation>उपयोगकर्ता नाम / पासवर्ड</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2123"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1775"/>
+        <source>X.509 Certificate</source>
+        <translation>X.509 प्रमाणपत्र</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2256"/>
+        <source>No endpoint this build can open with the selected identity</source>
+        <translation>चयनित पहचान के साथ इस बिल्ड द्वारा खोला जा सकने वाला कोई एंडपॉइंट नहीं</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2284"/>
+        <source>%1 (deprecated)</source>
+        <translation>%1 (पदावनत)</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2503"/>
+        <source>The server certificate has expired</source>
+        <translation>सर्वर प्रमाणपत्र समाप्त हो गया है</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2505"/>
+        <source>The server certificate is not valid yet</source>
+        <translation>सर्वर प्रमाणपत्र अभी तक मान्य नहीं है</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2507"/>
+        <source>The server certificate was not issued for this host</source>
+        <translation>सर्वर प्रमाणपत्र इस होस्ट के लिए जारी नहीं किया गया था</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2509"/>
+        <source>The server certificate could not be parsed</source>
+        <translation>सर्वर प्रमाणपत्र को पार्स नहीं किया जा सका</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2646"/>
         <source>Endpoint URL</source>
         <translation>एंडपॉइंट URL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2130"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2653"/>
         <source>Authentication</source>
         <translation>प्रमाणीकरण</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2138"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2661"/>
         <source>Username</source>
         <translation>उपयोगकर्ता नाम</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2145"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2668"/>
         <source>Password</source>
         <translation>पासवर्ड</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2152"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2675"/>
         <source>Poll Interval (ms)</source>
         <translation>पोल अंतराल (ms)</translation>
     </message>
@@ -14001,19 +14110,18 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::OpcUaTagModel</name>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUaTagModel.cpp" line="299"/>
+        <location filename="../../src/IO/Drivers/OpcUaTagModel.cpp" line="293"/>
         <source>read</source>
         <translation>पढ़ें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUaTagModel.cpp" line="299"/>
+        <location filename="../../src/IO/Drivers/OpcUaTagModel.cpp" line="293"/>
         <source>no read</source>
         <translation>पढ़ें नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUaTagModel.cpp" line="649"/>
         <source>invalid node id</source>
-        <translation>अमान्य नोड ID</translation>
+        <translation type="vanished">अमान्य नोड ID</translation>
     </message>
 </context>
 <context>
@@ -18787,72 +18895,196 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>OpcUa</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="49"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="51"/>
         <source>Endpoint</source>
         <translation>एंडपॉइंट</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="71"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="73"/>
         <source>Discover</source>
         <translation>खोजें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="86"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="88"/>
         <source>Poll Interval (ms)</source>
         <translation>पोल अंतराल (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="93"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="95"/>
         <source>10-60000</source>
         <translation>10-60000</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="107"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="109"/>
         <source>Security</source>
         <translation>सुरक्षा</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="150"/>
-        <source>Secure channels are not supported in this version</source>
-        <translation>इस संस्करण में सुरक्षित चैनल समर्थित नहीं हैं</translation>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="152"/>
+        <source>This endpoint offers no user identity token the selected authentication mode can present</source>
+        <translation>यह एंडपॉइंट कोई उपयोगकर्ता पहचान टोकन प्रदान नहीं करता है जिसे चयनित प्रमाणीकरण मोड प्रस्तुत कर सके</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="158"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="160"/>
+        <source>Policy</source>
+        <translation>नीति</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="176"/>
+        <source>Mode</source>
+        <translation>मोड</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="183"/>
+        <source>Sign</source>
+        <translation>हस्ताक्षर</translation>
+    </message>
+    <message>
+        <source>Sign &amp;&amp; Encrypt</source>
+        <translation type="vanished">हस्ताक्षर और एन्क्रिप्ट</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="203"/>
+        <source>This policy is deprecated by the OPC Foundation (SHA-1 / RSA-1.5). Use it only for controllers that support nothing better.</source>
+        <translation>यह नीति OPC Foundation द्वारा अप्रचलित है (SHA-1 / RSA-1.5)। इसका उपयोग केवल उन नियंत्रकों के लिए करें जो बेहतर कुछ भी समर्थन नहीं करते हैं।</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="261"/>
+        <source>Certificate</source>
+        <translation>प्रमाणपत्र</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="275"/>
+        <source>No certificate selected</source>
+        <translation>कोई प्रमाणपत्र चयनित नहीं</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="279"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="304"/>
+        <source>Browse…</source>
+        <translation>ब्राउज़ करें…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="286"/>
+        <source>Private Key</source>
+        <translation>निजी कुंजी</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="300"/>
+        <source>No private key selected</source>
+        <translation>कोई निजी कुंजी चयनित नहीं</translation>
+    </message>
+    <message>
+        <source>Credentials travel in the clear on this channel. Choose a policy other than None with Sign &amp; Encrypt to protect them.</source>
+        <translation type="vanished">इस चैनल पर क्रेडेंशियल्स असुरक्षित रूप से ट्रांसमिट होते हैं। उन्हें सुरक्षित करने के लिए None के अलावा Sign &amp; Encrypt वाली पॉलिसी चुनें।</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="183"/>
+        <source>Sign and Encrypt</source>
+        <translation>हस्ताक्षर और एन्क्रिप्ट</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="320"/>
+        <source>Credentials travel in the clear on this channel. Choose a policy other than None with Sign and Encrypt to protect them.</source>
+        <translation>इस चैनल पर क्रेडेंशियल्स असुरक्षित रूप से ट्रांसमिट होते हैं। उन्हें सुरक्षित करने के लिए None के अलावा Sign and Encrypt वाली पॉलिसी चुनें।</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="327"/>
+        <source>Identity</source>
+        <translation>पहचान</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="344"/>
+        <source>Generated on the first secure connection</source>
+        <translation>पहले सुरक्षित कनेक्शन पर जेनरेट किया गया</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="352"/>
+        <source>Export…</source>
+        <translation>एक्सपोर्ट करें…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="358"/>
+        <source>Replace</source>
+        <translation>बदलें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="439"/>
+        <source>Export Client Certificate</source>
+        <translation>क्लाइंट सर्टिफिकेट एक्सपोर्ट करें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="440"/>
+        <source>Certificate (*.der)</source>
+        <translation>सर्टिफिकेट (*.der)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="440"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="448"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="456"/>
+        <source>All files (*)</source>
+        <translation>सभी फ़ाइलें (*)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="447"/>
+        <source>Select User Certificate</source>
+        <translation>उपयोगकर्ता सर्टिफिकेट चुनें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="448"/>
+        <source>Certificate (*.der *.pem *.crt)</source>
+        <translation>सर्टिफिकेट (*.der *.pem *.crt)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="455"/>
+        <source>Select Private Key</source>
+        <translation>प्राइवेट की चुनें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="456"/>
+        <source>Private key (*.der *.pem *.key)</source>
+        <translation>प्राइवेट की (*.der *.pem *.key)</translation>
+    </message>
+    <message>
+        <source>Secure channels are not supported in this version</source>
+        <translation type="vanished">इस संस्करण में सुरक्षित चैनल समर्थित नहीं हैं</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="210"/>
         <source>Authentication</source>
         <translation>प्रमाणीकरण</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="174"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="226"/>
         <source>Username</source>
         <translation>उपयोगकर्ता नाम</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="191"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="243"/>
         <source>Password</source>
         <translation>पासवर्ड</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="218"/>
         <source>Credentials are sent unencrypted: this version only opens None-policy channels.</source>
-        <translation>क्रेडेंशियल्स असुरक्षित भेजे जाते हैं: यह संस्करण केवल None-policy चैनल खोलता है।</translation>
+        <translation type="vanished">क्रेडेंशियल्स असुरक्षित भेजे जाते हैं: यह संस्करण केवल None-policy चैनल खोलता है।</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="236"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="384"/>
         <source>Browse Tags…</source>
         <translation>टैग ब्राउज़ करें…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="247"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="395"/>
         <source>Generate Project</source>
         <translation>प्रोजेक्ट जनरेट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="265"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="413"/>
         <source>%1 tag(s) selected</source>
         <translation>%1 टैग चयनित</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="266"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="414"/>
         <source>No tags selected</source>
         <translation>कोई टैग चयनित नहीं</translation>
     </message>
@@ -18903,6 +19135,59 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="453"/>
         <source>OK</source>
         <translation>ठीक है</translation>
+    </message>
+</context>
+<context>
+    <name>OpcUaTrustDialog</name>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="42"/>
+        <source>Untrusted OPC UA Server</source>
+        <translation>अविश्वसनीय OPC UA सर्वर</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="84"/>
+        <source>Check the fingerprint against the one the server operator gave you before accepting. Accepting records the decision for this installation; it does not reconnect, so press Connect again afterwards.</source>
+        <translation>स्वीकार करने से पहले फ़िंगरप्रिंट की जाँच सर्वर ऑपरेटर द्वारा दी गई फ़िंगरप्रिंट से करें। स्वीकार करने से इस इंस्टॉलेशन के लिए निर्णय रिकॉर्ड हो जाता है; यह पुनः कनेक्ट नहीं करता, इसलिए बाद में फिर से Connect दबाएं।</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="108"/>
+        <source>Subject:</source>
+        <translation>विषय:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="119"/>
+        <source>Issuer:</source>
+        <translation>जारीकर्ता:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="130"/>
+        <source>Application URI:</source>
+        <translation>एप्लिकेशन URI:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="141"/>
+        <source>Fingerprint:</source>
+        <translation>फ़िंगरप्रिंट:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="152"/>
+        <source>Valid From:</source>
+        <translation>वैध प्रारंभ:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="162"/>
+        <source>Valid Until:</source>
+        <translation>वैध समाप्ति:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="188"/>
+        <source>Reject</source>
+        <translation>अस्वीकार करें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="193"/>
+        <source>Trust This Server</source>
+        <translation>इस सर्वर पर विश्वास करें</translation>
     </message>
 </context>
 <context>

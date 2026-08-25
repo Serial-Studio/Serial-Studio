@@ -24,8 +24,10 @@ import QtCore
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import QtQuick.Dialogs
 
 import "../../../../Widgets" as Widgets
+import "../../../../Dialogs" as Dialogs
 
 Item {
   id: root
@@ -147,8 +149,58 @@ Item {
         opacity: enabled ? 1 : 0.4
         highlighted: _endpointCombo.highlightedIndex === index
         ToolTip.visible: !enabled && hovered
-        ToolTip.text: qsTr("Secure channels are not supported in this version")
+        ToolTip.text: qsTr("This endpoint offers no user identity token the selected authentication mode can present")
       }
+    }
+
+    //
+    // Security policy and message mode
+    //
+    Label {
+      text: qsTr("Policy") + ":"
+      opacity: enabled ? 1 : 0.5
+      enabled: app.ioEnabled
+    } Widgets.Combo {
+      Layout.fillWidth: true
+      enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
+      model: Cpp_IO_OpcUa.securityPolicyList
+      currentIndex: Cpp_IO_OpcUa.securityPolicyIndex
+      onActivated: (index) => {
+        if (enabled && Cpp_IO_OpcUa.securityPolicyIndex !== index)
+          Cpp_IO_OpcUa.securityPolicyIndex = index
+      }
+    }
+
+    Label {
+      text: qsTr("Mode") + ":"
+      opacity: enabled ? 1 : 0.5
+      enabled: app.ioEnabled
+      visible: Cpp_IO_OpcUa.securityPolicyIndex > 0
+    } Widgets.Combo {
+      Layout.fillWidth: true
+      opacity: enabled ? 1 : 0.5
+      model: [qsTr("Sign"), qsTr("Sign and Encrypt")]
+      visible: Cpp_IO_OpcUa.securityPolicyIndex > 0
+      enabled: app.ioEnabled && Cpp_IO_OpcUa.securityPolicyIndex > 0
+      currentIndex: Math.max(0, Cpp_IO_OpcUa.securityMode - 2)
+      onActivated: (index) => {
+        if (enabled)
+          Cpp_IO_OpcUa.securityMode = index + 2
+      }
+    }
+
+    //
+    // Deprecated-policy notice
+    //
+    Label {
+      Layout.columnSpan: 2
+      Layout.fillWidth: true
+      wrapMode: Text.WordWrap
+      color: Cpp_ThemeManager.colors["error"]
+      font: Cpp_Misc_CommonFonts.customUiFont(0.85)
+      visible: Cpp_IO_OpcUa.securityPolicyDeprecated[Cpp_IO_OpcUa.securityPolicyIndex] === true
+      text: qsTr("This policy is deprecated by the OPC Foundation (SHA-1 / RSA-1.5). Use it only for controllers that support nothing better.")
     }
 
     //
@@ -205,17 +257,113 @@ Item {
       }
     }
 
+    Label {
+      text: qsTr("Certificate") + ":"
+      opacity: enabled ? 1 : 0.5
+      enabled: app.ioEnabled
+      visible: Cpp_IO_OpcUa.authMode === 2
+    } RowLayout {
+      spacing: 4
+      Layout.fillWidth: true
+      visible: Cpp_IO_OpcUa.authMode === 2
+
+      Widgets.LineField {
+        readOnly: true
+        enabled: app.ioEnabled
+        Layout.fillWidth: true
+        text: Cpp_IO_OpcUa.userCertificatePath
+        placeholderText: qsTr("No certificate selected")
+      }
+
+      Button {
+        text: qsTr("Browse…")
+        enabled: app.ioEnabled
+        onClicked: _userCertDialog.open()
+      }
+    }
+
+    Label {
+      text: qsTr("Private Key") + ":"
+      opacity: enabled ? 1 : 0.5
+      enabled: app.ioEnabled
+      visible: Cpp_IO_OpcUa.authMode === 2
+    } RowLayout {
+      spacing: 4
+      Layout.fillWidth: true
+      visible: Cpp_IO_OpcUa.authMode === 2
+
+      Widgets.LineField {
+        readOnly: true
+        enabled: app.ioEnabled
+        Layout.fillWidth: true
+        text: Cpp_IO_OpcUa.userKeyPath
+        placeholderText: qsTr("No private key selected")
+      }
+
+      Button {
+        text: qsTr("Browse…")
+        enabled: app.ioEnabled
+        onClicked: _userKeyDialog.open()
+      }
+    }
+
     //
-    // Unencrypted-credentials warning (R4)
+    // Plaintext-credential warning: only an unencrypted channel exposes them (R15)
     //
     Label {
       Layout.columnSpan: 2
       Layout.fillWidth: true
       wrapMode: Text.WordWrap
-      visible: Cpp_IO_OpcUa.authMode === 1
+      visible: Cpp_IO_OpcUa.credentialsExposed
       color: Cpp_ThemeManager.colors["error"]
       font: Cpp_Misc_CommonFonts.customUiFont(0.85)
-      text: qsTr("Credentials are sent unencrypted: this version only opens None-policy channels.")
+      text: qsTr("Credentials travel in the clear on this channel. Choose a policy other than None with Sign and Encrypt to protect them.")
+    }
+
+    //
+    // This installation's client certificate
+    //
+    Label {
+      text: qsTr("Identity") + ":"
+      opacity: enabled ? 1 : 0.5
+      enabled: app.ioEnabled
+      visible: Cpp_IO_OpcUa.securityPolicyIndex > 0
+    } ColumnLayout {
+      spacing: 4
+      Layout.fillWidth: true
+      visible: Cpp_IO_OpcUa.securityPolicyIndex > 0
+
+      Label {
+        opacity: 0.7
+        Layout.fillWidth: true
+        wrapMode: Text.WrapAnywhere
+        font: Cpp_Misc_CommonFonts.monoFont
+        text: Cpp_IO_OpcUa.clientCertificate.valid === true
+              ? Cpp_IO_OpcUa.clientCertificate.subject + "\n"
+                + Cpp_IO_OpcUa.clientCertificate.fingerprint
+              : qsTr("Generated on the first secure connection")
+      }
+
+      RowLayout {
+        spacing: 4
+        Layout.fillWidth: true
+
+        Button {
+          text: qsTr("Export…")
+          enabled: app.ioEnabled && Cpp_IO_OpcUa.clientCertificate.valid === true
+          onClicked: _exportDialog.open()
+        }
+
+        Button {
+          text: qsTr("Replace")
+          enabled: app.ioEnabled
+          onClicked: Cpp_IO_OpcUa.regenerateCertificate()
+        }
+
+        Item {
+          Layout.fillWidth: true
+        }
+      }
     }
 
     //
@@ -269,6 +417,44 @@ Item {
 
     OpcUaTagBrowser {
       id: _browser
+    }
+
+    Dialogs.OpcUaTrustDialog {
+      id: _trustDialog
+    }
+
+    Connections {
+      target: Cpp_IO_OpcUa
+
+      function onServerCertificateUntrusted(certificate, reason) {
+        _trustDialog.showCertificate(certificate, reason)
+      }
+    }
+
+    FileDialog {
+      id: _exportDialog
+
+      defaultSuffix: "der"
+      fileMode: FileDialog.SaveFile
+      title: qsTr("Export Client Certificate")
+      nameFilters: [qsTr("Certificate (*.der)"), qsTr("All files (*)")]
+      onAccepted: Cpp_IO_OpcUa.exportCertificate(selectedFile)
+    }
+
+    FileDialog {
+      id: _userCertDialog
+
+      title: qsTr("Select User Certificate")
+      nameFilters: [qsTr("Certificate (*.der *.pem *.crt)"), qsTr("All files (*)")]
+      onAccepted: Cpp_IO_OpcUa.userCertificatePath = selectedFile
+    }
+
+    FileDialog {
+      id: _userKeyDialog
+
+      title: qsTr("Select Private Key")
+      nameFilters: [qsTr("Private key (*.der *.pem *.key)"), qsTr("All files (*)")]
+      onAccepted: Cpp_IO_OpcUa.userKeyPath = selectedFile
     }
 
     //

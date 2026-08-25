@@ -10958,7 +10958,7 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>ExternalWidgetWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="237"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="252"/>
         <source>The widget could not be created.</source>
         <translation>위젯을 생성할 수 없습니다.</translation>
     </message>
@@ -13676,324 +13676,433 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::OpcUa</name>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="386"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="417"/>
         <source>OPC UA Initialization Failed</source>
         <translation>OPC UA 초기화 실패</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="387"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1314"/>
         <source>The %1 backend is not available in this build.</source>
-        <translation>%1 백엔드는 이 빌드에서 사용할 수 없습니다.</translation>
+        <translation type="vanished">%1 백엔드는 이 빌드에서 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="559"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="614"/>
         <source>OPC UA Connection Failed</source>
         <translation>OPC UA 연결 실패</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="560"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="615"/>
         <source>Unable to connect to "%1".</source>
         <translation>"%1"에 연결할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="561"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="726"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="752"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="928"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="616"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="743"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="884"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2257"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="577"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="632"/>
         <source>OPC UA Connection Lost</source>
         <translation>OPC UA 연결 끊김</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="591"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="646"/>
         <source>Timed out after %1 s</source>
         <translation>%1초 후 시간 초과</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="621"/>
         <source>The server closed the connection</source>
-        <translation>서버가 연결을 종료했습니다</translation>
+        <translation type="vanished">서버가 연결을 종료했습니다</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="623"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="678"/>
         <source>The server closed the session</source>
         <translation>서버가 세션을 종료했습니다</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="635"/>
         <source>Invalid endpoint URL</source>
-        <translation>잘못된 엔드포인트 URL</translation>
+        <translation type="vanished">잘못된 엔드포인트 URL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="638"/>
         <source>Access denied (bad credentials or anonymous login refused)</source>
-        <translation>액세스 거부됨 (잘못된 자격 증명 또는 익명 로그인 거부)</translation>
+        <translation type="vanished">액세스 거부됨 (잘못된 자격 증명 또는 익명 로그인 거부)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="641"/>
         <source>Connection error (server unreachable or refused)</source>
-        <translation>연결 오류 (서버에 연결할 수 없거나 거부됨)</translation>
+        <translation type="vanished">연결 오류 (서버에 연결할 수 없거나 거부됨)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="645"/>
         <source>The server does not accept this authentication mode</source>
-        <translation>서버가 이 인증 모드를 허용하지 않습니다</translation>
+        <translation type="vanished">서버가 이 인증 모드를 허용하지 않습니다</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="648"/>
         <source>The endpoint description was rejected (unsupported security policy)</source>
-        <translation>엔드포인트 설명이 거부됨 (지원되지 않는 보안 정책)</translation>
+        <translation type="vanished">엔드포인트 설명이 거부됨 (지원되지 않는 보안 정책)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="651"/>
         <source>The endpoint offers no matching user identity token</source>
-        <translation>엔드포인트가 일치하는 사용자 ID 토큰을 제공하지 않습니다</translation>
+        <translation type="vanished">엔드포인트가 일치하는 사용자 ID 토큰을 제공하지 않습니다</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="654"/>
         <source>The security policy is not supported by this build</source>
-        <translation>이 빌드에서 보안 정책이 지원되지 않습니다</translation>
+        <translation type="vanished">이 빌드에서 보안 정책이 지원되지 않습니다</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="657"/>
         <source>The certificate store is invalid or unreadable</source>
-        <translation>인증서 저장소가 유효하지 않거나 읽을 수 없습니다</translation>
+        <translation type="vanished">인증서 저장소가 유효하지 않거나 읽을 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="660"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2501"/>
         <source>The server certificate is not trusted</source>
         <translation>서버 인증서를 신뢰할 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="663"/>
         <source>Unexpected backend error</source>
-        <translation>예기치 않은 백엔드 오류가 발생했습니다</translation>
+        <translation type="vanished">예기치 않은 백엔드 오류가 발생했습니다</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="685"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="704"/>
         <source>"%1" is not a valid endpoint URL</source>
         <translation>"%1"은(는) 유효한 엔드포인트 URL이 아닙니다</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="686"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="752"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="705"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2257"/>
         <source>OPC UA Discovery</source>
         <translation>OPC UA 탐색</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="694"/>
         <source>The %1 backend is not available in this build</source>
-        <translation>%1 백엔드는 이 빌드에서 사용할 수 없습니다</translation>
+        <translation type="vanished">%1 백엔드는 이 빌드에서 사용할 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="725"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="742"/>
         <source>Discovery failed: %1</source>
         <translation>탐색 실패: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="726"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="743"/>
         <source>OPC UA Discovery Failed</source>
         <translation>OPC UA 탐색 실패</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="751"/>
         <source>No None-policy endpoint; secure channels are not supported in this version</source>
-        <translation>None 정책 엔드포인트가 없습니다. 보안 채널은 이 버전에서 지원되지 않습니다</translation>
+        <translation type="vanished">None 정책 엔드포인트가 없습니다. 보안 채널은 이 버전에서 지원되지 않습니다</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="776"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="789"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="409"/>
+        <source>The connection is not configured: check the endpoint and the tag list</source>
+        <translation>연결이 구성되지 않았습니다: 엔드포인트와 태그 목록을 확인하세요</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="416"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="713"/>
+        <source>The %1 stack is not available in this build</source>
+        <translation>%1 스택은 이 빌드에서 사용할 수 없습니다</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="459"/>
+        <source>The connection attempt could not be started</source>
+        <translation>연결 시도를 시작할 수 없습니다</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="477"/>
+        <source>OPC UA Certificate</source>
+        <translation>OPC UA 인증서</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="478"/>
+        <source>The client certificate could not be generated; secure channels will be refused.</source>
+        <translation>클라이언트 인증서를 생성할 수 없습니다. 보안 채널이 거부됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="773"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="786"/>
         <source>Endpoint discovery failed</source>
         <translation>엔드포인트 탐색 실패</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="927"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="883"/>
         <source>OPC UA Monitored Item Refused</source>
         <translation>OPC UA 모니터링 항목 거부됨</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="938"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="890"/>
         <source>the server refused every monitored item</source>
         <translation>서버가 모든 모니터링 항목을 거부했습니다</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="986"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="910"/>
+        <source>the server retired the subscription</source>
+        <translation>서버가 구독을 폐기했습니다</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="946"/>
         <source>OPC UA Subscription Unavailable</source>
         <translation>OPC UA 구독 사용 불가</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="987"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="947"/>
         <source>Falling back to polling: %1.</source>
         <translation>폴링으로 전환: %1.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1013"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="973"/>
         <source>no notification for %1 s</source>
         <translation>%1초 동안 알림 없음</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1069"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1026"/>
         <source>OPC UA Read Failed</source>
         <translation>OPC UA 읽기 실패</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1236"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1190"/>
         <source>OPC UA Type Mismatch</source>
         <translation>OPC UA 유형 불일치</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1237"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1191"/>
         <source>Channel %1 is declared %2 but the server sends %3; the value is coerced.</source>
         <translation>채널 %1은(는) %2(으)로 선언되었으나 서버가 %3을(를) 전송합니다. 값이 강제 변환됩니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1282"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1236"/>
         <source>Browse of %1 failed: %2</source>
         <translation>%1 탐색 실패: %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1307"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1261"/>
         <source>"%1" is not a valid endpoint URL.</source>
         <translation>"%1"은(는) 유효한 엔드포인트 URL이 아닙니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1400"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1268"/>
+        <source>The %1 stack is not available in this build.</source>
+        <translation>%1 스택은 이 빌드에서 사용할 수 없습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1275"/>
+        <source>The browse session was closed by the server</source>
+        <translation>서버가 탐색 세션을 종료했습니다</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1285"/>
+        <source>The browse session could not be started</source>
+        <translation>탐색 세션을 시작할 수 없습니다</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1365"/>
         <source>Could not open a browse session on %1</source>
         <translation>%1에서 탐색 세션을 열 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1424"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1392"/>
         <source>Failed to load generated project</source>
         <translation>생성된 프로젝트 로드 실패</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1425"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1393"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>생성된 프로젝트 JSON을 로드할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1439"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1407"/>
         <source>No tags selected</source>
         <translation>선택된 태그 없음</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1440"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1408"/>
         <source>Browse the server and select at least one tag before generating a project.</source>
         <translation>프로젝트를 생성하기 전에 서버를 탐색하고 최소 하나의 태그를 선택하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1443"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1467"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1411"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1435"/>
         <source>OPC UA Project Generator</source>
         <translation>OPC UA 프로젝트 생성기</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1462"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1430"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>%1개 그룹과 %2개 데이터셋으로 프로젝트를 성공적으로 생성했습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1465"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1433"/>
         <source>The project editor is now open for customization.</source>
         <translation>프로젝트 편집기가 사용자 지정을 위해 열렸습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1513"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1481"/>
         <source>OPC UA Project</source>
         <translation>OPC UA 프로젝트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1518"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1486"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1545"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1513"/>
         <source>Tags</source>
         <translation>태그</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1596"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1565"/>
+        <source> (deprecated)</source>
+        <translation>(더 이상 사용되지 않음)</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1581"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2315"/>
         <source>None</source>
         <translation>없음</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1598"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1583"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2315"/>
         <source>Sign</source>
         <translation>서명</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1599"/>
-        <source>Sign &amp; Encrypt</source>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1585"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2315"/>
+        <source>Sign and Encrypt</source>
         <translation>서명 및 암호화</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1708"/>
+        <source>Sign &amp;&amp; Encrypt</source>
+        <translation type="vanished">서명 및 암호화</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1590"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2315"/>
+        <source>Invalid</source>
+        <translation>유효하지 않음</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2684"/>
+        <source>Security Policy</source>
+        <translation>보안 정책</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2692"/>
+        <source>Security Mode</source>
+        <translation>보안 모드</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2700"/>
+        <source>User Certificate</source>
+        <translation>사용자 인증서</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2707"/>
+        <source>User Private Key</source>
+        <translation>사용자 개인 키</translation>
+    </message>
+    <message>
+        <source>Sign &amp; Encrypt</source>
+        <translation type="vanished">서명 및 암호화</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1713"/>
         <source>Connecting to %1</source>
         <translation>%1에 연결 중</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1711"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1716"/>
         <source>Not connected</source>
         <translation>연결되지 않음</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1717"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1722"/>
         <source>Subscribing, %1 of %2 tags</source>
         <translation>구독 중, %2개 태그 중 %1개</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1722"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1727"/>
         <source>Subscribed %1 tags, polling %2 refused, %3 Hz</source>
         <translation>%1개 태그 구독됨, %2개 폴링 거부됨, %3 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1728"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1733"/>
         <source>Polling (server refused subscriptions), %1 tags, %2 Hz</source>
         <translation>폴링 중(서버가 구독 거부함), %1개 태그, %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1732"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1737"/>
         <source>Subscribed, %1 tags, %2 Hz</source>
         <translation>구독됨, %1개 태그, %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1764"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1775"/>
         <source>Anonymous</source>
         <translation>익명</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1764"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1775"/>
         <source>Username / Password</source>
         <translation>사용자 이름 / 비밀번호</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2123"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1775"/>
+        <source>X.509 Certificate</source>
+        <translation>X.509 인증서</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2256"/>
+        <source>No endpoint this build can open with the selected identity</source>
+        <translation>선택한 ID로 열 수 있는 엔드포인트가 없습니다</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2284"/>
+        <source>%1 (deprecated)</source>
+        <translation>%1 (더 이상 사용되지 않음)</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2503"/>
+        <source>The server certificate has expired</source>
+        <translation>서버 인증서가 만료되었습니다</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2505"/>
+        <source>The server certificate is not valid yet</source>
+        <translation>서버 인증서가 아직 유효하지 않습니다</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2507"/>
+        <source>The server certificate was not issued for this host</source>
+        <translation>서버 인증서가 이 호스트에 대해 발급되지 않았습니다</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2509"/>
+        <source>The server certificate could not be parsed</source>
+        <translation>서버 인증서를 파싱할 수 없습니다</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2646"/>
         <source>Endpoint URL</source>
         <translation>엔드포인트 URL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2130"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2653"/>
         <source>Authentication</source>
         <translation>인증</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2138"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2661"/>
         <source>Username</source>
         <translation>사용자 이름</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2145"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2668"/>
         <source>Password</source>
         <translation>비밀번호</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2152"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2675"/>
         <source>Poll Interval (ms)</source>
         <translation>폴링 간격 (ms)</translation>
     </message>
@@ -14001,19 +14110,18 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::OpcUaTagModel</name>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUaTagModel.cpp" line="299"/>
+        <location filename="../../src/IO/Drivers/OpcUaTagModel.cpp" line="293"/>
         <source>read</source>
         <translation>읽기</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUaTagModel.cpp" line="299"/>
+        <location filename="../../src/IO/Drivers/OpcUaTagModel.cpp" line="293"/>
         <source>no read</source>
         <translation>읽기 불가</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUaTagModel.cpp" line="649"/>
         <source>invalid node id</source>
-        <translation>잘못된 노드 ID</translation>
+        <translation type="vanished">잘못된 노드 ID</translation>
     </message>
 </context>
 <context>
@@ -18787,72 +18895,196 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>OpcUa</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="49"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="51"/>
         <source>Endpoint</source>
         <translation>엔드포인트</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="71"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="73"/>
         <source>Discover</source>
         <translation>검색</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="86"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="88"/>
         <source>Poll Interval (ms)</source>
         <translation>폴링 간격 (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="93"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="95"/>
         <source>10-60000</source>
         <translation>10-60000</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="107"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="109"/>
         <source>Security</source>
         <translation>보안</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="150"/>
-        <source>Secure channels are not supported in this version</source>
-        <translation>보안 채널은 이 버전에서 지원되지 않습니다</translation>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="152"/>
+        <source>This endpoint offers no user identity token the selected authentication mode can present</source>
+        <translation>이 엔드포인트는 선택한 인증 모드가 제시할 수 있는 사용자 ID 토큰을 제공하지 않습니다</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="158"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="160"/>
+        <source>Policy</source>
+        <translation>정책</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="176"/>
+        <source>Mode</source>
+        <translation>모드</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="183"/>
+        <source>Sign</source>
+        <translation>서명</translation>
+    </message>
+    <message>
+        <source>Sign &amp;&amp; Encrypt</source>
+        <translation type="vanished">서명 및 암호화</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="203"/>
+        <source>This policy is deprecated by the OPC Foundation (SHA-1 / RSA-1.5). Use it only for controllers that support nothing better.</source>
+        <translation>이 정책은 OPC Foundation에서 더 이상 사용하지 않습니다(SHA-1 / RSA-1.5). 더 나은 방식을 지원하지 않는 컨트롤러에서만 사용하십시오.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="261"/>
+        <source>Certificate</source>
+        <translation>인증서</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="275"/>
+        <source>No certificate selected</source>
+        <translation>선택된 인증서 없음</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="279"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="304"/>
+        <source>Browse…</source>
+        <translation>찾아보기…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="286"/>
+        <source>Private Key</source>
+        <translation>개인 키</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="300"/>
+        <source>No private key selected</source>
+        <translation>개인 키가 선택되지 않음</translation>
+    </message>
+    <message>
+        <source>Credentials travel in the clear on this channel. Choose a policy other than None with Sign &amp; Encrypt to protect them.</source>
+        <translation type="vanished">이 채널에서 자격 증명이 암호화되지 않은 상태로 전송됩니다. 보호하려면 Sign &amp; Encrypt가 포함된 None 이외의 정책을 선택하세요.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="183"/>
+        <source>Sign and Encrypt</source>
+        <translation>서명 및 암호화</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="320"/>
+        <source>Credentials travel in the clear on this channel. Choose a policy other than None with Sign and Encrypt to protect them.</source>
+        <translation>이 채널에서 자격 증명이 암호화되지 않은 상태로 전송됩니다. 보호하려면 서명 및 암호화가 포함된 None 이외의 정책을 선택하세요.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="327"/>
+        <source>Identity</source>
+        <translation>식별 정보</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="344"/>
+        <source>Generated on the first secure connection</source>
+        <translation>첫 보안 연결 시 생성됨</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="352"/>
+        <source>Export…</source>
+        <translation>내보내기…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="358"/>
+        <source>Replace</source>
+        <translation>교체</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="439"/>
+        <source>Export Client Certificate</source>
+        <translation>클라이언트 인증서 내보내기</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="440"/>
+        <source>Certificate (*.der)</source>
+        <translation>인증서 (*.der)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="440"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="448"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="456"/>
+        <source>All files (*)</source>
+        <translation>모든 파일 (*)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="447"/>
+        <source>Select User Certificate</source>
+        <translation>사용자 인증서 선택</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="448"/>
+        <source>Certificate (*.der *.pem *.crt)</source>
+        <translation>인증서 (*.der *.pem *.crt)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="455"/>
+        <source>Select Private Key</source>
+        <translation>개인 키 선택</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="456"/>
+        <source>Private key (*.der *.pem *.key)</source>
+        <translation>개인 키 (*.der *.pem *.key)</translation>
+    </message>
+    <message>
+        <source>Secure channels are not supported in this version</source>
+        <translation type="vanished">보안 채널은 이 버전에서 지원되지 않습니다</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="210"/>
         <source>Authentication</source>
         <translation>인증</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="174"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="226"/>
         <source>Username</source>
         <translation>사용자 이름</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="191"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="243"/>
         <source>Password</source>
         <translation>비밀번호</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="218"/>
         <source>Credentials are sent unencrypted: this version only opens None-policy channels.</source>
-        <translation>자격 증명은 암호화되지 않은 상태로 전송됩니다: 이 버전은 None 정책 채널만 엽니다.</translation>
+        <translation type="vanished">자격 증명은 암호화되지 않은 상태로 전송됩니다: 이 버전은 None 정책 채널만 엽니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="236"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="384"/>
         <source>Browse Tags…</source>
         <translation>태그 탐색…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="247"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="395"/>
         <source>Generate Project</source>
         <translation>프로젝트 생성</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="265"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="413"/>
         <source>%1 tag(s) selected</source>
         <translation>%1개 태그 선택됨</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="266"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="414"/>
         <source>No tags selected</source>
         <translation>선택된 태그 없음</translation>
     </message>
@@ -18903,6 +19135,59 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="453"/>
         <source>OK</source>
         <translation>확인</translation>
+    </message>
+</context>
+<context>
+    <name>OpcUaTrustDialog</name>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="42"/>
+        <source>Untrusted OPC UA Server</source>
+        <translation>신뢰할 수 없는 OPC UA 서버</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="84"/>
+        <source>Check the fingerprint against the one the server operator gave you before accepting. Accepting records the decision for this installation; it does not reconnect, so press Connect again afterwards.</source>
+        <translation>수락하기 전에 서버 운영자가 제공한 지문과 대조하여 확인하십시오. 수락하면 이 설치에 대한 결정이 기록되지만 자동으로 재연결되지 않으므로 이후 다시 연결을 눌러야 합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="108"/>
+        <source>Subject:</source>
+        <translation>주체:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="119"/>
+        <source>Issuer:</source>
+        <translation>발급자:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="130"/>
+        <source>Application URI:</source>
+        <translation>애플리케이션 URI:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="141"/>
+        <source>Fingerprint:</source>
+        <translation>지문:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="152"/>
+        <source>Valid From:</source>
+        <translation>유효 시작:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="162"/>
+        <source>Valid Until:</source>
+        <translation>유효 만료:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="188"/>
+        <source>Reject</source>
+        <translation>거부</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="193"/>
+        <source>Trust This Server</source>
+        <translation>이 서버 신뢰</translation>
     </message>
 </context>
 <context>

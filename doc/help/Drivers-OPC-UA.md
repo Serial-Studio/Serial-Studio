@@ -33,20 +33,25 @@ sequenceDiagram
 
 A server advertises one **endpoint** per security configuration. Each endpoint pairs a **security policy** (`None`, `Basic256Sha256`, ...) with a **message security mode** (None, Sign, Sign & Encrypt). A client picks one endpoint and opens a secure channel with it.
 
-The OPC UA backend bundled with Serial Studio is built without encryption support, so this version opens **policy None** endpoints only. Secured endpoints still appear in the endpoint list, greyed out, so you can see what the server offers. Username/password login works on a None-policy channel, but the credentials travel unencrypted; the Setup panel shows a warning whenever that mode is selected and the connection log records it once per connect. Use anonymous login or an isolated network segment when that matters. Certificate (X.509) login is not available in this version.
+Serial Studio bundles its own OPC UA stack with encryption built in, so every endpoint a server advertises is reachable. Five security policies are supported: `None`, `Basic128Rsa15`, `Basic256`, `Basic256Sha256`, `Aes128_Sha256_RsaOaep` and `Aes256_Sha256_RsaPss`. Each secure policy can be used in **Sign** (messages are authenticated) or **Sign & Encrypt** (authenticated and confidential). Nothing is installed on the machine and nothing is taken from the system: the stack ships inside the application, so the same build behaves the same way on every computer.
+
+`Basic128Rsa15` and `Basic256` are **deprecated** by the OPC Foundation, which no longer considers SHA-1 and RSA-1.5 safe. They are offered because field controllers still ship them, they are labelled as deprecated everywhere they appear, and they are never chosen automatically.
+
+Login is **Anonymous**, **Username / Password**, or an **X.509 certificate**. A password is protected by the channel only when the mode is Sign & Encrypt; the Setup panel warns when a password would travel in the clear, and stops warning once the channel encrypts it.
 
 ## How Serial Studio uses it
 
-The driver wraps Qt's OPC UA client on the main thread. One source is one session with one server; the session subscribes to every selected tag.
+The driver drives the bundled OPC UA client on the main thread. One source is one session with one server; the session subscribes to every selected tag.
 
 ### Configuration model
 
-1. **Endpoint.** The server URL, `opc.tcp://host:port/path` (default `opc.tcp://127.0.0.1:4840`). Press **Discover** to fetch the server's endpoint list; the first None-policy endpoint whose user tokens match the selected authentication is picked automatically, and an explicit choice survives the next discovery. Connecting without a selected endpoint runs the same discovery first. Serial Studio always dials the **host and port you typed**, keeping the rest of the discovered description: servers routinely advertise their own hostname (`opc.tcp://PLC-01:4840`), which rarely resolves from an engineering laptop.
+1. **Endpoint.** The server URL, `opc.tcp://host:port/path` (default `opc.tcp://127.0.0.1:4840`). Press **Discover** to fetch the server's endpoint list; the most secure endpoint whose user tokens match the selected authentication is picked automatically (never a deprecated policy on its own), and an explicit choice survives the next discovery. Connecting without a selected endpoint runs the same discovery first. Serial Studio always dials the **host and port you typed**, keeping the rest of the discovered description: servers routinely advertise their own hostname (`opc.tcp://PLC-01:4840`), which rarely resolves from an engineering laptop.
 2. **Poll Interval (ms).** The interval requested for the subscription and for the read timer, and the frame rate of the source. Default 100 ms, clamped to 10-60000 ms. Servers revise it upward when it is below their minimum (PLC-embedded servers commonly floor it at 50-100 ms); the status line under the pane reports the rate in force, not the one requested.
-3. **Security.** The discovered endpoint rows, shown as `policy / mode / url`. Only None-policy rows that accept the selected authentication are selectable.
-4. **Authentication.** **Anonymous** (default) or **Username / Password**. The password is stored in the same encrypted per-machine vault the MQTT driver uses, keyed by host and port; it is never written to a project file.
-5. **Tags.** The **Browse Tags...** dialog opens a browse-only session and fetches exactly one level per expansion: one Browse plus one batched Read for the whole level. Nothing below a node is read until you expand it, so a gateway with a hundred thousand nodes stays responsive. Variables expand too, because PLC structs and UDTs expose their members, and their `EngineeringUnits`/`EURange` properties, as child Variables. Ticking a folder marks it: every readable supported variable under it is selected, including ones fetched later when you expand it. **Select All Readable** ticks everything fetched so far. **OK** commits the selection; **Cancel** and the window's close button discard it. Tags in branches you never expanded keep their place. Up to 2048 channels can be selected; the dialog warns above 512 because a very wide frame slows the dashboard. An edit made while a session is connected is applied when the link closes.
-6. **Generate Project.** Builds a project from the selection ([Generated project](#generated-project)).
+3. **Security.** The discovered endpoint rows, shown as `policy / mode / url`. A row is selectable when it advertises a user identity token the selected authentication can present.
+4. **Policy and Mode.** What to ask for when you dial without picking a row, and what the automatic pick is measured against. Choosing anything other than `None` reveals the **Mode** selector (Sign, or Sign & Encrypt).
+5. **Authentication.** **Anonymous** (default), **Username / Password**, or **X.509 Certificate**. The password is stored in the same encrypted per-machine vault the MQTT driver uses, keyed by host and port; it is never written to a project file. For certificate login, pick the certificate and its private key: only their **paths** are saved, never the key itself.
+6. **Tags.** The **Browse Tags...** dialog opens a browse-only session and fetches exactly one level per expansion: one Browse plus one batched Read for the whole level. Nothing below a node is read until you expand it, so a gateway with a hundred thousand nodes stays responsive. Variables expand too, because PLC structs and UDTs expose their members, and their `EngineeringUnits`/`EURange` properties, as child Variables. Ticking a folder marks it: every readable supported variable under it is selected, including ones fetched later when you expand it. **Select All Readable** ticks everything fetched so far. **OK** commits the selection; **Cancel** and the window's close button discard it. Tags in branches you never expanded keep their place. Up to 2048 channels can be selected; the dialog warns above 512 because a very wide frame slows the dashboard. An edit made while a session is connected is applied when the link closes.
+7. **Generate Project.** Builds a project from the selection ([Generated project](#generated-project)).
 
 Supported tag types: Boolean, SByte, Byte, Int16, UInt16, Int32, UInt32, Int64, UInt64, Float, Double, String, and one-dimensional arrays of those. The common namespace-0 subtypes resolve too (`Duration`, `UtcTime`, `Enumeration`, `IntegerId`, `DateTime`, `Guid`, `ByteString`, `LocalizedText`); when a vendor declares a type the table does not know, the value's own type decides, and anything printable becomes a string channel. Strings are capped at 256 bytes of UTF-8, truncated on a character boundary. Variables of any other type show in the browser but cannot be ticked.
 
@@ -103,9 +108,38 @@ The `OPC UA PLC Simulator` example ships a Python server (`pip install asyncua`)
 3. **Browse Tags...**, tick the `Plant` folder, press **OK**, then **Generate Project**.
 4. Connect. `FaultySensor` holds its last good value while the simulator reports the fault.
 
+## Secure connections
+
+### Connecting for the first time
+
+1. Choose a **Policy** other than `None` and leave **Mode** on Sign & Encrypt.
+2. Press **Connect**. The first attempt is refused: Serial Studio has never seen this server's certificate.
+3. The trust prompt shows the certificate's subject, issuer, validity window and **SHA-256 fingerprint**. Compare the fingerprint with the one the server operator gave you, then press **Trust This Server**.
+4. Press **Connect** again. Accepting a certificate records the decision without reconnecting, so **Connect** still reports one outcome per press.
+
+The decision is stored per installation, keyed by fingerprint. A server that is re-keyed presents a different fingerprint and asks again, which is the point: a silent inheritance would defeat the check.
+
+### Letting the server trust you
+
+A secure channel is mutual. On the first secure connection Serial Studio generates its own client certificate and keeps it, so a server operator has to trust this installation once rather than on every launch. Under **Identity** in the Setup panel:
+
+- **Export...** writes the certificate where the server expects trusted clients (`pki/trusted/certs` on many servers). The private key is never exported.
+- **Replace** generates a new certificate and key. Every server that trusted the old one has to trust the new one, so use it only when the key may have been exposed.
+
+### Why a secure connection was refused
+
+The four causes are reported separately, because they have four different fixes:
+
+| Reason | What to do |
+|--------|------------|
+| The server certificate is not trusted | Compare the fingerprint and accept it in the prompt. |
+| The server certificate has expired | Renew it on the server. Serial Studio will not accept an expired certificate. |
+| The server certificate is not valid yet | Check the clock on the server and on this machine. |
+| The server certificate was not issued for this host | You are dialing a name the certificate does not cover. Use the name it was issued for, or reissue it with the right SubjectAltName. |
+
 ## Common pitfalls
 
-- **Endpoint list is empty or greyed out.** The server offers only secured endpoints, or none of its None-policy endpoints accepts the selected authentication (a server advertising Anonymous only rejects a username session). Enable a matching endpoint, switch the authentication mode, or wait for secure-channel support.
+- **Endpoint list is empty or greyed out.** None of the server's endpoints advertises a user identity token the selected authentication can present (a server offering Anonymous only rejects a username session). Switch the authentication mode, or enable a matching endpoint on the server.
 - **"Access denied".** Anonymous login is disabled on the server, or the username/password is wrong. Switch the authentication mode and check the account; some servers also require the user to be granted read access to the browsed folders.
 - **Discovery works, connect times out.** Serial Studio dials the host you typed, so an unresolvable advertised hostname is not the cause; check the firewall on port 4840 and whether the server binds an interface your machine can reach.
 - **Everything polls instead of subscribing.** The server hit its subscription limit. A previous session that was not closed cleanly holds its subscriptions until the server times it out; wait for that, or raise the limit on the server.

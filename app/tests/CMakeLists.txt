@@ -597,8 +597,9 @@ endif()
 # unnoticed: a dropped source timestamp degrades silently to the local monotonic fallback, and a
 # collapsed array latches only its first element. Needs no server.
 #
-# Guarded on the target: the OPC UA stack is only built for BUILD_COMMERCIAL, so a GPL unit-test
-# configure has no open62541 to link and skips this suite the same way a missing source does.
+# Guarded on the target: SS_BUILD_TESTS builds the stack on a GPL configure too, so this suite
+# runs in CI's unit tier; an SS_ENABLE_OPCUA=OFF configure has no open62541 to link and skips it
+# the same way a missing source does.
 #
 if(TARGET open62541)
   ss_add_unit_test(tst_opcua_marshal

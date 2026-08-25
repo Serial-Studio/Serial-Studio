@@ -248,6 +248,142 @@ QString API::EnumLabels::scriptLanguageLabel(int value)
 }
 
 //--------------------------------------------------------------------------------------------------
+// OPC UA security
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the wire slug of an OPC UA security policy. The values are rows of the driver's
+ *        supported-policy list, weakest first, so they are stable across builds.
+ */
+QString API::EnumLabels::securityPolicySlug(int value)
+{
+  switch (value) {
+    case 0:
+      return QStringLiteral("none");
+    case 1:
+      return QStringLiteral("basic128-rsa15");
+    case 2:
+      return QStringLiteral("basic256");
+    case 3:
+      return QStringLiteral("basic256-sha256");
+    case 4:
+      return QStringLiteral("aes128-sha256-rsaoaep");
+    case 5:
+      return QStringLiteral("aes256-sha256-rsapss");
+    default:
+      break;
+  }
+
+  return QStringLiteral("unknown");
+}
+
+/**
+ * @brief Returns the human-readable name of an OPC UA security policy; the two the OPC Foundation
+ *        has deprecated say so, because nothing else in the UI would tell the user.
+ */
+QString API::EnumLabels::securityPolicyLabel(int value)
+{
+  switch (value) {
+    case 0:
+      return QStringLiteral("None");
+    case 1:
+      return QStringLiteral("Basic128Rsa15 (deprecated)");
+    case 2:
+      return QStringLiteral("Basic256 (deprecated)");
+    case 3:
+      return QStringLiteral("Basic256Sha256");
+    case 4:
+      return QStringLiteral("Aes128_Sha256_RsaOaep");
+    case 5:
+      return QStringLiteral("Aes256_Sha256_RsaPss");
+    default:
+      break;
+  }
+
+  return QStringLiteral("Unknown");
+}
+
+/**
+ * @brief Returns the wire slug of an OPC UA message security mode.
+ */
+QString API::EnumLabels::securityModeSlug(int value)
+{
+  switch (value) {
+    case 1:
+      return QStringLiteral("none");
+    case 2:
+      return QStringLiteral("sign");
+    case 3:
+      return QStringLiteral("sign-and-encrypt");
+    default:
+      break;
+  }
+
+  return QStringLiteral("unknown");
+}
+
+/**
+ * @brief Returns the human-readable name of an OPC UA message security mode.
+ */
+QString API::EnumLabels::securityModeLabel(int value)
+{
+  switch (value) {
+    case 1:
+      return QStringLiteral("None");
+    case 2:
+      return QStringLiteral("Sign");
+    case 3:
+      return QStringLiteral("Sign and Encrypt");
+    default:
+      break;
+  }
+
+  return QStringLiteral("Unknown");
+}
+
+/**
+ * @brief Returns the wire slug of an OPC UA user identity token type.
+ */
+QString API::EnumLabels::identityTokenSlug(int value)
+{
+  switch (value) {
+    case 0:
+      return QStringLiteral("anonymous");
+    case 1:
+      return QStringLiteral("username");
+    case 2:
+      return QStringLiteral("certificate");
+    case 3:
+      return QStringLiteral("issued-token");
+    default:
+      break;
+  }
+
+  return QStringLiteral("unknown");
+}
+
+/**
+ * @brief Returns the human-readable name of an OPC UA user identity token type.
+ */
+QString API::EnumLabels::identityTokenLabel(int value)
+{
+  switch (value) {
+    case 0:
+      return QStringLiteral("Anonymous");
+    case 1:
+      return QStringLiteral("Username / Password");
+    case 2:
+      return QStringLiteral("X.509 Certificate");
+    case 3:
+      return QStringLiteral("Issued Token");
+    default:
+      break;
+  }
+
+  return QStringLiteral("Unknown");
+}
+
+//--------------------------------------------------------------------------------------------------
 // GroupWidget
 //--------------------------------------------------------------------------------------------------
 

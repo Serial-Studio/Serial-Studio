@@ -10958,7 +10958,7 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>ExternalWidgetWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="237"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="252"/>
         <source>The widget could not be created.</source>
         <translation>Не удалось создать виджет.</translation>
     </message>
@@ -13676,324 +13676,433 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::OpcUa</name>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="386"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="417"/>
         <source>OPC UA Initialization Failed</source>
         <translation>Ошибка Инициализации OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="387"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1314"/>
         <source>The %1 backend is not available in this build.</source>
-        <translation>Бэкенд %1 недоступен в этой сборке.</translation>
+        <translation type="vanished">Бэкенд %1 недоступен в этой сборке.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="559"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="614"/>
         <source>OPC UA Connection Failed</source>
         <translation>Ошибка Подключения OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="560"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="615"/>
         <source>Unable to connect to "%1".</source>
         <translation>Не удалось подключиться к "%1".</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="561"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="726"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="752"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="928"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="616"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="743"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="884"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2257"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="577"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="632"/>
         <source>OPC UA Connection Lost</source>
         <translation>Соединение OPC UA Потеряно</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="591"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="646"/>
         <source>Timed out after %1 s</source>
         <translation>Истекло время ожидания после %1 с</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="621"/>
         <source>The server closed the connection</source>
-        <translation>Сервер закрыл соединение</translation>
+        <translation type="vanished">Сервер закрыл соединение</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="623"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="678"/>
         <source>The server closed the session</source>
         <translation>Сервер закрыл сеанс</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="635"/>
         <source>Invalid endpoint URL</source>
-        <translation>Недопустимый URL конечной точки</translation>
+        <translation type="vanished">Недопустимый URL конечной точки</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="638"/>
         <source>Access denied (bad credentials or anonymous login refused)</source>
-        <translation>Доступ запрещен (неверные учетные данные или отклонен анонимный вход)</translation>
+        <translation type="vanished">Доступ запрещен (неверные учетные данные или отклонен анонимный вход)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="641"/>
         <source>Connection error (server unreachable or refused)</source>
-        <translation>Ошибка соединения (сервер недоступен или отклонил подключение)</translation>
+        <translation type="vanished">Ошибка соединения (сервер недоступен или отклонил подключение)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="645"/>
         <source>The server does not accept this authentication mode</source>
-        <translation>Сервер не принимает этот режим аутентификации</translation>
+        <translation type="vanished">Сервер не принимает этот режим аутентификации</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="648"/>
         <source>The endpoint description was rejected (unsupported security policy)</source>
-        <translation>Описание конечной точки отклонено (неподдерживаемая политика безопасности)</translation>
+        <translation type="vanished">Описание конечной точки отклонено (неподдерживаемая политика безопасности)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="651"/>
         <source>The endpoint offers no matching user identity token</source>
-        <translation>Конечная точка не предлагает подходящего токена идентификации пользователя</translation>
+        <translation type="vanished">Конечная точка не предлагает подходящего токена идентификации пользователя</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="654"/>
         <source>The security policy is not supported by this build</source>
-        <translation>Политика безопасности не поддерживается этой сборкой</translation>
+        <translation type="vanished">Политика безопасности не поддерживается этой сборкой</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="657"/>
         <source>The certificate store is invalid or unreadable</source>
-        <translation>Хранилище сертификатов недействительно или не читается</translation>
+        <translation type="vanished">Хранилище сертификатов недействительно или не читается</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="660"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2501"/>
         <source>The server certificate is not trusted</source>
         <translation>Сертификат сервера не является доверенным</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="663"/>
         <source>Unexpected backend error</source>
-        <translation>Непредвиденная ошибка бэкенда</translation>
+        <translation type="vanished">Непредвиденная ошибка бэкенда</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="685"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="704"/>
         <source>"%1" is not a valid endpoint URL</source>
         <translation>"%1" не является допустимым URL конечной точки</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="686"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="752"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="705"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2257"/>
         <source>OPC UA Discovery</source>
         <translation>Обнаружение OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="694"/>
         <source>The %1 backend is not available in this build</source>
-        <translation>Бэкенд %1 недоступен в этой сборке</translation>
+        <translation type="vanished">Бэкенд %1 недоступен в этой сборке</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="725"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="742"/>
         <source>Discovery failed: %1</source>
         <translation>Ошибка обнаружения: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="726"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="743"/>
         <source>OPC UA Discovery Failed</source>
         <translation>Ошибка Обнаружения OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="751"/>
         <source>No None-policy endpoint; secure channels are not supported in this version</source>
-        <translation>Конечная точка без политики None не найдена; защищённые каналы не поддерживаются в этой версии</translation>
+        <translation type="vanished">Конечная точка без политики None не найдена; защищённые каналы не поддерживаются в этой версии</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="776"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="789"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="409"/>
+        <source>The connection is not configured: check the endpoint and the tag list</source>
+        <translation>Соединение не настроено: проверьте конечную точку и список тегов</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="416"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="713"/>
+        <source>The %1 stack is not available in this build</source>
+        <translation>Стек %1 недоступен в этой сборке</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="459"/>
+        <source>The connection attempt could not be started</source>
+        <translation>Не удалось начать попытку подключения</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="477"/>
+        <source>OPC UA Certificate</source>
+        <translation>Сертификат OPC UA</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="478"/>
+        <source>The client certificate could not be generated; secure channels will be refused.</source>
+        <translation>Не удалось создать сертификат клиента; защищённые каналы будут отклонены.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="773"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="786"/>
         <source>Endpoint discovery failed</source>
         <translation>Ошибка обнаружения конечной точки</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="927"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="883"/>
         <source>OPC UA Monitored Item Refused</source>
         <translation>Отслеживаемый Элемент OPC UA Отклонён</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="938"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="890"/>
         <source>the server refused every monitored item</source>
         <translation>сервер отклонил все отслеживаемые элементы</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="986"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="910"/>
+        <source>the server retired the subscription</source>
+        <translation>сервер отозвал подписку</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="946"/>
         <source>OPC UA Subscription Unavailable</source>
         <translation>Подписка OPC UA Недоступна</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="987"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="947"/>
         <source>Falling back to polling: %1.</source>
         <translation>Переход на опрос: %1.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1013"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="973"/>
         <source>no notification for %1 s</source>
         <translation>нет уведомлений в течение %1 с</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1069"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1026"/>
         <source>OPC UA Read Failed</source>
         <translation>Ошибка Чтения OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1236"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1190"/>
         <source>OPC UA Type Mismatch</source>
         <translation>Несоответствие Типов OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1237"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1191"/>
         <source>Channel %1 is declared %2 but the server sends %3; the value is coerced.</source>
         <translation>Канал %1 объявлен как %2, но сервер отправляет %3; значение приведено.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1282"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1236"/>
         <source>Browse of %1 failed: %2</source>
         <translation>Ошибка обзора %1: %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1307"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1261"/>
         <source>"%1" is not a valid endpoint URL.</source>
         <translation>"%1" не является допустимым URL конечной точки.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1400"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1268"/>
+        <source>The %1 stack is not available in this build.</source>
+        <translation>Стек %1 недоступен в этой сборке.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1275"/>
+        <source>The browse session was closed by the server</source>
+        <translation>Сервер закрыл сеанс просмотра</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1285"/>
+        <source>The browse session could not be started</source>
+        <translation>Не удалось начать сеанс просмотра</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1365"/>
         <source>Could not open a browse session on %1</source>
         <translation>Не удалось открыть сеанс просмотра на %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1424"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1392"/>
         <source>Failed to load generated project</source>
         <translation>Не удалось загрузить сгенерированный проект</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1425"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1393"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>Не удалось загрузить сгенерированный JSON проекта.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1439"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1407"/>
         <source>No tags selected</source>
         <translation>Теги не выбраны</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1440"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1408"/>
         <source>Browse the server and select at least one tag before generating a project.</source>
         <translation>Просмотрите сервер и выберите хотя бы один тег перед генерацией проекта.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1443"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1467"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1411"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1435"/>
         <source>OPC UA Project Generator</source>
         <translation>Генератор Проектов OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1462"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1430"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>Проект успешно сгенерирован: групп — %1, наборов данных — %2.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1465"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1433"/>
         <source>The project editor is now open for customization.</source>
         <translation>Редактор проекта открыт для настройки.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1513"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1481"/>
         <source>OPC UA Project</source>
         <translation>Проект OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1518"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1486"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1545"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1513"/>
         <source>Tags</source>
         <translation>Теги</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1596"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1565"/>
+        <source> (deprecated)</source>
+        <translation>(устарело)</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1581"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2315"/>
         <source>None</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1598"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1583"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2315"/>
         <source>Sign</source>
         <translation>Подпись</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1599"/>
-        <source>Sign &amp; Encrypt</source>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1585"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2315"/>
+        <source>Sign and Encrypt</source>
         <translation>Подпись и Шифрование</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1708"/>
+        <source>Sign &amp;&amp; Encrypt</source>
+        <translation type="vanished">Подпись и Шифрование</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1590"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2315"/>
+        <source>Invalid</source>
+        <translation>Недействительный</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2684"/>
+        <source>Security Policy</source>
+        <translation>Политика Безопасности</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2692"/>
+        <source>Security Mode</source>
+        <translation>Режим Безопасности</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2700"/>
+        <source>User Certificate</source>
+        <translation>Сертификат Пользователя</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2707"/>
+        <source>User Private Key</source>
+        <translation>Закрытый Ключ Пользователя</translation>
+    </message>
+    <message>
+        <source>Sign &amp; Encrypt</source>
+        <translation type="vanished">Подпись и Шифрование</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1713"/>
         <source>Connecting to %1</source>
         <translation>Подключение к %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1711"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1716"/>
         <source>Not connected</source>
         <translation>Не подключено</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1717"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1722"/>
         <source>Subscribing, %1 of %2 tags</source>
         <translation>Подписка, %1 из %2 тегов</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1722"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1727"/>
         <source>Subscribed %1 tags, polling %2 refused, %3 Hz</source>
         <translation>Подписано %1 тегов, опрос %2 отклонён, %3 Гц</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1728"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1733"/>
         <source>Polling (server refused subscriptions), %1 tags, %2 Hz</source>
         <translation>Опрос (сервер отклонил подписки), %1 тегов, %2 Гц</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1732"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1737"/>
         <source>Subscribed, %1 tags, %2 Hz</source>
         <translation>Подписано, %1 тегов, %2 Гц</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1764"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1775"/>
         <source>Anonymous</source>
         <translation>Анонимный</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1764"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1775"/>
         <source>Username / Password</source>
         <translation>Имя Пользователя / Пароль</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2123"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1775"/>
+        <source>X.509 Certificate</source>
+        <translation>Сертификат X.509</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2256"/>
+        <source>No endpoint this build can open with the selected identity</source>
+        <translation>Нет конечной точки, которую данная сборка может открыть с выбранной идентификацией</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2284"/>
+        <source>%1 (deprecated)</source>
+        <translation>%1 (устарело)</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2503"/>
+        <source>The server certificate has expired</source>
+        <translation>Срок действия сертификата сервера истёк</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2505"/>
+        <source>The server certificate is not valid yet</source>
+        <translation>Сертификат сервера ещё не действителен</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2507"/>
+        <source>The server certificate was not issued for this host</source>
+        <translation>Сертификат сервера не был выдан для этого хоста</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2509"/>
+        <source>The server certificate could not be parsed</source>
+        <translation>Не удалось разобрать сертификат сервера</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2646"/>
         <source>Endpoint URL</source>
         <translation>URL Конечной Точки</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2130"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2653"/>
         <source>Authentication</source>
         <translation>Аутентификация</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2138"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2661"/>
         <source>Username</source>
         <translation>Имя Пользователя</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2145"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2668"/>
         <source>Password</source>
         <translation>Пароль</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2152"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2675"/>
         <source>Poll Interval (ms)</source>
         <translation>Интервал Опроса (мс)</translation>
     </message>
@@ -14001,19 +14110,18 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::OpcUaTagModel</name>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUaTagModel.cpp" line="299"/>
+        <location filename="../../src/IO/Drivers/OpcUaTagModel.cpp" line="293"/>
         <source>read</source>
         <translation>чтение</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUaTagModel.cpp" line="299"/>
+        <location filename="../../src/IO/Drivers/OpcUaTagModel.cpp" line="293"/>
         <source>no read</source>
         <translation>нет чтения</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUaTagModel.cpp" line="649"/>
         <source>invalid node id</source>
-        <translation>недопустимый идентификатор узла</translation>
+        <translation type="vanished">недопустимый идентификатор узла</translation>
     </message>
 </context>
 <context>
@@ -18787,72 +18895,196 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>OpcUa</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="49"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="51"/>
         <source>Endpoint</source>
         <translation>Конечная Точка</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="71"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="73"/>
         <source>Discover</source>
         <translation>Обнаружить</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="86"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="88"/>
         <source>Poll Interval (ms)</source>
         <translation>Интервал Опроса (мс)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="93"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="95"/>
         <source>10-60000</source>
         <translation>10-60000</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="107"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="109"/>
         <source>Security</source>
         <translation>Безопасность</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="150"/>
-        <source>Secure channels are not supported in this version</source>
-        <translation>Защищённые каналы не поддерживаются в этой версии</translation>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="152"/>
+        <source>This endpoint offers no user identity token the selected authentication mode can present</source>
+        <translation>Эта конечная точка не предоставляет токен идентификации пользователя, который может представить выбранный режим аутентификации</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="158"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="160"/>
+        <source>Policy</source>
+        <translation>Политика</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="176"/>
+        <source>Mode</source>
+        <translation>Режим</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="183"/>
+        <source>Sign</source>
+        <translation>Подпись</translation>
+    </message>
+    <message>
+        <source>Sign &amp;&amp; Encrypt</source>
+        <translation type="vanished">Подпись и Шифрование</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="203"/>
+        <source>This policy is deprecated by the OPC Foundation (SHA-1 / RSA-1.5). Use it only for controllers that support nothing better.</source>
+        <translation>Эта политика устарела по решению OPC Foundation (SHA-1 / RSA-1.5). Используйте её только для контроллеров, которые не поддерживают ничего лучшего.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="261"/>
+        <source>Certificate</source>
+        <translation>Сертификат</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="275"/>
+        <source>No certificate selected</source>
+        <translation>Сертификат не выбран</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="279"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="304"/>
+        <source>Browse…</source>
+        <translation>Обзор…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="286"/>
+        <source>Private Key</source>
+        <translation>Закрытый Ключ</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="300"/>
+        <source>No private key selected</source>
+        <translation>Закрытый ключ не выбран</translation>
+    </message>
+    <message>
+        <source>Credentials travel in the clear on this channel. Choose a policy other than None with Sign &amp; Encrypt to protect them.</source>
+        <translation type="vanished">Учётные данные передаются в открытом виде по этому каналу. Выберите политику, отличную от None, с Sign &amp; Encrypt для их защиты.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="183"/>
+        <source>Sign and Encrypt</source>
+        <translation>Подпись и Шифрование</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="320"/>
+        <source>Credentials travel in the clear on this channel. Choose a policy other than None with Sign and Encrypt to protect them.</source>
+        <translation>Учётные данные передаются в открытом виде по этому каналу. Выберите политику, отличную от None, с Подпись и Шифрование для их защиты.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="327"/>
+        <source>Identity</source>
+        <translation>Идентификация</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="344"/>
+        <source>Generated on the first secure connection</source>
+        <translation>Генерируется при первом защищённом подключении</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="352"/>
+        <source>Export…</source>
+        <translation>Экспорт…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="358"/>
+        <source>Replace</source>
+        <translation>Заменить</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="439"/>
+        <source>Export Client Certificate</source>
+        <translation>Экспорт Сертификата Клиента</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="440"/>
+        <source>Certificate (*.der)</source>
+        <translation>Сертификат (*.der)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="440"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="448"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="456"/>
+        <source>All files (*)</source>
+        <translation>Все файлы (*)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="447"/>
+        <source>Select User Certificate</source>
+        <translation>Выбрать Сертификат Пользователя</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="448"/>
+        <source>Certificate (*.der *.pem *.crt)</source>
+        <translation>Сертификат (*.der *.pem *.crt)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="455"/>
+        <source>Select Private Key</source>
+        <translation>Выбрать Приватный Ключ</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="456"/>
+        <source>Private key (*.der *.pem *.key)</source>
+        <translation>Приватный ключ (*.der *.pem *.key)</translation>
+    </message>
+    <message>
+        <source>Secure channels are not supported in this version</source>
+        <translation type="vanished">Защищённые каналы не поддерживаются в этой версии</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="210"/>
         <source>Authentication</source>
         <translation>Аутентификация</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="174"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="226"/>
         <source>Username</source>
         <translation>Имя Пользователя</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="191"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="243"/>
         <source>Password</source>
         <translation>Пароль</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="218"/>
         <source>Credentials are sent unencrypted: this version only opens None-policy channels.</source>
-        <translation>Учётные данные передаются незашифрованными: эта версия открывает только каналы с политикой None.</translation>
+        <translation type="vanished">Учётные данные передаются незашифрованными: эта версия открывает только каналы с политикой None.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="236"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="384"/>
         <source>Browse Tags…</source>
         <translation>Обзор Тегов…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="247"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="395"/>
         <source>Generate Project</source>
         <translation>Создать Проект</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="265"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="413"/>
         <source>%1 tag(s) selected</source>
         <translation>Выбрано тегов: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="266"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="414"/>
         <source>No tags selected</source>
         <translation>Теги не выбраны</translation>
     </message>
@@ -18903,6 +19135,59 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="453"/>
         <source>OK</source>
         <translation>ОК</translation>
+    </message>
+</context>
+<context>
+    <name>OpcUaTrustDialog</name>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="42"/>
+        <source>Untrusted OPC UA Server</source>
+        <translation>Недоверенный Сервер OPC UA</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="84"/>
+        <source>Check the fingerprint against the one the server operator gave you before accepting. Accepting records the decision for this installation; it does not reconnect, so press Connect again afterwards.</source>
+        <translation>Проверьте отпечаток с тем, который предоставил оператор сервера, перед принятием. Принятие сохраняет решение для этой установки; оно не переподключает, поэтому нажмите Подключить снова после этого.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="108"/>
+        <source>Subject:</source>
+        <translation>Субъект:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="119"/>
+        <source>Issuer:</source>
+        <translation>Издатель:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="130"/>
+        <source>Application URI:</source>
+        <translation>URI Приложения:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="141"/>
+        <source>Fingerprint:</source>
+        <translation>Отпечаток:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="152"/>
+        <source>Valid From:</source>
+        <translation>Действителен С:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="162"/>
+        <source>Valid Until:</source>
+        <translation>Действителен До:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="188"/>
+        <source>Reject</source>
+        <translation>Отклонить</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="193"/>
+        <source>Trust This Server</source>
+        <translation>Доверять Этому Серверу</translation>
     </message>
 </context>
 <context>

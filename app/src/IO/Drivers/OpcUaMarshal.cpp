@@ -152,8 +152,9 @@ static QVariant scalarAt(const void* data, quint32 kind)
 
 /**
  * @brief Renders the OPC UA wrappers the dashboard has no vocabulary for: LocalizedText and
- *        EUInformation become display text, Range its low bound. Both of the latter are plain
- *        STRUCTUREs, so only the type pointer separates them.
+ *        EUInformation become display text, Range becomes {low, high} because both bounds become
+ *        a generated dataset's plot range. Both of the latter are plain STRUCTUREs, so only the
+ *        type pointer separates them.
  */
 static QVariant wrapperAt(const void* data, const UA_DataType* type)
 {
@@ -181,8 +182,10 @@ static QVariant wrapperAt(const void* data, const UA_DataType* type)
   if (type == &UA_TYPES[UA_TYPES_EUINFORMATION])
     return toQString(static_cast<const UA_EUInformation*>(data)->displayName.text);
 
-  if (type == &UA_TYPES[UA_TYPES_RANGE])
-    return QVariant(static_cast<const UA_Range*>(data)->low);
+  if (type == &UA_TYPES[UA_TYPES_RANGE]) {
+    const auto* range = static_cast<const UA_Range*>(data);
+    return QVariantList{range->low, range->high};
+  }
 
   return {};
 }

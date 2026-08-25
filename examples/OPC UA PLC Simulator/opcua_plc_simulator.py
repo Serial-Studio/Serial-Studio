@@ -50,9 +50,47 @@ for _stream in (sys.stdout, sys.stderr):
         pass
 
 import datetime
+from pathlib import Path
 
 from asyncua import Server, ua
+from asyncua.crypto.cert_gen import (
+    dump_private_key_as_pem,
+    generate_private_key,
+    setup_self_signed_certificate,
+)
 from asyncua.crypto.permission_rules import User, UserRole
+from cryptography import x509
+from cryptography.hazmat.primitives import hashes, serialization
+from cryptography.x509.oid import ExtendedKeyUsageOID, NameOID
+
+#
+# Security policy names accepted by --security, in the same order Serial Studio lists them.
+# Each maps to its Sign and SignAndEncrypt variants; the two the OPC Foundation deprecated are
+# offered so the client's deprecation labelling can be exercised, never because they are a good
+# idea on a real plant.
+#
+POLICY_VARIANTS = {
+    "Basic128Rsa15": (
+        ua.SecurityPolicyType.Basic128Rsa15_Sign,
+        ua.SecurityPolicyType.Basic128Rsa15_SignAndEncrypt,
+    ),
+    "Basic256": (
+        ua.SecurityPolicyType.Basic256_Sign,
+        ua.SecurityPolicyType.Basic256_SignAndEncrypt,
+    ),
+    "Basic256Sha256": (
+        ua.SecurityPolicyType.Basic256Sha256_Sign,
+        ua.SecurityPolicyType.Basic256Sha256_SignAndEncrypt,
+    ),
+    "Aes128_Sha256_RsaOaep": (
+        ua.SecurityPolicyType.Aes128Sha256RsaOaep_Sign,
+        ua.SecurityPolicyType.Aes128Sha256RsaOaep_SignAndEncrypt,
+    ),
+    "Aes256_Sha256_RsaPss": (
+        ua.SecurityPolicyType.Aes256Sha256RsaPss_Sign,
+        ua.SecurityPolicyType.Aes256Sha256RsaPss_SignAndEncrypt,
+    ),
+}
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s %(message)s", datefmt="%H:%M:%S"
@@ -329,8 +367,13 @@ class SimpleUserManager:
     def __init__(self, username, password):
         self.username = username
         self.password = password
+        self.allow_certificates = False
 
     def get_user(self, iserver, username=None, password=None, certificate=None):
+        # A certificate token carries no username: presenting one that the channel
+        # already proved ownership of is the login.
+        if certificate is not None and self.allow_certificates:
+            return User(role=UserRole.User)
         if self.username is None:
             return User(role=UserRole.User)
         if username == self.username and password == self.password:
@@ -338,25 +381,168 @@ class SimpleUserManager:
         return None
 
 
+async def ensure_server_certificate(cert_path, key_path, host, app_uri):
+    """Generate the server certificate and key on first secure run, then reuse them.
+
+    Reuse matters: a client that trusted this simulator once must not be asked again
+    on the next launch, which is exactly the behaviour the trust store is there to test.
+    """
+    cert = Path(cert_path)
+    key = Path(key_path)
+    if cert.is_file() and key.is_file():
+        return cert, key
+
+    cert.parent.mkdir(parents=True, exist_ok=True)
+    await setup_self_signed_certificate(
+        key,
+        cert,
+        app_uri,
+        host,
+        [ExtendedKeyUsageOID.CLIENT_AUTH, ExtendedKeyUsageOID.SERVER_AUTH],
+        {
+            "countryName": "DE",
+            "stateOrProvinceName": "Bavaria",
+            "localityName": "Munich",
+            "organizationName": "Serial Studio Simulator",
+        },
+    )
+    return cert, key
+
+
+def write_broken_certificate(
+    cert_path, key_path, host, app_uri, *, expired, wrong_host
+):
+    """Write a server certificate that is deliberately unacceptable, for the failure-mode tests.
+
+    `setup_self_signed_certificate` always starts the validity window at "now", so an expired
+    certificate cannot be asked of it; this builds one with explicit dates instead. `wrong_host`
+    names a host the server is not listening on, which is what a hostname mismatch is.
+    """
+    cert = Path(cert_path)
+    key = Path(key_path)
+    cert.parent.mkdir(parents=True, exist_ok=True)
+
+    named = "some-other-plc.invalid" if wrong_host else host
+    now = datetime.datetime.now(datetime.timezone.utc)
+    not_before = now - datetime.timedelta(days=400 if expired else 1)
+    not_after = (
+        now - datetime.timedelta(days=1)
+        if expired
+        else now + datetime.timedelta(days=365)
+    )
+
+    private_key = generate_private_key()
+    subject = x509.Name(
+        [
+            x509.NameAttribute(NameOID.COMMON_NAME, f"Bottling Line Simulator@{named}"),
+            x509.NameAttribute(NameOID.ORGANIZATION_NAME, "Serial Studio Simulator"),
+        ]
+    )
+
+    builder = x509.CertificateBuilder()
+    builder = builder.subject_name(subject)
+    builder = builder.issuer_name(subject)
+    builder = builder.not_valid_before(not_before)
+    builder = builder.not_valid_after(not_after)
+    builder = builder.serial_number(x509.random_serial_number())
+    builder = builder.public_key(private_key.public_key())
+    builder = builder.add_extension(
+        x509.SubjectAlternativeName(
+            [x509.DNSName(named), x509.UniformResourceIdentifier(app_uri)]
+        ),
+        critical=False,
+    )
+    builder = builder.add_extension(
+        x509.BasicConstraints(ca=True, path_length=0), critical=False
+    )
+    builder = builder.add_extension(
+        x509.KeyUsage(
+            digital_signature=True,
+            content_commitment=True,
+            key_encipherment=True,
+            data_encipherment=True,
+            key_agreement=False,
+            key_cert_sign=True,
+            crl_sign=False,
+            encipher_only=False,
+            decipher_only=False,
+        ),
+        critical=False,
+    )
+    builder = builder.add_extension(
+        x509.ExtendedKeyUsage([ExtendedKeyUsageOID.SERVER_AUTH]), critical=False
+    )
+
+    certificate = builder.sign(private_key=private_key, algorithm=hashes.SHA256())
+    cert.write_bytes(certificate.public_bytes(serialization.Encoding.DER))
+    key.write_bytes(dump_private_key_as_pem(private_key))
+    return cert, key
+
+
+def selected_policies(spec):
+    """Return the asyncua policy list for a --security value."""
+    if spec in ("", "none"):
+        return [ua.SecurityPolicyType.NoSecurity]
+
+    names = (
+        list(POLICY_VARIANTS) if spec == "all" else [n.strip() for n in spec.split(",")]
+    )
+    policies = []
+    for name in names:
+        if name not in POLICY_VARIANTS:
+            raise SystemExit(f"unknown security policy: {name}")
+        policies.extend(POLICY_VARIANTS[name])
+
+    return policies
+
+
 async def run(args):
-    server = Server(user_manager=SimpleUserManager(args.user, args.password))
+    app_uri = f"urn:{args.host}:SerialStudio:BottlingLineSimulator"
+    user_manager = SimpleUserManager(args.user, args.password)
+    user_manager.allow_certificates = args.allow_certificate_users
+
+    server = Server(user_manager=user_manager)
     await server.init()
     server.set_endpoint(f"opc.tcp://{args.host}:{args.port}{ENDPOINT_PATH}")
     server.set_server_name("Serial Studio Bottling Line Simulator")
+    await server.set_application_uri(app_uri)
 
-    if args.secure_only:
-        server.set_security_policy(
-            [ua.SecurityPolicyType.Basic256Sha256_SignAndEncrypt]
-        )
-        await server.load_certificate(args.cert)
-        await server.load_private_key(args.key)
-    else:
-        server.set_security_policy([ua.SecurityPolicyType.NoSecurity])
+    security = "Basic256Sha256" if args.secure_only else args.security
+    policies = selected_policies(security)
+    if not args.secure_only and security != "none":
+        policies.append(ua.SecurityPolicyType.NoSecurity)
 
+    server.set_security_policy(policies)
+    if security != "none":
+        if args.cert_expired or args.cert_wrong_host:
+            suffix = "expired" if args.cert_expired else "wronghost"
+            cert, key = write_broken_certificate(
+                f"server_cert_{suffix}.der",
+                f"server_key_{suffix}.pem",
+                args.host,
+                app_uri,
+                expired=args.cert_expired,
+                wrong_host=args.cert_wrong_host,
+            )
+        else:
+            cert, key = await ensure_server_certificate(
+                args.cert, args.key, args.host, app_uri
+            )
+
+        await server.load_certificate(str(cert))
+        await server.load_private_key(str(key))
+
+    tokens = []
     if args.user is None:
-        server.set_identity_tokens([ua.AnonymousIdentityToken])
+        tokens.append(ua.AnonymousIdentityToken)
     else:
-        server.set_identity_tokens([ua.UserNameIdentityToken])
+        tokens.append(ua.UserNameIdentityToken)
+    if args.allow_certificate_users:
+        tokens.append(ua.X509IdentityToken)
+
+    # No certificate validator is installed on purpose: any client certificate is accepted.
+    # What these tests exercise is Serial Studio's identity plumbing, not this simulator's PKI.
+    server.set_identity_tokens(tokens)
 
     if args.no_subscriptions:
         # Refuse every CreateSubscription (BadTooManySubscriptions) so clients fall back to polling.
@@ -375,8 +561,9 @@ async def run(args):
             ENDPOINT_PATH,
         )
         log.info(
-            "auth: %s | subscriptions: %s | rate: %.1f Hz",
+            "auth: %s | security: %s | subscriptions: %s | rate: %.1f Hz",
             "anonymous" if args.user is None else f"user '{args.user}'",
+            security,
             "refused" if args.no_subscriptions else "enabled",
             args.rate,
         )
@@ -410,10 +597,31 @@ def main():
     parser.add_argument(
         "--secure-only",
         action="store_true",
-        help="advertise only a Basic256Sha256 endpoint (needs --cert/--key)",
+        help="advertise only a Basic256Sha256 endpoint (no None fallback)",
+    )
+    parser.add_argument(
+        "--security",
+        default="none",
+        help="'none', 'all', or a comma list of policy names; each is offered in both "
+        "Sign and SignAndEncrypt, alongside a None endpoint",
+    )
+    parser.add_argument(
+        "--allow-certificate-users",
+        action="store_true",
+        help="also accept an X.509 user identity token",
     )
     parser.add_argument("--cert", default="server_cert.der")
     parser.add_argument("--key", default="server_key.pem")
+    parser.add_argument(
+        "--cert-expired",
+        action="store_true",
+        help="serve a certificate whose validity window ended yesterday",
+    )
+    parser.add_argument(
+        "--cert-wrong-host",
+        action="store_true",
+        help="serve a certificate issued for a host this server is not listening on",
+    )
     parser.add_argument(
         "--drop-after",
         type=float,

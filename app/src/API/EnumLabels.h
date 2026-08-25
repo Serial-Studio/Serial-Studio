@@ -79,6 +79,38 @@ namespace EnumLabels {
  */
 [[nodiscard]] QString layoutPatternLabel(int value);
 
+/**
+ * @brief Returns the wire slug of an OPC UA security policy, keyed on its row in the driver's
+ *        supported-policy list (spec 0067).
+ */
+[[nodiscard]] QString securityPolicySlug(int value);
+
+/**
+ * @brief Returns the human-readable name of an OPC UA security policy.
+ */
+[[nodiscard]] QString securityPolicyLabel(int value);
+
+/**
+ * @brief Returns the wire slug of an OPC UA message security mode (1 None, 2 Sign, 3
+ * SignAndEncrypt).
+ */
+[[nodiscard]] QString securityModeSlug(int value);
+
+/**
+ * @brief Returns the human-readable name of an OPC UA message security mode.
+ */
+[[nodiscard]] QString securityModeLabel(int value);
+
+/**
+ * @brief Returns the wire slug of an OPC UA user identity token type.
+ */
+[[nodiscard]] QString identityTokenSlug(int value);
+
+/**
+ * @brief Returns the human-readable name of an OPC UA user identity token type.
+ */
+[[nodiscard]] QString identityTokenLabel(int value);
+
 [[nodiscard]] QString groupWidgetSlug(int value);
 
 /**

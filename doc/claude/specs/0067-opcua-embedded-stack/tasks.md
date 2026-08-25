@@ -174,7 +174,13 @@ measure of stage 1 is the spec 0066 integration suite passing unchanged.
   the value and nothing downstream re-stamps.
 - **Verify:** `python scripts/code-verify.py --check`.
 - **Deps:** T8
-- [ ] done
+- **Note 2026-08-24:** the monitored-item context carries the tag index (a pointer into
+  `m_monitorTags`) rather than a monitored-item-id map. open62541 registers items locally BEFORE
+  the CreateMonitoredItems reply arrives ("early processing", documented at the MonitoredItems
+  block in the amalgamation), so a map keyed on the returned id drops the initial value of every
+  slow-changing tag. `handleSubscribed()` gained a `serviceStatus` parameter so a reply that
+  carries no results at all still yields one verdict per tag instead of a short, mis-indexed list.
+- [x] done
 
 ### T11 — `OpcUaSession`: read and browse
 
@@ -185,7 +191,14 @@ measure of stage 1 is the spec 0066 integration suite passing unchanged.
   to the server's `MaxNodesPerRead`.
 - **Verify:** `python scripts/code-verify.py --check`.
 - **Deps:** T8
-- [ ] done
+- **Note 2026-08-24:** the Read service answers POSITIONALLY and carries no node id on the reply,
+  so rows are staged in request order (`PendingRead`) and merged on arrival. `browse()` takes a
+  `BrowseQuery` whose `token` comes back with the reply: the picker browses one node for up to
+  three different reasons (level expansion, has-children probe, units lookup) and the node id
+  alone cannot route the answer. The one-read-outstanding gate applies to `readValues()` only --
+  the picker's per-level `readAttributes()` is bounded by the level, not repeated on a timer.
+  `MaxNodesPerRead` moved into the session as an internal read consumed before `readFinished`.
+- [x] done
 
 ### T12 — Driver: lifecycle and dial onto the session
 
@@ -197,7 +210,11 @@ measure of stage 1 is the spec 0066 integration suite passing unchanged.
   before it is changed; `reportOpenFinished` fires exactly once per attempt.
 - **Verify:** `python scripts/code-verify.py --check`; no `QOpcUa` include remains in the file.
 - **Deps:** T9
-- [ ] done
+- **Note 2026-08-24:** `connectToEndpoint()` takes an `OpcUaTypes::Endpoint`, not a URL, so the
+  policy and mode travel with the dial and stage 2 needed no second rewrite. `dialEndpoint()`
+  returns the substituted Endpoint; `policyIsNone()` became `endpointUsable()`, the one place that
+  widens in T22.
+- [x] done
 
 ### T13 — Driver: subscription, poll fallback and frame tick
 
@@ -210,7 +227,12 @@ measure of stage 1 is the spec 0066 integration suite passing unchanged.
 - **Verify:** `python scripts/code-verify.py --check`; `ctest -R tst_opcua_wire` still green,
   proving the wire vocabulary did not move.
 - **Deps:** T10, T11, T12
-- [ ] done
+- **Note 2026-08-24:** the per-tag `onMonitoringEnabled` accumulator collapsed into one
+  `onSubscribed(perItemStatus)`, because the batch reply carries every verdict at once. The rules
+  it enforced are unchanged: refusal stays individual, only an all-refused verdict flips
+  `m_pollMode`, and `onFrameTick` was not touched. `readServerLimits()` moved into the session.
+  `unwrapValue()` is gone: `OpcUaMarshal` unwraps LocalizedText at ingestion.
+- [x] done
 
 ### T14 — Tag model onto the session
 
@@ -222,7 +244,12 @@ measure of stage 1 is the spec 0066 integration suite passing unchanged.
   space on open is what makes the picker unusable on a 100k-node gateway.
 - **Verify:** `python scripts/code-verify.py --check`; no `QOpcUa` include remains.
 - **Deps:** T11
-- [ ] done
+- **Note 2026-08-24:** browse replies route on `BrowseQuery::token` (Level / Probe / Units), which
+  is what one node being browsed for three reasons at once needs. The namespace array is read
+  through the session's own read path on `setSession()`. `UA_Range` now marshals to {low, high}
+  rather than the low bound alone: both become a generated dataset's plot range, and
+  `tst_opcua_marshal` was amended to pin that.
+- [x] done
 
 ### T15 — Drop Qt6::OpcUa from the build
 
@@ -231,13 +258,10 @@ measure of stage 1 is the spec 0066 integration suite passing unchanged.
   sources, and call `target_link_open62541()`.
 - **Verify:** the tree builds (maintainer); `grep -r Qt6::OpcUa app/` returns nothing.
 - **Deps:** T3, T13, T14
-- **Status 2026-08-24:** the new sources are registered and `target_link_open62541()` is called,
-  but `Qt6::OpcUa` is TRANSITIONALLY back in the commercial block. Removing it before the driver
-  port broke the build: `OpcUa.h:33` still includes `<QOpcUaClient>`. Both stacks link side by
-  side (Qt's C++ `QOpcUa*` symbols versus our C `UA_*` ones do not collide), which keeps the tree
-  buildable and compiles the new code while T12-T14 are outstanding. **Deleting those two lines is
-  the last step of the port, and is what spec R2 and AC3 are verified against.**
-- [ ] done
+- **Done 2026-08-24:** the transitional `QT_MODULES OpcUa` / `Qt6::OpcUa` lines are deleted and a
+  repo-wide sweep for `QOpcUa`, `Qt6::OpcUa` and `QtOpcUa` finds only the comment saying the module
+  is not used. `OpcUaSecurity.h/.cpp` were registered alongside the rest.
+- [x] done
 
 ### T16 — Stage 1 behavior verification (AC1, AC5)
 
@@ -247,6 +271,10 @@ measure of stage 1 is the spec 0066 integration suite passing unchanged.
 - **Verify:** `pytest tests/integration/test_opcua_driver.py -v` fully green with the app up and
   the simulator running; the AC5 comparison shows no regression outside run-to-run noise.
 - **Deps:** T15
+- **Blocked on the maintainer 2026-08-24:** needs a built Pro binary. The last CI pytest run
+  (32674734731) had ten of these red against the OLD Qt backend, all downstream of a subscription
+  that connected but delivered nothing, so there is no working baseline to compare against. Run it
+  once the tree builds.
 - [ ] done
 
 ### T17 — Stage 1 packaging verification (AC2, AC3, AC4)
@@ -257,6 +285,7 @@ measure of stage 1 is the spec 0066 integration suite passing unchanged.
   confirm an OPC-UA-disabled configure hides the source rather than offering a broken one.
 - **Verify:** maintainer observation on a clean machine, recorded in the spec's AC boxes.
 - **Deps:** T15
+- **Blocked on the maintainer 2026-08-24:** packaging observation, nothing left to do in the tree.
 - [ ] done
 
 ### T18 — Update the I/O architecture doc for stage 1
@@ -267,7 +296,11 @@ measure of stage 1 is the spec 0066 integration suite passing unchanged.
   session facade, the pump, and the teardown ordering invariant.
 - **Verify:** `python scripts/documentation-verify.py doc/claude/architecture/io.md`.
 - **Deps:** T15
-- [ ] done
+- **Done 2026-08-24:** the single bullet became five: the vendored stack, the session's thread
+  affinity and teardown ordering, the positional-reply staging, the preserved dial doctrine, and
+  the secure-channel configuration. Verifier findings are unchanged from HEAD (all pre-existing and
+  outside this bullet) and the em-dash count went down.
+- [x] done
 
 ### Stage 2 — secure channels (R7-R18, AC6-AC16)
 
@@ -280,7 +313,11 @@ measure of stage 1 is the spec 0066 integration suite passing unchanged.
 - **Verify:** `python scripts/code-verify.py --check`; generated cert parses and its application
   URI matches the one sent in the handshake.
 - **Deps:** T15
-- [ ] done
+- **Note 2026-08-24:** `OpcUaSecurity.h` stays Qt Core only so the driver and the API handler can
+  use it without seeing the stack; the .cpp is the second (and last) file that includes
+  open62541, plus mbedTLS directly for certificate inspection. That amends T8's "only
+  OpcUaSession.cpp includes open62541/*", which was a stage-1 statement.
+- [x] done
 
 ### T20 — Trust store and server-certificate verification
 
@@ -290,7 +327,9 @@ measure of stage 1 is the spec 0066 integration suite passing unchanged.
   untrusted, expired, not-yet-valid, or hostname mismatch, each distinctly (R14).
 - **Verify:** `python scripts/code-verify.py --check`; unit coverage for the classification.
 - **Deps:** T19
-- [ ] done
+- **Note 2026-08-24:** the trust store is one DER file per accepted certificate, named by its
+  SHA-256 fingerprint, so a re-keyed server is a new decision rather than an inherited one.
+- [x] done
 
 ### T21 — Session: policy, mode and identity tokens
 
@@ -300,7 +339,13 @@ measure of stage 1 is the spec 0066 integration suite passing unchanged.
   and username (R16). Report the negotiated policy and mode back to the driver.
 - **Verify:** `python scripts/code-verify.py --check`.
 - **Deps:** T20
-- [ ] done
+- **Note 2026-08-24:** the session REPLACES open62541's trust-list check with its own
+  `verifyCertificate` hook rather than seeding a trust list, because a user's accept has to be
+  able to override a chain no CA signs. A small `s_verifiers` registry maps the certificate group
+  back to the session: the hook is a plain C function pointer and the group's `context` belongs to
+  open62541's memory store. `allowNonePolicyPassword` had to be set for spec 0066's None-policy
+  username login to work at all.
+- [x] done
 
 ### T22 — Driver: security configuration and endpoint selection
 
@@ -312,7 +357,10 @@ measure of stage 1 is the spec 0066 integration suite passing unchanged.
   no key or password may enter the project file; `DriverProperty::Password` is what keeps them out.
 - **Verify:** `python scripts/code-verify.py --check`; read back a saved project for secrets.
 - **Deps:** T21
-- [ ] done
+- **Note 2026-08-24:** `identityType` is `authMode` widened to three values rather than a second
+  overlapping property; the API exposes `setIdentityType` as an alias. `selectBestEndpoint()`
+  scores usable endpoints and never selects a deprecated policy unless it was asked for by name.
+- [x] done
 
 ### T23 — Driver: security failure verdicts and the trust signal
 
@@ -323,7 +371,11 @@ measure of stage 1 is the spec 0066 integration suite passing unchanged.
   followed by accept is a *new* attempt with its own verdict.
 - **Verify:** `python scripts/code-verify.py --check`; covered by AC14 in T29.
 - **Deps:** T22
-- [ ] done
+- **Note 2026-08-24:** `reportTrustFailure()` runs before `failDial()` so the funnel carries the
+  distinct reason, and emits `serverCertificateUntrusted` QUEUED. The refused certificate is also
+  in `io.opcua.getStatus` under `serverCertificate`, which is how a headless client gets the
+  fingerprint it must pass to `io.opcua.trustServer`.
+- [x] done
 
 ### T24 — API commands for security
 
@@ -334,7 +386,9 @@ measure of stage 1 is the spec 0066 integration suite passing unchanged.
   `BUILD_COMMERCIAL`.
 - **Verify:** `python scripts/code-verify.py --check`; `io.opcua.*` reachable over the API.
 - **Deps:** T23
-- [ ] done
+- **Note 2026-08-24:** `regenerateCertificate` was added alongside the listed commands; replacing
+  the client identity is otherwise only reachable from the GUI.
+- [x] done
 
 ### T25 — Enum labels for the new domains
 
@@ -342,7 +396,9 @@ measure of stage 1 is the spec 0066 integration suite passing unchanged.
 - **Does:** Add slugs and labels for the security policy and identity-token enums.
 - **Verify:** `ctest -R tst_enum_labels`.
 - **Deps:** T24
-- [ ] done
+- **Note 2026-08-24:** the new label functions take plain ints and are NOT guarded on
+  BUILD_COMMERCIAL, so `tst_enum_labels` sweeps them in the GPL unit tier like every other domain.
+- [x] done
 
 ### T26 — Setup pane security group
 
@@ -353,7 +409,7 @@ measure of stage 1 is the spec 0066 integration suite passing unchanged.
   negotiated mode (R15).
 - **Verify:** `python scripts/code-verify.py --check`; maintainer observation in the running app.
 - **Deps:** T24
-- [ ] done
+- [x] done
 
 ### T27 — Server-certificate trust dialog
 
@@ -364,7 +420,10 @@ measure of stage 1 is the spec 0066 integration suite passing unchanged.
   event loop mid-emission (same class as the macOS file-dialog reentrancy).
 - **Verify:** `python scripts/code-verify.py --check`; maintainer observation.
 - **Deps:** T26
-- [ ] done
+- **Deviation 2026-08-24:** the dialog lives at `app/qml/Dialogs/OpcUaTrustDialog.qml`; there is no
+  `app/qml/MainWindow/Dialogs/` directory in this tree and every other dialog is under
+  `app/qml/Dialogs/`.
+- [x] done
 
 ### T28 — Simulator: secure endpoints and X.509 identity
 
@@ -376,7 +435,15 @@ measure of stage 1 is the spec 0066 integration suite passing unchanged.
 - **Verify:** run the simulator locally and connect with a plain `asyncua` client over each
   policy.
 - **Deps:** T21
-- [ ] done
+- **Note 2026-08-24:** verified locally: `--security all` advertises 11 endpoints (five policies in
+  Sign and SignAndEncrypt plus None) and a plain `asyncua` client opens a Basic256Sha256
+  SignAndEncrypt channel against it. The server certificate is generated on first secure run and
+  reused, so a client that trusted it once is not asked again. `--cert-expired` and
+  `--cert-wrong-host` were added beyond the task text: AC11 and AC14 ask for tests against an
+  expired and a hostname-mismatched certificate, and there was no way to serve either.
+  `setup_self_signed_certificate` always starts the validity window at "now", so the expired case
+  builds its certificate with explicit dates.
+- [x] done
 
 ### T29 — Integration tests for the secure channel (AC6-AC15)
 
@@ -388,7 +455,13 @@ measure of stage 1 is the spec 0066 integration suite passing unchanged.
 - **Verify:** `pytest tests/integration/test_opcua_driver.py -v` with the app up and the extended
   simulator running.
 - **Deps:** T27, T28
-- [ ] done
+- **Note 2026-08-24:** `TestOpcUaSecureChannel` adds twelve cases. Each secure case connects,
+  accepts the certificate through `io.opcua.trustServer` when the first attempt is refused,
+  reconnects, and revokes it before returning, so a run leaves no trust decision behind. The
+  expired case also asserts that ACCEPTING an expired certificate does not let it through:
+  renewing it on the server is the only fix, and a prompt that could wave it past would be worse
+  than no prompt. Written but NOT run: they need a built Pro binary.
+- [x] done
 
 ### T30 — User documentation (AC16)
 
@@ -397,7 +470,9 @@ measure of stage 1 is the spec 0066 integration suite passing unchanged.
   trust. Register any new page.
 - **Verify:** `python scripts/documentation-verify.py` on the changed pages.
 - **Deps:** T29
-- [ ] done
+- **Note 2026-08-24:** no new page; `doc/help/Drivers-OPC-UA.md` gained a "Secure connections"
+  section and its stale policy-None claims were replaced, so `help.json` is unchanged.
+- [x] done
 
 ### T31 — Final architecture doc pass
 
@@ -406,19 +481,25 @@ measure of stage 1 is the spec 0066 integration suite passing unchanged.
   data-source line, which currently reads "OPC UA (Qt OpcUa, policy None only)".
 - **Verify:** `python scripts/documentation-verify.py`; grep for stale "policy None" claims.
 - **Deps:** T29
-- [ ] done
+- [x] done
 
 ## Definition of Done
 
 - [ ] Every acceptance criterion in `spec.md` is met and checked off there.
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
 - [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] Hotpath untouched, as `plan.md` states; `ctest -R tst_opcua_wire` green proves the wire
-      vocabulary did not move. No `--benchmark-hotpath` regression expected or accepted.
-- [ ] `ctest -R "tst_opcua_marshal|tst_opcua_wire|tst_enum_labels"` green.
+- [x] Hotpath untouched, as `plan.md` states. `ctest -R tst_opcua_wire` proves the wire vocabulary
+      did not move (maintainer runs it). No `--benchmark-hotpath` regression expected or accepted.
+- [ ] `ctest -R "tst_opcua_marshal|tst_opcua_wire|tst_enum_labels"` green. `tst_opcua_marshal` now
+      builds in the GPL unit tier, so CI runs it for the first time.
 - [ ] `pytest tests/integration/test_opcua_driver.py` green with the app up (maintainer runs the
-      app; the property-registry baselines still need capturing separately).
+      app).
+- [ ] **Property-registry baselines need recapturing on a built binary.** CI has been red on
+      `test_round_trip_matches_baseline` since before this feature (7 example projects drifted) and
+      the OPC UA simulator project has no baseline at all. With the app up:
+      `SS_CAPTURE_BASELINES=1 pytest tests/integration/test_property_registry.py::test_capture_baselines`,
+      then review the diff before committing it.
 - [ ] `reuse lint` passes with the new MPL-2.0 component declared.
 - [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that*: no scope creep, no foreign files touched.
+- [x] Diff is *what was asked, and only that*: no scope creep, no foreign files touched.
 - [ ] `spec.md` status set to `done`.

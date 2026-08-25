@@ -30,11 +30,6 @@
 #include <QJsonObject>
 #include <QList>
 #include <QObject>
-#include <QOpcUaClient>
-#include <QOpcUaEndpointDescription>
-#include <QOpcUaNode>
-#include <QOpcUaProvider>
-#include <QOpcUaReadResult>
 #include <QPointer>
 #include <QSettings>
 #include <QString>
@@ -43,6 +38,8 @@
 #include <QVariant>
 
 #include "DataModel/Frame.h"
+#include "IO/Drivers/OpcUaSession.h"
+#include "IO/Drivers/OpcUaTypes.h"
 #include "IO/Drivers/OpcUaWire.h"
 #include "IO/HAL_Driver.h"
 #include "MQTT/CredentialVault.h"
@@ -143,6 +140,44 @@ class OpcUa : public HAL_Driver {
   Q_PROPERTY(QStringList authModeList
              READ authModeList
              NOTIFY languageChanged)
+  Q_PROPERTY(QString securityPolicy
+             READ securityPolicy
+             WRITE setSecurityPolicy
+             NOTIFY securityChanged)
+  Q_PROPERTY(int securityPolicyIndex
+             READ securityPolicyIndex
+             WRITE setSecurityPolicyIndex
+             NOTIFY securityChanged)
+  Q_PROPERTY(QStringList securityPolicyList
+             READ securityPolicyList
+             NOTIFY languageChanged)
+  Q_PROPERTY(QVariantList securityPolicyDeprecated
+             READ securityPolicyDeprecated
+             CONSTANT)
+  Q_PROPERTY(int securityMode
+             READ securityMode
+             WRITE setSecurityMode
+             NOTIFY securityChanged)
+  Q_PROPERTY(QStringList securityModeList
+             READ securityModeList
+             NOTIFY languageChanged)
+  Q_PROPERTY(QString userCertificatePath
+             READ userCertificatePath
+             WRITE setUserCertificatePath
+             NOTIFY securityChanged)
+  Q_PROPERTY(QString userKeyPath
+             READ userKeyPath
+             WRITE setUserKeyPath
+             NOTIFY securityChanged)
+  Q_PROPERTY(QVariantMap clientCertificate
+             READ clientCertificate
+             NOTIFY certificateChanged)
+  Q_PROPERTY(QVariantList trustedCertificates
+             READ trustedCertificates
+             NOTIFY certificateChanged)
+  Q_PROPERTY(bool credentialsExposed
+             READ credentialsExposed
+             NOTIFY securityChanged)
   Q_PROPERTY(QObject* tagModel
              READ tagModelObject
              CONSTANT)
@@ -162,6 +197,9 @@ signals:
   void endpointIndexChanged();
   void publishingIntervalChanged();
   void browseFailed(const QString& reason);
+  void securityChanged();
+  void certificateChanged();
+  void serverCertificateUntrusted(const QVariantMap& certificate, const QString& reason);
 
 public:
   explicit OpcUa();
@@ -203,6 +241,23 @@ public:
   [[nodiscard]] bool browsing() const;
   [[nodiscard]] QStringList authModeList() const;
 
+  [[nodiscard]] QString securityPolicy() const;
+  [[nodiscard]] int securityPolicyIndex() const;
+  [[nodiscard]] QStringList securityPolicyList() const;
+  [[nodiscard]] static const QStringList& supportedPolicies();
+  [[nodiscard]] QVariantList securityPolicyDeprecated() const;
+  [[nodiscard]] int securityMode() const;
+  [[nodiscard]] QStringList securityModeList() const;
+  [[nodiscard]] QString userCertificatePath() const;
+  [[nodiscard]] QString userKeyPath() const;
+  [[nodiscard]] QVariantMap clientCertificate() const;
+  [[nodiscard]] QVariantList trustedCertificates() const;
+  [[nodiscard]] bool credentialsExposed() const;
+  [[nodiscard]] QJsonObject certificateJson() const;
+  [[nodiscard]] QString negotiatedPolicy() const;
+  [[nodiscard]] int negotiatedMode() const;
+  [[nodiscard]] QJsonArray trustedJson() const;
+
   [[nodiscard]] const QList<OpcUaTag>& tags() const noexcept;
   [[nodiscard]] QJsonArray tagsJson() const;
   [[nodiscard]] QJsonArray wireSchema() const;
@@ -229,20 +284,34 @@ public slots:
   void setUsername(const QString& username);
   void setPassword(const QString& password);
   void setPublishingInterval(const int interval);
+  void setSecurityPolicy(const QString& policyUri);
+  void setSecurityPolicyIndex(const int index);
+  void setSecurityMode(const int mode);
+  void setUserCertificatePath(const QString& value);
+  void setUserKeyPath(const QString& value);
+  [[nodiscard]] bool regenerateCertificate();
+  [[nodiscard]] bool exportCertificate(const QString& path);
+  [[nodiscard]] bool trustServerCertificate(const QString& fingerprint);
+  [[nodiscard]] bool revokeServerCertificate(const QString& fingerprint);
   void setTags(const QJsonArray& tags);
   void addTag(const OpcUaTag& tag);
   void removeTag(const int index);
   void clearTags();
 
 private slots:
-  void onStateChanged(QOpcUaClient::ClientState state);
-  void onErrorChanged(QOpcUaClient::ClientError error);
-  void onEndpointsFinished(const QList<QOpcUaEndpointDescription>& endpoints,
-                           QOpcUa::UaStatusCode status);
-  void onBrowseClientState(QOpcUaClient::ClientState state);
-  void onMonitoringEnabled(int tag, QOpcUa::UaStatusCode status);
-  void onValueUpdated(int tag, const QVariant& value);
-  void onReadFinished(const QList<QOpcUaReadResult>& results, QOpcUa::UaStatusCode status);
+  void onSessionConnected();
+  void onSessionDisconnected();
+  void onConnectFailed(const QString& reason);
+  void onEndpointsFinished(const QList<OpcUaTypes::Endpoint>& endpoints,
+                           OpcUaTypes::StatusCode status);
+  void onBrowseConnected();
+  void onBrowseFailed(const QString& reason);
+  void onSubscribed(const QList<OpcUaTypes::StatusCode>& perItemStatus);
+  void onSubscriptionLost(const QString& reason);
+  void onValueChanged(const OpcUaTypes::MonitoredValue& value);
+  void onReadFinished(quint32 token,
+                      const QList<OpcUaTypes::ReadRow>& rows,
+                      OpcUaTypes::StatusCode status);
   void onDialTimeout();
   void onPollTick();
   void onFrameTick();
@@ -250,32 +319,41 @@ private slots:
 
 private:
   void doClose();
-  void teardownClient(QOpcUaClient*& client);
+  void teardownSession(OpcUaSession*& session);
   void failDial(const QString& reason);
   void onLinkDropped(const QString& reason);
-  void applyAuthentication(QOpcUaClient* client) const;
-  [[nodiscard]] QOpcUaClient* makeClient();
-  [[nodiscard]] static QOpcUaProvider& provider();
+  [[nodiscard]] OpcUaSession::Identity identity() const;
+  [[nodiscard]] OpcUaSession* makeSession();
   [[nodiscard]] QString selectedEndpointUrl() const;
   [[nodiscard]] bool hasSelectedEndpoint() const noexcept;
   void continuePendingDial();
-  [[nodiscard]] static bool policyIsNone(const QOpcUaEndpointDescription& endpoint);
+  void startDial();
+  void selectBestEndpoint(const QString& previousUrl);
+  void publishEndpointSelection(const int index);
+  void warnAboutPlaintextCredentials() const;
+  void prepareClientIdentity();
+  [[nodiscard]] bool credentialsAreExposed() const;
+  [[nodiscard]] bool endpointUsable(const OpcUaTypes::Endpoint& endpoint) const;
+  [[nodiscard]] static QVariantMap certificateMap(const OpcUaTypes::CertInfo& info);
+  [[nodiscard]] static QJsonObject certificateObject(const OpcUaTypes::CertInfo& info);
+  [[nodiscard]] static QString describeTrustFailure(OpcUaTypes::TrustFailure failure);
+  [[nodiscard]] static QString describeMode(OpcUaTypes::SecurityMode mode);
+  [[nodiscard]] static bool policyIsDeprecated(const QString& policyUri);
+  void reportTrustFailure(const OpcUaSession* session);
 
   void subscribeAll();
   void enterPollMode(const QString& reason);
-  void adoptRevisedInterval(int tag);
+  void adoptRevisedInterval();
   void issueRead(const QList<int>& tags);
-  [[nodiscard]] QOpcUaEndpointDescription dialEndpoint() const;
-  [[nodiscard]] static bool endpointAcceptsToken(const QOpcUaEndpointDescription& endpoint,
+  [[nodiscard]] OpcUaTypes::Endpoint dialEndpoint() const;
+  [[nodiscard]] static bool endpointAcceptsToken(const OpcUaTypes::Endpoint& endpoint,
                                                  const int authMode);
   void markBad(int tag);
-  [[nodiscard]] static QVariant unwrapValue(const QVariant& value);
   void storeValue(int tag,
                   const QVariant& value,
-                  QOpcUa::UaStatusCode status,
+                  OpcUaTypes::StatusCode status,
                   const QDateTime& sourceTs);
   void reserveFrame();
-  void readServerLimits();
   [[nodiscard]] bool tagsFrozen() const;
   [[nodiscard]] const OpcUa* sessionPeer() const;
   void applyDeferredTags();
@@ -328,7 +406,6 @@ private:
   int m_failedMonitors;
   int m_revisedInterval;
   int m_frameCursor;
-  int m_readLimit;
   quint64 m_valuesReceived;
   quint64 m_badStatusCount;
   quint64 m_unstampedCount;
@@ -339,14 +416,19 @@ private:
   QString m_password;
   QString m_endpointUrl;
   QString m_lastError;
+  QString m_securityPolicy;
+  QString m_userCertificatePath;
+  QString m_userKeyPath;
+  int m_securityMode;
+  OpcUaTypes::CertInfo m_pendingTrust;
   QByteArray m_frame;
   QTimer* m_dialTimer;
   QTimer* m_watchdog;
   QTimer* m_pollTimer;
   QTimer* m_frameTimer;
-  QOpcUaClient* m_client;
-  QOpcUaClient* m_browseClient;
-  QOpcUaClient* m_discoveryClient;
+  OpcUaSession* m_session;
+  OpcUaSession* m_browseSession;
+  OpcUaSession* m_discoverySession;
   OpcUaTagModel* m_tagModel;
   QPointer<OpcUa> m_sessionPeer;
   QList<Slot> m_slots;
@@ -359,9 +441,8 @@ private:
   qint64 m_serverOffsetMs;
   QList<OpcUaTag> m_tags;
   QJsonArray m_deferredTags;
-  QList<QOpcUaNode*> m_nodes;
   QHash<QString, int> m_nodeIndex;
-  QList<QOpcUaEndpointDescription> m_endpoints;
+  QList<OpcUaTypes::Endpoint> m_endpoints;
   qint64 m_clockOffsetNs;
   ::MQTT::CredentialVault m_vault;
   QSettings m_settings;

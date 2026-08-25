@@ -81,6 +81,9 @@ private slots:
 
   void groupWidgetFullSweep_data();
   void groupWidgetFullSweep();
+  void opcUaSecuritySlugsAreWellFormedAndUnique();
+  void opcUaSecurityUnknownValuesFallBack();
+
   void groupWidgetSlugsAreWellFormedAndUnique();
   void groupWidgetOutOfRange_data();
   void groupWidgetOutOfRange();
@@ -459,6 +462,56 @@ void TstEnumLabels::groupWidgetFullSweep()
 /**
  * @brief GroupWidget slugs are well-formed and distinct from one another across the whole enum.
  */
+/**
+ * @brief The OPC UA security domains are what the API speaks for policy, mode and identity, so a
+ *        duplicated or malformed slug would make two different channels indistinguishable to a
+ *        client that automates the connection.
+ */
+void TstEnumLabels::opcUaSecuritySlugsAreWellFormedAndUnique()
+{
+  QSet<QString> policies;
+  for (int i = 0; i <= 5; ++i) {
+    const auto slug = API::EnumLabels::securityPolicySlug(i);
+    QVERIFY(isWellFormedSlug(slug));
+    QVERIFY(!policies.contains(slug));
+    QVERIFY(!API::EnumLabels::securityPolicyLabel(i).isEmpty());
+    policies.insert(slug);
+  }
+
+  QSet<QString> modes;
+  for (int i = 1; i <= 3; ++i) {
+    const auto slug = API::EnumLabels::securityModeSlug(i);
+    QVERIFY(isWellFormedSlug(slug));
+    QVERIFY(!modes.contains(slug));
+    QVERIFY(!API::EnumLabels::securityModeLabel(i).isEmpty());
+    modes.insert(slug);
+  }
+
+  QSet<QString> tokens;
+  for (int i = 0; i <= 3; ++i) {
+    const auto slug = API::EnumLabels::identityTokenSlug(i);
+    QVERIFY(isWellFormedSlug(slug));
+    QVERIFY(!tokens.contains(slug));
+    QVERIFY(!API::EnumLabels::identityTokenLabel(i).isEmpty());
+    tokens.insert(slug);
+  }
+}
+
+/**
+ * @brief A value outside the enumeration must read as unknown rather than silently landing on a
+ *        real policy: an out-of-range mode that resolved to "none" would claim a channel is
+ *        encrypted when it is not.
+ */
+void TstEnumLabels::opcUaSecurityUnknownValuesFallBack()
+{
+  QCOMPARE(API::EnumLabels::securityPolicySlug(99), QStringLiteral("unknown"));
+  QCOMPARE(API::EnumLabels::securityPolicyLabel(-1), QStringLiteral("Unknown"));
+  QCOMPARE(API::EnumLabels::securityModeSlug(0), QStringLiteral("unknown"));
+  QCOMPARE(API::EnumLabels::securityModeLabel(4), QStringLiteral("Unknown"));
+  QCOMPARE(API::EnumLabels::identityTokenSlug(9), QStringLiteral("unknown"));
+  QCOMPARE(API::EnumLabels::identityTokenLabel(9), QStringLiteral("Unknown"));
+}
+
 void TstEnumLabels::groupWidgetSlugsAreWellFormedAndUnique()
 {
   QSet<QString> slugs;

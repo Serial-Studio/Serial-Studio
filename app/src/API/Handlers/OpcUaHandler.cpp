@@ -22,10 +22,13 @@
 
 #include "API/Handlers/OpcUaHandler.h"
 
+#include <QFile>
 #include <QJsonArray>
 #include <QUrl>
 
 #include "API/CommandRegistry.h"
+#include "API/EnumLabels.h"
+#include "API/PathPolicy.h"
 #include "API/SchemaBuilder.h"
 #include "IO/ConnectionManager.h"
 #include "IO/Drivers/OpcUaTagModel.h"
@@ -64,6 +67,7 @@ void API::Handlers::OpcUaHandler::registerCommands()
   registerDiscoveryCommands(registry);
   registerTagCommands(registry);
   registerQueryCommands(registry);
+  registerSecurityCommands(registry);
 }
 
 /**
@@ -91,11 +95,12 @@ void API::Handlers::OpcUaHandler::registerConfigCommands(CommandRegistry& regist
     &setEndpointIndex);
   registry.registerCommand(
     QStringLiteral("io.opcua.setAuthMode"),
-    QStringLiteral("Set authentication (params: mode - 0=anonymous, 1=username/password)"),
+    QStringLiteral(
+      "Set authentication (params: mode - 0=anonymous, 1=username/password, 2=certificate)"),
     API::makeSchema({
       {QStringLiteral("mode"),
        QStringLiteral("integer"),
-       QStringLiteral("0 = anonymous, 1 = username/password")}
+       QStringLiteral("0 = anonymous, 1 = username/password, 2 = X.509 certificate")}
   }),
     &setAuthMode);
   registry.registerCommand(QStringLiteral("io.opcua.setUsername"),
@@ -230,6 +235,320 @@ void API::Handlers::OpcUaHandler::registerQueryCommands(CommandRegistry& registr
                            &getStatus);
 }
 
+/**
+ * @brief Register the secure-channel, identity and certificate-trust commands (spec 0067 R17).
+ */
+void API::Handlers::OpcUaHandler::registerSecurityCommands(CommandRegistry& registry)
+{
+  const auto empty = API::emptySchema();
+
+  registry.registerCommand(
+    QStringLiteral("io.opcua.setSecurityPolicy"),
+    QStringLiteral("Set the security policy (params: policy - full URI or short name)"),
+    API::makeSchema({
+      {QStringLiteral("policy"),
+       QStringLiteral("string"),
+       QStringLiteral("None, Basic128Rsa15, Basic256, Basic256Sha256, "
+                      "Aes128_Sha256_RsaOaep or Aes256_Sha256_RsaPss")}
+  }),
+    &setSecurityPolicy);
+  registry.registerCommand(
+    QStringLiteral("io.opcua.setSecurityMode"),
+    QStringLiteral(
+      "Set the message security mode (params: mode - 1=None, 2=Sign, 3=SignAndEncrypt)"),
+    API::makeSchema({
+      {QStringLiteral("mode"),
+       QStringLiteral("integer"),
+       QStringLiteral("1 = None, 2 = Sign, 3 = Sign and Encrypt")}
+  }),
+    &setSecurityMode);
+  registry.registerCommand(
+    QStringLiteral("io.opcua.setIdentityType"),
+    QStringLiteral("Alias of io.opcua.setAuthMode (params: type)"),
+    API::makeSchema({
+      {QStringLiteral("type"),
+       QStringLiteral("integer"),
+       QStringLiteral("0 = anonymous, 1 = username/password, 2 = X.509 certificate")}
+  }),
+    &setIdentityType);
+  registry.registerCommand(
+    QStringLiteral("io.opcua.setUserCertificate"),
+    QStringLiteral("Set the X.509 identity files (params: certificate, key - paths on disk)"),
+    API::makeSchema({
+      {QStringLiteral("certificate"),
+       QStringLiteral("string"),
+       QStringLiteral("Path to the user certificate (DER or PEM)")},
+      {        QStringLiteral("key"),
+       QStringLiteral("string"),
+       QStringLiteral("Path to the private key")                  }
+  }),
+    &setUserCertificate);
+
+  registry.registerCommand(QStringLiteral("io.opcua.getCertificate"),
+                           QStringLiteral("Get this installation's OPC UA client certificate"),
+                           empty,
+                           &getCertificate);
+  registry.registerCommand(
+    QStringLiteral("io.opcua.regenerateCertificate"),
+    QStringLiteral("Replace the client certificate and key; every server must trust it again"),
+    empty,
+    &regenerateCertificate);
+  registry.registerCommand(
+    QStringLiteral("io.opcua.exportCertificate"),
+    QStringLiteral("Write the client certificate to a file (params: path); the key is never "
+                   "exported"),
+    API::makeSchema({
+      {QStringLiteral("path"),
+       QStringLiteral("string"),
+       QStringLiteral("Destination path for the DER certificate")}
+  }),
+    &exportCertificate);
+  registry.registerCommand(QStringLiteral("io.opcua.listTrusted"),
+                           QStringLiteral("List the accepted server certificates"),
+                           empty,
+                           &listTrusted);
+  registry.registerCommand(
+    QStringLiteral("io.opcua.trustServer"),
+    QStringLiteral("Accept the server certificate the last attempt was refused over (params: "
+                   "fingerprint)"),
+    API::makeSchema({
+      {QStringLiteral("fingerprint"),
+       QStringLiteral("string"),
+       QStringLiteral("SHA-256 fingerprint reported by the failed attempt")}
+  }),
+    &trustServer);
+  registry.registerCommand(
+    QStringLiteral("io.opcua.revokeTrust"),
+    QStringLiteral("Withdraw a previously accepted server certificate (params: fingerprint)"),
+    API::makeSchema({
+      {QStringLiteral("fingerprint"),
+       QStringLiteral("string"),
+       QStringLiteral("SHA-256 fingerprint from io.opcua.listTrusted")}
+  }),
+    &revokeTrust);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Security setters
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Select the security policy, by full URI or by its short name.
+ */
+API::CommandResponse API::Handlers::OpcUaHandler::setSecurityPolicy(const QString& id,
+                                                                    const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("policy")))
+    return missingParam(id, "policy");
+
+  const auto requested = params.value(QStringLiteral("policy")).toString();
+  auto* driver         = opcUaDriver();
+
+  const auto policies = IO::Drivers::OpcUa::supportedPolicies();
+  for (const auto& uri : policies) {
+    if (uri != requested && uri.section(QLatin1Char('#'), -1) != requested)
+      continue;
+
+    driver->setSecurityPolicy(uri);
+    return CommandResponse::makeSuccess(id,
+                                        QJsonObject{
+                                          {QStringLiteral("policy"), uri}
+    });
+  }
+
+  return CommandResponse::makeError(
+    id, ErrorCode::InvalidParam, QStringLiteral("Unknown or unsupported security policy"));
+}
+
+/**
+ * @brief Select the message security mode.
+ */
+API::CommandResponse API::Handlers::OpcUaHandler::setSecurityMode(const QString& id,
+                                                                  const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("mode")))
+    return missingParam(id, "mode");
+
+  const int mode = params.value(QStringLiteral("mode")).toInt();
+  if (mode < 1 || mode > 3)
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("mode must be 1, 2 or 3"));
+
+  opcUaDriver()->setSecurityMode(mode);
+  return CommandResponse::makeSuccess(id,
+                                      QJsonObject{
+                                        {QStringLiteral("mode"), mode}
+  });
+}
+
+/**
+ * @brief Alias of setAuthMode, named for the security vocabulary the rest of these commands use.
+ */
+API::CommandResponse API::Handlers::OpcUaHandler::setIdentityType(const QString& id,
+                                                                  const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("type")))
+    return missingParam(id, "type");
+
+  QJsonObject forwarded;
+  forwarded.insert(QStringLiteral("mode"), params.value(QStringLiteral("type")));
+  return setAuthMode(id, forwarded);
+}
+
+/**
+ * @brief Point the X.509 identity at a certificate and its private key. Only the PATHS are
+ *        stored; neither the key nor a passphrase ever enters a project file or QSettings.
+ */
+API::CommandResponse API::Handlers::OpcUaHandler::setUserCertificate(const QString& id,
+                                                                     const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("certificate")))
+    return missingParam(id, "certificate");
+
+  if (!params.contains(QStringLiteral("key")))
+    return missingParam(id, "key");
+
+  const auto certificate = params.value(QStringLiteral("certificate")).toString();
+  const auto key         = params.value(QStringLiteral("key")).toString();
+  if (!QFile::exists(certificate) || !QFile::exists(key))
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("certificate and key must both exist on disk"));
+
+  if (!API::isPathAllowed(certificate) || !API::isPathAllowed(key))
+    return CommandResponse::makeError(id,
+                                      ErrorCode::InvalidParam,
+                                      QStringLiteral("certificate and key must be inside an "
+                                                     "allowed path"));
+
+  auto* driver = opcUaDriver();
+  driver->setUserCertificatePath(certificate);
+  driver->setUserKeyPath(key);
+  return CommandResponse::makeSuccess(
+    id,
+    QJsonObject{
+      {QStringLiteral("certificate"), certificate},
+      {        QStringLiteral("key"),         key}
+  });
+}
+
+//--------------------------------------------------------------------------------------------------
+// Certificates and trust
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief This installation's client certificate.
+ */
+API::CommandResponse API::Handlers::OpcUaHandler::getCertificate(const QString& id,
+                                                                 const QJsonObject& params)
+{
+  Q_UNUSED(params)
+  return CommandResponse::makeSuccess(
+    id,
+    QJsonObject{
+      {QStringLiteral("certificate"), opcUaDriver()->certificateJson()}
+  });
+}
+
+/**
+ * @brief Replace the client certificate and key.
+ */
+API::CommandResponse API::Handlers::OpcUaHandler::regenerateCertificate(const QString& id,
+                                                                        const QJsonObject& params)
+{
+  Q_UNUSED(params)
+  auto* driver = opcUaDriver();
+  if (!driver->regenerateCertificate())
+    return CommandResponse::makeError(
+      id, ErrorCode::OperationFailed, QStringLiteral("The certificate could not be generated"));
+
+  return CommandResponse::makeSuccess(
+    id,
+    QJsonObject{
+      {QStringLiteral("certificate"), driver->certificateJson()}
+  });
+}
+
+/**
+ * @brief Write the client certificate where the caller asked.
+ */
+API::CommandResponse API::Handlers::OpcUaHandler::exportCertificate(const QString& id,
+                                                                    const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("path")))
+    return missingParam(id, "path");
+
+  const auto path = params.value(QStringLiteral("path")).toString();
+  if (!API::isPathAllowed(path, true))
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("path is not allowed"));
+
+  if (!opcUaDriver()->exportCertificate(path))
+    return CommandResponse::makeError(
+      id, ErrorCode::OperationFailed, QStringLiteral("The certificate could not be written"));
+
+  return CommandResponse::makeSuccess(id,
+                                      QJsonObject{
+                                        {QStringLiteral("path"), path}
+  });
+}
+
+/**
+ * @brief Every server certificate the user has accepted.
+ */
+API::CommandResponse API::Handlers::OpcUaHandler::listTrusted(const QString& id,
+                                                              const QJsonObject& params)
+{
+  Q_UNUSED(params)
+  return CommandResponse::makeSuccess(id,
+                                      QJsonObject{
+                                        {QStringLiteral("trusted"), opcUaDriver()->trustedJson()}
+  });
+}
+
+/**
+ * @brief Accept the server certificate the last attempt was refused over. This does NOT retry the
+ *        connection: a trust decision followed by a connect is a NEW attempt with its own verdict.
+ */
+API::CommandResponse API::Handlers::OpcUaHandler::trustServer(const QString& id,
+                                                              const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("fingerprint")))
+    return missingParam(id, "fingerprint");
+
+  const auto fingerprint = params.value(QStringLiteral("fingerprint")).toString();
+  auto* driver           = opcUaDriver();
+  if (!driver->trustServerCertificate(fingerprint))
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::InvalidParam,
+      QStringLiteral("No refused server certificate matches that fingerprint"));
+
+  return CommandResponse::makeSuccess(id,
+                                      QJsonObject{
+                                        {QStringLiteral("trusted"), driver->trustedJson()}
+  });
+}
+
+/**
+ * @brief Withdraw a previously accepted server certificate.
+ */
+API::CommandResponse API::Handlers::OpcUaHandler::revokeTrust(const QString& id,
+                                                              const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("fingerprint")))
+    return missingParam(id, "fingerprint");
+
+  auto* driver = opcUaDriver();
+  if (!driver->revokeServerCertificate(params.value(QStringLiteral("fingerprint")).toString()))
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("No trusted certificate has that fingerprint"));
+
+  return CommandResponse::makeSuccess(id,
+                                      QJsonObject{
+                                        {QStringLiteral("trusted"), driver->trustedJson()}
+  });
+}
+
 //--------------------------------------------------------------------------------------------------
 // Configuration setters
 //--------------------------------------------------------------------------------------------------
@@ -290,9 +609,9 @@ API::CommandResponse API::Handlers::OpcUaHandler::setAuthMode(const QString& id,
     return missingParam(id, "mode");
 
   const int mode = params.value(QStringLiteral("mode")).toInt();
-  if (mode < 0 || mode > 1)
+  if (mode < 0 || mode > 2)
     return CommandResponse::makeError(
-      id, ErrorCode::InvalidParam, QStringLiteral("mode must be 0 or 1"));
+      id, ErrorCode::InvalidParam, QStringLiteral("mode must be 0, 1 or 2"));
 
   opcUaDriver()->setAuthMode(mode);
   return CommandResponse::makeSuccess(id,
@@ -595,14 +914,28 @@ API::CommandResponse API::Handlers::OpcUaHandler::getConfiguration(const QString
   return CommandResponse::makeSuccess(
     id,
     QJsonObject{
-      {       QStringLiteral("endpointUrl"),         driver->endpointUrl()},
-      {     QStringLiteral("endpointIndex"),       driver->endpointIndex()},
-      {          QStringLiteral("authMode"),            driver->authMode()},
-      {          QStringLiteral("username"),            driver->username()},
-      {       QStringLiteral("hasPassword"), !driver->password().isEmpty()},
-      {QStringLiteral("publishingInterval"),  driver->publishingInterval()},
-      {          QStringLiteral("tagCount"),            driver->tagCount()},
-      {   QStringLiteral("configurationOk"),     driver->configurationOk()},
+      {        QStringLiteral("endpointUrl"),driver->endpointUrl()                                             },
+      {      QStringLiteral("endpointIndex"),                                driver->endpointIndex()},
+      {           QStringLiteral("authMode"),                                     driver->authMode()},
+      {           QStringLiteral("username"),                                     driver->username()},
+      {        QStringLiteral("hasPassword"),                          !driver->password().isEmpty()},
+      { QStringLiteral("publishingInterval"),                           driver->publishingInterval()},
+      {           QStringLiteral("tagCount"),                                     driver->tagCount()},
+      {    QStringLiteral("configurationOk"),                              driver->configurationOk()},
+      {     QStringLiteral("securityPolicy"),                               driver->securityPolicy()},
+      {       QStringLiteral("securityMode"),                                 driver->securityMode()},
+      {QStringLiteral("userCertificatePath"),                          driver->userCertificatePath()},
+      {        QStringLiteral("userKeyPath"),                                  driver->userKeyPath()},
+      { QStringLiteral("credentialsExposed"),                           driver->credentialsExposed()},
+      {   QStringLiteral("securityModeSlug"),
+       API::EnumLabels::securityModeSlug(driver->securityMode())                                    },
+      {  QStringLiteral("securityModeLabel"),
+       API::EnumLabels::securityModeLabel(driver->securityMode())                                   },
+      { QStringLiteral("securityPolicySlug"),
+       API::EnumLabels::securityPolicySlug(driver->securityPolicyIndex())                           },
+      {   QStringLiteral("identityTypeSlug"), API::EnumLabels::identityTokenSlug(driver->authMode())},
+      {  QStringLiteral("identityTypeLabel"),
+       API::EnumLabels::identityTokenLabel(driver->authMode())                                      },
   });
 }
 

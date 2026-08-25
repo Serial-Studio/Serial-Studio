@@ -124,6 +124,38 @@ enum class NodeClass : std::uint32_t {
 inline constexpr std::uint32_t kAccessLevelCurrentRead = 0x01u;
 
 /**
+ * @brief The two reference sets the picker walks: the hierarchy for the tree itself, and
+ *        HasProperty for the EngineeringUnits/EURange lookup of a ticked variable.
+ */
+enum class ReferenceKind : std::uint8_t {
+  Hierarchical,
+  HasProperty,
+};
+
+/**
+ * @brief One browse, plus the token the caller gets back with the reply. A node can be browsed
+ *        for three different reasons at once (level expansion, the has-children probe, a units
+ *        lookup), so the node id alone cannot route the answer.
+ */
+struct BrowseQuery {
+  std::uint32_t token;
+  ReferenceKind kind;
+  NodeClass nodeClassMask;
+
+  BrowseQuery()
+    : token(0)
+    , kind(ReferenceKind::Hierarchical)
+    , nodeClassMask(NodeClass::Object | NodeClass::Variable)
+  {}
+};
+
+/**
+ * @brief Well-known namespace-0 nodes the session and the picker read directly.
+ */
+inline constexpr const char* kNodeNamespaceArray  = "ns=0;i=2255";
+inline constexpr const char* kNodeMaxNodesPerRead = "ns=0;i=11705";
+
+/**
  * @brief Channel security mode. None is the only one spec 0066 could open; the rest arrive with
  *        the secure-channel stage of spec 0067.
  */
@@ -165,6 +197,7 @@ struct Endpoint {
  */
 struct ReferenceRow {
   QString nodeId;
+  QString namespaceUri;
   QString browseName;
   QString displayName;
   NodeClass nodeClass;
@@ -206,16 +239,35 @@ struct MonitoredValue {
  *        the security layer in the secure-channel stage.
  */
 struct CertInfo {
+  QByteArray certificate;
   QString subject;
   QString issuer;
   QString fingerprint;
+  QString applicationUri;
   QDateTime notBefore;
   QDateTime notAfter;
+  bool valid;
+  bool trusted;
   bool hostnameMatches;
   bool expired;
   bool notYetValid;
 
-  CertInfo() : hostnameMatches(false), expired(false), notYetValid(false) {}
+  CertInfo()
+    : valid(false), trusted(false), hostnameMatches(false), expired(false), notYetValid(false)
+  {}
+};
+
+/**
+ * @brief Why a secure channel could not be opened, kept distinct so the user is told what to fix
+ *        rather than a single "certificate error" that could mean any of four different things.
+ */
+enum class TrustFailure : std::uint8_t {
+  None,
+  Untrusted,
+  Expired,
+  NotYetValid,
+  HostnameMismatch,
+  Unreadable,
 };
 
 }  // namespace OpcUaTypes

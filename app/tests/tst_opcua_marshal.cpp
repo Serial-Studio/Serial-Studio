@@ -130,7 +130,9 @@ void TstOpcUaMarshal::stringAndTextValues()
 
 /**
  * @brief EUInformation and Range are both plain structures, so only the type pointer separates
- *        them; the tag browser reads units and display bounds through this path.
+ *        them; the tag browser reads units and display bounds through this path. Range must keep
+ *        BOTH bounds: they become a generated dataset's plot minimum and maximum, and a low-only
+ *        conversion would give every plot a zero-width range with nothing to see.
  */
 void TstOpcUaMarshal::engineeringUnitWrappers()
 {
@@ -144,7 +146,11 @@ void TstOpcUaMarshal::engineeringUnitWrappers()
   range.low  = -50.0;
   range.high = 250.0;
   value      = scalarVariant(&range, UA_TYPES_RANGE);
-  QCOMPARE(OpcUaMarshal::toVariant(value).toDouble(), -50.0);
+
+  const auto bounds = OpcUaMarshal::toVariant(value).toList();
+  QCOMPARE(bounds.size(), 2);
+  QCOMPARE(bounds.at(0).toDouble(), -50.0);
+  QCOMPARE(bounds.at(1).toDouble(), 250.0);
 }
 
 /**

@@ -408,11 +408,16 @@ class TestOpcUaSession:
             api_client.command("csvExport.close")
             api_client.disable_csv_export()
 
-        home = os.path.expanduser("~")
+        # CSV::Export writes under the workspace CSV folder (see csvSessionDir), so search
+        # there rather than the whole home directory: a recursive home glob takes minutes on a
+        # real machine and can match an unrelated CSV that happens to be recent.
+        csv_root = os.path.join(
+            os.path.expanduser("~"), "Documents", "Serial Studio", "CSV"
+        )
         recent = [
             path
             for path in sorted(
-                glob.glob(os.path.join(home, "**", "*.csv"), recursive=True),
+                glob.glob(os.path.join(csv_root, "**", "*.csv"), recursive=True),
                 key=os.path.getmtime,
                 reverse=True,
             )[:5]
@@ -778,3 +783,465 @@ class TestOpcUaSimulatorFlags:
         status = _connect(api_client, timeout=40.0)
         assert status["linkState"] == "idle"
         assert status["isConnected"] is False
+
+
+# -----------------------------------------------------------------------------
+# Secure channels (spec 0067 stage 2, AC6-AC15)
+# -----------------------------------------------------------------------------
+
+
+def _configure_security(api_client, policy: str, mode: int):
+    api_client.command("io.opcua.setSecurityPolicy", {"policy": policy})
+    api_client.command("io.opcua.setSecurityMode", {"mode": mode})
+
+
+def _trust_pending(api_client) -> str:
+    """Accept the certificate the last attempt was refused over; returns its fingerprint."""
+    st = api_client.command("io.opcua.getStatus")
+    fingerprint = st.get("serverCertificate", {}).get("fingerprint", "")
+    assert fingerprint, "the refused attempt reported no server certificate"
+    api_client.command("io.opcua.trustServer", {"fingerprint": fingerprint})
+    return fingerprint
+
+
+def _forget(api_client, fingerprint: str):
+    try:
+        api_client.command("io.opcua.revokeTrust", {"fingerprint": fingerprint})
+    except APIError:
+        pass
+
+
+@pytest.mark.requires_opcua_sim
+class TestOpcUaSecureChannel:
+    def test_client_certificate_is_generated_and_reused(self, api_client, clean_state):
+        """AC10: the installation gets one certificate and keeps it, so a server operator
+        trusts this client once rather than on every launch."""
+        _require_pro(api_client)
+        first = api_client.command("io.opcua.getCertificate")["certificate"]
+        if not first["valid"]:
+            first = api_client.command("io.opcua.regenerateCertificate")["certificate"]
+
+        assert first["valid"] is True
+        assert first["fingerprint"]
+        assert first["applicationUri"].startswith("urn:")
+
+        again = api_client.command("io.opcua.getCertificate")["certificate"]
+        assert (
+            again["fingerprint"] == first["fingerprint"]
+        ), "the certificate was not reused"
+
+    def test_certificate_export_writes_only_the_certificate(
+        self, api_client, clean_state, temp_dir
+    ):
+        """AC11: the certificate can be handed to a server's trust store; the KEY never leaves."""
+        import os
+
+        _require_pro(api_client)
+        assert api_client.command("io.opcua.getCertificate")["certificate"][
+            "valid"
+        ] or (api_client.command("io.opcua.regenerateCertificate"))
+
+        path = os.path.join(temp_dir, "serial-studio-client.der")
+        api_client.command("io.opcua.exportCertificate", {"path": path})
+        assert os.path.getsize(path) > 0
+
+        with open(path, "rb") as handle:
+            blob = handle.read()
+
+        assert blob[:1] == b"\x30", "the export is not a DER certificate"
+        assert b"PRIVATE KEY" not in blob
+
+    def test_untrusted_server_is_refused_then_trusted(
+        self, api_client, clean_state, opcua_simulator_process
+    ):
+        """AC7/AC12/AC14: an unknown server certificate is its own distinct verdict, the prompt
+        gets the fingerprint, and accepting is what lets the NEXT attempt through."""
+        _require_pro(api_client)
+        sim = opcua_simulator_process(48421, "--security", "Basic256Sha256")
+        _configure(api_client, sim.url)
+        _configure_security(
+            api_client,
+            "http://opcfoundation.org/UA/SecurityPolicy#Basic256Sha256",
+            3,
+        )
+        _generate(api_client)
+
+        fingerprint = ""
+        try:
+            status = _connect(api_client)
+            st = api_client.command("io.opcua.getStatus")
+            if not status["isConnected"]:
+                assert (
+                    "trust" in st["lastError"].lower()
+                    or "certificate" in st["lastError"].lower()
+                )
+                fingerprint = _trust_pending(api_client)
+                status = _connect(api_client)
+            else:
+                fingerprint = st.get("serverCertificate", {}).get("fingerprint", "")
+
+            assert (
+                status["isConnected"] is True
+            ), "the trusted server still refused the channel"
+            st = api_client.command("io.opcua.getStatus")
+            assert st["securityMode"] == 3
+            assert st["securityPolicy"].endswith("Basic256Sha256")
+            assert st["credentialsExposed"] is False
+        finally:
+            _disconnect(api_client)
+            _forget(api_client, fingerprint)
+
+    @pytest.mark.parametrize(
+        "policy,mode",
+        [
+            ("Basic256Sha256", 2),
+            ("Basic256Sha256", 3),
+            ("Aes128_Sha256_RsaOaep", 3),
+            ("Aes256_Sha256_RsaPss", 3),
+        ],
+    )
+    def test_every_policy_and_mode_opens(
+        self, api_client, clean_state, opcua_simulator_process, policy, mode
+    ):
+        """AC6: each supported policy opens in both Sign and Sign & Encrypt."""
+        _require_pro(api_client)
+        sim = opcua_simulator_process(48422, "--security", "all")
+        _configure(api_client, sim.url)
+        _configure_security(
+            api_client, f"http://opcfoundation.org/UA/SecurityPolicy#{policy}", mode
+        )
+        _generate(api_client)
+
+        fingerprint = ""
+        try:
+            status = _connect(api_client)
+            if not status["isConnected"]:
+                fingerprint = _trust_pending(api_client)
+                status = _connect(api_client)
+
+            assert status["isConnected"] is True, f"{policy}/{mode} did not open"
+            st = _wait(
+                lambda: (lambda s: s if s["framesPublished"] >= 3 else None)(
+                    api_client.command("io.opcua.getStatus")
+                ),
+                15.0,
+            )
+            assert st, f"{policy}/{mode} opened but published nothing"
+        finally:
+            _disconnect(api_client)
+            _forget(api_client, fingerprint)
+
+    def test_secure_only_server_is_reachable(
+        self, api_client, clean_state, opcua_simulator_process
+    ):
+        """AC8: a server with no None endpoint is connectable, which is the whole point of
+        owning the stack; the old build could only look at it."""
+        _require_pro(api_client)
+        sim = opcua_simulator_process(48423, "--secure-only")
+        _configure(api_client, sim.url)
+        api_client.command("io.opcua.discoverEndpoints")
+        rows = _wait(
+            lambda: (lambda r: r if r["endpoints"] else None)(
+                api_client.command("io.opcua.listEndpoints")
+            ),
+            15.0,
+        )
+        assert rows, "discovery returned no endpoints"
+        assert all(
+            row["mode"] != 1 for row in rows["endpoints"]
+        ), "expected no None endpoint"
+        assert any(row["selectable"] for row in rows["endpoints"]), "nothing dialable"
+
+        _generate(api_client)
+        fingerprint = ""
+        try:
+            status = _connect(api_client)
+            if not status["isConnected"]:
+                fingerprint = _trust_pending(api_client)
+                status = _connect(api_client)
+
+            assert status["isConnected"] is True
+        finally:
+            _disconnect(api_client)
+            _forget(api_client, fingerprint)
+
+    def test_endpoint_auto_selection_prefers_the_strongest(
+        self, api_client, clean_state, opcua_simulator_process
+    ):
+        """AC9: discovery lands on the most secure endpoint the identity can use, and never on a
+        deprecated policy by itself."""
+        _require_pro(api_client)
+        sim = opcua_simulator_process(48424, "--security", "all")
+        _configure(api_client, sim.url)
+        api_client.command("io.opcua.discoverEndpoints")
+        rows = _wait(
+            lambda: (lambda r: r if r["endpoints"] else None)(
+                api_client.command("io.opcua.listEndpoints")
+            ),
+            15.0,
+        )
+        assert rows
+
+        deprecated = [row for row in rows["endpoints"] if row["deprecated"]]
+        assert deprecated, "the simulator was asked for the deprecated policies"
+        assert all(
+            row["selectable"] for row in deprecated
+        ), "deprecated is still reachable"
+
+        chosen = api_client.command("io.opcua.getConfig")
+        assert not chosen["securityPolicy"].endswith("Basic128Rsa15")
+        assert not chosen["securityPolicy"].endswith("Basic256")
+
+    def test_plaintext_warning_is_conditional(
+        self, api_client, clean_state, opcua_simulator_process
+    ):
+        """AC13: the credentials warning follows the negotiated mode. A permanent banner on an
+        encrypted channel is noise, and noise is what gets ignored on the one that matters.
+        """
+        _require_pro(api_client)
+        sim = opcua_simulator_process(
+            48425, "--security", "all", "--user", "op", "--password", "pw"
+        )
+
+        _configure(api_client, sim.url, auth_mode=1, user="op", pw="pw")
+        _configure_security(
+            api_client, "http://opcfoundation.org/UA/SecurityPolicy#None", 1
+        )
+        assert api_client.command("io.opcua.getConfig")["credentialsExposed"] is True
+
+        _configure_security(
+            api_client, "http://opcfoundation.org/UA/SecurityPolicy#Basic256Sha256", 3
+        )
+        assert api_client.command("io.opcua.getConfig")["credentialsExposed"] is False
+
+        api_client.command("io.opcua.setAuthMode", {"mode": 0})
+        _configure_security(
+            api_client, "http://opcfoundation.org/UA/SecurityPolicy#None", 1
+        )
+        assert api_client.command("io.opcua.getConfig")["credentialsExposed"] is False
+
+    def test_x509_identity(
+        self, api_client, clean_state, opcua_simulator_process, temp_dir
+    ):
+        """AC15: an X.509 user identity token is accepted where the server offers one.
+
+        The identity certificate is generated here rather than reusing the installation's
+        own: its private key never leaves the config directory, which is the property
+        test_certificate_export_writes_only_the_certificate pins.
+        """
+        import asyncio
+        import os
+        from pathlib import Path
+
+        from asyncua.crypto.cert_gen import setup_self_signed_certificate
+        from cryptography.x509.oid import ExtendedKeyUsageOID
+
+        _require_pro(api_client)
+        sim = opcua_simulator_process(
+            48426, "--security", "all", "--allow-certificate-users"
+        )
+        _configure(api_client, sim.url)
+
+        cert = Path(temp_dir) / "user_cert.der"
+        key = Path(temp_dir) / "user_key.pem"
+        asyncio.run(
+            setup_self_signed_certificate(
+                key,
+                cert,
+                "urn:serial-studio:test:user",
+                "127.0.0.1",
+                [ExtendedKeyUsageOID.CLIENT_AUTH],
+                {"countryName": "DE", "organizationName": "Serial Studio Tests"},
+            )
+        )
+        assert os.path.getsize(cert) > 0 and os.path.getsize(key) > 0
+
+        api_client.command(
+            "io.opcua.setUserCertificate", {"certificate": str(cert), "key": str(key)}
+        )
+        api_client.command("io.opcua.setIdentityType", {"type": 2})
+        _configure_security(
+            api_client, "http://opcfoundation.org/UA/SecurityPolicy#Basic256Sha256", 3
+        )
+        _generate(api_client)
+
+        fingerprint = ""
+        try:
+            status = _connect(api_client)
+            if not status["isConnected"]:
+                fingerprint = _trust_pending(api_client)
+                status = _connect(api_client)
+
+            assert status["isConnected"] is True
+        finally:
+            _disconnect(api_client)
+            _forget(api_client, fingerprint)
+
+    def test_expired_certificate_is_its_own_reason(
+        self, api_client, clean_state, opcua_simulator_process
+    ):
+        """AC11/AC14: an expired server certificate is reported as expired, not as untrusted, and
+        accepting it does NOT let it through. Renewing it on the server is the only fix, so a
+        trust prompt that could wave it past would be worse than useless."""
+        _require_pro(api_client)
+        sim = opcua_simulator_process(
+            48428, "--security", "Basic256Sha256", "--cert-expired"
+        )
+        _configure(api_client, sim.url)
+        _configure_security(
+            api_client, "http://opcfoundation.org/UA/SecurityPolicy#Basic256Sha256", 3
+        )
+        _generate(api_client)
+
+        fingerprint = ""
+        try:
+            status = _connect(api_client)
+            assert (
+                status["isConnected"] is False
+            ), "an expired certificate opened a channel"
+            assert status["linkState"] == "idle"
+
+            st = api_client.command("io.opcua.getStatus")
+            assert "expired" in st["lastError"].lower(), st["lastError"]
+            assert "trust" not in st["lastError"].lower()
+
+            certificate = st.get("serverCertificate", {})
+            assert certificate.get("expired") is True
+            fingerprint = certificate.get("fingerprint", "")
+
+            if fingerprint:
+                api_client.command("io.opcua.trustServer", {"fingerprint": fingerprint})
+                status = _connect(api_client)
+                assert (
+                    status["isConnected"] is False
+                ), "trusting an expired certificate let it through"
+        finally:
+            _disconnect(api_client)
+            _forget(api_client, fingerprint)
+
+    def test_hostname_mismatch_is_its_own_reason(
+        self, api_client, clean_state, opcua_simulator_process
+    ):
+        """AC11/AC14: a certificate issued for another host is reported as a hostname mismatch.
+        The fix is to dial the name it was issued for, which the reason has to say."""
+        _require_pro(api_client)
+        sim = opcua_simulator_process(
+            48429, "--security", "Basic256Sha256", "--cert-wrong-host"
+        )
+        _configure(api_client, sim.url)
+        _configure_security(
+            api_client, "http://opcfoundation.org/UA/SecurityPolicy#Basic256Sha256", 3
+        )
+        _generate(api_client)
+
+        try:
+            status = _connect(api_client)
+            assert status["isConnected"] is False
+            assert status["linkState"] == "idle"
+
+            st = api_client.command("io.opcua.getStatus")
+            assert "host" in st["lastError"].lower(), st["lastError"]
+            assert st.get("serverCertificate", {}).get("hostnameMatches") is False
+        finally:
+            _disconnect(api_client)
+
+    def test_every_failure_mode_has_a_distinct_reason(
+        self, api_client, clean_state, opcua_simulator_process
+    ):
+        """AC14: the security failure modes must not collapse into one message. Four causes with
+        four different fixes reported identically is what leaves an operator guessing.
+        """
+        _require_pro(api_client)
+        _configure_security(
+            api_client, "http://opcfoundation.org/UA/SecurityPolicy#Basic256Sha256", 3
+        )
+
+        reasons = {}
+        cases = (
+            ("untrusted", 48430, ()),
+            ("expired", 48431, ("--cert-expired",)),
+            ("hostname", 48432, ("--cert-wrong-host",)),
+        )
+        for label, port, extra in cases:
+            sim = opcua_simulator_process(port, "--security", "Basic256Sha256", *extra)
+            _configure(api_client, sim.url)
+            _configure_security(
+                api_client,
+                "http://opcfoundation.org/UA/SecurityPolicy#Basic256Sha256",
+                3,
+            )
+            _generate(api_client)
+            try:
+                status = _connect(api_client)
+                if status["isConnected"]:
+                    pytest.fail(f"{label}: the channel opened when it should not have")
+
+                reasons[label] = api_client.command("io.opcua.getStatus")["lastError"]
+            finally:
+                _disconnect(api_client)
+
+        assert all(reasons.values()), f"an empty reason: {reasons}"
+        assert len(set(reasons.values())) == len(
+            reasons
+        ), f"reasons collapsed: {reasons}"
+
+    def test_security_round_trips_without_secrets(
+        self, api_client, clean_state, opcua_simulator_process, temp_dir
+    ):
+        """AC12/R18: policy, mode and identity survive a project save and reopen, and the file
+        carries no key, password or certificate blob."""
+        import json
+        import os
+        import shutil
+
+        _require_pro(api_client)
+        sim = opcua_simulator_process(
+            48427, "--security", "all", "--user", "op", "--password", "pw"
+        )
+
+        _configure(api_client, sim.url, auth_mode=1, user="op", pw="pw")
+        _configure_security(
+            api_client,
+            "http://opcfoundation.org/UA/SecurityPolicy#Aes256_Sha256_RsaPss",
+            3,
+        )
+        _generate(api_client)
+
+        path = os.path.join(temp_dir, "opcua-secure.ssproj")
+        api_client.command("project.save", {"filePath": path})
+
+        # Editing a driver while a project is open re-captures its settings into source[0] and
+        # autosaves them, so the scrub below would rewrite the very file this test reopens.
+        # Verify against a copy taken while the saved state is still on disk.
+        saved = os.path.join(temp_dir, "opcua-secure-saved.ssproj")
+        shutil.copyfile(path, saved)
+
+        with open(saved, "r", encoding="utf-8") as handle:
+            raw = handle.read()
+
+        connection = json.loads(raw).get("sources", [{}])[0].get("connection", {})
+        assert "password" not in connection, "the password key reached the project file"
+        assert "pw" not in [str(v) for v in connection.values()]
+        assert "PRIVATE KEY" not in raw
+
+        api_client.command("io.opcua.setSecurityPolicy", {"policy": "None"})
+        api_client.command("project.open", {"filePath": saved})
+        api_client.command("project.activate")
+
+        cfg = _wait(
+            lambda: (
+                lambda c: (
+                    c if c["securityPolicy"].endswith("Aes256_Sha256_RsaPss") else None
+                )
+            )(api_client.command("io.opcua.getConfig")),
+            5.0,
+        )
+        assert cfg, "the security policy did not come back from the project file"
+        assert cfg["securityMode"] == 3
+        assert cfg["authMode"] == 1
+
+        # hasPassword is True here on purpose: the password came back from the per-machine
+        # encrypted vault, keyed by host:port, which is where it belongs. The requirement is
+        # that it never entered the project FILE, which the connection-block assertions above
+        # are what actually pin.
+        assert cfg["hasPassword"] is True

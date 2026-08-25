@@ -114,25 +114,68 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   (`SetupPanes/Hardware.qml` StackLayout gate; BLE's post-connect pickers exempt), and
   `ProjectModel::setSource0ConnectionSettings` no-ops on identical settings so persistence
   echoes cannot churn undo history or autosave.
-- **OPC UA (spec 0066) discovers before it dials, and publishes delta frames on a tick.**
-  `open()` creates a fresh client (`open62541` backend, policy None only: the shipped backend has
-  no encryption) with explicit `QOpcUaConnectionSettings`, and with no discovered endpoint selected
-  it runs `discoverEndpoints()` FIRST (`m_pendingDial`) — a synthetic `QOpcUaEndpointDescription`
-  carries no user-identity tokens and the backend refuses it. `dialEndpoint()` then dials the
-  discovered description with the user's typed host:port substituted: servers advertise their own
-  hostname, which rarely resolves from the engineering laptop. Endpoint selection requires
-  `policyIsNone` AND `endpointAcceptsToken(authMode)`, and an explicit pick survives re-discovery.
-  The ONE verdict is `stateChanged(Connected)` → `reportOpenFinished(true)` or the `failDial()`
-  funnel (`errorChanged` reason, Disconnected-while-dialing, 15 s `m_dialTimer`, discovery
-  failure) → `reportOpenFinished(false)`; an established drop queues `disconnectDevice(this)`.
-  On Connected it asks for one monitored item per tag; refused tags go to `m_polledTags` (batched
-  `readNodeAttributes`, chunked to `MaxNodesPerRead`, ONE read outstanding — a queued read behind
-  a slow PLC grows latency without bound), every refused item is refused *individually* and only
-  an all-refused verdict flips `m_pollMode`. `m_watchdog` (1 Hz) enters poll mode when nothing
+- **OPC UA (specs 0066/0067) owns its stack, discovers before it dials, and publishes delta
+  frames on a tick.** The protocol stack is `lib/open62541` (1.5.7 amalgamation) over
+  `lib/mbedtls` (3.6 LTS), both vendored and statically linked; **`Qt6::OpcUa` is not used and
+  not linked**, so the shipped package carries no Qt OPC UA module and no backend plugin, and the
+  driver's capabilities are a property of THIS build rather than of the machine it runs on.
+  `SS_ENABLE_OPCUA=OFF` (or a GPL build) hides the bus entirely.
+- **`OpcUaSession` is the only object that sees a `UA_` type.** It is a plain `QObject` affine to
+  the driver's (GUI) thread: a `QTimer` calls `UA_Client_run_iterate()`, open62541 dispatches its C
+  callbacks from inside that call, and static trampolines recover the session from
+  `config->clientContext` and immediately translate into Qt types. Nothing is `moveToThread`'d and
+  the amalgamation ships at `UA_MULTITHREADING 100`, which adds a recursive client lock and
+  thread-local state but spawns NO threads of its own -- that is why the callbacks stay inline,
+  and it is also what makes it legal for the tag model to issue a new browse from inside a browse
+  reply. **Teardown ordering is load-bearing**:
+  the pump stops and `clientContext` is nulled BEFORE `UA_Client_delete()`, every trampoline
+  null-checks, and a `close()` arriving from inside a callback defers the delete to a queued call
+  (`s_inPump`) rather than freeing the object the stack is standing on. `OpcUaTypes.h` is the
+  transport-neutral vocabulary (Qt Core only, so the ctest tier links it without the stack) and
+  `OpcUaMarshal` is the single seam, pinned by `tst_opcua_marshal`.
+- **Requests are answered POSITIONALLY, so the session stages them.** The Read service returns
+  values in request order with no node id on the reply: `PendingRead` holds the rows and merges on
+  arrival. A browse carries a caller-supplied `BrowseQuery::token` back with its reply, because the
+  picker browses one node for up to three different reasons (level expansion, has-children probe,
+  units lookup) and the node id alone cannot route the answer. `MaxNodesPerRead` is read by the
+  session itself and consumed internally. Subscriptions are ONE
+  `UA_Client_Subscriptions_create_async` plus ONE `UA_Client_MonitoredItems_createDataChanges_async`
+  for every tag; the **tag index rides in the monitored-item context**, never a map keyed on the
+  returned id, because open62541 registers items locally before the create reply arrives and a map
+  would drop the initial value of every slow-changing tag.
+- **The dial doctrine of spec 0066 is preserved verbatim.** With no discovered endpoint selected,
+  `open()` runs `discoverEndpoints()` FIRST (`m_pendingDial`) over a bare None-policy channel, which
+  the OPC UA specification requires every server to accept for the Discovery services.
+  `dialEndpoint()` then dials the discovered endpoint with the user's typed host:port substituted:
+  servers advertise their own hostname, which rarely resolves from the engineering laptop.
+  Selection requires `endpointUsable()` AND `endpointAcceptsToken(authMode)`, and an explicit pick
+  survives re-discovery. The ONE verdict is `connected()` → `reportOpenFinished(true)` or the
+  `failDial()` funnel (session `connectFailed`, 15 s `m_dialTimer`, discovery failure) →
+  `reportOpenFinished(false)`; an established drop queues `disconnectDevice(this)`.
+- **Secure channels are configuration on the session (spec 0067 stage 2).** All five policies are
+  supported; `Basic128Rsa15` and `Basic256` are labelled deprecated and never auto-selected, and
+  `selectBestEndpoint()` otherwise picks the most secure endpoint the chosen identity can use.
+  `OpcUaSecurity` owns the per-INSTALLATION identity and trust store under
+  `AppConfigLocation/OpcUa`: the client certificate is generated on first secure use and REUSED
+  (a server operator trusts this installation once), the private key is written owner-only and
+  never exported, and trusted server certificates are files keyed by SHA-256 fingerprint so a
+  server that re-keys is a NEW decision. The session REPLACES open62541's trust-list check with its
+  own `verifyCertificate` hook, and keeps the four refusal causes apart (untrusted, expired, not
+  yet valid, hostname mismatch) because they have four different fixes. A refusal is still ONE
+  verdict through `failDial()`; the trust prompt is emitted QUEUED and accepting only RECORDS the
+  decision, so the reconnect is a new attempt with its own verdict. Identity is anonymous,
+  username/password (`allowNonePolicyPassword` is what lets a password cross an unencrypted
+  channel at all) or an X.509 token. Nothing secret enters the project file:
+  `DriverProperty::Password` keeps the password out, and only the PATHS of a user certificate and
+  key are persisted.
+- **On Connected the driver subscribes every tag at once.** Refused tags go to `m_polledTags`
+  (batched read, chunked to `MaxNodesPerRead`, ONE read outstanding, because a queued read behind
+  a slow PLC grows latency without bound), every refused item is refused *individually* and only an
+  all-refused verdict flips `m_pollMode`. A 1 Hz watchdog falls back to polling when nothing has
   arrived for `kSilenceFactor` publishing periods: a server that silently drops the subscription
-  otherwise leaves the dashboard frozen and the status reading "Subscribed". The revised
-  publishing interval is adopted from `monitoringStatus()` and drives both timers; a live interval
-  change goes through `modifyMonitoring`. Value quality is decided by the OPC UA **severity bits**
+  otherwise leaves the dashboard frozen and the status reading "Subscribed". The revised publishing
+  interval is adopted from the session and drives both timers; a live interval change goes through
+  `UA_Client_Subscriptions_modify_async`. Value quality is decided by the OPC UA **severity bits**
   (Good and Uncertain publish, Bad keeps the last good value and lands in `badTags()`), never by
   `!= Good`. `m_frameTimer` encodes only dirty slots into one `OpcUaWire` frame
   (`[version][index u16][type u8][payload]*`, capped at `kMaxFrameBytes`, cursor rotated so high

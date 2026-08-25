@@ -104,3 +104,7 @@ out/
 
 # Example-script private virtualenvs (created by the dependency bootstrap)
 examples/**/.venv/
+
+# OPC UA simulator self-signed material (regenerated on each secure run)
+server_cert*.der
+server_key*.pem

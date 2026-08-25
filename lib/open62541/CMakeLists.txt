@@ -49,7 +49,7 @@ add_library(open62541 STATIC
 #
 # SYSTEM keeps open62541.h's own diagnostics out of the translation units that include it: it
 # redefines _WINSOCKAPI_ (Qt already defines it on the command line) and has an unreferenced
-# parameter in the no-op lock shims. Those are upstream's to care about, not ours, and they
+# parameter in one of its inline helpers. Those are upstream's to care about, not ours, and they
 # would otherwise appear on every file that touches the driver.
 #
 target_include_directories(open62541 SYSTEM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
@@ -65,8 +65,24 @@ if(WIN32)
   target_link_libraries(open62541 PUBLIC ws2_32 iphlpapi)
 endif()
 
+#
+# open62541.h defines _XOPEN_SOURCE 600 before the first POSIX header. On Apple platforms that
+# makes <sys/socket.h> and friends hide every BSD extension the stack uses (SO_REUSEPORT,
+# INADDR_LOOPBACK, struct ip_mreq, NI_MAXHOST, DT_REG), so the amalgamation does not compile.
+# _DARWIN_C_SOURCE restores them; it is PUBLIC because OpcUaSession.cpp includes the same header
+# and would otherwise trip the identical hiding.
+#
+if(APPLE)
+  target_compile_definitions(open62541 PUBLIC _DARWIN_C_SOURCE)
+endif()
+
+#
+# Links the stack into an application target. The BUILD_COMMERCIAL guard is what lets a GPL
+# unit-test configure build open62541 for tst_opcua_marshal without any of it reaching the GPL
+# binary: the target exists, the executable simply never links it.
+#
 function(target_link_open62541 TARGET)
-  if(NOT TARGET open62541)
+  if(NOT TARGET open62541 OR NOT BUILD_COMMERCIAL)
     return()
   endif()
 

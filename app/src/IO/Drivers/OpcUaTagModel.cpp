@@ -23,19 +23,15 @@
 #include "IO/Drivers/OpcUaTagModel.h"
 
 #include <QLoggingCategory>
-#include <QOpcUaEUInformation>
-#include <QOpcUaLocalizedText>
-#include <QOpcUaRange>
-#include <QOpcUaReadItem>
 #include <QUuid>
 
+#include "SerialStudio.h"
 #include "SSAssert.h"
 
 Q_DECLARE_LOGGING_CATEGORY(lcOpcUa)
 
 static constexpr const char* kObjectsFolder = "ns=0;i=85";
 static constexpr int kOpcUaMaxDepth         = 32;
-static constexpr int kMaxNodesPerRead       = 200;
 static constexpr int kMaxUnitsInFlight      = 8;
 static constexpr int kMaxProbesInFlight     = 8;
 
@@ -48,8 +44,9 @@ static constexpr int kMaxProbesInFlight     = 8;
  */
 IO::Drivers::OpcUaTagModel::OpcUaTagModel(QObject* parent)
   : QAbstractItemModel(parent)
-  , m_client(nullptr)
+  , m_session(nullptr)
   , m_root(std::make_unique<Node>())
+  , m_nextToken(1)
   , m_unitsInFlight(0)
   , m_probesInFlight(0)
   , m_pendingBrowses(0)
@@ -66,32 +63,31 @@ IO::Drivers::OpcUaTagModel::OpcUaTagModel(QObject* parent)
  */
 IO::Drivers::OpcUaTagModel::~OpcUaTagModel()
 {
-  setClient(nullptr);
+  setSession(nullptr);
 }
 
 /**
- * @brief Lends (or withdraws) the connected client; withdrawing resets the tree. The batched
- *        attribute replies arrive on the client, so the subscription follows the lease.
+ * @brief Lends (or withdraws) the connected browse session; withdrawing resets the tree. Every
+ *        browse and read reply arrives on the session, so the wiring follows the lease.
  */
-void IO::Drivers::OpcUaTagModel::setClient(QOpcUaClient* client)
+void IO::Drivers::OpcUaTagModel::setSession(OpcUaSession* session)
 {
-  if (m_client == client)
+  if (m_session == session)
     return;
 
-  if (m_client)
-    disconnect(m_client, nullptr, this, nullptr);
+  if (m_session)
+    disconnect(m_session, nullptr, this, nullptr);
 
-  m_client = client;
+  m_session = session;
   clear();
 
-  if (!m_client)
+  if (!m_session)
     return;
 
-  connect(m_client,
-          &QOpcUaClient::readNodeAttributesFinished,
-          this,
-          &IO::Drivers::OpcUaTagModel::onAttributesRead);
-  (void)m_client->updateNamespaceArray();
+  connect(
+    m_session, &OpcUaSession::readFinished, this, &IO::Drivers::OpcUaTagModel::onAttributesRead);
+  connect(
+    m_session, &OpcUaSession::browseFinished, this, &IO::Drivers::OpcUaTagModel::onBrowseReply);
 }
 
 /**
@@ -100,11 +96,9 @@ void IO::Drivers::OpcUaTagModel::setClient(QOpcUaClient* client)
  */
 void IO::Drivers::OpcUaTagModel::clear()
 {
-  for (auto* handle : m_handles)
-    retireHandle(handle);
-
-  m_handles.clear();
   m_pendingReads.clear();
+  m_browseTokens.clear();
+  m_unitTargets.clear();
   m_probeQueue.clear();
   m_unitQueue.clear();
   m_index.clear();
@@ -244,7 +238,7 @@ bool IO::Drivers::OpcUaTagModel::hasChildren(const QModelIndex& parent) const
 bool IO::Drivers::OpcUaTagModel::canFetchMore(const QModelIndex& parent) const
 {
   const Node* node = nodeAt(parent);
-  return m_client && node->expandable && !node->fetched && !node->fetching;
+  return m_session && node->expandable && !node->fetched && !node->fetching;
 }
 
 /**
@@ -589,7 +583,7 @@ QJsonArray IO::Drivers::OpcUaTagModel::childrenJson(const QString& nodeId) const
  */
 bool IO::Drivers::OpcUaTagModel::fetchNode(const QString& nodeId)
 {
-  if (!m_client)
+  if (!m_session)
     return false;
 
   Node* node = nodeId.isEmpty() ? m_root.get() : findNode(m_root.get(), nodeId);
@@ -608,33 +602,90 @@ bool IO::Drivers::OpcUaTagModel::fetchNode(const QString& nodeId)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Maps an expanded node id onto this server's namespace table; a reference that names a
+ * @brief Maps a browsed node id onto this server's namespace table; a reference that names a
  *        namespace URI (aggregating servers) would otherwise carry a meaningless index.
  */
-QString IO::Drivers::OpcUaTagModel::resolveNodeId(const QOpcUaExpandedNodeId& id) const
+QString IO::Drivers::OpcUaTagModel::resolveNodeId(const OpcUaTypes::ReferenceRow& row) const
 {
-  const auto uri = id.namespaceUri();
-  if (uri.isEmpty() || !m_client)
-    return id.nodeId();
+  if (row.namespaceUri.isEmpty() || !m_session)
+    return row.nodeId;
 
-  const int index = m_client->namespaceArray().indexOf(uri);
+  const int index = m_session->namespaceArray().indexOf(row.namespaceUri);
   if (index < 0)
-    return id.nodeId();
+    return row.nodeId;
 
-  const auto identifier = id.nodeId().section(QLatin1Char(';'), 1);
+  const auto identifier = row.nodeId.section(QLatin1Char(';'), 1);
   if (identifier.isEmpty())
-    return id.nodeId();
+    return row.nodeId;
 
   return QStringLiteral("ns=%1;%2").arg(QString::number(index), identifier);
 }
 
 /**
- * @brief Issues one browseChildren() for a node; the reply lands in onBrowseFinished().
+ * @brief Sends one browse through the session and registers what its reply will mean.
+ */
+quint32 IO::Drivers::OpcUaTagModel::issueBrowse(Node* node, Purpose purpose)
+{
+  SS_ASSERT(node != nullptr, return 0);
+  SS_ASSERT(m_session != nullptr, return 0);
+
+  OpcUaTypes::BrowseQuery query;
+  query.token         = m_nextToken++;
+  query.kind          = purpose == Purpose::Units ? OpcUaTypes::ReferenceKind::HasProperty
+                                                  : OpcUaTypes::ReferenceKind::Hierarchical;
+  query.nodeClassMask = purpose == Purpose::Units
+                        ? OpcUaTypes::NodeClass::Variable
+                        : OpcUaTypes::NodeClass::Object | OpcUaTypes::NodeClass::Variable;
+
+  PendingBrowse pending;
+  pending.node    = node;
+  pending.purpose = purpose;
+  m_browseTokens.insert(query.token, pending);
+
+  if (m_session->browse(node->nodeId, query))
+    return query.token;
+
+  m_browseTokens.remove(query.token);
+  return 0;
+}
+
+/**
+ * @brief Routes a browse reply to the pass that asked for it.
+ */
+void IO::Drivers::OpcUaTagModel::onBrowseReply(quint32 token,
+                                               const QString& nodeId,
+                                               const QList<OpcUaTypes::ReferenceRow>& children,
+                                               OpcUaTypes::StatusCode status)
+{
+  Q_UNUSED(nodeId)
+  const auto pending = m_browseTokens.take(token);
+  if (!pending.node)
+    return;
+
+  if (pending.purpose == Purpose::Level) {
+    onBrowseFinished(pending.node, children, status);
+    return;
+  }
+
+  if (pending.purpose == Purpose::Probe) {
+    onProbeFinished(pending.node, children, status);
+    return;
+  }
+
+  if (OpcUaTypes::isGood(status))
+    onUnitsBrowsed(pending.node, children);
+
+  --m_unitsInFlight;
+  pumpUnitQueue();
+}
+
+/**
+ * @brief Issues one browse for a node; the reply lands in onBrowseFinished().
  */
 void IO::Drivers::OpcUaTagModel::browse(Node* node)
 {
   SS_ASSERT(node != nullptr, return);
-  if (!m_client || node->fetching || node->fetched)
+  if (!m_session || node->fetching || node->fetched)
     return;
 
   int depth = 0;
@@ -644,32 +695,11 @@ void IO::Drivers::OpcUaTagModel::browse(Node* node)
   if (depth > kOpcUaMaxDepth)
     return;
 
-  auto* handle = m_client->node(node->nodeId);
-  if (!handle) {
-    Q_EMIT browseError(node->nodeId, tr("invalid node id"));
-    return;
-  }
-
   node->fetching = true;
   ++m_pendingBrowses;
-  handle->setParent(this);
-  m_handles.append(handle);
-  connect(handle,
-          &QOpcUaNode::browseFinished,
-          this,
-          [this, node, handle](const QList<QOpcUaReferenceDescription>& children,
-                               QOpcUa::UaStatusCode status) {
-            onBrowseFinished(node, children, status);
-            m_handles.removeOne(handle);
-            retireHandle(handle);
-          });
 
-  if (!handle->browseChildren(QOpcUa::ReferenceTypeId::HierarchicalReferences,
-                              QOpcUa::NodeClass::Object | QOpcUa::NodeClass::Variable)) {
-    m_handles.removeOne(handle);
-    retireHandle(handle);
-    onBrowseFinished(node, {}, QOpcUa::UaStatusCode::BadInternalError);
-  }
+  if (issueBrowse(node, Purpose::Level) == 0)
+    onBrowseFinished(node, {}, OpcUaTypes::kStatusBadInternal);
 
   publishBusy();
 }
@@ -680,18 +710,17 @@ void IO::Drivers::OpcUaTagModel::browse(Node* node)
  *        and the probe corrects the exceptions, such as a struct Variable.
  */
 std::unique_ptr<IO::Drivers::OpcUaTagModel::Node> IO::Drivers::OpcUaTagModel::makeChild(
-  Node* parent, const QOpcUaReferenceDescription& ref) const
+  Node* parent, const OpcUaTypes::ReferenceRow& row) const
 {
   SS_ASSERT(parent != nullptr, return std::make_unique<Node>());
 
   auto child        = std::make_unique<Node>();
   child->parent     = parent;
   child->row        = static_cast<int>(parent->children.size());
-  child->folder     = ref.nodeClass() != QOpcUa::NodeClass::Variable;
+  child->folder     = row.nodeClass != OpcUaTypes::NodeClass::Variable;
   child->expandable = child->folder;
-  child->nodeId     = resolveNodeId(ref.targetNodeId());
-  child->name =
-    ref.displayName().text().isEmpty() ? ref.browseName().name() : ref.displayName().text();
+  child->nodeId     = resolveNodeId(row);
+  child->name       = row.displayName.isEmpty() ? row.browseName : row.displayName;
   child->path =
     parent == m_root.get() ? parent->name : parent->path + QLatin1Char('/') + parent->name;
 
@@ -708,16 +737,16 @@ std::unique_ptr<IO::Drivers::OpcUaTagModel::Node> IO::Drivers::OpcUaTagModel::ma
  *        nothing below this node is fetched until the user expands it.
  */
 void IO::Drivers::OpcUaTagModel::onBrowseFinished(Node* node,
-                                                  const QList<QOpcUaReferenceDescription>& children,
-                                                  QOpcUa::UaStatusCode status)
+                                                  const QList<OpcUaTypes::ReferenceRow>& children,
+                                                  OpcUaTypes::StatusCode status)
 {
   SS_ASSERT(node != nullptr, return);
   node->fetching   = false;
   node->fetched    = true;
   m_pendingBrowses = qMax(0, m_pendingBrowses - 1);
 
-  if (status != QOpcUa::UaStatusCode::Good) {
-    Q_EMIT browseError(node->nodeId, QOpcUa::statusToString(status));
+  if (!OpcUaTypes::isGood(status)) {
+    Q_EMIT browseError(node->nodeId, OpcUaSession::describeStatus(status));
     publishBusy();
     return;
   }
@@ -744,6 +773,27 @@ void IO::Drivers::OpcUaTagModel::onBrowseFinished(Node* node,
   Q_EMIT dataChanged(parentIndex, parentIndex);
   Q_EMIT selectionChanged();
   publishBusy();
+}
+
+/**
+ * @brief The has-children probe's verdict: OPC UA carries no such hint in a browse result, and
+ *        guessing leaves dead expanders behind.
+ */
+void IO::Drivers::OpcUaTagModel::onProbeFinished(Node* node,
+                                                 const QList<OpcUaTypes::ReferenceRow>& children,
+                                                 OpcUaTypes::StatusCode status)
+{
+  SS_ASSERT(node != nullptr, return);
+  node->probing = false;
+  node->probed  = true;
+  if (OpcUaTypes::isGood(status) && !node->fetched)
+    node->expandable = !children.isEmpty();
+
+  const auto index = indexOf(node);
+  Q_EMIT dataChanged(index, index);
+
+  --m_probesInFlight;
+  pumpProbeQueue();
 }
 
 /**
@@ -803,49 +853,67 @@ void IO::Drivers::OpcUaTagModel::expandPreselected(Node* node)
 void IO::Drivers::OpcUaTagModel::readLevel(Node* node)
 {
   SS_ASSERT(node != nullptr, return);
-  if (!m_client)
+  if (!m_session)
     return;
 
-  QList<QOpcUaReadItem> items;
+  static const QList<OpcUaTypes::NodeAttribute> k_attributes = {
+    OpcUaTypes::NodeAttribute::DataType,
+    OpcUaTypes::NodeAttribute::ValueRank,
+    OpcUaTypes::NodeAttribute::ArrayDimensions,
+    OpcUaTypes::NodeAttribute::AccessLevel,
+    OpcUaTypes::NodeAttribute::UserAccessLevel,
+    OpcUaTypes::NodeAttribute::Description,
+    OpcUaTypes::NodeAttribute::Value,
+  };
+
+  const int chunk = qMax(1, m_session->readLimit() / static_cast<int>(k_attributes.size()));
+
+  QStringList nodeIds;
   for (auto& child : node->children) {
     if (child->folder || child->attributesRead)
       continue;
 
     m_pendingReads.insert(child->nodeId, child.get());
-    items.append(QOpcUaReadItem(child->nodeId, QOpcUa::NodeAttribute::DataType));
-    items.append(QOpcUaReadItem(child->nodeId, QOpcUa::NodeAttribute::ValueRank));
-    items.append(QOpcUaReadItem(child->nodeId, QOpcUa::NodeAttribute::ArrayDimensions));
-    items.append(QOpcUaReadItem(child->nodeId, QOpcUa::NodeAttribute::AccessLevel));
-    items.append(QOpcUaReadItem(child->nodeId, QOpcUa::NodeAttribute::UserAccessLevel));
-    items.append(QOpcUaReadItem(child->nodeId, QOpcUa::NodeAttribute::Description));
-    items.append(QOpcUaReadItem(child->nodeId, QOpcUa::NodeAttribute::Value));
-
-    if (items.size() < kMaxNodesPerRead)
+    nodeIds.append(child->nodeId);
+    if (nodeIds.size() < chunk)
       continue;
 
-    (void)m_client->readNodeAttributes(items);
-    items.clear();
+    (void)m_session->readAttributes(nodeIds, k_attributes, Token::LevelRead);
+    nodeIds.clear();
   }
 
-  if (!items.isEmpty())
-    (void)m_client->readNodeAttributes(items);
+  if (!nodeIds.isEmpty())
+    (void)m_session->readAttributes(nodeIds, k_attributes, Token::LevelRead);
 }
 
 /**
- * @brief Routes a batched Read reply into the rows that asked for it.
+ * @brief Routes a batched Read reply by the token the request carried. Routing on node id alone
+ *        let a ticked variable's own EngineeringUnits child divert that variable's level read.
  */
-void IO::Drivers::OpcUaTagModel::onAttributesRead(const QList<QOpcUaReadResult>& results,
-                                                  QOpcUa::UaStatusCode status)
+void IO::Drivers::OpcUaTagModel::onAttributesRead(quint32 token,
+                                                  const QList<OpcUaTypes::ReadRow>& rows,
+                                                  OpcUaTypes::StatusCode status)
 {
   Q_UNUSED(status)
 
+  if (token == Token::UnitRead) {
+    for (const auto& row : rows)
+      applyUnitValue(m_unitTargets.take(row.nodeId), row.value, row.status);
+
+    publishBusy();
+    return;
+  }
+
+  if (token != Token::LevelRead)
+    return;
+
   QList<Node*> touched;
-  for (const auto& result : results) {
-    Node* node = m_pendingReads.value(result.nodeId(), nullptr);
+  for (const auto& row : rows) {
+    Node* node = m_pendingReads.value(row.nodeId, nullptr);
     if (!node)
       continue;
 
-    applyAttribute(node, result.attribute(), result.value(), result.statusCode());
+    applyAttribute(node, row.attribute, row.value, row.status);
     if (!touched.contains(node))
       touched.append(node);
   }
@@ -865,36 +933,33 @@ void IO::Drivers::OpcUaTagModel::onAttributesRead(const QList<QOpcUaReadResult>&
  * @brief Applies one attribute of a variable row.
  */
 void IO::Drivers::OpcUaTagModel::applyAttribute(Node* node,
-                                                QOpcUa::NodeAttribute attribute,
+                                                OpcUaTypes::NodeAttribute attribute,
                                                 const QVariant& value,
-                                                QOpcUa::UaStatusCode status)
+                                                OpcUaTypes::StatusCode status)
 {
   SS_ASSERT(node != nullptr, return);
-  if (status != QOpcUa::UaStatusCode::Good)
+  if (!OpcUaTypes::isGood(status))
     return;
 
   switch (attribute) {
-    case QOpcUa::NodeAttribute::DataType:
+    case OpcUaTypes::NodeAttribute::DataType:
       node->type = wireTypeFromDataTypeId(value.toString());
       break;
-    case QOpcUa::NodeAttribute::Description:
-      node->description = value.canConvert<QOpcUaLocalizedText>()
-                          ? value.value<QOpcUaLocalizedText>().text()
-                          : value.toString();
+    case OpcUaTypes::NodeAttribute::Description:
+      node->description = value.toString();
       break;
-    case QOpcUa::NodeAttribute::AccessLevel:
-    case QOpcUa::NodeAttribute::UserAccessLevel:
-      node->readable =
-        (value.toUInt() & static_cast<quint32>(QOpcUa::AccessLevelBit::CurrentRead)) != 0;
+    case OpcUaTypes::NodeAttribute::AccessLevel:
+    case OpcUaTypes::NodeAttribute::UserAccessLevel:
+      node->readable = (value.toUInt() & OpcUaTypes::kAccessLevelCurrentRead) != 0;
       break;
-    case QOpcUa::NodeAttribute::ArrayDimensions: {
+    case OpcUaTypes::NodeAttribute::ArrayDimensions: {
       const auto dims = value.toList();
       if (!dims.isEmpty())
         node->arrayLen = qBound(1, dims.first().toInt(), OpcUaWire::kMaxTags);
 
       break;
     }
-    case QOpcUa::NodeAttribute::Value: {
+    case OpcUaTypes::NodeAttribute::Value: {
       if (node->type == OpcUaWire::Type::Invalid)
         node->type = wireTypeFromValue(value);
 
@@ -967,48 +1032,19 @@ void IO::Drivers::OpcUaTagModel::queueProbe(Node* node)
  */
 void IO::Drivers::OpcUaTagModel::pumpProbeQueue()
 {
-  while (m_client && m_probesInFlight < kMaxProbesInFlight && !m_probeQueue.isEmpty()) {
+  while (m_session && m_probesInFlight < kMaxProbesInFlight && !m_probeQueue.isEmpty()) {
     Node* node = m_probeQueue.dequeue();
     if (!node || node->probed || node->fetched)
       continue;
 
-    auto* handle = m_client->node(node->nodeId);
-    if (!handle) {
-      node->probed     = true;
-      node->expandable = false;
-      continue;
-    }
-
     ++m_probesInFlight;
     node->probing = true;
-    handle->setParent(this);
-    m_handles.append(handle);
-    connect(handle,
-            &QOpcUaNode::browseFinished,
-            this,
-            [this, node, handle](const QList<QOpcUaReferenceDescription>& children,
-                                 QOpcUa::UaStatusCode status) {
-              node->probing = false;
-              node->probed  = true;
-              if (status == QOpcUa::UaStatusCode::Good && !node->fetched)
-                node->expandable = !children.isEmpty();
+    if (issueBrowse(node, Purpose::Probe) != 0)
+      continue;
 
-              const auto index = indexOf(node);
-              Q_EMIT dataChanged(index, index);
-
-              m_handles.removeOne(handle);
-              retireHandle(handle);
-              --m_probesInFlight;
-              pumpProbeQueue();
-            });
-
-    if (!handle->browseChildren(QOpcUa::ReferenceTypeId::HierarchicalReferences,
-                                QOpcUa::NodeClass::Object | QOpcUa::NodeClass::Variable)) {
-      m_handles.removeOne(handle);
-      retireHandle(handle);
-      node->probing = false;
-      --m_probesInFlight;
-    }
+    node->probing = false;
+    node->probed  = true;
+    --m_probesInFlight;
   }
 }
 
@@ -1031,41 +1067,15 @@ void IO::Drivers::OpcUaTagModel::queueUnits(Node* node)
  */
 void IO::Drivers::OpcUaTagModel::pumpUnitQueue()
 {
-  while (m_client && m_unitsInFlight < kMaxUnitsInFlight && !m_unitQueue.isEmpty()) {
+  while (m_session && m_unitsInFlight < kMaxUnitsInFlight && !m_unitQueue.isEmpty()) {
     Node* node = m_unitQueue.dequeue();
     if (!node || node->euResolved)
       continue;
 
-    auto* handle = m_client->node(node->nodeId);
-    if (!handle) {
-      node->euResolved = true;
-      continue;
-    }
-
     ++m_unitsInFlight;
     node->euResolved = true;
-    handle->setParent(this);
-    m_handles.append(handle);
-    connect(handle,
-            &QOpcUaNode::browseFinished,
-            this,
-            [this, node, handle](const QList<QOpcUaReferenceDescription>& children,
-                                 QOpcUa::UaStatusCode status) {
-              if (status == QOpcUa::UaStatusCode::Good)
-                onUnitsBrowsed(node, children);
-
-              m_handles.removeOne(handle);
-              retireHandle(handle);
-              --m_unitsInFlight;
-              pumpUnitQueue();
-            });
-
-    if (!handle->browseChildren(QOpcUa::ReferenceTypeId::HasProperty,
-                                QOpcUa::NodeClass::Variable)) {
-      m_handles.removeOne(handle);
-      retireHandle(handle);
+    if (issueBrowse(node, Purpose::Units) == 0)
       --m_unitsInFlight;
-    }
   }
 }
 
@@ -1073,56 +1083,54 @@ void IO::Drivers::OpcUaTagModel::pumpUnitQueue()
  * @brief Reads EngineeringUnits / EURange out of a variable's properties.
  */
 void IO::Drivers::OpcUaTagModel::onUnitsBrowsed(Node* node,
-                                                const QList<QOpcUaReferenceDescription>& children)
+                                                const QList<OpcUaTypes::ReferenceRow>& children)
 {
   SS_ASSERT(node != nullptr, return);
-  if (!m_client)
+  if (!m_session)
     return;
 
+  QStringList nodeIds;
   for (const auto& ref : children) {
-    const auto name = ref.browseName().name();
-    if (name != QLatin1String("EngineeringUnits") && name != QLatin1String("EURange"))
+    const bool range = ref.browseName == QLatin1String("EURange");
+    if (!range && ref.browseName != QLatin1String("EngineeringUnits"))
       continue;
 
-    auto* handle = m_client->node(resolveNodeId(ref.targetNodeId()));
-    if (!handle)
-      continue;
+    UnitTarget target;
+    target.node  = node;
+    target.range = range;
 
-    handle->setParent(this);
-    m_handles.append(handle);
-    connect(handle, &QOpcUaNode::attributeRead, this, [this, node, handle](QOpcUa::NodeAttributes) {
-      const auto value = handle->attribute(QOpcUa::NodeAttribute::Value);
-      if (value.canConvert<QOpcUaEUInformation>())
-        node->unit = value.value<QOpcUaEUInformation>().displayName().text();
-
-      else if (value.canConvert<QOpcUaRange>()) {
-        node->euMin = value.value<QOpcUaRange>().low();
-        node->euMax = value.value<QOpcUaRange>().high();
-      }
-
-      const auto index = indexOf(node);
-      Q_EMIT dataChanged(index, index, {UnitRole});
-      m_handles.removeOne(handle);
-      retireHandle(handle);
-    });
-
-    if (!handle->readAttributes(QOpcUa::NodeAttribute::Value)) {
-      m_handles.removeOne(handle);
-      retireHandle(handle);
-    }
+    const auto nodeId = resolveNodeId(ref);
+    m_unitTargets.insert(nodeId, target);
+    nodeIds.append(nodeId);
   }
+
+  if (!nodeIds.isEmpty())
+    (void)m_session->readAttributes(nodeIds, {OpcUaTypes::NodeAttribute::Value}, Token::UnitRead);
 }
 
 /**
- * @brief Disconnects and deletes a node handle.
+ * @brief Applies one property value to the variable that asked for it. EURange carries {low,
+ *        high}: both bounds become the generated dataset's plot minimum and maximum.
  */
-void IO::Drivers::OpcUaTagModel::retireHandle(QOpcUaNode* handle)
+void IO::Drivers::OpcUaTagModel::applyUnitValue(const UnitTarget& target,
+                                                const QVariant& value,
+                                                OpcUaTypes::StatusCode status)
 {
-  if (!handle)
+  if (!target.node || !OpcUaTypes::isGood(status))
     return;
 
-  disconnect(handle, nullptr, this, nullptr);
-  handle->deleteLater();
+  if (!target.range)
+    target.node->unit = value.toString();
+  else {
+    const auto bounds = value.toList();
+    if (bounds.size() >= 2) {
+      target.node->euMin = SerialStudio::toDouble(bounds.at(0));
+      target.node->euMax = SerialStudio::toDouble(bounds.at(1));
+    }
+  }
+
+  const auto index = indexOf(target.node);
+  Q_EMIT dataChanged(index, index, {UnitRole});
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1232,9 +1240,6 @@ IO::Drivers::OpcUaWire::Type IO::Drivers::OpcUaTagModel::wireTypeFromValue(
     default:
       break;
   }
-
-  if (probe.canConvert<QOpcUaLocalizedText>())
-    return Type::Str;
 
   return Type::Invalid;
 }

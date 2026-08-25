@@ -395,7 +395,12 @@ add_subdirectory(mdflib)
 # the library itself compiles), and mbedTLS disables its own install/export rules automatically
 # when it detects it is a subproject.
 #
-if(BUILD_COMMERCIAL AND SS_ENABLE_OPCUA)
+# SS_BUILD_TESTS builds the stack too, on a GPL configure as well: tst_opcua_marshal links the
+# real open62541 to pin the one seam between its C vocabulary and Qt, and CI's unit tier is a GPL
+# configure. Building the targets does NOT put them in the application -- target_link_open62541()
+# stays a no-op outside BUILD_COMMERCIAL, so the GPL binary is unchanged.
+#
+if(SS_ENABLE_OPCUA AND (BUILD_COMMERCIAL OR SS_BUILD_TESTS))
   set(ENABLE_TESTING             OFF CACHE BOOL "" FORCE)
   set(ENABLE_PROGRAMS            OFF CACHE BOOL "" FORCE)
   set(MBEDTLS_FATAL_WARNINGS     OFF CACHE BOOL "" FORCE)

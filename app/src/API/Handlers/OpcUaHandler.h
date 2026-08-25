@@ -40,6 +40,7 @@ private:
   static void registerDiscoveryCommands(CommandRegistry& registry);
   static void registerTagCommands(CommandRegistry& registry);
   static void registerQueryCommands(CommandRegistry& registry);
+  static void registerSecurityCommands(CommandRegistry& registry);
 
   static CommandResponse setEndpointUrl(const QString& id, const QJsonObject& params);
   static CommandResponse setEndpointIndex(const QString& id, const QJsonObject& params);
@@ -47,6 +48,17 @@ private:
   static CommandResponse setUsername(const QString& id, const QJsonObject& params);
   static CommandResponse setPassword(const QString& id, const QJsonObject& params);
   static CommandResponse setPublishingInterval(const QString& id, const QJsonObject& params);
+
+  static CommandResponse setSecurityPolicy(const QString& id, const QJsonObject& params);
+  static CommandResponse setSecurityMode(const QString& id, const QJsonObject& params);
+  static CommandResponse setIdentityType(const QString& id, const QJsonObject& params);
+  static CommandResponse setUserCertificate(const QString& id, const QJsonObject& params);
+  static CommandResponse getCertificate(const QString& id, const QJsonObject& params);
+  static CommandResponse regenerateCertificate(const QString& id, const QJsonObject& params);
+  static CommandResponse exportCertificate(const QString& id, const QJsonObject& params);
+  static CommandResponse listTrusted(const QString& id, const QJsonObject& params);
+  static CommandResponse trustServer(const QString& id, const QJsonObject& params);
+  static CommandResponse revokeTrust(const QString& id, const QJsonObject& params);
 
   static CommandResponse discoverEndpoints(const QString& id, const QJsonObject& params);
   static CommandResponse listEndpoints(const QString& id, const QJsonObject& params);

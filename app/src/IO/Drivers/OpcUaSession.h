@@ -52,8 +52,11 @@ signals:
   void subscribed(const QList<OpcUaTypes::StatusCode>& perItemStatus);
   void valueChanged(const OpcUaTypes::MonitoredValue& value);
   void subscriptionLost(const QString& reason);
-  void readFinished(const QList<OpcUaTypes::ReadRow>& rows, OpcUaTypes::StatusCode status);
-  void browseFinished(const QString& nodeId,
+  void readFinished(quint32 token,
+                    const QList<OpcUaTypes::ReadRow>& rows,
+                    OpcUaTypes::StatusCode status);
+  void browseFinished(quint32 token,
+                      const QString& nodeId,
                       const QList<OpcUaTypes::ReferenceRow>& children,
                       OpcUaTypes::StatusCode status);
 
@@ -64,6 +67,8 @@ public:
   struct Identity {
     QString username;
     QString password;
+    QString certificatePath;
+    QString privateKeyPath;
     int mode;
 
     Identity() : mode(0) {}
@@ -80,22 +85,41 @@ public:
   [[nodiscard]] bool isOpen() const noexcept;
   [[nodiscard]] bool isConnecting() const noexcept;
   [[nodiscard]] int readLimit() const noexcept;
+  [[nodiscard]] int revisedInterval() const noexcept;
+  [[nodiscard]] QStringList namespaceArray() const;
+  [[nodiscard]] QString securityPolicyUri() const;
+  [[nodiscard]] OpcUaTypes::SecurityMode securityMode() const noexcept;
+  [[nodiscard]] OpcUaTypes::CertInfo serverCertificate() const;
+  [[nodiscard]] OpcUaTypes::TrustFailure trustFailure() const noexcept;
 
   [[nodiscard]] bool discoverEndpoints(const QString& url);
-  [[nodiscard]] bool connectToEndpoint(const QString& url, const Identity& identity);
+  [[nodiscard]] bool connectToEndpoint(const OpcUaTypes::Endpoint& endpoint,
+                                       const Identity& identity);
   [[nodiscard]] bool subscribe(const QStringList& nodeIds, int publishingIntervalMs);
   [[nodiscard]] bool readValues(const QStringList& nodeIds);
   [[nodiscard]] bool readAttributes(const QStringList& nodeIds,
-                                    const QList<OpcUaTypes::NodeAttribute>& attributes);
-  [[nodiscard]] bool browse(const QString& nodeId);
+                                    const QList<OpcUaTypes::NodeAttribute>& attributes,
+                                    quint32 token = 0);
+  [[nodiscard]] bool browse(const QString& nodeId, const OpcUaTypes::BrowseQuery& query);
+  [[nodiscard]] bool modifyPublishingInterval(int intervalMs);
+
+  [[nodiscard]] static QString describeStatus(OpcUaTypes::StatusCode status);
 
   void close();
 
   void handleStateChanged(int channelState, int sessionState, OpcUaTypes::StatusCode status);
   void handleEndpoints(const QList<OpcUaTypes::Endpoint>& endpoints, OpcUaTypes::StatusCode status);
-  void handleSubscribed(const QList<OpcUaTypes::StatusCode>& perItemStatus);
+  void handleSubscriptionCreated(quint32 subscriptionId,
+                                 int revisedIntervalMs,
+                                 OpcUaTypes::StatusCode status);
+  void handleSubscribed(const QList<OpcUaTypes::StatusCode>& perItemStatus,
+                        OpcUaTypes::StatusCode serviceStatus);
+  void handleSubscriptionLost(const QString& reason);
+  [[nodiscard]] OpcUaTypes::StatusCode verifyServerCertificate(const QByteArray& certificate);
   void handleValue(const OpcUaTypes::MonitoredValue& value);
-  void handleRead(const QList<OpcUaTypes::ReadRow>& rows, OpcUaTypes::StatusCode status);
+  void handleRead(quint32 requestId,
+                  const QList<OpcUaTypes::ReadRow>& rows,
+                  OpcUaTypes::StatusCode status);
   void handleBrowse(quint32 requestId,
                     const QList<OpcUaTypes::ReferenceRow>& children,
                     OpcUaTypes::StatusCode status);
@@ -104,13 +128,6 @@ private slots:
   void pump();
 
 private:
-  void teardown();
-  void startPump();
-  [[nodiscard]] bool ensureClient();
-  void requestEndpoints();
-  void failDial(const QString& reason);
-  void applyUsernameIdentity(const Identity& identity);
-
   /**
    * @brief What the session is currently trying to do, so a channel that opens knows whether to
    *        ask for endpoints or to hand the dial verdict to the driver.
@@ -121,18 +138,78 @@ private:
     Connecting,
   };
 
+  /**
+   * @brief Which of the session's own bookkeeping reads a reply belongs to, if any. These are
+   *        consumed here rather than published, so the driver never sees a phantom tag.
+   */
+  enum class InternalRead : quint8 {
+    No,
+    ReadLimit,
+    NamespaceArray,
+  };
+
+  /**
+   * @brief A read still on the wire. The Read service answers positionally, with no node id on
+   *        the reply, so the rows are staged here in request order and filled in on arrival, and
+   *        `token` is what routes the reply back to the caller that asked for it.
+   */
+  struct PendingRead {
+    QList<OpcUaTypes::ReadRow> rows;
+    InternalRead internalRead;
+    bool valueRead;
+    quint32 token;
+
+    PendingRead() : internalRead(InternalRead::No), valueRead(false), token(0) {}
+  };
+
+  /**
+   * @brief A browse still on the wire, with the caller's routing token.
+   */
+  struct PendingBrowse {
+    QString nodeId;
+    quint32 token;
+
+    PendingBrowse() : token(0) {}
+  };
+
+  void teardown();
+  void startPump();
+  [[nodiscard]] bool ensureClient(const OpcUaTypes::Endpoint& endpoint, const Identity& identity);
+  void requestEndpoints();
+  void failDial(const QString& reason);
+  void applyUsernameIdentity(const Identity& identity);
+  [[nodiscard]] bool applyIdentity(const Identity& identity);
+  [[nodiscard]] bool applySecurity(const OpcUaTypes::Endpoint& endpoint);
+  void createMonitoredItems();
+  void requestServerLimits();
+  void requestNamespaceArray();
+  [[nodiscard]] bool sendRead(const QList<OpcUaTypes::ReadRow>& rows,
+                              InternalRead internalRead,
+                              bool valueRead,
+                              quint32 token);
+
   bool m_connecting;
   bool m_open;
   bool m_readInFlight;
+  int m_stackDepth;
   Intent m_intent;
   int m_readLimit;
+  int m_revisedInterval;
   quint32 m_subscriptionId;
   QString m_endpointUrl;
   QString m_lastReason;
   QTimer* m_pump;
   UA_Client* m_client;
+  OpcUaTypes::SecurityMode m_securityMode;
+  OpcUaTypes::TrustFailure m_trustFailure;
+  QString m_securityPolicyUri;
+  OpcUaTypes::CertInfo m_serverCertificate;
+  QList<int> m_monitorTags;
   QList<QString> m_monitoredNodes;
-  QHash<quint32, QString> m_browseRequests;
+  QStringList m_namespaceArray;
+  qsizetype m_pollCursor;
+  QHash<quint32, PendingRead> m_readRequests;
+  QHash<quint32, PendingBrowse> m_browseRequests;
 };
 
 }  // namespace Drivers

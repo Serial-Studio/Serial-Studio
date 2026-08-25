@@ -26,19 +26,15 @@
 #include <QJsonDocument>
 #include <QLoggingCategory>
 #include <QMessageBox>
-#include <QOpcUaAuthenticationInformation>
-#include <QOpcUaConnectionSettings>
-#include <QOpcUaLocalizedText>
-#include <QOpcUaMonitoringParameters>
-#include <QOpcUaReadItem>
-#include <QOpcUaUserTokenPolicy>
 #include <QSet>
 #include <QUrl>
 
+#include "API/EnumLabels.h"
 #include "AppState.h"
 #include "DataModel/Frame.h"
 #include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
+#include "IO/Drivers/OpcUaSecurity.h"
 #include "IO/Drivers/OpcUaTagModel.h"
 #include "Misc/Translator.h"
 #include "Misc/Utilities.h"
@@ -54,15 +50,25 @@ static constexpr int kOpcUaDefaultIntervalMs = 100;
 static constexpr qint64 kNsPerMs             = 1000000LL;
 static constexpr qint64 kMaxClockSkewMs      = 5000;
 static constexpr int kDefaultPort            = 4840;
-static constexpr int kDefaultReadLimit       = 200;
-static constexpr int kRequestTimeoutMs       = 10000;
-static constexpr int kSessionTimeoutMs       = 60000;
-static constexpr int kChannelLifetimeMs      = 600000;
 static constexpr int kWatchdogMs             = 1000;
 static constexpr int kSilenceFactor          = 6;
 static constexpr int kMinSilenceMs           = 3000;
 static constexpr const char* kBackendName    = "open62541";
 static constexpr const char* kPolicyNone     = "http://opcfoundation.org/UA/SecurityPolicy#None";
+
+/**
+ * @brief Every security policy this build can open, weakest first. Basic128Rsa15 and Basic256 are
+ *        deprecated by the OPC Foundation (SHA-1 and RSA-1.5); they stay reachable because field
+ *        controllers still ship them, but they are labelled and never auto-selected.
+ */
+static constexpr const char* kPolicyUris[] = {
+  "http://opcfoundation.org/UA/SecurityPolicy#None",
+  "http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15",
+  "http://opcfoundation.org/UA/SecurityPolicy#Basic256",
+  "http://opcfoundation.org/UA/SecurityPolicy#Basic256Sha256",
+  "http://opcfoundation.org/UA/SecurityPolicy#Aes128_Sha256_RsaOaep",
+  "http://opcfoundation.org/UA/SecurityPolicy#Aes256_Sha256_RsaPss",
+};
 
 //--------------------------------------------------------------------------------------------------
 // Constructor/destructor
@@ -70,9 +76,8 @@ static constexpr const char* kPolicyNone     = "http://opcfoundation.org/UA/Secu
 
 /**
  * @brief Constructs the driver, restores persisted settings and wires the configuration signals.
- *        The open62541 backend narrates every channel event through qt.opcua.*; that goes to the
- *        user's console, so it is filtered here (setFilterRules replaces the rule set, hence the
- *        font and canbus rules from main.cpp / CANBus.cpp ride along).
+ *        setFilterRules REPLACES the rule set rather than adding to it, so the font and canbus
+ *        rules from main.cpp / CANBus.cpp have to ride along here.
  */
 IO::Drivers::OpcUa::OpcUa()
   : m_connecting(false)
@@ -92,7 +97,6 @@ IO::Drivers::OpcUa::OpcUa()
   , m_failedMonitors(0)
   , m_revisedInterval(0)
   , m_frameCursor(0)
-  , m_readLimit(kDefaultReadLimit)
   , m_valuesReceived(0)
   , m_badStatusCount(0)
   , m_unstampedCount(0)
@@ -100,13 +104,14 @@ IO::Drivers::OpcUa::OpcUa()
   , m_linkDrops(0)
   , m_skippedPolls(0)
   , m_endpointUrl(QStringLiteral("opc.tcp://127.0.0.1:4840"))
+  , m_securityMode(static_cast<int>(OpcUaTypes::SecurityMode::None))
   , m_dialTimer(new QTimer(this))
   , m_watchdog(new QTimer(this))
   , m_pollTimer(new QTimer(this))
   , m_frameTimer(new QTimer(this))
-  , m_client(nullptr)
-  , m_browseClient(nullptr)
-  , m_discoveryClient(nullptr)
+  , m_session(nullptr)
+  , m_browseSession(nullptr)
+  , m_discoverySession(nullptr)
   , m_tagModel(nullptr)
   , m_frameBytes(0)
   , m_lastStampNs(0)
@@ -130,13 +135,13 @@ IO::Drivers::OpcUa::OpcUa()
                                                          &OpcUa::usernameChanged,
                                                          &OpcUa::passwordChanged,
                                                          &OpcUa::publishingIntervalChanged,
+                                                         &OpcUa::securityChanged,
                                                          &OpcUa::tagsChanged};
   for (const auto signal : kConfigSignals)
     connect(this, signal, this, &IO::Drivers::OpcUa::configurationChanged);
 
   QLoggingCategory::setFilterRules(QStringLiteral("*font*=false\n"
-                                                  "qt.canbus*=false\n"
-                                                  "qt.opcua*=false"));
+                                                  "qt.canbus*=false"));
 
   Q_EMIT configurationChanged();
 }
@@ -161,18 +166,10 @@ void IO::Drivers::OpcUa::setupExternalConnections()
 IO::Drivers::OpcUa::~OpcUa()
 {
   doClose();
-  teardownClient(m_browseClient);
-  teardownClient(m_discoveryClient);
+  teardownSession(m_browseSession);
+  teardownSession(m_discoverySession);
   delete m_tagModel;
   m_tagModel = nullptr;
-
-  const auto nodes = findChildren<QOpcUaNode*>(QString(), Qt::FindDirectChildrenOnly);
-  for (auto* node : nodes)
-    delete node;
-
-  const auto clients = findChildren<QOpcUaClient*>(QString(), Qt::FindDirectChildrenOnly);
-  for (auto* client : clients)
-    delete client;
 }
 
 /**
@@ -186,6 +183,17 @@ void IO::Drivers::OpcUa::loadSettings()
   m_publishingInterval =
     m_settings.value("OpcUaDriver/publishingInterval", kOpcUaDefaultIntervalMs).toInt();
   m_publishingInterval = qBound(kMinIntervalMs, m_publishingInterval, kMaxIntervalMs);
+
+  m_securityPolicy =
+    m_settings.value("OpcUaDriver/securityPolicy", QString::fromLatin1(kPolicyNone)).toString();
+  if (!supportedPolicies().contains(m_securityPolicy))
+    m_securityPolicy = QString::fromLatin1(kPolicyNone);
+
+  m_securityMode =
+    m_settings.value("OpcUaDriver/securityMode", static_cast<int>(OpcUaTypes::SecurityMode::None))
+      .toInt();
+  m_userCertificatePath = m_settings.value("OpcUaDriver/userCertificate", QString()).toString();
+  m_userKeyPath         = m_settings.value("OpcUaDriver/userKey", QString()).toString();
 
   const QUrl url(m_endpointUrl);
   if (url.isValid() && !url.host().isEmpty())
@@ -294,15 +302,6 @@ void IO::Drivers::OpcUa::doClose()
   m_pollTimer->stop();
   m_frameTimer->stop();
 
-  for (auto* node : m_nodes) {
-    if (!node)
-      continue;
-
-    disconnect(node, nullptr, this, nullptr);
-    node->deleteLater();
-  }
-
-  m_nodes.clear();
   m_nodeIndex.clear();
   m_slots.clear();
   m_watchdog->stop();
@@ -311,7 +310,6 @@ void IO::Drivers::OpcUa::doClose()
   m_failedMonitors  = 0;
   m_revisedInterval = 0;
   m_frameCursor     = 0;
-  m_readLimit       = kDefaultReadLimit;
   m_readInFlight    = false;
   m_subscribing     = false;
   m_pollMode        = false;
@@ -319,24 +317,23 @@ void IO::Drivers::OpcUa::doClose()
   m_lastNotifyNs    = 0;
   m_serverOffsetMs  = 0;
 
-  teardownClient(m_client);
+  teardownSession(m_session);
 }
 
 /**
- * @brief Disconnects every signal from a client and retires it; the pointer is nulled so a late
- *        callback can never reach a freed object.
+ * @brief Disconnects every signal from a session and retires it; the pointer is nulled so a late
+ *        callback can never reach a freed object. The session's own close() is what stops the
+ *        iterate pump before the open62541 client is destroyed.
  */
-void IO::Drivers::OpcUa::teardownClient(QOpcUaClient*& client)
+void IO::Drivers::OpcUa::teardownSession(OpcUaSession*& session)
 {
-  if (!client)
+  if (!session)
     return;
 
-  disconnect(client, nullptr, this, nullptr);
-  if (client->state() != QOpcUaClient::Disconnected)
-    client->disconnectFromEndpoint();
-
-  client->deleteLater();
-  client = nullptr;
+  disconnect(session, nullptr, this, nullptr);
+  session->close();
+  session->deleteLater();
+  session = nullptr;
 }
 
 /**
@@ -344,7 +341,7 @@ void IO::Drivers::OpcUa::teardownClient(QOpcUaClient*& client)
  */
 bool IO::Drivers::OpcUa::isOpen() const noexcept
 {
-  return m_client && m_client->state() == QOpcUaClient::Connected;
+  return m_session && m_session->isOpen();
 }
 
 /**
@@ -383,7 +380,7 @@ bool IO::Drivers::OpcUa::configurationOk() const noexcept
     return false;
 
   if (m_endpointIndex >= 0 && m_endpointIndex < m_endpoints.size())
-    return policyIsNone(m_endpoints.at(m_endpointIndex));
+    return endpointUsable(m_endpoints.at(m_endpointIndex));
 
   return QUrl(m_endpointUrl).isValid() && !QUrl(m_endpointUrl).host().isEmpty();
 }
@@ -398,43 +395,47 @@ qint64 IO::Drivers::OpcUa::write(const QByteArray& data)
 }
 
 /**
- * @brief Starts the async dial: a fresh client and the 15 s last-resort timer. With a discovered
- *        endpoint selected it dials at once; otherwise it discovers first and dials the server's
- *        own None endpoint from onEndpointsFinished() (a synthetic description carries no user
- *        identity tokens and the backend refuses it). One verdict either way.
+ * @brief Starts the async dial: a fresh session and the 15 s last-resort timer. With a discovered
+ *        endpoint selected it dials at once; otherwise it discovers first and dials the endpoint
+ *        chosen in onEndpointsFinished(), because a synthetic description carries no user
+ *        identity tokens and the server refuses it. One verdict either way.
  */
 bool IO::Drivers::OpcUa::open(const QIODevice::OpenMode mode)
 {
   Q_UNUSED(mode)
 
   close();
-  if (!configurationOk())
-    return false;
-
-  m_client = makeClient();
-  if (!m_client) {
-    logDriverError(tr("OPC UA Initialization Failed"),
-                   tr("The %1 backend is not available in this build.").arg(kBackendName));
+  if (!configurationOk()) {
+    m_lastError = tr("The connection is not configured: check the endpoint and the tag list");
+    Q_EMIT statusChanged();
     return false;
   }
 
-  connect(m_client, &QOpcUaClient::stateChanged, this, &IO::Drivers::OpcUa::onStateChanged);
-  connect(m_client, &QOpcUaClient::errorChanged, this, &IO::Drivers::OpcUa::onErrorChanged);
-  connect(
-    m_client, &QOpcUaClient::readNodeAttributesFinished, this, &IO::Drivers::OpcUa::onReadFinished);
+  m_session = makeSession();
+  if (!m_session) {
+    m_lastError = tr("The %1 stack is not available in this build").arg(kBackendName);
+    logDriverError(tr("OPC UA Initialization Failed"), m_lastError);
+    Q_EMIT statusChanged();
+    return false;
+  }
 
-  applyAuthentication(m_client);
-  if (m_authMode == 1)
-    qCWarning(lcOpcUa) << "Username/password selected on a None-policy channel: credentials "
-                          "travel unencrypted to"
-                       << selectedEndpointUrl();
+  connect(m_session, &OpcUaSession::connected, this, &IO::Drivers::OpcUa::onSessionConnected);
+  connect(m_session, &OpcUaSession::disconnected, this, &IO::Drivers::OpcUa::onSessionDisconnected);
+  connect(m_session, &OpcUaSession::connectFailed, this, &IO::Drivers::OpcUa::onConnectFailed);
+  connect(m_session, &OpcUaSession::subscribed, this, &IO::Drivers::OpcUa::onSubscribed);
+  connect(m_session, &OpcUaSession::valueChanged, this, &IO::Drivers::OpcUa::onValueChanged);
+  connect(
+    m_session, &OpcUaSession::subscriptionLost, this, &IO::Drivers::OpcUa::onSubscriptionLost);
+  connect(m_session, &OpcUaSession::readFinished, this, &IO::Drivers::OpcUa::onReadFinished);
 
   m_connecting = true;
   m_lastError.clear();
   m_dialTimer->start(kOpcUaDialDeadlineMs);
+  warnAboutPlaintextCredentials();
+  prepareClientIdentity();
 
   if (hasSelectedEndpoint())
-    m_client->connectToEndpoint(dialEndpoint());
+    startDial();
   else {
     m_pendingDial = PendingDial::Live;
     discoverEndpoints();
@@ -446,61 +447,97 @@ bool IO::Drivers::OpcUa::open(const QIODevice::OpenMode mode)
 }
 
 /**
- * @brief True when a discovered, selectable endpoint row is current.
+ * @brief Hands the chosen endpoint to the session. A false return means the attempt never
+ *        started, so the verdict is owed here rather than through the state callback.
+ */
+void IO::Drivers::OpcUa::startDial()
+{
+  SS_ASSERT(m_session != nullptr, return);
+
+  const auto endpoint = dialEndpoint();
+  if (!m_session->connectToEndpoint(endpoint, identity()))
+    failDial(m_lastError.isEmpty() ? tr("The connection attempt could not be started")
+                                   : m_lastError);
+}
+
+/**
+ * @brief Materializes the installation's client certificate before a secure dial needs it, and
+ *        republishes it. Generating an RSA-2048 identity is a prime search that can run for
+ *        seconds, and leaving it to the first handshake put that inside DeviceManager's
+ *        synchronous open() call, freezing the window mid-dial.
+ */
+void IO::Drivers::OpcUa::prepareClientIdentity()
+{
+  if (m_securityPolicy == QLatin1String(kPolicyNone))
+    return;
+
+  QByteArray certificate;
+  QByteArray key;
+  if (!OpcUaSecurity::ensureClientIdentity(certificate, key))
+    logDriverError(tr("OPC UA Certificate"),
+                   tr("The client certificate could not be generated; secure channels will be "
+                      "refused."));
+
+  Q_EMIT certificateChanged();
+}
+
+/**
+ * @brief Warns once per dial when credentials would travel in the clear. Only an unencrypted
+ *        channel exposes them: on Sign or SignAndEncrypt the token is protected, so the warning
+ *        is conditional rather than permanent.
+ */
+void IO::Drivers::OpcUa::warnAboutPlaintextCredentials() const
+{
+  if (!credentialsAreExposed())
+    return;
+
+  qCWarning(lcOpcUa) << "Credentials selected on an unencrypted channel: they travel in the "
+                        "clear to"
+                     << selectedEndpointUrl();
+}
+
+/**
+ * @brief True when the chosen identity sends a secret over a channel that does not encrypt it.
+ */
+bool IO::Drivers::OpcUa::credentialsAreExposed() const
+{
+  if (m_authMode != 1)
+    return false;
+
+  return dialEndpoint().securityMode != OpcUaTypes::SecurityMode::SignAndEncrypt;
+}
+
+/**
+ * @brief True when a discovered endpoint row is current and this build can dial it.
  */
 bool IO::Drivers::OpcUa::hasSelectedEndpoint() const noexcept
 {
   return m_endpointIndex >= 0 && m_endpointIndex < m_endpoints.size()
-      && policyIsNone(m_endpoints.at(m_endpointIndex))
+      && endpointUsable(m_endpoints.at(m_endpointIndex))
       && endpointAcceptsToken(m_endpoints.at(m_endpointIndex), m_authMode);
 }
 
 /**
- * @brief The ONE provider in the process, created on first use and never destroyed.
- *        ~QOpcUaProvider unloads the backend plugin Qt caches process-wide, so a second
- *        instance (the per-source live driver beside the UI-config one) would leave the
- *        survivor's next createClient() calling into a dangling plugin. Leaking one object
- *        also keeps the plugin alive past every client at shutdown.
+ * @brief Creates a session bound to this driver's thread.
  */
-QOpcUaProvider& IO::Drivers::OpcUa::provider()
+IO::Drivers::OpcUaSession* IO::Drivers::OpcUa::makeSession()
 {
-  static QOpcUaProvider* instance = new QOpcUaProvider;
-  return *instance;
+  return new OpcUaSession(this);
 }
 
 /**
- * @brief Creates a backend client, or nullptr when the plugin is missing.
+ * @brief The identity the session presents: anonymous, username/password, or an X.509
+ *        certificate the user supplied.
  */
-QOpcUaClient* IO::Drivers::OpcUa::makeClient()
+IO::Drivers::OpcUaSession::Identity IO::Drivers::OpcUa::identity() const
 {
-  auto* client = provider().createClient(QString::fromLatin1(kBackendName));
-  if (!client)
-    return nullptr;
-
-  QOpcUaConnectionSettings settings;
-  settings.setConnectTimeout(std::chrono::milliseconds(kOpcUaDialDeadlineMs));
-  settings.setRequestTimeout(std::chrono::milliseconds(kRequestTimeoutMs));
-  settings.setSessionTimeout(std::chrono::milliseconds(kSessionTimeoutMs));
-  settings.setSecureChannelLifeTime(std::chrono::milliseconds(kChannelLifetimeMs));
-  client->setConnectionSettings(settings);
-  client->setParent(this);
-  return client;
-}
-
-/**
- * @brief Applies the anonymous or username token to a client.
- */
-void IO::Drivers::OpcUa::applyAuthentication(QOpcUaClient* client) const
-{
-  SS_ASSERT(client != nullptr, return);
-
-  QOpcUaAuthenticationInformation auth;
-  if (m_authMode == 1)
-    auth.setUsernameAuthentication(m_username, m_password);
-  else
-    auth.setAnonymousAuthentication();
-
-  client->setAuthenticationInformation(auth);
+  OpcUaSession::Identity out;
+  out.mode            = m_authMode;
+  out.username        = m_username;
+  out.password        = m_password;
+  out.certificatePath = m_userCertificatePath;
+  out.privateKeyPath  = m_userKeyPath;
+  return out;
 }
 
 /**
@@ -509,72 +546,60 @@ void IO::Drivers::OpcUa::applyAuthentication(QOpcUaClient* client) const
 QString IO::Drivers::OpcUa::selectedEndpointUrl() const
 {
   if (m_endpointIndex >= 0 && m_endpointIndex < m_endpoints.size())
-    return m_endpoints.at(m_endpointIndex).endpointUrl();
+    return m_endpoints.at(m_endpointIndex).endpointUrl;
 
   return m_endpointUrl;
-}
-
-/**
- * @brief True for the one policy the shipped backend can open.
- */
-bool IO::Drivers::OpcUa::policyIsNone(const QOpcUaEndpointDescription& endpoint)
-{
-  return endpoint.securityPolicy() == QLatin1String(kPolicyNone)
-      && endpoint.securityMode() == QOpcUaEndpointDescription::None;
 }
 
 /**
  * @brief True when the endpoint advertises a user token the selected authentication mode can
  *        present; a server offering only Anonymous rejects a username session outright.
  */
-bool IO::Drivers::OpcUa::endpointAcceptsToken(const QOpcUaEndpointDescription& endpoint,
+bool IO::Drivers::OpcUa::endpointAcceptsToken(const OpcUaTypes::Endpoint& endpoint,
                                               const int authMode)
 {
-  const auto wanted =
-    authMode == 1 ? QOpcUaUserTokenPolicy::Username : QOpcUaUserTokenPolicy::Anonymous;
+  const auto wanted = authMode == 1 ? OpcUaTypes::UserTokenType::Username
+                    : authMode == 2 ? OpcUaTypes::UserTokenType::Certificate
+                                    : OpcUaTypes::UserTokenType::Anonymous;
 
-  const auto tokens = endpoint.userIdentityTokens();
-  if (tokens.isEmpty())
+  if (endpoint.userTokenTypes.isEmpty())
     return true;
 
-  for (const auto& token : tokens)
-    if (token.tokenType() == wanted)
-      return true;
-
-  return false;
+  return endpoint.userTokenTypes.contains(wanted);
 }
 
 /**
- * @brief The description actually dialed: the discovered endpoint carrying the URL the user
- *        typed. Servers routinely advertise their own hostname (S7, Kepware, B&R) which does not
- *        resolve from the engineering laptop, so host and port are substituted while the policy
- *        and the user-token list the backend validates are preserved.
+ * @brief The endpoint actually dialed: the discovered row carrying the URL the user typed, since
+ *        servers advertise their own hostname (S7, Kepware, B&R) which rarely resolves from the
+ *        engineering laptop. With no row selected the CONFIGURED policy and mode are used;
+ *        falling back to None there would dial unencrypted whenever Discover was not pressed.
  */
-QOpcUaEndpointDescription IO::Drivers::OpcUa::dialEndpoint() const
+IO::Drivers::OpcUaTypes::Endpoint IO::Drivers::OpcUa::dialEndpoint() const
 {
-  QOpcUaEndpointDescription endpoint;
+  OpcUaTypes::Endpoint endpoint;
   if (!hasSelectedEndpoint()) {
-    endpoint.setEndpointUrl(m_endpointUrl);
-    endpoint.setSecurityPolicy(QString::fromLatin1(kPolicyNone));
-    endpoint.setSecurityMode(QOpcUaEndpointDescription::None);
+    endpoint.endpointUrl = m_endpointUrl;
+    endpoint.securityPolicyUri =
+      m_securityPolicy.isEmpty() ? QString::fromLatin1(kPolicyNone) : m_securityPolicy;
+    endpoint.securityMode = static_cast<OpcUaTypes::SecurityMode>(m_securityMode);
     return endpoint;
   }
 
   endpoint = m_endpoints.at(m_endpointIndex);
 
   const QUrl typed(m_endpointUrl);
-  QUrl advertised(endpoint.endpointUrl());
+  QUrl advertised(endpoint.endpointUrl);
   if (!typed.isValid() || typed.host().isEmpty() || !advertised.isValid())
     return endpoint;
 
   advertised.setHost(typed.host());
   advertised.setPort(typed.port(advertised.port(kDefaultPort)));
-  endpoint.setEndpointUrl(advertised.toString());
+  endpoint.endpointUrl = advertised.toString();
   return endpoint;
 }
 
 /**
- * @brief Ends a failed dial exactly once: tears the client down, logs, reports the verdict and
+ * @brief Ends a failed dial exactly once: tears the session down, logs, reports the verdict and
  *        republishes the state. A user abort already cleared m_connecting, which makes it silent.
  */
 void IO::Drivers::OpcUa::failDial(const QString& reason)
@@ -614,7 +639,7 @@ void IO::Drivers::OpcUa::onLinkDropped(const QString& reason)
 }
 
 /**
- * @brief Last-resort dial deadline; the backend normally reports sooner.
+ * @brief Last-resort dial deadline; the stack normally reports sooner.
  */
 void IO::Drivers::OpcUa::onDialTimeout()
 {
@@ -622,80 +647,44 @@ void IO::Drivers::OpcUa::onDialTimeout()
 }
 
 //--------------------------------------------------------------------------------------------------
-// Client signal handlers
+// Session signal handlers
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Connected settles the dial and starts the subscription; Disconnected during a dial is a
- *        failure, after one a link drop.
+ * @brief The session activated: settle the dial and start the subscription.
  */
-void IO::Drivers::OpcUa::onStateChanged(QOpcUaClient::ClientState state)
+void IO::Drivers::OpcUa::onSessionConnected()
 {
-  if (!m_client)
+  if (!m_session)
     return;
 
-  if (state == QOpcUaClient::Connected) {
-    m_dialTimer->stop();
-    m_connecting = false;
-    reportOpenFinished(true);
-    subscribeAll();
-    Q_EMIT statusChanged();
-    Q_EMIT configurationChanged();
-    return;
-  }
+  m_dialTimer->stop();
+  m_connecting = false;
+  reportOpenFinished(true);
+  subscribeAll();
 
-  if (state != QOpcUaClient::Disconnected)
-    return;
-
-  if (m_connecting)
-    failDial(m_lastError.isEmpty() ? tr("The server closed the connection") : m_lastError);
-  else if (!m_nodes.isEmpty())
-    onLinkDropped(m_lastError.isEmpty() ? tr("The server closed the session") : m_lastError);
+  Q_EMIT statusChanged();
+  Q_EMIT configurationChanged();
 }
 
 /**
- * @brief Maps backend errors to a reason string; the state transition carries the verdict.
+ * @brief The session went down after it had been established: a link drop, never a dial verdict.
  */
-void IO::Drivers::OpcUa::onErrorChanged(QOpcUaClient::ClientError error)
+void IO::Drivers::OpcUa::onSessionDisconnected()
 {
-  switch (error) {
-    case QOpcUaClient::NoError:
-      return;
-    case QOpcUaClient::InvalidUrl:
-      m_lastError = tr("Invalid endpoint URL");
-      break;
-    case QOpcUaClient::AccessDenied:
-      m_lastError = tr("Access denied (bad credentials or anonymous login refused)");
-      break;
-    case QOpcUaClient::ConnectionError:
-      m_lastError = tr("Connection error (server unreachable or refused)");
-      break;
-    case QOpcUaClient::UnsupportedAuthenticationInformation:
-    case QOpcUaClient::InvalidAuthenticationInformation:
-      m_lastError = tr("The server does not accept this authentication mode");
-      break;
-    case QOpcUaClient::InvalidEndpointDescription:
-      m_lastError = tr("The endpoint description was rejected (unsupported security policy)");
-      break;
-    case QOpcUaClient::NoMatchingUserIdentityTokenFound:
-      m_lastError = tr("The endpoint offers no matching user identity token");
-      break;
-    case QOpcUaClient::UnsupportedSecurityPolicy:
-      m_lastError = tr("The security policy is not supported by this build");
-      break;
-    case QOpcUaClient::InvalidPki:
-      m_lastError = tr("The certificate store is invalid or unreadable");
-      break;
-    case QOpcUaClient::CertificateUntrusted:
-      m_lastError = tr("The server certificate is not trusted");
-      break;
-    default:
-      m_lastError = tr("Unexpected backend error");
-      break;
-  }
+  if (m_connecting || m_slots.isEmpty())
+    return;
 
-  if (m_connecting && m_client && m_client->state() == QOpcUaClient::Disconnected)
-    failDial(m_lastError);
+  onLinkDropped(m_lastError.isEmpty() ? tr("The server closed the session") : m_lastError);
+}
+
+/**
+ * @brief The session's single verdict for a failed attempt.
+ */
+void IO::Drivers::OpcUa::onConnectFailed(const QString& reason)
+{
+  reportTrustFailure(m_session);
+  failDial(m_lastError.isEmpty() ? reason : m_lastError);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -718,69 +707,47 @@ void IO::Drivers::OpcUa::discoverEndpoints()
     return;
   }
 
-  teardownClient(m_discoveryClient);
-  m_discoveryClient = makeClient();
-  if (!m_discoveryClient) {
-    m_lastError = tr("The %1 backend is not available in this build").arg(kBackendName);
+  teardownSession(m_discoverySession);
+  m_discoverySession = makeSession();
+  if (!m_discoverySession) {
+    m_lastError = tr("The %1 stack is not available in this build").arg(kBackendName);
     continuePendingDial();
     return;
   }
 
-  connect(m_discoveryClient,
-          &QOpcUaClient::endpointsRequestFinished,
+  connect(m_discoverySession,
+          &OpcUaSession::endpointsReady,
           this,
-          [this](const QList<QOpcUaEndpointDescription>& endpoints,
-                 QOpcUa::UaStatusCode status,
-                 const QUrl&) { onEndpointsFinished(endpoints, status); });
+          &IO::Drivers::OpcUa::onEndpointsFinished);
 
   m_discovering = true;
   Q_EMIT discoveringChanged();
 
-  if (!m_discoveryClient->requestEndpoints(url))
-    onEndpointsFinished({}, QOpcUa::UaStatusCode::BadInternalError);
+  if (!m_discoverySession->discoverEndpoints(m_endpointUrl))
+    onEndpointsFinished({}, OpcUaTypes::kStatusBadInternal);
 }
 
 /**
- * @brief Stores the advertised endpoints, preferring the first None-policy one as the selection.
+ * @brief Stores the advertised endpoints and selects the best one this build can dial with the
+ *        chosen identity; a previously selected URL keeps its place across a re-discovery.
  */
-void IO::Drivers::OpcUa::onEndpointsFinished(const QList<QOpcUaEndpointDescription>& endpoints,
-                                             QOpcUa::UaStatusCode status)
+void IO::Drivers::OpcUa::onEndpointsFinished(const QList<OpcUaTypes::Endpoint>& endpoints,
+                                             OpcUaTypes::StatusCode status)
 {
   m_discovering = false;
-  teardownClient(m_discoveryClient);
 
-  if (status != QOpcUa::UaStatusCode::Good) {
+  if (!OpcUaTypes::isGood(status)) {
     m_endpoints.clear();
-    m_endpointIndex = -1;
-    m_lastError     = tr("Discovery failed: %1").arg(QOpcUa::statusToString(status));
+    publishEndpointSelection(-1);
+    m_lastError = tr("Discovery failed: %1").arg(OpcUaSession::describeStatus(status));
     logDriverError(tr("OPC UA Discovery Failed"), tr("\"%1\": %2").arg(m_endpointUrl, m_lastError));
   } else {
     const auto previous = m_endpointIndex >= 0 && m_endpointIndex < m_endpoints.size()
-                          ? m_endpoints.at(m_endpointIndex).endpointUrl()
+                          ? m_endpoints.at(m_endpointIndex).endpointUrl
                           : QString();
 
-    m_endpoints     = endpoints;
-    m_endpointIndex = -1;
-
-    for (int i = 0; i < m_endpoints.size(); ++i) {
-      const auto& candidate = m_endpoints.at(i);
-      if (!policyIsNone(candidate) || !endpointAcceptsToken(candidate, m_authMode))
-        continue;
-
-      if (m_endpointIndex < 0)
-        m_endpointIndex = i;
-
-      if (!previous.isEmpty() && candidate.endpointUrl() == previous) {
-        m_endpointIndex = i;
-        break;
-      }
-    }
-
-    if (m_endpointIndex < 0) {
-      m_lastError =
-        tr("No None-policy endpoint; secure channels are not supported in this version");
-      logDriverError(tr("OPC UA Discovery"), tr("\"%1\": %2").arg(m_endpointUrl, m_lastError));
-    }
+    m_endpoints = endpoints;
+    selectBestEndpoint(previous);
   }
 
   Q_EMIT discoveringChanged();
@@ -800,8 +767,8 @@ void IO::Drivers::OpcUa::continuePendingDial()
   m_pendingDial      = PendingDial::None;
 
   if (pending == PendingDial::Live) {
-    if (m_client && hasSelectedEndpoint())
-      m_client->connectToEndpoint(dialEndpoint());
+    if (m_session && hasSelectedEndpoint())
+      startDial();
     else
       failDial(m_lastError.isEmpty() ? tr("Endpoint discovery failed") : m_lastError);
 
@@ -811,9 +778,9 @@ void IO::Drivers::OpcUa::continuePendingDial()
   if (pending != PendingDial::Browse)
     return;
 
-  if (m_browseClient && hasSelectedEndpoint()) {
-    m_browseClient->connectToEndpoint(dialEndpoint());
-    return;
+  if (m_browseSession && hasSelectedEndpoint()) {
+    if (m_browseSession->connectToEndpoint(dialEndpoint(), identity()))
+      return;
   }
 
   Q_EMIT browseFailed(m_lastError.isEmpty() ? tr("Endpoint discovery failed") : m_lastError);
@@ -825,12 +792,12 @@ void IO::Drivers::OpcUa::continuePendingDial()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Computes the wire layout, reserves the frame once and asks for a monitored item per tag;
- *        the all-refused verdict arrives through onMonitoringEnabled().
+ * @brief Computes the wire layout, reserves the frame once and asks the session for ONE
+ *        subscription carrying every tag; the per-item verdicts arrive together in onSubscribed().
  */
 void IO::Drivers::OpcUa::subscribeAll()
 {
-  SS_ASSERT(m_client != nullptr, return);
+  SS_ASSERT(m_session != nullptr, return);
   SS_ASSERT(!m_tags.isEmpty(), return);
 
   const auto steady     = std::chrono::steady_clock::now().time_since_epoch();
@@ -842,7 +809,6 @@ void IO::Drivers::OpcUa::subscribeAll()
   m_serverOffsetMs      = 0;
 
   reserveFrame();
-  readServerLimits();
 
   m_pendingMonitors = m_tags.size();
   m_failedMonitors  = 0;
@@ -851,63 +817,18 @@ void IO::Drivers::OpcUa::subscribeAll()
   m_subscribing     = true;
   m_polledTags.clear();
 
-  QOpcUaMonitoringParameters params(static_cast<double>(m_publishingInterval));
-  params.setSamplingInterval(static_cast<double>(m_publishingInterval));
-  params.setQueueSize(1);
-  params.setDiscardOldest(true);
+  QStringList nodeIds;
+  nodeIds.reserve(m_tags.size());
   for (int i = 0; i < m_tags.size(); ++i) {
-    auto* node = m_client->node(m_tags.at(i).nodeId);
-    if (node)
-      node->setParent(this);
-
-    m_nodes.append(node);
+    nodeIds.append(m_tags.at(i).nodeId);
     m_nodeIndex.insert(m_tags.at(i).nodeId, i);
-    if (!node) {
-      onMonitoringEnabled(i, QOpcUa::UaStatusCode::BadNodeIdInvalid);
-      continue;
-    }
-
-    connect(node, &QOpcUaNode::valueAttributeUpdated, this, [this, i](const QVariant& value) {
-      onValueUpdated(i, value);
-    });
-    connect(node,
-            &QOpcUaNode::enableMonitoringFinished,
-            this,
-            [this, i](QOpcUa::NodeAttribute, QOpcUa::UaStatusCode status) {
-              onMonitoringEnabled(i, status);
-            });
-
-    if (!node->enableMonitoring(QOpcUa::NodeAttribute::Value, params))
-      onMonitoringEnabled(i, QOpcUa::UaStatusCode::BadInternalError);
   }
+
+  if (!m_session->subscribe(nodeIds, m_publishingInterval))
+    onSubscribed(QList<OpcUaTypes::StatusCode>(m_tags.size(), OpcUaTypes::kStatusBadInternal));
 
   m_frameTimer->start(m_publishingInterval);
   m_watchdog->start(kWatchdogMs);
-}
-
-/**
- * @brief Reads the server's MaxNodesPerRead once so a batched poll is never rejected wholesale
- *        with Bad_TooManyOperations; the default stands when the server does not publish it.
- */
-void IO::Drivers::OpcUa::readServerLimits()
-{
-  SS_ASSERT(m_client != nullptr, return);
-
-  auto* node = m_client->node(QStringLiteral("ns=0;i=11705"));
-  if (!node)
-    return;
-
-  node->setParent(this);
-  connect(node, &QOpcUaNode::attributeRead, this, [this, node](QOpcUa::NodeAttributes) {
-    const int limit = node->attribute(QOpcUa::NodeAttribute::Value).toInt();
-    if (limit > 0)
-      m_readLimit = qBound(1, limit, kDefaultReadLimit * 10);
-
-    node->deleteLater();
-  });
-
-  if (!node->readAttributes(QOpcUa::NodeAttribute::Value))
-    node->deleteLater();
 }
 
 /**
@@ -941,30 +862,31 @@ void IO::Drivers::OpcUa::reserveFrame()
 }
 
 /**
- * @brief Counts monitored-item verdicts; when every tag was refused the session falls back to
- *        timed reads, and a partial refusal is logged but the subscription stays.
+ * @brief The batch verdict, one status per tag. A refusal stays INDIVIDUAL: the refused tags move
+ *        to timed reads and the rest keep their subscription, and only an all-refused verdict
+ *        flips the whole session into poll mode.
  */
-void IO::Drivers::OpcUa::onMonitoringEnabled(int tag, QOpcUa::UaStatusCode status)
+void IO::Drivers::OpcUa::onSubscribed(const QList<OpcUaTypes::StatusCode>& perItemStatus)
 {
-  SS_ASSERT(tag >= 0 && tag < m_tags.size(), return);
-  if (m_pendingMonitors <= 0)
-    return;
+  m_subscribing     = false;
+  m_pendingMonitors = 0;
+  m_failedMonitors  = 0;
+  m_polledTags.clear();
 
-  --m_pendingMonitors;
-  if (status != QOpcUa::UaStatusCode::Good) {
+  for (int i = 0; i < perItemStatus.size() && i < m_tags.size(); ++i) {
+    if (OpcUaTypes::isGood(perItemStatus.at(i)))
+      continue;
+
     ++m_failedMonitors;
-    m_polledTags.append(tag);
-    logDriverError(tr("OPC UA Monitored Item Refused"),
-                   tr("\"%1\": %2").arg(m_tags.at(tag).nodeId, QOpcUa::statusToString(status)));
-  } else if (m_revisedInterval == m_publishingInterval) {
-    adoptRevisedInterval(tag);
+    m_polledTags.append(i);
+    logDriverError(
+      tr("OPC UA Monitored Item Refused"),
+      tr("\"%1\": %2").arg(m_tags.at(i).nodeId, OpcUaSession::describeStatus(perItemStatus.at(i))));
   }
 
-  if (m_pendingMonitors > 0)
-    return;
+  adoptRevisedInterval();
 
-  m_subscribing = false;
-  if (m_failedMonitors == m_nodes.size()) {
+  if (m_failedMonitors >= m_tags.size()) {
     enterPollMode(tr("the server refused every monitored item"));
     return;
   }
@@ -978,17 +900,25 @@ void IO::Drivers::OpcUa::onMonitoringEnabled(int tag, QOpcUa::UaStatusCode statu
 }
 
 /**
+ * @brief The server dropped the subscription on its own; timed reads take over.
+ */
+void IO::Drivers::OpcUa::onSubscriptionLost(const QString& reason)
+{
+  if (!isOpen())
+    return;
+
+  enterPollMode(reason.isEmpty() ? tr("the server retired the subscription") : reason);
+}
+
+/**
  * @brief Adopts the interval the server revised the subscription to; a PLC that floors publishing
  *        at 100 ms must not leave the pane claiming the rate the user asked for.
  */
-void IO::Drivers::OpcUa::adoptRevisedInterval(int tag)
+void IO::Drivers::OpcUa::adoptRevisedInterval()
 {
-  SS_ASSERT(tag >= 0 && tag < m_nodes.size(), return);
-  auto* node = m_nodes.at(tag);
-  SS_ASSERT(node != nullptr, return);
+  SS_ASSERT(m_session != nullptr, return);
 
-  const auto status = node->monitoringStatus(QOpcUa::NodeAttribute::Value);
-  const int revised = static_cast<int>(status.publishingInterval());
+  const int revised = m_session->revisedInterval();
   if (revised <= 0 || revised == m_revisedInterval)
     return;
 
@@ -1060,87 +990,70 @@ void IO::Drivers::OpcUa::onPollTick()
 }
 
 /**
- * @brief Issues the batched Value read for a tag subset, chunked to the server's MaxNodesPerRead.
- *        Exactly one read is outstanding at a time: queueing them behind a slow PLC grows latency
- *        without bound and eventually times the session out.
+ * @brief Issues the batched Value read for a tag subset. Exactly one read is outstanding at a
+ *        time: queueing them behind a slow PLC grows latency without bound and eventually times
+ *        the session out, so the session drops the overflow rather than queueing it.
  */
 void IO::Drivers::OpcUa::issueRead(const QList<int>& tags)
 {
-  SS_ASSERT(m_client != nullptr, return);
+  SS_ASSERT(m_session != nullptr, return);
   SS_ASSERT(!tags.isEmpty(), return);
 
-  QList<QOpcUaReadItem> items;
-  items.reserve(qMin(tags.size(), m_readLimit));
+  QStringList nodeIds;
+  nodeIds.reserve(tags.size());
   for (const int tag : tags) {
     if (tag < 0 || tag >= m_tags.size())
       continue;
 
-    items.append(QOpcUaReadItem(m_tags.at(tag).nodeId, QOpcUa::NodeAttribute::Value));
-    if (items.size() < m_readLimit)
-      continue;
-
-    m_readInFlight = m_client->readNodeAttributes(items);
-    items.clear();
-    return;
+    nodeIds.append(m_tags.at(tag).nodeId);
   }
 
-  if (!items.isEmpty())
-    m_readInFlight = m_client->readNodeAttributes(items);
+  if (!nodeIds.isEmpty())
+    m_readInFlight = m_session->readValues(nodeIds);
 }
 
 /**
  * @brief Routes batched read results into the slot cache by node id.
  */
-void IO::Drivers::OpcUa::onReadFinished(const QList<QOpcUaReadResult>& results,
-                                        QOpcUa::UaStatusCode status)
+void IO::Drivers::OpcUa::onReadFinished(quint32 token,
+                                        const QList<OpcUaTypes::ReadRow>& rows,
+                                        OpcUaTypes::StatusCode status)
 {
+  Q_UNUSED(token)
+
   m_readInFlight = false;
-  if (status != QOpcUa::UaStatusCode::Good) {
-    logDriverError(tr("OPC UA Read Failed"), QOpcUa::statusToString(status));
+  if (!OpcUaTypes::isGood(status)) {
+    logDriverError(tr("OPC UA Read Failed"), OpcUaSession::describeStatus(status));
     return;
   }
 
-  for (const auto& result : results) {
-    const int tag = m_nodeIndex.value(result.nodeId(), -1);
+  for (const auto& row : rows) {
+    const int tag = m_nodeIndex.value(row.nodeId, -1);
     if (tag < 0)
       continue;
 
-    storeValue(tag, result.value(), result.statusCode(), result.sourceTimestamp());
+    storeValue(tag, row.value, row.status, row.sourceTimestamp);
   }
 }
 
 /**
- * @brief Monitored-item update: pulls status and source time off the node and caches the value.
+ * @brief Monitored-item update: the tag index and the server's own timestamps travel with the
+ *        notification, so nothing has to be looked up or re-stamped here.
  */
-void IO::Drivers::OpcUa::onValueUpdated(int tag, const QVariant& value)
+void IO::Drivers::OpcUa::onValueChanged(const OpcUaTypes::MonitoredValue& value)
 {
-  SS_ASSERT(tag >= 0 && tag < m_nodes.size(), return);
-  auto* node = m_nodes.at(tag);
-  SS_ASSERT(node != nullptr, return);
+  SS_ASSERT(value.tag >= 0, return);
+  if (value.tag >= m_tags.size())
+    return;
 
   const auto now = std::chrono::steady_clock::now().time_since_epoch();
   m_lastNotifyNs = std::chrono::duration_cast<std::chrono::nanoseconds>(now).count();
 
-  if (!m_serverOffsetMs) {
-    const auto serverTs = node->serverTimestamp(QOpcUa::NodeAttribute::Value);
-    if (serverTs.isValid())
-      m_serverOffsetMs = serverTs.toMSecsSinceEpoch() - QDateTime::currentMSecsSinceEpoch();
-  }
+  if (!m_serverOffsetMs && value.serverTimestamp.isValid())
+    m_serverOffsetMs =
+      value.serverTimestamp.toMSecsSinceEpoch() - QDateTime::currentMSecsSinceEpoch();
 
-  storeValue(
-    tag, value, node->valueAttributeError(), node->sourceTimestamp(QOpcUa::NodeAttribute::Value));
-}
-
-/**
- * @brief Unwraps the one OPC UA-specific value type the wire vocabulary cannot see: LocalizedText
- *        becomes its text here so OpcUaWire.h stays Qt Core-only for the ctest tier.
- */
-QVariant IO::Drivers::OpcUa::unwrapValue(const QVariant& value)
-{
-  if (value.canConvert<QOpcUaLocalizedText>())
-    return value.value<QOpcUaLocalizedText>().text();
-
-  return value;
+  storeValue(value.tag, value.value, value.status, value.sourceTimestamp);
 }
 
 /**
@@ -1149,14 +1062,13 @@ QVariant IO::Drivers::OpcUa::unwrapValue(const QVariant& value)
  */
 void IO::Drivers::OpcUa::storeValue(int tag,
                                     const QVariant& value,
-                                    QOpcUa::UaStatusCode status,
+                                    OpcUaTypes::StatusCode status,
                                     const QDateTime& sourceTs)
 {
   SS_ASSERT(tag >= 0 && tag < m_firstIndex.size(), return);
   ++m_valuesReceived;
 
-  const auto severity = static_cast<quint32>(status) & 0xC0000000u;
-  if (severity >= 0x80000000u) {
+  if (OpcUaTypes::isBad(status)) {
     ++m_badStatusCount;
     markBad(tag);
     return;
@@ -1168,7 +1080,7 @@ void IO::Drivers::OpcUa::storeValue(int tag,
     const auto list = value.toList();
     for (int i = 0; i < count && i < list.size() && first + i < m_slots.size(); ++i) {
       auto& slot    = m_slots[first + i];
-      slot.value    = unwrapValue(list.at(i));
+      slot.value    = list.at(i);
       slot.sourceTs = sourceTs;
       slot.dirty    = true;
       slot.bad      = false;
@@ -1179,7 +1091,7 @@ void IO::Drivers::OpcUa::storeValue(int tag,
 
   SS_ASSERT(first < m_slots.size(), return);
   auto& slot    = m_slots[first];
-  slot.value    = unwrapValue(value);
+  slot.value    = value;
   slot.sourceTs = sourceTs;
   slot.dirty    = true;
   slot.bad      = false;
@@ -1337,7 +1249,7 @@ QObject* IO::Drivers::OpcUa::tagModelObject()
 }
 
 /**
- * @brief Opens a browse-only session on a second client so the picker can walk the address
+ * @brief Opens a browse-only session beside the live one so the picker can walk the address
  *        space without touching the live link; stopBrowse() ends it.
  */
 void IO::Drivers::OpcUa::startBrowse()
@@ -1350,27 +1262,33 @@ void IO::Drivers::OpcUa::startBrowse()
     return;
   }
 
-  teardownClient(m_browseClient);
-  m_browseClient = makeClient();
-  if (!m_browseClient) {
-    Q_EMIT browseFailed(tr("The %1 backend is not available in this build.").arg(kBackendName));
+  teardownSession(m_browseSession);
+  m_browseSession = makeSession();
+  if (!m_browseSession) {
+    Q_EMIT browseFailed(tr("The %1 stack is not available in this build.").arg(kBackendName));
     return;
   }
 
-  connect(
-    m_browseClient, &QOpcUaClient::stateChanged, this, &IO::Drivers::OpcUa::onBrowseClientState);
-  applyAuthentication(m_browseClient);
+  connect(m_browseSession, &OpcUaSession::connected, this, &IO::Drivers::OpcUa::onBrowseConnected);
+  connect(m_browseSession, &OpcUaSession::connectFailed, this, &IO::Drivers::OpcUa::onBrowseFailed);
+  connect(m_browseSession, &OpcUaSession::disconnected, this, [this] {
+    onBrowseFailed(tr("The browse session was closed by the server"));
+  });
 
   tagModel()->preselect(m_tags);
   m_browsing = true;
   Q_EMIT browsingChanged();
+  prepareClientIdentity();
 
-  if (hasSelectedEndpoint())
-    m_browseClient->connectToEndpoint(dialEndpoint());
-  else {
-    m_pendingDial = PendingDial::Browse;
-    discoverEndpoints();
+  if (hasSelectedEndpoint()) {
+    if (!m_browseSession->connectToEndpoint(dialEndpoint(), identity()))
+      onBrowseFailed(tr("The browse session could not be started"));
+
+    return;
   }
+
+  m_pendingDial = PendingDial::Browse;
+  discoverEndpoints();
 }
 
 /**
@@ -1379,7 +1297,7 @@ void IO::Drivers::OpcUa::startBrowse()
  */
 void IO::Drivers::OpcUa::stopBrowse()
 {
-  if (m_tagModel && m_browseClient && m_browseClient->state() == QOpcUaClient::Connected) {
+  if (m_tagModel && m_browseSession && m_browseSession->isOpen()) {
     QJsonArray array;
     const auto selected = m_tagModel->selectedTags();
     for (const auto& tag : selected)
@@ -1393,9 +1311,9 @@ void IO::Drivers::OpcUa::stopBrowse()
   }
 
   if (m_tagModel)
-    m_tagModel->setClient(nullptr);
+    m_tagModel->setSession(nullptr);
 
-  teardownClient(m_browseClient);
+  teardownSession(m_browseSession);
   if (!m_browsing)
     return;
 
@@ -1412,9 +1330,9 @@ void IO::Drivers::OpcUa::cancelBrowse()
     m_pendingDial = PendingDial::None;
 
   if (m_tagModel)
-    m_tagModel->setClient(nullptr);
+    m_tagModel->setSession(nullptr);
 
-  teardownClient(m_browseClient);
+  teardownSession(m_browseSession);
   if (!m_browsing)
     return;
 
@@ -1423,29 +1341,37 @@ void IO::Drivers::OpcUa::cancelBrowse()
 }
 
 /**
- * @brief Lends the connected browse client to the model; a drop or refusal ends the session.
+ * @brief Lends the connected browse session to the model and fetches the root level.
  */
-void IO::Drivers::OpcUa::onBrowseClientState(QOpcUaClient::ClientState state)
+void IO::Drivers::OpcUa::onBrowseConnected()
 {
-  if (!m_browseClient)
+  if (!m_browseSession)
     return;
 
-  if (state == QOpcUaClient::Connected) {
-    tagModel()->setClient(m_browseClient);
-    tagModel()->fetchMore(QModelIndex());
-    return;
-  }
+  tagModel()->setSession(m_browseSession);
+  tagModel()->fetchMore(QModelIndex());
+}
 
-  if (state != QOpcUaClient::Disconnected || !m_browsing)
+/**
+ * @brief A browse session that could not be opened, or one the server closed.
+ */
+void IO::Drivers::OpcUa::onBrowseFailed(const QString& reason)
+{
+  if (!m_browsing)
     return;
 
-  m_lastError = tr("Could not open a browse session on %1").arg(selectedEndpointUrl());
+  reportTrustFailure(m_browseSession);
+  m_lastError = reason.isEmpty()
+                ? tr("Could not open a browse session on %1").arg(selectedEndpointUrl())
+                : reason;
+
   Q_EMIT browseFailed(m_lastError);
   Q_EMIT statusChanged();
-  if (m_tagModel)
-    m_tagModel->setClient(nullptr);
 
-  teardownClient(m_browseClient);
+  if (m_tagModel)
+    m_tagModel->setSession(nullptr);
+
+  teardownSession(m_browseSession);
   m_browsing = false;
   Q_EMIT browsingChanged();
 }
@@ -1634,15 +1560,34 @@ QStringList IO::Drivers::OpcUa::endpointList() const
 {
   QStringList list;
   for (const auto& endpoint : m_endpoints) {
-    const auto policy = endpoint.securityPolicy().section(QLatin1Char('#'), -1);
-    const auto mode   = endpoint.securityMode() == QOpcUaEndpointDescription::None ? tr("None")
-                      : endpoint.securityMode() == QOpcUaEndpointDescription::Sign
-                        ? tr("Sign")
-                        : tr("Sign & Encrypt");
-    list.append(QStringLiteral("%1 / %2 / %3").arg(policy, mode, endpoint.endpointUrl()));
+    auto policy = endpoint.securityPolicyUri.section(QLatin1Char('#'), -1);
+    if (policyIsDeprecated(endpoint.securityPolicyUri))
+      policy += tr(" (deprecated)");
+
+    list.append(QStringLiteral("%1 / %2 / %3")
+                  .arg(policy, describeMode(endpoint.securityMode), endpoint.endpointUrl));
   }
 
   return list;
+}
+
+/**
+ * @brief The translated name of a message security mode.
+ */
+QString IO::Drivers::OpcUa::describeMode(OpcUaTypes::SecurityMode mode)
+{
+  switch (mode) {
+    case OpcUaTypes::SecurityMode::None:
+      return tr("None");
+    case OpcUaTypes::SecurityMode::Sign:
+      return tr("Sign");
+    case OpcUaTypes::SecurityMode::SignAndEncrypt:
+      return tr("Sign and Encrypt");
+    case OpcUaTypes::SecurityMode::Invalid:
+      break;
+  }
+
+  return tr("Invalid");
 }
 
 /**
@@ -1656,17 +1601,31 @@ QJsonArray IO::Drivers::OpcUa::endpointsJson() const
     const auto& endpoint = m_endpoints.at(i);
 
     QJsonArray tokens;
-    for (const auto& token : endpoint.userIdentityTokens())
-      tokens.append(static_cast<int>(token.tokenType()));
+    QJsonArray tokenSlugs;
+    for (const auto token : endpoint.userTokenTypes) {
+      tokens.append(static_cast<int>(token));
+      tokenSlugs.append(API::EnumLabels::identityTokenSlug(static_cast<int>(token)));
+    }
 
     out.append(QJsonObject{
       {QStringLiteral("index"), i},
-      {QStringLiteral("policy"), endpoint.securityPolicy().section(QLatin1Char('#'), -1)},
-      {QStringLiteral("mode"), static_cast<int>(endpoint.securityMode())},
-      {QStringLiteral("url"), endpoint.endpointUrl()},
+      {QStringLiteral("policy"), endpoint.securityPolicyUri.section(QLatin1Char('#'), -1)},
+      {QStringLiteral("policyUri"), endpoint.securityPolicyUri},
+      {QStringLiteral("deprecated"), policyIsDeprecated(endpoint.securityPolicyUri)},
+      {QStringLiteral("securityLevel"), static_cast<int>(endpoint.securityLevel)},
+      {QStringLiteral("mode"), static_cast<int>(endpoint.securityMode)},
+      {QStringLiteral("modeSlug"),
+       API::EnumLabels::securityModeSlug(static_cast<int>(endpoint.securityMode))},
+      {QStringLiteral("modeLabel"),
+       API::EnumLabels::securityModeLabel(static_cast<int>(endpoint.securityMode))},
+      {QStringLiteral("policySlug"),
+       API::EnumLabels::securityPolicySlug(
+         supportedPolicies().indexOf(endpoint.securityPolicyUri))},
+      {QStringLiteral("url"), endpoint.endpointUrl},
       {QStringLiteral("tokens"), tokens},
+      {QStringLiteral("tokenSlugs"), tokenSlugs},
       {QStringLiteral("selectable"),
-       policyIsNone(endpoint) && endpointAcceptsToken(endpoint, m_authMode)},
+       endpointUsable(endpoint) && endpointAcceptsToken(endpoint, m_authMode)},
     });
   }
 
@@ -1688,7 +1647,7 @@ QVariantList IO::Drivers::OpcUa::endpointSelectable() const
 {
   QVariantList list;
   for (const auto& endpoint : m_endpoints)
-    list.append(policyIsNone(endpoint));
+    list.append(endpointUsable(endpoint) && endpointAcceptsToken(endpoint, m_authMode));
 
   return list;
 }
@@ -1813,7 +1772,7 @@ bool IO::Drivers::OpcUa::browsing() const
  */
 QStringList IO::Drivers::OpcUa::authModeList() const
 {
-  return {tr("Anonymous"), tr("Username / Password")};
+  return {tr("Anonymous"), tr("Username / Password"), tr("X.509 Certificate")};
 }
 
 /**
@@ -1862,28 +1821,63 @@ QJsonArray IO::Drivers::OpcUa::wireSchema() const
  */
 QJsonObject IO::Drivers::OpcUa::statusJson() const
 {
-  if (const auto* peer = sessionPeer())
-    return peer->statusJson();
+  if (const auto* peer = sessionPeer()) {
+    auto snapshot = peer->statusJson();
+    if (snapshot.value(QStringLiteral("lastError")).toString().isEmpty() && !m_lastError.isEmpty())
+      snapshot.insert(QStringLiteral("lastError"), m_lastError);
+
+    return snapshot;
+  }
 
   return QJsonObject{
-    {      QStringLiteral("connected"),                               isOpen()},
-    {     QStringLiteral("connecting"),                           m_connecting},
-    {       QStringLiteral("pollMode"),                             m_pollMode},
-    {    QStringLiteral("subscribing"),                          m_subscribing},
-    {QStringLiteral("revisedInterval"),                      m_revisedInterval},
-    {    QStringLiteral("refusedTags"),                    m_polledTags.size()},
-    {   QStringLiteral("skippedPolls"),    static_cast<qint64>(m_skippedPolls)},
-    {        QStringLiteral("badTags"),  QJsonArray::fromStringList(badTags())},
-    {       QStringLiteral("endpoint"),                  selectedEndpointUrl()},
-    {       QStringLiteral("tagCount"),                          m_tags.size()},
-    { QStringLiteral("valuesReceived"),  static_cast<qint64>(m_valuesReceived)},
-    {      QStringLiteral("badStatus"),  static_cast<qint64>(m_badStatusCount)},
-    {      QStringLiteral("unstamped"),  static_cast<qint64>(m_unstampedCount)},
-    {QStringLiteral("framesPublished"), static_cast<qint64>(m_framesPublished)},
-    {     QStringLiteral("reconnects"),       static_cast<qint64>(m_linkDrops)},
-    {      QStringLiteral("lastError"),                            m_lastError},
-    {     QStringLiteral("statusText"),                           statusText()},
+    {         QStringLiteral("connected"),                               isOpen()},
+    {        QStringLiteral("connecting"),                           m_connecting},
+    {          QStringLiteral("pollMode"),                             m_pollMode},
+    {       QStringLiteral("subscribing"),                          m_subscribing},
+    {   QStringLiteral("revisedInterval"),                      m_revisedInterval},
+    {       QStringLiteral("refusedTags"),                    m_polledTags.size()},
+    {      QStringLiteral("skippedPolls"),    static_cast<qint64>(m_skippedPolls)},
+    {           QStringLiteral("badTags"),  QJsonArray::fromStringList(badTags())},
+    {          QStringLiteral("endpoint"),                  selectedEndpointUrl()},
+    {    QStringLiteral("securityPolicy"),                     negotiatedPolicy()},
+    {      QStringLiteral("securityMode"),                       negotiatedMode()},
+    {  QStringLiteral("configuredPolicy"),                       m_securityPolicy},
+    {    QStringLiteral("configuredMode"),                         m_securityMode},
+    {QStringLiteral("credentialsExposed"),                   credentialsExposed()},
+    { QStringLiteral("serverCertificate"),      certificateObject(m_pendingTrust)},
+    {          QStringLiteral("tagCount"),                          m_tags.size()},
+    {    QStringLiteral("valuesReceived"),  static_cast<qint64>(m_valuesReceived)},
+    {         QStringLiteral("badStatus"),  static_cast<qint64>(m_badStatusCount)},
+    {         QStringLiteral("unstamped"),  static_cast<qint64>(m_unstampedCount)},
+    {   QStringLiteral("framesPublished"), static_cast<qint64>(m_framesPublished)},
+    {        QStringLiteral("reconnects"),       static_cast<qint64>(m_linkDrops)},
+    {         QStringLiteral("lastError"),                            m_lastError},
+    {        QStringLiteral("statusText"),                           statusText()},
   };
+}
+
+/**
+ * @brief The policy the live channel negotiated, falling back to the configured one when no
+ *        session is up. A status reporting only what was asked for cannot show that a dial
+ *        settled on something weaker.
+ */
+QString IO::Drivers::OpcUa::negotiatedPolicy() const
+{
+  if (m_session && m_session->isOpen())
+    return m_session->securityPolicyUri();
+
+  return m_securityPolicy;
+}
+
+/**
+ * @brief The message security mode the live channel negotiated, else the configured one.
+ */
+int IO::Drivers::OpcUa::negotiatedMode() const
+{
+  if (m_session && m_session->isOpen())
+    return static_cast<int>(m_session->securityMode());
+
+  return m_securityMode;
 }
 
 /**
@@ -1917,7 +1911,7 @@ void IO::Drivers::OpcUa::setEndpointUrl(const QString& url)
     m_settings.setValue("OpcUaDriver/endpointUrl", m_endpointUrl);
 
   m_endpoints.clear();
-  m_endpointIndex = -1;
+  publishEndpointSelection(-1);
 
   const QUrl parsed(m_endpointUrl);
   if (parsed.isValid() && !parsed.host().isEmpty())
@@ -1938,11 +1932,23 @@ void IO::Drivers::OpcUa::setEndpointIndex(const int index)
   if (index == m_endpointIndex)
     return;
 
-  if (index >= 0 && (index >= m_endpoints.size() || !policyIsNone(m_endpoints.at(index))))
+  if (index >= 0 && (index >= m_endpoints.size() || !endpointUsable(m_endpoints.at(index))))
     return;
 
+  publishEndpointSelection(index);
+}
+
+/**
+ * @brief Adopts an endpoint selection and republishes everything derived from it. The security
+ *        posture of a connection follows the SELECTED endpoint, so credentialsExposed goes stale
+ *        (banner shown on an encrypted channel, hidden on a clear one) whenever a selection
+ *        moves without securityChanged.
+ */
+void IO::Drivers::OpcUa::publishEndpointSelection(const int index)
+{
   m_endpointIndex = index;
   Q_EMIT endpointIndexChanged();
+  Q_EMIT securityChanged();
 }
 
 /**
@@ -1950,7 +1956,7 @@ void IO::Drivers::OpcUa::setEndpointIndex(const int index)
  */
 void IO::Drivers::OpcUa::setAuthMode(const int mode)
 {
-  const int clamped = qBound(0, mode, 1);
+  const int clamped = qBound(0, mode, 2);
   if (m_authMode == clamped)
     return;
 
@@ -1959,6 +1965,8 @@ void IO::Drivers::OpcUa::setAuthMode(const int mode)
     m_settings.setValue("OpcUaDriver/authMode", m_authMode);
 
   Q_EMIT authModeChanged();
+  Q_EMIT securityChanged();
+  Q_EMIT endpointsChanged();
 }
 
 /**
@@ -2011,11 +2019,8 @@ void IO::Drivers::OpcUa::setPublishingInterval(const int interval)
   if (m_persistent)
     m_settings.setValue("OpcUaDriver/publishingInterval", m_publishingInterval);
 
-  for (auto* node : m_nodes)
-    if (node)
-      (void)node->modifyMonitoring(QOpcUa::NodeAttribute::Value,
-                                   QOpcUaMonitoringParameters::Parameter::PublishingInterval,
-                                   static_cast<double>(m_publishingInterval));
+  if (m_session)
+    (void)m_session->modifyPublishingInterval(m_publishingInterval);
 
   m_revisedInterval = m_publishingInterval;
   if (m_frameTimer->isActive())
@@ -2070,7 +2075,7 @@ void IO::Drivers::OpcUa::setTags(const QJsonArray& tags)
  */
 bool IO::Drivers::OpcUa::tagsFrozen() const
 {
-  return m_client != nullptr;
+  return m_session != nullptr;
 }
 
 /**
@@ -2164,6 +2169,468 @@ QJsonObject IO::Drivers::OpcUa::tagToJson(const OpcUaTag& tag)
 }
 
 //--------------------------------------------------------------------------------------------------
+// Security configuration
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Every security policy this build can open, weakest first.
+ */
+const QStringList& IO::Drivers::OpcUa::supportedPolicies()
+{
+  static const QStringList k_policies = [] {
+    QStringList out;
+    for (const auto* uri : kPolicyUris)
+      out.append(QString::fromLatin1(uri));
+
+    return out;
+  }();
+
+  return k_policies;
+}
+
+/**
+ * @brief True for the two policies the OPC Foundation has deprecated. They stay reachable because
+ *        field controllers still ship them, but the UI labels them and nothing auto-selects one.
+ */
+bool IO::Drivers::OpcUa::policyIsDeprecated(const QString& policyUri)
+{
+  return policyUri.endsWith(QLatin1String("#Basic128Rsa15"))
+      || policyUri.endsWith(QLatin1String("#Basic256"));
+}
+
+/**
+ * @brief True when this build can dial the endpoint. Every policy in kPolicyUris is supported, so
+ *        an endpoint is usable when its policy is one of them and its mode is a real one.
+ */
+bool IO::Drivers::OpcUa::endpointUsable(const OpcUaTypes::Endpoint& endpoint) const
+{
+  if (endpoint.securityMode == OpcUaTypes::SecurityMode::Invalid)
+    return false;
+
+  return supportedPolicies().contains(endpoint.securityPolicyUri);
+}
+
+/**
+ * @brief Picks the endpoint to dial after a discovery. A URL that was already selected keeps its
+ *        place; otherwise the MOST secure usable endpoint wins, and a deprecated policy is only
+ *        ever chosen when the user asked for it by name.
+ */
+void IO::Drivers::OpcUa::selectBestEndpoint(const QString& previousUrl)
+{
+  m_endpointIndex = -1;
+
+  int bestScore = -1;
+  for (int i = 0; i < m_endpoints.size(); ++i) {
+    const auto& candidate = m_endpoints.at(i);
+    if (!endpointUsable(candidate) || !endpointAcceptsToken(candidate, m_authMode))
+      continue;
+
+    if (!previousUrl.isEmpty() && candidate.endpointUrl == previousUrl) {
+      m_endpointIndex = i;
+      return;
+    }
+
+    const bool wanted = candidate.securityPolicyUri == m_securityPolicy
+                     && static_cast<int>(candidate.securityMode) == m_securityMode;
+    const int score = wanted ? 1000
+                    : policyIsDeprecated(candidate.securityPolicyUri)
+                      ? 0
+                      : supportedPolicies().indexOf(candidate.securityPolicyUri) * 10
+                          + static_cast<int>(candidate.securityMode);
+    if (score <= bestScore)
+      continue;
+
+    bestScore       = score;
+    m_endpointIndex = i;
+  }
+
+  if (m_endpointIndex >= 0) {
+    m_securityPolicy = m_endpoints.at(m_endpointIndex).securityPolicyUri;
+    m_securityMode   = static_cast<int>(m_endpoints.at(m_endpointIndex).securityMode);
+  }
+
+  Q_EMIT securityChanged();
+  if (m_endpointIndex >= 0)
+    return;
+
+  m_lastError = tr("No endpoint this build can open with the selected identity");
+  logDriverError(tr("OPC UA Discovery"), tr("\"%1\": %2").arg(m_endpointUrl, m_lastError));
+}
+
+/**
+ * @brief The configured security policy URI.
+ */
+QString IO::Drivers::OpcUa::securityPolicy() const
+{
+  return m_securityPolicy;
+}
+
+/**
+ * @brief The configured policy as a row of securityPolicyList().
+ */
+int IO::Drivers::OpcUa::securityPolicyIndex() const
+{
+  return qMax(0, supportedPolicies().indexOf(m_securityPolicy));
+}
+
+/**
+ * @brief Short names of the supported policies, for the picker.
+ */
+QStringList IO::Drivers::OpcUa::securityPolicyList() const
+{
+  QStringList out;
+  for (const auto& uri : supportedPolicies()) {
+    const auto name = uri.section(QLatin1Char('#'), -1);
+    out.append(policyIsDeprecated(uri) ? tr("%1 (deprecated)").arg(name) : name);
+  }
+
+  return out;
+}
+
+/**
+ * @brief Parallel to securityPolicyList(): true where the row is a deprecated policy.
+ */
+QVariantList IO::Drivers::OpcUa::securityPolicyDeprecated() const
+{
+  QVariantList out;
+  for (const auto& uri : supportedPolicies())
+    out.append(policyIsDeprecated(uri));
+
+  return out;
+}
+
+/**
+ * @brief The configured message security mode.
+ */
+int IO::Drivers::OpcUa::securityMode() const
+{
+  return m_securityMode;
+}
+
+/**
+ * @brief Translated message-security-mode labels, indexed by the OPC UA enumeration.
+ */
+QStringList IO::Drivers::OpcUa::securityModeList() const
+{
+  return {tr("Invalid"), tr("None"), tr("Sign"), tr("Sign and Encrypt")};
+}
+
+/**
+ * @brief Selects the security policy; a change invalidates the discovered endpoint selection.
+ */
+void IO::Drivers::OpcUa::setSecurityPolicy(const QString& policyUri)
+{
+  if (m_securityPolicy == policyUri || !supportedPolicies().contains(policyUri))
+    return;
+
+  m_securityPolicy = policyUri;
+  if (m_persistent)
+    m_settings.setValue("OpcUaDriver/securityPolicy", m_securityPolicy);
+
+  if (m_securityPolicy == QLatin1String(kPolicyNone))
+    m_securityMode = static_cast<int>(OpcUaTypes::SecurityMode::None);
+  else if (m_securityMode <= static_cast<int>(OpcUaTypes::SecurityMode::None))
+    m_securityMode = static_cast<int>(OpcUaTypes::SecurityMode::SignAndEncrypt);
+
+  m_endpointIndex = -1;
+  Q_EMIT securityChanged();
+  Q_EMIT endpointIndexChanged();
+}
+
+/**
+ * @brief Selects the security policy by row of securityPolicyList().
+ */
+void IO::Drivers::OpcUa::setSecurityPolicyIndex(const int index)
+{
+  const auto policies = supportedPolicies();
+  if (index < 0 || index >= policies.size())
+    return;
+
+  setSecurityPolicy(policies.at(index));
+}
+
+/**
+ * @brief Selects the message security mode. Dropping to None drops the policy with it: a strong
+ *        policy left on a None channel dials in the clear while the pane still names the policy,
+ *        the same silent-plaintext trap dialEndpoint() guards on the other side.
+ */
+void IO::Drivers::OpcUa::setSecurityMode(const int mode)
+{
+  const int clamped = qBound(static_cast<int>(OpcUaTypes::SecurityMode::None),
+                             mode,
+                             static_cast<int>(OpcUaTypes::SecurityMode::SignAndEncrypt));
+  if (m_securityMode == clamped)
+    return;
+
+  m_securityMode = clamped;
+  if (clamped == static_cast<int>(OpcUaTypes::SecurityMode::None))
+    m_securityPolicy = QString::fromLatin1(kPolicyNone);
+
+  if (m_persistent) {
+    m_settings.setValue("OpcUaDriver/securityMode", m_securityMode);
+    m_settings.setValue("OpcUaDriver/securityPolicy", m_securityPolicy);
+  }
+
+  m_endpointIndex = -1;
+  Q_EMIT securityChanged();
+  Q_EMIT endpointIndexChanged();
+}
+
+/**
+ * @brief The user certificate presented for X.509 identity (authentication mode 2).
+ */
+QString IO::Drivers::OpcUa::userCertificatePath() const
+{
+  return m_userCertificatePath;
+}
+
+/**
+ * @brief The private key that proves ownership of the user certificate.
+ */
+QString IO::Drivers::OpcUa::userKeyPath() const
+{
+  return m_userKeyPath;
+}
+
+/**
+ * @brief Turns whatever a caller hands us into a local path. QML file dialogs deliver a
+ *        `file://` URL, the API delivers a plain path, and both reach the same setter.
+ */
+static QString localPath(const QString& value)
+{
+  if (!value.startsWith(QLatin1String("file:")))
+    return value;
+
+  return QUrl(value).toLocalFile();
+}
+
+/**
+ * @brief Sets the user certificate path.
+ */
+void IO::Drivers::OpcUa::setUserCertificatePath(const QString& value)
+{
+  const auto path = localPath(value);
+  if (m_userCertificatePath == path)
+    return;
+
+  m_userCertificatePath = path;
+  if (m_persistent)
+    m_settings.setValue("OpcUaDriver/userCertificate", m_userCertificatePath);
+
+  Q_EMIT securityChanged();
+}
+
+/**
+ * @brief Sets the user private-key path. Only the PATH is stored: the key itself never enters
+ *        the project file or QSettings.
+ */
+void IO::Drivers::OpcUa::setUserKeyPath(const QString& value)
+{
+  const auto path = localPath(value);
+  if (m_userKeyPath == path)
+    return;
+
+  m_userKeyPath = path;
+  if (m_persistent)
+    m_settings.setValue("OpcUaDriver/userKey", m_userKeyPath);
+
+  Q_EMIT securityChanged();
+}
+
+/**
+ * @brief True when the chosen identity would send a secret over a channel that does not encrypt
+ *        it, which is what the pane's warning banner is conditional on.
+ */
+bool IO::Drivers::OpcUa::credentialsExposed() const
+{
+  return credentialsAreExposed();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Certificates and trust
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief A certificate rendered for QML.
+ */
+QVariantMap IO::Drivers::OpcUa::certificateMap(const OpcUaTypes::CertInfo& info)
+{
+  return QVariantMap{
+    {          QStringLiteral("valid"),           info.valid},
+    {        QStringLiteral("subject"),         info.subject},
+    {         QStringLiteral("issuer"),          info.issuer},
+    {    QStringLiteral("fingerprint"),     info.fingerprint},
+    { QStringLiteral("applicationUri"),  info.applicationUri},
+    {      QStringLiteral("notBefore"),       info.notBefore},
+    {       QStringLiteral("notAfter"),        info.notAfter},
+    {        QStringLiteral("trusted"),         info.trusted},
+    {        QStringLiteral("expired"),         info.expired},
+    {    QStringLiteral("notYetValid"),     info.notYetValid},
+    {QStringLiteral("hostnameMatches"), info.hostnameMatches},
+  };
+}
+
+/**
+ * @brief A certificate rendered for the API.
+ */
+QJsonObject IO::Drivers::OpcUa::certificateObject(const OpcUaTypes::CertInfo& info)
+{
+  return QJsonObject{
+    {          QStringLiteral("valid"),                           info.valid},
+    {        QStringLiteral("subject"),                         info.subject},
+    {         QStringLiteral("issuer"),                          info.issuer},
+    {    QStringLiteral("fingerprint"),                     info.fingerprint},
+    { QStringLiteral("applicationUri"),                  info.applicationUri},
+    {      QStringLiteral("notBefore"), info.notBefore.toString(Qt::ISODate)},
+    {       QStringLiteral("notAfter"),  info.notAfter.toString(Qt::ISODate)},
+    {        QStringLiteral("trusted"),                         info.trusted},
+    {        QStringLiteral("expired"),                         info.expired},
+    {    QStringLiteral("notYetValid"),                     info.notYetValid},
+    {QStringLiteral("hostnameMatches"),                 info.hostnameMatches},
+  };
+}
+
+/**
+ * @brief Why a certificate was refused, in the user's words. Kept distinct on purpose: trust it,
+ *        renew it, wait for it and dial the right name are four different fixes.
+ */
+QString IO::Drivers::OpcUa::describeTrustFailure(OpcUaTypes::TrustFailure failure)
+{
+  switch (failure) {
+    case OpcUaTypes::TrustFailure::Untrusted:
+      return tr("The server certificate is not trusted");
+    case OpcUaTypes::TrustFailure::Expired:
+      return tr("The server certificate has expired");
+    case OpcUaTypes::TrustFailure::NotYetValid:
+      return tr("The server certificate is not valid yet");
+    case OpcUaTypes::TrustFailure::HostnameMismatch:
+      return tr("The server certificate was not issued for this host");
+    case OpcUaTypes::TrustFailure::Unreadable:
+      return tr("The server certificate could not be parsed");
+    case OpcUaTypes::TrustFailure::None:
+      break;
+  }
+
+  return {};
+}
+
+/**
+ * @brief Publishes a rejected server certificate so the pane can offer the trust prompt. Emitted
+ *        QUEUED: a modal opened synchronously from inside the dial's error path would spin a
+ *        nested event loop in the middle of an emission (the macOS file-dialog reentrancy class).
+ */
+void IO::Drivers::OpcUa::reportTrustFailure(const OpcUaSession* session)
+{
+  if (!session || session->trustFailure() == OpcUaTypes::TrustFailure::None)
+    return;
+
+  m_pendingTrust    = session->serverCertificate();
+  const auto detail = describeTrustFailure(session->trustFailure());
+  const auto map    = certificateMap(m_pendingTrust);
+
+  m_lastError = detail;
+  QMetaObject::invokeMethod(
+    this,
+    [this, map, detail] { Q_EMIT serverCertificateUntrusted(map, detail); },
+    Qt::QueuedConnection);
+}
+
+/**
+ * @brief The installation's own client certificate, generated on first secure use.
+ */
+QVariantMap IO::Drivers::OpcUa::clientCertificate() const
+{
+  return certificateMap(OpcUaSecurity::inspect(OpcUaSecurity::clientCertificate(), QString()));
+}
+
+/**
+ * @brief The installation's client certificate, for the API.
+ */
+QJsonObject IO::Drivers::OpcUa::certificateJson() const
+{
+  return certificateObject(OpcUaSecurity::inspect(OpcUaSecurity::clientCertificate(), QString()));
+}
+
+/**
+ * @brief Every server certificate the user has accepted.
+ */
+QVariantList IO::Drivers::OpcUa::trustedCertificates() const
+{
+  QVariantList out;
+  const auto certificates = OpcUaSecurity::trustedCertificates();
+  for (const auto& certificate : certificates)
+    out.append(certificateMap(OpcUaSecurity::inspect(certificate, QString())));
+
+  return out;
+}
+
+/**
+ * @brief Every accepted server certificate, for the API.
+ */
+QJsonArray IO::Drivers::OpcUa::trustedJson() const
+{
+  QJsonArray out;
+  const auto certificates = OpcUaSecurity::trustedCertificates();
+  for (const auto& certificate : certificates)
+    out.append(certificateObject(OpcUaSecurity::inspect(certificate, QString())));
+
+  return out;
+}
+
+/**
+ * @brief Replaces the installation's client certificate and key. Every server that trusted the
+ *        old one has to trust the new one, so this is a deliberate action and never automatic.
+ */
+bool IO::Drivers::OpcUa::regenerateCertificate()
+{
+  const bool ok = OpcUaSecurity::regenerateClientIdentity();
+  if (ok)
+    Q_EMIT certificateChanged();
+
+  return ok;
+}
+
+/**
+ * @brief Writes the client certificate where the user asked, to hand to the server's trust store.
+ */
+bool IO::Drivers::OpcUa::exportCertificate(const QString& path)
+{
+  return OpcUaSecurity::exportClientCertificate(localPath(path));
+}
+
+/**
+ * @brief Accepts the server certificate the last attempt was refused over, and only when the
+ *        caller names it: the fingerprint is the confirmation token for a security decision, so an
+ *        empty one is a mismatch rather than a wildcard. This does NOT retry -- a trust decision
+ *        followed by a connect is a NEW attempt with its own single verdict.
+ */
+bool IO::Drivers::OpcUa::trustServerCertificate(const QString& fingerprint)
+{
+  const auto* peer   = sessionPeer();
+  const auto pending = peer ? peer->m_pendingTrust : m_pendingTrust;
+  if (fingerprint.isEmpty() || pending.fingerprint.compare(fingerprint, Qt::CaseInsensitive) != 0)
+    return false;
+
+  if (!OpcUaSecurity::trustCertificate(pending.certificate))
+    return false;
+
+  Q_EMIT certificateChanged();
+  return true;
+}
+
+/**
+ * @brief Withdraws a previously accepted server certificate.
+ */
+bool IO::Drivers::OpcUa::revokeServerCertificate(const QString& fingerprint)
+{
+  const bool ok = OpcUaSecurity::revokeTrust(fingerprint);
+  if (ok)
+    Q_EMIT certificateChanged();
+
+  return ok;
+}
+
+//--------------------------------------------------------------------------------------------------
 // Driver property model
 //--------------------------------------------------------------------------------------------------
 
@@ -2212,6 +2679,36 @@ QList<IO::DriverProperty> IO::Drivers::OpcUa::driverProperties() const
   interval.max   = kMaxIntervalMs;
   props.append(interval);
 
+  IO::DriverProperty policy;
+  policy.key     = QStringLiteral("securityPolicy");
+  policy.label   = tr("Security Policy");
+  policy.type    = IO::DriverProperty::ComboBox;
+  policy.value   = securityPolicyIndex();
+  policy.options = securityPolicyList();
+  props.append(policy);
+
+  IO::DriverProperty mode;
+  mode.key     = QStringLiteral("securityMode");
+  mode.label   = tr("Security Mode");
+  mode.type    = IO::DriverProperty::ComboBox;
+  mode.value   = m_securityMode;
+  mode.options = securityModeList();
+  props.append(mode);
+
+  IO::DriverProperty userCert;
+  userCert.key   = QStringLiteral("userCertificatePath");
+  userCert.label = tr("User Certificate");
+  userCert.type  = IO::DriverProperty::Text;
+  userCert.value = m_userCertificatePath;
+  props.append(userCert);
+
+  IO::DriverProperty userKey;
+  userKey.key   = QStringLiteral("userKeyPath");
+  userKey.label = tr("User Private Key");
+  userKey.type  = IO::DriverProperty::Text;
+  userKey.value = m_userKeyPath;
+  props.append(userKey);
+
   IO::DriverProperty tags;
   tags.key   = QStringLiteral("tags");
   tags.type  = IO::DriverProperty::Text;
@@ -2248,6 +2745,30 @@ void IO::Drivers::OpcUa::setDriverProperty(const QString& key, const QVariant& v
 
   if (key == QLatin1String("publishingInterval")) {
     setPublishingInterval(value.toInt());
+    return;
+  }
+
+  if (key == QLatin1String("securityPolicy")) {
+    if (value.typeId() == QMetaType::QString)
+      setSecurityPolicy(value.toString());
+    else
+      setSecurityPolicyIndex(value.toInt());
+
+    return;
+  }
+
+  if (key == QLatin1String("securityMode")) {
+    setSecurityMode(value.toInt());
+    return;
+  }
+
+  if (key == QLatin1String("userCertificatePath")) {
+    setUserCertificatePath(value.toString());
+    return;
+  }
+
+  if (key == QLatin1String("userKeyPath")) {
+    setUserKeyPath(value.toString());
     return;
   }
 

@@ -87,9 +87,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #   Qt6::Mqtt          - MQTT client for IoT protocols
 #   Qt6::SerialBus     - CAN Bus, Modbus TCP/RTU support
 #
-# OPC UA is moving off Qt6::OpcUa onto the open62541 static library vendored in lib/open62541,
-# which defines target_link_open62541() (called below). Qt6::OpcUa is still listed until the
-# driver port lands; see the TRANSITIONAL note in the commercial block.
+# OPC UA does NOT use Qt6::OpcUa (spec 0067). The driver talks to the open62541 static library
+# vendored in lib/open62541, linked through target_link_open62541() below, so the shipped package
+# carries no Qt OPC UA module and no backend plugin.
 #
 # Qt policies:
 #   QTP0001=NEW - Use new Qt resource system (qt_add_resources)
@@ -152,16 +152,6 @@ if(BUILD_COMMERCIAL)
     Qt6::Multimedia
     Qt6::SerialBus
   )
-
-  #
-  # TRANSITIONAL (spec 0067, remove with T12-T14). OpcUa.h/OpcUaTagModel.h still include the
-  # QOpcUa* headers; the port onto OpcUaSession has not landed yet. Keeping the Qt module here
-  # lets the tree build while the new stack (lib/open62541, OpcUaMarshal, OpcUaSession) is
-  # compiled alongside it. Deleting these two lines is the last step of the port and is what
-  # spec 0067 R2 is verified against.
-  #
-  list(APPEND QT_MODULES OpcUa)
-  list(APPEND QT_LIBS Qt6::OpcUa)
 endif()
 
 
@@ -807,6 +797,7 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/OpcUaTypes.h
     src/IO/Drivers/OpcUaMarshal.h
     src/IO/Drivers/OpcUaSession.h
+    src/IO/Drivers/OpcUaSecurity.h
     src/IO/Drivers/OpcUaTagModel.h
     src/UI/Widgets/Plot3D.h
     src/UI/Widgets/ImageView.h
@@ -917,6 +908,7 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/OpcUa.cpp
     src/IO/Drivers/OpcUaMarshal.cpp
     src/IO/Drivers/OpcUaSession.cpp
+    src/IO/Drivers/OpcUaSecurity.cpp
     src/IO/Drivers/OpcUaTagModel.cpp
     src/UI/Widgets/Plot3D.cpp
     src/UI/Widgets/ImageView.cpp
@@ -1009,6 +1001,7 @@ if(BUILD_COMMERCIAL)
     qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml
+    qml/Dialogs/OpcUaTrustDialog.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml
     qml/ProjectEditor/Views/MqttPublisherView.qml
