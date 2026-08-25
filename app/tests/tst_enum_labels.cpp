@@ -124,7 +124,8 @@ void TstEnumLabels::busTypeGplSweep_data()
   QTest::newRow("UART") << static_cast<int>(SerialStudio::BusType::UART) << QStringLiteral("uart")
                         << QStringLiteral("UART (serial port)");
   QTest::newRow("Network") << static_cast<int>(SerialStudio::BusType::Network)
-                           << QStringLiteral("network") << QStringLiteral("Network (TCP/UDP)");
+                           << QStringLiteral("network")
+                           << QStringLiteral("Network (TCP/UDP/WebSocket/HTTP)");
   QTest::newRow("BluetoothLE") << static_cast<int>(SerialStudio::BusType::BluetoothLE)
                                << QStringLiteral("bluetooth-le") << QStringLiteral("Bluetooth LE");
 }
