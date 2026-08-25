@@ -61,6 +61,10 @@ include_guard(GLOBAL)
 # guards: per-TU unwind tables here, protected bootstraps around every VM setup path, and pcall
 # around every script entry.
 #
+# Every Clang-family toolchain (Clang, AppleClang, clang-cl via /clang:, IntelLLVM) also compiles
+# C++ with -fcomplete-member-pointers, so a pointer-to-member to a forward-declared class is a hard
+# error instead of a per-TU ABI coin flip. GCC and cl.exe have no equivalent and are skipped.
+#
 # Architecture baselines: x86-64 -> -march=x86-64-v2 (SSE4.2, 2012+ CPUs); aarch64 -> armv8-a (plus
 # -latomic); armv7l -> armv7-a -mfpu=neon -mfloat-abi=hard (hardfloat pinned so a soft-float
 # toolchain cannot silently emit an ABI-mismatched binary).
@@ -96,6 +100,21 @@ if(PRODUCTION_OPTIMIZATION)
          -funwind-tables
          -fasynchronous-unwind-tables
       )
+   endif()
+
+   # -fcomplete-member-pointers rejects a pointer-to-member whose class is still incomplete. Under
+   # the MSVC ABI the representation is picked from the inheritance model, so an incomplete base
+   # hands one TU a 20-byte generalized member pointer and another an 8-byte one. That ODR mismatch
+   # flips on and off with unity-build include order, and ships as a constructor storing dangling
+   # stack addresses (2026-08-25: PropertyHooks::LiveProviderOptions). Clang family only;
+   # GCC and cl.exe have no equivalent. CXX-gated so the vendored C targets (luajit, mbedtls,
+   # open62541, hidapi, OpenSSL) never see it; clang-cl reaches it through /clang:.
+   if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|IntelLLVM")
+      if(MSVC)
+         add_compile_options($<$<COMPILE_LANGUAGE:CXX>:/clang:-fcomplete-member-pointers>)
+      else()
+         add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-fcomplete-member-pointers>)
+      endif()
    endif()
 
    if(WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND MINGW)

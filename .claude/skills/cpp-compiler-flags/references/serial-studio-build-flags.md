@@ -27,6 +27,16 @@ GCC/MinGW.
 add_compile_definitions(NDEBUG)
 ```
 
+### Always-on (every Clang-family C++ TU, when PRODUCTION_OPTIMIZATION)
+```
+-fcomplete-member-pointers          # clang-cl form: /clang:-fcomplete-member-pointers
+# Hard error on a pointer-to-member whose class is still incomplete. The MSVC ABI picks the
+# representation from the inheritance model, so an incomplete base gives one TU a 20-byte
+# generalized member pointer and another an 8-byte one; unity builds flip that by include order.
+# CXX-gated via $<COMPILE_LANGUAGE:CXX> so the vendored C targets never see it.
+# GCC and cl.exe have no equivalent and are skipped.
+```
+
 ### Per-toolchain production flags
 
 **GCC/Clang (Linux), AppleClang (macOS), Clang/GCC MinGW, IntelLLVM** (the "-O3 family"):

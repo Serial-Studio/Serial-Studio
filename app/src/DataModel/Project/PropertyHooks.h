@@ -29,9 +29,8 @@
 
 #include "DataModel/Frame.h"
 
-namespace DataModel {
-class ProjectModel;
-}  // namespace DataModel
+// Must be complete: the MSVC ABI picks a pointer-to-member's layout from the inheritance model.
+#include "DataModel/ProjectModel.h"
 
 namespace DataModel::PropertyHooks {
 
