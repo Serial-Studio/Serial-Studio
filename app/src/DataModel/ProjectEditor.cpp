@@ -113,6 +113,19 @@ DataModel::ProjectEditor::ProjectEditor()
 }
 
 /**
+ * @brief Releases the lazily-opened editor dialogs. They are constructed parentless because
+ *        this class is a QObject and they are QWidgets, so no Qt parent chain ever reaches
+ *        them and the destructor is their only release path.
+ */
+DataModel::ProjectEditor::~ProjectEditor()
+{
+  delete m_transformEditor;
+#ifdef BUILD_COMMERCIAL
+  delete m_mqttScriptEditor;
+#endif
+}
+
+/**
  * @brief Returns the singleton ProjectEditor instance.
  */
 DataModel::ProjectEditor& DataModel::ProjectEditor::instance()

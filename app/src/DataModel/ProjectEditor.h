@@ -209,6 +209,7 @@ signals:
                                   QVariantList currentMarkers);
 
 private:
+  ~ProjectEditor();
   explicit ProjectEditor();
   ProjectEditor(ProjectEditor&&)                 = delete;
   ProjectEditor(const ProjectEditor&)            = delete;
