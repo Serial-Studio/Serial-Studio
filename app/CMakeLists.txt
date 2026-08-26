@@ -1572,19 +1572,16 @@ endif()
 #---------------------------------------------------------------------------------------------------
 #
 # SS_UNITY_BUILD=ON batches this target's C++ sources into unity TUs to cut compile
-# time. SS_UNITY_BATCH_SIZE (cache var, default 8) sets sources per TU: it amortizes
-# header parsing while keeping enough TUs for the build to parallelize (batch 0 -- one
-# monolithic jumbo TU -- serializes the whole target on one compiler process, so keep
-# the TU count above the runner's core count). Default is OFF, and since 2026-08-26 CI
-# no longer opts in: the per-concern TU split (specs 0069/0070) made the plain build
-# parallelize well enough that batching stopped paying for itself. If it is ever
-# re-enabled, both PGO stages must configure with the SAME value -- the unity layout
-# determines the object-file <-> profile-data mapping, and it has to be identical
-# across stages.
-#
-# Consequence of CI not using it: a NEW file-local name collision no longer fails a
-# push. The app-wide uniqueness invariant below is now only checked when someone builds
-# with SS_UNITY_BUILD=ON by hand, so re-verify before relying on it.
+# time; CI compiles the application twice per platform (PGO generate + use) with no
+# compiler cache, so the savings land on every push. SS_UNITY_BATCH_SIZE (cache var,
+# default 8) sets sources per TU: it amortizes header parsing while keeping enough TUs
+# for the build to parallelize (batch 0 -- one monolithic jumbo TU -- serializes the
+# whole target on one compiler process, so keep the TU count above the runner's core
+# count). CI passes 32 via the SS_UNITY_BATCH workflow env var, sized for the
+# post-spec-0070 source count. Default is OFF: local builds, the ss_unit_tests tier,
+# and every lib/ third-party target are unaffected. Both PGO stages must configure
+# with the same value -- the unity layout determines the object-file <-> profile-data
+# mapping, and it has to be identical across stages.
 #
 # /bigobj: a unity TU on the MSVC ABI (cl.exe and clang-cl) can exceed the default
 # COFF section limit; the flag lifts it and has no codegen effect.

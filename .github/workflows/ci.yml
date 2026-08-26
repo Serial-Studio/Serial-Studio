@@ -81,6 +81,7 @@ env:
   # every configure site: both PGO stages must see the identical value or the
   # unity TU layout diverges and profile data is silently dropped.
   #
+  SS_UNITY_BATCH: 32
 
   #
   # Test gating: tagged releases always block on the live pytest suite; this
@@ -315,6 +316,8 @@ jobs:
           -DENABLE_GRPC=ON \
           -DENABLE_PGO=ON \
           -DPGO_STAGE=GENERATE \
+          -DSS_UNITY_BUILD=ON \
+          -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
           -DUSE_SYSTEM_ZLIB=ON \
           -DUSE_SYSTEM_EXPAT=ON \
           -DSS_INAPP_TESTS=ON \
@@ -381,6 +384,8 @@ jobs:
           -DENABLE_GRPC=ON \
           -DENABLE_PGO=ON \
           -DPGO_STAGE=USE \
+          -DSS_UNITY_BUILD=ON \
+          -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
           -DUSE_SYSTEM_ZLIB=ON \
           -DUSE_SYSTEM_EXPAT=ON \
           -DSS_INAPP_TESTS=ON \
@@ -1191,6 +1196,8 @@ jobs:
           -DENABLE_GRPC=ON \
           -DENABLE_PGO=ON \
           -DPGO_STAGE=GENERATE \
+          -DSS_UNITY_BUILD=ON \
+          -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
           -DUSE_SYSTEM_ZLIB=ON \
           -DUSE_SYSTEM_EXPAT=ON \
           -DSS_INAPP_TESTS=ON \
@@ -1257,6 +1264,8 @@ jobs:
           -DENABLE_GRPC=ON \
           -DENABLE_PGO=ON \
           -DPGO_STAGE=USE \
+          -DSS_UNITY_BUILD=ON \
+          -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
           -DUSE_SYSTEM_ZLIB=ON \
           -DUSE_SYSTEM_EXPAT=ON \
           -DSS_INAPP_TESTS=ON \
@@ -1942,6 +1951,8 @@ jobs:
           -DENABLE_GRPC=ON \
           -DENABLE_PGO=ON \
           -DPGO_STAGE=GENERATE \
+          -DSS_UNITY_BUILD=ON \
+          -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
           -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_OSX_DEPLOYMENT_TARGET=14.0 \
           -DCMAKE_OSX_ARCHITECTURES="arm64" \
@@ -2004,6 +2015,8 @@ jobs:
           -DENABLE_GRPC=ON \
           -DENABLE_PGO=ON \
           -DPGO_STAGE=USE \
+          -DSS_UNITY_BUILD=ON \
+          -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
           -DLLVM_PROFDATA=$(xcrun -f llvm-profdata) \
           -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_OSX_DEPLOYMENT_TARGET=14.0 \
@@ -2220,6 +2233,8 @@ jobs:
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
+          -DSS_UNITY_BUILD=ON \
+          -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
           -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_OSX_DEPLOYMENT_TARGET=14.0 \
           -DCMAKE_OSX_ARCHITECTURES="x86_64" \
@@ -2549,6 +2564,8 @@ jobs:
           -DENABLE_GRPC=ON `
           -DENABLE_PGO=ON `
           -DPGO_STAGE=GENERATE `
+          -DSS_UNITY_BUILD=ON `
+          -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} `
           -DCMAKE_BUILD_TYPE=Release `
           -DBUILD_COMMERCIAL=ON `
           -DBUILD_GPL3=OFF
@@ -2615,6 +2632,8 @@ jobs:
           -DENABLE_GRPC=ON `
           -DENABLE_PGO=ON `
           -DPGO_STAGE=USE `
+          -DSS_UNITY_BUILD=ON `
+          -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} `
           -DSS_PACKAGE_TYPE=msi `
           -DCMAKE_BUILD_TYPE=Release `
           -DBUILD_COMMERCIAL=ON `
