@@ -1,0 +1,83 @@
+{
+  "purpose": "Constants the AI-facing docs quote, bound to the code that owns them. Checked by scripts/claim-verify.py: the source_pattern must still match in the source file, and every docs entry's must_contain literal must still appear in the doc that quotes it. Either half going stale is a finding -- a number that changed in code and nowhere else is exactly the drift the CLAUDE.md canary was built to detect.",
+  "anchors": [
+    {
+      "name": "qt-version",
+      "source": ".github/workflows/ci.yml",
+      "source_pattern": "QT_VERSION_LINUX:\\s*6\\.11\\.2",
+      "docs": [{ "path": "CLAUDE.md", "must_contain": "qt 6.11.2" }]
+    },
+    {
+      "name": "cxx-standard",
+      "source": "CMakeLists.txt",
+      "source_pattern": "set\\(CMAKE_CXX_STANDARD 20\\)",
+      "docs": [{ "path": "CLAUDE.md", "must_contain": "cpp20" }]
+    },
+    {
+      "name": "hotpath-min-fps",
+      "source": "app/src/Misc/CLI.h",
+      "source_pattern": "min-fps[^\\n]*default: 256000",
+      "docs": [{ "path": "CLAUDE.md", "must_contain": "hotpath 256k" }]
+    },
+    {
+      "name": "benchmark-native-numeric-fps",
+      "source": "app/src/Benchmark/BenchmarkRunner.cpp",
+      "source_pattern": "kNativeNumericFps\\s*=\\s*1024000\\.0",
+      "docs": [{ "path": "CLAUDE.md", "must_contain": "native 1024k" }]
+    },
+    {
+      "name": "benchmark-js-mixed-fps",
+      "source": "app/src/Benchmark/BenchmarkRunner.cpp",
+      "source_pattern": "kJsMixedFps\\s*=\\s*64000\\.0",
+      "docs": [{ "path": "CLAUDE.md", "must_contain": "js 64k" }]
+    },
+    {
+      "name": "pipeline-queue-rule",
+      "source": "app/src/IO/PipelineHost.cpp",
+      "source_pattern": "65536-queue rule",
+      "docs": [{ "path": "CLAUDE.md", "must_contain": "queue 65536" }]
+    },
+    {
+      "name": "api-tcp-port",
+      "source": "app/src/API/Server.h",
+      "source_pattern": "#define API_TCP_PORT 7777",
+      "docs": [{ "path": "CLAUDE.md", "must_contain": "api 7777" }]
+    },
+    {
+      "name": "style-column-limit",
+      "source": ".clang-format",
+      "source_pattern": "ColumnLimit:\\s+100",
+      "docs": [{ "path": "CLAUDE.md", "must_contain": "style 100/2" }]
+    },
+    {
+      "name": "style-indent-width",
+      "source": ".clang-format",
+      "source_pattern": "IndentWidth:\\s+2",
+      "docs": [{ "path": "CLAUDE.md", "must_contain": "style 100/2" }]
+    },
+    {
+      "name": "frame-block-sample-cap",
+      "source": "app/src/DataModel/FrameBuilder.h",
+      "source_pattern": "kFrameBlockSampleCap\\s*=\\s*64",
+      "docs": [{ "path": "CLAUDE.md", "must_contain": "kFrameBlockSampleCap" }]
+    },
+    {
+      "name": "stream-block-sample-cap",
+      "source": "app/src/IO/StreamWorker.h",
+      "source_pattern": "kStreamBlockSampleCap\\s*=\\s*4096",
+      "docs": [{ "path": "CLAUDE.md", "must_contain": "kStreamBlockSampleCap" }]
+    },
+    {
+      "name": "function-length-limit",
+      "source": "scripts/code-verify.py",
+      "source_pattern": "cxx-function-too-long`\\s*.\\s*function body > 100 lines",
+      "docs": [{ "path": "CLAUDE.md", "must_contain": "hard limit 100" }]
+    },
+    {
+      "name": "tu-length-threshold",
+      "source": "scripts/code-verify.py",
+      "source_pattern": "_TU_CENSUS_THRESHOLD = 1500",
+      "docs": [{ "path": "CLAUDE.md", "must_contain": "1500" }]
+    }
+  ]
+}

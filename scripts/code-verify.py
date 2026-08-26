@@ -51,6 +51,7 @@ Usage:
     python3 scripts/code-verify.py --fix app/src            # rewrite C++ files
     python3 scripts/code-verify.py --check app/qml/Foo.qml  # single file
     python3 scripts/code-verify.py --fix --diff app/qml     # show changes
+    python3 scripts/code-verify.py --tu-census --check      # TU-size ratchet
 
 Called with no arguments the script defaults to --fix on the entire
 <repo>/app/qml and <repo>/app/src trees.
@@ -2025,6 +2026,24 @@ def process_file(path: Path, fix: bool) -> tuple[list[Violation], str | None]:
             for f in _SEMANTIC_RULES.analyze(path, raw_text, fence_mask):
                 violations.append(Violation(path, f.line, f.kind, f.message))
 
+    # Translation-unit size. The style contract caps functions at 100 lines
+    # but said nothing about the file holding them, so god TUs accreted one
+    # method per feature (FrameBuilder.cpp reached 4574 lines on the
+    # hotpath). Flagged per file here, ratcheted in aggregate by --tu-census.
+    if first_party and path.suffix in _TU_CENSUS_SUFFIXES:
+        tu_lines = len(raw_lines)
+        if tu_lines > _TU_CENSUS_THRESHOLD:
+            violations.append(
+                Violation(
+                    path,
+                    1,
+                    "cxx-tu-too-long",
+                    f"{tu_lines} lines (limit {_TU_CENSUS_THRESHOLD}); split with "
+                    "scripts/tu-cutter.py -- the aggregate ratchet is "
+                    "code-verify.py --tu-census --check",
+                )
+            )
+
     # Christmas-tree property sort + id-placement check are QML-specific.
     if is_qml:
         lines = tokenize(raw_lines)
@@ -2196,6 +2215,11 @@ _ADVISORY_KINDS = frozenset(
         "cxx-function-too-long",
         "cxx-nesting-too-deep",
         "cxx-anonymous-namespace",
+        # Translation-unit size. Advisory per file because the 34 TUs
+        # already over the line cannot be split in one pass; the gate
+        # that actually blocks accretion is the --tu-census ratchet,
+        # which fails when the excess-over-threshold pool grows.
+        "cxx-tu-too-long",
         # Raw-ownership / raw-memory rules. Each looks for the absence of
         # every sanctioned owner (Qt parent, delete, deleteLater, smart
         # pointer) rather than for `new` itself -- the app has ~440 `new`
@@ -2505,6 +2529,17 @@ the kinds below are short labels.
 
 **Advisories (don't block CI):**
 - `cxx-function-too-long` — function body > 100 lines (NASA P10 rule 4).
+- `cxx-tu-too-long` — a first-party `.cpp`/`.h`/`.qml` over 1500 lines.
+  The function cap says nothing about the file holding the functions, so
+  every feature appends a method and nothing ever forces extraction:
+  `FrameBuilder.cpp` reached 4574 lines on the hotpath, and
+  `ProjectModelCrud.cpp` — itself a spec-0002 split product — regrew to
+  2481. Per-file it is advisory, because the 34 TUs already over the line
+  cannot be split in one pass. The gate that blocks accretion is the
+  aggregate ratchet: `--tu-census --check` sums each file's excess over
+  the threshold and fails when that pool grows, so a split into pieces
+  that are individually smaller always passes even when it raises the
+  file count. Split with `scripts/tu-cutter.py`.
 - `cxx-nesting-too-deep` — control-flow nesting > 3 levels (CLAUDE.md).
 - `cxx-anonymous-namespace` — helpers/types/variables defined inside
   `namespace { ... }`. See "Anonymous-namespace helpers" below for why
@@ -3486,6 +3521,151 @@ def _run_singleton_census(repo_root: Path, check: bool, accept: bool) -> int:
     return 0
 
 
+_TU_CENSUS_BASELINE = Path(__file__).with_name("tu-census.json")
+_TU_CENSUS_SUFFIXES = (".cpp", ".h", ".qml")
+_TU_CENSUS_TREES = ("app/src", "app/qml")
+_TU_CENSUS_THRESHOLD = 1500
+_TU_CENSUS_TIERS = (
+    (4000, "critical"),
+    (2500, "god"),
+    (_TU_CENSUS_THRESHOLD, "oversized"),
+)
+
+
+def _tu_tier(lines: int) -> str:
+    """Name the size band a translation unit falls into."""
+    for floor, name in _TU_CENSUS_TIERS:
+        if lines >= floor:
+            return name
+    return "ok"
+
+
+def _collect_tu_census(repo_root: Path) -> dict:
+    """Measure every first-party TU over the size threshold under app/."""
+    buckets = {name: 0 for _, name in _TU_CENSUS_TIERS}
+    per_file: dict[str, int] = {}
+    excess = 0
+    worst = 0
+
+    trees = [repo_root / tree for tree in _TU_CENSUS_TREES]
+    for path in sorted(iter_source_files([t for t in trees if t.exists()])):
+        if path.suffix not in _TU_CENSUS_SUFFIXES:
+            continue
+        if not _is_first_party(path):
+            continue
+        try:
+            lines = len(path.read_text(encoding="utf-8", errors="replace").splitlines())
+        except OSError:
+            continue
+        if lines <= _TU_CENSUS_THRESHOLD:
+            continue
+
+        rel = path.resolve().relative_to(repo_root).as_posix()
+        per_file[rel] = lines
+        buckets[_tu_tier(lines)] += 1
+        excess += lines - _TU_CENSUS_THRESHOLD
+        worst = max(worst, lines)
+
+    return {
+        "rule": "cxx-tu-too-long",
+        "regenerate": "python scripts/code-verify.py --tu-census --accept",
+        "threshold": _TU_CENSUS_THRESHOLD,
+        "excess": excess,
+        "files": len(per_file),
+        "worst": worst,
+        "buckets": buckets,
+        "per_file": dict(sorted(per_file.items(), key=lambda kv: -kv[1])),
+    }
+
+
+def _print_tu_census(census: dict) -> None:
+    print(
+        f"TU census: {census['files']} files over {census['threshold']} lines, "
+        f"{census['excess']} excess lines, worst {census['worst']}"
+    )
+    for name, count in census["buckets"].items():
+        print(f"  {name:<10} {count}")
+
+    print("\nlargest translation units:")
+    for rel, lines in list(census["per_file"].items())[:15]:
+        print(f"  {lines:>5}  {rel}")
+
+
+def _run_tu_census(repo_root: Path, check: bool, accept: bool) -> int:
+    """Report the TU census, gate it against the checked-in baseline, or
+    re-baseline it.
+
+    The gated number is the excess-over-threshold pool, not the file count: a
+    split that turns one 4574-line TU into three 1525-line ones raises the file
+    count but drops the excess by 3000, and must pass. `worst` is gated too so
+    the largest offender cannot grow while others shrink to pay for it."""
+    census = _collect_tu_census(repo_root)
+
+    if accept:
+        _TU_CENSUS_BASELINE.write_text(
+            json.dumps(census, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+            newline="\n",
+        )
+        _print_tu_census(census)
+        print(f"\nbaseline written to {_TU_CENSUS_BASELINE}")
+        return 0
+
+    if not check:
+        _print_tu_census(census)
+        return 0
+
+    if not _TU_CENSUS_BASELINE.is_file():
+        print(
+            f"no baseline at {_TU_CENSUS_BASELINE}; seed it with "
+            "--tu-census --accept",
+            file=sys.stderr,
+        )
+        return 2
+
+    base = json.loads(_TU_CENSUS_BASELINE.read_text(encoding="utf-8"))
+    base_files = base.get("per_file", {})
+    grown = [
+        (rel, lines, base_files.get(rel, 0))
+        for rel, lines in census["per_file"].items()
+        if lines > base_files.get(rel, 0)
+    ]
+
+    excess_delta = census["excess"] - base.get("excess", 0)
+    worst_delta = census["worst"] - base.get("worst", 0)
+
+    if excess_delta > 0 or worst_delta > 0:
+        print(
+            f"TU census grew: excess {base.get('excess', 0)} -> "
+            f"{census['excess']}, worst {base.get('worst', 0)} -> "
+            f"{census['worst']}",
+            file=sys.stderr,
+        )
+        for rel, now, before in sorted(grown, key=lambda row: -(row[1] - row[2])):
+            print(f"  {rel}: {before} -> {now}", file=sys.stderr)
+
+        print(
+            "\nExtract instead of appending: move the new concern into its own "
+            "TU (scripts/tu-cutter.py cuts whole blocks and refuses a cut that "
+            "does not reconstruct the original). If the growth is deliberate, "
+            "re-baseline with python scripts/code-verify.py --tu-census --accept",
+            file=sys.stderr,
+        )
+        return 1
+
+    print(
+        f"TU census: {census['excess']} excess lines "
+        f"(baseline {base.get('excess', 0)}), worst {census['worst']} "
+        f"(baseline {base.get('worst', 0)})"
+    )
+    if excess_delta < 0 or worst_delta < 0:
+        print(
+            "the surface shrank; re-baseline with "
+            "python scripts/code-verify.py --tu-census --accept"
+        )
+    return 0
+
+
 def main(argv: list[str]) -> int:
     # Windows defaults stdout/stderr to cp1252; violation messages can carry
     # non-ASCII (em-dashes, smart quotes, U+2713) lifted from user source and
@@ -3518,9 +3698,14 @@ def main(argv: list[str]) -> int:
         help="classify every X::instance() under app/src (spec 0039)",
     )
     parser.add_argument(
+        "--tu-census",
+        action="store_true",
+        help="measure first-party translation units over the size threshold",
+    )
+    parser.add_argument(
         "--accept",
         action="store_true",
-        help="re-baseline scripts/singleton-census.json (with --singleton-census)",
+        help="re-baseline the census JSON (with --singleton-census / --tu-census)",
     )
     parser.add_argument(
         "paths",
@@ -3534,6 +3719,10 @@ def main(argv: list[str]) -> int:
     if args.singleton_census:
         root = Path(__file__).resolve().parent.parent
         return _run_singleton_census(root, check=args.check, accept=args.accept)
+
+    if args.tu_census:
+        root = Path(__file__).resolve().parent.parent
+        return _run_tu_census(root, check=args.check, accept=args.accept)
 
     # Default to --fix when neither mode was explicitly requested
     if not args.check and not args.fix:

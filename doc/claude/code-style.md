@@ -24,7 +24,9 @@ The compressed essentials live inline in `CLAUDE.md`; this doc is the full speci
 | Static vars | `s_lower_case` | `s_devices` |
 | Private members | `m_camelCase` | `m_deviceIndex` |
 | Public/protected members | `lower_case` | `sourceId` |
+<!-- claim-verify off -->
 | Constants / constexpr | `kCamelCase` | `kMaxBufferSize` |
+<!-- claim-verify on -->
 | Macros | `UPPER_CASE` | `BUILD_COMMERCIAL` |
 
 ### Control Flow

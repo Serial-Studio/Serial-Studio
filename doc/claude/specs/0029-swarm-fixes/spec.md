@@ -1,3 +1,11 @@
+---
+spec: 0029-swarm-fixes
+title: Swarm-audit fixes + licensing simplification
+status: done          # closed 2026-08-25 (work landed 2026-07-24; never marked)
+created: 2026-07-24
+author: Alex Spataru
+---
+
 # Spec 0029 — Swarm-audit fixes + licensing simplification
 
 Status: approved in chat (2026-07-24). Source: 60-agent Opus audit of the last 12 commits

@@ -43,9 +43,10 @@ add_compile_definitions(NDEBUG)
 ```
 Hidden visibility + `-fwhole-program-vtables` mirror the clang-cl branch (whole-program
 devirtualization of app-internal interfaces; safe because the app is one monolithic executable
-with no in-tree shared libs). lua54 compiles `-fno-lto` on macOS, and clang hard-errors on
-`-fwhole-program-vtables` without LTO, so `lib/lua/CMakeLists.txt` appends
-`-fno-whole-program-vtables` there.
+with no in-tree shared libs). LuaJIT compiles `-fno-lto` on every platform (its asm VM and generated
+tables interact badly with IPO), and clang hard-errors on
+`-fwhole-program-vtables` without LTO, so `lib/luajit/CMakeLists.txt` gives the
+`luajit` target both flags together.
 Arch baseline appended by platform: x86-64 -> `-march=x86-64-v2`; aarch64 -> `-march=armv8-a`
 + link `-latomic`; armv7l -> `-march=armv7-a -mfpu=neon -mfloat-abi=hard` + `-latomic`.
 IntelLLVM also adds `-static`.

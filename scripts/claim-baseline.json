@@ -1,0 +1,5 @@
+{
+  "purpose": "Claims scripts/claim-verify.py flags today and that nobody has corrected yet. The gate fails on any error NOT listed here, so new drift blocks immediately while this backlog is worked down. Shrink it by fixing the doc, then re-run with --accept.",
+  "regenerate": "python scripts/claim-verify.py --accept",
+  "accepted": []
+}

@@ -1,7 +1,7 @@
 ---
 spec: 0066-opcua-driver
 title: OPC UA Client Driver
-status: in-progress
+status: done          # closed 2026-08-25
 created: 2026-08-22
 author: Alex Spataru
 ---

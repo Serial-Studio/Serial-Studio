@@ -71,7 +71,10 @@ text and the incidents behind each rule:
 - **Show the why, not the what.** Comment/reply/commit message explains *why*, and only when
   the choice was non-obvious. One sentence.
 - **State the plan before non-trivial work** — visible *before* execution, not a summary
-  after. Operationalized as `/ss-spec`; no implementation lands before an approved `plan.md`.
+  after. Operationalized as `/ss-spec`. What enforces it is the review conversation, not the
+  git record: spec, plan and implementation land squashed in one commit, so history can
+  neither confirm nor refute that the plan came first. Never cite the archive as proof of
+  gating, and don't assume a spec dir is complete — some carry a plan or findings only.
 - **Self-review before handoff.** Re-read the diff: is this *what was asked, and only that*?
 
 ## Scripts
@@ -82,8 +85,14 @@ per-script table lives in [doc/claude/scripts.md](doc/claude/scripts.md). What b
 pushes); `code-verify.py` is the structural linter (`--fix` rewrites, `--check` regenerates
 `.code-report`; errors block CI). Suppression: `// code-verify off` / `// code-verify on`
 (C++/QML), `<!-- doc-verify off -->` / `<!-- doc-verify on -->` (Markdown) — suppressions
-are a code-review trigger. `.code-report` / `.doc-report` are the cleanup checklists;
-advisories are baseline debt, new code still clears them.
+are a code-review trigger. `.code-report` / `.doc-report` / `.claim-report` are the cleanup
+checklists; advisories are baseline debt, new code still clears them.
+
+Three gates ratchet *growth* against a checked-in baseline instead of capping absolute size,
+and `--accept` re-seeds each: `code-verify.py --singleton-census`, `code-verify.py
+--tu-census` (excess over 1500 lines), and `claim-verify.py`, which resolves every path,
+symbol and pinned constant in the AI-facing docs — the canary's values included — against the
+tree. Baselines, fences and anchor mechanics: [doc/claude/scripts.md](doc/claude/scripts.md).
 
 ## Tests
 
@@ -307,7 +316,9 @@ rules. Full spec and the NASA Power of Ten live in
 
 - **Format**: 100-col, 2-space indent, LF, pointer/ref binds to type (`int* p`). No braces on
   single-statement bodies; blank line after a brace-free body. Max 3 nesting levels (guard
-  clauses); functions 40-80 lines, hard limit 100. Run `clang-format`.
+  clauses); functions 40-80 lines, hard limit 100; translation units under 1500 lines
+  (`cxx-tu-too-long` — the function cap alone let god TUs accrete a method per feature).
+  Run `clang-format`.
 - **Headers (.h)**: `Q_OBJECT` → `Q_PROPERTY` → `signals:` → ctor/deleted copy → `public:`
   (`instance()` first) → `public slots:` → `private slots:` → `private:`, Christmas-tree in
   each block. `[[nodiscard]]` on every non-void return. **Never `Q_INVOKABLE void`** (use

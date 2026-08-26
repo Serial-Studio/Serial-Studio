@@ -88,7 +88,7 @@
   routes per-source frames. `FrameParser` keeps one engine per `sourceId`.
 - GPL: `openJsonFile()` truncates `m_sources` to 1; `addSource()` is gated by
   `BUILD_COMMERCIAL`.
-- Bus type change: set `m_awaitingContextRebuild`, wait for one-shot `contextsRebuilt`, then
+- Bus type change: open a one-shot `contextsRebuilt` connection that disconnects itself, then
   `buildSourceModel`. Don't force-rebuild on selection.
 
 ## Project File JSON Keys — `Keys::` Namespace

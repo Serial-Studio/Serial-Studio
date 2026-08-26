@@ -1,7 +1,7 @@
 ---
 spec: 0068-network-ws-http-clients
 title: WebSocket and HTTP/HTTPS clients in the Network driver
-status: in-progress
+status: done          # closed 2026-08-25
 created: 2026-08-25
 author: Alex Spataru
 ---

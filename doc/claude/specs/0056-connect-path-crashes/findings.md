@@ -1,6 +1,16 @@
+---
+spec: 0056-connect-path-crashes
+title: Connect-path crashes found by the integration sweep
+status: done          # closed 2026-08-25
+created: 2026-08-16
+author: Alex Spataru
+---
+
 # 0056 — Connect-path crashes found by the integration sweep
 
-Status: C1 and C3 fixed, C2 open with a reliable reproducer. Collected 2026-08-16 while running
+Status: closed 2026-08-25 — C1 and C3 fixed here; C2 reported resolved by the maintainer.
+The C2 section below is kept verbatim as the hypothesis record (five rejected leads), because
+the same reproducer is the fastest way back in if the fault ever returns. Collected 2026-08-16 while running
 `pytest tests/integration/` against a spec-0055 build. None of these are caused by spec 0055;
 C1's mechanism was *removed* by the 0055 follow-up, the other two predate it.
 

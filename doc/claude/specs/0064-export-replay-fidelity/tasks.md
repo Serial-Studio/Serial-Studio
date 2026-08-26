@@ -1,7 +1,7 @@
 ---
 spec: 0064-export-replay-fidelity
 phase: tasks
-status: in-progress   # draft -> approved -> in-progress -> done
+status: approved      # draft -> approved (gate before /ss-implement)
 updated: 2026-08-20
 ---
 

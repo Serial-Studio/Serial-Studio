@@ -10,8 +10,10 @@
 #  - clang-format pass 2      -> reflow after code-verify's edits
 #  - code-verify.py --check   -> regenerate .code-report
 #  - code-verify.py --singleton-census --check -> spec-0039 global-state ratchet (blocking)
+#  - code-verify.py --tu-census --check -> translation-unit size ratchet (blocking)
 #  - black                    -> format Python under app/, examples/, tests/, scripts/
 #  - documentation-verify.py  -> Markdown AI-narration scan
+#  - claim-verify.py          -> AI-facing doc claims vs the tree (blocking)
 #  - generate-sdk.py          -> regenerate SerialStudio.js / .lua from api-schema.json
 #  - generate-property-registry.py -> spec-0036 dataset registry + spec-0037 gRPC field-number
 #                                     ledger and typed proto (all six generated artifacts)
@@ -243,6 +245,14 @@ def main() -> int:
     ):
         return 1
 
+    if not run_gate_step(
+        "Checking the translation-unit census",
+        root / "scripts" / "code-verify.py",
+        "--tu-census",
+        "--check",
+    ):
+        return 1
+
     run_black(root)
 
     run_python_step(
@@ -250,6 +260,13 @@ def main() -> int:
         root / "scripts" / "documentation-verify.py",
         "--quiet",
     )
+
+    if not run_gate_step(
+        "Checking AI documentation claims",
+        root / "scripts" / "claim-verify.py",
+        "--quiet",
+    ):
+        return 1
 
     run_python_step(
         "Regenerating SerialStudio SDK (JS/Lua)",

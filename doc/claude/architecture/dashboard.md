@@ -11,7 +11,7 @@
 reconfigure and the per-frame walk is pointer-only.
 
 - **Value propagation** (`m_valuePushes`, built by `buildValuePushes` per source in row-major
-  group/dataset order from `m_datasetReferences`): `updateDashboardData` walks it positionally
+  group/dataset order from `m_datasetReferences`): `applyBlockValues` walks it positionally
   and validates each entry's `uniqueId` against the incoming dataset (mismatch or unmapped UID →
   `handleMissingDataset`, the same reconfigure-and-retry-once semantics the old per-dataset
   `QHash::find` provided).
@@ -40,8 +40,8 @@ reconfigure and the per-frame walk is pointer-only.
 `Dashboard::onDisplayTick` (the `uiTimeout` slot) is now the single entry point for data on
 the GUI thread, and it runs in this order:
 
-1. **Frame ring drain** — pop every finished `TimestampedFramePtr` the pipeline thread queued
-   (`PipelineHost::dequeueDashboardFrame`) and run `hotpathRxFrame` on each. The publisher no
+1. **Block ring drain** — pop every finished `DataModel::DataBlockPtr` the pipeline thread
+   queued (`PipelineHost::dequeueDashboardBlock`) and run `hotpathRxFrame` on each. The publisher no
    longer calls the Dashboard directly; nothing about the push tables or `structureGeneration`
    revalidation changed, only who calls them and when.
 2. **Stream worker drain** — for each `IO::StreamWorker`, publish the current display budget
@@ -49,7 +49,7 @@ the GUI thread, and it runs in this order:
    pending `DataBlock` through `applyBlock` (spec 0055: one ring, one drain, both lanes).
 3. **One coalesced `updated()`** if anything set `m_updateRequired`.
 
-`applyStreamUpdate` is O(pixels + fftSize + datasets) per block, never O(samples): latest
+`applyBlock` is O(pixels + fftSize + datasets) per block, never O(samples): latest
 values into the widget dataset copies via `m_datasetReferences`, envelope pairs
 `appendDecimated` into the plot/multiplot time rings, the FFT window memcpy'd into the FFT
 series. Both lanes share `advancePlotClock(sourceId, t0)` — the per-source clock is advanced
@@ -197,7 +197,7 @@ clock** (`m_plotDisplayTimeSec`, `hotpathRxFrame`): sources without a cadence st
 at one coarse wall-clock tick (~15 ms on Windows), which would compress them onto a single
 decimator interval and lose temporal spread; the display clock spreads same-timestamp frames
 by a smoothed per-sample period so sub-tick windows still render. It is self-correcting
-(n samples over a gap fill it exactly) and display-only: `m_relativeFrameTimeSec` and exported
+(n samples over a gap fill it exactly) and display-only: the plot clock's `relativeFrameTimeSec` and exported
 timestamps stay raw. Fine-timestamp sources (audio) hit the n==1 path and are unchanged. Ticks
 render the **magnitude** in an adaptive unit (`PlotWidget.qml` `timeAxis` + `secondsAgoFormat`
 + `timeUnitFactor`/`timeUnitName`): the title and ticks switch between `s` / `ms` / `us` from
@@ -305,8 +305,11 @@ project overview); elsewhere it's QSettings `Dashboard/PlotTimeRange` (edited in
 Dashboard syncs `m_plotTimeRange` from the project on `operationModeChanged` and persists to
 QSettings only outside ProjectFile. Both UI controls are an oscilloscope-style **editable**
 SpinBox snapping typed input to a 1 ms..300 s ladder. **API**: `dashboard.setTimeRange{seconds}` /
-`dashboard.getTimeRange` (alias `project.dashboard.setTimeRange`); the old `setPoints`/`getPoints`
-commands were removed with the rename. The legacy `points` (`kDefaultPlotPoints = 1000`) still
+`dashboard.getTimeRange` (alias `project.dashboard.setTimeRange`); the old
+<!-- claim-verify off -->
+`setPoints`/`getPoints`
+commands were removed with the rename.
+<!-- claim-verify on --> The legacy `points` (`kDefaultPlotPoints = 1000`) still
 sizes the raw rings for dataset-X / FFT / GPS / 3D; the "Points" controls were removed from the UI.
 
 ## Waterfall Follows the Time Range (Pro)
@@ -335,7 +338,10 @@ into bowtie quads at every baseline crossing, washing out dense bipolar fills). 
 axis range); the fill color is a saturation-deepened (`1-(1-s)^2`, hue-preserving) variant of the
 curve color so pastel themes stay vivid. Overlaid on the GraphsView plot area, tracking
 `xVisibleMin`/`yVisibleMin` under zoom/pan. It replaced the QtGraphs `AreaSeries` (whose per-tick
-CPU shape re-triangulation stalled audio-rate curves) and the bipolar `drawClamped` split series.
+CPU shape re-triangulation stalled audio-rate curves) and
+<!-- claim-verify off -->
+the bipolar `drawClamped` split series.
+<!-- claim-verify on -->
 Baseline rules: Plot = 0 when bipolar, `maxY` when all-negative (inverted mountain), else `minY`;
 FFT always uses `minY` (floor). NaN samples break the column run and leave a real gap. The fill
 renders above the curve stroke and below the crosshair overlay; it follows the curve series'
@@ -378,18 +384,18 @@ removed 2026-08-17 as UI nobody could read; `MultiPlot` has no segment surface a
 one). Session-DB persistence of segments is not implemented yet.
 
 **Stream-lane sources feed the same engines by a second path (spec 0051 M4).** Audio and any other
-`isStreamCapable()` source never reaches `updateLineSeries`/`updateDataSeries`, so `feedSweep`/
-`feedMultiSweep` never see it; until this was wired the trigger was simply dead for those sources while
-the plain time rings kept updating, so the plot looked alive. `applyStreamChannel` now calls
-`feedPlotStreamSweep` per plot, and `applyStreamUpdate` calls `feedMultiplotStreamSweep` per enabled
-multiplot sweep after the channel loop (a multiplot needs one sweep time from its trigger curve applied
-to every curve, which a per-channel hook cannot produce). Both drive `advance()` from the
-`DataBlock` envelope pairs, so **trigger resolution is the envelope bucket**, i.e. exactly the
-resolution the trace is drawn at (`StreamProcessor::reduceChannel` buckets on the same
-`windowSec`/`pixelWidth` the plot uses). Curves pair by envelope index because one source's channels
-share that grid. A multiplot no channel of the update feeds resolves to a null trigger and is skipped,
-which is what keeps frame-fed multiplots out of the stream path; a multiplot mixing both lanes would be
-advanced by both clocks and is not supported.
+`isStreamCapable()` source never reaches `updateLineSeries`/`updateDataSeries`, where the frame lane
+advances the sweep inline once per display tick at `m_plotDisplayTimeSec`; until this was wired the
+trigger was simply dead for those sources while the plain time rings kept updating, so the plot looked
+alive. `applyBlockColumn` now calls `feedPlotBlockSweep` per active plot the column targets, and
+`applyBlock` calls `feedMultiplotBlockSweep` per enabled, active multiplot after the column loop (a
+multiplot needs one sweep time from its trigger curve applied to every curve, which a per-channel hook
+cannot produce). Both drive `advance()` **once per sample**, at `baseSec + i * dt` off the block's
+uniform grid, so **trigger resolution is the source's, not the display's** — the reduction happens
+afterwards, when the sweep time that `advance()` returns is written through `appendDecimated`. Curves
+pair by sample index because one source's columns share a block grid. A multiplot no column of the
+block feeds resolves to a null trigger and is skipped, which is what keeps frame-fed multiplots out of
+the stream path; a multiplot mixing both lanes would be advanced by both clocks and is not supported.
 
 ## Output Widgets (Pro)
 
@@ -447,7 +453,7 @@ Minimum window size is mode-dependent via `WidgetDelegate.minimumWidth/Height`
 (48x48 manual, 356x320 auto) which feed `implicitWidth/Height` — the floor
 `computeResizedGeometry` and `constrainWindows` (48 fallback in manual, 100x80 in auto) read.
 `MiniWindow` collapses caption chrome progressively below 200 px (external button, title,
-minimize, maximize; close never hides) and its `externControlWidth`/`windowControlsWidth`
+minimize, maximize; close never hides) and its `menuControlWidth`/`windowControlsWidth`
 count only visible controls, which the C++ caption hit-test depends on.
 
 ## Widget Toolbars — `WidgetToolbar.qml` Owns the Policy
@@ -520,7 +526,7 @@ gated by `registry-verify.py` + `tests/scripts/test_widget_manifests.py`.
 
 ## Workspaces (`UI::Taskbar`)
 
-`app/qml/MainWindow/Taskbar/`: user-defined dashboard tabs.
+`app/qml/MainWindow/Panes/Dashboard/Taskbar.qml`: user-defined dashboard tabs.
 Persisted under `"workspaces"`. **Workspace IDs ≥ 1000**, group IDs < 1000.
 `Taskbar::deleteWorkspace(id)` branches on the threshold — don't cross-wire. Edits stage
 in memory + `setModified(true)`; no autosave.

@@ -62,7 +62,7 @@ timebase that is either a uniform grid (`dt != 0`) or explicit per-sample offset
   0055 changed only what happens *after* `applyDatasetValues*` returns. `trySpanLane` and the frame
   slot pool are untouched — the pooled `Frame` simply became the staging buffer.
 - **Two caps, not one (D6).** `kFrameBlockSampleCap` (64) bounds the frame lane because its columns
-  carry a display string per sample — `updateDashboardData` wrote `dataset.value` into DataGrid and
+  carry a display string per sample — `applyBlockValues` writes `dataset.value` into DataGrid and
   the API-serialized frame, and re-rendering that from the double changes what the user sees.
   `kStreamBlockSampleCap` (4096) bounds the numeric-only dense lane (D2).
 - **The pipeline thread is the single producer for every sink (D8).** A stream worker owns no
@@ -277,7 +277,7 @@ Dashboard taskbar badge poll; nothing on the frame path signals, allocates, or l
 
 ProjectFile replay does not travel the byte pipeline: players call
 `FrameBuilder::replayChannels(sourceId, channels, recordedTs)` with already-split cells, and
-`publishReplayFrame` fans out to the dashboard (pooled slot) plus API/gRPC observers only —
+`publishReplayValues` fans out to the dashboard (pooled slot) plus API/gRPC observers only —
 **recording sinks never see replayed frames**. While a player is open, transform engines are
 destroyed and `m_captureDatasetValues` is forced off (`refreshDatasetCaptureFlag` gates on
 `!m_playerOpen`); the player `openChanged` lambdas set `m_captureFlagsDirty` on both edges and

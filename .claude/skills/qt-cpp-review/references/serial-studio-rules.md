@@ -22,10 +22,10 @@ sinks`. A violation here causes silent frame drops, not a compile error.
   `DeviceManager` ready-read, `ConnectionManager::onFrameReady`, and
   `sourceStructureChanged -> rebuildDevices` (queued there lets a stale `m_devices[0]` survive
   into Connect).
-- **SS-HOT-3**: No allocation and no `Frame` copy on the dashboard path. The Dashboard frame
-  comes from `FrameBuilder::acquireFrame()` (the slot pool), never a direct
-  `make_shared<TimestampedFrame>`. The async-sink fan-out in `hotpathTxFrame` makes exactly
-  one detached `make_shared` copy, gated on a sink being enabled — that is the intentional
+- **SS-HOT-3**: No allocation and no block copy on the dashboard path. The Dashboard block
+  comes from `FrameBuilder::claimBlockSlot()` (the slot pool), never a direct
+  `make_shared<DataModel::DataBlock>`. The async-sink fan-out makes exactly
+  one detached `clone_block_trimmed` copy, gated on a sink being enabled — that is the intentional
   slow-export path and is not a finding.
 - **SS-HOT-4**: Source owns time. Stamp at the driver boundary; never re-stamp in an
   export/report worker. `monotonicFrameNs(...)` is the safety net only.

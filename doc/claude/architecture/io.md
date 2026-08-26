@@ -56,9 +56,11 @@ legacy CSV text path, so the branch inside `Audio::processInputBuffer` is delibe
 `DeviceManager::open(mode)` starts the `FrameReader` if it is null and then calls
 `m_driver->open(mode)` directly. There is no orchestration layer: `DeviceManager` owns no
 task runner, and nothing sits between `ConnectionManager::connectDevice()` and the driver.
+<!-- claim-verify off -->
 The spec-0034 `IO::ConnectionFlows` layer and the hook family it drove (`supportsAsyncOpen`,
 `beginOpen`, `abortOpen`, `openTimeoutMsec`, `linkDropped`) were removed 2026-07-30; spec
-0034's docs describe a design that is no longer in the tree. The only async-open surface
+0034's docs describe a design that is no longer in the tree.
+<!-- claim-verify on --> The only async-open surface
 today is spec 0050's bare `HAL_Driver::openFinished(bool, reason)` verdict signal — a
 namesake of a removed 0034 hook, but a different, much smaller thing (see below).
 
@@ -151,7 +153,9 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   reply. **Teardown ordering is load-bearing**:
   the pump stops and `clientContext` is nulled BEFORE `UA_Client_delete()`, every trampoline
   null-checks, and a `close()` arriving from inside a callback defers the delete to a queued call
-  (`s_inPump`) rather than freeing the object the stack is standing on. `OpcUaTypes.h` is the
+  (`ClientCallScope` raises a per-session re-entrancy depth around every open62541 call, not
+  only the pump — a flag that covered the pump alone let a failed dial destroy the client
+  `connectAsync()` was still standing on) rather than freeing the object the stack is standing on. `OpcUaTypes.h` is the
   transport-neutral vocabulary (Qt Core only, so the ctest tier links it without the stack) and
   `OpcUaMarshal` is the single seam, pinned by `tst_opcua_marshal`.
 - **Requests are answered POSITIONALLY, so the session stages them.** The Read service returns
@@ -229,7 +233,10 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   synchronous settle, and on user cancel). `ConnectionManager::onDriverOpenFinished` settles
   the pending id, quietly closes the device on a failed dial (never `sessionClosed`), and
   forwards to `onDeviceOpenFinished` — so the spec-0035 diagnostics auto-trigger now sees
-  async failures too. There is NO polling sweep: `settlePendingDialVerdicts()` is gone;
+  async failures too. There is NO polling sweep:
+<!-- claim-verify off -->
+  `settlePendingDialVerdicts()` is gone;
+<!-- claim-verify on -->
   never re-add a "check isOpen() later" settlement path. A driver that dials async and does
   not report both outcomes wedges the connect button — that is the bug class this design
   exists to kill. The reason string is never shown — diagnostics ignore it and the driver

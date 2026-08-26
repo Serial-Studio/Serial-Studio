@@ -273,7 +273,7 @@ transforms re-run only on frame arrival, so table writes made while the device i
 don't render until the next frame. Two SDK calls close that gap, both running the same
 transform-only pass (`reprocessDatasetValues`) over the live frames (per-source frames when
 populated, else `m_frame`) and sharing the private `republishFrames(bool feedExports)` helper:
-`refreshDashboard()` (`dashboard.reprocess` → `FrameBuilder::reprocessFrames`, `feedExports`
+`dashboardTick()` (`dashboard.reprocess` → `FrameBuilder::reprocessFrames`, `feedExports`
 false) runs **synchronously** and publishes to `Dashboard::hotpathRxFrame` directly, skipping
 the sink fan-out so a synthetic refresh never re-records samples already
 exported on arrival; `dashboardTick()` (`dashboard.tick` → `FrameBuilder::dashboardTick`,
@@ -302,4 +302,6 @@ in a throwaway GUI-thread engine (stub `__ss_bridge` + SDK prelude + `JsWatchdog
 installing it; `controlscript.getCode`/`setCode` are registry aliases of `get`/`set`. The
 agent-facing globals reference is `:/ai/docs/control_script_js.md`
 (`meta.fetchScriptingDocs{kind:'control_script_js'}`; allow-lists in
-`ContextBuilder::scriptingDocFor` AND `ToolDispatcher::getScriptingDocs`, plus `rcc.qrc`).
+`ContextBuilder::scriptingDocFor` AND the `meta.fetchScriptingDocs` entry in
+`ToolDispatcher`'s tool table, dispatched by `Conversation::runMetaScriptingDocs`, plus
+`rcc.qrc`).

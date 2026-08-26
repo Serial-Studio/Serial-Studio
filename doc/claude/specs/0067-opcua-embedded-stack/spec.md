@@ -1,7 +1,7 @@
 ---
 spec: 0067-opcua-embedded-stack
 title: Embedded OPC UA Stack and Secure Channels
-status: in-progress  # draft -> approved -> in-progress -> done | shelved
+status: done          # closed 2026-08-25
 created: 2026-08-24
 author: Alex Spataru
 ---

@@ -25,6 +25,7 @@
 !/.claude/hooks/
 .code-report
 .doc-report
+.claim-report
 /TODO.md
 /findings.md
 

@@ -28,7 +28,8 @@ always blockers. To auto-fix formatting in place: `python scripts/code-verify.py
 
 Before any commit, run the top-level driver, which chains: chmod (POSIX) → expand-doxygen →
 clang-format → code-verify --fix → clang-format → code-verify --check → singleton-census gate
-(spec 0039, blocking) → black (Python) → documentation-verify → generate-sdk (regenerates
+(spec 0039, blocking) → tu-census gate (blocking) → black (Python) → documentation-verify →
+claim-verify gate (blocking) → generate-sdk (regenerates
 `SerialStudio.js`/`.lua` from `api-schema.json`) → generate-command-strings →
 generate-property-registry (regen + --check + --check-snapshot, specs 0036/0037) →
 registry-verify → search-index rebuild → changed-file summary. It only sanitizes the

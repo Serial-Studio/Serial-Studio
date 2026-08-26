@@ -1,7 +1,7 @@
 ---
 spec: 0064-export-replay-fidelity
 title: Export and Replay Fidelity
-status: in-progress   # closed 2026-08-20, reopened same day for the dense-replay amendment below
+status: done          # closed 2026-08-25
 created: 2026-08-18
 author: Alex Spataru
 ---

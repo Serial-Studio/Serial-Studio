@@ -1,3 +1,11 @@
+---
+spec: 0021-simd-kernels
+title: Portable SIMD kernels
+status: done          # closed 2026-08-25
+created: 2026-07-19
+author: Alex Spataru
+---
+
 # 0021 — Portable SIMD kernels (plan)
 
 Status: approved-by-commission (user requested identify -> plan -> implement in one autonomous
@@ -59,3 +67,27 @@ Read-back diff review per site (exactness argument named per kernel), adversaria
 review pass, `python scripts/code-verify.py --check` on every touched file. No builds here;
 the 256 kHz gate re-runs in CI (`--benchmark-hotpath`), and the TextTemplates edit keeps the
 x86 fast path structurally unchanged so the gate risk is the NEON lane only.
+
+## Outcome (verified 2026-08-25)
+
+Every planned consumer got a kernel; the names drifted during implementation, so read
+`app/src/DSPSimd.h` as the authority, not the table above.
+
+| Planned | Shipped as | Consumer |
+|---|---|---|
+| `simdForEachByteMatch` | same | TextTemplates |
+| `simdMinMaxF64` | same (+ `simdMinF64` / `simdMaxF64` split out) | ReportData, `DSP::dsColumnYBounds` |
+| `simdRingsToPoints` | same | Plot XY |
+| `simdFindAnyByte` | same | ZMODEM `zdleEncode` |
+| `simdFiniteMinMaxStrided2` | `simdFiniteMinMaxPointF` | Plot, PlotCurve, MultiPlot |
+| `simdWindowedComplexFill` | `simdWindowedRealFill` | FFTPlot, Waterfall |
+| `simdHexPairs16` + `simdPrintableMask16` | not built | — |
+
+The Console path took a different shape than planned: `simdAsciiDots16` (Console `Handler.cpp`)
+and `simdWidenAscii` (`DataModel/Frame.h`) replaced the hex-pair/printable-mask pair. Two kernels
+landed that the plan never listed — `simdPowerSpectrumDb` (FFTPlot, Waterfall) and
+`simdDeinterleaveToF64` (`IO::StreamWorker`) — both from the spec-0051 stream lane, which did not
+exist when this plan was written.
+
+The deferred list above still stands: none of it was picked up.
+

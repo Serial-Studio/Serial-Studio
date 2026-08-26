@@ -54,7 +54,7 @@ Two entries in that list carry their own reason to sit where they do:
   reason and because the diagnostics runner reports through the problem center. Both get their
   wiring later, in the `setupExternalConnections()` block.
 - **`OfflineLicense` and `Trial` are pinned ahead of `restoreLastProject()`**: their ctors install
-  the `CommercialToken`, and anything that bakes `proWidgetsEnabled()` into derived state at load
+  the `CommercialToken`, and anything that bakes `SerialStudio::activated()` into derived state at load
   time (auto workspaces, driver lists, dashboard layout) reads a fallback value if the token
   arrives late. Late or async activation still needs a `LemonSqueezy::activatedChanged` hook — the
   pinning fixes the startup path only (2026-07-09: Plot3D degraded to MultiPlot on

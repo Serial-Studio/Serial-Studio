@@ -21,7 +21,7 @@ Extract anything a `Grep`/`Read` could settle:
 | Behavior | "Reconnects automatically on disconnect" | The slot/handler implementing it |
 | File / format | "Exports MDF4" / port name examples | The exporter/driver code; platform-specific literals |
 | CLI flag | "`--benchmark-hotpath`" | Grep the exact flag string in `app/src` |
-| Cross-reference | "[UART](Drivers-UART.md)" | Target file exists; entry registered in `help.json` |
+| Cross-reference | `[UART](Drivers-UART.md)` | Target file exists; entry registered in `help.json` |
 
 Skip opinions, theory primers, and protocol background — audit facts, not prose.
 

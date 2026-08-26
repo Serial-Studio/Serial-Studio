@@ -44,7 +44,7 @@
   when `dt_ns` is 0. `t_end_ns` is indexed with `t0_ns` so a reader finds the blocks covering an
   instant by lookup instead of decoding, and `min_value`/`max_value`/`sum_value`/`finite_count`
   keep the explorer's report aggregates pure SQL -- SQL cannot compute MIN/AVG over a blob.
-  `hashBlockRow` is the spec-0044 digest; `hashReadingRow` / `hashStreamBlock` are **kept verbatim**
+  `hashBlockRow` is the spec-0044 digest; `hashRawChunk` / `hashReadingRow` are **kept verbatim**
   so a legacy archive re-hashes identically.
   - **Legacy archives are read-only history (R8).** `readings` and `stream_blocks` still open,
     replay and verify; the app never writes them again. Every reader goes through
@@ -60,7 +60,7 @@
     are deleted, along with the float32 interleave round trip they required. Because no worker sits
     in front of a replay any more there is no precomputed FFT window, so `applyBlockColumn` falls
     back to feeding the FFT and waterfall series from the samples -- what the frame lane always did.
-- **Session DB lives in `app/src/Sessions/`** (NOT `app/src/SQLite/`):
+- **Session DB lives in `app/src/Sessions/`** (NOT `app/src/Sessions/`):
   - `Sessions::DatabaseManager` — singleton owning the open `.db`; backs `app/qml/DatabaseExplorer/`.
   - `Sessions::Export` (`Sessions/Export.h/.cpp`): `FrameConsumer`-based; tables
     `sessions/columns/readings/raw_bytes/table_snapshots`; second lock-free queue for raw
@@ -86,7 +86,7 @@
   - **ProjectFile replay bypasses the byte round-trip (spec 0020)**: all three players hand
     their already-split cells to `FrameBuilder::replayChannels(sourceId, channels, recordedTs)`
     — no `joinReplayRow` → bytes → re-split. It publishes via the slot pool through
-    `publishReplayFrame`: dashboard + read-only observers (API/gRPC, only with a client
+    `publishReplayValues`: dashboard + read-only observers (API/gRPC, only with a client
     connected) and **never a recording sink** (CSV/MDF4/Sessions export, MQTT) — replay
     cannot re-record itself. Recorded timestamps ride the frame (players anchor a steady base
     per `anchorSteadyBase` and stamp rows with recorded deltas).
@@ -126,9 +126,9 @@
 ## Reproducibility Verification (spec 0044)
 
 - **Capture-side fingerprints.** `ExportWorker` keeps two incremental SHA-256 hashes on the
-  worker thread: raw chunks (in `writeRawBytes`, insertion = `raw_id` order) and readings
-  rows (in `bindAndInsertReading`), over the canonical byte layout in
-  `Sessions::hashRawChunk` / `hashReadingRow` (`Export.h` free functions — the verifier
+  worker thread: raw chunks (in `writeRawBytes`, insertion = `raw_id` order) and block
+  rows (in `insertBlockRow`), over the canonical byte layout in
+  `Sessions::hashRawChunk` / `hashBlockRow` (`Export.h` free functions — the verifier
   reuses them, never re-derive the layout). `finalizeSession()` stamps them into the
   session row together with `app_version`, `capture_format`
   (`DatabaseManager::kCaptureFormatVersion`), `repro_class` (JSON: controlScript /

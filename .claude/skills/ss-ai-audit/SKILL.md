@@ -19,6 +19,15 @@ corpus sweep, 2026-07 skills audit), so treat drift as expected, not exceptional
 
 ## Procedure
 
+0. **Run the mechanical pass first.** `python3 scripts/claim-verify.py` resolves every
+   backticked repo path, `file:line` citation, Markdown link, `Class::method`, bare camelCase
+   identifier and pinned constant in the AI-facing tier against the tree, and writes
+   `.claim-report`. It is a gate in CI and in `sanitize-commit.py`, baselined by
+   `scripts/claim-baseline.json`, so anything it can catch should already be caught. Start
+   from its advisories (identifiers that vanished are the richest seam) and spend the manual
+   pass on what it structurally cannot check: whether a *paragraph* still describes the
+   mechanism, whether a step list is complete, whether a rule still binds.
+
 1. **Enumerate the claim-bearing files** in scope: `CLAUDE.md`, `doc/claude/**` (including
    `architecture/`), `.claude/skills/*/SKILL.md` + `references/`, and — if asked — the in-app
    assistant material under `app/rcc/`.
@@ -47,8 +56,10 @@ corpus sweep, 2026-07 skills audit), so treat drift as expected, not exceptional
 - **Moved implementations** — TU splits and renames leave docs pointing at the old file
   (e.g. `ProjectEditor.cpp` → `Project/ProjectEditorShared.h` + `ProjectEditorForms.cpp`).
 - **CI workflow names** — jobs get consolidated/renamed (`test.yml`/`deploy.yml` → `ci.yml`).
+<!-- claim-verify off -->
 - **Interface vs concrete attribution** — a method documented on the interface that only the
   concrete class carries (`IScriptEngine::guardedCall` → `JsScriptEngine::guardedCall`).
+<!-- claim-verify on -->
 - **Look-alike constants** — two real numbers conflated (65536 enqueue queue vs 4096
   `kCapturedPoolSize`). Verify which structure the number belongs to, not just that it
   appears in code.

@@ -1,7 +1,7 @@
 ---
 spec: 0065-glibc-compat-appimage
 title: glibc-compat Linux AppImage for legacy distributions
-status: in-progress  # draft -> approved -> in-progress -> done | shelved
+status: done          # closed 2026-08-25
 created: 2026-08-20
 author: Alex Spataru
 ---

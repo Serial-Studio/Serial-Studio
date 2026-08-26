@@ -49,7 +49,7 @@ see [ss-hotpath]). Never re-stamp downstream.
    switch, and `app/src/DataModel/Project/ProjectEditorForms.cpp` — add it to the `busTypes`
    combobox list in the source form model (the old `ProjectEditor.cpp` was split; these live
    in the per-concern TUs now).
-8. Icon — add the driver SVG under `app/rcc/icons/devices/drivers/` and register it with a
+8. Icon — add the driver SVG under `app/rcc/icons/devices/<tier>/` (16/24/32) and register it with a
    `<file>` entry in `app/rcc/rcc.qrc` (`busTypeIcon()` returns its `qrc:/` path).
 9. CLI (optional) — if it should be launchable headless, add options in `app/src/Misc/CLI.{h,cpp}`
    following the existing `setupUartConnection` / `setupTcpConnection` pattern.

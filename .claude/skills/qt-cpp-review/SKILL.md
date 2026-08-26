@@ -160,10 +160,11 @@ judging anything on the `Driver -> FrameReader -> FrameBuilder -> Dashboard` pat
 - A hotpath signal hop that is **queued instead of `Qt::DirectConnection`** (queued between
   two main-thread objects fills the 65536-slot queue at 10+ kHz and drops frames). Includes
   `DeviceManager` ready-read and `sourceStructureChanged -> rebuildDevices`.
-- **Allocation or a `Frame` copy on the dashboard path** — the Dashboard frame must come from
-  `FrameBuilder::acquireFrame()` (slot pool), never a direct `make_shared<TimestampedFrame>`.
-  (The async-sink fan-out in `hotpathTxFrame` makes one *intentional* detached copy, gated on
-  a sink being enabled — that is the slow export path, not a finding.)
+- **Allocation or a block copy on the dashboard path** — the Dashboard block must come from
+  `FrameBuilder::claimBlockSlot()` (slot pool), never a direct
+  `make_shared<DataModel::DataBlock>`. (The async-sink fan-out makes one *intentional*
+  detached copy via `clone_block_trimmed`, gated on a sink being enabled — that is the slow
+  export path, not a finding.)
 - **Re-stamping time** in an export/report worker. Source owns time: stamp at the driver
   boundary; `monotonicFrameNs(...)` is the safety net only.
 - JS frame-parser calls not going through `JsScriptEngine::guardedCall()` (raw

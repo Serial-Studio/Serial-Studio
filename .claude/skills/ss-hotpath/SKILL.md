@@ -54,10 +54,11 @@ block. Never per-sample across a thread boundary.
 - **Hotpath signal hops must be `Qt::DirectConnection`.** A queued connection between two
   pipeline-thread objects fills the slot queue at 10+ kHz and drops frames. GUI↔pipeline
   traffic must stay chunk/command/tick rate.
-- **No allocation and no `Frame` copy on the dashboard path.** Draw frames from
-  `FrameBuilder::acquireFrame()` (the slot pool) — never `make_shared<TimestampedFrame>` directly.
-  The one detached copy in the `hotpathTxFrame` async-sink fan-out is intentional (slow export
-  path, gated on a sink being on, keeps a backlog from pinning the pool) — not a violation.
+- **No allocation and no block copy on the dashboard path.** Draw blocks from
+  `FrameBuilder::claimBlockSlot()` (the slot pool) — never `make_shared<DataModel::DataBlock>`
+  directly. The one detached `clone_block_trimmed` copy in the async-sink fan-out is
+  intentional (slow export path, gated on a sink being on, keeps a backlog from pinning the
+  pool) — not a violation.
 - **The hotpath reads cached flags** (`m_operationMode`, `m_playerOpen`, `m_anyAsyncSink`,
   `m_captureLatestFrame`, `m_changeDriven`, Dashboard `m_streamAvailable`). A new input to any
   of them must wire its change signal to the cache refresh, or frames/exports silently stop

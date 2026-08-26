@@ -3022,6 +3022,30 @@ jobs:
       run: python3 scripts/code-verify.py --check
 
     #
+    # Growth ratchets. Each has a checked-in baseline and fails only on an increase, so the
+    # existing debt does not block CI while new debt does. Until 2026-08-25 the singleton census
+    # ran only inside sanitize-commit.py, which made it a gate somebody had to remember to run
+    #
+    - name: '🔒 Ratchet global state (spec 0039)'
+      run: python3 scripts/code-verify.py --singleton-census --check
+
+    - name: '🔒 Ratchet translation-unit size'
+      run: python3 scripts/code-verify.py --tu-census --check
+
+    #
+    # The AI-facing docs are the tier that rots silently; this checks their paths, symbols and
+    # pinned constants against the tree
+    #
+    - name: '🔬 Verify AI documentation claims'
+      run: python3 scripts/claim-verify.py --quiet
+
+    #
+    # Markdown AI-narration scan over the user-facing docs
+    #
+    - name: '🔬 Verify documentation conventions'
+      run: python3 scripts/documentation-verify.py --quiet
+
+    #
     # The .code-report cleanup checklist, uploaded even on success so the baseline debt stays
     # visible
     #
@@ -3030,7 +3054,10 @@ jobs:
       uses: actions/upload-artifact@v5
       with:
         name: code-verify-report
-        path: .code-report
+        path: |
+          .code-report
+          .doc-report
+          .claim-report
         if-no-files-found: ignore
 
     #
