@@ -31,6 +31,7 @@
 #  include <vector>
 
 #  include "SerialStudio.h"
+#  include "Sessions/Player/PreSessionState.h"
 #  include "Sessions/PlayerLoaderWorker.h"
 
 class QThread;
@@ -210,11 +211,8 @@ private:
 
   QSet<int> m_sourcesAtCurrentTs;
 
-  bool m_preSessionCaptured;
   bool m_restorePending;
-  SerialStudio::OperationMode m_preSessionOperationMode;
-  QString m_preSessionProjectPath;
-  QString m_preSessionViewState;
+  PreSessionState m_preSession;
 };
 
 }  // namespace Sessions

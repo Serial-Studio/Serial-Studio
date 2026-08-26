@@ -422,17 +422,17 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>API::Server</name>
     <message>
-        <location filename="../../src/API/Server.cpp" line="625"/>
+        <location filename="../../src/API/Server.cpp" line="310"/>
         <source>Unable to start API TCP server</source>
         <translation>API TCPサーバーを起動できません</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="672"/>
+        <location filename="../../src/API/Server.cpp" line="357"/>
         <source>Allow External API Connections?</source>
         <translation>外部API接続を許可しますか?</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="673"/>
+        <location filename="../../src/API/Server.cpp" line="358"/>
         <source>Exposing the API server to external hosts allows other devices on your network to connect to Serial Studio on port 7777.
 
 Only enable this on trusted networks. Untrusted clients may read live data or send commands to your device.</source>
@@ -441,32 +441,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 信頼できるネットワークでのみ有効にしてください。信頼できないクライアントはライブデータを読み取ったり、デバイスにコマンドを送信したりする可能性があります。</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="737"/>
+        <location filename="../../src/API/Server.cpp" line="422"/>
         <source>Unable to restart API TCP server</source>
         <translation>API TCPサーバーを再起動できません</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="847"/>
+        <location filename="../../src/API/Server.cpp" line="532"/>
         <source>Allow API device control?</source>
         <translation>API デバイス制御を許可しますか？</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="848"/>
+        <location filename="../../src/API/Server.cpp" line="533"/>
         <source>A program using Serial Studio's local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
         <translation>Serial Studio のローカル API を使用しているプログラムが、接続されたデバイスへのデータ送信を要求しています。API クライアントによるデバイスへの書き込みを許可しますか？</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="851"/>
+        <location filename="../../src/API/Server.cpp" line="536"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1974"/>
+        <location filename="../../src/API/Server.cpp" line="1659"/>
         <source>API server</source>
         <translation>APIサーバー</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1974"/>
+        <location filename="../../src/API/Server.cpp" line="1659"/>
         <source>Invalid pending connection</source>
         <translation>無効な保留中の接続</translation>
     </message>
@@ -6960,12 +6960,12 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>値表示の固定小数点以下桁数。フォーマットを上書きします（-1 = 自動）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="701"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="714"/>
         <source>Auto-detect</source>
         <translation>自動検出</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="701"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="714"/>
         <source>Manual Delimiters</source>
         <translation>手動区切り文字</translation>
     </message>
@@ -7755,7 +7755,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">ペインターウィジェット</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="718"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="731"/>
         <source>Web View</source>
         <translation>Webビュー</translation>
     </message>
@@ -7977,7 +7977,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">ゲージまたはバー表示範囲の上限</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="731"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="744"/>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="662"/>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="689"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="366"/>
@@ -8069,207 +8069,207 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Painterコードを編集</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="455"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="468"/>
         <source>Edit Canvas Code</source>
         <translation>キャンバスコードを編集</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="479"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="492"/>
         <source>Edit Transmit Function</source>
         <translation>送信関数を編集</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="665"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="678"/>
         <source>Rectangular (None)</source>
         <translation>矩形（なし）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="665"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="678"/>
         <source>Bartlett (Triangular)</source>
         <translation>バートレット（三角）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="665"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="678"/>
         <source>Hann</source>
         <translation>ハン</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="666"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="679"/>
         <source>Hamming</source>
         <translation>ハミング</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="666"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="679"/>
         <source>Blackman</source>
         <translation>ブラックマン</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="666"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="679"/>
         <source>Blackman-Harris</source>
         <translation>ブラックマン-ハリス</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="666"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="679"/>
         <source>Nuttall</source>
         <translation>ナットール</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="667"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="680"/>
         <source>Blackman-Nuttall</source>
         <translation>ブラックマン-ナットール</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="667"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="680"/>
         <source>Flat Top</source>
         <translation>フラットトップ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="667"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="680"/>
         <source>Welch</source>
         <translation>ウェルチ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="667"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="680"/>
         <source>Bartlett-Hann</source>
         <translation>バートレット・ハン</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="668"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="681"/>
         <source>Bohman</source>
         <translation>ボーマン</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="668"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="681"/>
         <source>Cosine (Sine)</source>
         <translation>コサイン（サイン）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="668"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="681"/>
         <source>Lanczos</source>
         <translation>ランチョス</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="668"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="681"/>
         <source>Parzen</source>
         <translation>パーゼン</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="679"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="692"/>
         <source>Off</source>
         <translation>OFF</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="679"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="692"/>
         <source>Auto Start</source>
         <translation>自動開始</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="679"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="692"/>
         <source>Start on Trigger</source>
         <translation>トリガーで開始</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="679"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="692"/>
         <source>Toggle on Trigger</source>
         <translation>トリガーで切り替え</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="680"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="693"/>
         <source>Repeat N Times</source>
         <translation>N回繰り返し</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="683"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="696"/>
         <source>Plain Text (UTF8)</source>
         <translation>プレーンテキスト（UTF8）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="683"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="696"/>
         <source>Hexadecimal</source>
         <translation>16進数</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="683"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="696"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="684"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="697"/>
         <source>Binary (Direct)</source>
         <translation>バイナリ（直接）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="689"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="702"/>
         <source>No Checksum</source>
         <translation>チェックサムなし</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="693"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="706"/>
         <source>End Delimiter Only</source>
         <translation>終端デリミタのみ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="693"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="706"/>
         <source>Start Delimiter Only</source>
         <translation>開始デリミタのみ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="694"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="707"/>
         <source>Start + End Delimiter</source>
         <translation>開始+終端デリミタ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="694"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="707"/>
         <source>No Delimiters</source>
         <translation>デリミタなし</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="704"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="717"/>
         <source>Button</source>
         <translation>ボタン</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="704"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="717"/>
         <source>Slider</source>
         <translation>スライダー</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="704"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="717"/>
         <source>Toggle</source>
         <translation>トグル</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="704"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="717"/>
         <source>Text Field</source>
         <translation>テキストフィールド</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="705"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="718"/>
         <source>Knob</source>
         <translation>ノブ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="709"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="722"/>
         <source>Bar Panel</source>
         <translation>バーパネル</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="710"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="723"/>
         <source>Data Grid</source>
         <translation>データグリッド</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="711"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="724"/>
         <source>GPS Map</source>
         <translation>GPSマップ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="712"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="725"/>
         <source>Gyroscope</source>
         <translation>ジャイロスコープ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="713"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="726"/>
         <source>Multi-Plot</source>
         <translation>マルチプロット</translation>
     </message>
@@ -8278,49 +8278,49 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">マルチプロット</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="714"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="727"/>
         <source>Accelerometer</source>
         <translation>加速度センサー</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="715"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="728"/>
         <source>3D Plot</source>
         <translation>3Dプロット</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="716"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="729"/>
         <source>Image View</source>
         <translation>画像ビュー</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="717"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="730"/>
         <source>Canvas Widget</source>
         <translation>キャンバスウィジェット</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="719"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="722"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="739"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="732"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="735"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="752"/>
         <source>None</source>
         <translation>なし</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="723"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="736"/>
         <source>Bar</source>
         <translation>バー</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="724"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="737"/>
         <source>Gauge</source>
         <translation>ゲージ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="725"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="738"/>
         <source>Compass</source>
         <translation>コンパス</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="726"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="739"/>
         <source>Meter</source>
         <translation>メーター</translation>
     </message>
@@ -8329,52 +8329,52 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">温度計</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="732"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="745"/>
         <source>Integer (0 decimals)</source>
         <translation>整数（小数点以下0桁）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="733"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="746"/>
         <source>1 decimal</source>
         <translation>小数点以下1桁</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="734"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="747"/>
         <source>2 decimals</source>
         <translation>小数点以下2桁</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="735"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="748"/>
         <source>3 decimals</source>
         <translation>小数点以下3桁</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="736"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="749"/>
         <source>Scientific</source>
         <translation>指数表記</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="740"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="753"/>
         <source>New Line (\n)</source>
         <translation>改行 (</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="741"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="754"/>
         <source>Carriage Return (\r)</source>
         <translation>キャリッジリターン (\r)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="742"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="755"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="745"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="758"/>
         <source>No</source>
         <translation>いいえ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="746"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="759"/>
         <source>Yes</source>
         <translation>はい</translation>
     </message>
@@ -12419,7 +12419,7 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="324"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="291"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
@@ -12428,77 +12428,77 @@ Valid format: 01 A2 FF 3C</source>
         <translation type="vanished">ネットワークソケット</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="325"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="292"/>
         <source>Network</source>
         <translation>ネットワーク</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="326"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="293"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="328"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="295"/>
         <source>Audio</source>
         <translation>オーディオ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="329"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="296"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="330"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="297"/>
         <source>CAN Bus</source>
         <translation>CANバス</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="331"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="298"/>
         <source>USB Device</source>
         <translation>USBデバイス</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="332"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="299"/>
         <source>HID Device</source>
         <translation>HIDデバイス</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="333"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="300"/>
         <source>Process</source>
         <translation>プロセス</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="334"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="301"/>
         <source>MQTT Subscriber</source>
         <translation>MQTTサブスクライバー</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="335"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="302"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="789"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="702"/>
         <source>Your trial period has ended.</source>
         <translation>試用期間が終了しました。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="790"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="703"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>Serial Studioを引き続き使用するには、ライセンスを有効化してください。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="886"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="799"/>
         <source>connection attempt failed</source>
         <translation>接続試行に失敗しました</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1436"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1322"/>
         <source>This connection type requires an active license or trial.</source>
         <translation>この接続タイプにはアクティブなライセンスまたはトライアルが必要です。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1437"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1323"/>
         <source>Activate Serial Studio Pro or start a trial to use this device type.</source>
         <translation>Serial Studio Proをアクティベートするか、トライアルを開始してこのデバイスタイプを使用してください。</translation>
     </message>
@@ -12612,93 +12612,93 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::Drivers::BluetoothLE</name>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="461"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="80"/>
         <source>BLE I/O Module Error</source>
         <translation>BLE I/Oモジュールエラー</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="720"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="339"/>
         <source>The device disconnected before the connection completed</source>
         <translation>接続完了前にデバイスが切断されました</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="736"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="355"/>
         <source>BLE connection error: %1</source>
         <translation>BLE接続エラー: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="825"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="444"/>
         <source>Select Device</source>
         <translation>デバイスを選択</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="836"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="455"/>
         <source>Select Service</source>
         <translation>サービスを選択</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="847"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="466"/>
         <source>Select Characteristic</source>
         <translation>キャラクタリスティックを選択</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1058"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="677"/>
         <source>Error while configuring BLE service</source>
         <translation>BLEサービスの設定中にエラーが発生しました</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1276"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="895"/>
         <source>Operation error</source>
         <translation>操作エラー</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1279"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="898"/>
         <source>Characteristic write error</source>
         <translation>キャラクタリスティック書き込みエラー</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1282"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="901"/>
         <source>Descriptor write error</source>
         <translation>ディスクリプタ書き込みエラー</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="735"/>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1285"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="354"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="904"/>
         <source>Unknown error</source>
         <translation>不明なエラー</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1290"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="909"/>
         <source>Characteristic read error</source>
         <translation>キャラクタリスティック読み取りエラー</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1293"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="912"/>
         <source>Descriptor read error</source>
         <translation>ディスクリプタ読み取りエラー</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1301"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="920"/>
         <source>BLE service error during connect</source>
         <translation>接続中にBLEサービスエラーが発生しました</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1534"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1153"/>
         <source>BLE Device</source>
         <translation>BLEデバイス</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1542"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1161"/>
         <source>Service</source>
         <translation>サービス</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1549"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1168"/>
         <source>Notify Characteristic</source>
         <translation>通知キャラクタリスティック</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1556"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1175"/>
         <source>Characteristic</source>
         <translation>キャラクタリスティック</translation>
     </message>
@@ -17469,57 +17469,57 @@ Please provide the necessary credentials.</source>
 <context>
     <name>Misc::ExtensionManager</name>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="267"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="277"/>
         <source>Theme</source>
         <translation>テーマ</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="270"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="280"/>
         <source>Frame Parser</source>
         <translation>フレームパーサー</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="273"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="283"/>
         <source>Project Template</source>
         <translation>プロジェクトテンプレート</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="276"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="286"/>
         <source>Plugin</source>
         <translation>プラグイン</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="279"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="289"/>
         <source>Widget</source>
         <translation>ウィジェット</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="282"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="292"/>
         <source>All Types</source>
         <translation>すべての種類</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="499"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="509"/>
         <source>Reset Extensions</source>
         <translation>拡張機能をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="500"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="510"/>
         <source>This uninstalls all extensions, removes all custom repositories, and restores the default settings. Continue?</source>
         <translation>すべての拡張機能をアンインストールし、すべてのカスタムリポジトリを削除して、デフォルト設定に復元します。続行しますか?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="539"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="549"/>
         <source>Select Extension Repository Folder</source>
         <translation>拡張機能リポジトリフォルダを選択</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="760"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="770"/>
         <source>Extension updates available</source>
         <translation>拡張機能の更新が利用可能</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="761"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="771"/>
         <source>Newer versions are available for: %1.
 
 Do you want to update them now?</source>
@@ -17528,50 +17528,50 @@ Do you want to update them now?</source>
 今すぐ更新しますか?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="768"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="778"/>
         <source>Always update</source>
         <translation>常に更新</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1160"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1170"/>
         <source>Installed (repository no longer available)</source>
         <translation>インストール済み（リポジトリは利用できません）</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1468"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1478"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1499"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1521"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1566"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1576"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1585"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1453"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1462"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1483"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1506"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1549"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1559"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1567"/>
         <source>Plugin Error</source>
         <translation>プラグインエラー</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1468"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1453"/>
         <source>Plugin "%1" is not installed.</source>
         <translation>プラグイン「%1」はインストールされていません。</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1479"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1463"/>
         <source>Extension "%1" is not a plugin (type: %2).</source>
         <translation>拡張機能「%1」はプラグインではありません（種類: %2）。</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1500"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1484"/>
         <source>Cannot read plugin metadata file:
 %1/info.json</source>
         <translation>プラグインメタデータファイルを読み取れません:
 %1/info.json</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1522"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1507"/>
         <source>Plugin "%1" requires gRPC but this build does not include gRPC support.</source>
         <translation>プラグイン「%1」はGRPCを必要としますが、このビルドにはGRPCサポートが含まれていません。</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1532"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1517"/>
         <source>This plugin uses gRPC for high-performance data streaming. The API server needs to be enabled.
 
 Would you like to enable it now?</source>
@@ -17580,34 +17580,34 @@ Would you like to enable it now?</source>
 今すぐ有効にしますか？</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1538"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1523"/>
         <source>API Server Required</source>
         <translation>APIサーバーが必要です</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1567"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1550"/>
         <source>Plugin "%1" has no 'entry' field in info.json.</source>
         <translation>プラグイン「%1」のinfo.jsonに'entry'フィールドがありません。</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1577"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1560"/>
         <source>Entry point not found:
 %1</source>
         <translation>エントリーポイントが見つかりません：
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1586"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1568"/>
         <source>Plugin "%1" has an invalid entry point path.</source>
         <translation>プラグイン「%1」のエントリーポイントパスが無効です。</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1629"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1611"/>
         <source>Missing Dependency</source>
         <translation>依存関係の不足</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1630"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1612"/>
         <source>This plugin requires "%1" but it was not found on your system.
 
 Would you like to open the download page?</source>
@@ -17616,7 +17616,7 @@ Would you like to open the download page?</source>
 ダウンロードページを開きますか？</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1535"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1520"/>
         <source>Plugins need the API server to communicate with Serial Studio. Would you like to enable it now?</source>
         <translation>プラグインがSerial Studioと通信するにはAPIサーバーが必要です。今すぐ有効にしますか？</translation>
     </message>
@@ -21483,22 +21483,22 @@ Click Refresh to update the list.</source>
         <translation>書き込み用ファイルを開けません!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1404"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1023"/>
         <source>Invalid Bluetooth adapter!</source>
         <translation>無効なBluetoothアダプタです！</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1407"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1026"/>
         <source>Unsuported platform or operating system</source>
         <translation>サポートされていないプラットフォームまたはオペレーティングシステム</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1410"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1029"/>
         <source>Unsupported discovery method</source>
         <translation>サポートされていない検出方法</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1413"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1032"/>
         <source>General I/O error</source>
         <translation>一般的なI/Oエラー</translation>
     </message>
@@ -21802,22 +21802,22 @@ function parse(%1) { ... }
         <translation>終了</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1308"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1294"/>
         <source>Time (s)</source>
         <translation>時間 (s)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1387"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1373"/>
         <source>%1  %2 dB</source>
         <translation>%1  %2 dB</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1499"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1485"/>
         <source>Freq: %1</source>
         <translation>周波数: %1</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1502"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1488"/>
         <source>Time: −%1</source>
         <translation>時間: −%1</translation>
     </message>
@@ -23285,103 +23285,103 @@ function parse(%1) { ... }
 <context>
     <name>Sessions::DatabaseManager</name>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1641"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1280"/>
         <source>Select logo image</source>
         <translation>ロゴ画像を選択</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1643"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1282"/>
         <source>Images (*.png *.jpg *.jpeg *.svg)</source>
         <translation>画像 (*.png *.jpg *.jpeg *.svg)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1012"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="651"/>
         <source>Open Session File</source>
         <translation>セッションファイルを開く</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1014"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="653"/>
         <source>Session files (*.db)</source>
         <translation>セッションファイル (*.db)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1844"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1484"/>
         <source>Cannot open session file</source>
         <translation>セッションファイルを開けません</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1239"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="878"/>
         <source>Delete session from %1?</source>
         <translation>%1 からセッションを削除しますか？</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1242"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="881"/>
         <source>Delete Session</source>
         <translation>セッションを削除</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1705"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1344"/>
         <source>No project data</source>
         <translation>プロジェクトデータがありません</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1240"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="879"/>
         <source>All readings and raw data for this session are permanently removed.</source>
         <translation>このセッションのすべての読み取り値と生データが完全に削除されます。</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1070"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1079"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="709"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="718"/>
         <source>Lock Session File</source>
         <translation>セッションファイルをロック</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1071"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="710"/>
         <source>Choose a password to lock the session file:</source>
         <translation>セッションファイルをロックするパスワードを選択:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1080"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="719"/>
         <source>Confirm the password:</source>
         <translation>パスワードを確認:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1088"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="727"/>
         <source>Passwords do not match</source>
         <translation>パスワードが一致しません</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1089"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="728"/>
         <source>The two passwords you entered do not match. The session file was not locked.</source>
         <translation>入力された2つのパスワードが一致しません。セッションファイルはロックされませんでした。</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1125"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="764"/>
         <source>Unlock Session File</source>
         <translation>セッションファイルのロック解除</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1126"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="765"/>
         <source>Enter the session file password:</source>
         <translation>セッションファイルのパスワードを入力:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1136"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="775"/>
         <source>Incorrect password</source>
         <translation>パスワードが正しくありません</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1137"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="776"/>
         <source>The password you entered does not match the one stored in the session file.</source>
         <translation>入力されたパスワードがセッションファイルに保存されているものと一致しません。</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1229"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="868"/>
         <source>Session file locked</source>
         <translation>セッションファイルがロックされています</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1230"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="869"/>
         <source>Unlock the session file before deleting recorded sessions.</source>
         <translation>記録されたセッションを削除する前にセッションファイルのロックを解除してください。</translation>
     </message>
@@ -23390,12 +23390,12 @@ function parse(%1) { ... }
         <translation type="vanished">このセッションには埋め込みプロジェクトファイルが含まれていません — ダッシュボードはクイックプロットレイアウトにフォールバックします。</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1384"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1023"/>
         <source>Export Session to CSV</source>
         <translation>セッションをCSVにエクスポート</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1384"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1023"/>
         <source>CSV files (*.csv)</source>
         <translation>CSVファイル (*.CSV)</translation>
     </message>
@@ -23414,19 +23414,19 @@ function parse(%1) { ... }
         <translation type="vanished">エクスポートを準備中…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1613"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1252"/>
         <source>Done</source>
         <translation>完了</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1579"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1613"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1218"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1252"/>
         <source>Failed</source>
         <translation>失敗</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1584"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1622"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1223"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1261"/>
         <source>Report Failed</source>
         <translation>レポート失敗</translation>
     </message>
@@ -23435,68 +23435,68 @@ function parse(%1) { ... }
         <translation type="vanished">レポートを生成できませんでした。出力パスを確認して再試行してください。</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1514"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1153"/>
         <source>Save PDF Report</source>
         <translation>PDFレポートを保存</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1464"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1103"/>
         <source>Loading session data…</source>
         <translation>セッションデータを読み込み中…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1514"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1153"/>
         <source>Save HTML Report</source>
         <translation>HTMLレポートを保存</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1515"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1154"/>
         <source>PDF files (*.pdf)</source>
         <translation>PDFファイル (*.PDF)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1515"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1154"/>
         <source>HTML files (*.html)</source>
         <translation>HTMLファイル (*.HTML)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1585"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1623"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1224"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1262"/>
         <source>Could not generate the report.</source>
         <translation>レポートを生成できませんでした。</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1706"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1345"/>
         <source>This session file does not contain an embedded project.</source>
         <translation>このセッションファイルには埋め込みプロジェクトが含まれていません。</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1715"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1354"/>
         <source>Invalid project data</source>
         <translation>無効なプロジェクトデータ</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1716"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1355"/>
         <source>The embedded project JSON is malformed and cannot be restored.</source>
         <translation>埋め込みプロジェクトのJSONが不正な形式のため、復元できません。</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1726"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1365"/>
         <source>Restore Project</source>
         <translation>プロジェクトを復元</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1726"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1365"/>
         <source>Serial Studio projects (*.ssproj *.json)</source>
         <translation>Serial Studioプロジェクト (*.ssproj *.json)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1734"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1373"/>
         <source>Cannot write file</source>
         <translation>ファイルを書き込めません</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1734"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1373"/>
         <source>Check file permissions and try again.</source>
         <translation>ファイルのアクセス許可を確認して再試行してください。</translation>
     </message>
@@ -23784,63 +23784,63 @@ function parse(%1) { ... }
 <context>
     <name>Sessions::Player</name>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="313"/>
+        <location filename="../../src/Sessions/Player.cpp" line="311"/>
         <source>Open Session File</source>
         <translation>セッションファイルを開く</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="315"/>
+        <location filename="../../src/Sessions/Player.cpp" line="313"/>
         <source>Session files (*.db)</source>
         <translation>セッションファイル (*.db)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="398"/>
+        <location filename="../../src/Sessions/Player.cpp" line="396"/>
         <source>Device Connection Active</source>
         <translation>デバイス接続がアクティブです</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="399"/>
+        <location filename="../../src/Sessions/Player.cpp" line="397"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>この機能を使用するには、デバイスから切断する必要があります。続行しますか?</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="447"/>
-        <location filename="../../src/Sessions/Player.cpp" line="537"/>
+        <location filename="../../src/Sessions/Player.cpp" line="445"/>
+        <location filename="../../src/Sessions/Player.cpp" line="535"/>
         <source>Cannot open session file</source>
         <translation>セッションファイルを開けません</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="448"/>
+        <location filename="../../src/Sessions/Player.cpp" line="446"/>
         <source>Unknown error</source>
         <translation>不明なエラー</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="465"/>
+        <location filename="../../src/Sessions/Player.cpp" line="463"/>
         <source>No project data</source>
         <translation>プロジェクトデータがありません</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="466"/>
+        <location filename="../../src/Sessions/Player.cpp" line="464"/>
         <source>This session does not contain an embedded project file — the dashboard falls back to a quick-plot layout.</source>
         <translation>このセッションには埋め込みプロジェクトファイルが含まれていません — ダッシュボードはクイックプロットレイアウトにフォールバックします。</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="538"/>
+        <location filename="../../src/Sessions/Player.cpp" line="536"/>
         <source>Check file permissions and try again.</source>
         <translation>ファイルのアクセス許可を確認して、再試行してください。</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="692"/>
+        <location filename="../../src/Sessions/Player.cpp" line="689"/>
         <source>Sessions</source>
         <translation>セッション</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="693"/>
+        <location filename="../../src/Sessions/Player.cpp" line="690"/>
         <source>Recording uses an older copy of the project</source>
         <translation>記録は古いバージョンのプロジェクトを使用しています</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="694"/>
+        <location filename="../../src/Sessions/Player.cpp" line="691"/>
         <source>The dashboard shown is the one embedded in the recording; the project on disk has changed since. Close the session to return to the current project.</source>
         <translation>表示されているダッシュボードは記録に埋め込まれたものです。ディスク上のプロジェクトはその後変更されています。現在のプロジェクトに戻るにはセッションを閉じてください。</translation>
     </message>
@@ -27580,47 +27580,47 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Waterfall</name>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="407"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="393"/>
         <source>Viridis</source>
         <translation>Viridis</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="409"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="395"/>
         <source>Inferno</source>
         <translation>Inferno</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="411"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="397"/>
         <source>Magma</source>
         <translation>Magma</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="413"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="399"/>
         <source>Plasma</source>
         <translation>Plasma</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="415"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="401"/>
         <source>Turbo</source>
         <translation>Turbo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="417"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="403"/>
         <source>Jet</source>
         <translation>Jet</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="419"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="405"/>
         <source>Hot</source>
         <translation>Hot</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="421"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="407"/>
         <source>Grayscale</source>
         <translation>グレースケール</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="423"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="409"/>
         <source>Unknown</source>
         <translation>不明</translation>
     </message>

@@ -226,6 +226,7 @@ set(SOURCES
   src/Misc/Problems/ScriptCheckers.cpp
   src/Misc/WorkspaceManager.cpp
   src/Misc/ExtensionManager.cpp
+  src/Misc/Extensions/PluginRunner.cpp
   src/Misc/Examples.cpp
   src/Misc/HelpCenter.cpp
   src/Misc/IconEngine.cpp
@@ -248,6 +249,7 @@ set(SOURCES
   src/UI/Dashboard.cpp
   src/UI/AlarmMonitor.cpp
   src/UI/Taskbar.cpp
+  src/UI/Taskbar/TaskbarModel.cpp
   src/UI/TaskbarSettings.cpp
   src/UI/WindowManager.cpp
   src/UI/SnapGuides.cpp
@@ -276,6 +278,7 @@ set(SOURCES
   src/UI/Widgets/MultiPlot.cpp
   src/UI/Widgets/WebView.cpp
   src/API/Server.cpp
+  src/API/Server/ServerWorker.cpp
   src/API/CommandRegistry.cpp
   src/API/CommandHandler.cpp
   src/API/MCPHandler.cpp
@@ -298,6 +301,9 @@ set(SOURCES
   src/API/Handlers/ProjectHandler.cpp
   src/API/Handlers/ProjectHandlerFile.cpp
   src/API/Handlers/ProjectHandlerEntities.cpp
+  src/API/Handlers/Entities/ProjectHandlerAlarmCompat.cpp
+  src/API/Handlers/Entities/ProjectHandlerBulk.cpp
+  src/API/Handlers/Entities/ProjectHandlerDatasetFields.cpp
   src/API/Handlers/ProjectHandlerParser.cpp
   src/API/Handlers/ProjectHandlerBatch.cpp
   src/API/Handlers/ProjectHandlerDiscovery.cpp
@@ -321,12 +327,14 @@ set(SOURCES
   src/IO/Drivers/Network/NetworkHttp.cpp
   src/IO/Drivers/UART.cpp
   src/IO/Drivers/BluetoothLE.cpp
+  src/IO/Drivers/BluetoothLE/BleUuids.cpp
   src/IO/Checksum.cpp
   src/Console/Annotations.cpp
   src/Console/Handler.cpp
   src/IO/FrameConfig.h
   src/IO/DeviceManager.cpp
   src/IO/ConnectionManager.cpp
+  src/IO/ConnectionManager/DriverUiRegistry.cpp
   src/IO/PipelineHost.cpp
   src/IO/StreamWorker.cpp
   src/Async/TaskTree.cpp
@@ -436,6 +444,7 @@ set(HEADERS
   src/Misc/Translator.h
   src/Misc/WorkspaceManager.h
   src/Misc/ExtensionManager.h
+  src/Misc/Extensions/PluginRunner.h
   src/Misc/Examples.h
   src/Misc/HelpCenter.h
   src/Misc/IconEngine.h
@@ -529,6 +538,7 @@ set(HEADERS
   src/IO/FrameConfig.h
   src/IO/DeviceManager.h
   src/IO/ConnectionManager.h
+  src/IO/ConnectionManager/DriverUiRegistry.h
   src/IO/PipelineHost.h
   src/IO/StreamWorker.h
   src/Async/TaskTree.h
@@ -583,6 +593,7 @@ set(HEADERS
   src/DataModel/Importers/ProtoImporter.h
   src/DataModel/DataBlock.h
   src/DataModel/Frame.h
+  src/IO/Drivers/BluetoothLE/BleUuids.h
   src/DataModel/FrameBuilder.h
   src/DataModel/FramePoolPolicy.h
   src/DataModel/FrameConsumer.h
@@ -814,6 +825,7 @@ if(BUILD_COMMERCIAL)
     src/UI/Widgets/ImageExport.h
     src/UI/Widgets/AudioExport.h
     src/UI/Widgets/Waterfall.h
+  src/UI/Widgets/Waterfall/WaterfallMath.h
     src/UI/Widgets/Painter.h
     src/UI/Widgets/PainterContext.h
     src/UI/Widgets/PainterDataBridge.h
@@ -834,10 +846,12 @@ if(BUILD_COMMERCIAL)
     src/Licensing/OfflineSelfTest.h
     src/Licensing/GuardSelfTest.h
     src/Sessions/DatabaseManager.h
+  src/Sessions/DatabaseManager/ReproducibilityVerifier.h
     src/Sessions/DatabaseWorker.h
     src/Sessions/Export.h
     src/Sessions/HtmlReport.h
     src/Sessions/Player.h
+  src/Sessions/Player/PreSessionState.h
     src/Sessions/PlayerLoaderWorker.h
     src/Sessions/ReportData.h
     src/Sessions/BlockReader.h
@@ -925,8 +939,11 @@ if(BUILD_COMMERCIAL)
     src/UI/Widgets/ImageExport.cpp
     src/UI/Widgets/AudioExport.cpp
     src/UI/Widgets/Waterfall.cpp
+  src/UI/Widgets/Waterfall/WaterfallTicks.cpp
     src/UI/Widgets/Painter.cpp
     src/UI/Widgets/PainterContext.cpp
+  src/UI/Widgets/Painter/PainterGradient.cpp
+  src/UI/Widgets/Painter/PainterPattern.cpp
     src/UI/Widgets/PainterDataBridge.cpp
     src/DataModel/Editors/PainterCodeEditor.cpp
     src/UI/ImageProvider.cpp
@@ -935,10 +952,13 @@ if(BUILD_COMMERCIAL)
     src/Licensing/Trial.cpp
     src/Licensing/CommercialToken.cpp
     src/Sessions/DatabaseManager.cpp
+  src/Sessions/DatabaseManager/DatabaseSchema.cpp
+  src/Sessions/DatabaseManager/ReproducibilityVerifier.cpp
     src/Sessions/DatabaseWorker.cpp
     src/Sessions/Export.cpp
     src/Sessions/HtmlReport.cpp
     src/Sessions/Player.cpp
+  src/Sessions/Player/PreSessionState.cpp
     src/Sessions/PlayerLoaderWorker.cpp
     src/Sessions/ReportData.cpp
     src/Sessions/Verifier.cpp
@@ -1552,15 +1572,19 @@ endif()
 #---------------------------------------------------------------------------------------------------
 #
 # SS_UNITY_BUILD=ON batches this target's C++ sources into unity TUs to cut compile
-# time; CI compiles the application twice per platform (PGO generate + use) with no
-# compiler cache, so the savings land on every push. SS_UNITY_BATCH_SIZE (cache var,
-# default 8) sets sources per TU: it amortizes header parsing while keeping enough TUs
-# for the build to parallelize (batch 0 -- one monolithic jumbo TU -- serializes the
-# whole target on one compiler process, so keep the TU count above the runner's core
-# count). Default is OFF: local builds, the ss_unit_tests tier, and every lib/
-# third-party target are unaffected. Both PGO stages must configure with the same
-# value -- the unity layout determines the object-file <-> profile-data mapping, and
-# it has to be identical across stages.
+# time. SS_UNITY_BATCH_SIZE (cache var, default 8) sets sources per TU: it amortizes
+# header parsing while keeping enough TUs for the build to parallelize (batch 0 -- one
+# monolithic jumbo TU -- serializes the whole target on one compiler process, so keep
+# the TU count above the runner's core count). Default is OFF, and since 2026-08-26 CI
+# no longer opts in: the per-concern TU split (specs 0069/0070) made the plain build
+# parallelize well enough that batching stopped paying for itself. If it is ever
+# re-enabled, both PGO stages must configure with the SAME value -- the unity layout
+# determines the object-file <-> profile-data mapping, and it has to be identical
+# across stages.
+#
+# Consequence of CI not using it: a NEW file-local name collision no longer fails a
+# push. The app-wide uniqueness invariant below is now only checked when someone builds
+# with SS_UNITY_BUILD=ON by hand, so re-verify before relying on it.
 #
 # /bigobj: a unity TU on the MSVC ABI (cl.exe and clang-cl) can exceed the default
 # COFF section limit; the flag lifts it and has no codegen effect.

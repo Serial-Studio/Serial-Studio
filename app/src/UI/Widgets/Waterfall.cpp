@@ -40,6 +40,9 @@
 #include "UI/Dashboard.h"
 #include "UI/Widgets/AudioExport.h"
 #include "UI/Widgets/FFTWindow.h"
+#include "UI/Widgets/Waterfall/WaterfallMath.h"
+
+using namespace UI::Widgets::WaterfallDetail;
 
 //--------------------------------------------------------------------------------------------------
 // Constants
@@ -63,23 +66,6 @@ static constexpr double kLn10          = 2.302585092994046;
 //--------------------------------------------------------------------------------------------------
 // Static helpers
 //--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Integer-exponent 10^n via table lookup; falls back to std::pow if out of band.
- */
-static inline double waterfallFastPow10(double exponent) noexcept
-{
-  static constexpr double kTable[] = {
-    1e-15, 1e-14, 1e-13, 1e-12, 1e-11, 1e-10, 1e-9, 1e-8, 1e-7, 1e-6, 1e-5,
-    1e-4,  1e-3,  1e-2,  1e-1,  1e0,   1e1,   1e2,  1e3,  1e4,  1e5,  1e6,
-    1e7,   1e8,   1e9,   1e10,  1e11,  1e12,  1e13, 1e14, 1e15,
-  };
-  const int idx = static_cast<int>(exponent) + 15;
-  if (idx < 0 || idx >= static_cast<int>(sizeof(kTable) / sizeof(kTable[0]))) [[unlikely]]
-    return std::pow(10.0, exponent);
-
-  return kTable[idx];
-}
 
 /**
  * @brief Linearly interpolates a color from per-channel LUT arrays of length n.
@@ -1574,80 +1560,6 @@ void Widgets::Waterfall::drawCursorTooltip(QPainter* painter,
   const double textBaseline = ty + padY + fm.ascent();
   painter->drawText(QPointF(tx + padX, textBaseline), freqText);
   painter->drawText(QPointF(tx + padX, textBaseline + fm.height() + gap), timeText);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Tick generation
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Picks a {1,2,5}*10^n step for a given range and target tick count.
- */
-Widgets::Waterfall::AxisTicks Widgets::Waterfall::computeFreqTicks(double maxFreq, int targetCount)
-{
-  AxisTicks out{{}, 1.0, maxFreq};
-  if (!std::isfinite(maxFreq) || maxFreq <= 0.0)
-    return out;
-
-  const double target  = std::max(2, targetCount);
-  const double raw     = maxFreq / target;
-  const double base    = waterfallFastPow10(std::floor(std::log10(raw)));
-  const double cands[] = {1.0, 2.0, 5.0, 10.0};
-
-  double step = base;
-  for (double c : cands) {
-    if (raw <= c * base) {
-      step = c * base;
-      break;
-    }
-  }
-
-  out.step       = step;
-  out.displayMax = std::ceil(maxFreq / step) * step;
-  for (double v = 0.0; v <= out.displayMax + 1e-6; v += step)
-    out.values.push_back(v);
-
-  return out;
-}
-
-/**
- * @brief Same algorithm as computeFreqTicks but for the seconds axis.
- */
-Widgets::Waterfall::AxisTicks Widgets::Waterfall::computeTimeTicks(double maxSeconds,
-                                                                   int targetCount)
-{
-  return computeFreqTicks(maxSeconds, targetCount);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Format helpers
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Formats a frequency value as Hz / kHz / MHz with one decimal at most.
- */
-QString Widgets::Waterfall::formatFreqTick(double hz)
-{
-  const double abs = std::fabs(hz);
-  if (abs >= 1e6)
-    return QString::number(hz / 1e6, 'g', 3) + QStringLiteral(" MHz");
-
-  if (abs >= 1e3)
-    return QString::number(hz / 1e3, 'g', 3) + QStringLiteral(" kHz");
-
-  return QString::number(hz, 'g', 3) + QStringLiteral(" Hz");
-}
-
-/**
- * @brief Formats a time value -- integer seconds when step >= 1, decimals otherwise.
- */
-QString Widgets::Waterfall::formatTimeTick(double seconds, double step)
-{
-  if (step >= 1.0)
-    return QString::number(std::round(seconds), 'f', 0);
-
-  const int decimals = std::max(0, -static_cast<int>(std::floor(std::log10(step))));
-  return QString::number(seconds, 'f', decimals);
 }
 
 //--------------------------------------------------------------------------------------------------

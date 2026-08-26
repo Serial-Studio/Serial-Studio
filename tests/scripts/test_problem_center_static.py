@@ -16,7 +16,38 @@ COMMANDS = ("problems.list", "problems.run", "problems.listCheckers")
 OTHER_TIERS = ("confirm", "blocked", "deviceGated", "alwaysConfirm")
 
 
+_SPEC_0070_SPLITS = {
+    "app/src/AI/ToolDispatcher.cpp": "app/src/AI/ToolDispatcher",
+    "app/src/API/Handlers/ProjectHandlerEntities.cpp": "app/src/API/Handlers/Entities",
+    "app/src/Sessions/DatabaseManager.cpp": "app/src/Sessions/DatabaseManager",
+    "app/src/IO/Drivers/BluetoothLE.cpp": "app/src/IO/Drivers/BluetoothLE",
+    "app/src/UI/Widgets/Waterfall.cpp": "app/src/UI/Widgets/Waterfall",
+    "app/src/UI/Taskbar.cpp": "app/src/UI/Taskbar",
+    "app/src/UI/Widgets/PainterContext.cpp": "app/src/UI/Widgets/Painter",
+    "app/src/API/Server.cpp": "app/src/API/Server",
+}
+
+
+def _component_text(path: str) -> str:
+    """A component's source: the named file plus the concern TUs extracted from it.
+
+    Spec 0070 moved cohesive concerns out of the god files into sibling TUs. These
+    checks assert on a component's behaviour, not on which of its files a given
+    function ended up in, so they read the whole component.
+    """
+    p = ROOT / path
+    parts = [p.read_text(encoding="utf-8")] if p.exists() else []
+    d = ROOT / _SPEC_0070_SPLITS.get(path, "")
+    if path in _SPEC_0070_SPLITS and d.is_dir():
+        for f in sorted(d.iterdir()):
+            if f.suffix in (".cpp", ".h"):
+                parts.append(f.read_text(encoding="utf-8"))
+    return "\n".join(parts)
+
+
 def read_text(path: str) -> str:
+    if path.endswith((".cpp", ".h")):
+        return _component_text(path)
     return (ROOT / path).read_text(encoding="utf-8")
 
 

@@ -87,19 +87,6 @@ IO::ConnectionManager::ConnectionManager()
   , m_startSequence("/*")
   , m_finishSequence("*/")
   , m_replyCaptureArmed(false)
-  , m_uartUi(std::make_unique<IO::Drivers::UART>())
-  , m_networkUi(std::make_unique<IO::Drivers::Network>())
-  , m_bluetoothLEUi(std::make_unique<IO::Drivers::BluetoothLE>())
-#ifdef BUILD_COMMERCIAL
-  , m_audioUi(std::make_unique<IO::Drivers::Audio>())
-  , m_canBusUi(std::make_unique<IO::Drivers::CANBus>())
-  , m_hidUi(std::make_unique<IO::Drivers::HID>())
-  , m_mqttUi(std::make_unique<IO::Drivers::MQTT>())
-  , m_modbusUi(std::make_unique<IO::Drivers::Modbus>())
-  , m_opcUaUi(std::make_unique<IO::Drivers::OpcUa>())
-  , m_processUi(std::make_unique<IO::Drivers::Process>())
-  , m_usbUi(std::make_unique<IO::Drivers::USB>())
-#endif
 {
   connect(this, &ConnectionManager::busTypeChanged, this, &ConnectionManager::configurationChanged);
 
@@ -128,27 +115,7 @@ IO::ConnectionManager::ConnectionManager()
  */
 IO::ConnectionManager::~ConnectionManager()
 {
-  for (auto* drv : {static_cast<QObject*>(m_uartUi.get()),
-                    static_cast<QObject*>(m_networkUi.get()),
-                    static_cast<QObject*>(m_bluetoothLEUi.get())}) {
-    if (drv)
-      disconnect(drv, nullptr, this, nullptr);
-  }
-
-#ifdef BUILD_COMMERCIAL
-  for (auto* drv : {static_cast<QObject*>(m_audioUi.get()),
-                    static_cast<QObject*>(m_canBusUi.get()),
-                    static_cast<QObject*>(m_hidUi.get()),
-                    static_cast<QObject*>(m_mqttUi.get()),
-                    static_cast<QObject*>(m_modbusUi.get()),
-                    static_cast<QObject*>(m_opcUaUi.get()),
-                    static_cast<QObject*>(m_processUi.get()),
-                    static_cast<QObject*>(m_usbUi.get())}) {
-    if (drv)
-      disconnect(drv, nullptr, this, nullptr);
-  }
-#endif
-
+  m_uiDrivers.detachFrom(this);
   disconnectAllDevices();
 }
 
@@ -396,7 +363,7 @@ IO::HAL_Driver* IO::ConnectionManager::driverForEditing(int deviceId)
  */
 IO::Drivers::UART* IO::ConnectionManager::uart() const noexcept
 {
-  return m_uartUi.get();
+  return m_uiDrivers.uart();
 }
 
 /**
@@ -404,7 +371,7 @@ IO::Drivers::UART* IO::ConnectionManager::uart() const noexcept
  */
 IO::Drivers::Network* IO::ConnectionManager::network() const noexcept
 {
-  return m_networkUi.get();
+  return m_uiDrivers.network();
 }
 
 /**
@@ -412,7 +379,7 @@ IO::Drivers::Network* IO::ConnectionManager::network() const noexcept
  */
 IO::Drivers::BluetoothLE* IO::ConnectionManager::bluetoothLE() const noexcept
 {
-  return m_bluetoothLEUi.get();
+  return m_uiDrivers.bluetoothLE();
 }
 
 /**
@@ -431,7 +398,7 @@ IO::Drivers::BluetoothLE* IO::ConnectionManager::connectedBluetoothLE() const no
       return ble;
   }
 
-  return m_bluetoothLEUi.get();
+  return m_uiDrivers.bluetoothLE();
 }
 
 #ifdef BUILD_COMMERCIAL
@@ -440,7 +407,7 @@ IO::Drivers::BluetoothLE* IO::ConnectionManager::connectedBluetoothLE() const no
  */
 IO::Drivers::Audio* IO::ConnectionManager::audio() const noexcept
 {
-  return m_audioUi.get();
+  return m_uiDrivers.audio();
 }
 
 /**
@@ -448,7 +415,7 @@ IO::Drivers::Audio* IO::ConnectionManager::audio() const noexcept
  */
 IO::Drivers::CANBus* IO::ConnectionManager::canBus() const noexcept
 {
-  return m_canBusUi.get();
+  return m_uiDrivers.canBus();
 }
 
 /**
@@ -456,7 +423,7 @@ IO::Drivers::CANBus* IO::ConnectionManager::canBus() const noexcept
  */
 IO::Drivers::HID* IO::ConnectionManager::hid() const noexcept
 {
-  return m_hidUi.get();
+  return m_uiDrivers.hid();
 }
 
 /**
@@ -464,7 +431,7 @@ IO::Drivers::HID* IO::ConnectionManager::hid() const noexcept
  */
 IO::Drivers::Modbus* IO::ConnectionManager::modbus() const noexcept
 {
-  return m_modbusUi.get();
+  return m_uiDrivers.modbus();
 }
 
 /**
@@ -472,7 +439,7 @@ IO::Drivers::Modbus* IO::ConnectionManager::modbus() const noexcept
  */
 IO::Drivers::OpcUa* IO::ConnectionManager::opcUa() const noexcept
 {
-  return m_opcUaUi.get();
+  return m_uiDrivers.opcUa();
 }
 
 /**
@@ -480,7 +447,7 @@ IO::Drivers::OpcUa* IO::ConnectionManager::opcUa() const noexcept
  */
 IO::Drivers::Process* IO::ConnectionManager::process() const noexcept
 {
-  return m_processUi.get();
+  return m_uiDrivers.process();
 }
 
 /**
@@ -488,7 +455,7 @@ IO::Drivers::Process* IO::ConnectionManager::process() const noexcept
  */
 IO::Drivers::USB* IO::ConnectionManager::usb() const noexcept
 {
-  return m_usbUi.get();
+  return m_uiDrivers.usb();
 }
 
 /**
@@ -496,7 +463,7 @@ IO::Drivers::USB* IO::ConnectionManager::usb() const noexcept
  */
 IO::Drivers::MQTT* IO::ConnectionManager::mqtt() const noexcept
 {
-  return m_mqttUi.get();
+  return m_uiDrivers.mqtt();
 }
 #endif
 
@@ -505,34 +472,7 @@ IO::Drivers::MQTT* IO::ConnectionManager::mqtt() const noexcept
  */
 IO::HAL_Driver* IO::ConnectionManager::activeUiDriver() const noexcept
 {
-  switch (m_busType) {
-    case SerialStudio::BusType::UART:
-      return m_uartUi.get();
-    case SerialStudio::BusType::Network:
-      return m_networkUi.get();
-    case SerialStudio::BusType::BluetoothLE:
-      return m_bluetoothLEUi.get();
-#ifdef BUILD_COMMERCIAL
-    case SerialStudio::BusType::Audio:
-      return m_audioUi.get();
-    case SerialStudio::BusType::ModBus:
-      return m_modbusUi.get();
-    case SerialStudio::BusType::CanBus:
-      return m_canBusUi.get();
-    case SerialStudio::BusType::RawUsb:
-      return m_usbUi.get();
-    case SerialStudio::BusType::HidDevice:
-      return m_hidUi.get();
-    case SerialStudio::BusType::Process:
-      return m_processUi.get();
-    case SerialStudio::BusType::Mqtt:
-      return m_mqttUi.get();
-    case SerialStudio::BusType::OpcUa:
-      return m_opcUaUi.get();
-#endif
-    default:
-      return nullptr;
-  }
+  return m_uiDrivers.forBusType(m_busType);
 }
 
 /**
@@ -540,34 +480,7 @@ IO::HAL_Driver* IO::ConnectionManager::activeUiDriver() const noexcept
  */
 IO::HAL_Driver* IO::ConnectionManager::uiDriverForBusType(SerialStudio::BusType type) const noexcept
 {
-  switch (type) {
-    case SerialStudio::BusType::UART:
-      return m_uartUi.get();
-    case SerialStudio::BusType::Network:
-      return m_networkUi.get();
-    case SerialStudio::BusType::BluetoothLE:
-      return m_bluetoothLEUi.get();
-#ifdef BUILD_COMMERCIAL
-    case SerialStudio::BusType::Audio:
-      return m_audioUi.get();
-    case SerialStudio::BusType::ModBus:
-      return m_modbusUi.get();
-    case SerialStudio::BusType::CanBus:
-      return m_canBusUi.get();
-    case SerialStudio::BusType::RawUsb:
-      return m_usbUi.get();
-    case SerialStudio::BusType::HidDevice:
-      return m_hidUi.get();
-    case SerialStudio::BusType::Process:
-      return m_processUi.get();
-    case SerialStudio::BusType::Mqtt:
-      return m_mqttUi.get();
-    case SerialStudio::BusType::OpcUa:
-      return m_opcUaUi.get();
-#endif
-    default:
-      return nullptr;
-  }
+  return m_uiDrivers.forBusType(type);
 }
 
 /**
@@ -995,13 +908,7 @@ void IO::ConnectionManager::setupExternalConnections()
 
   setBusType(static_cast<SerialStudio::BusType>(savedBusType));
 
-  m_uartUi->setupExternalConnections();
-#ifdef BUILD_COMMERCIAL
-  m_modbusUi->setupExternalConnections();
-  m_opcUaUi->setupExternalConnections();
-  m_canBusUi->setupExternalConnections();
-  m_usbUi->setupExternalConnections();
-#endif
+  m_uiDrivers.setupExternalConnections();
 
   connect(&Misc::Translator::instance(),
           &Misc::Translator::languageChanged,
@@ -1043,34 +950,24 @@ void IO::ConnectionManager::setupExternalConnections()
           Qt::QueuedConnection);
 #endif
 
-  wireUiDriver(m_uartUi.get());
-  wireUiDriver(m_networkUi.get());
-  wireUiDriver(m_bluetoothLEUi.get());
-#ifdef BUILD_COMMERCIAL
-  wireUiDriver(m_audioUi.get());
-  wireUiDriver(m_canBusUi.get());
-  wireUiDriver(m_hidUi.get());
-  wireUiDriver(m_mqttUi.get());
-  wireUiDriver(m_modbusUi.get());
-  wireUiDriver(m_opcUaUi.get());
-  wireUiDriver(m_processUi.get());
-  wireUiDriver(m_usbUi.get());
-#endif
+  for (auto* driver : m_uiDrivers.all())
+    wireUiDriver(driver);
 
   auto clearEditing = [this]() {
     Q_EMIT deviceListRefreshed();
   };
-  connect(m_uartUi.get(), &IO::Drivers::UART::availablePortsChanged, this, clearEditing);
-  connect(m_bluetoothLEUi.get(), &IO::Drivers::BluetoothLE::devicesChanged, this, clearEditing);
+  connect(m_uiDrivers.uart(), &IO::Drivers::UART::availablePortsChanged, this, clearEditing);
+  connect(m_uiDrivers.bluetoothLE(), &IO::Drivers::BluetoothLE::devicesChanged, this, clearEditing);
 #ifdef BUILD_COMMERCIAL
-  connect(m_usbUi.get(), &IO::Drivers::USB::deviceListChanged, this, clearEditing);
-  connect(m_hidUi.get(), &IO::Drivers::HID::deviceListChanged, this, clearEditing);
-  connect(m_modbusUi.get(), &IO::Drivers::Modbus::availableSerialPortsChanged, this, clearEditing);
+  connect(m_uiDrivers.usb(), &IO::Drivers::USB::deviceListChanged, this, clearEditing);
+  connect(m_uiDrivers.hid(), &IO::Drivers::HID::deviceListChanged, this, clearEditing);
+  connect(
+    m_uiDrivers.modbus(), &IO::Drivers::Modbus::availableSerialPortsChanged, this, clearEditing);
 
   connect(this, &IO::ConnectionManager::connectedChanged, this, [this] {
     const bool paused = isConnected();
-    m_hidUi->setDiscoveryPaused(paused);
-    m_audioUi->setDiscoveryPaused(paused);
+    m_uiDrivers.hid()->setDiscoveryPaused(paused);
+    m_uiDrivers.audio()->setDiscoveryPaused(paused);
   });
 #endif
 }
@@ -1127,19 +1024,7 @@ void IO::ConnectionManager::shutdownDrivers()
   m_devices.clear();
   devices.clear();
 
-  m_uartUi.reset();
-  m_networkUi.reset();
-  m_bluetoothLEUi.reset();
-#ifdef BUILD_COMMERCIAL
-  m_audioUi.reset();
-  m_canBusUi.reset();
-  m_hidUi.reset();
-  m_mqttUi.reset();
-  m_modbusUi.reset();
-  m_opcUaUi.reset();
-  m_processUi.reset();
-  m_usbUi.reset();
-#endif
+  m_uiDrivers.releaseAll();
 }
 
 /**
@@ -1349,8 +1234,9 @@ void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
   auto driver = createDriver(type);
 
   if (type == SerialStudio::BusType::BluetoothLE) {
-    if (m_bluetoothLEUi->operatingSystemSupported())
-      m_bluetoothLEUi->startDiscovery();
+    auto* ble = m_uiDrivers.bluetoothLE();
+    if (ble && ble->operatingSystemSupported())
+      ble->startDiscovery();
   }
 
   if (driver) {
@@ -2292,11 +2178,12 @@ std::unique_ptr<IO::HAL_Driver> IO::ConnectionManager::createDriver(
 
       auto driver = std::make_unique<IO::Drivers::OpcUa>();
       driver->setPersistent(false);
-      if (m_opcUaUi) {
-        m_opcUaUi->setSessionPeer(driver.get());
+      auto* opcUaUi = m_uiDrivers.opcUa();
+      if (opcUaUi) {
+        opcUaUi->setSessionPeer(driver.get());
         connect(driver.get(),
                 &IO::Drivers::OpcUa::statusChanged,
-                m_opcUaUi.get(),
+                opcUaUi,
                 &IO::Drivers::OpcUa::statusChanged,
                 Qt::UniqueConnection);
       }

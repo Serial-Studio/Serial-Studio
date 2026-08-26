@@ -27,7 +27,6 @@
 #  include <QJsonDocument>
 #  include <QJsonObject>
 #  include <QJsonParseError>
-#  include <QProcess>
 #  include <QSqlError>
 #  include <QSqlQuery>
 #  include <QThread>
@@ -50,8 +49,6 @@
 //--------------------------------------------------------------------------------------------------
 
 static QString s_dbPathOverride;
-
-static constexpr int kStderrTailBytes = 2000;
 
 //--------------------------------------------------------------------------------------------------
 // File-local helpers
@@ -111,10 +108,6 @@ Sessions::DatabaseManager::DatabaseManager()
   , m_pdfExportProgress(0.0)
   , m_pendingPdfSessionId(-1)
   , m_pendingPdfActive(false)
-  , m_verifyProcess(nullptr)
-  , m_regressActive(false)
-  , m_sweepActive(false)
-  , m_sweepOwnsCandidate(false)
   , m_nextToken(1)
   , m_outstandingMutations(0)
   , m_workspaceManager(nullptr)
@@ -124,6 +117,7 @@ Sessions::DatabaseManager::DatabaseManager()
 {
   qRegisterMetaType<Sessions::ReportPayloadPtr>("Sessions::ReportPayloadPtr");
   initWorker();
+  wireVerifier();
 }
 
 /**
@@ -198,14 +192,7 @@ void Sessions::DatabaseManager::initWorker()
  */
 void Sessions::DatabaseManager::shutdown()
 {
-  m_sweepActive = false;
-  m_sweepQueue.clear();
-
-  if (m_verifyProcess) {
-    m_verifyProcess->terminate();
-    if (!m_verifyProcess->waitForFinished(3000))
-      m_verifyProcess->kill();
-  }
+  m_verifier.shutdown();
 
   if (!m_thread)
     return;
@@ -480,7 +467,7 @@ QString Sessions::DatabaseManager::canonicalDbPath(const QString& projectTitle)
  */
 bool Sessions::DatabaseManager::verificationBusy() const
 {
-  return m_verifyProcess != nullptr;
+  return m_verifier.busy();
 }
 
 /**
@@ -488,7 +475,7 @@ bool Sessions::DatabaseManager::verificationBusy() const
  */
 bool Sessions::DatabaseManager::regressionBusy() const
 {
-  return m_verifyProcess != nullptr && m_regressActive;
+  return m_verifier.regressionBusy();
 }
 
 /**
@@ -496,7 +483,7 @@ bool Sessions::DatabaseManager::regressionBusy() const
  */
 QVariantMap Sessions::DatabaseManager::lastRegressionReport() const
 {
-  return m_lastRegressionReport;
+  return m_verifier.lastReport();
 }
 
 /**
@@ -571,430 +558,82 @@ QVariantMap Sessions::DatabaseManager::latestVerdicts() const
 }
 
 /**
- * @brief Builds the structured report delivered when a verification or regression child
- *        process fails outside its own reporting (spawn failure, crash, unparseable output),
- *        so no failure path ever concludes with an empty verdict map.
+ * @brief Republishes the verifier's state through the historian's own property and signal
+ *        surface, which QML and the API server were already bound to. A concluded
+ *        verification also refreshes the session list: the child appended the record.
  */
-static QVariantMap childFailureReport(const QString& code,
-                                      int exitCode,
-                                      const QByteArray& stderrData)
+void Sessions::DatabaseManager::wireVerifier()
 {
-  static const struct {
-    const char* code;
-    const char* error;
-    const char* hint;
-  } kFailures[] = {
-    {  "child-spawn-failed",
-     "The check could not be started.",                                               "Restart Serial Studio and try again."        },
-    {       "child-crashed",
-     "The check stopped unexpectedly.", "Try again. If this keeps happening, please report it and include the session file."        },
-    {"child-output-invalid",
-     "The check did not return a readable result.",                                                "Try again. If this keeps happening, other software on this computer may be "
-                                                "interfering with Serial Studio."},
-  };
-
-  QVariantMap map;
-  map.insert(QStringLiteral("verdict"), QStringLiteral("error"));
-  map.insert(QStringLiteral("errorCode"), code);
-  map.insert(QStringLiteral("exitCode"), exitCode);
-  for (const auto& entry : kFailures) {
-    if (code == QLatin1String(entry.code)) {
-      map.insert(QStringLiteral("error"), QString::fromLatin1(entry.error));
-      map.insert(QStringLiteral("hint"), QString::fromLatin1(entry.hint));
-      break;
-    }
-  }
-
-  const QString tail = QString::fromUtf8(stderrData.right(kStderrTailBytes)).trimmed();
-  if (!tail.isEmpty())
-    map.insert(QStringLiteral("stderrTail"), tail);
-
-  return map;
+  connect(&m_verifier,
+          &ReproducibilityVerifier::busyChanged,
+          this,
+          &DatabaseManager::verificationBusyChanged);
+  connect(&m_verifier,
+          &ReproducibilityVerifier::regressionBusyChanged,
+          this,
+          &DatabaseManager::regressionBusyChanged);
+  connect(&m_verifier,
+          &ReproducibilityVerifier::reportChanged,
+          this,
+          &DatabaseManager::regressionReportChanged);
+  connect(&m_verifier,
+          &ReproducibilityVerifier::sweepChanged,
+          this,
+          &DatabaseManager::regressionSweepChanged);
+  connect(&m_verifier,
+          &ReproducibilityVerifier::regressionFinished,
+          this,
+          &DatabaseManager::regressionFinished);
+  connect(&m_verifier,
+          &ReproducibilityVerifier::verificationFinished,
+          this,
+          [this](int sessionId, bool success, const QVariantMap& verdict) {
+            Q_EMIT verificationFinished(sessionId, success, verdict);
+            Q_EMIT sessionsChanged();
+          });
 }
 
 /**
- * @brief Launches the spec-0044 verifier child process for @p sessionId (-1 = latest completed).
- *        The child appends the verification record itself; this side only parses the verdict
- *        JSON from stdout and refreshes the UI. One verification runs at a time.
+ * @brief Runs the spec-0044 reproducibility check for @p sessionId (-1 = latest completed).
  */
 void Sessions::DatabaseManager::verifySession(int sessionId)
 {
   SS_ASSERT(m_open, return);
   SS_ASSERT(!m_filePath.isEmpty(), return);
 
-  if (m_verifyProcess || m_sweepActive)
-    return;
-
-  auto* process   = new QProcess(this);
-  m_verifyProcess = process;
-  Q_EMIT verificationBusyChanged();
-
-  QStringList args{QStringLiteral("--verify-session"), m_filePath, QStringLiteral("--headless")};
-  if (sessionId >= 0)
-    args << QStringLiteral("--verify-session-id") << QString::number(sessionId);
-
-  connect(process,
-          &QProcess::finished,
-          this,
-          [this, process, sessionId](int exitCode, QProcess::ExitStatus status) {
-            const auto doc = QJsonDocument::fromJson(process->readAllStandardOutput());
-            const bool ok  = status == QProcess::NormalExit && doc.isObject();
-            auto map       = doc.object().toVariantMap();
-            if (!ok)
-              map = childFailureReport(status != QProcess::NormalExit
-                                         ? QStringLiteral("child-crashed")
-                                         : QStringLiteral("child-output-invalid"),
-                                       exitCode,
-                                       process->readAllStandardError());
-
-            int resolvedId = sessionId;
-            if (resolvedId < 0 && map.contains(QStringLiteral("sessionId")))
-              resolvedId = map.value(QStringLiteral("sessionId")).toInt();
-
-            concludeVerification(resolvedId, ok && exitCode == 0, map);
-          });
-  connect(process, &QProcess::errorOccurred, this, [this, sessionId](QProcess::ProcessError err) {
-    if (err == QProcess::FailedToStart)
-      concludeVerification(
-        sessionId,
-        false,
-        childFailureReport(QStringLiteral("child-spawn-failed"), -1, QByteArray()));
-  });
-
-  process->start(QCoreApplication::applicationFilePath(), args);
+  m_verifier.verify(sessionId);
 }
 
 /**
- * @brief Tears the verification child process down and publishes the verdict exactly once.
- */
-void Sessions::DatabaseManager::concludeVerification(int sessionId,
-                                                     bool success,
-                                                     const QVariantMap& verdict)
-{
-  if (!m_verifyProcess)
-    return;
-
-  m_verifyProcess->deleteLater();
-  m_verifyProcess = nullptr;
-  Q_EMIT verificationBusyChanged();
-  Q_EMIT verificationFinished(sessionId, success, verdict);
-  Q_EMIT sessionsChanged();
-}
-
-/**
- * @brief Publishes a regression start failure through the ephemeral report channel so the
- *        QML/API surfaces never see a silent no-op, then returns false for the caller.
- */
-bool Sessions::DatabaseManager::publishRegressStartFailure(int sessionId,
-                                                           const QString& code,
-                                                           const QString& error,
-                                                           const QString& hint)
-{
-  QVariantMap map;
-  map.insert(QStringLiteral("verdict"), QStringLiteral("error"));
-  map.insert(QStringLiteral("errorCode"), code);
-  map.insert(QStringLiteral("error"), error);
-  map.insert(QStringLiteral("hint"), hint);
-
-  m_lastRegressionReport = map;
-  Q_EMIT regressionReportChanged();
-  Q_EMIT regressionFinished(sessionId, false, map);
-  return false;
-}
-
-/**
- * @brief Serializes the currently open project to @p path; removes the partial file and
- *        returns false when the write cannot complete.
- */
-static bool writeCandidateSnapshot(const QString& path)
-{
-  static auto& project = DataModel::ProjectModel::instance();
-  const auto json      = QJsonDocument(project.serializeToJson()).toJson(QJsonDocument::Compact);
-
-  QFile file(path);
-  if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate) || file.write(json) != json.size()) {
-    file.close();
-    QFile::remove(path);
-    return false;
-  }
-
-  return true;
-}
-
-/**
- * @brief Launches the spec-0047 regression child for @p sessionId against @p candidatePath,
- *        or against the currently open project (serialized to a temporary file) when the path
- *        is empty. Shares the single child slot with verification: one pass at a time.
- *        Returns false (with a published error report) when the pass did not start.
+ * @brief Runs the spec-0047 regression check for @p sessionId against @p candidatePath, or
+ *        against the currently open project when the path is empty.
  */
 bool Sessions::DatabaseManager::regressSession(int sessionId, const QString& candidatePath)
 {
   SS_ASSERT(m_open, return false);
   SS_ASSERT(!m_filePath.isEmpty(), return false);
 
-  if (m_verifyProcess)
-    return false;
-
-  QString candidate = candidatePath;
-  m_regressCandidateTemp.clear();
-  if (candidate.isEmpty()) {
-    candidate = QDir::temp().filePath(
-      QStringLiteral("ss-regress-candidate-%1.json").arg(QCoreApplication::applicationPid()));
-    if (!writeCandidateSnapshot(candidate))
-      return publishRegressStartFailure(
-        sessionId,
-        QStringLiteral("candidate-write-failed"),
-        QStringLiteral("The current project could not be saved for comparison."),
-        QStringLiteral("Check that there is enough free disk space, then try again."));
-
-    m_regressCandidateTemp = candidate;
-  }
-
-  auto* process   = new QProcess(this);
-  m_verifyProcess = process;
-  m_regressActive = true;
-  m_lastRegressionReport.clear();
-  Q_EMIT verificationBusyChanged();
-  Q_EMIT regressionBusyChanged();
-  Q_EMIT regressionReportChanged();
-
-  QStringList args{QStringLiteral("--regress-session"),
-                   m_filePath,
-                   QStringLiteral("--headless"),
-                   QStringLiteral("--regress-project"),
-                   candidate};
-  if (sessionId >= 0)
-    args << QStringLiteral("--regress-session-id") << QString::number(sessionId);
-
-  connect(process,
-          &QProcess::finished,
-          this,
-          [this, process, sessionId](int exitCode, QProcess::ExitStatus status) {
-            const auto doc = QJsonDocument::fromJson(process->readAllStandardOutput());
-            const bool ok  = status == QProcess::NormalExit && doc.isObject();
-            auto map       = doc.object().toVariantMap();
-            if (!ok)
-              map = childFailureReport(status != QProcess::NormalExit
-                                         ? QStringLiteral("child-crashed")
-                                         : QStringLiteral("child-output-invalid"),
-                                       exitCode,
-                                       process->readAllStandardError());
-
-            int resolvedId = sessionId;
-            if (resolvedId < 0 && map.contains(QStringLiteral("sessionId")))
-              resolvedId = map.value(QStringLiteral("sessionId")).toInt();
-
-            concludeRegression(resolvedId, ok && exitCode == 0, map);
-          });
-  connect(process, &QProcess::errorOccurred, this, [this, sessionId](QProcess::ProcessError err) {
-    if (err != QProcess::FailedToStart)
-      return;
-
-    QMetaObject::invokeMethod(
-      this,
-      [this, sessionId]() {
-        concludeRegression(
-          sessionId,
-          false,
-          childFailureReport(QStringLiteral("child-spawn-failed"), -1, QByteArray()));
-      },
-      Qt::QueuedConnection);
-  });
-
-  process->start(QCoreApplication::applicationFilePath(), args);
-  return true;
+  return m_verifier.regress(sessionId, candidatePath);
 }
 
 /**
- * @brief Publishes a finished regression pass: releases the shared child slot, removes the
- *        auto-serialized candidate file, and stores the ephemeral report (never the archive).
- */
-void Sessions::DatabaseManager::concludeRegression(int sessionId,
-                                                   bool success,
-                                                   const QVariantMap& report)
-{
-  if (!m_verifyProcess)
-    return;
-
-  m_verifyProcess->deleteLater();
-  m_verifyProcess = nullptr;
-  m_regressActive = false;
-
-  if (!m_regressCandidateTemp.isEmpty()) {
-    QFile::remove(m_regressCandidateTemp);
-    m_regressCandidateTemp.clear();
-  }
-
-  m_lastRegressionReport = report;
-  if (m_sweepActive)
-    advanceRegressionSweep(sessionId, report);
-
-  Q_EMIT verificationBusyChanged();
-  Q_EMIT regressionBusyChanged();
-  Q_EMIT regressionReportChanged();
-  Q_EMIT regressionFinished(sessionId, success, report);
-}
-
-/**
- * @brief Starts a golden-tag regression sweep: tagged completed sessions run through
- *        regressSession() sequentially against one shared candidate snapshot. Returns false
- *        (with a published error report) when the sweep did not start; state is only touched
- *        once the candidate is secured, so a failed start never destroys prior results.
+ * @brief Runs a golden-tag regression sweep over every completed session carrying @p tag.
  */
 bool Sessions::DatabaseManager::regressSessionsByTag(const QString& tag,
                                                      const QString& candidatePath)
 {
   SS_ASSERT(m_open, return false);
+  SS_ASSERT(!m_filePath.isEmpty(), return false);
 
-  if (m_verifyProcess || m_sweepActive || tag.trimmed().isEmpty())
-    return false;
-
-  bool queryOk = false;
-  QList<int> ids;
-  const QString connName = QStringLiteral("ss_dbm_sweep_read");
-  {
-    auto db = QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"), connName);
-    db.setDatabaseName(m_filePath);
-    db.setConnectOptions(QStringLiteral("QSQLITE_OPEN_READONLY"));
-    if (db.open()) {
-      QSqlQuery q(db);
-      q.prepare(QStringLiteral("SELECT s.session_id FROM sessions s "
-                               "JOIN session_tags st ON st.session_id = s.session_id "
-                               "JOIN tags t ON t.tag_id = st.tag_id "
-                               "WHERE t.label = ? AND s.ended_at IS NOT NULL "
-                               "ORDER BY s.session_id"));
-      q.bindValue(0, tag.trimmed());
-      queryOk = q.exec();
-      while (queryOk && q.next())
-        ids.append(q.value(0).toInt());
-
-      db.close();
-    }
-  }
-
-  QSqlDatabase::removeDatabase(connName);
-
-  if (!queryOk)
-    return publishRegressStartFailure(-1,
-                                      QStringLiteral("sweep-query-failed"),
-                                      QStringLiteral("The tagged sessions could not be listed."),
-                                      QStringLiteral("Reopen the session file and try again."));
-
-  QString candidate   = candidatePath;
-  bool owns_candidate = false;
-  if (candidate.isEmpty() && !ids.isEmpty()) {
-    candidate = QDir::temp().filePath(
-      QStringLiteral("ss-regress-sweep-%1.json").arg(QCoreApplication::applicationPid()));
-    if (!writeCandidateSnapshot(candidate))
-      return publishRegressStartFailure(
-        -1,
-        QStringLiteral("candidate-write-failed"),
-        QStringLiteral("The current project could not be saved for comparison."),
-        QStringLiteral("Check that there is enough free disk space, then try again."));
-
-    owns_candidate = true;
-  }
-
-  m_sweepTag           = tag.trimmed();
-  m_sweepReports       = QVariantList();
-  m_sweepOwnsCandidate = owns_candidate;
-  m_sweepCandidate     = candidate;
-  m_sweepQueue         = ids;
-  m_sweepActive        = true;
-  Q_EMIT regressionSweepChanged();
-
-  if (m_sweepQueue.isEmpty()) {
-    finishRegressionSweep();
-    return true;
-  }
-
-  const int first = m_sweepQueue.takeFirst();
-  if (!regressSession(first, m_sweepCandidate)) {
-    finishRegressionSweep();
-    return false;
-  }
-
-  return true;
+  return m_verifier.regressByTag(tag, candidatePath);
 }
 
 /**
- * @brief Records one finished sweep entry and launches the next session, or finalizes when
- *        the queue is drained or the database closed mid-sweep.
- */
-void Sessions::DatabaseManager::advanceRegressionSweep(int sessionId, const QVariantMap& report)
-{
-  QVariantMap entry;
-  entry.insert(QStringLiteral("sessionId"), sessionId);
-  entry.insert(QStringLiteral("report"), report);
-  m_sweepReports.append(entry);
-
-  if (m_sweepQueue.isEmpty() || !m_open) {
-    finishRegressionSweep();
-    return;
-  }
-
-  const int next = m_sweepQueue.takeFirst();
-  if (!regressSession(next, m_sweepCandidate))
-    finishRegressionSweep();
-}
-
-/**
- * @brief Ends the sweep: removes the sweep-owned candidate snapshot and publishes the state.
- */
-void Sessions::DatabaseManager::finishRegressionSweep()
-{
-  if (m_sweepOwnsCandidate && !m_sweepCandidate.isEmpty())
-    QFile::remove(m_sweepCandidate);
-
-  m_sweepActive        = false;
-  m_sweepOwnsCandidate = false;
-  m_sweepCandidate.clear();
-  m_sweepQueue.clear();
-  Q_EMIT regressionSweepChanged();
-}
-
-/**
- * @brief Buckets one sweep verdict into the aggregate counters.
- */
-static void countSweepVerdict(
-  const QString& verdict, int& passed, int& drifted, int& notVerifiable, int& failed)
-{
-  if (verdict == QLatin1String("identical"))
-    ++passed;
-  else if (verdict.endsWith(QLatin1String("-drift")))
-    ++drifted;
-  else if (verdict == QLatin1String("not_verifiable"))
-    ++notVerifiable;
-  else
-    ++failed;
-}
-
-/**
- * @brief Returns the sweep state for the API poll surface: activity flag, tag, verdict
- *        counters derived from the collected reports, and the per-session reports.
+ * @brief Returns the sweep state for the API poll surface.
  */
 QVariantMap Sessions::DatabaseManager::regressionSweepStatus() const
 {
-  int passed = 0, drifted = 0, notVerifiable = 0, failed = 0;
-  for (const auto& entryVariant : m_sweepReports) {
-    const auto report = entryVariant.toMap().value(QStringLiteral("report")).toMap();
-    countSweepVerdict(
-      report.value(QStringLiteral("verdict")).toString(), passed, drifted, notVerifiable, failed);
-  }
-
-  QVariantMap summary;
-  summary.insert(QStringLiteral("passed"), passed);
-  summary.insert(QStringLiteral("drifted"), drifted);
-  summary.insert(QStringLiteral("notVerifiable"), notVerifiable);
-  summary.insert(QStringLiteral("failed"), failed);
-
-  QVariantMap status;
-  status.insert(QStringLiteral("active"), m_sweepActive);
-  status.insert(QStringLiteral("tag"), m_sweepTag);
-  status.insert(QStringLiteral("remaining"), m_sweepQueue.size());
-  status.insert(QStringLiteral("summary"), summary);
-  status.insert(QStringLiteral("reports"), m_sweepReports);
-  return status;
+  return m_verifier.sweepStatus();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1813,8 +1452,9 @@ void Sessions::DatabaseManager::onWorkerOpened(const QString& filePath,
                                                bool locked,
                                                const QString& passwordHash)
 {
-  m_filePath        = filePath;
-  m_open            = true;
+  m_filePath = filePath;
+  m_open     = true;
+  m_verifier.setArchive(filePath);
   m_sessionList     = sessionList;
   m_tagList         = tagList;
   const bool wasLck = m_locked;
@@ -1854,6 +1494,7 @@ void Sessions::DatabaseManager::onWorkerClosed()
 
   m_open = false;
   m_filePath.clear();
+  m_verifier.setArchive(QString());
   m_sessionList.clear();
   m_tagList.clear();
   m_passwordHash.clear();
@@ -1968,274 +1609,6 @@ void Sessions::DatabaseManager::onWorkerReportDataReady(const ReportPayloadPtr& 
 void Sessions::DatabaseManager::onWorkerGlobalProjectJsonReady(const QString& json)
 {
   runRestoreProjectFromJson(json);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Schema (shared with Sessions::Export at session creation time)
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Creates or upgrades the session-log schema on the open database.
- */
-void Sessions::DatabaseManager::createSchema(QSqlQuery& q)
-{
-  createSchemaSessionTables(q);
-  migrateColumnsTable(q);
-  migrateSessionsTable(q);
-  createSchemaSampleTables(q);
-  createSchemaStreamTables(q);
-  createSchemaBlockTable(q);
-  createSchemaTagTables(q);
-  createSchemaProjectMetadata(q);
-  createSchemaVerifications(q);
-  q.exec(QStringLiteral("PRAGMA user_version = %1").arg(kUserVersion));
-}
-
-/**
- * @brief Creates the sessions header and columns metadata tables.
- */
-void Sessions::DatabaseManager::createSchemaSessionTables(QSqlQuery& q)
-{
-  q.exec("CREATE TABLE IF NOT EXISTS sessions ("
-         "  session_id    INTEGER PRIMARY KEY AUTOINCREMENT,"
-         "  project_title TEXT NOT NULL,"
-         "  started_at    TEXT NOT NULL,"
-         "  ended_at      TEXT,"
-         "  project_json  TEXT,"
-         "  notes         TEXT"
-         ")");
-
-  q.exec("CREATE TABLE IF NOT EXISTS columns ("
-         "  column_id    INTEGER PRIMARY KEY AUTOINCREMENT,"
-         "  session_id   INTEGER NOT NULL REFERENCES sessions,"
-         "  unique_id    INTEGER NOT NULL,"
-         "  source_id    INTEGER NOT NULL DEFAULT 0,"
-         "  source_title TEXT NOT NULL DEFAULT '',"
-         "  group_title  TEXT NOT NULL,"
-         "  title        TEXT NOT NULL,"
-         "  units        TEXT,"
-         "  widget       TEXT,"
-         "  is_virtual   INTEGER NOT NULL DEFAULT 0"
-         ")");
-}
-
-/**
- * @brief Adds source_id / source_title to legacy columns tables in older databases.
- */
-void Sessions::DatabaseManager::migrateColumnsTable(QSqlQuery& q)
-{
-  auto columnExists = [&q](const QString& column) {
-    if (!q.exec(QStringLiteral("PRAGMA table_info(\"columns\")"))) {
-      qWarning() << "[Sessions] PRAGMA table_info failed:" << q.lastError().text();
-      return false;
-    }
-    while (q.next())
-      if (q.value(1).toString().compare(column, Qt::CaseInsensitive) == 0)
-        return true;
-
-    return false;
-  };
-
-  if (!columnExists(QStringLiteral("source_id"))) {
-    if (!q.exec("ALTER TABLE \"columns\" ADD COLUMN source_id INTEGER NOT NULL DEFAULT 0"))
-      qWarning() << "[Sessions] ALTER add source_id failed:" << q.lastError().text();
-  }
-
-  if (!columnExists(QStringLiteral("source_title"))) {
-    if (!q.exec("ALTER TABLE \"columns\" ADD COLUMN source_title TEXT NOT NULL DEFAULT ''"))
-      qWarning() << "[Sessions] ALTER add source_title failed:" << q.lastError().text();
-  }
-}
-
-/**
- * @brief Adds the spec-0044 fingerprint/classification columns and the spec-0062 view-state
- *        bundle column to legacy sessions tables (nullable, so old archives keep reading).
- */
-void Sessions::DatabaseManager::migrateSessionsTable(QSqlQuery& q)
-{
-  auto columnExists = [&q](const QString& column) {
-    if (!q.exec(QStringLiteral("PRAGMA table_info(\"sessions\")"))) {
-      qWarning() << "[Sessions] PRAGMA table_info failed:" << q.lastError().text();
-      return false;
-    }
-    while (q.next())
-      if (q.value(1).toString().compare(column, Qt::CaseInsensitive) == 0)
-        return true;
-
-    return false;
-  };
-
-  static constexpr struct {
-    const char* name;
-    const char* type;
-  } kColumns[] = {
-    {     "raw_sha256",    "TEXT"},
-    {"readings_sha256",    "TEXT"},
-    {    "app_version",    "TEXT"},
-    { "capture_format", "INTEGER"},
-    {    "repro_class",    "TEXT"},
-    { "frames_dropped", "INTEGER"},
-    { "overflow_bytes", "INTEGER"},
-    {  "stream_sha256",    "TEXT"},
-    {     "view_state",    "TEXT"},
-  };
-
-  for (const auto& col : kColumns) {
-    if (columnExists(QLatin1String(col.name)))
-      continue;
-
-    const auto sql = QStringLiteral("ALTER TABLE \"sessions\" ADD COLUMN %1 %2")
-                       .arg(QLatin1String(col.name), QLatin1String(col.type));
-    if (!q.exec(sql))
-      qWarning() << "[Sessions] ALTER add" << col.name << "failed:" << q.lastError().text();
-  }
-}
-
-/**
- * @brief Creates the per-sample tables (readings, raw_bytes, table_snapshots) and indexes.
- */
-void Sessions::DatabaseManager::createSchemaSampleTables(QSqlQuery& q)
-{
-  q.exec("CREATE TABLE IF NOT EXISTS readings ("
-         "  reading_id          INTEGER PRIMARY KEY AUTOINCREMENT,"
-         "  session_id          INTEGER NOT NULL,"
-         "  timestamp_ns        INTEGER NOT NULL,"
-         "  unique_id           INTEGER NOT NULL,"
-         "  raw_numeric_value   REAL,"
-         "  raw_string_value    TEXT,"
-         "  final_numeric_value REAL,"
-         "  final_string_value  TEXT,"
-         "  is_numeric          INTEGER NOT NULL DEFAULT 1"
-         ")");
-  q.exec("CREATE INDEX IF NOT EXISTS idx_readings_session_uid_ts "
-         "ON readings (session_id, unique_id, timestamp_ns)");
-  q.exec("CREATE INDEX IF NOT EXISTS idx_readings_session_ts "
-         "ON readings (session_id, timestamp_ns)");
-
-  q.exec("CREATE TABLE IF NOT EXISTS raw_bytes ("
-         "  raw_id       INTEGER PRIMARY KEY AUTOINCREMENT,"
-         "  session_id   INTEGER NOT NULL,"
-         "  timestamp_ns INTEGER NOT NULL,"
-         "  device_id    INTEGER NOT NULL DEFAULT 0,"
-         "  data         BLOB NOT NULL"
-         ")");
-  q.exec("CREATE INDEX IF NOT EXISTS idx_raw_bytes_session_ts "
-         "ON raw_bytes (session_id, timestamp_ns)");
-
-  q.exec("CREATE TABLE IF NOT EXISTS table_snapshots ("
-         "  snapshot_id   INTEGER PRIMARY KEY AUTOINCREMENT,"
-         "  session_id    INTEGER NOT NULL,"
-         "  timestamp_ns  INTEGER NOT NULL,"
-         "  table_name    TEXT NOT NULL,"
-         "  register_name TEXT NOT NULL,"
-         "  numeric_value REAL,"
-         "  string_value  TEXT"
-         ")");
-  q.exec("CREATE INDEX IF NOT EXISTS idx_snapshots_session_ts "
-         "ON table_snapshots (session_id, timestamp_ns, table_name)");
-}
-
-/**
- * @brief Creates the full-rate stream-block table (spec 0054). One row per acquisition block
- *        per dataset: `samples` is `frames` IEEE-754 float64 values written little-endian, and
- *        `t0_ns` + `dt_ns` date each of them as t0 + i * dt, so the source keeps owning time.
- *        Additive only -- a v1 database gains the empty table and replays unchanged.
- */
-void Sessions::DatabaseManager::createSchemaStreamTables(QSqlQuery& q)
-{
-  q.exec("CREATE TABLE IF NOT EXISTS stream_blocks ("
-         "  stream_block_id INTEGER PRIMARY KEY AUTOINCREMENT,"
-         "  session_id      INTEGER NOT NULL,"
-         "  source_id       INTEGER NOT NULL,"
-         "  unique_id       INTEGER NOT NULL,"
-         "  block_number    INTEGER NOT NULL,"
-         "  t0_ns           INTEGER NOT NULL,"
-         "  dt_ns           INTEGER NOT NULL,"
-         "  frames          INTEGER NOT NULL,"
-         "  samples         BLOB NOT NULL"
-         ")");
-  q.exec("CREATE INDEX IF NOT EXISTS idx_stream_blocks_session_uid_t0 "
-         "ON stream_blocks (session_id, unique_id, t0_ns)");
-}
-
-/**
- * @brief Creates the unified block table (spec 0055 R7): one row per dataset per published block,
- *        for BOTH lanes. Little-endian float64 values plus their pre-transform twin, length-
- *        prefixed UTF-8 texts, and explicit per-sample times when `dt_ns` is 0. Additive -- v1/v2
- *        databases keep `readings` and `stream_blocks` and still replay.
- */
-void Sessions::DatabaseManager::createSchemaBlockTable(QSqlQuery& q)
-{
-  q.exec("CREATE TABLE IF NOT EXISTS blocks ("
-         "  block_id     INTEGER PRIMARY KEY AUTOINCREMENT,"
-         "  session_id   INTEGER NOT NULL,"
-         "  source_id    INTEGER NOT NULL,"
-         "  unique_id    INTEGER NOT NULL,"
-         "  block_number INTEGER NOT NULL,"
-         "  t0_ns        INTEGER NOT NULL,"
-         "  t_end_ns     INTEGER NOT NULL,"
-         "  dt_ns        INTEGER NOT NULL,"
-         "  frames       INTEGER NOT NULL,"
-         "  is_numeric   INTEGER NOT NULL DEFAULT 1,"
-         "  min_value    REAL,"
-         "  max_value    REAL,"
-         "  sum_value    REAL,"
-         "  finite_count INTEGER NOT NULL DEFAULT 0,"
-         "  values_blob  BLOB NOT NULL,"
-         "  raw_values   BLOB,"
-         "  texts        BLOB,"
-         "  raw_texts    BLOB,"
-         "  times        BLOB"
-         ")");
-  q.exec("CREATE INDEX IF NOT EXISTS idx_blocks_session_uid_t0 "
-         "ON blocks (session_id, unique_id, t0_ns)");
-  q.exec("CREATE INDEX IF NOT EXISTS idx_blocks_session_t0 "
-         "ON blocks (session_id, t0_ns, t_end_ns)");
-}
-
-/**
- * @brief Creates the tags catalog and the session -> tag join table.
- */
-void Sessions::DatabaseManager::createSchemaTagTables(QSqlQuery& q)
-{
-  q.exec("CREATE TABLE IF NOT EXISTS tags ("
-         "  tag_id INTEGER PRIMARY KEY AUTOINCREMENT,"
-         "  label  TEXT NOT NULL UNIQUE COLLATE NOCASE"
-         ")");
-
-  q.exec("CREATE TABLE IF NOT EXISTS session_tags ("
-         "  session_id INTEGER NOT NULL,"
-         "  tag_id     INTEGER NOT NULL,"
-         "  PRIMARY KEY (session_id, tag_id)"
-         ") WITHOUT ROWID");
-}
-
-/**
- * @brief Creates the project_metadata key/value store.
- */
-void Sessions::DatabaseManager::createSchemaProjectMetadata(QSqlQuery& q)
-{
-  q.exec("CREATE TABLE IF NOT EXISTS project_metadata ("
-         "  key   TEXT PRIMARY KEY,"
-         "  value TEXT NOT NULL"
-         ") WITHOUT ROWID");
-}
-
-/**
- * @brief Creates the append-only verification-record table (spec 0044).
- */
-void Sessions::DatabaseManager::createSchemaVerifications(QSqlQuery& q)
-{
-  q.exec("CREATE TABLE IF NOT EXISTS verifications ("
-         "  verification_id INTEGER PRIMARY KEY AUTOINCREMENT,"
-         "  session_id      INTEGER NOT NULL REFERENCES sessions,"
-         "  verified_at     TEXT NOT NULL,"
-         "  app_version     TEXT NOT NULL,"
-         "  verdict         TEXT NOT NULL,"
-         "  detail_json     TEXT"
-         ")");
-  q.exec("CREATE INDEX IF NOT EXISTS idx_verifications_session "
-         "ON verifications (session_id, verification_id)");
 }
 
 #endif  // BUILD_COMMERCIAL

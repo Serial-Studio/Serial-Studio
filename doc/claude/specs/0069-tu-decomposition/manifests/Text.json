@@ -1,0 +1,54 @@
+{
+ "dest_dir": "app/src/DataModel/Scripting/NativeTemplates/Text",
+ "residual": "app/src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp",
+ "tu_order": [
+  "TextAtCommand.cpp",
+  "TextDelimited.cpp",
+  "TextFixedWidth.cpp",
+  "TextIni.cpp",
+  "TextJson.cpp",
+  "TextKeyValue.cpp",
+  "TextNmea0183.cpp",
+  "TextUrlEncoded.cpp",
+  "TextXml.cpp",
+  "TextYaml.cpp"
+ ],
+ "assignments": {
+  "struct:DelimitedTextParser#0": "TextDelimited.cpp",
+  "struct:DelimitedTextTemplate#0": "TextDelimited.cpp",
+  "static:isNumericValue#0": "TextShared.h",
+  "static:buildKeyIndex#0": "TextShared.h",
+  "static:percentDecode#0": "TextShared.h",
+  "struct:FixedWidthParser#0": "TextFixedWidth.cpp",
+  "struct:FixedWidthTemplate#0": "TextFixedWidth.cpp",
+  "struct:KeyValueParser#0": "TextKeyValue.cpp",
+  "struct:KeyValueTemplate#0": "TextKeyValue.cpp",
+  "struct:IniConfigParser#0": "TextIni.cpp",
+  "struct:IniConfigTemplate#0": "TextIni.cpp",
+  "struct:AtCommandsParser#0": "TextAtCommand.cpp",
+  "struct:AtCommandsTemplate#0": "TextAtCommand.cpp",
+  "struct:Nmea0183Parser#0": "TextNmea0183.cpp",
+  "struct:Nmea0183Template#0": "TextNmea0183.cpp",
+  "struct:UrlEncodedParser#0": "TextUrlEncoded.cpp",
+  "struct:UrlEncodedTemplate#0": "TextUrlEncoded.cpp",
+  "struct:JsonDataParser#0": "TextJson.cpp",
+  "struct:JsonDataTemplate#0": "TextJson.cpp",
+  "struct:XmlDataParser#0": "TextXml.cpp",
+  "struct:XmlDataTemplate#0": "TextXml.cpp",
+  "struct:YamlDataParser#0": "TextYaml.cpp",
+  "struct:YamlDataTemplate#0": "TextYaml.cpp"
+ },
+ "headers": [
+  {
+   "name": "TextShared.h",
+   "path": "app/src/DataModel/Scripting/NativeTemplates/Text/TextShared.h",
+   "promote_inline": "static",
+   "includes": [
+    "<QCoreApplication>",
+    "<QString>",
+    "<QStringList>",
+    "\"DataModel/Scripting/NativeTemplates/NativeTemplates.h\""
+   ]
+  }
+ ]
+}

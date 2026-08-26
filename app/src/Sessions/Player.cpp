@@ -76,9 +76,7 @@ Sessions::Player::Player()
   , m_timestamp("--.--")
   , m_startTimestampSeconds(0.0)
   , m_steadyBaseRowSeconds(0.0)
-  , m_preSessionCaptured(false)
   , m_restorePending(false)
-  , m_preSessionOperationMode(SerialStudio::QuickPlot)
 {
   qRegisterMetaType<Sessions::PlayerSessionPayloadPtr>("Sessions::PlayerSessionPayloadPtr");
 
@@ -641,15 +639,13 @@ void Sessions::Player::clearLocalState()
  */
 void Sessions::Player::capturePreSessionState()
 {
-  if (m_preSessionCaptured)
+  if (m_preSession.captured())
     return;
 
   static auto& appState     = AppState::instance();
   static auto& projectModel = DataModel::ProjectModel::instance();
-  m_preSessionOperationMode = appState.operationMode();
-  m_preSessionProjectPath   = projectModel.jsonFilePath();
-  m_preSessionViewState     = viewStateDashboard().viewStateJson();
-  m_preSessionCaptured      = true;
+  m_preSession.capture(
+    appState.operationMode(), projectModel.jsonFilePath(), viewStateDashboard().viewStateJson());
 }
 
 /**
@@ -675,10 +671,11 @@ void Sessions::Player::applyBundledViewState(const QString& viewState, const QSt
   else
     dashboard.setViewStateJson(viewState);
 
-  if (projectJson.isEmpty() || m_preSessionProjectPath.isEmpty())
+  const auto& capturedProject = m_preSession.projectPath();
+  if (projectJson.isEmpty() || capturedProject.isEmpty())
     return;
 
-  QFile file(m_preSessionProjectPath);
+  QFile file(capturedProject);
   if (!file.open(QIODevice::ReadOnly))
     return;
 
@@ -703,7 +700,7 @@ void Sessions::Player::applyBundledViewState(const QString& viewState, const QSt
  */
 void Sessions::Player::schedulePreSessionRestore()
 {
-  if (!m_preSessionCaptured)
+  if (!m_preSession.captured())
     return;
 
   m_restorePending = true;
@@ -727,24 +724,22 @@ void Sessions::Player::performPendingRestore()
  */
 void Sessions::Player::restorePreSessionState()
 {
-  if (!m_preSessionCaptured)
+  if (!m_preSession.captured())
     return;
 
-  static auto& pm = DataModel::ProjectModel::instance();
-  if (!m_preSessionProjectPath.isEmpty() && QFileInfo::exists(m_preSessionProjectPath))
-    (void)pm.openJsonFile(m_preSessionProjectPath);
+  static auto& pm         = DataModel::ProjectModel::instance();
+  const auto& projectPath = m_preSession.projectPath();
+  if (!projectPath.isEmpty() && QFileInfo::exists(projectPath))
+    (void)pm.openJsonFile(projectPath);
   else
     pm.newJsonFile();
 
   static auto& appState = AppState::instance();
-  appState.setOperationMode(m_preSessionOperationMode);
+  appState.setOperationMode(m_preSession.operationMode());
 
-  viewStateDashboard().setViewStateJson(m_preSessionViewState);
+  viewStateDashboard().setViewStateJson(m_preSession.viewState());
 
-  m_preSessionCaptured = false;
-  m_preSessionProjectPath.clear();
-  m_preSessionViewState.clear();
-  m_preSessionOperationMode = SerialStudio::QuickPlot;
+  m_preSession.clear();
 }
 
 /**

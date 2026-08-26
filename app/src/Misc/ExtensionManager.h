@@ -26,13 +26,13 @@
 #include <QMap>
 #include <QNetworkAccessManager>
 #include <QObject>
-#include <QProcess>
-#include <QProcessEnvironment>
 #include <QSet>
 #include <QSettings>
 #include <QUrl>
 #include <QVariantList>
 #include <QVariantMap>
+
+#include "Misc/Extensions/PluginRunner.h"
 
 class QNetworkReply;
 
@@ -182,7 +182,6 @@ private slots:
   void downloadNextFile();
   void applyFilter();
   void rebuildInstalledPlugins();
-  void onPluginFinished(const QString& id);
   void loadLocalManifest(const QString& repoPath);
   void loadInstalledManifest();
   void saveInstalledManifest();
@@ -220,18 +219,6 @@ private:
   [[nodiscard]] bool checkPluginDependencies(const QString& id,
                                              const QJsonArray& deps,
                                              bool& hasPipDepsOut);
-  [[nodiscard]] QProcessEnvironment buildPluginEnvironment() const;
-  void wirePluginProcessSignals(QProcess* process, const QString& id);
-  void startPluginProcess(QProcess* process,
-                          const QString& runtime,
-                          const QString& entryPath,
-                          bool terminal);
-  void registerRunningPlugin(const QString& id,
-                             QProcess* process,
-                             const QJsonObject& resolved,
-                             const QString& pluginDir,
-                             bool terminal,
-                             bool hasPipDeps);
 
 private:
   bool m_loading;
@@ -262,11 +249,8 @@ private:
   QSet<QString> m_autoUpdateDeclined;
 
   bool m_dashboardWasAvailable;
-  QSet<QString> m_userClosedPlugins;
-  QMap<QString, QProcess*> m_plugins;
-  QMap<QString, QString> m_pluginOutput;
+  PluginRunner m_pluginRunner;
   QMap<QString, QVariantMap> m_pluginMetadataCache;
-  QVariantList m_runningPlugins;
   QVariantList m_installedPlugins;
   QNetworkAccessManager m_nam;
   QSet<QNetworkReply*> m_activeReplies;

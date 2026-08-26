@@ -21,11 +21,11 @@
 #  include <QSqlQuery>
 #  include <QVariantList>
 
+#  include "Sessions/DatabaseManager/ReproducibilityVerifier.h"
 #  include "Sessions/DatabaseWorker.h"
 #  include "Sessions/HtmlReport.h"
 
 class QThread;
-class QProcess;
 class AppState;
 
 namespace Misc {
@@ -236,14 +236,7 @@ private slots:
 
 private:
   void initWorker();
-  void concludeVerification(int sessionId, bool success, const QVariantMap& verdict);
-  void concludeRegression(int sessionId, bool success, const QVariantMap& report);
-  void advanceRegressionSweep(int sessionId, const QVariantMap& report);
-  void finishRegressionSweep();
-  bool publishRegressStartFailure(int sessionId,
-                                  const QString& code,
-                                  const QString& error,
-                                  const QString& hint);
+  void wireVerifier();
   [[nodiscard]] quint64 nextToken();
   void setBusy(bool busy);
   void renderReportFromPayload(const ReportPayloadPtr& payload);
@@ -289,18 +282,7 @@ private:
   // CSV export tracking
   QString m_pendingCsvPath;
 
-  // Spec-0044 verification child process
-  QProcess* m_verifyProcess;
-  bool m_regressActive;
-  QString m_regressCandidateTemp;
-  QVariantMap m_lastRegressionReport;
-
-  bool m_sweepActive;
-  bool m_sweepOwnsCandidate;
-  QString m_sweepTag;
-  QString m_sweepCandidate;
-  QList<int> m_sweepQueue;
-  QVariantList m_sweepReports;
+  ReproducibilityVerifier m_verifier;
 
   // Outstanding mutation tokens awaiting worker confirmation
   quint64 m_nextToken;

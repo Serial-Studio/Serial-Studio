@@ -1,0 +1,37 @@
+{
+ "dest_dir": "app/src/API/Handlers",
+ "residual": "app/src/API/Handlers/ProjectHandlerEntities.cpp",
+ "tu_order": [
+  "ProjectHandlerAlarmCompat.cpp",
+  "ProjectHandlerBulk.cpp",
+  "ProjectHandlerDatasetFields.cpp"
+ ],
+ "assignments": {
+  "API::Handlers::ProjectHandler::groupAdd#0": "ProjectHandlerAlarmCompat.cpp",
+  "API::Handlers::ProjectHandler::groupDelete#0": "ProjectHandlerAlarmCompat.cpp",
+  "API::Handlers::ProjectHandler::groupDuplicate#0": "ProjectHandlerAlarmCompat.cpp",
+  "API::Handlers::ProjectHandler::widgetForDatasetOptions#0": "ProjectHandlerAlarmCompat.cpp",
+  "API::Handlers::ProjectHandler::applyDatasetVisualizationFlags#0": "ProjectHandlerAlarmCompat.cpp",
+  "API::Handlers::ProjectHandler::datasetAdd#0": "ProjectHandlerAlarmCompat.cpp",
+  "namespace:API::Handlers#1": "ProjectHandlerAlarmCompat.cpp",
+  "API::Handlers::ProjectHandler::datasetAddMany#0": "ProjectHandlerAlarmCompat.cpp",
+  "namespace:API::Handlers#2": "ProjectHandlerAlarmCompat.cpp",
+  "API::Handlers::ProjectHandler::datasetDelete#0": "ProjectHandlerAlarmCompat.cpp",
+  "API::Handlers::ProjectHandler::datasetDuplicate#0": "ProjectHandlerAlarmCompat.cpp",
+  "API::Handlers::ProjectHandler::datasetSetOption#0": "ProjectHandlerAlarmCompat.cpp",
+  "API::Handlers::ProjectHandler::datasetSetOptions#0": "ProjectHandlerAlarmCompat.cpp",
+  "API::Handlers::ProjectHandler::datasetSetVirtual#0": "ProjectHandlerDatasetFields.cpp",
+  "API::Handlers::ProjectHandler::datasetSetTransformCode#0": "ProjectHandlerDatasetFields.cpp",
+  "API::Handlers::ProjectHandler::datasetGetAlarmBands#0": "ProjectHandlerDatasetFields.cpp",
+  "API::Handlers::ProjectHandler::datasetSetAlarmBands#0": "ProjectHandlerDatasetFields.cpp",
+  "API::Handlers::ProjectHandler::datasetGetFFTMarkers#0": "ProjectHandlerDatasetFields.cpp",
+  "API::Handlers::ProjectHandler::datasetSetFFTMarkers#0": "ProjectHandlerDatasetFields.cpp",
+  "API::Handlers::ProjectHandler::actionAdd#0": "ProjectHandlerDatasetFields.cpp",
+  "API::Handlers::ProjectHandler::actionDelete#0": "ProjectHandlerDatasetFields.cpp",
+  "API::Handlers::ProjectHandler::actionDuplicate#0": "ProjectHandlerDatasetFields.cpp",
+  "API::Handlers::ProjectHandler::groupUpdate#0": "ProjectHandlerBulk.cpp",
+  "API::Handlers::ProjectHandler::datasetUpdate#0": "ProjectHandlerBulk.cpp",
+  "API::Handlers::ProjectHandler::actionUpdate#0": "ProjectHandlerBulk.cpp",
+  "API::Handlers::ProjectHandler::outputWidgetUpdate#0": "ProjectHandlerBulk.cpp"
+ }
+}

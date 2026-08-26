@@ -32,10 +32,8 @@
 #include <QTimer>
 #include <unordered_map>
 
+#include "IO/ConnectionManager/DriverUiRegistry.h"
 #include "IO/DeviceManager.h"
-#include "IO/Drivers/BluetoothLE.h"
-#include "IO/Drivers/Network.h"
-#include "IO/Drivers/UART.h"
 #include "IO/HAL_Driver.h"
 #include "IO/StreamWorker.h"
 #include "SerialStudio.h"
@@ -49,17 +47,6 @@ struct Source;
 namespace Misc::Diagnostics {
 enum class Bus : int;
 }  // namespace Misc::Diagnostics
-
-#ifdef BUILD_COMMERCIAL
-#  include "IO/Drivers/Audio.h"
-#  include "IO/Drivers/CANBus.h"
-#  include "IO/Drivers/HID.h"
-#  include "IO/Drivers/Modbus.h"
-#  include "IO/Drivers/MQTT.h"
-#  include "IO/Drivers/OpcUa.h"
-#  include "IO/Drivers/Process.h"
-#  include "IO/Drivers/USB.h"
-#endif
 
 namespace IO {
 
@@ -294,19 +281,7 @@ private:
   mutable QMutex m_replyMutex;
   QHash<int, QByteArray> m_replyBuffers;
 
-  std::unique_ptr<IO::Drivers::UART> m_uartUi;
-  std::unique_ptr<IO::Drivers::Network> m_networkUi;
-  std::unique_ptr<IO::Drivers::BluetoothLE> m_bluetoothLEUi;
-#ifdef BUILD_COMMERCIAL
-  std::unique_ptr<IO::Drivers::Audio> m_audioUi;
-  std::unique_ptr<IO::Drivers::CANBus> m_canBusUi;
-  std::unique_ptr<IO::Drivers::HID> m_hidUi;
-  std::unique_ptr<IO::Drivers::MQTT> m_mqttUi;
-  std::unique_ptr<IO::Drivers::Modbus> m_modbusUi;
-  std::unique_ptr<IO::Drivers::OpcUa> m_opcUaUi;
-  std::unique_ptr<IO::Drivers::Process> m_processUi;
-  std::unique_ptr<IO::Drivers::USB> m_usbUi;
-#endif
+  DriverUiRegistry m_uiDrivers;
 };
 
 }  // namespace IO

@@ -66,10 +66,12 @@ private:
   void loadManifest(const QString& path);
   void loadLayout(const QString& path);
   void loadMenus(const QString& path);
+
   [[nodiscard]] static QJsonArray resolveMenuIncludes(const QJsonArray& nodes,
                                                       const QHash<QString, QJsonArray>& menus,
                                                       QStringList& stack,
                                                       int depth);
+
   [[nodiscard]] QJsonArray filterLayoutNodes(const QJsonArray& nodes) const;
   [[nodiscard]] QVariantMap toVariant(const QJsonObject& command) const;
   [[nodiscard]] QVariantList layoutNodes(const QJsonArray& nodes) const;

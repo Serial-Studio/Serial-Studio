@@ -72,37 +72,6 @@
 }
 
 //--------------------------------------------------------------------------------------------------
-// Taskbar model implementation
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Constructs the taskbar model for representing dashboard widgets.
- */
-UI::TaskbarModel::TaskbarModel(QObject* parent) : QStandardItemModel(parent) {}
-
-/**
- * @brief Returns the role names used for QML data binding.
- */
-QHash<int, QByteArray> UI::TaskbarModel::roleNames() const
-{
-#define BAL(x) QByteArrayLiteral(x)
-  static const QHash<int, QByteArray> kNames = {
-    {    GroupIdRole,     BAL("groupId")},
-    {    IsGroupRole,     BAL("isGroup")},
-    {   WindowIdRole,    BAL("windowId")},
-    {  GroupNameRole,   BAL("groupName")},
-    { WidgetTypeRole,  BAL("widgetType")},
-    { WidgetNameRole,  BAL("widgetName")},
-    { WidgetIconRole,  BAL("widgetIcon")},
-    {WindowStateRole, BAL("windowState")},
-    {     IconIdRole,      BAL("iconId")},
-  };
-#undef BAL
-
-  return kNames;
-}
-
-//--------------------------------------------------------------------------------------------------
 // Taskbar class implementation
 //--------------------------------------------------------------------------------------------------
 
