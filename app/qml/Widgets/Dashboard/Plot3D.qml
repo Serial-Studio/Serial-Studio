@@ -313,14 +313,14 @@ Item {
       to: 100
       from: 30
       stepSize: 1
-      onValueChanged: {
-        if (!isNaN(value) && model) {
-          var separation = value / 1e3
+      onMoved: {
+        if (!model || isNaN(value))
+          return
 
-          if (model.eyeSeparation !== separation) {
-            model.eyeSeparation = separation
-            Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "eyeSeparation", separation)
-          }
+        const separation = Math.round(value) / 1e3
+        if (model.eyeSeparation !== separation) {
+          model.eyeSeparation = separation
+          Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "eyeSeparation", separation)
         }
       }
       Layout.fillWidth: true
