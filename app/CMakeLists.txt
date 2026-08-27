@@ -151,6 +151,7 @@ if(BUILD_COMMERCIAL)
     Mqtt
     Multimedia
     SerialBus
+    ShaderTools
   )
   set(QT_LIBS
     ${QT_LIBS}
@@ -824,6 +825,8 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/OpcUaTagModel.h
     src/UI/Widgets/Plot3D.h
   src/UI/Widgets/Plot3D/Plot3DOverlay.h
+  src/UI/Widgets/Plot3D/Plot3DStereo.h
+  src/UI/Widgets/Plot3D/Plot3DEyeMaterial.h
     src/UI/Widgets/ImageView.h
     src/UI/Widgets/ImageExport.h
     src/UI/Widgets/AudioExport.h
@@ -938,7 +941,10 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/OpcUaSecurity.cpp
     src/IO/Drivers/OpcUaTagModel.cpp
     src/UI/Widgets/Plot3D.cpp
+  src/UI/Widgets/Plot3D/Plot3DNodes.cpp
   src/UI/Widgets/Plot3D/Plot3DOverlay.cpp
+  src/UI/Widgets/Plot3D/Plot3DStereo.cpp
+  src/UI/Widgets/Plot3D/Plot3DEyeMaterial.cpp
     src/UI/Widgets/ImageView.cpp
     src/UI/Widgets/ImageExport.cpp
     src/UI/Widgets/AudioExport.cpp
@@ -1303,6 +1309,31 @@ qt_add_executable(
 
 if(MSVC)
   target_compile_options(${PROJECT_EXECUTABLE} PRIVATE /W4)
+endif()
+
+#---------------------------------------------------------------------------------------------------
+# Stereo stroke shaders (Pro)
+#---------------------------------------------------------------------------------------------------
+#
+# The 3D plot's anaglyph passes need a material that narrows the pipeline's color-write mask, and
+# a custom material needs its own shader stages. These are vendored rather than borrowed from Qt's
+# built-in scene-graph set so the uniform block and the code that fills it are both ours and cannot
+# drift when Qt reorganizes its shaders. BASE puts them at :/serial-studio.com/shaders/<name>.qsb,
+# which is what Plot3DStereo.h names. BATCHABLE emits the rewritten vertex variant the batch
+# renderer asks for when it merges nodes: without it a merged batch would request a variant the
+# .qsb does not carry, fail to build its pipeline, and be dropped -- an invisible stereo pass.
+#
+#---------------------------------------------------------------------------------------------------
+
+if(BUILD_COMMERCIAL)
+  qt_add_shaders(${PROJECT_EXECUTABLE} "plot3d_eye_shaders"
+    BATCHABLE
+    PREFIX "/serial-studio.com/shaders"
+    BASE "${CMAKE_CURRENT_SOURCE_DIR}/shaders"
+    FILES
+      shaders/plot3d_eye.vert
+      shaders/plot3d_eye.frag
+  )
 endif()
 
 target_link_libraries(

@@ -277,10 +277,10 @@ Widgets.Pane {
   //
   Item {
     anchors.fill: parent
+    anchors.topMargin: -16
     anchors.leftMargin: -9
     anchors.rightMargin: -9
-    anchors.bottomMargin: (zeroBottom ? -14 : -9)
-    anchors.topMargin: (headerVisible ? -16 : -9)
+    anchors.bottomMargin: (zeroBottom ? -14 : -8)
 
     //
     // Default background

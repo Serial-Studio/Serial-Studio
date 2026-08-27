@@ -791,6 +791,23 @@ ss_add_unit_test(tst_frame_reader_modes
 # )
 #
 
+#
+# Stereo color policy behind the 3D plot's anaglyph mode (spec 0072). Plot3DStereo.cpp is
+# deliberately free of Qt Quick and of every project type -- QColor and nothing else -- which is
+# what lets the whole shipped palette be checked for both-eye visibility without a GUI, a scene
+# graph or a running app. Commercial-only TU, so the suite defines BUILD_COMMERCIAL.
+#
+ss_add_unit_test(tst_plot3d_stereo
+  SOURCES tst_plot3d_stereo.cpp
+          ${SS_APP_SRC}/UI/Widgets/Plot3D/Plot3DStereo.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core Qt6::Gui
+)
+
+if(TARGET tst_plot3d_stereo)
+  target_compile_definitions(tst_plot3d_stereo PRIVATE BUILD_COMMERCIAL)
+endif()
+
 #---------------------------------------------------------------------------------------------------
 # Aggregate target
 #---------------------------------------------------------------------------------------------------

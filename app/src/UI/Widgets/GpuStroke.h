@@ -27,12 +27,21 @@
 #include <QSGGeometryNode>
 #include <vector>
 
+QT_FORWARD_DECLARE_CLASS(QSGMaterial)
+
 namespace Widgets::GpuStroke {
 /**
  * @brief Geometry ceiling (16M): past it a caller drops the stroke so int scene-graph buffers
  *        can't overflow.
  */
 inline constexpr qsizetype kMaxGeometry = 1 << 24;
+
+/**
+ * @brief Optional material hook, consulted only when a node is first built. Null means the
+ *        stock vertex-color material, which is what every caller but the 3D plot's stereo
+ *        passes wants.
+ */
+using MaterialFactory = QSGMaterial* (*)();
 
 [[nodiscard]] qsizetype runLength(const QPointF* pts, const qsizetype count, qsizetype& start);
 
@@ -54,13 +63,15 @@ void countRun(const QPointF* px,
                                                const QPointF* px,
                                                const QColor* colors,
                                                const qsizetype count,
-                                               const double halfWidth);
+                                               const double halfWidth,
+                                               MaterialFactory makeMaterial = nullptr);
 
 [[nodiscard]] QSGGeometryNode* buildPointNode(QSGGeometryNode* node,
                                               const QPointF* px,
                                               const QColor* colors,
                                               const qsizetype count,
-                                              const double halfSize);
+                                              const double halfSize,
+                                              MaterialFactory makeMaterial = nullptr);
 
 void emitRun(QSGGeometry::ColoredPoint2D* vertices,
              quint32* indices,

@@ -46,7 +46,7 @@
     },
     {
       "path": "examples/LorenzAttractor/LorenzAttractor.ssproj",
-      "sha256": "96b045159e8e4c3f23a83000300eae57379f8f35e0e3c4938ad772a5855d9ac8"
+      "sha256": "8489d6ecf3c38123352cd047144e561a182300d49c88787a33552fdf1f857b29"
     },
     {
       "path": "examples/MPU6050/MPU6050.ssproj",
@@ -90,7 +90,7 @@
     },
     {
       "path": "examples/Vibration Test Rig/VibrationTestRig.ssproj",
-      "sha256": "ddbf395e7d682688f301566f1c4fbfb7e747de7f08f8a7dd1befe466db56dc4a"
+      "sha256": "435749d714ec3ab97ee35d8b2cbf9618c3c7e6d7d9d0b0c2354d5e61faf5b5ad"
     }
   ]
 }

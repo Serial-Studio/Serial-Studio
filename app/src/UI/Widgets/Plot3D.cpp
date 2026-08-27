@@ -39,6 +39,7 @@
 #include "SSAssert.h"
 #include "UI/Dashboard.h"
 #include "UI/Widgets/GpuStroke.h"
+#include "UI/Widgets/Plot3D/Plot3DEyeMaterial.h"
 #include "UI/Widgets/Plot3D/Plot3DOverlay.h"
 
 static constexpr float kNearPlane = 0.1f;
@@ -117,6 +118,8 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem* parent)
   , m_eyeSeparation(0.069f)
   , m_anaglyph(false)
   , m_autoScale(true)
+  , m_channelIsolation(Plot3DStereo::shadersPresent())
+  , m_nodesStereo(false)
   , m_autoCenter(false)
   , m_interpolate(true)
   , m_orbitNavigation(true)
@@ -131,9 +134,9 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem* parent)
   , m_labelUpload(false)
   , m_indicatorUpload(false)
   , m_bgNode(nullptr)
-  , m_gridNode(nullptr)
-  , m_axisNode(nullptr)
-  , m_traceNode(nullptr)
+  , m_gridNodes{}
+  , m_axisNodes{}
+  , m_traceNodes{}
   , m_labelNode(nullptr)
   , m_indicatorNode(nullptr)
   , m_orbitOffsetX(0)
@@ -155,6 +158,7 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem* parent)
   setAcceptedMouseButtons(Qt::AllButtons);
 
   setAntialiasing(false);
+  setClip(true);
 
   connect(&m_dashboard, &UI::Dashboard::updated, this, &Widgets::Plot3D::updateData);
 
@@ -184,7 +188,10 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem* parent)
  * @brief Builds the plot's scene-graph node tree. Runs on the render thread with the GUI
  *        thread blocked in the synchronization phase, which is what makes reading item and
  *        dashboard state here safe; no other render-thread callback may read that state, and
- *        the cached child pointers are never dereferenced outside this call.
+ *        the cached child pointers are never dereferenced outside this call. It is also the
+ *        first place the running backend is known, so channel isolation is retired here when
+ *        that backend cannot run a custom material: the marks make the next tick re-derive the
+ *        colors, one frame late, rather than leaving the plot blank.
  */
 QSGNode* Widgets::Plot3D::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* data)
 {
@@ -194,11 +201,11 @@ QSGNode* Widgets::Plot3D::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData*
   if (rect.isEmpty() || !window()) {
     delete oldNode;
     m_bgNode        = nullptr;
-    m_gridNode      = nullptr;
-    m_axisNode      = nullptr;
-    m_traceNode     = nullptr;
     m_labelNode     = nullptr;
     m_indicatorNode = nullptr;
+    m_gridNodes.fill(nullptr);
+    m_axisNodes.fill(nullptr);
+    m_traceNodes.fill(nullptr);
     return nullptr;
   }
 
@@ -206,22 +213,35 @@ QSGNode* Widgets::Plot3D::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData*
   if (!root) {
     root              = new QSGNode;
     m_bgNode          = nullptr;
-    m_gridNode        = nullptr;
-    m_axisNode        = nullptr;
-    m_traceNode       = nullptr;
     m_labelNode       = nullptr;
     m_indicatorNode   = nullptr;
     m_labelUpload     = true;
     m_indicatorUpload = true;
     m_bgUpload        = true;
+    m_gridNodes.fill(nullptr);
+    m_axisNodes.fill(nullptr);
+    m_traceNodes.fill(nullptr);
   }
 
   SS_ASSERT(root != nullptr, return nullptr);
 
   root->removeAllChildNodes();
+
+  if (m_channelIsolation && !EyeMaterialFactory::backendSupportsIsolation(window())) {
+    m_channelIsolation = false;
+    m_dirtyGrid        = true;
+    m_dirtyData        = true;
+  }
+
+  const bool stereoNodes = m_anaglyph && m_channelIsolation;
+  if (stereoNodes != m_nodesStereo) {
+    releaseStrokeNodes();
+    m_nodesStereo = stereoNodes;
+  }
+
   syncBackgroundNode(root, rect);
-  syncStrokeNode(m_gridNode, m_gridPx, m_gridColors, 0.5);
-  syncStrokeNode(m_axisNode, m_axisPx, m_axisColors, 0.75);
+  syncStrokeNodes(m_gridNodes, m_gridPx, m_gridColors, 0.5);
+  syncStrokeNodes(m_axisNodes, m_axisPx, m_axisColors, 0.75);
   syncTraceNode();
 
   syncTileNode(m_labelNode, m_labelTile, m_labelPos, m_labelUpload);
@@ -233,134 +253,6 @@ QSGNode* Widgets::Plot3D::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData*
   appendSceneNodes(root);
 
   return root;
-}
-
-/**
- * @brief Rebuilds the trace node, stroking the gradient polyline or emitting one dot per
- *        sample when interpolation is off.
- */
-void Widgets::Plot3D::syncTraceNode()
-{
-  SS_ASSERT(m_tracePx.size() == m_traceColors.size(), return);
-
-  const auto count = static_cast<qsizetype>(m_tracePx.size());
-  if (m_interpolate)
-    m_traceNode =
-      GpuStroke::buildStrokeNode(m_traceNode, m_tracePx.data(), m_traceColors.data(), count, 1.0);
-  else
-    m_traceNode =
-      GpuStroke::buildPointNode(m_traceNode, m_tracePx.data(), m_traceColors.data(), count, 1.0);
-}
-
-/**
- * @brief Rebuilds one tile node in place, re-uploading its texture only when the tile was
- *        rasterized again. A null tile releases the node.
- */
-void Widgets::Plot3D::syncTileNode(QSGSimpleTextureNode*& slot,
-                                   const QImage& tile,
-                                   const QPointF& topLeft,
-                                   bool& needsUpload)
-{
-  SS_ASSERT(window() != nullptr, return);
-
-  if (tile.isNull()) {
-    delete slot;
-    slot        = nullptr;
-    needsUpload = false;
-    return;
-  }
-
-  if (!slot) {
-    // code-verify off
-    // Scene-graph nodes default to QSGNode::OwnedByParent, so appending transfers ownership to
-    // the root and the slot is re-nulled whenever updatePaintNode is handed a null oldNode.
-    slot = new QSGSimpleTextureNode;
-    // code-verify on
-    slot->setOwnsTexture(true);
-    slot->setFiltering(QSGTexture::Linear);
-    needsUpload = true;
-  }
-
-  if (needsUpload) {
-    slot->setTexture(window()->createTextureFromImage(tile));
-    needsUpload = false;
-  }
-
-  const QSizeF size = tile.deviceIndependentSize();
-  slot->setRect(QRectF(topLeft, size));
-}
-
-/**
- * @brief Appends the scene nodes in draw order, flipping the trace and grid around the same
- *        camera-angle threshold the layered composite used.
- */
-void Widgets::Plot3D::appendSceneNodes(QSGNode* root)
-{
-  SS_ASSERT(root != nullptr, return);
-
-  const bool gridOnTop = m_cameraAngleX <= 270.0 && m_cameraAngleX > 90.0;
-  if (gridOnTop && m_traceNode)
-    root->appendChildNode(m_traceNode);
-
-  if (m_gridNode)
-    root->appendChildNode(m_gridNode);
-
-  if (m_axisNode)
-    root->appendChildNode(m_axisNode);
-
-  if (!gridOnTop && m_traceNode)
-    root->appendChildNode(m_traceNode);
-
-  if (m_labelNode)
-    root->appendChildNode(m_labelNode);
-
-  if (m_indicatorNode)
-    root->appendChildNode(m_indicatorNode);
-}
-
-/**
- * @brief Refreshes the background tile node, rebuilding the tile only when the theme or the
- *        item size marked it dirty.
- */
-void Widgets::Plot3D::syncBackgroundNode(QSGNode* root, const QRectF& rect)
-{
-  SS_ASSERT(root != nullptr, return);
-  SS_ASSERT(window() != nullptr, return);
-
-  if (!m_bgNode) {
-    // code-verify off
-    // Scene-graph nodes default to QSGNode::OwnedByParent, so appending below transfers
-    // ownership to the root and the slot is re-nulled whenever updatePaintNode is handed a
-    // null oldNode. There is no destructor release path to add.
-    m_bgNode = new QSGSimpleTextureNode;
-    // code-verify on
-    m_bgNode->setOwnsTexture(true);
-    m_bgNode->setFiltering(QSGTexture::Linear);
-  }
-
-  if (m_bgUpload && !m_bgTile.isNull()) {
-    m_bgNode->setTexture(window()->createTextureFromImage(m_bgTile));
-    m_bgUpload = false;
-  }
-
-  m_bgNode->setRect(rect);
-  root->appendChildNode(m_bgNode);
-}
-
-/**
- * @brief Rebuilds one stroke node in place from an accumulated polyline; the builder frees and
- *        nulls the slot when there is nothing left to draw.
- */
-void Widgets::Plot3D::syncStrokeNode(QSGGeometryNode*& slot,
-                                     const std::vector<QPointF>& px,
-                                     const std::vector<QColor>& colors,
-                                     const double halfWidth)
-{
-  SS_ASSERT(px.size() == colors.size(), return);
-  SS_ASSERT(halfWidth > 0.0, return);
-
-  slot = GpuStroke::buildStrokeNode(
-    slot, px.data(), colors.data(), static_cast<qsizetype>(px.size()), halfWidth);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -765,6 +657,9 @@ void Widgets::Plot3D::onThemeChanged()
   m_outerBackgroundColor = m_themeManager.getColor("widget_window");
   // clang-format on
 
+  m_eyeGhostBackground =
+    Plot3DStereo::midBackground(m_innerBackgroundColor, m_outerBackgroundColor);
+
   markDirty();
 }
 
@@ -963,15 +858,19 @@ void Widgets::Plot3D::updateCamera(const DSP::LineSeries3D& data)
 }
 
 /**
- * @brief Rebuilds the trace polyline for the current camera transform. Stereo eyes are handled
- *        by the anaglyph pass, so this builds the mono transform only.
+ * @brief Rebuilds the trace polyline for the current camera transform, into one accumulator
+ *        slot per eye. Mono fills slot 0 and leaves slot 1 empty, which is what releases the
+ *        second eye's node the moment stereo is switched off.
  */
 void Widgets::Plot3D::drawData()
 {
   const auto& data = m_dashboard.plotData3D(m_index);
   if (data.empty()) {
-    m_tracePx.clear();
-    m_traceColors.clear();
+    for (int slot = 0; slot < Plot3DStereo::kEyeSlots; ++slot) {
+      m_tracePx[slot].clear();
+      m_traceColors[slot].clear();
+    }
+
     m_dirtyData = false;
     return;
   }
@@ -981,8 +880,10 @@ void Widgets::Plot3D::drawData()
     m_dataUpdated = false;
   }
 
-  m_tracePx.clear();
-  m_traceColors.clear();
+  for (int slot = 0; slot < Plot3DStereo::kEyeSlots; ++slot) {
+    m_tracePx[slot].clear();
+    m_traceColors[slot].clear();
+  }
 
   QMatrix4x4 matrix;
   matrix.perspective(45.0f, float(width()) / height(), kNearPlane, kFarPlane);
@@ -1007,7 +908,8 @@ void Widgets::Plot3D::drawData()
 /**
  * @brief Projects the series and shades it tail-to-head as per-vertex color, replacing the
  *        pen-per-segment gradient. With interpolation off every sample carries the head color
- *        and is drawn as a dot instead of a stroke.
+ *        and is drawn as a dot instead of a stroke. The gradient carries no alpha of its own,
+ *        so a stereo eye's capped ghost alpha is re-applied to each interpolated vertex.
  */
 void Widgets::Plot3D::buildTracePolyline(const QMatrix4x4& matrix,
                                          const DSP::LineSeries3D& data,
@@ -1018,52 +920,54 @@ void Widgets::Plot3D::buildTracePolyline(const QMatrix4x4& matrix,
   if (n < 1)
     return;
 
-  const QColor head = maskEyeColor(m_lineHeadColor, mask);
-  const QColor tail = maskEyeColor(m_lineTailColor, mask);
+  const int slot    = Plot3DStereo::eyeSlot(mask);
+  auto& px          = m_tracePx[slot];
+  auto& colors      = m_traceColors[slot];
+  const QColor head = eyeColor(m_lineHeadColor, mask);
+  const QColor tail = eyeColor(m_lineTailColor, mask);
 
-  if (!m_tracePx.empty()) {
-    m_tracePx.push_back(QPointF(qQNaN(), qQNaN()));
-    m_traceColors.push_back(head);
+  if (!px.empty()) {
+    px.push_back(QPointF(qQNaN(), qQNaN()));
+    colors.push_back(head);
   }
 
-  m_tracePx.insert(m_tracePx.end(), points.begin(), points.end());
-  m_traceColors.reserve(m_traceColors.size() + static_cast<std::size_t>(n));
+  px.insert(px.end(), points.begin(), points.end());
+  colors.reserve(colors.size() + static_cast<std::size_t>(n));
 
   if (!m_interpolate) {
-    m_traceColors.insert(m_traceColors.end(), static_cast<std::size_t>(n), head);
+    colors.insert(colors.end(), static_cast<std::size_t>(n), head);
     return;
   }
 
-  const double inv = n > 1 ? 1.0 / static_cast<double>(n - 1) : 0.0;
+  const double inv    = n > 1 ? 1.0 / static_cast<double>(n - 1) : 0.0;
+  const float ghosted = head.alphaF();
   for (qsizetype i = 0; i < n; ++i) {
     const double t = static_cast<double>(i) * inv;
     QColor c;
     c.setRedF(tail.redF() * (1 - t) + head.redF() * t);
     c.setGreenF(tail.greenF() * (1 - t) + head.greenF() * t);
     c.setBlueF(tail.blueF() * (1 - t) + head.blueF() * t);
-    m_traceColors.push_back(c);
+    if (mask != EyeMask::None)
+      c.setAlphaF(ghosted);
+
+    colors.push_back(c);
   }
 }
 
 /**
- * @brief Applies a stereo eye's channel mask to a color, preserving alpha. Masking is
- *        per-channel linear, so a masked gradient endpoint interpolates exactly as the merged
- *        image did.
+ * @brief Derives one eye's color. With channel isolation the eyes write disjoint channels and
+ *        the source color passes through at full strength; without it they blend over each
+ *        other, so the unowned channels are filled from the background instead.
  */
-QColor Widgets::Plot3D::maskEyeColor(const QColor& color, const EyeMask mask)
+QColor Widgets::Plot3D::eyeColor(const QColor& color, const EyeMask mask) const
 {
   if (mask == EyeMask::None)
     return color;
 
-  QColor out = color;
-  if (mask == EyeMask::Left) {
-    out.setGreenF(0.0);
-    out.setBlueF(0.0);
-    return out;
-  }
+  if (m_channelIsolation)
+    return Plot3DStereo::isolatedEyeColor(color, mask);
 
-  out.setRedF(0.0);
-  return out;
+  return Plot3DStereo::blendedEyeColor(color, m_eyeGhostBackground, mask);
 }
 
 /**
@@ -1079,16 +983,18 @@ void Widgets::Plot3D::applyCameraTransform(QMatrix4x4& matrix) const
 }
 
 /**
- * @brief Rebuilds the grid and axis polylines. With stereo on, both eyes accumulate into the
- *        same buffers under complementary channel masks, replacing the two extra full-screen
- *        layers and the per-pixel merge.
+ * @brief Rebuilds the grid and axis polylines. With stereo on each eye fills its own slot, so
+ *        each ends up on its own node and can carry its own color-write mask; that is what
+ *        replaced the two extra full-screen layers and the per-pixel merge.
  */
 void Widgets::Plot3D::drawGrid()
 {
-  m_gridPx.clear();
-  m_gridColors.clear();
-  m_axisPx.clear();
-  m_axisColors.clear();
+  for (int slot = 0; slot < Plot3DStereo::kEyeSlots; ++slot) {
+    m_gridPx[slot].clear();
+    m_gridColors[slot].clear();
+    m_axisPx[slot].clear();
+    m_axisColors[slot].clear();
+  }
 
   QMatrix4x4 matrix;
   matrix.perspective(45.0f, float(width()) / height(), kNearPlane, kFarPlane);
@@ -1278,8 +1184,11 @@ void Widgets::Plot3D::projectLine3D(const QMatrix4x4& matrix,
 void Widgets::Plot3D::appendGridLine(const QMatrix4x4& matrix,
                                      const QVector3D& p1,
                                      const QVector3D& p2,
-                                     const QColor& color)
+                                     const QColor& color,
+                                     const int slot)
 {
+  SS_ASSERT(slot >= 0 && slot < Plot3DStereo::kEyeSlots, return);
+
   projectLine3D(matrix, p1, p2, color, m_linePx, m_lineColors);
   if (m_linePx.empty())
     return;
@@ -1292,7 +1201,7 @@ void Widgets::Plot3D::appendGridLine(const QMatrix4x4& matrix,
                           m_dashPx,
                           m_dashColors);
 
-  appendPolyline(m_gridPx, m_gridColors, m_dashPx, m_dashColors);
+  appendPolyline(m_gridPx[slot], m_gridColors[slot], m_dashPx, m_dashColors);
 }
 
 /**
@@ -1301,10 +1210,13 @@ void Widgets::Plot3D::appendGridLine(const QMatrix4x4& matrix,
 void Widgets::Plot3D::appendAxisLine(const QMatrix4x4& matrix,
                                      const QVector3D& p1,
                                      const QVector3D& p2,
-                                     const QColor& color)
+                                     const QColor& color,
+                                     const int slot)
 {
+  SS_ASSERT(slot >= 0 && slot < Plot3DStereo::kEyeSlots, return);
+
   projectLine3D(matrix, p1, p2, color, m_linePx, m_lineColors);
-  appendPolyline(m_axisPx, m_axisColors, m_linePx, m_lineColors);
+  appendPolyline(m_axisPx[slot], m_axisColors[slot], m_linePx, m_lineColors);
 }
 
 /**
@@ -1317,9 +1229,10 @@ void Widgets::Plot3D::buildGridPolylines(const QMatrix4x4& matrix, const EyeMask
   const float cx    = std::round(m_centerPoint.x() / step) * step;
   const float cy    = std::round(m_centerPoint.y() / step) * step;
 
-  auto minor = m_gridMinorColor;
+  const int slot = Plot3DStereo::eyeSlot(mask);
+  auto minor     = m_gridMinorColor;
   minor.setAlpha(100);
-  minor = maskEyeColor(minor, mask);
+  minor = eyeColor(minor, mask);
 
   for (int i = -kGridSteps; i <= kGridSteps; ++i) {
     if (i == 0)
@@ -1327,16 +1240,16 @@ void Widgets::Plot3D::buildGridPolylines(const QMatrix4x4& matrix, const EyeMask
 
     const float x = cx + i * step;
     const float y = cy + i * step;
-    appendGridLine(matrix, QVector3D(x, cy + l, 0), QVector3D(x, cy - l, 0), minor);
-    appendGridLine(matrix, QVector3D(cx + l, y, 0), QVector3D(cx - l, y, 0), minor);
+    appendGridLine(matrix, QVector3D(x, cy + l, 0), QVector3D(x, cy - l, 0), minor, slot);
+    appendGridLine(matrix, QVector3D(cx + l, y, 0), QVector3D(cx - l, y, 0), minor, slot);
   }
 
-  const float ax = m_centerPoint.x();
-  const float ay = m_centerPoint.y();
-  appendAxisLine(
-    matrix, QVector3D(ax - l, ay, 0), QVector3D(ax + l, ay, 0), maskEyeColor(m_xAxisColor, mask));
-  appendAxisLine(
-    matrix, QVector3D(ax, ay - l, 0), QVector3D(ax, ay + l, 0), maskEyeColor(m_yAxisColor, mask));
+  const float ax     = m_centerPoint.x();
+  const float ay     = m_centerPoint.y();
+  const QColor xAxis = eyeColor(m_xAxisColor, mask);
+  const QColor yAxis = eyeColor(m_yAxisColor, mask);
+  appendAxisLine(matrix, QVector3D(ax - l, ay, 0), QVector3D(ax + l, ay, 0), xAxis, slot);
+  appendAxisLine(matrix, QVector3D(ax, ay - l, 0), QVector3D(ax, ay + l, 0), yAxis, slot);
 
   const QString label = tr("Grid Interval: %1 unit(s)").arg(step);
   if (label != m_gridStepLabel) {

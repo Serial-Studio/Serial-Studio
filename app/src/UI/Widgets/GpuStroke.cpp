@@ -215,15 +215,19 @@ static void emitJoinIndices(quint32* indices, int& idx, const int a, const int b
 }
 
 /**
- * @brief Length of the maximal run of finite points starting at start: the polyline is
- *        split into connected strips at non-finite points (NaN/inf gaps), and each strip
- *        is mitered as one continuous stroke. Returns the vertex count of the run; start
- *        advances past any leading non-finite point.
+ * @brief Length of the maximal run of finite points starting at start: the polyline splits
+ *        into connected strips at non-finite points, each mitered as one stroke. start advances
+ *        past any leading non-finite point, and all the way to the end on a failed precondition
+ *        so the caller's `start < count` loop terminates instead of spinning in release.
  */
 qsizetype Widgets::GpuStroke::runLength(const QPointF* pts, const qsizetype count, qsizetype& start)
 {
-  SS_ASSERT(pts != nullptr, return 0);
-  SS_ASSERT(count >= 0, return 0);
+  SS_ASSERT_LOG(pts != nullptr);
+  SS_ASSERT_LOG(count >= 0);
+  if (!pts || count < 0) {
+    start = count;
+    return 0;
+  }
 
   while (start < count && (!std::isfinite(pts[start].x()) || !std::isfinite(pts[start].y())))
     ++start;
@@ -527,11 +531,12 @@ QSGGeometryNode* Widgets::GpuStroke::buildStrokeNode(QSGGeometryNode* node,
                                                      const QPointF* px,
                                                      const QColor* colors,
                                                      const qsizetype count,
-                                                     const double halfWidth)
+                                                     const double halfWidth,
+                                                     MaterialFactory makeMaterial)
 {
-  SS_ASSERT(halfWidth > 0.0, return nullptr);
+  SS_ASSERT_LOG(halfWidth > 0.0);
 
-  if (!px || !colors || count < 2) {
+  if (!px || !colors || count < 2 || halfWidth <= 0.0) {
     delete node;
     return nullptr;
   }
@@ -564,7 +569,11 @@ QSGGeometryNode* Widgets::GpuStroke::buildStrokeNode(QSGGeometryNode* node,
     geometry->setDrawingMode(QSGGeometry::DrawTriangles);
     node->setGeometry(geometry);
     node->setFlag(QSGNode::OwnsGeometry);
-    node->setMaterial(new QSGVertexColorMaterial);
+    QSGMaterial* material = makeMaterial ? makeMaterial() : nullptr;
+    if (!material)
+      material = new QSGVertexColorMaterial;
+
+    node->setMaterial(material);
     node->setFlag(QSGNode::OwnsMaterial);
   }
 
@@ -606,11 +615,12 @@ QSGGeometryNode* Widgets::GpuStroke::buildPointNode(QSGGeometryNode* node,
                                                     const QPointF* px,
                                                     const QColor* colors,
                                                     const qsizetype count,
-                                                    const double halfSize)
+                                                    const double halfSize,
+                                                    MaterialFactory makeMaterial)
 {
-  SS_ASSERT(halfSize > 0.0, return nullptr);
+  SS_ASSERT_LOG(halfSize > 0.0);
 
-  if (!px || !colors || count < 1) {
+  if (!px || !colors || count < 1 || halfSize <= 0.0) {
     delete node;
     return nullptr;
   }
@@ -638,7 +648,11 @@ QSGGeometryNode* Widgets::GpuStroke::buildPointNode(QSGGeometryNode* node,
     geometry->setDrawingMode(QSGGeometry::DrawTriangles);
     node->setGeometry(geometry);
     node->setFlag(QSGNode::OwnsGeometry);
-    node->setMaterial(new QSGVertexColorMaterial);
+    QSGMaterial* material = makeMaterial ? makeMaterial() : nullptr;
+    if (!material)
+      material = new QSGVertexColorMaterial;
+
+    node->setMaterial(material);
     node->setFlag(QSGNode::OwnsMaterial);
   }
 

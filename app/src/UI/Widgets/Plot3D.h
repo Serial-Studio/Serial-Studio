@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <array>
 #include <QMatrix4x4>
 #include <QPainter>
 #include <QQuickItem>
@@ -32,6 +33,8 @@
 #include "Misc/ThemeManager.h"
 #include "Misc/TimerEvents.h"
 #include "UI/Dashboard.h"
+#include "UI/Widgets/GpuStroke.h"
+#include "UI/Widgets/Plot3D/Plot3DStereo.h"
 
 QT_FORWARD_DECLARE_CLASS(QSGGeometryNode)
 QT_FORWARD_DECLARE_CLASS(QSGSimpleTextureNode)
@@ -161,15 +164,9 @@ private slots:
   void onThemeChanged();
 
 private:
-  /**
-   * @brief Channel mask applied to a stereo eye: the left eye keeps red, the right keeps
-   *        green and blue, matching the channel split of the retired per-pixel merge.
-   */
-  enum class EyeMask {
-    None,
-    Left,
-    Right
-  };
+  using EyeMask = Plot3DStereo::EyeMask;
+  template<typename T>
+  using EyeArray = std::array<T, Plot3DStereo::kEyeSlots>;
 
   void markDirty();
   void markCameraDirty();
@@ -190,12 +187,15 @@ private:
   void appendGridLine(const QMatrix4x4& matrix,
                       const QVector3D& p1,
                       const QVector3D& p2,
-                      const QColor& color);
+                      const QColor& color,
+                      const int slot);
   void appendAxisLine(const QMatrix4x4& matrix,
                       const QVector3D& p1,
                       const QVector3D& p2,
-                      const QColor& color);
-  [[nodiscard]] static QColor maskEyeColor(const QColor& color, const EyeMask mask);
+                      const QColor& color,
+                      const int slot);
+  [[nodiscard]] QColor eyeColor(const QColor& color, const EyeMask mask) const;
+  [[nodiscard]] GpuStroke::MaterialFactory eyeFactory(const int slot) const;
   void applyCameraTransform(QMatrix4x4& matrix) const;
   void buildGridPolylines(const QMatrix4x4& matrix, const EyeMask mask);
   void buildTracePolyline(const QMatrix4x4& matrix,
@@ -209,10 +209,11 @@ private:
                     const QPointF& topLeft,
                     bool& needsUpload);
   void appendSceneNodes(QSGNode* root);
-  void syncStrokeNode(QSGGeometryNode*& slot,
-                      const std::vector<QPointF>& px,
-                      const std::vector<QColor>& colors,
-                      const double halfWidth);
+  void releaseStrokeNodes();
+  void syncStrokeNodes(EyeArray<QSGGeometryNode*>& nodes,
+                       const EyeArray<std::vector<QPointF>>& px,
+                       const EyeArray<std::vector<QColor>>& colors,
+                       const double halfWidth);
 
 private:
   [[nodiscard]] qreal displayPixelRatio() const;
@@ -246,6 +247,8 @@ private:
 
   bool m_anaglyph;
   bool m_autoScale;
+  bool m_channelIsolation;
+  bool m_nodesStereo;
   bool m_autoCenter;
   bool m_interpolate;
   bool m_orbitNavigation;
@@ -266,6 +269,7 @@ private:
   QColor m_lineTailColor;
   QColor m_gridMinorColor;
   QColor m_gridMajorColor;
+  QColor m_eyeGhostBackground;
   QColor m_innerBackgroundColor;
   QColor m_outerBackgroundColor;
 
@@ -285,17 +289,18 @@ private:
   std::vector<QColor> m_lineColors;
   std::vector<QPointF> m_dashPx;
   std::vector<QColor> m_dashColors;
-  std::vector<QPointF> m_gridPx;
-  std::vector<QColor> m_gridColors;
-  std::vector<QPointF> m_axisPx;
-  std::vector<QColor> m_axisColors;
-  std::vector<QPointF> m_tracePx;
-  std::vector<QColor> m_traceColors;
+
+  EyeArray<std::vector<QPointF>> m_gridPx;
+  EyeArray<std::vector<QColor>> m_gridColors;
+  EyeArray<std::vector<QPointF>> m_axisPx;
+  EyeArray<std::vector<QColor>> m_axisColors;
+  EyeArray<std::vector<QPointF>> m_tracePx;
+  EyeArray<std::vector<QColor>> m_traceColors;
 
   QSGSimpleTextureNode* m_bgNode;
-  QSGGeometryNode* m_gridNode;
-  QSGGeometryNode* m_axisNode;
-  QSGGeometryNode* m_traceNode;
+  EyeArray<QSGGeometryNode*> m_gridNodes;
+  EyeArray<QSGGeometryNode*> m_axisNodes;
+  EyeArray<QSGGeometryNode*> m_traceNodes;
   QSGSimpleTextureNode* m_labelNode;
   QSGSimpleTextureNode* m_indicatorNode;
 
