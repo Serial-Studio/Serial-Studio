@@ -44,6 +44,10 @@ namespace Drivers {
 class Audio : public HAL_Driver {
   // clang-format off
   Q_OBJECT
+  Q_PROPERTY(bool normalization
+             READ normalization
+             WRITE setNormalization
+             NOTIFY normalizationChanged)
   Q_PROPERTY(int selectedInputDevice
              READ selectedInputDevice
              WRITE setSelectedInputDevice
@@ -97,6 +101,7 @@ class Audio : public HAL_Driver {
 
 signals:
   void inputSettingsChanged();
+  void normalizationChanged();
   void outputSettingsChanged();
 
 public:
@@ -118,6 +123,7 @@ public:
   void closeDevice();
   void close() override;
 
+  [[nodiscard]] bool normalization() const noexcept;
   [[nodiscard]] bool isOpen() const noexcept override;
   [[nodiscard]] bool isStreamCapable() const noexcept override;
   [[nodiscard]] bool streamLaneActive() const noexcept;
@@ -157,6 +163,7 @@ public:
 
 public slots:
   void setDriverProperty(const QString& key, const QVariant& value) override;
+  void setNormalization(bool enabled);
   void setDiscoveryPaused(const bool paused);
   void setSelectedSampleRate(int index);
 
@@ -196,6 +203,8 @@ private:
   static void notificationCallback(const ma_device_notification* notification);
 
   void applyPlatformAudioConfig();
+  void renderCsv(const QByteArray& raw, int channels, ma_format format, int totalFrames);
+  void renderNormalizedCsv(const QByteArray& raw, int channels, ma_format fmt, int totalFrames);
   void publishTypedBlock(const QByteArray& raw,
                          int channels,
                          ma_format format,
@@ -212,6 +221,7 @@ private:
 private:
   bool m_init;
   bool m_isOpen;
+  bool m_normalization;
   bool m_discoveryPaused;
 
   int m_selectedSampleRate;

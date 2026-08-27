@@ -1535,39 +1535,44 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>Audio</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="89"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="94"/>
         <source>No Microphone Detected</source>
         <translation>לא זוהה מיקרופון</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="98"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="103"/>
         <source>Connect a mic or check your settings</source>
         <translation>חבר מיקרופון או בדוק את ההגדרות</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="123"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="128"/>
         <source>Input Device</source>
         <translation>התקן קלט</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="142"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="166"/>
         <source>Sample Rate</source>
         <translation>קצב דגימה</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="161"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="230"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="185"/>
+        <source>Normalization</source>
+        <translation>נורמליזציה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="205"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="254"/>
         <source>Sample Format</source>
         <translation>פורמט דגימה</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="180"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="249"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="147"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="273"/>
         <source>Channels</source>
         <translation>ערוצים</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="211"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="235"/>
         <source>Output Device</source>
         <translation>התקן פלט</translation>
     </message>
@@ -6093,13 +6098,13 @@ v
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="3090"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3228"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3237"/>
         <source>Channel %1</source>
         <translation>ערוץ %1</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="3099"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3244"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3253"/>
         <source>Quick Plot</source>
         <translation>תרשים מהיר</translation>
     </message>
@@ -6118,7 +6123,7 @@ v
         <translation type="vanished">תרשימים מרובים</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3239"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3248"/>
         <source>Audio Input</source>
         <translation>קלט שמע</translation>
     </message>
@@ -12434,77 +12439,87 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::Drivers::Audio</name>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="589"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="736"/>
         <source>Audio Device Stopped</source>
         <translation>התקן שמע הופסק</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="590"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="737"/>
         <source>The audio backend stopped the stream. The device may have been unplugged or claimed by another application.</source>
         <translation>ממשק השמע עצר את הזרם. ייתכן שההתקן נותק או נתפס על ידי יישום אחר.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="829"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1007"/>
         <source>channels</source>
         <translation>ערוצים</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="882"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1060"/>
         <source> channels</source>
         <translation>ערוצים</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1030"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1208"/>
         <source>Unsigned 8-bit</source>
         <translation>ללא סימן 8 סיביות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1031"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1209"/>
         <source>Signed 16-bit</source>
         <translation>עם סימן 16 סיביות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1032"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1210"/>
         <source>Signed 24-bit</source>
         <translation>עם סימן 24 סיביות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1033"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1211"/>
         <source>Signed 32-bit</source>
         <translation>עם סימן 32 סיביות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1034"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1212"/>
         <source>Float 32-bit</source>
         <translation>נקודה צפה 32 סיביות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1037"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1215"/>
         <source>Mono</source>
         <translation>מונו</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1038"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1216"/>
         <source>Stereo</source>
         <translation>סטריאו</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1539"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1740"/>
         <source>Input Device</source>
         <translation>התקן קלט</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1547"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1748"/>
         <source>Sample Rate</source>
         <translation>קצב דגימה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1555"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1756"/>
+        <source>Normalization</source>
+        <translation>נורמליזציה</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1757"/>
+        <source>Publish samples as floats in the -1.0 to 1.0 range</source>
+        <translation>פרסם דגימות כמספרים עשרוניים בטווח 1.0- עד 1.0</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1765"/>
         <source>Sample Format</source>
         <translation>פורמט דגימה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1563"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1774"/>
         <source>Channels</source>
         <translation>ערוצים</translation>
     </message>
@@ -20954,22 +20969,22 @@ Click Refresh to update the list.</source>
         <translation>יציאה</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1294"/>
+        <location filename="../../src/UI/Widgets/Waterfall/WaterfallOverlay.cpp" line="209"/>
         <source>Time (s)</source>
         <translation>זמן (שניות)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1373"/>
+        <location filename="../../src/UI/Widgets/Waterfall/WaterfallOverlay.cpp" line="288"/>
         <source>%1  %2 dB</source>
         <translation>%1  %2 dB</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1485"/>
+        <location filename="../../src/UI/Widgets/Waterfall/WaterfallOverlay.cpp" line="400"/>
         <source>Freq: %1</source>
         <translation>תדר: %1</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1488"/>
+        <location filename="../../src/UI/Widgets/Waterfall/WaterfallOverlay.cpp" line="403"/>
         <source>Time: −%1</source>
         <translation>זמן: −%1</translation>
     </message>
@@ -26900,7 +26915,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Plot3D</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1123"/>
+        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1329"/>
         <source>Grid Interval: %1 unit(s)</source>
         <translation>מרווח רשת: %1 יחידות</translation>
     </message>
@@ -26920,47 +26935,47 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Waterfall</name>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="393"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="399"/>
         <source>Viridis</source>
         <translation>Viridis</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="395"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="401"/>
         <source>Inferno</source>
         <translation>Inferno</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="397"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="403"/>
         <source>Magma</source>
         <translation>Magma</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="399"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="405"/>
         <source>Plasma</source>
         <translation>Plasma</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="401"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="407"/>
         <source>Turbo</source>
         <translation>טורבו</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="403"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="409"/>
         <source>Jet</source>
         <translation>ג'ט</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="405"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="411"/>
         <source>Hot</source>
         <translation>חם</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="407"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="413"/>
         <source>Grayscale</source>
         <translation>גווני אפור</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="409"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="415"/>
         <source>Unknown</source>
         <translation>לא ידוע</translation>
     </message>

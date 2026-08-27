@@ -38,6 +38,16 @@ static constexpr std::size_t kAudioQueueCapacity = 1024;
 // Continuous-clock resync bound: jitter under this is absorbed, drift over it snaps to wall time
 static constexpr std::chrono::milliseconds kAudioClockResync{50};
 
+// Format preference under normalization, cheapest decode first (f32 is a straight passthrough)
+static constexpr ma_format kNormalizedFormats[] = {
+  ma_format_f32, ma_format_s16, ma_format_s32, ma_format_s24, ma_format_u8};
+
+// Reciprocal full-scale factors, as exact powers of two: normalizing is one multiply, not a divide
+static constexpr float kInvFullScaleU8  = 0x1p-7f;
+static constexpr float kInvFullScaleS16 = 0x1p-15f;
+static constexpr float kInvFullScaleS24 = 0x1p-23f;
+static constexpr float kInvFullScaleS32 = 0x1p-31f;
+
 //--------------------------------------------------------------------------------------------------
 // Utility functions
 //--------------------------------------------------------------------------------------------------
@@ -203,6 +213,81 @@ static bool checkAndUpdateDeviceList(IO::HAL_Driver* owner,
 }
 
 /**
+ * @brief Returns the index of the cheapest format to normalize from among those the device
+ * reports natively, or 0 when it offers none of the known ones.
+ */
+static int bestNormalizedFormatIndex(const QList<ma_format>& formats)
+{
+  for (const auto format : kNormalizedFormats) {
+    const int index = formats.indexOf(format);
+    if (index >= 0)
+      return index;
+  }
+
+  return 0;
+}
+
+/**
+ * @brief Yields the affine terms mapping a raw PCM magnitude to the normalized -1..1 range, as
+ * normalized = (raw + offset) * scale. Float32 is already normalized and a disabled normalization
+ * yields the identity, so every decode path can apply the terms unconditionally.
+ */
+static void normalizationTerms(ma_format format, bool enabled, float& offset, float& scale)
+{
+  offset = 0.0f;
+  scale  = 1.0f;
+  if (!enabled)
+    return;
+
+  switch (format) {
+    case ma_format_u8:
+      offset = -128.0f;
+      scale  = kInvFullScaleU8;
+      break;
+    case ma_format_s16:
+      scale = kInvFullScaleS16;
+      break;
+    case ma_format_s24:
+      scale = kInvFullScaleS24;
+      break;
+    case ma_format_s32:
+      scale = kInvFullScaleS32;
+      break;
+    default:
+      break;
+  }
+}
+
+/**
+ * @brief Decodes one interleaved PCM sample of the given format into its raw float magnitude;
+ * an unknown format cannot reach here because a zero bytes-per-sample rejects the buffer first.
+ */
+static float decodeSample(ma_format format, const char* ptr)
+{
+  switch (format) {
+    case ma_format_u8:
+      return static_cast<float>(static_cast<quint8>(*ptr));
+    case ma_format_s16:
+      return static_cast<float>(qFromLittleEndian<qint16>(reinterpret_cast<const quint8*>(ptr)));
+    case ma_format_s24: {
+      const quint8* b  = reinterpret_cast<const quint8*>(ptr);
+      const qint32 s24 = static_cast<qint32>(b[0]) | (static_cast<qint32>(b[1]) << 8)
+                       | (static_cast<qint32>(b[2]) << 16);
+      return static_cast<float>((s24 & 0x800000) ? (s24 | static_cast<qint32>(0xFF000000)) : s24);
+    }
+    case ma_format_s32:
+      return static_cast<float>(qFromLittleEndian<qint32>(reinterpret_cast<const quint8*>(ptr)));
+    case ma_format_f32: {
+      float sample;
+      std::memcpy(&sample, ptr, sizeof(float));
+      return sample;
+    }
+    default:
+      return 0.0f;
+  }
+}
+
+/**
  * @brief Packs a single CSV sample into native bytes for the given ma_format.
  */
 static bool packCsvSample(ma_format format, const QByteArray& token, QVector<quint8>& out)
@@ -283,6 +368,64 @@ static bool packCsvSample(ma_format format, const QByteArray& token, QVector<qui
   return false;
 }
 
+/**
+ * @brief Packs a single normalized -1..1 CSV sample into native bytes for the given ma_format;
+ * the integer encodings use the positive full scale so the round trip stays symmetric.
+ */
+static bool packNormalizedSample(ma_format format, const QByteArray& token, QVector<quint8>& out)
+{
+  bool ok      = false;
+  float sample = token.toFloat(&ok);
+  if (!ok) {
+    qWarning() << "Invalid normalized sample:" << token;
+    return false;
+  }
+
+  sample = qBound(-1.0f, sample, 1.0f);
+
+  if (format == ma_format_f32) {
+    const quint8* bytes = reinterpret_cast<const quint8*>(&sample);
+    for (size_t b = 0; b < sizeof(float); ++b)
+      out.append(bytes[b]);
+
+    return true;
+  }
+
+  if (format == ma_format_u8) {
+    out.append(static_cast<quint8>(qBound(0, qRound(sample * 127.0f) + 128, 255)));
+    return true;
+  }
+
+  if (format == ma_format_s16) {
+    const qint16 value  = static_cast<qint16>(qRound(sample * 32767.0f));
+    const quint8* bytes = reinterpret_cast<const quint8*>(&value);
+    out.append(bytes[0]);
+    out.append(bytes[1]);
+    return true;
+  }
+
+  if (format == ma_format_s24) {
+    const qint32 value = qRound(sample * 8388607.0f);
+    out.append(static_cast<quint8>(value & 0xFF));
+    out.append(static_cast<quint8>((value >> 8) & 0xFF));
+    out.append(static_cast<quint8>((value >> 16) & 0xFF));
+    return true;
+  }
+
+  if (format == ma_format_s32) {
+    const auto value    = static_cast<qint32>(qRound(static_cast<double>(sample) * 2147483647.0));
+    const quint8* bytes = reinterpret_cast<const quint8*>(&value);
+    out.append(bytes[0]);
+    out.append(bytes[1]);
+    out.append(bytes[2]);
+    out.append(bytes[3]);
+    return true;
+  }
+
+  qWarning() << "Unsupported format:" << static_cast<int>(format);
+  return false;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Constructor, destructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
@@ -295,6 +438,7 @@ static bool packCsvSample(ma_format format, const QByteArray& token, QVector<qui
 IO::Drivers::Audio::Audio()
   : m_init(false)
   , m_isOpen(false)
+  , m_normalization(true)
   , m_discoveryPaused(false)
   , m_selectedSampleRate(0)
   , m_selectedInputDevice(-1)
@@ -470,9 +614,9 @@ bool IO::Drivers::Audio::configurationOk() const noexcept
 }
 
 /**
- * @brief Writes a CSV-formatted audio frame into the internal output queue;
- * the lock-free SPSC enqueue is safe because the main thread is the sole
- * producer of this queue.
+ * @brief Writes a CSV-formatted audio frame into the internal output queue; values are normalized
+ * -1..1 floats or raw per-format magnitudes, matching whatever capture publishes. The lock-free
+ * SPSC enqueue is safe because the main thread is the sole producer of this queue.
  */
 qint64 IO::Drivers::Audio::write(const QByteArray& data)
 {
@@ -491,9 +635,12 @@ qint64 IO::Drivers::Audio::write(const QByteArray& data)
   }
 
   QVector<quint8> frame;
-  for (int i = 0; i < channels; ++i)
-    if (!packCsvSample(format, parts[i], frame))
+  for (int i = 0; i < channels; ++i) {
+    const bool packed = m_normalization ? packNormalizedSample(format, parts[i], frame)
+                                        : packCsvSample(format, parts[i], frame);
+    if (!packed)
       return 0;
+  }
 
   if (!m_outputQueue.try_enqueue(std::move(frame))) [[unlikely]] {
     qWarning() << "Audio output queue full -- dropping frame";
@@ -692,6 +839,37 @@ void IO::Drivers::Audio::startInputWorker()
   }
 
   QMetaObject::invokeMethod(m_inputWorkerTimer, "start", Qt::QueuedConnection);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Normalization
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns whether samples are published in the normalized -1..1 float range.
+ */
+bool IO::Drivers::Audio::normalization() const noexcept
+{
+  return m_normalization;
+}
+
+/**
+ * @brief Enables or disables normalized sampling. While enabled the driver overrides the manual
+ * sample-format selection with the cheapest format the device offers natively, because the
+ * amplitude range no longer depends on it; the setting only moves while the device is closed,
+ * which is what lets the input worker read it without an atomic.
+ */
+void IO::Drivers::Audio::setNormalization(bool enabled)
+{
+  if (isOpen() || m_normalization == enabled)
+    return;
+
+  m_normalization = enabled;
+  configureInput();
+  configureOutput();
+  persistSettings();
+
+  Q_EMIT normalizationChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1067,6 +1245,9 @@ void IO::Drivers::Audio::configureInput()
     return;
   }
 
+  if (m_normalization)
+    m_selectedInputSampleFormat = bestNormalizedFormatIndex(caps.supportedFormats);
+
   // clang-format off
   m_selectedSampleRate = qBound(0, m_selectedSampleRate, caps.supportedSampleRates.size() - 1);
   m_selectedInputSampleFormat = qBound(0, m_selectedInputSampleFormat, caps.supportedFormats.size() - 1);
@@ -1101,6 +1282,9 @@ void IO::Drivers::Audio::configureOutput()
     qWarning() << "Output capabilities for selected device are not populated";
     return;
   }
+
+  if (m_normalization)
+    m_selectedOutputSampleFormat = bestNormalizedFormatIndex(caps.supportedFormats);
 
   // clang-format off
   m_selectedOutputSampleFormat = qBound(0, m_selectedOutputSampleFormat, caps.supportedFormats.size() - 1);
@@ -1169,7 +1353,30 @@ void IO::Drivers::Audio::processInputBuffer()
 
   m_csvBuffer.seek(0);
 
-  const char* ptr = raw.constData();
+  if (m_normalization)
+    renderNormalizedCsv(raw, channels, format, totalFrames);
+  else
+    renderCsv(raw, channels, format, totalFrames);
+
+  m_csvStream.flush();
+  const auto length = m_csvBuffer.pos();
+  if (streamLane)
+    publishConsoleData(m_csvData.left(length), timestamp, frameStep, totalFrames);
+  else
+    publishReceivedData(m_csvData.left(length), timestamp, frameStep, totalFrames);
+}
+
+/**
+ * @brief Renders raw PCM into the CSV buffer as native-range values: integers for the integer
+ *        formats, so a 32-bit sample keeps every bit that a float round trip would drop.
+ */
+void IO::Drivers::Audio::renderCsv(const QByteArray& raw,
+                                   int channels,
+                                   ma_format format,
+                                   int totalFrames)
+{
+  const int bytesPerSample = ma_get_bytes_per_sample(format);
+  const char* ptr          = raw.constData();
   for (int i = 0; i < totalFrames; ++i) {
     for (int ch = 0; ch < channels; ++ch) {
       switch (format) {
@@ -1213,18 +1420,39 @@ void IO::Drivers::Audio::processInputBuffer()
 
     m_csvStream << '\n';
   }
-
-  m_csvStream.flush();
-  const auto length = m_csvBuffer.pos();
-  if (streamLane)
-    publishConsoleData(m_csvData.left(length), timestamp, frameStep, totalFrames);
-  else
-    publishReceivedData(m_csvData.left(length), timestamp, frameStep, totalFrames);
 }
 
 /**
- * @brief Decodes raw PCM into a typed SampleBlock (interleaved float32, same numeric magnitudes
- *        the CSV lane emitted) and publishes it for the stream worker (spec 0051 R6).
+ * @brief Renders raw PCM into the CSV buffer as normalized -1..1 floats, using the same affine
+ *        terms as the typed lane so a stream source and a text source read identically.
+ */
+void IO::Drivers::Audio::renderNormalizedCsv(const QByteArray& raw,
+                                             int channels,
+                                             ma_format fmt,
+                                             int totalFrames)
+{
+  float offset = 0.0f;
+  float scale  = 1.0f;
+  normalizationTerms(fmt, true, offset, scale);
+
+  const int bytesPerSample = ma_get_bytes_per_sample(fmt);
+  const char* ptr          = raw.constData();
+  for (int i = 0; i < totalFrames; ++i) {
+    for (int ch = 0; ch < channels; ++ch) {
+      m_csvStream << (decodeSample(fmt, ptr) + offset) * scale;
+      ptr += bytesPerSample;
+      if (ch < channels - 1)
+        m_csvStream << ',';
+    }
+
+    m_csvStream << '\n';
+  }
+}
+
+/**
+ * @brief Decodes raw PCM into a typed SampleBlock (interleaved float32, carrying the same numeric
+ *        magnitudes the CSV lane emits under the current normalization setting, so the two lanes
+ *        never disagree) and publishes it for the stream worker (spec 0051 R6).
  */
 void IO::Drivers::Audio::publishTypedBlock(const QByteArray& raw,
                                            int channels,
@@ -1243,44 +1471,17 @@ void IO::Drivers::Audio::publishTypedBlock(const QByteArray& raw,
   block->dt       = frameStep;
   block->samples.resize(static_cast<std::size_t>(totalFrames) * static_cast<std::size_t>(channels));
 
+  float offset = 0.0f;
+  float scale  = 1.0f;
+  normalizationTerms(format, m_normalization, offset, scale);
+
   const int bytesPerSample = ma_get_bytes_per_sample(format);
   const char* ptr          = raw.constData();
   float* out               = block->samples.data();
   const qsizetype count    = block->frames * channels;
 
-  for (qsizetype i = 0; i < count; ++i) {
-    switch (format) {
-      case ma_format_u8:
-        out[i] = static_cast<float>(static_cast<quint8>(*ptr));
-        break;
-      case ma_format_s16:
-        out[i] =
-          static_cast<float>(qFromLittleEndian<qint16>(reinterpret_cast<const quint8*>(ptr)));
-        break;
-      case ma_format_s24: {
-        const quint8* b  = reinterpret_cast<const quint8*>(ptr);
-        const qint32 s24 = static_cast<qint32>(b[0]) | (static_cast<qint32>(b[1]) << 8)
-                         | (static_cast<qint32>(b[2]) << 16);
-        const qint32 sample = (s24 & 0x800000) ? (s24 | static_cast<qint32>(0xFF000000)) : s24;
-        out[i]              = static_cast<float>(sample);
-        break;
-      }
-      case ma_format_s32:
-        out[i] =
-          static_cast<float>(qFromLittleEndian<qint32>(reinterpret_cast<const quint8*>(ptr)));
-        break;
-      case ma_format_f32: {
-        float sample;
-        std::memcpy(&sample, ptr, sizeof(float));
-        out[i] = sample;
-        break;
-      }
-      default:
-        return;
-    }
-
-    ptr += bytesPerSample;
-  }
+  for (qsizetype i = 0; i < count; ++i, ptr += bytesPerSample)
+    out[i] = (decodeSample(format, ptr) + offset) * scale;
 
   publishSampleBlock(block);
 }
@@ -1550,13 +1751,23 @@ QList<IO::DriverProperty> IO::Drivers::Audio::driverProperties() const
   rate.options = sampleRates();
   props.append(rate);
 
-  IO::DriverProperty fmt;
-  fmt.key     = QStringLiteral("inputFormat");
-  fmt.label   = tr("Sample Format");
-  fmt.type    = IO::DriverProperty::ComboBox;
-  fmt.value   = m_selectedInputSampleFormat;
-  fmt.options = inputSampleFormats();
-  props.append(fmt);
+  IO::DriverProperty norm;
+  norm.key         = QStringLiteral("normalization");
+  norm.label       = tr("Normalization");
+  norm.description = tr("Publish samples as floats in the -1.0 to 1.0 range");
+  norm.type        = IO::DriverProperty::CheckBox;
+  norm.value       = m_normalization;
+  props.append(norm);
+
+  if (!m_normalization) {
+    IO::DriverProperty fmt;
+    fmt.key     = QStringLiteral("inputFormat");
+    fmt.label   = tr("Sample Format");
+    fmt.type    = IO::DriverProperty::ComboBox;
+    fmt.value   = m_selectedInputSampleFormat;
+    fmt.options = inputSampleFormats();
+    props.append(fmt);
+  }
 
   IO::DriverProperty ch;
   ch.key     = QStringLiteral("inputChannels");
@@ -1581,6 +1792,11 @@ void IO::Drivers::Audio::setDriverProperty(const QString& key, const QVariant& v
 
   if (key == QLatin1String("sampleRate")) {
     setSelectedSampleRate(value.toInt());
+    return;
+  }
+
+  if (key == QLatin1String("normalization")) {
+    setNormalization(value.toBool());
     return;
   }
 
@@ -1694,6 +1910,9 @@ void IO::Drivers::Audio::applyConnectionSettings(const QJsonObject& settings)
   if (settings.isEmpty() || isOpen())
     return;
 
+  if (settings.contains(QStringLiteral("normalization")))
+    m_normalization = settings.value(QStringLiteral("normalization")).toBool();
+
   const auto deviceId     = settings.value(QStringLiteral("deviceId")).toObject();
   const auto savedDevName = deviceId.value(QStringLiteral("inputDeviceName")).toString();
   const int savedDevIndex = settings.value(QStringLiteral("inputDevice")).toInt(-1);
@@ -1752,6 +1971,9 @@ void IO::Drivers::Audio::applyConnectionSettings(const QJsonObject& settings)
   if (fmtIndex < 0)
     fmtIndex = 0;
 
+  if (m_normalization)
+    fmtIndex = bestNormalizedFormatIndex(caps.supportedFormats);
+
   const int savedChCount = deviceId.value(QStringLiteral("channelCount")).toInt(0);
   const int savedChIndex = settings.value(QStringLiteral("inputChannels")).toInt(-1);
 
@@ -1782,6 +2004,8 @@ void IO::Drivers::Audio::applyConnectionSettings(const QJsonObject& settings)
  */
 void IO::Drivers::Audio::persistSettings()
 {
+  m_settings.setValue(QStringLiteral("AudioDriver/normalization"), m_normalization);
+
   if (validateInput()) {
     const auto& caps = m_inputCapabilities[m_selectedInputDevice];
     m_settings.setValue(QStringLiteral("AudioDriver/inputDeviceName"),
@@ -1824,6 +2048,8 @@ void IO::Drivers::Audio::persistSettings()
  */
 void IO::Drivers::Audio::restoreSettings()
 {
+  m_normalization = m_settings.value(QStringLiteral("AudioDriver/normalization"), true).toBool();
+
   const auto inName = m_settings.value(QStringLiteral("AudioDriver/inputDeviceName")).toString();
   if (!inName.isEmpty()) {
     for (int i = 0; i < m_inputDevices.size(); ++i) {

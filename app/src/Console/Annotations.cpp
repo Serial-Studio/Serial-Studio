@@ -958,9 +958,10 @@ void Console::AnnotationDecoder::setEnabled(bool enabled)
 }
 
 /**
- * @brief Chunk-rate entry: bytes always enter the model's retained window; when enabled the
- *        carry + chunk goes through decode(bytes, offset, ctx) under the watchdog and whatever it
- *        did not consume carries over (bounded). A decoder that throws or hangs is disabled.
+ * @brief Chunk-rate entry: bytes append to the carry in place and the consumed prefix is removed,
+ *        so a chunk costs no buffer allocation. size is passed explicitly because bytes.length in
+ *        a script loop costs a string-to-index conversion per iteration. QJSValues release before
+ *        fail() destroys the engine: one outliving it corrupts the collector's chain.
  */
 void Console::AnnotationDecoder::feed(const QByteArray& bytes)
 {
@@ -976,29 +977,40 @@ void Console::AnnotationDecoder::feed(const QByteArray& bytes)
 
   m_inFeed = true;
 
-  const QByteArray chunk = m_carry.isEmpty() ? bytes : (m_carry + bytes);
-  const qint64 offset    = m_carryOffset;
+  m_carry.append(bytes);
+  const qint64 offset  = m_carryOffset;
+  const qsizetype size = m_carry.size();
 
-  QJSValueList args;
-  args << m_engine->toScriptValue(chunk) << QJSValue(static_cast<double>(offset)) << m_context;
-  const QJSValue result = m_watchdog->call(m_decodeFn, args);
+  bool timedOut = false;
+  bool hadError = false;
+  QString errorMessage;
+  qint64 consumed = size;
 
-  if (m_watchdog->lastCallTimedOut()) {
-    fail(tr("decode() exceeded %1 ms").arg(kWatchdogMs));
+  {
+    QJSValueList args;
+    args << m_engine->toScriptValue(m_carry) << QJSValue(static_cast<double>(offset)) << m_context
+         << QJSValue(static_cast<double>(size));
+
+    const QJSValue result = m_watchdog->call(m_decodeFn, args);
+    timedOut              = m_watchdog->lastCallTimedOut();
+    hadError              = !timedOut && result.isError();
+
+    if (hadError)
+      errorMessage = result.property(QStringLiteral("message")).toString();
+
+    else if (!timedOut && result.isNumber())
+      consumed = static_cast<qint64>(result.toNumber());
+  }
+
+  if (timedOut || hadError) {
+    fail(timedOut ? tr("decode() exceeded %1 ms").arg(kWatchdogMs) : errorMessage);
     m_inFeed = false;
     return;
   }
 
-  if (result.isError()) {
-    fail(result.property(QStringLiteral("message")).toString());
-    m_inFeed = false;
-    return;
-  }
+  consumed = std::clamp<qint64>(consumed, 0, size);
+  m_carry.remove(0, static_cast<qsizetype>(consumed));
 
-  qint64 consumed = result.isNumber() ? static_cast<qint64>(result.toNumber()) : chunk.size();
-  consumed        = std::clamp<qint64>(consumed, 0, chunk.size());
-
-  m_carry = chunk.mid(static_cast<qsizetype>(consumed));
   if (m_carry.size() > kMaxCarry) {
     const qsizetype dropped = m_carry.size() - kMaxCarry;
     m_carry.remove(0, dropped);
@@ -1050,7 +1062,7 @@ bool Console::AnnotationDecoder::compile(QString& error)
 
   m_decodeFn = decoder.property(QStringLiteral("decode"));
   if (!m_decodeFn.isCallable()) {
-    error = tr("'decoder.decode(bytes, offset, ctx)' is not a function");
+    error = tr("'decoder.decode(bytes, offset, ctx, size)' is not a function");
     return false;
   }
 

@@ -283,6 +283,7 @@
     "io.audio.setInputChannelConfig",
     "io.audio.setInputDevice",
     "io.audio.setInputSampleFormat",
+    "io.audio.setNormalization",
     "io.audio.setOutputChannelConfig",
     "io.audio.setOutputDevice",
     "io.audio.setOutputSampleFormat",

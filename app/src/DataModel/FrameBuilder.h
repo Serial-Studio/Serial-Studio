@@ -209,6 +209,8 @@ public slots:
   void onPlayerOpenChanged();
 
   void collectTransformEngineGarbage();
+  void releaseTransformEngines();
+  void rebuildTransformEngines();
   void flushOpenBlocks();
 
 private slots:

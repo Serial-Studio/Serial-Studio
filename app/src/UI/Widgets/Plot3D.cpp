@@ -22,9 +22,13 @@
 
 #include "UI/Widgets/Plot3D.h"
 
+#include <algorithm>
 #include <cmath>
 #include <QCursor>
+#include <QFontMetrics>
 #include <QQuickWindow>
+#include <QSGGeometryNode>
+#include <QSGSimpleTextureNode>
 #include <QtNumeric>
 
 #include "DataModel/HotpathOptimization.h"
@@ -34,6 +38,8 @@
 #include "Misc/TimerEvents.h"
 #include "SSAssert.h"
 #include "UI/Dashboard.h"
+#include "UI/Widgets/GpuStroke.h"
+#include "UI/Widgets/Plot3D/Plot3DOverlay.h"
 
 static constexpr float kNearPlane = 0.1f;
 static constexpr float kFarPlane  = 100.0f;
@@ -42,6 +48,36 @@ static constexpr int kScaleShrinkDelay    = 30;
 static constexpr double kFitPadding       = 1.2;
 static constexpr double kInvFitSteps      = 1.0 / 6.0;
 static constexpr double kScaleShrinkRatio = 0.35;
+
+static constexpr int kIndicatorTileSize = 100;
+static constexpr int kIndicatorMinSize  = 240;
+static constexpr int kGridSteps         = 10;
+static constexpr int kLineSegments      = 40;
+static constexpr float kInvLineSegments = 1.0f / kLineSegments;
+static constexpr float kScreenRatio     = 0.4f;
+static constexpr double kGridDashOn     = 4.0;
+static constexpr double kGridDashOff    = 2.0;
+
+/**
+ * @brief Appends a polyline to an accumulator, separated by a non-finite point so the two
+ *        stay independent runs.
+ */
+static void appendPolyline(std::vector<QPointF>& dstPx,
+                           std::vector<QColor>& dstColors,
+                           const std::vector<QPointF>& srcPx,
+                           const std::vector<QColor>& srcColors)
+{
+  if (srcPx.empty())
+    return;
+
+  if (!dstPx.empty()) {
+    dstPx.push_back(QPointF(qQNaN(), qQNaN()));
+    dstColors.push_back(srcColors.front());
+  }
+
+  dstPx.insert(dstPx.end(), srcPx.begin(), srcPx.end());
+  dstColors.insert(dstColors.end(), srcColors.begin(), srcColors.end());
+}
 
 /**
  * @brief Integer-exponent 10^n via table lookup; std::pow fallback for out-of-band values.
@@ -69,7 +105,7 @@ static double fastPow10(double exponent) noexcept
  * @brief Constructs a Plot3D widget.
  */
 Widgets::Plot3D::Plot3D(const int index, QQuickItem* parent)
-  : QQuickPaintedItem(parent)
+  : QQuickItem(parent)
   , m_index(index)
   , m_worldScale(0.05)
   , m_cameraAngleX(300)
@@ -90,6 +126,16 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem* parent)
   , m_dirtyBackground(true)
   , m_dirtyCameraIndicator(true)
   , m_dataUpdated(true)
+  , m_dirtyLabel(true)
+  , m_bgUpload(true)
+  , m_labelUpload(false)
+  , m_indicatorUpload(false)
+  , m_bgNode(nullptr)
+  , m_gridNode(nullptr)
+  , m_axisNode(nullptr)
+  , m_traceNode(nullptr)
+  , m_labelNode(nullptr)
+  , m_indicatorNode(nullptr)
   , m_orbitOffsetX(0)
   , m_orbitOffsetY(0)
   , m_targetWorldScale(1.0)
@@ -100,7 +146,6 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem* parent)
   , m_themeManager(Misc::ThemeManager::instance())
   , m_commonFonts(Misc::CommonFonts::instance())
 {
-  setOpaquePainting(true);
   setAcceptHoverEvents(true);
   setFiltersChildMouseEvents(true);
 
@@ -109,7 +154,6 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem* parent)
   setFlag(ItemAcceptsInputMethod, true);
   setAcceptedMouseButtons(Qt::AllButtons);
 
-  setMipmap(true);
   setAntialiasing(false);
 
   connect(&m_dashboard, &UI::Dashboard::updated, this, &Widgets::Plot3D::updateData);
@@ -120,8 +164,10 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem* parent)
 
   if (VALIDATE_WIDGET(SerialStudio::DashboardPlot3D, m_index)) {
     connect(&m_timerEvents, &Misc::TimerEvents::uiTimeout, this, [=, this] {
-      if (isVisible() && dirty())
+      if (isVisible() && dirty()) {
+        polish();
         update();
+      }
     });
   }
 
@@ -135,81 +181,186 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem* parent)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Renders the complete 3D plot scene, blending a red-cyan anaglyph when enabled.
+ * @brief Builds the plot's scene-graph node tree. Runs on the render thread with the GUI
+ *        thread blocked in the synchronization phase, which is what makes reading item and
+ *        dashboard state here safe; no other render-thread callback may read that state, and
+ *        the cached child pointers are never dereferenced outside this call.
  */
-void Widgets::Plot3D::paint(QPainter* painter)
+QSGNode* Widgets::Plot3D::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* data)
 {
-  painter->setBackground(m_outerBackgroundColor);
+  Q_UNUSED(data)
 
-  if (m_dirtyData)
-    drawData();
-
-  if (m_dirtyGrid)
-    drawGrid();
-
-  if (m_dirtyCameraIndicator)
-    drawCameraIndicator();
-
-  if (m_dirtyBackground)
-    drawBackground();
-
-  QList<QImage*> images;
-  images.append(m_bgImg);
-
-  if (m_cameraAngleX <= 270 && m_cameraAngleX > 90.0) {
-    images.append(m_plotImg);
-    images.append(m_gridImg);
+  const QRectF rect = boundingRect();
+  if (rect.isEmpty() || !window()) {
+    delete oldNode;
+    m_bgNode        = nullptr;
+    m_gridNode      = nullptr;
+    m_axisNode      = nullptr;
+    m_traceNode     = nullptr;
+    m_labelNode     = nullptr;
+    m_indicatorNode = nullptr;
+    return nullptr;
   }
 
-  else {
-    images.append(m_gridImg);
-    images.append(m_plotImg);
+  auto* root = oldNode;
+  if (!root) {
+    root              = new QSGNode;
+    m_bgNode          = nullptr;
+    m_gridNode        = nullptr;
+    m_axisNode        = nullptr;
+    m_traceNode       = nullptr;
+    m_labelNode       = nullptr;
+    m_indicatorNode   = nullptr;
+    m_labelUpload     = true;
+    m_indicatorUpload = true;
+    m_bgUpload        = true;
   }
 
-  images.append(m_cameraIndicatorImg);
+  SS_ASSERT(root != nullptr, return nullptr);
 
-  if (anaglyphEnabled()) {
-    const qreal dpr = displayPixelRatio();
-    if (m_anaglyphImg[0].size() != widgetSize() || m_anaglyphImg[0].devicePixelRatio() != dpr) {
-      m_anaglyphImg[0] = QImage(widgetSize(), QImage::Format_ARGB32_Premultiplied);
-      m_anaglyphImg[1] = QImage(widgetSize(), QImage::Format_ARGB32_Premultiplied);
-      m_anaglyphMerged = QImage(widgetSize(), QImage::Format_RGB32);
-      m_anaglyphImg[0].setDevicePixelRatio(dpr);
-      m_anaglyphImg[1].setDevicePixelRatio(dpr);
-      m_anaglyphMerged.setDevicePixelRatio(dpr);
-    }
+  root->removeAllChildNodes();
+  syncBackgroundNode(root, rect);
+  syncStrokeNode(m_gridNode, m_gridPx, m_gridColors, 0.5);
+  syncStrokeNode(m_axisNode, m_axisPx, m_axisColors, 0.75);
+  syncTraceNode();
 
-    m_anaglyphImg[0].fill(Qt::transparent);
-    m_anaglyphImg[1].fill(Qt::transparent);
+  syncTileNode(m_labelNode, m_labelTile, m_labelPos, m_labelUpload);
+  syncTileNode(m_indicatorNode,
+               m_indicatorTile,
+               QPointF(50.0 - kIndicatorTileSize * 0.5, 50.0 - kIndicatorTileSize * 0.5),
+               m_indicatorUpload);
 
-    QPainter leftScene(&m_anaglyphImg[0]);
-    for (const auto* p : images)
-      leftScene.drawImage(0, 0, p[0]);
+  appendSceneNodes(root);
 
-    QPainter rightScene(&m_anaglyphImg[1]);
-    for (const auto* p : images)
-      rightScene.drawImage(0, 0, p[1]);
+  return root;
+}
 
-    const int h = m_anaglyphImg[0].height();
-    const int w = m_anaglyphImg[0].width();
-    for (int y = 0; y < h; ++y) {
-      const QRgb* SS_RESTRICT lLine =
-        reinterpret_cast<const QRgb*>(m_anaglyphImg[0].constScanLine(y));
-      const QRgb* SS_RESTRICT rLine =
-        reinterpret_cast<const QRgb*>(m_anaglyphImg[1].constScanLine(y));
-      QRgb* SS_RESTRICT oLine = reinterpret_cast<QRgb*>(m_anaglyphMerged.scanLine(y));
+/**
+ * @brief Rebuilds the trace node, stroking the gradient polyline or emitting one dot per
+ *        sample when interpolation is off.
+ */
+void Widgets::Plot3D::syncTraceNode()
+{
+  SS_ASSERT(m_tracePx.size() == m_traceColors.size(), return);
 
-      for (int x = 0; x < w; ++x)
-        oLine[x] = qRgb(qRed(lLine[x]), qGreen(rLine[x]), qBlue(rLine[x]));
-    }
+  const auto count = static_cast<qsizetype>(m_tracePx.size());
+  if (m_interpolate)
+    m_traceNode =
+      GpuStroke::buildStrokeNode(m_traceNode, m_tracePx.data(), m_traceColors.data(), count, 1.0);
+  else
+    m_traceNode =
+      GpuStroke::buildPointNode(m_traceNode, m_tracePx.data(), m_traceColors.data(), count, 1.0);
+}
 
-    painter->drawImage(0, 0, m_anaglyphMerged);
+/**
+ * @brief Rebuilds one tile node in place, re-uploading its texture only when the tile was
+ *        rasterized again. A null tile releases the node.
+ */
+void Widgets::Plot3D::syncTileNode(QSGSimpleTextureNode*& slot,
+                                   const QImage& tile,
+                                   const QPointF& topLeft,
+                                   bool& needsUpload)
+{
+  SS_ASSERT(window() != nullptr, return);
+
+  if (tile.isNull()) {
+    delete slot;
+    slot        = nullptr;
+    needsUpload = false;
+    return;
   }
 
-  else {
-    for (const auto* p : images)
-      painter->drawImage(0, 0, p[0]);
+  if (!slot) {
+    // code-verify off
+    // Scene-graph nodes default to QSGNode::OwnedByParent, so appending transfers ownership to
+    // the root and the slot is re-nulled whenever updatePaintNode is handed a null oldNode.
+    slot = new QSGSimpleTextureNode;
+    // code-verify on
+    slot->setOwnsTexture(true);
+    slot->setFiltering(QSGTexture::Linear);
+    needsUpload = true;
   }
+
+  if (needsUpload) {
+    slot->setTexture(window()->createTextureFromImage(tile));
+    needsUpload = false;
+  }
+
+  const QSizeF size = tile.deviceIndependentSize();
+  slot->setRect(QRectF(topLeft, size));
+}
+
+/**
+ * @brief Appends the scene nodes in draw order, flipping the trace and grid around the same
+ *        camera-angle threshold the layered composite used.
+ */
+void Widgets::Plot3D::appendSceneNodes(QSGNode* root)
+{
+  SS_ASSERT(root != nullptr, return);
+
+  const bool gridOnTop = m_cameraAngleX <= 270.0 && m_cameraAngleX > 90.0;
+  if (gridOnTop && m_traceNode)
+    root->appendChildNode(m_traceNode);
+
+  if (m_gridNode)
+    root->appendChildNode(m_gridNode);
+
+  if (m_axisNode)
+    root->appendChildNode(m_axisNode);
+
+  if (!gridOnTop && m_traceNode)
+    root->appendChildNode(m_traceNode);
+
+  if (m_labelNode)
+    root->appendChildNode(m_labelNode);
+
+  if (m_indicatorNode)
+    root->appendChildNode(m_indicatorNode);
+}
+
+/**
+ * @brief Refreshes the background tile node, rebuilding the tile only when the theme or the
+ *        item size marked it dirty.
+ */
+void Widgets::Plot3D::syncBackgroundNode(QSGNode* root, const QRectF& rect)
+{
+  SS_ASSERT(root != nullptr, return);
+  SS_ASSERT(window() != nullptr, return);
+
+  if (!m_bgNode) {
+    // code-verify off
+    // Scene-graph nodes default to QSGNode::OwnedByParent, so appending below transfers
+    // ownership to the root and the slot is re-nulled whenever updatePaintNode is handed a
+    // null oldNode. There is no destructor release path to add.
+    m_bgNode = new QSGSimpleTextureNode;
+    // code-verify on
+    m_bgNode->setOwnsTexture(true);
+    m_bgNode->setFiltering(QSGTexture::Linear);
+  }
+
+  if (m_bgUpload && !m_bgTile.isNull()) {
+    m_bgNode->setTexture(window()->createTextureFromImage(m_bgTile));
+    m_bgUpload = false;
+  }
+
+  m_bgNode->setRect(rect);
+  root->appendChildNode(m_bgNode);
+}
+
+/**
+ * @brief Rebuilds one stroke node in place from an accumulated polyline; the builder frees and
+ *        nulls the slot when there is nothing left to draw.
+ */
+void Widgets::Plot3D::syncStrokeNode(QSGGeometryNode*& slot,
+                                     const std::vector<QPointF>& px,
+                                     const std::vector<QColor>& colors,
+                                     const double halfWidth)
+{
+  SS_ASSERT(px.size() == colors.size(), return);
+  SS_ASSERT(halfWidth > 0.0, return);
+
+  slot = GpuStroke::buildStrokeNode(
+    slot, px.data(), colors.data(), static_cast<qsizetype>(px.size()), halfWidth);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -310,7 +461,7 @@ double Widgets::Plot3D::idealWorldScale() const
  */
 bool Widgets::Plot3D::dirty() const
 {
-  return m_dirtyGrid || m_dirtyData || m_dirtyBackground || m_dirtyCameraIndicator;
+  return m_dirtyGrid || m_dirtyData || m_dirtyBackground || m_dirtyCameraIndicator || m_dirtyLabel;
 }
 
 /**
@@ -614,16 +765,6 @@ void Widgets::Plot3D::onThemeChanged()
   m_outerBackgroundColor = m_themeManager.getColor("widget_window");
   // clang-format on
 
-  const double invSteps = 1.0 / static_cast<double>(m_gradientPens.size() - 1);
-  for (std::size_t i = 0; i < m_gradientPens.size(); ++i) {
-    const double t = static_cast<double>(i) * invSteps;
-    QColor c;
-    c.setRedF(m_lineTailColor.redF() * (1 - t) + m_lineHeadColor.redF() * t);
-    c.setGreenF(m_lineTailColor.greenF() * (1 - t) + m_lineHeadColor.greenF() * t);
-    c.setBlueF(m_lineTailColor.blueF() * (1 - t) + m_lineHeadColor.blueF() * t);
-    m_gradientPens[i] = QPen(c, 2);
-  }
-
   markDirty();
 }
 
@@ -634,12 +775,39 @@ void Widgets::Plot3D::onThemeChanged()
 /**
  * @brief Marks all plot layers as dirty and requests a repaint.
  */
+void Widgets::Plot3D::updatePolish()
+{
+  if (m_dirtyBackground) {
+    m_bgTile = UI::Widgets::Plot3DDetail::buildBackgroundTile(
+      boundingRect().size().toSize(), m_innerBackgroundColor, m_outerBackgroundColor);
+    m_dirtyBackground = false;
+    m_bgUpload        = true;
+  }
+
+  if (m_dirtyGrid)
+    drawGrid();
+
+  if (m_dirtyData)
+    drawData();
+
+  if (m_dirtyCameraIndicator)
+    drawCameraIndicator();
+
+  if (m_dirtyLabel)
+    drawGridLabel();
+}
+
+/**
+ * @brief Marks every layer dirty and schedules a rebuild.
+ */
 void Widgets::Plot3D::markDirty()
 {
   m_dirtyGrid            = true;
   m_dirtyData            = true;
   m_dirtyBackground      = true;
   m_dirtyCameraIndicator = true;
+  m_dirtyLabel           = true;
+  polish();
   update();
 }
 
@@ -651,6 +819,7 @@ void Widgets::Plot3D::markCameraDirty()
   m_dirtyGrid            = true;
   m_dirtyData            = true;
   m_dirtyCameraIndicator = true;
+  polish();
   update();
 }
 
@@ -685,7 +854,7 @@ void Widgets::Plot3D::itemChange(ItemChange change, const ItemChangeData& value)
   if (change == ItemVisibleHasChanged && value.boolValue)
     updateData();
 
-  QQuickPaintedItem::itemChange(change, value);
+  QQuickItem::itemChange(change, value);
 }
 
 /**
@@ -794,15 +963,16 @@ void Widgets::Plot3D::updateCamera(const DSP::LineSeries3D& data)
 }
 
 /**
- * @brief Renders the 3D plot foreground.
+ * @brief Rebuilds the trace polyline for the current camera transform. Stereo eyes are handled
+ *        by the anaglyph pass, so this builds the mono transform only.
  */
 void Widgets::Plot3D::drawData()
 {
   const auto& data = m_dashboard.plotData3D(m_index);
   if (data.empty()) {
-    m_plotImg[0] = QImage();
-    m_plotImg[1] = QImage();
-    m_dirtyData  = false;
+    m_tracePx.clear();
+    m_traceColors.clear();
+    m_dirtyData = false;
     return;
   }
 
@@ -811,138 +981,173 @@ void Widgets::Plot3D::drawData()
     m_dataUpdated = false;
   }
 
+  m_tracePx.clear();
+  m_traceColors.clear();
+
   QMatrix4x4 matrix;
   matrix.perspective(45.0f, float(width()) / height(), kNearPlane, kFarPlane);
   matrix.translate(m_cameraOffsetX, m_cameraOffsetY, m_cameraOffsetZ);
 
   if (anaglyphEnabled()) {
     auto eyes = eyeTransformations(matrix);
-
-    eyes.first.rotate(m_cameraAngleX, 1, 0, 0);
-    eyes.first.rotate(m_cameraAngleY, 0, 1, 0);
-    eyes.first.rotate(m_cameraAngleZ, 0, 0, 1);
-    eyes.first.scale(m_worldScale);
-    eyes.first.translate(-m_centerPoint);
-
-    eyes.second.rotate(m_cameraAngleX, 1, 0, 0);
-    eyes.second.rotate(m_cameraAngleY, 0, 1, 0);
-    eyes.second.rotate(m_cameraAngleZ, 0, 0, 1);
-    eyes.second.scale(m_worldScale);
-    eyes.second.translate(-m_centerPoint);
-
-    m_plotImg[0] = renderData(eyes.first, data);
-    m_plotImg[1] = renderData(eyes.second, data);
+    applyCameraTransform(eyes.first);
+    applyCameraTransform(eyes.second);
+    buildTracePolyline(eyes.first, data, EyeMask::Left);
+    buildTracePolyline(eyes.second, data, EyeMask::Right);
   }
 
   else {
-    matrix.rotate(m_cameraAngleX, 1, 0, 0);
-    matrix.rotate(m_cameraAngleY, 0, 1, 0);
-    matrix.rotate(m_cameraAngleZ, 0, 0, 1);
-    matrix.scale(m_worldScale);
-    matrix.translate(-m_centerPoint);
-
-    m_plotImg[0] = renderData(matrix, data);
+    applyCameraTransform(matrix);
+    buildTracePolyline(matrix, data, EyeMask::None);
   }
 
   m_dirtyData = false;
 }
 
 /**
- * @brief Renders the 3D plot background.
+ * @brief Projects the series and shades it tail-to-head as per-vertex color, replacing the
+ *        pen-per-segment gradient. With interpolation off every sample carries the head color
+ *        and is drawn as a dot instead of a stroke.
+ */
+void Widgets::Plot3D::buildTracePolyline(const QMatrix4x4& matrix,
+                                         const DSP::LineSeries3D& data,
+                                         const EyeMask mask)
+{
+  const auto& points = screenProjection(data, matrix);
+  const qsizetype n  = static_cast<qsizetype>(points.size());
+  if (n < 1)
+    return;
+
+  const QColor head = maskEyeColor(m_lineHeadColor, mask);
+  const QColor tail = maskEyeColor(m_lineTailColor, mask);
+
+  if (!m_tracePx.empty()) {
+    m_tracePx.push_back(QPointF(qQNaN(), qQNaN()));
+    m_traceColors.push_back(head);
+  }
+
+  m_tracePx.insert(m_tracePx.end(), points.begin(), points.end());
+  m_traceColors.reserve(m_traceColors.size() + static_cast<std::size_t>(n));
+
+  if (!m_interpolate) {
+    m_traceColors.insert(m_traceColors.end(), static_cast<std::size_t>(n), head);
+    return;
+  }
+
+  const double inv = n > 1 ? 1.0 / static_cast<double>(n - 1) : 0.0;
+  for (qsizetype i = 0; i < n; ++i) {
+    const double t = static_cast<double>(i) * inv;
+    QColor c;
+    c.setRedF(tail.redF() * (1 - t) + head.redF() * t);
+    c.setGreenF(tail.greenF() * (1 - t) + head.greenF() * t);
+    c.setBlueF(tail.blueF() * (1 - t) + head.blueF() * t);
+    m_traceColors.push_back(c);
+  }
+}
+
+/**
+ * @brief Applies a stereo eye's channel mask to a color, preserving alpha. Masking is
+ *        per-channel linear, so a masked gradient endpoint interpolates exactly as the merged
+ *        image did.
+ */
+QColor Widgets::Plot3D::maskEyeColor(const QColor& color, const EyeMask mask)
+{
+  if (mask == EyeMask::None)
+    return color;
+
+  QColor out = color;
+  if (mask == EyeMask::Left) {
+    out.setGreenF(0.0);
+    out.setBlueF(0.0);
+    return out;
+  }
+
+  out.setRedF(0.0);
+  return out;
+}
+
+/**
+ * @brief Applies the camera rotation, scale and centering to a projection matrix.
+ */
+void Widgets::Plot3D::applyCameraTransform(QMatrix4x4& matrix) const
+{
+  matrix.rotate(m_cameraAngleX, 1, 0, 0);
+  matrix.rotate(m_cameraAngleY, 0, 1, 0);
+  matrix.rotate(m_cameraAngleZ, 0, 0, 1);
+  matrix.scale(m_worldScale);
+  matrix.translate(-m_centerPoint);
+}
+
+/**
+ * @brief Rebuilds the grid and axis polylines. With stereo on, both eyes accumulate into the
+ *        same buffers under complementary channel masks, replacing the two extra full-screen
+ *        layers and the per-pixel merge.
  */
 void Widgets::Plot3D::drawGrid()
 {
+  m_gridPx.clear();
+  m_gridColors.clear();
+  m_axisPx.clear();
+  m_axisColors.clear();
+
   QMatrix4x4 matrix;
   matrix.perspective(45.0f, float(width()) / height(), kNearPlane, kFarPlane);
   matrix.translate(m_cameraOffsetX, m_cameraOffsetY, m_cameraOffsetZ);
 
   if (anaglyphEnabled()) {
     auto eyes = eyeTransformations(matrix);
-
-    eyes.first.rotate(m_cameraAngleX, 1, 0, 0);
-    eyes.first.rotate(m_cameraAngleY, 0, 1, 0);
-    eyes.first.rotate(m_cameraAngleZ, 0, 0, 1);
-    eyes.first.scale(m_worldScale);
-    eyes.first.translate(-m_centerPoint);
-
-    eyes.second.rotate(m_cameraAngleX, 1, 0, 0);
-    eyes.second.rotate(m_cameraAngleY, 0, 1, 0);
-    eyes.second.rotate(m_cameraAngleZ, 0, 0, 1);
-    eyes.second.scale(m_worldScale);
-    eyes.second.translate(-m_centerPoint);
-
-    m_gridImg[0] = renderGrid(eyes.first);
-    m_gridImg[1] = renderGrid(eyes.second);
+    applyCameraTransform(eyes.first);
+    applyCameraTransform(eyes.second);
+    buildGridPolylines(eyes.first, EyeMask::Left);
+    buildGridPolylines(eyes.second, EyeMask::Right);
   }
 
   else {
-    matrix.rotate(m_cameraAngleX, 1, 0, 0);
-    matrix.rotate(m_cameraAngleY, 0, 1, 0);
-    matrix.rotate(m_cameraAngleZ, 0, 0, 1);
-    matrix.scale(m_worldScale);
-    matrix.translate(-m_centerPoint);
-
-    m_gridImg[0] = renderGrid(matrix);
+    applyCameraTransform(matrix);
+    buildGridPolylines(matrix, EyeMask::None);
   }
 
   m_dirtyGrid = false;
 }
 
 /**
- * @brief Renders the 3D plot background with optional anaglyph effect.
- */
-void Widgets::Plot3D::drawBackground()
-{
-  QImage img(widgetSize(), QImage::Format_ARGB32_Premultiplied);
-  img.setDevicePixelRatio(displayPixelRatio());
-  img.fill(Qt::transparent);
-
-  QPointF center(width() * 0.5f, height() * 0.5f);
-  double radius = qMax(width(), height()) * 0.25;
-  QRadialGradient gradient(center, radius);
-  gradient.setColorAt(0.0, m_innerBackgroundColor);
-  gradient.setColorAt(1.0, m_outerBackgroundColor);
-
-  QPainter painter(&img);
-  painter.fillRect(boundingRect(), gradient);
-
-  m_bgImg[0] = img;
-  if (anaglyphEnabled())
-    m_bgImg[1] = img;
-
-  m_dirtyBackground = false;
-}
-
-/**
- * @brief Renders the 3D camera indicator.
+ * @brief Rebuilds the camera orientation indicator tile. The indicator is hidden on small
+ *        widgets, exactly as the layered version was.
  */
 void Widgets::Plot3D::drawCameraIndicator()
 {
-  QMatrix4x4 matrix;
-
-  if (anaglyphEnabled()) {
-    auto eyes = eyeTransformations(matrix);
-
-    eyes.first.rotate(m_cameraAngleX, 1, 0, 0);
-    eyes.first.rotate(m_cameraAngleY, 0, 1, 0);
-    eyes.first.rotate(m_cameraAngleZ, 0, 0, 1);
-
-    eyes.second.rotate(m_cameraAngleX, 1, 0, 0);
-    eyes.second.rotate(m_cameraAngleY, 0, 1, 0);
-    eyes.second.rotate(m_cameraAngleZ, 0, 0, 1);
-
-    m_cameraIndicatorImg[0] = renderCameraIndicator(eyes.first);
-    m_cameraIndicatorImg[1] = renderCameraIndicator(eyes.second);
-  }
-
-  else {
-    matrix.rotate(m_cameraAngleX, 1, 0, 0);
-    matrix.rotate(m_cameraAngleY, 0, 1, 0);
-    matrix.rotate(m_cameraAngleZ, 0, 0, 1);
-    m_cameraIndicatorImg[0] = renderCameraIndicator(matrix);
-  }
-
   m_dirtyCameraIndicator = false;
+
+  if (width() < kIndicatorMinSize || height() < kIndicatorMinSize) {
+    m_indicatorTile = QImage();
+    return;
+  }
+
+  QMatrix4x4 matrix;
+  matrix.rotate(m_cameraAngleX, 1, 0, 0);
+  matrix.rotate(m_cameraAngleY, 0, 1, 0);
+  matrix.rotate(m_cameraAngleZ, 0, 0, 1);
+
+  const UI::Widgets::Plot3DDetail::IndicatorColors colors{
+    m_xAxisColor, m_yAxisColor, m_zAxisColor, m_axisTextColor};
+
+  m_indicatorTile = UI::Widgets::Plot3DDetail::buildCameraIndicatorTile(
+    kIndicatorTileSize, displayPixelRatio(), matrix, m_commonFonts.customMonoFont(0.8), colors);
+  m_indicatorUpload = true;
+}
+
+/**
+ * @brief Rebuilds the grid-interval label tile, which changes only when the grid step or the
+ *        theme does.
+ */
+void Widgets::Plot3D::drawGridLabel()
+{
+  m_dirtyLabel     = false;
+  const QFont font = m_commonFonts.monoFont();
+  m_labelTile      = UI::Widgets::Plot3DDetail::buildTextTile(
+    m_gridStepLabel, font, m_textColor, displayPixelRatio());
+  m_labelPos    = QPointF(7.0, height() - 8.0 - QFontMetrics(font).ascent() - 1.0);
+  m_labelUpload = true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1003,19 +1208,24 @@ const std::vector<QPointF>& Widgets::Plot3D::screenProjection(const DSP::LineSer
   return m_projected;
 }
 
+//--------------------------------------------------------------------------------------------------
+// Grid computation
+//--------------------------------------------------------------------------------------------------
+
 /**
- * @brief Renders a near-plane-clipped 3D line as faded 2D segments, projecting only its two
- *        endpoints since a projective transform maps straight lines to straight lines.
+ * @brief Projects a near-plane-clipped 3D line into a pixel-space polyline, fading each point
+ *        toward the item edge and marking points beyond the visible ratio non-finite so the
+ *        stroke breaks there, exactly where the old per-segment cull dropped geometry.
  */
-void Widgets::Plot3D::drawLine3D(QPainter& painter,
-                                 const QMatrix4x4& matrix,
-                                 const QVector3D& p1,
-                                 const QVector3D& p2,
-                                 QColor color,
-                                 float lineWidth,
-                                 Qt::PenStyle style)
+void Widgets::Plot3D::projectLine3D(const QMatrix4x4& matrix,
+                                    const QVector3D& p1,
+                                    const QVector3D& p2,
+                                    const QColor& color,
+                                    std::vector<QPointF>& px,
+                                    std::vector<QColor>& colors) const
 {
-  constexpr int segmentCount = 40;
+  px.clear();
+  colors.clear();
 
   QVector4D a = matrix * QVector4D(p1, 1.0f);
   QVector4D b = matrix * QVector4D(p2, 1.0f);
@@ -1034,216 +1244,105 @@ void Widgets::Plot3D::drawLine3D(QPainter& painter,
   const QPointF center(halfW, halfH);
   const float maxDist    = 0.5f * std::hypot(w, h);
   const float invMaxDist = maxDist > 0.0f ? 1.0f / maxDist : 0.0f;
-
-  const float screenRatio = 0.4f;
-  const float xLimit      = w * screenRatio;
-  const float yLimit      = h * screenRatio;
+  const float xLimit     = w * kScreenRatio;
+  const float yLimit     = h * kScreenRatio;
 
   const QPointF pStart(halfW + (a.x() / a.w()) * halfW, halfH - (a.y() / a.w()) * halfH);
   const QPointF pEnd(halfW + (b.x() / b.w()) * halfW, halfH - (b.y() / b.w()) * halfH);
   const QPointF span = pEnd - pStart;
 
-  QPen pen(color, lineWidth, style);
-  constexpr float kInvSegments = 1.0f / segmentCount;
-  for (int i = 0; i < segmentCount; ++i) {
-    const QPointF pA = pStart + span * (float(i) * kInvSegments);
-    const QPointF pB = pStart + span * (float(i + 1) * kInvSegments);
-
-    const bool exceedPAx = std::abs(pA.x() - halfW) > xLimit;
-    const bool exceedPBx = std::abs(pB.x() - halfW) > xLimit;
-    const bool exceedPAy = std::abs(pA.y() - halfH) > yLimit;
-    const bool exceedPBy = std::abs(pB.y() - halfH) > yLimit;
-    if (exceedPAx || exceedPBx || exceedPAy || exceedPBy)
+  px.reserve(kLineSegments + 1);
+  colors.reserve(kLineSegments + 1);
+  for (int i = 0; i <= kLineSegments; ++i) {
+    const QPointF p    = pStart + span * (float(i) * kInvLineSegments);
+    const bool outside = std::abs(p.x() - halfW) > xLimit || std::abs(p.y() - halfH) > yLimit;
+    if (outside) {
+      px.push_back(QPointF(qQNaN(), qQNaN()));
+      colors.push_back(color);
       continue;
+    }
 
-    QPointF mid = 0.5f * (pA + pB);
-    float dist  = QLineF(mid, center).length();
-    float alpha = 1.0f - std::clamp(dist * invMaxDist, 0.0f, 1.0f);
-
-    QColor faded = color;
+    const float dist  = QLineF(p, center).length();
+    const float alpha = 1.0f - std::clamp(dist * invMaxDist, 0.0f, 1.0f);
+    QColor faded      = color;
     faded.setAlphaF(color.alphaF() * alpha);
 
-    pen.setColor(faded);
-    painter.setPen(pen);
-    painter.drawLine(pA, pB);
+    px.push_back(p);
+    colors.push_back(faded);
   }
 }
 
-//--------------------------------------------------------------------------------------------------
-// Grid computation
-//--------------------------------------------------------------------------------------------------
+/**
+ * @brief Projects one grid line, dashes it, and appends it to the grid accumulator.
+ */
+void Widgets::Plot3D::appendGridLine(const QMatrix4x4& matrix,
+                                     const QVector3D& p1,
+                                     const QVector3D& p2,
+                                     const QColor& color)
+{
+  projectLine3D(matrix, p1, p2, color, m_linePx, m_lineColors);
+  if (m_linePx.empty())
+    return;
+
+  GpuStroke::dashPolyline(m_linePx.data(),
+                          m_lineColors.data(),
+                          static_cast<qsizetype>(m_linePx.size()),
+                          kGridDashOn,
+                          kGridDashOff,
+                          m_dashPx,
+                          m_dashColors);
+
+  appendPolyline(m_gridPx, m_gridColors, m_dashPx, m_dashColors);
+}
 
 /**
- * @brief Renders the infinite grid overlay as a 2D pixmap.
+ * @brief Projects one axis line and appends it, undashed, to the axis accumulator.
  */
-QImage Widgets::Plot3D::renderGrid(const QMatrix4x4& matrix)
+void Widgets::Plot3D::appendAxisLine(const QMatrix4x4& matrix,
+                                     const QVector3D& p1,
+                                     const QVector3D& p2,
+                                     const QColor& color)
 {
-  QImage img(widgetSize(), QImage::Format_ARGB32_Premultiplied);
-  img.setDevicePixelRatio(displayPixelRatio());
-  img.fill(Qt::transparent);
+  projectLine3D(matrix, p1, p2, color, m_linePx, m_lineColors);
+  appendPolyline(m_axisPx, m_axisColors, m_linePx, m_lineColors);
+}
 
-  QPainter painter(&img);
-  painter.setRenderHint(QPainter::Antialiasing, true);
+/**
+ * @brief Appends one eye's grid and axis polylines to the accumulators.
+ */
+void Widgets::Plot3D::buildGridPolylines(const QMatrix4x4& matrix, const EyeMask mask)
+{
+  const double step = gridStep();
+  const double l    = kGridSteps * step;
+  const float cx    = std::round(m_centerPoint.x() / step) * step;
+  const float cy    = std::round(m_centerPoint.y() / step) * step;
 
-  const double numSteps = 10;
-  const double step     = gridStep();
-  const double l        = numSteps * step;
-  const float cx        = std::round(m_centerPoint.x() / step) * step;
-  const float cy        = std::round(m_centerPoint.y() / step) * step;
+  auto minor = m_gridMinorColor;
+  minor.setAlpha(100);
+  minor = maskEyeColor(minor, mask);
 
-  QVector<QPair<QVector3D, QVector3D>> gridLines;
-  for (int i = -numSteps; i <= numSteps; ++i) {
+  for (int i = -kGridSteps; i <= kGridSteps; ++i) {
     if (i == 0)
       continue;
 
-    float x       = cx + i * step;
-    float y       = cy + i * step;
-    const auto x1 = QVector3D(x, cy + l, 0);
-    const auto x2 = QVector3D(x, cy - l, 0);
-    const auto y1 = QVector3D(cx + l, y, 0);
-    const auto y2 = QVector3D(cx - l, y, 0);
-
-    gridLines.append({x1, x2});
-    gridLines.append({y1, y2});
+    const float x = cx + i * step;
+    const float y = cy + i * step;
+    appendGridLine(matrix, QVector3D(x, cy + l, 0), QVector3D(x, cy - l, 0), minor);
+    appendGridLine(matrix, QVector3D(cx + l, y, 0), QVector3D(cx - l, y, 0), minor);
   }
 
-  const float ax                    = m_centerPoint.x();
-  const float ay                    = m_centerPoint.y();
-  QPair<QVector3D, QVector3D> xAxis = {QVector3D(ax - l, ay, 0), QVector3D(ax + l, ay, 0)};
-  QPair<QVector3D, QVector3D> yAxis = {QVector3D(ax, ay - l, 0), QVector3D(ax, ay + l, 0)};
+  const float ax = m_centerPoint.x();
+  const float ay = m_centerPoint.y();
+  appendAxisLine(
+    matrix, QVector3D(ax - l, ay, 0), QVector3D(ax + l, ay, 0), maskEyeColor(m_xAxisColor, mask));
+  appendAxisLine(
+    matrix, QVector3D(ax, ay - l, 0), QVector3D(ax, ay + l, 0), maskEyeColor(m_yAxisColor, mask));
 
-  auto color = m_gridMinorColor;
-  color.setAlpha(100);
-  for (const auto& line : gridLines)
-    drawLine3D(painter, matrix, line.first, line.second, color, 1, Qt::DashLine);
-
-  drawLine3D(painter, matrix, xAxis.first, xAxis.second, m_xAxisColor, 1.5, Qt::SolidLine);
-  drawLine3D(painter, matrix, yAxis.first, yAxis.second, m_yAxisColor, 1.5, Qt::SolidLine);
-
-  const QString stepLabel = tr("Grid Interval: %1 unit(s)").arg(step);
-  painter.setPen(m_textColor);
-  painter.setFont(m_commonFonts.monoFont());
-  painter.drawText(QPoint(8, height() - 8), stepLabel);
-
-  return img;
-}
-
-/**
- * @brief Renders the camera orientation indicator as a 2D pixmap.
- */
-QImage Widgets::Plot3D::renderCameraIndicator(const QMatrix4x4& matrix)
-{
-  struct Axis {
-    QVector3D dir;
-    QColor color;
-    QString label;
-  };
-
-  struct TransformedAxis {
-    Axis axis;
-    QVector4D transformed;
-  };
-
-  QImage img(widgetSize(), QImage::Format_ARGB32_Premultiplied);
-  img.setDevicePixelRatio(displayPixelRatio());
-  img.fill(Qt::transparent);
-
-  if (width() < 240 || height() < 240)
-    return img;
-
-  QPainter painter(&img);
-  painter.setRenderHint(QPainter::Antialiasing, true);
-
-  const float lineScale  = 18;
-  const float axisLength = 2;
-  const QPointF origin(50, 50);
-
-  QVector<Axis> axes = {
-    {{1, 0, 0}, m_xAxisColor, QStringLiteral("X")},
-    {{0, 1, 0}, m_yAxisColor, QStringLiteral("Y")},
-    {{0, 0, 1}, m_zAxisColor, QStringLiteral("Z")}
-  };
-
-  QVector<TransformedAxis> transformedAxes;
-  for (const auto& ax : axes) {
-    QVector4D t = matrix * QVector4D(ax.dir * axisLength, 1.0f);
-    transformedAxes.append({ax, t});
+  const QString label = tr("Grid Interval: %1 unit(s)").arg(step);
+  if (label != m_gridStepLabel) {
+    m_gridStepLabel = label;
+    m_dirtyLabel    = true;
   }
-
-  std::sort(transformedAxes.begin(),
-            transformedAxes.end(),
-            [](const TransformedAxis& a, const TransformedAxis& b) {
-              return a.transformed.z() < b.transformed.z();
-            });
-
-  painter.setFont(m_commonFonts.customMonoFont(0.8));
-  QFontMetrics fm(painter.font());
-  int textWidth      = fm.horizontalAdvance("X");
-  int textHeight     = fm.height();
-  float circleRadius = std::max(textWidth, textHeight) * 0.7f;
-
-  for (const auto& ta : transformedAxes) {
-    const QVector4D& t = ta.transformed;
-    const float invW   = t.w() != 0.0f ? 1.0f / t.w() : 0.0f;
-    QPointF endpoint(origin.x() + (t.x() * invW) * lineScale,
-                     origin.y() - (t.y() * invW) * lineScale);
-
-    painter.setPen(QPen(ta.axis.color, 3));
-    painter.drawLine(origin, endpoint);
-
-    painter.setBrush(ta.axis.color);
-    painter.setPen(Qt::NoPen);
-    painter.drawEllipse(endpoint, circleRadius, circleRadius);
-
-    QRectF textRect(
-      endpoint.x() - circleRadius, endpoint.y() - circleRadius, circleRadius * 2, circleRadius * 2);
-
-    painter.setPen(m_axisTextColor);
-    painter.drawText(textRect, Qt::AlignCenter, ta.axis.label);
-  }
-
-  return img;
-}
-
-/**
- * @brief Renders the 3D plot foreground as a 2D pixmap.
- */
-QImage Widgets::Plot3D::renderData(const QMatrix4x4& matrix, const DSP::LineSeries3D& data)
-{
-  QImage img(widgetSize(), QImage::Format_ARGB32_Premultiplied);
-  img.setDevicePixelRatio(displayPixelRatio());
-  img.fill(Qt::transparent);
-
-  QPainter painter(&img);
-  painter.setRenderHint(QPainter::Antialiasing, true);
-
-  const auto& points = screenProjection(data, matrix);
-
-  if (m_interpolate) {
-    const auto numPoints   = static_cast<qsizetype>(points.size());
-    const double invPoints = numPoints > 0 ? 1.0 / numPoints : 0.0;
-    const double lutScale  = static_cast<double>(m_gradientPens.size() - 1);
-    for (qsizetype i = 1; i < numPoints; ++i) {
-      const QPointF& a = points[i - 1];
-      const QPointF& b = points[i];
-      if (qIsNaN(a.x()) || qIsNaN(b.x()))
-        continue;
-
-      const auto idx = static_cast<std::size_t>(double(i) * invPoints * lutScale);
-      painter.setPen(m_gradientPens[idx]);
-      painter.drawLine(a, b);
-    }
-  }
-
-  else {
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(m_lineHeadColor);
-    for (const QPointF& pt : points)
-      if (!qIsNaN(pt.x()))
-        painter.drawEllipse(pt, 1, 1);
-  }
-
-  return img;
 }
 
 //--------------------------------------------------------------------------------------------------

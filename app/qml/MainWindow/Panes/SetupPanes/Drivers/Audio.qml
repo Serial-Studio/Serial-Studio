@@ -52,6 +52,11 @@ Item {
         _inChan.currentIndex = Cpp_IO_Audio.selectedInputChannelConfiguration
     }
 
+    function onNormalizationChanged() {
+      if (_norm.checked !== Cpp_IO_Audio.normalization)
+        _norm.checked = Cpp_IO_Audio.normalization
+    }
+
     function onOutputSettingsChanged() {
       if (_outDev.currentIndex !== Cpp_IO_Audio.selectedOutputDevice)
         _outDev.currentIndex = Cpp_IO_Audio.selectedOutputDevice
@@ -135,6 +140,25 @@ Item {
     }
 
     //
+    // Input channels
+    //
+    Label {
+      visible: _inChan.visible
+      text: qsTr("Channels") + ":"
+    } Widgets.Combo {
+      id: _inChan
+
+      Layout.fillWidth: true
+      visible: count > 0 && _inDev.visible
+      model: Cpp_IO_Audio.inputChannelConfigurations
+      currentIndex: Cpp_IO_Audio.selectedInputChannelConfiguration
+      onActivated: (index) => {
+        if (Cpp_IO_Audio.selectedInputChannelConfiguration !== index)
+          Cpp_IO_Audio.selectedInputChannelConfiguration = index
+      }
+    }
+
+    //
     // Input sample rate selection
     //
     Label {
@@ -154,7 +178,7 @@ Item {
     }
 
     //
-    // Input sample format selection
+    // Input sample format selection (the driver picks it while normalizing)
     //
     Label {
       visible: _inFmt.visible
@@ -163,9 +187,9 @@ Item {
       id: _inFmt
 
       Layout.fillWidth: true
-      visible: count > 0 && _inDev.visible
       model: Cpp_IO_Audio.inputSampleFormats
       currentIndex: Cpp_IO_Audio.selectedInputSampleFormat
+      visible: count > 0 && _inDev.visible && !_norm.checked
       onActivated: (index) => {
         if (Cpp_IO_Audio.selectedInputSampleFormat !== index)
           Cpp_IO_Audio.selectedInputSampleFormat = index
@@ -173,24 +197,24 @@ Item {
     }
 
     //
-    // Input channels
+    // Normalization
     //
     Label {
-      visible: _inChan.visible
-      text: qsTr("Channels") + ":"
-    } Widgets.Combo {
-      id: _inChan
+      visible: _inDev.visible
+      text: qsTr("Normalization") + ":"
+    } CheckBox {
+      id: _norm
 
-      Layout.fillWidth: true
-      visible: count > 0 && _inDev.visible
-      model: Cpp_IO_Audio.inputChannelConfigurations
-      currentIndex: Cpp_IO_Audio.selectedInputChannelConfiguration
-      onActivated: (index) => {
-        if (Cpp_IO_Audio.selectedInputChannelConfiguration !== index)
-          Cpp_IO_Audio.selectedInputChannelConfiguration = index
+      Layout.leftMargin: -8
+      visible: _inDev.visible
+      Layout.maximumHeight: 18
+      checked: Cpp_IO_Audio.normalization
+      Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+      onCheckedChanged: {
+        if (Cpp_IO_Audio.normalization !== checked)
+          Cpp_IO_Audio.normalization = checked
       }
     }
-
 
     //
     // Spacer
@@ -223,25 +247,6 @@ Item {
     }
 
     //
-    // Output sample format selection
-    //
-    Label {
-      visible: _outFmt.visible
-      text: qsTr("Sample Format") + ":"
-    } Widgets.Combo {
-      id: _outFmt
-
-      Layout.fillWidth: true
-      visible: count > 0 && _outDev.visible
-      model: Cpp_IO_Audio.outputSampleFormats
-      currentIndex: Cpp_IO_Audio.selectedOutputSampleFormat
-      onActivated: (index) => {
-        if (Cpp_IO_Audio.selectedOutputSampleFormat !== index)
-          Cpp_IO_Audio.selectedOutputSampleFormat = index
-      }
-    }
-
-    //
     // Output channels
     //
     Label {
@@ -257,6 +262,25 @@ Item {
       onActivated: (index) => {
         if (Cpp_IO_Audio.selectedOutputChannelConfiguration !== index)
           Cpp_IO_Audio.selectedOutputChannelConfiguration = index
+      }
+    }
+
+    //
+    // Output sample format selection
+    //
+    Label {
+      visible: _outFmt.visible
+      text: qsTr("Sample Format") + ":"
+    } Widgets.Combo {
+      id: _outFmt
+
+      Layout.fillWidth: true
+      model: Cpp_IO_Audio.outputSampleFormats
+      currentIndex: Cpp_IO_Audio.selectedOutputSampleFormat
+      visible: count > 0 && _outDev.visible && !_norm.checked
+      onActivated: (index) => {
+        if (Cpp_IO_Audio.selectedOutputSampleFormat !== index)
+          Cpp_IO_Audio.selectedOutputSampleFormat = index
       }
     }
 

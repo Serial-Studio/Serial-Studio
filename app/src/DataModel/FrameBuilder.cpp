@@ -3130,11 +3130,18 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList& channels)
 
 #ifdef BUILD_COMMERCIAL
 /**
- * @brief Returns the numeric display range of a miniaudio capture format.
+ * @brief Returns the numeric display range of a miniaudio capture format, or the normalized
+ * -1..1 range when the driver publishes normalized samples.
  */
-static void audioFormatRange(ma_format format, double& minValue, double& maxValue)
+static void audioFormatRange(ma_format fmt, bool normalized, double& minValue, double& maxValue)
 {
-  switch (format) {
+  if (normalized) {
+    minValue = -1.0;
+    maxValue = 1.0;
+    return;
+  }
+
+  switch (fmt) {
     case ma_format_u8:
       maxValue = 255;
       minValue = 0;
@@ -3174,7 +3181,8 @@ void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channe
 #ifdef BUILD_COMMERCIAL
   ma_format format = ma_format_unknown;
   quint32 sampleRate{};
-  bool haveAudio = false;
+  bool haveAudio  = false;
+  bool normalized = false;
   IO::PipelineHost::runOnGuiThreadBlocking([&] {
     static auto& ioManager = IO::ConnectionManager::instance();
     const auto* audioPtr   = ioManager.audio();
@@ -3183,6 +3191,7 @@ void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channe
 
     format     = audioPtr->config().capture.format;
     sampleRate = audioPtr->config().sampleRate;
+    normalized = audioPtr->normalization();
     haveAudio  = true;
   });
 
@@ -3191,7 +3200,7 @@ void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channe
 
   double maxValue = 1.0;
   double minValue = 0.0;
-  audioFormatRange(format, minValue, maxValue);
+  audioFormatRange(format, normalized, minValue, maxValue);
 
   const int targetSamples = static_cast<int>(sampleRate * 0.05);
   int fftSamples          = 256;
@@ -3868,6 +3877,26 @@ void DataModel::FrameBuilder::destroyTransformEngines()
 
   m_transformEngines.clear();
   SS_ASSERT_LOG(m_transformEngines.empty());
+}
+
+/**
+ * @brief Destroys every transform engine on the thread that built them. A lua_State and a
+ *        QJSEngine belong to their creating thread: a QJSEngine's collector is driven both
+ *        synchronously and by posted events, so one surviving a thread move is swept from two
+ *        threads at once and double-frees the identifier table.
+ */
+void DataModel::FrameBuilder::releaseTransformEngines()
+{
+  destroyTransformEngines();
+}
+
+/**
+ * @brief Rebuilds the transform engines on the current thread, restoring what
+ *        releaseTransformEngines() dropped ahead of a thread move.
+ */
+void DataModel::FrameBuilder::rebuildTransformEngines()
+{
+  compileTransforms();
 }
 
 /**

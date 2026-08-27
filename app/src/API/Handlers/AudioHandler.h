@@ -23,9 +23,13 @@ public:
   static void registerCommands();
 
 private:
+  static void registerSetterCommands();
+  static void registerGetterCommands();
+
   static CommandResponse setInputDevice(const QString& id, const QJsonObject& params);
   static CommandResponse setOutputDevice(const QString& id, const QJsonObject& params);
   static CommandResponse setSampleRate(const QString& id, const QJsonObject& params);
+  static CommandResponse setNormalization(const QString& id, const QJsonObject& params);
   static CommandResponse setInputSampleFormat(const QString& id, const QJsonObject& params);
   static CommandResponse setInputChannelConfig(const QString& id, const QJsonObject& params);
   static CommandResponse setOutputSampleFormat(const QString& id, const QJsonObject& params);

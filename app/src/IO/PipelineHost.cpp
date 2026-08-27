@@ -212,10 +212,11 @@ void IO::PipelineHost::relocateProcessingObjects()
 }
 
 /**
- * @brief Hands the FrameBuilder and FrameParser to @p target's thread, dropping every script
- *        engine first (on their current owner): a lua_State and a QJSEngine belong to the thread
- *        that built them, and parsing through an engine born elsewhere corrupts the QV4 heap.
- *        readCode() rebuilds them on the new owner; a stopped target thread is refused.
+ * @brief Hands the FrameBuilder and FrameParser to @p target's thread. BOTH drop their script
+ *        engines first, on their current owner: a lua_State and a QJSEngine belong to the thread
+ *        that built them, and a QJSEngine surviving the move is swept from its old thread by
+ *        posted events and its new one synchronously, double-freeing the identifier table.
+ *        readCode() and rebuildTransformEngines() rebuild on the new owner.
  */
 void IO::PipelineHost::moveProcessingObjectsTo(QThread* target)
 {
@@ -229,13 +230,17 @@ void IO::PipelineHost::moveProcessingObjectsTo(QThread* target)
   if (target != qApp->thread() && !target->isRunning())
     return;
 
+  SS_ASSERT(m_frameBuilder->thread() == m_frameParser->thread(), return);
+
   runOnObjectThread(m_frameParser, [this, target] {
     m_frameParser->releaseEngines();
+    m_frameBuilder->releaseTransformEngines();
     m_frameParser->moveToThread(target);
     m_frameBuilder->moveToThread(target);
   });
 
   QMetaObject::invokeMethod(m_frameParser, &DataModel::FrameParser::readCode);
+  QMetaObject::invokeMethod(m_frameBuilder, &DataModel::FrameBuilder::rebuildTransformEngines);
 }
 
 /**

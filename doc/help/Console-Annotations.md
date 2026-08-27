@@ -31,13 +31,13 @@ decoder = {
     {name: "payload", color: "#59a14f"},
     {name: "newline", color: "#e15759"}
   ],
-  decode: function(bytes, offset, ctx) {
+  decode: function(bytes, offset, ctx, size) {
     const b = new Uint8Array(bytes)
     let i = 0
-    while (i < b.length) {
+    while (i < size) {
       const start = i
-      while (i < b.length && b[i] !== 0x0A) ++i
-      if (i >= b.length) return start
+      while (i < size && b[i] !== 0x0A) ++i
+      if (i >= size) return start
       ctx.annotate(offset + start, offset + i - 1, 1, 0,
                    [(i - start) + " bytes", "P"])
       ctx.annotate(offset + i, offset + i, 0, 1, ["LF", "n"])
@@ -53,7 +53,7 @@ decoder = {
 
 `rows` is an array of names, one per lane in the Track tab. `classes` is an array of `{name, color}` objects, or plain name strings. A class without a valid color gets one from a built-in palette. Both arrays must be non-empty or the script fails to compile.
 
-### `decode(bytes, offset, ctx)`
+### `decode(bytes, offset, ctx, size)`
 
 Called with each new chunk of console bytes:
 
@@ -62,6 +62,9 @@ Called with each new chunk of console bytes:
 | `bytes`  | The chunk to decode, as an ArrayBuffer. Wrap it in `new Uint8Array(bytes)` to index it. |
 | `offset` | Absolute stream offset of `bytes[0]`, counted from the start of the session. |
 | `ctx`    | The annotation store. Call `ctx.annotate(...)` on it. |
+| `size`   | Number of bytes in `bytes`. Use this in loop conditions instead of `b.length`. |
+
+Prefer `size` over `b.length` in any loop that runs per byte. Reading `.length` off a typed array is a named property lookup, and the JavaScript engine resolves it by first testing whether the name is an array index, costing a string-to-number conversion on every iteration. On a busy console that single difference dominates decoding time. If you keep `.length`, hoist it into a local (`const n = b.length`) before the loop rather than re-reading it in the condition.
 
 The return value is **how many bytes the function consumed**. Anything not consumed carries over and is presented again at the front of the next chunk, so a message split across two chunks decodes once, whole. Return `start` when a partial message is at the end of the buffer, as the example does.
 

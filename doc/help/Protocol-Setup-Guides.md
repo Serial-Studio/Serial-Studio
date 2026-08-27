@@ -523,9 +523,10 @@ Full driver reference: [CAN Bus](Drivers-CAN-Bus.md).
 1. In the **Setup Panel**, select **Audio** from the I/O Interface dropdown.
 2. Select the **Input Device** from the dropdown (lists all detected audio capture devices).
 3. Select the **Sample Rate**. Common: 44100 Hz, 48000 Hz. Available rates depend on the device.
-4. Select the **Sample Format**. Options, as supported by the device: Unsigned 8-bit, Signed 16-bit, Signed 24-bit, Signed 32-bit, Float 32-bit.
-5. Select the **Channels** layout (Mono, Stereo, or a multichannel layout, depending on the device).
-6. Click **Connect**.
+4. Leave **Normalization** ticked (the default) to get samples as floats in the -1.0 to 1.0 range; the driver then picks the sample format itself and the **Sample Format** selector is hidden.
+5. If you unticked **Normalization**, select the **Sample Format**. Options, as supported by the device: Unsigned 8-bit, Signed 16-bit, Signed 24-bit, Signed 32-bit, Float 32-bit.
+6. Select the **Channels** layout (Mono, Stereo, or a multichannel layout, depending on the device).
+7. Click **Connect**.
 
 Audio data flows into the pipeline as PCM samples, which can be visualized with Plot, FFT Plot, and Waterfall widgets.
 

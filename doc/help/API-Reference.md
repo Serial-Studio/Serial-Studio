@@ -4442,7 +4442,7 @@ Get player status.
 }
 ```
 
-### Audio Driver Commands - Pro (13)
+### Audio Driver Commands - Pro (14)
 
 **Note:** These commands require a Serial Studio Pro license.
 
@@ -4464,8 +4464,23 @@ Set sample rate.
 **Parameters:**
 - `rateIndex` (int): Sample rate index
 
+#### 🔵 `io.audio.setNormalization`
+Publish samples as floats in the -1.0 to 1.0 range. On by default. While enabled the
+driver selects the PCM format itself, so `setInputSampleFormat` and
+`setOutputSampleFormat` have no lasting effect.
+
+**Parameters:**
+- `enabled` (bool): Normalize samples
+
+**Returns:**
+```json
+{
+  "enabled": true
+}
+```
+
 #### 🔵 `io.audio.setInputSampleFormat`
-Set input sample format.
+Set input sample format. Ignored while normalization is enabled.
 
 **Parameters:**
 - `formatIndex` (int): Format index
@@ -4477,7 +4492,7 @@ Set input channel configuration.
 - `channelIndex` (int): Channel config index
 
 #### 🔵 `io.audio.setOutputSampleFormat`
-Set output sample format.
+Set output sample format. Ignored while normalization is enabled.
 
 **Parameters:**
 - `formatIndex` (int): Format index
@@ -4549,6 +4564,7 @@ Get complete audio configuration.
 **Returns:**
 ```json
 {
+  "normalization": true,
   "selectedInputDevice": 0,
   "selectedOutputDevice": 0,
   "selectedSampleRate": 2,

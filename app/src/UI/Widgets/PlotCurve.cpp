@@ -22,7 +22,6 @@
 #include "UI/Widgets/PlotCurve.h"
 
 #include <algorithm>
-#include <cmath>
 #include <QDebug>
 #include <QElapsedTimer>
 #include <QSGGeometryNode>
@@ -30,195 +29,7 @@
 
 #include "DSPSimd.h"
 #include "SSAssert.h"
-
-// Edge feather in logical pixels, straddling the stroke edge so perceived width stays lineWidth
-constexpr double kFeatherPx = 1.0;
-
-// Round-join fan: one arc segment per kFanStep of turn, capped at kFanMax (a 180deg reversal)
-constexpr double kFanStep = 0.39269908;
-constexpr int kFanMax     = 8;
-
-// Geometry ceiling (16M): past it the curve is dropped so int scene-graph buffers can't overflow
-constexpr qsizetype kMaxGeometry = 1 << 24;
-
-/**
- * @brief Encodes a premultiplied vertex color for QSGVertexColorMaterial.
- */
-static void setVertexColor(QSGGeometry::ColoredPoint2D& vertex,
-                           const float x,
-                           const float y,
-                           const QColor& color,
-                           double alpha)
-{
-  SS_ASSERT(alpha >= 0.0 && alpha <= 1.0, alpha = std::clamp(alpha, 0.0, 1.0));
-
-  vertex.set(x,
-             y,
-             static_cast<unsigned char>(std::lround(color.redF() * alpha * 255.0)),
-             static_cast<unsigned char>(std::lround(color.greenF() * alpha * 255.0)),
-             static_cast<unsigned char>(std::lround(color.blueF() * alpha * 255.0)),
-             static_cast<unsigned char>(std::lround(alpha * 255.0)));
-}
-
-/**
- * @brief Computes the unit direction between two pixel-space points; returns false for
- *        degenerate (near zero-length) segments.
- */
-static bool unitDir(const QPointF& from, const QPointF& to, QPointF& dir)
-{
-  const double dx  = to.x() - from.x();
-  const double dy  = to.y() - from.y();
-  const double len = std::sqrt(dx * dx + dy * dy);
-  if (!(len > 1e-6))
-    return false;
-
-  dir = QPointF(dx / len, dy / len);
-  return true;
-}
-
-/**
- * @brief Arc-segment count for the round join between two unit segment directions: the exterior
- *        turn angle bucketed by kFanStep and capped at kFanMax. Pure in the directions, so the
- *        counting and emitting passes derive an identical count without shared state. Zero for a
- *        near-collinear join (no fan).
- */
-static int fanSegments(const QPointF& dIn, const QPointF& dOut)
-{
-  const double dot   = std::clamp(dIn.x() * dOut.x() + dIn.y() * dOut.y(), -1.0, 1.0);
-  const double cross = dIn.x() * dOut.y() - dIn.y() * dOut.x();
-  const double phi   = std::atan2(std::abs(cross), dot);
-  return std::clamp(static_cast<int>(std::ceil(phi / kFanStep)), 0, kFanMax);
-}
-
-/**
- * @brief Emits a symmetric four-vertex cross-section along unit normal n at half-width hw: feather
- *        edge, core edge, core edge, feather edge. The feather adds kFeatherPx beyond the core, so
- *        the 50%-alpha point lands on the stroke edge and the alpha ramp anti-aliases. Used at run
- *        ends (flat caps) where both sides are exposed.
- */
-static void emitCapSection(QSGGeometry::ColoredPoint2D* vertices,
-                           int& v,
-                           const QPointF& p,
-                           const QPointF& n,
-                           double hw,
-                           const QColor& color)
-{
-  SS_ASSERT(vertices != nullptr, return);
-  SS_ASSERT(hw > 0.0, hw = 0.25);
-
-  const double alpha = color.alphaF();
-  const double face  = std::max(0.25, hw - kFeatherPx * 0.5);
-  const double edge  = face + kFeatherPx;
-
-  setVertexColor(vertices[v++],
-                 static_cast<float>(p.x() + n.x() * edge),
-                 static_cast<float>(p.y() + n.y() * edge),
-                 color,
-                 0.0);
-  setVertexColor(vertices[v++],
-                 static_cast<float>(p.x() + n.x() * face),
-                 static_cast<float>(p.y() + n.y() * face),
-                 color,
-                 alpha);
-  setVertexColor(vertices[v++],
-                 static_cast<float>(p.x() - n.x() * face),
-                 static_cast<float>(p.y() - n.y() * face),
-                 color,
-                 alpha);
-  setVertexColor(vertices[v++],
-                 static_cast<float>(p.x() - n.x() * edge),
-                 static_cast<float>(p.y() - n.y() * edge),
-                 color,
-                 0.0);
-}
-
-/**
- * @brief Emits a round-join fan filling the outer notch at vertex p, sweeping outer-side unit
- *        normals n0 to n1 across nFan>=1 arc steps. A center vertex plus nFan+1 feathered rim
- *        pairs (core at face, feather at edge) tile the arc as one core plus two feather triangles
- *        per step, so the join is solid with an anti-aliased rim.
- */
-static void emitFan(QSGGeometry::ColoredPoint2D* vertices,
-                    quint32* indices,
-                    int& v,
-                    int& idx,
-                    const QPointF& p,
-                    const QPointF& n0,
-                    const QPointF& n1,
-                    const int nFan,
-                    const double hw,
-                    const QColor& color)
-{
-  SS_ASSERT(vertices != nullptr, return);
-  SS_ASSERT(indices != nullptr, return);
-  SS_ASSERT(nFan >= 1, return);
-
-  const double alpha = color.alphaF();
-  const double face  = std::max(0.25, hw - kFeatherPx * 0.5);
-  const double edge  = face + kFeatherPx;
-
-  const double dot   = std::clamp(n0.x() * n1.x() + n0.y() * n1.y(), -1.0, 1.0);
-  const double cross = n0.x() * n1.y() - n0.y() * n1.x();
-  const double sweep = std::atan2(cross, dot) / nFan;
-  const double cs    = std::cos(sweep);
-  const double sn    = std::sin(sweep);
-
-  const int center = v;
-  setVertexColor(vertices[v++], static_cast<float>(p.x()), static_cast<float>(p.y()), color, alpha);
-
-  double rx = n0.x();
-  double ry = n0.y();
-  for (int j = 0; j <= nFan; ++j) {
-    const double dx = (j == nFan) ? n1.x() : rx;
-    const double dy = (j == nFan) ? n1.y() : ry;
-    setVertexColor(vertices[v++],
-                   static_cast<float>(p.x() + dx * face),
-                   static_cast<float>(p.y() + dy * face),
-                   color,
-                   alpha);
-    setVertexColor(vertices[v++],
-                   static_cast<float>(p.x() + dx * edge),
-                   static_cast<float>(p.y() + dy * edge),
-                   color,
-                   0.0);
-    const double nx = rx * cs - ry * sn;
-    ry              = rx * sn + ry * cs;
-    rx              = nx;
-  }
-
-  for (int j = 0; j < nFan; ++j) {
-    const int c0   = center + 1 + 2 * j;
-    const int c1   = center + 1 + 2 * (j + 1);
-    indices[idx++] = static_cast<quint32>(center);
-    indices[idx++] = static_cast<quint32>(c0);
-    indices[idx++] = static_cast<quint32>(c1);
-    indices[idx++] = static_cast<quint32>(c0);
-    indices[idx++] = static_cast<quint32>(c0 + 1);
-    indices[idx++] = static_cast<quint32>(c1 + 1);
-    indices[idx++] = static_cast<quint32>(c0);
-    indices[idx++] = static_cast<quint32>(c1 + 1);
-    indices[idx++] = static_cast<quint32>(c1);
-  }
-}
-
-/**
- * @brief Emits the 18 indices (three quad bands, two triangles each) joining two consecutive
- *        four-vertex cross-sections along a run.
- */
-static void emitJoinIndices(quint32* indices, int& idx, const int a, const int b)
-{
-  SS_ASSERT(indices != nullptr, return);
-  SS_ASSERT(a >= 0 && b >= 0, return);
-
-  for (int k = 0; k < 3; ++k) {
-    indices[idx++] = static_cast<quint32>(a + k);
-    indices[idx++] = static_cast<quint32>(b + k);
-    indices[idx++] = static_cast<quint32>(a + k + 1);
-    indices[idx++] = static_cast<quint32>(b + k);
-    indices[idx++] = static_cast<quint32>(b + k + 1);
-    indices[idx++] = static_cast<quint32>(a + k + 1);
-  }
-}
+#include "UI/Widgets/GpuStroke.h"
 
 /**
  * @brief Constructs the curve item and enables scene-graph content.
@@ -408,29 +219,6 @@ void Widgets::PlotCurve::projectToPixels(const QPointF* pts,
 }
 
 /**
- * @brief Length of the maximal run of finite points starting at start: the polyline is
- *        split into connected strips at non-finite points (NaN/inf gaps), and each strip
- *        is mitered as one continuous stroke. Returns the vertex count of the run; start
- *        advances past any leading non-finite point.
- */
-qsizetype Widgets::PlotCurve::runLength(const QPointF* pts,
-                                        const qsizetype count,
-                                        qsizetype& start) const
-{
-  SS_ASSERT(pts != nullptr, return 0);
-  SS_ASSERT(count >= 0, return 0);
-
-  while (start < count && (!std::isfinite(pts[start].x()) || !std::isfinite(pts[start].y())))
-    ++start;
-
-  qsizetype end = start;
-  while (end < count && std::isfinite(pts[end].x()) && std::isfinite(pts[end].y()))
-    ++end;
-
-  return end - start;
-}
-
-/**
  * @brief True when a run's X interval overlaps the visible window, so fully offscreen runs
  *        (zoom/pan slices) are skipped without extruding their geometry.
  */
@@ -446,45 +234,6 @@ bool Widgets::PlotCurve::runVisible(const QPointF* pts,
   DSP::simdFiniteMinMaxPointF<0>(pts + start, len, lo, hi);
 
   return hi >= m_xMin && lo <= m_xMax;
-}
-
-/**
- * @brief Counts one run's vertices and indices; the walk, direction fallback and fanSegments()
- *        call MUST stay textually identical to emitRun or the passes disagree and overrun the
- *        geometry buffer. qsizetype accumulators tolerate an undecimated raw series.
- */
-void Widgets::PlotCurve::countRun(const QPointF* px,
-                                  const qsizetype start,
-                                  const qsizetype len,
-                                  qsizetype& vertexCount,
-                                  qsizetype& indexCount) const
-{
-  SS_ASSERT(px != nullptr, return);
-  SS_ASSERT(len >= 2, return);
-
-  auto dirAt = [&](const qsizetype i, const QPointF& fallback) {
-    QPointF dir = fallback;
-    (void)unitDir(px[start + i], px[start + i + 1], dir);
-    return dir;
-  };
-
-  QPointF prevDir = dirAt(0, QPointF(1, 0));
-  for (qsizetype i = 0; i + 1 < len; ++i) {
-    const QPointF dir  = dirAt(i, prevDir);
-    vertexCount       += 8;
-    indexCount        += 18;
-
-    if (i + 2 < len) {
-      const QPointF dOut = dirAt(i + 1, dir);
-      const int nFan     = fanSegments(dir, dOut);
-      if (nFan >= 1) {
-        vertexCount += 2 * nFan + 3;
-        indexCount  += 9 * nFan;
-      }
-    }
-
-    prevDir = dir;
-  }
 }
 
 /**
@@ -506,9 +255,9 @@ void Widgets::PlotCurve::countRibbon(const QPointF* pts,
 
   qsizetype start = 0;
   while (start < count) {
-    const qsizetype len = runLength(pts, count, start);
+    const qsizetype len = GpuStroke::runLength(pts, count, start);
     if (len >= 2 && runVisible(pts, start, len))
-      countRun(px, start, len, vertexCount, indexCount);
+      GpuStroke::countRun(px, start, len, vertexCount, indexCount);
 
     start += len;
   }
@@ -536,82 +285,25 @@ void Widgets::PlotCurve::emitRibbon(QSGGeometry::ColoredPoint2D* vertices,
   int idx         = 0;
   qsizetype start = 0;
   while (start < count) {
-    const qsizetype len = runLength(pts, count, start);
+    const qsizetype len = GpuStroke::runLength(pts, count, start);
     if (len < 2 || !runVisible(pts, start, len)) {
       start += len;
       continue;
     }
 
-    emitRun(vertices, indices, v, idx, px, start, len, hw);
+    GpuStroke::emitRun(vertices, indices, v, idx, px, start, len, hw, m_color);
     start += len;
   }
 
   // code-verify off
   // Post-condition on a buffer already written: a soft assert cannot un-write an overrun, so the
-  // countRibbon()/emitRun() vertex-budget lockstep stays the real guard and this stays debug-only.
+  // countRibbon()/GpuStroke::emitRun() vertex-budget lockstep stays the real guard and this
+  // stays debug-only.
   Q_ASSERT(v == vertexCount);
   Q_ASSERT(idx == indexCount);
   // code-verify on
   Q_UNUSED(vertexCount)
   Q_UNUSED(indexCount)
-}
-
-/**
- * @brief Emits one run [start, start+len) as constant-width body quads with round joins: each
- *        segment is a flat-capped quad extruded hw along its own normal (width never varies with
- *        bend angle, sharp tips stay full-width), and each interior vertex gets an outer-side
- *        round-join fan. Carries the previous direction across degenerate (zero-length) segments.
- */
-void Widgets::PlotCurve::emitRun(QSGGeometry::ColoredPoint2D* vertices,
-                                 quint32* indices,
-                                 int& v,
-                                 int& idx,
-                                 const QPointF* px,
-                                 const qsizetype start,
-                                 const qsizetype len,
-                                 const double hw) const
-{
-  SS_ASSERT(vertices != nullptr, return);
-  SS_ASSERT(indices != nullptr, return);
-  SS_ASSERT(len >= 2, return);
-
-  auto dirAt = [&](const qsizetype i, const QPointF& fallback) {
-    QPointF dir = fallback;
-    (void)unitDir(px[start + i], px[start + i + 1], dir);
-    return dir;
-  };
-
-  QPointF prevDir = dirAt(0, QPointF(1, 0));
-  for (qsizetype i = 0; i + 1 < len; ++i) {
-    const QPointF dir = dirAt(i, prevDir);
-    const QPointF n(-dir.y(), dir.x());
-
-    const int body = v;
-    emitCapSection(vertices, v, px[start + i], n, hw, m_color);
-    emitCapSection(vertices, v, px[start + i + 1], n, hw, m_color);
-    emitJoinIndices(indices, idx, body, body + 4);
-
-    if (i + 2 < len) {
-      const QPointF dOut = dirAt(i + 1, dir);
-      const int nFan     = fanSegments(dir, dOut);
-      if (nFan >= 1) {
-        const double s = (dir.x() * dOut.y() - dir.y() * dOut.x()) < 0.0 ? 1.0 : -1.0;
-        const QPointF nOut(-dOut.y(), dOut.x());
-        emitFan(vertices,
-                indices,
-                v,
-                idx,
-                px[start + i + 1],
-                QPointF(n.x() * s, n.y() * s),
-                QPointF(nOut.x() * s, nOut.y() * s),
-                nFan,
-                hw,
-                m_color);
-      }
-    }
-
-    prevDir = dir;
-  }
 }
 
 /**
@@ -652,7 +344,7 @@ QSGNode* Widgets::PlotCurve::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeDa
     return nullptr;
   }
 
-  if (vertexCount > kMaxGeometry || indexCount > kMaxGeometry) {
+  if (vertexCount > GpuStroke::kMaxGeometry || indexCount > GpuStroke::kMaxGeometry) {
     delete oldNode;
     return nullptr;
   }

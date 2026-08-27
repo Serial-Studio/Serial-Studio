@@ -1,21 +1,21 @@
 {
   "spec": "0039-session-context",
   "regenerate": "python scripts/code-verify.py --singleton-census --accept",
-  "total": 1704,
-  "files": 211,
+  "total": 1706,
+  "files": 217,
   "buckets": {
     "root": 156,
     "accessor": 68,
     "ctor-capture": 105,
     "deferred": 20,
-    "static-cache": 1231,
+    "static-cache": 1233,
     "loose": 124
   },
   "per_class": {
-    "IO::ConnectionManager": 222,
+    "IO::ConnectionManager": 223,
     "DataModel::ProjectModel": 218,
     "AppState": 132,
-    "CommandRegistry": 102,
+    "CommandRegistry": 103,
     "UI::Dashboard": 85,
     "DataModel::FrameBuilder": 79,
     "Misc::IconRegistry": 48,
@@ -271,13 +271,13 @@
       }
     },
     "app/src/API/Handlers/AudioHandler.cpp": {
-      "total": 14,
+      "total": 16,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 14,
+        "static-cache": 16,
         "loose": 0
       }
     },
@@ -377,6 +377,39 @@
         "ctor-capture": 0,
         "deferred": 0,
         "static-cache": 4,
+        "loose": 0
+      }
+    },
+    "app/src/API/Handlers/Entities/ProjectHandlerAlarmCompat.cpp": {
+      "total": 11,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 11,
+        "loose": 0
+      }
+    },
+    "app/src/API/Handlers/Entities/ProjectHandlerBulk.cpp": {
+      "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 4,
+        "loose": 0
+      }
+    },
+    "app/src/API/Handlers/Entities/ProjectHandlerDatasetFields.cpp": {
+      "total": 9,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 9,
         "loose": 0
       }
     },
@@ -579,13 +612,13 @@
       }
     },
     "app/src/API/Handlers/ProjectHandlerEntities.cpp": {
-      "total": 28,
+      "total": 4,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 28,
+        "static-cache": 4,
         "loose": 0
       }
     },
@@ -1745,13 +1778,24 @@
       }
     },
     "app/src/Misc/ExtensionManager.cpp": {
-      "total": 6,
+      "total": 4,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 5,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "app/src/Misc/Extensions/PluginRunner.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 2,
         "loose": 0
       }
     },
@@ -1997,14 +2041,25 @@
         "loose": 0
       }
     },
+    "app/src/Sessions/DatabaseManager/ReproducibilityVerifier.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
     "app/src/Sessions/DatabaseManager.cpp": {
-      "total": 9,
+      "total": 8,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 4,
-        "static-cache": 2,
+        "static-cache": 1,
         "loose": 2
       }
     },
@@ -2393,14 +2448,25 @@
         "loose": 0
       }
     },
+    "app/src/UI/Widgets/Waterfall/WaterfallOverlay.cpp": {
+      "total": 5,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 5,
+        "loose": 0
+      }
+    },
     "app/src/UI/Widgets/Waterfall.cpp": {
-      "total": 12,
+      "total": 7,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 5,
         "deferred": 0,
-        "static-cache": 7,
+        "static-cache": 2,
         "loose": 0
       }
     },

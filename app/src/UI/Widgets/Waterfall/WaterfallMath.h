@@ -24,6 +24,14 @@
 
 #include <cmath>
 
+// Axis layout metrics shared by the widget and its overlay rasterizer translation units.
+static constexpr int kAxisTickPx     = 4;
+static constexpr int kAxisLabelPad   = 4;
+static constexpr int kAxisTickCount  = 6;
+static constexpr int kMinAxisWidth   = 200;
+static constexpr int kMinAxisHeight  = 160;
+static constexpr int kMarkerChipRows = 3;
+
 namespace UI::Widgets::WaterfallDetail {
 /**
  * @brief Integer-exponent 10^n via table lookup; falls back to std::pow if out of band.

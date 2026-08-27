@@ -26,7 +26,7 @@
 
 #include <QFontMetrics>
 #include <QImage>
-#include <QQuickPaintedItem>
+#include <QQuickItem>
 #include <QVector>
 #include <utility>
 
@@ -36,6 +36,9 @@
 #include "SerialStudio.h"
 #include "UI/Dashboard.h"
 
+QT_FORWARD_DECLARE_CLASS(QSGSimpleRectNode)
+QT_FORWARD_DECLARE_CLASS(QSGSimpleTextureNode)
+
 namespace Widgets {
 
 class AudioExport;
@@ -43,7 +46,7 @@ class AudioExport;
 /**
  * @brief Pro waterfall (spectrogram) widget -- scrolling time-frequency plot.
  */
-class Waterfall : public QQuickPaintedItem {
+class Waterfall : public QQuickItem {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(bool running
@@ -175,9 +178,9 @@ public:
   Q_INVOKABLE [[nodiscard]] QColor colorAt(double normalized) const;
   Q_INVOKABLE [[nodiscard]] QString recordingsFolder() const;
 
-  void paint(QPainter* painter) override;
-
 protected:
+  QSGNode* updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* data) override;
+  void updatePolish() override;
   void wheelEvent(QWheelEvent* event) override;
   void mouseMoveEvent(QMouseEvent* event) override;
   void mousePressEvent(QMouseEvent* event) override;
@@ -260,11 +263,17 @@ private:
   void writeRowAt(int row, const float* dbValues, int bins);
   void paintRowInto(int physicalRow, const float* dbValues, int bins);
   void renderAxisLayer();
+  void syncBackgroundNodes(QSGNode* root, const QRectF& plotRect);
+  void syncSpectrogramNodes(QSGNode* root, const QRectF& plotRect);
+  void syncOverlayNode(QSGNode* root);
+  void appendSpectrogramQuad(QSGSimpleTextureNode*& slot,
+                             QSGNode* root,
+                             const QRectF& dstRect,
+                             const QRectF& srcRect);
   void markAxisDirty();
   void drawXAxis(QPainter* painter, const QRectF& plotRect) const;
   void drawYAxis(QPainter* painter, const QRectF& plotRect) const;
   void drawCursor(QPainter* painter, const QRectF& plotRect) const;
-  void drawHistoryImage(QPainter* painter, const QRectF& plotRect) const;
   void cursorReadoutValues(
     const QRectF& plotRect, double cx, double cy, double& freqHz, double& yVal) const;
   void drawCursorTooltip(QPainter* painter,
@@ -314,10 +323,18 @@ private:
   bool m_cursorHovering;
   QPointF m_cursorPos;
 
-  // Cached axis layer: rebuilt only when zoom/pan/size/theme changes
+  // Cached overlay layer (axes, markers, cursor): rebuilt only when one of its inputs changes
   bool m_axisDirty;
+  bool m_overlayUpload;
+  bool m_textureDirty;
   QRectF m_cachedPlotRect;
   QImage m_axisLayer;
+
+  QSGSimpleRectNode* m_outerBgNode;
+  QSGSimpleRectNode* m_innerBgNode;
+  QSGSimpleTextureNode* m_specNodeA;
+  QSGSimpleTextureNode* m_specNodeB;
+  QSGSimpleTextureNode* m_overlayNode;
 
   // Cached theme colors (refreshed via onThemeChanged())
   QColor m_outerBg;

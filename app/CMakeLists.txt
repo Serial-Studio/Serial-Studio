@@ -263,6 +263,7 @@ set(SOURCES
   src/UI/Widgets/Gauge.cpp
   src/UI/Widgets/Plot.cpp
   src/UI/Widgets/PlotAreaFill.cpp
+  src/UI/Widgets/GpuStroke.cpp
   src/UI/Widgets/PlotCurve.cpp
   src/UI/LayoutPatterns.cpp
   src/UI/Widgets/Compass.cpp
@@ -471,6 +472,7 @@ set(HEADERS
   src/UI/Widgets/Gauge.h
   src/UI/Widgets/Plot.h
   src/UI/Widgets/PlotAreaFill.h
+  src/UI/Widgets/GpuStroke.h
   src/UI/Widgets/PlotCurve.h
   src/UI/Widgets/PlotLogScale.h
   src/UI/Widgets/DataGrid.h
@@ -821,6 +823,7 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/OpcUaSecurity.h
     src/IO/Drivers/OpcUaTagModel.h
     src/UI/Widgets/Plot3D.h
+  src/UI/Widgets/Plot3D/Plot3DOverlay.h
     src/UI/Widgets/ImageView.h
     src/UI/Widgets/ImageExport.h
     src/UI/Widgets/AudioExport.h
@@ -935,11 +938,13 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/OpcUaSecurity.cpp
     src/IO/Drivers/OpcUaTagModel.cpp
     src/UI/Widgets/Plot3D.cpp
+  src/UI/Widgets/Plot3D/Plot3DOverlay.cpp
     src/UI/Widgets/ImageView.cpp
     src/UI/Widgets/ImageExport.cpp
     src/UI/Widgets/AudioExport.cpp
     src/UI/Widgets/Waterfall.cpp
   src/UI/Widgets/Waterfall/WaterfallTicks.cpp
+  src/UI/Widgets/Waterfall/WaterfallOverlay.cpp
     src/UI/Widgets/Painter.cpp
     src/UI/Widgets/PainterContext.cpp
   src/UI/Widgets/Painter/PainterGradient.cpp

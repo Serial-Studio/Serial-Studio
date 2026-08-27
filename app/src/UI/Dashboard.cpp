@@ -498,6 +498,17 @@ void UI::Dashboard::applyBlock(const DataModel::DataBlockPtr& block)
     if (!applyBlockValues(*block, block->samples - 1)) [[unlikely]]
       return;
 
+#ifdef BUILD_COMMERCIAL
+    if (m_plotData3D.size() != widgetCount(SerialStudio::DashboardPlot3D)) [[unlikely]]
+      configurePlot3DSeries();
+
+    if (m_waterfallValues.size() != widgetCount(SerialStudio::DashboardWaterfall)) [[unlikely]]
+      configureWaterfallSeries();
+
+    updatePlot3DSeries(sid);
+    updateWaterfallSeries(sid);
+#endif
+
   } else {
     for (qsizetype i = 0; i < block->samples; ++i) {
       (void)advancePlotClock(sid, DataModel::sample_time(*block, i));

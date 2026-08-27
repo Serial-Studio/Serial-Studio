@@ -1547,39 +1547,44 @@ Habilite apenas em redes confiáveis. Clientes não confiáveis podem ler dados 
 <context>
     <name>Audio</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="89"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="94"/>
         <source>No Microphone Detected</source>
         <translation>Nenhum Microfone Detectado</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="98"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="103"/>
         <source>Connect a mic or check your settings</source>
         <translation>Conecte um microfone ou verifique suas configurações</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="123"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="128"/>
         <source>Input Device</source>
         <translation>Dispositivo de Entrada</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="142"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="166"/>
         <source>Sample Rate</source>
         <translation>Taxa de Amostragem</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="161"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="230"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="185"/>
+        <source>Normalization</source>
+        <translation>Normalização</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="205"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="254"/>
         <source>Sample Format</source>
         <translation>Formato de Amostra</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="180"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="249"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="147"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="273"/>
         <source>Channels</source>
         <translation>Canais</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="211"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="235"/>
         <source>Output Device</source>
         <translation>Dispositivo de Saída</translation>
     </message>
@@ -6137,7 +6142,7 @@ v
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="3090"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3228"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3237"/>
         <source>Channel %1</source>
         <translation>Canal %1</translation>
     </message>
@@ -6147,13 +6152,13 @@ v
         <translation>Gráfico Múltiplo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3239"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3248"/>
         <source>Audio Input</source>
         <translation>Entrada de Áudio</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="3099"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3244"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3253"/>
         <source>Quick Plot</source>
         <translation>Gráfico Rápido</translation>
     </message>
@@ -12534,77 +12539,87 @@ Formato válido: 01 A2 FF 3C</translation>
 <context>
     <name>IO::Drivers::Audio</name>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="589"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="736"/>
         <source>Audio Device Stopped</source>
         <translation>Dispositivo de Áudio Parado</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="590"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="737"/>
         <source>The audio backend stopped the stream. The device may have been unplugged or claimed by another application.</source>
         <translation>O backend de áudio parou o fluxo. O dispositivo pode ter sido desconectado ou reivindicado por outro aplicativo.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="829"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1007"/>
         <source>channels</source>
         <translation>canais</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="882"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1060"/>
         <source> channels</source>
         <translation>canais</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1030"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1208"/>
         <source>Unsigned 8-bit</source>
         <translation>8-bit Sem Sinal</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1031"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1209"/>
         <source>Signed 16-bit</source>
         <translation>16-bit Com Sinal</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1032"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1210"/>
         <source>Signed 24-bit</source>
         <translation>24-bit Com Sinal</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1033"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1211"/>
         <source>Signed 32-bit</source>
         <translation>32-bit Com Sinal</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1034"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1212"/>
         <source>Float 32-bit</source>
         <translation>Float 32-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1037"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1215"/>
         <source>Mono</source>
         <translation>Mono</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1038"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1216"/>
         <source>Stereo</source>
         <translation>Estéreo</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1539"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1740"/>
         <source>Input Device</source>
         <translation>Dispositivo de Entrada</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1547"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1748"/>
         <source>Sample Rate</source>
         <translation>Taxa de Amostragem</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1555"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1756"/>
+        <source>Normalization</source>
+        <translation>Normalização</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1757"/>
+        <source>Publish samples as floats in the -1.0 to 1.0 range</source>
+        <translation>Publicar amostras como floats na faixa de -1.0 a 1.0</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1765"/>
         <source>Sample Format</source>
         <translation>Formato de Amostra</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1563"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1774"/>
         <source>Channels</source>
         <translation>Canais</translation>
     </message>
@@ -21802,22 +21817,22 @@ O parâmetro separador não é mais necessário.</translation>
         <translation>Sair</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1294"/>
+        <location filename="../../src/UI/Widgets/Waterfall/WaterfallOverlay.cpp" line="209"/>
         <source>Time (s)</source>
         <translation>Tempo (s)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1373"/>
+        <location filename="../../src/UI/Widgets/Waterfall/WaterfallOverlay.cpp" line="288"/>
         <source>%1  %2 dB</source>
         <translation>%1  %2 dB</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1485"/>
+        <location filename="../../src/UI/Widgets/Waterfall/WaterfallOverlay.cpp" line="400"/>
         <source>Freq: %1</source>
         <translation>Freq: %1</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1488"/>
+        <location filename="../../src/UI/Widgets/Waterfall/WaterfallOverlay.cpp" line="403"/>
         <source>Time: −%1</source>
         <translation>Tempo: −%1</translation>
     </message>
@@ -27560,7 +27575,7 @@ Entendo que quando terminar, precisarei comprar uma licença ou compilar a vers�
 <context>
     <name>Widgets::Plot3D</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1123"/>
+        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1329"/>
         <source>Grid Interval: %1 unit(s)</source>
         <translation>Intervalo da Grade: %1 unidade(s)</translation>
     </message>
@@ -27580,47 +27595,47 @@ Entendo que quando terminar, precisarei comprar uma licença ou compilar a vers�
 <context>
     <name>Widgets::Waterfall</name>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="393"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="399"/>
         <source>Viridis</source>
         <translation>Viridis</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="395"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="401"/>
         <source>Inferno</source>
         <translation>Inferno</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="397"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="403"/>
         <source>Magma</source>
         <translation>Magma</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="399"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="405"/>
         <source>Plasma</source>
         <translation>Plasma</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="401"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="407"/>
         <source>Turbo</source>
         <translation>Turbo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="403"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="409"/>
         <source>Jet</source>
         <translation>Jet</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="405"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="411"/>
         <source>Hot</source>
         <translation>Hot</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="407"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="413"/>
         <source>Grayscale</source>
         <translation>Escala de Cinza</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="409"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="415"/>
         <source>Unknown</source>
         <translation>Desconhecido</translation>
     </message>

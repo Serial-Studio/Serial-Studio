@@ -100,17 +100,9 @@ protected:
 
 private:
   void projectToPixels(const QPointF* pts, qsizetype count, const double w, const double h);
-  [[nodiscard]] qsizetype runLength(const QPointF* pts,
-                                    const qsizetype count,
-                                    qsizetype& start) const;
   [[nodiscard]] bool runVisible(const QPointF* pts,
                                 const qsizetype start,
                                 const qsizetype len) const;
-  void countRun(const QPointF* px,
-                const qsizetype start,
-                const qsizetype len,
-                qsizetype& vertexCount,
-                qsizetype& indexCount) const;
   void countRibbon(const QPointF* pts,
                    const QPointF* px,
                    const qsizetype count,
@@ -124,14 +116,6 @@ private:
                   const QPointF* px,
                   const qsizetype count,
                   const double hw) const;
-  void emitRun(QSGGeometry::ColoredPoint2D* vertices,
-               quint32* indices,
-               int& v,
-               int& idx,
-               const QPointF* px,
-               const qsizetype start,
-               const qsizetype len,
-               const double hw) const;
 
 private:
   QColor m_color;

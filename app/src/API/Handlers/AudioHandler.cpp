@@ -26,6 +26,16 @@
  */
 void API::Handlers::AudioHandler::registerCommands()
 {
+  registerSetterCommands();
+  registerGetterCommands();
+}
+
+/**
+ * @brief Registers the device-gated setters, each taking an index into an option list except
+ * setNormalization, which takes a boolean.
+ */
+void API::Handlers::AudioHandler::registerSetterCommands()
+{
   static auto& registry = CommandRegistry::instance();
 
   registry.registerCommand(QStringLiteral("io.audio.setInputDevice"),
@@ -54,6 +64,15 @@ void API::Handlers::AudioHandler::registerCommands()
                               QStringLiteral("Sample rate index")}
   }),
                            &setSampleRate);
+
+  registry.registerCommand(QStringLiteral("io.audio.setNormalization"),
+                           QStringLiteral("Enable normalized -1..1 sampling (params: enabled)"),
+                           makeSchema({
+                             {QStringLiteral("enabled"),
+                              QStringLiteral("boolean"),
+                              QStringLiteral("Publish samples as floats in the -1..1 range")}
+  }),
+                           &setNormalization);
 
   registry.registerCommand(QStringLiteral("io.audio.setInputSampleFormat"),
                            QStringLiteral("Set input sample format (params: formatIndex)"),
@@ -90,6 +109,14 @@ void API::Handlers::AudioHandler::registerCommands()
                               QStringLiteral("Output channel configuration index")}
   }),
                            &setOutputChannelConfig);
+}
+
+/**
+ * @brief Registers the read-only listing and configuration getters.
+ */
+void API::Handlers::AudioHandler::registerGetterCommands()
+{
+  static auto& registry = CommandRegistry::instance();
 
   const auto empty = emptySchema();
   registry.registerCommand(QStringLiteral("io.audio.listInputDevices"),
@@ -215,6 +242,27 @@ API::CommandResponse API::Handlers::AudioHandler::setSampleRate(const QString& i
   QJsonObject result;
   result[QStringLiteral("rateIndex")] = rate_index;
   result[QStringLiteral("rateName")]  = rates.at(rate_index);
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Enable or disable normalized sampling
+ */
+API::CommandResponse API::Handlers::AudioHandler::setNormalization(const QString& id,
+                                                                   const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("enabled"))) {
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
+  }
+
+  const bool enabled = params.value(QStringLiteral("enabled")).toBool();
+
+  static auto& connectionManager = IO::ConnectionManager::instance();
+  connectionManager.audio()->setNormalization(enabled);
+
+  QJsonObject result;
+  result[QStringLiteral("enabled")] = connectionManager.audio()->normalization();
   return CommandResponse::makeSuccess(id, result);
 }
 
@@ -467,6 +515,7 @@ API::CommandResponse API::Handlers::AudioHandler::getConfiguration(const QString
   auto* audio                    = connectionManager.audio();
 
   QJsonObject result;
+  result[QStringLiteral("normalization")]              = audio->normalization();
   result[QStringLiteral("selectedInputDevice")]        = audio->selectedInputDevice();
   result[QStringLiteral("selectedOutputDevice")]       = audio->selectedOutputDevice();
   result[QStringLiteral("selectedSampleRate")]         = audio->selectedSampleRate();
