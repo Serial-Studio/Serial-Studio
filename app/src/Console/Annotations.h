@@ -42,9 +42,10 @@
 namespace Console {
 
 /**
- * @brief One decoded byte-range annotation (spec 0059): absolute stream offsets (inclusive),
- *        the decoder-declared row and class, and up to kTextLevels interned text renderings from
- *        longest to shortest.
+ * @brief One decoded byte-range annotation (spec 0059): ingested-stream offsets (inclusive), the
+ *        decoder-declared row and class, and up to kTextLevels interned renderings, longest
+ *        first. Offsets count ingested bytes, which is every wire byte only while a view is
+ *        attached: feed() skips ingestion with no viewer, so a close/open shifts the base.
  */
 struct Annotation {
   static constexpr int kTextLevels = 3;
@@ -157,11 +158,12 @@ public:
   [[nodiscard]] Q_INVOKABLE QString payloadText(int cls, int maxBytes) const;
   [[nodiscard]] Q_INVOKABLE bool exportCsv(const QString& path) const;
 
-public slots:
   void reset();
   void commitPending();
   void ingestBytes(const QByteArray& bytes);
   void declareLayout(const QStringList& rows, const QVariantList& classSpecs);
+
+public slots:
   void annotate(qint64 start, qint64 end, int row, int cls, const QStringList& texts);
 
 private:
@@ -229,6 +231,7 @@ public:
 
   [[nodiscard]] int rowFilter() const noexcept;
   [[nodiscard]] int classFilter() const noexcept;
+  void setSourceModel(QAbstractItemModel* source) override;
 
 public slots:
   void setRowFilter(int row);
@@ -243,14 +246,17 @@ private:
 };
 
 /**
- * @brief Runs a user JavaScript decoder over the Console's raw byte stream at chunk cadence: the
- *        script defines a global `decoder` object with `rows`, `classes` and
- *        `decode(bytes, offset, ctx)` (returns the bytes consumed; unconsumed bytes carry over,
- *        bounded). Errors disable the decoder until re-applied; every call runs under a watchdog.
+ * @brief Runs a user JavaScript decoder over the Console's raw byte stream at chunk cadence: a
+ *        global `decoder` object with `rows`, `classes` and `decode(bytes, offset, ctx)` (returns
+ *        the bytes consumed; the rest carries over, bounded). Errors disable it until re-applied,
+ *        every call runs under a watchdog, and nothing runs without a setViewerActive() view.
  */
 class AnnotationDecoder : public QObject {
   // clang-format off
   Q_OBJECT
+  Q_PROPERTY(bool active
+             READ active
+             NOTIFY stateChanged)
   Q_PROPERTY(bool enabled
              READ enabled
              WRITE setEnabled
@@ -285,6 +291,7 @@ public:
   [[nodiscard]] Q_INVOKABLE QVariantList templates() const;
   [[nodiscard]] Q_INVOKABLE QString templateCode(const QString& file) const;
 
+  [[nodiscard]] bool active() const noexcept;
   [[nodiscard]] bool enabled() const noexcept;
   [[nodiscard]] bool compiled() const noexcept;
   [[nodiscard]] bool failed() const noexcept;
@@ -295,6 +302,7 @@ public:
 public slots:
   void setCode(const QString& code);
   void setEnabled(bool enabled);
+  void setViewerActive(QObject* viewer, bool active);
   void feed(const QByteArray& bytes);
   void reset();
 
@@ -308,6 +316,7 @@ private:
   AnnotationModel* m_model;
   std::unique_ptr<QJSEngine> m_engine;
   std::unique_ptr<DataModel::JsWatchdog> m_watchdog;
+  QHash<QObject*, QMetaObject::Connection> m_viewers;
   QJSValue m_decodeFn;
   QJSValue m_context;
   QString m_code;

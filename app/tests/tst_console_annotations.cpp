@@ -34,7 +34,8 @@
  * @brief The frame annotation layer (spec 0059): interned texts stay bounded, the store trims
  *        with the retained byte window, the filter proxy and CSV export see the same rows, payload
  *        extraction reproduces the annotated bytes byte-for-byte, and a JS decoder runs with
- *        carry-over, is disabled on a throw, and never blocks the caller.
+ *        carry-over, is disabled on a throw, pauses while no view is registered, and never
+ *        blocks the caller.
  */
 class TstConsoleAnnotations : public QObject {
   Q_OBJECT
@@ -45,12 +46,40 @@ private slots:
   void filterAndCsvAgree();
   void payloadReproducesAnnotatedBytes();
   void decoderRunsWithCarryOver();
+  void decoderPausesWithoutViewer();
   void decoderIsDisabledOnThrow();
   void decoderRejectsBadLayout();
 
 private:
+  [[nodiscard]] static QString newlineDecoder();
   [[nodiscard]] static QVariantList twoClasses();
 };
+
+/**
+ * @brief A decoder that labels every newline-framed run and its terminator, returning the bytes it
+ *        consumed so an unterminated tail carries into the next call.
+ */
+QString TstConsoleAnnotations::newlineDecoder()
+{
+  return QStringLiteral(
+    "decoder = {\n"
+    "  rows: ['bytes', 'lines'],\n"
+    "  classes: [{name: 'text', color: '#123456'}, 'newline'],\n"
+    "  decode: function(bytes, offset, ctx) {\n"
+    "    const b = new Uint8Array(bytes);\n"
+    "    let i = 0;\n"
+    "    while (i < b.length) {\n"
+    "      const start = i;\n"
+    "      while (i < b.length && b[i] !== 10) ++i;\n"
+    "      if (i >= b.length) return start;\n"
+    "      if (i > start) ctx.annotate(offset + start, offset + i - 1, 1, 0, ['line', 'L']);\n"
+    "      ctx.annotate(offset + i, offset + i, 0, 1, ['LF']);\n"
+    "      ++i;\n"
+    "    }\n"
+    "    return i;\n"
+    "  }\n"
+    "};\n");
+}
 
 /**
  * @brief Two named classes with explicit colours.
@@ -214,24 +243,9 @@ void TstConsoleAnnotations::decoderRunsWithCarryOver()
 {
   Console::AnnotationModel model;
   Console::AnnotationDecoder decoder(&model);
-  decoder.setCode(QStringLiteral(
-    "decoder = {\n"
-    "  rows: ['bytes', 'lines'],\n"
-    "  classes: [{name: 'text', color: '#123456'}, 'newline'],\n"
-    "  decode: function(bytes, offset, ctx) {\n"
-    "    const b = new Uint8Array(bytes);\n"
-    "    let i = 0;\n"
-    "    while (i < b.length) {\n"
-    "      const start = i;\n"
-    "      while (i < b.length && b[i] !== 10) ++i;\n"
-    "      if (i >= b.length) return start;\n"
-    "      if (i > start) ctx.annotate(offset + start, offset + i - 1, 1, 0, ['line', 'L']);\n"
-    "      ctx.annotate(offset + i, offset + i, 0, 1, ['LF']);\n"
-    "      ++i;\n"
-    "    }\n"
-    "    return i;\n"
-    "  }\n"
-    "};\n"));
+  QObject viewer;
+  decoder.setViewerActive(&viewer, true);
+  decoder.setCode(newlineDecoder());
   QVERIFY2(decoder.compiled(), qPrintable(decoder.lastError()));
   QVERIFY(!decoder.failed());
   QCOMPARE(model.rowNames(), (QStringList{QStringLiteral("bytes"), QStringLiteral("lines")}));
@@ -263,6 +277,47 @@ void TstConsoleAnnotations::decoderRunsWithCarryOver()
 }
 
 /**
+ * @brief With no view registered the decoder is inert: bytes are neither retained nor decoded, and
+ *        resuming drops the carry so the first frame after the gap is not spliced across it.
+ */
+void TstConsoleAnnotations::decoderPausesWithoutViewer()
+{
+  Console::AnnotationModel model;
+  Console::AnnotationDecoder decoder(&model);
+  decoder.setCode(newlineDecoder());
+  decoder.setEnabled(true);
+  QVERIFY(!decoder.active());
+
+  decoder.feed(QByteArrayLiteral("abc\n"));
+  model.commitPending();
+  QCOMPARE(model.count(), 0);
+  QCOMPARE(model.retainedEnd(), qint64(0));
+
+  QObject viewer;
+  decoder.setViewerActive(&viewer, true);
+  QVERIFY(decoder.active());
+
+  decoder.feed(QByteArrayLiteral("abc"));
+  model.commitPending();
+  QCOMPARE(model.count(), 0);
+  QCOMPARE(model.retainedEnd(), qint64(3));
+
+  decoder.setViewerActive(&viewer, false);
+  decoder.feed(QByteArrayLiteral("xyz\n"));
+  model.commitPending();
+  QCOMPARE(model.count(), 0);
+  QCOMPARE(model.retainedEnd(), qint64(3));
+
+  decoder.setViewerActive(&viewer, true);
+  decoder.feed(QByteArrayLiteral("de\n"));
+  model.commitPending();
+  QCOMPARE(model.count(), 2);
+  QCOMPARE(model.at(0).start, qint64(3));
+  QCOMPARE(model.at(0).end, qint64(4));
+  QCOMPARE(model.at(1).start, qint64(5));
+}
+
+/**
  * @brief A decoder that throws is disabled after one failure with the message exposed; a fresh
  *        setCode() clears the failure.
  */
@@ -271,6 +326,8 @@ void TstConsoleAnnotations::decoderIsDisabledOnThrow()
   Console::AnnotationModel model;
   Console::AnnotationDecoder decoder(&model);
   QSignalSpy spy(&decoder, &Console::AnnotationDecoder::stateChanged);
+  QObject viewer;
+  decoder.setViewerActive(&viewer, true);
 
   decoder.setCode(QStringLiteral("decoder = { rows: ['r'], classes: ['c'],"
                                  " decode: function() { throw new Error('boom'); } };"));

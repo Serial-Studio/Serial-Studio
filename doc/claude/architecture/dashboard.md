@@ -111,6 +111,16 @@ Load-bearing rules, all earned against a 48 kHz audio stream (2026-08-17):
   `QSortFilterProxyModel`. `ingestBytes()` only marks the count dirty for the same reason.
   Anything that reads `count()` right after `annotate()` (tests, headless callers) must commit
   first.
+- **The layer is gated on a view being on screen.** `AnnotationDecoder::setViewerActive(viewer,
+  on)` tracks panels by identity (a `destroyed()` guard each, so a console window torn down with
+  its panel open cannot wedge the gate); `feed()` returns before `ingestBytes()` when the set is
+  empty, so a closed panel costs the console stream neither the 1 MiB-window copy nor a `decode()`
+  call per chunk. `ConsoleAnnotations.qml` registers on `visible`, which follows both the ribbon
+  toggle and the Console pane being the shown view. The gate is orthogonal to `enabled`: armed but
+  unwatched is paused. Resuming clears the carry -- its bytes predate the gap, and splicing them
+  onto what arrives after hands `decode()` a frame that was never on the wire. Two `Terminal.qml`
+  instances can exist (Console pane + the dashboard console tool window), which is why this is a
+  viewer set and not a bool.
 - **Panel UI state lives in `Settings { category: "ConsoleAnnotations" }`**, not in the project:
   `saveWidgetSetting` is a no-op outside Project File mode.
 - **The store is a `std::deque`.** Trimming (`dropOldest`, `trimToRetainedBytes`) costs the

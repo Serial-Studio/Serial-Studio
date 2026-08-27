@@ -157,7 +157,22 @@ Item {
     root.saveDecoderSettings()
   }
 
-  Component.onCompleted: Qt.callLater(restoreDecoderSettings)
+  //
+  // The decoder only runs while this panel is on screen: closed, it would keep copying the whole
+  // console stream into the retained window and calling decode() per chunk for nobody
+  //
+  function publishViewerState(on) {
+    if (root.decoder)
+      root.decoder.setViewerActive(root, on)
+  }
+
+  onVisibleChanged: root.publishViewerState(root.visible)
+  Component.onDestruction: root.publishViewerState(false)
+
+  Component.onCompleted: {
+    root.publishViewerState(root.visible)
+    Qt.callLater(root.restoreDecoderSettings)
+  }
 
   //
   // Refresh the track strip at UI cadence, only while it is on screen

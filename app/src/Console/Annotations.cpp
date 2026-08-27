@@ -22,6 +22,7 @@
 #include "Console/Annotations.h"
 
 #include <algorithm>
+#include <cmath>
 #include <limits>
 #include <QFile>
 #include <QTextStream>
@@ -486,7 +487,9 @@ QString Console::AnnotationModel::payloadText(int cls, int maxBytes) const
 }
 
 /**
- * @brief Writes every retained annotation as CSV (start, end, length, row, class, text).
+ * @brief Writes every retained annotation as CSV (start, end, length, row, class, text). The
+ *        stream is flushed before its status is read: QTextStream buffers, so the final chunk
+ *        would otherwise land during destruction and a device error on it would go unreported.
  */
 bool Console::AnnotationModel::exportCsv(const QString& path) const
 {
@@ -511,7 +514,8 @@ bool Console::AnnotationModel::exportCsv(const QString& path) const
         << '\n';
   }
 
-  return out.status() == QTextStream::Ok;
+  out.flush();
+  return out.status() == QTextStream::Ok && file.error() == QFileDevice::NoError;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -696,13 +700,22 @@ int Console::AnnotationModel::internText(const QString& text)
 
 /**
  * @brief Removes annotations that end before the retained byte window (they can no longer be
- *        extracted); items are in append order, so the prefix walk is bounded by what falls off.
+ *        extracted). The prefix walk stops at the first survivor only while the store is known
+ *        sorted by start; commitPending clears that flag for a decoder that annotates backwards,
+ *        and an out-of-order item behind a survivor would otherwise never be trimmed.
  */
 void Console::AnnotationModel::trimToRetainedBytes()
 {
   int drop = 0;
   for (std::size_t i = 0; i < m_items.size(); ++i) {
-    if (m_items[i].end >= m_bytesStart)
+    if (m_items[i].end >= m_bytesStart) {
+      if (m_sortedByStart)
+        break;
+
+      continue;
+    }
+
+    if (drop < static_cast<int>(i))
       break;
 
     ++drop;
@@ -739,6 +752,25 @@ Console::AnnotationFilter::AnnotationFilter(QObject* parent)
   : QSortFilterProxyModel(parent), m_rowFilter(-1), m_classFilter(-1)
 {
   setDynamicSortFilter(true);
+}
+
+/**
+ * @brief Tracks the source model so a re-declared layout can clear the filters. Without this the
+ *        proxy keeps filtering on an index the new layout may not have, emptying the table while
+ *        the combos - rebuilt from the new lists - read "All rows" and "All classes".
+ */
+void Console::AnnotationFilter::setSourceModel(QAbstractItemModel* source)
+{
+  QSortFilterProxyModel::setSourceModel(source);
+
+  auto* model = qobject_cast<AnnotationModel*>(source);
+  if (!model)
+    return;
+
+  connect(model, &AnnotationModel::layoutDeclared, this, [this] {
+    setRowFilter(-1);
+    setClassFilter(-1);
+  });
 }
 
 /**
@@ -814,6 +846,7 @@ Console::AnnotationDecoder::AnnotationDecoder(AnnotationModel* model, QObject* p
   , m_model(model)
   , m_engine()
   , m_watchdog()
+  , m_viewers()
   , m_decodeFn()
   , m_context()
   , m_code()
@@ -865,6 +898,16 @@ QString Console::AnnotationDecoder::templateCode(const QString& file) const
 {
   return DataModel::readTextResource(DataModel::templateResourcePath(
     QStringLiteral(":/scripts/annotations"), file, QStringLiteral(".js")));
+}
+
+/**
+ * @brief True while at least one annotation view is on screen. Decoding is gated on it: the
+ *        panel is the only consumer of the store, so a closed one earns the console stream a
+ *        free ride instead of a retained-window copy plus a decode() call per chunk.
+ */
+bool Console::AnnotationDecoder::active() const noexcept
+{
+  return !m_viewers.isEmpty();
 }
 
 /**
@@ -958,16 +1001,49 @@ void Console::AnnotationDecoder::setEnabled(bool enabled)
 }
 
 /**
- * @brief Chunk-rate entry: bytes append to the carry in place and the consumed prefix is removed,
- *        so a chunk costs no buffer allocation. size is passed explicitly because bytes.length in
- *        a script loop costs a string-to-index conversion per iteration. QJSValues release before
- *        fail() destroys the engine: one outliving it corrupts the collector's chain.
+ * @brief Registers or drops @p viewer as an on-screen annotation view; decoding runs only while
+ *        one is registered, and each is guarded by destroyed() so a torn-down console window
+ *        cannot wedge the gate open. Resuming drops the carry: its bytes predate the pause, and
+ *        splicing them onto what arrives after hands decode() a frame never seen on the wire.
+ */
+void Console::AnnotationDecoder::setViewerActive(QObject* viewer, bool active)
+{
+  SS_ASSERT(viewer != nullptr, return);
+
+  if (active == m_viewers.contains(viewer))
+    return;
+
+  if (!active) {
+    QObject::disconnect(m_viewers.take(viewer));
+    Q_EMIT stateChanged();
+    return;
+  }
+
+  if (m_viewers.isEmpty()) {
+    m_carry.clear();
+    m_carryOffset = m_model ? m_model->retainedEnd() : 0;
+  }
+
+  const auto guard = connect(viewer, &QObject::destroyed, this, [this, viewer]() {
+    m_viewers.remove(viewer);
+    Q_EMIT stateChanged();
+  });
+
+  m_viewers.insert(viewer, guard);
+  Q_EMIT stateChanged();
+}
+
+/**
+ * @brief Chunk-rate entry. The carry is appended to and trimmed in place rather than regrown,
+ *        but a chunk still costs one QV4 ArrayBuffer that shares it: measure before calling this
+ *        allocation-free. size is explicit because bytes.length costs a string-to-index
+ *        conversion per script-loop iteration; the QJSValues release before fail() frees engine.
  */
 void Console::AnnotationDecoder::feed(const QByteArray& bytes)
 {
   SS_ASSERT(m_model != nullptr, return);
 
-  if (bytes.isEmpty())
+  if (bytes.isEmpty() || m_viewers.isEmpty())
     return;
 
   m_model->ingestBytes(bytes);
@@ -998,8 +1074,12 @@ void Console::AnnotationDecoder::feed(const QByteArray& bytes)
     if (hadError)
       errorMessage = result.property(QStringLiteral("message")).toString();
 
-    else if (!timedOut && result.isNumber())
-      consumed = static_cast<qint64>(result.toNumber());
+    else if (!timedOut && result.isNumber()) {
+      const double returned = result.toNumber();
+      SS_ASSERT_LOG(std::isfinite(returned));
+      if (std::isfinite(returned))
+        consumed = static_cast<qint64>(returned);
+    }
   }
 
   if (timedOut || hadError) {
