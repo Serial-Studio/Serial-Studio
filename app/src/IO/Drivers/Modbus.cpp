@@ -41,8 +41,9 @@ static constexpr int kDialPaceMs     = 250;
 static constexpr int kDialDeadlineMs = 5000;
 
 #include "AppState.h"
-#include "DataModel/Frame.h"
 #include "DataModel/ProjectModel.h"
+#include "IO/Drivers/Modbus/ModbusProjectGenerator.h"
+#include "IO/Drivers/SerialPortIdentity.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
 #include "Misc/Utilities.h"
@@ -99,28 +100,6 @@ static constexpr int kDialDeadlineMs = 5000;
   return QSerialPort::OneStop;
 }
 
-/**
- * @brief Returns the user-visible serial ports filtered by the same rules used by the UI list.
- */
-[[nodiscard]] static QVector<QSerialPortInfo> filteredSerialPorts()
-{
-  QVector<QSerialPortInfo> filtered;
-  const auto ports = QSerialPortInfo::availablePorts();
-  for (const auto& info : ports) {
-    if (info.isNull())
-      continue;
-
-#ifdef Q_OS_MACOS
-    if (info.portName().toLower().startsWith("tty."))
-      continue;
-#endif
-
-    filtered.append(info);
-  }
-
-  return filtered;
-}
-
 //--------------------------------------------------------------------------------------------------
 // Constructor/destructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
@@ -144,6 +123,7 @@ IO::Drivers::Modbus::Modbus()
   , m_protocolIndex(1)
   , m_currentGroupIndex(0)
   , m_serialPortIndex(0)
+  , m_registerGroups(m_settings)
 {
   m_slaveAddress  = m_settings.value("ModbusDriver/slaveAddress", 1).toUInt();
   m_protocolIndex = m_settings.value("ModbusDriver/protocolIndex", 1).toUInt();
@@ -159,20 +139,7 @@ IO::Drivers::Modbus::Modbus()
   m_serialPortIndex = m_settings.value("ModbusDriver/serialPortIndex", 0).toUInt();
   // clang-format on
 
-  // clang-format off
-  const int groupCount = m_settings.beginReadArray("ModbusDriver/registerGroups");
-  for (int i = 0; i < groupCount; ++i)
-  {
-    m_settings.setArrayIndex(i);
-    ModbusRegisterGroup group;
-    group.registerType = m_settings.value("type", 0).toUInt();
-    group.startAddress = m_settings.value("start", 0).toUInt();
-    group.count = m_settings.value("count", 0).toUInt();
-    if (group.count > 0 && group.count <= 125)
-      m_registerGroups.append(group);
-  }
-  m_settings.endArray();
-  // clang-format on
+  m_registerGroups.restore();
 
   connect(m_pollTimer, &QTimer::timeout, this, &IO::Drivers::Modbus::pollRegisters);
 
@@ -764,24 +731,8 @@ void IO::Drivers::Modbus::addRegisterGroup(const quint8 type,
                                            const quint16 start,
                                            const quint16 count)
 {
-  if (count > 0 && count <= 125) {
-    for (const auto& group : std::as_const(m_registerGroups))
-      if (group.registerType == type && group.startAddress == start && group.count == count)
-        return;
-
-    m_registerGroups.append(ModbusRegisterGroup(type, start, count));
-
-    m_settings.beginWriteArray("ModbusDriver/registerGroups");
-    for (int i = 0; i < m_registerGroups.size(); ++i) {
-      m_settings.setArrayIndex(i);
-      m_settings.setValue("type", m_registerGroups[i].registerType);
-      m_settings.setValue("start", m_registerGroups[i].startAddress);
-      m_settings.setValue("count", m_registerGroups[i].count);
-    }
-    m_settings.endArray();
-
+  if (m_registerGroups.add(type, start, count))
     Q_EMIT registerGroupsChanged();
-  }
 }
 
 /**
@@ -789,22 +740,13 @@ void IO::Drivers::Modbus::addRegisterGroup(const quint8 type,
  */
 void IO::Drivers::Modbus::removeRegisterGroup(const int index)
 {
-  if (index >= 0 && index < m_registerGroups.count()) {
-    m_registerGroups.removeAt(index);
-    if (m_currentGroupIndex >= m_registerGroups.count())
-      m_currentGroupIndex = 0;
+  if (!m_registerGroups.remove(index))
+    return;
 
-    m_settings.beginWriteArray("ModbusDriver/registerGroups");
-    for (int i = 0; i < m_registerGroups.size(); ++i) {
-      m_settings.setArrayIndex(i);
-      m_settings.setValue("type", m_registerGroups[i].registerType);
-      m_settings.setValue("start", m_registerGroups[i].startAddress);
-      m_settings.setValue("count", m_registerGroups[i].count);
-    }
-    m_settings.endArray();
+  if (m_currentGroupIndex >= m_registerGroups.count())
+    m_currentGroupIndex = 0;
 
-    Q_EMIT registerGroupsChanged();
-  }
+  Q_EMIT registerGroupsChanged();
 }
 
 /**
@@ -814,9 +756,6 @@ void IO::Drivers::Modbus::clearRegisterGroups()
 {
   m_registerGroups.clear();
   m_currentGroupIndex = 0;
-
-  m_settings.beginWriteArray("ModbusDriver/registerGroups");
-  m_settings.endArray();
 
   Q_EMIT registerGroupsChanged();
 }
@@ -838,7 +777,7 @@ QString IO::Drivers::Modbus::registerGroupInfo(const int index) const
     return QString();
 
   // clang-format off
-  const auto &group = m_registerGroups[index];
+  const auto &group = m_registerGroups.at(index);
   const QStringList types = registerTypeList();
   const QString typeName = (group.registerType < types.count()) ? types[group.registerType] : "";
   // clang-format on
@@ -868,7 +807,12 @@ void IO::Drivers::Modbus::generateProject()
     return;
   }
 
-  const auto project = buildProject();
+  QJsonObject conn_settings;
+  for (const auto& prop : driverProperties())
+    conn_settings.insert(prop.key, QJsonValue::fromVariant(prop.value));
+
+  const ModbusProjectGenerator generator(m_registerGroups.groups());
+  const auto project = generator.buildProject(conn_settings);
 
   static auto& pm       = DataModel::ProjectModel::instance();
   static auto& appState = AppState::instance();
@@ -881,11 +825,8 @@ void IO::Drivers::Modbus::generateProject()
 
   pm.setModified(true);
 
-  int total_datasets = 0;
-  for (const auto& g : m_registerGroups)
-    total_datasets += g.count;
-
-  const int groupCount = m_registerGroups.count();
+  const int total_datasets = generator.totalDatasets();
+  const int groupCount     = m_registerGroups.count();
   QObject::connect(
     &pm,
     &DataModel::ProjectModel::saveDialogCompleted,
@@ -905,188 +846,6 @@ void IO::Drivers::Modbus::generateProject()
     Qt::SingleShotConnection);
 
   (void)pm.saveJsonFile(true);
-}
-
-/**
- * @brief Assembles the complete project JSON object.
- */
-QJsonObject IO::Drivers::Modbus::buildProject() const
-{
-  QJsonObject project;
-  project[Keys::Title]   = tr("Modbus Project");
-  project[Keys::Actions] = QJsonArray();
-
-  QJsonObject source;
-  source[Keys::SourceId]              = 0;
-  source[Keys::Title]                 = tr("Modbus");
-  source[Keys::BusType]               = static_cast<int>(SerialStudio::BusType::ModBus);
-  source[Keys::FrameStart]            = QString();
-  source[Keys::FrameEnd]              = QString();
-  source[Keys::Checksum]              = QString();
-  source[Keys::FrameDetection]        = static_cast<int>(SerialStudio::NoDelimiters);
-  source[Keys::Decoder]               = static_cast<int>(SerialStudio::Binary);
-  source[Keys::HexadecimalDelimiters] = false;
-  source[Keys::FrameParserCode]       = buildFrameParser();
-  source[Keys::FrameParserLanguage]   = static_cast<int>(SerialStudio::Lua);
-
-  QJsonObject conn_settings;
-  for (const auto& prop : driverProperties())
-    conn_settings.insert(prop.key, QJsonValue::fromVariant(prop.value));
-
-  source[Keys::SourceConn] = conn_settings;
-
-  project[Keys::Sources] = QJsonArray{source};
-
-  static const QStringList type_names = {
-    tr("Holding Registers"),
-    tr("Input Registers"),
-    tr("Coils"),
-    tr("Discrete Inputs"),
-  };
-
-  QJsonArray group_array;
-  int group_id      = 0;
-  int dataset_index = 1;
-
-  for (const auto& reg_group : m_registerGroups) {
-    DataModel::Group group;
-    group.groupId = group_id;
-    group.widget  = QStringLiteral("datagrid");
-
-    const QString type_name = (reg_group.registerType < type_names.count())
-                              ? type_names[reg_group.registerType]
-                              : tr("Unknown");
-    group.title = QStringLiteral("%1 @ %2").arg(type_name, QString::number(reg_group.startAddress));
-
-    const bool is_reg = (reg_group.registerType <= 1);
-
-    for (quint16 i = 0; i < reg_group.count; ++i) {
-      DataModel::Dataset dataset;
-      dataset.index = dataset_index++;
-      dataset.log   = true;
-
-      const quint16 addr = reg_group.startAddress + i;
-
-      if (is_reg) {
-        dataset.title  = tr("Register %1").arg(addr);
-        dataset.plt    = true;
-        dataset.wgtMin = 0;
-        dataset.wgtMax = 65535;
-        dataset.pltMin = 0;
-        dataset.pltMax = 65535;
-      } else {
-        dataset.title =
-          (reg_group.registerType == 2) ? tr("Coil %1").arg(addr) : tr("Discrete %1").arg(addr);
-        dataset.led     = true;
-        dataset.ledHigh = 1;
-        dataset.wgtMin  = 0;
-        dataset.wgtMax  = 1;
-      }
-
-      group.datasets.push_back(dataset);
-    }
-
-    group_array.append(DataModel::serialize(group));
-    ++group_id;
-  }
-
-  project[QStringLiteral("groups")] = group_array;
-  return project;
-}
-
-/**
- * @brief Generates a JavaScript frame parser for the configured register groups.
- */
-QString IO::Drivers::Modbus::buildFrameParser() const
-{
-  static const QStringList type_names = {
-    QStringLiteral("Holding Registers"),
-    QStringLiteral("Input Registers"),
-    QStringLiteral("Coils"),
-    QStringLiteral("Discrete Inputs"),
-  };
-
-  int total_datasets = 0;
-  for (const auto& g : m_registerGroups)
-    total_datasets += g.count;
-
-  const int group_count = m_registerGroups.count();
-
-  QString code;
-
-  code += QStringLiteral("--\n");
-  code += QStringLiteral("-- Modbus Register Frame Parser\n");
-  code += QStringLiteral("-- Auto-generated by Serial Studio\n");
-  code += QStringLiteral("--\n");
-  code += QStringLiteral("-- Total groups: %1\n").arg(group_count);
-  code += QStringLiteral("-- Total datasets: %1\n").arg(total_datasets);
-  code += QStringLiteral("--\n");
-  code += QStringLiteral("-- Frame format: {slaveAddr, funcCode, byteCount, ...data}\n");
-  code += QStringLiteral("-- Groups are polled sequentially; this parser tracks the cycle.\n");
-  code += QStringLiteral("--\n\n");
-
-  code += QStringLiteral("local values = {}\n");
-  code += QStringLiteral("for i = 1, %1 do values[i] = 0 end\n").arg(total_datasets);
-  code += QStringLiteral("local currentGroup = 0\n\n");
-
-  code += QStringLiteral("function parse(frame)\n");
-  code += QStringLiteral("  if #frame < 3 then return values end\n\n");
-  code += QStringLiteral("  -- Extract data payload (skip slave addr, func code, byte count)\n");
-  code += QStringLiteral("  local data = {}\n");
-  code += QStringLiteral("  for i = 4, #frame do data[#data + 1] = frame[i] end\n\n");
-
-  int dataset_offset = 0;
-  for (int g = 0; g < group_count; ++g) {
-    const auto& reg_group = m_registerGroups[g];
-    const bool is_reg     = (reg_group.registerType <= 1);
-
-    const QString type_name = (reg_group.registerType < type_names.count())
-                              ? type_names[reg_group.registerType]
-                              : QStringLiteral("Unknown");
-
-    if (g == 0)
-      code += QStringLiteral("  if currentGroup == %1 then -- %2 @ %3, count=%4\n")
-                .arg(g)
-                .arg(type_name)
-                .arg(reg_group.startAddress)
-                .arg(reg_group.count);
-    else
-      code += QStringLiteral("  elseif currentGroup == %1 then -- %2 @ %3, count=%4\n")
-                .arg(g)
-                .arg(type_name)
-                .arg(reg_group.startAddress)
-                .arg(reg_group.count);
-
-    if (is_reg) {
-      for (quint16 i = 0; i < reg_group.count; ++i) {
-        const int byte_off  = i * 2 + 1;
-        code               += QStringLiteral("    values[%1] = (data[%2] << 8) | data[%3]\n")
-                  .arg(dataset_offset + i + 1)
-                  .arg(byte_off)
-                  .arg(byte_off + 1);
-      }
-    } else {
-      for (quint16 i = 0; i < reg_group.count; ++i) {
-        const int byte_idx  = i / 8 + 1;
-        const int bit_idx   = i % 8;
-        code               += QStringLiteral("    values[%1] = (data[%2] >> %3) & 1\n")
-                  .arg(dataset_offset + i + 1)
-                  .arg(byte_idx)
-                  .arg(bit_idx);
-      }
-    }
-
-    dataset_offset += reg_group.count;
-  }
-
-  if (group_count > 0)
-    code += QStringLiteral("  end\n\n");
-
-  code += QStringLiteral("  currentGroup = (currentGroup + 1) %% %1\n").arg(group_count);
-  code += QStringLiteral("  return values\n");
-  code += QStringLiteral("end\n");
-
-  return code;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1211,7 +970,7 @@ void IO::Drivers::Modbus::pollNextGroup()
   if (m_currentGroupIndex >= m_registerGroups.count())
     return;
 
-  const auto& group = m_registerGroups[m_currentGroupIndex];
+  const auto& group = m_registerGroups.at(m_currentGroupIndex);
 
   QModbusDataUnit::RegisterType registerType;
   switch (group.registerType) {
@@ -1419,21 +1178,14 @@ void IO::Drivers::Modbus::refreshSerialPorts()
   locations.append("/dev/null");
   names.append(tr("Select Port"));
 
-  const auto ports = QSerialPortInfo::availablePorts();
+  const auto ports = SerialPorts::visiblePorts();
   for (const auto& info : ports) {
-    if (!info.isNull()) {
-#ifdef Q_OS_MACOS
-      if (info.portName().toLower().startsWith("tty."))
-        continue;
-#endif
-
 #ifdef Q_OS_WIN
-      names.append(info.portName() + "  " + info.description());
+    names.append(info.portName() + "  " + info.description());
 #else
-      names.append(info.portName());
+    names.append(info.portName());
 #endif
-      locations.append(info.systemLocation());
-    }
+    locations.append(info.systemLocation());
   }
 
   if (m_serialPortNames != names) {
@@ -1461,64 +1213,12 @@ QJsonObject IO::Drivers::Modbus::deviceIdentifier() const
   if (m_protocolIndex != 0 || m_serialPortIndex < 1)
     return {};
 
-  const auto filtered = filteredSerialPorts();
+  const auto filtered = SerialPorts::visiblePorts();
   const int idx       = m_serialPortIndex - 1;
   if (idx < 0 || idx >= filtered.count())
     return {};
 
-  const auto& info = filtered.at(idx);
-  QJsonObject id;
-
-  if (info.hasVendorIdentifier())
-    id.insert(QStringLiteral("vid"),
-              QString::number(info.vendorIdentifier(), 16).rightJustified(4, '0').toUpper());
-
-  if (info.hasProductIdentifier())
-    id.insert(QStringLiteral("pid"),
-              QString::number(info.productIdentifier(), 16).rightJustified(4, '0').toUpper());
-
-  const auto serial = info.serialNumber();
-  if (!serial.isEmpty())
-    id.insert(QStringLiteral("serial"), serial);
-
-  id.insert(QStringLiteral("portName"), info.portName());
-
-  const auto desc = info.description();
-  if (!desc.isEmpty())
-    id.insert(QStringLiteral("description"), desc);
-
-  return id;
-}
-
-/**
- * @brief Scores a serial-port candidate against saved identifier fields.
- */
-[[nodiscard]] static int scorePortMatch(const QSerialPortInfo& info,
-                                        const QString& savedVid,
-                                        const QString& savedPid,
-                                        const QString& savedSer,
-                                        const QString& savedName,
-                                        const QString& savedDesc)
-{
-  int score = 0;
-
-  if (!savedVid.isEmpty() && info.hasVendorIdentifier()) {
-    const auto vid = QString::number(info.vendorIdentifier(), 16).rightJustified(4, '0').toUpper();
-    const auto pid = QString::number(info.productIdentifier(), 16).rightJustified(4, '0').toUpper();
-    if (vid == savedVid && pid == savedPid) {
-      score += 100;
-      if (!savedSer.isEmpty() && info.serialNumber() == savedSer)
-        score += 50;
-    }
-  }
-
-  if (!savedDesc.isEmpty() && info.description() == savedDesc)
-    score += 10;
-
-  if (!savedName.isEmpty() && info.portName() == savedName)
-    score += 5;
-
-  return score;
+  return SerialPorts::identity(filtered.at(idx));
 }
 
 /**
@@ -1532,18 +1232,12 @@ bool IO::Drivers::Modbus::selectByIdentifier(const QJsonObject& id)
   if (m_serialPortNames.isEmpty())
     refreshSerialPorts();
 
-  const auto filtered  = filteredSerialPorts();
-  const auto savedVid  = id.value(QStringLiteral("vid")).toString();
-  const auto savedPid  = id.value(QStringLiteral("pid")).toString();
-  const auto savedSer  = id.value(QStringLiteral("serial")).toString();
-  const auto savedName = id.value(QStringLiteral("portName")).toString();
-  const auto savedDesc = id.value(QStringLiteral("description")).toString();
+  const auto filtered = SerialPorts::visiblePorts();
 
   int bestScore = 0;
   int bestIndex = -1;
   for (int i = 0; i < filtered.count(); ++i) {
-    const int score =
-      scorePortMatch(filtered.at(i), savedVid, savedPid, savedSer, savedName, savedDesc);
+    const int score = SerialPorts::scoreIdentityMatch(SerialPorts::identity(filtered.at(i)), id);
     if (score > bestScore) {
       bestScore = score;
       bestIndex = i;
@@ -1601,19 +1295,10 @@ QList<IO::DriverProperty> IO::Drivers::Modbus::driverProperties() const
   else
     appendRtuProperties(props);
 
-  QJsonArray groups_array;
-  for (const auto& g : m_registerGroups) {
-    QJsonObject obj;
-    obj[QStringLiteral("type")]  = g.registerType;
-    obj[QStringLiteral("start")] = g.startAddress;
-    obj[QStringLiteral("count")] = g.count;
-    groups_array.append(obj);
-  }
-
   IO::DriverProperty groups;
   groups.key   = QStringLiteral("registerGroups");
   groups.type  = IO::DriverProperty::Text;
-  groups.value = QVariant::fromValue(groups_array);
+  groups.value = QVariant::fromValue(m_registerGroups.toJson());
   props.append(groups);
 
   return props;

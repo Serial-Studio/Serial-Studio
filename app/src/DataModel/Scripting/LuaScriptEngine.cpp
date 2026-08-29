@@ -45,6 +45,7 @@ extern "C" {
 #include "DataModel/Scripting/LuaCompatJIT.h"
 #include "DataModel/Scripting/LuaMigration.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
+#include "DataModel/Scripting/ScriptFrameShaping.h"
 #include "IO/PipelineHost.h"
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
@@ -1042,8 +1043,6 @@ QList<QStringList> DataModel::LuaScriptEngine::classifyTable(int len)
  */
 QList<QStringList> DataModel::LuaScriptEngine::unzipMixedTable(int len)
 {
-  QList<QStringList> results;
-
   QStringList scalars;
   QList<QStringList> vectors;
   qsizetype maxVectorLength = 0;
@@ -1056,33 +1055,5 @@ QList<QStringList> DataModel::LuaScriptEngine::unzipMixedTable(int len)
 
   lua_pop(m_state, 1);
 
-  if (vectors.isEmpty()) {
-    results.append(scalars);
-    return results;
-  }
-
-  maxVectorLength = qMin(maxVectorLength, static_cast<qsizetype>(kMaxVecLen));
-
-  for (auto& vec : vectors) {
-    if (!vec.isEmpty() && vec.size() < maxVectorLength) {
-      const QString lastValue = vec.last();
-      while (vec.size() < maxVectorLength)
-        vec.append(lastValue);
-    }
-  }
-
-  results.reserve(maxVectorLength);
-  for (int i = 0; i < maxVectorLength; ++i) {
-    QStringList frame;
-    frame.reserve(scalars.size() + vectors.size());
-    frame.append(scalars);
-
-    for (const auto& vec : std::as_const(vectors))
-      if (i < vec.size())
-        frame.append(vec[i]);
-
-    results.append(frame);
-  }
-
-  return results;
+  return DataModel::ScriptFrames::unzipMixedFrames(scalars, vectors, maxVectorLength);
 }

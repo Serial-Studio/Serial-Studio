@@ -20,8 +20,8 @@
 
 #include "AI/KeyVault.h"
 #include "AI/Logging.h"
+#include "AI/Providers/ProviderJson.h"
 #include "AI/SseEventReader.h"
-#include "Misc/JsonValidator.h"
 
 static constexpr int kGeminiInitialResponseTimeoutMs = 120 * 1000;
 
@@ -244,7 +244,7 @@ void AI::GeminiReply::onReplyFinished()
   }
 
   if (status >= 400) {
-    setTransientError(status == 408 || status == 429 || status >= 500);
+    setTransientError(ProviderJson::isTransientHttpStatus(status));
     handleHttpError(status);
     return;
   }
@@ -258,15 +258,7 @@ void AI::GeminiReply::onReplyFinished()
  */
 void AI::GeminiReply::handleHttpError(int status)
 {
-  const auto body = m_reply->readAll();
-  QString msg;
-  Misc::JsonValidator::Limits limits;
-  limits.maxFileSize = 256 * 1024;
-  const auto parsed  = Misc::JsonValidator::parseAndValidate(body, limits);
-  if (parsed.valid && parsed.document.isObject()) {
-    const auto err = parsed.document.object().value(QStringLiteral("error")).toObject();
-    msg            = err.value(QStringLiteral("message")).toString();
-  }
+  QString msg = ProviderJson::errorMessageFromBody(m_reply->readAll());
   if (msg.isEmpty())
     msg = tr("HTTP %1").arg(status);
 

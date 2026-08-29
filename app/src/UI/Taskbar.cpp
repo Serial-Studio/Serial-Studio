@@ -95,12 +95,22 @@ UI::Taskbar::Taskbar(QQuickItem* parent)
   , m_windowManager(nullptr)
   , m_fullModel(new TaskbarModel(this))
   , m_taskbarButtons(new TaskbarModel(this))
+  , m_windowMap(m_dashboard, m_widgetRegistry)
+  , m_focusCycler()
+  , m_search(m_fullModel)
 {
   qmlRegisterUncreatableType<UI::TaskbarModel>(
     "SerialStudio.UI", 1, 0, "TaskbarModel", "TaskbarModel is exposed by Taskbar singleton");
 
-  m_focusCycleTimer.setSingleShot(false);
-  connect(&m_focusCycleTimer, &QTimer::timeout, this, &UI::Taskbar::onFocusCycleTick);
+  connect(&m_focusCycler, &UI::FocusCycler::focusRequested, this, &UI::Taskbar::setActiveWindow);
+  connect(
+    &m_focusCycler, &UI::FocusCycler::focusRefreshRequested, this, &UI::Taskbar::refocusWindow);
+  connect(
+    &m_focusCycler, &UI::FocusCycler::focusCleared, this, [this] { setActiveWindow(nullptr); });
+
+  connect(&m_search, &UI::TaskbarSearch::dismissed, this, &UI::Taskbar::searchDismissed);
+  connect(&m_search, &UI::TaskbarSearch::filterChanged, this, &UI::Taskbar::searchFilterChanged);
+  connect(&m_search, &UI::TaskbarSearch::resultsChanged, this, &UI::Taskbar::searchResultsChanged);
 
   connectToRegistry();
 
@@ -459,8 +469,7 @@ void UI::Taskbar::setActiveGroupId(int groupId)
   if (groupId != m_activeGroupId && !m_rebuildInProgress)
     emitWorkspaceChangeAnticipation(groupId);
 
-  m_focusCycleTimer.stop();
-  m_focusCycleQueue.clear();
+  m_focusCycler.stop();
 
   saveLayout();
 
@@ -512,7 +521,7 @@ void UI::Taskbar::setActiveGroupId(int groupId)
  */
 int UI::Taskbar::resolveWorkspaceRefWindowId(const DataModel::WidgetRef& ref) const
 {
-  const int windowId = findWindowIdByGroupAndIndex(ref.widgetType, ref.relativeIndex);
+  const int windowId = m_windowMap.findWindowIdByGroupAndIndex(ref.widgetType, ref.relativeIndex);
   if (windowId < 0)
     return -1;
 
@@ -596,35 +605,6 @@ void UI::Taskbar::populateTaskbarFromGroup(int groupId)
       }
     }
   }
-}
-
-/**
- * @brief Returns the windowId for the (widgetType, relativeIndex) pair, or -1 if not found.
- */
-int UI::Taskbar::findWindowIdByGroupAndIndex(int widgetType, int relativeIndex) const
-{
-  const auto& widgetMap = m_dashboard.widgetMap();
-  for (auto it = widgetMap.begin(); it != widgetMap.end(); ++it) {
-    if (static_cast<int>(it.value().first) != widgetType || it.value().second != relativeIndex)
-      continue;
-
-    return it.key();
-  }
-
-  return -1;
-}
-
-/**
- * @brief Returns the dashboard relative-index for windowId, or -1 if not found.
- */
-int UI::Taskbar::relativeIndexForWindow(int windowId) const
-{
-  const auto& widgetMap = m_dashboard.widgetMap();
-  for (auto it = widgetMap.begin(); it != widgetMap.end(); ++it)
-    if (it.key() == windowId)
-      return it.value().second;
-
-  return -1;
 }
 
 /**
@@ -776,7 +756,7 @@ void UI::Taskbar::unregisterWindow(QQuickItem* window)
       m_windowConnections.erase(it);
     }
 
-    m_focusCycleQueue.removeAll(window);
+    m_focusCycler.remove(window);
 
     m_windowIDs.remove(window);
     if (m_windowManager)
@@ -854,66 +834,39 @@ void UI::Taskbar::registerWindow(const int id, QQuickItem* window)
 }
 
 /**
- * @brief Starts a brief focus-ripple across all registered tiles in visual order.
+ * @brief Starts a brief focus-ripple across all registered tiles in visual order; the cycler
+ *        owns the timing, the taskbar owns which tiles are eligible.
  */
 void UI::Taskbar::startFocusCycle()
 {
-  m_focusCycleTimer.stop();
-  m_focusCycleQueue.clear();
-
+  m_focusCycler.stop();
   if (!m_windowManager)
     return;
 
+  QVector<QQuickItem*> queue;
   const auto& order = m_windowManager->windowOrder();
   for (int id : order)
     if (auto* win = windowData(id); win && windowState(win) == TaskbarModel::WindowNormal)
-      m_focusCycleQueue.append(win);
+      queue.append(win);
 
-  if (m_focusCycleQueue.isEmpty()) {
-    setActiveWindow(nullptr);
-    return;
-  }
-
-  if (m_focusCycleQueue.size() == 1) {
-    QQuickItem* only = m_focusCycleQueue.first();
-    m_focusCycleQueue.clear();
-    setActiveWindow(only);
-    return;
-  }
-
-  QQuickItem* firstTile = m_focusCycleQueue.first();
-  m_focusCycleQueue.append(firstTile);
-
-  constexpr int kBudgetMs = 200;
-  constexpr int kMinMs    = 10;
-  constexpr int kMaxMs    = 40;
-  const int interval      = qBound(kMinMs, kBudgetMs / m_focusCycleQueue.size(), kMaxMs);
-  m_focusCycleTimer.setInterval(interval);
-  m_focusCycleTimer.start();
+  m_focusCycler.start(queue);
 }
 
 /**
- * @brief Advances the focus-cycle by one tile, stopping when the queue drains.
+ * @brief Re-activates a tile the focus ripple lands on. The active window is dropped first so a
+ *        tile that is already active still re-emits, which is what makes the ripple visible.
  */
-void UI::Taskbar::onFocusCycleTick()
+void UI::Taskbar::refocusWindow(QQuickItem* window)
 {
-  if (m_focusCycleQueue.isEmpty()) {
-    m_focusCycleTimer.stop();
+  if (!window)
     return;
+
+  if (m_activeWindow == window) {
+    m_activeWindow = nullptr;
+    Q_EMIT activeWindowChanged();
   }
 
-  QQuickItem* win = m_focusCycleQueue.takeFirst();
-  if (win) {
-    if (m_activeWindow == win) {
-      m_activeWindow = nullptr;
-      Q_EMIT activeWindowChanged();
-    }
-
-    setActiveWindow(win);
-  }
-
-  if (m_focusCycleQueue.isEmpty())
-    m_focusCycleTimer.stop();
+  setActiveWindow(window);
 }
 
 /**
@@ -969,18 +922,6 @@ void UI::Taskbar::applySavedWindowStates(const QJsonObject& layout)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Records the bidirectional mapping between a widget ID and a window ID.
- */
-void UI::Taskbar::mapWidgetToWindow(UI::WidgetID wid, int windowId)
-{
-  if (wid == kInvalidWidgetId)
-    return;
-
-  m_widgetIdToWindowId.insert(wid, windowId);
-  m_windowIdToWidgetId.insert(windowId, wid);
-}
-
-/**
  * @brief Rebuilds the taskbar's full and visible models from the latest dashboard frame.
  */
 void UI::Taskbar::rebuildModel()
@@ -988,8 +929,7 @@ void UI::Taskbar::rebuildModel()
   if (m_rebuildInProgress)
     return;
 
-  m_focusCycleTimer.stop();
-  m_focusCycleQueue.clear();
+  m_focusCycler.stop();
 
   m_rebuildInProgress = true;
   {
@@ -1004,8 +944,7 @@ void UI::Taskbar::rebuildModel()
     m_windowIDs.clear();
     m_fullModel->clear();
     m_activeWindow = nullptr;
-    m_widgetIdToWindowId.clear();
-    m_windowIdToWidgetId.clear();
+    m_windowMap.clear();
     if (m_windowManager)
       m_windowManager->clear();
   }
@@ -1033,7 +972,7 @@ void UI::Taskbar::rebuildModel()
     QList<int> windowIds;
     QList<int> relativeIds;
     QList<SerialStudio::DashboardWidget> widgetTypes;
-    collectGroupWidgetIds(groupId, windowIds, relativeIds, widgetTypes);
+    m_windowMap.collectGroupWidgetIds(groupId, windowIds, relativeIds, widgetTypes);
 
     int mainWindowId = -1;
     for (int i = 0; i < windowIds.count(); ++i) {
@@ -1051,7 +990,7 @@ void UI::Taskbar::rebuildModel()
     const bool alreadyRegistered = groupIds.contains(groupId);
     buildOverviewGroupItem(
       groupItem, groupId, groupName, groupType, group.widget, mainWindowId, alreadyRegistered);
-    mapMainGroupWidgetId(groupType, groupId, mainWindowId);
+    m_windowMap.mapMainGroupWidget(groupType, groupId, mainWindowId);
 
     for (int i = 0; i < windowIds.count(); ++i)
       appendGroupChildItem(
@@ -1095,60 +1034,6 @@ void UI::Taskbar::buildOverviewGroupItem(QStandardItem* groupItem,
 }
 
 /**
- * @brief Maps the WidgetID of the main group widget (if any) to its windowId.
- */
-void UI::Taskbar::mapMainGroupWidgetId(SerialStudio::DashboardWidget groupType,
-                                       int groupId,
-                                       int mainWindowId)
-{
-  if (groupType == SerialStudio::DashboardNoWidget || mainWindowId < 0)
-    return;
-
-  const auto widgetIds = m_widgetRegistry.widgetIdsByType(groupType);
-  for (const auto& wid : std::as_const(widgetIds)) {
-    const auto info = m_widgetRegistry.widgetInfo(wid);
-    if (info.groupId != groupId || !info.isGroupWidget)
-      continue;
-
-    m_widgetIdToWindowId.insert(wid, mainWindowId);
-    m_windowIdToWidgetId.insert(mainWindowId, wid);
-    return;
-  }
-}
-
-/**
- * @brief Collects (windowId, widgetType, relativeIndex) triples that belong to groupId.
- */
-void UI::Taskbar::collectGroupWidgetIds(int groupId,
-                                        QList<int>& windowIds,
-                                        QList<int>& relativeIds,
-                                        QList<SerialStudio::DashboardWidget>& widgetTypes) const
-{
-  auto* db              = &m_dashboard;
-  const auto& widgetMap = db->widgetMap();
-  for (auto it = widgetMap.begin(); it != widgetMap.end(); ++it) {
-    const auto windowId      = it.key();
-    const auto widgetType    = it.value().first;
-    const auto relativeIndex = it.value().second;
-
-    const auto slot = db->widgetSlot(widgetType, relativeIndex);
-    if (!slot.valid)
-      continue;
-
-    const int candidateGroup = slot.group
-                               ? db->getGroupWidget(widgetType, slot.bucketIndex).groupId
-                               : db->getDatasetWidget(widgetType, slot.bucketIndex).groupId;
-
-    if (candidateGroup != groupId)
-      continue;
-
-    windowIds.append(windowId);
-    widgetTypes.append(widgetType);
-    relativeIds.append(relativeIndex);
-  }
-}
-
-/**
  * @brief Builds and appends a single child QStandardItem under the given group item; a widget
  *        rendered by an extension package takes its artwork from that package's descriptor.
  */
@@ -1177,7 +1062,7 @@ void UI::Taskbar::appendGroupChildItem(QStandardItem* groupItem,
     const auto& title = slot.group ? db->getGroupWidget(widgetType, slot.bucketIndex).title
                                    : db->getDatasetWidget(widgetType, slot.bucketIndex).title;
     child->setData(title, TaskbarModel::WidgetNameRole);
-    mapWidgetToWindow(m_widgetRegistry.widgetIdByTypeAndIndex(widgetType, relativeIndex), windowId);
+    m_windowMap.map(m_widgetRegistry.widgetIdByTypeAndIndex(widgetType, relativeIndex), windowId);
   }
 
   groupItem->appendRow(child);
@@ -1298,10 +1183,10 @@ QStandardItem* UI::Taskbar::findItemByWindowId(int windowId,
 QStandardItem* UI::Taskbar::findItemByWidgetId(UI::WidgetID widgetId,
                                                QStandardItem* parentItem) const
 {
-  if (!m_widgetIdToWindowId.contains(widgetId))
+  const int windowId = m_windowMap.windowIdForWidget(widgetId);
+  if (windowId < 0)
     return nullptr;
 
-  int windowId = m_widgetIdToWindowId.value(widgetId);
   return findItemByWindowId(windowId, parentItem);
 }
 
@@ -1377,8 +1262,7 @@ void UI::Taskbar::onWidgetDestroyed(UI::WidgetID id)
  */
 void UI::Taskbar::onRegistryCleared()
 {
-  m_widgetIdToWindowId.clear();
-  m_windowIdToWidgetId.clear();
+  m_windowMap.clear();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1390,7 +1274,7 @@ void UI::Taskbar::onRegistryCleared()
  */
 QString UI::Taskbar::searchFilter() const
 {
-  return m_searchFilter;
+  return m_search.filter();
 }
 
 /**
@@ -1398,10 +1282,7 @@ QString UI::Taskbar::searchFilter() const
  */
 void UI::Taskbar::dismissSearch()
 {
-  m_searchFilter.clear();
-  Q_EMIT searchFilterChanged();
-  Q_EMIT searchResultsChanged();
-  Q_EMIT searchDismissed();
+  m_search.dismiss();
 }
 
 /**
@@ -1409,12 +1290,7 @@ void UI::Taskbar::dismissSearch()
  */
 void UI::Taskbar::setSearchFilter(const QString& filter)
 {
-  if (m_searchFilter == filter)
-    return;
-
-  m_searchFilter = filter;
-  Q_EMIT searchFilterChanged();
-  Q_EMIT searchResultsChanged();
+  m_search.setFilter(filter);
 }
 
 /**
@@ -1422,61 +1298,7 @@ void UI::Taskbar::setSearchFilter(const QString& filter)
  */
 QVariantList UI::Taskbar::searchResults() const
 {
-  QVariantList results;
-  const auto filter   = m_searchFilter.trimmed();
-  const bool noFilter = filter.isEmpty();
-
-  for (int i = 0; i < m_fullModel->rowCount() && results.size() < 30; ++i) {
-    auto* groupItem = m_fullModel->item(i);
-    if (!groupItem)
-      continue;
-
-    const auto groupName = groupItem->data(TaskbarModel::GroupNameRole).toString();
-
-    const auto groupWidgetName = groupItem->data(TaskbarModel::WidgetNameRole).toString();
-    const auto groupType       = groupItem->data(TaskbarModel::WidgetTypeRole).toInt();
-    if (groupType != SerialStudio::DashboardNoWidget
-        && (noFilter || SerialStudio::searchMatches(filter, groupWidgetName)
-            || SerialStudio::searchMatches(filter, groupName))) {
-      QVariantMap entry;
-      entry[QStringLiteral("windowId")]      = groupItem->data(TaskbarModel::WindowIdRole);
-      entry[QStringLiteral("widgetName")]    = groupWidgetName;
-      entry[QStringLiteral("widgetIcon")]    = groupItem->data(TaskbarModel::WidgetIconRole);
-      entry[QStringLiteral("widgetType")]    = groupType;
-      entry[QStringLiteral("groupName")]     = groupName;
-      entry[QStringLiteral("groupId")]       = groupItem->data(TaskbarModel::GroupIdRole);
-      entry[QStringLiteral("isWorkspace")]   = false;
-      entry[QStringLiteral("isGroupWidget")] = true;
-      results.append(entry);
-    }
-
-    for (int j = 0; j < groupItem->rowCount() && results.size() < 30; ++j) {
-      auto* child = groupItem->child(j);
-      if (!child)
-        continue;
-
-      const auto childType = child->data(TaskbarModel::WidgetTypeRole).toInt();
-      if (childType == SerialStudio::DashboardNoWidget)
-        continue;
-
-      const auto name = child->data(TaskbarModel::WidgetNameRole).toString();
-      if (noFilter || SerialStudio::searchMatches(filter, name)
-          || SerialStudio::searchMatches(filter, groupName)) {
-        QVariantMap entry;
-        entry[QStringLiteral("windowId")]      = child->data(TaskbarModel::WindowIdRole);
-        entry[QStringLiteral("widgetName")]    = name;
-        entry[QStringLiteral("widgetIcon")]    = child->data(TaskbarModel::WidgetIconRole);
-        entry[QStringLiteral("widgetType")]    = child->data(TaskbarModel::WidgetTypeRole);
-        entry[QStringLiteral("groupName")]     = groupName;
-        entry[QStringLiteral("groupId")]       = child->data(TaskbarModel::GroupIdRole);
-        entry[QStringLiteral("isWorkspace")]   = false;
-        entry[QStringLiteral("isGroupWidget")] = false;
-        results.append(entry);
-      }
-    }
-  }
-
-  return results;
+  return m_search.results();
 }
 
 /**
@@ -1484,50 +1306,7 @@ QVariantList UI::Taskbar::searchResults() const
  */
 QVariantList UI::Taskbar::allWidgets() const
 {
-  QVariantList results;
-
-  for (int i = 0; i < m_fullModel->rowCount(); ++i) {
-    auto* groupItem = m_fullModel->item(i);
-    if (!groupItem)
-      continue;
-
-    const auto groupName = groupItem->data(TaskbarModel::GroupNameRole).toString();
-
-    const auto groupType = groupItem->data(TaskbarModel::WidgetTypeRole).toInt();
-    if (groupType != SerialStudio::DashboardNoWidget) {
-      QVariantMap entry;
-      entry[QStringLiteral("windowId")]    = groupItem->data(TaskbarModel::WindowIdRole);
-      entry[QStringLiteral("widgetName")]  = groupItem->data(TaskbarModel::WidgetNameRole);
-      entry[QStringLiteral("widgetIcon")]  = groupItem->data(TaskbarModel::WidgetIconRole);
-      entry[QStringLiteral("widgetType")]  = groupType;
-      entry[QStringLiteral("groupName")]   = groupName;
-      entry[QStringLiteral("groupId")]     = groupItem->data(TaskbarModel::GroupIdRole);
-      entry[QStringLiteral("isWorkspace")] = false;
-      results.append(entry);
-    }
-
-    for (int j = 0; j < groupItem->rowCount(); ++j) {
-      auto* child = groupItem->child(j);
-      if (!child)
-        continue;
-
-      const auto childType = child->data(TaskbarModel::WidgetTypeRole).toInt();
-      if (childType == SerialStudio::DashboardNoWidget)
-        continue;
-
-      QVariantMap entry;
-      entry[QStringLiteral("windowId")]    = child->data(TaskbarModel::WindowIdRole);
-      entry[QStringLiteral("widgetName")]  = child->data(TaskbarModel::WidgetNameRole);
-      entry[QStringLiteral("widgetIcon")]  = child->data(TaskbarModel::WidgetIconRole);
-      entry[QStringLiteral("widgetType")]  = child->data(TaskbarModel::WidgetTypeRole);
-      entry[QStringLiteral("groupName")]   = groupName;
-      entry[QStringLiteral("groupId")]     = child->data(TaskbarModel::GroupIdRole);
-      entry[QStringLiteral("isWorkspace")] = false;
-      results.append(entry);
-    }
-  }
-
-  return results;
+  return m_search.allWidgets();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1745,16 +1524,7 @@ void UI::Taskbar::addWidgetToActiveWorkspace(int windowId)
   const auto widgetType = item->data(TaskbarModel::WidgetTypeRole).toInt();
   const auto groupId    = item->data(TaskbarModel::GroupIdRole).toInt();
 
-  auto& db        = m_dashboard;
-  const auto& map = db.widgetMap();
-  int relIdx      = -1;
-  for (auto it = map.begin(); it != map.end(); ++it) {
-    if (it.key() == windowId) {
-      relIdx = it.value().second;
-      break;
-    }
-  }
-
+  const int relIdx = m_windowMap.relativeIndexForWindow(windowId);
   if (relIdx < 0)
     return;
 
@@ -1781,7 +1551,7 @@ void UI::Taskbar::removeWidgetFromActiveWorkspace(int windowId)
 
   const auto widgetType = item->data(TaskbarModel::WidgetTypeRole).toInt();
   const auto groupId    = item->data(TaskbarModel::GroupIdRole).toInt();
-  const int relIdx      = relativeIndexForWindow(windowId);
+  const int relIdx      = m_windowMap.relativeIndexForWindow(windowId);
   if (relIdx < 0)
     return;
 
@@ -1910,7 +1680,6 @@ void UI::Taskbar::setWorkspaceWidgets(int workspaceId, const QVariantList& windo
   if (!found)
     return;
 
-  const auto& widgetMap = m_dashboard.widgetMap();
   for (const auto& idVar : windowIds) {
     const int windowId = idVar.toInt();
     auto* item         = findItemByWindowId(windowId);
@@ -1919,15 +1688,7 @@ void UI::Taskbar::setWorkspaceWidgets(int workspaceId, const QVariantList& windo
 
     const auto widgetType = item->data(TaskbarModel::WidgetTypeRole).toInt();
     const auto groupId    = item->data(TaskbarModel::GroupIdRole).toInt();
-
-    int relIdx = -1;
-    for (auto it = widgetMap.begin(); it != widgetMap.end(); ++it) {
-      if (it.key() == windowId) {
-        relIdx = it.value().second;
-        break;
-      }
-    }
-
+    const int relIdx      = m_windowMap.relativeIndexForWindow(windowId);
     if (relIdx >= 0) {
       const int groupUid = m_dashboard.groupUniqueIdForGroupId(groupId);
       pm->addWidgetToWorkspace(workspaceId, widgetType, groupUid, relIdx);

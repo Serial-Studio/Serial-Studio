@@ -44,7 +44,7 @@ TYPED_PROTO = ROOT / "doc" / "grpc" / "serialstudio-typed.proto"
 
 SNAPSHOT_COMMAND = "project.dataset.update"
 
-# Declared by datasetUpdateSchema() in app/src/API/Handlers/ProjectHandler.cpp, not by the
+# Declared by datasetUpdateSchema() in app/src/API/Handlers/ProjectUpdateCommands.cpp, not by the
 # manifest: the two identity params address the dataset the patch applies to.
 IDENTITY_PARAMS = ("groupId", "datasetId")
 

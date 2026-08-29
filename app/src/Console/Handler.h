@@ -29,6 +29,7 @@
 #include <unordered_map>
 
 #include "Console/Annotations.h"
+#include "Console/TextFormat.h"
 #include "IO/CircularBuffer.h"
 #include "IO/HAL_Driver.h"
 #include "SerialStudio.h"
@@ -317,14 +318,12 @@ private slots:
 private:
   struct DeviceConsoleState {
     QString buffer;
-    bool isStartingLine = true;
-    bool lastCharWasCR  = false;
+    TextFormat::LineState line;
   };
 
   [[nodiscard]] bool hasImageWidget() const;
   QString dataToString(QByteArrayView data);
   QString plainTextStr(QByteArrayView data);
-  QString hexadecimalStr(QByteArrayView data);
   [[nodiscard]] QString appendToDevice(int deviceId, const QString& str, bool addTimestamp);
 
 private:
@@ -344,8 +343,7 @@ private:
   bool m_ansiColorsEnabled;
   bool m_vt100Emulation;
   bool m_ansiColors;
-  bool m_isStartingLine;
-  bool m_lastCharWasCR;
+  TextFormat::LineState m_lineState;
 
   int m_currentDeviceId;
   QList<int> m_deviceSourceIds;

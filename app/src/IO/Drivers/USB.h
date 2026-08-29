@@ -35,19 +35,14 @@
 
 #include <libusb.h>
 
-#include <atomic>
-#include <condition_variable>
-#include <cstddef>
-#include <mutex>
-#include <new>
 #include <QHash>
 #include <QList>
 #include <QObject>
 #include <QSettings>
 #include <QString>
 #include <QStringList>
-#include <QThread>
 
+#include "IO/Drivers/USB/UsbTransferPump.h"
 #include "IO/HAL_Driver.h"
 
 namespace IO {
@@ -171,6 +166,11 @@ public slots:
 private slots:
   void onReadError();
   void enumerateDevices();
+  void onPumpData(const QByteArray& data, IO::CapturedData::SteadyTimePoint timestamp);
+  void onControlTransferCompleted(bool ok,
+                                  int bytesTransferred,
+                                  const QString& responseHex,
+                                  int status);
 
 private:
   struct EndpointInfo {
@@ -184,18 +184,10 @@ private:
 
   void buildEndpointLists();
   void clearEndpointLists();
-  void allocateIsoTransfers();
   void collectEndpoint(const libusb_endpoint_descriptor& ep,
                        int ifNum,
                        uint8_t altSetting,
                        bool wantIso);
-  void eventLoop();
-
-  void stopReadThread();
-  void stopEventThread();
-  void cancelAndDrainTransfers();
-  void notifyDrainWaiter();
-  void freeTransfers();
 
   [[nodiscard]] QString enrichDeviceLabel(libusb_device* dev,
                                           const libusb_device_descriptor& desc,
@@ -203,18 +195,10 @@ private:
   [[nodiscard]] QString endpointErrorMessage() const;
   [[nodiscard]] bool activateSelectedEndpoints();
 
-  void readLoop();
-  void isoReadLoop();
-
-  bool claimInterface(int ifaceNum);
-  void releaseInterfaces();
-
   [[nodiscard]] bool deviceSerialMatches(libusb_device* device,
                                          const libusb_device_descriptor& desc,
                                          const QString& savedSer) const;
 
-  static void LIBUSB_CALL isoTransferCallback(libusb_transfer* transfer);
-  static void LIBUSB_CALL controlTransferCallback(libusb_transfer* transfer);
   static int LIBUSB_CALL hotplugCallback(libusb_context* ctx,
                                          libusb_device* device,
                                          libusb_hotplug_event event,
@@ -225,6 +209,8 @@ private:
   libusb_device_handle* m_handle;
   libusb_hotplug_callback_handle m_hotplugHandle;
 
+  UsbTransferPump m_pump;
+
   int m_deviceIndex;
   int m_inEndpointIndex;
   int m_outEndpointIndex;
@@ -232,25 +218,12 @@ private:
 
   TransferMode m_transferMode;
 
-  static constexpr std::size_t kCacheLine = 64;
-  alignas(kCacheLine) std::atomic<bool> m_running;
-  alignas(kCacheLine) std::atomic<bool> m_eventLoopRunning;
-  alignas(kCacheLine) std::atomic<int> m_isoInFlight;
-  alignas(kCacheLine) std::atomic<bool> m_controlInFlight;
-  alignas(kCacheLine) std::atomic<bool> m_drainWaiting;
-
-  std::mutex m_drainMutex;
-  std::condition_variable m_drainCv;
-
-  QThread m_readThread;
-  QThread m_eventThread;
   QSettings m_settings;
 
   QStringList m_deviceLabels;
   QList<libusb_device*> m_devicePtrs;
   QHash<QString, QString> m_deviceLabelCache;
 
-  QList<int> m_claimedInterfaces;
   QList<EndpointInfo> m_inEndpoints;
   QList<EndpointInfo> m_outEndpoints;
   QStringList m_inEndpointLabels;
@@ -260,9 +233,6 @@ private:
   uint8_t m_activeOutEp;
   uint8_t m_activeInEpType;
   uint8_t m_activeOutEpType;
-
-  QList<libusb_transfer*> m_isoTransfers;
-  libusb_transfer* m_controlTransfer;
 };
 
 }  // namespace Drivers

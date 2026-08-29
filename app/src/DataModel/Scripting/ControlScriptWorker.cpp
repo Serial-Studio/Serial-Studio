@@ -32,6 +32,8 @@
 #include "API/CommandProtocol.h"
 #include "API/CommandRegistry.h"
 #include "DataModel/Scripting/JsWatchdog.h"
+#include "DataModel/Scripting/ScriptDeviceWait.h"
+#include "DataModel/Scripting/ScriptResult.h"
 #include "IO/ConnectionManager.h"
 #include "SSAssert.h"
 
@@ -43,8 +45,6 @@ static constexpr int kLoopRearmMs       = 1;
 static constexpr int kDelaySliceMs      = 50;
 static constexpr int kControlMaxDelayMs = 3600000;
 static constexpr int kRuntimeWatchdogMs = 2000;
-static constexpr int kReplyPollSliceMs  = 5;
-static constexpr int kMaxReplyWaitMs    = 30000;
 
 static std::atomic<bool> s_shutdownRequested{false};
 
@@ -68,12 +68,8 @@ QVariantMap DataModel::ControlApiMarshaller::dispatch(const QString& method,
 {
   static std::atomic<quint64> s_requestSeq{0};
 
-  if (s_shutdownRequested.load(std::memory_order_acquire)) {
-    QVariantMap out;
-    out.insert(QStringLiteral("ok"), false);
-    out.insert(QStringLiteral("error"), QStringLiteral("apiCall: application is shutting down"));
-    return out;
-  }
+  if (s_shutdownRequested.load(std::memory_order_acquire))
+    return ScriptResult::makeError(QStringLiteral("apiCall: application is shutting down"));
 
   API::CommandRequest request;
   request.id      = QStringLiteral("cs-%1").arg(s_requestSeq.fetch_add(1) + 1);
@@ -154,17 +150,11 @@ void DataModel::ControlApiBridge::setWatchdog(DataModel::JsWatchdog* watchdog)
 QVariantMap DataModel::ControlApiBridge::call(const QString& method, const QVariantMap& params)
 {
   QVariantMap out;
-  if (method.isEmpty()) {
-    out.insert(QStringLiteral("ok"), false);
-    out.insert(QStringLiteral("error"), QStringLiteral("apiCall: method must not be empty"));
-    return out;
-  }
+  if (method.isEmpty())
+    return ScriptResult::makeError(QStringLiteral("apiCall: method must not be empty"));
 
-  if (s_shutdownRequested.load(std::memory_order_acquire)) {
-    out.insert(QStringLiteral("ok"), false);
-    out.insert(QStringLiteral("error"), QStringLiteral("apiCall: application is shutting down"));
-    return out;
-  }
+  if (s_shutdownRequested.load(std::memory_order_acquire))
+    return ScriptResult::makeError(QStringLiteral("apiCall: application is shutting down"));
 
   const bool ok = QMetaObject::invokeMethod(m_marshaller,
                                             "dispatch",
@@ -200,103 +190,25 @@ QVariantList DataModel::ControlApiBridge::listCommands()
 
 /**
  * @brief Writes @p data to @p sourceId then blocks the worker (never the GUI) until the reply
- *        satisfies @p until (terminator, byte length, or undefined for first non-empty) or
- *        @p timeoutMs elapses, capped at kMaxReplyWaitMs. The C++ wait re-arms the watchdog after
- *        (like delay()), so device latency is never billed to the JS budget. Shutdown-sliced.
+ *        satisfies @p until or @p timeoutMs elapses; shutdown is what aborts the wait here.
  */
 QVariantMap DataModel::ControlApiBridge::writeAndWait(const QJSValue& data,
                                                       int timeoutMs,
                                                       const QJSValue& until,
                                                       int sourceId)
 {
-  QVariantMap out;
-  out.insert(QStringLiteral("ok"), false);
-  out.insert(QStringLiteral("data"), QString());
-  out.insert(QStringLiteral("bytesRead"), 0);
-  out.insert(QStringLiteral("timedOut"), false);
-
-  QByteArray payload;
-  if (data.isString()) {
-    payload = data.toString().toUtf8();
-  } else if (data.isArray()) {
-    const int len = data.property(QStringLiteral("length")).toInt();
-    payload.reserve(len);
-    for (int i = 0; i < len; ++i)
-      payload.append(static_cast<char>(data.property(static_cast<quint32>(i)).toInt() & 0xff));
-  }
-
-  if (sourceId < 0 || payload.isEmpty()) {
-    out.insert(QStringLiteral("error"), QStringLiteral("deviceWriteAndWait: bad source or data"));
-    return out;
-  }
-
-  if (s_shutdownRequested.load(std::memory_order_acquire)) {
-    out.insert(QStringLiteral("error"), QStringLiteral("deviceWriteAndWait: shutting down"));
-    return out;
-  }
-
-  QByteArray terminator;
-  int expectedLen = 0;
-  if (until.isString())
-    terminator = until.toString().toUtf8();
-  else if (until.isNumber())
-    expectedLen = until.toInt();
-
-  qint64 written = -1;
-  QMetaObject::invokeMethod(m_marshaller,
-                            "writeAndArm",
-                            Qt::BlockingQueuedConnection,
-                            Q_RETURN_ARG(qint64, written),
-                            Q_ARG(int, sourceId),
-                            Q_ARG(QByteArray, payload));
-
-  if (written <= 0) {
-    QMetaObject::invokeMethod(
-      m_marshaller, "disarmReply", Qt::BlockingQueuedConnection, Q_ARG(int, sourceId));
-    out.insert(QStringLiteral("error"), QStringLiteral("deviceWriteAndWait: write failed"));
-    if (m_watchdog && !s_shutdownRequested.load(std::memory_order_acquire))
-      m_watchdog->arm();
-
-    return out;
-  }
-
-  const auto satisfies = [&](const QByteArray& reply) {
-    if (!terminator.isEmpty())
-      return reply.contains(terminator);
-
-    if (expectedLen > 0)
-      return reply.size() >= expectedLen;
-
-    return !reply.isEmpty();
+  const auto shuttingDown = [] {
+    return s_shutdownRequested.load(std::memory_order_acquire);
   };
 
-  const int budget = qBound(0, timeoutMs, kMaxReplyWaitMs);
-  QByteArray reply;
-  bool satisfied = false;
-  for (int waited = 0; waited <= budget && !satisfied; waited += kReplyPollSliceMs) {
-    if (s_shutdownRequested.load(std::memory_order_acquire))
-      break;
-
-    QThread::msleep(static_cast<unsigned long>(kReplyPollSliceMs));
-    QMetaObject::invokeMethod(m_marshaller,
-                              "pollReply",
-                              Qt::BlockingQueuedConnection,
-                              Q_RETURN_ARG(QByteArray, reply),
-                              Q_ARG(int, sourceId));
-    satisfied = satisfies(reply);
-  }
-
-  QMetaObject::invokeMethod(
-    m_marshaller, "disarmReply", Qt::BlockingQueuedConnection, Q_ARG(int, sourceId));
-
-  if (m_watchdog && !s_shutdownRequested.load(std::memory_order_acquire))
-    m_watchdog->arm();
-
-  out.insert(QStringLiteral("ok"), satisfied);
-  out.insert(QStringLiteral("data"), QString::fromUtf8(reply));
-  out.insert(QStringLiteral("bytesRead"), reply.size());
-  out.insert(QStringLiteral("timedOut"), !satisfied);
-  return out;
+  return ScriptDeviceWait::writeAndWait(m_marshaller,
+                                        m_watchdog,
+                                        shuttingDown,
+                                        QStringLiteral("deviceWriteAndWait: shutting down"),
+                                        data,
+                                        timeoutMs,
+                                        until,
+                                        sourceId);
 }
 
 /**

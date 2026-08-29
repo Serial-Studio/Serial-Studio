@@ -3,7 +3,7 @@ spec: 0070-concern-classes
 title: Concern Classes for the God Objects
 status: in-progress
 created: 2026-08-25
-updated: 2026-08-26
+updated: 2026-08-28
 author: Alex Spataru
 ---
 
@@ -87,7 +87,6 @@ Landed (2026-08-26), all verified as exact line-multiset matches against `HEAD`:
 
 | component | before | after | what came out |
 |---|---:|---:|---|
-| `AI/ToolDispatcher.cpp` | 2562 | **239** | 9 concern TUs, each exporting 1-5 of its functions |
 | `API/Handlers/ProjectHandlerEntities.cpp` | 1750 | **394** | 3 concern TUs (member functions, no header needed) |
 | `IO/Drivers/BluetoothLE.cpp` | 1592 | **1500** | `BleUuids` (3 of 5 exported) |
 | `API/Server.cpp` | 2072 | 1776 | `ServerWorker` definitions to their own TU |
@@ -98,6 +97,61 @@ Landed (2026-08-26), all verified as exact line-multiset matches against `HEAD`:
 | `Sessions/Player.cpp` | 1744 | 1739 | **`PreSessionState`** -- the one new class |
 | `Misc/ExtensionManager.cpp` | 2072 | **1816** | **`PluginRunner`** -- process lifetime, output, running list |
 | `IO/ConnectionManager.cpp` | 2311 | **2197** | **`DriverUiRegistry`** -- the 11 UI-config drivers |
+
+## Correction (2026-08-28)
+
+The Progress table above previously carried an `AI/ToolDispatcher.cpp` row (2562 -> 239,
+"9 concern TUs"). That extraction was described in-session but never landed: commit
+829944b4f contains no ToolDispatcher changes, the file is still 2561 lines and no concern
+TU exists on disk. The row is removed; the extraction moves to the second wave below.
+Everything else in the table is verified present on disk.
+
+## Second wave (2026-08-28) -- batch authorized, tests mandated
+
+The maintainer authorized an overnight batch (multiple extractions in one working tree,
+verified by the maintainer's single build the next morning), superseding the
+"one per change, never batched" rule for this wave only. Two new obligations attach:
+
+- **Every extracted unit that is isolable gets a C++ unit-test suite** under `app/tests/`
+  (spec-0032 tier: one QObject per suite, `ss_add_unit_test` registration, minimal link
+  set). A unit whose link set would pull in application singletons or a device library is
+  exempt, and the exemption is recorded in tasks.md.
+- **No generator scripts.** `tu-cutter.py` produced the failed 0069 sweep and is banned for
+  this work; every extraction is written by hand against the matrices.
+
+Wave-2 scope (evidence: the matrices in decomposition-guide.md):
+
+1. **`AI/ToolDispatcher.cpp` (2561)** -- the extraction described above, done for real:
+   concern TUs with `Detail`-namespace narrow exports; schema builders and resolvers are
+   pure JSON transforms and get tests.
+2. **`UI::SnapOverlay` from `WindowManager` (2495)** -- backlog item 4 below.
+3. **`AI/Conversation.cpp` (3285)** -- the history-surgery cluster (11 functions of pure
+   QJsonArray manipulation: prune, reconcile tool pairs, age tool results) and the token
+   budget pair leave as free-function TUs. Both are pure and get tests.
+4. **`UI/Widgets/Terminal.cpp` (2849)** -- the ANSI/SGR + 256-color cluster
+   (`m_ansiStandardColors`, `m_ansiBrightColors`, `m_formatValues`) becomes a palette/SGR
+   engine with known-answer tests.
+5. **`DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp` (2474)** -- matrix verdict
+   "clean split": one template class per TU, no new boundaries needed.
+6. **USB transfer pump (1711)** -- backlog item 5 below; threading boundary, attempted
+   last, deferred with notes if the risk cannot be bounded without a build.
+
+Out of scope for the wave, unchanged from above: FrameBuilder/Dashboard (hotpath,
+benchmark-gated), Publisher (no sub-object), ProjectModel family (undo hazard, needs a
+human design pass), CLI (different treatment), OpcUa (fresh 0067/0073 code).
+
+**Superseded the same day:** the maintainer then directed a literal app-wide campaign —
+every first-party file read, god objects included, one class = one .h + one .cpp, multi-TU
+class splits re-formed into facades owning real sub-object classes, singleton reach
+ratcheted down, unit tests per isolable unit. Executed overnight 2026-08-28 as 25 work
+packages plus an integration wave; the full plan, per-package results, defect reports and
+follow-up backlog live in plan.md and tasks.md of this spec. Headline results: TU census
+32 files / 23,643 excess lines → 19 / 11,581 (critical 2 → 0; worst 4612 → 3544); singleton
+census 1762 → 1718 occurrences (static-cache 1279 → 1225); ~60 new class/namespace units;
+33 new ctest suites; both `*Shared.h` coupling headers deleted; `tests/scripts` tier 302
+passed; `code-verify` 0 errors; `claim-verify` 0 errors 0 advisories. The maintainer's
+morning build is the acceptance gate; `--benchmark-hotpath` must re-prove the 256 kHz gate
+before the hotpath packages (P24/P25) are trusted.
 
 ## Type C backlog -- one component at a time
 

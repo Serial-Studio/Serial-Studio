@@ -284,7 +284,7 @@ Use `python test_api.py list` to see all commands, or run `python test_api.py in
 - `ui.window.*` - Dashboard window layout
 - `scripts.*` - Read-only script asset access
 
-### Pro Features (Commercial License Required)
+### Pro Features (Commercial License or Free Trial)
 - `io.modbus.*` - Modbus RTU/TCP driver
 - `io.canbus.*` - CAN Bus driver
 - `io.audio.*` - Audio input/output driver

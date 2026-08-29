@@ -29,6 +29,10 @@
 #include <QRect>
 #include <QTimer>
 
+#include "UI/Widgets/Terminal/AnsiPalette.h"
+#include "UI/Widgets/Terminal/AnsiStateMachine.h"
+#include "UI/Widgets/Terminal/TerminalSearch.h"
+
 namespace Console {
 class Handler;
 }  // namespace Console
@@ -63,9 +67,14 @@ struct CharColor {
 };
 
 /**
- * @brief QML terminal widget with optional VT-100 emulation.
+ * @brief QML terminal widget with optional VT-100 emulation. The widget owns the text buffer, the
+ *        painter and the input handlers; the escape-sequence parser, the ANSI color palette and
+ *        the in-buffer search are separate objects it drives. AnsiSink is inherited privately: the
+ *        state machine is the only caller of those operations.
  */
-class Terminal : public QQuickPaintedItem {
+class Terminal
+  : public QQuickPaintedItem
+  , private AnsiSink {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(QFont font
@@ -147,17 +156,6 @@ public:
 
   Q_ENUM(Direction);
 
-  enum State {
-    Text,
-    Escape,
-    Format,
-    ResetFont,
-    OSC,
-    IgnoreSeq
-  };
-
-  Q_ENUM(State);
-
   [[nodiscard]] int charWidth() const;
   [[nodiscard]] int charHeight() const;
 
@@ -220,29 +218,21 @@ private:
   void refreshSearchMatches();
   void scrollToCurrentMatch();
   void processText(const QChar& byte, QString& text);
-  void processEscape(const QChar& byte, QString& text);
-  void processFormat(const QChar& byte, QString& text);
-  void processResetFont(const QChar& byte, QString& text);
-
-  bool dispatchCsiFinal(const QChar& byte);
-  void processOsc(const QChar& byte);
-  void processIgnoreSeq(const QChar& byte);
   static int scanPrintableRun(const QString& data, int pos);
   static bool lineHasRtlChar(QStringView line);
-  void handleCsiCursorMove(char final);
-  void handleCsiCursorAbsolute(char final);
-  void handleCsiEraseDisplay();
-  void handleCsiEraseLine();
-  void handleCsiDecPrivateMode(const QChar& byte);
+
+  [[nodiscard]] QPoint currentCursor() const override;
+  void eraseAllRows() override;
+  void eraseRowsAfter(int row) override;
+  void eraseRowsBefore(int row) override;
+  void setCursorHidden(bool hidden) override;
+  void moveCursor(const QPoint& position) override;
+  void applySgrCodes(const QList<int>& codes) override;
+  void eraseFromCursor(AnsiEraseDirection direction, int length) override;
 
   void setCursorPosition(const QPoint& position);
   void setCursorPosition(const int x, const int y);
   void replaceData(int x, int y, const QChar& byte);
-  void applyAnsiColor(const QList<int>& codes);
-  int applyAnsiSgrCode(const QList<int>& codes, int i);
-  void updateAnsiColorPalette();
-  [[nodiscard]] QColor getColor256(int index) const;
-  static QColor getColor256Static(int index);
 
   [[nodiscard]] int findCharAtPixelX(const QString& line,
                                      int segStart,
@@ -339,7 +329,6 @@ private:
   QPoint m_selectionStart;
   QPoint m_selectionStartCursor;
 
-  State m_state;
   bool m_paused;
   bool m_autoscroll;
   bool m_ansiColors;
@@ -349,24 +338,12 @@ private:
   bool m_mouseTracking;
   bool m_draggingScrollbar;
 
-  QList<int> m_formatValues;
-  int m_currentFormatValue;
-  bool m_privateMode;
-
   bool m_stateChanged;
   bool m_cursorHidden;
-  QPoint m_savedCursorPosition;
-  QColor m_currentColor;
-  QColor m_currentBgColor;
 
-  QColor m_ansiStandardColors[8];
-  QColor m_ansiBrightColors[8];
-
-  QString m_searchQuery;
-  QList<QPoint> m_searchMatches;
-  int m_searchCurrent;
-  bool m_searchDirty;
-  bool m_searchCaseSensitive;
+  AnsiPalette m_ansiPalette;
+  AnsiStateMachine m_ansi;
+  TerminalSearch m_search;
 
   QFont m_badgeFont;
   QFontMetrics m_badgeMetrics;

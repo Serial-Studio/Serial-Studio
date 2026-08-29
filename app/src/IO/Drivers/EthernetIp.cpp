@@ -88,6 +88,25 @@ static constexpr const char* kEipPlcTypes[] = {
   return true;
 }
 
+/**
+ * @brief Rejects a host or CIP path that would break out of the same attribute string: `gateway=`
+ *        and `path=` carry user text too, and a `&` there appends an attribute just as
+ *        effectively. Whitespace passes here, unlike in a tag name, because a path is commonly
+ *        typed as "1, 0".
+ */
+[[nodiscard]] static bool eipAttributeValueSafe(const QString& value)
+{
+  SS_ASSERT_LOG(kEipMaxTagNameChars > 0);
+  if (value.size() > kEipMaxTagNameChars)
+    return false;
+
+  for (const QChar ch : value)
+    if (ch == QLatin1Char('&') || ch == QLatin1Char('='))
+      return false;
+
+  return true;
+}
+
 //--------------------------------------------------------------------------------------------------
 // libplctag seam
 //--------------------------------------------------------------------------------------------------
@@ -308,12 +327,15 @@ void IO::Drivers::EipPollWorker::configure(const QString& host,
 
 /**
  * @brief Renders one tag's libplctag attribute string. An element index becomes part of the CIP
- *        symbolic name, which is how the protocol addresses an array member.
+ *        symbolic name, which is how the protocol addresses an array member. The host and path
+ *        reaching here are already attribute-safe: configurationOk() refuses the dial otherwise.
  */
 QByteArray IO::Drivers::EipPollWorker::attributes(const EipTag& tag) const
 {
   SS_ASSERT(!tag.tag.isEmpty(), return {});
   SS_ASSERT_LOG(!m_host.isEmpty());
+
+  const QString path = m_path.trimmed();
 
   QString name = tag.tag;
   if (tag.element >= 0)
@@ -321,8 +343,8 @@ QByteArray IO::Drivers::EipPollWorker::attributes(const EipTag& tag) const
 
   QString attribs = QStringLiteral("protocol=ab-eip&gateway=%1&plc=%2&elem_count=1&name=%3")
                       .arg(m_host, m_plcType, name);
-  if (!m_path.trimmed().isEmpty())
-    attribs += QStringLiteral("&path=%1").arg(m_path.trimmed());
+  if (!path.isEmpty())
+    attribs += QStringLiteral("&path=%1").arg(path);
 
   return attribs.toLatin1();
 }
@@ -427,7 +449,9 @@ void IO::Drivers::EipPollWorker::onPollTick()
 }
 
 /**
- * @brief Reads one tag through its handle and renders it as the declared wire type.
+ * @brief Reads one tag and renders it as the declared wire type. An undecodable value counts as a
+ *        FAILED read: the caller feeds this call's false to the dead-tick watchdog, so counting it
+ *        as a success reports a healthy link right up to the drop it is about to declare.
  */
 bool IO::Drivers::EipPollWorker::readTag(int index, QVariant& value)
 {
@@ -440,9 +464,14 @@ bool IO::Drivers::EipPollWorker::readTag(int index, QVariant& value)
     return false;
   }
 
-  m_readsOk.fetch_add(1, std::memory_order_relaxed);
   value = decodeTag(handle, m_tags.at(index).type);
-  return value.isValid();
+  if (!value.isValid()) {
+    m_readsFailed.fetch_add(1, std::memory_order_relaxed);
+    return false;
+  }
+
+  m_readsOk.fetch_add(1, std::memory_order_relaxed);
+  return true;
 }
 
 /**
@@ -726,11 +755,16 @@ bool IO::Drivers::EthernetIp::isWritable() const noexcept
 }
 
 /**
- * @brief A host and a tag list whose entries all name a tag and a known type.
+ * @brief A host and a tag list whose entries all name a tag and a known type. The endpoint is
+ *        checked against the attribute grammar here rather than at dial time, so an unusable host
+ *        greys the connect button instead of failing inside the worker.
  */
 bool IO::Drivers::EthernetIp::configurationOk() const noexcept
 {
   if (m_host.trimmed().isEmpty() || m_tags.isEmpty())
+    return false;
+
+  if (!eipAttributeValueSafe(m_host.trimmed()) || !eipAttributeValueSafe(m_cipPath.trimmed()))
     return false;
 
   return m_tags.size() <= OpcUaWire::kMaxTags;
@@ -1107,12 +1141,22 @@ void IO::Drivers::EthernetIp::setPollInterval(const int interval)
 
 /**
  * @brief The wire layout is sized when the worker is configured, so the list is immutable while a
- *        session is live. Silent on purpose: the UI-to-live property echo hits this on every
- *        configuration change.
+ *        session is live. The per-source instance owns the worker; the UI-config instance owns
+ *        none and must consult its live peer, or the pane edits a list the running session already
+ *        sized. Silent: the UI-to-live property echo hits this on every configuration change.
  */
 bool IO::Drivers::EthernetIp::tagsFrozen() const noexcept
 {
-  return m_worker != nullptr;
+  return m_worker != nullptr || sessionPeer() != nullptr;
+}
+
+/**
+ * @brief Peer-aware frozen flag the tags dialog binds its editing controls to, so the dialog
+ *        visibly locks while a session is live rather than silently dropping edits.
+ */
+bool IO::Drivers::EthernetIp::tagsLocked() const noexcept
+{
+  return tagsFrozen();
 }
 
 /**

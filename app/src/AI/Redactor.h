@@ -22,7 +22,7 @@ namespace AI {
  */
 class Redactor {
 public:
-  static bool scrub(QString& text);
+  [[nodiscard]] static bool scrub(QString& text);
   [[nodiscard]] static QJsonObject scrubObject(const QJsonObject& obj, int depth = 0);
   [[nodiscard]] static QJsonArray scrubArray(const QJsonArray& arr, int depth = 0);
 };

@@ -28,17 +28,28 @@
 #include <QVariantList>
 
 #include "DataModel/Frame.h"
+#include "DataModel/Project/ProjectBulkOps.h"
+#include "DataModel/Project/ProjectEntities.h"
+#include "DataModel/Project/ProjectFolders.h"
 #include "DataModel/Project/ProjectHistory.h"
+#include "DataModel/Project/ProjectLoader.h"
+#include "DataModel/Project/ProjectOutputWidgets.h"
+#include "DataModel/Project/ProjectPersistence.h"
+#include "DataModel/Project/ProjectPresentation.h"
+#include "DataModel/Project/ProjectSources.h"
+#include "DataModel/Project/ProjectTables.h"
+#include "DataModel/Project/ProjectWorkspaces.h"
 #include "SerialStudio.h"
 
-class QTimer;
-class QFileSystemWatcher;
 class SessionContext;
 
 namespace DataModel {
 
 /**
- * @brief Pure data model for the Serial Studio project configuration.
+ * @brief Facade for the Serial Studio project configuration: the document core (title, scalars,
+ *        groups, actions, sources, selection, presentation blobs, undo history) plus the QML
+ *        property/slot surface. Every other concern is a composed sub-object, and the slots below
+ *        forward to whichever one owns the state.
  */
 class ProjectModel : public QObject {
   // clang-format off
@@ -217,6 +228,17 @@ private:
   [[nodiscard]] SaveBlocker saveBlockerCode() const;
 
   friend class ::SessionContext;
+  friend class ProjectBulkOps;
+  friend class ProjectEntities;
+  friend class ProjectFolders;
+  friend class ProjectLoader;
+  friend class ProjectOutputWidgets;
+  friend class ProjectPersistence;
+  friend class ProjectPresentation;
+  friend class ProjectSources;
+  friend class ProjectTables;
+  friend class ProjectWorkspaces;
+
   explicit ProjectModel();
   ProjectModel(ProjectModel&&)                 = delete;
   ProjectModel(const ProjectModel&)            = delete;
@@ -577,96 +599,11 @@ public:
   void setAutoSaveSuspended(bool suspend);
 
 private:
-  [[nodiscard]] bool setGroupsInFolderEnabled(int folderId, bool enabled);
-  void syncRuntime();
-
-  [[nodiscard]] QSet<int> duplicateGroupFolderSubtree(int rootFolderId);
-  [[nodiscard]] QSet<int> duplicateTableFolderSubtree(int rootFolderId);
-  void appendTableCopyToFolder(const DataModel::TableDef& src, int parentFolderId);
-  void duplicateTableByPath(const QString& tablePath);
-
-  int nextDatasetIndex();
-  bool finalizeProjectSave();
-  void clearTransientState();
-  void autoSave();
-  [[nodiscard]] bool writeProjectFile(const QString& path);
-
-  void watchProjectFile();
-  void resolveDiskFileChange();
-  void promptDiskFileReload();
-  [[nodiscard]] static QByteArray hashProjectFile(const QString& path);
-
-  bool confirmGroupWidgetChange(DataModel::Group& grp, SerialStudio::GroupWidget widget);
-  bool applyGroupWidget(DataModel::Group& grp, SerialStudio::GroupWidget widget);
-  bool populateFixedLayoutGroup(DataModel::Group& grp, SerialStudio::GroupWidget widget);
-
-  struct DocumentLoadFlags {
-    int loadedSchema;
-    bool olderSchema;
-    bool legacyUniqueIds;
-  };
-
-  bool applyHistorySnapshot(const QByteArray& state);
-  DocumentLoadFlags applyJsonDocumentCore(const QJsonObject& json);
-
-  void loadProjectRootScalars(const QJsonObject& json);
-  void loadProjectArrays(const QJsonObject& json, const QString& legacyParserCode);
-  void seedDefaultSourceFromUi(const QString& legacyParserCode);
-  void enforceGplSingleSource();
-  void resolveDatasetTransformLanguages();
-  void resolveDatasetVirtualFlags();
-  void loadWidgetSettingsAndWorkspaces(const QJsonObject& json);
-  void loadSinkConfigs(const QJsonObject& json);
   void emitSinkConfigResets(bool hadMqttPublisher, bool hadInfluxSink);
-  void stageDisplayTitle(const QString& key, const QString& title);
-  void loadPointCount(const QJsonObject& json);
-  void loadPlotTimeRange(const QJsonObject& json);
-  void loadFrozen(const QJsonObject& json);
-  void loadChangeDrivenTransforms(const QJsonObject& json);
-  void loadLuaFastMode(const QJsonObject& json);
-  void migrateLegacyLayoutKeys();
-  void migrateLegacyDashboardLayout(const QJsonObject& json);
-  bool migrateLegacySeparator(const QJsonObject& json);
-  void emitProjectLoadedSignals(const bool includeJsonFileChanged = true);
-  void persistLegacyMigration();
+  void clearTransientState();
 
-  [[nodiscard]] std::vector<Workspace> buildAutoWorkspaces() const;
-  void appendAutoGroupWorkspaces(std::vector<Workspace>& result,
-                                 const std::vector<Group>& groups,
-                                 const QMap<int, std::vector<WidgetRef>>& perGroupRefs) const;
-  [[nodiscard]] std::vector<WorkspaceFolder> buildAutoWorkspaceFoldersFor(
-    const std::vector<Workspace>& workspaces) const;
-
-  void regenerateAutoWorkspacesUnnotified();
-
-  [[nodiscard]] QMap<int, int> widgetTypeCountsForGroup(const Group& g) const;
-
-  void shiftWorkspaceRefsAfterGroupDelete(int deletedGid, const QMap<int, int>& deletedTypeCounts);
-
-  void shiftWorkspaceRefsAfterDatasetDelete(int groupId, const QMap<int, int>& datasetTypeCounts);
-
-  void shiftHiddenGroupIdsAfterGroupDelete(int deletedGid);
-
-  void shiftLayoutKeysAfterGroupDelete(int deletedGid);
-
-  void remapGroupIdsAfterReorder(const std::vector<int>& oldToNewGid);
-  void remapHiddenGroupIdsAfterReorder(const std::vector<int>& oldToNewGid);
-  void remapLayoutKeysAfterReorder(const std::vector<int>& oldToNewGid);
-  void remapAutoWorkspaceIdsAfterReorder(const std::vector<int>& oldToNewGid);
-
-  bool mergeAutoWorkspaceUpdates();
-  void sanitizeWorkspaceFolders();
-  void sanitizeGroupFolders();
-  void sanitizeTableFolders();
-  [[nodiscard]] int findTableIndexByPath(const QString& tablePath) const;
-  [[nodiscard]] QString tablePathFor(const DataModel::TableDef& table) const;
-
+  [[nodiscard]] int nextDatasetIndex();
   [[nodiscard]] int allocateUniqueId();
-  void seedNextUniqueIdFromGroups();
-  void deduplicateUniqueIds();
-  void migrateLegacyWorkspaceRefs();
-  void migrateLegacyXAxisIds();
-  void migrateLegacyWaterfallYAxisIds();
 
 private:
   QString m_title;
@@ -695,42 +632,30 @@ private:
   std::vector<DataModel::Group> m_groups;
   std::vector<DataModel::Action> m_actions;
   std::vector<DataModel::Source> m_sources;
-  QSet<int> m_hiddenGroupIds;
-  std::vector<DataModel::Workspace> m_workspaces;
-  std::vector<DataModel::Workspace> m_autoSnapshot;
-  std::vector<DataModel::WorkspaceFolder> m_workspaceFolders;
-  std::vector<DataModel::GroupFolder> m_groupFolders;
-  std::vector<DataModel::TableFolder> m_tableFolders;
-  std::vector<DataModel::TableDef> m_tables;
-
-  bool m_customizeWorkspaces;
 
   QString m_passwordHash;
   bool m_locked;
 
-  QTimer* m_autoSaveTimer;
-  bool m_autoSaveSuspended;
-  bool m_runtimeDirty;
   qint64 m_mutationEpoch;
   ProjectHistory m_history;
-
-  QFileSystemWatcher* m_fileWatcher;
-  bool m_diskCheckPending;
-  bool m_diskPromptActive;
-  QByteArray m_diskFileHash;
-
-  std::vector<DataModel::Workspace> m_sessionWorkspaces;
 
   DataModel::Group m_selectedGroup;
   DataModel::Action m_selectedAction;
   DataModel::Dataset m_selectedDataset;
   DataModel::OutputWidget m_selectedOutputWidget;
 
-  QJsonObject m_widgetSettings;
-  QJsonObject m_widgetDisplay;
   QJsonObject m_mqttPublisher;
   QJsonObject m_influxSink;
-  QJsonObject m_treeExpansion;
-  QJsonObject m_diagramCollapse;
+
+  ProjectPresentation m_presentation;
+  ProjectPersistence m_persistence;
+  ProjectFolders m_folders;
+  ProjectWorkspaces m_workspaces;
+  ProjectTables m_tables;
+  ProjectLoader m_loader;
+  ProjectSources m_sourceOps;
+  ProjectEntities m_entities;
+  ProjectOutputWidgets m_outputWidgets;
+  ProjectBulkOps m_bulk;
 };
 }  // namespace DataModel

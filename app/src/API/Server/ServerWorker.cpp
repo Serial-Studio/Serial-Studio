@@ -19,23 +19,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
-#include <QAtomicInteger>
+#include "API/Server/ServerWorker.h"
+
+#include <QDebug>
 #include <QJsonArray>
 #include <QJsonDocument>
-#include <QJsonObject>
-#include <QRandomGenerator>
-#include <QSet>
+#include <QThread>
 #include <utility>
 
-#include "API/CommandHandler.h"
-#include "API/CommandProtocol.h"
-#include "API/MCPHandler.h"
-#include "API/MCPProtocol.h"
-#include "API/Mirror/MirrorPublisher.h"
-#include "API/Server.h"
-#include "DataModel/FrameBuilder.h"
-#include "IO/ConnectionManager.h"
-#include "Misc/Utilities.h"
 #include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -46,7 +37,26 @@
 constexpr qint64 kMaxApiPendingWriteBytes = 16 * 1024 * 1024;
 
 //--------------------------------------------------------------------------------------------------
-// Class implementation
+// Constructor & destructor
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Constructs the worker over the shared frame-consumer queue plumbing.
+ */
+API::ServerWorker::ServerWorker(moodycamel::ReaderWriterQueue<DataModel::DataBlockPtr>* queue,
+                                std::atomic<bool>* enabled,
+                                std::atomic<size_t>* queueSize)
+  : DataModel::FrameConsumerWorker<DataModel::DataBlockPtr>(queue, enabled, queueSize)
+  , m_droppedBroadcasts(0)
+{}
+
+/**
+ * @brief Destructor
+ */
+API::ServerWorker::~ServerWorker() = default;
+
+//--------------------------------------------------------------------------------------------------
+// Socket write budget
 //--------------------------------------------------------------------------------------------------
 
 /**

@@ -47,9 +47,12 @@ extern "C" {
 #include "DataModel/Scripting/DashboardApi.h"
 #include "DataModel/Scripting/DeviceWriteApi.h"
 #include "DataModel/Scripting/LuaCompatJIT.h"
+#include "DataModel/Scripting/ScriptResult.h"
 #include "IO/PipelineHost.h"
 #include "SerialStudio.h"
 #include "SSAssert.h"
+
+using namespace DataModel::ScriptResult;
 
 //--------------------------------------------------------------------------------------------------
 // Constants
@@ -317,18 +320,12 @@ QVariantMap DataModel::ScriptApiCallBridge::call(const QJSValue& methodVal,
 {
   QVariantMap out;
 
-  if (!methodVal.isString()) {
-    out.insert(QStringLiteral("ok"), false);
-    out.insert(QStringLiteral("error"), QStringLiteral("apiCall: method must be a string"));
-    return out;
-  }
+  if (!methodVal.isString())
+    return makeError(QStringLiteral("apiCall: method must be a string"));
 
   const QString method = methodVal.toString();
-  if (method.isEmpty()) {
-    out.insert(QStringLiteral("ok"), false);
-    out.insert(QStringLiteral("error"), QStringLiteral("apiCall: method must not be empty"));
-    return out;
-  }
+  if (method.isEmpty())
+    return makeError(QStringLiteral("apiCall: method must not be empty"));
 
   static auto& registry = API::CommandRegistry::instance();
   if (!registry.hasCommand(method)) {
@@ -344,11 +341,8 @@ QVariantMap DataModel::ScriptApiCallBridge::call(const QJSValue& methodVal,
 
   QJsonObject params;
   if (!paramsVal.isUndefined() && !paramsVal.isNull()) {
-    if (!paramsVal.isObject() || paramsVal.isArray() || paramsVal.isCallable()) {
-      out.insert(QStringLiteral("ok"), false);
-      out.insert(QStringLiteral("error"), QStringLiteral("apiCall: params must be an object"));
-      return out;
-    }
+    if (!paramsVal.isObject() || paramsVal.isArray() || paramsVal.isCallable())
+      return makeError(QStringLiteral("apiCall: params must be an object"));
 
     const QVariant qv = paramsVal.toVariant();
     params            = QJsonObject::fromVariantMap(qv.toMap());
@@ -358,13 +352,9 @@ QVariantMap DataModel::ScriptApiCallBridge::call(const QJSValue& methodVal,
   try {
     response = dispatchApiCall(method, params);
   } catch (const std::exception& e) {
-    out.insert(QStringLiteral("ok"), false);
-    out.insert(QStringLiteral("error"), QString::fromUtf8(e.what()));
-    return out;
+    return makeError(QString::fromUtf8(e.what()));
   } catch (...) {
-    out.insert(QStringLiteral("ok"), false);
-    out.insert(QStringLiteral("error"), QStringLiteral("apiCall: unknown exception"));
-    return out;
+    return makeError(QStringLiteral("apiCall: unknown exception"));
   }
 
   out.insert(QStringLiteral("ok"), response.success);
@@ -431,32 +421,12 @@ static void pushApiResult(lua_State* L, const API::CommandResponse& r)
 }
 
 /**
- * @brief Pushes an early-failure {ok = false, error = msg[, errorCode]} table onto the Lua stack.
- */
-static void pushLuaErr(lua_State* L, const QString& msg, const QString& code = QString())
-{
-  lua_createtable(L, 0, code.isEmpty() ? 2 : 3);
-  lua_pushboolean(L, 0);
-  lua_setfield(L, -2, "ok");
-
-  const QByteArray utf8 = msg.toUtf8();
-  lua_pushlstring(L, utf8.constData(), static_cast<size_t>(utf8.size()));
-  lua_setfield(L, -2, "error");
-
-  if (!code.isEmpty()) {
-    const QByteArray codeUtf8 = code.toUtf8();
-    lua_pushlstring(L, codeUtf8.constData(), static_cast<size_t>(codeUtf8.size()));
-    lua_setfield(L, -2, "errorCode");
-  }
-}
-
-/**
  * @brief Lua C closure for apiCall(method, params?) returning a result table.
  */
 static int luaApiCall(lua_State* L)
 {
   if (!lua_isstring(L, 1)) {
-    pushLuaErr(L, QStringLiteral("apiCall: method must be a string"));
+    pushLuaError(L, QStringLiteral("apiCall: method must be a string"));
     return 1;
   }
 
@@ -464,7 +434,7 @@ static int luaApiCall(lua_State* L)
   const char* mstr = lua_tolstring(L, 1, &mlen);
   const QString method(QString::fromUtf8(mstr, static_cast<int>(mlen)));
   if (method.isEmpty()) {
-    pushLuaErr(L, QStringLiteral("apiCall: method must not be empty"));
+    pushLuaError(L, QStringLiteral("apiCall: method must not be empty"));
     return 1;
   }
 
@@ -477,7 +447,7 @@ static int luaApiCall(lua_State* L)
   QJsonObject params;
   if (lua_gettop(L) >= 2 && !lua_isnil(L, 2)) {
     if (!lua_istable(L, 2)) {
-      pushLuaErr(L, QStringLiteral("apiCall: params must be a table"));
+      pushLuaError(L, QStringLiteral("apiCall: params must be a table"));
       return 1;
     }
 
@@ -485,7 +455,7 @@ static int luaApiCall(lua_State* L)
     if (v.isObject())
       params = v.toObject();
     else {
-      pushLuaErr(L, QStringLiteral("apiCall: params must be an object-like table"));
+      pushLuaError(L, QStringLiteral("apiCall: params must be an object-like table"));
       return 1;
     }
   }
@@ -493,9 +463,9 @@ static int luaApiCall(lua_State* L)
   try {
     pushApiResult(L, dispatchApiCall(method, params));
   } catch (const std::exception& e) {
-    pushLuaErr(L, QString::fromUtf8(e.what()));
+    pushLuaError(L, QString::fromUtf8(e.what()));
   } catch (...) {
-    pushLuaErr(L, QStringLiteral("apiCall: unknown exception"));
+    pushLuaError(L, QStringLiteral("apiCall: unknown exception"));
   }
   return 1;
 }

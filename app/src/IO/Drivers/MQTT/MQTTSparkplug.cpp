@@ -546,9 +546,8 @@ void IO::Drivers::MQTT::sparkplugStateChanged(const bool connected)
 /**
  * @brief Reports the session's hardening drops as one line carrying the deltas since the previous
  *        sample, and nothing when they are all zero. The counters are plain integers polled from
- *        the publishing tick once every thirty passes (spec 0033): the message path never signals,
- *        allocates or logs. A session reset restarts them, so a shrinking counter reads as no
- * delta.
+ *        the publishing tick once every thirty passes (spec 0033), so the message path never
+ *        signals, allocates or logs.
  */
 void IO::Drivers::MQTT::reportSparkplugDrops()
 {

@@ -13,62 +13,52 @@
 
 #ifdef BUILD_COMMERCIAL
 
-#  include <QApplication>
-#  include <QCoreApplication>
-#  include <QDateTime>
-#  include <QDir>
-#  include <QFile>
-#  include <QFileDialog>
-#  include <QFileInfo>
-#  include <QGuiApplication>
-#  include <QInputDialog>
-#  include <QJsonDocument>
-#  include <QJsonObject>
-#  include <QJsonParseError>
-#  include <QProcess>
+#  include "Sessions/DatabaseManager/DatabaseSchema.h"
+
+#  include <QDebug>
 #  include <QSqlError>
 #  include <QSqlQuery>
-#  include <QThread>
-#  include <QTimer>
-
-#  include "AppState.h"
-#  include "DataModel/ProjectModel.h"
-#  include "Misc/PasswordHash.h"
-#  include "Misc/Utilities.h"
-#  include "Misc/WorkspaceManager.h"
-#  include "SerialStudio.h"
-#  include "Sessions/DatabaseManager.h"
-#  include "Sessions/Export.h"
-#  include "Sessions/HtmlReport.h"
-#  include "Sessions/Player.h"
-#  include "Sessions/ReportData.h"
-#  include "SSAssert.h"
-
-//--------------------------------------------------------------------------------------------------
-// Schema (shared with Sessions::Export at session creation time)
-//--------------------------------------------------------------------------------------------------
+#  include <QString>
 
 /**
- * @brief Creates or upgrades the session-log schema on the open database.
+ * @brief Reports whether @p table already has a column named @p column.
  */
-void Sessions::DatabaseManager::createSchema(QSqlQuery& q)
+static bool sessionSchemaColumnExists(QSqlQuery& q, const QString& table, const QString& column)
 {
-  createSchemaSessionTables(q);
+  if (!q.exec(QStringLiteral("PRAGMA table_info(\"%1\")").arg(table))) {
+    qWarning() << "[Sessions] PRAGMA table_info failed:" << q.lastError().text();
+    return false;
+  }
+
+  while (q.next())
+    if (q.value(1).toString().compare(column, Qt::CaseInsensitive) == 0)
+      return true;
+
+  return false;
+}
+
+/**
+ * @brief Creates or upgrades the session-log schema on the open database, stamping @p userVersion
+ *        once every table and migration has run.
+ */
+void Sessions::DatabaseSchema::createAll(QSqlQuery& q, int userVersion)
+{
+  createSessionTables(q);
   migrateColumnsTable(q);
   migrateSessionsTable(q);
-  createSchemaSampleTables(q);
-  createSchemaStreamTables(q);
-  createSchemaBlockTable(q);
-  createSchemaTagTables(q);
-  createSchemaProjectMetadata(q);
-  createSchemaVerifications(q);
-  q.exec(QStringLiteral("PRAGMA user_version = %1").arg(kUserVersion));
+  createSampleTables(q);
+  createStreamTables(q);
+  createBlockTable(q);
+  createTagTables(q);
+  createProjectMetadata(q);
+  createVerifications(q);
+  q.exec(QStringLiteral("PRAGMA user_version = %1").arg(userVersion));
 }
 
 /**
  * @brief Creates the sessions header and columns metadata tables.
  */
-void Sessions::DatabaseManager::createSchemaSessionTables(QSqlQuery& q)
+void Sessions::DatabaseSchema::createSessionTables(QSqlQuery& q)
 {
   q.exec("CREATE TABLE IF NOT EXISTS sessions ("
          "  session_id    INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -96,26 +86,16 @@ void Sessions::DatabaseManager::createSchemaSessionTables(QSqlQuery& q)
 /**
  * @brief Adds source_id / source_title to legacy columns tables in older databases.
  */
-void Sessions::DatabaseManager::migrateColumnsTable(QSqlQuery& q)
+void Sessions::DatabaseSchema::migrateColumnsTable(QSqlQuery& q)
 {
-  auto columnExists = [&q](const QString& column) {
-    if (!q.exec(QStringLiteral("PRAGMA table_info(\"columns\")"))) {
-      qWarning() << "[Sessions] PRAGMA table_info failed:" << q.lastError().text();
-      return false;
-    }
-    while (q.next())
-      if (q.value(1).toString().compare(column, Qt::CaseInsensitive) == 0)
-        return true;
+  const QString table = QStringLiteral("columns");
 
-    return false;
-  };
-
-  if (!columnExists(QStringLiteral("source_id"))) {
+  if (!sessionSchemaColumnExists(q, table, QStringLiteral("source_id"))) {
     if (!q.exec("ALTER TABLE \"columns\" ADD COLUMN source_id INTEGER NOT NULL DEFAULT 0"))
       qWarning() << "[Sessions] ALTER add source_id failed:" << q.lastError().text();
   }
 
-  if (!columnExists(QStringLiteral("source_title"))) {
+  if (!sessionSchemaColumnExists(q, table, QStringLiteral("source_title"))) {
     if (!q.exec("ALTER TABLE \"columns\" ADD COLUMN source_title TEXT NOT NULL DEFAULT ''"))
       qWarning() << "[Sessions] ALTER add source_title failed:" << q.lastError().text();
   }
@@ -125,20 +105,8 @@ void Sessions::DatabaseManager::migrateColumnsTable(QSqlQuery& q)
  * @brief Adds the spec-0044 fingerprint/classification columns and the spec-0062 view-state
  *        bundle column to legacy sessions tables (nullable, so old archives keep reading).
  */
-void Sessions::DatabaseManager::migrateSessionsTable(QSqlQuery& q)
+void Sessions::DatabaseSchema::migrateSessionsTable(QSqlQuery& q)
 {
-  auto columnExists = [&q](const QString& column) {
-    if (!q.exec(QStringLiteral("PRAGMA table_info(\"sessions\")"))) {
-      qWarning() << "[Sessions] PRAGMA table_info failed:" << q.lastError().text();
-      return false;
-    }
-    while (q.next())
-      if (q.value(1).toString().compare(column, Qt::CaseInsensitive) == 0)
-        return true;
-
-    return false;
-  };
-
   static constexpr struct {
     const char* name;
     const char* type;
@@ -154,8 +122,9 @@ void Sessions::DatabaseManager::migrateSessionsTable(QSqlQuery& q)
     {     "view_state",    "TEXT"},
   };
 
+  const QString table = QStringLiteral("sessions");
   for (const auto& col : kColumns) {
-    if (columnExists(QLatin1String(col.name)))
+    if (sessionSchemaColumnExists(q, table, QLatin1String(col.name)))
       continue;
 
     const auto sql = QStringLiteral("ALTER TABLE \"sessions\" ADD COLUMN %1 %2")
@@ -168,7 +137,7 @@ void Sessions::DatabaseManager::migrateSessionsTable(QSqlQuery& q)
 /**
  * @brief Creates the per-sample tables (readings, raw_bytes, table_snapshots) and indexes.
  */
-void Sessions::DatabaseManager::createSchemaSampleTables(QSqlQuery& q)
+void Sessions::DatabaseSchema::createSampleTables(QSqlQuery& q)
 {
   q.exec("CREATE TABLE IF NOT EXISTS readings ("
          "  reading_id          INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -215,7 +184,7 @@ void Sessions::DatabaseManager::createSchemaSampleTables(QSqlQuery& q)
  *        `t0_ns` + `dt_ns` date each of them as t0 + i * dt, so the source keeps owning time.
  *        Additive only -- a v1 database gains the empty table and replays unchanged.
  */
-void Sessions::DatabaseManager::createSchemaStreamTables(QSqlQuery& q)
+void Sessions::DatabaseSchema::createStreamTables(QSqlQuery& q)
 {
   q.exec("CREATE TABLE IF NOT EXISTS stream_blocks ("
          "  stream_block_id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -238,7 +207,7 @@ void Sessions::DatabaseManager::createSchemaStreamTables(QSqlQuery& q)
  *        prefixed UTF-8 texts, and explicit per-sample times when `dt_ns` is 0. Additive -- v1/v2
  *        databases keep `readings` and `stream_blocks` and still replay.
  */
-void Sessions::DatabaseManager::createSchemaBlockTable(QSqlQuery& q)
+void Sessions::DatabaseSchema::createBlockTable(QSqlQuery& q)
 {
   q.exec("CREATE TABLE IF NOT EXISTS blocks ("
          "  block_id     INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -270,7 +239,7 @@ void Sessions::DatabaseManager::createSchemaBlockTable(QSqlQuery& q)
 /**
  * @brief Creates the tags catalog and the session -> tag join table.
  */
-void Sessions::DatabaseManager::createSchemaTagTables(QSqlQuery& q)
+void Sessions::DatabaseSchema::createTagTables(QSqlQuery& q)
 {
   q.exec("CREATE TABLE IF NOT EXISTS tags ("
          "  tag_id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -287,7 +256,7 @@ void Sessions::DatabaseManager::createSchemaTagTables(QSqlQuery& q)
 /**
  * @brief Creates the project_metadata key/value store.
  */
-void Sessions::DatabaseManager::createSchemaProjectMetadata(QSqlQuery& q)
+void Sessions::DatabaseSchema::createProjectMetadata(QSqlQuery& q)
 {
   q.exec("CREATE TABLE IF NOT EXISTS project_metadata ("
          "  key   TEXT PRIMARY KEY,"
@@ -298,7 +267,7 @@ void Sessions::DatabaseManager::createSchemaProjectMetadata(QSqlQuery& q)
 /**
  * @brief Creates the append-only verification-record table (spec 0044).
  */
-void Sessions::DatabaseManager::createSchemaVerifications(QSqlQuery& q)
+void Sessions::DatabaseSchema::createVerifications(QSqlQuery& q)
 {
   q.exec("CREATE TABLE IF NOT EXISTS verifications ("
          "  verification_id INTEGER PRIMARY KEY AUTOINCREMENT,"

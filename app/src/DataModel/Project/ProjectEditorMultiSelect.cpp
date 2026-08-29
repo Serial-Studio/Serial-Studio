@@ -43,7 +43,6 @@
 #  include "MQTT/PublisherScriptEditor.h"
 #endif
 #include "ProjectEditorItemIds.h"
-#include "ProjectEditorShared.h"
 
 //--------------------------------------------------------------------------------------------------
 // Multi-selection aggregate editing

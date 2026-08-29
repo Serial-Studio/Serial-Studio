@@ -30,7 +30,6 @@
 #include "IO/ConnectionManager.h"
 #include "IO/PipelineHost.h"
 #include "MDF4/Player.h"
-#include "Misc/IconEngine.h"
 #include "Misc/TimerEvents.h"
 #include "SessionContext.h"
 #include "SSAssert.h"
@@ -48,10 +47,7 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
-#include <QJsonDocument>
-#include <QJSValue>
 #include <QSet>
-#include <QTimer>
 
 //--------------------------------------------------------------------------------------------------
 // Constants
@@ -148,53 +144,6 @@ static qint64 ringSnapshotKey(const int sourceId, const int uniqueId)
 }
 
 //--------------------------------------------------------------------------------------------------
-// File-local helpers
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Decrements a RepeatNTimes counter and stops the timer when it hits zero.
- */
-static void tickRepeatTimer(int index, QMap<int, QTimer*>& timers, QMap<int, int>& counters)
-{
-  const auto it = counters.find(index);
-  if (it == counters.end())
-    return;
-
-  if (--it.value() > 0)
-    return;
-
-  const auto timerIt = timers.find(index);
-  if (timerIt != timers.end() && timerIt.value())
-    timerIt.value()->stop();
-
-  counters.erase(it);
-}
-
-/**
- * @brief Applies a non-RepeatNTimes timer mode to an action's QTimer.
- */
-static void applyTimerMode(QTimer* timer,
-                           DataModel::TimerMode mode,
-                           bool guiTrigger,
-                           const QString& actionTitle)
-{
-  if (!timer) {
-    qWarning() << "Invalid timer pointer for action" << actionTitle;
-    return;
-  }
-
-  if (mode == DataModel::TimerMode::StartOnTrigger && !timer->isActive())
-    timer->start();
-
-  else if (mode == DataModel::TimerMode::ToggleOnTrigger && guiTrigger) {
-    if (timer->isActive())
-      timer->stop();
-    else
-      timer->start();
-  }
-}
-
-//--------------------------------------------------------------------------------------------------
 // Constructor & singleton access
 //--------------------------------------------------------------------------------------------------
 
@@ -207,16 +156,6 @@ UI::Dashboard::Dashboard()
   , m_widgetCount(0)
   , m_updateRequired(false)
   , m_thinningActive(false)
-  , m_showActionPanel(true)
-  , m_terminalEnabled(false)
-  , m_notificationLogEnabled(false)
-  , m_clockEnabled(false)
-  , m_stopwatchEnabled(false)
-  , m_autoHideToolbar(false)
-  , m_showAlignmentGuides(false)
-  , m_persistSettings(true)
-  , m_layoutMargin(0)
-  , m_layoutSpacing(-1)
   , m_updateRetryInProgress(false)
   , m_layoutValid(false)
   , m_streamAvailable(false)
@@ -224,6 +163,25 @@ UI::Dashboard::Dashboard()
   , m_plotDisplayTimeSec(0)
   , m_pltXAxis(kDefaultPlotPoints)
   , m_multipltXAxis(kDefaultPlotPoints)
+  , m_tools(m_settings, IO::ConnectionManager::instance())
+  , m_viewState(m_settings)
+  , m_widgetMapBuilder(UI::WidgetModelBindings{.widgetCount         = m_widgetCount,
+                                               .lastFrame           = m_lastFrame,
+                                               .widgetMap           = m_widgetMap,
+                                               .extensionGroupIds   = m_extensionGroupIds,
+                                               .extensionDatasetIds = m_extensionDatasetIds,
+                                               .datasets            = m_datasets,
+                                               .sourceRawFrames     = m_sourceRawFrames,
+                                               .datasetExtremes     = m_datasetExtremes,
+                                               .valuePushes         = m_valuePushes,
+                                               .extremePushes       = m_extremePushes,
+                                               .datasetReferences   = m_datasetReferences,
+                                               .widgetGroups        = m_widgetGroups,
+                                               .widgetDatasets      = m_widgetDatasets},
+                       AppState::instance(),
+                       DataModel::ProjectModel::instance(),
+                       UI::WidgetRegistry::instance(),
+                       UI::WidgetExtensions::instance())
 {
   static auto& csvPlayer    = CSV::Player::instance();
   static auto& mdf4Player   = MDF4::Player::instance();
@@ -305,6 +263,14 @@ UI::Dashboard::Dashboard()
   connect(&timerEvents, &Misc::TimerEvents::timeout1Hz, this, &UI::Dashboard::pollThinningState);
 
   connect(this, &UI::Dashboard::widgetCountChanged, this, &UI::Dashboard::actionStatusChanged);
+
+  // clang-format off
+  connect(&m_tools, &UI::DashboardTools::actionStatusChanged, this, &UI::Dashboard::actionStatusChanged);
+  connect(&m_tools, &UI::DashboardTools::clockEnabledChanged, this, &UI::Dashboard::clockEnabledChanged);
+  connect(&m_tools, &UI::DashboardTools::stopwatchEnabledChanged, this, &UI::Dashboard::stopwatchEnabledChanged);
+  connect(&m_tools, &UI::DashboardTools::terminalEnabledChanged, this, &UI::Dashboard::terminalEnabledChanged);
+  connect(&m_tools, &UI::DashboardTools::notificationLogEnabledChanged, this, &UI::Dashboard::notificationLogEnabledChanged);
+  // clang-format on
 
   connect(
     &projectModel, &DataModel::ProjectModel::frozenChanged, this, &UI::Dashboard::frozenChanged);
@@ -868,24 +834,12 @@ const UI::Dashboard::StreamTargets& UI::Dashboard::streamTargetsFor(int uniqueId
  */
 void UI::Dashboard::restorePersistedSettings()
 {
-  m_autoHideToolbar        = m_settings.value("Dashboard/AutoHideToolbar", false).toBool();
-  m_showActionPanel        = m_settings.value("Dashboard/ShowActionPanel", true).toBool();
-  m_showAlignmentGuides    = m_settings.value("Dashboard/ShowAlignmentGuides", false).toBool();
-  m_terminalEnabled        = m_settings.value("Dashboard/TerminalEnabled", false).toBool();
-  m_notificationLogEnabled = m_settings.value("Dashboard/NotificationLogEnabled", false).toBool();
-  m_clockEnabled           = m_settings.value("Dashboard/ClockEnabled", false).toBool();
-  m_stopwatchEnabled       = m_settings.value("Dashboard/StopwatchEnabled", false).toBool();
+  m_viewState.restoreViewPreferences();
+  m_tools.restorePersistedSettings();
   m_plotTimeRange =
     qMax(0.001, SerialStudio::toDouble(m_settings.value("Dashboard/PlotTimeRange", 10.0)));
 
-  m_layoutMargin = qMax(
-    0,
-    m_settings.value("Dashboard/LayoutMargin", m_settings.value("Dashboard/AutoLayoutMargin", 0))
-      .toInt());
-  m_layoutSpacing = qMax(
-    -1,
-    m_settings.value("Dashboard/LayoutSpacing", m_settings.value("Dashboard/AutoLayoutSpacing", -1))
-      .toInt());
+  m_viewState.restoreLayoutPreferences();
 }
 
 /**
@@ -909,7 +863,7 @@ UI::Dashboard& UI::Dashboard::instance()
  */
 QJsonObject UI::Dashboard::widgetViewState(const QString& widgetId) const
 {
-  return m_widgetViewState.value(widgetId).toObject();
+  return m_viewState.widgetViewState(widgetId);
 }
 
 /**
@@ -917,7 +871,7 @@ QJsonObject UI::Dashboard::widgetViewState(const QString& widgetId) const
  */
 QJsonObject UI::Dashboard::globalViewState() const
 {
-  return m_globalViewState;
+  return m_viewState.globalViewState();
 }
 
 /**
@@ -925,11 +879,7 @@ QJsonObject UI::Dashboard::globalViewState() const
  */
 QString UI::Dashboard::viewStateJson() const
 {
-  QJsonObject root;
-  root.insert(QStringLiteral("version"), 1);
-  root.insert(QStringLiteral("global"), m_globalViewState);
-  root.insert(QStringLiteral("widgets"), m_widgetViewState);
-  return QString::fromUtf8(QJsonDocument(root).toJson(QJsonDocument::Compact));
+  return m_viewState.viewStateJson();
 }
 
 /**
@@ -940,21 +890,8 @@ void UI::Dashboard::saveWidgetViewState(const QString& widgetId,
                                         const QString& key,
                                         const QVariant& value)
 {
-  if (widgetId.isEmpty() || key.isEmpty())
-    return;
-
-  auto normalized = value;
-  if (normalized.userType() == qMetaTypeId<QJSValue>())
-    normalized = normalized.value<QJSValue>().toVariant();
-
-  auto obj            = m_widgetViewState.value(widgetId).toObject();
-  const auto newValue = QJsonValue::fromVariant(normalized);
-  if (obj.value(key) == newValue)
-    return;
-
-  obj.insert(key, newValue);
-  m_widgetViewState.insert(widgetId, obj);
-  Q_EMIT viewStateChanged();
+  if (m_viewState.saveWidgetViewState(widgetId, key, value))
+    Q_EMIT viewStateChanged();
 }
 
 /**
@@ -962,19 +899,8 @@ void UI::Dashboard::saveWidgetViewState(const QString& widgetId,
  */
 void UI::Dashboard::saveGlobalViewState(const QString& key, const QVariant& value)
 {
-  if (key.isEmpty())
-    return;
-
-  auto normalized = value;
-  if (normalized.userType() == qMetaTypeId<QJSValue>())
-    normalized = normalized.value<QJSValue>().toVariant();
-
-  const auto newValue = QJsonValue::fromVariant(normalized);
-  if (m_globalViewState.value(key) == newValue)
-    return;
-
-  m_globalViewState.insert(key, newValue);
-  Q_EMIT viewStateChanged();
+  if (m_viewState.saveGlobalViewState(key, value))
+    Q_EMIT viewStateChanged();
 }
 
 /**
@@ -983,12 +909,8 @@ void UI::Dashboard::saveGlobalViewState(const QString& key, const QVariant& valu
  */
 void UI::Dashboard::setViewStateJson(const QString& json)
 {
-  const auto doc = QJsonDocument::fromJson(json.toUtf8());
-  m_widgetViewState =
-    doc.isObject() ? doc.object().value(QStringLiteral("widgets")).toObject() : QJsonObject();
-  m_globalViewState =
-    doc.isObject() ? doc.object().value(QStringLiteral("global")).toObject() : QJsonObject();
-  Q_EMIT viewStateChanged();
+  if (m_viewState.setViewStateJson(json))
+    Q_EMIT viewStateChanged();
 }
 
 /**
@@ -996,12 +918,8 @@ void UI::Dashboard::setViewStateJson(const QString& json)
  */
 void UI::Dashboard::clearViewState()
 {
-  if (m_widgetViewState.isEmpty() && m_globalViewState.isEmpty())
-    return;
-
-  m_widgetViewState = QJsonObject();
-  m_globalViewState = QJsonObject();
-  Q_EMIT viewStateChanged();
+  if (m_viewState.clearViewState())
+    Q_EMIT viewStateChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1022,7 +940,7 @@ bool UI::Dashboard::available() const
  */
 bool UI::Dashboard::showActionPanel() const noexcept
 {
-  return m_showActionPanel;
+  return m_viewState.showActionPanel();
 }
 
 /**
@@ -1030,7 +948,7 @@ bool UI::Dashboard::showActionPanel() const noexcept
  */
 bool UI::Dashboard::autoHideToolbar() const noexcept
 {
-  return m_autoHideToolbar;
+  return m_viewState.autoHideToolbar();
 }
 
 /**
@@ -1038,7 +956,7 @@ bool UI::Dashboard::autoHideToolbar() const noexcept
  */
 bool UI::Dashboard::showAlignmentGuides() const noexcept
 {
-  return m_showAlignmentGuides;
+  return m_viewState.showAlignmentGuides();
 }
 
 /**
@@ -1092,7 +1010,7 @@ double UI::Dashboard::plotTimeRange() const noexcept
  */
 int UI::Dashboard::layoutMargin() const noexcept
 {
-  return m_layoutMargin;
+  return m_viewState.layoutMargin();
 }
 
 /**
@@ -1101,7 +1019,7 @@ int UI::Dashboard::layoutMargin() const noexcept
  */
 int UI::Dashboard::layoutSpacing() const noexcept
 {
-  return m_layoutSpacing;
+  return m_viewState.layoutSpacing();
 }
 
 /**
@@ -1226,7 +1144,7 @@ void UI::Dashboard::connectViewStateResets(AppState& appState)
  */
 bool UI::Dashboard::terminalEnabled() const noexcept
 {
-  return m_terminalEnabled;
+  return m_tools.terminalEnabled();
 }
 
 /**
@@ -1234,7 +1152,7 @@ bool UI::Dashboard::terminalEnabled() const noexcept
  */
 bool UI::Dashboard::notificationLogEnabled() const noexcept
 {
-  return m_notificationLogEnabled;
+  return m_tools.notificationLogEnabled();
 }
 
 /**
@@ -1242,7 +1160,7 @@ bool UI::Dashboard::notificationLogEnabled() const noexcept
  */
 bool UI::Dashboard::clockEnabled() const noexcept
 {
-  return m_clockEnabled;
+  return m_tools.clockEnabled();
 }
 
 /**
@@ -1250,7 +1168,7 @@ bool UI::Dashboard::clockEnabled() const noexcept
  */
 bool UI::Dashboard::stopwatchEnabled() const noexcept
 {
-  return m_stopwatchEnabled;
+  return m_tools.stopwatchEnabled();
 }
 
 /**
@@ -1297,7 +1215,7 @@ int UI::Dashboard::points() const noexcept
  */
 int UI::Dashboard::actionCount() const
 {
-  return m_actions.count();
+  return m_tools.actionCount();
 }
 
 /**
@@ -1372,11 +1290,7 @@ int UI::Dashboard::widgetCount(const SerialStudio::DashboardWidget widget) const
  */
 QString UI::Dashboard::extensionIdAt(const bool group, const int bucketIndex) const
 {
-  const auto& ids = group ? m_extensionGroupIds : m_extensionDatasetIds;
-  if (bucketIndex < 0 || bucketIndex >= ids.count())
-    return {};
-
-  return ids.at(bucketIndex);
+  return m_widgetMapBuilder.extensionIdAt(group, bucketIndex);
 }
 
 /**
@@ -1435,24 +1349,7 @@ const QString& UI::Dashboard::title() const
  */
 QVariantList UI::Dashboard::actions() const
 {
-  QVariantList actions;
-  for (int i = 0; i < m_actions.count(); ++i) {
-    const auto& action = m_actions[i];
-
-    QVariantMap m;
-    m["id"]      = i;
-    m["checked"] = false;
-    m["text"]    = action.title;
-    m["icon"]    = Misc::IconEngine::resolveActionIconSource(action.icon);
-    if (action.timerMode == DataModel::TimerMode::ToggleOnTrigger) {
-      if (m_timers.contains(i) && m_timers[i] && m_timers[i]->isActive())
-        m["checked"] = true;
-    }
-
-    actions.append(m);
-  }
-
-  return actions;
+  return m_tools.actions();
 }
 
 /**
@@ -1460,11 +1357,7 @@ QVariantList UI::Dashboard::actions() const
  */
 int UI::Dashboard::actionIndexForId(int actionId) const noexcept
 {
-  for (int i = 0; i < m_actions.count(); ++i)
-    if (m_actions.at(i).actionId == actionId)
-      return i;
-
-  return -1;
+  return m_tools.actionIndexForId(actionId);
 }
 
 /**
@@ -1920,7 +1813,7 @@ void UI::Dashboard::resetData(const bool notify)
     DataModel::Frame templateFrame;
     frameBuilder.invokeOnBuilderThreadBlocking(
       [&templateFrame] { templateFrame = frameBuilder.frame(); });
-    configureActions(templateFrame);
+    m_tools.configureActions(templateFrame);
   }
 
   if (notify) {
@@ -2193,13 +2086,8 @@ void UI::Dashboard::bulkLoadPlotWindow(const QVector<double>& timesSec,
  */
 void UI::Dashboard::setShowActionPanel(const bool enabled)
 {
-  if (m_showActionPanel != enabled) {
-    m_showActionPanel = enabled;
-    if (m_persistSettings)
-      m_settings.setValue("Dashboard/ShowActionPanel", m_showActionPanel);
-
+  if (m_viewState.setShowActionPanel(enabled))
     Q_EMIT showActionPanelChanged();
-  }
 }
 
 /**
@@ -2207,11 +2095,8 @@ void UI::Dashboard::setShowActionPanel(const bool enabled)
  */
 void UI::Dashboard::setAutoHideToolbar(const bool enabled)
 {
-  if (m_autoHideToolbar != enabled) {
-    m_autoHideToolbar = enabled;
-    m_settings.setValue("Dashboard/AutoHideToolbar", m_autoHideToolbar);
+  if (m_viewState.setAutoHideToolbar(enabled))
     Q_EMIT autoHideToolbarChanged();
-  }
 }
 
 /**
@@ -2219,13 +2104,8 @@ void UI::Dashboard::setAutoHideToolbar(const bool enabled)
  */
 void UI::Dashboard::setShowAlignmentGuides(const bool enabled)
 {
-  if (m_showAlignmentGuides != enabled) {
-    m_showAlignmentGuides = enabled;
-    if (m_persistSettings)
-      m_settings.setValue("Dashboard/ShowAlignmentGuides", m_showAlignmentGuides);
-
+  if (m_viewState.setShowAlignmentGuides(enabled))
     Q_EMIT showAlignmentGuidesChanged();
-  }
 }
 
 /**
@@ -2234,15 +2114,8 @@ void UI::Dashboard::setShowAlignmentGuides(const bool enabled)
  */
 void UI::Dashboard::setLayoutMargin(const int margin)
 {
-  const int clamped = qMax(0, margin);
-  if (m_layoutMargin == clamped)
-    return;
-
-  m_layoutMargin = clamped;
-  if (m_persistSettings)
-    m_settings.setValue("Dashboard/LayoutMargin", m_layoutMargin);
-
-  Q_EMIT layoutMarginChanged();
+  if (m_viewState.setLayoutMargin(margin))
+    Q_EMIT layoutMarginChanged();
 }
 
 /**
@@ -2251,15 +2124,8 @@ void UI::Dashboard::setLayoutMargin(const int margin)
  */
 void UI::Dashboard::setLayoutSpacing(const int spacing)
 {
-  const int clamped = qMax(-1, spacing);
-  if (m_layoutSpacing == clamped)
-    return;
-
-  m_layoutSpacing = clamped;
-  if (m_persistSettings)
-    m_settings.setValue("Dashboard/LayoutSpacing", m_layoutSpacing);
-
-  Q_EMIT layoutSpacingChanged();
+  if (m_viewState.setLayoutSpacing(spacing))
+    Q_EMIT layoutSpacingChanged();
 }
 
 /**
@@ -2313,7 +2179,8 @@ void UI::Dashboard::setPlotTimeRange(const double seconds)
  */
 void UI::Dashboard::setSettingsPersistent(const bool persistent)
 {
-  m_persistSettings = persistent;
+  m_tools.setSettingsPersistent(persistent);
+  m_viewState.setSettingsPersistent(persistent);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2326,14 +2193,7 @@ void UI::Dashboard::setSettingsPersistent(const bool persistent)
  */
 void UI::Dashboard::setTerminalEnabled(const bool enabled)
 {
-  if (m_terminalEnabled == enabled)
-    return;
-
-  m_terminalEnabled = enabled;
-  if (m_persistSettings)
-    m_settings.setValue("Dashboard/TerminalEnabled", m_terminalEnabled);
-
-  Q_EMIT terminalEnabledChanged();
+  m_tools.setTerminalEnabled(enabled);
 }
 
 /**
@@ -2341,14 +2201,7 @@ void UI::Dashboard::setTerminalEnabled(const bool enabled)
  */
 void UI::Dashboard::setNotificationLogEnabled(const bool enabled)
 {
-  if (m_notificationLogEnabled == enabled)
-    return;
-
-  m_notificationLogEnabled = enabled;
-  if (m_persistSettings)
-    m_settings.setValue("Dashboard/NotificationLogEnabled", m_notificationLogEnabled);
-
-  Q_EMIT notificationLogEnabledChanged();
+  m_tools.setNotificationLogEnabled(enabled);
 }
 
 /**
@@ -2356,14 +2209,7 @@ void UI::Dashboard::setNotificationLogEnabled(const bool enabled)
  */
 void UI::Dashboard::setClockEnabled(const bool enabled)
 {
-  if (m_clockEnabled == enabled)
-    return;
-
-  m_clockEnabled = enabled;
-  if (m_persistSettings)
-    m_settings.setValue("Dashboard/ClockEnabled", m_clockEnabled);
-
-  Q_EMIT clockEnabledChanged();
+  m_tools.setClockEnabled(enabled);
 }
 
 /**
@@ -2371,14 +2217,7 @@ void UI::Dashboard::setClockEnabled(const bool enabled)
  */
 void UI::Dashboard::setStopwatchEnabled(const bool enabled)
 {
-  if (m_stopwatchEnabled == enabled)
-    return;
-
-  m_stopwatchEnabled = enabled;
-  if (m_persistSettings)
-    m_settings.setValue("Dashboard/StopwatchEnabled", m_stopwatchEnabled);
-
-  Q_EMIT stopwatchEnabledChanged();
+  m_tools.setStopwatchEnabled(enabled);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2392,50 +2231,7 @@ void UI::Dashboard::setStopwatchEnabled(const bool enabled)
  */
 void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
 {
-  if (index < 0 || index >= m_actions.count()) {
-    qWarning() << "Invalid action index:" << index;
-    return;
-  }
-
-  const auto& action = m_actions[index];
-
-  static auto& ioManager = IO::ConnectionManager::instance();
-
-  if (action.timerMode == DataModel::TimerMode::RepeatNTimes && guiTrigger) {
-    if (m_timers.contains(index) && m_timers[index]) {
-      m_repeatCounters[index] = qMax(1, action.repeatCount);
-      m_timers[index]->start();
-    }
-
-    if (!ioManager.paused())
-      (void)ioManager.writeDataToDevice(action.sourceId, DataModel::get_tx_bytes(action));
-
-    tickRepeatTimer(index, m_timers, m_repeatCounters);
-    return;
-  }
-
-  if (action.timerMode == DataModel::TimerMode::RepeatNTimes && !guiTrigger) {
-    if (!ioManager.paused())
-      (void)ioManager.writeDataToDevice(action.sourceId, DataModel::get_tx_bytes(action));
-
-    tickRepeatTimer(index, m_timers, m_repeatCounters);
-    return;
-  }
-
-  bool timerFlipped  = false;
-  const auto timerIt = m_timers.find(index);
-  if (timerIt != m_timers.end()) {
-    const bool wasActive = timerIt.value() && timerIt.value()->isActive();
-    applyTimerMode(timerIt.value(), action.timerMode, guiTrigger, action.title);
-    const bool isActive = timerIt.value() && timerIt.value()->isActive();
-    timerFlipped        = (wasActive != isActive);
-  }
-
-  if (!ioManager.paused())
-    (void)ioManager.writeDataToDevice(action.sourceId, DataModel::get_tx_bytes(action));
-
-  if (timerFlipped)
-    Q_EMIT actionStatusChanged();
+  m_tools.activateAction(index, guiTrigger);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2655,7 +2451,7 @@ double UI::Dashboard::advancePlotClock(int sourceId,
 }
 
 //--------------------------------------------------------------------------------------------------
-// Widget map population
+// Layout reconfiguration (the widget model itself is built by UI::WidgetMapBuilder)
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -2712,56 +2508,6 @@ void UI::Dashboard::foldExtremes(int sourceId)
 
     push.slot->min = qMin(push.slot->min, value);
     push.slot->max = qMax(push.slot->max, value);
-  }
-}
-
-/**
- * @brief Registers a dataset's index and per-widget-key mappings.
- */
-void UI::Dashboard::processDatasetIntoWidgetMaps(const DataModel::Dataset& datasetIn,
-                                                 DataModel::Group& ledPanel)
-{
-  SS_ASSERT(datasetIn.index >= 0, return);
-  SS_ASSERT(datasetIn.uniqueId >= 0, return);
-
-  DataModel::Dataset dataset = datasetIn;
-  if (DSP::almostEqual(dataset.wgtMin, dataset.wgtMax)) {
-    dataset.wgtMin = dataset.pltMin;
-    dataset.wgtMax = dataset.pltMax;
-  }
-
-  if (DSP::almostEqual(dataset.fftMin, dataset.fftMax)) {
-    dataset.fftMin = dataset.pltMin;
-    dataset.fftMax = dataset.pltMax;
-  }
-
-  if (!m_datasets.contains(dataset.uniqueId)) {
-    m_datasets.insert(dataset.uniqueId, dataset);
-  } else {
-    auto prev     = m_datasets.value(dataset.uniqueId);
-    double newMin = qMin(prev.pltMin, dataset.pltMin);
-    double newMax = qMax(prev.pltMax, dataset.pltMax);
-
-    auto d   = dataset;
-    d.pltMin = newMin;
-    d.pltMax = newMax;
-    m_datasets.insert(dataset.uniqueId, d);
-  }
-
-  if (dataset.hideOnDashboard)
-    return;
-
-  auto keys = SerialStudio::getDashboardWidgets(dataset);
-  for (const auto& widgetKey : std::as_const(keys)) {
-    if (widgetKey == SerialStudio::DashboardLED) {
-      ledPanel.datasets.push_back(dataset);
-      continue;
-    }
-    if (widgetKey == SerialStudio::DashboardExtension)
-      m_extensionDatasetIds.append(dataset.widget);
-
-    if (widgetKey != SerialStudio::DashboardNoWidget)
-      m_widgetDatasets[widgetKey].append(dataset);
   }
 }
 
@@ -2848,16 +2594,16 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
   stopwatch.uniqueId = DataModel::runtime_group_unique_id(stopwatch.groupId);
   m_lastFrame.groups.push_back(stopwatch);
 
-  buildWidgetGroups(frame, pro);
+  m_widgetMapBuilder.buildWidgetGroups(frame, pro);
 
-  applyDisplayTitles();
-  registerWidgets();
+  m_widgetMapBuilder.applyDisplayTitles();
+  m_widgetMapBuilder.registerWidgets();
 
-  buildDatasetReferences();
-  buildValuePushes();
+  m_widgetMapBuilder.buildDatasetReferences();
+  m_widgetMapBuilder.buildValuePushes();
 
   updateDataSeries();
-  configureActions(frame);
+  m_tools.configureActions(frame);
 
   restorePlotTimeRings(savedPlotRings);
   restoreMultiplotTimeRings(savedMultiplotRings);
@@ -2865,166 +2611,6 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
   m_layoutValid = true;
 
   Q_EMIT widgetCountChanged();
-}
-
-/**
- * @brief Populates m_widgetGroups and m_widgetDatasets from the current frame. A datasetless data
- *        grid materialises as an empty table on purpose: dropping it would shift every later
- *        widget's relativeIndex and orphan saved workspace references. Extension entries bucket
- *        under DashboardExtension in walk order, ids index-aligned in m_extensionGroupIds.
- */
-void UI::Dashboard::buildWidgetGroups(const DataModel::Frame& frame, bool pro)
-{
-  SS_ASSERT(!m_lastFrame.groups.empty(), return);
-  SS_ASSERT(!frame.groups.empty(), return);
-  (void)frame;
-
-  for (const auto& group : m_lastFrame.groups) {
-    const auto key = SerialStudio::getDashboardWidget(group);
-
-    if (key == SerialStudio::DashboardExtension)
-      m_extensionGroupIds.append(group.widget);
-
-    if (key != SerialStudio::DashboardNoWidget)
-      m_widgetGroups[key].append(group);
-
-    if (key == SerialStudio::DashboardPlot3D && !pro) {
-      auto& bucket = m_widgetGroups[key];
-      if (!bucket.isEmpty() && bucket.last().groupId == group.groupId)
-        bucket.removeLast();
-
-      if (bucket.isEmpty())
-        m_widgetGroups.remove(key);
-
-      auto copy  = group;
-      copy.title = tr("%1 (Fallback)").arg(group.title);
-      m_widgetGroups[SerialStudio::DashboardMultiPlot].append(copy);
-      relabelGroupAsMultiplotFallback(group.groupId, copy.title);
-    }
-
-#ifdef BUILD_COMMERCIAL
-    if (key == SerialStudio::DashboardPainter && !pro) {
-      auto& bucket = m_widgetGroups[key];
-      if (!bucket.isEmpty() && bucket.last().groupId == group.groupId)
-        bucket.removeLast();
-
-      if (bucket.isEmpty())
-        m_widgetGroups.remove(key);
-
-      auto copy  = group;
-      copy.title = tr("%1 (Fallback)").arg(group.title);
-      m_widgetGroups[SerialStudio::DashboardDataGrid].append(copy);
-    }
-#endif
-
-    if (key == SerialStudio::DashboardAccelerometer) {
-      m_widgetGroups[SerialStudio::DashboardMultiPlot].append(group);
-      if (pro)
-        m_widgetGroups[SerialStudio::DashboardPlot3D].append(group);
-    }
-
-    if (key == SerialStudio::DashboardGyroscope)
-      m_widgetGroups[SerialStudio::DashboardMultiPlot].append(group);
-
-    DataModel::Group ledPanel;
-    for (const auto& dataset : group.datasets)
-      processDatasetIntoWidgetMaps(dataset, ledPanel);
-
-    if (ledPanel.datasets.size() > 0) {
-      ledPanel.widget   = "led-panel";
-      ledPanel.groupId  = group.groupId;
-      ledPanel.uniqueId = group.uniqueId;
-      ledPanel.title    = tr("LED Panel (%1)").arg(group.title);
-      m_widgetGroups[SerialStudio::DashboardLED].append(ledPanel);
-    }
-  }
-}
-
-/**
- * @brief Rewrites the matching group entry in m_lastFrame as a multiplot fallback.
- */
-void UI::Dashboard::relabelGroupAsMultiplotFallback(int groupId, const QString& newTitle)
-{
-  for (size_t i = 0; i < m_lastFrame.groups.size(); ++i) {
-    if (m_lastFrame.groups[i].groupId != groupId)
-      continue;
-
-    m_lastFrame.groups[i].title  = newTitle;
-    m_lastFrame.groups[i].widget = "multiplot";
-    return;
-  }
-}
-
-/**
- * @brief Applies display-title overrides to the widget copies in m_widgetGroups and
- *        m_widgetDatasets: widget-level entries ("type:uid") beat entity-level ones ("uid"),
- *        canonical titles resolve from m_lastFrame so a removed override restores the original
- *        text; extension widgets key off "ext:&lt;id&gt;" instead of the numeric type.
- */
-void UI::Dashboard::applyDisplayTitles()
-{
-  static auto& appState     = AppState::instance();
-  static auto& projectModel = DataModel::ProjectModel::instance();
-  if (appState.operationMode() != SerialStudio::ProjectFile)
-    return;
-
-  SS_ASSERT(!m_lastFrame.groups.empty(), return);
-  const auto overrides = projectModel.displayTitles();
-
-  QHash<int, QString> canonical;
-  for (const auto& group : m_lastFrame.groups) {
-    canonical.insert(group.uniqueId, group.title);
-    for (const auto& dataset : group.datasets)
-      canonical.insert(dataset.uniqueId, dataset.title);
-  }
-
-  const auto widgetOverride = [&](const QString& token, int uniqueId) {
-    return overrides.value(token + QLatin1Char(':') + QString::number(uniqueId)).toString();
-  };
-
-  const auto entityResolve = [&](int uniqueId, const QString& current) {
-    const auto over = overrides.value(QString::number(uniqueId)).toString();
-    if (!over.isEmpty())
-      return over;
-
-    return canonical.value(uniqueId, current);
-  };
-
-  const auto resolve = [&](const QString& token, int uniqueId, const QString& current) {
-    const auto scoped = widgetOverride(token, uniqueId);
-    return scoped.isEmpty() ? entityResolve(uniqueId, current) : scoped;
-  };
-
-  const auto typeToken = [this](SerialStudio::DashboardWidget key, bool group, int index) {
-    if (key != SerialStudio::DashboardExtension)
-      return QString::number(static_cast<int>(key));
-
-    return UI::WidgetExtensions::persistedTypeToken(extensionIdAt(group, index));
-  };
-
-  for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i) {
-    for (int j = 0; j < i.value().count(); ++j) {
-      auto& group      = i.value()[j];
-      const auto token = typeToken(i.key(), true, j);
-      if (group.widget != QLatin1String("led-panel")) {
-        group.title = resolve(token, group.uniqueId, group.title);
-        continue;
-      }
-
-      const auto scoped = widgetOverride(token, group.uniqueId);
-      group.title       = scoped.isEmpty()
-                          ? tr("LED Panel (%1)").arg(entityResolve(group.uniqueId, group.title))
-                          : scoped;
-    }
-  }
-
-  for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i) {
-    for (int j = 0; j < i.value().count(); ++j) {
-      auto& dataset    = i.value()[j];
-      const auto token = typeToken(i.key(), false, j);
-      dataset.title    = resolve(token, dataset.uniqueId, dataset.title);
-    }
-  }
 }
 
 /**
@@ -3038,7 +2624,7 @@ void UI::Dashboard::refreshDisplayTitles()
   if (m_widgetCount == 0 || m_lastFrame.groups.empty() || !m_layoutValid)
     return;
 
-  applyDisplayTitles();
+  m_widgetMapBuilder.applyDisplayTitles();
 
   static auto& registry = WidgetRegistry::instance();
   for (auto i = m_widgetGroups.constBegin(); i != m_widgetGroups.constEnd(); ++i) {
@@ -3049,240 +2635,12 @@ void UI::Dashboard::refreshDisplayTitles()
 
   for (auto i = m_widgetDatasets.constBegin(); i != m_widgetDatasets.constEnd(); ++i) {
     const auto key = i.key();
-    const int base = datasetBucketBase(key);
+    const int base = m_widgetMapBuilder.datasetBucketBase(key);
     for (int j = 0; j < i.value().size(); ++j)
       registry.updateWidget(registry.widgetIdByTypeAndIndex(key, base + j), i.value().at(j).title);
   }
 
   Q_EMIT displayTitlesChanged();
-}
-
-/**
- * @brief Registers all group and dataset widgets with the WidgetRegistry. Registry ids are handed
- *        out in creation order per type, so the dataset pass offsets its relative indices for the
- *        extension bucket (whose first slots belong to the group-scope packages registered above).
- */
-void UI::Dashboard::registerWidgets()
-{
-  SS_ASSERT(!m_widgetGroups.isEmpty() || !m_widgetDatasets.isEmpty(), return);
-  SS_ASSERT(m_widgetCount == 0, m_widgetCount = 0);
-
-  static auto& registry = WidgetRegistry::instance();
-  registry.beginBatchUpdate();
-
-  for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i) {
-    const auto key   = i.key();
-    const auto count = i.value().count();
-    for (int j = 0; j < count; ++j) {
-      const auto& group = i.value().at(j);
-      (void)registry.createWidget(key, group.title, group.groupId, -1, true);
-      m_widgetMap.insert(m_widgetCount++, qMakePair(key, j));
-    }
-  }
-
-  for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i) {
-    const auto key   = i.key();
-    const int base   = datasetBucketBase(key);
-    const auto count = i.value().count();
-    for (int j = 0; j < count; ++j) {
-      const auto& dataset = i.value().at(j);
-      (void)registry.createWidget(key, dataset.title, dataset.groupId, dataset.index, false);
-      m_widgetMap.insert(m_widgetCount++, qMakePair(key, base + j));
-    }
-  }
-
-  registry.endBatchUpdate();
-}
-
-/**
- * @brief Builds the m_datasetReferences map from all widget and frame sources.
- */
-void UI::Dashboard::buildDatasetReferences()
-{
-  SS_ASSERT(!m_lastFrame.groups.empty(), return);
-  SS_ASSERT(!m_widgetGroups.isEmpty() || !m_widgetDatasets.isEmpty(), return);
-
-  for (auto& groupList : m_widgetGroups) {
-    for (auto& group : groupList)
-      for (auto& dataset : group.datasets)
-        m_datasetReferences[dataset.uniqueId].append(&dataset);
-  }
-
-  for (auto& datasetList : m_widgetDatasets)
-    for (auto& dataset : datasetList)
-      m_datasetReferences[dataset.uniqueId].append(&dataset);
-
-  for (auto& dataset : m_datasets)
-    m_datasetReferences[dataset.uniqueId].append(&dataset);
-
-  for (auto& group : m_lastFrame.groups) {
-    for (auto& dataset : group.datasets) {
-      auto& list = m_datasetReferences[dataset.uniqueId];
-      if (!list.contains(&dataset))
-        list.append(&dataset);
-    }
-  }
-}
-
-/**
- * @brief Rebuilds the dataset reference map after the frame layout has changed.
- *        Any push_back/erase on m_lastFrame.groups shifts elements and dangles the
- *        &dataset pointers stored here, so every such mutation must call this; the
- *        early-out guards buildDatasetReferences(), which asserts on an empty frame.
- */
-void UI::Dashboard::rebuildDatasetReferences()
-{
-  m_datasetReferences.clear();
-  m_valuePushes.clear();
-
-  if (m_lastFrame.groups.empty())
-    return;
-
-  buildDatasetReferences();
-  buildValuePushes();
-}
-
-/**
- * @brief Resolves one dataset's propagation targets from m_datasetReferences.
- */
-UI::Dashboard::ValuePush UI::Dashboard::makeValuePush(
-  const DataModel::Dataset& dataset, const QSet<const DataModel::Dataset*>& stringTargets) const
-{
-  SS_ASSERT_LOG(!m_datasetReferences.isEmpty());
-
-  ValuePush push;
-  push.uniqueId = dataset.uniqueId;
-
-  const auto ref_it = m_datasetReferences.constFind(dataset.uniqueId);
-  if (ref_it == m_datasetReferences.cend()) {
-    push.uniqueId = std::numeric_limits<int>::min();
-    return push;
-  }
-
-  for (auto* target : ref_it.value()) {
-    push.targets.push_back(target);
-    if (stringTargets.contains(target))
-      push.stringTargets.push_back(target);
-  }
-
-  return push;
-}
-
-/**
- * @brief Pre-resolves the per-source value-propagation tables from m_datasetReferences. A
- *        zero-dataset layout (image/painter-only) still registers an empty table per source:
- *        a legitimate datasetless frame must find its table instead of tripping the
- *        missing-dataset quarantine on every frame.
- */
-void UI::Dashboard::buildValuePushes()
-{
-  SS_ASSERT(!m_lastFrame.groups.empty(), return);
-  SS_ASSERT_LOG(!m_widgetGroups.isEmpty() || !m_widgetDatasets.isEmpty());
-
-  m_valuePushes.clear();
-
-  QSet<const DataModel::Dataset*> string_targets;
-  for (auto& group : m_lastFrame.groups)
-    for (auto& dataset : group.datasets)
-      string_targets.insert(&dataset);
-
-  const auto grid_it = m_widgetGroups.constFind(SerialStudio::DashboardDataGrid);
-  if (grid_it != m_widgetGroups.cend()) {
-    for (const auto& group : grid_it.value())
-      for (const auto& dataset : group.datasets)
-        string_targets.insert(&dataset);
-  }
-
-  const auto panel_it = m_widgetGroups.constFind(SerialStudio::DashboardBarPanel);
-  if (panel_it != m_widgetGroups.cend()) {
-    for (const auto& group : panel_it.value())
-      for (const auto& dataset : group.datasets)
-        string_targets.insert(&dataset);
-  }
-
-  addExtensionStringTargets(string_targets);
-
-  for (auto it = m_sourceRawFrames.cbegin(); it != m_sourceRawFrames.cend(); ++it) {
-    auto& table = m_valuePushes[it.key()];
-    for (const auto& group : it.value().groups)
-      for (const auto& dataset : group.datasets)
-        table.push_back(makeValuePush(dataset, string_targets));
-  }
-
-  buildExtremePushes();
-}
-
-/**
- * @brief Pre-resolves the per-source extreme-hold fold tables (spec 0052): one entry per opted-in
- *        dataset, pointing at the address-stable m_datasets copy and its m_datasetExtremes slot.
- *        Datasets that never opt in contribute no entry, so the per-frame fold walks nothing.
- */
-void UI::Dashboard::buildExtremePushes()
-{
-  m_extremePushes.clear();
-
-  for (auto it = m_sourceRawFrames.cbegin(); it != m_sourceRawFrames.cend(); ++it)
-    for (const auto& group : it.value().groups)
-      for (const auto& dataset : group.datasets)
-        appendExtremePush(it.key(), dataset);
-}
-
-/**
- * @brief Appends one extreme-hold fold entry when @a dataset opted in and resolves in m_datasets.
- */
-void UI::Dashboard::appendExtremePush(int sourceId, const DataModel::Dataset& dataset)
-{
-  if (!dataset.extremeHold)
-    return;
-
-  const auto ds_it = m_datasets.constFind(dataset.uniqueId);
-  if (ds_it == m_datasets.cend())
-    return;
-
-  ExtremePush push;
-  push.slot    = &m_datasetExtremes[dataset.uniqueId];
-  push.value   = &ds_it.value().numericValue;
-  push.numeric = &ds_it.value().isNumeric;
-  m_extremePushes[sourceId].push_back(push);
-}
-
-/**
- * @brief Adds the widget copies of every extension package that declared readsStringValues to the
- *        string-target set, which is what keeps a package that renders Dataset::value from reading
- *        a stale string. Reconfigure-time only: the per-frame walk is untouched, and a package
- *        that never declares the flag contributes no target and therefore no work.
- */
-void UI::Dashboard::addExtensionStringTargets(QSet<const DataModel::Dataset*>& targets) const
-{
-  static auto& catalog = UI::WidgetExtensions::instance();
-
-  const auto groups = m_widgetGroups.constFind(SerialStudio::DashboardExtension);
-  if (groups != m_widgetGroups.cend()) {
-    for (int i = 0; i < groups->count(); ++i) {
-      if (!catalog.descriptor(extensionIdAt(true, i)).readsStringValues)
-        continue;
-
-      for (const auto& dataset : groups->at(i).datasets)
-        targets.insert(&dataset);
-    }
-  }
-
-  const auto datasets = m_widgetDatasets.constFind(SerialStudio::DashboardExtension);
-  if (datasets != m_widgetDatasets.cend()) {
-    for (int i = 0; i < datasets->count(); ++i)
-      if (catalog.descriptor(extensionIdAt(false, i)).readsStringValues)
-        targets.insert(&datasets->at(i));
-  }
-}
-
-/**
- * @brief Returns the relative-index offset of one dataset bucket. Extension widgets share a single
- *        enum value with the group-scope packages that occupy the bucket's first slots, so their
- *        dataset copies start after them; every built-in type owns its bucket alone.
- */
-int UI::Dashboard::datasetBucketBase(const SerialStudio::DashboardWidget key) const noexcept
-{
-  return key == SerialStudio::DashboardExtension ? m_extensionGroupIds.count() : 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4183,72 +3541,4 @@ void UI::Dashboard::buildMultiplotPushes()
 
     m_multiplotPushes.push_back(std::move(push));
   }
-}
-
-//--------------------------------------------------------------------------------------------------
-// Action configuration
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Configures dashboard actions and associated timers from the given DataModel frame.
- */
-void UI::Dashboard::configureActions(const DataModel::Frame& frame)
-{
-  if (frame.groups.size() <= 0)
-    return;
-
-  m_actions.clear();
-  m_actions.squeeze();
-
-  for (auto it = m_timers.begin(); it != m_timers.end(); ++it) {
-    if (it.value()) {
-      disconnect(it.value());
-      it.value()->stop();
-      delete it.value();
-    }
-  }
-
-  m_timers.clear();
-  m_repeatCounters.clear();
-
-  for (const auto& action : frame.actions)
-    m_actions.append(action);
-
-  static auto& ioManager = IO::ConnectionManager::instance();
-  if (!ioManager.isConnected()) {
-    Q_EMIT actionStatusChanged();
-    return;
-  }
-
-  for (int i = 0; i < m_actions.count(); ++i) {
-    const auto& action = m_actions[i];
-    if (action.timerMode == DataModel::TimerMode::Off)
-      continue;
-
-    const auto interval = action.timerIntervalMs;
-    if (interval <= 0) {
-      qWarning() << "Interval for action" << action.title << "must be greater than 0!";
-      continue;
-    }
-
-    auto* timer = new QTimer(this);
-    timer->setInterval(interval);
-    timer->setTimerType(Qt::PreciseTimer);
-    connect(timer, &QTimer::timeout, this, [this, i]() { activateAction(i, false); });
-
-    const bool isRepeat = action.timerMode == DataModel::TimerMode::RepeatNTimes;
-    if (isRepeat && action.autoExecuteOnConnect) {
-      m_repeatCounters[i] = qMax(1, action.repeatCount);
-      timer->start();
-    }
-
-    else if (!isRepeat
-             && (action.timerMode == DataModel::TimerMode::AutoStart
-                 || action.autoExecuteOnConnect))
-      timer->start();
-
-    m_timers.insert(i, timer);
-  }
-
-  Q_EMIT actionStatusChanged();
 }

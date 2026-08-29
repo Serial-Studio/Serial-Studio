@@ -21,6 +21,7 @@
 
 #include "Misc/ExtensionManager.h"
 
+#include <algorithm>
 #include <QApplication>
 #include <QDebug>
 #include <QDesktopServices>
@@ -32,11 +33,12 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QNetworkReply>
-#include <QProcessEnvironment>
 #include <QStandardPaths>
 #include <QTimer>
+#include <QUrl>
 
 #include "API/Server.h"
+#include "Misc/Extensions/ExtensionCatalog.h"
 #include "Misc/JsonValidator.h"
 #include "Misc/Utilities.h"
 #include "Misc/WorkspaceManager.h"
@@ -46,34 +48,8 @@
 // Default repository URL
 //--------------------------------------------------------------------------------------------------
 
-static constexpr int kUpdatePolicyAsk    = 0;
-static constexpr int kUpdatePolicyAlways = 1;
-static constexpr int kUpdatePolicyNever  = 2;
-
 static const QString kDefaultRepoUrl =
   QStringLiteral("https://raw.githubusercontent.com/serial-studio/extensions/main/manifest.json");
-
-/**
- * @brief Picks the best matching platform override map for the given platform key.
- */
-static QVariantMap selectPlatformOverride(const QVariantMap& platforms, const QString& platformKey)
-{
-  if (platforms.isEmpty())
-    return {};
-
-  if (platforms.contains(platformKey))
-    return platforms.value(platformKey).toMap();
-
-  const auto os       = platformKey.left(platformKey.indexOf('/'));
-  const auto wildcard = os + QStringLiteral("/*");
-  if (platforms.contains(wildcard))
-    return platforms.value(wildcard).toMap();
-
-  if (platforms.contains(QStringLiteral("*")))
-    return platforms.value(QStringLiteral("*")).toMap();
-
-  return {};
-}
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access functions
@@ -81,22 +57,19 @@ static QVariantMap selectPlatformOverride(const QVariantMap& platforms, const QS
 
 /**
  * @brief Constructs the ExtensionManager singleton. The catalog view and the installed-plugin
- *        list are derived from the runner's process list, so they are refreshed from its
- *        runningChanged signal rather than at each of its call sites.
+ *        list are derived from the runner's process list and from the installer's manifest, so
+ *        they are refreshed from those objects' signals rather than at each of their call sites.
  */
 Misc::ExtensionManager::ExtensionManager()
   : m_loading(false)
+  , m_dashboardWasAvailable(false)
   , m_selectedIndex(-1)
-  , m_downloadProgress(0)
-  , m_pendingDownloads(0)
-  , m_totalDownloads(0)
   , m_pendingManifests(0)
   , m_pendingExtensionMetas(0)
-  , m_updatePolicy(kUpdatePolicyAsk)
-  , m_dashboardWasAvailable(false)
+  , m_installer(m_nam, Misc::WorkspaceManager::instance())
+  , m_autoUpdater(m_settings)
 {
   m_nam.setTransferTimeout(15 * 1000);
-  m_updatePolicy = m_settings.value("ExtensionAutoUpdate", kUpdatePolicyAsk).toInt();
 
   connect(&m_pluginRunner, &PluginRunner::runningChanged, this, [this] {
     Q_EMIT runningPluginsChanged();
@@ -106,13 +79,21 @@ Misc::ExtensionManager::ExtensionManager()
   connect(
     &m_pluginRunner, &PluginRunner::outputChanged, this, &ExtensionManager::pluginOutputChanged);
 
+  connect(&m_installer, &ExtensionInstaller::busyChanged, this, &ExtensionManager::loadingChanged);
+  connect(&m_installer,
+          &ExtensionInstaller::progressChanged,
+          this,
+          &ExtensionManager::downloadProgressChanged);
+  connect(
+    &m_installer, &ExtensionInstaller::installed, this, &ExtensionManager::onExtensionInstalled);
+
   const auto saved = m_settings.value("ExtensionRepositories").toStringList();
   if (saved.isEmpty())
     m_repositories.append(kDefaultRepoUrl);
   else
     m_repositories = saved;
 
-  loadInstalledManifest();
+  m_installer.reload();
   applyFilter();
   rebuildInstalledPlugins();
 }
@@ -131,11 +112,12 @@ Misc::ExtensionManager& Misc::ExtensionManager::instance()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns whether a network operation is in progress.
+ * @brief Returns whether a network operation is in progress; a catalog refresh and an install
+ *        both raise the same flag, because the dialog blocks on either.
  */
 bool Misc::ExtensionManager::loading() const noexcept
 {
-  return m_loading;
+  return m_loading || m_installer.busy();
 }
 
 /**
@@ -143,7 +125,7 @@ bool Misc::ExtensionManager::loading() const noexcept
  */
 bool Misc::ExtensionManager::updateCheckEnabled() const noexcept
 {
-  return m_updatePolicy != kUpdatePolicyNever;
+  return m_autoUpdater.checkEnabled();
 }
 
 /**
@@ -151,7 +133,7 @@ bool Misc::ExtensionManager::updateCheckEnabled() const noexcept
  */
 bool Misc::ExtensionManager::automaticUpdates() const noexcept
 {
-  return m_updatePolicy == kUpdatePolicyAlways;
+  return m_autoUpdater.automaticUpdates();
 }
 
 /**
@@ -175,7 +157,7 @@ int Misc::ExtensionManager::selectedIndex() const noexcept
  */
 float Misc::ExtensionManager::downloadProgress() const noexcept
 {
-  return m_downloadProgress;
+  return m_installer.progress();
 }
 
 /**
@@ -242,7 +224,7 @@ QVariantMap Misc::ExtensionManager::selectedExtension() const
  */
 bool Misc::ExtensionManager::isLocalRepo(const QString& url) const
 {
-  return url.startsWith('/') || url.startsWith("file://");
+  return ExtensionCatalog::isLocalRepo(url);
 }
 
 /**
@@ -250,7 +232,7 @@ bool Misc::ExtensionManager::isLocalRepo(const QString& url) const
  */
 QString Misc::ExtensionManager::platformKey() const
 {
-  return currentPlatformKey();
+  return ExtensionCatalog::currentPlatformKey();
 }
 
 /**
@@ -258,14 +240,7 @@ QString Misc::ExtensionManager::platformKey() const
  */
 QStringList Misc::ExtensionManager::extensionTypes() const
 {
-  return {
-    QStringLiteral("All"),
-    QStringLiteral("theme"),
-    QStringLiteral("frame-parser"),
-    QStringLiteral("project-template"),
-    QStringLiteral("plugin"),
-    QStringLiteral("widget"),
-  };
+  return ExtensionCatalog::extensionTypes();
 }
 
 /**
@@ -299,7 +274,7 @@ QString Misc::ExtensionManager::friendlyTypeName(const QString& type) const
  */
 bool Misc::ExtensionManager::isInstalled(const QString& id) const
 {
-  return m_installedExtensions.contains(id);
+  return m_installer.isInstalled(id);
 }
 
 /**
@@ -310,9 +285,7 @@ bool Misc::ExtensionManager::hasUpdate(const QString& id) const
   if (!isInstalled(id))
     return false;
 
-  const auto installed = m_installedExtensions.value(id).toObject();
-  const auto localVer  = installed.value("version").toString();
-
+  const auto localVer = m_installer.installedVersion(id);
   for (const auto& entry : std::as_const(m_allExtensions)) {
     const auto obj = entry.toObject();
     if (obj.value("id").toString() == id)
@@ -327,10 +300,7 @@ bool Misc::ExtensionManager::hasUpdate(const QString& id) const
  */
 QString Misc::ExtensionManager::installedVersion(const QString& id) const
 {
-  if (!isInstalled(id))
-    return {};
-
-  return m_installedExtensions.value(id).toObject().value("version").toString();
+  return m_installer.installedVersion(id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -421,7 +391,7 @@ void Misc::ExtensionManager::setFilterType(const QString& type)
  */
 void Misc::ExtensionManager::refreshRepositories()
 {
-  if (m_loading)
+  if (loading())
     return;
 
   for (auto* reply : std::as_const(m_activeReplies)) {
@@ -518,17 +488,7 @@ void Misc::ExtensionManager::resetRepositories()
     return;
 
   stopAllPlugins();
-
-  const auto ids = m_installedExtensions.keys();
-  for (const auto& id : ids) {
-    const auto info = m_installedExtensions.value(id).toObject();
-    const auto type = info.value("type").toString();
-    const auto dir  = extensionsPath() + "/" + type + "/" + id;
-    QDir(dir).removeRecursively();
-  }
-
-  m_installedExtensions = QJsonObject();
-  saveInstalledManifest();
+  m_installer.removeAll();
 
   m_repositories.clear();
   m_repositories.append(kDefaultRepoUrl);
@@ -571,83 +531,13 @@ void Misc::ExtensionManager::browseLocalRepo()
  */
 void Misc::ExtensionManager::installExtension()
 {
-  if (m_loading)
+  if (loading())
     return;
 
   if (m_selectedIndex < 0 || m_selectedIndex >= m_filteredExtensions.count())
     return;
 
-  const auto addon   = m_filteredExtensions.at(m_selectedIndex).toMap();
-  const auto id      = addon.value("id").toString();
-  const auto type    = addon.value("type").toString();
-  const auto base    = addon.value("_repoBase").toString();
-  const auto isLocal = addon.value("_isLocal").toBool();
-
-  auto files           = addon.value("files").toList();
-  const auto platforms = addon.value("platforms").toMap();
-  const auto override  = selectPlatformOverride(platforms, currentPlatformKey());
-  const auto platFiles = override.value("files").toList();
-  for (const auto& f : platFiles)
-    if (!files.contains(f))
-      files.append(f);
-
-  if (id.isEmpty() || files.isEmpty())
-    return;
-
-  if (id.contains("..") || id.contains('/') || id.contains('\\'))
-    return;
-
-  if (type.contains("..") || type.contains('/') || type.contains('\\'))
-    return;
-
-  const auto installDir = extensionsPath() + "/" + type + "/" + id;
-  QDir().mkpath(installDir);
-
-  if (isLocal) {
-    for (const auto& f : std::as_const(files)) {
-      const auto localName = f.toString();
-      const auto dst       = installDir + "/" + localName;
-
-      if (!isPathSafe(dst, installDir))
-        continue;
-
-      const auto src = base + localName;
-      QDir().mkpath(QFileInfo(dst).absolutePath());
-      QFile::copy(src, dst);
-    }
-
-    QJsonObject info;
-    info.insert("version", addon.value("version").toString());
-    info.insert("type", type);
-    info.insert("repoBase", base);
-    m_installedExtensions.insert(id, info);
-    saveInstalledManifest();
-
-    Q_EMIT extensionInstalled(id);
-    m_pluginMetadataCache.remove(id);
-    applyFilter();
-    rebuildInstalledPlugins();
-    return;
-  }
-
-  m_downloadQueue.clear();
-  for (const auto& f : files) {
-    const auto localName = f.toString();
-    const auto url       = resolveFileUrl(base, localName);
-    m_downloadQueue.append({localName, url});
-  }
-
-  m_currentInstallId       = id;
-  m_currentInstallRepoBase = base;
-  m_currentInstallMeta     = addon;
-  m_loading                = true;
-  m_downloadProgress       = 0;
-  m_totalDownloads         = m_downloadQueue.count();
-  m_pendingDownloads       = m_totalDownloads;
-  Q_EMIT loadingChanged();
-  Q_EMIT downloadProgressChanged();
-
-  downloadNextFile();
+  (void)m_installer.install(m_filteredExtensions.at(m_selectedIndex).toMap());
 }
 
 /**
@@ -666,18 +556,26 @@ bool Misc::ExtensionManager::uninstallExtension()
   if (id.isEmpty() || !isInstalled(id))
     return false;
 
-  const auto installDir = extensionsPath() + "/" + type + "/" + id;
-  const bool removed    = QDir(installDir).removeRecursively();
-
-  m_installedExtensions.remove(id);
+  const bool removed = m_installer.uninstall(id, type);
   m_pluginMetadataCache.remove(id);
-  saveInstalledManifest();
 
   Q_EMIT extensionUninstalled(id);
   applyFilter();
   rebuildInstalledPlugins();
 
   return removed;
+}
+
+/**
+ * @brief Republishes a finished install: the catalog entry, the plugin metadata cache and the
+ *        installed-plugin list all become stale the moment the installer records it.
+ */
+void Misc::ExtensionManager::onExtensionInstalled(const QString& id)
+{
+  Q_EMIT extensionInstalled(id);
+  m_pluginMetadataCache.remove(id);
+  applyFilter();
+  rebuildInstalledPlugins();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -701,12 +599,9 @@ void Misc::ExtensionManager::checkForUpdatesOnStartup(const bool appUpdatesEnabl
  */
 void Misc::ExtensionManager::setUpdateCheckEnabled(const bool enabled)
 {
-  if (enabled == updateCheckEnabled())
+  if (!m_autoUpdater.setCheckEnabled(enabled))
     return;
 
-  m_updatePolicy = enabled ? kUpdatePolicyAsk : kUpdatePolicyNever;
-  m_settings.setValue("ExtensionAutoUpdate", m_updatePolicy);
-  m_autoUpdateDeclined.clear();
   Q_EMIT updatePolicyChanged();
 
   if (enabled)
@@ -718,15 +613,9 @@ void Misc::ExtensionManager::setUpdateCheckEnabled(const bool enabled)
  */
 void Misc::ExtensionManager::setAutomaticUpdates(const bool enabled)
 {
-  if (enabled == automaticUpdates())
+  if (!m_autoUpdater.setAutomaticUpdates(enabled))
     return;
 
-  if (!enabled && !updateCheckEnabled())
-    return;
-
-  m_updatePolicy = enabled ? kUpdatePolicyAlways : kUpdatePolicyAsk;
-  m_settings.setValue("ExtensionAutoUpdate", m_updatePolicy);
-  m_autoUpdateDeclined.clear();
   Q_EMIT updatePolicyChanged();
 
   if (enabled)
@@ -756,10 +645,10 @@ QString Misc::ExtensionManager::catalogName(const QString& id) const
  */
 bool Misc::ExtensionManager::confirmAutoUpdate(const QStringList& ids)
 {
-  if (m_updatePolicy == kUpdatePolicyAlways)
+  if (m_autoUpdater.automaticUpdates())
     return true;
 
-  if (m_updatePolicy == kUpdatePolicyNever)
+  if (!m_autoUpdater.checkEnabled())
     return false;
 
   QStringList names;
@@ -779,8 +668,7 @@ bool Misc::ExtensionManager::confirmAutoUpdate(const QStringList& ids)
   });
 
   if (answer == QMessageBox::YesToAll) {
-    m_updatePolicy = kUpdatePolicyAlways;
-    m_settings.setValue("ExtensionAutoUpdate", m_updatePolicy);
+    m_autoUpdater.rememberAlways();
     Q_EMIT updatePolicyChanged();
     return true;
   }
@@ -789,38 +677,44 @@ bool Misc::ExtensionManager::confirmAutoUpdate(const QStringList& ids)
 }
 
 /**
- * @brief Checks installed extensions against the catalog and, with the user's consent, updates any
- * that have a newer version available.
+ * @brief Collects the installed extensions a newer version exists for and, with the user's
+ *        consent, queues them; a refusal is remembered so the next check does not ask again.
+ */
+bool Misc::ExtensionManager::queuePendingUpdates()
+{
+  QStringList pending;
+  const auto ids = m_installer.installedIds();
+  for (const auto& id : ids)
+    if (hasUpdate(id) && !m_autoUpdater.declined(id))
+      pending.append(id);
+
+  if (pending.isEmpty())
+    return false;
+
+  if (!confirmAutoUpdate(pending)) {
+    m_autoUpdater.decline(pending);
+    return false;
+  }
+
+  m_autoUpdater.enqueue(pending);
+  return true;
+}
+
+/**
+ * @brief Installs the queued extension updates one at a time, chaining the next one on the
+ *        install that finishes so two downloads never overlap.
  */
 void Misc::ExtensionManager::autoUpdateExtensions()
 {
-  if (m_loading || !updateCheckEnabled())
+  if (loading() || !updateCheckEnabled())
     return;
 
-  if (m_autoUpdateQueue.isEmpty()) {
-    QStringList pending;
-    const auto ids = m_installedExtensions.keys();
-    for (const auto& id : ids)
-      if (hasUpdate(id) && !m_autoUpdateDeclined.contains(id))
-        pending.append(id);
-
-    if (pending.isEmpty())
-      return;
-
-    if (!confirmAutoUpdate(pending)) {
-      for (const auto& id : pending)
-        m_autoUpdateDeclined.insert(id);
-
-      return;
-    }
-
-    m_autoUpdateQueue = pending;
-  }
-
-  if (m_autoUpdateQueue.isEmpty())
+  if (!m_autoUpdater.hasPending() && !queuePendingUpdates())
     return;
 
-  const auto id = m_autoUpdateQueue.takeFirst();
+  const auto id = m_autoUpdater.takeNext();
+  if (id.isEmpty())
+    return;
 
   bool found = false;
   for (int i = 0; i < m_filteredExtensions.count(); ++i) {
@@ -834,20 +728,20 @@ void Misc::ExtensionManager::autoUpdateExtensions()
     break;
   }
 
-  if (!m_autoUpdateQueue.isEmpty()) {
-    if (found && m_loading) {
-      connect(
-        this,
-        &ExtensionManager::extensionInstalled,
-        this,
-        [this]() { QTimer::singleShot(0, this, &ExtensionManager::autoUpdateExtensions); },
-        Qt::SingleShotConnection);
-    }
+  if (!m_autoUpdater.hasPending())
+    return;
 
-    else {
-      QTimer::singleShot(0, this, &ExtensionManager::autoUpdateExtensions);
-    }
+  if (found && loading()) {
+    connect(
+      this,
+      &ExtensionManager::extensionInstalled,
+      this,
+      [this]() { QTimer::singleShot(0, this, &ExtensionManager::autoUpdateExtensions); },
+      Qt::SingleShotConnection);
+    return;
   }
+
+  QTimer::singleShot(0, this, &ExtensionManager::autoUpdateExtensions);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -967,72 +861,9 @@ void Misc::ExtensionManager::onReadmeReply()
   Q_EMIT selectedReadmeChanged();
 }
 
-/**
- * @brief Handles individual file download completion during extension install.
- */
-void Misc::ExtensionManager::onFileDownloadReply()
-{
-  auto* reply = qobject_cast<QNetworkReply*>(sender());
-  if (!reply)
-    return;
-
-  m_activeReplies.remove(reply);
-  reply->deleteLater();
-
-  if (reply->error() == QNetworkReply::NoError)
-    writeExtensionFile(reply);
-
-  --m_pendingDownloads;
-  m_downloadProgress = (m_totalDownloads > 0)
-                       ? static_cast<float>(m_totalDownloads - m_pendingDownloads)
-                           / static_cast<float>(m_totalDownloads)
-                       : 1.0f;
-  Q_EMIT downloadProgressChanged();
-
-  if (!m_downloadQueue.isEmpty()) {
-    downloadNextFile();
-    return;
-  }
-
-  QJsonObject info;
-  info.insert("version", m_currentInstallMeta.value("version").toString());
-  info.insert("type", m_currentInstallMeta.value("type").toString());
-  info.insert("repoBase", m_currentInstallRepoBase);
-
-  QJsonArray fileList;
-  for (const auto& f : m_currentInstallMeta.value("files").toList())
-    fileList.append(f.toString());
-
-  info.insert("files", fileList);
-  m_installedExtensions.insert(m_currentInstallId, info);
-  saveInstalledManifest();
-
-  m_loading = false;
-  Q_EMIT loadingChanged();
-  Q_EMIT extensionInstalled(m_currentInstallId);
-  m_pluginMetadataCache.remove(m_currentInstallId);
-  applyFilter();
-  rebuildInstalledPlugins();
-}
-
 //--------------------------------------------------------------------------------------------------
-// Internal helpers
+// Catalog view
 //--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Downloads the next file in the install queue.
- */
-void Misc::ExtensionManager::downloadNextFile()
-{
-  if (m_downloadQueue.isEmpty())
-    return;
-
-  const auto [localName, url] = m_downloadQueue.takeFirst();
-  auto* reply                 = m_nam.get(QNetworkRequest(url));
-  reply->setProperty("localName", localName);
-  m_activeReplies.insert(reply);
-  connect(reply, &QNetworkReply::finished, this, &ExtensionManager::onFileDownloadReply);
-}
 
 /**
  * @brief Applies search and category filters to rebuild the filtered list.
@@ -1041,87 +872,39 @@ void Misc::ExtensionManager::applyFilter()
 {
   m_filteredExtensions.clear();
 
+  const auto platform = ExtensionCatalog::currentPlatformKey();
+  const ExtensionCatalog::CatalogFilter filter{m_filterType, m_filterCategory, m_searchFilter};
+
   for (const auto& entry : std::as_const(m_allExtensions)) {
     const auto obj = entry.toObject();
-    if (!catalogEntryMatchesFilters(obj))
+    if (!ExtensionCatalog::entryMatchesFilters(obj, filter))
       continue;
 
-    m_filteredExtensions.append(buildCatalogEntryMap(obj));
+    const auto id = obj.value("id").toString();
+
+    ExtensionCatalog::EntryState state;
+    state.installed        = isInstalled(id);
+    state.pluginRunning    = isPluginRunning(id);
+    state.updateAvailable  = hasUpdate(id);
+    state.installedVersion = installedVersion(id);
+
+    m_filteredExtensions.append(ExtensionCatalog::buildEntryMap(obj, state, platform));
   }
 
   appendOrphanedInstalledEntries();
-
-  static const QMap<QString, int> typeOrder = {
-    {          QStringLiteral("plugin"), 0},
-    {           QStringLiteral("theme"), 1},
-    {    QStringLiteral("frame-parser"), 2},
-    {QStringLiteral("project-template"), 3},
-  };
 
   std::stable_sort(m_filteredExtensions.begin(),
                    m_filteredExtensions.end(),
                    [](const QVariant& a, const QVariant& b) {
                      const auto ta = a.toMap().value("type").toString();
                      const auto tb = b.toMap().value("type").toString();
-                     return typeOrder.value(ta, 99) < typeOrder.value(tb, 99);
+                     return ExtensionCatalog::typeSortRank(ta) < ExtensionCatalog::typeSortRank(tb);
                    });
 
   restoreSelectionByPreviousId();
 
   Q_EMIT selectedIndexChanged();
   Q_EMIT filteredExtensionsChanged();
-}
-
-/**
- * @brief Returns true when @p entry passes the current type/category/search filters.
- */
-bool Misc::ExtensionManager::catalogEntryMatchesFilters(const QJsonObject& entry) const
-{
-  if (!m_filterType.isEmpty() && m_filterType != QStringLiteral("All"))
-    if (entry.value("type").toString() != m_filterType)
-      return false;
-
-  if (!m_filterCategory.isEmpty() && m_filterCategory != QStringLiteral("All")) {
-    const auto category = entry.value("category").toString();
-    if (!category.contains(m_filterCategory, Qt::CaseInsensitive))
-      return false;
-  }
-
-  if (m_searchFilter.isEmpty())
-    return true;
-
-  const auto title  = entry.value("title").toString();
-  const auto desc   = entry.value("description").toString();
-  const auto author = entry.value("author").toString();
-
-  return title.contains(m_searchFilter, Qt::CaseInsensitive)
-      || desc.contains(m_searchFilter, Qt::CaseInsensitive)
-      || author.contains(m_searchFilter, Qt::CaseInsensitive);
-}
-
-/**
- * @brief Builds the QML-friendly variant map for a catalog entry, including install state.
- */
-QVariantMap Misc::ExtensionManager::buildCatalogEntryMap(const QJsonObject& entry) const
-{
-  auto map      = entry.toVariantMap();
-  const auto id = entry.value("id").toString();
-  map.insert("installed", isInstalled(id));
-  map.insert("updateAvailable", hasUpdate(id));
-  map.insert("installedVersion", installedVersion(id));
-  map.insert("pluginRunning", isPluginRunning(id));
-
-  const auto plats = entry.value("platforms").toObject();
-  if (plats.isEmpty()) {
-    map.insert("platformAvailable", true);
-    return map;
-  }
-
-  const auto key        = currentPlatformKey();
-  const auto os         = key.left(key.indexOf('/'));
-  const bool compatible = plats.contains(key) || plats.contains(os + "/*") || plats.contains("*");
-  map.insert("platformAvailable", compatible);
-  return map;
 }
 
 /**
@@ -1133,12 +916,12 @@ void Misc::ExtensionManager::appendOrphanedInstalledEntries()
   for (const auto& entry : std::as_const(m_filteredExtensions))
     catalogIds.insert(entry.toMap().value("id").toString());
 
-  const auto installedIds = m_installedExtensions.keys();
+  const auto installedIds = m_installer.installedIds();
   for (const auto& id : installedIds) {
     if (catalogIds.contains(id))
       continue;
 
-    const auto info = m_installedExtensions.value(id).toObject();
+    const auto info = m_installer.installedInfo(id);
     const auto type = info.value("type").toString();
 
     if (!m_filterType.isEmpty() && m_filterType != QStringLiteral("All"))
@@ -1154,7 +937,7 @@ void Misc::ExtensionManager::appendOrphanedInstalledEntries()
     map.insert("installedVersion", info.value("version").toString());
     map.insert("pluginRunning", isPluginRunning(id));
 
-    const auto addonJsonPath = extensionsPath() + "/" + type + "/" + id + "/info.json";
+    const auto addonJsonPath = m_installer.extensionsPath() + "/" + type + "/" + id + "/info.json";
     QFile addonFile(addonJsonPath);
     if (addonFile.open(QIODevice::ReadOnly)) {
       const auto addonObj = QJsonDocument::fromJson(addonFile.readAll()).object();
@@ -1171,13 +954,9 @@ void Misc::ExtensionManager::appendOrphanedInstalledEntries()
       map.insert("author", QString());
     }
 
-    if (!m_searchFilter.isEmpty()) {
-      const auto title = map.value("title").toString();
-      const auto desc  = map.value("description").toString();
-      if (!title.contains(m_searchFilter, Qt::CaseInsensitive)
-          && !desc.contains(m_searchFilter, Qt::CaseInsensitive))
-        continue;
-    }
+    if (!ExtensionCatalog::matchesSearch(
+          map.value("title").toString(), map.value("description").toString(), m_searchFilter))
+      continue;
 
     m_filteredExtensions.append(map);
   }
@@ -1212,7 +991,7 @@ QVariantMap Misc::ExtensionManager::loadPluginMetadata(const QString& iid)
   if (cacheIt != m_pluginMetadataCache.end())
     return cacheIt.value();
 
-  const auto pluginDir = extensionsPath() + "/plugin/" + iid;
+  const auto pluginDir = m_installer.extensionsPath() + "/plugin/" + iid;
   QVariantMap cached;
 
   QFile metaFile(pluginDir + "/info.json");
@@ -1240,9 +1019,9 @@ QVariantMap Misc::ExtensionManager::loadPluginMetadata(const QString& iid)
 void Misc::ExtensionManager::rebuildInstalledPlugins()
 {
   QVariantList plugins;
-  const auto pluginIds = m_installedExtensions.keys();
+  const auto pluginIds = m_installer.installedIds();
   for (const auto& iid : pluginIds) {
-    const auto info = m_installedExtensions.value(iid).toObject();
+    const auto info = m_installer.installedInfo(iid);
     if (info.value("type").toString() != QStringLiteral("plugin"))
       continue;
 
@@ -1264,85 +1043,6 @@ void Misc::ExtensionManager::rebuildInstalledPlugins()
     m_installedPlugins = plugins;
     Q_EMIT installedPluginsChanged();
   }
-}
-
-/**
- * @brief Returns the base extensions directory path.
- */
-QString Misc::ExtensionManager::extensionsPath() const
-{
-  static auto& workspaceManager = Misc::WorkspaceManager::instance();
-  return workspaceManager.path("Extensions");
-}
-
-/**
- * @brief Returns the themes extension directory path.
- */
-QString Misc::ExtensionManager::themesPath() const
-{
-  return extensionsPath() + "/theme";
-}
-
-/**
- * @brief Returns the path to the installed.json tracking file.
- */
-QString Misc::ExtensionManager::installedManifestPath() const
-{
-  return extensionsPath() + "/installed.json";
-}
-
-/**
- * @brief Returns the platform key for the current OS and CPU architecture.
- */
-QString Misc::ExtensionManager::currentPlatformKey() const
-{
-#if defined(Q_OS_MACOS)
-  const auto os = QStringLiteral("darwin");
-#elif defined(Q_OS_WIN)
-  const auto os = QStringLiteral("windows");
-#else
-  const auto os = QStringLiteral("linux");
-#endif
-
-  const auto arch = QSysInfo::currentCpuArchitecture();
-  auto normalized = arch;
-  if (arch == QStringLiteral("arm64") || arch == QStringLiteral("aarch64"))
-    normalized = QStringLiteral("arm64");
-  else if (arch == QStringLiteral("x86_64") || arch == QStringLiteral("amd64"))
-    normalized = QStringLiteral("x86_64");
-
-  return os + "/" + normalized;
-}
-
-/**
- * @brief Resolves platform-specific overrides from a plugin's metadata.
- */
-QJsonObject Misc::ExtensionManager::resolvePlatform(const QJsonObject& meta) const
-{
-  auto result = meta;
-
-  const auto platforms = meta.value("platforms").toObject();
-  if (platforms.isEmpty())
-    return result;
-
-  const auto key = currentPlatformKey();
-  const auto os  = key.left(key.indexOf('/'));
-
-  QJsonObject override;
-  if (platforms.contains(key))
-    override = platforms.value(key).toObject();
-  else if (platforms.contains(os + "/*"))
-    override = platforms.value(os + "/*").toObject();
-  else if (platforms.contains("*"))
-    override = platforms.value("*").toObject();
-
-  if (override.isEmpty())
-    return result;
-
-  for (auto it = override.begin(); it != override.end(); ++it)
-    result.insert(it.key(), it.value());
-
-  return result;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1412,7 +1112,7 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
   if (!checkLaunchPreconditions(id))
     return;
 
-  const auto pluginDir = extensionsPath() + "/plugin/" + id;
+  const auto pluginDir = m_installer.extensionsPath() + "/plugin/" + id;
   QJsonObject resolved;
   if (!readPluginMetadata(id, pluginDir, resolved))
     return;
@@ -1454,7 +1154,7 @@ bool Misc::ExtensionManager::checkLaunchPreconditions(const QString& id)
     return false;
   }
 
-  const auto info = m_installedExtensions.value(id).toObject();
+  const auto info = m_installer.installedInfo(id);
   const auto type = info.value("type").toString();
   if (type != QStringLiteral("plugin")) {
     m_pluginRunner.appendOutput(id, QStringLiteral("[Error] Not a plugin (type: %1)\n").arg(type));
@@ -1487,7 +1187,8 @@ bool Misc::ExtensionManager::readPluginMetadata(const QString& id,
   }
 
   const auto metaDoc = QJsonDocument::fromJson(metaFile.readAll());
-  resolvedOut        = resolvePlatform(metaDoc.object());
+  resolvedOut =
+    ExtensionCatalog::resolvePlatform(metaDoc.object(), ExtensionCatalog::currentPlatformKey());
   return true;
 }
 
@@ -1562,7 +1263,7 @@ bool Misc::ExtensionManager::resolveAndValidateEntry(const QString& id,
     return false;
   }
 
-  if (!isPathSafe(entryPathOut, pluginDir)) {
+  if (!ExtensionCatalog::isPathSafe(entryPathOut, pluginDir)) {
     m_pluginRunner.appendOutput(id, QStringLiteral("[Error] Invalid entry point path\n"));
     Misc::Utilities::showMessageBox(tr("Plugin Error"),
                                     tr("Plugin \"%1\" has an invalid entry point path.").arg(id),
@@ -1649,13 +1350,13 @@ void Misc::ExtensionManager::stopAllPlugins()
  */
 void Misc::ExtensionManager::restoreRunningPlugins()
 {
-  if (m_loading) {
+  if (loading()) {
     connect(
       this,
       &ExtensionManager::loadingChanged,
       this,
       [this]() {
-        if (!m_loading)
+        if (!loading())
           restoreRunningPlugins();
       },
       Qt::SingleShotConnection);
@@ -1691,14 +1392,13 @@ void Misc::ExtensionManager::onDashboardAvailableChanged()
  */
 void Misc::ExtensionManager::onWorkspacePathChanged()
 {
-  m_installedExtensions = QJsonObject();
-  loadInstalledManifest();
+  m_installer.reload();
   applyFilter();
   rebuildInstalledPlugins();
 }
 
 //--------------------------------------------------------------------------------------------------
-// Local manifest & file I/O
+// Local repositories
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -1745,72 +1445,4 @@ void Misc::ExtensionManager::loadLocalManifest(const QString& repoPath)
       m_allExtensions.append(obj);
     }
   }
-}
-
-/**
- * @brief Loads the installed addon tracking manifest from disk.
- */
-void Misc::ExtensionManager::loadInstalledManifest()
-{
-  QFile file(installedManifestPath());
-  if (!file.open(QIODevice::ReadOnly))
-    return;
-
-  const auto doc = QJsonDocument::fromJson(file.readAll());
-  if (doc.isObject())
-    m_installedExtensions = doc.object();
-}
-
-/**
- * @brief Saves the installed addon tracking manifest to disk.
- */
-void Misc::ExtensionManager::saveInstalledManifest()
-{
-  QDir().mkpath(extensionsPath());
-  QFile file(installedManifestPath());
-  if (file.open(QIODevice::WriteOnly)) {
-    file.write(QJsonDocument(m_installedExtensions).toJson(QJsonDocument::Indented));
-    file.close();
-  }
-}
-
-/**
- * @brief Writes a downloaded addon file to the appropriate install directory.
- */
-void Misc::ExtensionManager::writeExtensionFile(QNetworkReply* reply)
-{
-  const auto localName  = reply->property("localName").toString();
-  const auto type       = m_currentInstallMeta.value("type").toString();
-  const auto installDir = extensionsPath() + "/" + type + "/" + m_currentInstallId;
-  const auto filePath   = installDir + "/" + localName;
-
-  if (!isPathSafe(filePath, installDir))
-    return;
-
-  QDir().mkpath(QFileInfo(filePath).absolutePath());
-
-  QFile file(filePath);
-  if (file.open(QIODevice::WriteOnly)) {
-    file.write(reply->readAll());
-    file.close();
-  }
-}
-
-/**
- * @brief Validates that a resolved file path stays within the expected base directory.
- */
-bool Misc::ExtensionManager::isPathSafe(const QString& filePath, const QString& baseDir) const
-{
-  const auto canonical = QFileInfo(filePath).absoluteFilePath();
-  const auto base      = QFileInfo(baseDir).absoluteFilePath();
-  return canonical.startsWith(base + "/") || canonical == base;
-}
-
-/**
- * @brief Resolves a relative file path against a repository base URL.
- */
-QUrl Misc::ExtensionManager::resolveFileUrl(const QString& repoBaseUrl,
-                                            const QString& relativePath) const
-{
-  return QUrl(repoBaseUrl + relativePath);
 }

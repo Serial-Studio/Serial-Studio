@@ -87,4 +87,4 @@ The Socket API exposes the driver under `io.iec104.*`: `getConfig`, `getStatus`,
 
 ## Availability
 
-The driver is a Pro feature and needs an activated licence. GPL builds carry no IEC 60870-5-104 client at all; the bus is then unavailable rather than failing at connect time.
+The driver is a Pro feature, fully available with a licence or during the [free trial](Pro-vs-Free.md), which unlocks every Pro feature. GPL builds carry no IEC 60870-5-104 client at all; the bus is then unavailable rather than failing at connect time.

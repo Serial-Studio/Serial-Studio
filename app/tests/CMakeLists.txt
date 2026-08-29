@@ -737,6 +737,32 @@ ss_add_unit_test(tst_opcua_wire
           ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp
           ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp
           ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/NativeTemplateSupport.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryHex.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryBase64.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryTlv.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryCobs.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinarySlip.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryUbx.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinarySirf.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryMavlink.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryNmea2000.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryRtcm.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryModbus.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryMessagePack.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextDelimited.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextFixedWidth.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextKeyValue.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextIniConfig.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextAtCommands.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextUrlEncoded.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextJsonData.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextXmlData.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextYamlData.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/MultiFrameBatchedSensor.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/MultiFrameTimeSeries2d.cpp
           ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
           ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
@@ -883,6 +909,32 @@ ss_add_unit_test(tst_cframe_parser
           ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp
           ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp
           ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/NativeTemplateSupport.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryHex.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryBase64.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryTlv.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryCobs.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinarySlip.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryUbx.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinarySirf.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryMavlink.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryNmea2000.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryRtcm.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryModbus.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryMessagePack.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextDelimited.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextFixedWidth.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextKeyValue.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextIniConfig.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextAtCommands.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextUrlEncoded.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextJsonData.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextXmlData.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextYamlData.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/MultiFrameBatchedSensor.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/MultiFrameTimeSeries2d.cpp
           ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
           ${SS_APP_SRC}/Misc/Utilities.cpp
           ${SS_APP_SRC}/SSAssert.cpp
@@ -1002,6 +1054,457 @@ ss_add_unit_test(tst_plot3d_stereo
 if(TARGET tst_plot3d_stereo)
   target_compile_definitions(tst_plot3d_stereo PRIVATE BUILD_COMMERCIAL)
 endif()
+
+#
+# The terminal's ANSI color unit (spec 0070): the xterm-256 table, the theme-selected base
+# palettes, and the SGR codes that select from them. Pure QColor, so QQuickItem never enters
+# the link set.
+#
+ss_add_unit_test(tst_ansi_palette
+  SOURCES tst_ansi_palette.cpp
+          ${SS_APP_SRC}/UI/Widgets/Terminal/AnsiPalette.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Gui
+)
+
+#
+# The terminal's escape-sequence parser (spec 0070), driven against a recording AnsiSink. The
+# sink boundary is what keeps Terminal.cpp (and QQuickItem) out of this suite.
+#
+ss_add_unit_test(tst_ansi_state_machine
+  SOURCES tst_ansi_state_machine.cpp
+          ${SS_APP_SRC}/UI/Widgets/Terminal/AnsiStateMachine.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# Search state of the terminal widget (spec 0070): query/match bookkeeping over caller-supplied
+# lines, no widget in the link set.
+#
+ss_add_unit_test(tst_terminal_search
+  SOURCES tst_terminal_search.cpp
+          ${SS_APP_SRC}/UI/Widgets/Terminal/TerminalSearch.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# AI tool schema catalog (spec 0070): both tool rosters and every input-schema builder,
+# checked for structural validity and pinned enums. Pure JSON, no app link.
+#
+ss_add_unit_test(tst_tool_schemas
+  SOURCES tst_tool_schemas.cpp
+          ${SS_APP_SRC}/AI/Tools/ToolSchemas.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# AI snapshot compaction (spec 0070): the pure result-reduction transforms split out of the
+# registry-bound resolvers precisely so this suite can link QtCore alone.
+#
+ss_add_unit_test(tst_tool_compact
+  SOURCES tst_tool_compact.cpp
+          ${SS_APP_SRC}/AI/Tools/ToolCompact.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# Provider-neutral wire JSON for the AI assistant (spec 0070): history/tool translation, the
+# Chat-Completions body build, and HTTP error mapping shared by eight providers.
+#
+ss_add_unit_test(tst_provider_json
+  SOURCES tst_provider_json.cpp
+          ${SS_APP_SRC}/AI/Providers/ProviderJson.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# The <think>-tag stream splitter (spec 0070): carry/scan state across chunk boundaries,
+# extracted from OpenAIReply so it tests without a network stack.
+#
+ss_add_unit_test(tst_think_tag_splitter
+  SOURCES tst_think_tag_splitter.cpp
+          ${SS_APP_SRC}/AI/Providers/ThinkTagSplitter.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# Console text formatting (spec 0070): the normalize/timestamp loop, control-char filter and
+# hex dump shared by the two console append paths. QtCore only; the SIMD dots inline from
+# DSPSimd.h.
+#
+ss_add_unit_test(tst_console_text_format
+  SOURCES tst_console_text_format.cpp
+          ${SS_APP_SRC}/Console/TextFormat.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# Waterfall view/window state (spec 0070): pan/zoom clamps, dB window, axis-window math shared
+# by the axis painter, cursor readout and source-rect mapping. Qt-value-type only.
+#
+ss_add_unit_test(tst_waterfall_viewstate
+  SOURCES tst_waterfall_viewstate.cpp
+          ${SS_APP_SRC}/UI/Widgets/Waterfall/WaterfallViewState.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# Waterfall tick ladders and label formatting (spec 0070), now free functions with a narrow
+# header.
+#
+ss_add_unit_test(tst_waterfall_ticks
+  SOURCES tst_waterfall_ticks.cpp
+          ${SS_APP_SRC}/UI/Widgets/Waterfall/WaterfallTicks.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# The history-repair passes AI::Conversation runs before every provider request: orphan
+# tool_result removal, missing-result synthesis, tool-pair reconciliation across malformed
+# orderings, transcript aging with its exemption list, and fresh-turn pruning. An unpaired
+# tool_use makes the provider reject the whole request, so these are integrity gates, not
+# formatting. HistorySurgery.cpp logs through the AI category, hence Logging.cpp.
+#
+ss_add_unit_test(tst_conversation_history
+  SOURCES tst_conversation_history.cpp
+          ${SS_APP_SRC}/AI/Conversation/HistorySurgery.cpp
+          ${SS_APP_SRC}/AI/Logging.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# The context-window budgeter: token estimation, the reservation arithmetic, and the rule that
+# a trim may only cut at a fresh user turn. Pulls HistorySurgery.cpp for the boundary scan.
+#
+ss_add_unit_test(tst_conversation_budget
+  SOURCES tst_conversation_budget.cpp
+          ${SS_APP_SRC}/AI/Conversation/TokenBudget.cpp
+          ${SS_APP_SRC}/AI/Conversation/HistorySurgery.cpp
+          ${SS_APP_SRC}/AI/Logging.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# The meta-tool surface advertised to the model each turn: schema shapes, the 11-tool roster
+# and its order, the injected recipe/skill enums, and the two flags that reshape the curated
+# command list. Pure JSON building with no ContextBuilder dependency, so QtCore alone.
+#
+ss_add_unit_test(tst_conversation_metatools
+  SOURCES tst_conversation_metatools.cpp
+          ${SS_APP_SRC}/AI/Conversation/MetaToolCatalog.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# The API socket's credential and reception guards (spec 0070). AuthPrimitives.cpp is the pure
+# half of ServerAuth (QtCore only) so these KATs need neither the consent prompt's QtWidgets
+# dependency nor a live server; ClientReception drives its ReceptionHost stub, so QTcpSocket is
+# only ever an opaque handle and Qt6::Network is here for that type alone.
+#
+ss_add_unit_test(tst_server_auth
+  SOURCES tst_server_auth.cpp
+          ${SS_APP_SRC}/API/Server/AuthPrimitives.cpp
+          ${SS_APP_SRC}/API/Server/ClientReception.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Network
+)
+
+#
+# Modbus project generation (spec 0070): the register-group -> project/parser builder that used
+# to live inside the driver. Link set mirrors tst_frame_serialization.
+#
+ss_add_unit_test(tst_modbus_generation
+  SOURCES tst_modbus_generation.cpp
+          ${SS_APP_SRC}/IO/Drivers/Modbus/ModbusProjectGenerator.cpp
+          ${SS_APP_SRC}/DataModel/Frame.cpp
+          ${SS_APP_SRC}/DataModel/Generated/DatasetSerialization.cpp
+          ${SS_APP_SRC}/DataModel/Project/PropertyValidators.cpp
+          ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Core5Compat
+          Qt6::Gui
+)
+
+#
+# Serial-port identity scoring shared by UART and Modbus (spec 0070): the 100/50/10/5 ladder
+# that reattaches a saved device to a re-enumerated port.
+#
+ss_add_unit_test(tst_serial_port_identity
+  SOURCES tst_serial_port_identity.cpp
+          ${SS_APP_SRC}/IO/Drivers/SerialPortIdentity.cpp
+  LIBS    Qt6::Core
+          Qt6::SerialPort
+)
+
+#
+# OPC UA endpoint selection (spec 0070): pure policy ranking/deprecation/token acceptance over
+# synthetic endpoint descriptors. QtCore only -- no open62541.
+#
+ss_add_unit_test(tst_opcua_endpoint_selection
+  SOURCES tst_opcua_endpoint_selection.cpp
+          ${SS_APP_SRC}/IO/Drivers/OpcUa/OpcUaEndpointSelection.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# The MQTT publisher's dashboard payload transform (spec 0070): RFC 4180 escaping, the column
+# label the CSV header and the Sparkplug metric registry share, header/row assembly, and the
+# block->frame materialisation both dashboard modes feed on. CsvExpansion is QObject-free, so
+# SSAssert.cpp is the whole production link set; the TU is commercial-only, so the suite
+# defines the macro itself.
+#
+ss_add_unit_test(tst_mqtt_csv_expansion
+  SOURCES tst_mqtt_csv_expansion.cpp
+          ${SS_APP_SRC}/MQTT/CsvExpansion.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+if(TARGET tst_mqtt_csv_expansion)
+  target_compile_definitions(tst_mqtt_csv_expansion PRIVATE BUILD_COMMERCIAL)
+endif()
+
+#
+# Window geometry math (spec 0070): resize-edge detection with the shipping 8 px margin,
+# resize/constrain/cascade KATs. Stateless free functions; Qt6::Quick supplies QQuickItem.
+#
+ss_add_unit_test(tst_window_geometry
+  SOURCES tst_window_geometry.cpp
+          ${SS_APP_SRC}/UI/WindowManager/WindowGeometry.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core Qt6::Gui Qt6::Quick
+)
+
+#
+# Snap overlay publication (spec 0070): gesture publish/dedupe/clear and guide serialization,
+# driven through QSignalSpy. SnapOverlay takes no Dashboard reference precisely so this suite
+# links without the app.
+#
+ss_add_unit_test(tst_snap_overlay
+  SOURCES tst_snap_overlay.cpp
+          ${SS_APP_SRC}/UI/WindowManager/SnapOverlay.cpp
+          ${SS_APP_SRC}/UI/WindowManager/WindowGeometry.cpp
+          ${SS_APP_SRC}/UI/SnapGuides.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core Qt6::Gui Qt6::Quick
+)
+
+#
+# USB hex-request parsing (spec 0070): the control-request byte/uint parsers and the transfer
+# status labels, mirrored libusb-free so the suite links in a GPL configure too.
+#
+ss_add_unit_test(tst_usb_hex_parsing
+  SOURCES tst_usb_hex_parsing.cpp
+          ${SS_APP_SRC}/IO/Drivers/USB/UsbHex.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# Widget-extension manifest validation (spec 0070): the version-range grammar and every
+# rejection code the spec-0038 trust model rests on, injected host version + reserved ids so
+# the parser links QtCore-only.
+#
+ss_add_unit_test(tst_widget_manifest
+  SOURCES tst_widget_manifest.cpp
+          ${SS_APP_SRC}/UI/WidgetManifestParser.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# The language table (spec 0070): one row per shipped language replacing four parallel
+# switches across Translator and ThemeManager.
+#
+ss_add_unit_test(tst_language_table
+  SOURCES tst_language_table.cpp
+          ${SS_APP_SRC}/Misc/LanguageTable.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# The theme catalog (spec 0070): built-in/user theme scanning and localized title rows,
+# separated from the palette build so it loads without a GUI.
+#
+ss_add_unit_test(tst_theme_catalog
+  SOURCES tst_theme_catalog.cpp
+          ${SS_APP_SRC}/Misc/ThemeCatalog.cpp
+          ${SS_APP_SRC}/Misc/LanguageTable.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# Extension catalog helpers (spec 0070): filter/platform/path-safety free functions split out
+# of ExtensionManager; the path-traversal KATs pin the install trust boundary.
+#
+ss_add_unit_test(tst_extension_catalog
+  SOURCES tst_extension_catalog.cpp
+          ${SS_APP_SRC}/Misc/Extensions/ExtensionCatalog.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# Reply capture for scripted writes (spec 0070): arm/record/poll/disarm over per-device
+# buffers, the mutex moved as one unit with what it guards. QtCore only.
+#
+ss_add_unit_test(tst_connection_reply_capture
+  SOURCES tst_connection_reply_capture.cpp
+          ${SS_APP_SRC}/IO/ConnectionManager/ReplyCapture.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# Replay CSV row codec (spec 0070): the QString reader and its byte-view twin held to the
+# same rows -- an export/import contract that had no coverage before.
+#
+ss_add_unit_test(tst_replay_row_codec
+  SOURCES tst_replay_row_codec.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/ReplayRowCodec.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# The mixed scalar/vector frame unzip both script engines now share (spec 0070);
+# header-inline, so no production TU to link.
+#
+ss_add_unit_test(tst_script_frame_shaping
+  SOURCES tst_script_frame_shaping.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# The .proto lexer/parser (spec 0070): the class extraction that finally unblocked importer
+# unit coverage -- the parser no longer reaches Utilities/ProjectModel, so it links QtCore
+# alone (the full-importer suites above stay commented for the reasons they document).
+#
+ss_add_unit_test(tst_proto_parser
+  SOURCES tst_proto_parser.cpp
+          ${SS_APP_SRC}/DataModel/Importers/ProtoLexer.cpp
+          ${SS_APP_SRC}/DataModel/Importers/ProtoParser.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# The code formatter behind every embedded editor (spec 0070): brace/Lua-block depth,
+# hanging indents, string/comment immunity, idempotence. Pure statics, QtCore only.
+#
+ss_add_unit_test(tst_code_formatter
+  SOURCES tst_code_formatter.cpp
+          ${SS_APP_SRC}/DataModel/Editors/CodeFormatter.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# CSV row syntax (spec 0070): separator sniffing, top-level splitting under quotes, and the
+# timestamp unit-scale table. Pure functions + SSAssert only.
+#
+ss_add_unit_test(tst_csv_rows
+  SOURCES tst_csv_rows.cpp
+          ${SS_APP_SRC}/CSV/Player/RowSyntax.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# CSV multi-source replay mapping (spec 0070): column->source bits, the 8-source ceiling,
+# sparse backfill semantics.
+#
+ss_add_unit_test(tst_csv_multisource
+  SOURCES tst_csv_multisource.cpp
+          ${SS_APP_SRC}/CSV/Player/MultiSourceMap.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# CSV row codec (spec 0070): per-mode cell exclusion, the column-mapping inverse and the
+# QuickPlot payload branches, over the shared replay row splitter.
+#
+ss_add_unit_test(tst_csv_row_codec
+  SOURCES tst_csv_row_codec.cpp
+          ${SS_APP_SRC}/CSV/Player/RowCodec.cpp
+          ${SS_APP_SRC}/CSV/Player/RowSyntax.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/ReplayRowCodec.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+)
+
+#
+# Historian replay alignment (spec 0070): column->project mapping and stream timeline merge,
+# ProjectModel flattened out so the suite links QtCore alone. Commercial-only TU.
+#
+ss_add_unit_test(tst_session_alignment
+  SOURCES tst_session_alignment.cpp
+          ${SS_APP_SRC}/Sessions/Player/ReplayAlignment.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+if(TARGET tst_session_alignment)
+  target_compile_definitions(tst_session_alignment PRIVATE BUILD_COMMERCIAL)
+endif()
+
+#
+# Historian frame synthesis (spec 0070): the DB-free half of replay -- row selection, window
+# scatter, gap fill, and the steady replay clock.
+#
+ss_add_unit_test(tst_session_synthesis
+  SOURCES tst_session_synthesis.cpp
+          ${SS_APP_SRC}/Sessions/Player/ReplayFrameValues.cpp
+          ${SS_APP_SRC}/Sessions/Player/ReplayClock.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core Qt6::Gui Qt6::Sql
+)
+if(TARGET tst_session_synthesis)
+  target_compile_definitions(tst_session_synthesis PRIVATE BUILD_COMMERCIAL)
+endif()
+
+#
+# Dashboard view/session state (spec 0070): both view-state scopes, layout clamps, the
+# persistence gate and its deliberate autoHideToolbar exemption. Qml supplies QJSValue
+# normalization.
+#
+ss_add_unit_test(tst_dashboard_viewstate
+  SOURCES tst_dashboard_viewstate.cpp
+          ${SS_APP_SRC}/UI/Dashboard/DashboardViewState.cpp
+  LIBS    Qt6::Core Qt6::Qml
+)
+
+#
+# Project Editor navigation history (spec 0070): ring arithmetic, dedup-at-cursor, the
+# 128-entry cap, resolvable walks. Plain value type, QtCore only.
+#
+ss_add_unit_test(tst_project_nav_history
+  SOURCES tst_project_nav_history.cpp
+          ${SS_APP_SRC}/DataModel/Project/ProjectNavHistory.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# Project folder-tree templates (spec 0070): existence, parentage, cycle termination and
+# display paths, driven through a local POD -- no ProjectModel in the link set.
+#
+ss_add_unit_test(tst_project_folders
+  SOURCES tst_project_folders.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+)
 
 #---------------------------------------------------------------------------------------------------
 # Aggregate target

@@ -44,7 +44,6 @@
 #  include "MQTT/PublisherScriptEditor.h"
 #endif
 #include "ProjectEditorItemIds.h"
-#include "ProjectEditorShared.h"
 
 /**
  * @brief Returns the first tree item in @p map whose mapped value satisfies @p pred.
@@ -396,8 +395,8 @@ void DataModel::ProjectEditor::onCurrentSelectionChanged(const QModelIndex& curr
   if (!item)
     return;
 
-  if (!m_navigatingHistory)
-    pushNavEntry(captureNavEntry(item));
+  if (!m_nav.navigating() && m_nav.push(captureNavEntry(item)))
+    Q_EMIT navHistoryChanged();
 
   const bool handled =
     selectSourceParserItem(item) || selectSourceItem(item) || selectGroupItem(item)
@@ -422,7 +421,7 @@ void DataModel::ProjectEditor::onCurrentSelectionChanged(const QModelIndex& curr
  */
 bool DataModel::ProjectEditor::canGoBack() const noexcept
 {
-  return m_navCursor > 0 && !m_navHistory.empty();
+  return m_nav.canGoBack();
 }
 
 /**
@@ -430,7 +429,7 @@ bool DataModel::ProjectEditor::canGoBack() const noexcept
  */
 bool DataModel::ProjectEditor::canGoForward() const noexcept
 {
-  return m_navCursor >= 0 && (m_navCursor + 1) < static_cast<int>(m_navHistory.size());
+  return m_nav.canGoForward();
 }
 
 /**
@@ -445,10 +444,10 @@ auto DataModel::ProjectEditor::captureNavEntry(QStandardItem* item) const -> Nav
   const int kindRole = item->data(TreeItemKind).toInt();
   if (kindRole != KindNone) {
     entry.valid    = true;
-    entry.kind     = static_cast<ItemKind>(kindRole);
+    entry.kind     = kindRole;
     entry.id       = item->data(TreeItemId).toInt();
     entry.parentId = item->data(TreeItemParentId).toInt();
-    if (entry.kind == KindUserTable)
+    if (kindRole == KindUserTable)
       entry.key = m_userTableItems.value(item);
 
     return entry;
@@ -457,23 +456,23 @@ auto DataModel::ProjectEditor::captureNavEntry(QStandardItem* item) const -> Nav
   entry.container = true;
   entry.valid     = true;
   if (m_rootItems.contains(item)) {
-    entry.view = ProjectView;
+    entry.view = static_cast<int>(ProjectView);
     return entry;
   }
   if (item == m_groupsRootItem) {
-    entry.view = GroupsView;
+    entry.view = static_cast<int>(GroupsView);
     return entry;
   }
   if (item == m_tablesRootItem) {
-    entry.view = DataTablesView;
+    entry.view = static_cast<int>(DataTablesView);
     return entry;
   }
   if (item == m_systemDatasetsItem) {
-    entry.view = SystemDatasetsView;
+    entry.view = static_cast<int>(SystemDatasetsView);
     return entry;
   }
   if (item == m_workspacesRootItem) {
-    entry.view = WorkspacesView;
+    entry.view = static_cast<int>(WorkspacesView);
     return entry;
   }
 
@@ -491,7 +490,7 @@ QStandardItem* DataModel::ProjectEditor::resolveNavEntry(const NavEntry& entry) 
     return nullptr;
 
   if (entry.container) {
-    switch (entry.view) {
+    switch (static_cast<CurrentView>(entry.view)) {
       case ProjectView:
         return m_rootItems.isEmpty() ? nullptr : m_rootItems.firstKey();
       case GroupsView:
@@ -509,7 +508,7 @@ QStandardItem* DataModel::ProjectEditor::resolveNavEntry(const NavEntry& entry) 
 
   const int id  = entry.id;
   const int pid = entry.parentId;
-  switch (entry.kind) {
+  switch (static_cast<ItemKind>(entry.kind)) {
     case KindGroup:
       return navFind(m_groupItems, [id](const auto& v) { return v.groupId == id; });
     case KindDataset:
@@ -546,93 +545,38 @@ QStandardItem* DataModel::ProjectEditor::resolveNavEntry(const NavEntry& entry) 
 }
 
 /**
- * @brief Equality over the navigable target of two history entries (identity, not cursor).
- */
-bool DataModel::ProjectEditor::sameNavTarget(const NavEntry& a, const NavEntry& b) noexcept
-{
-  if (a.container != b.container)
-    return false;
-
-  if (a.container)
-    return a.view == b.view;
-
-  return a.kind == b.kind && a.id == b.id && a.parentId == b.parentId && a.key == b.key;
-}
-
-/**
- * @brief Appends a visited node: dedupes vs the cursor, truncates forward, caps at kMaxNavHistory.
- *        The dedup is load-bearing, not an optimization: currentChanged and selectionChanged both
- *        reach onCurrentSelectionChanged, so one click arrives twice and would double-push without
- *        it (the re-entrancy guard only covers the back/forward replay).
- */
-void DataModel::ProjectEditor::pushNavEntry(const NavEntry& entry)
-{
-  if (!entry.valid)
-    return;
-
-  const int size = static_cast<int>(m_navHistory.size());
-  if (m_navCursor >= 0 && m_navCursor < size
-      && sameNavTarget(m_navHistory[static_cast<size_t>(m_navCursor)], entry))
-    return;
-
-  if (m_navCursor + 1 < size)
-    m_navHistory.erase(m_navHistory.begin() + (m_navCursor + 1), m_navHistory.end());
-
-  m_navHistory.push_back(entry);
-  m_navCursor = static_cast<int>(m_navHistory.size()) - 1;
-
-  if (static_cast<int>(m_navHistory.size()) > kMaxNavHistory) {
-    const int drop = static_cast<int>(m_navHistory.size()) - kMaxNavHistory;
-    m_navHistory.erase(m_navHistory.begin(), m_navHistory.begin() + drop);
-    m_navCursor -= drop;
-  }
-
-  SS_ASSERT_LOG(static_cast<int>(m_navHistory.size()) <= kMaxNavHistory);
-  SS_ASSERT_LOG(m_navCursor >= 0 && m_navCursor < static_cast<int>(m_navHistory.size()));
-  Q_EMIT navHistoryChanged();
-}
-
-/**
  * @brief Drops the whole history (used when a different project is loaded).
  */
 void DataModel::ProjectEditor::clearNavHistory()
 {
-  if (m_navHistory.empty() && m_navCursor == -1)
-    return;
-
-  m_navHistory.clear();
-  m_navCursor = -1;
-  Q_EMIT navHistoryChanged();
+  if (m_nav.clear())
+    Q_EMIT navHistoryChanged();
 }
 
 /**
- * @brief Steps back to the nearest still-resolvable earlier node; skips deleted entries within a
- *        fixed bound and guards re-entrant selection so the replay is not re-recorded.
+ * @brief Steps back to the nearest still-resolvable earlier node; the resolver skips deleted
+ *        entries and the replay guard keeps the resulting selection out of the history.
  */
 void DataModel::ProjectEditor::navigateBack()
 {
   if (!canGoBack() || !m_selectionModel)
     return;
 
-  SS_ASSERT(m_navCursor > 0, return);
-
-  int idx               = m_navCursor - 1;
   QStandardItem* target = nullptr;
-  for (int guard = static_cast<int>(m_navHistory.size()); idx >= 0 && guard > 0; --guard, --idx) {
-    target = resolveNavEntry(m_navHistory[static_cast<size_t>(idx)]);
-    if (target)
-      break;
-  }
+  const int index       = m_nav.previousResolvable([this, &target](const NavEntry& entry) {
+    target = resolveNavEntry(entry);
+    return target != nullptr;
+  });
 
-  if (!target)
+  if (index < 0 || !target)
     return;
 
-  m_navCursor         = idx;
-  m_navigatingHistory = true;
-  m_navDirection      = -1;
+  m_nav.setCursor(index);
+  m_nav.setNavigating(true);
+  m_nav.setDirection(-1);
   m_selectionModel->setCurrentIndex(target->index(), QItemSelectionModel::ClearAndSelect);
-  m_navDirection      = 0;
-  m_navigatingHistory = false;
+  m_nav.setDirection(0);
+  m_nav.setNavigating(false);
   Q_EMIT navHistoryChanged();
 }
 
@@ -642,39 +586,33 @@ void DataModel::ProjectEditor::navigateBack()
  */
 int DataModel::ProjectEditor::navDirection() const noexcept
 {
-  return m_navDirection;
+  return m_nav.direction();
 }
 
 /**
- * @brief Steps forward to the nearest still-resolvable later node; skips deleted entries within a
- *        fixed bound and guards re-entrant selection so the replay is not re-recorded.
+ * @brief Steps forward to the nearest still-resolvable later node; the resolver skips deleted
+ *        entries and the replay guard keeps the resulting selection out of the history.
  */
 void DataModel::ProjectEditor::navigateForward()
 {
   if (!canGoForward() || !m_selectionModel)
     return;
 
-  SS_ASSERT(m_navCursor >= 0, return);
-  SS_ASSERT(m_navCursor + 1 < static_cast<int>(m_navHistory.size()), return);
-
-  const int n           = static_cast<int>(m_navHistory.size());
-  int idx               = m_navCursor + 1;
   QStandardItem* target = nullptr;
-  for (int guard = n; idx < n && guard > 0; --guard, ++idx) {
-    target = resolveNavEntry(m_navHistory[static_cast<size_t>(idx)]);
-    if (target)
-      break;
-  }
+  const int index       = m_nav.nextResolvable([this, &target](const NavEntry& entry) {
+    target = resolveNavEntry(entry);
+    return target != nullptr;
+  });
 
-  if (!target)
+  if (index < 0 || !target)
     return;
 
-  m_navCursor         = idx;
-  m_navigatingHistory = true;
-  m_navDirection      = 1;
+  m_nav.setCursor(index);
+  m_nav.setNavigating(true);
+  m_nav.setDirection(1);
   m_selectionModel->setCurrentIndex(target->index(), QItemSelectionModel::ClearAndSelect);
-  m_navDirection      = 0;
-  m_navigatingHistory = false;
+  m_nav.setDirection(0);
+  m_nav.setNavigating(false);
   Q_EMIT navHistoryChanged();
 }
 

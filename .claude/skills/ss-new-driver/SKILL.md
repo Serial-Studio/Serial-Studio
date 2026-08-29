@@ -45,10 +45,9 @@ see [ss-hotpath]). Never re-stamp downstream.
 6. `app/src/API/EnumLabels.cpp` — add the bus to the `busTypeSlug()` and `busTypeLabel()`
    switches (the API's string names for the bus; commercial buses go inside the
    `#ifdef BUILD_COMMERCIAL` block).
-7. `app/src/DataModel/Project/ProjectEditorShared.h` — add the bus to the `busTypeIcon()`
+7. `app/src/DataModel/Project/ProjectEditorIcons.h` — add the bus to the `busTypeIcon()`
    switch, and `app/src/DataModel/Project/ProjectEditorForms.cpp` — add it to the `busTypes`
-   combobox list in the source form model (the old `ProjectEditor.cpp` was split; these live
-   in the per-concern TUs now).
+   combobox list in the source form model.
 8. Icon — add the driver SVG under `app/rcc/icons/devices/<tier>/` (16/24/32) and register it with a
    `<file>` entry in `app/rcc/rcc.qrc` (`busTypeIcon()` returns its `qrc:/` path).
 9. CLI (optional) — if it should be launchable headless, add options in `app/src/Misc/CLI.{h,cpp}`

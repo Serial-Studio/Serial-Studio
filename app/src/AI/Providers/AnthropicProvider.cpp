@@ -17,17 +17,7 @@
 #include "AI/Logging.h"
 #include "AI/Providers/AnthropicReply.h"
 #include "AI/Providers/ImmediateErrorReply.h"
-
-/**
- * @brief Anthropic enforces tool names ^[a-zA-Z0-9_-]+; encode dots/colons.
- */
-static QString anthropicToolName(const QString& original)
-{
-  QString out = original;
-  out.replace(QChar('.'), QChar('_'));
-  out.replace(QChar(':'), QChar('_'));
-  return out;
-}
+#include "AI/Providers/ProviderJson.h"
 
 /**
  * @brief Rewrites a single content block in-place for Anthropic's tool format. All
@@ -38,7 +28,7 @@ static QJsonObject sanitizeBlock(QJsonObject block)
   const auto type = block.value(QStringLiteral("type")).toString();
   if (type == QStringLiteral("tool_use")) {
     const auto name               = block.value(QStringLiteral("name")).toString();
-    block[QStringLiteral("name")] = anthropicToolName(name);
+    block[QStringLiteral("name")] = AI::ProviderJson::sanitizeToolName(name);
   }
 
   const auto keys = block.keys();
@@ -231,7 +221,7 @@ AI::Reply* AI::AnthropicProvider::sendMessage(const QJsonArray& history,
     for (const auto& v : tools) {
       auto t                    = v.toObject();
       const auto name           = t.value(QStringLiteral("name")).toString();
-      t[QStringLiteral("name")] = anthropicToolName(name);
+      t[QStringLiteral("name")] = ProviderJson::sanitizeToolName(name);
       sanitizedTools.append(t);
     }
     body[QStringLiteral("tools")] = sanitizedTools;

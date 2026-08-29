@@ -27,177 +27,25 @@
 // clang-format off
 #include <QtMqtt>
 #include <QJsonObject>
-#include <QMap>
-#include <QMutex>
 #include <QObject>
-#include <QSslCertificate>
-#include <QSslConfiguration>
 #include <QTimer>
 #include <QVariantMap>
 // clang-format on
 
-#  include "Async/TaskTree.h"
 #  include "DataModel/DataBlock.h"
-#  include "DataModel/ExportSchema.h"
-#  include "DataModel/Frame.h"
 #  include "DataModel/FrameConsumer.h"
 #  include "IO/HAL_Driver.h"
+#  include "MQTT/BrokerOptions.h"
 #  include "MQTT/CredentialVault.h"
-#  include "MQTT/SparkplugPublisher.h"
-#  include "MQTT/TlsIdentity.h"
+#  include "MQTT/PublisherWorker.h"
+#  include "MQTT/TlsConfig.h"
 
 namespace MQTT {
 
 /**
- * @brief Snapshot of every field needed by the worker thread to (re)configure the broker.
- */
-struct BrokerConfig {
-  bool enabled                              = false;
-  bool sslEnabled                           = false;
-  bool cleanSession                         = true;
-  bool publishNotifications                 = false;
-  bool sparkplugEnabled                     = false;
-  int mode                                  = 0;
-  int scriptLanguage                        = 0;
-  int peerVerifyDepth                       = 10;
-  quint16 port                              = 1883;
-  quint16 keepAlive                         = 60;
-  QMqttClient::ProtocolVersion mqttVersion  = QMqttClient::MQTT_5_0;
-  QSsl::SslProtocol sslProtocol             = QSsl::SecureProtocols;
-  QSslSocket::PeerVerifyMode peerVerifyMode = QSslSocket::AutoVerifyPeer;
-  QString clientId;
-  QString hostname;
-  QString username;
-  QString password;
-  QString topicBase;
-  QString notificationTopic;
-  QString scriptCode;
-  QString scriptTopic;
-  QString sparkplugGroupId;
-  QString sparkplugEdgeNode;
-  QString sparkplugDeviceId;
-  QByteArray alpnProtocol;
-  QSslKey clientPrivateKey;
-  QSslCertificate clientCertificate;
-  QList<QSslCertificate> caCertificates;
-};
-
-/**
- * @brief Raw RX-bytes payload paired with the device id and capture timestamp.
- */
-struct TimestampedRawBytes {
-  int deviceId;
-  IO::CapturedDataPtr data;
-};
-
-class Publisher;
-class PublisherScript;
-
-/**
- * @brief Background worker that owns the QMqttClient and performs broker I/O off-main.
- */
-class PublisherWorker : public DataModel::FrameConsumerWorker<DataModel::DataBlockPtr> {
-  Q_OBJECT
-
-signals:
-  void brokerStateChanged(int state);
-  void brokerErrorOccurred(const QString& message);
-  void scriptErrorOccurred(const QString& message);
-  void testConnectionFinished(bool ok, const QString& detail);
-
-public:
-  PublisherWorker(moodycamel::ReaderWriterQueue<DataModel::DataBlockPtr>* frameQueue,
-                  std::atomic<bool>* enabled,
-                  std::atomic<size_t>* queueSize,
-                  moodycamel::ReaderWriterQueue<TimestampedRawBytes>* rawQueue,
-                  moodycamel::ReaderWriterQueue<TimestampedRawBytes>* frameQueueBytes,
-                  std::atomic<int>* mode,
-                  std::atomic<int>* scriptLanguage,
-                  std::atomic<quint64>* messagesSent,
-                  std::atomic<quint64>* bytesSent);
-  ~PublisherWorker() override;
-
-  void processData() override;
-  void closeResources() override;
-  [[nodiscard]] bool isResourceOpen() const override;
-
-  [[nodiscard]] QString errorString(QMqttClient::ClientError error) const;
-
-public slots:
-  void bootstrap();
-  void applyBrokerConfig(const MQTT::BrokerConfig& cfg);
-  void openBroker();
-  void closeBroker();
-  void publishNotificationOnWorker(const QString& topic, const QByteArray& payload);
-  void publishCustomOnWorker(const QString& topic, const QByteArray& payload, int qos, bool retain);
-  void runTestConnection();
-
-protected:
-  void processItems(const std::vector<DataModel::DataBlockPtr>& items) override;
-
-public slots:
-  void setTemplateFrame(int sourceId, const DataModel::Frame& frame);
-  void setStructureGeneration(quint64 generation);
-
-private slots:
-  void onClientStateChanged(QMqttClient::ClientState state);
-  void onClientErrorChanged(QMqttClient::ClientError error);
-  void onSparkplugCommand(const QMqttMessage& message);
-
-private:
-  [[nodiscard]] Async::Task* buildReconnectFlow();
-  [[nodiscard]] bool sparkplugActive() const;
-  void publishBatchAsJson(const std::vector<DataModel::Frame>& items);
-  void publishBatchAsCsv(const std::vector<DataModel::Frame>& items);
-  void expandBlocks(const std::vector<DataModel::DataBlockPtr>& blocks);
-  void rebuildCsvSchema(const DataModel::Frame& frame);
-  void recompileScriptIfNeeded();
-  void configureSparkplugWill();
-  void publishSparkplugBirth();
-  void subscribeSparkplugCommands();
-  void discardSuppressedPayloads();
-  void registerSparkplugMetrics(const DataModel::Frame& frame);
-  void publishSparkplugBlocks(const std::vector<DataModel::DataBlockPtr>& blocks);
-
-private:
-  std::map<int, DataModel::FrameTemplate> m_templates;
-  // One publish carries at most this many samples; a dense block alone can exceed it
-  static constexpr std::size_t kMaxExpandedSamples = 4096;
-  std::vector<DataModel::Frame> m_expanded;
-  bool publishAndCount(const QMqttTopicName& topic, const QByteArray& payload);
-  void applyClientPropertiesUnsafe();
-  static QString describeMqttError(QMqttClient::ClientError error);
-  static QString escapeCsvField(const QString& s);
-
-private:
-  BrokerConfig m_cfg;
-  QMqttClient* m_client;
-  QSslConfiguration m_sslConfiguration;
-  QByteArray m_rawBatchBuffer;
-  moodycamel::ReaderWriterQueue<TimestampedRawBytes>* m_rawQueue;
-  moodycamel::ReaderWriterQueue<TimestampedRawBytes>* m_frameQueueBytes;
-  std::atomic<int>* m_mode;
-  std::atomic<int>* m_scriptLanguage;
-  std::atomic<quint64>* m_messagesSent;
-  std::atomic<quint64>* m_bytesSent;
-
-  PublisherScript* m_script;
-  QString m_compiledScriptCode;
-  std::unique_ptr<Async::TaskRunner> m_runner;
-
-  QString m_csvFrameTitle;
-  QByteArray m_csvHeaderPayload;
-  QByteArray m_csvRowBuffer;
-  bool m_csvHeaderDirty;
-  QMap<int, QString> m_csvLastFinal;
-  DataModel::ExportSchema m_csvSchema;
-
-  quint64 m_pendingStructureGeneration;
-  SparkplugPublisher m_sparkplug;
-};
-
-/**
- * @brief Per-project MQTT publisher; broadcasts frames, raw bytes and notifications.
+ * @brief Per-project MQTT publisher; broadcasts frames, raw bytes and notifications. The facade
+ *        owns the main-thread configuration and the lock-free queues the consumer path fills;
+ *        every broker interaction belongs to PublisherWorker on its own thread.
  */
 class Publisher : public DataModel::FrameConsumer<DataModel::DataBlockPtr> {
   // clang-format off
@@ -497,6 +345,7 @@ private slots:
 
 private:
   [[nodiscard]] bool licenseValid() const;
+  void registerBrokerOptions();
   void markConfigChanged();
   void scheduleSyncToWorker();
   void syncToWorker();
@@ -509,53 +358,39 @@ private:
 
 private:
   bool m_enabled;
-  bool m_sslEnabled;
   bool m_publishNotifications;
   bool m_cleanSession;
   bool m_inApply;
   bool m_skipNextSync;
   bool m_savingToProjectModel;
   bool m_reportConnectionErrors;
+  bool m_customClientId;
+  bool m_sparkplugEnabled;
   int m_mode;
-  int m_peerVerifyDepth;
+  int m_scriptLanguage;
   int m_publishFrequencyHz;
 
   QMqttClient::ProtocolVersion m_protocolVersion;
-  QSsl::SslProtocol m_sslProtocol;
-  QSslSocket::PeerVerifyMode m_peerVerifyMode;
   quint16 m_port;
   quint16 m_keepAlive;
 
-  bool m_customClientId;
   QString m_clientId;
   QString m_autoClientId;
   QString m_hostname;
   QString m_username;
   QString m_password;
+  QString m_keyPassphrase;
   QString m_topicBase;
   QString m_notificationTopic;
   QString m_scriptCode;
   QString m_scriptTopic;
-  int m_scriptLanguage;
-
-  bool m_sparkplugEnabled;
   QString m_sparkplugGroupId;
   QString m_sparkplugEdgeNodeId;
   QString m_sparkplugDeviceId;
 
-  bool m_alpnEnabled;
-  QString m_alpnProtocol;
-  QString m_keyPassphrase;
-  QString m_privateKeyPath;
-  QString m_clientCertificatePath;
-  TlsIdentity m_tlsIdentity;
-
-  QList<QSslCertificate> m_caCertificates;
+  TlsConfig m_tls;
+  BrokerOptions m_options;
   CredentialVault m_credentialVault;
-
-  QMap<QString, QSsl::SslProtocol> m_sslProtocols;
-  QMap<QString, QMqttClient::ProtocolVersion> m_mqttVersions;
-  QMap<QString, QSslSocket::PeerVerifyMode> m_peerVerifyModes;
 
   QTimer m_syncTimer;
   QTimer m_statsTimer;
@@ -602,7 +437,5 @@ private:
 };
 
 }  // namespace MQTT
-
-Q_DECLARE_METATYPE(MQTT::BrokerConfig)
 
 #endif  // BUILD_COMMERCIAL

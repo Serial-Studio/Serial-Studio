@@ -36,7 +36,7 @@ The control loop uses the Euler method for numerical integration to evolve the s
 
 The whole example runs from the control script, with no helper process to launch:
 
-- **`setup()`** seeds the clock and posts a notification (Pro license required; on a free build the notification call fails silently and nothing appears).
+- **`setup()`** seeds the clock and posts a notification (a Pro feature, available with a license or during the free trial; on a GPL build the notification call fails silently and nothing appears).
 - **`loop()`** advances the Lorenz state one Euler step, writes `x`, `y` and `z` into the `Lorenz` data table with `tableSet()`, then calls `dashboardTick()` to force a render.
 - The three datasets are **computed**: their Lua transforms read the matching variable from the `Lorenz` table, so the dashboard is fed straight from the control loop.
 - The UDP source is a **dummy**, kept only so a connection can be opened. Its Lua frame parser returns `{}` (no frame); no bytes are ever parsed, and the control loop's `dashboardTick()` drives both the dashboard and the exports.
@@ -49,7 +49,7 @@ Because the loop free-runs (the worker re-arms it about once per millisecond), t
 
 - **Self-contained.** No Python, no external process, no real data source.
 - **Real-time visualization.** Watch the Lorenz attractor's chaotic motion as it happens.
-- **Custom X-axis.** Use Serial Studio's project editor to pick any dataset as the X-axis source (Pro license required).
+- **Custom X-axis.** Use Serial Studio's project editor to pick any dataset as the X-axis source (Pro feature; license or free trial).
 - **Dynamic visualization.** Plot $x$, $y$, and $z$ on 2D or 3D graphs.
 
 ## Requirements

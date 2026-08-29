@@ -28,49 +28,17 @@ extern "C" {
 }
 // clang-format on
 
-#include <QByteArray>
 #include <QJSEngine>
 #include <QString>
 #include <stdexcept>
 
 #include "DataModel/Frame.h"
 #include "DataModel/ProjectModel.h"
+#include "DataModel/Scripting/ScriptResult.h"
 #include "SSAssert.h"
 #include "UI/Dashboard.h"
 
-//--------------------------------------------------------------------------------------------------
-// Result helpers
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Pushes a {ok, error?} table onto the Lua stack.
- */
-static void pushLuaResult(lua_State* L, bool ok, const QString& errorMsg)
-{
-  lua_createtable(L, 0, ok ? 1 : 2);
-
-  lua_pushboolean(L, ok ? 1 : 0);
-  lua_setfield(L, -2, "ok");
-
-  if (!ok) {
-    const QByteArray utf8 = errorMsg.toUtf8();
-    lua_pushlstring(L, utf8.constData(), static_cast<size_t>(utf8.size()));
-    lua_setfield(L, -2, "error");
-  }
-}
-
-/**
- * @brief Builds a JS-style {ok, error?} map.
- */
-static QVariantMap makeJsResult(bool ok, const QString& errorMsg)
-{
-  QVariantMap result;
-  result.insert(QStringLiteral("ok"), ok);
-  if (!ok)
-    result.insert(QStringLiteral("error"), errorMsg);
-
-  return result;
-}
+using namespace DataModel::ScriptResult;
 
 //--------------------------------------------------------------------------------------------------
 // Core operations (main-thread only: parser + transform engines both run on main)
@@ -273,7 +241,7 @@ QVariantMap DataModel::DashboardBridge::clearPlots()
 {
   QString errorMsg;
   const bool ok = coreClearPlots(errorMsg);
-  return makeJsResult(ok, errorMsg);
+  return makeResult(ok, errorMsg);
 }
 
 /**
@@ -282,11 +250,11 @@ QVariantMap DataModel::DashboardBridge::clearPlots()
 QVariantMap DataModel::DashboardBridge::setPlotPoints(const QJSValue& pointsVal)
 {
   if (!pointsVal.isNumber())
-    return makeJsResult(false, QStringLiteral("setPlotPoints: points must be a number"));
+    return makeResult(false, QStringLiteral("setPlotPoints: points must be a number"));
 
   QString errorMsg;
   const bool ok = coreSetPlotPoints(static_cast<int>(pointsVal.toInt()), errorMsg);
-  return makeJsResult(ok, errorMsg);
+  return makeResult(ok, errorMsg);
 }
 
 /**
@@ -297,11 +265,11 @@ static QVariantMap setVisibilityJs(const QJSValue& visibleVal,
                                    void (UI::Dashboard::*setter)(const bool))
 {
   if (!visibleVal.isBool())
-    return makeJsResult(false, QStringLiteral("%1: visible must be a boolean").arg(name));
+    return makeResult(false, QStringLiteral("%1: visible must be a boolean").arg(name));
 
   QString errorMsg;
   const bool ok = coreSetVisibility(setter, visibleVal.toBool(), errorMsg);
-  return makeJsResult(ok, errorMsg);
+  return makeResult(ok, errorMsg);
 }
 
 /**
@@ -352,7 +320,7 @@ QVariantMap DataModel::DashboardBridge::setActiveWorkspace(const QJSValue& targe
   else
     errorMsg = QStringLiteral("setActiveWorkspace: argument must be a workspace id or name");
 
-  return makeJsResult(ok, errorMsg);
+  return makeResult(ok, errorMsg);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -21,12 +21,8 @@
 
 #include "ThemeManager.h"
 
-#include <QDir>
-#include <QFile>
-#include <QFileInfo>
 #include <QGuiApplication>
 #include <QJsonArray>
-#include <QJsonDocument>
 #include <QPalette>
 #include <QStyleHints>
 #include <QTimer>
@@ -102,57 +98,19 @@ static QVector<QPair<QColor, QColor>> extractDeviceColors(const QJsonObject& col
  */
 Misc::ThemeManager::ThemeManager() : m_theme(0), m_applyingTheme(false), m_persistSettings(true)
 {
-  // clang-format off
-  const QStringList themes = {
-      QStringLiteral("default"),
-      QStringLiteral("fluent-light"),
-      QStringLiteral("fluent-dark"),
-  };
-  // clang-format on
-
-  for (const auto& theme : std::as_const(themes)) {
-    QFile file(QStringLiteral(":/themes/%1.json").arg(theme));
-    if (!file.open(QFile::ReadOnly)) {
-      qWarning() << "Failed to open theme resource:" << theme;
-      continue;
-    }
-
-    QJsonParseError parseError;
-    const auto document = QJsonDocument::fromJson(file.readAll(), &parseError);
-    if (parseError.error != QJsonParseError::NoError || document.isNull()) {
-      qWarning() << "Failed to parse theme" << theme << ":" << parseError.errorString();
-      continue;
-    }
-
-    const auto title = document.object().value("title").toString();
-    if (title.isEmpty()) {
-      qWarning() << "Theme" << theme << "has no title, skipping";
-      continue;
-    }
-
-    m_themes.insert(title, document.object());
-    m_availableThemes.append(title);
-  }
-
-  if (m_availableThemes.isEmpty()) {
-    qCritical() << "No themes loaded! Adding fallback";
-    m_availableThemes.append("Fallback");
-  }
-
+  m_catalog.loadBuiltInThemes();
   loadUserThemes();
-
-  m_availableThemes.append(QStringLiteral("System"));
 
   int themeIndex       = 0;
   const auto savedName = m_settings.value("ApplicationThemeName").toString();
   if (!savedName.isEmpty()) {
-    const int idx = m_availableThemes.indexOf(savedName);
+    const int idx = m_catalog.indexOf(savedName);
     themeIndex    = (idx >= 0) ? idx : 0;
   }
 
   else {
     themeIndex = m_settings.value("ApplicationTheme", 0).toInt();
-    if (themeIndex < 0 || themeIndex >= m_availableThemes.count())
+    if (themeIndex < 0 || themeIndex >= m_catalog.count())
       themeIndex = 0;
 
     m_settings.remove("ApplicationTheme");
@@ -236,7 +194,7 @@ const QVector<QPair<QColor, QColor>>& Misc::ThemeManager::deviceColors() const
  */
 const QStringList& Misc::ThemeManager::availableThemes() const
 {
-  return m_availableThemeNames;
+  return m_catalog.localizedNames();
 }
 
 /**
@@ -277,22 +235,22 @@ QColor Misc::ThemeManager::alarmColorForSeverity(int severity) const
 void Misc::ThemeManager::setTheme(const int index)
 {
   int filteredIndex = index;
-  if (index < 0 || index >= m_availableThemes.count())
+  if (index < 0 || index >= m_catalog.count())
     filteredIndex = 0;
 
   m_theme     = filteredIndex;
-  m_themeName = m_availableThemes.at(filteredIndex);
+  m_themeName = m_catalog.titleAt(filteredIndex);
   if (m_persistSettings)
     m_settings.setValue("ApplicationThemeName", m_themeName);
 
-  if (m_themeName == QStringLiteral("System")) {
+  if (m_themeName == ThemeCatalog::systemTitle()) {
     loadSystemTheme();
     return;
   }
 
   m_applyingTheme = true;
 
-  auto data      = m_themes.value(m_themeName);
+  auto data      = m_catalog.theme(m_themeName);
   m_colors       = jsonObjectToVariantMap(data.value("colors").toObject());
   m_widgetColors = extractWidgetColors(data.value("colors").toObject());
   m_deviceColors = extractDeviceColors(data.value("colors").toObject());
@@ -368,10 +326,10 @@ void Misc::ThemeManager::loadSystemTheme()
   else
     resolved = QStringLiteral("Fluent Light");
 
-  const auto data = m_themes.value(resolved);
+  const auto data = m_catalog.theme(resolved);
 
-  m_themeName    = QStringLiteral("System");
-  m_theme        = m_availableThemes.indexOf(m_themeName);
+  m_themeName    = ThemeCatalog::systemTitle();
+  m_theme        = m_catalog.indexOf(m_themeName);
   m_colors       = jsonObjectToVariantMap(data.value("colors").toObject());
   m_widgetColors = extractWidgetColors(data.value("colors").toObject());
   m_deviceColors = extractDeviceColors(data.value("colors").toObject());
@@ -391,93 +349,8 @@ void Misc::ThemeManager::loadSystemTheme()
  */
 void Misc::ThemeManager::updateLocalizedThemeNames()
 {
-  m_availableThemeNames.clear();
   static auto& translator = Translator::instance();
-  const auto lang         = translator.language();
-
-  for (const auto& themeName : std::as_const(m_availableThemes)) {
-    if (themeName == QStringLiteral("System")) {
-      m_availableThemeNames.append(tr("System"));
-      continue;
-    }
-
-    const auto themeObj     = m_themes.value(themeName);
-    const auto translations = themeObj.value("translations").toObject();
-
-    QString localized;
-    switch (lang) {
-      case Translator::Spanish:
-        localized = translations.value("es_MX").toString();
-        break;
-      case Translator::Chinese:
-        localized = translations.value("zh_CN").toString();
-        break;
-      case Translator::German:
-        localized = translations.value("de_DE").toString();
-        break;
-      case Translator::Russian:
-        localized = translations.value("ru_RU").toString();
-        break;
-      case Translator::French:
-        localized = translations.value("fr_FR").toString();
-        break;
-      case Translator::Japanese:
-        localized = translations.value("ja_JP").toString();
-        break;
-      case Translator::Korean:
-        localized = translations.value("ko_KR").toString();
-        break;
-      case Translator::Portuguese:
-        localized = translations.value("pt_BR").toString();
-        break;
-      case Translator::Italian:
-        localized = translations.value("it_IT").toString();
-        break;
-      case Translator::Polish:
-        localized = translations.value("pl_PL").toString();
-        break;
-      case Translator::Turkish:
-        localized = translations.value("tr_TR").toString();
-        break;
-      case Translator::Ukrainian:
-        localized = translations.value("uk_UA").toString();
-        break;
-      case Translator::Czech:
-        localized = translations.value("cs_CZ").toString();
-        break;
-      case Translator::Hindi:
-        localized = translations.value("hi_IN").toString();
-        break;
-      case Translator::Dutch:
-        localized = translations.value("nl_NL").toString();
-        break;
-      case Translator::Romanian:
-        localized = translations.value("ro_RO").toString();
-        break;
-      case Translator::Swedish:
-        localized = translations.value("sv_SE").toString();
-        break;
-      case Translator::Arabic:
-        localized = translations.value("ar_SA").toString();
-        break;
-      case Translator::Hebrew:
-        localized = translations.value("he_IL").toString();
-        break;
-      case Translator::Vietnamese:
-        localized = translations.value("vi_VN").toString();
-        break;
-      case Translator::English:
-      default:
-        localized = themeObj.value("title").toString();
-        break;
-    }
-
-    if (localized.isEmpty())
-      localized = themeObj.value("title").toString();
-
-    m_availableThemeNames.append(localized);
-  }
-
+  m_catalog.updateLocalizedNames(translator.language());
   Q_EMIT languageChanged();
 }
 
@@ -491,8 +364,8 @@ void Misc::ThemeManager::updateLocalizedThemeNames()
 
 bool Misc::ThemeManager::eventFilter(QObject* watched, QEvent* event)
 {
-  if (event->type() == QEvent::ApplicationPaletteChange && m_themeName == QStringLiteral("System")
-      && !m_applyingTheme) {
+  if (event->type() == QEvent::ApplicationPaletteChange
+      && m_themeName == ThemeCatalog::systemTitle() && !m_applyingTheme) {
     loadSystemTheme();
     return true;
   }
@@ -509,64 +382,8 @@ bool Misc::ThemeManager::eventFilter(QObject* watched, QEvent* event)
  */
 void Misc::ThemeManager::loadUserThemes()
 {
-  for (const auto& name : std::as_const(m_userThemeNames)) {
-    m_themes.remove(name);
-    m_availableThemes.removeAll(name);
-  }
-
-  m_userThemeNames.clear();
-
   static auto& workspaceManager = Misc::WorkspaceManager::instance();
-  const auto themesDir          = workspaceManager.path("Extensions/theme");
-  QDir dir(themesDir);
-  if (!dir.exists())
-    return;
-
-  const auto subdirs = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-  for (const auto& subdir : subdirs) {
-    const auto subdirPath = themesDir + "/" + subdir;
-    QDir addonDir(subdirPath);
-    const auto jsonFiles = addonDir.entryList({"*.json"}, QDir::Files);
-    for (const auto& jsonFile : jsonFiles)
-      tryLoadUserThemeFile(subdirPath, jsonFile);
-  }
-}
-
-/**
- * @brief Loads a single user-theme JSON file into the theme registry.
- */
-void Misc::ThemeManager::tryLoadUserThemeFile(const QString& subdirPath, const QString& jsonFile)
-{
-  QFile file(subdirPath + "/" + jsonFile);
-  if (!file.open(QFile::ReadOnly))
-    return;
-
-  QJsonParseError parseError;
-  const auto doc = QJsonDocument::fromJson(file.readAll(), &parseError);
-  if (parseError.error != QJsonParseError::NoError || doc.isNull())
-    return;
-
-  auto obj         = doc.object();
-  const auto title = obj.value("title").toString();
-  if (title.isEmpty() || !obj.contains("colors"))
-    return;
-
-  if (m_themes.contains(title))
-    return;
-
-  auto params          = obj.value("parameters").toObject();
-  const auto editorKey = params.value("code-editor-theme").toString();
-  if (!editorKey.isEmpty()) {
-    const auto xmlPath = subdirPath + "/code-editor/" + editorKey + ".xml";
-    if (QFile::exists(xmlPath))
-      params.insert("code-editor-theme", xmlPath);
-
-    obj.insert("parameters", params);
-  }
-
-  m_themes.insert(title, obj);
-  m_availableThemes.append(title);
-  m_userThemeNames.append(title);
+  m_catalog.reloadUserThemes(workspaceManager.path("Extensions/theme"));
 }
 
 /**
@@ -574,22 +391,21 @@ void Misc::ThemeManager::tryLoadUserThemeFile(const QString& subdirPath, const Q
  */
 void Misc::ThemeManager::onExtensionInstalled(const QString& id)
 {
-  const auto previousUserThemes = m_userThemeNames;
+  const auto previousUserThemes = m_catalog.userThemes();
 
-  m_availableThemes.removeAll(QStringLiteral("System"));
   loadUserThemes();
-  m_availableThemes.append(QStringLiteral("System"));
 
   static auto& ext   = Misc::ExtensionManager::instance();
   const auto info    = ext.selectedExtension();
   const bool isTheme = id.isEmpty() || info.value("type").toString() == QStringLiteral("theme");
 
   if (isTheme) {
-    for (const auto& name : std::as_const(m_userThemeNames)) {
+    const auto userThemes = m_catalog.userThemes();
+    for (const auto& name : std::as_const(userThemes)) {
       if (previousUserThemes.contains(name))
         continue;
 
-      const int idx = m_availableThemes.indexOf(name);
+      const int idx = m_catalog.indexOf(name);
       if (idx < 0)
         continue;
 
@@ -600,7 +416,7 @@ void Misc::ThemeManager::onExtensionInstalled(const QString& id)
     }
   }
 
-  const int idx = m_availableThemes.indexOf(m_themeName);
+  const int idx = m_catalog.indexOf(m_themeName);
   if (idx >= 0)
     m_theme = idx;
 
@@ -616,11 +432,9 @@ void Misc::ThemeManager::onExtensionUninstalled(const QString& id)
   Q_UNUSED(id)
   const auto currentName = m_themeName;
 
-  m_availableThemes.removeAll(QStringLiteral("System"));
   loadUserThemes();
-  m_availableThemes.append(QStringLiteral("System"));
 
-  const int idx = m_availableThemes.indexOf(currentName);
+  const int idx = m_catalog.indexOf(currentName);
   if (idx >= 0)
     m_theme = idx;
   else

@@ -20,6 +20,7 @@
 
 #include "AI/KeyVault.h"
 #include "AI/Logging.h"
+#include "AI/Providers/ProviderJson.h"
 #include "AI/SseEventReader.h"
 #include "Misc/JsonValidator.h"
 
@@ -74,7 +75,7 @@ AI::OpenAIReply::OpenAIReply(QNetworkAccessManager& nam,
   , m_sse(new SseEventReader(this))
   , m_transferTimeoutMs(transferTimeoutMs > 0 ? transferTimeoutMs : kOpenAIInitialResponseTimeoutMs)
   , m_parseThinkTags(parseThinkTags)
-  , m_thinkScan(ThinkScan::Detect)
+  , m_thinkSplitter()
   , m_finished(false)
 {
   connect(m_sse, &SseEventReader::frameReceived, this, &OpenAIReply::onSseEvent);
@@ -234,75 +235,25 @@ void AI::OpenAIReply::processChoiceDelta(const QJsonObject& choice)
  */
 void AI::OpenAIReply::routeContentChunk(const QString& chunk)
 {
-  if (!m_parseThinkTags || m_thinkScan == ThinkScan::Passthrough) {
+  if (!m_parseThinkTags) {
     Q_EMIT partialText(chunk);
     return;
   }
 
-  m_thinkCarry.append(chunk);
-  processThinkCarry(false);
+  publishThinkChunks(m_thinkSplitter.append(chunk));
 }
 
 /**
- * @brief Drains the buffered carry across scanner states, holding back only bytes that
- *        could still complete a tag split across chunks. atEnd flushes everything.
+ * @brief Emits each scanned run on the channel the splitter assigned it, in stream order.
  */
-void AI::OpenAIReply::processThinkCarry(bool atEnd)
+void AI::OpenAIReply::publishThinkChunks(const std::vector<ThinkChunk>& chunks)
 {
-  static const auto kOpen  = QStringLiteral("<think>");
-  static const auto kClose = QStringLiteral("</think>");
-  const int max_passes     = m_thinkCarry.size() + 2;
+  for (const auto& chunk : chunks)
+    if (chunk.channel == ThinkChannel::Thinking)
+      Q_EMIT partialThinking(chunk.text);
 
-  for (int pass = 0; pass < max_passes && !m_thinkCarry.isEmpty(); ++pass) {
-    if (m_thinkScan == ThinkScan::Passthrough) {
-      Q_EMIT partialText(m_thinkCarry);
-      m_thinkCarry.clear();
-      return;
-    }
-
-    if (m_thinkScan == ThinkScan::Detect) {
-      int ws = 0;
-      while (ws < m_thinkCarry.size() && m_thinkCarry.at(ws).isSpace())
-        ++ws;
-
-      if (ws > 0)
-        m_thinkCarry.remove(0, ws);
-
-      if (m_thinkCarry.isEmpty())
-        return;
-
-      if (m_thinkCarry.startsWith(kOpen)) {
-        m_thinkCarry.remove(0, kOpen.size());
-        m_thinkScan = ThinkScan::Thinking;
-        continue;
-      }
-
-      if (!atEnd && m_thinkCarry.size() < kOpen.size() && kOpen.startsWith(m_thinkCarry))
-        return;
-
-      m_thinkScan = ThinkScan::Passthrough;
-      continue;
-    }
-
-    const int close_at = m_thinkCarry.indexOf(kClose);
-    if (close_at >= 0) {
-      if (close_at > 0)
-        Q_EMIT partialThinking(m_thinkCarry.left(close_at));
-
-      m_thinkCarry.remove(0, close_at + kClose.size());
-      m_thinkScan = ThinkScan::Detect;
-      continue;
-    }
-
-    const int keep = atEnd ? 0 : kClose.size() - 1;
-    const int cut  = m_thinkCarry.size() - keep;
-    if (cut > 0) {
-      Q_EMIT partialThinking(m_thinkCarry.left(cut));
-      m_thinkCarry.remove(0, cut);
-    }
-
-    return;
-  }
+    else
+      Q_EMIT partialText(chunk.text);
 }
 
 /**
@@ -382,16 +333,8 @@ void AI::OpenAIReply::onReplyFinished()
   }
 
   if (status >= 400) {
-    setTransientError(status == 408 || status == 429 || status >= 500);
-    const auto body = m_reply->readAll();
-    QString msg;
-    Misc::JsonValidator::Limits limits;
-    limits.maxFileSize = 256 * 1024;
-    const auto parsed  = Misc::JsonValidator::parseAndValidate(body, limits);
-    if (parsed.valid && parsed.document.isObject()) {
-      const auto err = parsed.document.object().value(QStringLiteral("error")).toObject();
-      msg            = err.value(QStringLiteral("message")).toString();
-    }
+    setTransientError(ProviderJson::isTransientHttpStatus(status));
+    QString msg = ProviderJson::errorMessageFromBody(m_reply->readAll());
     if (msg.isEmpty())
       msg = tr("HTTP %1").arg(status);
 
@@ -407,7 +350,7 @@ void AI::OpenAIReply::onReplyFinished()
 
   m_sse->feed({});
   if (m_parseThinkTags)
-    processThinkCarry(true);
+    publishThinkChunks(m_thinkSplitter.flush());
 
   emitPendingToolCalls();
 

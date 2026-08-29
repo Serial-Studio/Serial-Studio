@@ -39,19 +39,9 @@ public:
                                    const QJsonArray& tools,
                                    bool forbidToolUse = false) override;
 
-  [[nodiscard]] static QJsonArray translateHistory(const QJsonArray& history,
-                                                   const QString& systemText,
-                                                   bool useDeveloperRole);
-  [[nodiscard]] static QJsonArray translateTools(const QJsonArray& tools);
-
 private:
   [[nodiscard]] static bool prefersDeveloperRole(const QString& modelId);
   [[nodiscard]] static bool isReasoningModel(const QString& modelId);
-
-  static void translateBlocks(const QJsonArray& blocks,
-                              QString& textAccumulator,
-                              QJsonArray& toolCalls,
-                              QJsonArray& toolResultMessages);
 
   QNetworkAccessManager& m_nam;
   KeyGetter m_keyGetter;

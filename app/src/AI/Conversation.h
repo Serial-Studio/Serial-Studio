@@ -14,7 +14,6 @@
 #include <QHash>
 #include <QJsonArray>
 #include <QJsonObject>
-#include <QNetworkAccessManager>
 #include <QObject>
 #include <QSet>
 #include <QString>
@@ -22,10 +21,8 @@
 #include <QVariantList>
 #include <QVariantMap>
 
+#include "AI/Conversation/HelpFetcher.h"
 #include "AI/SentinelProbe.h"
-
-class QUrl;
-class QNetworkReply;
 
 namespace AI {
 
@@ -57,19 +54,15 @@ class Conversation : public QObject {
   // clang-format on
 
 public:
-  static constexpr int kMaxToolCalls          = 25;
-  static constexpr int kMaxDigestChars        = 600;
-  static constexpr int kMaxHistoryItems       = 400;
-  static constexpr int kMaxUiMessageRows      = 600;
-  static constexpr int kMaxTransientRetries   = 2;
-  static constexpr int kSystemReserveTokens   = 28000;
-  static constexpr int kStreamFlushMs         = 33;
-  static constexpr int kAutoSaveDebounceMs    = 800;
-  static constexpr int kRetryBaseMs           = 1500;
-  static constexpr int kHelpFetchTimeoutMs    = 15 * 1000;
-  static constexpr int kMaxHelpFetchBytes     = 32 * 1024;
-  static constexpr int kMaxHelpIndexBytes     = 64 * 1024;
-  static constexpr int kMaxHelpTransportBytes = 1 * 1024 * 1024;
+  static constexpr int kMaxToolCalls        = 25;
+  static constexpr int kMaxDigestChars      = 600;
+  static constexpr int kMaxHistoryItems     = 400;
+  static constexpr int kMaxUiMessageRows    = 600;
+  static constexpr int kMaxTransientRetries = 2;
+  static constexpr int kSystemReserveTokens = 28000;
+  static constexpr int kStreamFlushMs       = 33;
+  static constexpr int kAutoSaveDebounceMs  = 800;
+  static constexpr int kRetryBaseMs         = 1500;
 
   /**
    * @brief Status pill rendered by QML for each tool-call card.
@@ -135,21 +128,17 @@ private slots:
                            const QJsonObject& extras = QJsonObject());
   void onReplyFinished();
   void onReplyError(const QString& message);
+  void onHelpFetchFinished(const QString& callId, const QJsonObject& result);
 
 private:
   void issueRequest();
   void ageHistoryToolResults();
   void pruneHistory();
-  [[nodiscard]] int firstFreshUserTurnAt(int start) const;
   void reconcileHistoryToolPairs();
-  bool reconcileHistoryToolPairsAt(int& i);
   void injectRoutedSkill(const QString& userText);
   void maybeProposeMemory(const QString& userText);
   void evaluateProbe();
   [[nodiscard]] QString probeComplianceKey() const;
-  void fetchHelpPage(const QString& callId, const QString& path);
-  void fetchHelpIndex(const QString& callId, const QUrl& missedUrl);
-  void completeHelpFetch(const QString& callId, const QUrl& url, QNetworkReply* reply);
   void appendUserMessage(const QString& text);
   void beginAssistantMessage();
   void appendToolCallCard(const QString& callId,
@@ -193,7 +182,6 @@ private:
   [[nodiscard]] bool shouldRetryAfterError() const;
   void scheduleTransientRetry(const QString& message);
 
-  [[nodiscard]] static QString rewriteHelpLinks(const QString& text);
   void setBusy(bool busy);
   void setAwaitingConfirmation(bool flag);
   void setLastError(const QString& message);
@@ -201,7 +189,6 @@ private:
   void scheduleUiFlush();
   [[nodiscard]] QJsonArray dispatcherTools() const;
   [[nodiscard]] QJsonArray budgetedHistory(const QJsonArray& tools) const;
-  [[nodiscard]] static int estimateTokens(const QJsonArray& blocks);
 
   /**
    * @brief Captured Confirm-state info pending user approval.
@@ -238,7 +225,7 @@ private:
   QHash<QString, PendingCall> m_awaitingConfirm;
   bool m_lastAwaitingFlag;
 
-  QNetworkAccessManager m_helpFetchNam;
+  HelpFetcher m_helpFetcher;
 
   QTimer* m_streamFlushTimer;
   bool m_streamDirty;

@@ -17,6 +17,7 @@
 
 #include "AI/KeyVault.h"
 #include "AI/Logging.h"
+#include "AI/Providers/ProviderJson.h"
 #include "AI/SseEventReader.h"
 #include "Misc/JsonValidator.h"
 
@@ -307,16 +308,8 @@ void AI::AnthropicReply::onReplyFinished()
   }
 
   if (status >= 400) {
-    setTransientError(status == 408 || status == 429 || status >= 500);
-    const auto body = m_reply->readAll();
-    QString msg;
-    Misc::JsonValidator::Limits limits;
-    limits.maxFileSize = 256 * 1024;
-    const auto parsed  = Misc::JsonValidator::parseAndValidate(body, limits);
-    if (parsed.valid && parsed.document.isObject()) {
-      const auto err = parsed.document.object().value(QStringLiteral("error")).toObject();
-      msg            = err.value(QStringLiteral("message")).toString();
-    }
+    setTransientError(ProviderJson::isTransientHttpStatus(status));
+    QString msg = ProviderJson::errorMessageFromBody(m_reply->readAll());
     if (msg.isEmpty())
       msg = tr("HTTP %1").arg(status);
 

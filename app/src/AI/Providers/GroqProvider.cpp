@@ -17,8 +17,8 @@
 #include "AI/ContextBuilder.h"
 #include "AI/Logging.h"
 #include "AI/Providers/ImmediateErrorReply.h"
-#include "AI/Providers/OpenAIProvider.h"
 #include "AI/Providers/OpenAIReply.h"
+#include "AI/Providers/ProviderJson.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constants
@@ -122,27 +122,10 @@ AI::Reply* AI::GroqProvider::sendMessage(const QJsonArray& history,
       QObject::tr("No Groq API key set. Open Manage Keys to add one."));
 
   const auto systemBlocks = ContextBuilder::buildSystemArray(false);
-  QString systemText;
-  for (const auto& v : systemBlocks) {
-    const auto block = v.toObject();
-    const auto t     = block.value(QStringLiteral("text")).toString();
-    if (!t.isEmpty()) {
-      if (!systemText.isEmpty())
-        systemText.append(QStringLiteral("\n\n"));
+  const auto systemText   = ProviderJson::flattenSystemBlocks(systemBlocks);
 
-      systemText.append(t);
-    }
-  }
-
-  QJsonObject body;
-  body[QStringLiteral("model")]    = currentModel();
-  body[QStringLiteral("stream")]   = true;
-  body[QStringLiteral("messages")] = OpenAIProvider::translateHistory(history, systemText, false);
-  if (!tools.isEmpty()) {
-    body[QStringLiteral("tools")] = OpenAIProvider::translateTools(tools);
-    body[QStringLiteral("tool_choice")] =
-      forbidToolUse ? QStringLiteral("none") : QStringLiteral("auto");
-  }
+  const auto body =
+    ProviderJson::chatCompletionsBody(currentModel(), history, systemText, tools, forbidToolUse);
 
   const auto bytes = QJsonDocument(body).toJson(QJsonDocument::Compact);
 

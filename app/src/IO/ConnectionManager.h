@@ -23,16 +23,16 @@
 
 #include <atomic>
 #include <memory>
-#include <QHash>
 #include <QMap>
-#include <QMutex>
 #include <QObject>
 #include <QSet>
 #include <QSettings>
 #include <QTimer>
 #include <unordered_map>
 
+#include "IO/ConnectionManager/ConnectFanOut.h"
 #include "IO/ConnectionManager/DriverUiRegistry.h"
+#include "IO/ConnectionManager/ReplyCapture.h"
 #include "IO/DeviceManager.h"
 #include "IO/HAL_Driver.h"
 #include "IO/StreamWorker.h"
@@ -237,8 +237,6 @@ private slots:
   void onDriverOpenFinished(bool ok, const QString& reason);
 
 private:
-  void endWaitCursor();
-  void beginWaitCursor();
   void concludeConnectRequest();
   void notifyConnectedStateChanged();
   void wireUiDriver(IO::HAL_Driver* driver);
@@ -259,14 +257,8 @@ private:
 private:
   std::atomic<bool> m_paused;
   bool m_writeEnabled;
-  bool m_connectFanOut;
-  bool m_connectPending;
-  bool m_waitCursorActive;
-  bool m_lastConnectedState;
   bool m_syncingFromProject;
   bool m_rebuildingDevices;
-  bool m_lastConnectingState;
-  int m_lastConnectedCount;
   SerialStudio::BusType m_busType;
 
   QByteArray m_startSequence;
@@ -276,14 +268,11 @@ private:
   QSettings m_settings;
   QTimer m_uiDriverSaveTimer;
 
-  QSet<int> m_pendingDialVerdicts;
   std::unordered_map<int, std::unique_ptr<DeviceManager>> m_devices;
   std::vector<std::unique_ptr<StreamWorker>> m_streamWorkers;
 
-  std::atomic<bool> m_replyCaptureArmed;
-  mutable QMutex m_replyMutex;
-  QHash<int, QByteArray> m_replyBuffers;
-
+  ConnectFanOut m_fanOut;
+  ReplyCapture m_replyCapture;
   DriverUiRegistry m_uiDrivers;
 };
 

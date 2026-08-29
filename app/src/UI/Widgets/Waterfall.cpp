@@ -23,15 +23,13 @@
 #include "UI/Widgets/Waterfall.h"
 
 #include <algorithm>
+#include <cmath>
 #include <QCursor>
-#include <QFontMetrics>
 #include <QHoverEvent>
 #include <QMouseEvent>
-#include <QPainter>
 #include <QQuickWindow>
 #include <QSGSimpleRectNode>
 #include <QSGSimpleTextureNode>
-#include <QtMath>
 #include <QWheelEvent>
 
 #include "DSPSimd.h"
@@ -42,9 +40,6 @@
 #include "UI/Dashboard.h"
 #include "UI/Widgets/AudioExport.h"
 #include "UI/Widgets/FFTWindow.h"
-#include "UI/Widgets/Waterfall/WaterfallMath.h"
-
-using namespace UI::Widgets::WaterfallDetail;
 
 //--------------------------------------------------------------------------------------------------
 // Constants
@@ -56,7 +51,6 @@ static constexpr float kFloorDb        = -100.0f;
 static constexpr float kEpsSquared     = 1e-24f;
 static constexpr int kSmoothingWindow  = 3;
 static constexpr int kHalfSmoothWindow = kSmoothingWindow / 2;
-static constexpr double kMaxZoom       = 32.0;
 static constexpr double kLn10          = 2.302585092994046;
 
 //--------------------------------------------------------------------------------------------------
@@ -165,27 +159,13 @@ Widgets::Waterfall::Waterfall(const int index, QQuickItem* parent)
   , m_samplingRate(0)
   , m_windowType(SerialStudio::FFTWindowBlackmanHarris)
   , m_historySize(kDefaultHistory)
-  , m_colorMap(Turbo)
   , m_writeRow(0)
   , m_topRow(0)
   , m_filledOnce(false)
-  , m_axisVisible(true)
-  , m_markersVisible(true)
-  , m_colorbarVisible(true)
-  , m_minDb(-100.0)
-  , m_maxDb(0.0)
   , m_center(0.0)
   , m_halfRange(1.0)
-  , m_xZoom(1.0)
-  , m_yZoom(1.0)
-  , m_xPan(0.0)
-  , m_yPan(0.0)
   , m_scaleIsValid(false)
   , m_dragging(false)
-  , m_cursorEnabled(false)
-  , m_cursorHovering(false)
-  , m_axisDirty(true)
-  , m_overlayUpload(true)
   , m_textureDirty(true)
   , m_outerBgNode(nullptr)
   , m_innerBgNode(nullptr)
@@ -200,13 +180,14 @@ Widgets::Waterfall::Waterfall(const int index, QQuickItem* parent)
   , m_logActive(false)
   , m_logMin(0.0)
   , m_logMax(1.0)
-  , m_selectedMarker(-1)
   , m_plan(nullptr)
   , m_dashboard(UI::Dashboard::instance())
   , m_themeManager(Misc::ThemeManager::instance())
   , m_commonFonts(Misc::CommonFonts::instance())
   , m_timerEvents(Misc::TimerEvents::instance())
   , m_audioExport(Widgets::AudioExport::instance())
+  , m_view(static_cast<int>(ColorMapCount), static_cast<int>(Turbo))
+  , m_overlay(m_view, m_themeManager, m_commonFonts, m_timerEvents)
   , m_audioRecordingEnabled(false)
 {
   setFlag(ItemHasContents, true);
@@ -251,6 +232,7 @@ Widgets::Waterfall::Waterfall(const int index, QQuickItem* parent)
     loadMarkers();
   }
 
+  pushAxisModel();
   onThemeChanged();
 
   connect(&m_dashboard, &UI::Dashboard::updated, this, &Widgets::Waterfall::updateData);
@@ -320,7 +302,7 @@ bool Widgets::Waterfall::running() const noexcept
  */
 int Widgets::Waterfall::colorMap() const noexcept
 {
-  return m_colorMap;
+  return m_view.colorMap();
 }
 
 /**
@@ -352,7 +334,7 @@ int Widgets::Waterfall::fftSize() const noexcept
  */
 double Widgets::Waterfall::minDb() const noexcept
 {
-  return m_minDb;
+  return m_view.minDb();
 }
 
 /**
@@ -360,7 +342,7 @@ double Widgets::Waterfall::minDb() const noexcept
  */
 double Widgets::Waterfall::maxDb() const noexcept
 {
-  return m_maxDb;
+  return m_view.maxDb();
 }
 
 /**
@@ -419,7 +401,7 @@ QString Widgets::Waterfall::colorMapName(int index) const
  */
 QColor Widgets::Waterfall::colorAt(double normalized) const
 {
-  return QColor(sampleColorMap(m_colorMap, normalized));
+  return QColor(sampleColorMap(m_view.colorMap(), normalized));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -440,14 +422,11 @@ void Widgets::Waterfall::setRunning(const bool enabled)
  */
 void Widgets::Waterfall::setColorMap(const int map)
 {
-  const int clamped = qBound(0, map, static_cast<int>(ColorMapCount) - 1);
-  if (m_colorMap == clamped)
+  if (!m_view.setColorMap(map))
     return;
 
-  m_colorMap = clamped;
-
   if (!m_image.isNull() && !m_filledOnce && m_writeRow == 0)
-    m_image.fill(sampleColorMap(m_colorMap, 0.0));
+    m_image.fill(sampleColorMap(m_view.colorMap(), 0.0));
 
   m_textureDirty = true;
   Q_EMIT colorMapChanged();
@@ -466,7 +445,7 @@ void Widgets::Waterfall::setHistorySize(const int size)
   m_historySize = clamped;
   rebuildHistoryImage();
   Q_EMIT historySizeChanged();
-  markAxisDirty();
+  pushAxisModel();
 }
 
 /**
@@ -474,8 +453,7 @@ void Widgets::Waterfall::setHistorySize(const int size)
  */
 void Widgets::Waterfall::syncHistoryToTimeRange()
 {
-  static auto& timer = Misc::TimerEvents::instance();
-  const double fps   = timer.fps() > 0 ? timer.fps() : 24.0;
+  const double fps   = m_timerEvents.fps() > 0 ? m_timerEvents.fps() : 24.0;
   const double range = m_dashboard.plotTimeRange();
   setHistorySize(static_cast<int>(std::lround(range * fps)));
 }
@@ -485,10 +463,9 @@ void Widgets::Waterfall::syncHistoryToTimeRange()
  */
 void Widgets::Waterfall::setMinDb(const double value)
 {
-  if (qFuzzyCompare(m_minDb, value))
+  if (!m_view.setMinDb(value))
     return;
 
-  m_minDb = value;
   Q_EMIT dynamicRangeChanged();
 }
 
@@ -497,15 +474,14 @@ void Widgets::Waterfall::setMinDb(const double value)
  */
 void Widgets::Waterfall::setMaxDb(const double value)
 {
-  if (qFuzzyCompare(m_maxDb, value))
+  if (!m_view.setMaxDb(value))
     return;
 
-  m_maxDb = value;
   Q_EMIT dynamicRangeChanged();
 }
 
 /**
- * @brief Copies the dataset's frequency markers into runtime state (spec 0019); runs once at
+ * @brief Copies the dataset's frequency markers into the overlay (spec 0019); runs once at
  *        construction so the per-row path never touches the project model.
  */
 void Widgets::Waterfall::loadMarkers()
@@ -514,10 +490,10 @@ void Widgets::Waterfall::loadMarkers()
     return;
 
   const auto& dataset = GET_DATASET(SerialStudio::DashboardWaterfall, m_index);
-  m_markers.clear();
-  m_markers.reserve(dataset.fftMarkers.size());
+  std::vector<WaterfallOverlay::MarkerData> markers;
+  markers.reserve(dataset.fftMarkers.size());
   for (const auto& m : dataset.fftMarkers) {
-    MarkerData md;
+    WaterfallOverlay::MarkerData md;
     md.freqLo      = m.frequency;
     md.freqHi      = m.endFrequency;
     md.warningDb   = static_cast<float>(m.warningDb);
@@ -526,50 +502,32 @@ void Widgets::Waterfall::loadMarkers()
     md.state       = 0;
     md.customColor = m.color.isEmpty() ? QColor() : QColor::fromString(m.color);
     md.label       = m.label;
-    m_markers.push_back(std::move(md));
+    markers.push_back(std::move(md));
   }
+
+  m_overlay.setMarkers(std::move(markers));
 }
 
 /**
- * @brief Refreshes each marker's peak and normal/warning/alarm state from the freshly
- *        smoothed spectrum row; point markers use a +/- 2 bin neighborhood. Bin math clamps
- *        in the double domain BEFORE the int cast: casting an unrepresentable double is UB.
+ * @brief Republishes the axis domain the overlay draws against; called whenever the FFT plan,
+ *        the history depth or the Campbell binding changes, since the overlay caches it.
  */
-void Widgets::Waterfall::updateMarkerStates(const int spectrumSize)
+void Widgets::Waterfall::pushAxisModel()
 {
-  constexpr double pointHalfWindow = 2.0;
-  SS_ASSERT(spectrumSize > 0, return);
-  SS_ASSERT(m_smoothed.size() >= static_cast<std::size_t>(spectrumSize), return);
+  WaterfallOverlay::AxisModel axis;
+  axis.samplingRate = m_samplingRate;
+  axis.fftSize      = m_size;
+  axis.historySize  = m_historySize;
+  axis.campbellMode = m_campbellMode;
+  axis.logActive    = m_logActive;
+  axis.logMin       = m_logMin;
+  axis.logMax       = m_logMax;
+  axis.yMin         = m_yMin;
+  axis.yMax         = m_yMax;
+  axis.yAxisTitle   = m_yAxisTitle;
 
-  const double freqStep = static_cast<double>(m_samplingRate) / qMax(1, m_size);
-  const double lastBin  = qMax(0, spectrumSize - 1);
-  for (auto& m : m_markers) {
-    double loF = 0.0;
-    double hiF = 0.0;
-    if (m.freqHi > m.freqLo) {
-      loF = std::floor(m.freqLo / freqStep);
-      hiF = std::ceil(m.freqHi / freqStep);
-    } else {
-      const double center = std::round(m.freqLo / freqStep);
-      loF                 = center - pointHalfWindow;
-      hiF                 = center + pointHalfWindow;
-    }
-
-    const int lo = static_cast<int>(qBound(0.0, loF, lastBin));
-    const int hi = static_cast<int>(qBound(static_cast<double>(lo), hiF, lastBin));
-
-    float peak = kFloorDb;
-    for (int i = lo; i <= hi; ++i)
-      peak = std::max(peak, m_smoothed[i]);
-
-    m.peakDb = peak;
-    if (std::isfinite(m.alarmDb) && peak >= m.alarmDb)
-      m.state = 2;
-    else if (std::isfinite(m.warningDb) && peak >= m.warningDb)
-      m.state = 1;
-    else
-      m.state = 0;
-  }
+  m_overlay.setAxisModel(axis);
+  markAxisDirty();
 }
 
 /**
@@ -581,7 +539,7 @@ void Widgets::Waterfall::clearHistory()
   m_writeRow   = 0;
   m_filledOnce = false;
   if (!m_image.isNull()) {
-    m_image.fill(sampleColorMap(m_colorMap, 0.0));
+    m_image.fill(sampleColorMap(m_view.colorMap(), 0.0));
     m_textureDirty = true;
   }
 
@@ -629,9 +587,10 @@ void Widgets::Waterfall::rebuildLogColumnTable()
   const double nyquist  = m_samplingRate * 0.5;
 
   m_logActive = m_logX && width >= 4 && nyquist > freqStep;
-  markAxisDirty();
-  if (!m_logActive)
+  if (!m_logActive) {
+    pushAxisModel();
     return;
+  }
 
   m_logMin = std::log10(freqStep);
   m_logMax = std::log10(nyquist);
@@ -650,6 +609,8 @@ void Widgets::Waterfall::rebuildLogColumnTable()
     m_logColBin[static_cast<std::size_t>(x)]  = idx;
     m_logColFrac[static_cast<std::size_t>(x)] = static_cast<float>(qBound(0.0, pos - idx, 1.0));
   }
+
+  pushAxisModel();
 }
 
 /**
@@ -675,29 +636,6 @@ const float* Widgets::Waterfall::imageRow(const float* dbValues, int bins)
 }
 
 /**
- * @brief Maps a frequency in Hz to the axis world domain (Hz linear, log10-Hz log).
- */
-double Widgets::Waterfall::worldFromFreq(double hz) const
-{
-  if (!m_logActive)
-    return hz;
-
-  const double freqStep = static_cast<double>(m_samplingRate) / qMax(1, m_size);
-  return std::log10(qMax(hz, freqStep));
-}
-
-/**
- * @brief Maps an axis world coordinate back to a frequency in Hz.
- */
-double Widgets::Waterfall::freqFromWorld(double w) const
-{
-  if (!m_logActive)
-    return w;
-
-  return std::exp(w * kLn10);
-}
-
-/**
  * @brief Releases the FFT plan if one is currently allocated.
  */
 void Widgets::Waterfall::releaseFftPlan()
@@ -720,7 +658,7 @@ void Widgets::Waterfall::rebuildHistoryImage()
   const int width  = qMax(1, m_size / 2);
   const int height = qMax(1, m_historySize);
   m_image          = QImage(width, height, QImage::Format_RGB32);
-  m_image.fill(sampleColorMap(m_colorMap, 0.0));
+  m_image.fill(sampleColorMap(m_view.colorMap(), 0.0));
   m_textureDirty = true;
   m_topRow       = 0;
   m_writeRow     = 0;
@@ -775,10 +713,10 @@ void Widgets::Waterfall::paintRowInto(int physicalRow, const float* dbValues, in
   SS_ASSERT(dbValues != nullptr, return);
   SS_ASSERT(physicalRow >= 0 && physicalRow < m_image.height(), return);
 
+  const int map          = m_view.colorMap();
   const int imageWidth   = m_image.width();
-  const float minDb      = static_cast<float>(m_minDb);
-  const float maxDb      = static_cast<float>(m_maxDb);
-  const float invDbRange = 1.0f / qMax(1e-6f, maxDb - minDb);
+  const float minDb      = static_cast<float>(m_view.minDb());
+  const float invDbRange = m_view.invDbRange();
   const int writableBins = qMin(bins, imageWidth);
   m_textureDirty         = true;
   QRgb* scan             = reinterpret_cast<QRgb*>(m_image.scanLine(physicalRow));
@@ -786,11 +724,11 @@ void Widgets::Waterfall::paintRowInto(int physicalRow, const float* dbValues, in
   for (int x = 0; x < writableBins; ++x) {
     const float v  = (dbValues[x] - minDb) * invDbRange;
     const double t = qBound(0.0, static_cast<double>(v), 1.0);
-    scan[x]        = sampleColorMap(m_colorMap, t);
+    scan[x]        = sampleColorMap(map, t);
   }
 
   if (writableBins < imageWidth) {
-    const QRgb floor = sampleColorMap(m_colorMap, 0.0);
+    const QRgb floor = sampleColorMap(map, 0.0);
     for (int x = writableBins; x < imageWidth; ++x)
       scan[x] = floor;
   }
@@ -901,8 +839,8 @@ void Widgets::Waterfall::updateData()
   const int spectrumSize = m_size / 2;
   computeSmoothedRow(spectrumSize);
 
-  if (!m_markers.empty() && spectrumSize > 0)
-    updateMarkerStates(spectrumSize);
+  if (m_overlay.hasMarkers() && spectrumSize > 0)
+    m_overlay.updateMarkerStates(m_smoothed.data(), spectrumSize);
 
   const float* row_data = imageRow(m_smoothed.data(), spectrumSize);
   if (!row_data)
@@ -955,21 +893,20 @@ QSGNode* Widgets::Waterfall::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeDa
 
   auto* root = oldNode;
   if (!root) {
-    root            = new QSGNode;
-    m_outerBgNode   = nullptr;
-    m_innerBgNode   = nullptr;
-    m_specNodeA     = nullptr;
-    m_specNodeB     = nullptr;
-    m_overlayNode   = nullptr;
-    m_textureDirty  = true;
-    m_overlayUpload = true;
+    root           = new QSGNode;
+    m_outerBgNode  = nullptr;
+    m_innerBgNode  = nullptr;
+    m_specNodeA    = nullptr;
+    m_specNodeB    = nullptr;
+    m_overlayNode  = nullptr;
+    m_textureDirty = true;
   }
 
   SS_ASSERT(root != nullptr, return nullptr);
 
   root->removeAllChildNodes();
-  syncBackgroundNodes(root, m_cachedPlotRect);
-  syncSpectrogramNodes(root, m_cachedPlotRect);
+  syncBackgroundNodes(root, m_overlay.plotRect());
+  syncSpectrogramNodes(root, m_overlay.plotRect());
   syncOverlayNode(root);
 
   return root;
@@ -992,7 +929,7 @@ void Widgets::Waterfall::syncBackgroundNodes(QSGNode* root, const QRectF& plotRe
   }
 
   m_outerBgNode->setRect(outerRect);
-  m_outerBgNode->setColor(m_outerBg);
+  m_outerBgNode->setColor(m_overlay.outerBackground());
   root->appendChildNode(m_outerBgNode);
 
   if (plotRect.isEmpty())
@@ -1006,7 +943,7 @@ void Widgets::Waterfall::syncBackgroundNodes(QSGNode* root, const QRectF& plotRe
   }
 
   m_innerBgNode->setRect(plotRect);
-  m_innerBgNode->setColor(m_innerBg);
+  m_innerBgNode->setColor(m_overlay.innerBackground());
   root->appendChildNode(m_innerBgNode);
 }
 
@@ -1111,10 +1048,10 @@ void Widgets::Waterfall::syncOverlayNode(QSGNode* root)
 {
   SS_ASSERT(root != nullptr, return);
 
-  if (m_axisLayer.isNull()) {
+  bool upload = m_overlay.consumeUpload();
+  if (m_overlay.layer().isNull()) {
     delete m_overlayNode;
-    m_overlayNode   = nullptr;
-    m_overlayUpload = false;
+    m_overlayNode = nullptr;
     return;
   }
 
@@ -1122,47 +1059,43 @@ void Widgets::Waterfall::syncOverlayNode(QSGNode* root)
     m_overlayNode = new QSGSimpleTextureNode;
     m_overlayNode->setOwnsTexture(true);
     m_overlayNode->setFiltering(QSGTexture::Linear);
-    m_overlayUpload = true;
+    upload = true;
   }
 
-  if (m_overlayUpload) {
-    m_overlayNode->setTexture(window()->createTextureFromImage(m_axisLayer));
-    m_overlayUpload = false;
-  }
+  if (upload)
+    m_overlayNode->setTexture(window()->createTextureFromImage(m_overlay.layer()));
 
   m_overlayNode->setRect(QRectF(0, 0, width(), height()));
   root->appendChildNode(m_overlayNode);
 }
 
+/**
+ * @brief Rasterizes the overlay layer on the GUI thread ahead of the scene-graph sync. The
+ *        layer uses QPainter, fonts and application singletons, none of which may be touched
+ *        from updatePaintNode's render-thread context.
+ */
+void Widgets::Waterfall::updatePolish()
+{
+  if (!m_overlay.dirty())
+    return;
+
+  const qreal dpr = (window() ? window()->devicePixelRatio() : 1.0);
+  m_overlay.render(QSizeF(width(), height()), dpr);
+}
+
+/**
+ * @brief Marks the axis overlay as needing a re-render and schedules a repaint.
+ */
+void Widgets::Waterfall::markAxisDirty()
+{
+  m_overlay.markDirty();
+  polish();
+  update();
+}
+
 //--------------------------------------------------------------------------------------------------
 // Layout helpers
 //--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Computes the inner plot rectangle after reserving axis-label margins.
- */
-QRectF Widgets::Waterfall::computePlotRect(const QFontMetrics& fm) const
-{
-  if (!m_axisVisible || width() < kMinAxisWidth || height() < kMinAxisHeight)
-    return QRectF(0.5, 0.5, qMax(0.0, width() - 1), qMax(0.0, height() - 1));
-
-  static auto& fonts = Misc::CommonFonts::instance();
-  const QFontMetrics titleFm(fonts.widgetFont(0.91, true));
-
-  const int yTickWidth =
-    fm.horizontalAdvance(QStringLiteral("00.00")) + kAxisTickPx + kAxisLabelPad;
-  const int yTitleWidth = titleFm.height() + 2;
-
-  const int leftMargin   = yTitleWidth + yTickWidth;
-  const int rightMargin  = kAxisLabelPad;
-  const int topMargin    = kAxisLabelPad;
-  const int bottomMargin = fm.height() + kAxisTickPx + kAxisLabelPad * 2;
-
-  return QRectF(leftMargin + 0.5,
-                topMargin + 0.5,
-                qMax(0.0, width() - leftMargin - rightMargin - 1),
-                qMax(0.0, height() - topMargin - bottomMargin - 1));
-}
 
 /**
  * @brief Returns the visible source rectangle inside m_image, given zoom/pan.
@@ -1172,93 +1105,7 @@ QRectF Widgets::Waterfall::computeSourceRect() const
   if (m_image.isNull())
     return QRectF();
 
-  const double iw   = m_image.width();
-  const double ih   = m_image.height();
-  const double srcW = iw / m_xZoom;
-  const double srcH = ih / m_yZoom;
-
-  const double maxPanX = qMax(0.0, (iw - srcW) * 0.5);
-  const double maxPanY = qMax(0.0, (ih - srcH) * 0.5);
-  const double cx      = iw * 0.5 + qBound(-maxPanX, m_xPan * iw, maxPanX);
-  const double cy      = ih * 0.5 + qBound(-maxPanY, m_yPan * ih, maxPanY);
-
-  return QRectF(cx - srcW * 0.5, cy - srcH * 0.5, srcW, srcH);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Axis rendering
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Computes the visible frequency window [wMin, wMax] in axis WORLD units (Hz linear,
- *        log10-Hz log) from the zoom/pan view state; single source of truth for the axis,
- *        hover cursor, and marker Hz-to-pixel mapping.
- */
-void Widgets::Waterfall::visibleFreqWindow(double& wMin, double& wMax) const
-{
-  const double w0     = m_logActive ? m_logMin : 0.0;
-  const double w1     = m_logActive ? m_logMax : m_samplingRate * 0.5;
-  const double range  = w1 - w0;
-  const double srcW   = range / m_xZoom;
-  const double maxPan = qMax(0.0, (range - srcW) * 0.5);
-  const double center = (w0 + w1) * 0.5 + qBound(-maxPan, m_xPan * range, maxPan);
-  wMin                = center - srcW * 0.5;
-  wMax                = center + srcW * 0.5;
-}
-
-/**
- * @brief Collects the tick frequencies (Hz) for the visible window: the {1,2,5} ladder on
- *        the linear axis, or per-decade {1,2,5} candidates thinned to decades on the log
- *        axis when they would crowd.
- */
-std::vector<double> Widgets::Waterfall::collectFreqTicks(double wMin, double wMax) const
-{
-  std::vector<double> out;
-  if (!m_logActive) {
-    const AxisTicks ticks = computeFreqTicks(wMax - wMin, kAxisTickCount);
-    const double step     = ticks.step;
-    const double first    = std::ceil(wMin / step - 1e-9) * step;
-    for (double v = first; v <= wMax + 1e-6; v += step)
-      out.push_back(v);
-
-    return out;
-  }
-
-  constexpr double mants[] = {1.0, 2.0, 5.0};
-  const int dLo            = static_cast<int>(std::floor(wMin)) - 1;
-  const int dHi            = static_cast<int>(std::ceil(wMax)) + 1;
-  for (int dec = dLo; dec <= dHi; ++dec) {
-    for (const double m : mants) {
-      const double w = dec + std::log10(m);
-      if (w >= wMin - 1e-9 && w <= wMax + 1e-9)
-        out.push_back(m * waterfallFastPow10(dec));
-    }
-  }
-
-  if (static_cast<int>(out.size()) > kAxisTickCount + 2) {
-    std::vector<double> decades;
-    decades.reserve(out.size());
-    for (const double v : out) {
-      const double lg = std::log10(v);
-      if (std::abs(lg - std::round(lg)) < 1e-9)
-        decades.push_back(v);
-    }
-
-    if (!decades.empty())
-      out = std::move(decades);
-  }
-
-  if (static_cast<int>(out.size()) < 2) {
-    out.clear();
-    const double fLo      = freqFromWorld(wMin);
-    const double fHi      = freqFromWorld(wMax);
-    const AxisTicks ticks = computeFreqTicks(fHi - fLo, kAxisTickCount);
-    const double first    = std::ceil(fLo / ticks.step - 1e-9) * ticks.step;
-    for (double v = first; v <= fHi + 1e-6; v += ticks.step)
-      out.push_back(v);
-  }
-
-  return out;
+  return m_view.sourceRect(m_image.width(), m_image.height());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1270,7 +1117,7 @@ std::vector<double> Widgets::Waterfall::collectFreqTicks(double wMin, double wMa
  */
 bool Widgets::Waterfall::axisVisible() const noexcept
 {
-  return m_axisVisible;
+  return m_view.axisVisible();
 }
 
 /**
@@ -1278,7 +1125,7 @@ bool Widgets::Waterfall::axisVisible() const noexcept
  */
 double Widgets::Waterfall::xZoom() const noexcept
 {
-  return m_xZoom;
+  return m_view.xZoom();
 }
 
 /**
@@ -1286,7 +1133,7 @@ double Widgets::Waterfall::xZoom() const noexcept
  */
 double Widgets::Waterfall::yZoom() const noexcept
 {
-  return m_yZoom;
+  return m_view.yZoom();
 }
 
 /**
@@ -1294,7 +1141,7 @@ double Widgets::Waterfall::yZoom() const noexcept
  */
 double Widgets::Waterfall::xPan() const noexcept
 {
-  return m_xPan;
+  return m_view.xPan();
 }
 
 /**
@@ -1302,7 +1149,7 @@ double Widgets::Waterfall::xPan() const noexcept
  */
 double Widgets::Waterfall::yPan() const noexcept
 {
-  return m_yPan;
+  return m_view.yPan();
 }
 
 /**
@@ -1310,8 +1157,7 @@ double Widgets::Waterfall::yPan() const noexcept
  */
 bool Widgets::Waterfall::atDefaultView() const noexcept
 {
-  return qFuzzyCompare(m_xZoom, 1.0) && qFuzzyCompare(m_yZoom, 1.0) && qFuzzyIsNull(m_xPan)
-      && qFuzzyIsNull(m_yPan);
+  return m_view.atDefaultView();
 }
 
 /**
@@ -1319,10 +1165,9 @@ bool Widgets::Waterfall::atDefaultView() const noexcept
  */
 void Widgets::Waterfall::setAxisVisible(const bool enabled)
 {
-  if (m_axisVisible == enabled)
+  if (!m_view.setAxisVisible(enabled))
     return;
 
-  m_axisVisible = enabled;
   Q_EMIT axisVisibleChanged();
   markAxisDirty();
 }
@@ -1332,7 +1177,7 @@ void Widgets::Waterfall::setAxisVisible(const bool enabled)
  */
 bool Widgets::Waterfall::cursorEnabled() const noexcept
 {
-  return m_cursorEnabled;
+  return m_view.cursorEnabled();
 }
 
 /**
@@ -1340,10 +1185,9 @@ bool Widgets::Waterfall::cursorEnabled() const noexcept
  */
 void Widgets::Waterfall::setCursorEnabled(const bool enabled)
 {
-  if (m_cursorEnabled == enabled)
+  if (!m_view.setCursorEnabled(enabled))
     return;
 
-  m_cursorEnabled = enabled;
   Q_EMIT cursorEnabledChanged();
   markAxisDirty();
 }
@@ -1353,7 +1197,7 @@ void Widgets::Waterfall::setCursorEnabled(const bool enabled)
  */
 bool Widgets::Waterfall::markersVisible() const noexcept
 {
-  return m_markersVisible;
+  return m_view.markersVisible();
 }
 
 /**
@@ -1362,14 +1206,11 @@ bool Widgets::Waterfall::markersVisible() const noexcept
  */
 void Widgets::Waterfall::setMarkersVisible(const bool enabled)
 {
-  if (m_markersVisible == enabled)
+  if (!m_view.setMarkersVisible(enabled))
     return;
 
-  m_markersVisible = enabled;
-  if (!enabled) {
-    m_selectedMarker = -1;
-    m_chipHitRects.clear();
-  }
+  if (!enabled)
+    m_overlay.clearSpotlight();
 
   Q_EMIT markersVisibleChanged();
   markAxisDirty();
@@ -1380,7 +1221,7 @@ void Widgets::Waterfall::setMarkersVisible(const bool enabled)
  */
 bool Widgets::Waterfall::colorbarVisible() const noexcept
 {
-  return m_colorbarVisible;
+  return m_view.colorbarVisible();
 }
 
 /**
@@ -1388,10 +1229,9 @@ bool Widgets::Waterfall::colorbarVisible() const noexcept
  */
 void Widgets::Waterfall::setColorbarVisible(const bool enabled)
 {
-  if (m_colorbarVisible == enabled)
+  if (!m_view.setColorbarVisible(enabled))
     return;
 
-  m_colorbarVisible = enabled;
   Q_EMIT colorbarVisibleChanged();
 }
 
@@ -1459,23 +1299,8 @@ void Widgets::Waterfall::setAudioRecordingEnabled(const bool enabled)
  */
 void Widgets::Waterfall::zoomBy(double factor, double anchorX, double anchorY)
 {
-  if (!std::isfinite(factor) || factor <= 0.0)
+  if (!m_view.zoomBy(factor, anchorX, anchorY))
     return;
-
-  const double newX = qBound(1.0, m_xZoom * factor, kMaxZoom);
-  const double newY = qBound(1.0, m_yZoom * factor, kMaxZoom);
-
-  const double ax = qBound(0.0, anchorX, 1.0) - 0.5;
-  const double ay = qBound(0.0, anchorY, 1.0) - 0.5;
-  m_xPan          = m_xPan + ax * (1.0 / m_xZoom - 1.0 / newX);
-  m_yPan          = m_yPan + ay * (1.0 / m_yZoom - 1.0 / newY);
-  m_xZoom         = newX;
-  m_yZoom         = newY;
-
-  const double maxPanX = (1.0 - 1.0 / m_xZoom) * 0.5;
-  const double maxPanY = (1.0 - 1.0 / m_yZoom) * 0.5;
-  m_xPan               = qBound(-maxPanX, m_xPan, maxPanX);
-  m_yPan               = qBound(-maxPanY, m_yPan, maxPanY);
 
   Q_EMIT viewChanged();
   markAxisDirty();
@@ -1487,16 +1312,8 @@ void Widgets::Waterfall::zoomBy(double factor, double anchorX, double anchorY)
  */
 void Widgets::Waterfall::panBy(double normDx, double normDy)
 {
-  if (!std::isfinite(normDx) || !std::isfinite(normDy))
+  if (!m_view.panBy(normDx, normDy))
     return;
-
-  m_xPan -= normDx / m_xZoom;
-  m_yPan -= normDy / m_yZoom;
-
-  const double maxPanX = (1.0 - 1.0 / m_xZoom) * 0.5;
-  const double maxPanY = (1.0 - 1.0 / m_yZoom) * 0.5;
-  m_xPan               = qBound(-maxPanX, m_xPan, maxPanX);
-  m_yPan               = qBound(-maxPanY, m_yPan, maxPanY);
 
   Q_EMIT viewChanged();
   markAxisDirty();
@@ -1507,13 +1324,8 @@ void Widgets::Waterfall::panBy(double normDx, double normDy)
  */
 void Widgets::Waterfall::resetView()
 {
-  if (atDefaultView())
+  if (!m_view.resetView())
     return;
-
-  m_xZoom = 1.0;
-  m_yZoom = 1.0;
-  m_xPan  = 0.0;
-  m_yPan  = 0.0;
 
   Q_EMIT viewChanged();
   markAxisDirty();
@@ -1558,10 +1370,9 @@ void Widgets::Waterfall::mousePressEvent(QMouseEvent* event)
     return;
   }
 
-  if (m_markersVisible && !m_markers.empty()) {
-    const int hit = markerChipAt(event->position());
-    if (hit >= 0) {
-      m_selectedMarker = (m_selectedMarker == hit) ? -1 : hit;
+  if (m_view.markersVisible() && m_overlay.hasMarkers()) {
+    const int hit = m_overlay.markerChipAt(event->position());
+    if (hit >= 0 && m_overlay.toggleSpotlight(hit)) {
       markAxisDirty();
       event->accept();
       return;
@@ -1625,9 +1436,8 @@ void Widgets::Waterfall::geometryChange(const QRectF& newGeom, const QRectF& old
  */
 void Widgets::Waterfall::hoverEnterEvent(QHoverEvent* event)
 {
-  m_cursorHovering = true;
-  m_cursorPos      = event->position();
-  if (m_cursorEnabled)
+  m_overlay.setCursorPosition(event->position(), true);
+  if (m_view.cursorEnabled())
     markAxisDirty();
 
   event->accept();
@@ -1639,17 +1449,17 @@ void Widgets::Waterfall::hoverEnterEvent(QHoverEvent* event)
  */
 void Widgets::Waterfall::hoverMoveEvent(QHoverEvent* event)
 {
-  m_cursorHovering = true;
-  m_cursorPos      = event->position();
+  const QPointF pos = event->position();
+  m_overlay.setCursorPosition(pos, true);
 
   if (!m_dragging) {
-    if (m_markersVisible && markerChipAt(m_cursorPos) >= 0)
+    if (m_view.markersVisible() && m_overlay.markerChipAt(pos) >= 0)
       setCursor(Qt::PointingHandCursor);
     else
       unsetCursor();
   }
 
-  if (m_cursorEnabled)
+  if (m_view.cursorEnabled())
     markAxisDirty();
 
   event->accept();
@@ -1660,8 +1470,8 @@ void Widgets::Waterfall::hoverMoveEvent(QHoverEvent* event)
  */
 void Widgets::Waterfall::hoverLeaveEvent(QHoverEvent* event)
 {
-  m_cursorHovering = false;
-  if (m_cursorEnabled)
+  m_overlay.setCursorPosition(QPointF(), false);
+  if (m_view.cursorEnabled())
     markAxisDirty();
 
   event->accept();
@@ -1676,15 +1486,7 @@ void Widgets::Waterfall::hoverLeaveEvent(QHoverEvent* event)
  */
 void Widgets::Waterfall::onThemeChanged()
 {
-  m_outerBg      = m_themeManager.getColor(QStringLiteral("widget_window"));
-  m_innerBg      = m_themeManager.getColor(QStringLiteral("widget_base"));
-  m_borderColor  = m_themeManager.getColor(QStringLiteral("widget_border"));
-  m_textColor    = m_themeManager.getColor(QStringLiteral("widget_text"));
-  m_gridColor    = QColor(m_borderColor.red(), m_borderColor.green(), m_borderColor.blue(), 80);
-  m_accentColor  = m_themeManager.getColor(QStringLiteral("highlight"));
-  m_warningColor = m_themeManager.alarmColorForSeverity(2);
-  m_alarmColor   = m_themeManager.alarmColorForSeverity(3);
-
+  m_overlay.refreshTheme();
   markAxisDirty();
 }
 

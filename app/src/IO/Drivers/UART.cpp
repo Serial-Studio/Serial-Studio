@@ -28,6 +28,7 @@
 #endif
 
 #include "IO/ConnectionManager.h"
+#include "IO/Drivers/SerialPortIdentity.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
 #include "Misc/Utilities.h"
@@ -259,7 +260,7 @@ bool IO::Drivers::UART::open(const QIODevice::OpenMode mode)
     if (m_deviceNames.contains(name)) {
       const auto target =
         portId < m_deviceLocations.count() ? m_deviceLocations.at(portId) : QString();
-      const auto live = validPorts();
+      const auto live = SerialPorts::visiblePorts();
 
       const int matchIndex = matchPortByLocation(live, target);
       if (matchIndex < 0) {
@@ -781,7 +782,7 @@ void IO::Drivers::UART::refreshSerialDevices()
   locations.append("/dev/null");
   names.append(tr("Select Port"));
 
-  auto validPortList = validPorts();
+  auto validPortList = SerialPorts::visiblePorts();
   for (const auto& info : std::as_const(validPortList)) {
     if (!info.isNull()) {
 #ifdef Q_OS_WIN
@@ -905,25 +906,6 @@ void IO::Drivers::UART::populateErrors()
 }
 
 /**
- * @brief Returns a list with all the valid serial port objects.
- */
-QVector<QSerialPortInfo> IO::Drivers::UART::validPorts() const
-{
-  QVector<QSerialPortInfo> ports;
-  for (const auto& info : QSerialPortInfo::availablePorts()) {
-    if (!info.isNull()) {
-#ifdef Q_OS_MACOS
-      if (info.portName().toLower().startsWith("tty."))
-        continue;
-#endif
-      ports.append(info);
-    }
-  }
-
-  return ports;
-}
-
-/**
  * @brief Re-locates the open port in the new device list, updating m_portIndex if matched.
  */
 bool IO::Drivers::UART::relocateOpenPortIndex(const QVector<QSerialPortInfo>& ports)
@@ -955,33 +937,12 @@ QJsonObject IO::Drivers::UART::deviceIdentifier() const
   if (m_portIndex < 1)
     return {};
 
-  const auto ports = validPorts();
+  const auto ports = SerialPorts::visiblePorts();
   const int idx    = m_portIndex - 1;
   if (idx < 0 || idx >= ports.count())
     return {};
 
-  const auto& info = ports.at(idx);
-  QJsonObject id;
-
-  if (info.hasVendorIdentifier())
-    id.insert(QStringLiteral("vid"),
-              QString::number(info.vendorIdentifier(), 16).rightJustified(4, '0').toUpper());
-
-  if (info.hasProductIdentifier())
-    id.insert(QStringLiteral("pid"),
-              QString::number(info.productIdentifier(), 16).rightJustified(4, '0').toUpper());
-
-  const auto serial = info.serialNumber();
-  if (!serial.isEmpty())
-    id.insert(QStringLiteral("serial"), serial);
-
-  id.insert(QStringLiteral("portName"), info.portName());
-
-  const auto desc = info.description();
-  if (!desc.isEmpty())
-    id.insert(QStringLiteral("description"), desc);
-
-  return id;
+  return SerialPorts::identity(ports.at(idx));
 }
 
 /**
@@ -995,13 +956,13 @@ bool IO::Drivers::UART::selectByIdentifier(const QJsonObject& id)
   if (m_deviceNames.isEmpty())
     refreshSerialDevices();
 
-  const auto ports = validPorts();
+  const auto ports = SerialPorts::visiblePorts();
 
   int bestScore = 0;
   int bestIndex = -1;
 
   for (int i = 0; i < ports.count(); ++i) {
-    const int score = scorePortIdentifierMatch(ports.at(i), id);
+    const int score = SerialPorts::scoreIdentityMatch(SerialPorts::identity(ports.at(i)), id);
     if (score > bestScore) {
       bestScore = score;
       bestIndex = i;
@@ -1013,40 +974,6 @@ bool IO::Drivers::UART::selectByIdentifier(const QJsonObject& id)
 
   setPortIndex(static_cast<quint8>(bestIndex + 1));
   return true;
-}
-
-/**
- * @brief Scores how strongly a port matches a saved identifier (VID/PID/serial/name/desc).
- */
-int IO::Drivers::UART::scorePortIdentifierMatch(const QSerialPortInfo& info,
-                                                const QJsonObject& id) const
-{
-  const auto savedVid  = id.value(QStringLiteral("vid")).toString();
-  const auto savedPid  = id.value(QStringLiteral("pid")).toString();
-  const auto savedSer  = id.value(QStringLiteral("serial")).toString();
-  const auto savedName = id.value(QStringLiteral("portName")).toString();
-  const auto savedDesc = id.value(QStringLiteral("description")).toString();
-
-  int score = 0;
-
-  const bool vid_pid_checkable = !savedVid.isEmpty() && info.hasVendorIdentifier();
-  if (vid_pid_checkable) {
-    const auto vid = QString::number(info.vendorIdentifier(), 16).rightJustified(4, '0').toUpper();
-    const auto pid = QString::number(info.productIdentifier(), 16).rightJustified(4, '0').toUpper();
-    if (vid == savedVid && pid == savedPid) {
-      score += 100;
-      if (!savedSer.isEmpty() && info.serialNumber() == savedSer)
-        score += 50;
-    }
-  }
-
-  if (!savedDesc.isEmpty() && info.description() == savedDesc)
-    score += 10;
-
-  if (!savedName.isEmpty() && info.portName() == savedName)
-    score += 5;
-
-  return score;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -74,7 +74,7 @@ The API Server is available in both **Serial Studio GPL** and **Serial Studio Pr
 
 **Legend:**
 - 🟢 = GPL/Pro (available in all builds)
-- 🔵 = Pro only (requires commercial license)
+- 🔵 = Pro only (commercial license or free trial)
 
 ## Calling the API from Frame Parsers, Transforms, and Canvas Widgets
 

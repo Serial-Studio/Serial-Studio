@@ -21,6 +21,7 @@
 #include "AI/Logging.h"
 #include "AI/Providers/GeminiReply.h"
 #include "AI/Providers/ImmediateErrorReply.h"
+#include "AI/Providers/ProviderJson.h"
 
 //--------------------------------------------------------------------------------------------------
 // Construction and provider metadata
@@ -255,17 +256,7 @@ AI::Reply* AI::GeminiProvider::sendMessage(const QJsonArray& history,
       QObject::tr("No Gemini API key set. Open Manage Keys to add one."));
 
   const auto systemBlocks = ContextBuilder::buildSystemArray(false);
-  QString systemText;
-  for (const auto& v : systemBlocks) {
-    const auto block = v.toObject();
-    const auto t     = block.value(QStringLiteral("text")).toString();
-    if (!t.isEmpty()) {
-      if (!systemText.isEmpty())
-        systemText.append(QStringLiteral("\n\n"));
-
-      systemText.append(t);
-    }
-  }
+  const auto systemText   = ProviderJson::flattenSystemBlocks(systemBlocks);
 
   QJsonObject body;
   body[QStringLiteral("contents")] = translateHistory(history);

@@ -75,7 +75,8 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   private `notifyConnectedStateChanged()`, which emits `connectedChanged()` only when the
   `isConnected()` flag or the open-device count actually moved. Callers never reason about
   whether another path already reported; calling it twice is harmless. The
-  `m_connectPending` / `m_connectFanOut` pair and `concludeConnectRequest()` survive only to
+  connect-request bookkeeping now lives in `IO::ConnectFanOut` (the facade's `m_fanOut`
+  member) and `concludeConnectRequest()` survives only to
   settle the wait cursor and to make `toggleConnection()` treat an in-flight request as
   "connected" so the button aborts instead of stacking a second attempt.
 - **Async dials are visible through `HAL_Driver::isConnecting()`** (default `false`).

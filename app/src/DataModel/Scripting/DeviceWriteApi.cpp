@@ -34,10 +34,13 @@ extern "C" {
 #include <QString>
 #include <stdexcept>
 
+#include "DataModel/Scripting/ScriptResult.h"
 #include "IO/ConnectionManager.h"
 #include "IO/PipelineHost.h"
 #include "SSAssert.h"
 #include "UI/Dashboard.h"
+
+using namespace DataModel::ScriptResult;
 
 //--------------------------------------------------------------------------------------------------
 // Shared write + logging core
@@ -86,23 +89,6 @@ static qint64 performDeviceWrite(int sourceId, const QByteArray& data, QString& 
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Pushes a {ok, error?} table onto the Lua stack.
- */
-static void pushLuaWriteResult(lua_State* L, bool ok, const QString& errorMsg)
-{
-  lua_createtable(L, 0, ok ? 1 : 2);
-
-  lua_pushboolean(L, ok ? 1 : 0);
-  lua_setfield(L, -2, "ok");
-
-  if (!ok) {
-    const QByteArray utf8 = errorMsg.toUtf8();
-    lua_pushlstring(L, utf8.constData(), static_cast<size_t>(utf8.size()));
-    lua_setfield(L, -2, "error");
-  }
-}
-
-/**
  * @brief Lua C closure for deviceWrite(data, sourceId?) returning a result table.
  */
 static int luaDeviceWrite(lua_State* L)
@@ -110,7 +96,7 @@ static int luaDeviceWrite(lua_State* L)
   const int defaultSourceId = static_cast<int>(lua_tointeger(L, lua_upvalueindex(1)));
 
   if (!lua_isstring(L, 1)) {
-    pushLuaWriteResult(L, false, QStringLiteral("deviceWrite: data must be a string"));
+    pushLuaResult(L, false, QStringLiteral("deviceWrite: data must be a string"));
     return 1;
   }
 
@@ -120,7 +106,7 @@ static int luaDeviceWrite(lua_State* L)
   int sourceId = defaultSourceId;
   if (lua_gettop(L) >= 2 && !lua_isnil(L, 2)) {
     if (!lua_isnumber(L, 2)) {
-      pushLuaWriteResult(L, false, QStringLiteral("deviceWrite: sourceId must be a number"));
+      pushLuaResult(L, false, QStringLiteral("deviceWrite: sourceId must be a number"));
       return 1;
     }
     sourceId = static_cast<int>(lua_tointeger(L, 2));
@@ -128,13 +114,13 @@ static int luaDeviceWrite(lua_State* L)
 
   const QByteArray bytes(str, static_cast<int>(len));
   if (bytes.isEmpty()) {
-    pushLuaWriteResult(L, false, QStringLiteral("deviceWrite: data is empty"));
+    pushLuaResult(L, false, QStringLiteral("deviceWrite: data is empty"));
     return 1;
   }
 
   QString errorMsg;
   const qint64 written = performDeviceWrite(sourceId, bytes, errorMsg);
-  pushLuaWriteResult(L, written > 0 && errorMsg.isEmpty(), errorMsg);
+  pushLuaResult(L, written > 0 && errorMsg.isEmpty(), errorMsg);
   return 1;
 }
 
@@ -152,13 +138,6 @@ DataModel::DeviceWriteBridge::DeviceWriteBridge(QObject* parent) : QObject(paren
  */
 QVariantMap DataModel::DeviceWriteBridge::write(const QJSValue& data, const QJSValue& sourceIdVal)
 {
-  auto makeError = [](const QString& msg) -> QVariantMap {
-    QVariantMap m;
-    m.insert(QStringLiteral("ok"), false);
-    m.insert(QStringLiteral("error"), msg);
-    return m;
-  };
-
   int sourceId = defaultSourceId;
   if (!sourceIdVal.isUndefined() && !sourceIdVal.isNull()) {
     if (!sourceIdVal.isNumber())
@@ -184,15 +163,7 @@ QVariantMap DataModel::DeviceWriteBridge::write(const QJSValue& data, const QJSV
 
   QString errorMsg;
   const qint64 written = performDeviceWrite(sourceId, bytes, errorMsg);
-
-  QVariantMap result;
-  if (written > 0 && errorMsg.isEmpty()) {
-    result.insert(QStringLiteral("ok"), true);
-  } else {
-    result.insert(QStringLiteral("ok"), false);
-    result.insert(QStringLiteral("error"), errorMsg);
-  }
-  return result;
+  return makeResult(written > 0 && errorMsg.isEmpty(), errorMsg);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -304,14 +275,14 @@ static bool fireActionByPublicId(int actionId, QString& errorMsgOut)
 static int luaActionFire(lua_State* L)
 {
   if (!lua_isnumber(L, 1)) {
-    pushLuaWriteResult(L, false, QStringLiteral("actionFire: actionId must be a number"));
+    pushLuaResult(L, false, QStringLiteral("actionFire: actionId must be a number"));
     return 1;
   }
 
   const int actionId = static_cast<int>(lua_tointeger(L, 1));
   QString errorMsg;
   const bool ok = fireActionByPublicId(actionId, errorMsg);
-  pushLuaWriteResult(L, ok, errorMsg);
+  pushLuaResult(L, ok, errorMsg);
   return 1;
 }
 
@@ -336,26 +307,13 @@ DataModel::ActionFireBridge::ActionFireBridge(QObject* parent) : QObject(parent)
  */
 QVariantMap DataModel::ActionFireBridge::fire(const QJSValue& actionIdVal)
 {
-  auto makeError = [](const QString& msg) -> QVariantMap {
-    QVariantMap m;
-    m.insert(QStringLiteral("ok"), false);
-    m.insert(QStringLiteral("error"), msg);
-    return m;
-  };
-
   if (!actionIdVal.isNumber())
     return makeError(QStringLiteral("actionFire: actionId must be a number"));
 
   const int actionId = static_cast<int>(actionIdVal.toInt());
   QString errorMsg;
   const bool ok = fireActionByPublicId(actionId, errorMsg);
-
-  QVariantMap result;
-  result.insert(QStringLiteral("ok"), ok);
-  if (!ok)
-    result.insert(QStringLiteral("error"), errorMsg);
-
-  return result;
+  return makeResult(ok, errorMsg);
 }
 
 /**

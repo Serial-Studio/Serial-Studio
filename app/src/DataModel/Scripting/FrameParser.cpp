@@ -22,8 +22,6 @@
 #include "DataModel/Scripting/FrameParser.h"
 
 #include <QCoreApplication>
-#include <QFile>
-#include <QJsonDocument>
 #include <QThread>
 
 #include "DataModel/ProjectModel.h"
@@ -32,7 +30,6 @@
 #include "DataModel/Scripting/JsScriptEngine.h"
 #include "DataModel/Scripting/LuaScriptEngine.h"
 #include "DataModel/Scripting/NativeTemplates/NativeTemplate.h"
-#include "DataModel/Scripting/ScriptTemplates.h"
 #include "IO/PipelineHost.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
@@ -156,34 +153,7 @@ void DataModel::FrameParser::setupExternalConnections()
  */
 QString DataModel::FrameParser::defaultTemplateCode(int language)
 {
-  if (language == SerialStudio::Native) {
-    const auto* tmpl = nativeTemplateById(defaultNativeTemplateId());
-    SS_ASSERT(tmpl != nullptr, return {});
-    return CFrameParser::buildDescriptor(tmpl->id(), nativeTemplateDefaults(*tmpl));
-  }
-
-  const auto templates = loadScriptTemplateManifest(
-    QStringLiteral(":/scripts/parser/templates.json"), "DataModel::FrameParser");
-
-  QString defaultFile;
-  for (const auto& tmpl : templates) {
-    if (tmpl.isDefault) {
-      defaultFile = tmpl.file;
-      break;
-    }
-  }
-
-  if (defaultFile.isEmpty() && !templates.isEmpty())
-    defaultFile = templates.constFirst().file;
-
-  if (defaultFile.isEmpty())
-    return {};
-
-  const bool isLua = (language == SerialStudio::Lua);
-  const auto directory =
-    isLua ? QStringLiteral(":/scripts/parser/lua") : QStringLiteral(":/scripts/parser/js");
-  const auto suffix = isLua ? QStringLiteral(".lua") : QStringLiteral(".js");
-  return readTextResource(templateResourcePath(directory, defaultFile, suffix));
+  return ParserTemplateCatalog::defaultCode(language);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -197,44 +167,7 @@ bool DataModel::FrameParser::nativeEquivalentForFile(const QString& file,
                                                      QString& templateId,
                                                      QJsonObject& params)
 {
-  struct DelimitedVariant {
-    QLatin1StringView file;
-    QLatin1StringView separator;
-  };
-
-  static constexpr DelimitedVariant kDelimited[] = {
-    {    QLatin1StringView("comma_separated"),   QLatin1StringView(",")},
-    {      QLatin1StringView("tab_separated"), QLatin1StringView("\\t")},
-    {     QLatin1StringView("pipe_delimited"),   QLatin1StringView("|")},
-    {QLatin1StringView("semicolon_separated"),   QLatin1StringView(";")},
-  };
-
-  for (const auto& variant : kDelimited) {
-    if (file != variant.file)
-      continue;
-
-    const auto* tmpl = nativeTemplateById(QStringLiteral("delimited"));
-    SS_ASSERT(tmpl != nullptr, return false);
-
-    templateId = tmpl->id();
-    params     = nativeTemplateDefaults(*tmpl);
-    params.insert(QStringLiteral("separator"), QString(variant.separator));
-    return true;
-  }
-
-  QString id = file;
-  if (file == QStringLiteral("fixed_width_fields"))
-    id = QStringLiteral("fixed_width");
-  else if (file == QStringLiteral("key_value_pairs"))
-    id = QStringLiteral("key_value");
-
-  const auto* tmpl = nativeTemplateById(id);
-  if (!tmpl)
-    return false;
-
-  templateId = tmpl->id();
-  params     = nativeTemplateDefaults(*tmpl);
-  return true;
+  return ParserTemplateCatalog::nativeEquivalentForFile(file, templateId, params);
 }
 
 /**
@@ -243,31 +176,7 @@ bool DataModel::FrameParser::nativeEquivalentForFile(const QString& file,
 QString DataModel::FrameParser::fileForNativeTemplate(const QString& templateId,
                                                       const QJsonObject& params)
 {
-  SS_ASSERT(!nativeTemplates().isEmpty(), return {});
-
-  if (templateId == QStringLiteral("delimited")) {
-    const QString separator = SerialStudio::resolveEscapeSequences(
-      params.value(QStringLiteral("separator")).toString(QStringLiteral(",")));
-
-    if (separator == QStringLiteral("\t"))
-      return QStringLiteral("tab_separated");
-
-    if (separator == QStringLiteral("|"))
-      return QStringLiteral("pipe_delimited");
-
-    if (separator == QStringLiteral(";"))
-      return QStringLiteral("semicolon_separated");
-
-    return QStringLiteral("comma_separated");
-  }
-
-  if (templateId == QStringLiteral("fixed_width"))
-    return QStringLiteral("fixed_width_fields");
-
-  if (templateId == QStringLiteral("key_value"))
-    return QStringLiteral("key_value_pairs");
-
-  return templateId;
+  return ParserTemplateCatalog::fileForNativeTemplate(templateId, params);
 }
 
 /**
@@ -275,27 +184,10 @@ QString DataModel::FrameParser::fileForNativeTemplate(const QString& templateId,
  */
 QString DataModel::FrameParser::templateCode(int sourceId) const
 {
-  auto it        = m_engines.find(sourceId);
-  const int idx  = (it != m_engines.end()) ? it->second->templateIdx : -1;
-  const int lang = languageForSource(sourceId);
+  auto it       = m_engines.find(sourceId);
+  const int idx = (it != m_engines.end()) ? it->second->templateIdx : -1;
 
-  if (lang == SerialStudio::Native) {
-    const auto& templates = nativeTemplates();
-    if (idx < 0 || idx >= templates.size())
-      return {};
-
-    const auto* tmpl = templates.at(idx);
-    return CFrameParser::buildDescriptor(tmpl->id(), nativeTemplateDefaults(*tmpl));
-  }
-
-  if (idx < 0 || idx >= m_templateFiles.count())
-    return {};
-
-  const bool isLua = (lang == SerialStudio::Lua);
-  const auto directory =
-    isLua ? QStringLiteral(":/scripts/parser/lua") : QStringLiteral(":/scripts/parser/js");
-  const auto suffix = isLua ? QStringLiteral(".lua") : QStringLiteral(".js");
-  return readTextResource(templateResourcePath(directory, m_templateFiles.at(idx), suffix));
+  return m_templates.codeForIndex(idx, languageForSource(sourceId));
 }
 
 /**
@@ -303,53 +195,7 @@ QString DataModel::FrameParser::templateCode(int sourceId) const
  */
 int DataModel::FrameParser::detectTemplate(const QString& code) const
 {
-  const QString trimmed = code.trimmed();
-  if (trimmed.isEmpty())
-    return -1;
-
-  if (trimmed.startsWith(QLatin1Char('{')))
-    return detectNativeTemplate(trimmed);
-
-  for (int i = 0; i < m_templateFiles.size(); ++i) {
-    const auto& file = m_templateFiles[i];
-
-    const auto luaPath =
-      templateResourcePath(QStringLiteral(":/scripts/parser/lua"), file, QStringLiteral(".lua"));
-    const QString luaCode = readTextResource(luaPath).trimmed();
-    if (!luaCode.isEmpty() && luaCode == trimmed)
-      return i;
-
-    const auto jsPath =
-      templateResourcePath(QStringLiteral(":/scripts/parser/js"), file, QStringLiteral(".js"));
-    const QString jsCode = readTextResource(jsPath).trimmed();
-    if (!jsCode.isEmpty() && jsCode == trimmed)
-      return i;
-  }
-
-  return -1;
-}
-
-/**
- * @brief Returns the native registry index matching a JSON descriptor, or -1.
- */
-int DataModel::FrameParser::detectNativeTemplate(const QString& code) const
-{
-  SS_ASSERT(!code.isEmpty(), return -1);
-
-  const auto doc = QJsonDocument::fromJson(code.toUtf8());
-  if (!doc.isObject())
-    return -1;
-
-  const QString id = doc.object().value(QStringLiteral("template")).toString();
-  if (id.isEmpty())
-    return -1;
-
-  const auto& templates = nativeTemplates();
-  for (int i = 0; i < templates.size(); ++i)
-    if (templates.at(i)->id() == id)
-      return i;
-
-  return -1;
+  return m_templates.detect(code);
 }
 
 /**
@@ -357,7 +203,7 @@ int DataModel::FrameParser::detectNativeTemplate(const QString& code) const
  */
 const QStringList& DataModel::FrameParser::templateNames() const
 {
-  return m_templateNames;
+  return m_templates.names();
 }
 
 /**
@@ -366,9 +212,9 @@ const QStringList& DataModel::FrameParser::templateNames() const
 const QStringList& DataModel::FrameParser::templateNames(int language) const
 {
   if (language == SerialStudio::Native)
-    return m_nativeTemplateNames;
+    return m_templates.nativeNames();
 
-  return m_templateNames;
+  return m_templates.names();
 }
 
 /**
@@ -376,7 +222,7 @@ const QStringList& DataModel::FrameParser::templateNames(int language) const
  */
 const QStringList& DataModel::FrameParser::templateFiles() const
 {
-  return m_templateFiles;
+  return m_templates.files();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -907,28 +753,7 @@ void DataModel::FrameParser::collectGarbage()
  */
 void DataModel::FrameParser::loadTemplateNames()
 {
-  m_defaultTemplateFile.clear();
-  m_templateFiles.clear();
-  m_templateNames.clear();
-  m_nativeTemplateNames.clear();
-
-  const auto templates = loadScriptTemplateManifest(
-    QStringLiteral(":/scripts/parser/templates.json"), "DataModel::FrameParser");
-
-  for (const auto& tmpl : templates) {
-    m_templateFiles.append(tmpl.file);
-    m_templateNames.append(tmpl.name);
-    if (m_defaultTemplateFile.isEmpty() && tmpl.isDefault)
-      m_defaultTemplateFile = tmpl.file;
-  }
-
-  if (m_defaultTemplateFile.isEmpty() && !m_templateFiles.isEmpty())
-    m_defaultTemplateFile = m_templateFiles.constFirst();
-
-  const auto& native = nativeTemplates();
-  for (const auto* tmpl : native)
-    m_nativeTemplateNames.append(tmpl->name());
-
+  m_templates.reload();
   Q_EMIT templateNamesChanged();
 }
 
@@ -942,7 +767,7 @@ void DataModel::FrameParser::setTemplateIdx(int sourceId, int idx)
     return;
   }
 
-  if (idx < 0 || idx >= m_templateFiles.size())
+  if (idx < 0 || idx >= m_templates.fileCount())
     return;
 
   bool loaded = false;
@@ -998,8 +823,8 @@ void DataModel::FrameParser::setNativeTemplateIdx(int sourceId, int idx)
 void DataModel::FrameParser::loadDefaultTemplate(int sourceId, bool guiTrigger)
 {
   const bool native = (languageForSource(sourceId) == SerialStudio::Native);
-  const auto idx    = native ? 0 : m_templateFiles.indexOf(m_defaultTemplateFile);
-  setTemplateIdx(sourceId, static_cast<int>(idx));
+  const int idx     = native ? 0 : m_templates.defaultFileIndex();
+  setTemplateIdx(sourceId, idx);
 
   if (!guiTrigger) {
     IO::PipelineHost::runOnGuiThreadBlocking([] {

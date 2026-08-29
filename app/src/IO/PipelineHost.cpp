@@ -213,10 +213,9 @@ void IO::PipelineHost::relocateProcessingObjects()
 
 /**
  * @brief Hands the FrameBuilder and FrameParser to @p target's thread. BOTH drop their script
- *        engines first, on their current owner: a lua_State and a QJSEngine belong to the thread
- *        that built them, and a QJSEngine surviving the move is swept from its old thread by
- *        posted events and its new one synchronously, double-freeing the identifier table.
- *        readCode() and rebuildTransformEngines() rebuild on the new owner.
+ *        engines first, on their current owner: a QJSEngine surviving the move is swept from its
+ *        old thread by posted events and its new one synchronously, double-freeing the identifier
+ *        table. readCode() and rebuildTransformEngines() rebuild on the new owner.
  */
 void IO::PipelineHost::moveProcessingObjectsTo(QThread* target)
 {

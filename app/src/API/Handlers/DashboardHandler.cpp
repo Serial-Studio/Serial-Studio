@@ -766,7 +766,7 @@ static void insertTailFrameFilterUid(const QJsonValue& selector, QSet<int>& out)
   }
 
   QString error;
-  const auto match = API::Handlers::resolveDatasetSelector(selector, error);
+  const auto match = API::Handlers::ProjectApiSupport::resolveDatasetSelector(selector, error);
   if (match.dataset)
     out.insert(match.dataset->uniqueId);
 }

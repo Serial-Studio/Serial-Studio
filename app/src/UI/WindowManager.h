@@ -21,8 +21,6 @@
 
 #pragma once
 
-#include <QHash>
-#include <QJsonArray>
 #include <QJsonObject>
 #include <QMap>
 #include <QObject>
@@ -30,27 +28,25 @@
 #include <QQuickItem>
 #include <QRect>
 #include <QSettings>
+#include <QSize>
 #include <QVariant>
 #include <QVector>
 
 #include "UI/LayoutPatterns.h"
-
-namespace detail {
-struct StableKey;
-}  // namespace detail
+#include "UI/WindowManager/SnapOverlay.h"
+#include "UI/WindowManager/WindowGeometry.h"
+#include "UI/WindowManager/WindowLayoutStore.h"
 
 namespace UI {
 class Taskbar;
 class Dashboard;
 class UISessionRegistry;
 
-namespace Snap {
-struct SnapResult;
-}  // namespace Snap
-
 /**
- * @brief Manages layout, geometry, z-ordering, and interactive manipulation of
- *        floating dashboard windows.
+ * @brief Manages layout, geometry, z-ordering, and interactive manipulation of floating dashboard
+ *        windows. The gesture visuals live in SnapOverlay and the manual-layout reference in
+ *        WindowLayoutStore; this class owns the window registry, the interaction state machine and
+ *        the QML surface, and forwards the overlay properties QML binds to.
  */
 class WindowManager : public QQuickItem {
   // clang-format off
@@ -139,6 +135,8 @@ signals:
   void geometryChanged(QQuickItem* item);
 
 public:
+  using ResizeEdge = WindowGeometry::ResizeEdge;
+
   WindowManager(QQuickItem* parent = nullptr);
   ~WindowManager();
 
@@ -175,18 +173,6 @@ public:
   [[nodiscard]] int firstTileWindowId() const;
   [[nodiscard]] const QVector<int>& windowOrder() const;
 
-  enum class ResizeEdge {
-    None,
-    Left,
-    Right,
-    Top,
-    Bottom,
-    TopLeft,
-    TopRight,
-    BottomLeft,
-    BottomRight
-  };
-
 public slots:
   void clear();
   void loadLayout();
@@ -214,44 +200,15 @@ public slots:
 
 private:
   void refreshLayoutChoice();
-  [[nodiscard]] int getIdForWindow(QQuickItem* item) const;
-  [[nodiscard]] QQuickItem* findOverlapTarget(const QRect& dragRect) const;
-  [[nodiscard]] QVector<int> resolveSavedOrder(
-    const QJsonObject& layout, const QHash<detail::StableKey, int>& stableLookup) const;
-
-  [[nodiscard]] QRect extractGeometry(QQuickItem* item) const;
-  [[nodiscard]] QVector<QQuickItem*> sortedByVisualStacking() const;
-  [[nodiscard]] QQuickItem* topmostWindowAt(const QPointF& pos) const;
-  [[nodiscard]] QQuickItem* manualResizeTargetAt(const QPointF& pos) const;
-  [[nodiscard]] ResizeEdge detectResizeEdge(QQuickItem* target, const QPointF& pos) const;
-
+  void computeMergedEdges();
   void applyResizeCursor(ResizeEdge edge);
-  void applySavedGeometries(const QJsonObject& layout,
-                            const QHash<detail::StableKey, int>& stableLookup,
-                            int marginCanvasW,
-                            int marginCanvasH);
-
-  [[nodiscard]] bool startManualPress(const QPointF& pos, Qt::MouseButton button);
-
+  void commitManualGeometry(QQuickItem* window);
   void handleDragMove(QMouseEvent* event, const QPoint& delta);
   void handleResizeMove(QMouseEvent* event, const QPoint& delta);
-  void applyManualLayout(int newWidth, int newHeight);
 
-  void computeMergedEdges();
-  void clearSnapGuides();
-  void clearManualGesture();
-  void cacheSnapSiblings(QQuickItem* target);
-  void publishManualGesture(const QRect& geometry);
-  void publishSnapGuides(const Snap::SnapResult& result);
-  void publishFractionPreview(const QRect& geometry);
-
+  [[nodiscard]] QSize canvasSize() const;
   [[nodiscard]] bool tryReorderDraggedWindow();
-
-  void storeManualLayout();
-  void commitManualGeometry(QQuickItem* window);
-  void storeManualGeometry(int id, QQuickItem* item);
-
-  [[nodiscard]] QRect computeResizedGeometry(const QPoint& delta) const;
+  [[nodiscard]] bool startManualPress(const QPointF& pos, Qt::MouseButton button);
 
 protected:
   void hoverLeaveEvent(QHoverEvent* event) override;
@@ -267,14 +224,15 @@ private:
   UI::Dashboard& m_dashboard;
   UI::UISessionRegistry& m_sessionRegistry;
 
+  SnapOverlay m_snapOverlay;
+  WindowLayoutStore m_layoutStore;
+
   int m_zCounter;
   bool m_layoutRestored;
   bool m_autoLayoutEnabled;
   bool m_frozen;
   bool m_userReordered;
   bool m_suppressGeometrySignal;
-  int m_manualCanvasWidth;
-  int m_manualCanvasHeight;
   int m_lastCanvasWidth;
   int m_lastCanvasHeight;
   QString m_backgroundImage;
@@ -282,8 +240,6 @@ private:
   QVector<int> m_windowOrder;
   QMap<int, QQuickItem*> m_windows;
   QMap<QQuickItem*, int> m_windowZ;
-  QMap<int, QRect> m_manualGeometries;
-  QMap<int, QRect> m_pendingGeometries;
 
   ResizeEdge m_resizeEdge;
 
@@ -292,18 +248,10 @@ private:
 
   bool m_gridEnabled;
   int m_gridSize;
-  bool m_manualGestureActive;
-  QRect m_manualGestureGeometry;
-  QRect m_sizeMatchRect;
-  QRect m_fractionPreviewRect;
-  QString m_fractionPreviewLabel;
   int m_layoutRatio;
   QString m_layoutPattern;
   QString m_layoutContextKey;
   QVariantMap m_mergedEdges;
-  QVariantList m_alignmentGuides;
-  QVariantList m_spacingIndicators;
-  QVector<QRect> m_snapSiblings;
 
   QRect m_initialGeometry;
   QPoint m_initialMousePos;

@@ -210,6 +210,8 @@ endif()
 
 set(SOURCES
   src/Misc/ThemeManager.cpp
+  src/Misc/ThemeCatalog.cpp
+  src/Misc/LanguageTable.cpp
   src/Misc/CommonFonts.cpp
   src/Misc/Utilities.cpp
   src/Misc/PasswordHash.cpp
@@ -228,6 +230,9 @@ set(SOURCES
   src/Misc/WorkspaceManager.cpp
   src/Misc/ExtensionManager.cpp
   src/Misc/Extensions/PluginRunner.cpp
+  src/Misc/Extensions/ExtensionCatalog.cpp
+  src/Misc/Extensions/ExtensionInstaller.cpp
+  src/Misc/Extensions/ExtensionAutoUpdater.cpp
   src/Misc/Examples.cpp
   src/Misc/HelpCenter.cpp
   src/Misc/IconEngine.cpp
@@ -248,16 +253,25 @@ set(SOURCES
   src/Platform/FileOpenEventFilter.cpp
   src/UI/DashboardWidget.cpp
   src/UI/Dashboard.cpp
+  src/UI/Dashboard/DashboardTools.cpp
+  src/UI/Dashboard/DashboardViewState.cpp
+  src/UI/Dashboard/WidgetMapBuilder.cpp
   src/UI/AlarmMonitor.cpp
   src/UI/Taskbar.cpp
   src/UI/Taskbar/TaskbarModel.cpp
+  src/UI/Taskbar/TaskbarWindowMap.cpp
+  src/UI/Taskbar/FocusCycler.cpp
+  src/UI/Taskbar/TaskbarSearch.cpp
+  src/UI/WindowManager/WindowGeometry.cpp
+  src/UI/WindowManager/SnapOverlay.cpp
+  src/UI/WindowManager/WindowLayoutStore.cpp
   src/UI/TaskbarSettings.cpp
   src/UI/WindowManager.cpp
   src/UI/SnapGuides.cpp
   src/UI/UISessionRegistry.cpp
   src/UI/WidgetRegistry.cpp
   src/UI/WidgetExtensions.cpp
-  src/UI/WidgetExtensionManifest.cpp
+  src/UI/WidgetManifestParser.cpp
   src/Misc/Problems/ExtensionCheckers.cpp
   src/UI/Widgets/ExtensionData.cpp
   src/UI/Widgets/LEDPanel.cpp
@@ -275,12 +289,19 @@ set(SOURCES
   src/UI/Widgets/Accelerometer.cpp
   src/UI/Widgets/DataGrid.cpp
   src/UI/Widgets/Terminal.cpp
+  src/UI/Widgets/Terminal/AnsiPalette.cpp
+  src/UI/Widgets/Terminal/AnsiStateMachine.cpp
+  src/UI/Widgets/Terminal/TerminalSearch.cpp
   src/UI/Widgets/Gyroscope.cpp
   src/UI/Widgets/GPS.cpp
   src/UI/Widgets/MultiPlot.cpp
   src/UI/Widgets/WebView.cpp
   src/API/Server.cpp
   src/API/Server/ServerWorker.cpp
+  src/API/Server/AuthPrimitives.cpp
+  src/API/Server/ServerAuth.cpp
+  src/API/Server/ClientReception.cpp
+  src/API/Server/MirrorCommands.cpp
   src/API/CommandRegistry.cpp
   src/API/CommandHandler.cpp
   src/API/MCPHandler.cpp
@@ -301,14 +322,20 @@ set(SOURCES
   src/API/Mirror/MirrorSession.cpp
   src/Licensing/SimpleCrypt.cpp
   src/API/Handlers/ProjectHandler.cpp
-  src/API/Handlers/ProjectHandlerFile.cpp
-  src/API/Handlers/ProjectHandlerEntities.cpp
-  src/API/Handlers/Entities/ProjectHandlerAlarmCompat.cpp
-  src/API/Handlers/Entities/ProjectHandlerBulk.cpp
-  src/API/Handlers/Entities/ProjectHandlerDatasetFields.cpp
-  src/API/Handlers/ProjectHandlerParser.cpp
-  src/API/Handlers/ProjectHandlerBatch.cpp
-  src/API/Handlers/ProjectHandlerDiscovery.cpp
+  src/API/Handlers/ProjectApiSupport.cpp
+  src/API/Handlers/ProjectActionCommands.cpp
+  src/API/Handlers/ProjectBatchCommands.cpp
+  src/API/Handlers/ProjectDatasetCommands.cpp
+  src/API/Handlers/ProjectDatasetFieldCommands.cpp
+  src/API/Handlers/ProjectDiscoveryCommands.cpp
+  src/API/Handlers/ProjectDryRunCommands.cpp
+  src/API/Handlers/ProjectFileCommands.cpp
+  src/API/Handlers/ProjectGroupCommands.cpp
+  src/API/Handlers/ProjectListCommands.cpp
+  src/API/Handlers/ProjectOutputWidgetCommands.cpp
+  src/API/Handlers/ProjectPainterCommands.cpp
+  src/API/Handlers/ProjectParserCommands.cpp
+  src/API/Handlers/ProjectUpdateCommands.cpp
   src/API/Handlers/ConsoleHandler.cpp
   src/API/Handlers/ControlScriptHandler.cpp
   src/API/Handlers/CSVPlayerHandler.cpp
@@ -330,13 +357,17 @@ set(SOURCES
   src/IO/Drivers/UART.cpp
   src/IO/Drivers/BluetoothLE.cpp
   src/IO/Drivers/BluetoothLE/BleUuids.cpp
+  src/IO/Drivers/SerialPortIdentity.cpp
   src/IO/Checksum.cpp
   src/Console/Annotations.cpp
   src/Console/Handler.cpp
+  src/Console/TextFormat.cpp
   src/IO/FrameConfig.h
   src/IO/DeviceManager.cpp
   src/IO/ConnectionManager.cpp
   src/IO/ConnectionManager/DriverUiRegistry.cpp
+  src/IO/ConnectionManager/ConnectFanOut.cpp
+  src/IO/ConnectionManager/ReplyCapture.cpp
   src/IO/PipelineHost.cpp
   src/IO/StreamWorker.cpp
   src/Async/TaskTree.cpp
@@ -352,6 +383,10 @@ set(SOURCES
   src/DataModel/Scripting/MacroWorker.cpp
   src/DataModel/Scripting/MacroRunner.cpp
   src/DataModel/Scripting/FrameParser.cpp
+  src/DataModel/Scripting/ParserTemplateCatalog.cpp
+  src/DataModel/Scripting/ReplayRowCodec.cpp
+  src/DataModel/Scripting/ScriptDeviceWait.cpp
+  src/DataModel/Scripting/ScriptResult.cpp
   src/DataModel/Scripting/FrameParserPipeline.cpp
   src/DataModel/Scripting/JsScriptEngine.cpp
   src/DataModel/Scripting/JsWatchdog.cpp
@@ -371,7 +406,36 @@ set(SOURCES
   src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp
   src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp
   src/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp
+  src/DataModel/Scripting/NativeTemplates/NativeTemplateSupport.cpp
+  src/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp
+  src/DataModel/Scripting/NativeTemplates/BinaryHex.cpp
+  src/DataModel/Scripting/NativeTemplates/BinaryBase64.cpp
+  src/DataModel/Scripting/NativeTemplates/BinaryTlv.cpp
+  src/DataModel/Scripting/NativeTemplates/BinaryCobs.cpp
+  src/DataModel/Scripting/NativeTemplates/BinarySlip.cpp
+  src/DataModel/Scripting/NativeTemplates/BinaryUbx.cpp
+  src/DataModel/Scripting/NativeTemplates/BinarySirf.cpp
+  src/DataModel/Scripting/NativeTemplates/BinaryMavlink.cpp
+  src/DataModel/Scripting/NativeTemplates/BinaryNmea2000.cpp
+  src/DataModel/Scripting/NativeTemplates/BinaryRtcm.cpp
+  src/DataModel/Scripting/NativeTemplates/BinaryModbus.cpp
+  src/DataModel/Scripting/NativeTemplates/BinaryMessagePack.cpp
+  src/DataModel/Scripting/NativeTemplates/TextDelimited.cpp
+  src/DataModel/Scripting/NativeTemplates/TextFixedWidth.cpp
+  src/DataModel/Scripting/NativeTemplates/TextKeyValue.cpp
+  src/DataModel/Scripting/NativeTemplates/TextIniConfig.cpp
+  src/DataModel/Scripting/NativeTemplates/TextAtCommands.cpp
+  src/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp
+  src/DataModel/Scripting/NativeTemplates/TextUrlEncoded.cpp
+  src/DataModel/Scripting/NativeTemplates/TextJsonData.cpp
+  src/DataModel/Scripting/NativeTemplates/TextXmlData.cpp
+  src/DataModel/Scripting/NativeTemplates/TextYamlData.cpp
+  src/DataModel/Scripting/NativeTemplates/MultiFrameBatchedSensor.cpp
+  src/DataModel/Scripting/NativeTemplates/MultiFrameTimeSeries2d.cpp
   src/DataModel/Editors/JsCodeEditor.cpp
+  src/DataModel/Editors/EmbeddedCodeEditor.cpp
+  src/DataModel/Editors/EditorFormatting.cpp
+  src/DataModel/Editors/ScriptTemplateCatalog.cpp
   src/DataModel/Editors/ControlScriptEditor.cpp
   src/DataModel/Editors/MacroEditor.cpp
   src/DataModel/Editors/SerialStudioCompleter.cpp
@@ -386,13 +450,17 @@ set(SOURCES
   src/DataModel/Generated/DatasetSerialization.cpp
   src/DataModel/Generated/DatasetForm.cpp
   src/API/Generated/DatasetApiFields.cpp
-  src/DataModel/Project/ProjectModelPersistence.cpp
-  src/DataModel/Project/ProjectModelLoading.cpp
-  src/DataModel/Project/ProjectModelSources.cpp
-  src/DataModel/Project/ProjectModelCrud.cpp
-  src/DataModel/Project/ProjectModelWorkspaces.cpp
-  src/DataModel/Project/ProjectModelFolders.cpp
-  src/DataModel/Project/ProjectModelTables.cpp
+  src/DataModel/Project/ProjectPersistence.cpp
+  src/DataModel/Project/ProjectPresentation.cpp
+  src/DataModel/Project/ProjectLoader.cpp
+  src/DataModel/Project/ProjectFolders.cpp
+  src/DataModel/Project/ProjectWorkspaces.cpp
+  src/DataModel/Project/ProjectTables.cpp
+  src/DataModel/Project/ProjectSources.cpp
+  src/DataModel/Project/ProjectEntities.cpp
+  src/DataModel/Project/ProjectOutputWidgets.cpp
+  src/DataModel/Project/ProjectBulkOps.cpp
+  src/DataModel/Project/ProjectNavHistory.cpp
   src/DataModel/ProjectEditor.cpp
   src/DataModel/Project/ProjectEditorWiring.cpp
   src/DataModel/Project/ProjectEditorTree.cpp
@@ -403,7 +471,12 @@ set(SOURCES
   src/DataModel/Project/ProjectEditorSelection.cpp
   src/DataModel/Project/ProjectEditorSummaries.cpp
   src/DataModel/Importers/ProtoImporter.cpp
+  src/DataModel/Importers/ProtoLexer.cpp
+  src/DataModel/Importers/ProtoParser.cpp
   src/DataModel/FrameBuilder.cpp
+  src/DataModel/FrameBuilder/QuickPlotBuilder.cpp
+  src/DataModel/FrameBuilder/TableScriptBridge.cpp
+  src/DataModel/FrameBuilder/TransformCompiler.cpp
   src/DataModel/FramePoolPolicy.cpp
   src/DataModel/Frame.cpp
   src/DataModel/FrameConsumer.cpp
@@ -413,6 +486,10 @@ set(SOURCES
   src/DataModel/NotificationCenter.cpp
   src/DataModel/Dialogs/TransmitTestDialog.cpp
   src/CSV/Player.cpp
+  src/CSV/Player/FileIndexer.cpp
+  src/CSV/Player/MultiSourceMap.cpp
+  src/CSV/Player/RowCodec.cpp
+  src/CSV/Player/RowSyntax.cpp
   src/CSV/PlayerLoaderWorker.cpp
   src/CSV/Export.cpp
   src/MDF4/Player.cpp
@@ -432,6 +509,8 @@ set(HEADERS
   src/Misc/CommonFonts.h
   src/Misc/JsonValidator.h
   src/Misc/ThemeManager.h
+  src/Misc/ThemeCatalog.h
+  src/Misc/LanguageTable.h
   src/Misc/TimerEvents.h
   src/Misc/ProblemCenter.h
   src/Misc/ConnectionDiagnostics.h
@@ -448,6 +527,9 @@ set(HEADERS
   src/Misc/WorkspaceManager.h
   src/Misc/ExtensionManager.h
   src/Misc/Extensions/PluginRunner.h
+  src/Misc/Extensions/ExtensionCatalog.h
+  src/Misc/Extensions/ExtensionInstaller.h
+  src/Misc/Extensions/ExtensionAutoUpdater.h
   src/Misc/Examples.h
   src/Misc/HelpCenter.h
   src/Misc/IconEngine.h
@@ -459,15 +541,26 @@ set(HEADERS
   src/Misc/CrashTracker.h
   src/Misc/BackupManager.h
   src/UI/Dashboard.h
+  src/UI/Dashboard/DashboardTools.h
+  src/UI/Dashboard/DashboardViewState.h
+  src/UI/Dashboard/WidgetMapBuilder.h
   src/UI/DashboardWidget.h
   src/UI/AlarmMonitor.h
   src/UI/Taskbar.h
+  src/UI/Taskbar/TaskbarModel.h
+  src/UI/Taskbar/TaskbarWindowMap.h
+  src/UI/Taskbar/FocusCycler.h
+  src/UI/Taskbar/TaskbarSearch.h
+  src/UI/WindowManager/WindowGeometry.h
+  src/UI/WindowManager/SnapOverlay.h
+  src/UI/WindowManager/WindowLayoutStore.h
   src/UI/TaskbarSettings.h
   src/UI/WindowManager.h
   src/UI/WidgetRegistry.h
   src/UI/WidgetBands.h
   src/UI/LayoutPatterns.h
   src/UI/WidgetExtensions.h
+  src/UI/WidgetManifestParser.h
   src/UI/Widgets/GPS.h
   src/UI/Widgets/MultiPlot.h
   src/UI/Widgets/WebView.h
@@ -489,7 +582,16 @@ set(HEADERS
   src/UI/Widgets/LEDPanel.h
   src/UI/Widgets/Compass.h
   src/UI/Widgets/Terminal.h
+  src/UI/Widgets/Terminal/AnsiPalette.h
+  src/UI/Widgets/Terminal/AnsiStateMachine.h
+  src/UI/Widgets/Terminal/TerminalSearch.h
   src/API/Server.h
+  src/API/Server/ServerWorker.h
+  src/API/Server/AuthPrimitives.h
+  src/API/Server/ServerAuth.h
+  src/API/Server/ClientReception.h
+  src/API/Server/ConnectionState.h
+  src/API/Server/MirrorCommands.h
   src/API/CommandProtocol.h
   src/API/MCPProtocol.h
   src/API/CommandRegistry.h
@@ -514,6 +616,20 @@ set(HEADERS
   src/API/Mirror/MirrorSession.h
   src/Licensing/SimpleCrypt.h
   src/API/Handlers/ProjectHandler.h
+  src/API/Handlers/ProjectApiSupport.h
+  src/API/Handlers/ProjectActionCommands.h
+  src/API/Handlers/ProjectBatchCommands.h
+  src/API/Handlers/ProjectDatasetCommands.h
+  src/API/Handlers/ProjectDatasetFieldCommands.h
+  src/API/Handlers/ProjectDiscoveryCommands.h
+  src/API/Handlers/ProjectDryRunCommands.h
+  src/API/Handlers/ProjectFileCommands.h
+  src/API/Handlers/ProjectGroupCommands.h
+  src/API/Handlers/ProjectListCommands.h
+  src/API/Handlers/ProjectOutputWidgetCommands.h
+  src/API/Handlers/ProjectPainterCommands.h
+  src/API/Handlers/ProjectParserCommands.h
+  src/API/Handlers/ProjectUpdateCommands.h
   src/API/Handlers/ConsoleHandler.h
   src/API/Handlers/ControlScriptHandler.h
   src/API/Handlers/CSVPlayerHandler.h
@@ -535,6 +651,7 @@ set(HEADERS
   src/Platform/NativeWindow.h
   src/Console/Annotations.h
   src/Console/Handler.h
+  src/Console/TextFormat.h
   src/Console/Export.h
   src/IO/Drivers/UART.h
   src/IO/Drivers/Network.h
@@ -543,6 +660,8 @@ set(HEADERS
   src/IO/DeviceManager.h
   src/IO/ConnectionManager.h
   src/IO/ConnectionManager/DriverUiRegistry.h
+  src/IO/ConnectionManager/ConnectFanOut.h
+  src/IO/ConnectionManager/ReplyCapture.h
   src/IO/PipelineHost.h
   src/IO/StreamWorker.h
   src/Async/TaskTree.h
@@ -559,6 +678,11 @@ set(HEADERS
   src/IO/FileTransmission/ZMODEM.h
   src/IO/FrameReader.h
   src/DataModel/Scripting/FrameParser.h
+  src/DataModel/Scripting/ParserTemplateCatalog.h
+  src/DataModel/Scripting/ReplayRowCodec.h
+  src/DataModel/Scripting/ScriptDeviceWait.h
+  src/DataModel/Scripting/ScriptFrameShaping.h
+  src/DataModel/Scripting/ScriptResult.h
   src/DataModel/Scripting/ControlScript.h
   src/DataModel/Scripting/ControlScriptWorker.h
   src/DataModel/Scripting/MacroWorker.h
@@ -578,7 +702,36 @@ set(HEADERS
   src/DataModel/Scripting/ScriptTemplates.h
   src/DataModel/Scripting/CFrameParser.h
   src/DataModel/Scripting/NativeTemplates/NativeTemplate.h
+  src/DataModel/Scripting/NativeTemplates/NativeTemplateSupport.h
+  src/DataModel/Scripting/NativeTemplates/BinaryRaw.h
+  src/DataModel/Scripting/NativeTemplates/BinaryHex.h
+  src/DataModel/Scripting/NativeTemplates/BinaryBase64.h
+  src/DataModel/Scripting/NativeTemplates/BinaryTlv.h
+  src/DataModel/Scripting/NativeTemplates/BinaryCobs.h
+  src/DataModel/Scripting/NativeTemplates/BinarySlip.h
+  src/DataModel/Scripting/NativeTemplates/BinaryUbx.h
+  src/DataModel/Scripting/NativeTemplates/BinarySirf.h
+  src/DataModel/Scripting/NativeTemplates/BinaryMavlink.h
+  src/DataModel/Scripting/NativeTemplates/BinaryNmea2000.h
+  src/DataModel/Scripting/NativeTemplates/BinaryRtcm.h
+  src/DataModel/Scripting/NativeTemplates/BinaryModbus.h
+  src/DataModel/Scripting/NativeTemplates/BinaryMessagePack.h
+  src/DataModel/Scripting/NativeTemplates/TextDelimited.h
+  src/DataModel/Scripting/NativeTemplates/TextFixedWidth.h
+  src/DataModel/Scripting/NativeTemplates/TextKeyValue.h
+  src/DataModel/Scripting/NativeTemplates/TextIniConfig.h
+  src/DataModel/Scripting/NativeTemplates/TextAtCommands.h
+  src/DataModel/Scripting/NativeTemplates/TextNmea0183.h
+  src/DataModel/Scripting/NativeTemplates/TextUrlEncoded.h
+  src/DataModel/Scripting/NativeTemplates/TextJsonData.h
+  src/DataModel/Scripting/NativeTemplates/TextXmlData.h
+  src/DataModel/Scripting/NativeTemplates/TextYamlData.h
+  src/DataModel/Scripting/NativeTemplates/MultiFrameBatchedSensor.h
+  src/DataModel/Scripting/NativeTemplates/MultiFrameTimeSeries2d.h
   src/DataModel/Editors/JsCodeEditor.h
+  src/DataModel/Editors/EmbeddedCodeEditor.h
+  src/DataModel/Editors/EditorFormatting.h
+  src/DataModel/Editors/ScriptTemplateCatalog.h
   src/DataModel/Editors/ControlScriptEditor.h
   src/DataModel/Editors/MacroEditor.h
   src/DataModel/Editors/SerialStudioCompleter.h
@@ -590,15 +743,32 @@ set(HEADERS
   src/DataModel/Project/ProjectHistory.h
   src/DataModel/Project/PropertyHooks.h
   src/DataModel/Generated/DatasetRegistry.h
-  src/DataModel/Project/ProjectModelShared.h
+  src/DataModel/Project/ProjectPersistence.h
+  src/DataModel/Project/ProjectPresentation.h
+  src/DataModel/Project/ProjectLoader.h
+  src/DataModel/Project/ProjectFolders.h
+  src/DataModel/Project/ProjectWorkspaces.h
+  src/DataModel/Project/ProjectTables.h
+  src/DataModel/Project/ProjectSources.h
+  src/DataModel/Project/ProjectEntities.h
+  src/DataModel/Project/ProjectOutputWidgets.h
+  src/DataModel/Project/ProjectBulkOps.h
+  src/DataModel/Project/ProjectNavHistory.h
+  src/DataModel/Project/ProjectNaming.h
+  src/DataModel/Project/ProjectEditorIcons.h
   src/DataModel/ProjectEditor.h
   src/DataModel/Project/ProjectEditorItemIds.h
-  src/DataModel/Project/ProjectEditorShared.h
   src/DataModel/Importers/ProtoImporter.h
+  src/DataModel/Importers/ProtoLexer.h
+  src/DataModel/Importers/ProtoParser.h
   src/DataModel/DataBlock.h
   src/DataModel/Frame.h
   src/IO/Drivers/BluetoothLE/BleUuids.h
+  src/IO/Drivers/SerialPortIdentity.h
   src/DataModel/FrameBuilder.h
+  src/DataModel/FrameBuilder/QuickPlotBuilder.h
+  src/DataModel/FrameBuilder/TableScriptBridge.h
+  src/DataModel/FrameBuilder/TransformCompiler.h
   src/DataModel/FramePoolPolicy.h
   src/DataModel/FrameConsumer.h
   src/DataModel/DataTable.h
@@ -610,6 +780,10 @@ set(HEADERS
   src/CSV/SparseRowMerger.h
   src/CSV/Export.h
   src/CSV/Player.h
+  src/CSV/Player/FileIndexer.h
+  src/CSV/Player/MultiSourceMap.h
+  src/CSV/Player/RowCodec.h
+  src/CSV/Player/RowSyntax.h
   src/CSV/PlayerLoaderWorker.h
   src/MDF4/Player.h
   src/MDF4/PlayerLoaderWorker.h
@@ -807,11 +981,17 @@ if(BUILD_COMMERCIAL)
     src/InfluxDB/Export.h
     src/MQTT/CredentialVault.h
     src/MQTT/Publisher.h
+    src/MQTT/PublisherWorker.h
+    src/MQTT/TlsConfig.h
+    src/MQTT/BrokerOptions.h
+    src/MQTT/CsvExpansion.h
     src/MQTT/PublisherScript.h
     src/MQTT/PublisherScriptEditor.h
     src/MQTT/SparkplugPublisher.h
     src/MQTT/TlsIdentity.h
     src/IO/Drivers/Audio.h
+    src/IO/Drivers/Audio/AudioDeviceCatalog.h
+    src/IO/Drivers/Audio/AudioPcm.h
     src/Misc/Diagnostics/AudioChecks.h
     src/IO/Drivers/CANBus.h
     src/IO/Drivers/CANBus/CanBackends.h
@@ -821,13 +1001,22 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/CANBus/SlcanBackend.h
     src/IO/Drivers/CANBus/SeeedCanBackend.h
     src/IO/Drivers/Modbus.h
+    src/IO/Drivers/Modbus/ModbusRegisterGroups.h
+    src/IO/Drivers/Modbus/ModbusProjectGenerator.h
     src/IO/Drivers/HID.h
     src/IO/Drivers/USB.h
+    src/IO/Drivers/USB/UsbHex.h
+    src/IO/Drivers/USB/UsbTransferPump.h
     src/IO/Drivers/Process.h
     src/IO/Drivers/MQTT.h
     src/IO/Drivers/MQTT/SparkplugPayload.h
     src/IO/Drivers/MQTT/SparkplugSession.h
     src/IO/Drivers/OpcUa.h
+    src/IO/Drivers/OpcUa/OpcUaBrowser.h
+    src/IO/Drivers/OpcUa/OpcUaCertificateStore.h
+    src/IO/Drivers/OpcUa/OpcUaEndpointSelection.h
+    src/IO/Drivers/OpcUa/OpcUaFrameAssembler.h
+    src/IO/Drivers/OpcUa/OpcUaTag.h
     src/IO/Drivers/OpcUaWire.h
     src/IO/Drivers/OpcUaTypes.h
     src/IO/Drivers/OpcUaMarshal.h
@@ -859,6 +1048,8 @@ if(BUILD_COMMERCIAL)
     src/DataModel/Importers/AxisTicks.h
     src/DataModel/Importers/ImporterCommon.h
     src/DataModel/Importers/DBCImporter.h
+    src/DataModel/Importers/DBCMultiplexing.h
+    src/DataModel/Importers/ModbusRegisterMap.h
     src/DataModel/Importers/ModbusMapImporter.h
     src/Licensing/Trial.h
     src/Licensing/MachineID.h
@@ -871,11 +1062,18 @@ if(BUILD_COMMERCIAL)
     src/Licensing/OfflineSelfTest.h
     src/Licensing/GuardSelfTest.h
     src/Sessions/DatabaseManager.h
+    src/Sessions/DatabaseManager/DatabaseSchema.h
+    src/Sessions/DatabaseManager/SessionExporter.h
   src/Sessions/DatabaseManager/ReproducibilityVerifier.h
     src/Sessions/DatabaseWorker.h
     src/Sessions/Export.h
     src/Sessions/HtmlReport.h
     src/Sessions/Player.h
+    src/Sessions/Player/ReplayAlignment.h
+    src/Sessions/Player/ReplayClock.h
+    src/Sessions/Player/ReplayFrameValues.h
+    src/Sessions/Player/ReplaySynthesis.h
+    src/Sessions/Player/SessionDbReader.h
   src/Sessions/Player/PreSessionState.h
     src/Sessions/PlayerLoaderWorker.h
     src/Sessions/ReportData.h
@@ -898,17 +1096,34 @@ if(BUILD_COMMERCIAL)
     src/AI/CommandRegistry.h
     src/AI/FileSandbox.h
     src/AI/ToolDispatcher.h
+    src/AI/Tools/ToolBulkTools.h
+    src/AI/Tools/ToolCatalog.h
+    src/AI/Tools/ToolCompact.h
+    src/AI/Tools/ToolDispatch.h
+    src/AI/Tools/ToolFilesystemTools.h
+    src/AI/Tools/ToolResolve.h
+    src/AI/Tools/ToolSchemas.h
+    src/AI/Tools/ToolScriptTools.h
+    src/AI/Tools/ToolSupport.h
+    src/AI/Tools/ToolTileTools.h
     src/AI/Assistant.h
     src/AI/DocSearch.h
     src/AI/Redactor.h
     src/AI/SseEventReader.h
     src/AI/ContextBuilder.h
     src/AI/Conversation.h
+    src/AI/Conversation/HelpFetcher.h
+    src/AI/Conversation/HistorySurgery.h
+    src/AI/Conversation/MetaToolCatalog.h
+    src/AI/Conversation/ReplyAssembly.h
+    src/AI/Conversation/TokenBudget.h
     src/AI/ChatStore.h
     src/AI/SentinelProbe.h
     src/AI/MemoryStore.h
     src/AI/SkillRouter.h
     src/AI/Providers/Provider.h
+    src/AI/Providers/ProviderJson.h
+    src/AI/Providers/ThinkTagSplitter.h
     src/AI/Providers/ImmediateErrorReply.h
     src/AI/Providers/AnthropicProvider.h
     src/AI/Providers/AnthropicReply.h
@@ -946,10 +1161,15 @@ if(BUILD_COMMERCIAL)
     src/MQTT/Publisher.cpp
     src/MQTT/PublisherScript.cpp
     src/MQTT/PublisherScriptEditor.cpp
-    src/MQTT/PublisherSparkplug.cpp
+    src/MQTT/PublisherWorker.cpp
+    src/MQTT/TlsConfig.cpp
+    src/MQTT/BrokerOptions.cpp
+    src/MQTT/CsvExpansion.cpp
     src/MQTT/SparkplugPublisher.cpp
     src/MQTT/TlsIdentity.cpp
     src/IO/Drivers/Audio.cpp
+    src/IO/Drivers/Audio/AudioDeviceCatalog.cpp
+    src/IO/Drivers/Audio/AudioPcm.cpp
     src/Misc/Diagnostics/AudioChecks.cpp
     src/IO/Drivers/CANBus.cpp
     src/IO/Drivers/CANBus/CanBackends.cpp
@@ -958,14 +1178,23 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/CANBus/SlcanBackend.cpp
     src/IO/Drivers/CANBus/SeeedCanBackend.cpp
     src/IO/Drivers/Modbus.cpp
+    src/IO/Drivers/Modbus/ModbusRegisterGroups.cpp
+    src/IO/Drivers/Modbus/ModbusProjectGenerator.cpp
     src/IO/Drivers/HID.cpp
     src/IO/Drivers/USB.cpp
+    src/IO/Drivers/USB/UsbHex.cpp
+    src/IO/Drivers/USB/UsbTransferPump.cpp
     src/IO/Drivers/Process.cpp
     src/IO/Drivers/MQTT.cpp
     src/IO/Drivers/MQTT/MQTTSparkplug.cpp
     src/IO/Drivers/MQTT/SparkplugPayload.cpp
     src/IO/Drivers/MQTT/SparkplugSession.cpp
     src/IO/Drivers/OpcUa.cpp
+    src/IO/Drivers/OpcUa/OpcUaBrowser.cpp
+    src/IO/Drivers/OpcUa/OpcUaCertificateStore.cpp
+    src/IO/Drivers/OpcUa/OpcUaEndpointSelection.cpp
+    src/IO/Drivers/OpcUa/OpcUaFrameAssembler.cpp
+    src/IO/Drivers/OpcUa/OpcUaTag.cpp
     src/IO/Drivers/OpcUaMarshal.cpp
     src/IO/Drivers/OpcUaSession.cpp
     src/IO/Drivers/OpcUaSecurity.cpp
@@ -988,6 +1217,7 @@ if(BUILD_COMMERCIAL)
     src/UI/Widgets/AudioExport.cpp
     src/UI/Widgets/Waterfall.cpp
   src/UI/Widgets/Waterfall/WaterfallTicks.cpp
+  src/UI/Widgets/Waterfall/WaterfallViewState.cpp
   src/UI/Widgets/Waterfall/WaterfallOverlay.cpp
     src/UI/Widgets/Painter.cpp
     src/UI/Widgets/PainterContext.cpp
@@ -997,16 +1227,24 @@ if(BUILD_COMMERCIAL)
     src/DataModel/Editors/PainterCodeEditor.cpp
     src/UI/ImageProvider.cpp
     src/DataModel/Importers/DBCImporter.cpp
+    src/DataModel/Importers/DBCMultiplexing.cpp
+    src/DataModel/Importers/ModbusRegisterMap.cpp
     src/DataModel/Importers/ModbusMapImporter.cpp
     src/Licensing/Trial.cpp
     src/Licensing/CommercialToken.cpp
     src/Sessions/DatabaseManager.cpp
   src/Sessions/DatabaseManager/DatabaseSchema.cpp
+    src/Sessions/DatabaseManager/SessionExporter.cpp
   src/Sessions/DatabaseManager/ReproducibilityVerifier.cpp
     src/Sessions/DatabaseWorker.cpp
     src/Sessions/Export.cpp
     src/Sessions/HtmlReport.cpp
     src/Sessions/Player.cpp
+    src/Sessions/Player/ReplayAlignment.cpp
+    src/Sessions/Player/ReplayClock.cpp
+    src/Sessions/Player/ReplayFrameValues.cpp
+    src/Sessions/Player/ReplaySynthesis.cpp
+    src/Sessions/Player/SessionDbReader.cpp
   src/Sessions/Player/PreSessionState.cpp
     src/Sessions/PlayerLoaderWorker.cpp
     src/Sessions/ReportData.cpp
@@ -1035,16 +1273,33 @@ if(BUILD_COMMERCIAL)
     src/AI/CommandRegistry.cpp
     src/AI/FileSandbox.cpp
     src/AI/ToolDispatcher.cpp
+    src/AI/Tools/ToolBulkTools.cpp
+    src/AI/Tools/ToolCatalog.cpp
+    src/AI/Tools/ToolCompact.cpp
+    src/AI/Tools/ToolDispatch.cpp
+    src/AI/Tools/ToolFilesystemTools.cpp
+    src/AI/Tools/ToolResolve.cpp
+    src/AI/Tools/ToolSchemas.cpp
+    src/AI/Tools/ToolScriptTools.cpp
+    src/AI/Tools/ToolSupport.cpp
+    src/AI/Tools/ToolTileTools.cpp
     src/AI/Assistant.cpp
     src/AI/DocSearch.cpp
     src/AI/Redactor.cpp
     src/AI/SseEventReader.cpp
     src/AI/ContextBuilder.cpp
     src/AI/Conversation.cpp
+    src/AI/Conversation/HelpFetcher.cpp
+    src/AI/Conversation/HistorySurgery.cpp
+    src/AI/Conversation/MetaToolCatalog.cpp
+    src/AI/Conversation/ReplyAssembly.cpp
+    src/AI/Conversation/TokenBudget.cpp
     src/AI/ChatStore.cpp
     src/AI/SentinelProbe.cpp
     src/AI/MemoryStore.cpp
     src/AI/SkillRouter.cpp
+    src/AI/Providers/ProviderJson.cpp
+    src/AI/Providers/ThinkTagSplitter.cpp
     src/AI/Providers/AnthropicProvider.cpp
     src/AI/Providers/AnthropicReply.cpp
     src/AI/Providers/OpenAIProvider.cpp

@@ -12,8 +12,10 @@
 #include <QHash>
 #include <QJsonObject>
 #include <QString>
+#include <vector>
 
 #include "AI/Providers/Provider.h"
+#include "AI/Providers/ThinkTagSplitter.h"
 
 class QNetworkAccessManager;
 class QNetworkReply;
@@ -57,15 +59,6 @@ private:
     bool emitted;
   };
 
-  /**
-   * @brief Scanner state for inline <think>...</think> blocks in the content stream.
-   */
-  enum class ThinkScan : int {
-    Detect      = 0,
-    Thinking    = 1,
-    Passthrough = 2,
-  };
-
   void onSseEvent(const QString& name, const QJsonObject& data);
   void onSseError(const QString& reason);
   void onReplyReadyRead();
@@ -73,7 +66,7 @@ private:
 
   void processChoiceDelta(const QJsonObject& choice);
   void routeContentChunk(const QString& chunk);
-  void processThinkCarry(bool atEnd);
+  void publishThinkChunks(const std::vector<ThinkChunk>& chunks);
   void emitPendingToolCalls();
   [[nodiscard]] bool streamBudgetBreached(qsizetype bytes);
   void finishOk();
@@ -95,8 +88,7 @@ private:
   QString m_finishReason;
   int m_transferTimeoutMs;
   bool m_parseThinkTags;
-  ThinkScan m_thinkScan;
-  QString m_thinkCarry;
+  ThinkTagSplitter m_thinkSplitter;
   bool m_finished;
 };
 

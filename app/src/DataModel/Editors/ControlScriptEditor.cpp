@@ -21,21 +21,12 @@
 
 #include "DataModel/Editors/ControlScriptEditor.h"
 
-#include <QAbstractItemView>
-#include <QCompleter>
-#include <QCoreApplication>
 #include <QDir>
 #include <QFile>
 #include <QFileDialog>
-#include <QJavascriptHighlighter>
 #include <QJSEngine>
-#include <QLineNumberArea>
-#include <QQuickWindow>
-#include <QTextCursor>
-#include <QTextDocument>
 
-#include "DataModel/Editors/CodeFormatter.h"
-#include "DataModel/Editors/SerialStudioCompleter.h"
+#include "DataModel/Editors/EditorFormatting.h"
 #include "DataModel/ProjectEditor.h"
 #include "DataModel/ProjectModel.h"
 #include "Misc/CommonFonts.h"
@@ -64,48 +55,34 @@ static QString defaultControlScript()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Constructs the QML-side control-script editor.
+ * @brief Constructs the QML-side control-script editor. The Project Editor is a separate top-level
+ *        window that stays instantiated once opened, hence the window-visibility render gate.
  */
 DataModel::ControlScriptEditor::ControlScriptEditor(QQuickItem* parent)
   : QQuickPaintedItem(parent)
-  , m_dirty(true)
   , m_readingCode(false)
   , m_initialLoad(true)
   , m_themeManager(Misc::ThemeManager::instance())
-  , m_commonFonts(Misc::CommonFonts::instance())
+  , m_timerEvents(Misc::TimerEvents::instance())
   , m_projectEditor(DataModel::ProjectEditor::instance())
   , m_projectModel(DataModel::ProjectModel::instance())
-  , m_timerEvents(Misc::TimerEvents::instance())
+  , m_editor(*this,
+             m_themeManager,
+             Misc::CommonFonts::instance(),
+             EmbeddedCodeEditor::RenderGate::WindowVisible)
 {
-  setMipmap(false);
-  setAntialiasing(false);
-  setOpaquePainting(true);
-  setAcceptTouchEvents(true);
-  setFlag(ItemHasContents, true);
-  setFlag(ItemIsFocusScope, true);
-  setFlag(ItemAcceptsInputMethod, true);
-  setAcceptedMouseButtons(Qt::AllButtons);
-  setFillColor(m_themeManager.getColor(QStringLiteral("base")));
+  m_editor.configureHost();
 
-  m_widget.setTabReplace(true);
-  m_widget.setTabReplaceSize(2);
-  m_widget.setAutoIndentation(true);
-  m_widget.setHighlighter(new QJavascriptHighlighter());
-  m_widget.setFont(m_commonFonts.monoFont());
-  m_widget.setLayoutDirection(Qt::LeftToRight);
-  m_widget.setLanguageHint(QCodeEditor::LanguageHint::JavaScript);
-  m_widget.setCompleter(new DataModel::SerialStudioCompleter(false, &m_widget));
-
-  onThemeChanged();
   connect(&m_themeManager,
           &Misc::ThemeManager::themeChanged,
           this,
           &DataModel::ControlScriptEditor::onThemeChanged);
 
-  connect(&m_widget, &QCodeEditor::textChanged, this, [this] { Q_EMIT modifiedChanged(); });
-  connect(&m_widget, &QCodeEditor::textChanged, this, &DataModel::ControlScriptEditor::textChanged);
+  auto& widget = m_editor.widget();
+  connect(&widget, &QCodeEditor::textChanged, this, [this] { Q_EMIT modifiedChanged(); });
+  connect(&widget, &QCodeEditor::textChanged, this, &DataModel::ControlScriptEditor::textChanged);
 
-  connect(&m_widget, &QCodeEditor::textChanged, this, [this] {
+  connect(&widget, &QCodeEditor::textChanged, this, [this] {
     if (m_readingCode)
       return;
 
@@ -131,12 +108,10 @@ DataModel::ControlScriptEditor::ControlScriptEditor(QQuickItem* parent)
   connect(
     this, &QQuickPaintedItem::heightChanged, this, &DataModel::ControlScriptEditor::resizeWidget);
   connect(
-    &m_widget, &QCodeEditor::textChanged, this, &DataModel::ControlScriptEditor::scheduleRender);
-  connect(&m_widget,
-          &QCodeEditor::selectionChanged,
-          this,
-          &DataModel::ControlScriptEditor::scheduleRender);
-  connect(&m_widget,
+    &widget, &QCodeEditor::textChanged, this, &DataModel::ControlScriptEditor::scheduleRender);
+  connect(
+    &widget, &QCodeEditor::selectionChanged, this, &DataModel::ControlScriptEditor::scheduleRender);
+  connect(&widget,
           &QCodeEditor::cursorPositionChanged,
           this,
           &DataModel::ControlScriptEditor::scheduleRender);
@@ -157,7 +132,7 @@ DataModel::ControlScriptEditor::ControlScriptEditor(QQuickItem* parent)
  */
 QString DataModel::ControlScriptEditor::text() const
 {
-  return m_widget.toPlainText();
+  return m_editor.text();
 }
 
 /**
@@ -165,10 +140,7 @@ QString DataModel::ControlScriptEditor::text() const
  */
 bool DataModel::ControlScriptEditor::isModified() const noexcept
 {
-  if (m_widget.document())
-    return m_widget.document()->isModified();
-
-  return false;
+  return m_editor.isModified();
 }
 
 /**
@@ -176,10 +148,7 @@ bool DataModel::ControlScriptEditor::isModified() const noexcept
  */
 bool DataModel::ControlScriptEditor::undoAvailable() const noexcept
 {
-  if (m_widget.document())
-    return m_widget.document()->isUndoAvailable();
-
-  return false;
+  return m_editor.undoAvailable();
 }
 
 /**
@@ -187,10 +156,7 @@ bool DataModel::ControlScriptEditor::undoAvailable() const noexcept
  */
 bool DataModel::ControlScriptEditor::redoAvailable() const noexcept
 {
-  if (m_widget.document())
-    return m_widget.document()->isRedoAvailable();
-
-  return false;
+  return m_editor.redoAvailable();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -202,7 +168,7 @@ bool DataModel::ControlScriptEditor::redoAvailable() const noexcept
  */
 void DataModel::ControlScriptEditor::cut()
 {
-  m_widget.cut();
+  m_editor.cut();
 }
 
 /**
@@ -210,7 +176,7 @@ void DataModel::ControlScriptEditor::cut()
  */
 void DataModel::ControlScriptEditor::undo()
 {
-  m_widget.undo();
+  m_editor.undo();
 }
 
 /**
@@ -218,7 +184,7 @@ void DataModel::ControlScriptEditor::undo()
  */
 void DataModel::ControlScriptEditor::redo()
 {
-  m_widget.redo();
+  m_editor.redo();
 }
 
 /**
@@ -226,7 +192,7 @@ void DataModel::ControlScriptEditor::redo()
  */
 void DataModel::ControlScriptEditor::copy()
 {
-  m_widget.copy();
+  m_editor.copy();
 }
 
 /**
@@ -234,7 +200,7 @@ void DataModel::ControlScriptEditor::copy()
  */
 void DataModel::ControlScriptEditor::paste()
 {
-  m_widget.paste();
+  m_editor.paste();
 }
 
 /**
@@ -242,7 +208,7 @@ void DataModel::ControlScriptEditor::paste()
  */
 void DataModel::ControlScriptEditor::selectAll()
 {
-  m_widget.selectAll();
+  m_editor.selectAll();
 }
 
 /**
@@ -250,21 +216,7 @@ void DataModel::ControlScriptEditor::selectAll()
  */
 void DataModel::ControlScriptEditor::formatDocument()
 {
-  const QString original = m_widget.toPlainText();
-  const QString formatted =
-    CodeFormatter::formatDocument(original, CodeFormatter::Language::JavaScript);
-  if (formatted == original)
-    return;
-
-  QTextCursor cursor = m_widget.textCursor();
-  const int savedPos = cursor.position();
-  cursor.beginEditBlock();
-  cursor.select(QTextCursor::Document);
-  cursor.insertText(formatted);
-  cursor.endEditBlock();
-
-  cursor.setPosition(qMin(savedPos, formatted.size()));
-  m_widget.setTextCursor(cursor);
+  EditorFormatting::formatDocument(m_editor.widget(), CodeFormatter::Language::JavaScript);
 }
 
 /**
@@ -272,29 +224,7 @@ void DataModel::ControlScriptEditor::formatDocument()
  */
 void DataModel::ControlScriptEditor::formatSelection()
 {
-  const QString original = m_widget.toPlainText();
-
-  QTextCursor cursor = m_widget.textCursor();
-  QTextCursor first(m_widget.document());
-  first.setPosition(qMin(cursor.selectionStart(), cursor.selectionEnd()));
-  QTextCursor last(m_widget.document());
-  last.setPosition(qMax(cursor.selectionStart(), cursor.selectionEnd()));
-
-  const int firstLine     = first.blockNumber();
-  const int lastLine      = last.blockNumber();
-  const QString formatted = CodeFormatter::formatLineRange(
-    original, CodeFormatter::Language::JavaScript, firstLine, lastLine);
-  if (formatted == original)
-    return;
-
-  const int savedPos = cursor.position();
-  cursor.beginEditBlock();
-  cursor.select(QTextCursor::Document);
-  cursor.insertText(formatted);
-  cursor.endEditBlock();
-
-  cursor.setPosition(qMin(savedPos, formatted.size()));
-  m_widget.setTextCursor(cursor);
+  EditorFormatting::formatSelection(m_editor.widget(), CodeFormatter::Language::JavaScript);
 }
 
 /**
@@ -312,15 +242,7 @@ void DataModel::ControlScriptEditor::importFile()
       return;
 
     QMetaObject::invokeMethod(
-      this,
-      [this, path]() {
-        QFile file(path);
-        if (file.open(QFile::ReadOnly)) {
-          m_widget.setPlainText(QString::fromUtf8(file.readAll()));
-          file.close();
-        }
-      },
-      Qt::QueuedConnection);
+      this, [this, path]() { (void)m_editor.importFromFile(path); }, Qt::QueuedConnection);
   });
 
   dialog->open();
@@ -341,12 +263,7 @@ void DataModel::ControlScriptEditor::readCode()
     code = defaultControlScript();
 
   m_initialLoad = false;
-
-  if (m_widget.toPlainText() != code)
-    m_widget.setPlainText(code);
-
-  m_widget.document()->clearUndoRedoStacks();
-  m_widget.document()->setModified(false);
+  m_editor.syncSourceText(code);
 
   m_readingCode = false;
   Q_EMIT modifiedChanged();
@@ -357,9 +274,7 @@ void DataModel::ControlScriptEditor::readCode()
  */
 void DataModel::ControlScriptEditor::reload()
 {
-  m_widget.setPlainText(defaultControlScript());
-  m_widget.document()->clearUndoRedoStacks();
-  m_widget.document()->setModified(false);
+  m_editor.setSourceText(defaultControlScript());
   Q_EMIT modifiedChanged();
 }
 
@@ -402,18 +317,7 @@ void DataModel::ControlScriptEditor::evaluate()
  */
 void DataModel::ControlScriptEditor::onThemeChanged()
 {
-  static const auto* t = &Misc::ThemeManager::instance();
-  const auto name      = t->parameters().value(QStringLiteral("code-editor-theme")).toString();
-
-  const auto path =
-    QDir::isAbsolutePath(name) ? name : QStringLiteral(":/themes/code-editor/%1.xml").arg(name);
-
-  QFile file(path);
-  if (file.open(QFile::ReadOnly)) {
-    m_style.load(QString::fromUtf8(file.readAll()));
-    m_widget.setSyntaxStyle(&m_style);
-    file.close();
-  }
+  m_editor.applyTheme();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -426,16 +330,7 @@ void DataModel::ControlScriptEditor::onThemeChanged()
  */
 void DataModel::ControlScriptEditor::scheduleRender()
 {
-  m_dirty = true;
-}
-
-/**
- * @brief Whether a grab would be seen: an item in a closed window still reports itself visible,
- *        so a project-editor tab left selected keeps rendering at UI rate behind a hidden window.
- */
-bool DataModel::ControlScriptEditor::renderable() const
-{
-  return isVisible() && window() && window()->isVisible();
+  m_editor.scheduleRender();
 }
 
 /**
@@ -443,27 +338,7 @@ bool DataModel::ControlScriptEditor::renderable() const
  */
 void DataModel::ControlScriptEditor::renderWidget()
 {
-  if (!renderable() || (!m_dirty && !hasActiveFocus()))
-    return;
-
-  m_dirty = false;
-  syncWidgetPosition();
-  m_pixmap = m_widget.grab();
-  update();
-}
-
-/**
- * @brief Aligns the hidden widget's top-level position with the item's on-screen position so
- *        completer popups and drag auto-scroll resolve correct global coordinates.
- */
-void DataModel::ControlScriptEditor::syncWidgetPosition()
-{
-  if (!window())
-    return;
-
-  const QPoint global = mapToGlobal(QPointF(0, 0)).toPoint();
-  if (m_widget.pos() != global)
-    m_widget.move(global);
+  m_editor.renderWidget();
 }
 
 /**
@@ -471,10 +346,7 @@ void DataModel::ControlScriptEditor::syncWidgetPosition()
  */
 void DataModel::ControlScriptEditor::resizeWidget()
 {
-  if (width() > 0 && height() > 0) {
-    m_widget.setFixedSize(static_cast<int>(width()), static_cast<int>(height()));
-    scheduleRender();
-  }
+  m_editor.resizeWidget();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -486,8 +358,7 @@ void DataModel::ControlScriptEditor::resizeWidget()
  */
 void DataModel::ControlScriptEditor::paint(QPainter* painter)
 {
-  if (painter && isVisible())
-    painter->drawPixmap(0, 0, m_pixmap);
+  m_editor.paint(painter);
 }
 
 /**
@@ -496,11 +367,8 @@ void DataModel::ControlScriptEditor::paint(QPainter* painter)
  */
 bool DataModel::ControlScriptEditor::event(QEvent* event)
 {
-  if (event->type() == QEvent::ShortcutOverride) {
-    QCoreApplication::sendEvent(&m_widget, event);
-    if (event->isAccepted())
-      return true;
-  }
+  if (m_editor.handleShortcutOverride(event))
+    return true;
 
   return QQuickPaintedItem::event(event);
 }
@@ -511,14 +379,7 @@ bool DataModel::ControlScriptEditor::event(QEvent* event)
  */
 void DataModel::ControlScriptEditor::keyPressEvent(QKeyEvent* event)
 {
-  auto* completer = m_widget.completer();
-  if (completer && completer->popup() && completer->popup()->isVisible()
-      && SerialStudioCompleter::popupHandlesKey(event->key()))
-    QCoreApplication::sendEvent(completer->popup(), event);
-  else
-    QCoreApplication::sendEvent(&m_widget, event);
-
-  scheduleRender();
+  m_editor.handleKeyPress(event);
 }
 
 /**
@@ -526,7 +387,7 @@ void DataModel::ControlScriptEditor::keyPressEvent(QKeyEvent* event)
  */
 void DataModel::ControlScriptEditor::keyReleaseEvent(QKeyEvent* event)
 {
-  QCoreApplication::sendEvent(&m_widget, event);
+  m_editor.forwardToWidget(event);
 }
 
 /**
@@ -534,8 +395,8 @@ void DataModel::ControlScriptEditor::keyReleaseEvent(QKeyEvent* event)
  */
 void DataModel::ControlScriptEditor::inputMethodEvent(QInputMethodEvent* event)
 {
-  QCoreApplication::sendEvent(&m_widget, event);
-  scheduleRender();
+  m_editor.forwardToWidget(event);
+  m_editor.scheduleRender();
 }
 
 /**
@@ -543,7 +404,7 @@ void DataModel::ControlScriptEditor::inputMethodEvent(QInputMethodEvent* event)
  */
 void DataModel::ControlScriptEditor::focusInEvent(QFocusEvent* event)
 {
-  QCoreApplication::sendEvent(&m_widget, event);
+  m_editor.forwardToWidget(event);
 }
 
 /**
@@ -551,72 +412,39 @@ void DataModel::ControlScriptEditor::focusInEvent(QFocusEvent* event)
  */
 void DataModel::ControlScriptEditor::focusOutEvent(QFocusEvent* event)
 {
-  QCoreApplication::sendEvent(&m_widget, event);
+  m_editor.forwardToWidget(event);
 }
 
-/** @brief Forwards mouse-press events to the backing widget after offsetting for the line-number
- * gutter. */
+/**
+ * @brief Forwards mouse-press events to the backing widget, claiming focus for the item.
+ */
 void DataModel::ControlScriptEditor::mousePressEvent(QMouseEvent* event)
 {
-  const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();
-  QMouseEvent copy(event->type(),
-                   event->position() - QPointF(lineNumWidth, 0),
-                   event->globalPosition(),
-                   event->button(),
-                   event->buttons(),
-                   event->modifiers(),
-                   event->pointingDevice());
-  QCoreApplication::sendEvent(m_widget.viewport(), &copy);
-  forceActiveFocus();
-  scheduleRender();
+  m_editor.handleMouse(event, true);
 }
 
-/** @brief Forwards mouse-move events to the backing widget after offsetting for the line-number
- * gutter. */
+/**
+ * @brief Forwards mouse-move events to the backing widget.
+ */
 void DataModel::ControlScriptEditor::mouseMoveEvent(QMouseEvent* event)
 {
-  const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();
-  QMouseEvent copy(event->type(),
-                   event->position() - QPointF(lineNumWidth, 0),
-                   event->globalPosition(),
-                   event->button(),
-                   event->buttons(),
-                   event->modifiers(),
-                   event->pointingDevice());
-  QCoreApplication::sendEvent(m_widget.viewport(), &copy);
-  scheduleRender();
+  m_editor.handleMouse(event, false);
 }
 
-/** @brief Forwards mouse-release events to the backing widget after offsetting for the line-number
- * gutter. */
+/**
+ * @brief Forwards mouse-release events to the backing widget.
+ */
 void DataModel::ControlScriptEditor::mouseReleaseEvent(QMouseEvent* event)
 {
-  const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();
-  QMouseEvent copy(event->type(),
-                   event->position() - QPointF(lineNumWidth, 0),
-                   event->globalPosition(),
-                   event->button(),
-                   event->buttons(),
-                   event->modifiers(),
-                   event->pointingDevice());
-  QCoreApplication::sendEvent(m_widget.viewport(), &copy);
-  scheduleRender();
+  m_editor.handleMouse(event, false);
 }
 
-/** @brief Forwards double-click events to the backing widget after offsetting for the line-number
- * gutter. */
+/**
+ * @brief Forwards double-click events to the backing widget.
+ */
 void DataModel::ControlScriptEditor::mouseDoubleClickEvent(QMouseEvent* event)
 {
-  const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();
-  QMouseEvent copy(event->type(),
-                   event->position() - QPointF(lineNumWidth, 0),
-                   event->globalPosition(),
-                   event->button(),
-                   event->buttons(),
-                   event->modifiers(),
-                   event->pointingDevice());
-  QCoreApplication::sendEvent(m_widget.viewport(), &copy);
-  scheduleRender();
+  m_editor.handleMouse(event, false);
 }
 
 /**
@@ -624,8 +452,8 @@ void DataModel::ControlScriptEditor::mouseDoubleClickEvent(QMouseEvent* event)
  */
 void DataModel::ControlScriptEditor::wheelEvent(QWheelEvent* event)
 {
-  QCoreApplication::sendEvent(m_widget.viewport(), event);
-  scheduleRender();
+  m_editor.forwardToViewport(event);
+  m_editor.scheduleRender();
 }
 
 /**
@@ -633,7 +461,7 @@ void DataModel::ControlScriptEditor::wheelEvent(QWheelEvent* event)
  */
 void DataModel::ControlScriptEditor::dragEnterEvent(QDragEnterEvent* event)
 {
-  QCoreApplication::sendEvent(m_widget.viewport(), event);
+  m_editor.forwardToViewport(event);
 }
 
 /**
@@ -641,7 +469,7 @@ void DataModel::ControlScriptEditor::dragEnterEvent(QDragEnterEvent* event)
  */
 void DataModel::ControlScriptEditor::dragMoveEvent(QDragMoveEvent* event)
 {
-  QCoreApplication::sendEvent(m_widget.viewport(), event);
+  m_editor.forwardToViewport(event);
 }
 
 /**
@@ -649,7 +477,7 @@ void DataModel::ControlScriptEditor::dragMoveEvent(QDragMoveEvent* event)
  */
 void DataModel::ControlScriptEditor::dragLeaveEvent(QDragLeaveEvent* event)
 {
-  QCoreApplication::sendEvent(m_widget.viewport(), event);
+  m_editor.forwardToViewport(event);
 }
 
 /**
@@ -657,5 +485,5 @@ void DataModel::ControlScriptEditor::dragLeaveEvent(QDragLeaveEvent* event)
  */
 void DataModel::ControlScriptEditor::dropEvent(QDropEvent* event)
 {
-  QCoreApplication::sendEvent(m_widget.viewport(), event);
+  m_editor.forwardToViewport(event);
 }

@@ -1641,8 +1641,14 @@ def find_interrupt_guard_violations(
 # defect. Whitelisted names are the intentional exceptions: the history
 # machinery itself, history boundaries (lock/load), and the presentation /
 # workspace surfaces the spec keeps outside undo history.
-_UNDO_SCOPE_FILES = re.compile(r"ProjectModel(\.cpp$|[A-Z]\w*\.cpp$)")
-_UNDO_FUNC_RE = re.compile(r"^[A-Za-z_][\w:<>&*\s]*DataModel::ProjectModel::(\w+)\s*\(")
+_UNDO_SCOPE_FILES = re.compile(
+    r"Project(?:Model|Entities|OutputWidgets|BulkOps|Sources|Tables|Folders|"
+    r"Workspaces|Loader|Persistence|Presentation)(\.cpp$|[A-Z]\w*\.cpp$)"
+)
+_UNDO_FUNC_RE = re.compile(
+    r"^[A-Za-z_][\w:<>&*\s]*DataModel::Project(?:Model|Entities|OutputWidgets|BulkOps|"
+    r"Sources|Tables|Folders|Workspaces|Loader|Persistence|Presentation)::(\w+)\s*\("
+)
 _UNDO_SET_MODIFIED_RE = re.compile(r"\bsetModified\s*\(\s*true\s*\)")
 _UNDO_SCOPE_RE = re.compile(
     r"\bProjectUndoScope\b|\bProjectUndoFrame\b|\bcommitPending\b"
@@ -1970,6 +1976,144 @@ def find_hotpath_assert_scope_violations(
     return violations
 
 
+# Trial parity: an active trial installs a valid CommercialToken, so every Pro
+# feature gate must count trial users as entitled -- SerialStudio::activated()
+# in C++, or the paid probe paired with Cpp_Licensing_Trial state in QML.
+# Gating a feature on a paid-only probe (LemonSqueezy isActivated, offline
+# activation, FeatureTier comparisons) silently strips it from trial users, who
+# then report the feature as broken instead of evaluating it. A paid probe with
+# a Trial probe within _TRIAL_PARITY_WINDOW lines counts as a deliberate
+# trial-aware expression; licence-management and entitlement-reporting surfaces
+# are allowlisted (growing that list is a review decision). The doc-side twin
+# below holds user-facing Markdown to the same bar: a licence-requirement
+# claim must mention the trial nearby, because "needs an activated licence"
+# reads as "buy first" to the very user the trial exists to convert.
+_TRIAL_PARITY_PAID_RE = re.compile(
+    r"\bisActivated\b|\bfeatureTier\s*\(|\bFeatureTier::"
+    r"|Cpp_Licensing_OfflineLicense\s*\.\s*activated"
+)
+_TRIAL_PARITY_TRIAL_RE = re.compile(
+    r"\btrialEnabled\b|\btrialExpired\b|\btrialAvailable\b|\bdaysRemaining\b"
+    r"|\bLicensing::Trial\b|\bCpp_Licensing_Trial\b"
+)
+_TRIAL_PARITY_WINDOW = 4
+_TRIAL_PARITY_ALLOWED = (
+    "app/src/Misc/Translator.cpp",
+    "app/src/Misc/CLI.cpp",
+    "app/src/API/Handlers/LicensingHandler.cpp",
+    "app/qml/main.qml",
+    "app/qml/Dialogs/LicenseManagement.qml",
+    "app/qml/Dialogs/Welcome.qml",
+    "app/qml/Dialogs/About.qml",
+)
+
+_TRIAL_PARITY_DOC_RE = re.compile(
+    r"(?:needs?|requires?)\s+(?:an?\s+|the\s+)?"
+    r"(?:valid\s+|activated\s+|commercial\s+)*licen[cs]e"
+    r"|licen[cs]e\s+(?:key\s+)?(?:is\s+)?required",
+    re.IGNORECASE,
+)
+_TRIAL_PARITY_DOC_TRIAL_RE = re.compile(r"\btrial\b", re.IGNORECASE)
+_DOC_FENCE_OFF_RE = re.compile(r"<!--\s*doc-verify\s+off\s*-->")
+_DOC_FENCE_ON_RE = re.compile(r"<!--\s*doc-verify\s+on\s*-->")
+
+
+def find_trial_parity_violations(
+    raw_lines: list[str], path: Path, fence_mask: list[bool]
+) -> list[Violation]:
+    """Flag paid-licence entitlement probes outside the licensing surfaces
+    with no trial-aware complement nearby: an active trial counts as
+    activated, so such a gate silently excludes trial users."""
+    posix = path.as_posix()
+    if "app/src/Licensing/" in posix:
+        return []
+    if any(posix.endswith(allowed) for allowed in _TRIAL_PARITY_ALLOWED):
+        return []
+
+    violations: list[Violation] = []
+    for i, line in enumerate(raw_lines):
+        if i < len(fence_mask) and fence_mask[i]:
+            continue
+        if not _TRIAL_PARITY_PAID_RE.search(line):
+            continue
+
+        lo = max(0, i - _TRIAL_PARITY_WINDOW)
+        hi = min(len(raw_lines), i + _TRIAL_PARITY_WINDOW + 1)
+        if _TRIAL_PARITY_TRIAL_RE.search("\n".join(raw_lines[lo:hi])):
+            continue
+
+        violations.append(
+            Violation(
+                path,
+                i + 1,
+                "trial-parity",
+                "paid-licence probe (isActivated / FeatureTier / offline "
+                "activation) with no trial-aware complement -- an active "
+                "trial installs a valid CommercialToken, so Pro gates go "
+                "through SerialStudio::activated() in C++ or pair the probe "
+                "with Cpp_Licensing_Trial state in QML. A genuine "
+                "licence-management surface belongs in the allowlist in "
+                "code-verify.py.",
+            )
+        )
+    return violations
+
+
+def _is_user_facing_markdown(path: Path) -> bool:
+    """True for the Markdown a customer reads: the doc/help manual, the
+    examples READMEs, and the repo-root README. doc/claude and other
+    AI-facing material stay out of scope."""
+    posix = path.as_posix()
+    if "/doc/claude/" in posix or posix.startswith("doc/claude/"):
+        return False
+    for marker in ("/doc/help/", "/examples/"):
+        if marker in posix or posix.startswith(marker.strip("/") + "/"):
+            return True
+    repo_root = Path(__file__).resolve().parent.parent
+    return path.name == "README.md" and path.resolve().parent == repo_root
+
+
+def find_trial_parity_doc_violations(
+    raw_lines: list[str], path: Path
+) -> list[Violation]:
+    """Flag a licence-requirement claim in user-facing Markdown with no trial
+    mention within the window: trial users read it as 'buy first' and either
+    walk away or misreport a working feature as broken. Honors the Markdown
+    `<!-- doc-verify off/on -->` fences."""
+    violations: list[Violation] = []
+    fenced = False
+    for i, line in enumerate(raw_lines):
+        if _DOC_FENCE_OFF_RE.search(line):
+            fenced = True
+            continue
+        if _DOC_FENCE_ON_RE.search(line):
+            fenced = False
+            continue
+        if fenced or not _TRIAL_PARITY_DOC_RE.search(line):
+            continue
+
+        lo = max(0, i - _TRIAL_PARITY_WINDOW)
+        hi = min(len(raw_lines), i + _TRIAL_PARITY_WINDOW + 1)
+        if _TRIAL_PARITY_DOC_TRIAL_RE.search("\n".join(raw_lines[lo:hi])):
+            continue
+
+        violations.append(
+            Violation(
+                path,
+                i + 1,
+                "trial-parity",
+                "licence-requirement claim with no trial mention nearby -- "
+                "every Pro feature is fully available during the free trial, "
+                "and wording that hides this reads as 'buy first' to the "
+                "user the trial exists to convert. Say the feature works "
+                "with a licence or during the free trial (link "
+                "Pro-vs-Free.md), or fence a deliberate exception with "
+                "<!-- doc-verify off -->.",
+            )
+        )
+    return violations
+
+
 def process_file(path: Path, fix: bool) -> tuple[list[Violation], str | None]:
     # Read as bytes first so CRLF detection isn't masked by Python's universal
     # newline translation in text mode — read_text() silently rewrites \r\n
@@ -2019,12 +2163,17 @@ def process_file(path: Path, fix: bool) -> tuple[list[Violation], str | None]:
         violations.extend(
             find_driver_setter_guard_violations(raw_lines, path, fence_mask)
         )
+        violations.extend(find_trial_parity_violations(raw_lines, path, fence_mask))
 
         # Static-analysis rules (Qt/C++ semantic checks + QML conventions).
         # The rules module degrades gracefully when tree-sitter is missing.
         if _SEMANTIC_RULES is not None:
             for f in _SEMANTIC_RULES.analyze(path, raw_text, fence_mask):
                 violations.append(Violation(path, f.line, f.kind, f.message))
+
+    # Trial-parity wording check for the Markdown a customer reads.
+    if path.suffix == ".md" and _is_user_facing_markdown(path):
+        violations.extend(find_trial_parity_doc_violations(raw_lines, path))
 
     # Translation-unit size. The style contract caps functions at 100 lines
     # but said nothing about the file holding them, so god TUs accreted one

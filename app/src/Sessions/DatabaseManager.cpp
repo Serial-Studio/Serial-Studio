@@ -18,7 +18,6 @@
 #  include <QApplication>
 #  include <QCoreApplication>
 #  include <QDateTime>
-#  include <QDir>
 #  include <QFile>
 #  include <QFileDialog>
 #  include <QFileInfo>
@@ -38,10 +37,9 @@
 #  include "Misc/Utilities.h"
 #  include "Misc/WorkspaceManager.h"
 #  include "SerialStudio.h"
+#  include "Sessions/DatabaseManager/DatabaseSchema.h"
 #  include "Sessions/Export.h"
-#  include "Sessions/HtmlReport.h"
 #  include "Sessions/Player.h"
-#  include "Sessions/ReportData.h"
 #  include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -49,45 +47,6 @@
 //--------------------------------------------------------------------------------------------------
 
 static QString s_dbPathOverride;
-
-//--------------------------------------------------------------------------------------------------
-// File-local helpers
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Scrubs a project title for use as a folder/file name component.
- */
-static QString sanitiseTitleForPath(const QString& title)
-{
-  QString safe = title;
-  safe.remove(QChar('/'));
-  safe.remove(QChar('\\'));
-  safe.remove(QChar(':'));
-  safe.remove(QChar('*'));
-  safe.remove(QChar('?'));
-  safe.remove(QChar('"'));
-  safe.remove(QChar('<'));
-  safe.remove(QChar('>'));
-  safe.remove(QChar('|'));
-  safe.remove(QChar('\0'));
-  safe.remove(QStringLiteral(".."));
-  safe = safe.simplified();
-
-  int keep = 0;
-  for (int i = safe.size(); i > 0; --i) {
-    const QChar c = safe.at(i - 1);
-    if (c != QChar('.') && c != QChar(' ')) {
-      keep = i;
-      break;
-    }
-  }
-  safe.truncate(keep);
-
-  if (safe.isEmpty())
-    safe = QStringLiteral("Untitled");
-
-  return safe;
-}
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton
@@ -102,12 +61,6 @@ Sessions::DatabaseManager::DatabaseManager()
   , m_open(false)
   , m_selectedSessionId(-1)
   , m_locked(false)
-  , m_csvExportBusy(false)
-  , m_csvExportProgress(0.0)
-  , m_pdfExportBusy(false)
-  , m_pdfExportProgress(0.0)
-  , m_pendingPdfSessionId(-1)
-  , m_pendingPdfActive(false)
   , m_nextToken(1)
   , m_outstandingMutations(0)
   , m_workspaceManager(nullptr)
@@ -118,6 +71,7 @@ Sessions::DatabaseManager::DatabaseManager()
   qRegisterMetaType<Sessions::ReportPayloadPtr>("Sessions::ReportPayloadPtr");
   initWorker();
   wireVerifier();
+  wireExporter();
 }
 
 /**
@@ -166,12 +120,13 @@ void Sessions::DatabaseManager::initWorker()
   connect(m_worker, &DatabaseWorker::notesUpdated, this, &DatabaseManager::onWorkerNotesUpdated);
   connect(
     m_worker, &DatabaseWorker::mutationFinished, this, &DatabaseManager::onWorkerMutationFinished);
+  m_exporter.setWorker(m_worker);
   connect(
-    m_worker, &DatabaseWorker::csvExportProgress, this, &DatabaseManager::onWorkerCsvProgress);
+    m_worker, &DatabaseWorker::csvExportProgress, &m_exporter, &SessionExporter::onCsvProgress);
   connect(
-    m_worker, &DatabaseWorker::csvExportFinished, this, &DatabaseManager::onWorkerCsvFinished);
+    m_worker, &DatabaseWorker::csvExportFinished, &m_exporter, &SessionExporter::onCsvFinished);
   connect(
-    m_worker, &DatabaseWorker::reportDataReady, this, &DatabaseManager::onWorkerReportDataReady);
+    m_worker, &DatabaseWorker::reportDataReady, &m_exporter, &SessionExporter::onReportDataReady);
   connect(
     m_worker, &DatabaseWorker::datasetListReady, this, &DatabaseManager::sessionDatasetsReady);
   connect(
@@ -237,6 +192,7 @@ void Sessions::DatabaseManager::setupExternalConnections()
   m_player           = &Sessions::Player::instance();
   m_projectModel     = &DataModel::ProjectModel::instance();
   m_appState         = &AppState::instance();
+  m_exporter.setWorkspace(m_workspaceManager);
 
   connect(&Sessions::Export::instance(),
           &Sessions::Export::openChanged,
@@ -301,7 +257,7 @@ int Sessions::DatabaseManager::selectedSessionId() const
  */
 bool Sessions::DatabaseManager::csvExportBusy() const
 {
-  return m_csvExportBusy;
+  return m_exporter.csvBusy();
 }
 
 /**
@@ -309,7 +265,7 @@ bool Sessions::DatabaseManager::csvExportBusy() const
  */
 bool Sessions::DatabaseManager::pdfExportBusy() const
 {
-  return m_pdfExportBusy;
+  return m_exporter.pdfBusy();
 }
 
 /**
@@ -317,7 +273,7 @@ bool Sessions::DatabaseManager::pdfExportBusy() const
  */
 QString Sessions::DatabaseManager::pdfExportStatus() const
 {
-  return m_pdfExportStatus;
+  return m_exporter.pdfStatus();
 }
 
 /**
@@ -325,7 +281,7 @@ QString Sessions::DatabaseManager::pdfExportStatus() const
  */
 double Sessions::DatabaseManager::pdfExportProgress() const
 {
-  return m_pdfExportProgress;
+  return m_exporter.pdfProgress();
 }
 
 /**
@@ -333,7 +289,7 @@ double Sessions::DatabaseManager::pdfExportProgress() const
  */
 double Sessions::DatabaseManager::csvExportProgress() const
 {
-  return m_csvExportProgress;
+  return m_exporter.csvProgress();
 }
 
 /**
@@ -452,7 +408,7 @@ QString Sessions::DatabaseManager::canonicalDbPath(const QString& projectTitle)
   if (!s_dbPathOverride.isEmpty())
     return s_dbPathOverride;
 
-  const QString safeTitle       = sanitiseTitleForPath(projectTitle);
+  const QString safeTitle       = Sessions::sanitiseTitleForPath(projectTitle);
   static auto& workspaceManager = Misc::WorkspaceManager::instance();
   const auto subdir             = workspaceManager.path("Session Databases");
   return QStringLiteral("%1/%2/%2.db").arg(subdir, safeTitle);
@@ -998,301 +954,91 @@ void Sessions::DatabaseManager::removeTagFromSession(int sessionId, int tagId)
 }
 
 //--------------------------------------------------------------------------------------------------
-// CSV export
+// Export dispatch (SessionExporter owns the flows)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Picks an output path and dispatches a streaming CSV export to the worker.
+ * @brief Republishes the exporter's state through the historian's own property and signal surface,
+ *        which QML and the API server were already bound to.
+ */
+void Sessions::DatabaseManager::wireExporter()
+{
+  connect(
+    &m_exporter, &SessionExporter::csvBusyChanged, this, &DatabaseManager::csvExportBusyChanged);
+  connect(&m_exporter,
+          &SessionExporter::csvProgressChanged,
+          this,
+          &DatabaseManager::csvExportProgressChanged);
+  connect(&m_exporter, &SessionExporter::csvFinished, this, &DatabaseManager::csvExportFinished);
+  connect(
+    &m_exporter, &SessionExporter::pdfBusyChanged, this, &DatabaseManager::pdfExportBusyChanged);
+  connect(&m_exporter,
+          &SessionExporter::pdfProgressChanged,
+          this,
+          &DatabaseManager::pdfExportProgressChanged);
+  connect(&m_exporter, &SessionExporter::pdfFinished, this, &DatabaseManager::pdfExportFinished);
+  connect(&m_exporter, &SessionExporter::logoPicked, this, &DatabaseManager::reportLogoPicked);
+}
+
+/**
+ * @brief Returns the cached project title of @p sessionId, the name every export path derives its
+ *        suggested output folder from.
+ */
+QString Sessions::DatabaseManager::sessionProjectTitle(int sessionId) const
+{
+  return sessionMetadata(sessionId).value("project_title").toString();
+}
+
+/**
+ * @brief Exports a session to CSV; the flow belongs to the exporter.
  */
 void Sessions::DatabaseManager::exportSessionToCsv(int sessionId)
 {
-  if (!isOpen() || m_csvExportBusy)
+  if (!isOpen())
     return;
 
-  SS_ASSERT(m_workspaceManager != nullptr, return);
-
-  const auto meta         = sessionMetadata(sessionId);
-  const QString projTitle = meta.value("project_title").toString();
-  const QString safeProj  = sanitiseTitleForPath(projTitle);
-  const QString dir       = QStringLiteral("%1/%2").arg(m_workspaceManager->path("CSV"), safeProj);
-  QDir().mkpath(dir);
-
-  const QString suggested =
-    QStringLiteral("%1/session_%2.csv").arg(dir, QString::number(sessionId));
-  const auto path = QFileDialog::getSaveFileName(
-    nullptr, tr("Export Session to CSV"), suggested, tr("CSV files (*.csv)"));
-  if (path.isEmpty())
-    return;
-
-  m_csvExportBusy     = true;
-  m_csvExportProgress = 0.0;
-  m_pendingCsvPath    = path;
-  Q_EMIT csvExportBusyChanged();
-  Q_EMIT csvExportProgressChanged();
-
-  QMetaObject::invokeMethod(
-    m_worker, "runCsvExport", Qt::QueuedConnection, Q_ARG(int, sessionId), Q_ARG(QString, path));
+  m_exporter.exportToCsv(sessionId, sessionProjectTitle(sessionId));
 }
 
-//--------------------------------------------------------------------------------------------------
-// PDF / HTML report export
-//--------------------------------------------------------------------------------------------------
-
 /**
- * @brief Translates QML options + path picker into a worker fetch + main-thread render.
+ * @brief Exports a session to a PDF/HTML report; the flow belongs to the exporter.
  */
 void Sessions::DatabaseManager::exportSessionToPdf(int sessionId, const QVariantMap& options)
 {
-  if (!isOpen() || m_pdfExportBusy)
+  if (!isOpen())
     return;
 
-  HtmlReportOptions opts;
-  opts.outputPath    = options.value("outputPath").toString();
-  opts.companyName   = options.value("companyName").toString();
-  opts.documentTitle = options.value("documentTitle").toString();
-  opts.authorName    = options.value("authorName").toString();
-  opts.logoPath      = options.value("logoPath").toString();
-  opts.pageSize =
-    static_cast<QPageSize::PageSizeId>(options.value("pageSize", QPageSize::A4).toInt());
-  opts.includeCover        = options.value("includeCover", true).toBool();
-  opts.includeMetadata     = options.value("includeMetadata", true).toBool();
-  opts.includeStats        = options.value("includeStats", true).toBool();
-  opts.includeCharts       = options.value("includeCharts", true).toBool();
-  opts.includeStatsOverlay = options.value("includeStatsOverlay", true).toBool();
-  opts.lineWidth           = SerialStudio::toDouble(options.value("lineWidth", 1.4));
-  opts.lineStyle           = options.value("lineStyle", QStringLiteral("solid")).toString();
-
-  const auto selList = options.value("selectedUniqueIds").toList();
-  opts.selectedUniqueIds.reserve(selList.size());
-  for (const auto& v : selList)
-    opts.selectedUniqueIds.push_back(v.toInt());
-
-  const QString fmtStr = options.value("outputFormat", QStringLiteral("pdf")).toString().toLower();
-  if (fmtStr == QStringLiteral("html"))
-    opts.format = HtmlReportOptions::Format::Html;
-  else if (fmtStr == QStringLiteral("both"))
-    opts.format = HtmlReportOptions::Format::Both;
-  else
-    opts.format = HtmlReportOptions::Format::Pdf;
-
-#  ifndef SERIAL_STUDIO_WITH_WEBENGINE
-  opts.format = HtmlReportOptions::Format::Html;
-#  endif
-
-  if (!opts.outputPath.isEmpty()) {
-    launchPdfExport(sessionId, std::move(opts));
-    return;
-  }
-
-  requestPdfOutputPath(sessionId, std::move(opts));
+  m_exporter.exportToPdf(sessionId, options, sessionProjectTitle(sessionId));
 }
 
 /**
- * @brief Stages PDF render context and asks the worker for the session payload.
- */
-void Sessions::DatabaseManager::launchPdfExport(int sessionId, HtmlReportOptions opts)
-{
-  m_pendingPdfOpts      = std::move(opts);
-  m_pendingPdfSessionId = sessionId;
-  m_pendingPdfActive    = true;
-
-  const bool reportBusy = (m_pendingPdfOpts.format != HtmlReportOptions::Format::Html);
-  if (reportBusy) {
-    m_pdfExportBusy     = true;
-    m_pdfExportProgress = 0.0;
-    m_pdfExportStatus   = tr("Loading session data…");
-    Q_EMIT pdfExportBusyChanged();
-    Q_EMIT pdfExportProgressChanged();
-  }
-
-  QVariantList selectedUniqueIds;
-  selectedUniqueIds.reserve(static_cast<int>(m_pendingPdfOpts.selectedUniqueIds.size()));
-  for (const int uid : m_pendingPdfOpts.selectedUniqueIds)
-    selectedUniqueIds.append(uid);
-
-  QMetaObject::invokeMethod(m_worker,
-                            "runReportDataLoad",
-                            Qt::QueuedConnection,
-                            Q_ARG(int, sessionId),
-                            Q_ARG(bool, m_pendingPdfOpts.includeCharts),
-                            Q_ARG(int, 10000),
-                            Q_ARG(QVariantList, selectedUniqueIds));
-}
-
-/**
- * @brief Asks the worker thread to enumerate a session's datasets for the selection UI.
+ * @brief Asks for a session's dataset list, for the export selection UI.
  */
 void Sessions::DatabaseManager::requestSessionDatasets(int sessionId)
 {
   if (!isOpen())
     return;
 
-  QMetaObject::invokeMethod(
-    m_worker, "runDatasetListLoad", Qt::QueuedConnection, Q_ARG(int, sessionId));
+  m_exporter.requestDatasets(sessionId);
 }
 
 /**
- * @brief Asks the worker thread to summarise a session's recorded stream data (spec 0054).
+ * @brief Asks for a summary of a session's recorded stream data (spec 0054).
  */
 void Sessions::DatabaseManager::requestStreamStats(int sessionId)
 {
   if (!isOpen())
     return;
 
-  QMetaObject::invokeMethod(
-    m_worker, "runStreamStatsLoad", Qt::QueuedConnection, Q_ARG(int, sessionId));
+  m_exporter.requestStreamStats(sessionId);
 }
 
 /**
- * @brief Opens a Save dialog for the report path and launches the export on accept.
- */
-void Sessions::DatabaseManager::requestPdfOutputPath(int sessionId, HtmlReportOptions opts)
-{
-  const bool wantsPdf  = (opts.format != HtmlReportOptions::Format::Html);
-  const QString ext    = wantsPdf ? QStringLiteral("pdf") : QStringLiteral("html");
-  const QString title  = wantsPdf ? tr("Save PDF Report") : tr("Save HTML Report");
-  const QString filter = wantsPdf ? tr("PDF files (*.pdf)") : tr("HTML files (*.html)");
-
-  SS_ASSERT(m_workspaceManager != nullptr, return);
-
-  const auto meta         = sessionMetadata(sessionId);
-  const QString projTitle = meta.value("project_title").toString();
-  const QString safeProj  = sanitiseTitleForPath(projTitle);
-  const QString dir = QStringLiteral("%1/%2").arg(m_workspaceManager->path("Reports"), safeProj);
-  QDir().mkpath(dir);
-
-  const QString baseName  = opts.documentTitle.isEmpty()
-                            ? QStringLiteral("session_%1").arg(sessionId)
-                            : sanitiseTitleForPath(opts.documentTitle);
-  const QString suggested = QStringLiteral("%1/%2.%3").arg(dir, baseName, ext);
-
-  auto* dialog = new QFileDialog(qApp->activeWindow(), title, suggested, filter);
-  dialog->setAcceptMode(QFileDialog::AcceptSave);
-  dialog->setFileMode(QFileDialog::AnyFile);
-  dialog->setAttribute(Qt::WA_DeleteOnClose);
-
-  connect(dialog,
-          &QFileDialog::fileSelected,
-          this,
-          [this, opts, ext, sessionId](const QString& path) mutable {
-            if (path.isEmpty()) {
-              Q_EMIT pdfExportFinished(QString(), false);
-              return;
-            }
-
-            QMetaObject::invokeMethod(
-              this,
-              [this, opts = std::move(opts), ext, sessionId, path]() mutable {
-                QString finalPath = path;
-                const QString dot = QStringLiteral(".") + ext;
-                if (!finalPath.endsWith(dot, Qt::CaseInsensitive))
-                  finalPath += dot;
-
-                opts.outputPath = finalPath;
-                launchPdfExport(sessionId, std::move(opts));
-              },
-              Qt::QueuedConnection);
-          });
-
-  connect(
-    dialog, &QFileDialog::rejected, this, [this] { Q_EMIT pdfExportFinished(QString(), false); });
-
-  dialog->open();
-}
-
-/**
- * @brief Continues the PDF flow on the main thread once the worker has shipped data.
- */
-void Sessions::DatabaseManager::renderReportFromPayload(const ReportPayloadPtr& payload)
-{
-  if (!m_pendingPdfActive)
-    return;
-
-  if (!payload || payload->sessionId != m_pendingPdfSessionId)
-    return;
-
-  if (!payload->ok) {
-    if (m_pdfExportBusy) {
-      m_pdfExportBusy     = false;
-      m_pdfExportProgress = 0.0;
-      m_pdfExportStatus   = tr("Failed");
-      Q_EMIT pdfExportBusyChanged();
-      Q_EMIT pdfExportProgressChanged();
-    }
-
-    Misc::Utilities::showMessageBox(tr("Report Failed"),
-                                    payload->error.isEmpty() ? tr("Could not generate the report.")
-                                                             : payload->error,
-                                    QMessageBox::Warning);
-
-    Q_EMIT pdfExportFinished(QString(), false);
-    m_pendingPdfActive = false;
-    return;
-  }
-
-  const bool reportBusy = (m_pendingPdfOpts.format != HtmlReportOptions::Format::Html);
-
-  auto* renderer = new HtmlReport(this);
-
-  if (reportBusy) {
-    connect(renderer, &HtmlReport::progress, this, [this](const QString& status, double percent) {
-      m_pdfExportStatus   = status;
-      m_pdfExportProgress = percent;
-      Q_EMIT pdfExportProgressChanged();
-    });
-  }
-
-  connect(renderer,
-          &HtmlReport::finished,
-          this,
-          [this, renderer, reportBusy](const QString& outputPath, bool ok, const QString& error) {
-            if (reportBusy) {
-              m_pdfExportBusy     = false;
-              m_pdfExportProgress = 1.0;
-              m_pdfExportStatus   = ok ? tr("Done") : tr("Failed");
-              Q_EMIT pdfExportBusyChanged();
-              Q_EMIT pdfExportProgressChanged();
-            }
-            Q_EMIT pdfExportFinished(outputPath, ok);
-
-            if (ok) {
-              Misc::Utilities::revealFile(outputPath);
-            } else {
-              Misc::Utilities::showMessageBox(tr("Report Failed"),
-                                              error.isEmpty() ? tr("Could not generate the report.")
-                                                              : error,
-                                              QMessageBox::Warning);
-            }
-
-            m_pendingPdfActive = false;
-            renderer->deleteLater();
-          });
-
-  renderer->render(payload->data, payload->series, m_pendingPdfOpts);
-}
-
-/**
- * @brief Opens a native QFileDialog to pick a logo for the report.
+ * @brief Opens the report logo picker; the dialog belongs to the exporter.
  */
 void Sessions::DatabaseManager::pickReportLogo()
 {
-  auto* dialog = new QFileDialog(qApp->activeWindow(),
-                                 tr("Select logo image"),
-                                 QString(),
-                                 tr("Images (*.png *.jpg *.jpeg *.svg)"));
-  dialog->setAcceptMode(QFileDialog::AcceptOpen);
-  dialog->setFileMode(QFileDialog::ExistingFile);
-  dialog->setAttribute(Qt::WA_DeleteOnClose);
-
-  connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
-    if (path.isEmpty())
-      return;
-
-    QMetaObject::invokeMethod(
-      this, [this, path]() { Q_EMIT reportLogoPicked(path); }, Qt::QueuedConnection);
-  });
-
-  dialog->open();
+  m_exporter.pickReportLogo();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1568,47 +1314,31 @@ void Sessions::DatabaseManager::onWorkerMutationFinished(quint64 token,
 }
 
 /**
- * @brief Worker is streaming CSV -- update the percentage cache.
- */
-void Sessions::DatabaseManager::onWorkerCsvProgress(double percent)
-{
-  m_csvExportProgress = percent;
-  Q_EMIT csvExportProgressChanged();
-}
-
-/**
- * @brief Worker finished writing the CSV -- report status, reveal in the OS shell.
- */
-void Sessions::DatabaseManager::onWorkerCsvFinished(const QString& outputPath,
-                                                    bool ok,
-                                                    const QString& error)
-{
-  Q_UNUSED(error)
-  m_csvExportBusy     = false;
-  m_csvExportProgress = ok ? 1.0 : 0.0;
-  m_pendingCsvPath.clear();
-  Q_EMIT csvExportBusyChanged();
-  Q_EMIT csvExportProgressChanged();
-  Q_EMIT csvExportFinished(outputPath, ok);
-
-  if (ok)
-    Misc::Utilities::revealFile(outputPath);
-}
-
-/**
- * @brief Worker shipped the report data bundle -- kick off rendering on the main thread.
- */
-void Sessions::DatabaseManager::onWorkerReportDataReady(const ReportPayloadPtr& payload)
-{
-  renderReportFromPayload(payload);
-}
-
-/**
  * @brief Worker handed back the global project JSON -- finish the restore flow.
  */
 void Sessions::DatabaseManager::onWorkerGlobalProjectJsonReady(const QString& json)
 {
   runRestoreProjectFromJson(json);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Schema entry points (shared with Sessions::Export and the verifier child)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Creates or upgrades the session-log schema on the open database.
+ */
+void Sessions::DatabaseManager::createSchema(QSqlQuery& q)
+{
+  DatabaseSchema::createAll(q, kUserVersion);
+}
+
+/**
+ * @brief Creates the append-only verification-record table (spec 0044).
+ */
+void Sessions::DatabaseManager::createSchemaVerifications(QSqlQuery& q)
+{
+  DatabaseSchema::createVerifications(q);
 }
 
 #endif  // BUILD_COMMERCIAL

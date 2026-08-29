@@ -21,15 +21,14 @@
 
 #pragma once
 
-#include <QCodeEditor>
 #include <QEvent>
 #include <QPainter>
 #include <QQuickPaintedItem>
-#include <QSyntaxStyle>
+
+#include "DataModel/Editors/EmbeddedCodeEditor.h"
 
 namespace Misc {
 class ThemeManager;
-class CommonFonts;
 class TimerEvents;
 }  // namespace Misc
 
@@ -114,8 +113,6 @@ private slots:
 
 private:
   void switchNativeLanguage(const int language);
-  void syncWidgetPosition();
-  [[nodiscard]] bool renderable() const;
 
 private:
   bool event(QEvent* event) override;
@@ -136,19 +133,15 @@ private:
   void dropEvent(QDropEvent* event) override;
 
 private:
-  bool m_dirty;
   int m_sourceId;
   int m_language;
   bool m_readingCode;
-  QPixmap m_pixmap;
-  QSyntaxStyle m_style;
-  QCodeEditor m_widget;
   Misc::ThemeManager& m_themeManager;
-  Misc::CommonFonts& m_commonFonts;
   Misc::TimerEvents& m_timerEvents;
   DataModel::ProjectModel& m_projectModel;
   DataModel::ProjectEditor& m_projectEditor;
   DataModel::FrameParser& m_frameParser;
+  EmbeddedCodeEditor m_editor;
 };
 
 }  // namespace DataModel

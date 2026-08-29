@@ -98,4 +98,4 @@ The Socket API exposes the driver under `io.s7.*`: `getConfig`, `getStatus`, `se
 
 ## Availability
 
-The driver is a Pro feature and needs an activated licence. It is built into every commercial build and depends on no external library; GPL builds carry no S7comm client at all, and the bus is then unavailable rather than failing at connect time.
+The driver is a Pro feature, fully available with a licence or during the [free trial](Pro-vs-Free.md), which unlocks every Pro feature. It is built into every commercial build and depends on no external library; GPL builds carry no S7comm client at all, and the bus is then unavailable rather than failing at connect time.

@@ -85,7 +85,6 @@ private:
 private:
   static constexpr int kHookInstructionCount   = 10000;
   static constexpr int kMaxElements            = 10000;
-  static constexpr int kMaxVecLen              = 10000;
   static constexpr int kRuntimeWatchdogMs      = 500;
   static constexpr int kMaxConsecutiveTimeouts = 3;
 

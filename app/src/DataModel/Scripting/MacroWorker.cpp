@@ -28,17 +28,17 @@
 #include "API/CommandRegistry.h"
 #include "DataModel/Scripting/ControlScriptWorker.h"
 #include "DataModel/Scripting/JsWatchdog.h"
+#include "DataModel/Scripting/ScriptDeviceWait.h"
+#include "DataModel/Scripting/ScriptResult.h"
 #include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constants
 //--------------------------------------------------------------------------------------------------
 
-static constexpr int kMacroWatchdogMs       = 5000;
-static constexpr int kMacroDelaySliceMs     = 50;
-static constexpr int kMacroMaxDelayMs       = 3600000;
-static constexpr int kMacroReplyPollSliceMs = 5;
-static constexpr int kMacroMaxReplyWaitMs   = 30000;
+static constexpr int kMacroWatchdogMs   = 5000;
+static constexpr int kMacroDelaySliceMs = 50;
+static constexpr int kMacroMaxDelayMs   = 3600000;
 
 //--------------------------------------------------------------------------------------------------
 // Macro apiCall bridge (worker thread)
@@ -85,17 +85,11 @@ bool DataModel::MacroApiBridge::stopRequested() const noexcept
 QVariantMap DataModel::MacroApiBridge::call(const QString& method, const QVariantMap& params)
 {
   QVariantMap out;
-  if (method.isEmpty()) {
-    out.insert(QStringLiteral("ok"), false);
-    out.insert(QStringLiteral("error"), QStringLiteral("apiCall: method must not be empty"));
-    return out;
-  }
+  if (method.isEmpty())
+    return ScriptResult::makeError(QStringLiteral("apiCall: method must not be empty"));
 
-  if (stopRequested()) {
-    out.insert(QStringLiteral("ok"), false);
-    out.insert(QStringLiteral("error"), QStringLiteral("apiCall: macro stop requested"));
-    return out;
-  }
+  if (stopRequested())
+    return ScriptResult::makeError(QStringLiteral("apiCall: macro stop requested"));
 
   const bool ok = QMetaObject::invokeMethod(m_marshaller,
                                             "dispatch",
@@ -130,101 +124,25 @@ QVariantList DataModel::MacroApiBridge::listCommands()
 
 /**
  * @brief Writes @p data to @p sourceId then blocks the worker (never the GUI) until the reply
- *        satisfies @p until or @p timeoutMs elapses; Stop-sliced, watchdog re-armed after.
+ *        satisfies @p until or @p timeoutMs elapses; the Stop button is what aborts the wait here.
  */
 QVariantMap DataModel::MacroApiBridge::writeAndWait(const QJSValue& data,
                                                     int timeoutMs,
                                                     const QJSValue& until,
                                                     int sourceId)
 {
-  QVariantMap out;
-  out.insert(QStringLiteral("ok"), false);
-  out.insert(QStringLiteral("data"), QString());
-  out.insert(QStringLiteral("bytesRead"), 0);
-  out.insert(QStringLiteral("timedOut"), false);
-
-  QByteArray payload;
-  if (data.isString()) {
-    payload = data.toString().toUtf8();
-  } else if (data.isArray()) {
-    const int len = data.property(QStringLiteral("length")).toInt();
-    payload.reserve(len);
-    for (int i = 0; i < len; ++i)
-      payload.append(static_cast<char>(data.property(static_cast<quint32>(i)).toInt() & 0xff));
-  }
-
-  if (sourceId < 0 || payload.isEmpty()) {
-    out.insert(QStringLiteral("error"), QStringLiteral("deviceWriteAndWait: bad source or data"));
-    return out;
-  }
-
-  if (stopRequested()) {
-    out.insert(QStringLiteral("error"), QStringLiteral("deviceWriteAndWait: macro stop requested"));
-    return out;
-  }
-
-  QByteArray terminator;
-  int expectedLen = 0;
-  if (until.isString())
-    terminator = until.toString().toUtf8();
-  else if (until.isNumber())
-    expectedLen = until.toInt();
-
-  qint64 written = -1;
-  QMetaObject::invokeMethod(m_marshaller,
-                            "writeAndArm",
-                            Qt::BlockingQueuedConnection,
-                            Q_RETURN_ARG(qint64, written),
-                            Q_ARG(int, sourceId),
-                            Q_ARG(QByteArray, payload));
-
-  if (written <= 0) {
-    QMetaObject::invokeMethod(
-      m_marshaller, "disarmReply", Qt::BlockingQueuedConnection, Q_ARG(int, sourceId));
-    out.insert(QStringLiteral("error"), QStringLiteral("deviceWriteAndWait: write failed"));
-    if (m_watchdog && !stopRequested())
-      m_watchdog->arm();
-
-    return out;
-  }
-
-  const auto satisfies = [&](const QByteArray& reply) {
-    if (!terminator.isEmpty())
-      return reply.contains(terminator);
-
-    if (expectedLen > 0)
-      return reply.size() >= expectedLen;
-
-    return !reply.isEmpty();
+  const auto stopped = [this] {
+    return stopRequested();
   };
 
-  const int budget = qBound(0, timeoutMs, kMacroMaxReplyWaitMs);
-  QByteArray reply;
-  bool satisfied = false;
-  for (int waited = 0; waited <= budget && !satisfied; waited += kMacroReplyPollSliceMs) {
-    if (stopRequested())
-      break;
-
-    QThread::msleep(static_cast<unsigned long>(kMacroReplyPollSliceMs));
-    QMetaObject::invokeMethod(m_marshaller,
-                              "pollReply",
-                              Qt::BlockingQueuedConnection,
-                              Q_RETURN_ARG(QByteArray, reply),
-                              Q_ARG(int, sourceId));
-    satisfied = satisfies(reply);
-  }
-
-  QMetaObject::invokeMethod(
-    m_marshaller, "disarmReply", Qt::BlockingQueuedConnection, Q_ARG(int, sourceId));
-
-  if (m_watchdog && !stopRequested())
-    m_watchdog->arm();
-
-  out.insert(QStringLiteral("ok"), satisfied);
-  out.insert(QStringLiteral("data"), QString::fromUtf8(reply));
-  out.insert(QStringLiteral("bytesRead"), reply.size());
-  out.insert(QStringLiteral("timedOut"), !satisfied);
-  return out;
+  return ScriptDeviceWait::writeAndWait(m_marshaller,
+                                        m_watchdog,
+                                        stopped,
+                                        QStringLiteral("deviceWriteAndWait: macro stop requested"),
+                                        data,
+                                        timeoutMs,
+                                        until,
+                                        sourceId);
 }
 
 /**

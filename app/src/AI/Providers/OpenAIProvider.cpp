@@ -13,23 +13,12 @@
 #include <QJsonObject>
 #include <QNetworkAccessManager>
 #include <QObject>
-#include <QSet>
 
 #include "AI/ContextBuilder.h"
 #include "AI/Logging.h"
 #include "AI/Providers/ImmediateErrorReply.h"
 #include "AI/Providers/OpenAIReply.h"
-
-/**
- * @brief OpenAI enforces tool names ^[a-zA-Z0-9_-]+; encode dots/colons.
- */
-static QString sanitizeName(const QString& original)
-{
-  QString out = original;
-  out.replace(QChar('.'), QChar('_'));
-  out.replace(QChar(':'), QChar('_'));
-  return out;
-}
+#include "AI/Providers/ProviderJson.h"
 
 //--------------------------------------------------------------------------------------------------
 // Construction and provider metadata
@@ -149,173 +138,6 @@ bool AI::OpenAIProvider::isReasoningModel(const QString& modelId)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Translators
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Inserts stub tool replies for any assistant tool_call that lacks a tool message.
- */
-static QJsonArray backfillDanglingToolCalls(const QJsonArray& messages)
-{
-  QSet<QString> answered;
-  for (const auto& value : messages) {
-    const auto msg = value.toObject();
-    if (msg.value(QStringLiteral("role")).toString() == QStringLiteral("tool"))
-      answered.insert(msg.value(QStringLiteral("tool_call_id")).toString());
-  }
-
-  QJsonArray out;
-  for (const auto& value : messages) {
-    const auto msg = value.toObject();
-    out.append(msg);
-
-    const auto calls = msg.value(QStringLiteral("tool_calls")).toArray();
-    for (const auto& callValue : calls) {
-      const auto id = callValue.toObject().value(QStringLiteral("id")).toString();
-      if (id.isEmpty() || answered.contains(id))
-        continue;
-
-      QJsonObject stub;
-      stub[QStringLiteral("role")]         = QStringLiteral("tool");
-      stub[QStringLiteral("tool_call_id")] = id;
-      stub[QStringLiteral("content")] = QStringLiteral("{\"ok\":false,\"error\":\"no_result\"}");
-      out.append(stub);
-      answered.insert(id);
-    }
-  }
-
-  return out;
-}
-
-/**
- * @brief Converts Anthropic-shaped history into the OpenAI Chat Completions shape.
- */
-QJsonArray AI::OpenAIProvider::translateHistory(const QJsonArray& history,
-                                                const QString& systemText,
-                                                bool useDeveloperRole)
-{
-  QJsonArray out;
-
-  if (!systemText.isEmpty()) {
-    QJsonObject sys;
-    sys[QStringLiteral("role")] =
-      useDeveloperRole ? QStringLiteral("developer") : QStringLiteral("system");
-    sys[QStringLiteral("content")] = systemText;
-    out.append(sys);
-  }
-
-  for (const auto& v : history) {
-    const auto msg          = v.toObject();
-    const auto role         = msg.value(QStringLiteral("role")).toString();
-    const auto contentValue = msg.value(QStringLiteral("content"));
-
-    if (contentValue.isString()) {
-      QJsonObject m;
-      m[QStringLiteral("role")]    = role;
-      m[QStringLiteral("content")] = contentValue.toString();
-      out.append(m);
-      continue;
-    }
-
-    if (!contentValue.isArray())
-      continue;
-
-    QString textAccumulator;
-    QJsonArray toolCalls;
-    QJsonArray toolResultMessages;
-    translateBlocks(contentValue.toArray(), textAccumulator, toolCalls, toolResultMessages);
-
-    if (!textAccumulator.isEmpty() || !toolCalls.isEmpty()) {
-      QJsonObject m;
-      m[QStringLiteral("role")] = role;
-      if (!textAccumulator.isEmpty())
-        m[QStringLiteral("content")] = textAccumulator;
-
-      if (!toolCalls.isEmpty())
-        m[QStringLiteral("tool_calls")] = toolCalls;
-
-      out.append(m);
-    }
-
-    for (const auto& tr : toolResultMessages)
-      out.append(tr);
-  }
-
-  return backfillDanglingToolCalls(out);
-}
-
-/**
- * @brief Splits Anthropic content blocks into OpenAI text / tool_calls / tool messages.
- */
-void AI::OpenAIProvider::translateBlocks(const QJsonArray& blocks,
-                                         QString& textAccumulator,
-                                         QJsonArray& toolCalls,
-                                         QJsonArray& toolResultMessages)
-{
-  for (const auto& bv : blocks) {
-    const auto block = bv.toObject();
-    const auto type  = block.value(QStringLiteral("type")).toString();
-
-    if (type == QStringLiteral("text")) {
-      const auto t = block.value(QStringLiteral("text")).toString();
-      if (t.isEmpty())
-        continue;
-
-      if (!textAccumulator.isEmpty())
-        textAccumulator.append(QChar('\n'));
-
-      textAccumulator.append(t);
-      continue;
-    }
-
-    if (type == QStringLiteral("tool_use")) {
-      QJsonObject fn;
-      fn[QStringLiteral("name")] = sanitizeName(block.value(QStringLiteral("name")).toString());
-      fn[QStringLiteral("arguments")] =
-        QString::fromUtf8(QJsonDocument(block.value(QStringLiteral("input")).toObject())
-                            .toJson(QJsonDocument::Compact));
-
-      QJsonObject tc;
-      tc[QStringLiteral("id")]       = block.value(QStringLiteral("id")).toString();
-      tc[QStringLiteral("type")]     = QStringLiteral("function");
-      tc[QStringLiteral("function")] = fn;
-      toolCalls.append(tc);
-      continue;
-    }
-
-    if (type != QStringLiteral("tool_result"))
-      continue;
-
-    QJsonObject toolMsg;
-    toolMsg[QStringLiteral("role")]         = QStringLiteral("tool");
-    toolMsg[QStringLiteral("tool_call_id")] = block.value(QStringLiteral("tool_use_id")).toString();
-    toolMsg[QStringLiteral("content")]      = block.value(QStringLiteral("content")).toString();
-    toolResultMessages.append(toolMsg);
-  }
-}
-
-/**
- * @brief Converts AI-tool definitions into the OpenAI tool-choice schema.
- */
-QJsonArray AI::OpenAIProvider::translateTools(const QJsonArray& tools)
-{
-  QJsonArray out;
-  for (const auto& v : tools) {
-    const auto t = v.toObject();
-    QJsonObject fn;
-    fn[QStringLiteral("name")]        = sanitizeName(t.value(QStringLiteral("name")).toString());
-    fn[QStringLiteral("description")] = t.value(QStringLiteral("description"));
-    fn[QStringLiteral("parameters")]  = t.value(QStringLiteral("input_schema"));
-
-    QJsonObject tool;
-    tool[QStringLiteral("type")]     = QStringLiteral("function");
-    tool[QStringLiteral("function")] = fn;
-    out.append(tool);
-  }
-  return out;
-}
-
-//--------------------------------------------------------------------------------------------------
 // sendMessage
 //--------------------------------------------------------------------------------------------------
 
@@ -332,38 +154,20 @@ AI::Reply* AI::OpenAIProvider::sendMessage(const QJsonArray& history,
       QObject::tr("No OpenAI API key set. Open Manage Keys to add one."));
 
   const auto systemBlocks = ContextBuilder::buildSystemArray(false);
-  QString systemText;
-  for (const auto& v : systemBlocks) {
-    const auto block = v.toObject();
-    const auto t     = block.value(QStringLiteral("text")).toString();
-    if (!t.isEmpty()) {
-      if (!systemText.isEmpty())
-        systemText.append(QStringLiteral("\n\n"));
-
-      systemText.append(t);
-    }
-  }
+  const auto systemText   = ProviderJson::flattenSystemBlocks(systemBlocks);
 
   const auto model = currentModel();
   const auto caps  = capabilities();
 
-  QJsonObject body;
-  body[QStringLiteral("model")]                  = model;
-  body[QStringLiteral("stream")]                 = true;
+  auto body = ProviderJson::chatCompletionsBody(
+    model, history, systemText, tools, forbidToolUse, caps.developerRole);
   body[QStringLiteral("store")]                  = false;
   body[QStringLiteral("parallel_tool_calls")]    = caps.parallelToolCalls;
   body[QStringLiteral("prompt_cache_key")]       = QStringLiteral("serial-studio-ai-assistant");
   body[QStringLiteral("prompt_cache_retention")] = QStringLiteral("24h");
-  body[QStringLiteral("messages")] = translateHistory(history, systemText, caps.developerRole);
 
   if (isReasoningModel(model))
     body[QStringLiteral("reasoning_effort")] = QStringLiteral("none");
-
-  if (!tools.isEmpty()) {
-    body[QStringLiteral("tools")] = translateTools(tools);
-    body[QStringLiteral("tool_choice")] =
-      forbidToolUse ? QStringLiteral("none") : QStringLiteral("auto");
-  }
 
   const auto bytes = QJsonDocument(body).toJson(QJsonDocument::Compact);
 

@@ -45,7 +45,6 @@
 #  include "MQTT/PublisherScriptEditor.h"
 #endif
 #include "ProjectEditorItemIds.h"
-#include "ProjectEditorShared.h"
 
 /**
  * @brief Parses the AlarmBandsEditor dialog's QVariantList payload into validated alarm bands,

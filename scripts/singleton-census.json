@@ -1,36 +1,36 @@
 {
   "spec": "0039-session-context",
   "regenerate": "python scripts/code-verify.py --singleton-census --accept",
-  "total": 1762,
-  "files": 226,
+  "total": 1718,
+  "files": 238,
   "buckets": {
     "root": 159,
     "accessor": 69,
-    "ctor-capture": 105,
+    "ctor-capture": 111,
     "deferred": 20,
-    "static-cache": 1279,
-    "loose": 130
+    "static-cache": 1225,
+    "loose": 134
   },
   "per_class": {
-    "IO::ConnectionManager": 246,
-    "DataModel::ProjectModel": 225,
+    "IO::ConnectionManager": 244,
+    "DataModel::ProjectModel": 224,
     "AppState": 136,
-    "CommandRegistry": 107,
-    "UI::Dashboard": 85,
-    "DataModel::FrameBuilder": 80,
+    "UI::Dashboard": 83,
+    "CommandRegistry": 82,
+    "DataModel::FrameBuilder": 79,
     "Misc::IconRegistry": 50,
-    "Misc::ThemeManager": 44,
-    "Misc::TimerEvents": 34,
+    "Misc::ThemeManager": 38,
+    "Misc::TimerEvents": 31,
     "Console::Handler": 30,
     "API::Server": 29,
     "Misc::WorkspaceManager": 27,
     "DataModel::NotificationCenter": 27,
-    "Misc::CommonFonts": 27,
     "Misc::Translator": 26,
     "API::CommandRegistry": 25,
     "Sessions::Export": 25,
     "Licensing::LemonSqueezy": 24,
     "Sessions::DatabaseManager": 23,
+    "Misc::CommonFonts": 23,
     "CSV::Player": 22,
     "MDF4::Player": 21,
     "IO::PipelineHost": 21,
@@ -66,7 +66,7 @@
     "AI::Assistant": 4,
     "LemonSqueezy": 4,
     "UI::TaskbarSettings": 4,
-    "WidgetRegistry": 4,
+    "UI::WidgetRegistry": 4,
     "ConnectionDiagnostics": 3,
     "MirrorPublisher": 3,
     "ProcessLauncher": 3,
@@ -75,7 +75,7 @@
     "QCanBus": 3,
     "Misc::ShortcutGenerator": 3,
     "Widgets::ImageExport": 3,
-    "UI::WidgetRegistry": 3,
+    "WidgetRegistry": 3,
     "ImageExport": 3,
     "AI::DocSearch": 2,
     "Server": 2,
@@ -195,13 +195,68 @@
       }
     },
     "app/src/AI/ToolDispatcher.cpp": {
-      "total": 22,
+      "total": 3,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 22,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "app/src/AI/Tools/ToolBulkTools.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 2,
+        "loose": 0
+      }
+    },
+    "app/src/AI/Tools/ToolCatalog.cpp": {
+      "total": 12,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 12,
+        "loose": 0
+      }
+    },
+    "app/src/AI/Tools/ToolDispatch.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "app/src/AI/Tools/ToolFilesystemTools.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "app/src/AI/Tools/ToolSupport.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
         "loose": 0
       }
     },
@@ -392,39 +447,6 @@
         "loose": 0
       }
     },
-    "app/src/API/Handlers/Entities/ProjectHandlerAlarmCompat.cpp": {
-      "total": 11,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 11,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/Entities/ProjectHandlerBulk.cpp": {
-      "total": 4,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 4,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/Entities/ProjectHandlerDatasetFields.cpp": {
-      "total": 9,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 9,
-        "loose": 0
-      }
-    },
     "app/src/API/Handlers/ExtensionHandler.cpp": {
       "total": 13,
       "buckets": {
@@ -601,7 +623,95 @@
         "loose": 0
       }
     },
-    "app/src/API/Handlers/ProjectApiSupport.h": {
+    "app/src/API/Handlers/ProjectActionCommands.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "app/src/API/Handlers/ProjectApiSupport.cpp": {
+      "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 4,
+        "loose": 0
+      }
+    },
+    "app/src/API/Handlers/ProjectBatchCommands.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 2,
+        "loose": 0
+      }
+    },
+    "app/src/API/Handlers/ProjectDatasetCommands.cpp": {
+      "total": 7,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 7,
+        "loose": 0
+      }
+    },
+    "app/src/API/Handlers/ProjectDatasetFieldCommands.cpp": {
+      "total": 6,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 6,
+        "loose": 0
+      }
+    },
+    "app/src/API/Handlers/ProjectDiscoveryCommands.cpp": {
+      "total": 7,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 7,
+        "loose": 0
+      }
+    },
+    "app/src/API/Handlers/ProjectDryRunCommands.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 2,
+        "loose": 0
+      }
+    },
+    "app/src/API/Handlers/ProjectFileCommands.cpp": {
+      "total": 18,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 18,
+        "loose": 0
+      }
+    },
+    "app/src/API/Handlers/ProjectGroupCommands.cpp": {
       "total": 4,
       "buckets": {
         "root": 0,
@@ -613,39 +723,28 @@
       }
     },
     "app/src/API/Handlers/ProjectHandler.cpp": {
-      "total": 26,
+      "total": 1,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 26,
-        "loose": 0
+        "static-cache": 0,
+        "loose": 1
       }
     },
-    "app/src/API/Handlers/ProjectHandlerBatch.cpp": {
-      "total": 10,
+    "app/src/API/Handlers/ProjectListCommands.cpp": {
+      "total": 8,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 10,
+        "static-cache": 8,
         "loose": 0
       }
     },
-    "app/src/API/Handlers/ProjectHandlerDiscovery.cpp": {
-      "total": 7,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 7,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/ProjectHandlerEntities.cpp": {
+    "app/src/API/Handlers/ProjectOutputWidgetCommands.cpp": {
       "total": 4,
       "buckets": {
         "root": 0,
@@ -656,7 +755,18 @@
         "loose": 0
       }
     },
-    "app/src/API/Handlers/ProjectHandlerFile.cpp": {
+    "app/src/API/Handlers/ProjectPainterCommands.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 2,
+        "loose": 0
+      }
+    },
+    "app/src/API/Handlers/ProjectParserCommands.cpp": {
       "total": 18,
       "buckets": {
         "root": 0,
@@ -667,14 +777,14 @@
         "loose": 0
       }
     },
-    "app/src/API/Handlers/ProjectHandlerParser.cpp": {
-      "total": 22,
+    "app/src/API/Handlers/ProjectUpdateCommands.cpp": {
+      "total": 4,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 22,
+        "static-cache": 4,
         "loose": 0
       }
     },
@@ -833,13 +943,13 @@
       }
     },
     "app/src/API/Server.cpp": {
-      "total": 11,
+      "total": 10,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 9,
+        "static-cache": 8,
         "loose": 1
       }
     },
@@ -954,24 +1064,24 @@
       }
     },
     "app/src/DataModel/Editors/ControlScriptEditor.cpp": {
-      "total": 6,
+      "total": 5,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 5,
         "deferred": 0,
-        "static-cache": 1,
+        "static-cache": 0,
         "loose": 0
       }
     },
     "app/src/DataModel/Editors/DatasetTransformEditor.cpp": {
-      "total": 8,
+      "total": 7,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 4,
         "deferred": 0,
-        "static-cache": 4,
+        "static-cache": 3,
         "loose": 0
       }
     },
@@ -987,57 +1097,90 @@
       }
     },
     "app/src/DataModel/Editors/JsCodeEditor.cpp": {
-      "total": 7,
+      "total": 6,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 6,
         "deferred": 0,
-        "static-cache": 1,
+        "static-cache": 0,
         "loose": 0
       }
     },
     "app/src/DataModel/Editors/MacroEditor.cpp": {
-      "total": 4,
+      "total": 3,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 3,
         "deferred": 0,
-        "static-cache": 1,
+        "static-cache": 0,
         "loose": 0
       }
     },
     "app/src/DataModel/Editors/OutputCodeEditor.cpp": {
-      "total": 7,
+      "total": 6,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 6,
         "deferred": 0,
-        "static-cache": 1,
+        "static-cache": 0,
         "loose": 0
       }
     },
     "app/src/DataModel/Editors/PainterCodeEditor.cpp": {
-      "total": 7,
+      "total": 6,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 6,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "app/src/DataModel/FrameBuilder/QuickPlotBuilder.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "app/src/DataModel/FrameBuilder/TableScriptBridge.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "app/src/DataModel/FrameBuilder/TransformCompiler.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
         "deferred": 0,
         "static-cache": 1,
         "loose": 0
       }
     },
     "app/src/DataModel/FrameBuilder.cpp": {
-      "total": 70,
+      "total": 63,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 44,
+        "static-cache": 37,
         "loose": 25
       }
     },
@@ -1129,6 +1272,17 @@
         "loose": 0
       }
     },
+    "app/src/DataModel/Project/ProjectEditorIcons.h": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
     "app/src/DataModel/Project/ProjectEditorMqtt.cpp": {
       "total": 4,
       "buckets": {
@@ -1137,17 +1291,6 @@
         "ctor-capture": 0,
         "deferred": 0,
         "static-cache": 4,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Project/ProjectEditorShared.h": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
         "loose": 0
       }
     },
@@ -1184,18 +1327,7 @@
         "loose": 0
       }
     },
-    "app/src/DataModel/Project/ProjectModelCrud.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Project/ProjectModelFolders.cpp": {
+    "app/src/DataModel/Project/ProjectFolders.cpp": {
       "total": 6,
       "buckets": {
         "root": 0,
@@ -1206,7 +1338,7 @@
         "loose": 0
       }
     },
-    "app/src/DataModel/Project/ProjectModelLoading.cpp": {
+    "app/src/DataModel/Project/ProjectLoader.cpp": {
       "total": 11,
       "buckets": {
         "root": 0,
@@ -1217,7 +1349,7 @@
         "loose": 0
       }
     },
-    "app/src/DataModel/Project/ProjectModelPersistence.cpp": {
+    "app/src/DataModel/Project/ProjectPersistence.cpp": {
       "total": 7,
       "buckets": {
         "root": 0,
@@ -1228,7 +1360,18 @@
         "loose": 0
       }
     },
-    "app/src/DataModel/Project/ProjectModelSources.cpp": {
+    "app/src/DataModel/Project/ProjectPresentation.cpp": {
+      "total": 7,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 7,
+        "loose": 0
+      }
+    },
+    "app/src/DataModel/Project/ProjectSources.cpp": {
       "total": 3,
       "buckets": {
         "root": 0,
@@ -1239,7 +1382,7 @@
         "loose": 0
       }
     },
-    "app/src/DataModel/Project/ProjectModelTables.cpp": {
+    "app/src/DataModel/Project/ProjectTables.cpp": {
       "total": 3,
       "buckets": {
         "root": 0,
@@ -1250,14 +1393,14 @@
         "loose": 0
       }
     },
-    "app/src/DataModel/Project/ProjectModelWorkspaces.cpp": {
-      "total": 21,
+    "app/src/DataModel/Project/ProjectWorkspaces.cpp": {
+      "total": 23,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 21,
+        "static-cache": 23,
         "loose": 0
       }
     },
@@ -1284,13 +1427,13 @@
       }
     },
     "app/src/DataModel/ProjectModel.cpp": {
-      "total": 31,
+      "total": 23,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 19,
+        "static-cache": 11,
         "loose": 11
       }
     },
@@ -1882,9 +2025,9 @@
       "buckets": {
         "root": 0,
         "accessor": 1,
-        "ctor-capture": 0,
+        "ctor-capture": 1,
         "deferred": 0,
-        "static-cache": 3,
+        "static-cache": 2,
         "loose": 0
       }
     },
@@ -2175,14 +2318,14 @@
       }
     },
     "app/src/Sessions/Player.cpp": {
-      "total": 29,
+      "total": 27,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 28,
-        "loose": 0
+        "static-cache": 23,
+        "loose": 3
       }
     },
     "app/src/Sessions/Verifier.cpp": {
@@ -2230,13 +2373,13 @@
       }
     },
     "app/src/UI/Dashboard.cpp": {
-      "total": 41,
+      "total": 40,
       "buckets": {
         "root": 0,
         "accessor": 1,
-        "ctor-capture": 0,
+        "ctor-capture": 5,
         "deferred": 0,
-        "static-cache": 40,
+        "static-cache": 34,
         "loose": 0
       }
     },
@@ -2548,36 +2691,25 @@
         "loose": 0
       }
     },
-    "app/src/UI/Widgets/Waterfall/WaterfallOverlay.cpp": {
-      "total": 5,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 5,
-        "loose": 0
-      }
-    },
     "app/src/UI/Widgets/Waterfall.cpp": {
-      "total": 7,
+      "total": 5,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 5,
         "deferred": 0,
-        "static-cache": 2,
+        "static-cache": 0,
         "loose": 0
       }
     },
     "app/src/UI/WindowManager.cpp": {
-      "total": 6,
+      "total": 4,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 2,
         "deferred": 0,
-        "static-cache": 4,
+        "static-cache": 2,
         "loose": 0
       }
     },

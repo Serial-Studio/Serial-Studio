@@ -22,8 +22,8 @@
 #  include <QVariantList>
 
 #  include "Sessions/DatabaseManager/ReproducibilityVerifier.h"
+#  include "Sessions/DatabaseManager/SessionExporter.h"
 #  include "Sessions/DatabaseWorker.h"
-#  include "Sessions/HtmlReport.h"
 
 class QThread;
 class AppState;
@@ -229,29 +229,16 @@ private slots:
   void onWorkerLockStateChanged(bool locked, const QString& passwordHash);
   void onWorkerNotesUpdated(int sessionId, const QString& notes);
   void onWorkerMutationFinished(quint64 token, bool ok, const QString& error);
-  void onWorkerCsvProgress(double percent);
-  void onWorkerCsvFinished(const QString& outputPath, bool ok, const QString& error);
-  void onWorkerReportDataReady(const Sessions::ReportPayloadPtr& payload);
   void onWorkerGlobalProjectJsonReady(const QString& json);
 
 private:
   void initWorker();
   void wireVerifier();
+  void wireExporter();
   [[nodiscard]] quint64 nextToken();
   void setBusy(bool busy);
-  void renderReportFromPayload(const ReportPayloadPtr& payload);
   void runRestoreProjectFromJson(const QString& json);
-  void launchPdfExport(int sessionId, HtmlReportOptions opts);
-  void requestPdfOutputPath(int sessionId, HtmlReportOptions opts);
-
-  static void createSchemaSessionTables(QSqlQuery& q);
-  static void migrateColumnsTable(QSqlQuery& q);
-  static void migrateSessionsTable(QSqlQuery& q);
-  static void createSchemaSampleTables(QSqlQuery& q);
-  static void createSchemaStreamTables(QSqlQuery& q);
-  static void createSchemaBlockTable(QSqlQuery& q);
-  static void createSchemaTagTables(QSqlQuery& q);
-  static void createSchemaProjectMetadata(QSqlQuery& q);
+  [[nodiscard]] QString sessionProjectTitle(int sessionId) const;
 
 private:
   QThread* m_thread;
@@ -265,23 +252,10 @@ private:
   bool m_locked;
   QString m_passwordHash;
 
-  bool m_csvExportBusy;
-  double m_csvExportProgress;
-  bool m_pdfExportBusy;
-  double m_pdfExportProgress;
-  QString m_pdfExportStatus;
-
   QVariantList m_sessionList;
   QVariantList m_tagList;
 
-  // Pending PDF render context, paired with worker reply by sessionId
-  HtmlReportOptions m_pendingPdfOpts;
-  int m_pendingPdfSessionId;
-  bool m_pendingPdfActive;
-
-  // CSV export tracking
-  QString m_pendingCsvPath;
-
+  SessionExporter m_exporter;
   ReproducibilityVerifier m_verifier;
 
   // Outstanding mutation tokens awaiting worker confirmation

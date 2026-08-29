@@ -40,9 +40,8 @@ extern "C" {
 #include <QMenu>
 #include <QMessageBox>
 #include <QShortcut>
-#include <QTextCursor>
 
-#include "DataModel/Editors/CodeFormatter.h"
+#include "DataModel/Editors/EditorFormatting.h"
 #include "DataModel/Editors/ExpressionHighlighter.h"
 #include "DataModel/Editors/SerialStudioCompleter.h"
 #include "DataModel/FrameBuilder.h"
@@ -365,22 +364,9 @@ void DataModel::DatasetTransformEditor::onFormat()
   if (m_language == SerialStudio::Expression)
     return;
 
-  const auto lang         = (m_language == SerialStudio::Lua) ? CodeFormatter::Language::Lua
-                                                              : CodeFormatter::Language::JavaScript;
-  const QString original  = m_editor->toPlainText();
-  const QString formatted = CodeFormatter::formatDocument(original, lang);
-  if (formatted == original)
-    return;
-
-  QTextCursor cursor = m_editor->textCursor();
-  const int savedPos = cursor.position();
-  cursor.beginEditBlock();
-  cursor.select(QTextCursor::Document);
-  cursor.insertText(formatted);
-  cursor.endEditBlock();
-
-  cursor.setPosition(qMin(savedPos, formatted.size()));
-  m_editor->setTextCursor(cursor);
+  const auto lang = (m_language == SerialStudio::Lua) ? CodeFormatter::Language::Lua
+                                                      : CodeFormatter::Language::JavaScript;
+  EditorFormatting::formatDocument(*m_editor, lang);
 }
 
 /**
@@ -391,30 +377,9 @@ void DataModel::DatasetTransformEditor::onFormatLine()
   if (m_language == SerialStudio::Expression)
     return;
 
-  const auto lang        = (m_language == SerialStudio::Lua) ? CodeFormatter::Language::Lua
-                                                             : CodeFormatter::Language::JavaScript;
-  const QString original = m_editor->toPlainText();
-
-  QTextCursor cursor = m_editor->textCursor();
-  QTextCursor first(m_editor->document());
-  first.setPosition(qMin(cursor.selectionStart(), cursor.selectionEnd()));
-  QTextCursor last(m_editor->document());
-  last.setPosition(qMax(cursor.selectionStart(), cursor.selectionEnd()));
-
-  const int firstLine     = first.blockNumber();
-  const int lastLine      = last.blockNumber();
-  const QString formatted = CodeFormatter::formatLineRange(original, lang, firstLine, lastLine);
-  if (formatted == original)
-    return;
-
-  const int savedPos = cursor.position();
-  cursor.beginEditBlock();
-  cursor.select(QTextCursor::Document);
-  cursor.insertText(formatted);
-  cursor.endEditBlock();
-
-  cursor.setPosition(qMin(savedPos, formatted.size()));
-  m_editor->setTextCursor(cursor);
+  const auto lang = (m_language == SerialStudio::Lua) ? CodeFormatter::Language::Lua
+                                                      : CodeFormatter::Language::JavaScript;
+  EditorFormatting::formatSelection(*m_editor, lang);
 }
 
 /**
@@ -495,8 +460,8 @@ void DataModel::DatasetTransformEditor::onLanguageChanged(int index)
  */
 void DataModel::DatasetTransformEditor::onThemeChanged()
 {
-  static const auto* t = &Misc::ThemeManager::instance();
-  const auto name      = t->parameters().value(QStringLiteral("code-editor-theme")).toString();
+  const auto name =
+    m_themeManager.parameters().value(QStringLiteral("code-editor-theme")).toString();
   const auto path =
     QDir::isAbsolutePath(name) ? name : QStringLiteral(":/themes/code-editor/%1.xml").arg(name);
 

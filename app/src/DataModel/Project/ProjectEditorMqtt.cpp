@@ -44,7 +44,6 @@
 #endif
 #include "Misc/IconRegistry.h"
 #include "ProjectEditorItemIds.h"
-#include "ProjectEditorShared.h"
 
 /**
  * @brief Opens the native MQTT publisher script editor dialog.

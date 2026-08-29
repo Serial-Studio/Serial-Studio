@@ -8,17 +8,16 @@
 
 #pragma once
 
-#include <QCodeEditor>
 #include <QPainter>
 #include <QQuickPaintedItem>
-#include <QSyntaxStyle>
 
 #include "DataModel/Dialogs/TransmitTestDialog.h"
+#include "DataModel/Editors/EmbeddedCodeEditor.h"
+#include "DataModel/Editors/ScriptTemplateCatalog.h"
 #include "DataModel/Frame.h"
 
 namespace Misc {
 class ThemeManager;
-class CommonFonts;
 class TimerEvents;
 class Translator;
 }  // namespace Misc
@@ -82,10 +81,6 @@ private slots:
   void scheduleRender();
 
 private:
-  void syncWidgetPosition();
-  [[nodiscard]] bool renderable() const;
-
-private:
   bool event(QEvent* event) override;
   void paint(QPainter* painter) override;
   void keyPressEvent(QKeyEvent* event) override;
@@ -108,21 +103,16 @@ public:
 
 private:
   void loadTemplates();
-  bool m_dirty;
+
+private:
   bool m_readingCode;
   Misc::ThemeManager& m_themeManager;
-  Misc::CommonFonts& m_commonFonts;
-  DataModel::ProjectEditor& m_projectEditor;
-  DataModel::ProjectModel& m_projectModel;
   Misc::TimerEvents& m_timerEvents;
   Misc::Translator& m_translator;
-  QPixmap m_pixmap;
-  QSyntaxStyle m_style;
-  QCodeEditor m_widget;
-
-  QString m_defaultTemplateFile;
-  QStringList m_templateNames;
-  QStringList m_templateFiles;
+  DataModel::ProjectEditor& m_projectEditor;
+  DataModel::ProjectModel& m_projectModel;
+  EmbeddedCodeEditor m_editor;
+  ScriptTemplateCatalog m_templates;
   TransmitTestDialog m_testDialog;
 };
 

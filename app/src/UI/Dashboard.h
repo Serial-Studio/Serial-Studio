@@ -35,6 +35,9 @@
 #include "DSP.h"
 #include "IO/StreamWorker.h"
 #include "SerialStudio.h"
+#include "UI/Dashboard/DashboardTools.h"
+#include "UI/Dashboard/DashboardViewState.h"
+#include "UI/Dashboard/WidgetMapBuilder.h"
 #include "UI/WidgetRegistry.h"
 
 class AppState;
@@ -165,15 +168,8 @@ public:
     QString extensionId;
   };
 
-  /**
-   * @brief Min/max hold state for one extreme-hold dataset (spec 0052): the lowest and highest
-   *        finite values observed since the last data reset; survives layout rebuilds.
-   */
-  struct DatasetExtremes {
-    double min = 0;
-    double max = 0;
-    bool valid = false;
-  };
+  // Owned by UI::WidgetMapBuilder, which resolves the fold table pointing into this store
+  using DatasetExtremes = UI::DatasetExtremes;
 
   [[nodiscard]] static Dashboard& instance();
 
@@ -322,8 +318,6 @@ private:
   void connectViewStateResets(AppState& appState);
   void reconfigureDashboard(const DataModel::Frame& frame);
   [[nodiscard]] DataModel::Frame combineSourceFrames(const DataModel::Frame& seed) const;
-  void processDatasetIntoWidgetMaps(const DataModel::Dataset& datasetIn,
-                                    DataModel::Group& ledPanel);
   void handleMissingDataset(const DataModel::Frame& frame);
   void registerXAxisIfNeeded(const DataModel::Dataset& dataset);
 
@@ -343,7 +337,6 @@ private:
   void configurePlot3DSeries();
   void configureMultiLineSeries();
   void buildMultiplotPushes();
-  void configureActions(const DataModel::Frame& frame);
 
   [[nodiscard]] QHash<qint64, DSP::EnvelopeRing> snapshotPlotTimeRings() const;
   [[nodiscard]] QHash<qint64, std::vector<DSP::EnvelopeRing>> snapshotMultiplotTimeRings() const;
@@ -364,19 +357,8 @@ private:
                          const QVector<double>& timesSec,
                          const QHash<qint64, QVector<double>>& series,
                          double timeOffset);
-  void buildWidgetGroups(const DataModel::Frame& frame, bool pro);
-  void applyDisplayTitles();
-  void registerWidgets();
-  void buildDatasetReferences();
-  void rebuildDatasetReferences();
-  void buildValuePushes();
-  void buildExtremePushes();
-  void appendExtremePush(int sourceId, const DataModel::Dataset& dataset);
   void foldExtremes(int sourceId);
-  void addExtensionStringTargets(QSet<const DataModel::Dataset*>& targets) const;
-  [[nodiscard]] int datasetBucketBase(const SerialStudio::DashboardWidget key) const noexcept;
   void clearPushTables();
-  void relabelGroupAsMultiplotFallback(int groupId, const QString& newTitle);
 
 private:
   /**
@@ -422,31 +404,6 @@ private:
     const bool* activeFlag;
     std::vector<TimeCurve> timeCurves;
     std::vector<std::pair<DSP::AxisData*, const double*>> samples;
-  };
-
-  /**
-   * @brief Pre-resolved value-propagation entry: one incoming dataset to its widget copies.
-   *        stringTargets is the subset whose string value is observable (DataGrid rows and the
-   *        API-serialized m_lastFrame); the rest only ever consume the numeric fields.
-   */
-  struct ValuePush {
-    std::vector<DataModel::Dataset*> targets;
-    std::vector<DataModel::Dataset*> stringTargets;
-    int uniqueId;
-  };
-
-  [[nodiscard]] ValuePush makeValuePush(const DataModel::Dataset& dataset,
-                                        const QSet<const DataModel::Dataset*>& stringTargets) const;
-
-  /**
-   * @brief Pre-resolved extreme-hold fold for one flagged dataset: the store slot plus value and
-   *        numeric-gate pointers into the m_datasets copy (QMap nodes, address-stable across
-   *        frames; both maps rebuild with the push tables).
-   */
-  struct ExtremePush {
-    DatasetExtremes* slot;
-    const double* value;
-    const bool* numeric;
   };
 
   /**
@@ -550,17 +507,6 @@ private:
   int m_widgetCount;
   bool m_updateRequired;
   bool m_thinningActive;
-  bool m_showActionPanel;
-  bool m_terminalEnabled;
-  bool m_notificationLogEnabled;
-  bool m_clockEnabled;
-  bool m_stopwatchEnabled;
-  bool m_autoHideToolbar;
-  bool m_showAlignmentGuides;
-  bool m_persistSettings;
-
-  int m_layoutMargin;
-  int m_layoutSpacing;
 
   bool m_updateRetryInProgress;
 
@@ -611,9 +557,6 @@ private:
   QVector<DSP::AxisData> m_waterfallValues;
 #endif
 
-  QMap<int, QTimer*> m_timers;
-  QMap<int, int> m_repeatCounters;
-  QVector<DataModel::Action> m_actions;
   SerialStudio::WidgetMap m_widgetMap;
   QMap<int, DataModel::Dataset> m_datasets;
 
@@ -639,9 +582,10 @@ private:
   QHash<int, quint64> m_sourceStructureGen;
   QHash<int, quint64> m_quarantinedSources;
 
-  // Session view state (spec 0062): per-widget + global, never part of the project document
-  QJsonObject m_widgetViewState;
-  QJsonObject m_globalViewState;
+  // Declared last: WidgetMapBuilder binds the members above by reference, in declaration order
+  DashboardTools m_tools;
+  DashboardViewState m_viewState;
+  WidgetMapBuilder m_widgetMapBuilder;
 };
 }  // namespace UI
 

@@ -2,7 +2,7 @@
 
 For three of the most painful protocol configurations, Serial Studio can build the project for you from a vendor file. Drop in a `.dbc` for CAN Bus, a register-map CSV/XML/JSON for Modbus, or a `.proto` schema for Protocol Buffers, and you get back a complete `.ssproj` with groups, datasets, dashboard widgets, and a working frame parser. No hand-typed register addresses, no copy-paste from PDFs.
 
-The DBC and Modbus importers live in the **Setup Panel** of the relevant driver and are Pro features. The Protobuf importer lives in the Project Editor toolbar (**Import > Protobuf**), applies to any transport that delivers a serialized message blob, and is available in all builds. (Any Pro widgets the generated projects use still require a license, but `.proto` import itself does not.)
+The DBC and Modbus importers live in the **Setup Panel** of the relevant driver and are Pro features. The Protobuf importer lives in the Project Editor toolbar (**Import > Protobuf**), applies to any transport that delivers a serialized message blob, and is available in all builds. (Any Pro widgets the generated projects use still need a license or the free trial, but `.proto` import itself does not.)
 
 ## Why this exists
 

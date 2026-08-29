@@ -1,70 +1,70 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="ro_RO" sourcelanguage="en_US">
 <context>
-    <name/>
+    <name></name>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="355"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="354"/>
         <source>Mixed</source>
         <translation>Mixt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="411"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="410"/>
         <source>Client Certificate</source>
         <translation>Certificat Client</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="412"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="411"/>
         <source>Optional (mutual TLS)</source>
         <translation>Opțional (TLS mutual)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="413"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="412"/>
         <source>PEM certificate presented to brokers that require mutual TLS (AWS IoT Core)</source>
         <translation>Certificat PEM prezentat brokerilor care necesită TLS mutual (AWS IoT Core)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="424"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="423"/>
         <source>Private Key</source>
         <translation>Cheie Privată</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="425"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="424"/>
         <source>Defaults to the certificate file</source>
         <translation>Implicit fișierul certificat</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="426"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="425"/>
         <source>PEM private key matching the client certificate</source>
         <translation>Cheie privată PEM corespunzătoare certificatului client</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="436"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="435"/>
         <source>Key Passphrase</source>
         <translation>Frază de Acces Cheie</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="437"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="436"/>
         <source>Passphrase for an encrypted private key (stored in the encrypted vault, never in the project file)</source>
         <translation>Frază de acces pentru o cheie privată criptată (stocată în seiful criptat, niciodată în fișierul proiect)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="448"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="447"/>
         <source>ALPN (MQTT over port 443)</source>
         <translation>ALPN (MQTT pe portul 443)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="449"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="448"/>
         <source>Announce an ALPN protocol so brokers can serve MQTT on port 443 behind firewalls</source>
         <translation>Anunță un protocol ALPN astfel încât brokerii pot servi MQTT pe portul 443 în spatele firewall-urilor</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="463"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="462"/>
         <source>ALPN Protocol</source>
         <translation>Protocol ALPN</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="465"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="464"/>
         <source>Protocol name announced during the TLS handshake (AWS IoT uses x-amzn-mqtt-ca)</source>
         <translation>Nume de protocol anunțat în timpul handshake-ului TLS (AWS IoT folosește x-amzn-mqtt-ca)</translation>
     </message>
@@ -72,37 +72,37 @@
 <context>
     <name>AI::AnthropicReply</name>
     <message>
-        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="122"/>
+        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="123"/>
         <source>Anthropic error</source>
         <translation>Eroare Anthropic</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="272"/>
+        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="273"/>
         <source>Stream parse error: %1</source>
         <translation>Eroare de parsare flux: %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="321"/>
+        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="314"/>
         <source>HTTP %1</source>
         <translation>HTTP %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="324"/>
+        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="317"/>
         <source>Invalid API key (%1)</source>
         <translation>Cheie API invalidă (%1)</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="326"/>
+        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="319"/>
         <source>Rate limited: %1</source>
         <translation>Limită de rată atinsă: %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="328"/>
+        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="321"/>
         <source>Anthropic %1: %2</source>
         <translation>Anthropic %1: %2</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="362"/>
+        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="355"/>
         <source>Reply exceeded the %1 MB stream limit</source>
         <translation>Răspunsul a depășit limita de flux de %1 MB</translation>
     </message>
@@ -160,63 +160,63 @@ Fiecare acțiune asupra dispozitivului necesită în continuare aprobarea dvs. e
         <translation type="vanished">Asistentul AI necesită o licență Pro</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="174"/>
+        <location filename="../../src/AI/Conversation.cpp" line="163"/>
         <source>AI Assistant is not available in this build</source>
         <translation>Asistentul AI nu este disponibil în această versiune</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="180"/>
-        <location filename="../../src/AI/Conversation.cpp" line="1297"/>
+        <location filename="../../src/AI/Conversation.cpp" line="169"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1208"/>
         <source>AI subsystem not initialized</source>
         <translation>Subsistemul AI nu este inițializat</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="186"/>
+        <location filename="../../src/AI/Conversation.cpp" line="175"/>
         <source>Already busy with a previous request</source>
         <translation>Deja ocupat cu o cerere anterioară</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="667"/>
+        <location filename="../../src/AI/Conversation.cpp" line="593"/>
         <source>Tool-call budget reached for this turn; no further tools will run.</source>
         <translation>Bugetul de apeluri de instrumente a fost atins pentru această rundă; nu vor mai fi executate instrumente.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1312"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1223"/>
         <source>Waiting for %1 to respond. Loading the model and processing the prompt can take a while on local hardware...</source>
         <translation>Se așteaptă răspunsul de la %1. Încărcarea modelului și procesarea promptului pot dura ceva timp pe hardware local...</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="2226"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1567"/>
         <source>%1 operation(s) failed</source>
         <translation>%1 operațiune(i) eșuată(e)</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="2279"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1620"/>
         <source>Source list read-back failed</source>
         <translation>Citirea listei de surse a eșuat</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="2300"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1641"/>
         <source>Source %1 not found after update</source>
         <translation>Sursa %1 nu a fost găsită după actualizare</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="2318"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1659"/>
         <source>Fields did not round-trip: %1</source>
         <translation>Câmpurile nu s-au sincronizat: %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="2439"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1734"/>
         <source>You have reached the tool-call budget for this turn. Do not request more tools. Summarize what you found so far, and if the task is incomplete, say which steps remain so the user can tell you to continue.</source>
         <translation>Ați atins bugetul de apeluri de instrumente pentru această rundă. Nu mai solicitați instrumente. Rezumați ceea ce ați găsit până acum și, dacă sarcina este incompletă, menționați ce pași rămân pentru ca utilizatorul să vă poată spune să continuați.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="3211"/>
+        <location filename="../../src/AI/Conversation.cpp" line="2060"/>
         <source>The model stopped reproducing its context-integrity line. Long conversations degrade silently; recent replies may be less reliable.</source>
         <translation>Modelul a încetat să reproducă linia de integritate a contextului. Conversațiile lungi se degradează silențios; răspunsurile recente pot fi mai puțin fiabile.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="3214"/>
+        <location filename="../../src/AI/Conversation.cpp" line="2063"/>
         <source>The model altered its context-integrity line (drifted segment: %1). Long conversations degrade silently; recent replies may be less reliable.</source>
         <translation>Modelul a modificat linia de integritate a contextului (segment deviat: %1). Conversațiile lungi se degradează silențios; răspunsurile recente pot fi mai puțin fiabile.</translation>
     </message>
@@ -225,17 +225,17 @@ Fiecare acțiune asupra dispozitivului necesită în continuare aprobarea dvs. e
         <translation type="vanished">Bugetul de apeluri de instrumente depășit</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1144"/>
-        <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider's safety filters.)</source>
+        <location filename="../../src/AI/Conversation.cpp" line="1055"/>
+        <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider&apos;s safety filters.)</source>
         <translation>(Modelul a returnat un răspuns gol. Încercați să reformulați, să treceți la un alt model sau să verificați dacă cererea este permisă de filtrele de siguranță ale furnizorului.)</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1316"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1227"/>
         <source>Sending request to %1...</source>
         <translation>Se trimite cererea către %1...</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1334"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1245"/>
         <source>Provider returned no reply</source>
         <translation>Furnizorul nu a returnat niciun răspuns</translation>
     </message>
@@ -258,32 +258,32 @@ Fiecare acțiune asupra dispozitivului necesită în continuare aprobarea dvs. e
         <translation>Gemini s-a oprit fără a produce un răspuns: %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="271"/>
+        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="263"/>
         <source>HTTP %1</source>
         <translation>HTTP %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="274"/>
+        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="266"/>
         <source>Invalid API key (%1)</source>
         <translation>Cheie API invalidă (%1)</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="276"/>
+        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="268"/>
         <source>Rate limited: %1</source>
         <translation>Limită de rată: %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="278"/>
+        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="270"/>
         <source>Invalid API key</source>
         <translation>Cheie API invalidă</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="280"/>
+        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="272"/>
         <source>Gemini %1: %2</source>
         <translation>Gemini %1: %2</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="297"/>
+        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="289"/>
         <source>Reply exceeded the %1 MB stream limit</source>
         <translation>Răspunsul a depășit limita de flux de %1 MB</translation>
     </message>
@@ -291,32 +291,32 @@ Fiecare acțiune asupra dispozitivului necesită în continuare aprobarea dvs. e
 <context>
     <name>AI::OpenAIReply</name>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="159"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="160"/>
         <source>Stream parse error: %1</source>
         <translation>Eroare de parsare flux: %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="396"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="339"/>
         <source>HTTP %1</source>
         <translation>HTTP %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="399"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="342"/>
         <source>Invalid API key (%1)</source>
         <translation>Cheie API invalidă (%1)</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="401"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="344"/>
         <source>Rate limited: %1</source>
         <translation>Limită de rată: %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="403"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="346"/>
         <source>%1 %2: %3</source>
         <translation>%1 %2: %3</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="437"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="380"/>
         <source>Reply exceeded the %1 MB stream limit</source>
         <translation>Răspunsul a depășit limita de flux de %1 MB</translation>
     </message>
@@ -374,7 +374,7 @@ Fiecare acțiune asupra dispozitivului necesită în continuare aprobarea dvs. e
     </message>
     <message>
         <location filename="../../src/API/Mirror/MirrorClient.cpp" line="566"/>
-        <source>The remote's dataset layout does not match its announced hash</source>
+        <source>The remote&apos;s dataset layout does not match its announced hash</source>
         <translation>Structura seturilor de date de la distanță nu corespunde cu hash-ul anunțat</translation>
     </message>
     <message>
@@ -415,24 +415,24 @@ Fiecare acțiune asupra dispozitivului necesită în continuare aprobarea dvs. e
     </message>
     <message>
         <location filename="../../src/API/ProcessLauncher.cpp" line="97"/>
-        <source>Program "%1" not found in PATH</source>
-        <translation>Programul "%1" nu a fost găsit în PATH</translation>
+        <source>Program &quot;%1&quot; not found in PATH</source>
+        <translation>Programul &quot;%1&quot; nu a fost găsit în PATH</translation>
     </message>
 </context>
 <context>
     <name>API::Server</name>
     <message>
-        <location filename="../../src/API/Server.cpp" line="310"/>
+        <location filename="../../src/API/Server.cpp" line="204"/>
         <source>Unable to start API TCP server</source>
         <translation>Imposibil de pornit serverul TCP API</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="357"/>
+        <location filename="../../src/API/Server.cpp" line="251"/>
         <source>Allow External API Connections?</source>
         <translation>Permiteți Conexiuni API Externe?</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="358"/>
+        <location filename="../../src/API/Server.cpp" line="252"/>
         <source>Exposing the API server to external hosts allows other devices on your network to connect to Serial Studio on port 7777.
 
 Only enable this on trusted networks. Untrusted clients may read live data or send commands to your device.</source>
@@ -441,34 +441,49 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 Activați doar în rețele de încredere. Clienții nesiguri pot citi date live sau trimite comenzi către dispozitiv.</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="422"/>
+        <location filename="../../src/API/Server.cpp" line="316"/>
         <source>Unable to restart API TCP server</source>
         <translation>Imposibil de repornit serverul TCP API</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="532"/>
         <source>Allow API device control?</source>
-        <translation>Permiteți controlul dispozitivului prin API?</translation>
+        <translation type="vanished">Permiteți controlul dispozitivului prin API?</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="533"/>
-        <source>A program using Serial Studio's local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
-        <translation>Un program care utilizează API-ul local al Serial Studio solicită să trimită date către dispozitivul conectat. Permiteți clienților API să scrie pe dispozitiv?</translation>
+        <source>A program using Serial Studio&apos;s local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
+        <translation type="vanished">Un program care utilizează API-ul local al Serial Studio solicită să trimită date către dispozitivul conectat. Permiteți clienților API să scrie pe dispozitiv?</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="536"/>
         <source>Serial Studio</source>
-        <translation>Serial Studio</translation>
+        <translation type="vanished">Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1659"/>
+        <location filename="../../src/API/Server.cpp" line="896"/>
         <source>API server</source>
         <translation>Server API</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1659"/>
+        <location filename="../../src/API/Server.cpp" line="896"/>
         <source>Invalid pending connection</source>
         <translation>Conexiune în așteptare invalidă</translation>
+    </message>
+</context>
+<context>
+    <name>API::ServerAuth</name>
+    <message>
+        <location filename="../../src/API/Server/ServerAuth.cpp" line="138"/>
+        <source>Allow API device control?</source>
+        <translation type="unfinished">Permiteți controlul dispozitivului prin API?</translation>
+    </message>
+    <message>
+        <location filename="../../src/API/Server/ServerAuth.cpp" line="139"/>
+        <source>A program using Serial Studio&apos;s local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
+        <translation type="unfinished">Un program care utilizează API-ul local al Serial Studio solicită să trimită date către dispozitivul conectat. Permiteți clienților API să scrie pe dispozitiv?</translation>
+    </message>
+    <message>
+        <location filename="../../src/API/Server/ServerAuth.cpp" line="142"/>
+        <source>Serial Studio</source>
+        <translation type="unfinished">Serial Studio</translation>
     </message>
 </context>
 <context>
@@ -538,8 +553,8 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="174"/>
-        <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
-        <translation>Acest software este furnizat „ca atare" fără nicio garanție de orice fel, expresă sau implicită, inclusiv, dar fără a se limita la, garanțiile de vandabilitate sau potrivire pentru un anumit scop. În niciun caz autorul nu va fi răspunzător pentru daune rezultate din utilizarea acestui software.</translation>
+        <source>This software is provided &apos;as is&apos; without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
+        <translation>Acest software este furnizat „ca atare&quot; fără nicio garanție de orice fel, expresă sau implicită, inclusiv, dar fără a se limita la, garanțiile de vandabilitate sau potrivire pentru un anumit scop. În niciun caz autorul nu va fi răspunzător pentru daune rezultate din utilizarea acestui software.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="195"/>
@@ -561,7 +576,7 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
         <translation type="vanished">Demonstrație Proiect</translation>
     </message>
     <message>
-        <source>What's New</source>
+        <source>What&apos;s New</source>
         <translation type="vanished">Ce Este Nou</translation>
     </message>
     <message>
@@ -1088,7 +1103,7 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
         <translation type="vanished">Aplică Presetare</translation>
     </message>
     <message>
-        <source>Replace the current bands with the selected preset, scaled to this dataset's range.</source>
+        <source>Replace the current bands with the selected preset, scaled to this dataset&apos;s range.</source>
         <translation type="vanished">Înlocuiește benzile curente cu presetarea selectată, scalată la intervalul acestui set de date.</translation>
     </message>
     <message>
@@ -1306,7 +1321,7 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="421"/>
-        <source>Help me discover Serial Studio's features</source>
+        <source>Help me discover Serial Studio&apos;s features</source>
         <translation>Ajută-mă să descopăr funcțiile Serial Studio</translation>
     </message>
     <message>
@@ -1432,13 +1447,13 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="776"/>
-        <source>Added folder "%1" - readable this session</source>
-        <translation>Dosarul „%1" a fost adăugat - disponibil în această sesiune</translation>
+        <source>Added folder &quot;%1&quot; - readable this session</source>
+        <translation>Dosarul „%1&quot; a fost adăugat - disponibil în această sesiune</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="777"/>
-        <source>Added "%1" - readable this session</source>
-        <translation>„%1" a fost adăugat - disponibil în această sesiune</translation>
+        <source>Added &quot;%1&quot; - readable this session</source>
+        <translation>„%1&quot; a fost adăugat - disponibil în această sesiune</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="782"/>
@@ -1791,7 +1806,7 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
     <message>
         <location filename="../../qml/Dialogs/BackupRecovery.qml" line="164"/>
         <source>Title changes from “%1” to “%2”. Group structure unchanged.</source>
-        <translation>Titlul se schimbă de la "%1" la "%2". Structura grupului rămâne neschimbată.</translation>
+        <translation>Titlul se schimbă de la &quot;%1&quot; la &quot;%2&quot;. Structura grupului rămâne neschimbată.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/BackupRecovery.qml" line="169"/>
@@ -1883,7 +1898,7 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
     </message>
     <message>
         <location filename="../../qml/Dialogs/Benchmark.qml" line="124"/>
-        <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio's data pipeline.</source>
+        <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio&apos;s data pipeline.</source>
         <translation>Măsoară cât de rapid poate acest calculator să extragă, să analizeze și să vizualizeze cadrele prin pipeline-ul de date al Serial Studio.</translation>
     </message>
     <message>
@@ -2349,7 +2364,7 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="291"/>
-        <source>We'll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
+        <source>We&apos;ll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
         <translation>Serial Studio va fi actualizat pentru a funcționa cu acest sistem de operare de îndată ce QT îl va suporta oficial</translation>
     </message>
 </context>
@@ -2434,144 +2449,144 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
 <context>
     <name>CSV::Player</name>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="506"/>
+        <location filename="../../src/CSV/Player.cpp" line="349"/>
         <source>Select CSV file</source>
         <translation>Selectează fișier CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="508"/>
+        <location filename="../../src/CSV/Player.cpp" line="351"/>
         <source>CSV files (*.csv)</source>
         <translation>Fișiere CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="649"/>
+        <location filename="../../src/CSV/Player.cpp" line="480"/>
         <source>Device Connection Active</source>
         <translation>Conexiune Dispozitiv Activă</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="650"/>
+        <location filename="../../src/CSV/Player.cpp" line="481"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>Pentru a utiliza această funcție, trebuie să vă deconectați de la dispozitiv. Doriți să continuați?</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="664"/>
-        <location filename="../../src/CSV/Player.cpp" line="682"/>
+        <location filename="../../src/CSV/Player.cpp" line="495"/>
+        <location filename="../../src/CSV/Player.cpp" line="513"/>
         <source>Check file permissions and location</source>
         <translation>Verifică permisiunile și locația fișierului</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="671"/>
-        <location filename="../../src/CSV/Player.cpp" line="753"/>
-        <location filename="../../src/CSV/Player.cpp" line="949"/>
+        <location filename="../../src/CSV/Player.cpp" line="502"/>
+        <location filename="../../src/CSV/Player.cpp" line="585"/>
+        <location filename="../../src/CSV/Player.cpp" line="724"/>
         <source>Insufficient Data in CSV File</source>
         <translation>Date Insuficiente în Fișierul CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="664"/>
-        <location filename="../../src/CSV/Player.cpp" line="682"/>
+        <location filename="../../src/CSV/Player.cpp" line="495"/>
+        <location filename="../../src/CSV/Player.cpp" line="513"/>
         <source>Cannot read CSV file</source>
         <translation>Nu se poate citi fișierul CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="672"/>
-        <location filename="../../src/CSV/Player.cpp" line="754"/>
-        <location filename="../../src/CSV/Player.cpp" line="950"/>
+        <location filename="../../src/CSV/Player.cpp" line="503"/>
+        <location filename="../../src/CSV/Player.cpp" line="586"/>
+        <location filename="../../src/CSV/Player.cpp" line="725"/>
         <source>The CSV file must contain at least one data row to proceed. Check the file and try again.</source>
         <translation>Fișierul CSV trebuie să conțină cel puțin un rând de date pentru a continua. Verificați fișierul și încercați din nou.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="943"/>
+        <location filename="../../src/CSV/Player.cpp" line="718"/>
         <source>CSV Row Limit Reached</source>
         <translation>Limită de Rânduri CSV Atinsă</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="944"/>
+        <location filename="../../src/CSV/Player.cpp" line="719"/>
         <source>Playback is limited to %L1 rows; the rest of the file was not indexed.</source>
         <translation>Redarea este limitată la %L1 rânduri; restul fișierului nu a fost indexat.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1401"/>
+        <location filename="../../src/CSV/Player.cpp" line="1177"/>
         <source>Seconds (s)</source>
         <translation>Secunde (s)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1401"/>
+        <location filename="../../src/CSV/Player.cpp" line="1177"/>
         <source>Milliseconds (ms)</source>
         <translation>Milisecunde (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1401"/>
+        <location filename="../../src/CSV/Player.cpp" line="1177"/>
         <source>Microseconds (us)</source>
         <translation>Microsecunde (us)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1405"/>
+        <location filename="../../src/CSV/Player.cpp" line="1181"/>
         <source>Timestamp Units</source>
         <translation>Unități Marcaj Temporal</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1406"/>
+        <location filename="../../src/CSV/Player.cpp" line="1182"/>
         <source>The timestamp column does not declare a unit. How should it be interpreted?</source>
         <translation>Coloana de marcaj temporal nu declară o unitate. Cum ar trebui interpretată?</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1431"/>
+        <location filename="../../src/CSV/Player.cpp" line="1207"/>
         <source>Invalid CSV</source>
         <translation>CSV Invalid</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1432"/>
+        <location filename="../../src/CSV/Player.cpp" line="1208"/>
         <source>The CSV file does not contain any data or headers.</source>
         <translation>Fișierul CSV nu conține date sau anteturi.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1445"/>
+        <location filename="../../src/CSV/Player.cpp" line="1221"/>
         <source>Select a date/time column</source>
         <translation>Selectați o coloană de dată/oră</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1445"/>
-        <location filename="../../src/CSV/Player.cpp" line="1457"/>
+        <location filename="../../src/CSV/Player.cpp" line="1221"/>
+        <location filename="../../src/CSV/Player.cpp" line="1233"/>
         <source>Set interval manually</source>
         <translation>Setare manuală a intervalului</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1447"/>
+        <location filename="../../src/CSV/Player.cpp" line="1223"/>
         <source>CSV Date/Time Selection</source>
         <translation>Selectare Dată/oră CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1448"/>
+        <location filename="../../src/CSV/Player.cpp" line="1224"/>
         <source>Choose how to handle the date/time data:</source>
         <translation>Alegeți cum să gestionați datele de dată/oră:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1460"/>
+        <location filename="../../src/CSV/Player.cpp" line="1236"/>
         <source>Set Interval</source>
         <translation>Setare Interval</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1461"/>
+        <location filename="../../src/CSV/Player.cpp" line="1237"/>
         <source>Please enter the interval between rows in milliseconds:</source>
         <translation>Introduceți intervalul dintre rânduri în milisecunde:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1478"/>
+        <location filename="../../src/CSV/Player.cpp" line="1254"/>
         <source>Select Date/Time Column</source>
         <translation>Selectează Coloana Dată/oră</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1479"/>
+        <location filename="../../src/CSV/Player.cpp" line="1255"/>
         <source>Please select the column that contains the date/time data:</source>
         <translation>Selectați coloana care conține datele de dată/oră:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1489"/>
+        <location filename="../../src/CSV/Player.cpp" line="1265"/>
         <source>Invalid Selection</source>
         <translation>Selecție Invalidă</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1489"/>
+        <location filename="../../src/CSV/Player.cpp" line="1265"/>
         <source>The selected column is not valid.</source>
         <translation>Coloana selectată nu este validă.</translation>
     </message>
@@ -3486,7 +3501,7 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="197"/>
-        <source>Export this table's variables to CSV</source>
+        <source>Export this table&apos;s variables to CSV</source>
         <translation>Exportă variabilele acestui tabel în CSV</translation>
     </message>
     <message>
@@ -3501,7 +3516,7 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="223"/>
-        <source>Import this table's variables from CSV</source>
+        <source>Import this table&apos;s variables from CSV</source>
         <translation>Importă variabilele acestui tabel din CSV</translation>
     </message>
     <message>
@@ -3578,7 +3593,7 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
         <translation>Exportă sesiunea selectată în CSV</translation>
     </message>
     <message>
-        <source>Export this table's registers to CSV</source>
+        <source>Export this table&apos;s registers to CSV</source>
         <translation type="vanished">Exportă registrele acestui tabel în CSV</translation>
     </message>
     <message>
@@ -3701,7 +3716,7 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
         <translation type="vanished">Importă Registre</translation>
     </message>
     <message>
-        <source>Import this table's registers from CSV</source>
+        <source>Import this table&apos;s registers from CSV</source>
         <translation type="vanished">Importă registrele acestui tabel din CSV</translation>
     </message>
     <message>
@@ -4417,7 +4432,7 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="362"/>
-        <source>Watch another Serial Studio instance's dashboard over the network</source>
+        <source>Watch another Serial Studio instance&apos;s dashboard over the network</source>
         <translation>Urmărește tabloul de bord al altei instanțe Serial Studio prin rețea</translation>
     </message>
     <message>
@@ -4497,22 +4512,22 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
     </message>
     <message>
         <location filename="../../src/Console/Annotations.cpp" line="1139"/>
-        <source>the script must define a global 'decoder' object</source>
-        <translation>scriptul trebuie să definească un obiect global 'decoder'</translation>
+        <source>the script must define a global &apos;decoder&apos; object</source>
+        <translation>scriptul trebuie să definească un obiect global &apos;decoder&apos;</translation>
     </message>
     <message>
         <location filename="../../src/Console/Annotations.cpp" line="1145"/>
-        <source>'decoder.decode(bytes, offset, ctx, size)' is not a function</source>
-        <translation>'decoder.decode(bytes, offset, ctx, size)' nu este o funcție</translation>
+        <source>&apos;decoder.decode(bytes, offset, ctx, size)&apos; is not a function</source>
+        <translation>&apos;decoder.decode(bytes, offset, ctx, size)&apos; nu este o funcție</translation>
     </message>
     <message>
-        <source>'decoder.decode(bytes, offset, ctx)' is not a function</source>
-        <translation type="vanished">'decoder.decode(bytes, offset, ctx)' nu este o funcție</translation>
+        <source>&apos;decoder.decode(bytes, offset, ctx)&apos; is not a function</source>
+        <translation type="vanished">&apos;decoder.decode(bytes, offset, ctx)&apos; nu este o funcție</translation>
     </message>
     <message>
         <location filename="../../src/Console/Annotations.cpp" line="1184"/>
-        <source>'decoder.rows' and 'decoder.classes' must be non-empty arrays</source>
-        <translation>'decoder.rows' și 'decoder.classes' trebuie să fie array-uri nevide</translation>
+        <source>&apos;decoder.rows&apos; and &apos;decoder.classes&apos; must be non-empty arrays</source>
+        <translation>&apos;decoder.rows&apos; și &apos;decoder.classes&apos; trebuie să fie array-uri nevide</translation>
     </message>
     <message>
         <location filename="../../src/Console/Annotations.cpp" line="1198"/>
@@ -4584,42 +4599,42 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
 <context>
     <name>Console::Handler</name>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="284"/>
+        <location filename="../../src/Console/Handler.cpp" line="300"/>
         <source>ASCII</source>
         <translation>ASCII</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="285"/>
+        <location filename="../../src/Console/Handler.cpp" line="301"/>
         <source>HEX</source>
         <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="295"/>
+        <location filename="../../src/Console/Handler.cpp" line="311"/>
         <source>No Line Ending</source>
         <translation>Fără Terminare de Linie</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="296"/>
+        <location filename="../../src/Console/Handler.cpp" line="312"/>
         <source>New Line</source>
         <translation>Linie Nouă</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="297"/>
+        <location filename="../../src/Console/Handler.cpp" line="313"/>
         <source>Carriage Return</source>
         <translation>Retur de Car</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="298"/>
+        <location filename="../../src/Console/Handler.cpp" line="314"/>
         <source>CR + NL</source>
         <translation>CR + NL</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="308"/>
+        <location filename="../../src/Console/Handler.cpp" line="324"/>
         <source>Text</source>
         <translation>Text</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="309"/>
+        <location filename="../../src/Console/Handler.cpp" line="325"/>
         <source>Hex</source>
         <translation>Hex</translation>
     </message>
@@ -4632,12 +4647,12 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
         <translation type="vanished">Hexazecimal</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="331"/>
+        <location filename="../../src/Console/Handler.cpp" line="347"/>
         <source>No Checksum</source>
         <translation>Fără Checksum</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="1057"/>
+        <location filename="../../src/Console/Handler.cpp" line="1024"/>
         <source>Device %1</source>
         <translation>Dispozitiv %1</translation>
     </message>
@@ -5053,7 +5068,7 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="157"/>
-        <source>Euler's number</source>
+        <source>Euler&apos;s number</source>
         <translation>Numărul lui Euler</translation>
     </message>
     <message>
@@ -5386,6 +5401,18 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
         <source>Dashboard %1</source>
         <translation>Tablou de Bord %1</translation>
     </message>
+    <message>
+        <location filename="../../src/UI/Dashboard/WidgetMapBuilder.cpp" line="177"/>
+        <location filename="../../src/UI/Dashboard/WidgetMapBuilder.cpp" line="192"/>
+        <source>%1 (Fallback)</source>
+        <translation type="unfinished">%1 (Rezervă)</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Dashboard/WidgetMapBuilder.cpp" line="214"/>
+        <location filename="../../src/UI/Dashboard/WidgetMapBuilder.cpp" line="292"/>
+        <source>LED Panel (%1)</source>
+        <translation type="unfinished">Panou LED (%1)</translation>
+    </message>
 </context>
 <context>
     <name>DashboardButton</name>
@@ -5609,33 +5636,33 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
 <context>
     <name>DataModel::ControlScriptEditor</name>
     <message>
-        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="306"/>
+        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="236"/>
         <source>Select Javascript file to import</source>
         <translation>Selectează fișier JavaScript de importat</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="374"/>
-        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="385"/>
+        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="289"/>
+        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="300"/>
         <source>Code Validation Failed</source>
         <translation>Validare Cod Eșuată</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="375"/>
+        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="290"/>
         <source>Line %1: %2</source>
         <translation>Linia %1: %2</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="386"/>
+        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="301"/>
         <source>The script must define a setup() and/or loop() function.</source>
         <translation>Scriptul trebuie să definească o funcție setup() și/sau loop().</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="391"/>
+        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="306"/>
         <source>Code Validation Successful</source>
         <translation>Validare Cod Reușită</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="392"/>
+        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="307"/>
         <source>No syntax errors detected in the control loop.</source>
         <translation>Nu au fost detectate erori de sintaxă în bucla de control.</translation>
     </message>
@@ -5697,7 +5724,7 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
         <translation>Prezentare Generală</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/DBCImporter.cpp" line="363"/>
+        <location filename="../../src/DataModel/Importers/DBCImporter.cpp" line="341"/>
         <source>Active</source>
         <translation>Activ</translation>
     </message>
@@ -5745,107 +5772,107 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
 <context>
     <name>DataModel::DatasetTransformEditor</name>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="78"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="77"/>
         <source>Dataset Value Transform</source>
         <translation>Transformare Valoare Set de Date</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="115"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="114"/>
         <source>Lua</source>
         <translation>Lua</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="115"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="114"/>
         <source>JavaScript</source>
         <translation>Javascript</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="142"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="141"/>
         <source>Language:</source>
         <translation>Limbaj:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="145"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="144"/>
         <source>Template:</source>
         <translation>Șablon:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="124"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="123"/>
         <source>Enter raw value (e.g., 1024)</source>
         <translation>Introduceți valoarea brută (de ex., 1024)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="129"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="128"/>
         <source>Test</source>
         <translation>Testează</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="130"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="129"/>
         <source>Clear</source>
         <translation>Șterge</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="156"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="155"/>
         <source>Input:</source>
         <translation>Intrare:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="159"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="158"/>
         <source>Output:</source>
         <translation>Ieșire:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="132"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="131"/>
         <source>Apply</source>
         <translation>Aplică</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="115"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="114"/>
         <source>Expression</source>
         <translation>Expresie</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="133"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="132"/>
         <source>Cancel</source>
         <translation>Anulează</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="237"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="236"/>
         <source>Transform — %1</source>
         <translation>Transformare — %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="317"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="316"/>
         <source>The value transform has a syntax error and was not applied.</source>
         <translation>Transformarea valorii conține o eroare de sintaxă și nu a fost aplicată.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="326"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="325"/>
         <source>The value transform must define a transform(value) function.</source>
         <translation>Transformarea valorii trebuie să definească o funcție transform(value).</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="327"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="326"/>
         <source>Define a transform(value) function that returns a number, or use Clear to remove the transform.</source>
         <translation>Definiți o funcție transform(value) care returnează un număr sau utilizați Șterge pentru a elimina transformarea.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="345"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="344"/>
         <source>Enter a value</source>
         <translation>Introduceți o valoare</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="352"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="351"/>
         <source>Invalid number</source>
         <translation>Număr invalid</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="427"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="392"/>
         <source>Format Document	Ctrl+Shift+I</source>
         <translation>Formatează Documentul	ctrl+shift+i</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="428"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="393"/>
         <source>Format Selection	Ctrl+I</source>
         <translation>Formatează Selecția	ctrl+i</translation>
     </message>
@@ -5856,7 +5883,7 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
 # Lines starting with # are comments.
 #
 # Inputs:
-#    v     this sample's raw value
+#    v     this sample&apos;s raw value
 #    t     seconds since the frame stream started
 #    dt    seconds since the previous sample
 #    n     sample index, starting at 0
@@ -5910,7 +5937,7 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="599"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="564"/>
         <source>--
 -- Define a transform(value) function that receives the live
 -- dataset reading and returns a transformed number. If no
@@ -5969,7 +5996,7 @@ v
 --</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="627"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="592"/>
         <source>/*
  * Define a transform(value) function that receives the live
  * dataset reading and returns a transformed number. If no
@@ -6026,17 +6053,17 @@ v
  */</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="768"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="733"/>
         <source>Failed to create the Lua engine.</source>
         <translation>Eșec la crearea motorului Lua.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="807"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="772"/>
         <source>Line %1: %2</source>
         <translation>Linia %1: %2</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="973"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="938"/>
         <source>Select Template…</source>
         <translation>Selectează Șablon…</translation>
     </message>
@@ -6097,28 +6124,28 @@ v
  * fă clic pe Testează pentru a încerca funcția ta.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="863"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="828"/>
         <source>Engine error</source>
         <translation>Eroare motor</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="853"/>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="887"/>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="900"/>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="917"/>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="928"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="818"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="852"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="865"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="882"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="893"/>
         <source>Error: %1</source>
         <translation>Eroare: %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="565"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="530"/>
         <source>#
 # An arithmetic expression evaluated once per sample. No function,
 # no statements: the value of the expression is the new reading.
 # Lines starting with # are comments.
 #
 # Inputs:
-#    v     this sample's raw value
+#    v     this sample&apos;s raw value
 #    t     seconds since the frame stream started
 #    dt    seconds since the previous sample
 #    n     sample index, starting at 0
@@ -6180,13 +6207,13 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="893"/>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="921"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="858"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="886"/>
         <source>Error: transform() not defined</source>
         <translation>Eroare: transform() nu este definită</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="905"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="870"/>
         <source>Error: transform() must return a number</source>
         <translation>Eroare: transform() trebuie să returneze un număr</translation>
     </message>
@@ -6194,34 +6221,28 @@ v
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="586"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="569"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, historian, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
         <translation>Un consumator din aval (tablou de bord, export CSV/MDF4, istoric sau abonat API) nu procesează suficient de rapid, astfel încât datele sunt eliminate din afișaj și din orice înregistrare activă. Dezactivează un consumator intensiv sau reduce rata de date.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3097"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3244"/>
         <source>Channel %1</source>
-        <translation>Canal %1</translation>
+        <translation type="vanished">Canal %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3125"/>
         <source>Multi-Plot</source>
-        <translation>Grafic Multiplu</translation>
+        <translation type="vanished">Grafic Multiplu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3255"/>
         <source>Audio Input</source>
-        <translation>Intrare Audio</translation>
+        <translation type="vanished">Intrare Audio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3106"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3260"/>
         <source>Quick Plot</source>
-        <translation>Grafic Rapid</translation>
+        <translation type="vanished">Grafic Rapid</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="584"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="567"/>
         <source>Block pool exhausted</source>
         <translation>Pool-ul de blocuri epuizat</translation>
     </message>
@@ -6230,12 +6251,12 @@ v
         <translation type="vanished">Un consumator din aval (tablou de bord, export CSV/MDF4, baza de date de sesiuni sau abonat API) nu procesează suficient de rapid, astfel încât datele sunt eliminate din afișaj și din orice înregistrare activă. Dezactivați un consumator intensiv sau reduceți rata de date.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2771"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2746"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>Transformarea JavaScript a depășit bugetul</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2772"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2747"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>O transformare de dataset a durat mai mult de %1 ms; seturile de date rămase din cadrul frame-ului au revenit la valorile brute până la următorul frame. Profilează sau simplifică codul de transformare.</translation>
     </message>
@@ -6248,14 +6269,12 @@ v
         <translation type="vanished">Un consumator din aval (dashboard, export CSV/MDF4, sesiune DB sau abonat API) nu golește frame-urile suficient de rapid. Serial Studio revine la alocări per-frame până se elimină backlog-ul. Dezactivează un consumator intensiv sau reduce rata de date.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3057"/>
         <source>Device A</source>
-        <translation>Dispozitiv A</translation>
+        <translation type="vanished">Dispozitiv A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="3113"/>
         <source>Quick Plot Data</source>
-        <translation>Date Grafic Rapid</translation>
+        <translation type="vanished">Date Grafic Rapid</translation>
     </message>
     <message>
         <source>Multiple Plots</source>
@@ -6480,11 +6499,11 @@ Format valid: 01 A2 FF 3C</translation>
         <translation type="vanished">Valoare</translation>
     </message>
     <message>
-        <source>Enter frame data above, enable HEX mode if needed, then click "Evaluate" to run the frame parser.
+        <source>Enter frame data above, enable HEX mode if needed, then click &quot;Evaluate&quot; to run the frame parser.
 
 Example (Text): a,b,c,d,e,f
 Example (HEX):  48 65 6C 6C 6F</source>
-        <translation type="vanished">Introduceți datele cadrului mai sus, activați modul HEX dacă este necesar, apoi faceți clic pe „Evaluează" pentru a rula parserul de cadre.
+        <translation type="vanished">Introduceți datele cadrului mai sus, activați modul HEX dacă este necesar, apoi faceți clic pe „Evaluează&quot; pentru a rula parserul de cadre.
 
 Exemplu (Text): a,b,c,d,e,f
 Exemplu (HEX):  48 65 6C 6C 6F</translation>
@@ -6509,12 +6528,12 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
 <context>
     <name>DataModel::JsCodeEditor</name>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="234"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="196"/>
         <source>Change Scripting Language?</source>
         <translation>Schimbați Limbajul de Scriptare?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="235"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="197"/>
         <source>Switching the scripting language replaces the current parser code with the equivalent template in the new language.
 
 Any unsaved changes are lost. Continue?</source>
@@ -6523,32 +6542,32 @@ Any unsaved changes are lost. Continue?</source>
 Orice modificări nesalvate se pierd. Continuați?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="391"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="348"/>
         <source>Select Javascript file to import</source>
         <translation>Selectează fișier JavaScript de importat</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="391"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="348"/>
         <source>Select Lua file to import</source>
         <translation>Selectează fișier Lua de importat</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="422"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="375"/>
         <source>Code Validation Successful</source>
         <translation>Validare Cod Reușită</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="423"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="376"/>
         <source>No syntax errors detected in the parser code.</source>
         <translation>Nu au fost detectate erori de sintaxă în codul parserului.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="531"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="447"/>
         <source>Select Frame Parser Template</source>
         <translation>Selectează Șablon Parser de Trame</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="532"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="448"/>
         <source>Choose a template to load:</source>
         <translation>Alege un șablon de încărcat:</translation>
     </message>
@@ -6605,37 +6624,37 @@ Orice modificări nesalvate se pierd. Continuați?</translation>
 <context>
     <name>DataModel::ModbusMapImporter</name>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="299"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="123"/>
         <source>Import Modbus Register Map</source>
         <translation>Importă Hartă Registre Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="303"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="127"/>
         <source>Modbus Register Maps (*.csv *.xml *.json);;CSV Files (*.csv);;XML Files (*.xml);;JSON Files (*.json);;All Files (*)</source>
         <translation>Hărți Registre Modbus (*.CSV *.XML *.JSON);;Fișiere CSV (*.CSV);;Fișiere XML (*.XML);;Fișiere JSON (*.JSON);;Toate Fișierele (*)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="340"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="165"/>
         <source>No registers found</source>
         <translation>Niciun registru găsit</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="341"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="166"/>
         <source>The file could not be parsed or contains no register definitions.</source>
         <translation>Fișierul nu a putut fi parsat sau nu conține definiții de registre.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="343"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="168"/>
         <source>Modbus Import</source>
         <translation>Import Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="787"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="377"/>
         <source>Overview</source>
         <translation>Prezentare Generală</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="813"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="404"/>
         <source>On</source>
         <translation>Pornit</translation>
     </message>
@@ -6656,22 +6675,22 @@ Orice modificări nesalvate se pierd. Continuați?</translation>
         <translation type="vanished">Verifică permisiunile de scriere în directorul temporar.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="388"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="214"/>
         <source>Successfully imported %1 registers in %2 groups.</source>
         <translation>Au fost importate cu succes %1 registre în %2 grupuri.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="390"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="216"/>
         <source>The project editor is now open for customization.</source>
         <translation>Editorul de proiect este acum deschis pentru personalizare.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="392"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="218"/>
         <source>Modbus Import Complete</source>
         <translation>Import Modbus Finalizat</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="728"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="318"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
@@ -6734,17 +6753,17 @@ Orice modificări nesalvate se pierd. Continuați?</translation>
 <context>
     <name>DataModel::OutputCodeEditor</name>
     <message>
-        <location filename="../../src/DataModel/Editors/OutputCodeEditor.cpp" line="302"/>
+        <location filename="../../src/DataModel/Editors/OutputCodeEditor.cpp" line="237"/>
         <source>Select Javascript file to import</source>
         <translation>Selectează fișier JavaScript pentru import</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/OutputCodeEditor.cpp" line="359"/>
+        <location filename="../../src/DataModel/Editors/OutputCodeEditor.cpp" line="284"/>
         <source>Select Output Widget Template</source>
         <translation>Selectează Șablon Widget de Ieșire</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/OutputCodeEditor.cpp" line="360"/>
+        <location filename="../../src/DataModel/Editors/OutputCodeEditor.cpp" line="285"/>
         <source>Choose a template to load:</source>
         <translation>Alege un șablon de încărcat:</translation>
     </message>
@@ -6752,7 +6771,7 @@ Orice modificări nesalvate se pierd. Continuați?</translation>
 <context>
     <name>DataModel::PainterCodeEditor</name>
     <message>
-        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="313"/>
+        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="247"/>
         <source>Select Javascript file to import</source>
         <translation>Selectează fișier JavaScript de importat</translation>
     </message>
@@ -6761,26 +6780,26 @@ Orice modificări nesalvate se pierd. Continuați?</translation>
         <translation type="vanished">Selectează Șablon Widget Painter</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="399"/>
+        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="327"/>
         <source>Select Canvas Widget Template</source>
         <translation>Selectează Șablon Widget Canvas</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="400"/>
+        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="328"/>
         <source>Choose a template to load:</source>
         <translation>Alege un șablon de încărcat:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="442"/>
+        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="368"/>
         <source>Add datasets for this template?</source>
         <translation>Adaugă seturi de date pentru acest șablon?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="443"/>
-        <source>"%1" expects %2 dataset(s); the current group has %3.
+        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="369"/>
+        <source>&quot;%1&quot; expects %2 dataset(s); the current group has %3.
 
-Add %4 dataset(s) using the template's defaults?</source>
-        <translation>"%1" necesită %2 set(uri) de date; grupul curent are %3.
+Add %4 dataset(s) using the template&apos;s defaults?</source>
+        <translation>&quot;%1&quot; necesită %2 set(uri) de date; grupul curent are %3.
 
 Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</translation>
     </message>
@@ -7038,12 +7057,12 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
         <translation>Zecimale fixe pentru afișajul valorii; suprascrie formatul (-1 = auto)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="715"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="711"/>
         <source>Auto-detect</source>
         <translation>Detectare Automată</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="715"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="711"/>
         <source>Manual Delimiters</source>
         <translation>Delimitatori Manuali</translation>
     </message>
@@ -7053,8 +7072,8 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
         <translation>Mod Detectare</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="293"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="297"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="294"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="298"/>
         <source>Frame Parser</source>
         <translation>Analizor de Trame</translation>
     </message>
@@ -7068,24 +7087,24 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorSummaries.cpp" line="134"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="598"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="621"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="599"/>
         <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="622"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="623"/>
         <source>Dataset Values</source>
         <translation>Valori Set de Date</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="794"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="808"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="795"/>
         <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="809"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="828"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="810"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="829"/>
         <source>Workspaces</source>
         <translation>Spații de Lucru</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="845"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="849"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="846"/>
         <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="850"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="851"/>
         <source>MQTT Publisher</source>
         <translation>Publisher MQTT</translation>
     </message>
@@ -7094,293 +7113,293 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
         <translation type="vanished">Script de Control</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="113"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="112"/>
         <source>Publishing</source>
         <translation>Publicare</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="124"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="123"/>
         <source>Enable Publishing</source>
         <translation>Activează Publicarea</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="125"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="124"/>
         <source>Broadcast frames, raw bytes and notifications to the broker</source>
         <translation>Difuzează cadrele, octeții bruti și notificările către broker</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="136"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="135"/>
         <source>Payload</source>
         <translation>Payload</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="137"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="136"/>
         <source>Selects what gets published: parsed dashboard data or raw RX bytes</source>
         <translation>Selectează ce se publică: date parsate din tablou de bord sau octeți RX bruti</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="147"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="146"/>
         <source>Publish Rate (Hz)</source>
         <translation>Rată Publicare (Hz)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="148"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="147"/>
         <source>How many times per second to publish (1-30 Hz). Higher rates increase broker load; dashboard data is rate-limited so a slow broker never blocks frame parsing.</source>
         <translation>De câte ori pe secundă se publică (1-30 Hz). Rate mai mari cresc sarcina brokerului; datele din tabloul de bord sunt limitate în rată astfel încât un broker lent nu blochează niciodată parsarea cadrelor.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="160"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="159"/>
         <source>Topic Base</source>
         <translation>Bază Topic</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="161"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="160"/>
         <source>serial-studio/device</source>
         <translation>serial-studio/device</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="162"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="161"/>
         <source>Base topic used for frame and raw-byte publishing</source>
         <translation>Subiect de bază utilizat pentru publicarea cadrelor și a octeților bruti</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="172"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="171"/>
         <source>Script Topic</source>
         <translation>Subiect Script</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="173"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="197"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="172"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="196"/>
         <source>Defaults to Topic Base when empty</source>
         <translation>Implicit Subiect de Bază când este gol</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="174"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="173"/>
         <source>Topic the user script publishes to</source>
         <translation>Subiect pe care scriptul utilizatorului publică</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="184"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="183"/>
         <source>Publish Notifications</source>
         <translation>Publică Notificări</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="185"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="184"/>
         <source>Mirror dashboard notifications to a dedicated topic</source>
         <translation>Oglindește notificările tabloului de bord către un subiect dedicat</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="196"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="195"/>
         <source>Notification Topic</source>
         <translation>Subiect Notificări</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="198"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="197"/>
         <source>Topic where dashboard notifications are mirrored</source>
         <translation>Subiect unde sunt oglindite notificările tabloului de bord</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="215"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="214"/>
         <source>Sparkplug</source>
         <translation>Sparkplug</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="227"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="226"/>
         <source>Publish as Edge Node</source>
         <translation>Publică ca Nod Marginal</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="228"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="227"/>
         <source>Publish datasets in the Sparkplug B namespace instead of the payload selected above, with birth, death and rebirth handling</source>
         <translation>Publică seturile de date în spațiul de nume Sparkplug B în loc de payload-ul selectat mai sus, cu gestionare de naștere, moarte și renaștere</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="242"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="241"/>
         <source>Group ID</source>
         <translation>ID Grup</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="243"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="242"/>
         <source>Plant1</source>
         <translation>Plant1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="244"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="243"/>
         <source>Logical group this edge node belongs to</source>
         <translation>Grupul logic căruia îi aparține acest nod marginal</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="253"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="252"/>
         <source>Edge Node ID</source>
         <translation>ID Nod Edge</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="254"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="253"/>
         <source>SerialStudio</source>
         <translation>Serialstudio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="255"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="254"/>
         <source>Identifies this node inside the group</source>
         <translation>Identifică acest nod în cadrul grupului</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="264"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="263"/>
         <source>Device ID</source>
         <translation>ID Dispozitiv</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="265"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="264"/>
         <source>Optional</source>
         <translation>Opțional</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="266"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="265"/>
         <source>When set, datasets are published as a device of this node</source>
         <translation>Când este setat, seturile de date sunt publicate ca dispozitiv al acestui nod</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="280"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="279"/>
         <source>Broker</source>
         <translation>Broker</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="291"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="290"/>
         <source>Hostname</source>
         <translation>Hostname</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="292"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="291"/>
         <source>broker.hivemq.com</source>
         <translation>broker.hivemq.com</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="293"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="292"/>
         <source>Hostname or IP address of the MQTT broker</source>
         <translation>Hostname sau adresa IP a brokerului MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="302"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="301"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="303"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="302"/>
         <source>TCP port exposed by the broker (1883 plain, 8883 TLS)</source>
         <translation>Port TCP expus de broker (1883 simplu, 8883 TLS)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="313"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="312"/>
         <source>Custom Client ID</source>
         <translation>ID Client Personalizat</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="315"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="314"/>
         <source>Off: a fresh random id is generated on every project load. On: use the id below.</source>
         <translation>Dezactivat: un ID aleatoriu nou este generat la fiecare încărcare de proiect. Activat: se folosește ID-ul de mai jos.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="326"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="325"/>
         <source>Client ID</source>
         <translation>ID Client</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="327"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="326"/>
         <source>Identifier sent to the broker on CONNECT</source>
         <translation>Identificator trimis către broker la CONNECT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="340"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="339"/>
         <source>Protocol Version</source>
         <translation>Versiune Protocol</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="341"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="340"/>
         <source>MQTT protocol revision used on CONNECT</source>
         <translation>Versiunea protocolului MQTT utilizată la CONNECT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="350"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="349"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (s)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="351"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="350"/>
         <source>Seconds between PINGREQ packets when idle</source>
         <translation>Secunde între pachetele PINGREQ în stare inactivă</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="360"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="359"/>
         <source>Clean Session</source>
         <translation>Sesiune Curată</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="361"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="360"/>
         <source>Discard any persistent session state on CONNECT</source>
         <translation>Elimină orice stare de sesiune persistentă la CONNECT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="378"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="377"/>
         <source>Username</source>
         <translation>Nume Utilizator</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="379"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="378"/>
         <source>Username for broker authentication (leave empty for anonymous)</source>
         <translation>Nume de utilizator pentru autentificarea la broker (lăsați gol pentru anonim)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="389"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="388"/>
         <source>Password</source>
         <translation>Parolă</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="390"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="389"/>
         <source>Password for broker authentication</source>
         <translation>Parolă pentru autentificarea la broker</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="480"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="479"/>
         <source>SSL / TLS</source>
         <translation>SSL / TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="491"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="490"/>
         <source>Use SSL/TLS</source>
         <translation>Utilizare SSL/TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="492"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="491"/>
         <source>Tunnel the broker connection over TLS</source>
         <translation>Tunelare conexiune broker prin TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="505"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="504"/>
         <source>Protocol</source>
         <translation>Protocol</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="506"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="505"/>
         <source>Negotiated TLS protocol family</source>
         <translation>Familia de protocol TLS negociată</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="516"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="515"/>
         <source>Peer Verify</source>
         <translation>Verificare Peer</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="517"/>
-        <source>How strictly the broker's certificate chain is validated</source>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="516"/>
+        <source>How strictly the broker&apos;s certificate chain is validated</source>
         <translation>Cât de strict este validat lanțul de certificate al brokerului</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="527"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="526"/>
         <source>Verify Depth</source>
         <translation>Adâncime Verificare</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="528"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="527"/>
         <source>Maximum certificate chain length accepted (0 = unlimited)</source>
         <translation>Lungimea maximă a lanțului de certificate acceptată (0 = nelimitată)</translation>
     </message>
@@ -7705,7 +7724,7 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
         <translation>Ascunde în Tablou de Bord</translation>
     </message>
     <message>
-        <source>Suppress this dataset's standalone dashboard tile; the painter widget can still read its values</source>
+        <source>Suppress this dataset&apos;s standalone dashboard tile; the painter widget can still read its values</source>
         <translation type="vanished">Suprimă caseta de tablou de bord independentă a acestui set de date; widget-ul painter poate citi în continuare valorile sale</translation>
     </message>
     <message>
@@ -7740,7 +7759,7 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
     </message>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="251"/>
-        <source>Suppress this dataset's standalone dashboard tile; the canvas widget can still read its values</source>
+        <source>Suppress this dataset&apos;s standalone dashboard tile; the canvas widget can still read its values</source>
         <translation>Suprimă caseta de tablou de bord independentă a acestui set de date; widget-ul canvas poate citi în continuare valorile sale</translation>
     </message>
     <message>
@@ -7893,7 +7912,7 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
         <translation type="vanished">Widget Painter</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="732"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="728"/>
         <source>Web View</source>
         <translation>Vizualizare Web</translation>
     </message>
@@ -7908,22 +7927,22 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
         <translation>Tabel partajat definit în acest proiect</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorSummaries.cpp" line="818"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorSummaries.cpp" line="817"/>
         <source>Remove 1 widget reference whose target group or dataset no longer exists?</source>
         <translation>Elimini 1 referință widget al cărei grup sau set de date țintă nu mai există?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorSummaries.cpp" line="819"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorSummaries.cpp" line="818"/>
         <source>Remove %1 widget references whose target groups or datasets no longer exist?</source>
         <translation>Elimini %1 referințe widget ale căror grupuri sau seturi de date țintă nu mai există?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorSummaries.cpp" line="824"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorSummaries.cpp" line="823"/>
         <source>This will only affect workspace tile placement; no groups, datasets, or data are deleted.</source>
         <translation>Aceasta va afecta doar plasarea tile-urilor în spațiul de lucru; niciun grup, set de date sau date nu sunt șterse.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorSummaries.cpp" line="827"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorSummaries.cpp" line="826"/>
         <source>Clean Up Workspaces</source>
         <translation>Curăță Spațiile de Lucru</translation>
     </message>
@@ -7933,30 +7952,30 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
         <translation>Index Cadru</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="470"/>
         <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="471"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="472"/>
         <source>Dashboard Widgets</source>
         <translation>Widget-uri Tablou de Bord</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="598"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="611"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="599"/>
         <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="612"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="637"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="613"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="638"/>
         <source>Variables</source>
         <translation>Variabile</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="871"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="875"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="872"/>
         <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="876"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="877"/>
         <source>InfluxDB Sink</source>
         <translation>Destinație Influxdb</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="897"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="901"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="898"/>
         <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="902"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorTree.cpp" line="903"/>
         <source>Control Loop</source>
         <translation>Buclă de Control</translation>
     </message>
@@ -8122,7 +8141,7 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
         <translation type="vanished">Limită superioară a intervalului de afișare pentru indicator sau bară</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="745"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="741"/>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="662"/>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="689"/>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="366"/>
@@ -8214,207 +8233,207 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
         <translation type="vanished">Editează Cod Painter</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="469"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="465"/>
         <source>Edit Canvas Code</source>
         <translation>Editează Cod Canvas</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="493"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="489"/>
         <source>Edit Transmit Function</source>
         <translation>Editează Funcție de Transmisie</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="679"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="675"/>
         <source>Rectangular (None)</source>
         <translation>Dreptunghiulară (Niciunul)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="679"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="675"/>
         <source>Bartlett (Triangular)</source>
         <translation>Bartlett (Triunghiulară)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="679"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="675"/>
         <source>Hann</source>
         <translation>Hann</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="680"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="676"/>
         <source>Hamming</source>
         <translation>Hamming</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="680"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="676"/>
         <source>Blackman</source>
         <translation>Blackman</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="680"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="676"/>
         <source>Blackman-Harris</source>
         <translation>Blackman-harris</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="680"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="676"/>
         <source>Nuttall</source>
         <translation>Nuttall</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="681"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="677"/>
         <source>Blackman-Nuttall</source>
         <translation>Blackman-nuttall</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="681"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="677"/>
         <source>Flat Top</source>
         <translation>Flat Top</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="681"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="677"/>
         <source>Welch</source>
         <translation>Welch</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="681"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="677"/>
         <source>Bartlett-Hann</source>
         <translation>Bartlett-hann</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="682"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="678"/>
         <source>Bohman</source>
         <translation>Bohman</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="682"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="678"/>
         <source>Cosine (Sine)</source>
         <translation>Cosine (Sine)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="682"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="678"/>
         <source>Lanczos</source>
         <translation>Lanczos</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="682"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="678"/>
         <source>Parzen</source>
         <translation>Parzen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="693"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="689"/>
         <source>Off</source>
         <translation>Oprit</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="693"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="689"/>
         <source>Auto Start</source>
         <translation>Pornire Automată</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="693"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="689"/>
         <source>Start on Trigger</source>
         <translation>Pornire la Declanșare</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="693"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="689"/>
         <source>Toggle on Trigger</source>
         <translation>Comutare la Declanșare</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="694"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="690"/>
         <source>Repeat N Times</source>
         <translation>Repetă de N Ori</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="697"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="693"/>
         <source>Plain Text (UTF8)</source>
         <translation>Text Simplu (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="697"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="693"/>
         <source>Hexadecimal</source>
         <translation>Hexazecimal</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="697"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="693"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="698"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="694"/>
         <source>Binary (Direct)</source>
         <translation>Binar (Direct)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="703"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="699"/>
         <source>No Checksum</source>
         <translation>Fără Checksum</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="707"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="703"/>
         <source>End Delimiter Only</source>
         <translation>Doar Delimitator Final</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="707"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="703"/>
         <source>Start Delimiter Only</source>
         <translation>Doar Delimitator Inițial</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="708"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="704"/>
         <source>Start + End Delimiter</source>
         <translation>Delimitator Inițial + Final</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="708"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="704"/>
         <source>No Delimiters</source>
         <translation>Fără Delimitatori</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="718"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="714"/>
         <source>Button</source>
         <translation>Buton</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="718"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="714"/>
         <source>Slider</source>
         <translation>Cursor</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="718"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="714"/>
         <source>Toggle</source>
         <translation>Comutator</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="718"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="714"/>
         <source>Text Field</source>
         <translation>Câmp Text</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="719"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="715"/>
         <source>Knob</source>
         <translation>Buton Rotativ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="723"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="719"/>
         <source>Bar Panel</source>
         <translation>Panou de Bare</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="724"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="720"/>
         <source>Data Grid</source>
         <translation>Grilă de Date</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="725"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="721"/>
         <source>GPS Map</source>
         <translation>Hartă GPS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="726"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="722"/>
         <source>Gyroscope</source>
         <translation>Giroscop</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="727"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="723"/>
         <source>Multi-Plot</source>
         <translation>Grafic Multiplu</translation>
     </message>
@@ -8423,49 +8442,49 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
         <translation type="vanished">Grafic Multiplu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="728"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="724"/>
         <source>Accelerometer</source>
         <translation>Accelerometru</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="729"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="725"/>
         <source>3D Plot</source>
         <translation>Grafic 3D</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="730"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="726"/>
         <source>Image View</source>
         <translation>Vizualizare Imagine</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="731"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="727"/>
         <source>Canvas Widget</source>
         <translation>Widget Canvas</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="733"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="736"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="753"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="729"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="732"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="749"/>
         <source>None</source>
         <translation>Niciunul</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="737"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="733"/>
         <source>Bar</source>
         <translation>Bară</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="738"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="734"/>
         <source>Gauge</source>
         <translation>Indicator</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="739"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="735"/>
         <source>Compass</source>
         <translation>Busolă</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="740"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="736"/>
         <source>Meter</source>
         <translation>Contor</translation>
     </message>
@@ -8474,73 +8493,73 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
         <translation type="vanished">Termometru</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="746"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="742"/>
         <source>Integer (0 decimals)</source>
         <translation>Întreg (0 zecimale)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="747"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="743"/>
         <source>1 decimal</source>
         <translation>1 zecimală</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="748"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="744"/>
         <source>2 decimals</source>
         <translation>2 zecimale</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="749"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="745"/>
         <source>3 decimals</source>
         <translation>3 zecimale</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="750"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="746"/>
         <source>Scientific</source>
         <translation>Științific</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="754"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="750"/>
         <source>New Line (\n)</source>
         <translation>Linie Nouă (</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="755"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="751"/>
         <source>Carriage Return (\r)</source>
         <translation>Retur de Car (\r)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="756"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="752"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="759"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="755"/>
         <source>No</source>
         <translation>Nu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="760"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="756"/>
         <source>Yes</source>
         <translation>Da</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="201"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="310"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="200"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="309"/>
         <source>(multiple)</source>
         <translation>(multiple)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="215"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="324"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="214"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="323"/>
         <source>Mixed</source>
         <translation>Mixt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="416"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="418"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="415"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="417"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="476"/>
         <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="477"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="478"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="534"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="533"/>
         <source>Edit Selection</source>
         <translation>Editează Selecția</translation>
     </message>
@@ -8602,85 +8621,85 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
         <translation>Pas de Incrementare</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="88"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="87"/>
         <source>Rename Device</source>
         <translation>Redenumire Dispozitiv</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="232"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="231"/>
         <source>Edit Device</source>
         <translation>Editează Dispozitiv</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="327"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="350"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="356"/>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="432"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="326"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="349"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="355"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="431"/>
         <source>Edit Group</source>
         <translation>Editează Grup</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="373"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="372"/>
         <source>Rename Group</source>
         <translation>Redenumire Grup</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="580"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="579"/>
         <source>Edit Action</source>
         <translation>Editează Acțiune</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="622"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="621"/>
         <source>Rename Project</source>
         <translation>Redenumire Proiect</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="669"/>
-        <source>Alias "%1" is already in use</source>
-        <translation>Aliasul „%1" este deja utilizat</translation>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="668"/>
+        <source>Alias &quot;%1&quot; is already in use</source>
+        <translation>Aliasul „%1&quot; este deja utilizat</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="670"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="669"/>
         <source>Dataset aliases must be unique across the project. The change was not applied.</source>
         <translation>Aliasurile seturilor de date trebuie să fie unice în cadrul proiectului. Modificarea nu a fost aplicată.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="672"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="671"/>
         <source>Duplicate Alias</source>
         <translation>Alias Duplicat</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="682"/>
+        <source>Alias &quot;%1&quot; contains only digits</source>
+        <translation>Aliasul „%1&quot; conține doar cifre</translation>
+    </message>
+    <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="683"/>
-        <source>Alias "%1" contains only digits</source>
-        <translation>Aliasul „%1" conține doar cifre</translation>
+        <source>Scripts must quote it as a string, e.g. getDataset(&quot;%1&quot;); a numeric argument is read as a uniqueId, not this alias.</source>
+        <translation>Script-urile trebuie să îl citeze ca șir de caractere, de ex. getDataset(&quot;%1&quot;); un argument numeric este citit ca uniqueId, nu ca acest alias.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="684"/>
-        <source>Scripts must quote it as a string, e.g. getDataset("%1"); a numeric argument is read as a uniqueId, not this alias.</source>
-        <translation>Script-urile trebuie să îl citeze ca șir de caractere, de ex. getDataset("%1"); un argument numeric este citit ca uniqueId, nu ca acest alias.</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="688"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="687"/>
         <source>Numeric Alias</source>
         <translation>Alias Numeric</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="739"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="738"/>
         <source>Edit Alarms</source>
         <translation>Editează Alarme</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="861"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="860"/>
         <source>Rename Dataset</source>
         <translation>Redenumire Set de Date</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="882"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="881"/>
         <source>Edit Dataset</source>
         <translation>Editează Set de Date</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="1027"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="1026"/>
         <source>Edit Output Widget</source>
         <translation>Editează Widget de Ieșire</translation>
     </message>
@@ -8688,123 +8707,120 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
 <context>
     <name>DataModel::ProjectModel</name>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="469"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="478"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="341"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="350"/>
         <source>Lock Project</source>
         <translation>Blochează Proiectul</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="470"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="342"/>
         <source>Choose a password to lock the project:</source>
         <translation>Alegeți o parolă pentru a bloca proiectul:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="478"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="350"/>
         <source>Confirm the password:</source>
         <translation>Confirmați parola:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="483"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="355"/>
         <source>Passwords do not match</source>
         <translation>Parolele nu se potrivesc</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="484"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="356"/>
         <source>The two passwords you entered do not match. The project was not locked.</source>
         <translation>Cele două parole introduse nu se potrivesc. Proiectul nu a fost blocat.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="521"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="393"/>
         <source>Unlock Project</source>
         <translation>Deblochează Proiectul</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="522"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="394"/>
         <source>Enter the project password:</source>
         <translation>Introduceți parola proiectului:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="532"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="404"/>
         <source>Incorrect password</source>
         <translation>Parolă incorectă</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="533"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="405"/>
         <source>The password you entered does not match the one stored in the project file.</source>
         <translation>Parola introdusă nu se potrivește cu cea stocată în fișierul proiectului.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="567"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="534"/>
         <source>New Project</source>
         <translation>Proiect Nou</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="620"/>
         <source>Samples</source>
-        <translation>Eșantioane</translation>
+        <translation type="vanished">Eșantioane</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1201"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="936"/>
         <source>Change MQTT Publisher</source>
         <translation>Modificare Publisher MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1225"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="960"/>
         <source>Change InfluxDB Sink</source>
         <translation>Modificare Destinație Influxdb</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1335"/>
         <source>Rename Widget</source>
-        <translation>Redenumește Widget</translation>
+        <translation type="vanished">Redenumește Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1336"/>
         <source>Display title (empty restores the original):</source>
-        <translation>Titlu afișat (gol restaurează originalul):</translation>
+        <translation type="vanished">Titlu afișat (gol restaurează originalul):</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1673"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1430"/>
         <source>Change Project Title</source>
         <translation>Modificare Titlu Proiect</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1697"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1454"/>
         <source>Edit Control Script</source>
         <translation>Editează Script de Control</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1714"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1471"/>
         <source>Change Point Count</source>
         <translation>Modificare Număr de Puncte</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1737"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1494"/>
         <source>Change Plot Time Range</source>
         <translation>Schimbă Intervalul de Timp Al Graficului</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1763"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1520"/>
         <source>Toggle Freeze</source>
         <translation>Comută Înghețare</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1778"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1535"/>
         <source>Toggle Change-Driven Transforms</source>
         <translation>Comută Transformări Conduse de Schimbare</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1795"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1552"/>
         <source>Toggle Fast Lua Execution</source>
         <translation>Comutare Execuție Lua Rapidă</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1816"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1573"/>
         <source>Enable Fast Lua Execution?</source>
         <translation>Activare Execuție Lua Rapidă?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1817"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1574"/>
         <source>Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x faster), but the runaway-script watchdog cannot operate: a script stuck in an infinite loop will stall its data source until you disconnect.
 
 Enable it only for scripts you trust and have tested in Safe mode first.</source>
@@ -8813,709 +8829,549 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
 Activați-l doar pentru scripturi în care aveți încredere și pe care le-ați testat mai întâi în modul Sigur.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1822"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1579"/>
         <source>Fast Lua Execution</source>
         <translation>Execuție Lua Rapidă</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1851"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1608"/>
         <source>Change Frame Start Sequence</source>
         <translation>Schimbă Secvența de Start A Cadrului</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1870"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1627"/>
         <source>Change Frame End Sequence</source>
         <translation>Schimbă Secvența de Sfârșit A Cadrului</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1889"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1646"/>
         <source>Change Checksum</source>
         <translation>Schimbă Checksum</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1908"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1665"/>
         <source>Change Frame Detection</source>
         <translation>Schimbă Detectare Cadru</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1955"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1684"/>
         <source>Change Decoder</source>
         <translation>Schimbă Decodor</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1974"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1703"/>
         <source>Toggle Hex Delimiters</source>
         <translation>Comută Delimitatori Hex</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="69"/>
         <source>Add Device</source>
-        <translation>Adaugă Dispozitiv</translation>
+        <translation type="vanished">Adaugă Dispozitiv</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="74"/>
         <source>Multiple data sources require a Pro license</source>
-        <translation>Surse de date multiple necesită o licență Pro</translation>
+        <translation type="vanished">Surse de date multiple necesită o licență Pro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="75"/>
         <source>Serial Studio Pro allows connecting to multiple devices simultaneously. Please upgrade to unlock this feature.</source>
-        <translation>Serial Studio Pro permite conectarea simultană la mai multe dispozitive. Actualizați pentru a debloca această funcționalitate.</translation>
+        <translation type="vanished">Serial Studio Pro permite conectarea simultană la mai multe dispozitive. Actualizați pentru a debloca această funcționalitate.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="87"/>
         <source>Device %1</source>
-        <translation>Dispozitiv %1</translation>
+        <translation type="vanished">Dispozitiv %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="129"/>
         <source>Delete Device</source>
-        <translation>Șterge Dispozitiv</translation>
+        <translation type="vanished">Șterge Dispozitiv</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="164"/>
         <source>Duplicate Device</source>
-        <translation>Duplică Dispozitiv</translation>
+        <translation type="vanished">Duplică Dispozitiv</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="198"/>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="282"/>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="313"/>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="338"/>
         <source>Edit Device</source>
-        <translation>Editează Dispozitiv</translation>
+        <translation type="vanished">Editează Dispozitiv</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="229"/>
         <source>Rename Device</source>
-        <translation>Redenumește Dispozitiv</translation>
+        <translation type="vanished">Redenumește Dispozitiv</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="244"/>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="351"/>
         <source>Change Bus Type</source>
-        <translation>Schimbă Tip Magistrală</translation>
+        <translation type="vanished">Schimbă Tip Magistrală</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="266"/>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="365"/>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="523"/>
         <source>Edit Frame Parser</source>
-        <translation>Editează Analizor de Trame</translation>
+        <translation type="vanished">Editează Analizor de Trame</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="377"/>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="392"/>
         <source>Change Parser Language</source>
-        <translation>Schimbă Limbaj Analizor</translation>
+        <translation type="vanished">Schimbă Limbaj Analizor</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="418"/>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="443"/>
         <source>Change Parser Template</source>
-        <translation>Schimbă Șablon Analizor</translation>
+        <translation type="vanished">Schimbă Șablon Analizor</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="430"/>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="466"/>
         <source>Change Parser Parameters</source>
-        <translation>Schimbă Parametri Analizor</translation>
+        <translation type="vanished">Schimbă Parametri Analizor</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="495"/>
         <source>Change Stream Lane</source>
-        <translation>Schimbă Linia de Flux</translation>
+        <translation type="vanished">Schimbă Linia de Flux</translation>
     </message>
     <message>
         <source> (Copy)</source>
         <translation type="vanished">(Copie)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="118"/>
         <source>Do you want to save your changes?</source>
-        <translation>Doriți să salvați modificările?</translation>
+        <translation type="vanished">Doriți să salvați modificările?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="119"/>
         <source>You have unsaved modifications in this project!</source>
-        <translation>Aveți modificări nesalvate în acest proiect!</translation>
+        <translation type="vanished">Aveți modificări nesalvate în acest proiect!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="244"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="253"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="267"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="211"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="220"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="234"/>
         <source>Project error</source>
         <translation>Eroare proiect</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="244"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="211"/>
         <source>Project title cannot be empty!</source>
         <translation>Titlul proiectului nu poate fi gol!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="253"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="220"/>
         <source>You need to add at least one group!</source>
         <translation>Trebuie să adăugați cel puțin un grup!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="267"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="234"/>
         <source>You need to add at least one dataset!</source>
         <translation>Trebuie să adăugați cel puțin un set de date!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="315"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="282"/>
         <source>Your project needs a title</source>
         <translation>Proiectul necesită un titlu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="317"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="284"/>
         <source>Add a group to get started</source>
         <translation>Adaugă un grup pentru a începe</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="319"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="286"/>
         <source>Add a dataset to a group</source>
         <translation>Adaugă un set de date la un grup</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="333"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="300"/>
         <source>Open the Project view at the top of the tree and enter a name. You can rename the project at any time.</source>
         <translation>Deschide vizualizarea Proiect în partea de sus a arborelui și introdu un nume. Poți redenumi proiectul oricând.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="336"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="303"/>
         <source>Groups organize datasets into dashboard widgets. Use the Group button in the toolbar above to create one, then add datasets to it.</source>
         <translation>Grupurile organizează seturile de date în widget-uri de tablou de bord. Folosește butonul Grup din bara de instrumente de mai sus pentru a crea unul, apoi adaugă seturi de date la acesta.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="340"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="307"/>
         <source>Datasets are the values that appear on the dashboard. Select a group in the tree and use the Dataset button in the toolbar to add one.</source>
         <translation>Seturile de date sunt valorile care apar pe tabloul de bord. Selectați un grup în arbore și utilizați butonul Set de Date din bara de instrumente pentru a adăuga unul.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="619"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="668"/>
         <source>Time</source>
-        <translation>Timp</translation>
+        <translation type="vanished">Timp</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="119"/>
-        <source>Do you want to delete data source "%1"?</source>
-        <translation>Doriți să ștergeți sursa de date "%1"?</translation>
+        <source>Do you want to delete data source &quot;%1&quot;?</source>
+        <translation type="vanished">Doriți să ștergeți sursa de date &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelSources.cpp" line="120"/>
         <source>Groups using this source will move to the default source. This action cannot be undone.</source>
-        <translation>Grupurile care utilizează această sursă vor fi mutate la sursa implicită. Această acțiune nu poate fi anulată.</translation>
+        <translation type="vanished">Grupurile care utilizează această sursă vor fi mutate la sursa implicită. Această acțiune nu poate fi anulată.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="158"/>
         <source>Save Serial Studio Project</source>
-        <translation>Salvează Proiect Serial Studio</translation>
+        <translation type="vanished">Salvează Proiect Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="160"/>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="456"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
-        <translation>Fișiere Proiect Serial Studio (*.ssproj)</translation>
+        <translation type="vanished">Fișiere Proiect Serial Studio (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1594"/>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="181"/>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="447"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1302"/>
         <source>Untitled Project</source>
         <translation>Proiect Fără Titlu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1613"/>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="604"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1318"/>
         <source>Device A</source>
         <translation>Dispozitiv A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="227"/>
         <source>Select Project File</source>
-        <translation>Selectează Fișier Proiect</translation>
+        <translation type="vanished">Selectează Fișier Proiect</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="229"/>
         <source>Project Files (*.json *.ssproj)</source>
-        <translation>Fișiere Proiect (*.json *.ssproj)</translation>
+        <translation type="vanished">Fișiere Proiect (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="275"/>
         <source>JSON validation error</source>
-        <translation>Eroare de validare JSON</translation>
+        <translation type="vanished">Eroare de validare JSON</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="329"/>
         <source>Project upgraded from an earlier file format</source>
-        <translation>Proiect actualizat de la un format de fișier anterior</translation>
+        <translation type="vanished">Proiect actualizat de la un format de fișier anterior</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="330"/>
         <source>This project was saved with schema version %1; the current version is %2. Defaults have been applied to any new fields. Save the project to lock in the upgrade.</source>
-        <translation>Acest proiect a fost salvat cu versiunea de schemă %1; versiunea curentă este %2. S-au aplicat valorile implicite pentru orice câmpuri noi. Salvează proiectul pentru a finaliza actualizarea.</translation>
+        <translation type="vanished">Acest proiect a fost salvat cu versiunea de schemă %1; versiunea curentă este %2. S-au aplicat valorile implicite pentru orice câmpuri noi. Salvează proiectul pentru a finaliza actualizarea.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="454"/>
         <source>Save Imported Project</source>
-        <translation>Salvează Proiectul Importat</translation>
+        <translation type="vanished">Salvează Proiectul Importat</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="657"/>
         <source>Multi-source projects require a Pro license</source>
-        <translation>Proiectele cu surse multiple necesită licență Pro</translation>
+        <translation type="vanished">Proiectele cu surse multiple necesită licență Pro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="658"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
-        <translation>Acest proiect conține surse de date multiple. Doar prima sursă a fost încărcată. O licență Serial Studio Pro este necesară pentru a utiliza proiecte cu surse multiple.</translation>
+        <translation type="vanished">Acest proiect conține surse de date multiple. Doar prima sursă a fost încărcată. O licență Serial Studio Pro este necesară pentru a utiliza proiecte cu surse multiple.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="903"/>
         <source>Workspace IDs remapped on load</source>
-        <translation>ID-urile spațiului de lucru remapate la încărcare</translation>
+        <translation type="vanished">ID-urile spațiului de lucru remapate la încărcare</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="904"/>
         <source>%1 custom workspace ID(s) overlapped the new reserved auto range and were moved into the user range. Save the project to make the remap permanent.</source>
-        <translation>%1 ID-uri personalizate de spațiu de lucru s-au suprapus cu noua zonă automată rezervată și au fost mutate în zona utilizatorului. Salvează proiectul pentru a face remaparea permanentă.</translation>
+        <translation type="vanished">%1 ID-uri personalizate de spațiu de lucru s-au suprapus cu noua zonă automată rezervată și au fost mutate în zona utilizatorului. Salvează proiectul pentru a face remaparea permanentă.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="1126"/>
         <source>Legacy frame parser function updated</source>
-        <translation>Funcția de analiză a cadrelor moștenită a fost actualizată</translation>
+        <translation type="vanished">Funcția de analiză a cadrelor moștenită a fost actualizată</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="1127"/>
-        <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
-        <translation>Proiectul dumneavoastră a folosit o funcție veche de analiză a cadrelor cu un argument 'separator'. A fost migrat automat la noul format.</translation>
+        <source>Your project used a legacy frame parser function with a &apos;separator&apos; argument. It has been automatically migrated to the new format.</source>
+        <translation type="vanished">Proiectul dumneavoastră a folosit o funcție veche de analiză a cadrelor cu un argument &apos;separator&apos;. A fost migrat automat la noul format.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="306"/>
-        <source>Do you want to delete group "%1"?</source>
-        <translation>Doriți să ștergeți grupul "%1"?</translation>
+        <source>Do you want to delete group &quot;%1&quot;?</source>
+        <translation type="vanished">Doriți să ștergeți grupul &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="307"/>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="354"/>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="388"/>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1164"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
-        <translation>Această acțiune nu poate fi anulată. Doriți să continuați?</translation>
+        <translation type="vanished">Această acțiune nu poate fi anulată. Doriți să continuați?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="353"/>
-        <source>Do you want to delete action "%1"?</source>
-        <translation>Doriți să ștergeți acțiunea "%1"?</translation>
+        <source>Do you want to delete action &quot;%1&quot;?</source>
+        <translation type="vanished">Doriți să ștergeți acțiunea &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="387"/>
-        <source>Do you want to delete dataset "%1"?</source>
-        <translation>Doriți să ștergeți setul de date "%1"?</translation>
+        <source>Do you want to delete dataset &quot;%1&quot;?</source>
+        <translation type="vanished">Doriți să ștergeți setul de date &quot;%1&quot;?</translation>
     </message>
     <message>
         <source>%1 (Copy)</source>
         <translation type="vanished">%1 (Copie)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="121"/>
         <source>Edit Group</source>
-        <translation>Editează Grup</translation>
+        <translation type="vanished">Editează Grup</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="143"/>
         <source>Edit Dataset</source>
-        <translation>Editează Set de Date</translation>
+        <translation type="vanished">Editează Set de Date</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="200"/>
         <source>Seed Dataset Aliases</source>
-        <translation>Inițializează Aliasuri Set de Date</translation>
+        <translation type="vanished">Inițializează Aliasuri Set de Date</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="237"/>
         <source>Toggle Group</source>
-        <translation>Comută Grup</translation>
+        <translation type="vanished">Comută Grup</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="259"/>
         <source>Toggle Dataset</source>
-        <translation>Comută Set de Date</translation>
+        <translation type="vanished">Comută Set de Date</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="283"/>
         <source>Edit Action</source>
-        <translation>Editează Acțiune</translation>
+        <translation type="vanished">Editează Acțiune</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="320"/>
         <source>Delete Group</source>
-        <translation>Șterge Grup</translation>
+        <translation type="vanished">Șterge Grup</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="367"/>
         <source>Delete Action</source>
-        <translation>Șterge Acțiune</translation>
+        <translation type="vanished">Șterge Acțiune</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="406"/>
         <source>Delete Dataset</source>
-        <translation>Șterge Set de Date</translation>
+        <translation type="vanished">Șterge Set de Date</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="468"/>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1875"/>
         <source>Duplicate Group</source>
-        <translation>Duplică Grup</translation>
+        <translation type="vanished">Duplică Grup</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="509"/>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1988"/>
         <source>Duplicate Action</source>
-        <translation>Duplică Acțiune</translation>
+        <translation type="vanished">Duplică Acțiune</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="765"/>
         <source>Move Dataset</source>
-        <translation>Mută Setul de Date</translation>
+        <translation type="vanished">Mută Setul de Date</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="851"/>
         <source>Move Action</source>
-        <translation>Mută Acțiunea</translation>
+        <translation type="vanished">Mută Acțiunea</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="879"/>
         <source>Move Output Widget</source>
-        <translation>Mută Widget-ul de Ieșire</translation>
+        <translation type="vanished">Mută Widget-ul de Ieșire</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1020"/>
         <source>Change Output Widget Type</source>
-        <translation>Schimbă Tipul Widget-ului de Ieșire</translation>
+        <translation type="vanished">Schimbă Tipul Widget-ului de Ieșire</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1050"/>
         <source>Change Output Widget Icon</source>
-        <translation>Schimbă Pictograma Widget-ului de Ieșire</translation>
+        <translation type="vanished">Schimbă Pictograma Widget-ului de Ieșire</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1074"/>
         <source>Add Output Panel</source>
-        <translation>Adaugă Panou de Ieșire</translation>
+        <translation type="vanished">Adaugă Panou de Ieșire</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1075"/>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1112"/>
         <source>Output Controls</source>
-        <translation>Controale de Ieșire</translation>
+        <translation type="vanished">Controale de Ieșire</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1089"/>
         <source>Add Output Widget</source>
-        <translation>Adaugă Widget de Ieșire</translation>
+        <translation type="vanished">Adaugă Widget de Ieșire</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1124"/>
         <source>New Button</source>
-        <translation>Buton Nou</translation>
+        <translation type="vanished">Buton Nou</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1127"/>
         <source>New Slider</source>
-        <translation>Cursor Nou</translation>
+        <translation type="vanished">Cursor Nou</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1130"/>
         <source>New Toggle</source>
-        <translation>Comutator Nou</translation>
+        <translation type="vanished">Comutator Nou</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1133"/>
         <source>New Text Field</source>
-        <translation>Câmp Text Nou</translation>
+        <translation type="vanished">Câmp Text Nou</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1136"/>
         <source>New Knob</source>
-        <translation>Buton Rotativ Nou</translation>
+        <translation type="vanished">Buton Rotativ Nou</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1163"/>
-        <source>Do you want to delete output widget "%1"?</source>
-        <translation>Doriți să ștergeți widget-ul de ieșire "%1"?</translation>
+        <source>Do you want to delete output widget &quot;%1&quot;?</source>
+        <translation type="vanished">Doriți să ștergeți widget-ul de ieșire &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1183"/>
         <source>Delete Output Widget</source>
-        <translation>Șterge Widget-ul de Ieșire</translation>
+        <translation type="vanished">Șterge Widget-ul de Ieșire</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1225"/>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="2047"/>
         <source>Duplicate Output Widget</source>
-        <translation>Duplică Widget-ul de Ieșire</translation>
+        <translation type="vanished">Duplică Widget-ul de Ieșire</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1258"/>
         <source>Edit Output Widget</source>
-        <translation>Editează Widget-ul de Ieșire</translation>
+        <translation type="vanished">Editează Widget-ul de Ieșire</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1281"/>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1934"/>
         <source>Duplicate Dataset</source>
-        <translation>Duplică Set de Date</translation>
+        <translation type="vanished">Duplică Set de Date</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1313"/>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1590"/>
         <source>Add Group</source>
-        <translation>Adaugă Grup</translation>
+        <translation type="vanished">Adaugă Grup</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1348"/>
         <source>Group</source>
-        <translation>Grup</translation>
+        <translation type="vanished">Grup</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1357"/>
         <source>Add Dataset</source>
-        <translation>Adaugă Set de Date</translation>
+        <translation type="vanished">Adaugă Set de Date</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1368"/>
         <source>New Dataset</source>
-        <translation>Set de Date Nou</translation>
+        <translation type="vanished">Set de Date Nou</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1371"/>
         <source>New Plot</source>
-        <translation>Grafic Nou</translation>
+        <translation type="vanished">Grafic Nou</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1375"/>
         <source>New FFT Plot</source>
-        <translation>Grafic FFT Nou</translation>
+        <translation type="vanished">Grafic FFT Nou</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1379"/>
         <source>New Level Indicator</source>
-        <translation>Indicator Nivel Nou</translation>
+        <translation type="vanished">Indicator Nivel Nou</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1383"/>
         <source>New Gauge</source>
-        <translation>Indicator Nou</translation>
+        <translation type="vanished">Indicator Nou</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1387"/>
         <source>New Compass</source>
-        <translation>Busolă Nouă</translation>
+        <translation type="vanished">Busolă Nouă</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1393"/>
         <source>New Meter</source>
-        <translation>Contor Nou</translation>
+        <translation type="vanished">Contor Nou</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1452"/>
         <source>Edit Canvas Datasets</source>
-        <translation>Editează Seturi de Date Canvas</translation>
+        <translation type="vanished">Editează Seturi de Date Canvas</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="2187"/>
         <source>Duplicate Selection</source>
-        <translation>Duplică Selecția</translation>
+        <translation type="vanished">Duplică Selecția</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="2259"/>
         <source>Delete Selection</source>
-        <translation>Șterge Selecția</translation>
+        <translation type="vanished">Șterge Selecția</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="2374"/>
         <source>Move Selection</source>
-        <translation>Mută Selecția</translation>
+        <translation type="vanished">Mută Selecția</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="2437"/>
         <source>Toggle Selection</source>
-        <translation>Comută Selecția</translation>
+        <translation type="vanished">Comută Selecția</translation>
     </message>
     <message>
         <source>New Thermometer</source>
         <translation type="vanished">Termometru Nou</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1397"/>
         <source>New LED Indicator</source>
-        <translation>Indicator LED Nou</translation>
+        <translation type="vanished">Indicator LED Nou</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1401"/>
         <source>New Waterfall</source>
-        <translation>Waterfall Nou</translation>
+        <translation type="vanished">Waterfall Nou</translation>
     </message>
     <message>
         <source>Edit Painter Datasets</source>
         <translation type="vanished">Editează Seturi de Date Painter</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1471"/>
         <source>Channel %1</source>
-        <translation>Canal %1</translation>
+        <translation type="vanished">Canal %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1492"/>
         <source>Change Dataset Option</source>
-        <translation>Modifică Opțiunea Set de Date</translation>
+        <translation type="vanished">Modifică Opțiunea Set de Date</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1542"/>
         <source>Add Action</source>
-        <translation>Adaugă Acțiune</translation>
+        <translation type="vanished">Adaugă Acțiune</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1544"/>
         <source>New Action</source>
-        <translation>Acțiune Nouă</translation>
+        <translation type="vanished">Acțiune Nouă</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1640"/>
         <source>Change Group Widget</source>
-        <translation>Schimbă Widget-ul Grupului</translation>
+        <translation type="vanished">Schimbă Widget-ul Grupului</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1688"/>
         <source>Are you sure you want to change the group-level widget?</source>
-        <translation>Sigur doriți să schimbați widget-ul la nivel de grup?</translation>
+        <translation type="vanished">Sigur doriți să schimbați widget-ul la nivel de grup?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1690"/>
         <source>Existing datasets for this group are deleted</source>
-        <translation>Seturile de date existente pentru acest grup sunt șterse</translation>
+        <translation type="vanished">Seturile de date existente pentru acest grup sunt șterse</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1763"/>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1764"/>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1765"/>
         <source>Accelerometer %1</source>
-        <translation>Accelerometru %1</translation>
+        <translation type="vanished">Accelerometru %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1780"/>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1780"/>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1780"/>
         <source>Gyro %1</source>
-        <translation>Giroscop %1</translation>
+        <translation type="vanished">Giroscop %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1795"/>
         <source>Latitude</source>
-        <translation>Latitudine</translation>
+        <translation type="vanished">Latitudine</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1795"/>
         <source>Longitude</source>
-        <translation>Longitudine</translation>
+        <translation type="vanished">Longitudine</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1795"/>
         <source>Altitude</source>
-        <translation>Altitudine</translation>
+        <translation type="vanished">Altitudine</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1810"/>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1824"/>
         <source>X</source>
-        <translation>X</translation>
+        <translation type="vanished">X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1810"/>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1824"/>
         <source>Y</source>
-        <translation>Y</translation>
+        <translation type="vanished">Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1810"/>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="1824"/>
         <source>Z</source>
-        <translation>Z</translation>
+        <translation type="vanished">Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="233"/>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="440"/>
         <source>Workspace</source>
-        <translation>Spațiu de Lucru</translation>
+        <translation type="vanished">Spațiu de Lucru</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="917"/>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="100"/>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="354"/>
         <source>Shared Table</source>
-        <translation>Tabel Partajat</translation>
+        <translation type="vanished">Tabel Partajat</translation>
     </message>
     <message>
         <source>register</source>
         <translation type="vanished">registru</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="917"/>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="354"/>
         <source>New Shared Table</source>
-        <translation>Tabel Partajat Nou</translation>
+        <translation type="vanished">Tabel Partajat Nou</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2061"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2085"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2112"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2131"/>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="594"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="421"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="440"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="464"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="665"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="688"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="898"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="917"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="940"/>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="354"/>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="379"/>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="399"/>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="421"/>
         <source>Name:</source>
-        <translation>Nume:</translation>
+        <translation type="vanished">Nume:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="144"/>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="379"/>
         <source>Rename Table</source>
-        <translation>Redenumește Tabel</translation>
+        <translation type="vanished">Redenumește Tabel</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2061"/>
         <source>Rename Group</source>
-        <translation>Redenumire Grup</translation>
+        <translation type="vanished">Redenumire Grup</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2085"/>
         <source>Rename Dataset</source>
-        <translation>Redenumire Set de Date</translation>
+        <translation type="vanished">Redenumire Set de Date</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2112"/>
         <source>Rename Data Source</source>
-        <translation>Redenumire Sursă de Date</translation>
+        <translation type="vanished">Redenumire Sursă de Date</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2131"/>
         <source>Rename Action</source>
-        <translation>Redenumire Acțiune</translation>
+        <translation type="vanished">Redenumire Acțiune</translation>
     </message>
     <message>
         <source>New Register</source>
@@ -9526,34 +9382,24 @@ Activați-l doar pentru scripturi în care aveți încredere și pe care le-ați
         <translation type="vanished">Redenumește Registru</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1200"/>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="455"/>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="480"/>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="2355"/>
         <source>This action cannot be undone.</source>
-        <translation>Această acțiune nu poate fi anulată.</translation>
+        <translation type="vanished">Această acțiune nu poate fi anulată.</translation>
     </message>
     <message>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
         <translation type="vanished">Aceasta elimină %1 registru(e) împreună cu tabelul. Această acțiune nu poate fi anulată.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1199"/>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="459"/>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="479"/>
-        <source>Delete "%1"?</source>
-        <translation>Șterge "%1"?</translation>
+        <source>Delete &quot;%1&quot;?</source>
+        <translation type="vanished">Șterge &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="94"/>
         <source>Add Table</source>
-        <translation>Adaugă Tabel</translation>
+        <translation type="vanished">Adaugă Tabel</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="129"/>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="462"/>
         <source>Delete Table</source>
-        <translation>Șterge Tabel</translation>
+        <translation type="vanished">Șterge Tabel</translation>
     </message>
     <message>
         <source>Add Register</source>
@@ -9568,306 +9414,239 @@ Activați-l doar pentru scripturi în care aveți încredere și pe care le-ați
         <translation type="vanished">Editează Registru</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="214"/>
         <source>Add Variable</source>
-        <translation>Adaugă Variabilă</translation>
+        <translation type="vanished">Adaugă Variabilă</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="223"/>
         <source>variable</source>
-        <translation>variabilă</translation>
+        <translation type="vanished">variabilă</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="253"/>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="482"/>
         <source>Delete Variable</source>
-        <translation>Șterge Variabila</translation>
+        <translation type="vanished">Șterge Variabila</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="284"/>
         <source>Edit Variable</source>
-        <translation>Editează Variabila</translation>
+        <translation type="vanished">Editează Variabila</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="398"/>
         <source>New Variable</source>
-        <translation>Variabilă Nouă</translation>
+        <translation type="vanished">Variabilă Nouă</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="421"/>
         <source>Rename Variable</source>
-        <translation>Redenumește Variabila</translation>
+        <translation type="vanished">Redenumește Variabila</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="456"/>
         <source>This removes %1 variable(s) along with the table. This action cannot be undone.</source>
-        <translation>Aceasta elimină %1 variabilă/variabile împreună cu tabelul. Această acțiune nu poate fi anulată.</translation>
+        <translation type="vanished">Aceasta elimină %1 variabilă/variabile împreună cu tabelul. Această acțiune nu poate fi anulată.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="506"/>
         <source>Export Table</source>
-        <translation>Exportă Tabel</translation>
+        <translation type="vanished">Exportă Tabel</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="508"/>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="549"/>
         <source>CSV files (*.csv)</source>
-        <translation>Fișiere CSV (*.CSV)</translation>
+        <translation type="vanished">Fișiere CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="549"/>
         <source>Import Table</source>
-        <translation>Importă Tabel</translation>
+        <translation type="vanished">Importă Tabel</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelTables.cpp" line="558"/>
         <source>Import Table CSV</source>
-        <translation>Importă CSV Tabel</translation>
+        <translation type="vanished">Importă CSV Tabel</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="571"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="440"/>
         <source>New Workspace</source>
-        <translation>Spațiu de Lucru Nou</translation>
+        <translation type="vanished">Spațiu de Lucru Nou</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="594"/>
         <source>Rename Workspace</source>
-        <translation>Redenumește Spațiul de Lucru</translation>
+        <translation type="vanished">Redenumește Spațiul de Lucru</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="233"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="421"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="526"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="665"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="752"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="898"/>
         <source>Folder</source>
-        <translation>Folder</translation>
+        <translation type="vanished">Folder</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="421"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="665"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="898"/>
         <source>New Folder</source>
-        <translation>Folder Nou</translation>
+        <translation type="vanished">Folder Nou</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="464"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="539"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="688"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="765"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="940"/>
         <source>Rename Folder</source>
-        <translation>Redenumește Folder</translation>
+        <translation type="vanished">Redenumește Folder</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="482"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="706"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="958"/>
-        <source>Delete folder "%1"?</source>
-        <translation>Șterge folderul "%1"?</translation>
+        <source>Delete folder &quot;%1&quot;?</source>
+        <translation type="vanished">Șterge folderul &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="483"/>
         <source>The folder is removed; its workspaces and sub-folders move up to the parent.</source>
-        <translation>Folderul este eliminat; spațiile de lucru și sub-folderele sale urcă la părintele acestuia.</translation>
+        <translation type="vanished">Folderul este eliminat; spațiile de lucru și sub-folderele sale urcă la părintele acestuia.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="485"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="559"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="709"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="786"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="962"/>
         <source>Delete Folder</source>
-        <translation>Șterge Folder</translation>
+        <translation type="vanished">Șterge Folder</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="514"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="738"/>
         <source>Add Folder</source>
-        <translation>Adaugă Dosar</translation>
+        <translation type="vanished">Adaugă Dosar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="586"/>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="710"/>
         <source>Move Group</source>
-        <translation>Mută Grup</translation>
+        <translation type="vanished">Mută Grup</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="607"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="633"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="840"/>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="866"/>
         <source>Move Folder</source>
-        <translation>Mută Dosar</translation>
+        <translation type="vanished">Mută Dosar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="707"/>
         <source>The folder is removed; its groups and sub-folders move up to the parent.</source>
-        <translation>Folderul este eliminat; grupurile și sub-folderele sale urcă la părintele acestuia.</translation>
+        <translation type="vanished">Folderul este eliminat; grupurile și sub-folderele sale urcă la părintele acestuia.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="813"/>
         <source>Move Table</source>
-        <translation>Mută Tabel</translation>
+        <translation type="vanished">Mută Tabel</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelFolders.cpp" line="959"/>
         <source>The folder is removed; its tables and sub-folders move up to the parent. The accessor path of those tables changes accordingly.</source>
-        <translation>Folderul este eliminat; tabelele și sub-folderele sale urcă la părintele acestuia. Calea de acces a acelor tabele se modifică în consecință.</translation>
+        <translation type="vanished">Folderul este eliminat; tabelele și sub-folderele sale urcă la părintele acestuia. Calea de acces a acelor tabele se modifică în consecință.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="689"/>
         <source>Overview</source>
-        <translation>Prezentare Generală</translation>
+        <translation type="vanished">Prezentare Generală</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="698"/>
         <source>All Data</source>
-        <translation>Toate Datele</translation>
+        <translation type="vanished">Toate Datele</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="968"/>
         <source>Discard workspace customisations?</source>
-        <translation>Renunță la personalizările spațiului de lucru?</translation>
+        <translation type="vanished">Renunță la personalizările spațiului de lucru?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="969"/>
-        <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
-        <translation>Dezactivarea personalizării renunță la modificările tale și reconstruiește lista de spații de lucru din grupurile proiectului.</translation>
+        <source>Switching off Customize discards your edits and rebuilds the workspace list from the project&apos;s groups.</source>
+        <translation type="vanished">Dezactivarea personalizării renunță la modificările tale și reconstruiește lista de spații de lucru din grupurile proiectului.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="972"/>
         <source>Customize Workspaces</source>
-        <translation>Personalizează Spațiile de Lucru</translation>
+        <translation type="vanished">Personalizează Spațiile de Lucru</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelWorkspaces.cpp" line="1202"/>
         <source>Delete Workspace</source>
-        <translation>Șterge Spațiul de Lucru</translation>
+        <translation type="vanished">Șterge Spațiul de Lucru</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="501"/>
         <source>Project file removed from disk</source>
-        <translation>Fișier proiect eliminat de pe disc</translation>
+        <translation type="vanished">Fișier proiect eliminat de pe disc</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="502"/>
         <source>%1 was deleted or renamed by another program. Save the project to recreate it.</source>
-        <translation>%1 a fost șters sau redenumit de alt program. Salvează proiectul pentru a-l recrea.</translation>
+        <translation type="vanished">%1 a fost șters sau redenumit de alt program. Salvează proiectul pentru a-l recrea.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="524"/>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="545"/>
         <source>Project file changed on disk</source>
-        <translation>Fișier proiect modificat pe disc</translation>
+        <translation type="vanished">Fișier proiect modificat pe disc</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="525"/>
         <source>%1 was modified by another program. The in-memory project was kept; reopen the file to load the external changes.</source>
-        <translation>%1 a fost modificat de alt program. Proiectul din memorie a fost păstrat; redeschide fișierul pentru a încărca modificările externe.</translation>
+        <translation type="vanished">%1 a fost modificat de alt program. Proiectul din memorie a fost păstrat; redeschide fișierul pentru a încărca modificările externe.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="541"/>
         <source>The project file was modified by another program.
 
 Reload it and discard your unsaved changes?</source>
-        <translation>Fișierul proiect a fost modificat de alt program.
+        <translation type="vanished">Fișierul proiect a fost modificat de alt program.
 
 Îl reîncarci și renunți la modificările nesalvate?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="543"/>
         <source>The project file was modified by another program.
 
 Reload it?</source>
-        <translation>Fișierul proiect a fost modificat de alt program.
+        <translation type="vanished">Fișierul proiect a fost modificat de alt program.
 
 Îl reîncarci?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelPersistence.cpp" line="574"/>
         <source>File save error</source>
-        <translation>Eroare la salvarea fișierului</translation>
+        <translation type="vanished">Eroare la salvarea fișierului</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="2354"/>
         <source>Delete %1 selected items?</source>
-        <translation>Șterge %1 elemente selectate?</translation>
+        <translation type="vanished">Șterge %1 elemente selectate?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelCrud.cpp" line="2357"/>
         <source>Delete Items</source>
-        <translation>Șterge Elemente</translation>
+        <translation type="vanished">Șterge Elemente</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectModelLoading.cpp" line="490"/>
         <source>File open error</source>
-        <translation>Eroare la deschiderea fișierului</translation>
+        <translation type="vanished">Eroare la deschiderea fișierului</translation>
     </message>
 </context>
 <context>
     <name>DataModel::ProtoImporter</name>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="915"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="191"/>
         <source>Import Protocol Buffers File</source>
         <translation>Importare Fișier Protocol Buffers</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="917"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="193"/>
         <source>Proto Files (*.proto);;All Files (*)</source>
         <translation>Fișiere Proto (*.proto);;Toate Fișierele (*)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="951"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="227"/>
         <source>Failed to open proto file: %1</source>
         <translation>Eșec la deschiderea fișierului proto: %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="952"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="228"/>
         <source>Verify the file path and read permissions, then try again.</source>
         <translation>Verifică calea fișierului și permisiunile de citire, apoi încearcă din nou.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="954"/>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="963"/>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="981"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="230"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="239"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="254"/>
         <source>Protobuf Import Error</source>
         <translation>Eroare Import Protobuf</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="960"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="236"/>
         <source>Proto file is too large (the limit is 10 MB).</source>
         <translation>Fișierul proto este prea mare (limita este de 10 MB).</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="961"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="237"/>
         <source>Verify you selected the correct .proto definition file.</source>
         <translation>Verifică că ai selectat fișierul de definiție .proto corect.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="978"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="251"/>
         <source>Failed to parse proto file at line %1: %2</source>
         <translation>Eșec la parsarea fișierului proto la linia %1: %2</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="979"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="252"/>
         <source>Only proto3 syntax is supported. Verify the file format and try again.</source>
         <translation>Doar sintaxa proto3 este suportată. Verifică formatul fișierului și încearcă din nou.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="986"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="260"/>
         <source>Proto file contains no message definitions</source>
         <translation>Fișierul proto nu conține definiții de mesaje</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="987"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="261"/>
         <source>The selected file has no `message` blocks to import.</source>
         <translation>Fișierul selectat nu are blocuri `message` de importat.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="989"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="263"/>
         <source>Protobuf Import Warning</source>
         <translation>Avertisment Import Protobuf</translation>
     </message>
@@ -9880,24 +9659,59 @@ Reload it?</source>
         <translation type="vanished">JSON-ul proiectului generat nu a putut fi încărcat.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="1027"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="301"/>
         <source>Successfully imported %1 message(s) and %2 field(s) from the proto file.</source>
         <translation>Importat cu succes %1 mesaj(e) și %2 câmp(uri) din fișierul proto.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="1030"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="304"/>
         <source>The project editor is now open for customization.</source>
         <translation>Editorul de proiect este acum deschis pentru personalizare.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="1032"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="306"/>
         <source>Protobuf Import Complete</source>
         <translation>Import Protobuf Finalizat</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="1097"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="368"/>
         <source>Protobuf</source>
         <translation>Protobuf</translation>
+    </message>
+</context>
+<context>
+    <name>DataModel::QuickPlotBuilder</name>
+    <message>
+        <location filename="../../src/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="79"/>
+        <source>Device A</source>
+        <translation type="unfinished">Dispozitiv A</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="118"/>
+        <location filename="../../src/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="264"/>
+        <source>Channel %1</source>
+        <translation type="unfinished">Canal %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="127"/>
+        <location filename="../../src/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="280"/>
+        <source>Quick Plot</source>
+        <translation type="unfinished">Grafic Rapid</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="134"/>
+        <source>Quick Plot Data</source>
+        <translation type="unfinished">Date Grafic Rapid</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="146"/>
+        <source>Multi-Plot</source>
+        <translation type="unfinished">Grafic Multiplu</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="275"/>
+        <source>Audio Input</source>
+        <translation type="unfinished">Intrare Audio</translation>
     </message>
 </context>
 <context>
@@ -10291,7 +10105,7 @@ Format valid: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="344"/>
-        <source>Define colored value ranges with severity tiers for this dataset's gauge or LED.</source>
+        <source>Define colored value ranges with severity tiers for this dataset&apos;s gauge or LED.</source>
         <translation>Definește intervale de valori colorate cu niveluri de severitate pentru indicatorul sau LED-ul acestui set de date.</translation>
     </message>
     <message>
@@ -10333,7 +10147,7 @@ Format valid: 01 A2 FF 3C</translation>
         <translation>Benzi de Alarmă</translation>
     </message>
     <message>
-        <source>Define colored value ranges with severity tiers for this dataset's gauge.</source>
+        <source>Define colored value ranges with severity tiers for this dataset&apos;s gauge.</source>
         <translation type="vanished">Definește intervale de valori colorate cu niveluri de severitate pentru indicatorul acestui set de date.</translation>
     </message>
     <message>
@@ -10451,8 +10265,8 @@ Format valid: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="276"/>
-        <source>Click "OK" to begin installing the update</source>
-        <translation>Faceți clic pe „OK" pentru a începe instalarea actualizării</translation>
+        <source>Click &quot;OK&quot; to begin installing the update</source>
+        <translation>Faceți clic pe „OK&quot; pentru a începe instalarea actualizării</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="278"/>
@@ -10471,8 +10285,8 @@ Format valid: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="298"/>
-        <source>Click the "Open" button to apply the update</source>
-        <translation>Faceți clic pe butonul „Deschide" pentru a aplica actualizarea</translation>
+        <source>Click the &quot;Open&quot; button to apply the update</source>
+        <translation>Faceți clic pe butonul „Deschide&quot; pentru a aplica actualizarea</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="311"/>
@@ -10858,12 +10672,12 @@ Adăugați etichete de controler mai sus pentru a le interoga.</translation>
         <translation>Nicio etichetă configurată</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="107"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="126"/>
         <source>The tag attributes are empty</source>
         <translation>Atributele etichetei sunt goale</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="209"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="229"/>
         <source>The %1 client is not available in this build</source>
         <translation>Clientul %1 nu este disponibil în această versiune</translation>
     </message>
@@ -11015,7 +10829,7 @@ Adăugați etichete de controler mai sus pentru a le interoga.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="242"/>
-        <source>Don't Allow</source>
+        <source>Don&apos;t Allow</source>
         <translation>Nu Permite</translation>
     </message>
     <message>
@@ -11350,7 +11164,7 @@ Adăugați etichete de controler mai sus pentru a le interoga.</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="745"/>
-        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>Indisponibil prin atașare la distanță. Acest widget necesită fluxul brut de eșantioane de la distanță, pe care oglinda tabloului de bord nu îl transmite.</translation>
     </message>
     <message>
@@ -12742,7 +12556,7 @@ Adăugați etichete de controler mai sus pentru a le interoga.</translation>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="294"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="287"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
@@ -12751,92 +12565,92 @@ Adăugați etichete de controler mai sus pentru a le interoga.</translation>
         <translation type="vanished">Socket de Rețea</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="295"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="288"/>
         <source>Network</source>
         <translation>Rețea</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="296"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="289"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="298"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="291"/>
         <source>Audio</source>
         <translation>Audio</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="299"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="292"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="300"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="293"/>
         <source>CAN Bus</source>
         <translation>Magistrala CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="301"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="294"/>
         <source>USB Device</source>
         <translation>Dispozitiv USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="302"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="295"/>
         <source>HID Device</source>
         <translation>Dispozitiv HID</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="303"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="296"/>
         <source>Process</source>
         <translation>Proces</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="304"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="297"/>
         <source>MQTT Subscriber</source>
         <translation>Abonat MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="305"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="298"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="306"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="299"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="307"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="300"/>
         <source>EtherNet/IP</source>
         <translation>Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="308"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="301"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="732"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="716"/>
         <source>Your trial period has ended.</source>
         <translation>Perioada de probă s-a încheiat.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="733"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="717"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>Pentru a continua utilizarea Serial Studio, activați licența.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="829"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="802"/>
         <source>connection attempt failed</source>
         <translation>tentativa de conexiune a eșuat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1352"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1300"/>
         <source>This connection type requires an active license or trial.</source>
         <translation>Acest tip de conexiune necesită o licență activă sau o perioadă de probă.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1353"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1301"/>
         <source>Activate Serial Studio Pro or start a trial to use this device type.</source>
         <translation>Activează Serial Studio Pro sau începe o perioadă de probă pentru a folosi acest tip de dispozitiv.</translation>
     </message>
@@ -12872,87 +12686,87 @@ Adăugați etichete de controler mai sus pentru a le interoga.</translation>
 <context>
     <name>IO::Drivers::Audio</name>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="736"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="348"/>
         <source>Audio Device Stopped</source>
         <translation>Dispozitiv Audio Oprit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="737"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="349"/>
         <source>The audio backend stopped the stream. The device may have been unplugged or claimed by another application.</source>
         <translation>Backend-ul audio a oprit fluxul. Dispozitivul poate fi deconectat sau utilizat de o altă aplicație.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1007"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="781"/>
         <source>channels</source>
         <translation>canale</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1060"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="781"/>
         <source> channels</source>
         <translation>canale</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1208"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="764"/>
         <source>Unsigned 8-bit</source>
         <translation>Fără Semn 8-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1209"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="765"/>
         <source>Signed 16-bit</source>
         <translation>Cu Semn 16-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1210"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="766"/>
         <source>Signed 24-bit</source>
         <translation>Cu Semn 24-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1211"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="767"/>
         <source>Signed 32-bit</source>
         <translation>Cu Semn 32-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1212"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="768"/>
         <source>Float 32-bit</source>
         <translation>Virgulă Mobilă 32-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1215"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="771"/>
         <source>Mono</source>
         <translation>Mono</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1216"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="772"/>
         <source>Stereo</source>
         <translation>Stereo</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1740"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1282"/>
         <source>Input Device</source>
         <translation>Dispozitiv de Intrare</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1748"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1290"/>
         <source>Sample Rate</source>
         <translation>Rată de Eșantionare</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1756"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1298"/>
         <source>Normalization</source>
         <translation>Normalizare</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1757"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1299"/>
         <source>Publish samples as floats in the -1.0 to 1.0 range</source>
         <translation>Publică eșantioanele ca valori în virgulă mobilă în intervalul -1.0 la 1.0</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1765"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1307"/>
         <source>Sample Format</source>
         <translation>Format Eșantion</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1774"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1316"/>
         <source>Channels</source>
         <translation>Canale</translation>
     </message>
@@ -13189,18 +13003,18 @@ Pe Windows, instalează drivere hardware CAN (PEAK, VECTOR etc.).</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="995"/>
-        <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
-        <translation>Instalați &lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;driverele PEAK CAN&lt;/a&gt;</translation>
+        <source>Install &lt;a href=&apos;https://www.peak-system.com/Drivers.523.0.html?&amp;L=1&apos;&gt;PEAK CAN drivers&lt;/a&gt;</source>
+        <translation>Instalați &lt;a href=&apos;https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1&apos;&gt;driverele PEAK CAN&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="999"/>
-        <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
-        <translation>Instalați &lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;driverele VECTOR CAN&lt;/a&gt;</translation>
+        <source>Install &lt;a href=&apos;https://www.vector.com/us/en/products/products-a-z/libraries-drivers/&apos;&gt;Vector CAN drivers&lt;/a&gt;</source>
+        <translation>Instalați &lt;a href=&apos;https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/&apos;&gt;driverele VECTOR CAN&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="1003"/>
-        <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
-        <translation>Instalează &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;driverele CAN SysTec&lt;/a&gt;</translation>
+        <source>Install &lt;a href=&apos;https://www.systec-electronic.com/en/company/support/driver&apos;&gt;SysTec CAN drivers&lt;/a&gt;</source>
+        <translation>Instalează &lt;a href=&apos;https://www.systec-electronic.com/en/company/support/driver&apos;&gt;driverele CAN SysTec&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="1006"/>
@@ -13267,17 +13081,17 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::EipPollWorker</name>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="348"/>
-        <source>"%1": %2</source>
-        <translation>"%1": %2</translation>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="370"/>
+        <source>&quot;%1&quot;: %2</source>
+        <translation>&quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="355"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="377"/>
         <source>The controller did not open every tag within the connection deadline</source>
         <translation>Controlerul nu a deschis toate tag-urile în termenul limită al conexiunii</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="422"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="444"/>
         <source>The controller stopped answering tag reads</source>
         <translation>Controlerul a încetat să răspundă la citirile de tag-uri</translation>
     </message>
@@ -13285,164 +13099,164 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::EthernetIp</name>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="758"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="793"/>
         <source>The connection is not configured: check the host and the tag list</source>
         <translation>Conexiunea nu este configurată: verificați host-ul și lista de tag-uri</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="779"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="815"/>
         <source>EtherNet/IP Connection Failed</source>
         <translation>Conexiune Ethernet/IP Eșuată</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="780"/>
-        <source>"%1": %2</source>
-        <translation>„%1": %2</translation>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="816"/>
+        <source>&quot;%1&quot;: %2</source>
+        <translation>„%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="782"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="817"/>
         <source>the controller did not answer</source>
         <translation>controlerul nu a răspuns</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="826"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="860"/>
         <source>EtherNet/IP Connection Lost</source>
         <translation>Conexiune Ethernet/IP Pierdută</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="907"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="941"/>
         <source>ControlLogix</source>
         <translation>Controllogix</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="908"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="942"/>
         <source>CompactLogix</source>
         <translation>Compactlogix</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="909"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="943"/>
         <source>MicroLogix</source>
         <translation>Micrologix</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="910"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="944"/>
         <source>Micro800</source>
         <translation>Micro800</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="911"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="945"/>
         <source>PLC-5</source>
         <translation>PLC-5</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="912"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="946"/>
         <source>SLC 500</source>
         <translation>SLC 500</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="913"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="947"/>
         <source>Logix PCCC</source>
         <translation>Logix PCCC</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="914"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="948"/>
         <source>Omron NJ/NX</source>
         <translation>Omron NJ/NX</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="957"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="991"/>
         <source>Not connected</source>
         <translation>Neconectat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="960"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="994"/>
         <source>Polling %1 tags at %2 Hz</source>
         <translation>Interogare %1 etichete la %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1167"/>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1176"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1211"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1220"/>
         <source>EtherNet/IP Tag</source>
         <translation>Etichetă Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1168"/>
-        <source>The tag name "%1" is too long or contains characters that are not allowed (no '&amp;', '=' or whitespace).</source>
-        <translation>Numele etichetei "%1" este prea lung sau conține caractere care nu sunt permise (fără '&amp;', '=' sau spații).</translation>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1212"/>
+        <source>The tag name &quot;%1&quot; is too long or contains characters that are not allowed (no &apos;&amp;&apos;, &apos;=&apos; or whitespace).</source>
+        <translation>Numele etichetei &quot;%1&quot; este prea lung sau conține caractere care nu sunt permise (fără &apos;&amp;&apos;, &apos;=&apos; sau spații).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1176"/>
-        <source>Unknown tag type "%1".</source>
-        <translation>Tip de etichetă necunoscut "%1".</translation>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1220"/>
+        <source>Unknown tag type &quot;%1&quot;.</source>
+        <translation>Tip de etichetă necunoscut &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1228"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1272"/>
         <source>Gateway</source>
         <translation>Gateway</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1235"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1279"/>
         <source>CIP Path</source>
         <translation>Cale CIP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1242"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1286"/>
         <source>Controller Family</source>
         <translation>Familie Controler</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1250"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1294"/>
         <source>Poll Interval (ms)</source>
         <translation>Interval Interogare (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1344"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1388"/>
         <source>EtherNet/IP Project</source>
         <translation>Proiect Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1349"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1393"/>
         <source>EtherNet/IP</source>
         <translation>Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1378"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1422"/>
         <source>Controller Tags</source>
         <translation>Etichete Controller</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1411"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1455"/>
         <source>Failed to load generated project</source>
         <translation>Eșec la încărcarea proiectului generat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1412"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1456"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>JSON-ul proiectului generat nu a putut fi încărcat.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1426"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1470"/>
         <source>No tags configured</source>
         <translation>Nicio etichetă configurată</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1427"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1471"/>
         <source>Add at least one tag before generating a project.</source>
         <translation>Adăugați cel puțin o etichetă înainte de a genera un proiect.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1429"/>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1450"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1473"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1494"/>
         <source>EtherNet/IP Project Generator</source>
         <translation>Generator de Proiecte Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1447"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1491"/>
         <source>Successfully generated project with %1 datasets.</source>
         <translation>Proiect generat cu succes cu %1 seturi de date.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1448"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1492"/>
         <source>The project editor is now open for customization.</source>
         <translation>Editorul de proiect este acum deschis pentru personalizare.</translation>
     </message>
@@ -13552,15 +13366,15 @@ sudo ip link set %1 up type can bitrate %2
         <location filename="../../src/IO/Drivers/HID.cpp" line="183"/>
         <source>
 
-Check that your user is in the 'plugdev' group or that a udev rule grants access to this device.</source>
-        <translation>Verifică dacă utilizatorul tău este în grupul 'plugdev' sau dacă o regulă udev acordă acces la acest dispozitiv.
+Check that your user is in the &apos;plugdev&apos; group or that a udev rule grants access to this device.</source>
+        <translation>Verifică dacă utilizatorul tău este în grupul &apos;plugdev&apos; sau dacă o regulă udev acordă acces la acest dispozitiv.
 
 </translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/HID.cpp" line="186"/>
-        <source>Failed to open "%1"</source>
-        <translation>Eșec la deschiderea "%1"</translation>
+        <source>Failed to open &quot;%1&quot;</source>
+        <translation>Eșec la deschiderea &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/HID.cpp" line="291"/>
@@ -13586,143 +13400,143 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Iec104</name>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="374"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="377"/>
         <source>The connection is not configured: check the host and the port</source>
         <translation>Conexiunea nu este configurată: verificați host-ul și portul</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="423"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="432"/>
         <source>IEC 104 Connection Failed</source>
         <translation>Conexiune IEC 104 Eșuată</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="424"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="433"/>
         <source>Cannot connect to %1:%2 (%3)</source>
         <translation>Nu se poate conecta la %1:%2 (%3)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="462"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="471"/>
         <source>The station sent more than the receive buffer holds</source>
         <translation>Stația a trimis mai mult decât poate conține buffer-ul de recepție</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="500"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="509"/>
         <source>The station sent a frame this link could not decode</source>
         <translation>Stația a trimis o trama pe care acest link nu a putut-o decoda</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="647"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="655"/>
         <source>The station did not answer within t1</source>
         <translation>Stația nu a răspuns în intervalul t1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="751"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="759"/>
         <source>IEC 104 Connection Lost</source>
         <translation>Conexiune IEC 104 Pierdută</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="873"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="881"/>
         <source>Not connected</source>
         <translation>Neconectat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="876"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="884"/>
         <source>Starting data transfer…</source>
         <translation>Se inițiază transferul de date…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="878"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="886"/>
         <source>Monitoring %1 point(s) from station %2</source>
         <translation>Se monitorizează %1 punct(e) de la stația %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1161"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1167"/>
         <source>Host</source>
         <translation>Gazdă</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1168"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1174"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1177"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1183"/>
         <source>Common Address</source>
         <translation>Adresă Comună</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1189"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1195"/>
         <source>Send Window (k)</source>
         <translation>Fereastră de Trimitere (k)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1189"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1195"/>
         <source>Ack Window (w)</source>
         <translation>Fereastră de Confirmare (w)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1202"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1208"/>
         <source>Timeout t%1 (ms)</source>
         <translation>Timeout t%1 (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1326"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1332"/>
         <source>IEC 60870-5-104 Project</source>
         <translation>Proiect IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1331"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1337"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1361"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1367"/>
         <source>Status Points</source>
         <translation>Puncte de Stare</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1362"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1368"/>
         <source>Counters</source>
         <translation>Contoare</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1363"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1368"/>
         <source>Measurements</source>
         <translation>Măsurători</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1397"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1402"/>
         <source>Failed to load generated project</source>
         <translation>Eșec la încărcarea proiectului generat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1398"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1403"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>JSON-ul proiectului generat nu a putut fi încărcat.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1414"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1419"/>
         <source>No points discovered</source>
         <translation>Niciun punct descoperit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1415"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1420"/>
         <source>Connect to the station and let the interrogation finish before generating a project.</source>
         <translation>Conectați-vă la stație și lăsați interogarea să se finalizeze înainte de a genera un proiect.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1417"/>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1438"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1422"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1443"/>
         <source>IEC 60870-5-104 Project Generator</source>
         <translation>Generator de Proiect IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1435"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1440"/>
         <source>Successfully generated project with %1 datasets.</source>
         <translation>Proiect generat cu succes cu %1 seturi de date.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1436"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1441"/>
         <source>The project editor is now open for customization.</source>
         <translation>Editorul de proiect este acum deschis pentru personalizare.</translation>
     </message>
@@ -13935,8 +13749,8 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
     </message>
     <message>
         <location filename="../../src/IO/Drivers/MQTT.cpp" line="1085"/>
-        <source>Failed to subscribe to topic "%1".</source>
-        <translation>Eșec la abonarea la topic-ul „%1".</translation>
+        <source>Failed to subscribe to topic &quot;%1&quot;.</source>
+        <translation>Eșec la abonarea la topic-ul „%1&quot;.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/MQTT.cpp" line="1338"/>
@@ -14064,52 +13878,52 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
     </message>
     <message>
         <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="302"/>
-        <source>A group ID cannot contain '+', '#' or '/'; keeping "%1".</source>
-        <translation>Un ID de grup nu poate conține '+', '#' sau '/'; se păstrează "%1".</translation>
+        <source>A group ID cannot contain &apos;+&apos;, &apos;#&apos; or &apos;/&apos;; keeping &quot;%1&quot;.</source>
+        <translation>Un ID de grup nu poate conține &apos;+&apos;, &apos;#&apos; sau &apos;/&apos;; se păstrează &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="599"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="597"/>
         <source>Sparkplug Project</source>
         <translation>Proiect Sparkplug</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="604"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="602"/>
         <source>MQTT</source>
         <translation>MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="642"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="640"/>
         <source>No Sparkplug metrics discovered</source>
         <translation>Nicio metrică Sparkplug descoperită</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="643"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="641"/>
         <source>Connect to the broker and wait for at least one birth certificate before generating a project.</source>
         <translation>Conectați-vă la broker și așteptați cel puțin un certificat de naștere înainte de a genera un proiect.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="646"/>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="682"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="644"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="680"/>
         <source>Sparkplug Project Generator</source>
         <translation>Generator Proiect Sparkplug</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="658"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="656"/>
         <source>Failed to load generated project</source>
         <translation>Eșec la încărcarea proiectului generat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="659"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="657"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>JSON-ul proiectului generat nu a putut fi încărcat.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="677"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="675"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>Proiect generat cu succes cu %1 grupuri și %2 seturi de date.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="680"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="678"/>
         <source>The project editor is now open for customization.</source>
         <translation>Editorul de proiect este acum deschis pentru personalizare.</translation>
     </message>
@@ -14117,111 +13931,111 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Modbus</name>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="376"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="343"/>
         <source>Invalid Serial Port</source>
         <translation>Port Serial Invalid</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="420"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="387"/>
         <source>Modbus Initialization Failed</source>
         <translation>Inițializare Modbus Eșuată</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="443"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="410"/>
         <source>Nothing is listening at %1</source>
         <translation>Nimic nu ascultă la %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="501"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="468"/>
         <source>Modbus Connection Failed</source>
         <translation>Conexiune Modbus Eșuată</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="377"/>
-        <source>The selected serial port "%1" is no longer available. Refresh the port list and try again.</source>
-        <translation>Portul serial selectat "%1" nu mai este disponibil. Reîmprospătează lista de porturi și încearcă din nou.</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="344"/>
+        <source>The selected serial port &quot;%1&quot; is no longer available. Refresh the port list and try again.</source>
+        <translation>Portul serial selectat &quot;%1&quot; nu mai este disponibil. Reîmprospătează lista de porturi și încearcă din nou.</translation>
     </message>
     <message>
         <source>The Modbus client refused to start the connection.</source>
         <translation type="vanished">Clientul Modbus a refuzat să pornească conexiunea.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="421"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="388"/>
         <source>Unable to create Modbus device. Check your system configuration and try again.</source>
         <translation>Imposibil de creat dispozitivul Modbus. Verifică configurația sistemului și încearcă din nou.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="503"/>
-        <source>Unable to connect to "%1". Check your connection settings.</source>
-        <translation>Imposibil de conectat la "%1". Verifică setările de conexiune.</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="470"/>
+        <source>Unable to connect to &quot;%1&quot;. Check your connection settings.</source>
+        <translation>Imposibil de conectat la &quot;%1&quot;. Verifică setările de conexiune.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="504"/>
-        <source>"%1": %2</source>
-        <translation>"%1": %2</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="471"/>
+        <source>&quot;%1&quot;: %2</source>
+        <translation>&quot;%1&quot;: %2</translation>
     </message>
     <message>
         <source>Connection attempt timed out</source>
         <translation type="vanished">Tentativa de conexiune a expirat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="620"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="587"/>
         <source>None</source>
         <translation>Niciunul</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="621"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="588"/>
         <source>Even</source>
         <translation>Par</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="622"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="589"/>
         <source>Odd</source>
         <translation>Impar</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="623"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="590"/>
         <source>Space</source>
         <translation>Spațiu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="624"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="591"/>
         <source>Mark</source>
         <translation>Marcaj</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="676"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="643"/>
         <source>Holding Registers (0x03)</source>
         <translation>Registre de Reținere (0x03)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="677"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="644"/>
         <source>Input Registers (0x04)</source>
         <translation>Registre de Intrare (0x04)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="678"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="645"/>
         <source>Coils (0x01)</source>
         <translation>Bobine (0x01)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="679"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="646"/>
         <source>Discrete Inputs (0x02)</source>
         <translation>Intrări Discrete (0x02)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="864"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="803"/>
         <source>No register groups configured</source>
         <translation>Niciun grup de registre configurat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="865"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="804"/>
         <source>Add at least one register group before generating a project.</source>
         <translation>Adaugă cel puțin un grup de registre înainte de a genera un proiect.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="867"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="903"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="806"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="844"/>
         <source>Modbus Project Generator</source>
         <translation>Generator de Proiect Modbus</translation>
     </message>
@@ -14234,137 +14048,127 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Verifică permisiunile de scriere în directorul temporar.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="877"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="821"/>
         <source>Failed to load generated project</source>
         <translation>Eșec la încărcarea proiectului generat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="878"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="822"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>JSON-ul proiectului generat nu a putut fi încărcat.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="898"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="839"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>Proiect generat cu succes cu %1 grupuri și %2 seturi de date.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="901"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="842"/>
         <source>The project editor is now open for customization.</source>
         <translation>Editorul de proiect este acum deschis pentru personalizare.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="916"/>
         <source>Modbus Project</source>
-        <translation>Proiect Modbus</translation>
+        <translation type="vanished">Proiect Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="921"/>
         <source>Modbus</source>
-        <translation>Modbus</translation>
+        <translation type="vanished">Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="941"/>
         <source>Holding Registers</source>
-        <translation>Registre de Reținere</translation>
+        <translation type="vanished">Registre de Reținere</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="942"/>
         <source>Input Registers</source>
-        <translation>Registre de Intrare</translation>
+        <translation type="vanished">Registre de Intrare</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="943"/>
         <source>Coils</source>
-        <translation>Bobine</translation>
+        <translation type="vanished">Bobine</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="944"/>
         <source>Discrete Inputs</source>
-        <translation>Intrări Discrete</translation>
+        <translation type="vanished">Intrări Discrete</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="958"/>
         <source>Unknown</source>
-        <translation>Necunoscut</translation>
+        <translation type="vanished">Necunoscut</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="971"/>
         <source>Register %1</source>
-        <translation>Registru %1</translation>
+        <translation type="vanished">Registru %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="979"/>
         <source>Coil %1</source>
-        <translation>Bobină %1</translation>
+        <translation type="vanished">Bobină %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="979"/>
         <source>Discrete %1</source>
-        <translation>Discret %1</translation>
+        <translation type="vanished">Discret %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1406"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1165"/>
         <source>Error code: %1</source>
         <translation>Cod eroare: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1408"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1167"/>
         <source>Modbus Communication Error</source>
         <translation>Eroare de Comunicare Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1420"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1179"/>
         <source>Select Port</source>
         <translation>Selectează Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1575"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1269"/>
         <source>Protocol</source>
         <translation>Protocol</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1583"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1277"/>
         <source>Slave Address</source>
         <translation>Adresă Slave</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1592"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1286"/>
         <source>Poll Interval (ms)</source>
         <translation>Interval Interogare (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1629"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1314"/>
         <source>Host / IP</source>
         <translation>Gazdă / IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1636"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1321"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1651"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1336"/>
         <source>Serial Port</source>
         <translation>Port Serial</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1659"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1344"/>
         <source>Baud Rate</source>
         <translation>Rată Baud</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1667"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1352"/>
         <source>Parity</source>
         <translation>Paritate</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1675"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1360"/>
         <source>Data Bits</source>
         <translation>Biți de Date</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1683"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1368"/>
         <source>Stop Bits</source>
         <translation>Biți de Stop</translation>
     </message>
@@ -14401,13 +14205,13 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Network.cpp" line="318"/>
-        <source>"%1" is not a valid URL</source>
-        <translation>"%1" nu este un URL valid</translation>
+        <source>&quot;%1&quot; is not a valid URL</source>
+        <translation>&quot;%1&quot; nu este un URL valid</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Network.cpp" line="324"/>
-        <source>"%1" must start with %2://</source>
-        <translation>"%1" trebuie să înceapă cu %2://</translation>
+        <source>&quot;%1&quot; must start with %2://</source>
+        <translation>&quot;%1&quot; trebuie să înceapă cu %2://</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Network.cpp" line="448"/>
@@ -14572,7 +14376,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::OpcUa</name>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="425"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="410"/>
         <source>OPC UA Initialization Failed</source>
         <translation>Inițializare OPC UA Eșuată</translation>
     </message>
@@ -14581,31 +14385,30 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Backend-ul %1 nu este disponibil în această versiune.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="622"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="584"/>
         <source>OPC UA Connection Failed</source>
         <translation>Conexiune OPC UA Eșuată</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="623"/>
-        <source>Unable to connect to "%1".</source>
-        <translation>Imposibil de conectat la "%1".</translation>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="585"/>
+        <source>Unable to connect to &quot;%1&quot;.</source>
+        <translation>Imposibil de conectat la &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="624"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="781"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="922"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2301"/>
-        <source>"%1": %2</source>
-        <translation>"%1": %2</translation>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="586"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="732"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="832"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1915"/>
+        <source>&quot;%1&quot;: %2</source>
+        <translation>&quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="640"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="602"/>
         <source>OPC UA Connection Lost</source>
         <translation>Conexiune OPC UA Pierdută</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="654"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="679"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="616"/>
         <source>Timed out after %1 s</source>
         <translation>Expirat după %1 s</translation>
     </message>
@@ -14614,7 +14417,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Serverul a închis conexiunea</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="711"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="662"/>
         <source>The server closed the session</source>
         <translation>Serverul a închis sesiunea</translation>
     </message>
@@ -14651,22 +14454,21 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Depozitul de certificate este invalid sau ilizibil</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2545"/>
         <source>The server certificate is not trusted</source>
-        <translation>Certificatul serverului nu este de încredere</translation>
+        <translation type="vanished">Certificatul serverului nu este de încredere</translation>
     </message>
     <message>
         <source>Unexpected backend error</source>
         <translation type="vanished">Eroare neașteptată de backend</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="737"/>
-        <source>"%1" is not a valid endpoint URL</source>
-        <translation>"%1" nu este un URL de endpoint valid</translation>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="688"/>
+        <source>&quot;%1&quot; is not a valid endpoint URL</source>
+        <translation>&quot;%1&quot; nu este un URL de endpoint valid</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="738"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2301"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="689"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1915"/>
         <source>OPC UA Discovery</source>
         <translation>Descoperire OPC UA</translation>
     </message>
@@ -14675,12 +14477,12 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Backend-ul %1 nu este disponibil în această versiune</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="780"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="731"/>
         <source>Discovery failed: %1</source>
         <translation>Descoperire eșuată: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="781"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="732"/>
         <source>OPC UA Discovery Failed</source>
         <translation>Descoperire OPC UA Eșuată</translation>
     </message>
@@ -14689,188 +14491,181 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Niciun endpoint cu politică None; canalele securizate nu sunt suportate în această versiune</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="417"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="402"/>
         <source>The connection is not configured: check the endpoint and the tag list</source>
         <translation>Conexiunea nu este configurată: verificați endpoint-ul și lista de tag-uri</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="424"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="746"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="409"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="697"/>
         <source>The %1 stack is not available in this build</source>
         <translation>Stack-ul %1 nu este disponibil în această versiune</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="467"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="452"/>
         <source>The connection attempt could not be started</source>
         <translation>Tentativa de conexiune nu a putut fi inițiată</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="485"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="466"/>
         <source>OPC UA Certificate</source>
         <translation>Certificat OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="486"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="467"/>
         <source>The client certificate could not be generated; secure channels will be refused.</source>
         <translation>Certificatul client nu a putut fi generat; canalele securizate vor fi refuzate.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="779"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="730"/>
         <source>The server did not answer within %1 s</source>
         <translation>Serverul nu a răspuns în %1 s</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="811"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="824"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="762"/>
         <source>Endpoint discovery failed</source>
         <translation>Descoperirea endpoint-ului a eșuat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="921"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="831"/>
         <source>OPC UA Monitored Item Refused</source>
         <translation>Element Monitorizat OPC UA Refuzat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="928"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="838"/>
         <source>the server refused every monitored item</source>
         <translation>serverul a refuzat fiecare element monitorizat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="948"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="858"/>
         <source>the server retired the subscription</source>
         <translation>serverul a retras abonamentul</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="984"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="894"/>
         <source>OPC UA Subscription Unavailable</source>
         <translation>Abonament OPC UA Indisponibil</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="985"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="895"/>
         <source>Falling back to polling: %1.</source>
         <translation>Revenire la interogare: %1.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1011"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="921"/>
         <source>no notification for %1 s</source>
         <translation>nicio notificare pentru %1 s</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1064"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="974"/>
         <source>OPC UA Read Failed</source>
         <translation>Citire OPC UA Eșuată</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1228"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1019"/>
         <source>OPC UA Type Mismatch</source>
         <translation>Nepotrivire de Tip OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1229"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1020"/>
         <source>Channel %1 is declared %2 but the server sends %3; the value is coerced.</source>
         <translation>Canalul %1 este declarat %2 dar serverul trimite %3; valoarea este convertită forțat.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1274"/>
         <source>Browse of %1 failed: %2</source>
-        <translation>Răsfoirea lui %1 a eșuat: %2</translation>
+        <translation type="vanished">Răsfoirea lui %1 a eșuat: %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1299"/>
-        <source>"%1" is not a valid endpoint URL.</source>
-        <translation>"%1" nu este un URL de endpoint valid.</translation>
+        <source>&quot;%1&quot; is not a valid endpoint URL.</source>
+        <translation type="vanished">&quot;%1&quot; nu este un URL de endpoint valid.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1306"/>
         <source>The %1 stack is not available in this build.</source>
-        <translation>Stack-ul %1 nu este disponibil în această versiune.</translation>
+        <translation type="vanished">Stack-ul %1 nu este disponibil în această versiune.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1313"/>
         <source>The browse session was closed by the server</source>
-        <translation>Sesiunea de navigare a fost închisă de către server</translation>
+        <translation type="vanished">Sesiunea de navigare a fost închisă de către server</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1324"/>
         <source>The browse session could not be started</source>
-        <translation>Sesiunea de navigare nu a putut fi inițiată</translation>
+        <translation type="vanished">Sesiunea de navigare nu a putut fi inițiată</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1409"/>
         <source>Could not open a browse session on %1</source>
-        <translation>Nu s-a putut deschide o sesiune de navigare pe %1</translation>
+        <translation type="vanished">Nu s-a putut deschide o sesiune de navigare pe %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1436"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1131"/>
         <source>Failed to load generated project</source>
         <translation>Eșec la încărcarea proiectului generat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1437"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1132"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>JSON-ul proiectului generat nu a putut fi încărcat.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1451"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1146"/>
         <source>No tags selected</source>
         <translation>Niciun tag selectat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1452"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1147"/>
         <source>Browse the server and select at least one tag before generating a project.</source>
         <translation>Navigați serverul și selectați cel puțin un tag înainte de a genera un proiect.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1455"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1479"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1150"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1174"/>
         <source>OPC UA Project Generator</source>
         <translation>Generator de Proiecte OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1474"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1169"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>Proiect generat cu succes cu %1 grupuri și %2 seturi de date.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1477"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1172"/>
         <source>The project editor is now open for customization.</source>
         <translation>Editorul de proiect este acum deschis pentru personalizare.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1525"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1220"/>
         <source>OPC UA Project</source>
         <translation>Proiect OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1530"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1225"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1557"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1252"/>
         <source>Tags</source>
         <translation>Etichete</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1609"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1304"/>
         <source> (deprecated)</source>
         <translation>(depreciat)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1625"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2359"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1320"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1973"/>
         <source>None</source>
         <translation>Niciunul</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1627"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2359"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1322"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1973"/>
         <source>Sign</source>
         <translation>Semnare</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1629"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2359"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1324"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1973"/>
         <source>Sign and Encrypt</source>
         <translation>Semnare și Criptare</translation>
     </message>
@@ -14879,28 +14674,28 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Semnare și Criptare</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1634"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2359"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1329"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1973"/>
         <source>Invalid</source>
         <translation>Invalid</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2728"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2234"/>
         <source>Security Policy</source>
         <translation>Politică de Securitate</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2736"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2242"/>
         <source>Security Mode</source>
         <translation>Mod de Securitate</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2744"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2250"/>
         <source>User Certificate</source>
         <translation>Certificat Utilizator</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2751"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2257"/>
         <source>User Private Key</source>
         <translation>Cheie Privată Utilizator</translation>
     </message>
@@ -14909,104 +14704,171 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Semnare și Criptare</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1757"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1452"/>
         <source>Connecting to %1</source>
         <translation>Conectare la %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1760"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1455"/>
         <source>Not connected</source>
         <translation>Neconectat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1766"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1461"/>
         <source>Subscribing, %1 of %2 tags</source>
         <translation>Abonare, %1 din %2 etichete</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1771"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1466"/>
         <source>Subscribed %1 tags, polling %2 refused, %3 Hz</source>
         <translation>Abonat %1 etichete, interogare %2 refuzate, %3 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1777"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1472"/>
         <source>Polling (server refused subscriptions), %1 tags, %2 Hz</source>
         <translation>Interogare (serverul a refuzat abonările), %1 etichete, %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1781"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1476"/>
         <source>Subscribed, %1 tags, %2 Hz</source>
         <translation>Abonat, %1 etichete, %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1819"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1514"/>
         <source>Anonymous</source>
         <translation>Anonim</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1819"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1514"/>
         <source>Username / Password</source>
         <translation>Nume de Utilizator / Parolă</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1819"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1514"/>
         <source>X.509 Certificate</source>
         <translation>Certificat X.509</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2300"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1914"/>
         <source>No endpoint this build can open with the selected identity</source>
         <translation>Niciun endpoint pe care această versiune să îl poată deschide cu identitatea selectată</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2328"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1942"/>
         <source>%1 (deprecated)</source>
         <translation>%1 (depreciat)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2547"/>
         <source>The server certificate has expired</source>
-        <translation>Certificatul serverului a expirat</translation>
+        <translation type="vanished">Certificatul serverului a expirat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2549"/>
         <source>The server certificate is not valid yet</source>
-        <translation>Certificatul serverului nu este încă valabil</translation>
+        <translation type="vanished">Certificatul serverului nu este încă valabil</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2551"/>
         <source>The server certificate was not issued for this host</source>
-        <translation>Certificatul serverului nu a fost emis pentru acest host</translation>
+        <translation type="vanished">Certificatul serverului nu a fost emis pentru acest host</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2553"/>
         <source>The server certificate could not be parsed</source>
-        <translation>Certificatul serverului nu a putut fi analizat</translation>
+        <translation type="vanished">Certificatul serverului nu a putut fi analizat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2690"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2196"/>
         <source>Endpoint URL</source>
         <translation>URL Endpoint</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2697"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2203"/>
         <source>Authentication</source>
         <translation>Autentificare</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2705"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2211"/>
         <source>Username</source>
         <translation>Nume de Utilizator</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2712"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2218"/>
         <source>Password</source>
         <translation>Parolă</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2719"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2225"/>
         <source>Poll Interval (ms)</source>
         <translation>Interval Interogare (ms)</translation>
+    </message>
+</context>
+<context>
+    <name>IO::Drivers::OpcUaBrowser</name>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="79"/>
+        <source>&quot;%1&quot; is not a valid endpoint URL.</source>
+        <translation type="unfinished">&quot;%1&quot; nu este un URL de endpoint valid.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="86"/>
+        <source>The %1 stack is not available in this build.</source>
+        <translation type="unfinished">Stack-ul %1 nu este disponibil în această versiune.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="93"/>
+        <source>The browse session was closed by the server</source>
+        <translation type="unfinished">Sesiunea de navigare a fost închisă de către server</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="104"/>
+        <source>The browse session could not be started</source>
+        <translation type="unfinished">Sesiunea de navigare nu a putut fi inițiată</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="172"/>
+        <source>Endpoint discovery failed</source>
+        <translation type="unfinished">Descoperirea endpoint-ului a eșuat</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="193"/>
+        <source>Browse of %1 failed: %2</source>
+        <translation type="unfinished">Răsfoirea lui %1 a eșuat: %2</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="234"/>
+        <source>Could not open a browse session on %1</source>
+        <translation type="unfinished">Nu s-a putut deschide o sesiune de navigare pe %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="255"/>
+        <source>Timed out after %1 s</source>
+        <translation type="unfinished">Expirat după %1 s</translation>
+    </message>
+</context>
+<context>
+    <name>IO::Drivers::OpcUaCertificateStore</name>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaCertificateStore.cpp" line="238"/>
+        <source>The server certificate is not trusted</source>
+        <translation type="unfinished">Certificatul serverului nu este de încredere</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaCertificateStore.cpp" line="240"/>
+        <source>The server certificate has expired</source>
+        <translation type="unfinished">Certificatul serverului a expirat</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaCertificateStore.cpp" line="242"/>
+        <source>The server certificate is not valid yet</source>
+        <translation type="unfinished">Certificatul serverului nu este încă valabil</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaCertificateStore.cpp" line="244"/>
+        <source>The server certificate was not issued for this host</source>
+        <translation type="unfinished">Certificatul serverului nu a fost emis pentru acest host</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaCertificateStore.cpp" line="246"/>
+        <source>The server certificate could not be parsed</source>
+        <translation type="unfinished">Certificatul serverului nu a putut fi analizat</translation>
     </message>
 </context>
 <context>
@@ -15035,8 +14897,8 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="201"/>
-        <source>Executable "%1" not found in PATH.</source>
-        <translation>Executabilul "%1" nu a fost găsit în PATH.</translation>
+        <source>Executable &quot;%1&quot; not found in PATH.</source>
+        <translation>Executabilul &quot;%1&quot; nu a fost găsit în PATH.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="376"/>
@@ -15065,8 +14927,8 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="532"/>
-        <source>Process "%1" stopped</source>
-        <translation>Procesul "%1" s-a oprit</translation>
+        <source>Process &quot;%1&quot; stopped</source>
+        <translation>Procesul &quot;%1&quot; s-a oprit</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="542"/>
@@ -15095,8 +14957,8 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="571"/>
-        <source>The named pipe "%1" was closed on the other end.</source>
-        <translation>Pipe-ul numit "%1" a fost închis la celălalt capăt.</translation>
+        <source>The named pipe &quot;%1&quot; was closed on the other end.</source>
+        <translation>Pipe-ul numit &quot;%1&quot; a fost închis la celălalt capăt.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="592"/>
@@ -15148,128 +15010,128 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::S7</name>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="778"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="773"/>
         <source>The connection is not configured: check the host and the variable list</source>
         <translation>Conexiunea nu este configurată: verificați gazda și lista de variabile</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="799"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="795"/>
         <source>S7 Connection Failed</source>
         <translation>Conexiune S7 Eșuată</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="800"/>
-        <source>"%1" (rack %2, slot %3): %4</source>
-        <translation>"%1" (rack %2, slot %3): %4</translation>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="796"/>
+        <source>&quot;%1&quot; (rack %2, slot %3): %4</source>
+        <translation>&quot;%1&quot; (rack %2, slot %3): %4</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="804"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="800"/>
         <source>the controller did not answer</source>
         <translation>controlerul nu a răspuns</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="848"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="843"/>
         <source>S7 Connection Lost</source>
         <translation>Conexiune S7 Pierdută</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="919"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="914"/>
         <source>Not connected</source>
         <translation>Neconectat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="922"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="917"/>
         <source>Polling %1 variables at %2 Hz</source>
         <translation>Interogare %1 variabile la %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="938"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="933"/>
         <source>invalid</source>
         <translation>invalid</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="956"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="951"/>
         <source>The address could not be parsed.</source>
         <translation>Adresa nu a putut fi analizată.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1180"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1175"/>
         <source>S7 Address</source>
         <translation>Adresă S7</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1231"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1226"/>
         <source>Host</source>
         <translation>Gazdă</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1238"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1233"/>
         <source>Rack</source>
         <translation>Rack</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1247"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1242"/>
         <source>Slot</source>
         <translation>Slot</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1256"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1251"/>
         <source>Poll Interval (ms)</source>
         <translation>Interval Interogare (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1376"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1371"/>
         <source>Siemens S7 Project</source>
         <translation>Proiect Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1381"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1376"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1410"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1405"/>
         <source>DB%1</source>
         <translation>DB%1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1411"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1405"/>
         <source>Memory</source>
         <translation>Memorie</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1444"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1438"/>
         <source>Failed to load generated project</source>
         <translation>Eșec la încărcarea proiectului generat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1445"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1439"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>JSON-ul proiectului generat nu a putut fi încărcat.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1459"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1453"/>
         <source>No variables configured</source>
         <translation>Nicio variabilă configurată</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1460"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1454"/>
         <source>Add at least one variable before generating a project.</source>
         <translation>Adăugați cel puțin o variabilă înainte de a genera un proiect.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1462"/>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1483"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1456"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1477"/>
         <source>S7 Project Generator</source>
         <translation>Generator de Proiect S7</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1480"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1474"/>
         <source>Successfully generated project with %1 datasets.</source>
         <translation>Proiect generat cu succes cu %1 seturi de date.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1481"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1475"/>
         <source>The project editor is now open for customization.</source>
         <translation>Editorul de proiect este acum deschis pentru personalizare.</translation>
     </message>
@@ -15277,27 +15139,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::S7PollWorker</name>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="186"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="183"/>
         <source>The ISO connection request could not be sent</source>
         <translation>Cererea de conexiune ISO nu a putut fi trimisă</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="192"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="189"/>
         <source>The controller refused the ISO connection: check the rack and slot numbers</source>
         <translation>Controlerul a refuzat conexiunea ISO: verificați numerele de rack și slot</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="211"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="208"/>
         <source>The controller did not answer the S7comm setup request</source>
         <translation>Controlerul nu a răspuns la cererea de configurare S7comm</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="217"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="214"/>
         <source>The controller refused the S7comm session</source>
         <translation>Controlerul a refuzat sesiunea S7comm</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="375"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="371"/>
         <source>The controller closed the S7comm session</source>
         <translation>Controlerul a închis sesiunea S7comm</translation>
     </message>
@@ -15361,187 +15223,187 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::UART</name>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="101"/>
         <location filename="../../src/IO/Drivers/UART.cpp" line="102"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="434"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="473"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="103"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="435"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="474"/>
         <source>None</source>
         <translation>Niciunul</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="392"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="782"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="393"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="783"/>
         <source>Select Port</source>
         <translation>Selectează Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="435"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="436"/>
         <source>Even</source>
         <translation>Par</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="436"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="437"/>
         <source>Odd</source>
         <translation>Impar</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="437"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="438"/>
         <source>Space</source>
         <translation>Space</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="438"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="439"/>
         <source>Mark</source>
         <translation>Mark</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="474"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="475"/>
         <source>RTS/CTS</source>
         <translation>RTS/CTS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="475"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="476"/>
         <source>XON/XOFF</source>
         <translation>XON/XOFF</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="611"/>
-        <source>"%1" is not a valid path</source>
-        <translation>"%1" nu este o cale validă</translation>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="612"/>
+        <source>&quot;%1&quot; is not a valid path</source>
+        <translation>&quot;%1&quot; nu este o cale validă</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="612"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="613"/>
         <source>Please type another path to register a custom serial device</source>
         <translation>Introduceți o altă cale pentru a înregistra un dispozitiv serial personalizat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="894"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="895"/>
         <source>The specified device could not be found. Check the connection and try again.</source>
         <translation>Dispozitivul specificat nu a putut fi găsit. Verificați conexiunea și încercați din nou.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="901"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="902"/>
         <source>An unknown error occurred. Check the device and try again.</source>
         <translation>A apărut o eroare necunoscută. Verificați dispozitivul și încercați din nou.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="903"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="904"/>
         <source>The device is not open. Open the device before attempting this operation.</source>
         <translation>Dispozitivul nu este deschis. Deschideți dispozitivul înainte de a încerca această operațiune.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="305"/>
-        <source>Failed to connect to serial port "%1"</source>
-        <translation>Conectarea la portul serial "%1" a eșuat</translation>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="306"/>
+        <source>Failed to connect to serial port &quot;%1&quot;</source>
+        <translation>Conectarea la portul serial &quot;%1&quot; a eșuat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="284"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="547"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="285"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="548"/>
         <source>Failed to set baud rate</source>
         <translation>Eșec la setarea ratei de transmisie</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="285"/>
-        <source>Baud rate %1 rejected for port "%2": %3</source>
-        <translation>Rata de transmisie %1 respinsă pentru portul "%2": %3</translation>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="286"/>
+        <source>Baud rate %1 rejected for port &quot;%2&quot;: %3</source>
+        <translation>Rata de transmisie %1 respinsă pentru portul &quot;%2&quot;: %3</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="548"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="549"/>
         <source>Baud rate %1 rejected: %2</source>
         <translation>Rată Baud %1 respinsă: %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="865"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="866"/>
         <source>Unknown</source>
         <translation>Necunoscut</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="866"/>
-        <source>Critical error on serial port "%1"</source>
-        <translation>Eroare critică pe portul serial "%1"</translation>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="867"/>
+        <source>Critical error on serial port &quot;%1&quot;</source>
+        <translation>Eroare critică pe portul serial &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="867"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="868"/>
         <source>Unknown error</source>
         <translation>Eroare necunoscută</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="893"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="894"/>
         <source>No error occurred.</source>
         <translation>Nu a apărut nicio eroare.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="895"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="896"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
         <translation>Permisiune refuzată. Asigurați-vă că aplicația are drepturile de acces necesare la dispozitiv.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="896"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="897"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
         <translation>Deschiderea dispozitivului a eșuat. Este posibil să fie deja în uz sau indisponibil.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="897"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="898"/>
         <source>An error occurred while writing data to the device.</source>
         <translation>A apărut o eroare la scrierea datelor pe dispozitiv.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="898"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="899"/>
         <source>An error occurred while reading data from the device.</source>
         <translation>A apărut o eroare la citirea datelor de pe dispozitiv.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="899"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="900"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
         <translation>A apărut o eroare critică de resurse. Este posibil ca dispozitivul să fi fost deconectat sau nu mai este accesibil.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="900"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="901"/>
         <source>The requested operation is not supported on this device.</source>
         <translation>Operația solicitată nu este suportată pe acest dispozitiv.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="902"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="903"/>
         <source>The operation timed out. The device may not be responding.</source>
         <translation>Operațiunea a expirat. Dispozitivul ar putea să nu răspundă.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1065"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="992"/>
         <source>Serial Port</source>
         <translation>Port Serial</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1073"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1000"/>
         <source>Baud Rate</source>
         <translation>Rată de Transmisie</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1081"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1008"/>
         <source>Parity</source>
         <translation>Paritate</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1089"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1016"/>
         <source>Data Bits</source>
         <translation>Biți de Date</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1097"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1024"/>
         <source>Stop Bits</source>
         <translation>Biți de Stop</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1105"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1032"/>
         <source>Flow Control</source>
         <translation>Control Flux</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1113"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1040"/>
         <source>DTR</source>
         <translation>DTR</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1120"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1047"/>
         <source>Auto-Reconnect</source>
         <translation>Reconectare Automată</translation>
     </message>
@@ -15549,26 +15411,26 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::USB</name>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="161"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="168"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="164"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="171"/>
         <source>USB Error</source>
         <translation>Eroare USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="162"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="165"/>
         <source>Failed to initialize the USB subsystem. Check that libusb is available on your system.</source>
         <translation>Inițializarea subsistemului USB a eșuat. Verificați dacă libusb este disponibil pe sistem.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="198"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="587"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1117"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1128"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="201"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="581"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1005"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1016"/>
         <source>USB Device Error</source>
         <translation>Eroare Dispozitiv USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="178"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="181"/>
         <source>Could not open the USB device: %1.
 
 On Linux, ensure you have read/write permission on the device node (add a udev rule or run as root). On macOS, the kernel driver may need to be detached first.</source>
@@ -15577,40 +15439,40 @@ On Linux, ensure you have read/write permission on the device node (add a udev r
 Pe Linux, asigurați-vă că aveți permisiuni de citire/scriere pe nodul dispozitivului (adăugați o regulă udev sau rulați ca root). Pe macOS, driverul kernel poate necesita detașare mai întâi.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="168"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="171"/>
         <source>No USB device selected. Select a device and try again.</source>
         <translation>Niciun dispozitiv USB selectat. Selectați un dispozitiv și reîncercați.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="173"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="176"/>
         <source>Unknown Device</source>
         <translation>Dispozitiv Necunoscut</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="177"/>
-        <source>Failed to open "%1"</source>
-        <translation>Deschiderea „%1" a eșuat</translation>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="180"/>
+        <source>Failed to open &quot;%1&quot;</source>
+        <translation>Deschiderea „%1&quot; a eșuat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="796"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="818"/>
         <source>No isochronous IN endpoint was found on this device, but bulk or interrupt endpoints are available.
 
-Switch the Transfer Mode to "Bulk/Interrupt Stream" and try again.</source>
+Switch the Transfer Mode to &quot;Bulk/Interrupt Stream&quot; and try again.</source>
         <translation>Nu a fost găsit niciun endpoint izocron IN pe acest dispozitiv, dar sunt disponibile endpoint-uri bulk sau de întrerupere.
 
-Comutați Modul de Transfer la „Flux Bulk/Întrerupere" și încercați din nou.</translation>
+Comutați Modul de Transfer la „Flux Bulk/Întrerupere&quot; și încercați din nou.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="801"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="823"/>
         <source>No bulk or interrupt IN endpoint was found on this device, but isochronous endpoints are available.
 
-Switch the Transfer Mode to "Isochronous" and try again.</source>
+Switch the Transfer Mode to &quot;Isochronous&quot; and try again.</source>
         <translation>Nu a fost găsit niciun endpoint bulk sau de întrerupere IN pe acest dispozitiv, dar sunt disponibile endpoint-uri izocrone.
 
-Comutați Modul de Transfer la „Izocron" și încercați din nou.</translation>
+Comutați Modul de Transfer la „Izocron&quot; și încercați din nou.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="805"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="827"/>
         <source>No usable IN endpoint was found on this device.
 
 The device may not expose data endpoints in its active configuration, or it may speak a dedicated protocol. Protocol adapters (e.g. CAN or Modbus interfaces) should be connected through their own driver.</source>
@@ -15619,7 +15481,7 @@ The device may not expose data endpoints in its active configuration, or it may 
 Dispozitivul poate să nu expună endpoint-uri de date în configurația sa activă sau poate utiliza un protocol dedicat. Adaptoarele de protocol (de ex. interfețe CAN sau Modbus) trebuie conectate prin propriul lor driver.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1118"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1006"/>
         <source>Could not claim interface %1 on the USB device.
 
 Another driver or application may already have it open. On Linux, try unloading the kernel driver (e.g. cdc_acm) or adding a udev rule.</source>
@@ -15628,120 +15490,120 @@ Another driver or application may already have it open. On Linux, try unloading 
 Un alt driver sau aplicație ar putea să îl dețină deja deschis. Pe Linux, încercați descărcarea driverului kernel (ex. cdc_acm) sau adăugarea unei reguli udev.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1129"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1017"/>
         <source>Could not activate alternate setting %1 on interface %2. The selected endpoint is not reachable.</source>
         <translation>Nu s-a putut activa setarea alternativă %1 pe interfața %2. Punctul final selectat nu este accesibil.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1159"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1047"/>
         <source>USB Device Warning</source>
         <translation>Avertisment Dispozitiv USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1160"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1048"/>
         <source>The selected OUT endpoint could not be activated. Continuing in read-only mode.</source>
         <translation>Punctul final OUT selectat nu a putut fi activat. Se continuă în modul doar citire.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1393"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1077"/>
         <source>No device connected in Advanced Control mode.</source>
         <translation>Niciun dispozitiv conectat în modul Control Avansat.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1398"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1082"/>
         <source>A control transfer is already in progress.</source>
         <translation>Un transfer de control este deja în curs.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1408"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1092"/>
         <source>Invalid setup field: request type, request, wValue, and wIndex must be hex.</source>
         <translation>Câmp de configurare invalid: tipul cererii, cererea, wValue și wIndex trebuie să fie hexazecimale.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1418"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1102"/>
         <source>Invalid data payload: expected a sequence of hex bytes.</source>
         <translation>Payload de date invalid: se așteaptă o secvență de octeți hexazecimali.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1424"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1108"/>
         <source>Invalid transfer length (0-%1 bytes).</source>
         <translation>Lungime de transfer invalidă (0-%1 octeți).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1442"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1123"/>
         <source>Could not allocate the control transfer.</source>
         <translation>Nu s-a putut aloca transferul de control.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1469"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1128"/>
         <source>Failed to submit control transfer: %1.</source>
         <translation>Eșec la trimiterea transferului de control: %1.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1497"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="606"/>
         <source>Transfer complete: %1 byte(s).</source>
         <translation>Transfer finalizat: %1 octet(i).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1504"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="608"/>
         <source>Control transfer failed: %1.</source>
         <translation>Transfer de control eșuat: %1.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="354"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="348"/>
         <source>Select Device</source>
         <translation>Selectează Dispozitiv</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="376"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="370"/>
         <source>No Usable IN Endpoints</source>
         <translation>Niciun Punct Final IN Utilizabil</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="378"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="372"/>
         <source>Select IN Endpoint</source>
         <translation>Selectează Endpoint IN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="390"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="384"/>
         <source>None (Read-only)</source>
         <translation>Niciunul (Doar Citire)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="465"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="459"/>
         <source>Enable Advanced USB Control Transfers?</source>
         <translation>Activați Transferurile de Control USB Avansate?</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="466"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="460"/>
         <source>This enables control transfers in addition to bulk transfers. Sending incorrect control requests can crash or damage connected hardware. Only enable this if you know what you are doing.</source>
         <translation>Aceasta activează transferurile de control în plus față de transferurile bulk. Trimiterea de cereri de control incorecte poate bloca sau deteriora hardware-ul conectat. Activați doar dacă știți ce faceți.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="470"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="464"/>
         <source>Advanced USB Mode</source>
         <translation>Mod USB Avansat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="588"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="582"/>
         <source>The USB device was disconnected or encountered a fatal read error.</source>
         <translation>Dispozitivul USB a fost deconectat sau a întâmpinat o eroare fatală de citire.</translation>
     </message>
     <message>
         <source>No isochronous IN endpoint was found on this device, but bulk endpoints are available.
 
-Switch the Transfer Mode to "Bulk Stream" and try again.</source>
+Switch the Transfer Mode to &quot;Bulk Stream&quot; and try again.</source>
         <translation type="vanished">Nu a fost găsit niciun endpoint izocron IN pe acest dispozitiv, dar sunt disponibile endpoint-uri bulk.
 
-Comutați Modul de Transfer la „Flux Bulk" și încercați din nou.</translation>
+Comutați Modul de Transfer la „Flux Bulk&quot; și încercați din nou.</translation>
     </message>
     <message>
         <source>No bulk IN endpoint was found on this device, but isochronous endpoints are available.
 
-Switch the Transfer Mode to "Isochronous" and try again.</source>
+Switch the Transfer Mode to &quot;Isochronous&quot; and try again.</source>
         <translation type="vanished">Nu a fost găsit niciun endpoint bulk IN pe acest dispozitiv, dar sunt disponibile endpoint-uri izocrone.
 
-Comutați Modul de Transfer la „Izocron" și încercați din nou.</translation>
+Comutați Modul de Transfer la „Izocron&quot; și încercați din nou.</translation>
     </message>
     <message>
         <source>No usable IN endpoint was found on this device.
@@ -15752,12 +15614,12 @@ The device may not expose data endpoints in its active configuration, or it may 
 Dispozitivul poate să nu expună endpoint-uri de date în configurația sa activă sau poate necesita un driver specific.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1642"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1257"/>
         <source>USB Device</source>
         <translation>Dispozitiv USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1650"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1265"/>
         <source>Transfer Mode</source>
         <translation>Mod de Transfer</translation>
     </message>
@@ -15766,32 +15628,32 @@ Dispozitivul poate să nu expună endpoint-uri de date în configurația sa acti
         <translation type="vanished">Flux Bulk</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1653"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1268"/>
         <source>Advanced Control</source>
         <translation>Control Avansat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1653"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1268"/>
         <source>Isochronous</source>
         <translation>Izocron</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1653"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1268"/>
         <source>Bulk/Interrupt Stream</source>
         <translation>Flux Bulk/interrupt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1658"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1273"/>
         <source>IN Endpoint</source>
         <translation>Endpoint IN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1666"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1281"/>
         <source>OUT Endpoint</source>
         <translation>Endpoint OUT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1674"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1289"/>
         <source>ISO Packet Size</source>
         <translation>Dimensiune Pachet ISO</translation>
     </message>
@@ -16357,7 +16219,7 @@ Dispozitivul poate să nu expună endpoint-uri de date în configurația sa acti
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="271"/>
-        <source>Connect to discover the station's points</source>
+        <source>Connect to discover the station&apos;s points</source>
         <translation>Conectează-te pentru a descoperi punctele stației</translation>
     </message>
 </context>
@@ -16615,7 +16477,7 @@ Dispozitivul poate să nu expună endpoint-uri de date în configurația sa acti
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="78"/>
-        <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp's llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
+        <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp&apos;s llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
         <translation>Server local de modele. Funcționează cu orice endpoint compatibil OpenAI -- Ollama, llama-server al llama.cpp, LM Studio sau vLLM. Nimic nu părăsește mașina ta. Lista de modele este interogată live de la server.</translation>
     </message>
     <message>
@@ -16645,7 +16507,7 @@ Dispozitivul poate să nu expună endpoint-uri de date în configurația sa acti
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="225"/>
-        <source>Open the provider's console to create a new key</source>
+        <source>Open the provider&apos;s console to create a new key</source>
         <translation>Deschide consola furnizorului pentru a crea o cheie nouă</translation>
     </message>
     <message>
@@ -17133,7 +16995,7 @@ Pentru a reutiliza acest loc pe alt dispozitiv, trimiteți un email la alex@seri
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="509"/>
-        <source>Part of the file's data section could not be read; the recording may be truncated.</source>
+        <source>Part of the file&apos;s data section could not be read; the recording may be truncated.</source>
         <translation>O parte din secțiunea de date a fișierului nu a putut fi citită; înregistrarea poate fi trunchiată.</translation>
     </message>
     <message>
@@ -17421,7 +17283,7 @@ Pentru a debloca această funcție, vă rugăm să activați licența sau să vi
         <translation type="vanished">Topic MQTT Nesetat</translation>
     </message>
     <message>
-        <source>You won't receive any messages until a topic is configured.</source>
+        <source>You won&apos;t receive any messages until a topic is configured.</source>
         <translation type="vanished">Nu veți primi niciun mesaj până când un topic este configurat.</translation>
     </message>
     <message>
@@ -17433,8 +17295,8 @@ Pentru a debloca această funcție, vă rugăm să activați licența sau să vi
         <translation type="vanished">Topic MQTT Invalid</translation>
     </message>
     <message>
-        <source>The topic "%1" is not valid.</source>
-        <translation type="vanished">Topic-ul „%1" nu este valid.</translation>
+        <source>The topic &quot;%1&quot; is not valid.</source>
+        <translation type="vanished">Topic-ul „%1&quot; nu este valid.</translation>
     </message>
     <message>
         <source>Select PEM Certificates Directory</source>
@@ -17445,8 +17307,8 @@ Pentru a debloca această funcție, vă rugăm să activați licența sau să vi
         <translation type="vanished">Eroare Abonare</translation>
     </message>
     <message>
-        <source>Failed to subscribe to topic "%1".</source>
-        <translation type="vanished">Eșec la abonarea la topic-ul „%1".</translation>
+        <source>Failed to subscribe to topic &quot;%1&quot;.</source>
+        <translation type="vanished">Eșec la abonarea la topic-ul „%1&quot;.</translation>
     </message>
     <message>
         <source>Invalid MQTT Protocol Version</source>
@@ -17541,10 +17403,10 @@ Pentru a debloca această funcție, vă rugăm să activați licența sau să vi
         <translation type="vanished">Autentificare MQTT Necesară</translation>
     </message>
     <message>
-        <source>The MQTT broker requires authentication using method: "%1".
+        <source>The MQTT broker requires authentication using method: &quot;%1&quot;.
 
 Please provide the necessary credentials.</source>
-        <translation type="vanished">Broker-ul MQTT necesită autentificare folosind metoda: "%1".
+        <translation type="vanished">Broker-ul MQTT necesită autentificare folosind metoda: &quot;%1&quot;.
 
 Furniză acreditările necesare.</translation>
     </message>
@@ -17568,149 +17430,149 @@ Furniză acreditările necesare.</translation>
 <context>
     <name>MQTT::Publisher</name>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="900"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="160"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="901"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="161"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="902"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="162"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="904"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="164"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="905"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="165"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="906"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="166"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3 sau Mai Nou</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="907"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="167"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2 sau Mai Nou</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="908"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="168"/>
         <source>Any Protocol</source>
         <translation>Orice Protocol</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="909"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="169"/>
         <source>Secure Protocols Only</source>
         <translation>Doar Protocoale Securizate</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="911"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="171"/>
         <source>None</source>
         <translation>Niciunul</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="912"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="172"/>
         <source>Query Peer</source>
         <translation>Interogare Peer</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="913"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="173"/>
         <source>Verify Peer</source>
         <translation>Verificare Peer</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="914"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="174"/>
         <source>Auto Verify Peer</source>
         <translation>Verificare Automată Peer</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1283"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="155"/>
         <source>Raw RX Data</source>
         <translation>Date RX Brute</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1284"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="156"/>
         <source>Custom Script</source>
         <translation>Script Personalizat</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1285"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="157"/>
         <source>Dashboard Data (CSV)</source>
         <translation>Date Dashboard (CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1286"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="158"/>
         <source>Dashboard Data (JSON)</source>
         <translation>Date Dashboard (JSON)</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1462"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="643"/>
         <source>MQTT publisher unavailable</source>
         <translation>Publisher MQTT indisponibil</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1463"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="644"/>
         <source>A valid commercial license is required to use MQTT publishing.</source>
         <translation>Este necesară o licență comercială validă pentru a utiliza publicarea MQTT.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1465"/>
-        <location filename="../../src/MQTT/Publisher.cpp" line="2158"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="646"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1355"/>
         <source>MQTT Test Connection</source>
         <translation>Testare Conexiune MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1484"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="667"/>
         <source>Select PEM Certificates Directory</source>
         <translation>Selectează Directorul Certificatelor PEM</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1543"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="704"/>
         <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
         <translation>Fișiere PEM (*.pem *.crt *.cer *.key);;Toate fișierele (*)</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1569"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="730"/>
         <source>Select Client Certificate</source>
         <translation>Selectează Certificatul Client</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1577"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="738"/>
         <source>Select Private Key</source>
         <translation>Selectează Cheia Privată</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="2155"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1352"/>
         <source>MQTT broker reachable</source>
         <translation>Broker MQTT accesibil</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="2155"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1352"/>
         <source>MQTT broker unreachable</source>
         <translation>Broker MQTT inaccesibil</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="2169"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1366"/>
         <source>MQTT broker connection failed</source>
         <translation>Conexiunea la broker-ul MQTT a eșuat</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="2169"/>
-        <location filename="../../src/MQTT/Publisher.cpp" line="2330"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1366"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1526"/>
         <source>MQTT Publisher</source>
         <translation>Publisher MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="2327"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1523"/>
         <source>MQTT Client Certificate Error</source>
         <translation>Eroare Certificat Client MQTT</translation>
     </message>
@@ -17922,17 +17784,17 @@ Furniză acreditările necesare.</translation>
 <context>
     <name>MQTT::PublisherWorker</name>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="764"/>
+        <location filename="../../src/MQTT/PublisherWorker.cpp" line="757"/>
         <source>Configure broker hostname and port before testing the connection.</source>
         <translation>Configurează hostname-ul și portul brokerului înainte de a testa conexiunea.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="800"/>
+        <location filename="../../src/MQTT/PublisherWorker.cpp" line="793"/>
         <source>Successfully connected to %1:%2.</source>
         <translation>Conectat cu succes la %1:%2.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="811"/>
+        <location filename="../../src/MQTT/PublisherWorker.cpp" line="804"/>
         <source>Timed out after 5 seconds without reaching the broker.</source>
         <translation>Timeout după 5 secunde fără a ajunge la broker.</translation>
     </message>
@@ -18146,8 +18008,8 @@ Furniză acreditările necesare.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Macros.qml" line="674"/>
-        <source>command.name { "parameter": value }</source>
-        <translation>nume.comandă { "parametru": valoare }</translation>
+        <source>command.name { &quot;parameter&quot;: value }</source>
+        <translation>nume.comandă { &quot;parametru&quot;: valoare }</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Macros.qml" line="816"/>
@@ -18609,57 +18471,57 @@ Furniză acreditările necesare.</translation>
 <context>
     <name>Misc::ExtensionManager</name>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="277"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="252"/>
         <source>Theme</source>
         <translation>Temă</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="280"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="255"/>
         <source>Frame Parser</source>
         <translation>Analizor de Trame</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="283"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="258"/>
         <source>Project Template</source>
         <translation>Șablon Proiect</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="286"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="261"/>
         <source>Plugin</source>
         <translation>Plugin</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="289"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="264"/>
         <source>Widget</source>
         <translation>Widget</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="292"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="267"/>
         <source>All Types</source>
         <translation>Toate Tipurile</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="509"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="479"/>
         <source>Reset Extensions</source>
         <translation>Resetează Extensiile</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="510"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="480"/>
         <source>This uninstalls all extensions, removes all custom repositories, and restores the default settings. Continue?</source>
         <translation>Aceasta dezinstalează toate extensiile, elimină toate depozitele personalizate și restaurează setările implicite. Continuați?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="549"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="509"/>
         <source>Select Extension Repository Folder</source>
         <translation>Selectați Folderul Depozitului de Extensii</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="770"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="659"/>
         <source>Extension updates available</source>
         <translation>Actualizări de extensii disponibile</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="771"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="660"/>
         <source>Newer versions are available for: %1.
 
 Do you want to update them now?</source>
@@ -18668,50 +18530,50 @@ Do you want to update them now?</source>
 Doriți să le actualizați acum?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="778"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="667"/>
         <source>Always update</source>
         <translation>Actualizează Întotdeauna</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1170"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="953"/>
         <source>Installed (repository no longer available)</source>
         <translation>Instalat (depozitul nu mai este disponibil)</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1453"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1462"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1483"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1506"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1549"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1559"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1567"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1153"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1162"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1183"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1207"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1250"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1260"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1268"/>
         <source>Plugin Error</source>
         <translation>Eroare Plugin</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1453"/>
-        <source>Plugin "%1" is not installed.</source>
-        <translation>Plugin-ul "%1" nu este instalat.</translation>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1153"/>
+        <source>Plugin &quot;%1&quot; is not installed.</source>
+        <translation>Plugin-ul &quot;%1&quot; nu este instalat.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1463"/>
-        <source>Extension "%1" is not a plugin (type: %2).</source>
-        <translation>Extensia "%1" nu este un plugin (tip: %2).</translation>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1163"/>
+        <source>Extension &quot;%1&quot; is not a plugin (type: %2).</source>
+        <translation>Extensia &quot;%1&quot; nu este un plugin (tip: %2).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1484"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1184"/>
         <source>Cannot read plugin metadata file:
 %1/info.json</source>
         <translation>Nu se poate citi fișierul de metadate al plugin-ului:
 %1/info.json</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1507"/>
-        <source>Plugin "%1" requires gRPC but this build does not include gRPC support.</source>
-        <translation>Plugin-ul "%1" necesită GRPC, dar această versiune nu include suport GRPC.</translation>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1208"/>
+        <source>Plugin &quot;%1&quot; requires gRPC but this build does not include gRPC support.</source>
+        <translation>Plugin-ul &quot;%1&quot; necesită GRPC, dar această versiune nu include suport GRPC.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1517"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1218"/>
         <source>This plugin uses gRPC for high-performance data streaming. The API server needs to be enabled.
 
 Would you like to enable it now?</source>
@@ -18720,43 +18582,43 @@ Would you like to enable it now?</source>
 Doriți să îl activați acum?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1523"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1224"/>
         <source>API Server Required</source>
         <translation>Server API Necesar</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1550"/>
-        <source>Plugin "%1" has no 'entry' field in info.json.</source>
-        <translation>Plugin-ul "%1" nu are câmpul 'entry' în info.json.</translation>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1251"/>
+        <source>Plugin &quot;%1&quot; has no &apos;entry&apos; field in info.json.</source>
+        <translation>Plugin-ul &quot;%1&quot; nu are câmpul &apos;entry&apos; în info.json.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1560"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1261"/>
         <source>Entry point not found:
 %1</source>
         <translation>Punct de intrare negăsit:
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1568"/>
-        <source>Plugin "%1" has an invalid entry point path.</source>
-        <translation>Plugin-ul "%1" are o cale invalidă pentru punctul de intrare.</translation>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1269"/>
+        <source>Plugin &quot;%1&quot; has an invalid entry point path.</source>
+        <translation>Plugin-ul &quot;%1&quot; are o cale invalidă pentru punctul de intrare.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1611"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1312"/>
         <source>Missing Dependency</source>
         <translation>Dependență Lipsă</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1612"/>
-        <source>This plugin requires "%1" but it was not found on your system.
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1313"/>
+        <source>This plugin requires &quot;%1&quot; but it was not found on your system.
 
 Would you like to open the download page?</source>
-        <translation>Acest plugin necesită "%1" dar nu a fost găsit pe sistemul dumneavoastră.
+        <translation>Acest plugin necesită &quot;%1&quot; dar nu a fost găsit pe sistemul dumneavoastră.
 
 Doriți să deschideți pagina de descărcare?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1520"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1221"/>
         <source>Plugins need the API server to communicate with Serial Studio. Would you like to enable it now?</source>
         <translation>Plugin-urile necesită serverul API pentru a comunica cu Serial Studio. Doriți să îl activați acum?</translation>
     </message>
@@ -18975,7 +18837,7 @@ Doriți să deschideți pagina de descărcare?</translation>
 <context>
     <name>Misc::ThemeManager</name>
     <message>
-        <location filename="../../src/Misc/ThemeManager.cpp" line="400"/>
+        <location filename="../../src/Misc/ThemeCatalog.cpp" line="187"/>
         <source>System</source>
         <translation>Sistem</translation>
     </message>
@@ -18987,8 +18849,8 @@ Doriți să deschideți pagina de descărcare?</translation>
         <translation type="vanished">Verificare automată a actualizărilor?</translation>
     </message>
     <message>
-        <source>Should %1 automatically check for updates? You can always check for updates manually from the "About" dialog</source>
-        <translation type="vanished">%1 să verifice automat actualizările? Poți verifica manual actualizările oricând din dialogul „Despre"</translation>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
+        <translation type="vanished">%1 să verifice automat actualizările? Poți verifica manual actualizările oricând din dialogul „Despre&quot;</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="190"/>
@@ -19655,356 +19517,356 @@ Adaugă grupuri mai sus pentru a interoga mai multe tipuri de registre.</transla
 <context>
     <name>NativeTemplates</name>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="296"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="434"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="116"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="127"/>
         <source>Bytes per value</source>
         <translation>Octeți per valoare</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="297"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="435"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="117"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="128"/>
         <source>Number of bytes combined into each channel value.</source>
         <translation>Numărul de octeți combinați în fiecare valoare de canal.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="305"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="443"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="136"/>
         <source>Endianness</source>
         <translation>Endianness</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="306"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="444"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="126"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="137"/>
         <source>Byte order used when combining multi-byte values.</source>
         <translation>Ordinea octeților utilizată la combinarea valorilor multi-octet.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="314"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="452"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="134"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="145"/>
         <source>Signed values</source>
         <translation>Valori semnate</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="315"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="453"/>
-        <source>Interprets each value as two's-complement signed.</source>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="135"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="146"/>
+        <source>Interprets each value as two&apos;s-complement signed.</source>
         <translation>Interpretează fiecare valoare ca semnat în complement față de doi.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="655"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTlv.cpp" line="130"/>
         <source>Tag routing table</source>
         <translation>Tabel de rutare tag-uri</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="656"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTlv.cpp" line="131"/>
         <source>Comma-separated tag:index entries, e.g. 1:0,2:1,3:2. Tags may be decimal or 0x-prefixed hex.</source>
         <translation>Intrări tag:index separate prin virgulă, ex. 1:0,2:1,3:2. Tag-urile pot fi zecimale sau hexazecimale cu prefix 0x.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1100"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1304"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1227"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="216"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinarySirf.cpp" line="216"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryUbx.cpp" line="226"/>
         <source>Validate checksum</source>
         <translation>Validează checksum</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1101"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryUbx.cpp" line="227"/>
         <source>Rejects messages with an invalid Fletcher checksum.</source>
         <translation>Respinge mesajele cu checksum Fletcher invalid.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1305"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinarySirf.cpp" line="217"/>
         <source>Rejects messages with an invalid additive checksum.</source>
         <translation>Respinge mesajele cu checksum aditiv invalid.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1458"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryMavlink.cpp" line="165"/>
         <source>Protocol version</source>
         <translation>Versiune protocol</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1459"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryMavlink.cpp" line="166"/>
         <source>Selects the expected start marker (0xFE for v1, 0xFD for v2).</source>
         <translation>Selectează marcatorul de start așteptat (0xFE pentru v1, 0xFD pentru v2).</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1890"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryRtcm.cpp" line="229"/>
         <source>Validate CRC</source>
         <translation>Validează CRC</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1891"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryRtcm.cpp" line="230"/>
         <source>Rejects frames with an invalid CRC-24Q checksum.</source>
         <translation>Respinge cadrele cu o sumă de control CRC-24Q invalidă.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2066"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryModbus.cpp" line="190"/>
         <source>Channel count</source>
         <translation>Număr de canale</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2067"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryModbus.cpp" line="191"/>
         <source>Number of output channels (registers or coils).</source>
         <translation>Numărul de canale de ieșire (registre sau bobine).</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2075"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryModbus.cpp" line="199"/>
         <source>Register offset</source>
         <translation>Decalaj registru</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2076"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryModbus.cpp" line="200"/>
         <source>Address offset subtracted from single-write echoes (40001 for legacy Modicon maps).</source>
         <translation>Decalaj de adresă scăzut din ecourile de scriere unică (40001 pentru hărți Modicon vechi).</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2086"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryModbus.cpp" line="210"/>
         <source>Signed registers</source>
         <translation>Registre semnate</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2087"/>
-        <source>Interprets 16-bit registers as two's-complement signed values.</source>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryModbus.cpp" line="211"/>
+        <source>Interprets 16-bit registers as two&apos;s-complement signed values.</source>
         <translation>Interpretează registrele pe 16 biți ca valori semnate în complement față de doi.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2393"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryMessagePack.cpp" line="315"/>
         <source>Payload layout</source>
         <translation>Aspect payload</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2394"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryMessagePack.cpp" line="316"/>
         <source>Array emits every element in order; map routes keys through the key list.</source>
         <translation>Array-ul emite fiecare element în ordine; map-ul direcționează cheile prin lista de chei.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2404"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryMessagePack.cpp" line="326"/>
         <source>Keys (map mode)</source>
         <translation>Chei (mod hartă)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2405"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryMessagePack.cpp" line="327"/>
         <source>Comma-separated map keys in channel order. Only used for the map layout.</source>
         <translation>Chei de hartă separate prin virgulă în ordinea canalelor. Utilizate doar pentru aspectul de hartă.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="272"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="466"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="267"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="460"/>
         <source>Tag schema</source>
         <translation>Schemă Tag</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="273"/>
-        <source>Ordered tag list written by the OPC UA project generator: one {"i": index, "t": type} entry per channel.</source>
-        <translation>Lista ordonată de tag-uri scrisă de generatorul de proiecte OPC UA: o intrare {"i": index, "t": tip} per canal.</translation>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="268"/>
+        <source>Ordered tag list written by the OPC UA project generator: one {&quot;i&quot;: index, &quot;t&quot;: type} entry per channel.</source>
+        <translation>Lista ordonată de tag-uri scrisă de generatorul de proiecte OPC UA: o intrare {&quot;i&quot;: index, &quot;t&quot;: tip} per canal.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="347"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="341"/>
         <source>Metric schema</source>
         <translation>Schemă metrică</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="348"/>
-        <source>Ordered metric list written by the MQTT project generator: one {"index": index, "name": name} entry per channel.</source>
-        <translation>Lista ordonată de metrici scrisă de generatorul de proiecte MQTT: o intrare {"index": index, "name": name} per canal.</translation>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="342"/>
+        <source>Ordered metric list written by the MQTT project generator: one {&quot;index&quot;: index, &quot;name&quot;: name} entry per channel.</source>
+        <translation>Lista ordonată de metrici scrisă de generatorul de proiecte MQTT: o intrare {&quot;index&quot;: index, &quot;name&quot;: name} per canal.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="361"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="356"/>
         <source>The metric schema must list between 1 and %1 metrics.</source>
         <translation>Schema de metrici trebuie să listeze între 1 și %1 metrici.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="406"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="400"/>
         <source>Variable schema</source>
         <translation>Schema de variabile</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="407"/>
-        <source>Ordered variable list written by the S7 project generator: one {"index": index, "name": name} entry per channel.</source>
-        <translation>Lista ordonată de variabile scrisă de generatorul de proiecte S7: o intrare {"index": index, "name": nume} per canal.</translation>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="401"/>
+        <source>Ordered variable list written by the S7 project generator: one {&quot;index&quot;: index, &quot;name&quot;: name} entry per channel.</source>
+        <translation>Lista ordonată de variabile scrisă de generatorul de proiecte S7: o intrare {&quot;index&quot;: index, &quot;name&quot;: nume} per canal.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="420"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="415"/>
         <source>The variable schema must list between 1 and %1 variables.</source>
         <translation>Schema de variabile trebuie să listeze între 1 și %1 variabile.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="467"/>
-        <source>Ordered tag list written by the EtherNet/IP project generator: one {"index": index, "name": name} entry per channel.</source>
-        <translation>Lista ordonată de tag-uri scrisă de generatorul de proiecte EtherNet/IP: o intrare {"index": index, "name": nume} per canal.</translation>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="461"/>
+        <source>Ordered tag list written by the EtherNet/IP project generator: one {&quot;index&quot;: index, &quot;name&quot;: name} entry per channel.</source>
+        <translation>Lista ordonată de tag-uri scrisă de generatorul de proiecte EtherNet/IP: o intrare {&quot;index&quot;: index, &quot;name&quot;: nume} per canal.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="481"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="475"/>
         <source>The tag schema must list between 1 and %1 tags.</source>
         <translation>Schema de tag-uri trebuie să listeze între 1 și %1 tag-uri.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="527"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="520"/>
         <source>Point schema</source>
         <translation>Schema de puncte</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="528"/>
-        <source>Ordered point list written by the IEC 60870-5-104 project generator: one {"index": index, "name": name} entry per channel.</source>
-        <translation>Lista ordonată de puncte scrisă de generatorul de proiecte IEC 60870-5-104: o intrare {"index": index, "name": nume} per canal.</translation>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="521"/>
+        <source>Ordered point list written by the IEC 60870-5-104 project generator: one {&quot;index&quot;: index, &quot;name&quot;: name} entry per channel.</source>
+        <translation>Lista ordonată de puncte scrisă de generatorul de proiecte IEC 60870-5-104: o intrare {&quot;index&quot;: index, &quot;name&quot;: nume} per canal.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="542"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="535"/>
         <source>The point schema must list between 1 and %1 points.</source>
         <translation>Schema de puncte trebuie să listeze între 1 și %1 puncte.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp" line="185"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MultiFrameBatchedSensor.cpp" line="155"/>
         <source>Scalar fields</source>
         <translation>Câmpuri scalare</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp" line="186"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MultiFrameBatchedSensor.cpp" line="156"/>
         <source>Comma-separated JSON fields repeated in every generated frame.</source>
         <translation>Câmpuri JSON separate prin virgulă, repetate în fiecare cadru generat.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp" line="193"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MultiFrameBatchedSensor.cpp" line="163"/>
         <source>Sample array field</source>
         <translation>Câmp array de eșantioane</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp" line="194"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MultiFrameBatchedSensor.cpp" line="164"/>
         <source>JSON field holding the batched sample array.</source>
         <translation>Câmp JSON care conține array-ul de eșantioane grupate.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp" line="335"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MultiFrameTimeSeries2d.cpp" line="150"/>
         <source>Records array field</source>
         <translation>Câmp array de înregistrări</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp" line="336"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MultiFrameTimeSeries2d.cpp" line="151"/>
         <source>JSON field holding the array of record objects.</source>
         <translation>Câmp JSON care conține array-ul de obiecte înregistrare.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp" line="342"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MultiFrameTimeSeries2d.cpp" line="157"/>
         <source>Record fields (in channel order)</source>
         <translation>Câmpuri înregistrare (în ordinea canalelor)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp" line="343"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MultiFrameTimeSeries2d.cpp" line="158"/>
         <source>Comma-separated record fields. The position of each field sets its channel index.</source>
         <translation>Câmpuri înregistrare separate prin virgulă. Poziția fiecărui câmp stabilește indexul canalului său.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="587"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextFixedWidth.cpp" line="126"/>
         <source>Column widths</source>
         <translation>Lățimi coloane</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="588"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextFixedWidth.cpp" line="127"/>
         <source>Comma-separated character counts per field. Leave empty to split on whitespace.</source>
         <translation>Număr de caractere separate prin virgulă per câmp. Lăsați gol pentru separare pe spații albe.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="596"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextFixedWidth.cpp" line="135"/>
         <source>Trim whitespace</source>
         <translation>Elimină spații albe</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="597"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextFixedWidth.cpp" line="136"/>
         <source>Removes padding around every sliced field.</source>
         <translation>Elimină spațiile din jurul fiecărui câmp secționat.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="726"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="875"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1342"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1769"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextIniConfig.cpp" line="127"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextKeyValue.cpp" line="146"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextUrlEncoded.cpp" line="152"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextYamlData.cpp" line="174"/>
         <source>Keys (in channel order)</source>
         <translation>Chei (în ordinea canalelor)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="727"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="876"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1770"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextIniConfig.cpp" line="128"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextKeyValue.cpp" line="147"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextYamlData.cpp" line="175"/>
         <source>Comma-separated key names. The position of each key sets its channel index.</source>
         <translation>Nume de chei separate prin virgulă. Poziția fiecărei chei stabilește indexul canalului său.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="735"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextKeyValue.cpp" line="155"/>
         <source>Pair separator</source>
         <translation>Separator perechi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="736"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextKeyValue.cpp" line="156"/>
         <source>Character between key=value pairs.</source>
         <translation>Caracter între perechile cheie=valoare.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="742"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextKeyValue.cpp" line="162"/>
         <source>Key-value separator</source>
         <translation>Separator cheie-valoare</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="743"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextKeyValue.cpp" line="163"/>
         <source>Character between a key and its value.</source>
         <translation>Caracter între o cheie și valoarea sa.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="749"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextKeyValue.cpp" line="169"/>
         <source>Numeric values only</source>
         <translation>Doar valori numerice</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="750"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextKeyValue.cpp" line="170"/>
         <source>Ignores pairs whose value is not a number.</source>
         <translation>Ignoră perechile a căror valoare nu este un număr.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="992"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextAtCommands.cpp" line="124"/>
         <source>Command routing table</source>
         <translation>Tabel de rutare comenzi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="993"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextAtCommands.cpp" line="125"/>
         <source>Semicolon-separated entries of NAME:index list, e.g. CSQ:0,1;CREG:2,3;CGATT:4.</source>
         <translation>Intrări separate prin punct și virgulă în format listă NUME:index, de ex. CSQ:0,1;CREG:2,3;CGATT:4.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1218"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="207"/>
         <source>Talker prefix</source>
         <translation>Prefix vorbitor</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1219"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="208"/>
         <source>Two-letter talker id, e.g. GP for GPS or GN for multi-constellation receivers.</source>
         <translation>Identificator vorbitor de două litere, de ex. GP pentru GPS sau GN pentru receptoare multi-constelație.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1228"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="217"/>
         <source>Rejects sentences whose *hh checksum does not match.</source>
         <translation>Respinge propozițiile al căror checksum *hh nu se potrivește.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1343"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextUrlEncoded.cpp" line="153"/>
         <source>Comma-separated parameter names. The position of each key sets its channel index.</source>
         <translation>Nume parametri separați prin virgulă. Poziția fiecărei chei stabilește indexul canalului său.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1482"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextJsonData.cpp" line="148"/>
         <source>Fields (in channel order)</source>
         <translation>Câmpuri (în ordinea canalelor)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1483"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextJsonData.cpp" line="149"/>
         <source>Comma-separated field names. The position of each field sets its channel index.</source>
         <translation>Nume câmpuri separate prin virgulă. Poziția fiecărui câmp stabilește indexul canalului său.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1602"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextXmlData.cpp" line="127"/>
         <source>Tags (in channel order)</source>
         <translation>Etichete (în ordinea canalelor)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1603"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextXmlData.cpp" line="128"/>
         <source>Comma-separated tag names. The position of each tag sets its channel index.</source>
         <translation>Nume de etichete separate prin virgulă. Poziția fiecărei etichete stabilește indexul canalului său.</translation>
     </message>
@@ -20156,7 +20018,7 @@ Adaugă grupuri mai sus pentru a interoga mai multe tipuri de registre.</transla
     </message>
     <message>
         <location filename="../../qml/Dialogs/OfflineActivation.qml" line="95"/>
-        <source>Save this computer's device file. It identifies this machine and contains no personal information.</source>
+        <source>Save this computer&apos;s device file. It identifies this machine and contains no personal information.</source>
         <translation>Salvează fișierul dispozitivului acestui computer. Acesta identifică această mașină și nu conține informații personale.</translation>
     </message>
     <message>
@@ -21140,7 +21002,7 @@ Adaugă grupuri mai sus pentru a interoga mai multe tipuri de registre.</transla
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="368"/>
-        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>Indisponibil prin atașare la distanță. Acest widget necesită fluxul brut de eșantioane de la distanță, pe care oglinda tabloului de bord nu îl transmite.</translation>
     </message>
 </context>
@@ -21206,8 +21068,8 @@ Adaugă grupuri mai sus pentru a interoga mai multe tipuri de registre.</transla
     </message>
     <message>
         <location filename="../../qml/Widgets/PlotWidget.qml" line="1497"/>
-        <source>Remove marker "%1"</source>
-        <translation>Elimină marcajul "%1"</translation>
+        <source>Remove marker &quot;%1&quot;</source>
+        <translation>Elimină marcajul &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/PlotWidget.qml" line="1503"/>
@@ -21978,6 +21840,885 @@ Faceți clic pe Reîmprospătare pentru a actualiza lista.</translation>
     </message>
 </context>
 <context>
+    <name>ProjectModel</name>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="135"/>
+        <source>Duplicate Selection</source>
+        <translation type="unfinished">Duplică Selecția</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="213"/>
+        <source>Delete Selection</source>
+        <translation type="unfinished">Șterge Selecția</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="311"/>
+        <source>Delete %1 selected items?</source>
+        <translation type="unfinished">Șterge %1 elemente selectate?</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="312"/>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="494"/>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="521"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="912"/>
+        <source>This action cannot be undone.</source>
+        <translation type="unfinished">Această acțiune nu poate fi anulată.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="314"/>
+        <source>Delete Items</source>
+        <translation type="unfinished">Șterge Elemente</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="335"/>
+        <source>Move Selection</source>
+        <translation type="unfinished">Mută Selecția</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="400"/>
+        <source>Toggle Selection</source>
+        <translation type="unfinished">Comută Selecția</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="451"/>
+        <source>Legacy frame parser function updated</source>
+        <translation type="unfinished">Funcția de analiză a cadrelor moștenită a fost actualizată</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="452"/>
+        <source>Your project used a legacy frame parser function with a &apos;separator&apos; argument. It has been automatically migrated to the new format.</source>
+        <translation type="unfinished">Proiectul dumneavoastră a folosit o funcție veche de analiză a cadrelor cu un argument &apos;separator&apos;. A fost migrat automat la noul format.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="486"/>
+        <source>Select Project File</source>
+        <translation type="unfinished">Selectează Fișier Proiect</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="488"/>
+        <source>Project Files (*.json *.ssproj)</source>
+        <translation type="unfinished">Fișiere Proiect (*.json *.ssproj)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="535"/>
+        <source>JSON validation error</source>
+        <translation type="unfinished">Eroare de validare JSON</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="588"/>
+        <source>Project upgraded from an earlier file format</source>
+        <translation type="unfinished">Proiect actualizat de la un format de fișier anterior</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="590"/>
+        <source>This project was saved with schema version %1; the current version is %2. Defaults have been applied to any new fields. Save the project to lock in the upgrade.</source>
+        <translation type="unfinished">Acest proiect a fost salvat cu versiunea de schemă %1; versiunea curentă este %2. S-au aplicat valorile implicite pentru orice câmpuri noi. Salvează proiectul pentru a finaliza actualizarea.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="706"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="311"/>
+        <source>Untitled Project</source>
+        <translation type="unfinished">Proiect Fără Titlu</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="713"/>
+        <source>Save Imported Project</source>
+        <translation type="unfinished">Salvează Proiectul Importat</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="715"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="290"/>
+        <source>Serial Studio Project Files (*.ssproj)</source>
+        <translation type="unfinished">Fișiere Proiect Serial Studio (*.ssproj)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="750"/>
+        <source>File open error</source>
+        <translation type="unfinished">Eroare la deschiderea fișierului</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="869"/>
+        <source>Device A</source>
+        <translation type="unfinished">Dispozitiv A</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="922"/>
+        <source>Multi-source projects require a Pro license</source>
+        <translation type="unfinished">Proiectele cu surse multiple necesită licență Pro</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="923"/>
+        <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
+        <translation type="unfinished">Acest proiect conține surse de date multiple. Doar prima sursă a fost încărcată. O licență Serial Studio Pro este necesară pentru a utiliza proiecte cu surse multiple.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="1015"/>
+        <source>Workspace IDs remapped on load</source>
+        <translation type="unfinished">ID-urile spațiului de lucru remapate la încărcare</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="1016"/>
+        <source>%1 custom workspace ID(s) overlapped the new reserved auto range and were moved into the user range. Save the project to make the remap permanent.</source>
+        <translation type="unfinished">%1 ID-uri personalizate de spațiu de lucru s-au suprapus cu noua zonă automată rezervată și au fost mutate în zona utilizatorului. Salvează proiectul pentru a face remaparea permanentă.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="248"/>
+        <source>Do you want to save your changes?</source>
+        <translation type="unfinished">Doriți să salvați modificările?</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="249"/>
+        <source>You have unsaved modifications in this project!</source>
+        <translation type="unfinished">Aveți modificări nesalvate în acest proiect!</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="288"/>
+        <source>Save Serial Studio Project</source>
+        <translation type="unfinished">Salvează Proiect Serial Studio</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="381"/>
+        <source>File save error</source>
+        <translation type="unfinished">Eroare la salvarea fișierului</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="589"/>
+        <source>Project file removed from disk</source>
+        <translation type="unfinished">Fișier proiect eliminat de pe disc</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="590"/>
+        <source>%1 was deleted or renamed by another program. Save the project to recreate it.</source>
+        <translation type="unfinished">%1 a fost șters sau redenumit de alt program. Salvează proiectul pentru a-l recrea.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="613"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="635"/>
+        <source>Project file changed on disk</source>
+        <translation type="unfinished">Fișier proiect modificat pe disc</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="614"/>
+        <source>%1 was modified by another program. The in-memory project was kept; reopen the file to load the external changes.</source>
+        <translation type="unfinished">%1 a fost modificat de alt program. Proiectul din memorie a fost păstrat; redeschide fișierul pentru a încărca modificările externe.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="632"/>
+        <source>The project file was modified by another program.
+
+Reload it and discard your unsaved changes?</source>
+        <translation type="unfinished">Fișierul proiect a fost modificat de alt program.
+
+Îl reîncarci și renunți la modificările nesalvate?</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="634"/>
+        <source>The project file was modified by another program.
+
+Reload it?</source>
+        <translation type="unfinished">Fișierul proiect a fost modificat de alt program.
+
+Îl reîncarci?</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="55"/>
+        <source>Add Output Panel</source>
+        <translation type="unfinished">Adaugă Panou de Ieșire</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="57"/>
+        <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="96"/>
+        <source>Output Controls</source>
+        <translation type="unfinished">Controale de Ieșire</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="71"/>
+        <source>Add Output Widget</source>
+        <translation type="unfinished">Adaugă Widget de Ieșire</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="108"/>
+        <source>New Button</source>
+        <translation type="unfinished">Buton Nou</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="111"/>
+        <source>New Slider</source>
+        <translation type="unfinished">Cursor Nou</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="114"/>
+        <source>New Toggle</source>
+        <translation type="unfinished">Comutator Nou</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="117"/>
+        <source>New Text Field</source>
+        <translation type="unfinished">Câmp Text Nou</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="120"/>
+        <source>New Knob</source>
+        <translation type="unfinished">Buton Rotativ Nou</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="149"/>
+        <source>Change Output Widget Type</source>
+        <translation type="unfinished">Schimbă Tipul Widget-ului de Ieșire</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="180"/>
+        <source>Change Output Widget Icon</source>
+        <translation type="unfinished">Schimbă Pictograma Widget-ului de Ieșire</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="208"/>
+        <source>Edit Output Widget</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="238"/>
+        <source>Do you want to delete output widget &quot;%1&quot;?</source>
+        <translation type="unfinished">Doriți să ștergeți widget-ul de ieșire &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="240"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="345"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="387"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="422"/>
+        <source>This action cannot be undone. Do you wish to proceed?</source>
+        <translation type="unfinished">Această acțiune nu poate fi anulată. Doriți să continuați?</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="260"/>
+        <source>Delete Output Widget</source>
+        <translation type="unfinished">Șterge Widget-ul de Ieșire</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="303"/>
+        <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="376"/>
+        <source>Duplicate Output Widget</source>
+        <translation type="unfinished">Duplică Widget-ul de Ieșire</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="404"/>
+        <source>Move Output Widget</source>
+        <translation type="unfinished">Mută Widget-ul de Ieșire</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectPresentation.cpp" line="541"/>
+        <source>Rename Widget</source>
+        <translation type="unfinished">Redenumește Widget</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectPresentation.cpp" line="542"/>
+        <source>Display title (empty restores the original):</source>
+        <translation type="unfinished">Titlu afișat (gol restaurează originalul):</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectPresentation.cpp" line="594"/>
+        <location filename="../../src/DataModel/Project/ProjectPresentation.cpp" line="643"/>
+        <source>Time</source>
+        <translation type="unfinished">Timp</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectPresentation.cpp" line="595"/>
+        <source>Samples</source>
+        <translation type="unfinished">Eșantioane</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="175"/>
+        <source>Edit Group</source>
+        <translation type="unfinished">Editează Grup</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="197"/>
+        <source>Edit Dataset</source>
+        <translation type="unfinished">Editează Set de Date</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="237"/>
+        <source>Edit Action</source>
+        <translation type="unfinished">Editează Acțiune</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="255"/>
+        <source>Seed Dataset Aliases</source>
+        <translation type="unfinished">Inițializează Aliasuri Set de Date</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="292"/>
+        <source>Toggle Group</source>
+        <translation type="unfinished">Comută Grup</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="315"/>
+        <source>Toggle Dataset</source>
+        <translation type="unfinished">Comută Set de Date</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="344"/>
+        <source>Do you want to delete group &quot;%1&quot;?</source>
+        <translation type="unfinished">Doriți să ștergeți grupul &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="358"/>
+        <source>Delete Group</source>
+        <translation type="unfinished">Șterge Grup</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="386"/>
+        <source>Do you want to delete action &quot;%1&quot;?</source>
+        <translation type="unfinished">Doriți să ștergeți acțiunea &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="400"/>
+        <source>Delete Action</source>
+        <translation type="unfinished">Șterge Acțiune</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="420"/>
+        <source>Do you want to delete dataset &quot;%1&quot;?</source>
+        <translation type="unfinished">Doriți să ștergeți setul de date &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="441"/>
+        <source>Delete Dataset</source>
+        <translation type="unfinished">Șterge Set de Date</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="498"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1286"/>
+        <source>Duplicate Group</source>
+        <translation type="unfinished">Duplică Grup</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="541"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1404"/>
+        <source>Duplicate Action</source>
+        <translation type="unfinished">Duplică Acțiune</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="575"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1347"/>
+        <source>Duplicate Dataset</source>
+        <translation type="unfinished">Duplică Set de Date</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="612"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="857"/>
+        <source>Add Group</source>
+        <translation type="unfinished">Adaugă Grup</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="648"/>
+        <source>Group</source>
+        <translation type="unfinished">Grup</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="657"/>
+        <source>Add Dataset</source>
+        <translation type="unfinished">Adaugă Set de Date</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="669"/>
+        <source>New Dataset</source>
+        <translation type="unfinished">Set de Date Nou</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="672"/>
+        <source>New Plot</source>
+        <translation type="unfinished">Grafic Nou</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="676"/>
+        <source>New FFT Plot</source>
+        <translation type="unfinished">Grafic FFT Nou</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="680"/>
+        <source>New Level Indicator</source>
+        <translation type="unfinished">Indicator Nivel Nou</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="684"/>
+        <source>New Gauge</source>
+        <translation type="unfinished">Indicator Nou</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="688"/>
+        <source>New Compass</source>
+        <translation type="unfinished">Busolă Nouă</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="694"/>
+        <source>New Meter</source>
+        <translation type="unfinished">Contor Nou</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="698"/>
+        <source>New LED Indicator</source>
+        <translation type="unfinished">Indicator LED Nou</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="702"/>
+        <source>New Waterfall</source>
+        <translation type="unfinished">Waterfall Nou</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="733"/>
+        <source>Edit Canvas Datasets</source>
+        <translation type="unfinished">Editează Seturi de Date Canvas</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="754"/>
+        <source>Channel %1</source>
+        <translation type="unfinished">Canal %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="775"/>
+        <source>Change Dataset Option</source>
+        <translation type="unfinished">Modifică Opțiunea Set de Date</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="827"/>
+        <source>Add Action</source>
+        <translation type="unfinished">Adaugă Acțiune</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="836"/>
+        <source>New Action</source>
+        <translation type="unfinished">Acțiune Nouă</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="895"/>
+        <source>Change Group Widget</source>
+        <translation type="unfinished">Schimbă Widget-ul Grupului</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="945"/>
+        <source>Are you sure you want to change the group-level widget?</source>
+        <translation type="unfinished">Sigur doriți să schimbați widget-ul la nivel de grup?</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="946"/>
+        <source>Existing datasets for this group are deleted</source>
+        <translation type="unfinished">Seturile de date existente pentru acest grup sunt șterse</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1019"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1020"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1021"/>
+        <source>Accelerometer %1</source>
+        <translation type="unfinished">Accelerometru %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1037"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1038"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1039"/>
+        <source>Gyro %1</source>
+        <translation type="unfinished">Giroscop %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1055"/>
+        <source>Latitude</source>
+        <translation type="unfinished">Latitudine</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1055"/>
+        <source>Longitude</source>
+        <translation type="unfinished">Longitudine</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1055"/>
+        <source>Altitude</source>
+        <translation type="unfinished">Altitudine</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1071"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1087"/>
+        <source>X</source>
+        <translation type="unfinished">X</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1071"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1087"/>
+        <source>Y</source>
+        <translation type="unfinished">Y</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1071"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1087"/>
+        <source>Z</source>
+        <translation type="unfinished">Z</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1112"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="672"/>
+        <source>Move Group</source>
+        <translation type="unfinished">Mută Grup</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1169"/>
+        <source>Move Dataset</source>
+        <translation type="unfinished">Mută Setul de Date</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1211"/>
+        <source>Move Action</source>
+        <translation type="unfinished">Mută Acțiunea</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1434"/>
+        <source>Rename Group</source>
+        <translation type="unfinished">Redenumire Grup</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1435"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1464"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1490"/>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="382"/>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="411"/>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="434"/>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="457"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="277"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="863"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="890"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="498"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="521"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="549"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="735"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="762"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="957"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="980"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="1007"/>
+        <source>Name:</source>
+        <translation type="unfinished">Nume:</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1463"/>
+        <source>Rename Dataset</source>
+        <translation type="unfinished">Redenumire Set de Date</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1489"/>
+        <source>Rename Action</source>
+        <translation type="unfinished">Redenumire Acțiune</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="117"/>
+        <source>Add Table</source>
+        <translation type="unfinished">Adaugă Tabel</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="123"/>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="384"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="982"/>
+        <source>Shared Table</source>
+        <translation type="unfinished">Tabel Partajat</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="152"/>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="502"/>
+        <source>Delete Table</source>
+        <translation type="unfinished">Șterge Tabel</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="167"/>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="410"/>
+        <source>Rename Table</source>
+        <translation type="unfinished">Redenumește Tabel</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="241"/>
+        <source>Add Variable</source>
+        <translation type="unfinished">Adaugă Variabilă</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="250"/>
+        <source>variable</source>
+        <translation type="unfinished">variabilă</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="280"/>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="523"/>
+        <source>Delete Variable</source>
+        <translation type="unfinished">Șterge Variabila</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="311"/>
+        <source>Edit Variable</source>
+        <translation type="unfinished">Editează Variabila</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="381"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="979"/>
+        <source>New Shared Table</source>
+        <translation type="unfinished">Tabel Partajat Nou</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="433"/>
+        <source>New Variable</source>
+        <translation type="unfinished">Variabilă Nouă</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="456"/>
+        <source>Rename Variable</source>
+        <translation type="unfinished">Redenumește Variabila</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="495"/>
+        <source>This removes %1 variable(s) along with the table. This action cannot be undone.</source>
+        <translation type="unfinished">Aceasta elimină %1 variabilă/variabile împreună cu tabelul. Această acțiune nu poate fi anulată.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="499"/>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="520"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="911"/>
+        <source>Delete &quot;%1&quot;?</source>
+        <translation type="unfinished">Șterge &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="551"/>
+        <source>Export Table</source>
+        <translation type="unfinished">Exportă Tabel</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="553"/>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="596"/>
+        <source>CSV files (*.csv)</source>
+        <translation type="unfinished">Fișiere CSV (*.CSV)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="594"/>
+        <source>Import Table</source>
+        <translation type="unfinished">Importă Tabel</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="605"/>
+        <source>Import Table CSV</source>
+        <translation type="unfinished">Importă CSV Tabel</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="69"/>
+        <source>Add Device</source>
+        <translation type="unfinished">Adaugă Dispozitiv</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="74"/>
+        <source>Multiple data sources require a Pro license</source>
+        <translation type="unfinished">Surse de date multiple necesită o licență Pro</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="75"/>
+        <source>Serial Studio Pro allows connecting to multiple devices simultaneously. Please upgrade to unlock this feature.</source>
+        <translation type="unfinished">Serial Studio Pro permite conectarea simultană la mai multe dispozitive. Actualizați pentru a debloca această funcționalitate.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="87"/>
+        <source>Device %1</source>
+        <translation type="unfinished">Dispozitiv %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="120"/>
+        <source>Do you want to delete data source &quot;%1&quot;?</source>
+        <translation type="unfinished">Doriți să ștergeți sursa de date &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="121"/>
+        <source>Groups using this source will move to the default source. This action cannot be undone.</source>
+        <translation type="unfinished">Grupurile care utilizează această sursă vor fi mutate la sursa implicită. Această acțiune nu poate fi anulată.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="130"/>
+        <source>Delete Device</source>
+        <translation type="unfinished">Șterge Dispozitiv</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="165"/>
+        <source>Duplicate Device</source>
+        <translation type="unfinished">Duplică Dispozitiv</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="200"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="299"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="331"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="358"/>
+        <source>Edit Device</source>
+        <translation type="unfinished">Editează Dispozitiv</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="232"/>
+        <source>Rename Device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="248"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="372"/>
+        <source>Change Bus Type</source>
+        <translation type="unfinished">Schimbă Tip Magistrală</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="276"/>
+        <source>Rename Data Source</source>
+        <translation type="unfinished">Redenumire Sursă de Date</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="391"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="451"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="574"/>
+        <source>Edit Frame Parser</source>
+        <translation type="unfinished">Editează Analizor de Trame</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="403"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="465"/>
+        <source>Change Parser Language</source>
+        <translation type="unfinished">Schimbă Limbaj Analizor</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="419"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="492"/>
+        <source>Change Parser Template</source>
+        <translation type="unfinished">Schimbă Șablon Analizor</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="431"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="516"/>
+        <source>Change Parser Parameters</source>
+        <translation type="unfinished">Schimbă Parametri Analizor</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="545"/>
+        <source>Change Stream Lane</source>
+        <translation type="unfinished">Schimbă Linia de Flux</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="484"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="865"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="523"/>
+        <source>Workspace</source>
+        <translation type="unfinished">Spațiu de Lucru</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="862"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="520"/>
+        <source>New Workspace</source>
+        <translation type="unfinished">Spațiu de Lucru Nou</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="889"/>
+        <source>Rename Workspace</source>
+        <translation type="unfinished">Redenumește Spațiul de Lucru</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="914"/>
+        <source>Delete Workspace</source>
+        <translation type="unfinished">Șterge Spațiul de Lucru</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="976"/>
+        <source>Overview</source>
+        <translation type="unfinished">Prezentare Generală</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="985"/>
+        <source>All Data</source>
+        <translation type="unfinished">Toate Datele</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="1254"/>
+        <source>Discard workspace customisations?</source>
+        <translation type="unfinished">Renunță la personalizările spațiului de lucru?</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="1255"/>
+        <source>Switching off Customize discards your edits and rebuilds the workspace list from the project&apos;s groups.</source>
+        <translation type="unfinished">Dezactivarea personalizării renunță la modificările tale și reconstruiește lista de spații de lucru din grupurile proiectului.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="1258"/>
+        <source>Customize Workspaces</source>
+        <translation type="unfinished">Personalizează Spațiile de Lucru</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="326"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="500"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="612"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="737"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="826"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="959"/>
+        <source>Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="497"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="734"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="956"/>
+        <source>New Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="548"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="625"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="761"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="839"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="1006"/>
+        <source>Rename Folder</source>
+        <translation type="unfinished">Redenumește Folder</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="570"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="783"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="1028"/>
+        <source>Delete folder &quot;%1&quot;?</source>
+        <translation type="unfinished">Șterge folderul &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="571"/>
+        <source>The folder is removed; its workspaces and sub-folders move up to the parent.</source>
+        <translation type="unfinished">Folderul este eliminat; spațiile de lucru și sub-folderele sale urcă la părintele acestuia.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="574"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="645"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="786"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="860"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="1032"/>
+        <source>Delete Folder</source>
+        <translation type="unfinished">Șterge Folder</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="603"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="815"/>
+        <source>Add Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="693"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="719"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="915"/>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="941"/>
+        <source>Move Folder</source>
+        <translation type="unfinished">Mută Dosar</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="784"/>
+        <source>The folder is removed; its groups and sub-folders move up to the parent.</source>
+        <translation type="unfinished">Folderul este eliminat; grupurile și sub-folderele sale urcă la părintele acestuia.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="887"/>
+        <source>Move Table</source>
+        <translation type="unfinished">Mută Tabel</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="1029"/>
+        <source>The folder is removed; its tables and sub-folders move up to the parent. The accessor path of those tables changes accordingly.</source>
+        <translation type="unfinished">Folderul este eliminat; tabelele și sub-folderele sale urcă la părintele acestuia. Calea de acces a acelor tabele se modifică în consecință.</translation>
+    </message>
+</context>
+<context>
     <name>ProjectStructure</name>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="33"/>
@@ -22444,7 +23185,7 @@ Faceți clic pe Reîmprospătare pentru a actualiza lista.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="256"/>
-        <source>Run a dataset's transform only when one of its inputs changes. Speeds up large table-driven projects; off by default.</source>
+        <source>Run a dataset&apos;s transform only when one of its inputs changes. Speeds up large table-driven projects; off by default.</source>
         <translation>Execută transformarea unui set de date doar când una dintre intrările sale se modifică. Accelerează proiectele mari bazate pe tabele; dezactivat implicit.</translation>
     </message>
     <message>
@@ -22569,62 +23310,62 @@ Faceți clic pe Reîmprospătare pentru a actualiza lista.</translation>
 <context>
     <name>Publisher</name>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="80"/>
+        <location filename="../../src/MQTT/PublisherWorker.cpp" line="204"/>
         <source>No error</source>
         <translation>Nicio eroare</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="82"/>
-        <source>The broker rejected the connection due to an unsupported protocol version. Match the broker's MQTT version and try again.</source>
+        <location filename="../../src/MQTT/PublisherWorker.cpp" line="206"/>
+        <source>The broker rejected the connection due to an unsupported protocol version. Match the broker&apos;s MQTT version and try again.</source>
         <translation>Broker-ul a respins conexiunea din cauza unei versiuni de protocol nesuportate. Potrivește versiunea MQTT a broker-ului și încearcă din nou.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="85"/>
+        <location filename="../../src/MQTT/PublisherWorker.cpp" line="209"/>
         <source>The broker rejected the client ID. It may be malformed, too long, or already in use. Regenerate it and try again.</source>
         <translation>Broker-ul a respins ID-ul clientului. Poate fi malformat, prea lung sau deja în uz. Regenerează-l și încearcă din nou.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="88"/>
+        <location filename="../../src/MQTT/PublisherWorker.cpp" line="212"/>
         <source>The network reached the broker, but the broker is currently unavailable. Verify its status and try again later.</source>
         <translation>Rețeaua a ajuns la broker, dar broker-ul este momentan indisponibil. Verifică starea acestuia și încearcă din nou mai târziu.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="91"/>
+        <location filename="../../src/MQTT/PublisherWorker.cpp" line="215"/>
         <source>The username or password is incorrect or malformed. Double-check the credentials and try again.</source>
         <translation>Numele de utilizator sau parola este incorectă sau malformată. Verifică din nou acreditările și încearcă din nou.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="94"/>
+        <location filename="../../src/MQTT/PublisherWorker.cpp" line="218"/>
         <source>The broker denied the connection due to insufficient permissions. Verify that the account has the required ACLs.</source>
         <translation>Broker-ul a refuzat conexiunea din cauza permisiunilor insuficiente. Verifică că contul are ACL-urile necesare.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="97"/>
+        <location filename="../../src/MQTT/PublisherWorker.cpp" line="221"/>
         <source>A network or transport-layer issue prevented the connection. Check connectivity, ports, and TLS configuration.</source>
         <translation>O problemă la nivelul rețelei sau al stratului de transport a împiedicat conexiunea. Verifică conectivitatea, porturile și configurația TLS.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="100"/>
+        <location filename="../../src/MQTT/PublisherWorker.cpp" line="224"/>
         <source>The client detected an MQTT protocol violation and closed the connection. Verify broker and client compatibility.</source>
         <translation>Clientul a detectat o violare a protocolului MQTT și a închis conexiunea. Verifică compatibilitatea broker-ului și clientului.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="103"/>
+        <location filename="../../src/MQTT/PublisherWorker.cpp" line="227"/>
         <source>An unexpected error occurred. Check the broker logs and the application console for details.</source>
         <translation>A apărut o eroare neașteptată. Verifică jurnalele broker-ului și consola aplicației pentru detalii.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="106"/>
-        <source>An MQTT 5 protocol-level error occurred. Inspect the broker's reason code for details.</source>
+        <location filename="../../src/MQTT/PublisherWorker.cpp" line="230"/>
+        <source>An MQTT 5 protocol-level error occurred. Inspect the broker&apos;s reason code for details.</source>
         <translation>A apărut o eroare la nivelul protocolului MQTT 5. Inspectează codul de motiv al broker-ului pentru detalii.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="110"/>
+        <location filename="../../src/MQTT/PublisherWorker.cpp" line="234"/>
         <source>Unspecified MQTT error (code %1).</source>
         <translation>Eroare MQTT nespecificată (cod %1).</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="849"/>
+        <location filename="../../src/MQTT/PublisherWorker.cpp" line="842"/>
         <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
         <translation>Un certificat client este configurat: verifică că se potrivește cu cheia privată și este activat pe broker.</translation>
     </message>
@@ -22632,7 +23373,7 @@ Faceți clic pe Reîmprospătare pentru a actualiza lista.</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../src/Misc/Translator.cpp" line="231"/>
+        <location filename="../../src/Misc/Translator.cpp" line="95"/>
         <source>Failed to load welcome text :(</source>
         <translation>Nu s-a putut încărca textul de bun venit :(</translation>
     </message>
@@ -22699,7 +23440,7 @@ Faceți clic pe Reîmprospătare pentru a actualiza lista.</translation>
         <translation>Eroare generală de I/O</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="197"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="198"/>
         <source>
 
 This script may use Lua 5.3 bitwise syntax, which this runtime does not support. Replace: %1. The bit and bit32 libraries are available in every script.</source>
@@ -22708,13 +23449,13 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="485"/>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="257"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="486"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="225"/>
         <source>Frame Parser Disabled</source>
         <translation>Analizor de Trame Dezactivat</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="486"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="487"/>
         <source>The Lua frame parser for source %1 timed out %2 frames in a row and has been disabled to keep Serial Studio responsive.
 
 Most likely cause: an infinite loop or extremely slow operation in the script body. Fix the script and reload the project to re-enable parsing.</source>
@@ -22723,13 +23464,13 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 Cauza cea mai probabilă: o buclă infinită sau o operație extrem de lentă în corpul scriptului. Corectați scriptul și reîncărcați proiectul pentru a reactiva analizarea.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="264"/>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="304"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="265"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="305"/>
         <source>Lua Syntax Error</source>
         <translation>Eroare de Sintaxă Lua</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="265"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="266"/>
         <source>The parser code contains an error:
 
 %1
@@ -22742,17 +23483,17 @@ Serial Studio can rewrite the unsupported operators as bit.* calls and reload th
 Serial Studio poate rescrie operatorii nesuportați ca apeluri bit.* și reîncărca parser-ul. Biblioteca bit funcționează pe întregi pe 32 de biți, astfel încât o valoare mai mare de 32 de biți va face wrap odată rescrisă.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="275"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="276"/>
         <source>Fix Automatically</source>
         <translation>Corectează Automat</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="276"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="277"/>
         <source>Leave Unchanged</source>
         <translation>Lasă Neschimbat</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="305"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="306"/>
         <source>The parser code contains an error:
 
 %1</source>
@@ -22761,12 +23502,12 @@ Serial Studio poate rescrie operatorii nesuportați ca apeluri bit.* și reînc�
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="653"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="654"/>
         <source>Lua Runtime Error</source>
         <translation>Eroare de Execuție Lua</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="654"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="655"/>
         <source>The parser code triggered an error:
 
 %1</source>
@@ -22775,30 +23516,30 @@ Serial Studio poate rescrie operatorii nesuportați ca apeluri bit.* și reînc�
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="675"/>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="540"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="676"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="508"/>
         <source>Missing Parse Function</source>
         <translation>Funcție Parse Lipsă</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="676"/>
-        <source>The 'parse' function is not defined in the script.
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="677"/>
+        <source>The &apos;parse&apos; function is not defined in the script.
 
 Please ensure your code includes:
 function parse(frame) ... end</source>
-        <translation>Funcția 'parse' nu este definită în script.
+        <translation>Funcția &apos;parse&apos; nu este definită în script.
 
 Asigurați-vă că codul include:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="738"/>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="592"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="739"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="560"/>
         <source>Parse Function Runtime Error</source>
         <translation>Eroare de Execuție A Funcției Parse</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="739"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="740"/>
         <source>The parse function contains an error:
 
 %1
@@ -22811,12 +23552,12 @@ Please fix the error in the function body.</source>
 Vă rugăm să corectați eroarea în corpul funcției.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="248"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="216"/>
         <source>parse() timed out after %1 ms</source>
         <translation>parse() a expirat după %1 ms</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="258"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="226"/>
         <source>The JavaScript frame parser for source %1 timed out %2 frames in a row and has been disabled to keep Serial Studio responsive.
 
 Most likely cause: an infinite loop or extremely slow operation in the script body. Fix the script and reload the project to re-enable parsing.</source>
@@ -22825,12 +23566,12 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 Cauza cea mai probabilă: o buclă infinită sau o operație extrem de lentă în corpul scriptului. Corectați scriptul și reîncărcați proiectul pentru a reactiva analizarea.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="481"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="449"/>
         <source>JavaScript Timed Out</source>
         <translation>Javascript A Expirat</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="482"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="450"/>
         <source>The parser code did not finish evaluating within %1 ms and was interrupted.
 
 Most likely cause: an infinite loop at the top level of the script.</source>
@@ -22839,12 +23580,12 @@ Most likely cause: an infinite loop at the top level of the script.</source>
 Cauza cea mai probabilă: o buclă infinită la nivelul superior al scriptului.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="499"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="467"/>
         <source>JavaScript Syntax Error</source>
         <translation>Eroare de Sintaxă Javascript</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="500"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="468"/>
         <source>The parser code contains a syntax error at line %1:
 
 %2</source>
@@ -22853,12 +23594,12 @@ Cauza cea mai probabilă: o buclă infinită la nivelul superior al scriptului.<
 %2</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="514"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="482"/>
         <source>JavaScript Exception Occurred</source>
         <translation>A Apărut O Excepție Javascript</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="515"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="483"/>
         <source>The parser code triggered the following exceptions:
 
 %1</source>
@@ -22867,18 +23608,18 @@ Cauza cea mai probabilă: o buclă infinită la nivelul superior al scriptului.<
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="541"/>
-        <source>The 'parse' function is not defined in the script.
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="509"/>
+        <source>The &apos;parse&apos; function is not defined in the script.
 
 Please ensure your code includes:
 function parse(frame) { ... }</source>
-        <translation>Funcția 'parse' nu este definită în script.
+        <translation>Funcția &apos;parse&apos; nu este definită în script.
 
 Asigurați-vă că codul dvs. include:
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="593"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="561"/>
         <source>The parse function contains an error at line %1:
 
 %2
@@ -22891,67 +23632,67 @@ Please fix the error in the function body.</source>
 Vă rugăm să corectați eroarea în corpul funcției.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="693"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="661"/>
         <source>Invalid Function Declaration</source>
         <translation>Declarație de Funcție Invalidă</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="694"/>
-        <source>No callable 'parse' export found.
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="662"/>
+        <source>No callable &apos;parse&apos; export found.
 
 Define one of:
   function parse(frame) { ... }
   const parse = (frame) =&gt; { ... }</source>
-        <translation>Nu a fost găsit niciun export 'parse' apelabil.
+        <translation>Nu a fost găsit niciun export &apos;parse&apos; apelabil.
 
 Definește una dintre variante:
   function parse(frame) { ... }
   const parse = (frame) =&gt; { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="710"/>
-        <source>The 'parse' function must accept at least one parameter (the frame payload).</source>
-        <translation>Funcția 'parse' trebuie să accepte cel puțin un parametru (payload-ul frame-ului).</translation>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="678"/>
+        <source>The &apos;parse&apos; function must accept at least one parameter (the frame payload).</source>
+        <translation>Funcția &apos;parse&apos; trebuie să accepte cel puțin un parametru (payload-ul frame-ului).</translation>
     </message>
     <message>
-        <source>No valid 'parse' function declaration found.
+        <source>No valid &apos;parse&apos; function declaration found.
 
 Expected format:
 function parse(frame) { ... }</source>
-        <translation type="vanished">Nu a fost găsită o declarație validă a funcției 'parse'.
+        <translation type="vanished">Nu a fost găsită o declarație validă a funcției &apos;parse&apos;.
 
 Format așteptat:
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="709"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="677"/>
         <source>Invalid Function Parameter</source>
         <translation>Parametru Funcție Invalid</translation>
     </message>
     <message>
-        <source>The 'parse' function must have at least one parameter.
+        <source>The &apos;parse&apos; function must have at least one parameter.
 
 Expected format:
 function parse(frame) { ... }</source>
-        <translation type="vanished">Funcția 'parse' trebuie să aibă cel puțin un parametru.
+        <translation type="vanished">Funcția &apos;parse&apos; trebuie să aibă cel puțin un parametru.
 
 Format așteptat:
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="675"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="643"/>
         <source>Deprecated Function Signature</source>
         <translation>Semnătură Funcție Depreciată</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="676"/>
-        <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="644"/>
+        <source>The &apos;parse&apos; function uses the old two-parameter format: parse(%1, %2)
 
 This format is no longer supported. Please update to the new single-parameter format:
 function parse(%1) { ... }
 
 The separator parameter is no longer needed.</source>
-        <translation>Funcția 'parse' folosește formatul vechi cu doi parametri: parse(%1, %2)
+        <translation>Funcția &apos;parse&apos; folosește formatul vechi cu doi parametri: parse(%1, %2)
 
 Acest format nu mai este suportat. Vă rugăm să actualizați la noul format cu un singur parametru:
 function parse(%1) { ... }
@@ -22998,37 +23739,37 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Închide</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall/WaterfallOverlay.cpp" line="220"/>
+        <location filename="../../src/UI/Widgets/Waterfall/WaterfallOverlay.cpp" line="507"/>
         <source>Time (s)</source>
         <translation>Timp (s)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall/WaterfallOverlay.cpp" line="299"/>
+        <location filename="../../src/UI/Widgets/Waterfall/WaterfallOverlay.cpp" line="591"/>
         <source>%1  %2 dB</source>
         <translation>%1  %2 dB</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall/WaterfallOverlay.cpp" line="411"/>
+        <location filename="../../src/UI/Widgets/Waterfall/WaterfallOverlay.cpp" line="706"/>
         <source>Freq: %1</source>
         <translation>Frec: %1</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall/WaterfallOverlay.cpp" line="414"/>
+        <location filename="../../src/UI/Widgets/Waterfall/WaterfallOverlay.cpp" line="710"/>
         <source>Time: −%1</source>
         <translation>Timp: −%1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIProvider.cpp" line="332"/>
+        <location filename="../../src/AI/Providers/OpenAIProvider.cpp" line="154"/>
         <source>No OpenAI API key set. Open Manage Keys to add one.</source>
         <translation>Nicio cheie API OpenAI configurată. Deschide Gestionare Chei pentru a adăuga una.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/AnthropicProvider.cpp" line="207"/>
+        <location filename="../../src/AI/Providers/AnthropicProvider.cpp" line="197"/>
         <source>No Anthropic API key set. Open Manage Keys to add one.</source>
         <translation>Nicio cheie API Anthropic configurată. Deschide Gestionare Chei pentru a adăuga una.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/GeminiProvider.cpp" line="255"/>
+        <location filename="../../src/AI/Providers/GeminiProvider.cpp" line="256"/>
         <source>No Gemini API key set. Open Manage Keys to add one.</source>
         <translation>Nicio cheie API Gemini configurată. Deschide Gestionare Chei pentru a adăuga una.</translation>
     </message>
@@ -23066,79 +23807,79 @@ Parametrul separator nu mai este necesar.</translation>
         <translation type="vanished">Serial Studio elimină trame pentru a menține aplicația responsivă. Simplificați sau optimizați scriptul analizorului de trame pentru a reduce sarcina de lucru.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="388"/>
-        <source>Expected %1, got '%2'</source>
-        <translation>Se aștepta %1, s-a primit '%2'</translation>
+        <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="120"/>
+        <source>Expected %1, got &apos;%2&apos;</source>
+        <translation>Se aștepta %1, s-a primit &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="437"/>
-        <source>Expected enum name after 'enum'</source>
-        <translation>Se așteaptă nume enum după 'enum'</translation>
+        <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="193"/>
+        <source>Expected enum name after &apos;enum&apos;</source>
+        <translation>Se așteaptă nume enum după &apos;enum&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="451"/>
+        <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="207"/>
         <source>Expected oneof name</source>
         <translation>Se așteaptă nume oneof</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="478"/>
-        <source>Field tag '%1' out of range (1..%2)</source>
-        <translation>Eticheta câmpului '%1' în afara intervalului (1..%2)</translation>
+        <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="236"/>
+        <source>Field tag &apos;%1&apos; out of range (1..%2)</source>
+        <translation>Eticheta câmpului &apos;%1&apos; în afara intervalului (1..%2)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="496"/>
+        <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="254"/>
         <source>Expected key type in map&lt;&gt;</source>
         <translation>Se așteaptă tip cheie în map&lt;&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="504"/>
+        <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="262"/>
         <source>Expected value type in map&lt;&gt;</source>
         <translation>Se așteaptă tip valoare în map&lt;&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="512"/>
+        <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="270"/>
         <source>Expected map field name</source>
         <translation>Se așteaptă nume câmp map</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="524"/>
+        <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="282"/>
         <source>Expected map field tag</source>
         <translation>Se așteaptă etichetă câmp map</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="556"/>
-        <source>Expected field type, got '%1'</source>
-        <translation>Se așteaptă tip câmp, s-a primit '%1'</translation>
+        <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="314"/>
+        <source>Expected field type, got &apos;%1&apos;</source>
+        <translation>Se așteaptă tip câmp, s-a primit &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="575"/>
+        <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="333"/>
         <source>Expected field name after type</source>
         <translation>Se așteaptă nume câmp după tip</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="585"/>
+        <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="343"/>
         <source>Expected field tag number</source>
         <translation>Se așteaptă număr etichetă câmp</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="632"/>
+        <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="369"/>
         <source>Message nesting too deep (limit %1)</source>
         <translation>Imbricare mesaje prea adâncă (limită %1)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="637"/>
+        <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="374"/>
         <source>Expected message name</source>
         <translation>Se așteaptă nume mesaj</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="719"/>
-        <source>Unexpected token '%1' at file scope</source>
-        <translation>Token neașteptat '%1' în domeniul fișierului</translation>
+        <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="462"/>
+        <source>Unexpected token &apos;%1&apos; at file scope</source>
+        <translation>Token neașteptat &apos;%1&apos; în domeniul fișierului</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="765"/>
-        <source>Unsupported top-level keyword '%1'</source>
-        <translation>Cuvânt cheie de nivel superior nesuportat '%1'</translation>
+        <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="508"/>
+        <source>Unsupported top-level keyword &apos;%1&apos;</source>
+        <translation>Cuvânt cheie de nivel superior nesuportat &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../../src/Misc/GraphicsBackend.cpp" line="295"/>
@@ -23179,8 +23920,8 @@ Parametrul separator nu mai este necesar.</translation>
         <translation type="vanished">Configurația parserului nativ nu este un obiect JSON valid.</translation>
     </message>
     <message>
-        <source>Unknown native parser template: "%1".</source>
-        <translation type="vanished">Șablon parser nativ necunoscut: "%1".</translation>
+        <source>Unknown native parser template: &quot;%1&quot;.</source>
+        <translation type="vanished">Șablon parser nativ necunoscut: &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="190"/>
@@ -23189,8 +23930,8 @@ Parametrul separator nu mai este necesar.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="200"/>
-        <source>Unknown Built-In parser template: "%1".</source>
-        <translation>Șablon parser integrat necunoscut: "%1".</translation>
+        <source>Unknown Built-In parser template: &quot;%1&quot;.</source>
+        <translation>Șablon parser integrat necunoscut: &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="334"/>
@@ -23207,32 +23948,32 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Activare Offline</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1361"/>
+        <location filename="../../src/IO/Drivers/USB/UsbHex.cpp" line="84"/>
         <source>timed out</source>
         <translation>expirat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1363"/>
+        <location filename="../../src/IO/Drivers/USB/UsbHex.cpp" line="86"/>
         <source>cancelled</source>
         <translation>anulat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1365"/>
+        <location filename="../../src/IO/Drivers/USB/UsbHex.cpp" line="88"/>
         <source>stalled (request not supported)</source>
         <translation>blocat (cerere nesuportată)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1367"/>
+        <location filename="../../src/IO/Drivers/USB/UsbHex.cpp" line="90"/>
         <source>device disconnected</source>
         <translation>dispozitiv deconectat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1369"/>
+        <location filename="../../src/IO/Drivers/USB/UsbHex.cpp" line="92"/>
         <source>buffer overflow</source>
         <translation>depășire buffer</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1371"/>
+        <location filename="../../src/IO/Drivers/USB/UsbHex.cpp" line="94"/>
         <source>transfer error</source>
         <translation>eroare de transfer</translation>
     </message>
@@ -23324,14 +24065,14 @@ Parametrul separator nu mai este necesar.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="368"/>
-        <source>expected '%1'</source>
-        <translation>se așteaptă '%1'</translation>
+        <source>expected &apos;%1&apos;</source>
+        <translation>se așteaptă &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="408"/>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="463"/>
-        <source>unknown name '%1'</source>
-        <translation>nume necunoscut '%1'</translation>
+        <source>unknown name &apos;%1&apos;</source>
+        <translation>nume necunoscut &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="425"/>
@@ -23348,8 +24089,8 @@ Parametrul separator nu mai este necesar.</translation>
         <translation type="vanished">table() necesită în al doilea rând un nume de registru</translation>
     </message>
     <message>
-        <source>unknown register '%1.%2'</source>
-        <translation type="vanished">registru necunoscut '%1.%2'</translation>
+        <source>unknown register &apos;%1.%2&apos;</source>
+        <translation type="vanished">registru necunoscut &apos;%1.%2&apos;</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="436"/>
@@ -23358,8 +24099,8 @@ Parametrul separator nu mai este necesar.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="441"/>
-        <source>unknown variable '%1.%2'</source>
-        <translation>variabilă necunoscută '%1.%2'</translation>
+        <source>unknown variable &apos;%1.%2&apos;</source>
+        <translation>variabilă necunoscută &apos;%1.%2&apos;</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="459"/>
@@ -23373,8 +24114,8 @@ Parametrul separator nu mai este necesar.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="529"/>
-        <source>unknown function '%1'</source>
-        <translation>funcție necunoscută '%1'</translation>
+        <source>unknown function &apos;%1&apos;</source>
+        <translation>funcție necunoscută &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="540"/>
@@ -23389,8 +24130,8 @@ Parametrul separator nu mai este necesar.</translation>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="565"/>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="658"/>
-        <source>unexpected '%1'</source>
-        <translation>'%1' neașteptat</translation>
+        <source>unexpected &apos;%1&apos;</source>
+        <translation>&apos;%1&apos; neașteptat</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="618"/>
@@ -23489,7 +24230,7 @@ Parametrul separator nu mai este necesar.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RemoteAttach.qml" line="133"/>
-        <source>Watch another Serial Studio instance's dashboard over the network. The view is read-only: nothing you do here reaches the remote device.</source>
+        <source>Watch another Serial Studio instance&apos;s dashboard over the network. The view is read-only: nothing you do here reaches the remote device.</source>
         <translation>Urmărește tabloul de bord al altei instanțe Serial Studio prin rețea. Vizualizarea este doar pentru citire: nimic din ce faceți aici nu ajunge la dispozitivul la distanță.</translation>
     </message>
     <message>
@@ -23877,7 +24618,7 @@ Parametrul separator nu mai este necesar.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="96"/>
-        <source>Serial Studio couldn't reach your device.</source>
+        <source>Serial Studio couldn&apos;t reach your device.</source>
         <translation>Serial Studio nu a putut accesa dispozitivul.</translation>
     </message>
     <message>
@@ -23887,7 +24628,7 @@ Parametrul separator nu mai este necesar.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="108"/>
-        <source>Make sure it's plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
+        <source>Make sure it&apos;s plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
         <translation>Asigură-te că este conectat, pornit și nu este deja utilizat de altă aplicație. Poți reîncerca, alege un alt dispozitiv sau închide.</translation>
     </message>
     <message>
@@ -24438,7 +25179,7 @@ Adaugă adrese absolute mai sus pentru a interoga controlerul.</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="630"/>
-        <source>Compares this session's decoded values against the project currently open in the editor. The result reflects a transient candidate and is not stored with the session.</source>
+        <source>Compares this session&apos;s decoded values against the project currently open in the editor. The result reflects a transient candidate and is not stored with the session.</source>
         <translation>Compară valorile decodate ale acestei sesiuni cu proiectul deschis în prezent în editor. Rezultatul reflectă un candidat tranzitoriu și nu este stocat cu sesiunea.</translation>
     </message>
     <message>
@@ -24639,103 +25380,101 @@ Adaugă adrese absolute mai sus pentru a interoga controlerul.</translation>
 <context>
     <name>Sessions::DatabaseManager</name>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1280"/>
         <source>Select logo image</source>
-        <translation>Selectează imaginea logo</translation>
+        <translation type="vanished">Selectează imaginea logo</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1282"/>
         <source>Images (*.png *.jpg *.jpeg *.svg)</source>
-        <translation>Imagini (*.png *.jpg *.jpeg *.svg)</translation>
+        <translation type="vanished">Imagini (*.png *.jpg *.jpeg *.svg)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="651"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="607"/>
         <source>Open Session File</source>
         <translation>Deschide Fișier de Sesiune</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="653"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="609"/>
         <source>Session files (*.db)</source>
         <translation>Fișiere de sesiune (*.db)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1484"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1230"/>
         <source>Cannot open session file</source>
         <translation>Nu se poate deschide fișierul de sesiune</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="878"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="834"/>
         <source>Delete session from %1?</source>
         <translation>Șterge sesiunea din %1?</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="881"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="837"/>
         <source>Delete Session</source>
         <translation>Șterge Sesiunea</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1344"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1090"/>
         <source>No project data</source>
         <translation>Nicio dată de proiect</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="879"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="835"/>
         <source>All readings and raw data for this session are permanently removed.</source>
         <translation>Toate citirile și datele brute pentru această sesiune sunt eliminate permanent.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="709"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="718"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="665"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="674"/>
         <source>Lock Session File</source>
         <translation>Blochează Fișierul de Sesiune</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="710"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="666"/>
         <source>Choose a password to lock the session file:</source>
         <translation>Alegeți o parolă pentru a bloca fișierul de sesiune:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="719"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="675"/>
         <source>Confirm the password:</source>
         <translation>Confirmați parola:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="727"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="683"/>
         <source>Passwords do not match</source>
         <translation>Parolele nu se potrivesc</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="728"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="684"/>
         <source>The two passwords you entered do not match. The session file was not locked.</source>
         <translation>Cele două parole introduse nu se potrivesc. Fișierul de sesiune nu a fost blocat.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="764"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="720"/>
         <source>Unlock Session File</source>
         <translation>Deblochează Fișierul de Sesiune</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="765"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="721"/>
         <source>Enter the session file password:</source>
         <translation>Introduceți parola fișierului de sesiune:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="775"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="731"/>
         <source>Incorrect password</source>
         <translation>Parolă incorectă</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="776"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="732"/>
         <source>The password you entered does not match the one stored in the session file.</source>
         <translation>Parola introdusă nu se potrivește cu cea stocată în fișierul de sesiune.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="868"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="824"/>
         <source>Session file locked</source>
         <translation>Fișier de sesiune blocat</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="869"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="825"/>
         <source>Unlock the session file before deleting recorded sessions.</source>
         <translation>Deblocați fișierul de sesiune înainte de a șterge sesiunile înregistrate.</translation>
     </message>
@@ -24744,14 +25483,12 @@ Adaugă adrese absolute mai sus pentru a interoga controlerul.</translation>
         <translation type="vanished">Această sesiune nu conține un fișier de proiect încorporat — tabloul de bord revine la o dispunere de grafic rapid.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1023"/>
         <source>Export Session to CSV</source>
-        <translation>Exportă Sesiunea în CSV</translation>
+        <translation type="vanished">Exportă Sesiunea în CSV</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1023"/>
         <source>CSV files (*.csv)</source>
-        <translation>Fișiere CSV (*.CSV)</translation>
+        <translation type="vanished">Fișiere CSV (*.CSV)</translation>
     </message>
     <message>
         <source>Export Complete</source>
@@ -24768,89 +25505,77 @@ Adaugă adrese absolute mai sus pentru a interoga controlerul.</translation>
         <translation type="vanished">Se pregătește exportul…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1252"/>
         <source>Done</source>
-        <translation>Finalizat</translation>
+        <translation type="vanished">Finalizat</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1218"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1252"/>
         <source>Failed</source>
-        <translation>Eșuat</translation>
+        <translation type="vanished">Eșuat</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1223"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1261"/>
         <source>Report Failed</source>
-        <translation>Raport Eșuat</translation>
+        <translation type="vanished">Raport Eșuat</translation>
     </message>
     <message>
         <source>Could not generate the report. Check the output path and try again.</source>
         <translation type="vanished">Nu s-a putut genera raportul. Verificați calea de ieșire și încercați din nou.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1153"/>
         <source>Save PDF Report</source>
-        <translation>Salvează Raport PDF</translation>
+        <translation type="vanished">Salvează Raport PDF</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1103"/>
         <source>Loading session data…</source>
-        <translation>Se încarcă datele sesiunii…</translation>
+        <translation type="vanished">Se încarcă datele sesiunii…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1153"/>
         <source>Save HTML Report</source>
-        <translation>Salvează Raport HTML</translation>
+        <translation type="vanished">Salvează Raport HTML</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1154"/>
         <source>PDF files (*.pdf)</source>
-        <translation>Fișiere PDF (*.PDF)</translation>
+        <translation type="vanished">Fișiere PDF (*.PDF)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1154"/>
         <source>HTML files (*.html)</source>
-        <translation>Fișiere HTML (*.HTML)</translation>
+        <translation type="vanished">Fișiere HTML (*.HTML)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1224"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1262"/>
         <source>Could not generate the report.</source>
-        <translation>Nu s-a putut genera raportul.</translation>
+        <translation type="vanished">Nu s-a putut genera raportul.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1345"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1091"/>
         <source>This session file does not contain an embedded project.</source>
         <translation>Acest fișier de sesiune nu conține un proiect încorporat.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1354"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1100"/>
         <source>Invalid project data</source>
         <translation>Date de proiect invalide</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1355"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1101"/>
         <source>The embedded project JSON is malformed and cannot be restored.</source>
         <translation>JSON-ul proiectului încorporat este malformat și nu poate fi restaurat.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1365"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1111"/>
         <source>Restore Project</source>
         <translation>Restaurează Proiectul</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1365"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1111"/>
         <source>Serial Studio projects (*.ssproj *.json)</source>
         <translation>Proiecte Serial Studio (*.ssproj *.json)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1373"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1119"/>
         <source>Cannot write file</source>
         <translation>Nu se poate scrie fișierul</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1373"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1119"/>
         <source>Check file permissions and try again.</source>
         <translation>Verifică permisiunile fișierului și încearcă din nou.</translation>
     </message>
@@ -25138,12 +25863,12 @@ Adaugă adrese absolute mai sus pentru a interoga controlerul.</translation>
 <context>
     <name>Sessions::Player</name>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="311"/>
+        <location filename="../../src/Sessions/Player.cpp" line="312"/>
         <source>Open Session File</source>
         <translation>Deschide Fișier de Sesiune</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="313"/>
+        <location filename="../../src/Sessions/Player.cpp" line="314"/>
         <source>Session files (*.db)</source>
         <translation>Fișiere de sesiune (*.db)</translation>
     </message>
@@ -25159,7 +25884,7 @@ Adaugă adrese absolute mai sus pentru a interoga controlerul.</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/Player.cpp" line="445"/>
-        <location filename="../../src/Sessions/Player.cpp" line="535"/>
+        <location filename="../../src/Sessions/Player.cpp" line="469"/>
         <source>Cannot open session file</source>
         <translation>Nu se poate deschide fișierul de sesiune</translation>
     </message>
@@ -25169,32 +25894,32 @@ Adaugă adrese absolute mai sus pentru a interoga controlerul.</translation>
         <translation>Eroare necunoscută</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="463"/>
+        <location filename="../../src/Sessions/Player.cpp" line="462"/>
         <source>No project data</source>
         <translation>Nicio dată de proiect</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="464"/>
+        <location filename="../../src/Sessions/Player.cpp" line="463"/>
         <source>This session does not contain an embedded project file — the dashboard falls back to a quick-plot layout.</source>
         <translation>Această sesiune nu conține un fișier de proiect încorporat — tabloul de bord revine la o dispunere de grafic rapid.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="536"/>
+        <location filename="../../src/Sessions/Player.cpp" line="470"/>
         <source>Check file permissions and try again.</source>
         <translation>Verifică permisiunile fișierului și încearcă din nou.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="689"/>
+        <location filename="../../src/Sessions/Player.cpp" line="621"/>
         <source>Sessions</source>
         <translation>Sesiuni</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="690"/>
+        <location filename="../../src/Sessions/Player.cpp" line="622"/>
         <source>Recording uses an older copy of the project</source>
         <translation>Înregistrarea folosește o copie mai veche a proiectului</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="691"/>
+        <location filename="../../src/Sessions/Player.cpp" line="623"/>
         <source>The dashboard shown is the one embedded in the recording; the project on disk has changed since. Close the session to return to the current project.</source>
         <translation>Tabloul de bord afișat este cel încorporat în înregistrare; proiectul de pe disc s-a modificat între timp. Închideți sesiunea pentru a reveni la proiectul curent.</translation>
     </message>
@@ -25258,6 +25983,77 @@ Adaugă adrese absolute mai sus pentru a interoga controlerul.</translation>
         <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="386"/>
         <source>The selected session does not contain any frames.</source>
         <translation>Sesiunea selectată nu conține niciun cadru.</translation>
+    </message>
+</context>
+<context>
+    <name>Sessions::SessionExporter</name>
+    <message>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="169"/>
+        <source>Export Session to CSV</source>
+        <translation type="unfinished">Exportă Sesiunea în CSV</translation>
+    </message>
+    <message>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="169"/>
+        <source>CSV files (*.csv)</source>
+        <translation type="unfinished">Fișiere CSV (*.CSV)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="281"/>
+        <source>Loading session data…</source>
+        <translation type="unfinished">Se încarcă datele sesiunii…</translation>
+    </message>
+    <message>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="309"/>
+        <source>Save PDF Report</source>
+        <translation type="unfinished">Salvează Raport PDF</translation>
+    </message>
+    <message>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="309"/>
+        <source>Save HTML Report</source>
+        <translation type="unfinished">Salvează Raport HTML</translation>
+    </message>
+    <message>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="310"/>
+        <source>PDF files (*.pdf)</source>
+        <translation type="unfinished">Fișiere PDF (*.PDF)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="310"/>
+        <source>HTML files (*.html)</source>
+        <translation type="unfinished">Fișiere HTML (*.HTML)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="379"/>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="413"/>
+        <source>Failed</source>
+        <translation type="unfinished">Eșuat</translation>
+    </message>
+    <message>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="384"/>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="422"/>
+        <source>Report Failed</source>
+        <translation type="unfinished">Raport Eșuat</translation>
+    </message>
+    <message>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="385"/>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="423"/>
+        <source>Could not generate the report.</source>
+        <translation type="unfinished">Nu s-a putut genera raportul.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="413"/>
+        <source>Done</source>
+        <translation type="unfinished">Finalizat</translation>
+    </message>
+    <message>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="441"/>
+        <source>Select logo image</source>
+        <translation type="unfinished">Selectează imaginea logo</translation>
+    </message>
+    <message>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="443"/>
+        <source>Images (*.png *.jpg *.jpeg *.svg)</source>
+        <translation type="unfinished">Imagini (*.png *.jpg *.jpeg *.svg)</translation>
     </message>
 </context>
 <context>
@@ -25465,7 +26261,7 @@ Adaugă adrese absolute mai sus pentru a interoga controlerul.</translation>
         <translation>Actualizări și Noutăți</translation>
     </message>
     <message>
-        <source>Show What's New on Startup</source>
+        <source>Show What&apos;s New on Startup</source>
         <translation type="vanished">Afișează Ce Este Nou la Pornire</translation>
     </message>
     <message>
@@ -26015,7 +26811,7 @@ Adaugă adrese absolute mai sus pentru a interoga controlerul.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="449"/>
-        <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
+        <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
         <translation>Dublu-clic pe această implementare deschide direct tabloul de bord live pentru acest proiect. Fără bară de instrumente sau panou de configurare, doar datele, iar Serial Studio se închide imediat ce dispozitivul se deconectează.</translation>
     </message>
     <message>
@@ -26134,7 +26930,7 @@ Adaugă adrese absolute mai sus pentru a interoga controlerul.</translation>
         <translation>Ecran Complet</translation>
     </message>
     <message>
-        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
+        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
         <translation type="vanished">Dublu-clic pe această comandă rapidă deschide direct tabloul de bord live pentru acest proiect. Fără bară de instrumente sau panou de configurare, doar datele, iar Serial Studio se închide imediat ce dispozitivul se deconectează.</translation>
     </message>
     <message>
@@ -26142,7 +26938,7 @@ Adaugă adrese absolute mai sus pentru a interoga controlerul.</translation>
         <translation type="vanished">Încorporează Proiectul</translation>
     </message>
     <message>
-        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.
+        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.
 
 Turn on Embed Project to bake the project into the shortcut, so it keeps working even if the original file is moved or deleted.</source>
         <translation type="vanished">Dublu-clic pe această scurtătură duce pe cineva direct la tabloul de bord live pentru acest proiect. Nu există bară de unelte sau panou de configurare, doar datele, iar Serial Studio se închide imediat ce dispozitivul se deconectează.
@@ -26457,8 +27253,8 @@ Activează Încorporează Proiectul pentru a integra proiectul în scurtătură,
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="392"/>
-        <source>Show "%1"</source>
-        <translation>Afișează "%1"</translation>
+        <source>Show &quot;%1&quot;</source>
+        <translation>Afișează &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="397"/>
@@ -27239,23 +28035,23 @@ Activează Încorporează Proiectul pentru a integra proiectul în scurtătură,
     <name>TlsIdentity</name>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="141"/>
-        <source>The file "%1" does not exist.</source>
-        <translation>Fișierul "%1" nu există.</translation>
+        <source>The file &quot;%1&quot; does not exist.</source>
+        <translation>Fișierul &quot;%1&quot; nu există.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="144"/>
-        <source>The file "%1" cannot be read.</source>
-        <translation>Fișierul "%1" nu poate fi citit.</translation>
+        <source>The file &quot;%1&quot; cannot be read.</source>
+        <translation>Fișierul &quot;%1&quot; nu poate fi citit.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="147"/>
-        <source>"%1" is not a valid PEM certificate or key file.</source>
-        <translation>"%1" nu este un fișier certificat sau cheie PEM valid.</translation>
+        <source>&quot;%1&quot; is not a valid PEM certificate or key file.</source>
+        <translation>&quot;%1&quot; nu este un fișier certificat sau cheie PEM valid.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="151"/>
-        <source>"%1" is too large to be a PEM certificate or key file.</source>
-        <translation>"%1" este prea mare pentru a fi un fișier certificat sau cheie PEM.</translation>
+        <source>&quot;%1&quot; is too large to be a PEM certificate or key file.</source>
+        <translation>&quot;%1&quot; este prea mare pentru a fi un fișier certificat sau cheie PEM.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="156"/>
@@ -27264,13 +28060,13 @@ Activează Încorporează Proiectul pentru a integra proiectul în scurtătură,
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="160"/>
-        <source>The private key "%1" is encrypted. Enter its passphrase and try again.</source>
-        <translation>Cheia privată "%1" este criptată. Introdu fraza de acces și încearcă din nou.</translation>
+        <source>The private key &quot;%1&quot; is encrypted. Enter its passphrase and try again.</source>
+        <translation>Cheia privată &quot;%1&quot; este criptată. Introdu fraza de acces și încearcă din nou.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="165"/>
-        <source>The passphrase does not unlock the private key "%1".</source>
-        <translation>Fraza de acces nu deblochează cheia privată "%1".</translation>
+        <source>The passphrase does not unlock the private key &quot;%1&quot;.</source>
+        <translation>Fraza de acces nu deblochează cheia privată &quot;%1&quot;.</translation>
     </message>
 </context>
 <context>
@@ -27740,7 +28536,7 @@ Activează Încorporează Proiectul pentru a integra proiectul în scurtătură,
     </message>
     <message>
         <location filename="../../qml/Dialogs/TriggerDialog.qml" line="388"/>
-        <source>Leave timebase empty to use the plot's time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
+        <source>Leave timebase empty to use the plot&apos;s time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
         <translation>Lasă baza de timp goală pentru a folosi intervalul de timp al graficului; micșorează-o pentru a mări un semnal rapid. Holdoff ignoră declanșările noi pentru un moment după fiecare.</translation>
     </message>
     <message>
@@ -27806,7 +28602,7 @@ Activează Încorporează Proiectul pentru a integra proiectul în scurtătură,
         <translation>0</translation>
     </message>
     <message>
-        <source>Timebase sets how much time one sweep shows; leave it empty to use the plot's time range. Lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each one.</source>
+        <source>Timebase sets how much time one sweep shows; leave it empty to use the plot&apos;s time range. Lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each one.</source>
         <translation type="vanished">Baza de timp stabilește cât timp afișează un baleiaj; lasă-l gol pentru a folosi intervalul de timp al graficului. Micșorează-l pentru a mări un semnal rapid. Holdoff ignoră declanșările noi pentru un moment după fiecare declanșare.</translation>
     </message>
     <message>
@@ -27925,36 +28721,32 @@ Activează Încorporează Proiectul pentru a integra proiectul în scurtătură,
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2823"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2569"/>
         <source>Console</source>
         <translation>Consolă</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2831"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2577"/>
         <source>Notifications</source>
         <translation>Notificări</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2839"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2585"/>
         <source>Clock</source>
         <translation>Ceas</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2846"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2592"/>
         <source>Stopwatch</source>
         <translation>Cronometru</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2900"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2915"/>
         <source>%1 (Fallback)</source>
-        <translation>%1 (Rezervă)</translation>
+        <translation type="vanished">%1 (Rezervă)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2937"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="3016"/>
         <source>LED Panel (%1)</source>
-        <translation>Panou LED (%1)</translation>
+        <translation type="vanished">Panou LED (%1)</translation>
     </message>
 </context>
 <context>
@@ -27973,27 +28765,27 @@ Activează Încorporează Proiectul pentru a integra proiectul în scurtătură,
 <context>
     <name>UI::WindowManager</name>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1160"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="851"/>
         <source>Select Background Image</source>
         <translation>Selectează Imaginea de Fundal</translation>
     </message>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1162"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="853"/>
         <source>Images (*.png *.jpg *.jpeg *.bmp)</source>
         <translation>Imagini (*.png *.jpg *.jpeg *.bmp)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1527"/>
+        <location filename="../../src/UI/WindowManager/SnapOverlay.cpp" line="232"/>
         <source>Width: %1    Height: %2</source>
         <translation>Lățime: %1    Înălțime: %2</translation>
     </message>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1529"/>
+        <location filename="../../src/UI/WindowManager/SnapOverlay.cpp" line="235"/>
         <source>Width: %1</source>
         <translation>Lățime: %1</translation>
     </message>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1531"/>
+        <location filename="../../src/UI/WindowManager/SnapOverlay.cpp" line="237"/>
         <source>Height: %1</source>
         <translation>Înălțime: %1</translation>
     </message>
@@ -28375,7 +29167,7 @@ Activează Încorporează Proiectul pentru a integra proiectul în scurtătură,
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Waterfall.qml" line="506"/>
-        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>Indisponibil prin conexiune la distanță. Acest widget necesită fluxul brut de eșantioane de la dispozitivul la distanță, pe care oglindirea tabloului de bord nu îl transmite.</translation>
     </message>
     <message>
@@ -28441,7 +29233,7 @@ Activează Încorporează Proiectul pentru a integra proiectul în scurtătură,
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="285"/>
-        <source>You're currently using the fully-featured trial of %1 Pro. It's valid for 14 days of personal, non-commercial use.</source>
+        <source>You&apos;re currently using the fully-featured trial of %1 Pro. It&apos;s valid for 14 days of personal, non-commercial use.</source>
         <translation>Folosești în prezent versiunea de probă completă a %1 Pro. Este valabilă 14 zile pentru uz personal, necomercial.</translation>
     </message>
     <message>
@@ -28456,13 +29248,13 @@ Activează Încorporează Proiectul pentru a integra proiectul în scurtătură,
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="312"/>
-        <source>To see available subscription plans, click "Upgrade Now" below.</source>
-        <translation>Pentru a vedea planurile de abonament disponibile, apasă „Actualizează Acum" mai jos.</translation>
+        <source>To see available subscription plans, click &quot;Upgrade Now&quot; below.</source>
+        <translation>Pentru a vedea planurile de abonament disponibile, apasă „Actualizează Acum&quot; mai jos.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="333"/>
-        <source>Don't nag me about the trial.
-I understand that when it ends, I'll need to buy a license or build the GPLv3 version.</source>
+        <source>Don&apos;t nag me about the trial.
+I understand that when it ends, I&apos;ll need to buy a license or build the GPLv3 version.</source>
         <translation>Nu mă mai înștiința despre perioada de probă.
 Înțeleg că la expirare va trebui să cumpăr o licență sau să compilez versiunea GPLv3.</translation>
     </message>
@@ -28523,7 +29315,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>WhatsNew</name>
     <message>
-        <source>What's New in %1</source>
+        <source>What&apos;s New in %1</source>
         <translation type="vanished">Noutăți în %1</translation>
     </message>
     <message>
@@ -28659,7 +29451,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation type="vanished">Bine ai venit în %1!</translation>
     </message>
     <message>
-        <source>Here's what's new in version %1.</source>
+        <source>Here&apos;s what&apos;s new in version %1.</source>
         <translation type="vanished">Iată ce este nou în versiunea %1.</translation>
     </message>
     <message>
@@ -28868,7 +29660,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="380"/>
-        <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
+        <source>We can&apos;t offer unrestricted access because the ArcGIS API key incurs real costs.</source>
         <translation>Nu putem oferi acces nelimitat deoarece cheia API ArcGIS generează costuri reale.</translation>
     </message>
 </context>
@@ -28926,7 +29718,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation type="vanished">Sfat: apasă %1 oriunde pentru a deschide paleta de comenzi.</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Terminal.cpp" line="1585"/>
+        <location filename="../../src/UI/Widgets/Terminal.cpp" line="1537"/>
         <source>Tip: Press %1 anywhere to open the command palette.</source>
         <translation>Sfat: Apăsați %1 oriunde pentru a deschide paleta de comenzi.</translation>
     </message>
@@ -28934,47 +29726,47 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Waterfall</name>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="397"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="379"/>
         <source>Viridis</source>
         <translation>Viridis</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="399"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="381"/>
         <source>Inferno</source>
         <translation>Inferno</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="401"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="383"/>
         <source>Magma</source>
         <translation>Magma</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="403"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="385"/>
         <source>Plasma</source>
         <translation>Plasma</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="405"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="387"/>
         <source>Turbo</source>
         <translation>Turbo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="407"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="389"/>
         <source>Jet</source>
         <translation>Jet</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="409"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="391"/>
         <source>Hot</source>
         <translation>Hot</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="411"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="393"/>
         <source>Grayscale</source>
         <translation>Tonuri de Gri</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="413"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="395"/>
         <source>Unknown</source>
         <translation>Necunoscut</translation>
     </message>

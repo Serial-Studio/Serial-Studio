@@ -24,6 +24,8 @@
 #include <QApplication>
 #include <QFile>
 
+#include "Misc/LanguageTable.h"
+
 #ifdef BUILD_COMMERCIAL
 #  include "Licensing/CommercialToken.h"
 #endif
@@ -68,7 +70,7 @@ Misc::Translator::Language Misc::Translator::language() const
  */
 bool Misc::Translator::rtl() const
 {
-  return m_language == Arabic || m_language == Hebrew;
+  return LanguageTable::entryFor(m_language).rightToLeft;
 }
 
 /**
@@ -76,77 +78,7 @@ bool Misc::Translator::rtl() const
  */
 Misc::Translator::Language Misc::Translator::systemLanguage() const
 {
-  Language lang;
-  switch (QLocale::system().language()) {
-    case QLocale::English:
-      lang = English;
-      break;
-    case QLocale::Spanish:
-      lang = Spanish;
-      break;
-    case QLocale::Chinese:
-      lang = Chinese;
-      break;
-    case QLocale::German:
-      lang = German;
-      break;
-    case QLocale::Russian:
-      lang = Russian;
-      break;
-    case QLocale::French:
-      lang = French;
-      break;
-    case QLocale::Japanese:
-      lang = Japanese;
-      break;
-    case QLocale::Korean:
-      lang = Korean;
-      break;
-    case QLocale::Portuguese:
-      lang = Portuguese;
-      break;
-    case QLocale::Italian:
-      lang = Italian;
-      break;
-    case QLocale::Polish:
-      lang = Polish;
-      break;
-    case QLocale::Turkish:
-      lang = Turkish;
-      break;
-    case QLocale::Ukrainian:
-      lang = Ukrainian;
-      break;
-    case QLocale::Czech:
-      lang = Czech;
-      break;
-    case QLocale::Hindi:
-      lang = Hindi;
-      break;
-    case QLocale::Dutch:
-      lang = Dutch;
-      break;
-    case QLocale::Romanian:
-      lang = Romanian;
-      break;
-    case QLocale::Swedish:
-      lang = Swedish;
-      break;
-    case QLocale::Arabic:
-      lang = Arabic;
-      break;
-    case QLocale::Hebrew:
-      lang = Hebrew;
-      break;
-    case QLocale::Vietnamese:
-      lang = Vietnamese;
-      break;
-    default:
-      lang = English;
-      break;
-  }
-
-  return lang;
+  return LanguageTable::languageForLocale(QLocale::system().language());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -158,75 +90,7 @@ Misc::Translator::Language Misc::Translator::systemLanguage() const
  */
 QString Misc::Translator::welcomeConsoleText() const
 {
-  QString lang;
-  switch (language()) {
-    case English:
-      lang = QStringLiteral("EN");
-      break;
-    case Spanish:
-      lang = QStringLiteral("ES");
-      break;
-    case Chinese:
-      lang = QStringLiteral("ZH");
-      break;
-    case German:
-      lang = QStringLiteral("DE");
-      break;
-    case Russian:
-      lang = QStringLiteral("RU");
-      break;
-    case French:
-      lang = QStringLiteral("FR");
-      break;
-    case Japanese:
-      lang = QStringLiteral("JA");
-      break;
-    case Korean:
-      lang = QStringLiteral("KO");
-      break;
-    case Portuguese:
-      lang = QStringLiteral("PT");
-      break;
-    case Italian:
-      lang = QStringLiteral("IT");
-      break;
-    case Polish:
-      lang = QStringLiteral("PL");
-      break;
-    case Turkish:
-      lang = QStringLiteral("TR");
-      break;
-    case Ukrainian:
-      lang = QStringLiteral("UK");
-      break;
-    case Czech:
-      lang = QStringLiteral("CZ");
-      break;
-    case Hindi:
-      lang = QStringLiteral("HI");
-      break;
-    case Dutch:
-      lang = QStringLiteral("NL");
-      break;
-    case Romanian:
-      lang = QStringLiteral("RO");
-      break;
-    case Swedish:
-      lang = QStringLiteral("SV");
-      break;
-    case Arabic:
-      lang = QStringLiteral("AR");
-      break;
-    case Hebrew:
-      lang = QStringLiteral("HE");
-      break;
-    case Vietnamese:
-      lang = QStringLiteral("VI");
-      break;
-    default:
-      lang = QStringLiteral("EN");
-      break;
-  }
+  const auto lang = LanguageTable::welcomeCode(language());
 
   QString text = QObject::tr("Failed to load welcome text :(");
 #ifdef BUILD_COMMERCIAL
@@ -271,33 +135,7 @@ QString Misc::Translator::acknowledgementsText() const
  */
 QStringList& Misc::Translator::availableLanguages()
 {
-  static QStringList list;
-  if (list.isEmpty()) {
-    // code-verify off
-    list.append(QStringLiteral("English"));
-    list.append(QStringLiteral("Español"));
-    list.append(QStringLiteral("简体中文"));
-    list.append(QStringLiteral("Deutsch"));
-    list.append(QStringLiteral("Русский"));
-    list.append(QStringLiteral("Français"));
-    list.append(QStringLiteral("日本語"));
-    list.append(QStringLiteral("한국어"));
-    list.append(QStringLiteral("Português"));
-    list.append(QStringLiteral("Italiano"));
-    list.append(QStringLiteral("Polski"));
-    list.append(QStringLiteral("Türkçe"));
-    list.append(QStringLiteral("Українська"));
-    list.append(QStringLiteral("Čeština"));
-    list.append(QStringLiteral("हिन्दी"));
-    list.append(QStringLiteral("Nederlands"));
-    list.append(QStringLiteral("Română"));
-    list.append(QStringLiteral("Svenska"));
-    list.append(QStringLiteral("العربية"));
-    list.append(QStringLiteral("עברית"));
-    list.append(QStringLiteral("Tiếng Việt"));
-    // code-verify on
-  }
-
+  static QStringList list = LanguageTable::nativeNames();
   return list;
 }
 
@@ -306,103 +144,10 @@ QStringList& Misc::Translator::availableLanguages()
  */
 void Misc::Translator::setLanguage(const Language language)
 {
-  QString langName;
-  QLocale locale;
-  switch (language) {
-    case English:
-      langName = QStringLiteral("en_US");
-      locale   = QLocale(QLocale::English);
-      break;
-    case Spanish:
-      langName = QStringLiteral("es_MX");
-      locale   = QLocale(QLocale::Spanish);
-      break;
-    case Chinese:
-      langName = QStringLiteral("zh_CN");
-      locale   = QLocale(QLocale::Chinese);
-      break;
-    case German:
-      langName = QStringLiteral("de_DE");
-      locale   = QLocale(QLocale::German);
-      break;
-    case Russian:
-      langName = QStringLiteral("ru_RU");
-      locale   = QLocale(QLocale::Russian);
-      break;
-    case French:
-      langName = QStringLiteral("fr_FR");
-      locale   = QLocale(QLocale::French);
-      break;
-    case Japanese:
-      langName = QStringLiteral("ja_JP");
-      locale   = QLocale(QLocale::Japanese);
-      break;
-    case Korean:
-      langName = QStringLiteral("ko_KR");
-      locale   = QLocale(QLocale::Korean);
-      break;
-    case Portuguese:
-      langName = QStringLiteral("pt_BR");
-      locale   = QLocale(QLocale::Portuguese);
-      break;
-    case Italian:
-      langName = QStringLiteral("it_IT");
-      locale   = QLocale(QLocale::Italian);
-      break;
-    case Polish:
-      langName = QStringLiteral("pl_PL");
-      locale   = QLocale(QLocale::Polish);
-      break;
-    case Turkish:
-      langName = QStringLiteral("tr_TR");
-      locale   = QLocale(QLocale::Turkish);
-      break;
-    case Ukrainian:
-      langName = QStringLiteral("uk_UA");
-      locale   = QLocale(QLocale::Ukrainian);
-      break;
-    case Czech:
-      langName = QStringLiteral("cs_CZ");
-      locale   = QLocale(QLocale::Czech);
-      break;
-    case Hindi:
-      langName = QStringLiteral("hi_IN");
-      locale   = QLocale(QLocale::Hindi);
-      break;
-    case Dutch:
-      langName = QStringLiteral("nl_NL");
-      locale   = QLocale(QLocale::Dutch);
-      break;
-    case Romanian:
-      langName = QStringLiteral("ro_RO");
-      locale   = QLocale(QLocale::Romanian);
-      break;
-    case Swedish:
-      langName = QStringLiteral("sv_SE");
-      locale   = QLocale(QLocale::Swedish);
-      break;
-    case Arabic:
-      langName = QStringLiteral("ar_SA");
-      locale   = QLocale(QLocale::Arabic, QLocale::SaudiArabia);
-      break;
-    case Hebrew:
-      langName = QStringLiteral("he_IL");
-      locale   = QLocale(QLocale::Hebrew, QLocale::Israel);
-      break;
-    case Vietnamese:
-      langName = QStringLiteral("vi_VN");
-      locale   = QLocale(QLocale::Vietnamese, QLocale::Vietnam);
-      break;
-    default:
-      langName = QStringLiteral("en_US");
-      locale   = QLocale(QLocale::English);
-      break;
-  }
-
   m_language = language;
   m_settings.setValue(QStringLiteral("language"), m_language);
 
-  setLanguage(locale, langName);
+  setLanguage(LanguageTable::localeFor(language), LanguageTable::qmName(language));
 }
 
 /**

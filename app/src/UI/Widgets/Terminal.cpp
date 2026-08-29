@@ -69,7 +69,6 @@ Widgets::Terminal::Terminal(QQuickItem* parent)
   , m_scrollOffsetY(0)
   , m_maxLines(m_consoleHandler.scrollbackLines())
   , m_dragThumbGrabY(0)
-  , m_state(Text)
   , m_paused(false)
   , m_autoscroll(true)
   , m_ansiColors(false)
@@ -78,13 +77,9 @@ Widgets::Terminal::Terminal(QQuickItem* parent)
   , m_cursorVisible(true)
   , m_mouseTracking(false)
   , m_draggingScrollbar(false)
-  , m_currentFormatValue(0)
-  , m_privateMode(false)
   , m_stateChanged(false)
   , m_cursorHidden(false)
-  , m_searchCurrent(-1)
-  , m_searchDirty(false)
-  , m_searchCaseSensitive(false)
+  , m_ansi(*this)
   , m_badgeMetrics(QFont())
 {
   initBuffer();
@@ -155,7 +150,7 @@ Widgets::Terminal::Terminal(QQuickItem* parent)
 
   m_stateChanged = true;
   connect(&m_timerEvents, &Misc::TimerEvents::uiTimeout, this, [=, this] {
-    if (m_searchDirty && !m_searchQuery.isEmpty() && isVisible())
+    if (m_search.dirty() && m_search.active() && isVisible())
       refreshSearchMatches();
 
     if (isVisible() && m_stateChanged) {
@@ -475,7 +470,7 @@ void Widgets::Terminal::drawSegmentMatch(QPainter* painter,
                                          int y)
 {
   const int matchStart = match.x();
-  const int matchEnd   = matchStart + static_cast<int>(m_searchQuery.length());
+  const int matchEnd   = matchStart + static_cast<int>(m_search.query().length());
   const int selStartX  = qMax(matchStart, segStart);
   const int selEndX    = qMin(matchEnd, segEnd);
   if (selStartX >= selEndX)
@@ -522,14 +517,15 @@ void Widgets::Terminal::paintSearchHighlights(QPainter* painter,
                                               int lastVLine,
                                               int lineHeight)
 {
-  if (m_searchMatches.isEmpty())
+  const QList<QPoint>& searchMatches = m_search.matches();
+  if (searchMatches.isEmpty())
     return;
 
   const QFontMetrics fm = painter->fontMetrics();
 
-  const qsizetype matchCount = m_searchMatches.size();
+  const qsizetype matchCount = searchMatches.size();
   qsizetype k                = 0;
-  while (k < matchCount && m_searchMatches[k].y() < firstLine)
+  while (k < matchCount && searchMatches[k].y() < firstLine)
     ++k;
 
   int y = m_borderY;
@@ -537,7 +533,7 @@ void Widgets::Terminal::paintSearchHighlights(QPainter* painter,
     const QString& line = m_data[i];
 
     const qsizetype lineFirst = k;
-    while (k < matchCount && m_searchMatches[k].y() <= i)
+    while (k < matchCount && searchMatches[k].y() <= i)
       ++k;
 
     if (line.isEmpty()) {
@@ -552,8 +548,8 @@ void Widgets::Terminal::paintSearchHighlights(QPainter* painter,
         drawSegmentMatch(painter,
                          fm,
                          line,
-                         m_searchMatches[m],
-                         m == static_cast<qsizetype>(m_searchCurrent),
+                         searchMatches[m],
+                         m == static_cast<qsizetype>(m_search.currentIndex()),
                          start,
                          segEnd,
                          y);
@@ -1261,7 +1257,7 @@ void Widgets::Terminal::selectAll()
  */
 bool Widgets::Terminal::searchActive() const
 {
-  return !m_searchQuery.isEmpty();
+  return m_search.active();
 }
 
 /**
@@ -1269,7 +1265,7 @@ bool Widgets::Terminal::searchActive() const
  */
 int Widgets::Terminal::searchMatchCount() const
 {
-  return static_cast<int>(m_searchMatches.size());
+  return m_search.matchCount();
 }
 
 /**
@@ -1277,7 +1273,7 @@ int Widgets::Terminal::searchMatchCount() const
  */
 int Widgets::Terminal::searchCurrentMatch() const
 {
-  return m_searchCurrent + 1;
+  return m_search.currentMatchNumber();
 }
 
 /**
@@ -1285,12 +1281,9 @@ int Widgets::Terminal::searchCurrentMatch() const
  */
 void Widgets::Terminal::setSearchQuery(const QString& query, const bool caseSensitive)
 {
-  if (m_searchQuery == query && m_searchCaseSensitive == caseSensitive)
+  if (!m_search.setQuery(query, caseSensitive))
     return;
 
-  m_searchQuery         = query;
-  m_searchCaseSensitive = caseSensitive;
-  m_searchCurrent       = 0;
   refreshSearchMatches();
   update();
 }
@@ -1300,13 +1293,12 @@ void Widgets::Terminal::setSearchQuery(const QString& query, const bool caseSens
  */
 void Widgets::Terminal::searchNext()
 {
-  if (m_searchDirty)
+  if (m_search.dirty())
     refreshSearchMatches();
 
-  if (m_searchMatches.isEmpty())
+  if (!m_search.next())
     return;
 
-  m_searchCurrent = (m_searchCurrent + 1) % static_cast<int>(m_searchMatches.size());
   Q_EMIT searchResultsChanged();
   scrollToCurrentMatch();
 }
@@ -1316,14 +1308,12 @@ void Widgets::Terminal::searchNext()
  */
 void Widgets::Terminal::searchPrevious()
 {
-  if (m_searchDirty)
+  if (m_search.dirty())
     refreshSearchMatches();
 
-  if (m_searchMatches.isEmpty())
+  if (!m_search.previous())
     return;
 
-  const int count = static_cast<int>(m_searchMatches.size());
-  m_searchCurrent = (m_searchCurrent <= 0) ? count - 1 : m_searchCurrent - 1;
   Q_EMIT searchResultsChanged();
   scrollToCurrentMatch();
 }
@@ -1333,57 +1323,21 @@ void Widgets::Terminal::searchPrevious()
  */
 void Widgets::Terminal::clearSearch()
 {
-  if (m_searchQuery.isEmpty() && m_searchMatches.isEmpty())
+  if (!m_search.clear())
     return;
 
-  m_searchQuery.clear();
-  m_searchMatches.clear();
-  m_searchCurrent = -1;
-  m_searchDirty   = false;
   Q_EMIT searchResultsChanged();
   m_stateChanged = true;
   update();
 }
 
 /**
- * @brief Rescans the line buffer for the active query; clamps the current-match index so
- *        navigation stays valid after rows are trimmed, erased, or collapsed.
+ * @brief Rescans the line buffer for the active query and republishes the result counts;
+ *        the clamping that keeps navigation valid after a trim lives in TerminalSearch.
  */
 void Widgets::Terminal::refreshSearchMatches()
 {
-  m_searchDirty = false;
-  m_searchMatches.clear();
-
-  if (m_searchQuery.isEmpty()) {
-    m_searchCurrent = -1;
-    Q_EMIT searchResultsChanged();
-    return;
-  }
-
-  const auto cs = m_searchCaseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
-  for (int i = 0; i < m_data.size(); ++i) {
-    const QString& line = m_data[i];
-
-    qsizetype from = 0;
-    while (from < line.length()) {
-      const qsizetype index = line.indexOf(m_searchQuery, from, cs);
-      if (index < 0)
-        break;
-
-      m_searchMatches.append(QPoint(static_cast<int>(index), i));
-      from = index + qMax<qsizetype>(1, m_searchQuery.length());
-    }
-  }
-
-  if (m_searchMatches.isEmpty())
-    m_searchCurrent = -1;
-  else
-    m_searchCurrent = qBound(0, m_searchCurrent, static_cast<int>(m_searchMatches.size()) - 1);
-
-  SS_ASSERT(m_searchCurrent >= -1, m_searchCurrent = -1);
-  SS_ASSERT(m_searchCurrent < m_searchMatches.size(),
-            m_searchCurrent = static_cast<int>(m_searchMatches.size()) - 1);
-
+  m_search.refresh(m_data);
   m_stateChanged = true;
   Q_EMIT searchResultsChanged();
 }
@@ -1393,13 +1347,11 @@ void Widgets::Terminal::refreshSearchMatches()
  */
 void Widgets::Terminal::scrollToCurrentMatch()
 {
-  if (m_searchCurrent < 0 || m_searchCurrent >= m_searchMatches.size())
+  int row = m_search.currentRow();
+  if (row < 0)
     return;
 
   setAutoscroll(false);
-
-  int row = m_searchMatches[m_searchCurrent].y();
-  SS_ASSERT(row >= 0, return);
   SS_ASSERT(row < lineCount(), row = lineCount() - 1);
 
   int offset = m_scrollOffsetY;
@@ -1505,7 +1457,7 @@ void Widgets::Terminal::setAnsiColors(const bool enabled)
   m_ansiColors = enabled;
 
   if (enabled) {
-    m_currentColor = QColor();
+    m_ansiPalette.resetForeground();
     m_colorData.reserve(qMin(m_maxLines, MAX_UPFRONT_RESERVE));
   }
 
@@ -1542,11 +1494,11 @@ void Widgets::Terminal::onThemeChanged()
   m_palette.setColor(QPalette::Window, theme->getColor("console_border"));
   m_palette.setColor(QPalette::Highlight, theme->getColor("console_highlight"));
   setFillColor(m_palette.color(QPalette::Base));
-  updateAnsiColorPalette();
+  m_ansiPalette.rebuild(theme->getColor("console_base"), theme->getColor("console_text"));
   // clang-format on
 
   if (ansiColors())
-    m_currentColor = QColor();
+    m_ansiPalette.resetForeground();
 
   update();
 }
@@ -1658,14 +1610,14 @@ void Widgets::Terminal::append(const QString& data)
   const int len = data.size();
 
   while (pos < len) {
-    if (m_state == Text) [[likely]] {
+    if (m_ansi.inTextState()) [[likely]] {
       const int runStart = pos;
       pos                = scanPrintableRun(data, pos);
 
       if (pos > runStart)
         text.append(QStringView(data).mid(runStart, pos - runStart));
 
-      if (pos < len && m_state == Text) {
+      if (pos < len && m_ansi.inTextState()) {
         processText(data[pos], text);
         ++pos;
       }
@@ -1673,27 +1625,7 @@ void Widgets::Terminal::append(const QString& data)
       continue;
     }
 
-    const auto byte = data[pos];
-    switch (m_state) {
-      case Escape:
-        processEscape(byte, text);
-        break;
-      case Format:
-        processFormat(byte, text);
-        break;
-      case ResetFont:
-        processResetFont(byte, text);
-        break;
-      case OSC:
-        processOsc(byte);
-        break;
-      case IgnoreSeq:
-        processIgnoreSeq(byte);
-        break;
-      default:
-        break;
-    }
-
+    m_ansi.feed(data[pos]);
     ++pos;
   }
 
@@ -1752,7 +1684,7 @@ void Widgets::Terminal::trimExcessLines(int linesToDrop)
     m_repeatCounts.erase(m_repeatCounts.begin(), m_repeatCounts.begin() + countDrop);
   }
 
-  m_searchDirty = true;
+  m_search.markDirty();
   // code-verify on
 
   if (m_cursorPosition.y() >= linesToDrop)
@@ -1890,7 +1822,7 @@ bool Widgets::Terminal::collapseCompletedLine()
   if (y - 1 < m_repeatCounts.size() && m_repeatCounts[y - 1] < INT_MAX)
     ++m_repeatCounts[y - 1];
 
-  m_searchDirty = true;
+  m_search.markDirty();
 
   if (autoscroll()) {
     const int lastRow = m_data.size() - 1;
@@ -1957,16 +1889,16 @@ void Widgets::Terminal::initBuffer()
   m_repeatCounts.clear();
   m_repeatCounts.squeeze();
   m_repeatCounts.reserve(reserveLines);
-  m_searchDirty = true;
+  m_search.markDirty();
 
   if (ansiColors()) {
     m_colorData.reserve(reserveLines);
-    m_currentColor = QColor();
+    m_ansiPalette.resetForeground();
   }
 }
 
 //--------------------------------------------------------------------------------------------------
-// ANSI processing
+// Text lane
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -1997,7 +1929,7 @@ void Widgets::Terminal::processText(const QChar& byte, QString& text)
     case 0x1b:
       appendString(text);
       text.clear();
-      m_state = Escape;
+      m_ansi.beginEscape();
       return;
     case '\r':
       appendString(text);
@@ -2035,521 +1967,104 @@ void Widgets::Terminal::processText(const QChar& byte, QString& text)
     text.append(byte);
 }
 
-/**
- * @brief Processes the character immediately following ESC (0x1B).
- */
-void Widgets::Terminal::processEscape(const QChar& byte, QString& text)
-{
-  (void)text;
-
-  m_formatValues.clear();
-  m_currentFormatValue = 0;
-  m_privateMode        = false;
-
-  switch (byte.toLatin1()) {
-    case '[':
-      m_state = Format;
-      return;
-    case '(':
-      m_state = ResetFont;
-      return;
-    case ']':
-      m_state = OSC;
-      return;
-    case '7':
-      m_savedCursorPosition = m_cursorPosition;
-      m_state               = Text;
-      return;
-    case '8':
-      setCursorPosition(m_savedCursorPosition);
-      m_state = Text;
-      return;
-    case 'M':
-      setCursorPosition(m_cursorPosition.x(), qMax(0, m_cursorPosition.y() - 1));
-      m_state = Text;
-      return;
-    default:
-      m_state = Text;
-      return;
-  }
-}
-
-/**
- * @brief Processes one byte of a CSI (ESC[...) parameter or final sequence.
- */
-void Widgets::Terminal::processFormat(const QChar& byte, QString& text)
-{
-  (void)text;
-
-  if (byte >= '0' && byte <= '9') {
-    static constexpr int kMaxCsiParam = 1000000;
-    if (m_currentFormatValue < kMaxCsiParam)
-      m_currentFormatValue = m_currentFormatValue * 10 + (byte.cell() - '0');
-
-    return;
-  }
-
-  if (byte == '?' || byte == '>' || byte == '=') {
-    m_privateMode = true;
-    return;
-  }
-
-  if (byte == ';') {
-    m_formatValues.append(m_currentFormatValue);
-    m_currentFormatValue = 0;
-    m_state              = Format;
-    return;
-  }
-
-  if (dispatchCsiFinal(byte))
-    return;
-
-  m_state = Text;
-}
-
-/**
- * @brief Dispatches the final byte of a CSI sequence; returns true if handled.
- */
-bool Widgets::Terminal::dispatchCsiFinal(const QChar& byte)
-{
-  const char final = byte.toLatin1();
-  switch (final) {
-    case 'm':
-      if (!m_privateMode) {
-        m_formatValues.append(m_currentFormatValue);
-        if (ansiColors())
-          applyAnsiColor(m_formatValues);
-      }
-
-      m_state = Text;
-      return true;
-
-    case 's':
-      if (!m_privateMode)
-        m_savedCursorPosition = m_cursorPosition;
-
-      m_state = Text;
-      return true;
-
-    case 'u':
-      if (!m_privateMode)
-        setCursorPosition(m_savedCursorPosition);
-
-      m_state = Text;
-      return true;
-
-    case 'A':
-    case 'B':
-    case 'C':
-    case 'D':
-    case 'E':
-    case 'F':
-      handleCsiCursorMove(final);
-      m_state = Text;
-      return true;
-
-    case 'H':
-    case 'f':
-    case 'G':
-    case 'd':
-      handleCsiCursorAbsolute(final);
-      m_state = Text;
-      return true;
-
-    case 'J':
-      handleCsiEraseDisplay();
-      m_state = Text;
-      return true;
-
-    case 'K':
-      handleCsiEraseLine();
-      m_state = Text;
-      return true;
-
-    case 'P':
-      if (!m_privateMode) {
-        removeStringFromCursor(LeftDirection, m_currentFormatValue);
-        removeStringFromCursor(RightDirection);
-      }
-
-      m_state = Text;
-      return true;
-
-    case 'h':
-    case 'l':
-      handleCsiDecPrivateMode(byte);
-      m_state = Text;
-      return true;
-
-    default:
-      if ((final >= 'A' && final <= 'Z') || (final >= 'a' && final <= 'z')) {
-        m_state = Text;
-        return true;
-      }
-
-      return false;
-  }
-}
-
-/**
- * @brief Handles CSI cursor movement letters A-F (CUU/CUD/CUF/CUB/CNL/CPL).
- */
-void Widgets::Terminal::handleCsiCursorMove(char final)
-{
-  if (m_privateMode)
-    return;
-
-  const int value = m_currentFormatValue ? m_currentFormatValue : 1;
-  const int cx    = m_cursorPosition.x();
-  const int cy    = m_cursorPosition.y();
-  switch (final) {
-    case 'A':
-      setCursorPosition(cx, qMax(0, cy - value));
-      break;
-    case 'B':
-      setCursorPosition(cx, cy + value);
-      break;
-    case 'C':
-      setCursorPosition(cx + value, cy);
-      break;
-    case 'D':
-      setCursorPosition(qMax(0, cx - value), cy);
-      break;
-    case 'E':
-      setCursorPosition(0, cy + value);
-      break;
-    case 'F':
-      setCursorPosition(0, qMax(0, cy - value));
-      break;
-    default:
-      break;
-  }
-}
-
-/**
- * @brief Handles CSI absolute cursor placement (H/f/G/d).
- */
-void Widgets::Terminal::handleCsiCursorAbsolute(char final)
-{
-  if (m_privateMode)
-    return;
-
-  if (final == 'H' || final == 'f') {
-    if (m_formatValues.isEmpty()) {
-      const int row = qMax(0, m_currentFormatValue > 0 ? m_currentFormatValue - 1 : 0);
-      setCursorPosition(0, row);
-      return;
-    }
-
-    const int row = qMax(0, m_formatValues.value(0, 1) - 1);
-    const int col =
-      m_currentFormatValue > 0 ? m_currentFormatValue - 1 : m_formatValues.value(1, 1) - 1;
-    setCursorPosition(qMax(0, col), row);
-    return;
-  }
-
-  const int v = qMax(0, m_currentFormatValue > 0 ? m_currentFormatValue - 1 : 0);
-  if (final == 'G')
-    setCursorPosition(v, m_cursorPosition.y());
-
-  else if (final == 'd')
-    setCursorPosition(m_cursorPosition.x(), v);
-}
-
-/**
- * @brief Handles CSI Erase-in-Display (J).
- */
-void Widgets::Terminal::handleCsiEraseDisplay()
-{
-  if (m_privateMode)
-    return;
-
-  const int cy = m_cursorPosition.y();
-  switch (m_currentFormatValue) {
-    case 0:
-      removeStringFromCursor(RightDirection);
-      if (cy + 1 < m_data.size()) {
-        m_data.erase(m_data.begin() + cy + 1, m_data.end());
-        if (ansiColors() && cy + 1 < m_colorData.size())
-          m_colorData.erase(m_colorData.begin() + cy + 1, m_colorData.end());
-
-        if (cy + 1 < m_repeatCounts.size())
-          m_repeatCounts.erase(m_repeatCounts.begin() + cy + 1, m_repeatCounts.end());
-
-        m_searchDirty = true;
-      }
-
-      break;
-    case 1:
-      removeStringFromCursor(LeftDirection);
-      if (cy > 0) {
-        m_data.erase(m_data.begin(), m_data.begin() + cy);
-        if (ansiColors() && cy < m_colorData.size())
-          m_colorData.erase(m_colorData.begin(), m_colorData.begin() + cy);
-
-        const auto countDrop = qMin<qsizetype>(cy, m_repeatCounts.size());
-        if (countDrop > 0)
-          m_repeatCounts.erase(m_repeatCounts.begin(), m_repeatCounts.begin() + countDrop);
-
-        m_searchDirty = true;
-      }
-
-      setCursorPosition(m_cursorPosition.x(), 0);
-      break;
-    case 2:
-    case 3:
-      clear();
-      break;
-    default:
-      break;
-  }
-}
-
-/**
- * @brief Handles CSI Erase-in-Line (K).
- */
-void Widgets::Terminal::handleCsiEraseLine()
-{
-  if (m_privateMode)
-    return;
-
-  switch (m_currentFormatValue) {
-    case 0:
-      removeStringFromCursor(RightDirection);
-      break;
-    case 1:
-      removeStringFromCursor(LeftDirection);
-      break;
-    case 2:
-      removeStringFromCursor(RightDirection);
-      removeStringFromCursor(LeftDirection);
-      break;
-    default:
-      break;
-  }
-}
-
-/**
- * @brief Handles CSI DEC private mode set/reset for cursor visibility (h/l).
- */
-void Widgets::Terminal::handleCsiDecPrivateMode(const QChar& byte)
-{
-  if (m_privateMode && m_currentFormatValue == 25) {
-    m_cursorHidden = (byte == 'l');
-    m_stateChanged = true;
-  }
-}
-
-/**
- * @brief Processes a reset-font terminator and returns the state machine to Text.
- */
-void Widgets::Terminal::processResetFont(const QChar& byte, QString& text)
-{
-  (void)byte;
-  (void)text;
-  m_state = Text;
-}
-
-/**
- * @brief Consumes one byte while in OSC state (BEL terminator or ESC -> CSI).
- */
-void Widgets::Terminal::processOsc(const QChar& byte)
-{
-  const char latin = byte.toLatin1();
-  if (latin == 0x07)
-    m_state = Text;
-
-  else if (latin == 0x1b)
-    m_state = Escape;
-}
-
-/**
- * @brief Consumes one byte while ignoring an unknown CSI sequence.
- */
-void Widgets::Terminal::processIgnoreSeq(const QChar& byte)
-{
-  if ((byte >= 'A' && byte <= 'Z') || (byte >= 'a' && byte <= 'z'))
-    m_state = Text;
-}
-
 //--------------------------------------------------------------------------------------------------
-// Color management
+// Escape-sequence sink
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Updates the ANSI color palette based on the current theme.
+ * @brief AnsiSink: reports the cursor the escape sequences are addressing.
  */
-void Widgets::Terminal::updateAnsiColorPalette()
+QPoint Widgets::Terminal::currentCursor() const
 {
-  const auto theme         = &m_themeManager;
-  const QColor consoleBase = theme->getColor("console_base");
-  const QColor consoleText = theme->getColor("console_text");
-  const bool isDarkTheme   = consoleText.lightness() > consoleBase.lightness();
-
-  if (isDarkTheme) {
-    m_ansiStandardColors[0] = QColor(0, 0, 0);
-    m_ansiStandardColors[1] = QColor(205, 49, 49);
-    m_ansiStandardColors[2] = QColor(13, 188, 121);
-    m_ansiStandardColors[3] = QColor(229, 229, 16);
-    m_ansiStandardColors[4] = QColor(36, 114, 200);
-    m_ansiStandardColors[5] = QColor(188, 63, 188);
-    m_ansiStandardColors[6] = QColor(17, 168, 205);
-    m_ansiStandardColors[7] = QColor(229, 229, 229);
-
-    m_ansiBrightColors[0] = QColor(102, 102, 102);
-    m_ansiBrightColors[1] = QColor(241, 76, 76);
-    m_ansiBrightColors[2] = QColor(35, 209, 139);
-    m_ansiBrightColors[3] = QColor(245, 245, 67);
-    m_ansiBrightColors[4] = QColor(59, 142, 234);
-    m_ansiBrightColors[5] = QColor(214, 112, 214);
-    m_ansiBrightColors[6] = QColor(41, 184, 219);
-    m_ansiBrightColors[7] = QColor(255, 255, 255);
-  }
-
-  else {
-    m_ansiStandardColors[0] = QColor(0, 0, 0);
-    m_ansiStandardColors[1] = QColor(170, 0, 0);
-    m_ansiStandardColors[2] = QColor(0, 140, 0);
-    m_ansiStandardColors[3] = QColor(170, 140, 0);
-    m_ansiStandardColors[4] = QColor(0, 0, 170);
-    m_ansiStandardColors[5] = QColor(170, 0, 170);
-    m_ansiStandardColors[6] = QColor(0, 140, 170);
-    m_ansiStandardColors[7] = QColor(170, 170, 170);
-
-    m_ansiBrightColors[0] = QColor(85, 85, 85);
-    m_ansiBrightColors[1] = QColor(210, 0, 0);
-    m_ansiBrightColors[2] = QColor(0, 170, 0);
-    m_ansiBrightColors[3] = QColor(210, 170, 0);
-    m_ansiBrightColors[4] = QColor(0, 0, 210);
-    m_ansiBrightColors[5] = QColor(210, 0, 210);
-    m_ansiBrightColors[6] = QColor(0, 170, 210);
-    m_ansiBrightColors[7] = QColor(85, 85, 85);
-  }
+  return m_cursorPosition;
 }
 
 /**
- * @brief Applies ANSI SGR (Select Graphic Rendition) color codes.
+ * @brief AnsiSink: moves the cursor, clamped to the buffer geometry by setCursorPosition().
  */
-void Widgets::Terminal::applyAnsiColor(const QList<int>& codes)
+void Widgets::Terminal::moveCursor(const QPoint& position)
 {
-  for (int i = 0; i < codes.size(); ++i)
-    i += applyAnsiSgrCode(codes, i);
+  setCursorPosition(position);
 }
 
 /**
- * @brief Applies one SGR code at @p i in @p codes; returns number of extra params consumed.
+ * @brief AnsiSink: hides or shows the blinking cursor (DECTCEM).
  */
-int Widgets::Terminal::applyAnsiSgrCode(const QList<int>& codes, int i)
+void Widgets::Terminal::setCursorHidden(bool hidden)
 {
-  const int code = codes[i];
-
-  if (code == 0) {
-    m_currentColor   = QColor();
-    m_currentBgColor = QColor();
-    return 0;
-  }
-
-  if (code == 1) {
-    if (!m_currentColor.isValid())
-      m_currentColor = m_palette.color(QPalette::Text);
-
-    m_currentColor = m_currentColor.lighter(130);
-    return 0;
-  }
-
-  if (code >= 30 && code <= 37) {
-    m_currentColor = m_ansiStandardColors[code - 30];
-    return 0;
-  }
-
-  if (code >= 40 && code <= 47) {
-    m_currentBgColor = m_ansiStandardColors[code - 40];
-    return 0;
-  }
-
-  if (code >= 90 && code <= 97) {
-    m_currentColor = m_ansiBrightColors[code - 90];
-    return 0;
-  }
-
-  if (code >= 100 && code <= 107) {
-    m_currentBgColor = m_ansiBrightColors[code - 100];
-    return 0;
-  }
-
-  const bool isFg = (code == 38);
-  const bool isBg = (code == 48);
-  if (!isFg && !isBg)
-    return 0;
-
-  QColor& target = isFg ? m_currentColor : m_currentBgColor;
-
-  if (i + 2 < codes.size() && codes[i + 1] == 5) {
-    target = getColor256(codes[i + 2]);
-    return 2;
-  }
-
-  if (i + 4 < codes.size() && codes[i + 1] == 2) {
-    target = QColor(codes[i + 2], codes[i + 3], codes[i + 4]);
-    return 4;
-  }
-
-  return 0;
+  m_cursorHidden = hidden;
+  m_stateChanged = true;
 }
 
 /**
- * @brief Converts a 256-color palette index to a QColor.
+ * @brief AnsiSink: applies an SGR parameter run, but only while ANSI colors are on; the
+ *        parser stays unaware of the toggle so its behavior does not fork.
  */
-QColor Widgets::Terminal::getColor256(int index) const
+void Widgets::Terminal::applySgrCodes(const QList<int>& codes)
 {
-  return getColor256Static(index);
+  if (ansiColors())
+    m_ansiPalette.applySgr(codes, m_palette.color(QPalette::Text));
 }
 
 /**
- * @brief Static version of getColor256 for use without instance.
+ * @brief AnsiSink: blanks characters on either side of the cursor within its row.
  */
-QColor Widgets::Terminal::getColor256Static(int index)
+void Widgets::Terminal::eraseFromCursor(AnsiEraseDirection direction, int length)
 {
-  if (index < 8) {
-    static const QColor standard[8] = {
-      QColor(0, 0, 0),
-      QColor(170, 0, 0),
-      QColor(0, 170, 0),
-      QColor(170, 85, 0),
-      QColor(0, 0, 170),
-      QColor(170, 0, 170),
-      QColor(0, 170, 170),
-      QColor(170, 170, 170),
-    };
-    return standard[index];
-  }
-
-  if (index < 16) {
-    static const QColor bright[8] = {
-      QColor(85, 85, 85),
-      QColor(255, 85, 85),
-      QColor(85, 255, 85),
-      QColor(255, 255, 85),
-      QColor(85, 85, 255),
-      QColor(255, 85, 255),
-      QColor(85, 255, 255),
-      QColor(255, 255, 255),
-    };
-    return bright[index - 8];
-  }
-
-  if (index < 232) {
-    const int adjusted = index - 16;
-    const int r        = (adjusted / 36) % 6;
-    const int g        = (adjusted / 6) % 6;
-    const int b        = adjusted % 6;
-
-    return QColor(r ? (r * 40 + 55) : 0, g ? (g * 40 + 55) : 0, b ? (b * 40 + 55) : 0);
-  }
-
-  const int gray = 8 + (index - 232) * 10;
-  return QColor(gray, gray, gray);
+  const Direction sense = (direction == AnsiEraseDirection::Left) ? LeftDirection : RightDirection;
+  removeStringFromCursor(sense, length);
 }
+
+/**
+ * @brief AnsiSink: drops every row below @p row, keeping the color rows and repeat counts in
+ *        lockstep so the paint pass never reads a misaligned row.
+ */
+void Widgets::Terminal::eraseRowsAfter(int row)
+{
+  if (row + 1 >= m_data.size())
+    return;
+
+  m_data.erase(m_data.begin() + row + 1, m_data.end());
+  if (ansiColors() && row + 1 < m_colorData.size())
+    m_colorData.erase(m_colorData.begin() + row + 1, m_colorData.end());
+
+  if (row + 1 < m_repeatCounts.size())
+    m_repeatCounts.erase(m_repeatCounts.begin() + row + 1, m_repeatCounts.end());
+
+  m_search.markDirty();
+}
+
+/**
+ * @brief AnsiSink: drops every row above @p row, keeping the color rows and repeat counts in
+ *        lockstep.
+ */
+void Widgets::Terminal::eraseRowsBefore(int row)
+{
+  if (row <= 0)
+    return;
+
+  m_data.erase(m_data.begin(), m_data.begin() + row);
+  if (ansiColors() && row < m_colorData.size())
+    m_colorData.erase(m_colorData.begin(), m_colorData.begin() + row);
+
+  const auto countDrop = qMin<qsizetype>(row, m_repeatCounts.size());
+  if (countDrop > 0)
+    m_repeatCounts.erase(m_repeatCounts.begin(), m_repeatCounts.begin() + countDrop);
+
+  m_search.markDirty();
+}
+
+/**
+ * @brief AnsiSink: erases the whole display (CSI 2J / 3J).
+ */
+void Widgets::Terminal::eraseAllRows()
+{
+  clear();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Message formatting
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Formats a debug message with optional ANSI colors.
@@ -2643,7 +2158,7 @@ void Widgets::Terminal::replaceData(int x, int y, const QChar& byte)
   while (m_repeatCounts.size() < m_data.size())
     m_repeatCounts.append(1);
 
-  m_searchDirty = true;
+  m_search.markDirty();
   QString& line = m_data[y];
 
   if (ansiColors()) {
@@ -2661,7 +2176,7 @@ void Widgets::Terminal::replaceData(int x, int y, const QChar& byte)
     while (colorLine.size() < line.size())
       colorLine.append(CharColor());
 
-    const CharColor charColor(m_currentColor, m_currentBgColor);
+    const CharColor charColor(m_ansiPalette.foreground(), m_ansiPalette.background());
     if (x >= 0 && x < colorLine.size())
       colorLine[x] = charColor;
     else if (x >= 0)

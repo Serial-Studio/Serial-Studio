@@ -271,7 +271,7 @@ because chips are clickable (click = transient spotlight via `root.selectedMarke
 other markers; chip MouseArea passes wheel through so zoom still works). Both layers map Hz
 through the same `xVisibleMin/xVisibleRange` transform as PlotCurve (`log10` world coords on
 the log axis). Waterfall paints markers per-paint after the cached axis layer (escalation
-tint changes per row — do NOT move them into `m_axisLayer`); its Hz→x mapping is
+tint changes per row — do NOT move them into the overlay's cached `m_layer`); its Hz→x mapping is
 single-sourced in `visibleFreqWindow()`, shared with `drawXAxis`, the hover cursor, and the
 markers — and it works in **world units**: linear Hz, or log10-Hz when the dataset's
 `fftLogX` is on (the Waterfall honors it since 2026-07-18). Log mode resamples each spectrum

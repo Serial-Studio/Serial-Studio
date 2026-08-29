@@ -43,8 +43,8 @@
 #  include "MQTT/Publisher.h"
 #  include "MQTT/PublisherScriptEditor.h"
 #endif
+#include "DataModel/Project/ProjectEditorIcons.h"
 #include "ProjectEditorItemIds.h"
-#include "ProjectEditorShared.h"
 
 /**
  * @brief Serializes alarm bands into the QVariantList shape the AlarmBandsEditor dialog consumes.

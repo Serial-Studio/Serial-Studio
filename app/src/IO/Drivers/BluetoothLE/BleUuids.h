@@ -22,19 +22,24 @@
 #pragma once
 
 #include <QBluetoothUuid>
-#include <QJsonObject>
-#include <QOperatingSystemVersion>
-
-#include "IO/ConnectionManager.h"
-#include "IO/Drivers/BluetoothLE.h"
-#include "Misc/Utilities.h"
+#include <QLowEnergyCharacteristic>
+#include <QString>
 
 namespace IO::Drivers::BleDetail {
 
-QString bleServiceName(const QBluetoothUuid& uuid);
+/**
+ * @brief Returns the friendly name of a BLE service UUID, or its own string when unknown.
+ */
+[[nodiscard]] QString bleServiceName(const QBluetoothUuid& uuid);
 
-QBluetoothUuid bleUuidFromString(const QString& uuid);
+/**
+ * @brief Parses a UUID in any of the forms a project or a device may spell it in.
+ */
+[[nodiscard]] QBluetoothUuid bleUuidFromString(const QString& uuid);
 
-QString bleCharacteristicName(const QLowEnergyCharacteristic& characteristic);
+/**
+ * @brief Returns the friendly name of a characteristic, falling back to its UUID.
+ */
+[[nodiscard]] QString bleCharacteristicName(const QLowEnergyCharacteristic& characteristic);
 
 }  // namespace IO::Drivers::BleDetail

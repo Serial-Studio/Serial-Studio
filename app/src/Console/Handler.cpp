@@ -21,7 +21,6 @@
 
 #include "Console/Handler.h"
 
-#include <array>
 #include <QApplication>
 #include <QDateTime>
 #include <QFile>
@@ -30,8 +29,8 @@
 #include <QFontMetrics>
 
 #include "AppState.h"
+#include "Console/TextFormat.h"
 #include "DataModel/ProjectModel.h"
-#include "DSPSimd.h"
 #include "IO/Checksum.h"
 #include "IO/ConnectionManager.h"
 #include "Misc/CommonFonts.h"
@@ -65,6 +64,24 @@ static const QString& cachedTimestampStr()
 }
 
 /**
+ * @brief Returns the line prefix for a stamped chunk: the cached clock string, cyan-wrapped
+ *        while ANSI rendering is on. Empty when the caller wants no stamp.
+ */
+static QString decoratedTimestamp(bool addTimestamp, bool ansiColors)
+{
+  if (!addTimestamp)
+    return {};
+
+  const QString& timeStr = cachedTimestampStr();
+  if (!ansiColors)
+    return timeStr;
+
+  const QString ansiCyan  = QStringLiteral("\033[36m");
+  const QString ansiReset = QStringLiteral("\033[0m");
+  return QStringLiteral("%1%2%3").arg(ansiCyan, timeStr, ansiReset);
+}
+
+/**
  * @brief Constructs the console handler singleton.
  */
 Console::Handler::Handler()
@@ -82,8 +99,7 @@ Console::Handler::Handler()
   , m_ansiColorsEnabled(false)
   , m_vt100Emulation(true)
   , m_ansiColors(true)
-  , m_isStartingLine(true)
-  , m_lastCharWasCR(false)
+  , m_lineState()
   , m_currentDeviceId(-1)
   , m_fontFamilyIndex(0)
   , m_textBuffer(10 * 1024)
@@ -479,14 +495,12 @@ QString Console::Handler::formatUserHex(const QString& text)
 void Console::Handler::clear()
 {
   m_textBuffer.clear();
-  m_isStartingLine = true;
-  m_lastCharWasCR  = false;
+  m_lineState = TextFormat::LineState{};
 
   auto it = m_deviceState.find(m_currentDeviceId);
   if (it != m_deviceState.end()) {
     it->second.buffer.clear();
-    it->second.isStartingLine = true;
-    it->second.lastCharWasCR  = false;
+    it->second.line = TextFormat::LineState{};
   }
 
   Q_EMIT cleared();
@@ -830,57 +844,11 @@ void Console::Handler::append(const QString& string, const bool addTimestamp)
   if (string.isEmpty())
     return;
 
-  auto data = string;
-  if (m_lastCharWasCR && data.startsWith('\n'))
-    data.removeFirst();
+  const auto timestamp = decoratedTimestamp(addTimestamp, ansiColorsEnabled());
+  const auto processed = TextFormat::formatIncoming(string, m_lineState, timestamp);
 
-  m_lastCharWasCR = data.endsWith('\r');
-  data            = data.replace(QStringLiteral("\r\n"), QStringLiteral("\n"));
-  data            = data.replace(QStringLiteral("\r"), QStringLiteral("\n"));
-
-  QString timestamp;
-  if (addTimestamp) {
-    const QString& timeStr = cachedTimestampStr();
-
-    if (ansiColorsEnabled()) {
-      const QString ansiCyan  = QStringLiteral("\033[36m");
-      const QString ansiReset = QStringLiteral("\033[0m");
-      timestamp               = QStringLiteral("%1%2%3").arg(ansiCyan, timeStr, ansiReset);
-    }
-
-    else {
-      timestamp = timeStr;
-    }
-  }
-
-  QString processedString;
-  processedString.reserve(data.length() + timestamp.length() * 4);
-  int pos = 0;
-  while (pos < data.length()) {
-    const int nlPos = data.indexOf('\n', pos);
-    const int end   = (nlPos < 0) ? data.length() : nlPos;
-
-    if (end > pos) {
-      const auto segment = QStringView(data).mid(pos, end - pos);
-      if (m_isStartingLine && !segment.trimmed().isEmpty())
-        processedString.append(timestamp);
-
-      processedString.append(segment);
-      m_isStartingLine = false;
-    }
-
-    if (nlPos >= 0) {
-      processedString.append('\n');
-      m_isStartingLine = true;
-      pos              = nlPos + 1;
-    }
-
-    else
-      pos = end;
-  }
-
-  m_textBuffer.append(processedString.toUtf8());
-  m_pendingDisplay.append(processedString);
+  m_textBuffer.append(processed.toUtf8());
+  m_pendingDisplay.append(processed);
 }
 
 /**
@@ -1015,8 +983,7 @@ void Console::Handler::setCurrentDeviceId(int deviceId)
   m_currentDeviceId = deviceId;
 
   m_textBuffer.clear();
-  m_isStartingLine = true;
-  m_lastCharWasCR  = false;
+  m_lineState = TextFormat::LineState{};
   Q_EMIT cleared();
 
   auto it = m_deviceState.find(m_currentDeviceId);
@@ -1100,72 +1067,23 @@ QString Console::Handler::appendToDevice(int deviceId, const QString& str, bool 
   if (str.isEmpty())
     return QString();
 
-  auto& state = m_deviceState[deviceId];
-
-  auto data = str;
-  if (state.lastCharWasCR && data.startsWith('\n'))
-    data.removeFirst();
-
-  state.lastCharWasCR = data.endsWith('\r');
-
-  data = data.replace(QStringLiteral("\r\n"), QStringLiteral("\n"));
-  data = data.replace(QStringLiteral("\r"), QStringLiteral("\n"));
-
-  QString timestamp;
-  if (addTimestamp) {
-    const QString& timeStr = cachedTimestampStr();
-
-    if (ansiColorsEnabled()) {
-      const QString ansiCyan  = QStringLiteral("\033[36m");
-      const QString ansiReset = QStringLiteral("\033[0m");
-      timestamp               = QStringLiteral("%1%2%3").arg(ansiCyan, timeStr, ansiReset);
-    }
-
-    else {
-      timestamp = timeStr;
-    }
-  }
-
-  QString processedString;
-  processedString.reserve(data.length() + timestamp.length() * 4);
-
-  int pos = 0;
-  while (pos < data.length()) {
-    const int nlPos = data.indexOf('\n', pos);
-    const int end   = (nlPos < 0) ? data.length() : nlPos;
-
-    if (end > pos) {
-      const auto segment = QStringView(data).mid(pos, end - pos);
-      if (state.isStartingLine && !segment.trimmed().isEmpty())
-        processedString.append(timestamp);
-
-      processedString.append(segment);
-      state.isStartingLine = false;
-    }
-
-    if (nlPos >= 0) {
-      processedString.append('\n');
-      state.isStartingLine = true;
-      pos                  = nlPos + 1;
-    }
-
-    else
-      pos = end;
-  }
+  auto& state          = m_deviceState[deviceId];
+  const auto timestamp = decoratedTimestamp(addTimestamp, ansiColorsEnabled());
+  const auto processed = TextFormat::formatIncoming(str, state.line, timestamp);
 
   static constexpr int kMaxDeviceBuffer = 10 * 1024;
-  state.buffer.append(processedString);
+  state.buffer.append(processed);
   if (state.buffer.size() > kMaxDeviceBuffer) {
     const int excess = state.buffer.size() - kMaxDeviceBuffer;
     state.buffer.remove(0, excess);
   }
 
   if (deviceId == m_currentDeviceId || (m_currentDeviceId < 0 && m_deviceSourceIds.isEmpty())) {
-    m_textBuffer.append(processedString.toUtf8());
-    m_pendingDisplay.append(processedString);
+    m_textBuffer.append(processed.toUtf8());
+    m_pendingDisplay.append(processed);
   }
 
-  return processedString;
+  return processed;
 }
 
 /**
@@ -1245,150 +1163,21 @@ QString Console::Handler::dataToString(QByteArrayView data)
     case DisplayMode::DisplayPlainText:
       return plainTextStr(data);
     case DisplayMode::DisplayHexadecimal:
-      return hexadecimalStr(data);
+      return TextFormat::hexDump(data);
     default:
       return "";
   }
 }
 
 /**
- * @brief Converts raw received bytes to a display string.
+ * @brief Converts raw received bytes to a display string. Control characters survive only while
+ *        VT-100 emulation is on, where the terminal itself interprets them.
  */
 QString Console::Handler::plainTextStr(QByteArrayView data)
 {
-  QString utf8Data = SerialStudio::decodeText(data, m_encoding);
+  const QString utf8Data = SerialStudio::decodeText(data, m_encoding);
   if (vt100Emulation())
     return utf8Data;
 
-  QString filteredData;
-  filteredData.reserve(utf8Data.size());
-
-  int i = 0;
-  while (i < utf8Data.size()) {
-    const int runStart = i;
-    while (i < utf8Data.size()) {
-      const ushort unicode = utf8Data[i].unicode();
-
-      // clang-format off
-      const bool printable = (unicode != '\0')
-                             && ((unicode >= 0x20 && unicode < 0x7F)
-                                 || (unicode >= 0x80)
-                                 || (unicode == '\r')
-                                 || (unicode == '\n')
-                                 || (unicode == '\t')
-                                 || (unicode == 0x1B));
-      // clang-format on
-
-      if (!printable)
-        break;
-
-      ++i;
-    }
-
-    if (i > runStart)
-      filteredData.append(QStringView(utf8Data).mid(runStart, i - runStart));
-
-    if (i < utf8Data.size()) {
-      filteredData.append('.');
-      ++i;
-    }
-  }
-
-  return filteredData;
-}
-
-/**
- * @brief Writes one hex-dump row's 16-char ASCII column at @p out: the SIMD kernel maps
- *        full rows, a scalar tail blank-pads and dot-maps the final partial row.
- */
-static void hexDumpAsciiColumn(QByteArrayView data, int i, char16_t* out)
-{
-  SS_ASSERT(out != nullptr, return);
-  SS_ASSERT(i >= 0 && i < data.length(), return);
-
-  if (i + 16 <= data.length()) {
-    DSP::simdAsciiDots16(reinterpret_cast<const quint8*>(data.data() + i), out);
-    return;
-  }
-
-  for (int j = 0; j < 16; ++j) {
-    if (i + j >= data.length()) {
-      out[j] = u' ';
-      continue;
-    }
-
-    const auto b = static_cast<unsigned char>(data[i + j]);
-    out[j]       = (b >= 0x20 && b <= 0x7E) ? static_cast<char16_t>(b) : u'.';
-  }
-}
-
-/**
- * @brief Converts @a data into a HEX dump string: each row is built in a fixed char16_t
- *        scratch buffer (scalar nibble writes + the shared DSP::simdAsciiDots16 ASCII
- *        column) and appended with one QString::append call, replacing the per-character
- *        appends that dominated GUI time at MB/s rates with the hex view enabled.
- */
-QString Console::Handler::hexadecimalStr(QByteArrayView data)
-{
-  static_assert(sizeof(QChar) == sizeof(char16_t), "QChar must be UTF-16 code-unit sized");
-
-  static constexpr char kHexDigits[] = "0123456789abcdef";
-  constexpr auto rowSize             = 16;
-  constexpr auto rowChars            = 80;
-  constexpr auto fullRowLen          = 79;
-  static_assert(fullRowLen <= rowChars, "hex-dump row must fit the scratch buffer");
-
-  QString out;
-  const auto rows = (data.length() + rowSize - 1) / rowSize;
-  out.reserve(rows * rowChars + 2);
-
-  std::array<char16_t, rowChars> scratch;
-
-  for (int i = 0; i < data.length(); i += rowSize) {
-    int rowLen = 0;
-
-    for (int shift = 20; shift >= 0; shift -= 4)
-      scratch[rowLen++] = static_cast<char16_t>(kHexDigits[(i >> shift) & 0xF]);
-
-    scratch[rowLen++] = u' ';
-    scratch[rowLen++] = u'|';
-    scratch[rowLen++] = u' ';
-
-    for (int j = 0; j < rowSize; ++j) {
-      if (i + j < data.length()) {
-        const auto b      = static_cast<unsigned char>(data[i + j]);
-        scratch[rowLen++] = static_cast<char16_t>(kHexDigits[b >> 4]);
-        scratch[rowLen++] = static_cast<char16_t>(kHexDigits[b & 0xF]);
-        scratch[rowLen++] = u' ';
-      }
-
-      else {
-        scratch[rowLen++] = u' ';
-        scratch[rowLen++] = u' ';
-        scratch[rowLen++] = u' ';
-      }
-
-      if ((j + 1) == 8)
-        scratch[rowLen++] = u' ';
-    }
-
-    scratch[rowLen++] = u'|';
-    scratch[rowLen++] = u' ';
-
-    hexDumpAsciiColumn(data, i, scratch.data() + rowLen);
-    rowLen += rowSize;
-
-    scratch[rowLen++] = u' ';
-    scratch[rowLen++] = u'|';
-    scratch[rowLen++] = u'\n';
-
-    SS_ASSERT_LOG(rowLen == fullRowLen);
-    if (rowLen != fullRowLen)
-      break;
-
-    out.append(reinterpret_cast<const QChar*>(scratch.data()), rowLen);
-  }
-
-  out += QLatin1Char('\n');
-  return out;
+  return TextFormat::filterControlChars(utf8Data);
 }

@@ -28,17 +28,21 @@
 #include <QObject>
 #include <QSet>
 #include <QSettings>
-#include <QUrl>
 #include <QVariantList>
 #include <QVariantMap>
 
+#include "Misc/Extensions/ExtensionAutoUpdater.h"
+#include "Misc/Extensions/ExtensionInstaller.h"
 #include "Misc/Extensions/PluginRunner.h"
 
 class QNetworkReply;
 
 namespace Misc {
 /**
- * @brief Manages extension repositories, browsing, downloading, and installation.
+ * @brief Owns the extension catalog: the repositories it is fetched from, the filtered view QML
+ *        renders, and the launch decisions for installed plugins. Disk writes belong to
+ *        ExtensionInstaller, running processes to PluginRunner and update policy to
+ *        ExtensionAutoUpdater; this class holds those three and forwards their property surface.
  */
 class ExtensionManager : public QObject {
   // clang-format off
@@ -176,16 +180,12 @@ public slots:
 private slots:
   void autoUpdateExtensions();
   void onManifestReply();
-  void onFileDownloadReply();
   void onExtensionMetaReply();
   void onReadmeReply();
-  void downloadNextFile();
   void applyFilter();
   void rebuildInstalledPlugins();
   void loadLocalManifest(const QString& repoPath);
-  void loadInstalledManifest();
-  void saveInstalledManifest();
-  void writeExtensionFile(QNetworkReply* reply);
+  void onExtensionInstalled(const QString& id);
 
 private:
   void parseManifest(QNetworkReply* reply);
@@ -193,17 +193,8 @@ private:
 
   [[nodiscard]] QString catalogName(const QString& id) const;
   [[nodiscard]] bool confirmAutoUpdate(const QStringList& ids);
+  [[nodiscard]] bool queuePendingUpdates();
 
-  [[nodiscard]] QString extensionsPath() const;
-  [[nodiscard]] QString themesPath() const;
-  [[nodiscard]] QString installedManifestPath() const;
-  [[nodiscard]] QString currentPlatformKey() const;
-  [[nodiscard]] bool isPathSafe(const QString& filePath, const QString& baseDir) const;
-  [[nodiscard]] QJsonObject resolvePlatform(const QJsonObject& meta) const;
-  [[nodiscard]] QUrl resolveFileUrl(const QString& repoBaseUrl, const QString& relativePath) const;
-
-  [[nodiscard]] bool catalogEntryMatchesFilters(const QJsonObject& entry) const;
-  [[nodiscard]] QVariantMap buildCatalogEntryMap(const QJsonObject& entry) const;
   void appendOrphanedInstalledEntries();
   void restoreSelectionByPreviousId();
 
@@ -222,37 +213,28 @@ private:
 
 private:
   bool m_loading;
+  bool m_dashboardWasAvailable;
   int m_selectedIndex;
-  float m_downloadProgress;
-  int m_pendingDownloads;
-  int m_totalDownloads;
   int m_pendingManifests;
   int m_pendingExtensionMetas;
-  int m_updatePolicy;
 
   QString m_filterType;
   QString m_searchFilter;
   QString m_selectedReadme;
   QString m_filterCategory;
-  QSettings m_settings;
 
   QStringList m_repositories;
   QJsonArray m_allExtensions;
-  QVariantList m_filteredExtensions;
-
-  QJsonObject m_installedExtensions;
-  QString m_currentInstallId;
-  QString m_currentInstallRepoBase;
-  QVariantMap m_currentInstallMeta;
-  QList<QPair<QString, QUrl>> m_downloadQueue;
-  QStringList m_autoUpdateQueue;
-  QSet<QString> m_autoUpdateDeclined;
-
-  bool m_dashboardWasAvailable;
-  PluginRunner m_pluginRunner;
-  QMap<QString, QVariantMap> m_pluginMetadataCache;
   QVariantList m_installedPlugins;
+  QVariantList m_filteredExtensions;
+  QMap<QString, QVariantMap> m_pluginMetadataCache;
+
+  QSettings m_settings;
   QNetworkAccessManager m_nam;
   QSet<QNetworkReply*> m_activeReplies;
+
+  PluginRunner m_pluginRunner;
+  ExtensionInstaller m_installer;
+  ExtensionAutoUpdater m_autoUpdater;
 };
 }  // namespace Misc

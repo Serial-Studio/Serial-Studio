@@ -21,17 +21,6 @@
 
 #include "DataModel/Editors/MacroEditor.h"
 
-#include <QAbstractItemView>
-#include <QCompleter>
-#include <QCoreApplication>
-#include <QDir>
-#include <QFile>
-#include <QJavascriptHighlighter>
-#include <QLineNumberArea>
-#include <QLuaHighlighter>
-#include <QTextDocument>
-
-#include "DataModel/Editors/SerialStudioCompleter.h"
 #include "Misc/CommonFonts.h"
 #include "Misc/ThemeManager.h"
 #include "Misc/TimerEvents.h"
@@ -42,47 +31,33 @@
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Constructs the QML-side macro editor.
+ * @brief Constructs the QML-side macro editor. The macros dialog and the annotations decoder tab
+ *        live inside the main window, so the item-visibility gate is enough here.
  */
 DataModel::MacroEditor::MacroEditor(QQuickItem* parent)
   : QQuickPaintedItem(parent)
-  , m_dirty(true)
   , m_language(0)
   , m_themeManager(Misc::ThemeManager::instance())
-  , m_commonFonts(Misc::CommonFonts::instance())
   , m_timerEvents(Misc::TimerEvents::instance())
+  , m_editor(*this,
+             m_themeManager,
+             Misc::CommonFonts::instance(),
+             EmbeddedCodeEditor::RenderGate::ItemVisible)
 {
-  setMipmap(false);
-  setAntialiasing(false);
-  setOpaquePainting(true);
-  setAcceptTouchEvents(true);
-  setFlag(ItemHasContents, true);
-  setFlag(ItemIsFocusScope, true);
-  setFlag(ItemAcceptsInputMethod, true);
-  setAcceptedMouseButtons(Qt::AllButtons);
-  setFillColor(m_themeManager.getColor(QStringLiteral("base")));
+  m_editor.configureHost();
 
-  m_widget.setTabReplace(true);
-  m_widget.setTabReplaceSize(2);
-  m_widget.setAutoIndentation(true);
-  m_widget.setHighlighter(new QJavascriptHighlighter());
-  m_widget.setFont(m_commonFonts.monoFont());
-  m_widget.setLayoutDirection(Qt::LeftToRight);
-  m_widget.setLanguageHint(QCodeEditor::LanguageHint::JavaScript);
-  m_widget.setCompleter(new DataModel::SerialStudioCompleter(false, &m_widget));
-
-  onThemeChanged();
   connect(&m_themeManager,
           &Misc::ThemeManager::themeChanged,
           this,
           &DataModel::MacroEditor::onThemeChanged);
 
-  connect(&m_widget, &QCodeEditor::textChanged, this, [this] { Q_EMIT modifiedChanged(); });
-  connect(&m_widget, &QCodeEditor::textChanged, this, &DataModel::MacroEditor::textChanged);
-  connect(&m_widget, &QCodeEditor::textChanged, this, &DataModel::MacroEditor::scheduleRender);
-  connect(&m_widget, &QCodeEditor::selectionChanged, this, &DataModel::MacroEditor::scheduleRender);
+  auto& widget = m_editor.widget();
+  connect(&widget, &QCodeEditor::textChanged, this, [this] { Q_EMIT modifiedChanged(); });
+  connect(&widget, &QCodeEditor::textChanged, this, &DataModel::MacroEditor::textChanged);
+  connect(&widget, &QCodeEditor::textChanged, this, &DataModel::MacroEditor::scheduleRender);
+  connect(&widget, &QCodeEditor::selectionChanged, this, &DataModel::MacroEditor::scheduleRender);
   connect(
-    &m_widget, &QCodeEditor::cursorPositionChanged, this, &DataModel::MacroEditor::scheduleRender);
+    &widget, &QCodeEditor::cursorPositionChanged, this, &DataModel::MacroEditor::scheduleRender);
 
   connect(this, &QQuickPaintedItem::widthChanged, this, &DataModel::MacroEditor::resizeWidget);
   connect(this, &QQuickPaintedItem::heightChanged, this, &DataModel::MacroEditor::resizeWidget);
@@ -99,7 +74,7 @@ DataModel::MacroEditor::MacroEditor(QQuickItem* parent)
  */
 QString DataModel::MacroEditor::text() const
 {
-  return m_widget.toPlainText();
+  return m_editor.text();
 }
 
 /**
@@ -115,10 +90,7 @@ int DataModel::MacroEditor::language() const noexcept
  */
 bool DataModel::MacroEditor::isModified() const noexcept
 {
-  if (m_widget.document())
-    return m_widget.document()->isModified();
-
-  return false;
+  return m_editor.isModified();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -130,7 +102,7 @@ bool DataModel::MacroEditor::isModified() const noexcept
  */
 void DataModel::MacroEditor::cut()
 {
-  m_widget.cut();
+  m_editor.cut();
 }
 
 /**
@@ -138,7 +110,7 @@ void DataModel::MacroEditor::cut()
  */
 void DataModel::MacroEditor::undo()
 {
-  m_widget.undo();
+  m_editor.undo();
 }
 
 /**
@@ -146,7 +118,7 @@ void DataModel::MacroEditor::undo()
  */
 void DataModel::MacroEditor::redo()
 {
-  m_widget.redo();
+  m_editor.redo();
 }
 
 /**
@@ -154,7 +126,7 @@ void DataModel::MacroEditor::redo()
  */
 void DataModel::MacroEditor::copy()
 {
-  m_widget.copy();
+  m_editor.copy();
 }
 
 /**
@@ -162,9 +134,7 @@ void DataModel::MacroEditor::copy()
  */
 void DataModel::MacroEditor::clear()
 {
-  m_widget.setPlainText(QString());
-  m_widget.document()->clearUndoRedoStacks();
-  m_widget.document()->setModified(false);
+  m_editor.setSourceText(QString());
   Q_EMIT modifiedChanged();
 }
 
@@ -173,7 +143,7 @@ void DataModel::MacroEditor::clear()
  */
 void DataModel::MacroEditor::paste()
 {
-  m_widget.paste();
+  m_editor.paste();
 }
 
 /**
@@ -181,38 +151,20 @@ void DataModel::MacroEditor::paste()
  */
 void DataModel::MacroEditor::selectAll()
 {
-  m_widget.selectAll();
+  m_editor.selectAll();
 }
 
 /**
  * @brief Switches the highlighter/completer pair to the given language
- *        (SerialStudio::ScriptLanguage encoding); replaced objects go through deleteLater
- *        like the parser editor does.
+ *        (SerialStudio::ScriptLanguage encoding).
  */
 void DataModel::MacroEditor::setLanguage(int language)
 {
   if (m_language == language)
     return;
 
-  m_language            = language;
-  auto* old_completer   = m_widget.completer();
-  auto* old_highlighter = m_widget.highlighter();
-
-  if (language == SerialStudio::Lua) {
-    m_widget.setHighlighter(new QLuaHighlighter());
-    m_widget.setLanguageHint(QCodeEditor::LanguageHint::Lua);
-    m_widget.setCompleter(new DataModel::SerialStudioCompleter(true, &m_widget));
-  } else {
-    m_widget.setHighlighter(new QJavascriptHighlighter());
-    m_widget.setLanguageHint(QCodeEditor::LanguageHint::JavaScript);
-    m_widget.setCompleter(new DataModel::SerialStudioCompleter(false, &m_widget));
-  }
-
-  if (old_completer)
-    old_completer->deleteLater();
-
-  if (old_highlighter)
-    old_highlighter->deleteLater();
+  m_language = language;
+  m_editor.setScriptLanguage(language == SerialStudio::Lua);
 
   Q_EMIT languageChanged();
   scheduleRender();
@@ -224,11 +176,7 @@ void DataModel::MacroEditor::setLanguage(int language)
  */
 void DataModel::MacroEditor::setText(const QString& text)
 {
-  if (m_widget.toPlainText() != text)
-    m_widget.setPlainText(text);
-
-  m_widget.document()->clearUndoRedoStacks();
-  m_widget.document()->setModified(false);
+  m_editor.syncSourceText(text);
   Q_EMIT modifiedChanged();
   scheduleRender();
 }
@@ -238,7 +186,7 @@ void DataModel::MacroEditor::setText(const QString& text)
  */
 void DataModel::MacroEditor::markSaved()
 {
-  m_widget.document()->setModified(false);
+  m_editor.markSaved();
   Q_EMIT modifiedChanged();
 }
 
@@ -251,18 +199,7 @@ void DataModel::MacroEditor::markSaved()
  */
 void DataModel::MacroEditor::onThemeChanged()
 {
-  static const auto* t = &Misc::ThemeManager::instance();
-  const auto name      = t->parameters().value(QStringLiteral("code-editor-theme")).toString();
-
-  const auto path =
-    QDir::isAbsolutePath(name) ? name : QStringLiteral(":/themes/code-editor/%1.xml").arg(name);
-
-  QFile file(path);
-  if (file.open(QFile::ReadOnly)) {
-    m_style.load(QString::fromUtf8(file.readAll()));
-    m_widget.setSyntaxStyle(&m_style);
-    file.close();
-  }
+  m_editor.applyTheme();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -275,7 +212,7 @@ void DataModel::MacroEditor::onThemeChanged()
  */
 void DataModel::MacroEditor::scheduleRender()
 {
-  m_dirty = true;
+  m_editor.scheduleRender();
 }
 
 /**
@@ -284,27 +221,7 @@ void DataModel::MacroEditor::scheduleRender()
  */
 void DataModel::MacroEditor::renderWidget()
 {
-  if (!isVisible() || (!m_dirty && !hasActiveFocus()))
-    return;
-
-  m_dirty = false;
-  syncWidgetPosition();
-  m_pixmap = m_widget.grab();
-  update();
-}
-
-/**
- * @brief Aligns the hidden widget's top-level position with the item's on-screen position so
- *        completer popups and drag auto-scroll resolve correct global coordinates.
- */
-void DataModel::MacroEditor::syncWidgetPosition()
-{
-  if (!window())
-    return;
-
-  const QPoint global = mapToGlobal(QPointF(0, 0)).toPoint();
-  if (m_widget.pos() != global)
-    m_widget.move(global);
+  m_editor.renderWidget();
 }
 
 /**
@@ -312,10 +229,7 @@ void DataModel::MacroEditor::syncWidgetPosition()
  */
 void DataModel::MacroEditor::resizeWidget()
 {
-  if (width() > 0 && height() > 0) {
-    m_widget.setFixedSize(static_cast<int>(width()), static_cast<int>(height()));
-    scheduleRender();
-  }
+  m_editor.resizeWidget();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -327,8 +241,7 @@ void DataModel::MacroEditor::resizeWidget()
  */
 void DataModel::MacroEditor::paint(QPainter* painter)
 {
-  if (painter && isVisible())
-    painter->drawPixmap(0, 0, m_pixmap);
+  m_editor.paint(painter);
 }
 
 /**
@@ -337,11 +250,8 @@ void DataModel::MacroEditor::paint(QPainter* painter)
  */
 bool DataModel::MacroEditor::event(QEvent* event)
 {
-  if (event->type() == QEvent::ShortcutOverride) {
-    QCoreApplication::sendEvent(&m_widget, event);
-    if (event->isAccepted())
-      return true;
-  }
+  if (m_editor.handleShortcutOverride(event))
+    return true;
 
   return QQuickPaintedItem::event(event);
 }
@@ -352,14 +262,7 @@ bool DataModel::MacroEditor::event(QEvent* event)
  */
 void DataModel::MacroEditor::keyPressEvent(QKeyEvent* event)
 {
-  auto* completer = m_widget.completer();
-  if (completer && completer->popup() && completer->popup()->isVisible()
-      && SerialStudioCompleter::popupHandlesKey(event->key()))
-    QCoreApplication::sendEvent(completer->popup(), event);
-  else
-    QCoreApplication::sendEvent(&m_widget, event);
-
-  scheduleRender();
+  m_editor.handleKeyPress(event);
 }
 
 /**
@@ -367,7 +270,7 @@ void DataModel::MacroEditor::keyPressEvent(QKeyEvent* event)
  */
 void DataModel::MacroEditor::keyReleaseEvent(QKeyEvent* event)
 {
-  QCoreApplication::sendEvent(&m_widget, event);
+  m_editor.forwardToWidget(event);
 }
 
 /**
@@ -375,8 +278,8 @@ void DataModel::MacroEditor::keyReleaseEvent(QKeyEvent* event)
  */
 void DataModel::MacroEditor::inputMethodEvent(QInputMethodEvent* event)
 {
-  QCoreApplication::sendEvent(&m_widget, event);
-  scheduleRender();
+  m_editor.forwardToWidget(event);
+  m_editor.scheduleRender();
 }
 
 /**
@@ -384,8 +287,8 @@ void DataModel::MacroEditor::inputMethodEvent(QInputMethodEvent* event)
  */
 void DataModel::MacroEditor::focusInEvent(QFocusEvent* event)
 {
-  QCoreApplication::sendEvent(&m_widget, event);
-  scheduleRender();
+  m_editor.forwardToWidget(event);
+  m_editor.scheduleRender();
 }
 
 /**
@@ -393,73 +296,40 @@ void DataModel::MacroEditor::focusInEvent(QFocusEvent* event)
  */
 void DataModel::MacroEditor::focusOutEvent(QFocusEvent* event)
 {
-  QCoreApplication::sendEvent(&m_widget, event);
-  scheduleRender();
+  m_editor.forwardToWidget(event);
+  m_editor.scheduleRender();
 }
 
-/** @brief Forwards mouse-press events to the backing widget after offsetting for the line-number
- * gutter. */
+/**
+ * @brief Forwards mouse-press events to the backing widget, claiming focus for the item.
+ */
 void DataModel::MacroEditor::mousePressEvent(QMouseEvent* event)
 {
-  const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();
-  QMouseEvent copy(event->type(),
-                   event->position() - QPointF(lineNumWidth, 0),
-                   event->globalPosition(),
-                   event->button(),
-                   event->buttons(),
-                   event->modifiers(),
-                   event->pointingDevice());
-  QCoreApplication::sendEvent(m_widget.viewport(), &copy);
-  forceActiveFocus();
-  scheduleRender();
+  m_editor.handleMouse(event, true);
 }
 
-/** @brief Forwards mouse-move events to the backing widget after offsetting for the line-number
- * gutter. */
+/**
+ * @brief Forwards mouse-move events to the backing widget.
+ */
 void DataModel::MacroEditor::mouseMoveEvent(QMouseEvent* event)
 {
-  const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();
-  QMouseEvent copy(event->type(),
-                   event->position() - QPointF(lineNumWidth, 0),
-                   event->globalPosition(),
-                   event->button(),
-                   event->buttons(),
-                   event->modifiers(),
-                   event->pointingDevice());
-  QCoreApplication::sendEvent(m_widget.viewport(), &copy);
-  scheduleRender();
+  m_editor.handleMouse(event, false);
 }
 
-/** @brief Forwards mouse-release events to the backing widget after offsetting for the line-number
- * gutter. */
+/**
+ * @brief Forwards mouse-release events to the backing widget.
+ */
 void DataModel::MacroEditor::mouseReleaseEvent(QMouseEvent* event)
 {
-  const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();
-  QMouseEvent copy(event->type(),
-                   event->position() - QPointF(lineNumWidth, 0),
-                   event->globalPosition(),
-                   event->button(),
-                   event->buttons(),
-                   event->modifiers(),
-                   event->pointingDevice());
-  QCoreApplication::sendEvent(m_widget.viewport(), &copy);
-  scheduleRender();
+  m_editor.handleMouse(event, false);
 }
 
-/** @brief Forwards double-click events to the backing widget after offsetting for the line-number
- * gutter. */
+/**
+ * @brief Forwards double-click events to the backing widget.
+ */
 void DataModel::MacroEditor::mouseDoubleClickEvent(QMouseEvent* event)
 {
-  const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();
-  QMouseEvent copy(event->type(),
-                   event->position() - QPointF(lineNumWidth, 0),
-                   event->globalPosition(),
-                   event->button(),
-                   event->buttons(),
-                   event->modifiers(),
-                   event->pointingDevice());
-  QCoreApplication::sendEvent(m_widget.viewport(), &copy);
-  scheduleRender();
+  m_editor.handleMouse(event, false);
 }
 
 /**
@@ -467,8 +337,8 @@ void DataModel::MacroEditor::mouseDoubleClickEvent(QMouseEvent* event)
  */
 void DataModel::MacroEditor::wheelEvent(QWheelEvent* event)
 {
-  QCoreApplication::sendEvent(m_widget.viewport(), event);
-  scheduleRender();
+  m_editor.forwardToViewport(event);
+  m_editor.scheduleRender();
 }
 
 /**
@@ -476,7 +346,7 @@ void DataModel::MacroEditor::wheelEvent(QWheelEvent* event)
  */
 void DataModel::MacroEditor::dragEnterEvent(QDragEnterEvent* event)
 {
-  QCoreApplication::sendEvent(m_widget.viewport(), event);
+  m_editor.forwardToViewport(event);
 }
 
 /**
@@ -484,7 +354,7 @@ void DataModel::MacroEditor::dragEnterEvent(QDragEnterEvent* event)
  */
 void DataModel::MacroEditor::dragMoveEvent(QDragMoveEvent* event)
 {
-  QCoreApplication::sendEvent(m_widget.viewport(), event);
+  m_editor.forwardToViewport(event);
 }
 
 /**
@@ -492,7 +362,7 @@ void DataModel::MacroEditor::dragMoveEvent(QDragMoveEvent* event)
  */
 void DataModel::MacroEditor::dragLeaveEvent(QDragLeaveEvent* event)
 {
-  QCoreApplication::sendEvent(m_widget.viewport(), event);
+  m_editor.forwardToViewport(event);
 }
 
 /**
@@ -500,5 +370,5 @@ void DataModel::MacroEditor::dragLeaveEvent(QDragLeaveEvent* event)
  */
 void DataModel::MacroEditor::dropEvent(QDropEvent* event)
 {
-  QCoreApplication::sendEvent(m_widget.viewport(), event);
+  m_editor.forwardToViewport(event);
 }

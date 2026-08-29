@@ -30,6 +30,7 @@
 
 #include "DataModel/Editors/DatasetTransformEditor.h"
 #include "DataModel/Frame.h"
+#include "DataModel/Project/ProjectNavHistory.h"
 #include "SerialStudio.h"
 
 namespace IO {
@@ -522,23 +523,10 @@ private:
   bool selectInfluxSinkItem(QStandardItem* item);
   bool selectControlScriptItem(QStandardItem* item);
 
-  /**
-   * @brief Stable logical identity of a visited tree node for back/forward history.
-   */
-  struct NavEntry {
-    bool valid       = false;
-    bool container   = false;
-    ItemKind kind    = KindNone;
-    CurrentView view = ProjectView;
-    int id           = -1;
-    int parentId     = -1;
-    QString key;
-  };
+  using NavEntry = ProjectNavHistory::Entry;
 
-  [[nodiscard]] static bool sameNavTarget(const NavEntry& a, const NavEntry& b) noexcept;
   [[nodiscard]] NavEntry captureNavEntry(QStandardItem* item) const;
   [[nodiscard]] QStandardItem* resolveNavEntry(const NavEntry& entry) const;
-  void pushNavEntry(const NavEntry& entry);
   void clearNavHistory();
   void syncDatasetItemCache(int groupId, int datasetId);
   void appendDriverPropertyRows(const DataModel::Source& source);
@@ -642,11 +630,7 @@ private:
   CurrentView m_currentView;
   bool m_suppressViewChange;
 
-  static constexpr int kMaxNavHistory = 128;
-  std::vector<NavEntry> m_navHistory;
-  int m_navCursor;
-  int m_navDirection;
-  bool m_navigatingHistory;
+  ProjectNavHistory m_nav;
 
   ItemKind m_batchKind;
   bool m_batchApplying;

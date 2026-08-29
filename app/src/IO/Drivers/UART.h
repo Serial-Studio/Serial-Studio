@@ -173,12 +173,9 @@ private slots:
   void handleError(QSerialPort::SerialPortError error);
 
 private:
-  [[nodiscard]] QVector<QSerialPortInfo> validPorts() const;
   void applyDeviceProperty(const QVariant& value);
   void applyBaudRateProperty(const QVariant& value);
   bool relocateOpenPortIndex(const QVector<QSerialPortInfo>& ports);
-  [[nodiscard]] int scorePortIdentifierMatch(const QSerialPortInfo& info,
-                                             const QJsonObject& id) const;
 
 private:
   QSerialPort* m_port;

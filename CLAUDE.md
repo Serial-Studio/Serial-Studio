@@ -306,7 +306,7 @@ area. The hazard column names what breaks silently — the doc holds the rule.
 | `app/src/Console/Annotations.*`, `ConsoleAnnotations.qml` (spec 0059) | [dashboard.md](doc/claude/architecture/dashboard.md) "Frame annotation layer" | `annotate()` stages, `commitPending()` publishes per tick — reading `count()` right after needs a commit. `reset()` clears the model *before* re-reading the offset. |
 | `app/src/API/Mirror/`, `streamAvailable()` (spec 0040) | [mirror.md](doc/claude/architecture/mirror.md) | Dataset ordering or `wireUniqueId` changes are wire breaks: bump `kWireVersion`, regenerate `tests/fixtures/mirror/`. Viewer frames never reach the export fan-out. |
 | An embedded code editor's render cadence | [scripting.md](doc/claude/architecture/scripting.md) "Embedded Code Editors" | Never give a main-window-embedded editor an unconditional per-tick `grab()` — cost 13% of the GUI thread (2026-08-17). |
-| Locating a split god file (`ProjectModel`, `ProjectEditor`, `ProjectHandler`) | [directory-map.md](doc/claude/directory-map.md) | Implementations sit across per-concern TUs; facade headers unchanged. Splitter: `scripts/tu-cutter.py`. |
+| Locating a god object's concerns (`ProjectModel`, `ProjectHandler`, `FrameBuilder`, `Dashboard`) | [directory-map.md](doc/claude/directory-map.md) | Spec 0070 re-formed the god objects into facades owning real sub-object classes (one class = one .h/.cpp, in a sibling dir named after the facade). Never split one class across TUs; `tu-cutter.py` is retired for class work. |
 
 ## Code Style — Essentials
 

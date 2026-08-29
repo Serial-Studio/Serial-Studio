@@ -26,7 +26,20 @@
 #include <QSet>
 #include <QString>
 
-#include "API/CommandProtocol.h"
+#include "API/CommandRegistry.h"
+#include "API/Handlers/ProjectActionCommands.h"
+#include "API/Handlers/ProjectBatchCommands.h"
+#include "API/Handlers/ProjectDatasetCommands.h"
+#include "API/Handlers/ProjectDatasetFieldCommands.h"
+#include "API/Handlers/ProjectDiscoveryCommands.h"
+#include "API/Handlers/ProjectDryRunCommands.h"
+#include "API/Handlers/ProjectFileCommands.h"
+#include "API/Handlers/ProjectGroupCommands.h"
+#include "API/Handlers/ProjectListCommands.h"
+#include "API/Handlers/ProjectOutputWidgetCommands.h"
+#include "API/Handlers/ProjectPainterCommands.h"
+#include "API/Handlers/ProjectParserCommands.h"
+#include "API/Handlers/ProjectUpdateCommands.h"
 
 namespace DataModel {
 struct Dataset;
@@ -50,144 +63,35 @@ void applySimpleAlarmFields(DataModel::Dataset& d,
                             std::optional<double> high);
 
 /**
- * @brief Registers API commands for DataModel::ProjectModel operations.
+ * @brief Facade over the per-domain project command classes: owns one instance of each and fans
+ *        registration out to them in the order the registry has always seen.
  */
 class ProjectHandler {
 public:
   static void registerCommands();
 
+  [[nodiscard]] static QString applyDatasetUpdateParams(DataModel::Dataset& d,
+                                                        const QJsonObject& params,
+                                                        bool& rebuildTree,
+                                                        QSet<QString>& consumed);
+
 private:
-  static void registerFileCommands();
-  static void registerFileLifecycleCommands();
-  static void registerFileMetadataCommands();
-  static void registerHistoryCommands();
-  static void registerGroupCommands();
-  static void registerDatasetCommands();
-  static void registerDatasetCrudCommands();
-  static void registerDatasetCreateCommands();
-  static void registerDatasetLifecycleCommands();
-  static void registerDatasetOptionCommands();
-  static void registerDatasetFieldCommands();
-  static void registerDatasetAlarmCommands();
-  static void registerDatasetMarkerCommands();
-  static void registerActionCommands();
-  static void registerOutputWidgetCommands();
-  static void registerParserCommands();
-  static void registerParserCodeCommands();
-  static void registerParserTemplateCommands();
-  static void registerParserConfigCommands();
-  static void registerPainterCommands();
-  static void registerPainterCodeCommands();
-  static void registerUpdateCommands();
-  static void registerEntityUpdateCommands();
-  static void registerBatchCommand();
-  static void registerDryRunCommands();
-  static void registerFrameParserDryRunCommands();
-  static void registerScriptDryRunCommands();
-  static void registerEndToEndDryRunCommand();
-  static void registerListCommands();
-  static void registerResolverCommands();
-  static void registerDiscoveryCommands();
-  static void registerSnapshotAndMoveCommands();
-  static void registerTemplateCommands();
+  explicit ProjectHandler(CommandRegistry& registry);
+  void registerAll();
 
-  static CommandResponse fileNew(const QString& id, const QJsonObject& params);
-  static CommandResponse projectUndo(const QString& id, const QJsonObject& params);
-  static CommandResponse projectRedo(const QString& id, const QJsonObject& params);
-  static CommandResponse fileOpen(const QString& id, const QJsonObject& params);
-  static CommandResponse fileSave(const QString& id, const QJsonObject& params);
-  static CommandResponse setTitle(const QString& id, const QJsonObject& params);
-  static CommandResponse getStatus(const QString& id, const QJsonObject& params);
-
-  static CommandResponse groupAdd(const QString& id, const QJsonObject& params);
-  static CommandResponse groupDelete(const QString& id, const QJsonObject& params);
-  static CommandResponse groupDuplicate(const QString& id, const QJsonObject& params);
-
-  static CommandResponse datasetAdd(const QString& id, const QJsonObject& params);
-  static CommandResponse datasetAddMany(const QString& id, const QJsonObject& params);
-  static CommandResponse datasetDelete(const QString& id, const QJsonObject& params);
-  static CommandResponse datasetDuplicate(const QString& id, const QJsonObject& params);
-  static CommandResponse datasetSetOption(const QString& id, const QJsonObject& params);
-  static CommandResponse datasetSetOptions(const QString& id, const QJsonObject& params);
-
-  static CommandResponse actionAdd(const QString& id, const QJsonObject& params);
-  static CommandResponse actionDelete(const QString& id, const QJsonObject& params);
-  static CommandResponse actionDuplicate(const QString& id, const QJsonObject& params);
-
-  static CommandResponse outputWidgetAdd(const QString& id, const QJsonObject& params);
-  static CommandResponse outputWidgetDelete(const QString& id, const QJsonObject& params);
-  static CommandResponse outputWidgetDuplicate(const QString& id, const QJsonObject& params);
-  static CommandResponse outputWidgetGet(const QString& id, const QJsonObject& params);
-
-  static CommandResponse parserSetCode(const QString& id, const QJsonObject& params);
-  static CommandResponse parserGetCode(const QString& id, const QJsonObject& params);
-  static CommandResponse parserSetLanguage(const QString& id, const QJsonObject& params);
-  static CommandResponse parserGetLanguage(const QString& id, const QJsonObject& params);
-  static CommandResponse parserListTemplates(const QString& id, const QJsonObject& params);
-  static CommandResponse parserGetTemplateSchema(const QString& id, const QJsonObject& params);
-  static CommandResponse parserGetTemplate(const QString& id, const QJsonObject& params);
-  static CommandResponse parserSetTemplate(const QString& id, const QJsonObject& params);
-  static CommandResponse frameParserConfigure(const QString& id, const QJsonObject& params);
-  static CommandResponse frameParserGetConfig(const QString& id, const QJsonObject& params);
-
-  static CommandResponse painterSetCode(const QString& id, const QJsonObject& params);
-  static CommandResponse painterGetCode(const QString& id, const QJsonObject& params);
-
-  static CommandResponse frameParserDryRun(const QString& id, const QJsonObject& params);
-  static CommandResponse frameParserDryCompile(const QString& id, const QJsonObject& params);
-  static CommandResponse transformDryRun(const QString& id, const QJsonObject& params);
-  static CommandResponse painterDryRun(const QString& id, const QJsonObject& params);
-  static CommandResponse outputWidgetDryRun(const QString& id, const QJsonObject& params);
-  static CommandResponse endToEndDryRun(const QString& id, const QJsonObject& params);
-
-  static CommandResponse groupUpdate(const QString& id, const QJsonObject& params);
-  static CommandResponse datasetUpdate(const QString& id, const QJsonObject& params);
-  static CommandResponse actionUpdate(const QString& id, const QJsonObject& params);
-  static CommandResponse outputWidgetUpdate(const QString& id, const QJsonObject& params);
-
-  static CommandResponse loadFromJSON(const QString& id, const QJsonObject& params);
-  static CommandResponse exportJson(const QString& id, const QJsonObject& params);
-  static CommandResponse loadIntoFrameBuilder(const QString& id, const QJsonObject& params);
-
-  static CommandResponse templateList(const QString& id, const QJsonObject& params);
-  static CommandResponse templateApply(const QString& id, const QJsonObject& params);
-
-  static CommandResponse validate(const QString& id, const QJsonObject& params);
-
-  static CommandResponse groupsList(const QString& id, const QJsonObject& params);
-  static CommandResponse datasetsList(const QString& id, const QJsonObject& params);
-  static CommandResponse actionsList(const QString& id, const QJsonObject& params);
-
-  static CommandResponse datasetGetByUniqueId(const QString& id, const QJsonObject& params);
-  static CommandResponse datasetGetByTitle(const QString& id, const QJsonObject& params);
-  static CommandResponse datasetGetByPath(const QString& id, const QJsonObject& params);
-  static CommandResponse datasetGetExecutionOrder(const QString& id, const QJsonObject& params);
-
-  static CommandResponse projectSearch(const QString& id, const QJsonObject& params);
-  static CommandResponse groupGet(const QString& id, const QJsonObject& params);
-
-  static CommandResponse projectSnapshot(const QString& id, const QJsonObject& params);
-
-  static CommandResponse datasetMove(const QString& id, const QJsonObject& params);
-  static CommandResponse groupMove(const QString& id, const QJsonObject& params);
-
-  static CommandResponse datasetSetVirtual(const QString& id, const QJsonObject& params);
-  static CommandResponse datasetSetTransformCode(const QString& id, const QJsonObject& params);
-
-  static CommandResponse datasetGetAlarmBands(const QString& id, const QJsonObject& params);
-  static CommandResponse datasetSetAlarmBands(const QString& id, const QJsonObject& params);
-
-  static CommandResponse datasetGetFFTMarkers(const QString& id, const QJsonObject& params);
-  static CommandResponse datasetSetFFTMarkers(const QString& id, const QJsonObject& params);
-
-  static CommandResponse projectBatch(const QString& id, const QJsonObject& params);
-
-  static void applyDatasetVisualizationFlags(DataModel::Dataset& d, int options);
-  static QString widgetForDatasetOptions(int options);
-  static QString applyDatasetUpdateParams(DataModel::Dataset& d,
-                                          const QJsonObject& params,
-                                          bool& rebuildTree,
-                                          QSet<QString>& consumed);
+  ProjectFileCommands m_file;
+  ProjectGroupCommands m_group;
+  ProjectDatasetCommands m_dataset;
+  ProjectDatasetFieldCommands m_datasetFields;
+  ProjectActionCommands m_action;
+  ProjectOutputWidgetCommands m_outputWidget;
+  ProjectParserCommands m_parser;
+  ProjectPainterCommands m_painter;
+  ProjectUpdateCommands m_update;
+  ProjectBatchCommands m_batch;
+  ProjectDryRunCommands m_dryRun;
+  ProjectListCommands m_list;
+  ProjectDiscoveryCommands m_discovery;
 };
 
 }  // namespace Handlers

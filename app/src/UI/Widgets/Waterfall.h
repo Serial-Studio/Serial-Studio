@@ -24,17 +24,18 @@
 
 #include <kiss_fftr.h>
 
-#include <QFontMetrics>
 #include <QImage>
+#include <QPointF>
 #include <QQuickItem>
-#include <QVector>
-#include <utility>
+#include <vector>
 
 #include "Misc/CommonFonts.h"
 #include "Misc/ThemeManager.h"
 #include "Misc/TimerEvents.h"
 #include "SerialStudio.h"
 #include "UI/Dashboard.h"
+#include "UI/Widgets/Waterfall/WaterfallOverlay.h"
+#include "UI/Widgets/Waterfall/WaterfallViewState.h"
 
 QT_FORWARD_DECLARE_CLASS(QSGSimpleRectNode)
 QT_FORWARD_DECLARE_CLASS(QSGSimpleTextureNode)
@@ -213,56 +214,17 @@ private slots:
   void syncHistoryToTimeRange();
 
 private:
-  /**
-   * @brief Result of axis tick generation -- sampled values + step + display max.
-   */
-  struct AxisTicks {
-    std::vector<double> values;
-    double step;
-    double displayMax;
-  };
-
-  /**
-   * @brief Per-marker runtime state: configured span, thresholds, and live readout.
-   */
-  struct MarkerData {
-    double freqLo;
-    double freqHi;
-    float warningDb;
-    float alarmDb;
-    float peakDb;
-    int state;
-    QColor customColor;
-    QString label;
-  };
-
   void loadMarkers();
+  void pushAxisModel();
   void computeSmoothedRow(int spectrumSize);
-  void updateMarkerStates(const int spectrumSize);
   void rebuildLogColumnTable();
   [[nodiscard]] const float* imageRow(const float* dbValues, int bins);
-  [[nodiscard]] double worldFromFreq(double hz) const;
-  [[nodiscard]] double freqFromWorld(double w) const;
-  [[nodiscard]] std::vector<double> collectFreqTicks(double wMin, double wMax) const;
-  [[nodiscard]] int markerChipAt(const QPointF& pos) const;
-  void drawMarkers(QPainter* painter, const QRectF& plotRect) const;
-  void drawMarkerChip(QPainter* painter,
-                      const QRectF& plotRect,
-                      const QFontMetrics& fm,
-                      double* rowEnd,
-                      const int markerIndex,
-                      const bool spotlit,
-                      double cx,
-                      const QString& text,
-                      const QColor& color) const;
-  void visibleFreqWindow(double& xMinHz, double& xMaxHz) const;
   void allocateFftPlan(int size);
   void releaseFftPlan();
   void rebuildHistoryImage();
   void writeRow(const float* dbValues, int bins);
   void writeRowAt(int row, const float* dbValues, int bins);
   void paintRowInto(int physicalRow, const float* dbValues, int bins);
-  void renderAxisLayer();
   void syncBackgroundNodes(QSGNode* root, const QRectF& plotRect);
   void syncSpectrogramNodes(QSGNode* root, const QRectF& plotRect);
   void syncOverlayNode(QSGNode* root);
@@ -271,82 +233,34 @@ private:
                              const QRectF& dstRect,
                              const QRectF& srcRect);
   void markAxisDirty();
-  void drawXAxis(QPainter* painter, const QRectF& plotRect) const;
-  void drawYAxis(QPainter* painter, const QRectF& plotRect) const;
-  void drawCursor(QPainter* painter, const QRectF& plotRect) const;
-  void cursorReadoutValues(
-    const QRectF& plotRect, double cx, double cy, double& freqHz, double& yVal) const;
-  void drawCursorTooltip(QPainter* painter,
-                         const QRectF& plotRect,
-                         double cx,
-                         double cy,
-                         const QString& freqText,
-                         const QString& timeText) const;
-  [[nodiscard]] QRectF computePlotRect(const QFontMetrics& fm) const;
   [[nodiscard]] QRectF computeSourceRect() const;
   static QRgb sampleColorMap(int map, double t);
   static QRgb interpolateLut(const double* r, const double* g, const double* b, int n, double t);
-  static AxisTicks computeFreqTicks(double maxFreq, int targetCount);
-  static AxisTicks computeTimeTicks(double maxSeconds, int targetCount);
-  static QString formatFreqTick(double hz);
-  static QString formatTimeTick(double seconds, double step);
 
   int m_index;
   int m_size;
   int m_samplingRate;
   SerialStudio::FFTWindow m_windowType;
   int m_historySize;
-  int m_colorMap;
   int m_writeRow;
   int m_topRow;
   bool m_filledOnce;
-  bool m_axisVisible;
-  bool m_markersVisible;
-  bool m_colorbarVisible;
 
-  double m_minDb;
-  double m_maxDb;
   double m_center;
   double m_halfRange;
-  double m_xZoom;
-  double m_yZoom;
-  double m_xPan;
-  double m_yPan;
   bool m_scaleIsValid;
 
   // Mouse drag state
   bool m_dragging;
   QPointF m_lastMousePos;
 
-  // Hover-cursor state (frequency / time readout under the pointer)
-  bool m_cursorEnabled;
-  bool m_cursorHovering;
-  QPointF m_cursorPos;
-
-  // Cached overlay layer (axes, markers, cursor): rebuilt only when one of its inputs changes
-  bool m_axisDirty;
-  bool m_overlayUpload;
   bool m_textureDirty;
-  QRectF m_cachedPlotRect;
-  QImage m_axisLayer;
 
   QSGSimpleRectNode* m_outerBgNode;
   QSGSimpleRectNode* m_innerBgNode;
   QSGSimpleTextureNode* m_specNodeA;
   QSGSimpleTextureNode* m_specNodeB;
   QSGSimpleTextureNode* m_overlayNode;
-
-  // Cached theme colors (refreshed via onThemeChanged())
-  QColor m_outerBg;
-  QColor m_innerBg;
-  QColor m_borderColor;
-  QColor m_textColor;
-  QColor m_gridColor;
-  QColor m_accentColor;
-  QColor m_warningColor;
-  QColor m_alarmColor;
-
-  std::vector<MarkerData> m_markers;
 
   bool m_campbellMode;
   int m_yDatasetUniqueId;
@@ -363,10 +277,6 @@ private:
   std::vector<float> m_logColFrac;
   std::vector<float> m_logRow;
 
-  // Transient marker spotlight: chip hit rects captured per paint, -1 = none selected
-  int m_selectedMarker;
-  mutable std::vector<std::pair<int, QRectF>> m_chipHitRects;
-
   QImage m_image;
   std::vector<float> m_window;
   std::vector<float> m_dbCache;
@@ -380,6 +290,9 @@ private:
   Misc::CommonFonts& m_commonFonts;
   Misc::TimerEvents& m_timerEvents;
   AudioExport& m_audioExport;
+
+  WaterfallViewState m_view;
+  WaterfallOverlay m_overlay;
 
   bool m_audioRecordingEnabled;
 };

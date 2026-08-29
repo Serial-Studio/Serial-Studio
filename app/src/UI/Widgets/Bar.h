@@ -152,7 +152,7 @@ protected slots:
   virtual void updateData();
 
 private:
-  inline double computeFractional(double value) const
+  [[nodiscard]] inline double computeFractional(double value) const
   {
     const double min   = qMin(m_minValue, m_maxValue);
     const double max   = qMax(m_minValue, m_maxValue);

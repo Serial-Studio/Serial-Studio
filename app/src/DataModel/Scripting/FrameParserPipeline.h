@@ -27,9 +27,9 @@
 #include <QList>
 #include <QString>
 #include <QStringList>
-#include <QVarLengthArray>
 #include <QVector>
 
+#include "DataModel/Scripting/ReplayRowCodec.h"
 #include "SerialStudio.h"
 
 namespace DataModel {
@@ -94,44 +94,6 @@ void decodeAndParseFrame(const QByteArray& rawFrame,
  * @brief QuickPlot comma split: one channel row per frame, no script engine involved.
  */
 void splitQuickPlotChannels(const QByteArray& rawFrame, QList<QStringList>& outChannels);
-
-/**
- * @brief Joins replay cells into one comma-separated row, RFC-4180-quoting any cell that
- *        contains a comma, quote or newline. Counterpart of splitReplayRow.
- */
-[[nodiscard]] QByteArray joinReplayRow(const QStringList& cells);
-
-/**
- * @brief Quote-aware comma split of one synthesized replay row (RFC-4180 double-quote escape).
- */
-[[nodiscard]] QStringList splitReplayRow(QStringView row);
-
-/**
- * @brief Reusable per-cell view buffer for splitReplayRowSpans (stack storage for the
- *        common column counts).
- */
-using ReplayCellViews = QVarLengthArray<QByteArrayView, 64>;
-
-/**
- * @brief Byte-level twin of splitReplayRow for disk-backed replay rows: identical quote,
- *        trim and injection-guard semantics, but cells come back as views into @p row (or
- *        into @p scratch for cells that need RFC-4180 unescaping). A trailing CR is chopped
- *        (QTextStream did that upstream); trimming covers ASCII whitespace, the one
- *        documented divergence from QString::trimmed for exotic Unicode spaces. Views stay
- *        valid while @p row's bytes and @p scratch are alive and untouched; scratch-backed
- *        cells are resolved after the final append, so they survive a scratch reallocation.
- *        @p separator swaps the cell boundary (CSV player sniffing, spec 0048); quoting,
- *        trimming and guard semantics are separator-independent.
- */
-void splitReplayRowSpans(QByteArrayView row,
-                         ReplayCellViews& out,
-                         QByteArray& scratch,
-                         char separator = ',');
-
-/**
- * @brief Replay twin of splitQuickPlotChannels: one quote-aware row per non-empty line.
- */
-void splitReplayChannels(const QByteArray& rawFrame, QList<QStringList>& outChannels);
 
 /**
  * @brief Extraction + decoder + parser against the live FrameParser engine for @p sourceId.

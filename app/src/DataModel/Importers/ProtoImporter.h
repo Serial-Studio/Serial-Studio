@@ -28,53 +28,11 @@
 #include <QString>
 #include <QVector>
 
+#include "DataModel/Importers/ProtoParser.h"
+
 class SessionContext;
 
 namespace DataModel {
-
-/**
- * @brief Wire-format-aware classification of a Protocol Buffers scalar field type.
- */
-enum class ProtoScalar {
-  Double,
-  Float,
-  Int32,
-  Int64,
-  UInt32,
-  UInt64,
-  SInt32,
-  SInt64,
-  Fixed32,
-  Fixed64,
-  SFixed32,
-  SFixed64,
-  Bool,
-  String,
-  Bytes,
-  MessageRef,
-  EnumRef,
-};
-
-/**
- * @brief A single field declared inside a parsed `.proto` message.
- */
-struct ProtoField {
-  int tag            = 0;
-  bool repeated      = false;
-  ProtoScalar scalar = ProtoScalar::Int32;
-  QString name;
-  QString typeRef;
-};
-
-/**
- * @brief A message definition parsed from a `.proto` schema, possibly with nested messages.
- */
-struct ProtoMessage {
-  QString name;
-  QString qualifiedName;
-  QVector<ProtoField> fields;
-  QVector<ProtoMessage> nested;
-};
 
 /**
  * @brief Imports `.proto` schema files and generates Serial Studio projects.

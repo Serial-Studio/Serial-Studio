@@ -686,10 +686,9 @@ MQTT::SparkplugPublisher::Message MQTT::SparkplugPublisher::deathCertificate(
 
 /**
  * @brief Opens a new connection: next bdSeq, sequence reset to zero, adopted generation dropped so
- *        the first structure republish re-anchors it; the birth that follows carries the same bdSeq
- *        (R41, R42). The alias map is deliberately kept -- a reconnect re-births and re-declares
- *        every alias, so aliases only steady across it; the full alias reset lives in reset()
- * (R10).
+ *        the first structure republish re-anchors it; the birth that follows carries the same
+ *        bdSeq (R41, R42). The alias map is deliberately kept, since a reconnect re-births and
+ *        re-declares every alias; the full alias reset lives in reset() (R10).
  */
 MQTT::SparkplugPublisher::Message MQTT::SparkplugPublisher::beginConnection(quint64 timestampMs)
 {

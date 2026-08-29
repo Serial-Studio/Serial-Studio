@@ -24,7 +24,6 @@
 
 #include <atomic>
 #include <QBuffer>
-#include <QMap>
 #include <QObject>
 #include <QSettings>
 #include <QTextStream>
@@ -32,6 +31,7 @@
 #include <QTimer>
 #include <QVector>
 
+#include "IO/Drivers/Audio/AudioDeviceCatalog.h"
 #include "IO/HAL_Driver.h"
 #include "ThirdParty/miniaudio.h"
 #include "ThirdParty/readerwriterqueue.h"
@@ -114,12 +114,6 @@ public:
   Audio& operator=(const Audio&) = delete;
 
 public:
-  typedef struct {
-    QList<int> supportedSampleRates;
-    QList<ma_format> supportedFormats;
-    QList<int> supportedChannelCounts;
-  } AudioDeviceInfo;
-
   void closeDevice();
   void close() override;
 
@@ -186,17 +180,14 @@ private slots:
   void syncOutputParameters();
 
 private:
-  inline bool validateInput() const
-  {
-    return m_init && m_selectedInputDevice >= 0 && m_selectedInputDevice < m_inputDevices.size()
-        && m_selectedInputDevice < m_inputCapabilities.size();
-  }
+  [[nodiscard]] inline bool validateInput() const { return m_catalog.validateInput(); }
 
-  inline bool validateOutput() const
-  {
-    return m_init && m_selectedOutputDevice >= 0 && m_selectedOutputDevice < m_outputDevices.size()
-        && m_selectedOutputDevice < m_outputCapabilities.size();
-  }
+  [[nodiscard]] inline bool validateOutput() const { return m_catalog.validateOutput(); }
+
+  void dropSessionForLostDevice();
+
+  [[nodiscard]] bool updateInputDevices(const AudioDeviceCatalog::Enumeration& probe);
+  [[nodiscard]] bool updateOutputDevices(const AudioDeviceCatalog::Enumeration& probe);
 
   void handleCallback(void* output, const void* input, ma_uint32 frameCount);
   static void callback(ma_device* device, void* output, const void* input, ma_uint32 frameCount);
@@ -224,24 +215,11 @@ private:
   bool m_normalization;
   bool m_discoveryPaused;
 
-  int m_selectedSampleRate;
-
-  int m_selectedInputDevice;
-  int m_selectedInputSampleFormat;
-  int m_selectedInputChannelConfiguration;
-
-  int m_selectedOutputDevice;
-  int m_selectedOutputSampleFormat;
-  int m_selectedOutputChannelConfiguration;
-
-  QMap<ma_format, QString> m_sampleFormats;
-  QMap<ma_channel, QString> m_knownConfigs;
-
   ma_device m_device;
   ma_context m_context;
   ma_device_config m_config;
-  QVector<ma_device_info> m_inputDevices;
-  QVector<ma_device_info> m_outputDevices;
+
+  AudioDeviceCatalog m_catalog;
 
   QSettings m_settings;
   moodycamel::ReaderWriterQueue<QByteArray> m_inputQueue;
@@ -274,9 +252,6 @@ private:
   std::atomic<ma_uint32> m_rtCaptureChannels;
   std::atomic<ma_uint32> m_rtPlaybackChannels;
   // code-verify on
-
-  QVector<AudioDeviceInfo> m_inputCapabilities;
-  QVector<AudioDeviceInfo> m_outputCapabilities;
 };
 }  // namespace Drivers
 }  // namespace IO

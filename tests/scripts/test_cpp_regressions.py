@@ -13,14 +13,27 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 _SPEC_0070_SPLITS = {
-    "app/src/AI/ToolDispatcher.cpp": "app/src/AI/ToolDispatcher",
-    "app/src/API/Handlers/ProjectHandlerEntities.cpp": "app/src/API/Handlers/Entities",
+    "app/src/AI/ToolDispatcher.cpp": "app/src/AI/Tools",
+    "app/src/AI/Conversation.cpp": "app/src/AI/Conversation",
     "app/src/Sessions/DatabaseManager.cpp": "app/src/Sessions/DatabaseManager",
+    "app/src/Sessions/Player.cpp": "app/src/Sessions/Player",
     "app/src/IO/Drivers/BluetoothLE.cpp": "app/src/IO/Drivers/BluetoothLE",
+    "app/src/IO/Drivers/USB.cpp": "app/src/IO/Drivers/USB",
+    "app/src/IO/Drivers/Audio.cpp": "app/src/IO/Drivers/Audio",
+    "app/src/IO/Drivers/OpcUa.cpp": "app/src/IO/Drivers/OpcUa",
+    "app/src/IO/Drivers/Modbus.cpp": "app/src/IO/Drivers/Modbus",
+    "app/src/IO/ConnectionManager.cpp": "app/src/IO/ConnectionManager",
     "app/src/UI/Widgets/Waterfall.cpp": "app/src/UI/Widgets/Waterfall",
+    "app/src/UI/Widgets/Terminal.cpp": "app/src/UI/Widgets/Terminal",
     "app/src/UI/Taskbar.cpp": "app/src/UI/Taskbar",
+    "app/src/UI/WindowManager.cpp": "app/src/UI/WindowManager",
+    "app/src/UI/Dashboard.cpp": "app/src/UI/Dashboard",
     "app/src/UI/Widgets/PainterContext.cpp": "app/src/UI/Widgets/Painter",
     "app/src/API/Server.cpp": "app/src/API/Server",
+    "app/src/CSV/Player.cpp": "app/src/CSV/Player",
+    "app/src/DataModel/FrameBuilder.cpp": "app/src/DataModel/FrameBuilder",
+    "app/src/MQTT/Publisher.cpp": "app/src/MQTT",
+    "app/src/Misc/ExtensionManager.cpp": "app/src/Misc/Extensions",
 }
 
 
@@ -52,10 +65,10 @@ def test_project_model_save_returns_real_result():
     result of finalizeProjectSave() rather than a hardcoded `true`. The explanatory
     in-body comment was stripped by the comment-cleanup pass, so pin the behaviour to
     the code: the non-dialog tail of saveJsonFile returns finalizeProjectSave()."""
-    text = _read("app/src/DataModel/Project/ProjectModelPersistence.cpp")
+    text = _read("app/src/DataModel/Project/ProjectPersistence.cpp")
 
     body = re.search(
-        r"bool DataModel::ProjectModel::saveJsonFile\(const bool askPath\)[\s\S]*?\n\}",
+        r"bool DataModel::ProjectPersistence::saveJsonFile\(const bool askPath\)[\s\S]*?\n\}",
         text,
     )
     assert body is not None, "saveJsonFile body must be present"
@@ -161,7 +174,7 @@ def test_api_server_enabled_state_tracks_listen_failure():
 
 def test_mcp_schema_matches_registered_command_names():
     network = _read("app/src/API/Handlers/NetworkHandler.cpp")
-    project = _read("app/src/API/Handlers/ProjectHandler.cpp")
+    project = _read("app/src/API/Handlers/ProjectFileCommands.cpp")
     csv = _read("app/src/API/Handlers/CSVExportHandler.cpp")
     uart = _read("app/src/API/Handlers/UARTHandler.cpp")
 
@@ -233,9 +246,11 @@ def test_usb_close_joins_threads_with_quit_then_wait():
 
 def test_frame_parser_uses_qcoreapplication_event_forwarding():
     text = _read("app/src/DataModel/Editors/JsCodeEditor.cpp")
+    bridge = _read("app/src/DataModel/Editors/EmbeddedCodeEditor.cpp")
 
-    assert "QCoreApplication::sendEvent(&m_widget, event);" in text
+    assert "QCoreApplication::sendEvent(&m_widget, event);" in bridge
     assert "DW_EXEC_EVENT" not in text
+    assert "DW_EXEC_EVENT" not in bridge
 
 
 def test_project_editor_bounds_checks_combo_indices():
@@ -744,7 +759,9 @@ def test_frame_parser_pipeline_module_exists_with_shared_seam():
     """The shared module exposes the decoder seam, the QuickPlot splitter, and the two
     runners that the dialog and the dryRun call into. Anything else fragmenting that
     surface re-introduces the divergence we just removed."""
-    header = _read("app/src/DataModel/Scripting/FrameParserPipeline.h")
+    header = _read("app/src/DataModel/Scripting/FrameParserPipeline.h") + _read(
+        "app/src/DataModel/Scripting/ReplayRowCodec.h"
+    )
 
     # Two-overload decoder seam: live-parser (FrameParser&) and engine-override (IScriptEngine&).
     assert (
@@ -867,10 +884,10 @@ def test_frame_parser_pipeline_dispatches_quick_plot_branch():
 def test_frame_parser_dry_run_requires_input_bytes():
     """project.frameParser.dryRun must reject calls without inputBytes / inputBytesHex
     and must not silently fall back to sampleFrame/sampleFrames anymore."""
-    text = _read("app/src/API/Handlers/ProjectHandlerParser.cpp")
+    text = _read("app/src/API/Handlers/ProjectDryRunCommands.cpp")
 
     body = re.search(
-        r"API::CommandResponse API::Handlers::ProjectHandler::frameParserDryRun"
+        r"API::CommandResponse API::Handlers::ProjectDryRunCommands::frameParserDryRun"
         r"\([\s\S]*?\n\}\n",
         text,
     )
@@ -1466,10 +1483,14 @@ def test_ai_history_sanitizer_strips_orphan_tool_results():
     text = _read("app/src/AI/Conversation.cpp")
 
     # The orphan-strip pass exists and runs inside the reconciler.
-    assert "static void stripOrphanToolResults(QJsonArray& history)" in text
+    surgery = _read("app/src/AI/Conversation/HistorySurgery.cpp")
+    assert (
+        "void AI::HistorySurgery::stripOrphanToolResults(QJsonArray& history)"
+        in surgery
+    )
     assert re.search(
-        r"reconcileHistoryToolPairs\(\)\s*\{\s*stripOrphanToolResults\(m_history\);",
-        text,
+        r"reconcileHistoryToolPairs\(QJsonArray& history\)\s*\n\{\s*stripOrphanToolResults\(history\);",
+        surgery,
     ), "reconcileHistoryToolPairs must strip orphans before pairing"
 
     # Prune must run before reconcile so a prune cut cannot ship unpaired blocks.
@@ -1492,7 +1513,9 @@ def test_ai_history_sanitizer_strips_orphan_tool_results():
     ), "recordToolResult must drop results when no turn is in flight"
 
     # The prune cut point must never land on a tool-result turn.
-    fresh = re.search(r"int AI::Conversation::firstFreshUserTurnAt[\s\S]*?\n\}", text)
+    fresh = re.search(
+        r"int AI::HistorySurgery::firstFreshUserTurnAt[\s\S]*?\n\}", surgery
+    )
     assert fresh is not None
     assert "hasToolResult" in fresh.group(0)
     assert "fresh && !hasToolResult" in fresh.group(0)

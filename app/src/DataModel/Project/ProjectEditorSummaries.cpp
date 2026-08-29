@@ -43,8 +43,8 @@
 #  include "MQTT/Publisher.h"
 #  include "MQTT/PublisherScriptEditor.h"
 #endif
+#include "DataModel/Project/ProjectFolders.h"
 #include "ProjectEditorItemIds.h"
-#include "ProjectEditorShared.h"
 
 namespace DataModel {
 

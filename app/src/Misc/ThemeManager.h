@@ -22,10 +22,11 @@
 #pragma once
 
 #include <QColor>
-#include <QJsonObject>
 #include <QObject>
 #include <QPalette>
 #include <QSettings>
+
+#include "Misc/ThemeCatalog.h"
 
 template<typename... Colors>
 inline QString QSS(const QString& style, const Colors&... colors)
@@ -107,9 +108,6 @@ protected:
   bool eventFilter(QObject* watched, QEvent* event) override;
 
 private:
-  void tryLoadUserThemeFile(const QString& subdirPath, const QString& jsonFile);
-
-private:
   int m_theme;
   QPalette m_palette;
   QString m_themeName;
@@ -117,10 +115,7 @@ private:
   QVariantMap m_colors;
   QVariantMap m_parameters;
 
-  QStringList m_availableThemes;
-  QStringList m_availableThemeNames;
-  QStringList m_userThemeNames;
-  QMap<QString, QJsonObject> m_themes;
+  ThemeCatalog m_catalog;
 
   bool m_applyingTheme;
   bool m_persistSettings;

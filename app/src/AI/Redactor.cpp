@@ -102,7 +102,7 @@ static QJsonValue scrubValue(const QJsonValue& v, int depth)
 {
   if (v.isString()) {
     auto s = v.toString();
-    AI::Redactor::scrub(s);
+    (void)AI::Redactor::scrub(s);
     return s;
   }
 

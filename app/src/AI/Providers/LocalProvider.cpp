@@ -23,8 +23,8 @@
 #include "AI/KeyVault.h"
 #include "AI/Logging.h"
 #include "AI/Providers/ImmediateErrorReply.h"
-#include "AI/Providers/OpenAIProvider.h"
 #include "AI/Providers/OpenAIReply.h"
+#include "AI/Providers/ProviderJson.h"
 #include "Misc/JsonValidator.h"
 
 static constexpr int kLocalTransferTimeoutMs = 5 * 60 * 1000;
@@ -321,27 +321,10 @@ AI::Reply* AI::LocalProvider::sendMessage(const QJsonArray& history,
                                                    "Open Manage Keys to set one."));
 
   const auto systemBlocks = ContextBuilder::buildSystemArray(false);
-  QString systemText;
-  for (const auto& v : systemBlocks) {
-    const auto block = v.toObject();
-    const auto t     = block.value(QStringLiteral("text")).toString();
-    if (!t.isEmpty()) {
-      if (!systemText.isEmpty())
-        systemText.append(QStringLiteral("\n\n"));
+  const auto systemText   = ProviderJson::flattenSystemBlocks(systemBlocks);
 
-      systemText.append(t);
-    }
-  }
-
-  QJsonObject body;
-  body[QStringLiteral("model")]    = currentModel();
-  body[QStringLiteral("stream")]   = true;
-  body[QStringLiteral("messages")] = OpenAIProvider::translateHistory(history, systemText, false);
-  if (!tools.isEmpty()) {
-    body[QStringLiteral("tools")] = OpenAIProvider::translateTools(tools);
-    body[QStringLiteral("tool_choice")] =
-      forbidToolUse ? QStringLiteral("none") : QStringLiteral("auto");
-  }
+  const auto body =
+    ProviderJson::chatCompletionsBody(currentModel(), history, systemText, tools, forbidToolUse);
 
   const auto bytes = QJsonDocument(body).toJson(QJsonDocument::Compact);
 

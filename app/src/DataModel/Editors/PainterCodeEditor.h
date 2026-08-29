@@ -10,14 +10,14 @@
 
 #ifdef BUILD_COMMERCIAL
 
-#  include <QCodeEditor>
 #  include <QPainter>
 #  include <QQuickPaintedItem>
-#  include <QSyntaxStyle>
+
+#  include "DataModel/Editors/EmbeddedCodeEditor.h"
+#  include "DataModel/Editors/ScriptTemplateCatalog.h"
 
 namespace Misc {
 class ThemeManager;
-class CommonFonts;
 class TimerEvents;
 class Translator;
 }  // namespace Misc
@@ -71,10 +71,6 @@ private slots:
   void scheduleRender();
 
 private:
-  void syncWidgetPosition();
-  [[nodiscard]] bool renderable() const;
-
-private:
   bool event(QEvent* event) override;
   void paint(QPainter* painter) override;
   void keyPressEvent(QKeyEvent* event) override;
@@ -97,21 +93,16 @@ public:
 
 private:
   void loadTemplates();
-  bool m_dirty;
+
+private:
   bool m_readingCode;
   Misc::ThemeManager& m_themeManager;
-  Misc::CommonFonts& m_commonFonts;
-  DataModel::ProjectEditor& m_projectEditor;
   Misc::TimerEvents& m_timerEvents;
   Misc::Translator& m_translator;
+  DataModel::ProjectEditor& m_projectEditor;
   DataModel::ProjectModel& m_projectModel;
-  QPixmap m_pixmap;
-  QSyntaxStyle m_style;
-  QCodeEditor m_widget;
-
-  QString m_defaultTemplateFile;
-  QStringList m_templateNames;
-  QStringList m_templateFiles;
+  EmbeddedCodeEditor m_editor;
+  ScriptTemplateCatalog m_templates;
 };
 
 }  // namespace DataModel

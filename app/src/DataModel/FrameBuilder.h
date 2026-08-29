@@ -49,11 +49,12 @@ extern "C" {
 #include "DataModel/DataBlock.h"
 #include "DataModel/DataTable.h"
 #include "DataModel/Frame.h"
+#include "DataModel/FrameBuilder/QuickPlotBuilder.h"
+#include "DataModel/FrameBuilder/TableScriptBridge.h"
+#include "DataModel/FrameBuilder/TransformCompiler.h"
 #include "DataModel/FramePoolPolicy.h"
 #include "DataModel/ParseBudget.h"
 #include "DataModel/RepublishGate.h"
-#include "DataModel/Scripting/ExpressionTransform.h"
-#include "DataModel/Scripting/JsWatchdog.h"
 #include "IO/HAL_Driver.h"
 #include "IO/PipelineHost.h"
 #include "SerialStudio.h"
@@ -222,50 +223,12 @@ private slots:
 
 private:
   using BudgetClock                              = DataModel::ParseBudget::Clock;
-  static constexpr int kTransformWatchdogMs      = 100;
-  static constexpr int kTransformHookInstrCount  = 10000;
   static constexpr double kMillisecondsToSeconds = 1.0 / 1000.0;
-
-  struct TransformEntry {
-    int uniqueId;
-    QString code;
-  };
 
   struct TransformFrameInfo {
     quint64 frameNumber = 0;
     int sourceId        = 0;
     qint64 timestampMs  = 0;
-  };
-
-  struct LuaTransformRef {
-    int ref;
-    bool acceptsInfo;
-  };
-
-  struct JsTransformRef {
-    QJSValue fn;
-    bool acceptsInfo;
-  };
-
-  struct TransformEngine {
-    lua_State* luaState = nullptr;
-    QJSEngine* jsEngine = nullptr;
-    std::unique_ptr<JsWatchdog> jsWatchdog;
-    std::map<int, LuaTransformRef> luaRefs;
-    std::map<int, JsTransformRef> jsRefs;
-    QDeadlineTimer luaDeadline{QDeadlineTimer::Forever};
-    std::unique_ptr<Expression::SlotTable> exprSlots;
-    std::map<int, Expression::Runtime> exprRefs;
-  };
-
-  struct EngineKey {
-    int sourceId;
-    int language;
-
-    bool operator<(const EngineKey& other) const noexcept
-    {
-      return sourceId < other.sourceId || (sourceId == other.sourceId && language < other.language);
-    }
   };
 
   /**
@@ -283,7 +246,6 @@ private:
   };
 
   int m_quickPlotChannels;
-  bool m_quickPlotHasHeader;
   bool m_parseBudgetEnabled;
   bool m_lastConnectedState;
   bool m_playerOpen;
@@ -301,16 +263,11 @@ private:
 
   quint64 m_parsedFrameCount;
   quint64 m_skippedFrameCount;
-  quint64 m_transformErrors;
-  int m_lastTransformDatasetUniqueId;
-  QString m_lastTransformError;
 
   bool m_jsTransformTimedOut;
   QStringList m_channelScratch;
-  QStringList m_quickPlotChannelNames;
 
   DataModel::Frame m_frame;
-  DataModel::Frame m_quickPlotFrame;
   DataModel::DataTableStore m_tableStore;
 
   static constexpr size_t kTableMirrorSlots = 4;
@@ -336,8 +293,10 @@ private:
   std::vector<std::shared_ptr<DataModel::DataTableSnapshot>> m_tableSnapshotPool;
   std::size_t m_tableSnapshotPoolHint;
 
-  // Upvalue every Lua table-API closure carries; pinned for this object's lifetime
-  DataModel::TableApiContext m_luaTableContext;
+  // Concern sub-objects: their references bind members declared above, so addresses never move
+  DataModel::QuickPlotBuilder m_quickPlot;
+  DataModel::TableScriptBridge m_tableApi;
+  DataModel::TransformCompiler m_transforms;
 
   void noteGuiTableApiUser();
   void publishTableSnapshot();
@@ -349,7 +308,6 @@ private:
   DataModel::RepublishGate m_republishGate;
   QMap<int, DataModel::Frame> m_sourceFrames;
   std::map<int, quint64> m_sourceFrameCounters;
-  std::map<EngineKey, TransformEngine> m_transformEngines;
   std::unordered_map<int, std::unordered_map<int, int>> m_replayColumnMap;
   std::unordered_map<int, DatasetDeps> m_datasetDeps;
 
@@ -396,9 +354,9 @@ private:
   void publishParseLoads();
 
   int m_engineCacheSourceId;
-  TransformEngine* m_luaEngineForSource;
-  TransformEngine* m_jsEngineForSource;
-  TransformEngine* m_exprEngineForSource;
+  DataModel::TransformEngine* m_luaEngineForSource;
+  DataModel::TransformEngine* m_jsEngineForSource;
+  DataModel::TransformEngine* m_exprEngineForSource;
 
   int m_compileGuard;
   bool m_compilePending;
@@ -502,14 +460,11 @@ private:
   static constexpr qsizetype kMaxSpanFields = 128;
   std::array<QByteArrayView, kMaxSpanFields> m_spanScratch;
 
-  DataModel::Source makeQuickPlotSource() const;
   DataModel::Frame& ensureSourceFrame(int sourceId);
   SerialStudio::DecoderMethod resolveDecoderMethod(int sourceId, bool applyPerSourceOverride) const;
   void parseProjectFrame(const IO::CapturedDataPtr& data);
   void parseProjectFrame(int sourceId, const IO::CapturedDataPtr& data);
   void parseQuickPlotFrame(const IO::CapturedDataPtr& data);
-  void buildQuickPlotFrame(const QStringList& channels);
-  void buildQuickPlotAudioFrame(const QStringList& channels);
   void publishReplayValues(int sourceId,
                            const DataModel::Frame& src,
                            const DataModel::TimestampedFrame::SteadyTimePoint& ts);
@@ -577,40 +532,23 @@ private:
                           int uniqueId,
                           const QVariant& rawValue,
                           const TransformFrameInfo& info);
-  QVariant applyTransformLua(TransformEngine& engine,
+  QVariant applyTransformLua(DataModel::TransformEngine& engine,
                              int uniqueId,
                              const QVariant& rawValue,
                              const TransformFrameInfo& info);
-  QVariant applyTransformExpr(TransformEngine& engine,
+  QVariant applyTransformExpr(DataModel::TransformEngine& engine,
                               int uniqueId,
                               const QVariant& rawValue,
                               const TransformFrameInfo& info);
-  QVariant applyTransformJs(TransformEngine& engine,
+  QVariant applyTransformJs(DataModel::TransformEngine& engine,
                             int uniqueId,
                             const QVariant& rawValue,
                             const TransformFrameInfo& info);
-
-  SS_COLD void noteTransformError(int uniqueId, const char* message);
-  SS_COLD void noteTransformError(int uniqueId, const QString& message);
 
   void compileTransforms();
   void destroyTransformEngines();
   void initializeTableStore();
   void rebuildTransformsForPlayback();
-  void compileTransformsLua(TransformEngine& engine,
-                            int sourceId,
-                            const std::vector<TransformEntry>& entries);
-  void compileTransformsLuaEntry(lua_State* L,
-                                 TransformEngine& engine,
-                                 const TransformEntry& entry);
-  void compileTransformsExpr(TransformEngine& engine,
-                             int sourceId,
-                             const std::vector<TransformEntry>& entries);
-  void compileTransformsJS(TransformEngine& engine,
-                           int sourceId,
-                           const std::vector<TransformEntry>& entries);
-
-  static void transformLuaWatchdogHook(lua_State* L, lua_Debug* ar);
   // code-verify on
 };
 

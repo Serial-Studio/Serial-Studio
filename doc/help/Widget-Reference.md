@@ -115,7 +115,7 @@ flowchart TD
 - Best for: 3D position tracking, spatial data, point clouds.
 - Recommended: 3 datasets tagged x/y/z; any axis without a tagged dataset renders at 0.
 - Renders through Serial Studio's custom QPainter-based 3D pipeline. No GPU or OpenGL driver required. Runs on low-end hardware including Raspberry Pi.
-- Pro license required.
+- Pro feature (license or free trial).
 
 ### Image View (Pro)
 
@@ -130,7 +130,7 @@ flowchart TD
   - `imgStartSequence`: hex start delimiter (manual mode only).
   - `imgEndSequence`: hex end delimiter (manual mode only).
 - No datasets required inside the group. The widget reads raw image bytes directly from the transport stream.
-- Pro license required.
+- Pro feature (license or free trial).
 
 ### Canvas (Pro)
 
@@ -141,7 +141,7 @@ flowchart TD
 - Best for visualizations not covered by any built-in widget: instrument mimics, project-specific layouts, lab-equipment-style readouts.
 - Repaints at the dashboard refresh rate (60 Hz by default, configurable 1-240 Hz). A 250 ms watchdog terminates the script if a single call does not return.
 - See the [Canvas Widget](Painter-Widget.md) reference for the full API.
-- Pro license required.
+- Pro feature (license or free trial).
 
 ### Web View
 
@@ -189,7 +189,7 @@ flowchart TD
 - **Y-axis source.** Defaults to elapsed time. Set `waterfallYAxis` to another dataset's `uniqueId` to drive the Y axis from that dataset's value instead. This is typically used for order-tracking plots (for example RPM vs. frequency).
 - Best for: vibration order tracking, audio spectrograms, RF band monitoring, transient frequency events.
 - Configuration fields: `waterfall: true`, `waterfallYAxis` (0 = time; otherwise the `uniqueId` of the dataset to use as the Y axis), plus the FFT fields above.
-- Pro license required.
+- Pro feature (license or free trial).
 
 ### Bar
 

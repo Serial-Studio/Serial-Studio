@@ -22,19 +22,20 @@
 #pragma once
 
 #include <atomic>
-#include <deque>
 #include <QByteArray>
-#include <QElapsedTimer>
 #include <QHash>
 #include <QHostAddress>
 #include <QJsonObject>
 #include <QObject>
-#include <QSet>
 #include <QSettings>
 #include <QTcpServer>
 #include <QTcpSocket>
 
 #include "API/CommandProtocol.h"
+#include "API/Server/ClientReception.h"
+#include "API/Server/ConnectionState.h"
+#include "API/Server/ServerAuth.h"
+#include "API/Server/ServerWorker.h"
 #include "DataModel/DataBlock.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FrameConsumer.h"
@@ -44,76 +45,16 @@
 #define API_TCP_PORT 7777
 
 namespace API {
-class Server;
 class MirrorPublisher;
 
 /**
- * @brief Worker that handles JSON serialization and socket I/O on a background thread.
+ * @brief TCP server interface for API communication in Serial Studio. Owns the listening socket,
+ *        the per-connection table and the worker thread; the credential half lives in ServerAuth
+ *        and the parse/validate half in ClientReception, both wired here by injection.
  */
-class ServerWorker : public DataModel::FrameConsumerWorker<DataModel::DataBlockPtr> {
-  // clang-format off
-  Q_OBJECT
-  // clang-format on
-
-signals:
-  void clientCountChanged(int count);
-  void socketRemoved(QTcpSocket* socket, const QString& sessionId);
-  void streamWriteDone(QTcpSocket* socket, const QString& sessionId);
-  void dataReceived(QTcpSocket* socket, const QString& sessionId, const QByteArray& data);
-
-public:
-  ServerWorker(moodycamel::ReaderWriterQueue<DataModel::DataBlockPtr>* queue,
-               std::atomic<bool>* enabled,
-               std::atomic<size_t>* queueSize);
-  ~ServerWorker() override;
-
-  [[nodiscard]] bool isResourceOpen() const override;
-
-public slots:
-  void closeResources() override;
-  void removeSocket(QTcpSocket* socket);
-  void writeRawData(const QByteArray& data);
-  void broadcastEvent(const QJsonObject& event);
-  void addSocket(QTcpSocket* socket, const QString& sessionId);
-  void disconnectSocket(QTcpSocket* socket, const QString& sessionId);
-  void writeToSocket(QTcpSocket* socket, const QString& sessionId, const QByteArray& data);
-  void writeMirrorPayload(QTcpSocket* socket, const QString& sessionId, const QByteArray& data);
-  void writeStreamBlock(QTcpSocket* socket, const QString& sessionId, const QByteArray& data);
-  void setTemplateFrame(int sourceId, const DataModel::Frame& frame);
-  void setSocketStreamFrames(QTcpSocket* socket, const QString& sessionId, const bool enabled);
-
-protected:
-  void processItems(const std::vector<DataModel::DataBlockPtr>& items) override;
-
-private:
-  std::map<int, DataModel::FrameTemplate> m_templates;
-
-private slots:
-  void onSocketReadyRead();
-  void onSocketDisconnected();
-
-private:
-  [[nodiscard]] bool underWriteCap(QTcpSocket* socket);
-
-private:
-  QHash<QTcpSocket*, QString> m_sockets;
-
-  // Sockets whose client opted out of the per-frame broadcast; empty for every ordinary client
-  QSet<QTcpSocket*> m_mutedSockets;
-
-  // Sockets already reported as over-cap; per socket so a later client's stall is not swallowed
-  QSet<QTcpSocket*> m_warnedSockets;
-
-  // One broadcast document carries at most this many samples; a dense block can exceed it
-  static constexpr int kMaxBroadcastSamples = 4096;
-
-  quint64 m_droppedBroadcasts;
-};
-
-/**
- * @brief TCP server interface for API communication in Serial Studio.
- */
-class Server : public DataModel::FrameConsumer<DataModel::DataBlockPtr> {
+class Server
+  : public DataModel::FrameConsumer<DataModel::DataBlockPtr>
+  , public ReceptionHost {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(int clientCount
@@ -155,10 +96,10 @@ public:
   [[nodiscard]] bool hasStreamSubscribers() const noexcept;
   [[nodiscard]] int clientCount() const noexcept;
   [[nodiscard]] QString authToken() const;
-  [[nodiscard]] bool authorizeDeviceWrite();
+  [[nodiscard]] bool authorizeDeviceWrite() override;
   [[nodiscard]] bool externalConnections() const noexcept;
   [[nodiscard]] bool setAuthToken(const QString& token);
-  [[nodiscard]] bool verifyToken(const QByteArray& provided) const;
+  [[nodiscard]] bool verifyToken(const QByteArray& provided) const override;
   [[nodiscard]] bool authorizeRemoteCommand(const QString& command);
 
 public slots:
@@ -191,48 +132,28 @@ private slots:
   void onDataReceived(QTcpSocket* socket, const QString& sessionId, const QByteArray& data);
 
 private:
-  struct ConnectionState {
-    QString sessionId;
-    QString peerAddress;
-    quint16 peerPort = 0;
-    QByteArray buffer;
-    QElapsedTimer window;
-    int messageCount   = 0;
-    int byteCount      = 0;
-    bool authenticated = false;
-    int authAttempts   = 0;
-
-    // Mirror state; streamFrames defaults true so an unmodified client sees no change at all
-    bool streamFrames     = true;
-    bool mirrorSubscribed = false;
-    int mirrorHz          = 20;
-    int mirrorPrecision   = 0;
-
-    // Typed stream-block subscription (spec 0051 M6): ack-paced, drop-oldest, counted
-    bool streamSubscribed    = false;
-    bool streamWriteInFlight = false;
-    QSet<int> streamSources;
-    quint64 streamSeq    = 0;
-    quint64 streamMissed = 0;
-    std::deque<DataModel::DataBlockPtr> streamPending;
-  };
-
-  /**
-   * @brief Tri-state user consent for API-originated device writes.
-   */
-  enum class DeviceWriteConsent {
-    Unset,
-    Granted,
-    Denied
-  };
-
-  void ensureAuthToken();
   void applyExternalConnections(const bool enabled);
-  void handleAuthHandshake(QTcpSocket* socket, ConnectionState& state, const QByteArray& data);
-  [[nodiscard]] static bool constantTimeEquals(const QByteArray& a, const QByteArray& b);
+
+  [[nodiscard]] bool deviceConnected() const override;
+  [[nodiscard]] qint64 writeToDevice(const QByteArray& data) override;
+  [[nodiscard]] QByteArray dispatchCommand(const QByteArray& jsonBytes) override;
+  [[nodiscard]] QByteArray dispatchMcp(const QByteArray& jsonBytes,
+                                       const QString& sessionId) override;
+  [[nodiscard]] bool routeConnectionCommand(QTcpSocket* socket,
+                                            ConnectionState& state,
+                                            const QJsonObject& json) override;
+
+  void sendResponse(QTcpSocket* socket, const QByteArray& response) override;
+  void closeSocket(QTcpSocket* socket, const ConnectionState& state) override;
+  void disconnectClient(QTcpSocket* socket,
+                        ConnectionState& state,
+                        const QString& errorCode,
+                        const QString& errorMessage) override;
 
   [[nodiscard]] MirrorPublisher& mirrorPublisher();
-  [[nodiscard]] static bool isMirrorCommand(const QString& command);
+  void handleMirrorCommand(QTcpSocket* socket, ConnectionState& state, const QJsonObject& json);
+  void setStreamFrames(QTcpSocket* socket, ConnectionState& state, const bool enabled);
+
   [[nodiscard]] static bool isStreamCommand(const QString& command);
   void handleStreamCommand(QTcpSocket* socket, ConnectionState& state, const QJsonObject& json);
   [[nodiscard]] CommandResponse streamSubscribe(ConnectionState& state,
@@ -240,42 +161,15 @@ private:
   [[nodiscard]] CommandResponse streamUnsubscribe(ConnectionState& state,
                                                   const CommandRequest& request);
   void pumpStreamQueue(QTcpSocket* socket, ConnectionState& state);
-  void setStreamFrames(QTcpSocket* socket, ConnectionState& state, const bool enabled);
-  void handleMirrorCommand(QTcpSocket* socket, ConnectionState& state, const QJsonObject& json);
-  [[nodiscard]] CommandResponse mirrorSubscribe(QTcpSocket* socket,
-                                                ConnectionState& state,
-                                                const CommandRequest& request);
-  [[nodiscard]] CommandResponse mirrorSetRate(ConnectionState& state,
-                                              const CommandRequest& request);
-  [[nodiscard]] CommandResponse mirrorUnsubscribe(ConnectionState& state,
-                                                  const CommandRequest& request);
-
-  void sendResponseToSocket(QTcpSocket* socket, const QByteArray& response);
-  void disconnectClient(QTcpSocket* socket,
-                        ConnectionState& state,
-                        const QString& errorCode,
-                        const QString& errorMessage);
-  [[nodiscard]] bool validateRateLimits(QTcpSocket* socket,
-                                        ConnectionState& state,
-                                        const QByteArray& data);
-  [[nodiscard]] bool validateJsonMessage(QTcpSocket* socket,
-                                         ConnectionState& state,
-                                         const QByteArray& jsonBytes);
-  void handleJsonMessage(QTcpSocket* socket, ConnectionState& state, const QByteArray& jsonBytes);
-  void processRawJsonCommand(QTcpSocket* socket, ConnectionState& state, const QJsonObject& json);
-  void processNoNewlineBuffer(QTcpSocket* socket, ConnectionState& state);
-  void processBufferedJson(QTcpSocket* socket, ConnectionState& state, const QByteArray& trimmed);
-  void processJsonLine(QTcpSocket* socket, ConnectionState& state, const QByteArray& trimmedLine);
-  void processRawLine(QTcpSocket* socket, ConnectionState& state, const QByteArray& line);
 
 private:
   QSettings m_settings;
+  ServerAuth m_auth;
+  ClientReception m_reception;
   int m_clientCount;
   bool m_enabled;
   bool m_mirrorLinked;
   bool m_externalConnections;
-  QString m_authToken;
-  DeviceWriteConsent m_deviceWriteConsent;
   QTcpServer m_server;
   QHash<QTcpSocket*, ConnectionState> m_connections;
   alignas(64) std::atomic<bool> m_anyStreamSubscriber;

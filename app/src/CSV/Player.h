@@ -27,14 +27,14 @@
 #include <QFile>
 #include <QHash>
 #include <QKeyEvent>
-#include <QMap>
 #include <QObject>
 #include <QStringList>
-#include <QThread>
 #include <QTimer>
-#include <QVarLengthArray>
 #include <QVector>
 
+#include "CSV/Player/FileIndexer.h"
+#include "CSV/Player/MultiSourceMap.h"
+#include "CSV/Player/RowCodec.h"
 #include "CSV/PlayerLoaderWorker.h"
 
 namespace CSV {
@@ -122,10 +122,10 @@ private slots:
 private:
   bool runQuickPass();
   void startIndexing();
-  bool stopIndexing();
   void frontierPause();
   void sendHeaderFrame();
   void updateTimestampDisplay();
+  [[nodiscard]] bool stopIndexing();
   void processFrameBatch(int startFrame, int endFrame);
   bool promptUserForDateTimeOrInterval(QByteArrayView firstDataRow);
   [[nodiscard]] double promptTimestampUnitScale();
@@ -139,7 +139,6 @@ private:
   void injectFrame(const QByteArray& frame);
   void injectRow(int row);
   void injectSourceRow(int row, int sourceId);
-  [[nodiscard]] int dataColumnToFileColumn(int i) const;
   void backfillSparseSources();
   void anchorSteadyBase(int row);
   void buildSeekWindow(int startRow,
@@ -151,16 +150,12 @@ private:
   [[nodiscard]] int catchUpTargetRow(double target) const;
   [[nodiscard]] std::chrono::steady_clock::time_point rowSteadyTimestamp(int row);
   [[nodiscard]] QByteArrayView rawRow(int row) const;
-  [[nodiscard]] qsizetype splitDataCells(int row);
-  [[nodiscard]] QByteArray quickPlotPayload(int row);
   [[nodiscard]] bool recomputeMsUntilNext(qint64& msUntilNext);
 
 private:
   int m_framePos;
   bool m_injecting;
   bool m_playing;
-  bool m_multiSource;
-  bool m_indexing;
   bool m_pausedAtFrontier;
 
   // Heap-held so a detached indexer's mapping outlives the player's own close (see closeFile)
@@ -171,15 +166,10 @@ private:
   const char* m_mapped;
   qint64 m_mappedSize;
   qint64 m_dataOffset;
-  qint64 m_bytesIndexed;
-  quint64 m_indexGeneration;
   quint64 m_playbackEpoch;
   QVector<quint64> m_rowOffsets;
   QVector<double> m_rowSeconds;
 
-  PlayerTimestampMode m_tsMode;
-  int m_timestampColumn;
-  char m_separator;
   double m_timeScale;
   double m_intervalSeconds;
   qint64 m_anchorMs;
@@ -191,21 +181,12 @@ private:
   double m_steadyBaseRowSeconds;
   std::chrono::steady_clock::time_point m_steadyBase;
 
-  QThread* m_loaderThread;
-  PlayerLoaderWorker* m_loader;
-
-  DataModel::ReplayCellViews m_cells;
-  QByteArray m_splitScratch;
-  QVarLengthArray<QByteArrayView, 64> m_dataSpans;
-
   QTimer m_seekTimer;
   QTimer m_settleTimer;
   QHash<qint64, int> m_seekColumnByKey;
 
-  QMap<int, QVector<int>> m_sourceColumnsByIndex;
-  QVector<quint8> m_rowSourceBits;
-  QVector<quint8> m_fileColumnSourceBit;
-  QVector<int> m_bitSourceIds;
-  QVector<int> m_lastSourceRow;
+  RowCodec m_rows;
+  FileIndexer m_indexer;
+  MultiSourceMap m_sources;
 };
 }  // namespace CSV

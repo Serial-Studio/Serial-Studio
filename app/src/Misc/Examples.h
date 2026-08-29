@@ -113,6 +113,7 @@ private slots:
   void fetchScreenshot(const QString& id, const QString& fileName);
   void downloadNextFile();
 
+private:
   [[nodiscard]] QString cachePath() const;
   [[nodiscard]] QString exampleCachePath(const QString& id) const;
 

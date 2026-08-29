@@ -45,7 +45,6 @@
 #  include "MQTT/PublisherScriptEditor.h"
 #endif
 #include "Project/ProjectEditorItemIds.h"
-#include "Project/ProjectEditorShared.h"
 
 /**
  * @brief Constructs the ProjectEditor singleton and wires its ProjectModel signals.
@@ -60,9 +59,6 @@ DataModel::ProjectEditor::ProjectEditor()
 #endif
   , m_currentView(ProjectView)
   , m_suppressViewChange(false)
-  , m_navCursor(-1)
-  , m_navDirection(0)
-  , m_navigatingHistory(false)
   , m_batchKind(KindNone)
   , m_batchApplying(false)
   , m_groupsRootItem(nullptr)

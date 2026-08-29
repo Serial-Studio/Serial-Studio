@@ -12,7 +12,6 @@
 #pragma once
 
 #include <QHash>
-#include <QJsonArray>
 #include <QString>
 #include <QStringList>
 

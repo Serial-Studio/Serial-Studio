@@ -29,6 +29,7 @@
 #include <unordered_map>
 
 #include "DataModel/Scripting/IScriptEngine.h"
+#include "DataModel/Scripting/ParserTemplateCatalog.h"
 #include "ThirdParty/readerwriterqueue.h"
 
 class SessionContext;
@@ -123,7 +124,6 @@ private:
   void setNativeTemplateIdx(int sourceId, int idx);
   [[nodiscard]] IScriptEngine& engineForSource(int sourceId);
   [[nodiscard]] int languageForSource(int sourceId) const;
-  [[nodiscard]] int detectNativeTemplate(const QString& code) const;
   [[nodiscard]] QString scriptForSource(const Source& src) const;
 
 private:
@@ -140,10 +140,7 @@ private:
   ScriptStatsPtr m_guiScriptStats;
   moodycamel::ReaderWriterQueue<ScriptStatsPtr> m_statsMirrorRing;
 
-  QString m_defaultTemplateFile;
-  QStringList m_templateFiles;
-  QStringList m_templateNames;
-  QStringList m_nativeTemplateNames;
+  ParserTemplateCatalog m_templates;
 
   mutable std::unordered_map<int, int> m_sourceLanguages;
   std::map<int, std::unique_ptr<IScriptEngine>> m_engines;

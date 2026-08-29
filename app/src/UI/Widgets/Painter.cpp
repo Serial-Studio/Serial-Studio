@@ -860,8 +860,6 @@ void Widgets::Painter::setLastError(const QString& error)
   Q_EMIT lastErrorChanged();
 }
 
-#endif  // BUILD_COMMERCIAL
-
 /**
  * @brief Pulls a fresh snapshot when the item becomes effectively visible again, so a widget
  *        on a just-activated workspace page never shows values from when it was last shown.
@@ -873,3 +871,5 @@ void Widgets::Painter::itemChange(ItemChange change, const ItemChangeData& value
   if (change == ItemVisibleHasChanged && value.boolValue)
     updateData();
 }
+
+#endif  // BUILD_COMMERCIAL

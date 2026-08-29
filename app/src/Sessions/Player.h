@@ -15,16 +15,11 @@
 
 #ifdef BUILD_COMMERCIAL
 
-#  include <chrono>
-#  include <optional>
+#  include <memory>
 #  include <QElapsedTimer>
 #  include <QHash>
 #  include <QKeyEvent>
-#  include <QMap>
 #  include <QObject>
-#  include <QSet>
-#  include <QSqlDatabase>
-#  include <QSqlQuery>
 #  include <QString>
 #  include <QTimer>
 #  include <QVector>
@@ -32,6 +27,7 @@
 
 #  include "SerialStudio.h"
 #  include "Sessions/Player/PreSessionState.h"
+#  include "Sessions/Player/ReplaySynthesis.h"
 #  include "Sessions/PlayerLoaderWorker.h"
 
 class QThread;
@@ -43,7 +39,10 @@ class Dashboard;
 namespace Sessions {
 
 /**
- * @brief Replays Serial Studio SQLite export files as if they were live data.
+ * @brief Replays Serial Studio SQLite export files as if they were live data. The facade owns the
+ *        transport of playback and composes three sub-objects for the work itself: SessionDbReader,
+ *        ReplaySynthesis and PreSessionState. The singletons those need are resolved here and
+ *        handed in, never reached for from inside.
  */
 class Player : public QObject {
   // clang-format off
@@ -125,16 +124,11 @@ private:
   void initWorker();
   void joinWorker();
   void clearLocalState();
+  void applyProjectLayout();
+  void registerQuickPlotColumns();
   void applyBundledViewState(const QString& viewState, const QString& projectJson);
   [[nodiscard]] static UI::Dashboard& viewStateDashboard();
-  void teardownLocalDb();
-  bool openLocalDb(const QString& filePath);
-  void detectFinalValueColumns();
-  void fillSeekWindowFromBlocks(int startRow,
-                                int endRow,
-                                const QHash<int, qint64>& keyByUid,
-                                QHash<qint64, QVector<double>>& series);
-  [[nodiscard]] QHash<int, QString> frameValuesFromBlocks(qint64 timestampNs);
+  [[nodiscard]] ReplaySynthesis& synthesis();
 
   [[nodiscard]] bool restoreProjectFromJson(const QString& json);
 
@@ -143,24 +137,13 @@ private:
   void schedulePreSessionRestore();
   void performPendingRestore();
 
-  void alignColumnsToProject();
-  void buildMultiSourceMapping();
-
-  [[nodiscard]] QHash<int, QString> buildFrameAt(qint64 timestampNs);
-  void injectFrame(const QHash<int, QString>& uidValues, qint64 timestampNs);
-  void mergeStreamBlockTimes();
-  void injectStreamBlocksAt(qint64 timestampNs);
-  void replayStreamGroup(int sourceId, std::size_t first, std::size_t last);
-  [[nodiscard]] bool fetchStreamSamples(const PlayerStreamBlockIndex& entry,
-                                        std::vector<double>& out);
-  void processFrameBatch(int startFrame, int endFrame);
   void anchorSteadyBase(int frameIndex);
+  void processFrameBatch(int startFrame, int endFrame);
   [[nodiscard]] int seekWindowStartRow(int target) const;
   void buildSeekWindow(int startRow,
                        int endRow,
                        QVector<double>& times,
                        QHash<qint64, QVector<double>>& series);
-  [[nodiscard]] std::chrono::steady_clock::time_point rowSteadyTimestamp(qint64 timestampNs) const;
 
   void updateTimestampDisplay();
   [[nodiscard]] QString formatTimestamp(double seconds) const;
@@ -169,47 +152,23 @@ private:
   QThread* m_workerThread;
   PlayerLoaderWorker* m_worker;
 
-  std::optional<QSqlDatabase> m_db;
-  std::optional<QSqlQuery> m_frameQuery;
-  std::optional<QSqlQuery> m_seekQuery;
-  bool m_frameQueryPrepared;
-  bool m_seekQueryPrepared;
-  bool m_hasFinalValues;
-  bool m_usesBlocks;
-  QString m_filePath;
-  QString m_connectionName;
-  int m_sessionId;
-  int m_pendingSessionId;
-
   bool m_loading;
-
-  int m_framePos;
   bool m_playing;
-  bool m_multiSource;
-  bool m_injecting;
+  int m_framePos;
+  int m_pendingSessionId;
+  QString m_filePath;
   QString m_timestamp;
   double m_startTimestampSeconds;
-  double m_steadyBaseRowSeconds;
-  std::chrono::steady_clock::time_point m_steadyBase;
 
   QElapsedTimer m_elapsedTimer;
   QTimer m_seekTimer;
   QTimer m_settleTimer;
 
-  std::vector<int> m_columnUniqueIds;
-  QMap<int, int> m_uidToColumn;
-
   std::vector<qint64> m_timestampsNs;
 
-  std::vector<PlayerStreamBlockIndex> m_streamBlocks;
-  std::optional<QSqlQuery> m_streamBlobQuery;
-  std::optional<QSqlQuery> m_denseBlobQuery;
-  std::vector<std::vector<double>> m_streamChannelBuf;
-
-  QMap<int, int> m_columnToSource;
-  QMap<int, std::vector<int>> m_sourceColumns;
-
-  QSet<int> m_sourcesAtCurrentTs;
+  ReplayLayout m_layout;
+  SessionDbReader m_reader;
+  std::unique_ptr<ReplaySynthesis> m_synthesis;
 
   bool m_restorePending;
   PreSessionState m_preSession;

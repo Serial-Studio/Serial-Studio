@@ -19,21 +19,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
-#include <algorithm>
-#include <QSignalBlocker>
-#include <QTimer>
-
-#include "AppState.h"
-#include "DataModel/FrameBuilder.h"
-#include "DataModel/ProjectModel.h"
-#include "Misc/IconEngine.h"
-#include "Misc/IconRegistry.h"
-#include "UI/Dashboard.h"
-#include "UI/Taskbar.h"
-#include "UI/UISessionRegistry.h"
-#include "UI/WidgetExtensions.h"
-#include "UI/WidgetRegistry.h"
-#include "UI/WindowManager.h"
+#include "UI/Taskbar/TaskbarModel.h"
 
 //--------------------------------------------------------------------------------------------------
 // Taskbar model implementation

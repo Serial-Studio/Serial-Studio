@@ -11,10 +11,12 @@ app/src/
 │                    and the spec-0035 diagnostics probes; boundaries only, nothing per frame
 ├── DataModel/       Frame, FrameBuilder, FrameConsumer, DataTable(Store), ExportSchema,
 │   │                ProjectModel, ProjectEditor, NotificationCenter, HotpathOptimization.h
-│   ├── Project/     ProjectModel TU split (Crud, Folders, Loading, Persistence, Sources,
-│   │                Tables, Workspaces + ProjectModelShared.h) and ProjectEditor TU split
-│   │                (Commit, Forms, Mqtt, MultiSelect, Selection, Summaries, Tree, Wiring +
-│   │                ProjectEditorItemIds.h, ProjectEditorShared.h); facades stay in DataModel/.
+│   ├── Project/     ProjectModel's owned sub-objects (spec 0070): ProjectPersistence,
+│   │                ProjectPresentation, ProjectLoader, ProjectFolders, ProjectWorkspaces,
+│   │                ProjectTables, ProjectSources, ProjectEntities, ProjectOutputWidgets,
+│   │                ProjectBulkOps, ProjectNavHistory (+ ProjectNaming.h,
+│   │                ProjectEditorIcons.h, ProjectEditorItemIds.h); the ProjectEditor*
+│   │                per-concern TUs remain (follow-up: re-form into classes).
 │   │                Plus ProjectHistory (undo/redo mementos, spec 0031) and
 │   │                PropertyHooks/PropertyValidators (registry hooks, spec 0036)
 │   ├── Generated/   DatasetForm, DatasetRegistry.h, DatasetSerialization — emitted by
@@ -30,9 +32,9 @@ app/src/
 │   │                WidgetExtensions + WidgetExtensionManifest (installable widgets, spec 0038)
 │   └── Widgets/Output/  Button, Toggle, Slider, TextField, Panel (+ PanelLayout), Base
 ├── API/             TCP server port 7777 (MCP + legacy JSON-RPC), 30+ handlers
-│   ├── Handlers/    per-command handlers; ProjectHandler split into ProjectHandler{File,
-│   │                Entities,Parser,Batch}.cpp + ProjectApiSupport.h (registration stays
-│   │                in ProjectHandler.cpp); Diagnostics/Problems/Mirror handlers
+│   ├── Handlers/    per-command handlers; ProjectHandler is a facade owning 13 real
+│   │                Project*Commands classes + the ProjectApiSupport namespace (spec 0070);
+│   │                Diagnostics/Problems/Mirror handlers
 │   ├── Mirror/      MirrorProtocol/Session/Publisher/Client — remote dashboard mirroring
 │   │                (spec 0040)
 │   └── Generated/   DatasetApiFields.cpp — property-registry emitter output; never hand-edit

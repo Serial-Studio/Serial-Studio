@@ -33,6 +33,7 @@
 #include "Misc/WorkspaceManager.h"
 #include "SerialStudio.h"
 #include "SSAssert.h"
+#include "UI/WidgetManifestParser.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constants & local aliases
@@ -574,7 +575,8 @@ void UI::WidgetExtensions::loadPackage(const QString& directory, bool bundled)
     return;
   }
 
-  auto result = UI::parseWidgetManifest(parsed.document.object(), directory, bundled);
+  const WidgetManifestParser parser(hostApiVersion(), reservedIds());
+  auto result = parser.parse(parsed.document.object(), directory, bundled);
   m_findings.append(result.findings);
   if (!result.ok)
     return;
@@ -614,8 +616,8 @@ void UI::WidgetExtensions::resolveDependencies()
     for (const auto& dependency : package.dependencies) {
       const bool present = m_descriptors.contains(dependency.id);
       const bool usable  = present
-                       && widgetVersionInRange(m_descriptors.value(dependency.id).version,
-                                               dependency.versionRange);
+                       && WidgetManifestParser::versionInRange(
+                            m_descriptors.value(dependency.id).version, dependency.versionRange);
       if (usable)
         continue;
 

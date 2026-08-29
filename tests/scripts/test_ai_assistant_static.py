@@ -5,14 +5,27 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 _SPEC_0070_SPLITS = {
-    "app/src/AI/ToolDispatcher.cpp": "app/src/AI/ToolDispatcher",
-    "app/src/API/Handlers/ProjectHandlerEntities.cpp": "app/src/API/Handlers/Entities",
+    "app/src/AI/ToolDispatcher.cpp": "app/src/AI/Tools",
+    "app/src/AI/Conversation.cpp": "app/src/AI/Conversation",
     "app/src/Sessions/DatabaseManager.cpp": "app/src/Sessions/DatabaseManager",
+    "app/src/Sessions/Player.cpp": "app/src/Sessions/Player",
     "app/src/IO/Drivers/BluetoothLE.cpp": "app/src/IO/Drivers/BluetoothLE",
+    "app/src/IO/Drivers/USB.cpp": "app/src/IO/Drivers/USB",
+    "app/src/IO/Drivers/Audio.cpp": "app/src/IO/Drivers/Audio",
+    "app/src/IO/Drivers/OpcUa.cpp": "app/src/IO/Drivers/OpcUa",
+    "app/src/IO/Drivers/Modbus.cpp": "app/src/IO/Drivers/Modbus",
+    "app/src/IO/ConnectionManager.cpp": "app/src/IO/ConnectionManager",
     "app/src/UI/Widgets/Waterfall.cpp": "app/src/UI/Widgets/Waterfall",
+    "app/src/UI/Widgets/Terminal.cpp": "app/src/UI/Widgets/Terminal",
     "app/src/UI/Taskbar.cpp": "app/src/UI/Taskbar",
+    "app/src/UI/WindowManager.cpp": "app/src/UI/WindowManager",
+    "app/src/UI/Dashboard.cpp": "app/src/UI/Dashboard",
     "app/src/UI/Widgets/PainterContext.cpp": "app/src/UI/Widgets/Painter",
     "app/src/API/Server.cpp": "app/src/API/Server",
+    "app/src/CSV/Player.cpp": "app/src/CSV/Player",
+    "app/src/DataModel/FrameBuilder.cpp": "app/src/DataModel/FrameBuilder",
+    "app/src/MQTT/Publisher.cpp": "app/src/MQTT",
+    "app/src/Misc/ExtensionManager.cpp": "app/src/Misc/Extensions",
 }
 
 

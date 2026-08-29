@@ -152,7 +152,7 @@ unconditionally — check with a sample first if you think you need to, and neve
   defines `function transform(value) -> number`.
 - **Compile-once, call-many.** `FrameBuilder::compileTransforms()` runs on project load /
   connection open. One Lua state or `QJSEngine` per source; per-dataset function refs cached
-  in `m_transformEngines`.
+  in `DataModel::TransformCompiler` (spec 0070), read per frame through its inline `empty()`.
 - **Lua isolation**: `luaL_dostring` once; top-level `local`s become upvalues in the
   `transform` closure, so two datasets sharing the same Lua state don't clobber each other.
 - **JS isolation**: user code is wrapped in an IIFE at compile time so top-level `var`s are

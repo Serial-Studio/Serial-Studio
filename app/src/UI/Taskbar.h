@@ -23,11 +23,13 @@
 
 #include <QObject>
 #include <QQuickItem>
-#include <QStandardItemModel>
-#include <QTimer>
 #include <QVariantList>
 #include <QVector>
 
+#include "UI/Taskbar/FocusCycler.h"
+#include "UI/Taskbar/TaskbarModel.h"
+#include "UI/Taskbar/TaskbarSearch.h"
+#include "UI/Taskbar/TaskbarWindowMap.h"
 #include "UI/WidgetRegistry.h"
 #include "UI/WindowManager.h"
 
@@ -41,36 +43,6 @@ struct WidgetRef;
 namespace UI {
 class Dashboard;
 class UISessionRegistry;
-
-/**
- * @brief QStandardItemModel used to represent dashboard widgets in a hierarchical UI.
- */
-class TaskbarModel : public QStandardItemModel {
-  Q_OBJECT
-
-public:
-  enum Roles {
-    WindowIdRole = Qt::UserRole + 1,
-    WidgetTypeRole,
-    WidgetNameRole,
-    WidgetIconRole,
-    GroupIdRole,
-    GroupNameRole,
-    IsGroupRole,
-    WindowStateRole,
-    IconIdRole,
-  };
-
-  enum WindowState {
-    WindowNormal    = 0,
-    WindowMinimized = 1,
-    WindowClosed    = 2
-  };
-  Q_ENUM(WindowState)
-
-  explicit TaskbarModel(QObject* parent = nullptr);
-  [[nodiscard]] QHash<int, QByteArray> roleNames() const override;
-};
 
 /**
  * @brief Controller that manages dashboard window state and taskbar UI models.
@@ -205,14 +177,13 @@ private slots:
   void onWidgetCreated(UI::WidgetID id, const UI::WidgetInfo& info);
   void onWidgetUpdated(UI::WidgetID id, const UI::WidgetInfo& info);
   void onWidgetDestroyed(UI::WidgetID id);
-  void onFocusCycleTick();
+  void refocusWindow(QQuickItem* window);
 
 private:
   void rebuildModel();
   void connectToRegistry();
   void startFocusCycle();
   void applySavedWindowStates(const QJsonObject& layout);
-  void mapWidgetToWindow(UI::WidgetID wid, int windowId);
   void populateTaskbarFromWorkspace(int groupId);
   void populateTaskbarFromGroup(int groupId);
   void removeWorkspaceTaskbarRow(int windowId);
@@ -224,11 +195,6 @@ private:
                             SerialStudio::DashboardWidget widgetType,
                             int relativeIndex);
   void attachGroupItemToFullModel(QStandardItem* groupItem, int groupId, bool alreadyRegistered);
-  void collectGroupWidgetIds(int groupId,
-                             QList<int>& windowIds,
-                             QList<int>& relativeIds,
-                             QList<SerialStudio::DashboardWidget>& widgetTypes) const;
-  void mapMainGroupWidgetId(SerialStudio::DashboardWidget groupType, int groupId, int mainWindowId);
   void buildOverviewGroupItem(QStandardItem* groupItem,
                               int groupId,
                               const QString& groupName,
@@ -243,9 +209,7 @@ private:
                                                   QStandardItem* parentItem = nullptr) const;
   [[nodiscard]] QStandardItem* findGroupItemByGroupId(int groupId) const;
   [[nodiscard]] QStandardItem* createItemFromWidgetInfo(const UI::WidgetInfo& info);
-  [[nodiscard]] int findWindowIdByGroupAndIndex(int widgetType, int relativeIndex) const;
   [[nodiscard]] int resolveWorkspaceRefWindowId(const DataModel::WidgetRef& ref) const;
-  [[nodiscard]] int relativeIndexForWindow(int windowId) const;
   [[nodiscard]] int indexForGroupId(int groupId) const;
   [[nodiscard]] QString layoutContextKey() const;
   void emitWorkspaceChangeAnticipation(int toGroupId);
@@ -263,21 +227,18 @@ private:
   bool m_restoringLayout;
   bool m_independentWorkspace;
   QString m_layoutScope;
-  QString m_searchFilter;
 
   QQuickItem* m_activeWindow;
   UI::WindowManager* m_windowManager;
   QMap<QQuickItem*, int> m_windowIDs;
   QMap<QQuickItem*, QMetaObject::Connection> m_windowConnections;
 
-  QTimer m_focusCycleTimer;
-  QVector<QQuickItem*> m_focusCycleQueue;
-
-  QMap<UI::WidgetID, int> m_widgetIdToWindowId;
-  QMap<int, UI::WidgetID> m_windowIdToWidgetId;
-
   TaskbarModel* m_fullModel;
   TaskbarModel* m_taskbarButtons;
+
+  TaskbarWindowMap m_windowMap;
+  FocusCycler m_focusCycler;
+  TaskbarSearch m_search;
 };
 
 }  // namespace UI

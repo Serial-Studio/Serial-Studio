@@ -44,7 +44,7 @@ The editor window has three areas: a toolbar across the top, a tree view on the 
 File actions sit on the left; the rest of the toolbar is "add" buttons grouped by what they create.
 
 - **New / Open / Save / Save As.** File actions. **Save** (Ctrl+S / Cmd+S) writes the project to disk; **Open** loads an existing `.json` or `.ssproj` file.
-- **Protobuf.** Generate a project from a Protocol Buffers (`.proto`) schema. Available in all builds; only the Pro widgets it can generate require a license. See [Auto-Generating Projects](Auto-Generating-Projects.md).
+- **Protobuf.** Generate a project from a Protocol Buffers (`.proto`) schema. Available in all builds; only the Pro widgets it can generate need a license or the free trial. See [Auto-Generating Projects](Auto-Generating-Projects.md).
 - **Restore.** Restore a recent automatic snapshot. See [Backups & Recovery](Backup-Recovery.md).
 - **Lock.** Set a password and lock the editor. See [Project Lock](Project-Lock.md).
 - **Add Device** (Pro). Add another data source for multi-device projects.

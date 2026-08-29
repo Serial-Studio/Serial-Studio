@@ -92,4 +92,4 @@ The Socket API exposes the driver under `io.eip.*`: `getConfig`, `getStatus`, `s
 
 ## Availability
 
-The driver is a Pro feature and needs an activated licence. Builds configured with `SS_ENABLE_EIP=OFF`, and every GPL build, carry no EtherNet/IP client at all; the bus is then unavailable rather than failing at connect time.
+The driver is a Pro feature, fully available with a licence or during the [free trial](Pro-vs-Free.md), which unlocks every Pro feature. Builds configured with `SS_ENABLE_EIP=OFF`, and every GPL build, carry no EtherNet/IP client at all; the bus is then unavailable rather than failing at connect time.

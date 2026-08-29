@@ -4,7 +4,7 @@
 
 Actions let you put buttons on the Serial Studio dashboard that send commands back to the connected device. Typical uses include resetting a microcontroller, toggling an output pin, asking for a sensor reading, or sending calibration sequences. Each action is configured in the Project Editor and shows up automatically on the dashboard when you connect.
 
-For interactive controls with continuous values (sliders, knobs) or custom JavaScript data formatting, see [Output Controls](Output-Controls.md) (Pro license required).
+For interactive controls with continuous values (sliders, knobs) or custom JavaScript data formatting, see [Output Controls](Output-Controls.md) (a Pro feature, available with a license or during the free trial).
 
 ## How actions work
 

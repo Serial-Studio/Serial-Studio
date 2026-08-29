@@ -22,7 +22,6 @@
 #pragma once
 
 #include <QHash>
-#include <QJsonObject>
 #include <QList>
 #include <QObject>
 #include <QSet>
@@ -192,21 +191,5 @@ private:
   QHash<QString, QString> m_replacements;
   QList<Misc::ProblemCenter::Finding> m_findings;
 };
-
-/**
- * @brief Outcome of validating one manifest: either a descriptor or the findings that explain why
- *        the package was rejected. The parser never logs and never reports directly.
- */
-struct WidgetManifestResult {
-  bool ok = false;
-  WidgetExtensions::Descriptor descriptor;
-  QList<Misc::ProblemCenter::Finding> findings;
-};
-
-[[nodiscard]] WidgetManifestResult parseWidgetManifest(const QJsonObject& manifest,
-                                                       const QString& directory,
-                                                       bool bundled);
-
-[[nodiscard]] bool widgetVersionInRange(const QString& version, const QString& range);
 
 }  // namespace UI

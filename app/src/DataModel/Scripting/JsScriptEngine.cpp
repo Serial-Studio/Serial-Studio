@@ -29,6 +29,7 @@
 #include "DataModel/Scripting/DashboardApi.h"
 #include "DataModel/Scripting/DeviceWriteApi.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
+#include "DataModel/Scripting/ScriptFrameShaping.h"
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
 #include "SSAssert.h"
@@ -130,8 +131,7 @@ static QList<QStringList> convertMixedArray(const QJSValue& jsValue)
   static const QString kLength = QStringLiteral("length");
   const int elementCount       = jsValue.property(kLength).toInt();
 
-  constexpr int kMaxElements     = 10000;
-  constexpr qsizetype kMaxVecLen = 10000;
+  constexpr int kMaxElements = 10000;
 
   QStringList scalars;
   QList<QStringList> vectors;
@@ -151,39 +151,7 @@ static QList<QStringList> convertMixedArray(const QJSValue& jsValue)
     }
   }
 
-  if (vectors.isEmpty()) [[unlikely]] {
-    QList<QStringList> results;
-    results.append(scalars);
-    return results;
-  }
-
-  maxVectorLength = qMin(maxVectorLength, kMaxVecLen);
-
-  for (auto& vec : vectors) {
-    if (!vec.isEmpty() && vec.size() < maxVectorLength) {
-      const QString lastValue = vec.last();
-      while (vec.size() < maxVectorLength)
-        vec.append(lastValue);
-    }
-  }
-
-  QList<QStringList> results;
-  results.reserve(maxVectorLength);
-
-  for (int i = 0; i < maxVectorLength; ++i) {
-    QStringList frame;
-    frame.reserve(scalars.size() + vectors.size());
-
-    frame.append(scalars);
-
-    for (const auto& vec : std::as_const(vectors))
-      if (i < vec.size())
-        frame.append(vec[i]);
-
-    results.append(frame);
-  }
-
-  return results;
+  return DataModel::ScriptFrames::unzipMixedFrames(scalars, vectors, maxVectorLength);
 }
 
 /**

@@ -22,33 +22,39 @@
 
 #include "IO/Drivers/USB.h"
 
-#include <chrono>
-#include <cstring>
 #include <QApplication>
 #include <QJsonObject>
 #include <QMessageBox>
 #include <QMetaObject>
-#include <QThread>
 #include <QTimer>
 
 #include "IO/ConnectionManager.h"
+#include "IO/Drivers/USB/UsbHex.h"
 #include "Misc/Utilities.h"
 #include "SSAssert.h"
+
+using namespace IO::Drivers::UsbHex;
 
 //--------------------------------------------------------------------------------------------------
 // Constants
 //--------------------------------------------------------------------------------------------------
 
-constexpr unsigned int kBulkReadTimeout  = 100;
 constexpr unsigned int kBulkWriteTimeout = 1000;
-constexpr unsigned int kControlTimeout   = 1000;
-constexpr int kBulkReadBufSize           = 65536;
 constexpr int kDefaultIsoPacketSize      = 1024;
-constexpr int kIsoNumTransfers           = 8;
-constexpr int kIsoPacketsPerTransfer     = 8;
 constexpr int kHotplugFallbackIntervalMs = 2000;
-constexpr int kIsoDrainTimeoutMs         = 2000;
 constexpr int kMaxControlLength          = 4096;
+
+//--------------------------------------------------------------------------------------------------
+// libusb status pinning
+//--------------------------------------------------------------------------------------------------
+
+static_assert(static_cast<int>(LIBUSB_TRANSFER_COMPLETED) == kTransferCompleted);
+static_assert(static_cast<int>(LIBUSB_TRANSFER_ERROR) == kTransferError);
+static_assert(static_cast<int>(LIBUSB_TRANSFER_TIMED_OUT) == kTransferTimedOut);
+static_assert(static_cast<int>(LIBUSB_TRANSFER_CANCELLED) == kTransferCancelled);
+static_assert(static_cast<int>(LIBUSB_TRANSFER_STALL) == kTransferStall);
+static_assert(static_cast<int>(LIBUSB_TRANSFER_NO_DEVICE) == kTransferNoDevice);
+static_assert(static_cast<int>(LIBUSB_TRANSFER_OVERFLOW) == kTransferOverflow);
 
 //--------------------------------------------------------------------------------------------------
 // Constructor, destructor & singleton
@@ -61,22 +67,22 @@ IO::Drivers::USB::USB()
   : m_ctx(nullptr)
   , m_handle(nullptr)
   , m_hotplugHandle(0)
+  , m_pump(m_ctx, m_handle, this)
   , m_deviceIndex(0)
   , m_inEndpointIndex(0)
   , m_outEndpointIndex(0)
   , m_isoPacketSize(kDefaultIsoPacketSize)
   , m_transferMode(TransferMode::BulkStream)
-  , m_running(false)
-  , m_eventLoopRunning(false)
-  , m_isoInFlight(0)
-  , m_controlInFlight(false)
-  , m_drainWaiting(false)
   , m_activeInEp(0)
   , m_activeOutEp(0)
   , m_activeInEpType(0)
   , m_activeOutEpType(0)
-  , m_controlTransfer(nullptr)
 {
+  connect(&m_pump, &UsbTransferPump::readError, this, &USB::onReadError, Qt::QueuedConnection);
+  connect(&m_pump, &UsbTransferPump::dataReceived, this, &USB::onPumpData, Qt::DirectConnection);
+  connect(
+    &m_pump, &UsbTransferPump::controlTransferCompleted, this, &USB::onControlTransferCompleted);
+
   if (libusb_init(&m_ctx) < 0)
     m_ctx = nullptr;
 
@@ -107,11 +113,8 @@ IO::Drivers::USB::USB()
     timer->start();
   }
 
-  if (m_ctx) {
-    m_eventLoopRunning.store(true, std::memory_order_release);
-    connect(&m_eventThread, &QThread::started, this, &USB::eventLoop, Qt::DirectConnection);
-    m_eventThread.start();
-  }
+  if (m_ctx)
+    m_pump.startEventThread();
 }
 
 /**
@@ -120,22 +123,22 @@ IO::Drivers::USB::USB()
  */
 IO::Drivers::USB::~USB()
 {
-  stopReadThread();
-  cancelAndDrainTransfers();
-  stopEventThread();
+  m_pump.stopReadThread();
+  m_pump.cancelAndDrainTransfers();
+  m_pump.stopEventThread();
 
   if (m_ctx && m_hotplugHandle) {
     libusb_hotplug_deregister_callback(m_ctx, m_hotplugHandle);
     m_hotplugHandle = 0;
   }
 
-  freeTransfers();
+  m_pump.freeTransfers();
 
   for (auto* dev : std::as_const(m_devicePtrs))
     libusb_unref_device(dev);
 
   if (m_handle) {
-    releaseInterfaces();
+    m_pump.releaseInterfaces();
     libusb_close(m_handle);
     m_handle = nullptr;
   }
@@ -200,46 +203,37 @@ bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
   }
 
   if (!activateSelectedEndpoints()) {
-    releaseInterfaces();
+    m_pump.releaseInterfaces();
     libusb_close(m_handle);
     m_handle = nullptr;
     return false;
   }
 
-  m_running = true;
-
-  if (m_transferMode == TransferMode::Isochronous) {
-    allocateIsoTransfers();
-    connect(&m_readThread, &QThread::started, this, &USB::isoReadLoop, Qt::DirectConnection);
-  } else {
-    connect(&m_readThread, &QThread::started, this, &USB::readLoop, Qt::DirectConnection);
-  }
-
-  m_readThread.start();
+  if (m_transferMode == TransferMode::Isochronous)
+    m_pump.startIsochronousRead(m_activeInEp, m_isoPacketSize);
+  else
+    m_pump.startBulkRead(m_activeInEp, m_activeInEpType);
 
   Q_EMIT configurationChanged();
   return true;
 }
 
 /**
- * @brief Closes the device, tears down all active transfers, and stops the read thread. The
- * QThread::started connections are detached here so the next open() cycle re-wires exactly one
- * read slot instead of double-connecting.
+ * @brief Closes the device, tears down all active transfers, and stops the read thread. The pump
+ * detaches its own QThread::started connections while joining, so the next open() cycle wires
+ * exactly one read slot instead of double-connecting.
  */
 void IO::Drivers::USB::close()
 {
   SS_ASSERT_LOG(m_ctx != nullptr);
   SS_ASSERT_LOG(m_activeInEp != 0 || m_handle == nullptr);
 
-  stopReadThread();
-  cancelAndDrainTransfers();
-  freeTransfers();
-
-  disconnect(&m_readThread, &QThread::started, this, &USB::readLoop);
-  disconnect(&m_readThread, &QThread::started, this, &USB::isoReadLoop);
+  m_pump.stopReadThread();
+  m_pump.cancelAndDrainTransfers();
+  m_pump.freeTransfers();
 
   if (m_handle) {
-    releaseInterfaces();
+    m_pump.releaseInterfaces();
     libusb_close(m_handle);
     m_handle = nullptr;
   }
@@ -557,16 +551,16 @@ void IO::Drivers::USB::setIsoPacketSize(const int size)
 void IO::Drivers::USB::setupExternalConnections()
 {
   connect(qApp, &QApplication::aboutToQuit, this, [this] {
-    stopReadThread();
-    cancelAndDrainTransfers();
-    stopEventThread();
+    m_pump.stopReadThread();
+    m_pump.cancelAndDrainTransfers();
+    m_pump.stopEventThread();
 
     if (m_ctx && m_hotplugHandle) {
       libusb_hotplug_deregister_callback(m_ctx, m_hotplugHandle);
       m_hotplugHandle = 0;
     }
 
-    freeTransfers();
+    m_pump.freeTransfers();
   });
 }
 
@@ -586,6 +580,34 @@ void IO::Drivers::USB::onReadError()
   connectionManager.disconnectDevice(this);
   logDriverError(tr("USB Device Error"),
                  tr("The USB device was disconnected or encountered a fatal read error."));
+}
+
+/**
+ * @brief Publishes a block acquired by the transfer pump. The hop is a DirectConnection, so this
+ *        runs on the pump's read thread (or, for the iso pool, on the main thread after the
+ *        callback's queued hop) exactly where the driver published before; the stamp is the
+ *        pump's, because the source owns time.
+ */
+void IO::Drivers::USB::onPumpData(const QByteArray& data,
+                                  IO::CapturedData::SteadyTimePoint timestamp)
+{
+  publishReceivedData(data, timestamp);
+}
+
+/**
+ * @brief Turns a finished control transfer into the composer's verdict. The pump reports the raw
+ *        libusb status so every user-visible string stays in this translation unit.
+ */
+void IO::Drivers::USB::onControlTransferCompleted(bool ok,
+                                                  int bytesTransferred,
+                                                  const QString& responseHex,
+                                                  int status)
+{
+  QString message = tr("Transfer complete: %1 byte(s).").arg(bytesTransferred);
+  if (!ok)
+    message = tr("Control transfer failed: %1.").arg(controlStatusText(status));
+
+  Q_EMIT controlTransferFinished(ok, bytesTransferred, responseHex, message);
 }
 
 /**
@@ -638,7 +660,7 @@ void IO::Drivers::USB::enumerateDevices()
 
     if (m_deviceLabelCache.contains(key))
       label = m_deviceLabelCache.value(key);
-    else if (!m_eventThread.isRunning())
+    else if (!m_pump.eventThreadRunning())
       label = enrichDeviceLabel(dev, desc, label);
 
     refreshedCache.insert(key, label);
@@ -681,8 +703,8 @@ void IO::Drivers::USB::enumerateDevices()
 /**
  * @brief Opens @p dev to append its manufacturer/product strings to @p base; the synchronous
  * string-descriptor transfer runs only on the single-threaded startup scan, since issuing it while
- * m_eventThread pumps libusb_handle_events deadlocks the macOS backend (hotplug rescans reuse the
- * cached label instead).
+ * the pump's event thread runs libusb_handle_events deadlocks the macOS backend (hotplug rescans
+ * reuse the cached label instead).
  */
 QString IO::Drivers::USB::enrichDeviceLabel(libusb_device* dev,
                                             const libusb_device_descriptor& desc,
@@ -945,111 +967,6 @@ void IO::Drivers::USB::buildEndpointLists()
 }
 
 /**
- * @brief Runs the libusb event loop on m_eventThread.
- */
-void IO::Drivers::USB::eventLoop()
-{
-  while (m_eventLoopRunning.load(std::memory_order_acquire)) {
-    struct timeval tv = {0, 100000};
-    libusb_handle_events_timeout(m_ctx, &tv);
-  }
-}
-
-/**
- * @brief Stops and joins the bulk read thread. Mirrors HID::cleanupDevice: the started+
- * DirectConnection idiom drops the thread into exec() once readLoop returns, so quit() before
- * wait() is mandatory and terminate() (which corrupts libusb mid-transfer) is never used.
- */
-void IO::Drivers::USB::stopReadThread()
-{
-  m_running.store(false, std::memory_order_release);
-
-  if (m_readThread.isRunning()) {
-    m_readThread.quit();
-    m_readThread.wait();
-  }
-}
-
-/**
- * @brief Cancels every iso transfer and waits until all callbacks have reported back. libusb
- * forbids freeing an in-flight transfer, so this must drain to zero before the pool is freed;
- * the completion callbacks wake the wait as soon as the last one lands, and the bounded
- * deadline covers a dead device whose cancellations never complete.
- */
-void IO::Drivers::USB::cancelAndDrainTransfers()
-{
-  for (auto* t : std::as_const(m_isoTransfers))
-    libusb_cancel_transfer(t);
-
-  if (m_controlTransfer)
-    libusb_cancel_transfer(m_controlTransfer);
-
-  m_drainWaiting.store(true, std::memory_order_release);
-  {
-    std::unique_lock<std::mutex> lock(m_drainMutex);
-    (void)m_drainCv.wait_for(lock, std::chrono::milliseconds(kIsoDrainTimeoutMs), [this] {
-      return m_isoInFlight.load(std::memory_order_acquire) == 0
-          && !m_controlInFlight.load(std::memory_order_acquire);
-    });
-  }
-  m_drainWaiting.store(false, std::memory_order_release);
-}
-
-/**
- * @brief Wakes a drain wait once an in-flight counter dropped (event thread). The empty lock
- * before notify is what closes the race with a waiter that checked the counters but has not
- * gone to sleep yet; the steady state (no drain pending) costs one atomic load.
- */
-void IO::Drivers::USB::notifyDrainWaiter()
-{
-  if (!m_drainWaiting.load(std::memory_order_acquire))
-    return;
-
-  {
-    std::lock_guard<std::mutex> lock(m_drainMutex);
-  }
-  m_drainCv.notify_all();
-}
-
-/**
- * @brief Stops and joins the libusb event thread. quit() before wait() because eventLoop runs on
- * the started+DirectConnection idiom and would otherwise fall into exec().
- */
-void IO::Drivers::USB::stopEventThread()
-{
-  m_eventLoopRunning.store(false, std::memory_order_release);
-
-  if (m_eventThread.isRunning()) {
-    m_eventThread.quit();
-    m_eventThread.wait();
-  }
-}
-
-/**
- * @brief Frees the iso transfer pool and any leftover control transfer plus their buffers. Sole
- * owner of transfer->buffer: only valid once the read and event threads are joined, so no callback
- * can race the free.
- */
-void IO::Drivers::USB::freeTransfers()
-{
-  for (auto* t : std::as_const(m_isoTransfers)) {
-    delete[] t->buffer;
-    libusb_free_transfer(t);
-  }
-
-  m_isoTransfers.clear();
-  m_isoInFlight.store(0, std::memory_order_release);
-
-  if (m_controlTransfer) {
-    delete[] m_controlTransfer->buffer;
-    libusb_free_transfer(m_controlTransfer);
-    m_controlTransfer = nullptr;
-  }
-
-  m_controlInFlight.store(false, std::memory_order_release);
-}
-
-/**
  * @brief Static libusb hotplug callback invoked when a device arrives or leaves.
  */
 int LIBUSB_CALL IO::Drivers::USB::hotplugCallback(libusb_context*,
@@ -1074,35 +991,6 @@ void IO::Drivers::USB::clearEndpointLists()
 }
 
 /**
- * @brief Claims @p ifaceNum on the open device handle (no-op when already claimed).
- */
-bool IO::Drivers::USB::claimInterface(int ifaceNum)
-{
-  SS_ASSERT(m_handle != nullptr, return false);
-
-  if (m_claimedInterfaces.contains(ifaceNum))
-    return true;
-
-  if (libusb_claim_interface(m_handle, ifaceNum) < 0)
-    return false;
-
-  m_claimedInterfaces.append(ifaceNum);
-  return true;
-}
-
-/**
- * @brief Releases every claimed interface.
- */
-void IO::Drivers::USB::releaseInterfaces()
-{
-  if (m_handle)
-    for (const int iface : std::as_const(m_claimedInterfaces))
-      libusb_release_interface(m_handle, iface);
-
-  m_claimedInterfaces.clear();
-}
-
-/**
  * @brief Claims the interfaces of the selected IN/OUT endpoints and activates their alt-settings
  * (isochronous endpoints live in non-zero alt-settings; alt 0 is typically zero-bandwidth). A
  * failing OUT endpoint degrades to read-only with a warning instead of aborting the connection.
@@ -1113,7 +1001,7 @@ bool IO::Drivers::USB::activateSelectedEndpoints()
   SS_ASSERT(m_inEndpointIndex > 0 && (m_inEndpointIndex - 1) < m_inEndpoints.size(), return false);
 
   const EndpointInfo in = m_inEndpoints.at(m_inEndpointIndex - 1);
-  if (!claimInterface(in.interfaceNumber)) {
+  if (!m_pump.claimInterface(in.interfaceNumber)) {
     logDriverError(tr("USB Device Error"),
                    tr("Could not claim interface %1 on the USB device.\n\n"
                       "Another driver or application may already have it open. "
@@ -1147,7 +1035,7 @@ bool IO::Drivers::USB::activateSelectedEndpoints()
   if (out.interfaceNumber == in.interfaceNumber)
     outOk = (out.altSetting == in.altSetting);
   else {
-    outOk = claimInterface(out.interfaceNumber);
+    outOk = m_pump.claimInterface(out.interfaceNumber);
     if (outOk && out.altSetting != 0)
       outOk = libusb_set_interface_alt_setting(m_handle, out.interfaceNumber, out.altSetting) >= 0;
   }
@@ -1164,213 +1052,9 @@ bool IO::Drivers::USB::activateSelectedEndpoints()
   return true;
 }
 
-/**
- * @brief Synchronous read loop for BulkStream and AdvancedControl modes; dispatches bulk or
- * interrupt transfers based on the active IN endpoint's transfer type.
- */
-void IO::Drivers::USB::readLoop()
-{
-  unsigned char buf[kBulkReadBufSize];
-  const bool interruptEp = (m_activeInEpType == LIBUSB_TRANSFER_TYPE_INTERRUPT);
-
-  while (m_running.load(std::memory_order_relaxed)) {
-    int transferred = 0;
-    int rc;
-    if (interruptEp)
-      rc = libusb_interrupt_transfer(
-        m_handle, m_activeInEp, buf, kBulkReadBufSize, &transferred, kBulkReadTimeout);
-    else
-      rc = libusb_bulk_transfer(
-        m_handle, m_activeInEp, buf, kBulkReadBufSize, &transferred, kBulkReadTimeout);
-
-    if (rc == LIBUSB_ERROR_TIMEOUT)
-      continue;
-
-    if (rc == 0 && transferred > 0) {
-      publishReceivedData(QByteArray(reinterpret_cast<const char*>(buf), transferred));
-      continue;
-    }
-
-    if (rc != 0) {
-      QMetaObject::invokeMethod(this, "onReadError", Qt::QueuedConnection);
-      break;
-    }
-  }
-}
-
-/**
- * @brief Allocates and submits the isochronous transfer pool on the main thread.
- */
-void IO::Drivers::USB::allocateIsoTransfers()
-{
-  const int totalBufSize = m_isoPacketSize * kIsoPacketsPerTransfer;
-
-  for (int i = 0; i < kIsoNumTransfers; ++i) {
-    libusb_transfer* t = libusb_alloc_transfer(kIsoPacketsPerTransfer);
-    if (!t)
-      break;
-
-    auto* buf = new (std::nothrow) unsigned char[totalBufSize];
-    if (!buf) {
-      libusb_free_transfer(t);
-      break;
-    }
-
-    libusb_fill_iso_transfer(t,
-                             m_handle,
-                             m_activeInEp,
-                             buf,
-                             totalBufSize,
-                             kIsoPacketsPerTransfer,
-                             &USB::isoTransferCallback,
-                             this,
-                             0);
-
-    libusb_set_iso_packet_lengths(t, static_cast<unsigned int>(m_isoPacketSize));
-
-    if (libusb_submit_transfer(t) < 0) {
-      delete[] buf;
-      libusb_free_transfer(t);
-    } else {
-      m_isoTransfers.append(t);
-      m_isoInFlight.fetch_add(1, std::memory_order_acq_rel);
-    }
-  }
-}
-
-/**
- * @brief Async isochronous read loop for Isochronous mode.
- */
-void IO::Drivers::USB::isoReadLoop()
-{
-  while (m_running.load(std::memory_order_relaxed))
-    QThread::msleep(10);
-}
-
-/**
- * @brief Static libusb callback for each completed iso transfer; stamps acquisition time before
- *        queueing. Buffer ownership lives solely with freeTransfers() (frees post-join).
- */
-void LIBUSB_CALL IO::Drivers::USB::isoTransferCallback(libusb_transfer* transfer)
-{
-  auto* self = static_cast<USB*>(transfer->user_data);
-
-  if (transfer->status == LIBUSB_TRANSFER_COMPLETED || transfer->status == LIBUSB_TRANSFER_ERROR) {
-    int totalLen = 0;
-    for (int i = 0; i < transfer->num_iso_packets; ++i)
-      totalLen += static_cast<int>(transfer->iso_packet_desc[i].actual_length);
-
-    QByteArray received;
-    received.reserve(totalLen);
-
-    for (int i = 0; i < transfer->num_iso_packets; ++i) {
-      const libusb_iso_packet_descriptor& pkt = transfer->iso_packet_desc[i];
-      if (pkt.actual_length == 0)
-        continue;
-
-      const unsigned char* data =
-        libusb_get_iso_packet_buffer_simple(transfer, static_cast<unsigned int>(i));
-
-      received.append(reinterpret_cast<const char*>(data), static_cast<int>(pkt.actual_length));
-    }
-
-    if (!received.isEmpty()) {
-      const auto timestamp = IO::CapturedData::SteadyClock::now();
-      QMetaObject::invokeMethod(
-        self,
-        [self, received, timestamp] { self->publishReceivedData(received, timestamp); },
-        Qt::QueuedConnection);
-    }
-  }
-
-  if (!self->m_running.load(std::memory_order_relaxed)) {
-    self->m_isoInFlight.fetch_sub(1, std::memory_order_acq_rel);
-    self->notifyDrainWaiter();
-    return;
-  }
-
-  if (libusb_submit_transfer(transfer) < 0) {
-    self->m_running.store(false, std::memory_order_release);
-    self->m_isoInFlight.fetch_sub(1, std::memory_order_acq_rel);
-    self->notifyDrainWaiter();
-    QMetaObject::invokeMethod(self, "onReadError", Qt::QueuedConnection);
-  }
-}
-
 //--------------------------------------------------------------------------------------------------
 // Control transfers (Advanced Control mode)
 //--------------------------------------------------------------------------------------------------
-
-/**
- * @brief True when @p c is a hexadecimal digit (0-9, a-f, A-F).
- */
-[[nodiscard]] static bool isHexChar(const QChar c)
-{
-  return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
-}
-
-/**
- * @brief Parses a hex string (optional 0x prefix) into an unsigned value bounded by @p max.
- */
-[[nodiscard]] static unsigned int parseHexUInt(const QString& text,
-                                               const unsigned int max,
-                                               bool& ok)
-{
-  QString cleaned = text.trimmed();
-  if (cleaned.startsWith(QStringLiteral("0x"), Qt::CaseInsensitive))
-    cleaned.remove(0, 2);
-
-  const unsigned int value = cleaned.toUInt(&ok, 16);
-  if (!ok || value > max)
-    ok = false;
-
-  return value;
-}
-
-/**
- * @brief Parses a whitespace-tolerant hex byte string into raw bytes; ok=false on any non-hex.
- */
-[[nodiscard]] static QByteArray parseHexBytes(const QString& text, bool& ok)
-{
-  QString cleaned;
-  cleaned.reserve(text.size());
-
-  for (const QChar c : text) {
-    if (c.isSpace())
-      continue;
-
-    if (!isHexChar(c)) {
-      ok = false;
-      return {};
-    }
-
-    cleaned.append(c);
-  }
-
-  ok = (cleaned.size() % 2 == 0);
-  return ok ? QByteArray::fromHex(cleaned.toLatin1()) : QByteArray{};
-}
-
-/**
- * @brief Maps a libusb transfer status to a short human-readable failure reason.
- */
-[[nodiscard]] static QString controlStatusText(const int status)
-{
-  switch (status) {
-    case LIBUSB_TRANSFER_TIMED_OUT:
-      return QObject::tr("timed out");
-    case LIBUSB_TRANSFER_CANCELLED:
-      return QObject::tr("cancelled");
-    case LIBUSB_TRANSFER_STALL:
-      return QObject::tr("stalled (request not supported)");
-    case LIBUSB_TRANSFER_NO_DEVICE:
-      return QObject::tr("device disconnected");
-    case LIBUSB_TRANSFER_OVERFLOW:
-      return QObject::tr("buffer overflow");
-    default:
-      return QObject::tr("transfer error");
-  }
-}
 
 /**
  * @brief Composes and submits an async USB control transfer from the setup-packet fields entered
@@ -1394,7 +1078,7 @@ void IO::Drivers::USB::sendControlRequest(const QString& bmRequestType,
     return;
   }
 
-  if (m_controlInFlight.load(std::memory_order_acquire)) {
+  if (m_pump.controlTransferInFlight()) {
     fail(tr("A control transfer is already in progress."));
     return;
   }
@@ -1425,93 +1109,24 @@ void IO::Drivers::USB::sendControlRequest(const QString& bmRequestType,
     return;
   }
 
-  if (m_controlTransfer) {
-    delete[] m_controlTransfer->buffer;
-    libusb_free_transfer(m_controlTransfer);
-    m_controlTransfer = nullptr;
-  }
+  UsbTransferPump::ControlSetup setup;
+  setup.requestType = static_cast<uint8_t>(type);
+  setup.request     = static_cast<uint8_t>(request);
+  setup.value       = static_cast<uint16_t>(value);
+  setup.index       = static_cast<uint16_t>(index);
+  setup.length      = wLength;
+  setup.payload     = isIn ? QByteArray{} : payload;
 
-  libusb_transfer* transfer = libusb_alloc_transfer(0);
-  auto* buffer =
-    transfer ? new (std::nothrow) unsigned char[LIBUSB_CONTROL_SETUP_SIZE + wLength] : nullptr;
-  if (!transfer || !buffer) {
-    delete[] buffer;
-    if (transfer)
-      libusb_free_transfer(transfer);
-
+  int libusbError  = 0;
+  const auto state = m_pump.submitControlTransfer(setup, libusbError);
+  if (state == UsbTransferPump::ControlSubmitResult::AllocationFailed) {
     fail(tr("Could not allocate the control transfer."));
     return;
   }
 
-  libusb_fill_control_setup(buffer,
-                            static_cast<uint8_t>(type),
-                            static_cast<uint8_t>(request),
-                            static_cast<uint16_t>(value),
-                            static_cast<uint16_t>(index),
-                            static_cast<uint16_t>(wLength));
-
-  if (!isIn && wLength > 0)
-    std::memcpy(
-      buffer + LIBUSB_CONTROL_SETUP_SIZE, payload.constData(), static_cast<size_t>(wLength));
-
-  libusb_fill_control_transfer(
-    transfer, m_handle, buffer, &USB::controlTransferCallback, this, kControlTimeout);
-
-  m_controlTransfer = transfer;
-  m_controlInFlight.store(true, std::memory_order_release);
-
-  const int rc = libusb_submit_transfer(transfer);
-  if (rc < 0) {
-    m_controlInFlight.store(false, std::memory_order_release);
-    m_controlTransfer = nullptr;
-    delete[] buffer;
-    libusb_free_transfer(transfer);
+  if (state == UsbTransferPump::ControlSubmitResult::SubmitFailed)
     fail(tr("Failed to submit control transfer: %1.")
-           .arg(QString::fromUtf8(libusb_strerror(static_cast<libusb_error>(rc)))));
-  }
-}
-
-/**
- * @brief Static libusb completion callback (event thread): marshals the outcome via a queued
- * emit, then clears the in-flight flag last. It never frees the transfer nor writes
- * m_controlTransfer; the main thread owns that lifetime (freed at the next send or in
- * freeTransfers), mirroring the iso pool so teardown cannot race a free.
- */
-void LIBUSB_CALL IO::Drivers::USB::controlTransferCallback(libusb_transfer* transfer)
-{
-  auto* self = static_cast<USB*>(transfer->user_data);
-  SS_ASSERT(self != nullptr, return);
-  SS_ASSERT(transfer->buffer != nullptr, {
-    self->m_controlInFlight.store(false, std::memory_order_release);
-    self->notifyDrainWaiter();
-    return;
-  });
-
-  const bool ok   = (transfer->status == LIBUSB_TRANSFER_COMPLETED);
-  const int bytes = transfer->actual_length;
-  const bool isIn = (transfer->buffer[0] & LIBUSB_ENDPOINT_IN) != 0;
-
-  QString responseHex;
-  QString message;
-  if (ok) {
-    message = tr("Transfer complete: %1 byte(s).").arg(bytes);
-    if (isIn && bytes > 0) {
-      const unsigned char* data = libusb_control_transfer_get_data(transfer);
-      responseHex =
-        QString::fromLatin1(QByteArray(reinterpret_cast<const char*>(data), bytes).toHex(' '));
-    }
-  } else
-    message = tr("Control transfer failed: %1.").arg(controlStatusText(transfer->status));
-
-  QMetaObject::invokeMethod(
-    self,
-    [self, ok, bytes, responseHex, message] {
-      Q_EMIT self->controlTransferFinished(ok, bytes, responseHex, message);
-    },
-    Qt::QueuedConnection);
-
-  self->m_controlInFlight.store(false, std::memory_order_release);
-  self->notifyDrainWaiter();
+           .arg(QString::fromUtf8(libusb_strerror(static_cast<libusb_error>(libusbError)))));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1520,7 +1135,7 @@ void LIBUSB_CALL IO::Drivers::USB::controlTransferCallback(libusb_transfer* tran
 
 /**
  * @brief Returns VID, PID, and serial number of the currently selected USB device. The serial is
- * omitted while m_eventThread pumps libusb_handle_events: the synchronous string-descriptor
+ * omitted while the pump's event thread runs libusb_handle_events: the string-descriptor
  * transfer deadlocks the macOS backend (same rule as enrichDeviceLabel).
  */
 QJsonObject IO::Drivers::USB::deviceIdentifier() const
@@ -1540,7 +1155,7 @@ QJsonObject IO::Drivers::USB::deviceIdentifier() const
             QString::number(desc.idProduct, 16).rightJustified(4, '0').toUpper());
 
   libusb_device_handle* tmp = nullptr;
-  if (desc.iSerialNumber && !m_eventThread.isRunning() && libusb_open(dev, &tmp) == 0) {
+  if (desc.iSerialNumber && !m_pump.eventThreadRunning() && libusb_open(dev, &tmp) == 0) {
     unsigned char buf[256] = {};
     const int rc           = libusb_get_string_descriptor_ascii(
       tmp, desc.iSerialNumber, buf, static_cast<int>(sizeof(buf)));
@@ -1597,7 +1212,7 @@ bool IO::Drivers::USB::selectByIdentifier(const QJsonObject& id)
 
 /**
  * @brief Returns true when the device serial matches savedSer (or savedSer is empty / unreadable).
- * Falls back to a VID/PID-only match while m_eventThread runs, because the synchronous
+ * Falls back to a VID/PID-only match while the pump's event thread runs, because the synchronous
  * string-descriptor read deadlocks the macOS backend (same rule as enrichDeviceLabel).
  */
 bool IO::Drivers::USB::deviceSerialMatches(libusb_device* device,
@@ -1607,7 +1222,7 @@ bool IO::Drivers::USB::deviceSerialMatches(libusb_device* device,
   if (savedSer.isEmpty() || !desc.iSerialNumber)
     return true;
 
-  if (m_eventThread.isRunning())
+  if (m_pump.eventThreadRunning())
     return true;
 
   libusb_device_handle* tmp = nullptr;

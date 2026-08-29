@@ -181,6 +181,9 @@ class EthernetIp : public HAL_Driver {
   Q_PROPERTY(QString statusText
              READ statusText
              NOTIFY statusChanged)
+  Q_PROPERTY(bool tagsLocked
+             READ tagsLocked
+             NOTIFY statusChanged)
   // clang-format on
 
 signals:
@@ -218,6 +221,7 @@ public:
   [[nodiscard]] int plcTypeIndex() const;
   [[nodiscard]] int pollInterval() const;
   [[nodiscard]] int tagCount() const;
+  [[nodiscard]] bool tagsLocked() const noexcept;
   [[nodiscard]] QString statusText() const;
 
   [[nodiscard]] static QStringList plcTypeList();

@@ -20,25 +20,11 @@
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
 
-#include <algorithm>
-#include <QCursor>
-#include <QFontMetrics>
-#include <QHoverEvent>
-#include <QMouseEvent>
-#include <QPainter>
-#include <QQuickWindow>
-#include <QtMath>
-#include <QWheelEvent>
+#include "UI/Widgets/Waterfall/WaterfallTicks.h"
 
-#include "DSPSimd.h"
-#include "Misc/CommonFonts.h"
-#include "Misc/ThemeManager.h"
-#include "Misc/TimerEvents.h"
-#include "SSAssert.h"
-#include "UI/Dashboard.h"
-#include "UI/Widgets/AudioExport.h"
-#include "UI/Widgets/FFTWindow.h"
-#include "UI/Widgets/Waterfall.h"
+#include <algorithm>
+#include <cmath>
+
 #include "UI/Widgets/Waterfall/WaterfallMath.h"
 
 using namespace UI::Widgets::WaterfallDetail;
@@ -50,7 +36,8 @@ using namespace UI::Widgets::WaterfallDetail;
 /**
  * @brief Picks a {1,2,5}*10^n step for a given range and target tick count.
  */
-Widgets::Waterfall::AxisTicks Widgets::Waterfall::computeFreqTicks(double maxFreq, int targetCount)
+Widgets::WaterfallTicks::AxisTicks Widgets::WaterfallTicks::computeFreqTicks(double maxFreq,
+                                                                             int targetCount)
 {
   AxisTicks out{{}, 1.0, maxFreq};
   if (!std::isfinite(maxFreq) || maxFreq <= 0.0)
@@ -80,8 +67,8 @@ Widgets::Waterfall::AxisTicks Widgets::Waterfall::computeFreqTicks(double maxFre
 /**
  * @brief Same algorithm as computeFreqTicks but for the seconds axis.
  */
-Widgets::Waterfall::AxisTicks Widgets::Waterfall::computeTimeTicks(double maxSeconds,
-                                                                   int targetCount)
+Widgets::WaterfallTicks::AxisTicks Widgets::WaterfallTicks::computeTimeTicks(double maxSeconds,
+                                                                             int targetCount)
 {
   return computeFreqTicks(maxSeconds, targetCount);
 }
@@ -93,7 +80,7 @@ Widgets::Waterfall::AxisTicks Widgets::Waterfall::computeTimeTicks(double maxSec
 /**
  * @brief Formats a frequency value as Hz / kHz / MHz with one decimal at most.
  */
-QString Widgets::Waterfall::formatFreqTick(double hz)
+QString Widgets::WaterfallTicks::formatFreqTick(double hz)
 {
   const double abs = std::fabs(hz);
   if (abs >= 1e6)
@@ -108,7 +95,7 @@ QString Widgets::Waterfall::formatFreqTick(double hz)
 /**
  * @brief Formats a time value -- integer seconds when step >= 1, decimals otherwise.
  */
-QString Widgets::Waterfall::formatTimeTick(double seconds, double step)
+QString Widgets::WaterfallTicks::formatTimeTick(double seconds, double step)
 {
   if (step >= 1.0)
     return QString::number(std::round(seconds), 'f', 0);

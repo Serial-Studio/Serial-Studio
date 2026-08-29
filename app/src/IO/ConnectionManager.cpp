@@ -78,18 +78,11 @@
 IO::ConnectionManager::ConnectionManager()
   : m_paused(false)
   , m_writeEnabled(true)
-  , m_connectFanOut(false)
-  , m_connectPending(false)
-  , m_waitCursorActive(false)
-  , m_lastConnectedState(false)
   , m_syncingFromProject(false)
   , m_rebuildingDevices(false)
-  , m_lastConnectingState(false)
-  , m_lastConnectedCount(0)
   , m_busType(SerialStudio::BusType::UART)
   , m_startSequence("/*")
   , m_finishSequence("*/")
-  , m_replyCaptureArmed(false)
 {
   connect(this, &ConnectionManager::busTypeChanged, this, &ConnectionManager::configurationChanged);
 
@@ -643,11 +636,7 @@ qint64 IO::ConnectionManager::writeAndArmReply(int deviceId, const QByteArray& d
   SS_ASSERT(deviceId >= 0, return -1);
   SS_ASSERT(!data.isEmpty(), return -1);
 
-  {
-    QMutexLocker locker(&m_replyMutex);
-    m_replyBuffers.insert(deviceId, QByteArray());
-  }
-  m_replyCaptureArmed.store(true, std::memory_order_release);
+  m_replyCapture.arm(deviceId);
 
   return writeDataToDevice(deviceId, data);
 }
@@ -659,22 +648,17 @@ QByteArray IO::ConnectionManager::pollReplyBuffer(int deviceId) const
 {
   SS_ASSERT(deviceId >= 0, return {});
 
-  QMutexLocker locker(&m_replyMutex);
-  return m_replyBuffers.value(deviceId);
+  return m_replyCapture.poll(deviceId);
 }
 
 /**
- * @brief Drops the capture buffer for @p deviceId and disarms the tap once no buffers remain,
- *        so the steady-state raw-data path pays only a single relaxed atomic read.
+ * @brief Drops the capture buffer for @p deviceId, disarming the tap once no buffers remain.
  */
 void IO::ConnectionManager::disarmReplyCapture(int deviceId)
 {
   SS_ASSERT(deviceId >= 0, return);
 
-  QMutexLocker locker(&m_replyMutex);
-  m_replyBuffers.remove(deviceId);
-  if (m_replyBuffers.isEmpty())
-    m_replyCaptureArmed.store(false, std::memory_order_release);
+  m_replyCapture.disarm(deviceId);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -688,7 +672,7 @@ void IO::ConnectionManager::disarmReplyCapture(int deviceId)
  */
 void IO::ConnectionManager::toggleConnection()
 {
-  if (isConnected() || m_connectPending || anyDeviceConnecting())
+  if (isConnected() || m_fanOut.requestPending() || anyDeviceConnecting())
     disconnectDevice();
   else
     connectDevice();
@@ -744,16 +728,15 @@ void IO::ConnectionManager::connectDevice()
     controlScript.runOnConnect();
   }
 
-  m_connectPending = true;
-  m_connectFanOut  = true;
-  beginWaitCursor();
+  m_fanOut.beginRequest();
+  m_fanOut.beginWaitCursor();
 
   connectDevice(0);
 
   if (appState.operationMode() == SerialStudio::ProjectFile)
     connectAllDevices();
 
-  m_connectFanOut = false;
+  m_fanOut.endFanOut();
   concludeConnectRequest();
 }
 
@@ -763,11 +746,10 @@ void IO::ConnectionManager::connectDevice()
  */
 void IO::ConnectionManager::concludeConnectRequest()
 {
-  if (!m_connectPending || m_connectFanOut)
+  if (!m_fanOut.concludeRequest())
     return;
 
-  m_connectPending = false;
-  endWaitCursor();
+  m_fanOut.endWaitCursor();
   notifyConnectedStateChanged();
 }
 
@@ -779,20 +761,11 @@ void IO::ConnectionManager::concludeConnectRequest()
  */
 void IO::ConnectionManager::notifyConnectedStateChanged()
 {
-  const bool connecting = anyDeviceConnecting();
-  if (m_lastConnectingState != connecting) {
-    m_lastConnectingState = connecting;
+  if (m_fanOut.noteConnecting(anyDeviceConnecting()))
     Q_EMIT connectingChanged();
-  }
 
-  const bool connected = isConnected();
-  const int count      = connectedDeviceCount();
-  if (m_lastConnectedState == connected && m_lastConnectedCount == count)
-    return;
-
-  m_lastConnectedState = connected;
-  m_lastConnectedCount = count;
-  Q_EMIT connectedChanged();
+  if (m_fanOut.noteConnected(isConnected(), connectedDeviceCount()))
+    Q_EMIT connectedChanged();
 }
 
 /**
@@ -819,7 +792,7 @@ void IO::ConnectionManager::onDriverOpenFinished(bool ok, const QString& reason)
     }
   }
 
-  if (deviceId < 0 || !m_pendingDialVerdicts.remove(deviceId))
+  if (deviceId < 0 || !m_fanOut.takePendingDial(deviceId))
     return;
 
   if (!ok)
@@ -830,38 +803,13 @@ void IO::ConnectionManager::onDriverOpenFinished(bool ok, const QString& reason)
 }
 
 /**
- * @brief Raises the wait cursor at most once, so two overlapping requests cannot stack it.
- */
-void IO::ConnectionManager::beginWaitCursor()
-{
-  if (m_waitCursorActive)
-    return;
-
-  m_waitCursorActive = true;
-  QApplication::setOverrideCursor(Qt::WaitCursor);
-}
-
-/**
- * @brief Restores the wait cursor if this object raised it, so neither a late completion nor a
- *        cancel can leave it up or pop a cursor it does not own.
- */
-void IO::ConnectionManager::endWaitCursor()
-{
-  if (!m_waitCursorActive)
-    return;
-
-  m_waitCursorActive = false;
-  QApplication::restoreOverrideCursor();
-}
-
-/**
  * @brief Disconnects the primary device and any other project sources, settling a connect request
  *        the user gave up on. The id list is snapshotted first: a close can spin the event loop
  *        (error boxes), and a rebuild landing there would invalidate a live m_devices iterator.
  */
 void IO::ConnectionManager::disconnectDevice()
 {
-  beginWaitCursor();
+  m_fanOut.beginWaitCursor();
 
   disconnectDevice(0);
 
@@ -881,7 +829,7 @@ void IO::ConnectionManager::disconnectDevice()
   frameBuilder.registerQuickPlotHeaders(QStringList());
 
   concludeConnectRequest();
-  endWaitCursor();
+  m_fanOut.endWaitCursor();
 
   Q_EMIT driverChanged();
   notifyConnectedStateChanged();
@@ -1078,7 +1026,7 @@ void IO::ConnectionManager::connectDevice(int deviceId)
   setPaused(false);
 
   if (ok && halDriver && halDriver->isConnecting()) {
-    m_pendingDialVerdicts.insert(deviceId);
+    m_fanOut.notePendingDial(deviceId);
     concludeConnectRequest();
     notifyConnectedStateChanged();
     return;
@@ -1098,7 +1046,7 @@ void IO::ConnectionManager::connectDevice(int deviceId)
  */
 void IO::ConnectionManager::disconnectDevice(int deviceId)
 {
-  m_pendingDialVerdicts.remove(deviceId);
+  (void)m_fanOut.takePendingDial(deviceId);
 
   HAL_Driver* halDriver = driver(deviceId);
   if (halDriver)
@@ -1153,7 +1101,7 @@ void IO::ConnectionManager::disconnectDevice(HAL_Driver* driver)
   if (deviceId < 0)
     return;
 
-  if (m_pendingDialVerdicts.remove(deviceId))
+  if (m_fanOut.takePendingDial(deviceId))
     onDeviceOpenFinished(deviceId, false, QStringLiteral("connection attempt failed"));
 
   qWarning() << "[ConnectionManager] device" << deviceId << "dropped ("
@@ -1930,7 +1878,7 @@ void IO::ConnectionManager::rebuildDevices()
       continue;
     }
 
-    m_pendingDialVerdicts.remove(it->first);
+    (void)m_fanOut.takePendingDial(it->first);
     if (it->second) {
       if (it->second->driver())
         it->second->driver()->disarmOpenReport();
@@ -2034,12 +1982,8 @@ void IO::ConnectionManager::onRawDataReceived(int deviceId, const IO::CapturedDa
   if (m_paused)
     return;
 
-  if (m_replyCaptureArmed.load(std::memory_order_acquire)) [[unlikely]] {
-    QMutexLocker locker(&m_replyMutex);
-    auto it = m_replyBuffers.find(deviceId);
-    if (it != m_replyBuffers.end())
-      it->append(data->data);
-  }
+  if (m_replyCapture.armed()) [[unlikely]]
+    m_replyCapture.record(deviceId, data->data);
 
   static auto& console = Console::Handler::instance();
   static auto& server  = API::Server::instance();

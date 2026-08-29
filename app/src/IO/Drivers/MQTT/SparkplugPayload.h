@@ -78,8 +78,7 @@ inline constexpr qsizetype kMaxStringBytes  = 64 * 1024;
 inline constexpr int kMaxMetrics            = 2048;
 inline constexpr int kMaxVarintBytes        = 10;
 
-// Longest identity (metric name, topic element); retained per slot, so capped at what the wire
-// emits
+// Longest identity (metric name, topic element); retained per slot, capped at what the wire emits
 inline constexpr qsizetype kMaxIdentityBytes = 256;
 
 // NCMD metric that asks an edge node to re-publish its birth certificate

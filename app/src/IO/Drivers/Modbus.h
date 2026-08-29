@@ -32,25 +32,11 @@
 #include <QString>
 #include <QTimer>
 
+#include "IO/Drivers/Modbus/ModbusRegisterGroups.h"
 #include "IO/HAL_Driver.h"
 
 namespace IO {
 namespace Drivers {
-/**
- * @brief A contiguous block of Modbus registers to poll.
- */
-struct ModbusRegisterGroup {
-  quint8 registerType;
-  quint16 startAddress;
-  quint16 count;
-
-  ModbusRegisterGroup() : registerType(0), startAddress(0), count(0) {}
-
-  ModbusRegisterGroup(quint8 type, quint16 start, quint16 cnt)
-    : registerType(type), startAddress(start), count(cnt)
-  {}
-};
-
 /**
  * @brief HAL driver for Modbus RTU and Modbus TCP communication.
  */
@@ -216,8 +202,6 @@ private:
   void wireConfigurationSignals();
   void failDial(const QString& error);
   [[nodiscard]] static bool waitForModbusTcpEndpoint(const QString& host, quint16 port);
-  [[nodiscard]] QJsonObject buildProject() const;
-  [[nodiscard]] QString buildFrameParser() const;
   [[nodiscard]] bool configureTcpClient(QString& target);
   [[nodiscard]] bool configureRtuClient(QString& target);
   [[nodiscard]] bool finalizeAndConnect(const QString& target);
@@ -244,9 +228,9 @@ private:
   quint8 m_serialPortIndex;
   QStringList m_serialPortNames;
   QStringList m_serialPortLocations;
-  QVector<ModbusRegisterGroup> m_registerGroups;
 
   QSettings m_settings;
+  ModbusRegisterGroups m_registerGroups;
 };
 }  // namespace Drivers
 }  // namespace IO
