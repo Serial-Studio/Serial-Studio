@@ -89,12 +89,22 @@ set(SS_LIBPLCTAG_TARGET ${SS_LIBPLCTAG_TARGET} CACHE INTERNAL "Resolved libplcta
 # does not demote default-errors; upstream's windows/platform.c trips it (int* into ioctlsocket's
 # u_long*), so the demotion is explicit for clang front ends. Generator expressions, not
 # CMAKE_C_COMPILER_ID: the top-level project enables only CXX, so that variable is empty in this
-# scope and only the fetched subproject's own project() call enables C.
+# scope and only the fetched subproject's own project() call enables C. The suppression covers
+# every upstream library target built from the shared source list: plctag_dyn is built
+# unconditionally and its install rules feed cpack, so it must compile even though nothing here
+# links it.
 #
-target_compile_options(${SS_LIBPLCTAG_TARGET} PRIVATE
-  $<$<C_COMPILER_ID:Clang,AppleClang>:-w;-Wno-error=incompatible-pointer-types>
-  $<$<C_COMPILER_ID:GNU>:-w>
-  $<$<C_COMPILER_ID:MSVC>:/w>)
+foreach(_plctag_lib ${SS_LIBPLCTAG_TARGET} plctag_dyn plctag)
+  if(TARGET ${_plctag_lib})
+    get_target_property(_plctag_lib_type ${_plctag_lib} TYPE)
+    if(_plctag_lib_type MATCHES "^(STATIC|SHARED|OBJECT|MODULE)_LIBRARY$")
+      target_compile_options(${_plctag_lib} PRIVATE
+        $<$<C_COMPILER_ID:Clang,AppleClang>:-w;-Wno-error=incompatible-pointer-types>
+        $<$<C_COMPILER_ID:GNU>:-w>
+        $<$<C_COMPILER_ID:MSVC>:/w>)
+    endif()
+  endif()
+endforeach()
 
 #
 # libplctag.h lives in src/lib; upstream's own target exports it, but the include directory is
