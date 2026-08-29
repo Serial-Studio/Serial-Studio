@@ -87,15 +87,14 @@ set(SS_LIBPLCTAG_TARGET ${SS_LIBPLCTAG_TARGET} CACHE INTERNAL "Resolved libplcta
 #
 # clang (clang-cl included) promotes incompatible-pointer-types to an error by default, and /w
 # does not demote default-errors; upstream's windows/platform.c trips it (int* into ioctlsocket's
-# u_long*), so the demotion is explicit for clang front ends.
+# u_long*), so the demotion is explicit for clang front ends. Generator expressions, not
+# CMAKE_C_COMPILER_ID: the top-level project enables only CXX, so that variable is empty in this
+# scope and only the fetched subproject's own project() call enables C.
 #
-if(CMAKE_C_COMPILER_ID MATCHES "Clang")
-  target_compile_options(${SS_LIBPLCTAG_TARGET} PRIVATE -w -Wno-error=incompatible-pointer-types)
-elseif(MSVC)
-  target_compile_options(${SS_LIBPLCTAG_TARGET} PRIVATE /w)
-else()
-  target_compile_options(${SS_LIBPLCTAG_TARGET} PRIVATE -w)
-endif()
+target_compile_options(${SS_LIBPLCTAG_TARGET} PRIVATE
+  $<$<C_COMPILER_ID:Clang,AppleClang>:-w;-Wno-error=incompatible-pointer-types>
+  $<$<C_COMPILER_ID:GNU>:-w>
+  $<$<C_COMPILER_ID:MSVC>:/w>)
 
 #
 # libplctag.h lives in src/lib; upstream's own target exports it, but the include directory is
