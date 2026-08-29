@@ -1,0 +1,83 @@
+#
+# Serial Studio
+# https://serial-studio.com/
+#
+# Copyright (C) 2020–2025 Alex Spataru
+#
+# This file is dual-licensed:
+#
+# - Under the GNU GPLv3 (or later) for builds that exclude Pro modules.
+# - Under the Serial Studio Commercial License for builds that include
+#   any Pro functionality.
+#
+# You must comply with the terms of one of these licenses, depending
+# on your use case.
+#
+# For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
+# For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
+#
+# SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
+#
+
+#-------------------------------------------------------------------------------
+# Workflow configuration
+#
+# ci.yml ignores '**.md' so documentation-only pushes skip the build matrix, but
+# that also skipped the documentation gates that live in its lint job. This
+# workflow is the complement: it fires ONLY on Markdown changes and runs just
+# the two documentation verifiers, so a docs-only commit still gets checked.
+#-------------------------------------------------------------------------------
+
+name: Docs
+
+on:
+  push:
+    paths:
+    - '**.md'
+
+  pull_request:
+    paths:
+    - '**.md'
+
+#-------------------------------------------------------------------------------
+# Documentation gates (no build)
+#-------------------------------------------------------------------------------
+
+jobs:
+  docs:
+    runs-on: ubuntu-24.04
+    name: '🔬 Docs'
+    steps:
+    #
+    # No submodules: the verifiers only read first-party sources and docs
+    #
+    - name: '🧰 Checkout'
+      uses: actions/checkout@v5
+
+    #
+    # 3.11 with pip caching: every gate in this job is a Python script
+    #
+    - name: '🐍 Set up Python'
+      uses: actions/setup-python@v6
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    #
+    # tests/requirements.txt is the single dependency manifest for the repo's Python tooling
+    #
+    - name: '🐍 Install Python dependencies'
+      run: pip install -r tests/requirements.txt
+
+    #
+    # The AI-facing docs are the tier that rots silently; this checks their paths, symbols and
+    # pinned constants against the tree
+    #
+    - name: '🔬 Verify AI documentation claims'
+      run: python3 scripts/claim-verify.py --quiet
+
+    #
+    # Markdown AI-narration scan over the user-facing docs
+    #
+    - name: '🔬 Verify documentation conventions'
+      run: python3 scripts/documentation-verify.py --quiet

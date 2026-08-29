@@ -265,7 +265,7 @@ jobs:
     # get-cmake supplies a current CMake independently of whatever the runner image ships
     #
     - name: '⚙️ Install CMake'
-      uses: lukka/get-cmake@latest
+      uses: lukka/get-cmake@fffaaafeea488556c2c12dad60690008bc1caacb # v4.4.2
       with:
         useLocalCache: true
 
@@ -1145,7 +1145,7 @@ jobs:
     # get-cmake supplies a current CMake independently of whatever the runner image ships
     #
     - name: '⚙️ Install CMake'
-      uses: lukka/get-cmake@latest
+      uses: lukka/get-cmake@fffaaafeea488556c2c12dad60690008bc1caacb # v4.4.2
       with:
         useLocalCache: true
 
@@ -1932,7 +1932,7 @@ jobs:
     # get-cmake supplies a current CMake independently of whatever the runner image ships
     #
     - name: '⚙️ Install CMake'
-      uses: lukka/get-cmake@latest
+      uses: lukka/get-cmake@fffaaafeea488556c2c12dad60690008bc1caacb # v4.4.2
       with:
         useLocalCache: true
 
@@ -2209,7 +2209,7 @@ jobs:
     # get-cmake supplies a current CMake independently of whatever the runner image ships
     #
     - name: '⚙️ Install CMake'
-      uses: lukka/get-cmake@latest
+      uses: lukka/get-cmake@fffaaafeea488556c2c12dad60690008bc1caacb # v4.4.2
       with:
         useLocalCache: true
 
@@ -2545,7 +2545,7 @@ jobs:
     # get-cmake supplies a current CMake; both of its caches are off on this image
     #
     - name: '⚙️ Install CMake'
-      uses: lukka/get-cmake@latest
+      uses: lukka/get-cmake@fffaaafeea488556c2c12dad60690008bc1caacb # v4.4.2
       with:
         useLocalCache: false
         useCloudCache: false
