@@ -404,6 +404,24 @@ message ExtensionsUninstallRequest {
   bool dryRun = 3;
 }
 
+message InfluxGetStatusRequest {
+  string id = 1;
+}
+
+message InfluxSetConfigRequest {
+  string id = 1;
+  string bucket = 2;
+  string measurement = 3;
+  string org = 4;
+  string token = 5;
+  string url = 6;
+}
+
+message InfluxSetEnabledRequest {
+  string id = 1;
+  bool enabled = 2;
+}
+
 message IoAudioGetConfigRequest {
   string id = 1;
 }
@@ -441,6 +459,11 @@ message IoAudioSetInputDeviceRequest {
 message IoAudioSetInputSampleFormatRequest {
   string id = 1;
   int64 formatIndex = 2;
+}
+
+message IoAudioSetNormalizationRequest {
+  string id = 1;
+  bool enabled = 2;
 }
 
 message IoAudioSetOutputChannelConfigRequest {
@@ -581,6 +604,41 @@ message IoDisconnectRequest {
   string id = 1;
 }
 
+message IoEipAddTagRequest {
+  string id = 1;
+  int64 element = 2;
+  string name = 3;
+  string tag = 4;
+  string type = 5;  // enum: "bool", "i8", "u8", "i16", "u16", "i32", "u32", "i64", "u64", "f32", "f64", "str"
+}
+
+message IoEipClearTagsRequest {
+  string id = 1;
+}
+
+message IoEipGenerateProjectRequest {
+  string id = 1;
+}
+
+message IoEipGetConfigRequest {
+  string id = 1;
+}
+
+message IoEipGetStatusRequest {
+  string id = 1;
+}
+
+message IoEipRemoveTagRequest {
+  string id = 1;
+  int64 index = 2;
+}
+
+message IoEipSetPropertyRequest {
+  string id = 1;
+  string key = 2;
+  google.protobuf.Struct value = 3;
+}
+
 message IoGetLatestFrameRequest {
   string id = 1;
   string encoding = 2;  // enum: "text", "base64", "both"
@@ -602,6 +660,32 @@ message IoHidListDevicesRequest {
 message IoHidSetDeviceIndexRequest {
   string id = 1;
   int64 deviceIndex = 2;
+}
+
+message IoIec104ClearPointsRequest {
+  string id = 1;
+}
+
+message IoIec104GenerateProjectRequest {
+  string id = 1;
+}
+
+message IoIec104GetConfigRequest {
+  string id = 1;
+}
+
+message IoIec104GetPointsRequest {
+  string id = 1;
+}
+
+message IoIec104GetStatusRequest {
+  string id = 1;
+}
+
+message IoIec104SetPropertyRequest {
+  string id = 1;
+  string key = 2;  // enum: "host", "port", "commonAddress", "windowK", "windowW", "timeoutT1", "timeoutT2", "timeoutT3"
+  google.protobuf.Struct value = 3;
 }
 
 message IoListBusesRequest {
@@ -959,6 +1043,39 @@ message IoProcessSetPipePathRequest {
 message IoProcessSetWorkingDirRequest {
   string id = 1;
   string workingDir = 2;
+}
+
+message IoS7AddVariableRequest {
+  string id = 1;
+  string address = 2;
+  string name = 3;
+}
+
+message IoS7ClearVariablesRequest {
+  string id = 1;
+}
+
+message IoS7GenerateProjectRequest {
+  string id = 1;
+}
+
+message IoS7GetConfigRequest {
+  string id = 1;
+}
+
+message IoS7GetStatusRequest {
+  string id = 1;
+}
+
+message IoS7RemoveVariableRequest {
+  string id = 1;
+  int64 index = 2;
+}
+
+message IoS7SetPropertyRequest {
+  string id = 1;
+  string key = 2;
+  google.protobuf.Struct value = 3;
 }
 
 message IoSetBusTypeRequest {
@@ -2371,7 +2488,7 @@ service SerialStudioTypedAPI {
   // Return the last N samples (timestamp + value pairs) for each plot-enabled dataset. Use to debug "the values look wrong" complaints without polling dashboard.getData repeatedly. Only returns datasets whose plt flag is on; toggle it via project.dataset.setOption first if you need history for a different dataset.
   rpc DashboardTailFrames(DashboardTailFramesRequest) returns (CommandResponse);
 
-  // Force a dashboard render from the current table/dataset state, synthesizing the project frame structure if no device frame has arrived yet. Unlike dashboard.reprocess (which no-ops until a real frame exists and never feeds exporters), this lets a control script that only writes tables (tableSet()) render table-driven computed datasets from the very first loop(), and it also fans the synthesized frame out to the enabled export sinks (CSV/MDF4/session/MQTT/API). SDK: dashboardTick().
+  // Force a dashboard render from the current table/dataset state, synthesizing the project frame structure if no device frame has arrived yet. Unlike dashboard.reprocess (which no-ops until a real frame exists and never feeds exporters), this lets a control script that only writes tables (tableSet()) render table-driven computed datasets from the very first loop(), and it also fans the synthesized frame out to the enabled export sinks (CSV/MDF4/session/MQTT/InfluxDB/API). SDK: dashboardTick().
   rpc DashboardTick(DashboardTickRequest) returns (CommandResponse);
 
   // Check whether this machine is set up to connect: serial-port permissions and the exact command that fixes them on Linux, Bluetooth adapter power and permission, audio inputs, and whether the configured host or broker resolves and accepts a connection. THE first call when a connection fails or the Connect button does nothing. Returns immediately with the instant results already complete; slower reachability probes finish in the background. Optional param: bus.
@@ -2410,6 +2527,15 @@ service SerialStudioTypedAPI {
   // Uninstall an extension by selecting it (params: addonIndex). DESTRUCTIVE: removes the extension files irreversibly. Pass dryRun:true to see what would be removed without committing.
   rpc ExtensionsUninstall(ExtensionsUninstallRequest) returns (CommandResponse);
 
+  // Snapshot the sink: enabled/isOpen, the endpoint fields, whether a token is stored, and the pulled counters (pointsWritten, pointsDropped, fieldsSkipped, httpErrors) plus the last write error.
+  rpc InfluxGetStatus(InfluxGetStatusRequest) returns (CommandResponse);
+
+  // Configure the InfluxDB 2.x sink: server URL, organization, bucket and the measurement every point is written under. Every field is optional, so a call changes only what it names. The token is write-only: it goes to the machine-bound credential vault, never to the project file, and no verb ever reads it back.
+  rpc InfluxSetConfig(InfluxSetConfigRequest) returns (CommandResponse);
+
+  // Enable or disable the InfluxDB sink for the current project. Requires a valid commercial licence; an unlicensed build reports enabled=false.
+  rpc InfluxSetEnabled(InfluxSetEnabledRequest) returns (CommandResponse);
+
   // Get complete audio configuration
   rpc IoAudioGetConfig(IoAudioGetConfigRequest) returns (CommandResponse);
 
@@ -2436,6 +2562,9 @@ service SerialStudioTypedAPI {
 
   // Set input sample format (params: formatIndex)
   rpc IoAudioSetInputSampleFormat(IoAudioSetInputSampleFormatRequest) returns (CommandResponse);
+
+  // Enable normalized -1..1 sampling (params: enabled)
+  rpc IoAudioSetNormalization(IoAudioSetNormalizationRequest) returns (CommandResponse);
 
   // Set output channel config (params: channelIndex)
   rpc IoAudioSetOutputChannelConfig(IoAudioSetOutputChannelConfigRequest) returns (CommandResponse);
@@ -2527,6 +2656,27 @@ service SerialStudioTypedAPI {
   // Close the active I/O connection. Safe to call when already disconnected. Does NOT reset the configuration -- the next io.connect will reuse the same device + params.
   rpc IoDisconnect(IoDisconnectRequest) returns (CommandResponse);
 
+  // Add a CIP tag (params: name, tag, type, element)
+  rpc IoEipAddTag(IoEipAddTagRequest) returns (CommandResponse);
+
+  // Remove every configured CIP tag
+  rpc IoEipClearTags(IoEipClearTagsRequest) returns (CommandResponse);
+
+  // Build a project from the configured CIP tags
+  rpc IoEipGenerateProject(IoEipGenerateProjectRequest) returns (CommandResponse);
+
+  // Get the EtherNet/IP driver configuration
+  rpc IoEipGetConfig(IoEipGetConfigRequest) returns (CommandResponse);
+
+  // Get the EtherNet/IP session status and counters
+  rpc IoEipGetStatus(IoEipGetStatusRequest) returns (CommandResponse);
+
+  // Remove a CIP tag by index (params: index)
+  rpc IoEipRemoveTag(IoEipRemoveTagRequest) returns (CommandResponse);
+
+  // Set an EtherNet/IP driver property (params: key, value)
+  rpc IoEipSetProperty(IoEipSetPropertyRequest) returns (CommandResponse);
+
   // Returns the latest RAW frame received from the device: sequence number, payload (text/base64) and the parser's channel tokens in values[] -- including channels NOT yet mapped to any dataset (dashboard.getData only shows mapped data). Poll it from a control script loop() to detect new channels and auto-build widgets via project mutations; the sequence field tells you when a new frame arrived. Capture runs only while a control script is running or the API server is enabled, so hasData:false means no data OR no active consumer. timestampMs is a monotonic clock in milliseconds (not Unix epoch time); use it only for deltas between frames. ageMs is the time elapsed since the frame was captured -- use it for staleness watchdogs instead of mixing clocks.
   rpc IoGetLatestFrame(IoGetLatestFrameRequest) returns (CommandResponse);
 
@@ -2541,6 +2691,24 @@ service SerialStudioTypedAPI {
 
   // Select HID device by index (params: deviceIndex)
   rpc IoHidSetDeviceIndex(IoHidSetDeviceIndexRequest) returns (CommandResponse);
+
+  // Forget every discovered information object
+  rpc IoIec104ClearPoints(IoIec104ClearPointsRequest) returns (CommandResponse);
+
+  // Build a project from the discovered points
+  rpc IoIec104GenerateProject(IoIec104GenerateProjectRequest) returns (CommandResponse);
+
+  // Get the IEC 60870-5-104 driver configuration
+  rpc IoIec104GetConfig(IoIec104GetConfigRequest) returns (CommandResponse);
+
+  // List the information objects the station has reported
+  rpc IoIec104GetPoints(IoIec104GetPointsRequest) returns (CommandResponse);
+
+  // Get the IEC 60870-5-104 link status and counters
+  rpc IoIec104GetStatus(IoIec104GetStatusRequest) returns (CommandResponse);
+
+  // Set an IEC 60870-5-104 driver property (params: key, value)
+  rpc IoIec104SetProperty(IoIec104SetPropertyRequest) returns (CommandResponse);
 
   // Returns the list of bus types this build supports. Pro builds have all 9; GPL builds only ship UART/Network/BLE/Audio. Use before io.setBusType to confirm the bus is available.
   rpc IoListBuses(IoListBusesRequest) returns (CommandResponse);
@@ -2769,6 +2937,27 @@ service SerialStudioTypedAPI {
 
   // Set working directory for Launch mode (params: workingDir)
   rpc IoProcessSetWorkingDir(IoProcessSetWorkingDirRequest) returns (CommandResponse);
+
+  // Add an S7 variable (params: name, address)
+  rpc IoS7AddVariable(IoS7AddVariableRequest) returns (CommandResponse);
+
+  // Remove every configured S7 variable
+  rpc IoS7ClearVariables(IoS7ClearVariablesRequest) returns (CommandResponse);
+
+  // Build a project from the configured S7 variables
+  rpc IoS7GenerateProject(IoS7GenerateProjectRequest) returns (CommandResponse);
+
+  // Get the S7comm driver configuration
+  rpc IoS7GetConfig(IoS7GetConfigRequest) returns (CommandResponse);
+
+  // Get the S7comm session status and counters
+  rpc IoS7GetStatus(IoS7GetStatusRequest) returns (CommandResponse);
+
+  // Remove an S7 variable by index (params: index)
+  rpc IoS7RemoveVariable(IoS7RemoveVariableRequest) returns (CommandResponse);
+
+  // Set an S7comm driver property (params: key, value)
+  rpc IoS7SetProperty(IoS7SetPropertyRequest) returns (CommandResponse);
 
   // Switch the active bus. CRITICAL: this discards the previous bus's runtime config (port, baud rate, host, etc. are NOT carried over). After switching, configure the new bus with its setters before calling io.connect. The project's source list is independent -- this only affects what's currently live.
   rpc IoSetBusType(IoSetBusTypeRequest) returns (CommandResponse);
@@ -3187,7 +3376,7 @@ service SerialStudioTypedAPI {
   // Read the MQTT subscriber driver configuration (the UI driver -- this matches what would be used the next time io.connect runs with busType=mqtt). Password is never returned.
   rpc ProjectMqttSubscriberGetConfig(ProjectMqttSubscriberGetConfigRequest) returns (CommandResponse);
 
-  // Snapshot subscriber driver live state (isOpen, hostname, port).
+  // Snapshot subscriber driver live state (isOpen, hostname, port) plus the 'sparkplug' block: discovered metric count and the pulled session counters (decodeErrors, capDrops, preBirthDropped, seqGaps, ...).
   rpc ProjectMqttSubscriberGetStatus(ProjectMqttSubscriberGetStatusRequest) returns (CommandResponse);
 
   // Patch one or more MQTT subscriber driver fields. Pass only the keys you want to change. Setting 'password' requires 'username' in the same call. Mutating fields while connected schedules a reconnect.

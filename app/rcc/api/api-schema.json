@@ -785,7 +785,7 @@
         ]
     },
     {
-        "description": "Force a dashboard render from the current table/dataset state, synthesizing the project frame structure if no device frame has arrived yet. Unlike dashboard.reprocess (which no-ops until a real frame exists and never feeds exporters), this lets a control script that only writes tables (tableSet()) render table-driven computed datasets from the very first loop(), and it also fans the synthesized frame out to the enabled export sinks (CSV/MDF4/session/MQTT/API). SDK: dashboardTick().",
+        "description": "Force a dashboard render from the current table/dataset state, synthesizing the project frame structure if no device frame has arrived yet. Unlike dashboard.reprocess (which no-ops until a real frame exists and never feeds exporters), this lets a control script that only writes tables (tableSet()) render table-driven computed datasets from the very first loop(), and it also fans the synthesized frame out to the enabled export sinks (CSV/MDF4/session/MQTT/InfluxDB/API). SDK: dashboardTick().",
         "name": "dashboard.tick",
         "properties": {
         },
@@ -937,6 +937,55 @@
         ]
     },
     {
+        "description": "Snapshot the sink: enabled/isOpen, the endpoint fields, whether a token is stored, and the pulled counters (pointsWritten, pointsDropped, fieldsSkipped, httpErrors) plus the last write error.",
+        "name": "influx.getStatus",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Configure the InfluxDB 2.x sink: server URL, organization, bucket and the measurement every point is written under. Every field is optional, so a call changes only what it names. The token is write-only: it goes to the machine-bound credential vault, never to the project file, and no verb ever reads it back.",
+        "name": "influx.setConfig",
+        "properties": {
+            "bucket": {
+                "description": "Destination bucket",
+                "type": "string"
+            },
+            "measurement": {
+                "description": "Measurement name (default: serial_studio)",
+                "type": "string"
+            },
+            "org": {
+                "description": "Organization that owns the bucket",
+                "type": "string"
+            },
+            "token": {
+                "description": "API token; stored in the credential vault, write-only",
+                "type": "string"
+            },
+            "url": {
+                "description": "Server URL, e.g. http://localhost:8086",
+                "type": "string"
+            }
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Enable or disable the InfluxDB sink for the current project. Requires a valid commercial licence; an unlicensed build reports enabled=false.",
+        "name": "influx.setEnabled",
+        "properties": {
+            "enabled": {
+                "description": "Whether to write points to InfluxDB",
+                "type": "boolean"
+            }
+        },
+        "required": [
+            "enabled"
+        ]
+    },
+    {
         "description": "Get complete audio configuration",
         "name": "io.audio.getConfig",
         "properties": {
@@ -1021,6 +1070,19 @@
         },
         "required": [
             "formatIndex"
+        ]
+    },
+    {
+        "description": "Enable normalized -1..1 sampling (params: enabled)",
+        "name": "io.audio.setNormalization",
+        "properties": {
+            "enabled": {
+                "description": "Publish samples as floats in the -1..1 range",
+                "type": "boolean"
+            }
+        },
+        "required": [
+            "enabled"
         ]
     },
     {
@@ -1355,6 +1417,116 @@
         ]
     },
     {
+        "description": "Add a CIP tag (params: name, tag, type, element)",
+        "name": "io.eip.addTag",
+        "properties": {
+            "element": {
+                "description": "Array element index, or -1 for a scalar",
+                "maximum": 65535,
+                "minimum": -1,
+                "type": "integer"
+            },
+            "name": {
+                "description": "Channel name shown on the dashboard",
+                "type": "string"
+            },
+            "tag": {
+                "description": "CIP symbolic tag name",
+                "type": "string"
+            },
+            "type": {
+                "description": "Wire type code (bool, i16, i32, f32, str, ...)",
+                "enum": [
+                    "bool",
+                    "i8",
+                    "u8",
+                    "i16",
+                    "u16",
+                    "i32",
+                    "u32",
+                    "i64",
+                    "u64",
+                    "f32",
+                    "f64",
+                    "str"
+                ],
+                "type": "string"
+            }
+        },
+        "required": [
+            "tag",
+            "type"
+        ]
+    },
+    {
+        "description": "Remove every configured CIP tag",
+        "name": "io.eip.clearTags",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Build a project from the configured CIP tags",
+        "name": "io.eip.generateProject",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Get the EtherNet/IP driver configuration",
+        "name": "io.eip.getConfig",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Get the EtherNet/IP session status and counters",
+        "name": "io.eip.getStatus",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Remove a CIP tag by index (params: index)",
+        "name": "io.eip.removeTag",
+        "properties": {
+            "index": {
+                "description": "Zero-based position in the tag list",
+                "maximum": 2047,
+                "minimum": 0,
+                "type": "integer"
+            }
+        },
+        "required": [
+            "index"
+        ]
+    },
+    {
+        "description": "Set an EtherNet/IP driver property (params: key, value)",
+        "name": "io.eip.setProperty",
+        "properties": {
+            "key": {
+                "description": "Property key (host, cipPath, plcType, pollInterval)",
+                "type": "string"
+            },
+            "value": {
+                "description": "New property value",
+                "type": [
+                    "string",
+                    "integer"
+                ]
+            }
+        },
+        "required": [
+            "key",
+            "value"
+        ]
+    },
+    {
         "description": "Returns the latest RAW frame received from the device: sequence number, payload (text/base64) and the parser's channel tokens in values[] -- including channels NOT yet mapped to any dataset (dashboard.getData only shows mapped data). Poll it from a control script loop() to detect new channels and auto-build widgets via project mutations; the sequence field tells you when a new frame arrived. Capture runs only while a control script is running or the API server is enabled, so hasData:false means no data OR no active consumer. timestampMs is a monotonic clock in milliseconds (not Unix epoch time); use it only for deltas between frames. ageMs is the time elapsed since the frame was captured -- use it for staleness watchdogs instead of mixing clocks.",
         "name": "io.getLatestFrame",
         "properties": {
@@ -1410,6 +1582,77 @@
         },
         "required": [
             "deviceIndex"
+        ]
+    },
+    {
+        "description": "Forget every discovered information object",
+        "name": "io.iec104.clearPoints",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Build a project from the discovered points",
+        "name": "io.iec104.generateProject",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Get the IEC 60870-5-104 driver configuration",
+        "name": "io.iec104.getConfig",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "List the information objects the station has reported",
+        "name": "io.iec104.getPoints",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Get the IEC 60870-5-104 link status and counters",
+        "name": "io.iec104.getStatus",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Set an IEC 60870-5-104 driver property (params: key, value)",
+        "name": "io.iec104.setProperty",
+        "properties": {
+            "key": {
+                "description": "Property key",
+                "enum": [
+                    "host",
+                    "port",
+                    "commonAddress",
+                    "windowK",
+                    "windowW",
+                    "timeoutT1",
+                    "timeoutT2",
+                    "timeoutT3"
+                ],
+                "type": "string"
+            },
+            "value": {
+                "description": "New property value",
+                "type": [
+                    "string",
+                    "integer"
+                ]
+            }
+        },
+        "required": [
+            "key",
+            "value"
         ]
     },
     {
@@ -2312,6 +2555,90 @@
         },
         "required": [
             "workingDir"
+        ]
+    },
+    {
+        "description": "Add an S7 variable (params: name, address)",
+        "name": "io.s7.addVariable",
+        "properties": {
+            "address": {
+                "description": "Absolute S7 address, e.g. DB5.DBD20:REAL",
+                "type": "string"
+            },
+            "name": {
+                "description": "Channel name shown on the dashboard",
+                "type": "string"
+            }
+        },
+        "required": [
+            "address"
+        ]
+    },
+    {
+        "description": "Remove every configured S7 variable",
+        "name": "io.s7.clearVariables",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Build a project from the configured S7 variables",
+        "name": "io.s7.generateProject",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Get the S7comm driver configuration",
+        "name": "io.s7.getConfig",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Get the S7comm session status and counters",
+        "name": "io.s7.getStatus",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Remove an S7 variable by index (params: index)",
+        "name": "io.s7.removeVariable",
+        "properties": {
+            "index": {
+                "description": "Zero-based position in the variable list",
+                "minimum": 0,
+                "type": "integer"
+            }
+        },
+        "required": [
+            "index"
+        ]
+    },
+    {
+        "description": "Set an S7comm driver property (params: key, value)",
+        "name": "io.s7.setProperty",
+        "properties": {
+            "key": {
+                "description": "Property key (host, rack, slot, pollInterval)",
+                "type": "string"
+            },
+            "value": {
+                "description": "New property value",
+                "type": [
+                    "string",
+                    "integer"
+                ]
+            }
+        },
+        "required": [
+            "key",
+            "value"
         ]
     },
     {
@@ -4607,7 +4934,7 @@
         ]
     },
     {
-        "description": "Snapshot subscriber driver live state (isOpen, hostname, port).",
+        "description": "Snapshot subscriber driver live state (isOpen, hostname, port) plus the 'sparkplug' block: discovered metric count and the pulled session counters (decodeErrors, capDrops, preBirthDropped, seqGaps, ...).",
         "name": "project.mqtt.subscriber.getStatus",
         "properties": {
         },

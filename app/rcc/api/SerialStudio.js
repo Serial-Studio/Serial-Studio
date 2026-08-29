@@ -374,15 +374,19 @@ var csvPlayer = (typeof csvPlayer !== 'undefined') ? csvPlayer : {};
 var dashboard = (typeof dashboard !== 'undefined') ? dashboard : {};
 var diagnostics = (typeof diagnostics !== 'undefined') ? diagnostics : {};
 var extensions = (typeof extensions !== 'undefined') ? extensions : {};
+var influx = (typeof influx !== 'undefined') ? influx : {};
 var io = (typeof io !== 'undefined') ? io : {};
 io.audio = io.audio || {};
 io.ble = io.ble || {};
 io.canbus = io.canbus || {};
+io.eip = io.eip || {};
 io.hid = io.hid || {};
+io.iec104 = io.iec104 || {};
 io.modbus = io.modbus || {};
 io.network = io.network || {};
 io.opcua = io.opcua || {};
 io.process = io.process || {};
+io.s7 = io.s7 || {};
 io.uart = io.uart || {};
 io.usb = io.usb || {};
 var licensing = (typeof licensing !== 'undefined') ? licensing : {};
@@ -825,6 +829,23 @@ extensions.uninstall = function(addonIndex, options) {
   return apiCall('extensions.uninstall', p);
 };
 
+influx.getStatus = function() {
+  var p = {};
+  return apiCall('influx.getStatus', p);
+};
+
+influx.setConfig = function(options) {
+  var p = {};
+  if (options) for (var k in options) p[k] = options[k];
+  return apiCall('influx.setConfig', p);
+};
+
+influx.setEnabled = function(enabled) {
+  var p = {};
+  p['enabled'] = enabled;
+  return apiCall('influx.setEnabled', p);
+};
+
 io.audio.getConfig = function() {
   var p = {};
   return apiCall('io.audio.getConfig', p);
@@ -871,6 +892,12 @@ io.audio.setInputSampleFormat = function(formatIndex) {
   var p = {};
   p['formatIndex'] = formatIndex;
   return apiCall('io.audio.setInputSampleFormat', p);
+};
+
+io.audio.setNormalization = function(enabled) {
+  var p = {};
+  p['enabled'] = enabled;
+  return apiCall('io.audio.setNormalization', p);
 };
 
 io.audio.setOutputChannelConfig = function(channelIndex) {
@@ -1041,6 +1068,47 @@ io.disconnect = function() {
   return apiCall('io.disconnect', p);
 };
 
+io.eip.addTag = function(tag, type, options) {
+  var p = {};
+  p['tag'] = tag;
+  p['type'] = type;
+  if (options) for (var k in options) p[k] = options[k];
+  return apiCall('io.eip.addTag', p);
+};
+
+io.eip.clearTags = function() {
+  var p = {};
+  return apiCall('io.eip.clearTags', p);
+};
+
+io.eip.generateProject = function() {
+  var p = {};
+  return apiCall('io.eip.generateProject', p);
+};
+
+io.eip.getConfig = function() {
+  var p = {};
+  return apiCall('io.eip.getConfig', p);
+};
+
+io.eip.getStatus = function() {
+  var p = {};
+  return apiCall('io.eip.getStatus', p);
+};
+
+io.eip.removeTag = function(index) {
+  var p = {};
+  p['index'] = index;
+  return apiCall('io.eip.removeTag', p);
+};
+
+io.eip.setProperty = function(key, value) {
+  var p = {};
+  p['key'] = key;
+  p['value'] = value;
+  return apiCall('io.eip.setProperty', p);
+};
+
 // options.encoding: "text" | "base64" | "both"
 io.getLatestFrame = function(options) {
   var p = {};
@@ -1067,6 +1135,38 @@ io.hid.setDeviceIndex = function(deviceIndex) {
   var p = {};
   p['deviceIndex'] = deviceIndex;
   return apiCall('io.hid.setDeviceIndex', p);
+};
+
+io.iec104.clearPoints = function() {
+  var p = {};
+  return apiCall('io.iec104.clearPoints', p);
+};
+
+io.iec104.generateProject = function() {
+  var p = {};
+  return apiCall('io.iec104.generateProject', p);
+};
+
+io.iec104.getConfig = function() {
+  var p = {};
+  return apiCall('io.iec104.getConfig', p);
+};
+
+io.iec104.getPoints = function() {
+  var p = {};
+  return apiCall('io.iec104.getPoints', p);
+};
+
+io.iec104.getStatus = function() {
+  var p = {};
+  return apiCall('io.iec104.getStatus', p);
+};
+
+io.iec104.setProperty = function(key, value) {
+  var p = {};
+  p['key'] = key;
+  p['value'] = value;
+  return apiCall('io.iec104.setProperty', p);
 };
 
 io.listBuses = function() {
@@ -1500,6 +1600,46 @@ io.process.setWorkingDir = function(workingDir) {
   var p = {};
   p['workingDir'] = workingDir;
   return apiCall('io.process.setWorkingDir', p);
+};
+
+io.s7.addVariable = function(address, options) {
+  var p = {};
+  p['address'] = address;
+  if (options) for (var k in options) p[k] = options[k];
+  return apiCall('io.s7.addVariable', p);
+};
+
+io.s7.clearVariables = function() {
+  var p = {};
+  return apiCall('io.s7.clearVariables', p);
+};
+
+io.s7.generateProject = function() {
+  var p = {};
+  return apiCall('io.s7.generateProject', p);
+};
+
+io.s7.getConfig = function() {
+  var p = {};
+  return apiCall('io.s7.getConfig', p);
+};
+
+io.s7.getStatus = function() {
+  var p = {};
+  return apiCall('io.s7.getStatus', p);
+};
+
+io.s7.removeVariable = function(index) {
+  var p = {};
+  p['index'] = index;
+  return apiCall('io.s7.removeVariable', p);
+};
+
+io.s7.setProperty = function(key, value) {
+  var p = {};
+  p['key'] = key;
+  p['value'] = value;
+  return apiCall('io.s7.setProperty', p);
 };
 
 io.setBusType = function(busType) {

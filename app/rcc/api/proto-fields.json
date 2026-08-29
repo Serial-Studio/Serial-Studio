@@ -478,6 +478,29 @@
       "reserved": [],
       "next": 4
     },
+    "influx.getStatus": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "influx.setConfig": {
+      "fields": {
+        "bucket": 2,
+        "measurement": 3,
+        "org": 4,
+        "token": 5,
+        "url": 6
+      },
+      "reserved": [],
+      "next": 7
+    },
+    "influx.setEnabled": {
+      "fields": {
+        "enabled": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
     "io.audio.getConfig": {
       "fields": {},
       "reserved": [],
@@ -525,6 +548,13 @@
     "io.audio.setInputSampleFormat": {
       "fields": {
         "formatIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.audio.setNormalization": {
+      "fields": {
+        "enabled": 2
       },
       "reserved": [],
       "next": 3
@@ -714,6 +744,51 @@
       "reserved": [],
       "next": 2
     },
+    "io.eip.addTag": {
+      "fields": {
+        "element": 2,
+        "name": 3,
+        "tag": 4,
+        "type": 5
+      },
+      "reserved": [],
+      "next": 6
+    },
+    "io.eip.clearTags": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.eip.generateProject": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.eip.getConfig": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.eip.getStatus": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.eip.removeTag": {
+      "fields": {
+        "index": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.eip.setProperty": {
+      "fields": {
+        "key": 2,
+        "value": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
     "io.getLatestFrame": {
       "fields": {
         "encoding": 2,
@@ -743,6 +818,39 @@
       },
       "reserved": [],
       "next": 3
+    },
+    "io.iec104.clearPoints": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.iec104.generateProject": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.iec104.getConfig": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.iec104.getPoints": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.iec104.getStatus": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.iec104.setProperty": {
+      "fields": {
+        "key": 2,
+        "value": 3
+      },
+      "reserved": [],
+      "next": 4
     },
     "io.listBuses": {
       "fields": {},
@@ -1224,6 +1332,49 @@
       },
       "reserved": [],
       "next": 3
+    },
+    "io.s7.addVariable": {
+      "fields": {
+        "address": 2,
+        "name": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "io.s7.clearVariables": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.s7.generateProject": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.s7.getConfig": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.s7.getStatus": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "io.s7.removeVariable": {
+      "fields": {
+        "index": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.s7.setProperty": {
+      "fields": {
+        "key": 2,
+        "value": 3
+      },
+      "reserved": [],
+      "next": 4
     },
     "io.setBusType": {
       "fields": {

@@ -74,15 +74,19 @@ csvPlayer = csvPlayer or {}
 dashboard = dashboard or {}
 diagnostics = diagnostics or {}
 extensions = extensions or {}
+influx = influx or {}
 io = io or {}
 io.audio = io.audio or {}
 io.ble = io.ble or {}
 io.canbus = io.canbus or {}
+io.eip = io.eip or {}
 io.hid = io.hid or {}
+io.iec104 = io.iec104 or {}
 io.modbus = io.modbus or {}
 io.network = io.network or {}
 io.opcua = io.opcua or {}
 io.process = io.process or {}
+io.s7 = io.s7 or {}
 io.uart = io.uart or {}
 io.usb = io.usb or {}
 licensing = licensing or {}
@@ -525,6 +529,23 @@ function extensions.uninstall(addonIndex, options)
   return apiCall('extensions.uninstall', p)
 end
 
+function influx.getStatus()
+  local p = {}
+  return apiCall('influx.getStatus', p)
+end
+
+function influx.setConfig(options)
+  local p = {}
+  if options then for k, v in pairs(options) do p[k] = v end end
+  return apiCall('influx.setConfig', p)
+end
+
+function influx.setEnabled(enabled)
+  local p = {}
+  p['enabled'] = enabled
+  return apiCall('influx.setEnabled', p)
+end
+
 function io.audio.getConfig()
   local p = {}
   return apiCall('io.audio.getConfig', p)
@@ -571,6 +592,12 @@ function io.audio.setInputSampleFormat(formatIndex)
   local p = {}
   p['formatIndex'] = formatIndex
   return apiCall('io.audio.setInputSampleFormat', p)
+end
+
+function io.audio.setNormalization(enabled)
+  local p = {}
+  p['enabled'] = enabled
+  return apiCall('io.audio.setNormalization', p)
 end
 
 function io.audio.setOutputChannelConfig(channelIndex)
@@ -741,6 +768,47 @@ function io.disconnect()
   return apiCall('io.disconnect', p)
 end
 
+function io.eip.addTag(tag, type, options)
+  local p = {}
+  p['tag'] = tag
+  p['type'] = type
+  if options then for k, v in pairs(options) do p[k] = v end end
+  return apiCall('io.eip.addTag', p)
+end
+
+function io.eip.clearTags()
+  local p = {}
+  return apiCall('io.eip.clearTags', p)
+end
+
+function io.eip.generateProject()
+  local p = {}
+  return apiCall('io.eip.generateProject', p)
+end
+
+function io.eip.getConfig()
+  local p = {}
+  return apiCall('io.eip.getConfig', p)
+end
+
+function io.eip.getStatus()
+  local p = {}
+  return apiCall('io.eip.getStatus', p)
+end
+
+function io.eip.removeTag(index)
+  local p = {}
+  p['index'] = index
+  return apiCall('io.eip.removeTag', p)
+end
+
+function io.eip.setProperty(key, value)
+  local p = {}
+  p['key'] = key
+  p['value'] = value
+  return apiCall('io.eip.setProperty', p)
+end
+
 -- options.encoding: "text" | "base64" | "both"
 function io.getLatestFrame(options)
   local p = {}
@@ -767,6 +835,38 @@ function io.hid.setDeviceIndex(deviceIndex)
   local p = {}
   p['deviceIndex'] = deviceIndex
   return apiCall('io.hid.setDeviceIndex', p)
+end
+
+function io.iec104.clearPoints()
+  local p = {}
+  return apiCall('io.iec104.clearPoints', p)
+end
+
+function io.iec104.generateProject()
+  local p = {}
+  return apiCall('io.iec104.generateProject', p)
+end
+
+function io.iec104.getConfig()
+  local p = {}
+  return apiCall('io.iec104.getConfig', p)
+end
+
+function io.iec104.getPoints()
+  local p = {}
+  return apiCall('io.iec104.getPoints', p)
+end
+
+function io.iec104.getStatus()
+  local p = {}
+  return apiCall('io.iec104.getStatus', p)
+end
+
+function io.iec104.setProperty(key, value)
+  local p = {}
+  p['key'] = key
+  p['value'] = value
+  return apiCall('io.iec104.setProperty', p)
 end
 
 function io.listBuses()
@@ -1200,6 +1300,46 @@ function io.process.setWorkingDir(workingDir)
   local p = {}
   p['workingDir'] = workingDir
   return apiCall('io.process.setWorkingDir', p)
+end
+
+function io.s7.addVariable(address, options)
+  local p = {}
+  p['address'] = address
+  if options then for k, v in pairs(options) do p[k] = v end end
+  return apiCall('io.s7.addVariable', p)
+end
+
+function io.s7.clearVariables()
+  local p = {}
+  return apiCall('io.s7.clearVariables', p)
+end
+
+function io.s7.generateProject()
+  local p = {}
+  return apiCall('io.s7.generateProject', p)
+end
+
+function io.s7.getConfig()
+  local p = {}
+  return apiCall('io.s7.getConfig', p)
+end
+
+function io.s7.getStatus()
+  local p = {}
+  return apiCall('io.s7.getStatus', p)
+end
+
+function io.s7.removeVariable(index)
+  local p = {}
+  p['index'] = index
+  return apiCall('io.s7.removeVariable', p)
+end
+
+function io.s7.setProperty(key, value)
+  local p = {}
+  p['key'] = key
+  p['value'] = value
+  return apiCall('io.s7.setProperty', p)
 end
 
 function io.setBusType(busType)
