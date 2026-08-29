@@ -116,13 +116,17 @@ endif()
 
 #
 # Links the client into an application target; the BUILD_COMMERCIAL guard mirrors
-# target_link_open62541().
+# target_link_open62541(). LIBPLCTAGDLL_EXPORTS on Windows: libplctag.h has no static-consumer
+# branch there and defaults every prototype to __declspec(dllimport), which cannot resolve
+# against the static archive this build links; the define flips the prototypes to dllexport,
+# which the linker resolves from a static library. The macro gates nothing but libplctag.h.
 #
 function(target_link_libplctag TARGET)
   if(NOT SS_LIBPLCTAG_TARGET OR NOT BUILD_COMMERCIAL)
     return()
   endif()
 
-  target_compile_definitions(${TARGET} PRIVATE SS_EIP_ACTIVE=1)
+  target_compile_definitions(${TARGET} PRIVATE SS_EIP_ACTIVE=1
+                             $<$<PLATFORM_ID:Windows>:LIBPLCTAGDLL_EXPORTS=1>)
   target_link_libraries(${TARGET} PRIVATE ${SS_LIBPLCTAG_TARGET})
 endfunction()
