@@ -26,8 +26,8 @@
 
 #include "IO/Drivers/OpcUaTagModel.h"
 
-static constexpr int kOpcUaBrowseDeadlineMs = 15000;
-static constexpr const char* kBackendName   = "open62541";
+static constexpr int kOpcUaBrowseDeadlineMs      = 15000;
+static constexpr const char* kBrowserBackendName = "open62541";
 
 /**
  * @brief Constructs the browser and arms its single-shot deadline; the session and the tree model
@@ -83,7 +83,8 @@ void IO::Drivers::OpcUaBrowser::start()
   teardownSession();
   m_session = m_host.makeSession();
   if (!m_session) {
-    Q_EMIT browseFailed(tr("The %1 stack is not available in this build.").arg(kBackendName));
+    Q_EMIT browseFailed(
+      tr("The %1 stack is not available in this build.").arg(kBrowserBackendName));
     return;
   }
 

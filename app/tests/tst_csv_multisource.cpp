@@ -313,4 +313,6 @@ void TstCsvMultiSource::clearDropsTheWholeLayout()
   QCOMPARE(static_cast<int>(map.staleSources(1).size()), 0);
 }
 
+QTEST_APPLESS_MAIN(TstCsvMultiSource)
+
 #include "tst_csv_multisource.moc"

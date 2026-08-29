@@ -37,7 +37,7 @@
 //--------------------------------------------------------------------------------------------------
 
 // Manual-mode window size floor; mirrors the fallback WindowManager::constrainWindows() applies.
-constexpr int kManualMinSize = 48;
+constexpr int kLayoutManualMinSize = 48;
 
 namespace detail {
 
@@ -541,7 +541,7 @@ void UI::WindowLayoutStore::applyManualLayout(const QMap<int, QQuickItem*>& wind
     WindowGeometry::placeWindow(win,
                                 QRect(placed[i].x(),
                                       placed[i].y(),
-                                      qMax(kManualMinSize, placed[i].width()),
-                                      qMax(kManualMinSize, placed[i].height())));
+                                      qMax(kLayoutManualMinSize, placed[i].width()),
+                                      qMax(kLayoutManualMinSize, placed[i].height())));
   }
 }

@@ -278,7 +278,7 @@ int IO::Drivers::Iec104Proto::elementBytes(std::uint8_t typeId) noexcept
 {
   using namespace IO::Drivers::Iec104Proto;
 
-  out        = Point{};
+  out        = IO::Drivers::Iec104Proto::Point{};
   out.ioa    = ioa;
   out.typeId = typeId;
   out.kind   = kindForType(typeId);
@@ -349,7 +349,7 @@ IO::Drivers::Iec104Proto::DecodeResult IO::Drivers::Iec104Proto::decodeHeader(QB
       return DecodeResult::Truncated;
     }
 
-    Point point;
+    IO::Drivers::Iec104Proto::Point point;
     if (!decodeObject(asdu, pos + kIoaBytes, header.typeId, readIoa(asdu, pos), point)) {
       points.resize(mark);
       return DecodeResult::Malformed;
@@ -386,7 +386,7 @@ IO::Drivers::Iec104Proto::DecodeResult IO::Drivers::Iec104Proto::decodeHeader(QB
       return DecodeResult::Truncated;
     }
 
-    Point point;
+    IO::Drivers::Iec104Proto::Point point;
     if (!decodeObject(asdu, pos, header.typeId, (base + i) & kMaxIoa, point)) {
       points.resize(mark);
       return DecodeResult::Malformed;

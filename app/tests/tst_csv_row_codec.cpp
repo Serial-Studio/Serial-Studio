@@ -267,4 +267,6 @@ void TstCsvRowCodec::resetRestoresTheDefaultReading()
   QCOMPARE(static_cast<int>(codec.dataSpanCount()), 0);
 }
 
+QTEST_APPLESS_MAIN(TstCsvRowCodec)
+
 #include "tst_csv_row_codec.moc"

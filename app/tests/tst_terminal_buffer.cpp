@@ -472,16 +472,19 @@ void TstTerminalBuffer::eraseRowsKeepsRepeatCountsAligned()
 
 /**
  * @brief Autoscroll pins the viewport to the last visual row of the cursor's line, which counts
- *        the wrapped segments rather than the row index alone.
+ *        the wrapped segments rather than the row index alone. Appends wrap physically at the
+ *        live column count, so a row only exceeds it after the terminal narrows; the test writes
+ *        wide, then shrinks the columns the way the facade's geometry push does.
  */
 void TstTerminalBuffer::visualBottomRowFollowsWrapping()
 {
   Widgets::AnsiPalette palette;
   Widgets::TerminalBuffer buffer(palette);
-  buffer.setColumns(10);
+  buffer.setColumns(30);
   buffer.setMaxLines(1000);
 
   buffer.appendText(QString(25, QLatin1Char('x')));
+  buffer.setColumns(10);
   buffer.setCursor(0, 0);
   QCOMPARE(buffer.visualBottomRow(), 2);
 

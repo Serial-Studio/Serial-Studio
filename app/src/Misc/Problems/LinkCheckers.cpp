@@ -73,7 +73,7 @@ static quint64 s_totalOverflowBytes  = 0;
  * @brief The link owner these checkers sample, resolved once: the checkers are free functions with
  *        no constructor to capture in, so the singleton reach is funnelled through one accessor.
  */
-[[nodiscard]] static IO::ConnectionManager& connectionManager()
+[[nodiscard]] static IO::ConnectionManager& linkConnectionManager()
 {
   static auto& manager = IO::ConnectionManager::instance();
   return manager;
@@ -190,7 +190,7 @@ static void resetSampler()
   if (SerialStudio::isAnyPlayerOpen())
     return true;
 
-  return !connectionManager().isConnected();
+  return !linkConnectionManager().isConnected();
 }
 
 /**
@@ -248,7 +248,7 @@ static void advanceSampler()
   if (s_haveBaseline && (now - s_lastSampleMs) < kMinSampleMs)
     return;
 
-  const auto stats  = connectionManager().linkStats();
+  const auto stats  = linkConnectionManager().linkStats();
   const auto parsed = frameBuilder().parsedFrameCount();
   if (!s_haveBaseline || countersWereReset(stats, parsed))
     resetWindows();

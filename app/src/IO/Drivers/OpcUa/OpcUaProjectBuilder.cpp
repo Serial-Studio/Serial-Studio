@@ -38,7 +38,7 @@
  * @brief Translates a generated-project string in the OPC UA driver's context, which is where the
  *        catalogs already carry these entries.
  */
-[[nodiscard]] static QString trOpcUa(const char* text)
+[[nodiscard]] static QString trOpcUaProject(const char* text)
 {
   return QCoreApplication::translate("IO::Drivers::OpcUa", text);
 }
@@ -121,12 +121,12 @@ QJsonObject IO::Drivers::OpcUaProjectBuilder::buildProject(
   const QJsonObject& connectionSettings) const
 {
   QJsonObject project;
-  project[Keys::Title]   = trOpcUa("OPC UA Project");
+  project[Keys::Title]   = trOpcUaProject("OPC UA Project");
   project[Keys::Actions] = QJsonArray();
 
   QJsonObject source;
   source[Keys::SourceId]              = 0;
-  source[Keys::Title]                 = trOpcUa("OPC UA");
+  source[Keys::Title]                 = trOpcUaProject("OPC UA");
   source[Keys::BusType]               = static_cast<int>(SerialStudio::BusType::OpcUa);
   source[Keys::FrameStart]            = QString();
   source[Keys::FrameEnd]              = QString();
@@ -148,7 +148,7 @@ QJsonObject IO::Drivers::OpcUaProjectBuilder::buildProject(
   QHash<QString, DataModel::Group> groups;
   int index = 0;
   for (const auto& tag : m_tags) {
-    const QString key = tag.path.isEmpty() ? trOpcUa("Tags") : tag.path;
+    const QString key = tag.path.isEmpty() ? trOpcUaProject("Tags") : tag.path;
     if (!groups.contains(key)) {
       DataModel::Group group;
       group.groupId = order.size();

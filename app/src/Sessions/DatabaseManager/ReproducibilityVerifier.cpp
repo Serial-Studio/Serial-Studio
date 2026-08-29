@@ -32,8 +32,8 @@
 // File-local constants
 //--------------------------------------------------------------------------------------------------
 
-static constexpr int kStderrTailBytes  = 2000;
-static constexpr int kTerminateGraceMs = 3000;
+static constexpr int kStderrTailBytes          = 2000;
+static constexpr int kVerifierTerminateGraceMs = 3000;
 
 //--------------------------------------------------------------------------------------------------
 // File-local helpers
@@ -175,7 +175,7 @@ void Sessions::ReproducibilityVerifier::shutdown()
     return;
 
   m_process->terminate();
-  if (!m_process->waitForFinished(kTerminateGraceMs))
+  if (!m_process->waitForFinished(kVerifierTerminateGraceMs))
     m_process->kill();
 }
 

@@ -220,7 +220,7 @@ static int bootstrapEngineState(lua_State* L)
 /**
  * @brief Returns the project model, resolved once for every consumer in this translation unit.
  */
-[[nodiscard]] static DataModel::ProjectModel& projectModel()
+[[nodiscard]] static DataModel::ProjectModel& luaProjectModel()
 {
   static auto& model = DataModel::ProjectModel::instance();
   return model;
@@ -233,9 +233,9 @@ static int bootstrapEngineState(lua_State* L)
 static void applyLuaMigration(int sourceId, const QString& fixed)
 {
   if (sourceId == 0)
-    projectModel().setFrameParserCode(fixed);
+    luaProjectModel().setFrameParserCode(fixed);
   else
-    projectModel().updateSourceFrameParser(sourceId, fixed);
+    luaProjectModel().updateSourceFrameParser(sourceId, fixed);
 }
 
 /**
@@ -388,7 +388,7 @@ void DataModel::LuaScriptEngine::createState()
     return;
   }
 
-  if (projectModel().luaFastMode()) {
+  if (luaProjectModel().luaFastMode()) {
     luaJIT_setmode(m_state, 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_ON);
   } else {
     luaJIT_setmode(m_state, 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_OFF);

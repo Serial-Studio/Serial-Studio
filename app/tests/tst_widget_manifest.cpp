@@ -184,7 +184,8 @@ void TstWidgetManifest::acceptsWellFormedPackage()
   QVERIFY(result.descriptor.isValid());
   QCOMPARE(result.descriptor.id, QStringLiteral("com.example.dial"));
   QCOMPARE(result.descriptor.qmlFile, QStringLiteral("Widget.qml"));
-  QCOMPARE(result.descriptor.scope, UI::WidgetExtensions::GroupScope);
+  QCOMPARE(static_cast<int>(result.descriptor.scope),
+           static_cast<int>(UI::WidgetExtensions::GroupScope));
   QCOMPARE(result.descriptor.readsStringValues, true);
   QCOMPARE(result.descriptor.bundled, false);
   QVERIFY(result.descriptor.replaces.isEmpty());
@@ -219,7 +220,8 @@ void TstWidgetManifest::clampsDeclaredBounds()
   QVERIFY(result.ok);
   QCOMPARE(result.descriptor.accepts.minDatasets, 4);
   QCOMPARE(result.descriptor.accepts.maxDatasets, 4);
-  QCOMPARE(result.descriptor.accepts.value, UI::WidgetExtensions::StringValue);
+  QCOMPARE(static_cast<int>(result.descriptor.accepts.value),
+           static_cast<int>(UI::WidgetExtensions::StringValue));
   QCOMPARE(result.descriptor.defaultWidth, 48);
   QCOMPARE(result.descriptor.defaultHeight, 8192);
 }

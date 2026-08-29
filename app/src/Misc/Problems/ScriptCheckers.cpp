@@ -77,7 +77,7 @@ static const QString kScriptJumpDataset = QStringLiteral("dataset");
  *        functions with no constructor to capture in, so the singleton reach is funnelled through
  *        one accessor instead of a per-helper static.
  */
-[[nodiscard]] static DataModel::ProjectModel& projectModel()
+[[nodiscard]] static DataModel::ProjectModel& scriptProjectModel()
 {
   static auto& model = DataModel::ProjectModel::instance();
   return model;
@@ -118,7 +118,7 @@ static const QString kScriptJumpDataset = QStringLiteral("dataset");
  */
 [[nodiscard]] static QString scriptSourceLabel(int sourceId)
 {
-  const auto& sources = projectModel().sources();
+  const auto& sources = scriptProjectModel().sources();
   for (const auto& source : sources)
     if (source.sourceId == sourceId && !source.title.isEmpty())
       return source.title;
@@ -132,7 +132,7 @@ static const QString kScriptJumpDataset = QStringLiteral("dataset");
  */
 [[nodiscard]] static QString scriptDatasetLabel(int uniqueId)
 {
-  const auto& groups = projectModel().groups();
+  const auto& groups = scriptProjectModel().groups();
   for (const auto& group : groups) {
     for (const auto& dataset : group.datasets)
       if (dataset.uniqueId == uniqueId && !dataset.title.isEmpty())

@@ -360,6 +360,7 @@ ss_add_unit_test(tst_console_annotations
           ${SS_APP_SRC}/DataModel/Scripting/JsWatchdogThread.cpp
           ${SS_APP_SRC}/DataModel/Scripting/ScriptTemplates.cpp
           ${SS_APP_SRC}/Misc/Translator.cpp
+          ${SS_APP_SRC}/Misc/LanguageTable.cpp
           ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
           Qt6::Gui
@@ -597,7 +598,8 @@ ss_add_unit_test(tst_sparkplug_payload
 # SparkplugSession.{h,cpp} (spec 0073) is the birth-certificate state machine the codec above feeds:
 # alias tables, the bounded pre-birth buffer, sequence gaps and the synthetic Online metric. It is
 # QObject-free and header-only in its dependencies (OpcUaWire.h supplies the slot ceiling), so the
-# link set is the codec plus SSAssert.cpp and no BUILD_COMMERCIAL define is needed.
+# link set is the codec plus SSAssert.cpp and no BUILD_COMMERCIAL define is needed. Qt6::Gui is
+# headers-only fallout: OpcUaWire.h pulls SerialStudio.h for toDouble(), which includes QColor.
 #
 ss_add_unit_test(tst_sparkplug_session
   SOURCES tst_sparkplug_session.cpp
@@ -605,13 +607,15 @@ ss_add_unit_test(tst_sparkplug_session
           ${SS_APP_SRC}/IO/Drivers/MQTT/SparkplugPayload.cpp
           ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
+          Qt6::Gui
 )
 
 #
 # SparkplugPublisher.{h,cpp} (spec 0073 A1b) is the outbound Edge Node state machine: the alias
 # registry, the seq/bdSeq counters the specification pins, and the birth/data/death payloads. It
 # produces topic+payload pairs rather than performing I/O, so the suite drives the whole publishing
-# lifecycle with no broker and round-trips every payload back through the decoder.
+# lifecycle with no broker and round-trips every payload back through the decoder. Qt6::Gui is
+# headers-only fallout: SparkplugSession.h reaches SerialStudio.h (QColor) through OpcUaWire.h.
 #
 ss_add_unit_test(tst_sparkplug_publisher
   SOURCES tst_sparkplug_publisher.cpp
@@ -619,6 +623,7 @@ ss_add_unit_test(tst_sparkplug_publisher
           ${SS_APP_SRC}/IO/Drivers/MQTT/SparkplugPayload.cpp
           ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
+          Qt6::Gui
 )
 
 #
@@ -1222,7 +1227,8 @@ ss_add_unit_test(tst_server_auth
 
 #
 # Modbus project generation (spec 0070): the register-group -> project/parser builder that used
-# to live inside the driver. Link set mirrors tst_frame_serialization.
+# to live inside the driver. Link set mirrors tst_frame_serialization; BusType::ModBus is a
+# commercial bus enum, so the target defines the macro (like tst_opcua_project_builder).
 #
 ss_add_unit_test(tst_modbus_generation
   SOURCES tst_modbus_generation.cpp
@@ -1236,6 +1242,9 @@ ss_add_unit_test(tst_modbus_generation
           Qt6::Core5Compat
           Qt6::Gui
 )
+if(TARGET tst_modbus_generation)
+  target_compile_definitions(tst_modbus_generation PRIVATE BUILD_COMMERCIAL)
+endif()
 
 #
 # Serial-port identity scoring shared by UART and Modbus (spec 0070): the 100/50/10/5 ladder
@@ -1329,7 +1338,9 @@ ss_add_unit_test(tst_widget_manifest
 ss_add_unit_test(tst_language_table
   SOURCES tst_language_table.cpp
           ${SS_APP_SRC}/Misc/LanguageTable.cpp
+          ${SS_APP_SRC}/Misc/Translator.cpp
   LIBS    Qt6::Core
+          Qt6::Widgets
 )
 
 #
@@ -1564,8 +1575,12 @@ ss_add_unit_test(tst_table_snapshot_channel
   SOURCES tst_table_snapshot_channel.cpp
           ${SS_APP_SRC}/DataModel/FrameBuilder/TableSnapshotChannel.cpp
           ${SS_APP_SRC}/DataModel/DataTable.cpp
+          ${SS_APP_SRC}/DataModel/Frame.cpp
+          ${SS_APP_SRC}/DataModel/Generated/DatasetSerialization.cpp
+          ${SS_APP_SRC}/DataModel/Project/PropertyValidators.cpp
+          ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
           ${SS_APP_SRC}/SSAssert.cpp
-  LIBS    Qt6::Core Qt6::Gui Qt6::Qml
+  LIBS    Qt6::Core Qt6::Core5Compat Qt6::Gui Qt6::Qml
 )
 
 #
@@ -1620,8 +1635,11 @@ endif()
 ss_add_unit_test(tst_replay_seek_engine
   SOURCES tst_replay_seek_engine.cpp
           ${SS_APP_SRC}/UI/Dashboard/ReplaySeekEngine.cpp
+          ${SS_APP_SRC}/Platform/AppPlatform.cpp
           ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
+          Qt6::Gui
+          Qt6::Widgets
 )
 
 #---------------------------------------------------------------------------------------------------

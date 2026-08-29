@@ -39,7 +39,7 @@ static constexpr int kKeptOutputChars = 32768;
 /**
  * @brief Milliseconds a terminating process is given before it is killed.
  */
-static constexpr int kTerminateGraceMs = 3000;
+static constexpr int kPluginTerminateGraceMs = 3000;
 
 /**
  * @brief Constructs an idle runner holding no processes.
@@ -136,7 +136,7 @@ bool Misc::PluginRunner::start(const QString& id,
   wireProcess(process, id);
   startProcess(process, runtime, entryPath, terminal);
 
-  if (!process->waitForStarted(kTerminateGraceMs)) {
+  if (!process->waitForStarted(kPluginTerminateGraceMs)) {
     appendOutput(id, QStringLiteral("[Error] Failed to start: ") + process->errorString() + "\n");
     delete process;
     return false;
@@ -180,7 +180,7 @@ void Misc::PluginRunner::stop(const QString& id)
   m_processes.erase(it);
 
   process->terminate();
-  if (!process->waitForFinished(kTerminateGraceMs))
+  if (!process->waitForFinished(kPluginTerminateGraceMs))
     process->kill();
 
   const auto remaining = QString::fromUtf8(process->readAll());
@@ -210,7 +210,7 @@ void Misc::PluginRunner::stopAll()
 
     process->disconnect(this);
     process->terminate();
-    if (!process->waitForFinished(kTerminateGraceMs))
+    if (!process->waitForFinished(kPluginTerminateGraceMs))
       process->kill();
 
     delete process;

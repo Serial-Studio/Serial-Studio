@@ -567,7 +567,7 @@ void IO::Drivers::Iec104::handleInformation(QByteArrayView asdu)
   if (header.commonAddress != static_cast<quint16>(m_commonAddress))
     return;
 
-  QList<Point> points;
+  QList<Iec104Proto::Point> points;
   if (decode(asdu, header, points) != DecodeResult::Ok) {
     ++m_skippedAsdus;
     return;
@@ -582,7 +582,7 @@ void IO::Drivers::Iec104::handleInformation(QByteArrayView asdu)
  *        the station is saying its own reading is untrustworthy, and overwriting the last good
  *        value with it would present the failure as data.
  */
-void IO::Drivers::Iec104::ingestPoint(const Point& point)
+void IO::Drivers::Iec104::ingestPoint(const Iec104Proto::Point& point)
 {
   const int slot = slotForPoint(point);
   if (slot < 0)
@@ -613,7 +613,7 @@ void IO::Drivers::Iec104::ingestPoint(const Point& point)
  *        generated project. The discovery signal is raised by the caller once the whole buffer is
  *        drained -- a synchronous emission mid-walk lets a handler re-enter the buffer.
  */
-int IO::Drivers::Iec104::slotForPoint(const Point& point)
+int IO::Drivers::Iec104::slotForPoint(const Iec104Proto::Point& point)
 {
   const auto known = m_slotForIoa.constFind(point.ioa);
   if (known != m_slotForIoa.constEnd())

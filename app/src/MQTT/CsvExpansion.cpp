@@ -85,7 +85,7 @@ QByteArray MQTT::buildCsvHeader(const DataModel::ExportSchema& schema)
     if (i > 0)
       header.append(',');
 
-    header.append(escapeCsvField(csvColumnLabel(schema.columns[i])).toUtf8());
+    header.append(MQTT::escapeCsvField(csvColumnLabel(schema.columns[i])).toUtf8());
   }
 
   header.append('\n');
@@ -108,7 +108,7 @@ void MQTT::appendCsvRow(QByteArray& out,
       out.append(',');
 
     const int uid = schema.columns[i].uniqueId;
-    out.append(escapeCsvField(valuesByUniqueId.value(uid, QString())).toUtf8());
+    out.append(MQTT::escapeCsvField(valuesByUniqueId.value(uid, QString())).toUtf8());
   }
 
   out.append('\n');

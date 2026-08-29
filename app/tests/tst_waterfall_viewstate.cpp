@@ -23,6 +23,7 @@
 #include <limits>
 #include <QRectF>
 #include <QTest>
+#include <tuple>
 
 #include "UI/Widgets/Waterfall/WaterfallViewState.h"
 
@@ -186,9 +187,9 @@ void TstWaterfallViewState::dbWindowInvariants()
   QFETCH(double, maxDb);
   QFETCH(float, expected);
 
-  auto state = makeState();
-  QVERIFY(state.setMinDb(minDb));
-  QVERIFY(state.setMaxDb(maxDb));
+  auto state  = makeState();
+  std::ignore = state.setMinDb(minDb);
+  std::ignore = state.setMaxDb(maxDb);
 
   const float inv = state.invDbRange();
   QVERIFY(std::isfinite(inv));

@@ -45,7 +45,7 @@ using Widgets::WaterfallTicks::AxisTicks;
 
 static constexpr float kMarkerFloorDb = -100.0f;
 static constexpr double kFallbackFps  = 24.0;
-static constexpr double kLn10         = 2.302585092994046;
+static constexpr double kOverlayLn10  = 2.302585092994046;
 
 //--------------------------------------------------------------------------------------------------
 // Construction
@@ -233,7 +233,7 @@ double Widgets::WaterfallOverlay::freqFromWorld(const double w) const
   if (!m_axis.logActive)
     return w;
 
-  return std::exp(w * kLn10);
+  return std::exp(w * kOverlayLn10);
 }
 
 /**

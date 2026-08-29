@@ -132,13 +132,15 @@ inline void appendEllipse(QPainterPath& path,
  * @brief Appends a Canvas2D-style arcTo: the tangent arc of radius r joining the segment that
  *        arrives at (x1, y1) to the one leaving towards (x2, y2). Degenerate geometry (an empty
  *        path, a zero-length leg, a straight or reversed corner) falls back to a plain lineTo.
+ *        The element-count probe is deliberate: QPainterPath::isEmpty() is also true for a path
+ *        holding a lone moveTo, whose current point must still seed the tangent solve.
  */
 inline void appendArcTo(QPainterPath& path, qreal x1, qreal y1, qreal x2, qreal y2, qreal r)
 {
   if (r < 0.0)
     return;
 
-  if (path.isEmpty()) {
+  if (path.elementCount() == 0) {
     path.moveTo(x1, y1);
     return;
   }

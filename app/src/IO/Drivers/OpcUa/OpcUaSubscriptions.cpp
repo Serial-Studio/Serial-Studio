@@ -27,10 +27,10 @@
 
 #include "SSAssert.h"
 
-static constexpr int kWatchdogMs      = 1000;
-static constexpr int kSilenceFactor   = 6;
-static constexpr int kMinSilenceMs    = 3000;
-static constexpr qint64 kOpcUaNsPerMs = 1000000LL;
+static constexpr int kWatchdogMs             = 1000;
+static constexpr int kSilenceFactor          = 6;
+static constexpr int kMinSilenceMs           = 3000;
+static constexpr qint64 kSubscriptionNsPerMs = 1000000LL;
 
 //--------------------------------------------------------------------------------------------------
 // Construction and session binding
@@ -277,7 +277,7 @@ void IO::Drivers::OpcUaSubscriptions::onWatchdogTick()
 
   const auto now        = std::chrono::steady_clock::now().time_since_epoch();
   const qint64 nowNs    = std::chrono::duration_cast<std::chrono::nanoseconds>(now).count();
-  const qint64 silentMs = (nowNs - m_lastNotifyNs) / kOpcUaNsPerMs;
+  const qint64 silentMs = (nowNs - m_lastNotifyNs) / kSubscriptionNsPerMs;
   const qint64 budgetMs =
     qMax<qint64>(kMinSilenceMs, static_cast<qint64>(m_revisedInterval) * kSilenceFactor);
 

@@ -256,4 +256,6 @@ void TstCsvRows::hugeCellsScanInFullWithoutTruncation()
   QCOMPARE(static_cast<int>(CSV::firstTopLevelSeparator(QByteArrayView(row), ',')), kCellBytes + 2);
 }
 
+QTEST_APPLESS_MAIN(TstCsvRows)
+
 #include "tst_csv_rows.moc"
