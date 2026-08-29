@@ -458,7 +458,7 @@ Real-world applications of Serial Studio across industries, education, and hobby
 - Frames are stamped with the server's own source timestamps, so recordings follow the device clock
 
 **Hardware:** Any OPC UA server: Siemens S7-1200/1500, Beckhoff TwinCAT, CODESYS runtimes, WAGO, B&R, Schneider, or a gateway such as KEPServerEX, Ignition, or FactoryTalk Linx
-**Data Protocol:** OPC UA (IEC 62541) over `opc.tcp`, policy `None` endpoints only in this version, anonymous or username/password login
+**Data Protocol:** OPC UA (IEC 62541) over `opc.tcp`, six security policies from `None` to `Aes256_Sha256_RsaPss`, anonymous or username/password login
 **Note:** No tag-list export or vendor document needed. The browser is the importer
 **Example:** Watch a bottling line's filler level, capper torque, and pasteuriser zone temperatures on one dashboard, logged to CSV for batch records
 

@@ -33,7 +33,7 @@ sequenceDiagram
 
 A server advertises one **endpoint** per security configuration. Each endpoint pairs a **security policy** (`None`, `Basic256Sha256`, ...) with a **message security mode** (None, Sign, Sign & Encrypt). A client picks one endpoint and opens a secure channel with it.
 
-Serial Studio bundles its own OPC UA stack with encryption built in, so every endpoint a server advertises is reachable. Five security policies are supported: `None`, `Basic128Rsa15`, `Basic256`, `Basic256Sha256`, `Aes128_Sha256_RsaOaep` and `Aes256_Sha256_RsaPss`. Each secure policy can be used in **Sign** (messages are authenticated) or **Sign & Encrypt** (authenticated and confidential). Nothing is installed on the machine and nothing is taken from the system: the stack ships inside the application, so the same build behaves the same way on every computer.
+Serial Studio bundles its own OPC UA stack with encryption built in, so every endpoint a server advertises is reachable. Six security policies are supported: `None`, `Basic128Rsa15`, `Basic256`, `Basic256Sha256`, `Aes128_Sha256_RsaOaep` and `Aes256_Sha256_RsaPss`. Each secure policy can be used in **Sign** (messages are authenticated) or **Sign & Encrypt** (authenticated and confidential). Nothing is installed on the machine and nothing is taken from the system: the stack ships inside the application, so the same build behaves the same way on every computer.
 
 `Basic128Rsa15` and `Basic256` are **deprecated** by the OPC Foundation, which no longer considers SHA-1 and RSA-1.5 safe. They are offered because field controllers still ship them, they are labelled as deprecated everywhere they appear, and they are never chosen automatically.
 
