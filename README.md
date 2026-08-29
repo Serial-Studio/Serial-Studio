@@ -249,7 +249,7 @@ Serial Studio is developed and maintained by [Alex Spataru](https://github.com/a
 If Serial Studio is useful to you, here are a few ways to support it:
 
 - [Donate via PayPal](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE): keeps the project active.
-- [Buy a commercial license](https://serial-studio.com): required for any commercial use, including GPL builds compiled from source. Includes Pro features and priority support.
+- [Buy a commercial license](https://serial-studio.com): unlocks Pro features, official binaries, and priority support. GPL builds compiled from source are governed by the GPLv3 alone, with no additional restrictions.
 - [Become an affiliate](https://store.serial-studio.com/affiliates): a good fit for content creators who want to earn a commission by referring new customers.
 
 Commercial licenses directly fund development, bug fixes, and new features.
@@ -258,7 +258,7 @@ Commercial licenses directly fund development, bug fixes, and new features.
 
 Serial Studio uses a dual-license model that separates open source usage from commercial distribution:
 
-- [LICENSE.md](LICENSE.md): summary of the dual-license structure and usage terms.
+- [LICENSE.md](LICENSE.md): overview of the dual-license structure, routing to the full license documents.
 - [LICENSES/GPL-3.0-or-later.txt](LICENSES/GPL-3.0-or-later.txt): full GNU GPLv3 text for open source source code.
 - [LICENSES/LicenseRef-SerialStudio-Commercial.txt](LICENSES/LicenseRef-SerialStudio-Commercial.txt): full terms for proprietary features and official binaries.
 
@@ -270,17 +270,17 @@ The table below shows licensing, feature access, and obligations for each editio
 
 | Feature / use case     | GPL version *(build it yourself)*    | Trial version *(official binary)*    | Pro version *(activated official binary)*   |
 |------------------------|--------------------------------------|--------------------------------------|---------------------------------------------|
-| **Commercial use**     | ❌ Personal, educational, OSS only   | ❌ Evaluation only                   | ✅ Fully licensed                            |
+| **Commercial use**     | ✅ Permitted under GPLv3             | ❌ Evaluation only                   | ✅ Fully licensed                            |
 | **Official support**   | ❌ Community only                    | ❌ None                              | ✅ Priority support                          |
 | **Pro features**       | ❌ Not included                      | ✅ Included                          | ✅ Included                                  |
 | **Usage restrictions** | Must comply with GPL and Qt terms    | 14-day trial, no redistribution      | Bound by commercial license terms           |
 | **Precompiled binary** | ❌ Must build from source            | ✅ Provided for trial only           | ✅ Provided                                  |
 | **Qt licensing**       | Requires GPL-compatible Qt           | Qt licensing covered by vendor       | Qt licensing covered by vendor              |
 | **Activation system**  | ❌ Not applicable                    | ✅ Trial disables after 14 days      | ✅ Requires a valid license key              |
-| **Business use**       | ❌ Requires a Pro license            | ❌ Prohibited                        | ✅ Fully allowed                             |
+| **Business use**       | ✅ Permitted (no Pro features)       | ❌ Evaluation only                   | ✅ Fully allowed                             |
 | **Best for**           | OSS devs, students, contributors     | Hobbyists, personal evaluation       | Businesses, teams, commercial products      |
 
-The GPL build is intended for personal, educational, and open source projects; commercial use of any edition requires a Pro license, even if you compile from source. Pro features and official binaries are proprietary and need a commercial license for anything beyond personal evaluation. Seeing the source code does not grant GPL rights unless a file is explicitly licensed that way.
+The GPL build carries the full GPLv3 grant: use for any purpose, commercial use included, with no restrictions beyond the GPL's own terms. It excludes the Pro modules. Pro features and official binaries are proprietary; using them beyond the 14-day trial requires a commercial license. A file's SPDX header states its license; files marked commercial-only carry no GPL rights.
 
 ## Contributing
 

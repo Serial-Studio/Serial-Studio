@@ -6,11 +6,7 @@ Serial Studio uses a dual-license model to balance open source collaboration wit
 
 ### GNU General Public License v3.0 (GPLv3)
 
-The GPLv3 covers the open source portions of the Serial Studio codebase. It applies when all of these are true:
-
-- The build is compiled from source.
-- No Pro modules are included.
-- All linked dependencies (including Qt) are GPL-compatible.
+The GPLv3 covers every file whose SPDX header includes `GPL-3.0-or-later`. A build that contains only those files — the default build configuration — is GPLv3 software, usable for any purpose, commercial use included. Distributing such a build requires GPL-compatible dependencies, including a GPL-compatible Qt edition.
 
 Under GPLv3 you can use, study, modify, and redistribute Serial Studio freely, but any derivative work has to be released under GPLv3 as well. There is no warranty.
 
@@ -19,9 +15,9 @@ Reference: <https://www.gnu.org/licenses/gpl-3.0.html>
 
 ### Serial Studio Commercial License
 
-The Commercial License covers all official pre-built binaries, builds that include Pro modules, and any commercial use of Serial Studio. It's required for:
+The Commercial License covers the Pro module source code and builds that include Pro modules; the official pre-built binaries are covered by the EULA. Beyond the 14-day trial, it's required for:
 
-- Commercial, institutional, or enterprise deployment.
+- Use of Pro features in any setting.
 - Redistribution of official builds.
 - Access to Pro-gated features (MQTT, Modbus, CAN Bus, MDF4 export, 3D visualization, and the licensing subsystem).
 
@@ -31,18 +27,17 @@ Full text: `LICENSES/LicenseRef-SerialStudio-Commercial.txt`
 
 ### Full license agreement
 
-The central legal document covering both license types is `LICENSE.md` in the project root. It details:
+`LICENSE.md` in the project root routes to the full legal documents:
 
-- The dual-license structure and where the boundaries lie.
-- Trial limitations and the activation policy.
-- Qt licensing requirements for redistribution.
-- The Contributor License Agreement (CLA).
-- Trademark use and forking restrictions.
-- Enforcement and DMCA policy.
+- `LICENSES/GPL-3.0-or-later.txt` for GPL builds.
+- `LICENSES/LicenseRef-SerialStudio-Commercial.txt` for the Pro module sources.
+- `EULA.md` for official binaries, including the per-release 14-day trial.
+- `TRADEMARKS.md` for the name and logo policy.
+- `CONTRIBUTING.md` for the Contributor License Agreement (CLA).
 
 ## What you can do
 
-- Use the GPL version for personal, educational, and open source projects.
+- Use the GPL version for any purpose, commercial use included, under GPLv3 terms.
 - Modify and redistribute the source code under GPLv3.
 - Use the Pro version commercially with a valid Commercial License.
 - Evaluate Pro features during the 14-day trial.
@@ -54,7 +49,7 @@ The central legal document covering both license types is `LICENSE.md` in the pr
 - Remove or bypass license checks or activation mechanisms.
 - Redistribute Pro binaries without written authorization.
 - Include or link Pro modules into a GPL build.
-- Use Pro features in commercial or enterprise settings without a Commercial License.
+- Use Pro features without a commercial license or an active trial.
 
 ## Contributor License Agreement (CLA)
 
@@ -70,9 +65,11 @@ For a breakdown of features available under each license tier, see [Pro vs Free 
 
 ## License files
 
-- `LICENSE.md`: full dual-license agreement.
+- `LICENSE.md`: overview of the dual-license structure.
 - `LICENSES/GPL-3.0-or-later.txt`: GPLv3 license text.
-- `LICENSES/LicenseRef-SerialStudio-Commercial.txt`: Commercial License terms.
+- `LICENSES/LicenseRef-SerialStudio-Commercial.txt`: Commercial Source License terms.
+- `EULA.md`: End User License Agreement for the official binaries.
+- `TRADEMARKS.md`: trademark policy.
 
 For commercial licensing or legal questions, email alex@serial-studio.com.
 

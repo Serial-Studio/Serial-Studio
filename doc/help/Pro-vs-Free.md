@@ -9,7 +9,7 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 - All standard widgets and visualization.
 - Full project editor and dashboard customization.
 - CSV export and playback.
-- Intended for personal, educational, and open source projects.
+- Licensed under the GPLv3: usable for any purpose, commercial use included.
 
 **Pro version:**
 - Everything in the free version, plus:
@@ -21,7 +21,7 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 - Historian recording, browsing, and PDF reports.
 - File transfers over XMODEM, YMODEM, and ZMODEM.
 - In-app AI Assistant (bring your own API key).
-- Commercial use rights.
+- Official binaries under proprietary license terms, with no copyleft obligations.
 - Email support.
 
 ## Complete Feature Comparison
@@ -96,7 +96,7 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 | | Linux (x64, AppImage/Flatpak) | ✅ | ✅ |
 | **Licensing** | | | |
 | | Personal/Educational Use | ✅ | ✅ |
-| | Commercial Use | ❌ | ✅ |
+| | Commercial Use | ✅ (under GPLv3 terms) | ✅ |
 | | Open Source Projects | ✅ | ✅ |
 | | Source Code Access (GPL modules) | ✅ | ✅ |
 | **Distribution** | | | |
@@ -209,7 +209,7 @@ function parse(frame) {
 - Siemens, Beckhoff, CODESYS, WAGO, B&R, and Schneider controllers
 - Batch logging with the server's own source timestamps
 
-**Note:** The bundled OPC UA backend is built without encryption, so this version connects to policy `None` endpoints only.
+**Note:** The bundled OPC UA stack includes encryption: six security policies from `None` to `Aes256_Sha256_RsaPss`, each secure policy in Sign or Sign & Encrypt mode.
 
 **Learn more:** [OPC UA Driver](Drivers-OPC-UA.md)
 
@@ -431,22 +431,20 @@ deployment writes are compiled out of GPL builds.
 
 **Learn more:** [Operator Deployments](Operator-Deployments.md)
 
-### Commercial Use Rights
+### License Terms
 
 **Free (GPLv3):**
-- ❌ **Not permitted** for commercial use
-- ❌ Cannot use in business/enterprise
-- ❌ Cannot sell products using Serial Studio
-- ❌ Cannot use for internal business tools
+- ✅ Usable for any purpose, commercial and business use included
+- ✅ Modify and redistribute under GPLv3 terms
+- ❌ No Pro features (see the comparison table above)
+- ❌ Community support only
 
 **Pro License:**
-- ✅ Full commercial use rights
-- ✅ Enterprise deployments
-- ✅ Internal business tools
-- ✅ Product integration
-- ✅ Revenue-generating applications
+- ✅ All Pro features and official binaries
+- ✅ Proprietary license terms, no copyleft obligations
+- ✅ Email support and priority bug fixes
 
-**Important:** Even if you compile from source (GPL modules only), commercial use requires a Pro license per the license agreement.
+A GPL build compiled from source is governed by the GPLv3 alone. Businesses choose Pro for the features, the supported official binaries, and the commercial license terms.
 
 ## Choosing a version
 
@@ -456,14 +454,14 @@ deployment writes are compiled out of GPL builds.
 - Personal and educational projects.
 - Open source software development.
 - The core protocols (Serial, TCP/UDP, BLE).
-- Non-commercial use where the standard widgets are sufficient.
+- Any use, commercial included, where the core protocols and standard widgets are sufficient.
 
 Common cases: Arduino projects, ESP32/ESP8266 development, learning embedded
-systems, non-commercial university research, and home automation.
+systems, university research, and home automation.
 
 ### Pro adds:
 
-- Commercial and business use rights.
+- Official binaries under proprietary license terms.
 - MQTT, Modbus, CAN Bus, OPC UA, and Audio Input.
 - Raw USB (bulk/isochronous via libusb), HID, and Process I/O.
 - 3D plots, Waterfall (spectrogram), Canvas, and live Image View (camera feeds).
@@ -527,10 +525,11 @@ test-stand licenses. See [Offline Activation](Offline-Activation.md).
 
 ## Academic use
 
-There is no separate academic discount. Students and educators working on
-personal, non-commercial projects can use the GPLv3 source build for free;
-it covers coursework, thesis work, and personal research. Universities and
-research institutions buy commercial licenses like any other organization.
+There is no separate academic discount. Students, educators, and researchers
+can use the GPLv3 source build for free; it covers coursework, thesis work,
+and research that the core protocols and standard widgets support. Universities
+and research institutions buy commercial licenses when they need Pro features,
+official binaries, or support, like any other organization.
 
 ## Earning a license through contributions
 
@@ -550,7 +549,7 @@ Contributors to the Serial Studio project can receive a free Pro license.
 
 ### Can I use the free version commercially if I compile from source?
 
-**No.** The GPL code is for non-commercial use only. Commercial use requires a Pro license, even if you build from source with GPL modules only.
+**Yes.** A build compiled from source with GPL modules only is GPLv3 software, and the GPLv3 permits commercial use. It excludes the Pro features; businesses that need those, the official binaries, or email support buy a Pro license or evaluate with the 14-day trial.
 
 ### What happens if my trial expires?
 
@@ -667,7 +666,7 @@ Yes, for Pro customers. Contact alex@serial-studio.com for rates and availabilit
 | **Protocols** | Basic (Serial, Network, BLE) | Advanced (MQTT, Modbus, CAN, OPC UA, Audio, Raw USB, HID, Process I/O) |
 | **Widgets** | Standard | Standard + 3D Plot, XY Plot, Waterfall, Image View, Canvas, Output widgets |
 | **Export** | CSV | CSV + MDF4 |
-| **Commercial use** | ❌ | ✅ |
+| **Commercial use** | ✅ (GPLv3 terms) | ✅ |
 | **Support** | Community | Email + Community |
 | **Cost** | Free | Monthly, yearly, or lifetime license |
 

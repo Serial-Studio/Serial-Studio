@@ -55,7 +55,7 @@ See [Pro vs Free](Pro-vs-Free.md) for a detailed comparison.
 
 **Official binaries:** yes, with a Pro license. Commercial use covers business use, revenue-generating projects, client-facing systems, and grant- or privately-funded research.
 
-**GPL build:** no. Serial Studio's license terms reserve commercial use for Pro license holders, even when you build from source with GPL modules only. GPL builds are intended for personal, educational, and open source projects, and they don't include Pro features like MQTT, Modbus, CAN Bus, or 3D visualization.
+**GPL build:** yes. A build compiled from source with GPL modules only is GPLv3 software, and the GPLv3 permits commercial use. It doesn't include Pro features like MQTT, Modbus, CAN Bus, or 3D visualization; businesses that need those, the official binaries, or email support buy a Pro license or evaluate with the 14-day trial.
 
 See the [License Agreement](License-Agreement.md) for the full dual-licensing details.
 
@@ -517,7 +517,7 @@ Current packages bundle their own glibc and run on any distribution from the Deb
 | Historian (SQLite)               | ❌                         | ✅                             |
 | File transfer (X/Y/ZMODEM)       | ❌                         | ✅                             |
 | DBC file import (CAN)            | ❌                         | ✅                             |
-| Commercial use                   | ❌ Non-commercial only     | ✅                             |
+| Commercial use                   | ✅ Under GPLv3 terms       | ✅                             |
 | Priority support                 | ❌                         | ✅                             |
 | Source availability              | ✅ Open source             | ⚠️ Visible but proprietary     |
 
@@ -544,7 +544,7 @@ After 14 days:
 
 ### I'm a student or educator. Is there a discount?
 
-There is no separate academic discount. For personal, non-commercial coursework and research, the GPLv3 source build is free and covers that use. Universities and research institutions buy commercial licenses like any other organization.
+There is no separate academic discount. For coursework and research that the core protocols and standard widgets support, the GPLv3 source build is free and covers that use. Universities and research institutions buy commercial licenses when they need Pro features, official binaries, or support, like any other organization.
 
 ### Can I use Pro features in open source projects?
 
