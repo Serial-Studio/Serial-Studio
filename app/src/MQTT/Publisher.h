@@ -43,6 +43,7 @@
 #  include "DataModel/FrameConsumer.h"
 #  include "IO/HAL_Driver.h"
 #  include "MQTT/CredentialVault.h"
+#  include "MQTT/SparkplugPublisher.h"
 #  include "MQTT/TlsIdentity.h"
 
 namespace MQTT {
@@ -55,6 +56,7 @@ struct BrokerConfig {
   bool sslEnabled                           = false;
   bool cleanSession                         = true;
   bool publishNotifications                 = false;
+  bool sparkplugEnabled                     = false;
   int mode                                  = 0;
   int scriptLanguage                        = 0;
   int peerVerifyDepth                       = 10;
@@ -71,6 +73,9 @@ struct BrokerConfig {
   QString notificationTopic;
   QString scriptCode;
   QString scriptTopic;
+  QString sparkplugGroupId;
+  QString sparkplugEdgeNode;
+  QString sparkplugDeviceId;
   QByteArray alpnProtocol;
   QSslKey clientPrivateKey;
   QSslCertificate clientCertificate;
@@ -132,25 +137,34 @@ protected:
 
 public slots:
   void setTemplateFrame(int sourceId, const DataModel::Frame& frame);
+  void setStructureGeneration(quint64 generation);
 
 private slots:
   void onClientStateChanged(QMqttClient::ClientState state);
   void onClientErrorChanged(QMqttClient::ClientError error);
+  void onSparkplugCommand(const QMqttMessage& message);
 
 private:
   [[nodiscard]] Async::Task* buildReconnectFlow();
+  [[nodiscard]] bool sparkplugActive() const;
   void publishBatchAsJson(const std::vector<DataModel::Frame>& items);
   void publishBatchAsCsv(const std::vector<DataModel::Frame>& items);
   void expandBlocks(const std::vector<DataModel::DataBlockPtr>& blocks);
   void rebuildCsvSchema(const DataModel::Frame& frame);
   void recompileScriptIfNeeded();
+  void configureSparkplugWill();
+  void publishSparkplugBirth();
+  void subscribeSparkplugCommands();
+  void discardSuppressedPayloads();
+  void registerSparkplugMetrics(const DataModel::Frame& frame);
+  void publishSparkplugBlocks(const std::vector<DataModel::DataBlockPtr>& blocks);
 
 private:
   std::map<int, DataModel::FrameTemplate> m_templates;
   // One publish carries at most this many samples; a dense block alone can exceed it
   static constexpr std::size_t kMaxExpandedSamples = 4096;
   std::vector<DataModel::Frame> m_expanded;
-  void publishAndCount(const QMqttTopicName& topic, const QByteArray& payload);
+  bool publishAndCount(const QMqttTopicName& topic, const QByteArray& payload);
   void applyClientPropertiesUnsafe();
   static QString describeMqttError(QMqttClient::ClientError error);
   static QString escapeCsvField(const QString& s);
@@ -177,6 +191,9 @@ private:
   bool m_csvHeaderDirty;
   QMap<int, QString> m_csvLastFinal;
   DataModel::ExportSchema m_csvSchema;
+
+  quint64 m_pendingStructureGeneration;
+  SparkplugPublisher m_sparkplug;
 };
 
 /**
@@ -296,6 +313,22 @@ class Publisher : public DataModel::FrameConsumer<DataModel::DataBlockPtr> {
              READ scriptLanguage
              WRITE setScriptLanguage
              NOTIFY configurationChanged)
+  Q_PROPERTY(bool sparkplugEnabled
+             READ sparkplugEnabled
+             WRITE setSparkplugEnabled
+             NOTIFY configurationChanged)
+  Q_PROPERTY(QString sparkplugGroupId
+             READ sparkplugGroupId
+             WRITE setSparkplugGroupId
+             NOTIFY configurationChanged)
+  Q_PROPERTY(QString sparkplugEdgeNodeId
+             READ sparkplugEdgeNodeId
+             WRITE setSparkplugEdgeNodeId
+             NOTIFY configurationChanged)
+  Q_PROPERTY(QString sparkplugDeviceId
+             READ sparkplugDeviceId
+             WRITE setSparkplugDeviceId
+             NOTIFY configurationChanged)
   Q_PROPERTY(QString modeLabel
              READ modeLabel
              NOTIFY configurationChanged)
@@ -383,6 +416,10 @@ public:
   [[nodiscard]] QString scriptCode() const;
   [[nodiscard]] QString scriptTopic() const;
   [[nodiscard]] int scriptLanguage() const noexcept;
+  [[nodiscard]] bool sparkplugEnabled() const noexcept;
+  [[nodiscard]] QString sparkplugGroupId() const;
+  [[nodiscard]] QString sparkplugDeviceId() const;
+  [[nodiscard]] QString sparkplugEdgeNodeId() const;
   [[nodiscard]] QString modeLabel() const;
   [[nodiscard]] QString brokerEndpoint() const;
   [[nodiscard]] quint64 messagesSent() const noexcept;
@@ -433,6 +470,10 @@ public slots:
   void setScriptCode(const QString& code);
   void setScriptTopic(const QString& topic);
   void setScriptLanguage(const int language);
+  void setSparkplugEnabled(const bool enabled);
+  void setSparkplugGroupId(const QString& groupId);
+  void setSparkplugDeviceId(const QString& deviceId);
+  void setSparkplugEdgeNodeId(const QString& edgeNodeId);
   void hotpathTxRawFrame(int deviceId, const IO::CapturedDataPtr& data);
 
   void ingestBlock(const DataModel::DataBlockPtr& block);
@@ -497,6 +538,11 @@ private:
   QString m_scriptTopic;
   int m_scriptLanguage;
 
+  bool m_sparkplugEnabled;
+  QString m_sparkplugGroupId;
+  QString m_sparkplugEdgeNodeId;
+  QString m_sparkplugDeviceId;
+
   bool m_alpnEnabled;
   QString m_alpnProtocol;
   QString m_keyPassphrase;
@@ -549,6 +595,10 @@ private:
   static constexpr QLatin1StringView kKeyPrivateKeyPath{"privateKeyPath"};
   static constexpr QLatin1StringView kKeyAlpnEnabled{"alpnEnabled"};
   static constexpr QLatin1StringView kKeyAlpnProtocol{"alpnProtocol"};
+  static constexpr QLatin1StringView kKeySparkplugEnabled{"sparkplugEnabled"};
+  static constexpr QLatin1StringView kKeySparkplugGroupId{"sparkplugGroupId"};
+  static constexpr QLatin1StringView kKeySparkplugDeviceId{"sparkplugDeviceId"};
+  static constexpr QLatin1StringView kKeySparkplugEdgeNodeId{"sparkplugEdgeNodeId"};
 };
 
 }  // namespace MQTT

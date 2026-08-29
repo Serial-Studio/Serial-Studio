@@ -16,8 +16,10 @@ You can also browse and download examples directly from Serial Studio via the **
 | [csv2wav](csv2wav) | Convert Audio I/O recordings to WAV files | Intermediate | Yes |
 | [Dual Drone Telemetry](Dual%20Drone%20Telemetry) | Multi-source two-drone simulator with synthetic camera feeds | Advanced | Yes |
 | [EM Wave Simulator](EM%20Wave%20Simulator) | Propagating electromagnetic plane wave visualizer | Advanced | Yes |
+| [EtherNet-IP Example](EtherNet-IP%20Example) | Allen-Bradley Logix tag polling over EtherNet/IP (no simulator; real hardware or emulator) | Advanced | Yes |
 | [HexadecimalADC](HexadecimalADC) | Binary ADC data with CRC-16 and FFT analysis | Intermediate | |
 | [Hydrogen](Hydrogen) | Hydrogen 1s orbital Monte Carlo 3D visualization | Advanced | Yes |
+| [IEC 104 Example](IEC%20104%20Example) | IEC 60870-5-104 substation simulator with interrogation-driven point discovery | Intermediate | Yes |
 | [IMU Simulator](IMU%20Simulator) | Batched multi-frame IMU data parsing demo | Intermediate | |
 | [ISS Tracker](ISS%20Tracker) | Real-time International Space Station position tracker | Beginner | |
 | [LorenzAttractor](LorenzAttractor) | Lorenz attractor chaotic system simulation | Advanced | Yes |
@@ -32,6 +34,8 @@ You can also browse and download examples directly from Serial Studio via the **
 | [Protobuf Example](Protobuf%20Example) | Protocol Buffers schema import with binary auto-detect parsing | Intermediate | |
 | [PulseSensor](PulseSensor) | Heart rate PPG sensor with signal filtering | Beginner | |
 | [RC Plane Simulator](RC%20Plane%20Simulator) | RC plane flight telemetry simulator | Intermediate | |
+| [S7 PLC Example](S7%20PLC%20Example) | Siemens S7comm PLC simulator over ISO-on-TCP with absolute addressing | Intermediate | Yes |
+| [Sparkplug Example](Sparkplug%20Example) | Sparkplug edge node with birth certificates, aliases, and rebirth handling | Intermediate | Yes |
 | [System Monitor](System%20Monitor) | Live CPU, memory, disk, and network dashboard | Intermediate | Yes |
 | [Testo T549i](Testo%20T549i) | BLE pressure probe with Control Loop handshake and Lua unit transforms | Intermediate | |
 | [TinyGPS](TinyGPS) | GPS location tracker with map widget | Beginner | |

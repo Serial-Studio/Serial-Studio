@@ -95,6 +95,15 @@ inline QString busTypeIcon(int busType)
     case SerialStudio::BusType::OpcUa:
       name = "opcua";
       break;
+    case SerialStudio::BusType::S7:
+      name = "s7";
+      break;
+    case SerialStudio::BusType::EthernetIp:
+      name = "ethernetip";
+      break;
+    case SerialStudio::BusType::Iec104:
+      name = "iec104";
+      break;
 #endif
     default:
       break;

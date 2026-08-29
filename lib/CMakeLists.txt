@@ -432,6 +432,30 @@ if(NOT COMMAND target_link_open62541)
 endif()
 
 #---------------------------------------------------------------------------------------------------
+# Industrial PLC stacks: libplctag (EtherNet/IP), Pro edition only (spec 0073)
+#---------------------------------------------------------------------------------------------------
+#
+# It is fetched at configure time by its own module rather than vendored, so the repository carries
+# only the Serial-Studio-authored CMakeLists that assembles it. It is not built on a GPL configure:
+# unlike open62541 it has no unit-tier consumer, so there is nothing to build for a suite that would
+# never link it. The S7comm client needs no entry here at all: it is first-party Qt-Core code under
+# app/src/IO/Drivers/S7, like the IEC 60870-5-104 stack beside it.
+#
+if(SS_ENABLE_EIP AND BUILD_COMMERCIAL)
+  add_subdirectory(libplctag)
+endif()
+
+#
+# Defined unconditionally, exactly like target_link_open62541(): app/CMakeLists.txt calls it in
+# every configuration, and an undefined command is a hard configure error in the builds that carry
+# no PLC stack.
+#
+if(NOT COMMAND target_link_libplctag)
+  function(target_link_libplctag TARGET)
+  endfunction()
+endif()
+
+#---------------------------------------------------------------------------------------------------
 # libusb (Pro edition only)
 #---------------------------------------------------------------------------------------------------
 #

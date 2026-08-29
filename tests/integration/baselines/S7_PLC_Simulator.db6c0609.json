@@ -1,0 +1,182 @@
+{
+  "actions": [],
+  "changeDrivenTransforms": false,
+  "controlScriptCode": "/**\n * Siemens S7 PLC Simulator - Control Loop\n *\n * Launches the bundled Python simulator (s7_plc_simulator.py) automatically just before the\n * connection opens (via onConnect), so the example works without running anything by hand. The\n * helper process is stopped by Serial Studio when the device is disconnected, when the project\n * changes, or when the app quits.\n *\n * The interpreter is resolved cross-platform: \"python3\" is tried first (Linux/macOS), falling\n * back to \"python\" (typical on Windows).\n *\n * The S7 ISO-TSAP port is fixed at 102 by the protocol, and ports below 1024 are privileged on\n * macOS and Linux. If the auto-started helper cannot bind port 102, start it once with elevated\n * privileges (sudo python3 s7_plc_simulator.py) before pressing Connect.\n */\n\nvar helperPid = -1;\n\nfunction startHelper() {\n  var dir = system.projectDir();\n  if (!dir.ok)\n    return;\n\n  var script = dir.result.directory + \"/s7_plc_simulator.py\";\n\n  var r = system.exec(\"python3\", { args: [\"-u\", script, \"--host\", \"127.0.0.1\", \"--port\", \"102\"], workingDir: dir.result.directory });\n  if (!r.ok)\n    r = system.exec(\"python\", { args: [\"-u\", script, \"--host\", \"127.0.0.1\", \"--port\", \"102\"], workingDir: dir.result.directory });\n\n  if (r.ok)\n    helperPid = r.result.processId;\n}\n\nfunction onConnect() {\n  startHelper();\n}\n\nfunction setup() {}\n\nfunction loop() {\n  delay(1000);\n}\n",
+  "frozen": true,
+  "groups": [
+    {
+      "datasets": [
+        {
+          "datasetId": 0,
+          "displayFormat": "0d",
+          "displayTickCount": 5,
+          "fft": false,
+          "fftMax": 0,
+          "fftMin": 0,
+          "fftSamples": 256,
+          "fftSamplingRate": 100,
+          "fftWindow": 5,
+          "graph": true,
+          "groupId": 0,
+          "index": 1,
+          "led": false,
+          "ledHigh": 1,
+          "log": true,
+          "numericValue": 0,
+          "plotMax": 0,
+          "plotMin": 0,
+          "title": "Tank_Level",
+          "uniqueId": 1,
+          "units": "%",
+          "value": "",
+          "widget": "",
+          "widgetMax": 0,
+          "widgetMin": 0,
+          "xAxis": -2
+        },
+        {
+          "datasetId": 1,
+          "displayFormat": "0d",
+          "displayTickCount": 5,
+          "fft": false,
+          "fftMax": 0,
+          "fftMin": 0,
+          "fftSamples": 256,
+          "fftSamplingRate": 100,
+          "fftWindow": 5,
+          "graph": true,
+          "groupId": 0,
+          "index": 2,
+          "led": false,
+          "ledHigh": 1,
+          "log": true,
+          "numericValue": 0,
+          "plotMax": 0,
+          "plotMin": 0,
+          "title": "Motor_Speed",
+          "uniqueId": 2,
+          "units": "RPM",
+          "value": "",
+          "widget": "",
+          "widgetMax": 0,
+          "widgetMin": 0,
+          "xAxis": -2
+        },
+        {
+          "datasetId": 2,
+          "displayFormat": "0d",
+          "displayTickCount": 5,
+          "fft": false,
+          "fftMax": 0,
+          "fftMin": 0,
+          "fftSamples": 256,
+          "fftSamplingRate": 100,
+          "fftWindow": 5,
+          "graph": false,
+          "groupId": 0,
+          "index": 3,
+          "led": true,
+          "ledHigh": 1,
+          "log": true,
+          "numericValue": 0,
+          "plotMax": 0,
+          "plotMin": 0,
+          "title": "Pump_Running",
+          "uniqueId": 3,
+          "units": "",
+          "value": "",
+          "widget": "",
+          "widgetMax": 1,
+          "widgetMin": 0,
+          "xAxis": -2
+        }
+      ],
+      "title": "DB1",
+      "uniqueId": 0,
+      "widget": "datagrid"
+    }
+  ],
+  "hexadecimalDelimiters": false,
+  "influxSink": {
+    "bucket": "",
+    "enabled": false,
+    "measurement": "serial_studio",
+    "org": "",
+    "url": ""
+  },
+  "luaFastMode": false,
+  "mqttPublisher": {
+    "alpnEnabled": false,
+    "alpnProtocol": "x-amzn-mqtt-ca",
+    "cleanSession": true,
+    "clientCertPath": "",
+    "customClientId": false,
+    "enabled": false,
+    "hostname": "127.0.0.1",
+    "keepAlive": 60,
+    "mode": 0,
+    "mqttVersion": 2,
+    "notificationTopic": "",
+    "peerVerifyDepth": 10,
+    "peerVerifyMode": 3,
+    "port": 1883,
+    "privateKeyPath": "",
+    "publishFrequency": 10,
+    "publishNotifications": false,
+    "scriptCode": "",
+    "scriptLanguage": 0,
+    "scriptTopic": "",
+    "sparkplugDeviceId": "",
+    "sparkplugEdgeNodeId": "",
+    "sparkplugEnabled": false,
+    "sparkplugGroupId": "",
+    "sslEnabled": false,
+    "sslProtocol": 5,
+    "topicBase": ""
+  },
+  "nextUniqueId": 4,
+  "plotTimeRange": 10,
+  "pointCount": 500,
+  "schemaVersion": 3,
+  "sources": [
+    {
+      "busType": 11,
+      "checksum": "",
+      "checksumAlgorithm": "",
+      "decoder": 3,
+      "decoderMethod": 3,
+      "frameDetection": 2,
+      "frameEnd": "",
+      "frameParserLanguage": 2,
+      "frameParserParams": {
+        "schema": [
+          {
+            "index": 0,
+            "name": "Tank_Level"
+          },
+          {
+            "index": 1,
+            "name": "Motor_Speed"
+          },
+          {
+            "index": 2,
+            "name": "Pump_Running"
+          }
+        ]
+      },
+      "frameParserTemplate": "s7",
+      "frameStart": "",
+      "hexadecimalDelimiters": false,
+      "sourceId": 0,
+      "title": "Siemens S7"
+    }
+  ],
+  "title": "Siemens S7 PLC Simulator",
+  "widgetSettings": {
+    "externalWindows": {
+      "data": []
+    }
+  },
+  "writerVersion": "4.0.3",
+  "writerVersionAtCreation": "4.0.3"
+}

@@ -399,6 +399,13 @@
         }
     ],
     "hexadecimalDelimiters": false,
+    "influxSink": {
+        "bucket": "",
+        "enabled": false,
+        "measurement": "serial_studio",
+        "org": "",
+        "url": ""
+    },
     "luaFastMode": false,
     "mqttPublisher": {
         "alpnEnabled": false,
@@ -421,6 +428,10 @@
         "scriptCode": "",
         "scriptLanguage": 0,
         "scriptTopic": "",
+        "sparkplugDeviceId": "",
+        "sparkplugEdgeNodeId": "",
+        "sparkplugEnabled": false,
+        "sparkplugGroupId": "",
         "sslEnabled": false,
         "sslProtocol": 5,
         "topicBase": ""
@@ -477,6 +488,7 @@
         "sensor/Dashboard Widgets/gyro/x": false,
         "sensor/Dashboard Widgets/gyro/y": false,
         "sensor/Dashboard Widgets/gyro/z": false,
+        "sensor/InfluxDB Sink": false,
         "sensor/MQTT Publisher": false,
         "sensor/Protobuf": true,
         "sensor/Protobuf/Frame Parser": false,

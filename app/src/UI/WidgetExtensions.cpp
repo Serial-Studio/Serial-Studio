@@ -151,10 +151,11 @@ QStringList UI::WidgetExtensions::hostContextNames()
       "Cpp_UI_WidgetExtensions Cpp_Misc_GraphicsBackend Cpp_Misc_HighDpiScaling "
       "Cpp_Misc_CrashTracker Cpp_Misc_BackupManager Cpp_Benchmark_Runner Cpp_IO_Audio "
       "Cpp_IO_CANBus Cpp_IO_Modbus Cpp_IO_USB Cpp_IO_HID Cpp_IO_Process Cpp_IO_Mqtt Cpp_IO_OpcUa "
+      "Cpp_IO_S7 Cpp_IO_Eip Cpp_IO_Iec104 "
       "Cpp_MQTT_Publisher Cpp_JSON_DBCImporter Cpp_JSON_ModbusMapImporter Cpp_Licensing_Trial "
       "Cpp_Licensing_LemonSqueezy Cpp_Licensing_OfflineLicense Cpp_Sessions_Export "
       "Cpp_Sessions_Player Cpp_Sessions_Manager Cpp_ShortcutGenerator Cpp_AI_Assistant "
-      "Cpp_GRPC_Server Cpp_Image_Export Cpp_Audio_Export")
+      "Cpp_InfluxDB_Export Cpp_GRPC_Server Cpp_Image_Export Cpp_Audio_Export")
       .split(QLatin1Char(' '), Qt::SkipEmptyParts);
   return names;
 }

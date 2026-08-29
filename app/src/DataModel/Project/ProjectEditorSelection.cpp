@@ -349,6 +349,18 @@ bool DataModel::ProjectEditor::selectMqttPublisherItem(QStandardItem* item)
 }
 
 /**
+ * @brief Routes selection of the single InfluxDB sink tree node.
+ */
+bool DataModel::ProjectEditor::selectInfluxSinkItem(QStandardItem* item)
+{
+  if (item != m_influxSinkItem || item == nullptr)
+    return false;
+
+  setCurrentView(InfluxSinkView);
+  return true;
+}
+
+/**
  * @brief Switches to the control-script view when its tree node is selected.
  */
 bool DataModel::ProjectEditor::selectControlScriptItem(QStandardItem* item)
@@ -391,7 +403,7 @@ void DataModel::ProjectEditor::onCurrentSelectionChanged(const QModelIndex& curr
     selectSourceParserItem(item) || selectSourceItem(item) || selectGroupItem(item)
     || selectGroupFolderItem(item) || selectDatasetItem(item) || selectActionItem(item)
     || selectOutputWidgetItem(item) || selectDataTableItem(item) || selectWorkspaceTreeItem(item)
-    || selectMqttPublisherItem(item) || selectControlScriptItem(item);
+    || selectMqttPublisherItem(item) || selectInfluxSinkItem(item) || selectControlScriptItem(item);
 
   if (!handled && m_rootItems.contains(item)) {
     setCurrentView(ProjectView);
@@ -524,6 +536,8 @@ QStandardItem* DataModel::ProjectEditor::resolveNavEntry(const NavEntry& entry) 
     }
     case KindMqttPublisher:
       return m_mqttPublisherItem;
+    case KindInfluxSink:
+      return m_influxSinkItem;
     case KindControlScript:
       return m_controlScriptItem;
     default:

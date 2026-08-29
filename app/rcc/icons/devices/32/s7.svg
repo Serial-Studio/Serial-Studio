@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" version="1.1">
+<g fill="none" fill-rule="evenodd">
+<rect x="2.5" y="4.5" width="19" height="15" rx="1.5" fill="rgb(69.01961%,75.686276%,83.137256%)" stroke="rgb(40.000001%,47.450981%,56.078434%)" stroke-width="1"/>
+<rect x="4.5" y="7.5" width="3" height="9" rx="0.5" fill="rgb(40.000001%,47.450981%,56.078434%)" fill-opacity="0.35" stroke="rgb(40.000001%,47.450981%,56.078434%)" stroke-width="0.75"/>
+<rect x="9.5" y="7.5" width="3" height="9" rx="0.5" fill="rgb(40.000001%,47.450981%,56.078434%)" fill-opacity="0.35" stroke="rgb(40.000001%,47.450981%,56.078434%)" stroke-width="0.75"/>
+<rect x="14.5" y="7.5" width="3" height="9" rx="0.5" fill="rgb(40.000001%,47.450981%,56.078434%)" fill-opacity="0.35" stroke="rgb(40.000001%,47.450981%,56.078434%)" stroke-width="0.75"/>
+<circle cx="6" cy="9.5" r="0.9" fill="rgb(100%,93.333334%,63.921571%)" stroke="rgb(72.941178%,60.784316%,28.235295%)" stroke-width="0.5"/>
+<circle cx="11" cy="9.5" r="0.9" fill="rgb(100%,93.333334%,63.921571%)" stroke="rgb(72.941178%,60.784316%,28.235295%)" stroke-width="0.5"/>
+<circle cx="16" cy="9.5" r="0.9" fill="rgb(100%,93.333334%,63.921571%)" stroke="rgb(72.941178%,60.784316%,28.235295%)" stroke-width="0.5"/>
+<path d="M 6 2.5 L 6 4.5 M 12 2.5 L 12 4.5 M 18 2.5 L 18 4.5" stroke="rgb(40.000001%,47.450981%,56.078434%)" stroke-width="1" stroke-linecap="round"/>
+<path d="M 4.5 21.5 L 19.5 21.5" stroke="rgb(40.000001%,47.450981%,56.078434%)" stroke-width="1" stroke-linecap="round"/>
+</g>
+</svg>

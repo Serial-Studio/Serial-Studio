@@ -338,6 +338,30 @@ Item {
       }
 
       //
+      // Multi-frame reassembly checkbox
+      //
+      Label {
+        text: qsTr("Multi-Frame Reassembly") + ":"
+        visible: Cpp_IO_CANBus.interfaceList.length > 0
+      } CheckBox {
+        id: _tpReassemblyCheck
+
+        Layout.leftMargin: -8
+        Layout.maximumHeight: 18
+        checked: Cpp_IO_CANBus.tpReassembly
+        visible: Cpp_IO_CANBus.interfaceList.length > 0
+        Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+        onCheckedChanged: {
+          if (Cpp_IO_CANBus.tpReassembly !== checked)
+            Cpp_IO_CANBus.tpReassembly = checked
+        }
+
+        ToolTip.delay: 500
+        ToolTip.visible: hovered
+        ToolTip.text: qsTr("Reassemble J1939 transport-protocol and ISO-TP multi-frame messages")
+      }
+
+      //
       // Import DBC button
       //
       Label {

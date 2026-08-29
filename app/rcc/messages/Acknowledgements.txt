@@ -647,3 +647,21 @@ Serial Studio bundles Mbed TLS 3.6.7 and links it statically. It supplies the
 cryptography and X.509 certificate handling behind the OPC UA security
 policies. The bundled copy is unmodified upstream source with the test,
 program and documentation trees removed; it lives in `lib/mbedtls`.
+
+## libplctag
+
+Copyright (C) libplctag contributors.
+
+libplctag is dual-licensed; Serial Studio uses it under the Mozilla Public
+License, Version 2.0. If a copy of the MPL was not distributed with this file,
+you can obtain one at
+
+    https://mozilla.org/MPL/2.0/
+
+Source: [https://github.com/libplctag/libplctag](https://github.com/libplctag/libplctag)
+
+Serial Studio uses libplctag for its EtherNet/IP/CIP client, reading tags from
+Allen-Bradley CompactLogix and ControlLogix controllers. The library is built
+from unmodified upstream source fetched at build time; the build definition
+lives in `lib/libplctag` of the Serial Studio repository. Under section 3.2 of
+the License, that same source is available from the project page above.

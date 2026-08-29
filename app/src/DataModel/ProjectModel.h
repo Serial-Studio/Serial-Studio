@@ -126,6 +126,10 @@ class ProjectModel : public QObject {
              READ mqttPublisher
              WRITE setMqttPublisher
              NOTIFY mqttPublisherChanged)
+  Q_PROPERTY(QJsonObject influxSink
+             READ influxSink
+             WRITE setInfluxSink
+             NOTIFY influxSinkChanged)
   Q_PROPERTY(QJsonObject diagramCollapse
              READ diagramCollapse
              NOTIFY diagramCollapseChanged)
@@ -180,6 +184,7 @@ signals:
   void customizeWorkspacesChanged();
   void lockedChanged();
   void mqttPublisherChanged();
+  void influxSinkChanged();
   void diagramCollapseChanged();
   void saveDialogCompleted(bool accepted);
   void importCompleted(bool accepted, const QString& savedPath);
@@ -281,6 +286,7 @@ public:
   [[nodiscard]] bool customizeWorkspaces() const noexcept;
   [[nodiscard]] const std::vector<TableDef>& tables() const noexcept;
   [[nodiscard]] const QJsonObject& mqttPublisher() const noexcept;
+  [[nodiscard]] const QJsonObject& influxSink() const noexcept;
 
   [[nodiscard]] qint64 mutationEpoch() const noexcept;
 
@@ -469,6 +475,7 @@ public slots:
 
   void setCustomizeWorkspaces(const bool enabled);
   void setMqttPublisher(const QJsonObject& config);
+  void setInfluxSink(const QJsonObject& config);
 
   Q_INVOKABLE int addWorkspace(const QString& title);
   Q_INVOKABLE int autoGenerateWorkspaces();
@@ -609,6 +616,8 @@ private:
   void resolveDatasetTransformLanguages();
   void resolveDatasetVirtualFlags();
   void loadWidgetSettingsAndWorkspaces(const QJsonObject& json);
+  void loadSinkConfigs(const QJsonObject& json);
+  void emitSinkConfigResets(bool hadMqttPublisher, bool hadInfluxSink);
   void stageDisplayTitle(const QString& key, const QString& title);
   void loadPointCount(const QJsonObject& json);
   void loadPlotTimeRange(const QJsonObject& json);
@@ -720,6 +729,7 @@ private:
   QJsonObject m_widgetSettings;
   QJsonObject m_widgetDisplay;
   QJsonObject m_mqttPublisher;
+  QJsonObject m_influxSink;
   QJsonObject m_treeExpansion;
   QJsonObject m_diagramCollapse;
 };

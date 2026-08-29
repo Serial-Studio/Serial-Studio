@@ -369,6 +369,7 @@ set(SOURCES
   src/DataModel/Scripting/NativeTemplates/NativeTemplateRegistry.cpp
   src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp
   src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp
+  src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp
   src/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp
   src/DataModel/Editors/JsCodeEditor.cpp
   src/DataModel/Editors/ControlScriptEditor.cpp
@@ -788,6 +789,9 @@ if(BUILD_COMMERCIAL)
     ${HEADERS}
     src/API/Handlers/ModbusHandler.h
     src/API/Handlers/OpcUaHandler.h
+    src/API/Handlers/S7Handler.h
+    src/API/Handlers/EipHandler.h
+    src/API/Handlers/Iec104Handler.h
     src/API/Handlers/CANBusHandler.h
     src/API/Handlers/MDF4ExportHandler.h
     src/API/Handlers/AudioHandler.h
@@ -795,18 +799,23 @@ if(BUILD_COMMERCIAL)
     src/API/Handlers/HIDHandler.h
     src/API/Handlers/USBHandler.h
     src/API/Handlers/MqttHandler.h
+    src/API/Handlers/InfluxHandler.h
     src/API/Handlers/NotificationsHandler.h
     src/API/Handlers/ProcessHandler.h
     src/API/Handlers/SessionsHandler.h
+    src/InfluxDB/LineProtocol.h
+    src/InfluxDB/Export.h
     src/MQTT/CredentialVault.h
     src/MQTT/Publisher.h
     src/MQTT/PublisherScript.h
     src/MQTT/PublisherScriptEditor.h
+    src/MQTT/SparkplugPublisher.h
     src/MQTT/TlsIdentity.h
     src/IO/Drivers/Audio.h
     src/Misc/Diagnostics/AudioChecks.h
     src/IO/Drivers/CANBus.h
     src/IO/Drivers/CANBus/CanBackends.h
+    src/IO/Drivers/CANBus/CanReassembly.h
     src/IO/Drivers/CANBus/GsUsbCanBackend.h
     src/IO/Drivers/CANBus/GsUsbProtocol.h
     src/IO/Drivers/CANBus/SlcanBackend.h
@@ -816,6 +825,8 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/USB.h
     src/IO/Drivers/Process.h
     src/IO/Drivers/MQTT.h
+    src/IO/Drivers/MQTT/SparkplugPayload.h
+    src/IO/Drivers/MQTT/SparkplugSession.h
     src/IO/Drivers/OpcUa.h
     src/IO/Drivers/OpcUaWire.h
     src/IO/Drivers/OpcUaTypes.h
@@ -823,6 +834,14 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/OpcUaSession.h
     src/IO/Drivers/OpcUaSecurity.h
     src/IO/Drivers/OpcUaTagModel.h
+    src/IO/Drivers/S7.h
+    src/IO/Drivers/S7Address.h
+    src/IO/Drivers/S7/IsoTsap.h
+    src/IO/Drivers/S7/S7Pdu.h
+    src/IO/Drivers/EthernetIp.h
+    src/IO/Drivers/Iec104.h
+    src/IO/Drivers/Iec104/Apci.h
+    src/IO/Drivers/Iec104/Asdu.h
     src/UI/Widgets/Plot3D.h
   src/UI/Widgets/Plot3D/Plot3DOverlay.h
   src/UI/Widgets/Plot3D/Plot3DStereo.h
@@ -907,6 +926,9 @@ if(BUILD_COMMERCIAL)
     ${SOURCES}
     src/API/Handlers/ModbusHandler.cpp
     src/API/Handlers/OpcUaHandler.cpp
+    src/API/Handlers/S7Handler.cpp
+    src/API/Handlers/EipHandler.cpp
+    src/API/Handlers/Iec104Handler.cpp
     src/API/Handlers/CANBusHandler.cpp
     src/API/Handlers/MDF4ExportHandler.cpp
     src/API/Handlers/AudioHandler.cpp
@@ -914,19 +936,24 @@ if(BUILD_COMMERCIAL)
     src/API/Handlers/HIDHandler.cpp
     src/API/Handlers/USBHandler.cpp
     src/API/Handlers/MqttHandler.cpp
+    src/API/Handlers/InfluxHandler.cpp
     src/API/Handlers/ProcessHandler.cpp
     src/API/Handlers/LicensingHandler.cpp
     src/API/Handlers/NotificationsHandler.cpp
     src/API/Handlers/SessionsHandler.cpp
+    src/InfluxDB/Export.cpp
     src/MQTT/CredentialVault.cpp
     src/MQTT/Publisher.cpp
     src/MQTT/PublisherScript.cpp
     src/MQTT/PublisherScriptEditor.cpp
+    src/MQTT/PublisherSparkplug.cpp
+    src/MQTT/SparkplugPublisher.cpp
     src/MQTT/TlsIdentity.cpp
     src/IO/Drivers/Audio.cpp
     src/Misc/Diagnostics/AudioChecks.cpp
     src/IO/Drivers/CANBus.cpp
     src/IO/Drivers/CANBus/CanBackends.cpp
+    src/IO/Drivers/CANBus/CanReassembly.cpp
     src/IO/Drivers/CANBus/GsUsbCanBackend.cpp
     src/IO/Drivers/CANBus/SlcanBackend.cpp
     src/IO/Drivers/CANBus/SeeedCanBackend.cpp
@@ -935,11 +962,22 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/USB.cpp
     src/IO/Drivers/Process.cpp
     src/IO/Drivers/MQTT.cpp
+    src/IO/Drivers/MQTT/MQTTSparkplug.cpp
+    src/IO/Drivers/MQTT/SparkplugPayload.cpp
+    src/IO/Drivers/MQTT/SparkplugSession.cpp
     src/IO/Drivers/OpcUa.cpp
     src/IO/Drivers/OpcUaMarshal.cpp
     src/IO/Drivers/OpcUaSession.cpp
     src/IO/Drivers/OpcUaSecurity.cpp
     src/IO/Drivers/OpcUaTagModel.cpp
+    src/IO/Drivers/S7.cpp
+    src/IO/Drivers/S7Address.cpp
+    src/IO/Drivers/S7/IsoTsap.cpp
+    src/IO/Drivers/S7/S7Pdu.cpp
+    src/IO/Drivers/EthernetIp.cpp
+    src/IO/Drivers/Iec104.cpp
+    src/IO/Drivers/Iec104/Apci.cpp
+    src/IO/Drivers/Iec104/Asdu.cpp
     src/UI/Widgets/Plot3D.cpp
   src/UI/Widgets/Plot3D/Plot3DNodes.cpp
   src/UI/Widgets/Plot3D/Plot3DOverlay.cpp
@@ -1045,7 +1083,13 @@ if(BUILD_COMMERCIAL)
     qml/Dialogs/OpcUaTrustDialog.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml
+    qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml
+    qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml
+    qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml
+    qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml
+    qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml
     qml/ProjectEditor/Views/MqttPublisherView.qml
+    qml/ProjectEditor/Views/InfluxSinkView.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml
@@ -1350,6 +1394,7 @@ target_link_libraries(
 
 target_link_openssl(${PROJECT_EXECUTABLE})
 target_link_open62541(${PROJECT_EXECUTABLE})
+target_link_libplctag(${PROJECT_EXECUTABLE})
 target_link_mimalloc(${PROJECT_EXECUTABLE})
 
 if(WIN32 AND MSVC)

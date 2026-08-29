@@ -161,6 +161,14 @@
         }
     ],
     "hexadecimalDelimiters": false,
+    "influxSink": {
+        "bucket": "",
+        "enabled": false,
+        "measurement": "serial_studio",
+        "org": "",
+        "url": ""
+    },
+    "luaFastMode": false,
     "mqttPublisher": {
         "alpnEnabled": false,
         "alpnProtocol": "x-amzn-mqtt-ca",
@@ -182,6 +190,10 @@
         "scriptCode": "",
         "scriptLanguage": 0,
         "scriptTopic": "",
+        "sparkplugDeviceId": "",
+        "sparkplugEdgeNodeId": "",
+        "sparkplugEnabled": false,
+        "sparkplugGroupId": "",
         "sslEnabled": false,
         "sslProtocol": 5,
         "topicBase": ""
@@ -214,6 +226,30 @@
         }
     ],
     "title": "IMU Batched Data",
+    "treeExpansion": {
+        "": false,
+        "IMU Batched Data": true,
+        "IMU Batched Data/ ": false,
+        "IMU Batched Data/Control Loop": false,
+        "IMU Batched Data/Dashboard Widgets": true,
+        "IMU Batched Data/Dashboard Widgets/System Status": true,
+        "IMU Batched Data/Dashboard Widgets/System Status/Battery": false,
+        "IMU Batched Data/Dashboard Widgets/System Status/Temperature": false,
+        "IMU Batched Data/Dashboard Widgets/Three Axis Accelerometer": true,
+        "IMU Batched Data/Dashboard Widgets/Three Axis Accelerometer/X": false,
+        "IMU Batched Data/Dashboard Widgets/Three Axis Accelerometer/Y": false,
+        "IMU Batched Data/Dashboard Widgets/Three Axis Accelerometer/Z": false,
+        "IMU Batched Data/Device A": true,
+        "IMU Batched Data/Device A/Frame Parser": false,
+        "IMU Batched Data/InfluxDB Sink": false,
+        "IMU Batched Data/MQTT Publisher": false,
+        "IMU Batched Data/Variables": true,
+        "IMU Batched Data/Variables/Dataset Values": false,
+        "IMU Batched Data/Workspaces": true,
+        "IMU Batched Data/Workspaces/All Data": false,
+        "IMU Batched Data/Workspaces/System Status": false,
+        "IMU Batched Data/Workspaces/Three Axis Accelerometer": false
+    },
     "widgetSettings": {
         "activeGroup": 1001,
         "layout:1001": {

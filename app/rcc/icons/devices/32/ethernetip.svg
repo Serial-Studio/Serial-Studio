@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" version="1.1">
+<g fill="none" fill-rule="evenodd">
+<path d="M 6.5 3.5 L 17.5 3.5 L 17.5 14.5 L 14.5 14.5 L 14.5 17.5 L 9.5 17.5 L 9.5 14.5 L 6.5 14.5 Z" fill="rgb(54.509807%,71.764708%,94.117647%)" stroke="rgb(30.588236%,47.843137%,70.980394%)" stroke-width="1" stroke-linejoin="round"/>
+<path d="M 8.5 4.5 L 8.5 8 M 10.5 4.5 L 10.5 8 M 12 4.5 L 12 8 M 13.5 4.5 L 13.5 8 M 15.5 4.5 L 15.5 8" stroke="rgb(72.941178%,60.784316%,28.235295%)" stroke-width="1.1" stroke-linecap="round"/>
+<path d="M 12 17.5 L 12 20.5" stroke="rgb(47.058824%,54.509807%,61.176473%)" stroke-width="1.4" stroke-linecap="round"/>
+<circle cx="4" cy="20.5" r="1.6" fill="rgb(54.509807%,71.764708%,94.117647%)" stroke="rgb(30.588236%,47.843137%,70.980394%)" stroke-width="0.9"/>
+<circle cx="20" cy="20.5" r="1.6" fill="rgb(54.509807%,71.764708%,94.117647%)" stroke="rgb(30.588236%,47.843137%,70.980394%)" stroke-width="0.9"/>
+<path d="M 5.6 20.5 L 18.4 20.5" stroke="rgb(47.058824%,54.509807%,61.176473%)" stroke-width="1"/>
+</g>
+</svg>

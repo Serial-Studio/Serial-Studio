@@ -261,6 +261,11 @@ class SerialStudioClient:
             "process": 8,
             "mqtt": 9,
             "opcua": 10,
+            "s7": 11,
+            "ethernetip": 12,
+            "eip": 12,
+            "iec104": 13,
+            "iec-104": 13,
         }
 
         if bus_type.lower() not in bus_map:

@@ -481,6 +481,17 @@ void DataModel::ProjectEditor::selectMqttPublisher()
 }
 
 /**
+ * @brief Selects the InfluxDB sink tree item when available.
+ */
+void DataModel::ProjectEditor::selectInfluxSink()
+{
+  if (!m_selectionModel || !m_influxSinkItem)
+    return;
+
+  m_selectionModel->setCurrentIndex(m_influxSinkItem->index(), QItemSelectionModel::ClearAndSelect);
+}
+
+/**
  * @brief Selects the project-global control-script node in the tree.
  */
 void DataModel::ProjectEditor::selectControlScript()

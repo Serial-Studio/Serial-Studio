@@ -191,7 +191,20 @@ precedence = "override"
 SPDX-FileCopyrightText = "2006-2026 The Mbed TLS Contributors"
 SPDX-License-Identifier = "Apache-2.0"
 
+# libplctag (MPL-2.0) is FETCHED at configure time, never vendored, so the only file this
+# repository carries for it is the Serial-Studio-authored CMakeLists that assembles the build. Its
+# upstream sources land in the build tree and are declared by their own project; nothing here is
+# theirs to cover. MPL-2.0 is file-level copyleft, so static linkage carries no relink duty.
+#
+# No dependency of this project is LGPL. The S7comm client is first-party Qt-Core code under
+# app/src/IO/Drivers/S7, so nothing here obliges a release to ship a replaceable shared library or
+# to keep a relink path open. Any future dependency must be checked against PROPRIETARY
+# distribution, not only against the GPL, before it is added.
 [[annotations]]
-path = ["lib/CMakeLists.txt", "lib/OpenSSL/**"]
+path = [
+  "lib/CMakeLists.txt",
+  "lib/OpenSSL/**",
+  "lib/libplctag/**",
+]
 SPDX-FileCopyrightText = "2020-2026 Alex Spataru <alex@serial-studio.com>"
 SPDX-License-Identifier = "GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial"

@@ -25,10 +25,15 @@
 // clang-format off
 #include <QtMqtt>
 #include <QMap>
+#include <QHash>
+#include <QTimer>
+#include <QPointer>
 #include <QSettings>
+#include <QJsonObject>
 #include <QSslConfiguration>
 // clang-format on
 
+#include "IO/Drivers/MQTT/SparkplugSession.h"
 #include "IO/HAL_Driver.h"
 #include "MQTT/CredentialVault.h"
 #include "MQTT/TlsIdentity.h"
@@ -57,6 +62,10 @@ class MQTT : public HAL_Driver {
   Q_PROPERTY(bool autoKeepAlive
              READ autoKeepAlive
              WRITE setAutoKeepAlive
+             NOTIFY mqttConfigurationChanged)
+  Q_PROPERTY(bool sparkplugEnabled
+             READ sparkplugEnabled
+             WRITE setSparkplugEnabled
              NOTIFY mqttConfigurationChanged)
   Q_PROPERTY(quint16 port
              READ port
@@ -122,6 +131,10 @@ class MQTT : public HAL_Driver {
              READ topicFilter
              WRITE setTopicFilter
              NOTIFY mqttConfigurationChanged)
+  Q_PROPERTY(QString sparkplugGroupId
+             READ sparkplugGroupId
+             WRITE setSparkplugGroupId
+             NOTIFY mqttConfigurationChanged)
   Q_PROPERTY(QStringList mqttVersions
              READ mqttVersions
              CONSTANT)
@@ -151,6 +164,7 @@ public:
   MQTT& operator=(const MQTT&) = delete;
 
   void close() override;
+  void setSparkplugPeer(MQTT* peer);
 
   [[nodiscard]] bool isOpen() const noexcept override;
   [[nodiscard]] bool isConnecting() const noexcept override;
@@ -164,6 +178,10 @@ public:
   [[nodiscard]] bool sslEnabled() const noexcept;
   [[nodiscard]] bool autoKeepAlive() const noexcept;
   [[nodiscard]] bool cleanSession() const noexcept;
+  [[nodiscard]] bool sparkplugEnabled() const noexcept;
+
+  [[nodiscard]] int sparkplugSlotCount() const;
+  [[nodiscard]] SparkplugSession::Counters sparkplugCounters() const;
 
   [[nodiscard]] quint16 port() const noexcept;
   [[nodiscard]] quint16 keepAlive() const noexcept;
@@ -178,6 +196,7 @@ public:
   [[nodiscard]] QString username() const;
   [[nodiscard]] QString password() const;
   [[nodiscard]] QString topicFilter() const;
+  [[nodiscard]] QString sparkplugGroupId() const;
   [[nodiscard]] QString clientCertificatePath() const;
   [[nodiscard]] QString privateKeyPath() const;
   [[nodiscard]] QString keyPassphrase() const;
@@ -207,6 +226,8 @@ public slots:
   void setUsername(const QString& username);
   void setPassword(const QString& password);
   void setTopicFilter(const QString& topic);
+  void setSparkplugEnabled(const bool enabled);
+  void setSparkplugGroupId(const QString& groupId);
   void setClientCertificatePath(const QString& path);
   void setPrivateKeyPath(const QString& path);
   void setKeyPassphrase(const QString& passphrase);
@@ -214,27 +235,67 @@ public slots:
   void setAlpnProtocol(const QString& protocol);
   void selectClientCertificate();
   void selectPrivateKey();
+  void generateProject();
 
 private slots:
+  void onSparkplugTick();
   void onStateChanged(QMqttClient::ClientState state);
   void onErrorChanged(QMqttClient::ClientError error);
   void onMessageReceived(const QByteArray& message, const QMqttTopicName& topic);
 
 private:
   void loadPersistedSettings();
+  void refreshTopicFilterCache();
   [[nodiscard]] QString settingsKey(const char* leaf) const;
+  [[nodiscard]] QString effectiveTopicFilter() const;
   void appendMqttSslProperties(QList<IO::DriverProperty>& props) const;
   void scheduleReconnectIfActive();
   void applyPendingToClient();
   void reloadTlsIdentity(const bool interactive);
   void selectPemFile(const QString& title, void (MQTT::*setter)(const QString&));
+  [[nodiscard]] bool applySparkplugProperty(const QString& key, const QVariant& value);
+
+  void flushSparkplugFrame();
+  void reportSparkplugDrops();
+  void publishSparkplugRebirths();
+  void sparkplugStateChanged(const bool connected);
+  void appendSparkplugSlot(const SparkplugSession::SlotValue& slot);
+  void routeReceivedMessage(const QByteArray& message, const QMqttTopicName& topic);
+  [[nodiscard]] SparkplugSession& sparkplugSession();
+  [[nodiscard]] const SparkplugSession& sparkplugSession() const;
+  [[nodiscard]] bool rejectSparkplugGroupId(const QString& groupId) const;
+  [[nodiscard]] QJsonObject buildSparkplugProject() const;
+  [[nodiscard]] CapturedData::SteadyTimePoint sparkplugStamp(const quint64 timestampMs);
 
 private:
+  /**
+   * @brief Publishing-tick state of the Sparkplug lane: the reused encode buffer, the earliest
+   *        source stamp staged into it, the tick count the diagnostics poll rides on, and the
+   *        broker-epoch to steady-clock mapping sampled at connect. One value so the offset and the
+   *        stamp it feeds are reset together: a mapping that survives a reconnect stamps the new
+   *        session with the previous session's offset.
+   */
+  struct SparkplugState {
+    QByteArray frame;
+    quint64 earliestMs;
+    qint64 offsetNs;
+    qint64 lastStampNs;
+    int diagTicks;
+    bool clockValid;
+
+    /**
+     * @brief Builds an unmapped clock with an empty frame.
+     */
+    SparkplugState() : earliestMs(0), offsetNs(0), lastStampNs(0), diagTicks(0), clockValid(false)
+    {}
+  };
+
   bool m_sslEnabled;
   bool m_cleanSession;
   bool m_autoKeepAlive;
   bool m_userWantsOpen;
   bool m_reconnectPending;
+  bool m_sparkplugEnabled;
   quint16 m_port;
   quint16 m_keepAlive;
   QMqttClient::ProtocolVersion m_protocolVersion;
@@ -243,6 +304,8 @@ private:
   QString m_username;
   QString m_password;
   QString m_topicFilter;
+  QString m_effectiveFilter;
+  QString m_sparkplugGroupId;
   bool m_alpnEnabled;
   QString m_alpnProtocol;
   QString m_keyPassphrase;
@@ -252,7 +315,15 @@ private:
   QSettings m_settings;
   ::MQTT::CredentialVault m_vault;
   QMqttClient m_client;
+  QTimer m_sparkplugTimer;
+  QPointer<MQTT> m_sparkplugPeer;
+  SparkplugState m_sparkplugState;
+  SparkplugSession m_sparkplug;
+  QStringList m_pendingRebirths;
+  QMqttTopicFilter m_topicMatcher;
+  QHash<QString, qint64> m_lastRebirthMs;
   QSslConfiguration m_sslConfiguration;
+  SparkplugSession::Counters m_sparkplugCounters;
   QMap<QString, QSsl::SslProtocol> m_sslProtocols;
   QMap<QString, QMqttClient::ProtocolVersion> m_mqttVersions;
   QMap<QString, QSslSocket::PeerVerifyMode> m_peerVerifyModes;

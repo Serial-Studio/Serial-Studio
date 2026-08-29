@@ -248,6 +248,45 @@ Rectangle {
           root.registerBus(item)
       }
     }
+
+    Loader {
+      asynchronous: true
+      Layout.fillWidth: true
+      Layout.fillHeight: true
+      active: Cpp_CommercialBuild
+      source: "qrc:/serial-studio.com/gui/qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml"
+
+      onLoaded: {
+        if (item)
+          root.registerBus(item)
+      }
+    }
+
+    Loader {
+      asynchronous: true
+      Layout.fillWidth: true
+      Layout.fillHeight: true
+      active: Cpp_CommercialBuild
+      source: "qrc:/serial-studio.com/gui/qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml"
+
+      onLoaded: {
+        if (item)
+          root.registerBus(item)
+      }
+    }
+
+    Loader {
+      asynchronous: true
+      Layout.fillWidth: true
+      Layout.fillHeight: true
+      active: Cpp_CommercialBuild
+      source: "qrc:/serial-studio.com/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml"
+
+      onLoaded: {
+        if (item)
+          root.registerBus(item)
+      }
+    }
       }
 
       Item {

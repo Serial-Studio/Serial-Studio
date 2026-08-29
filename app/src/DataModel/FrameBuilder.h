@@ -79,6 +79,7 @@ class FrameBuilder : public QObject {
 signals:
   void jsonFileMapChanged();
   void frameChanged(const DataModel::Frame& frame);
+  void structureGenerationChanged(quint64 generation);
   void structurePublished(int sourceId, const DataModel::Frame& frame);
   void sessionStructureReady(const DataModel::Frame& frame);
 

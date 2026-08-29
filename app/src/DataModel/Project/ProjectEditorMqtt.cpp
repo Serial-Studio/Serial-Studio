@@ -89,6 +89,7 @@ void DataModel::ProjectEditor::buildMqttPublisherModel()
   const bool enabled = pub.enabled();
 
   buildMqttPublishingSection(pub, enabled);
+  buildMqttSparkplugSection(pub, enabled);
   buildMqttBrokerSection(pub, enabled);
   buildMqttSslSection(pub, enabled);
 #endif
@@ -198,6 +199,73 @@ void DataModel::ProjectEditor::buildMqttPublishingSection(const MQTT::Publisher&
                              ParameterDescription);
     m_mqttPublisherModel->appendRow(notifyTopicItem);
   }
+}
+#endif
+
+#ifdef BUILD_COMMERCIAL
+/**
+ * @brief Appends the Sparkplug section (edge-node toggle and identity). The identity rows appear
+ *        only once the toggle is on, because an edge node without a group and a node id has no
+ *        topic namespace to publish into.
+ */
+void DataModel::ProjectEditor::buildMqttSparkplugSection(const MQTT::Publisher& pub, bool enabled)
+{
+  auto* sparkplugHdr = new QStandardItem();
+  sparkplugHdr->setData(SectionHeader, WidgetType);
+  sparkplugHdr->setData(tr("Sparkplug"), PlaceholderValue);
+  static auto& registry = Misc::IconRegistry::instance();
+  sparkplugHdr->setData(registry.iconById(QStringLiteral("editor/mqtt-publisher"), 16),
+                        ParameterIcon);
+  m_mqttPublisherModel->appendRow(sparkplugHdr);
+
+  auto* sparkplugItem = new QStandardItem();
+  sparkplugItem->setEditable(true);
+  sparkplugItem->setData(enabled, Active);
+  sparkplugItem->setData(CheckBox, WidgetType);
+  sparkplugItem->setData(pub.sparkplugEnabled(), EditableValue);
+  sparkplugItem->setData(kMqttPublisher_SparkplugEnabled, ParameterType);
+  sparkplugItem->setData(tr("Publish as Edge Node"), ParameterName);
+  sparkplugItem->setData(tr("Publish datasets in the Sparkplug B namespace instead of the payload "
+                            "selected above, with birth, death and rebirth handling"),
+                         ParameterDescription);
+  m_mqttPublisherModel->appendRow(sparkplugItem);
+
+  if (!pub.sparkplugEnabled())
+    return;
+
+  auto* groupItem = new QStandardItem();
+  groupItem->setEditable(true);
+  groupItem->setData(enabled, Active);
+  groupItem->setData(TextField, WidgetType);
+  groupItem->setData(pub.sparkplugGroupId(), EditableValue);
+  groupItem->setData(kMqttPublisher_SparkplugGroupId, ParameterType);
+  groupItem->setData(tr("Group ID"), ParameterName);
+  groupItem->setData(tr("Plant1"), PlaceholderValue);
+  groupItem->setData(tr("Logical group this edge node belongs to"), ParameterDescription);
+  m_mqttPublisherModel->appendRow(groupItem);
+
+  auto* nodeItem = new QStandardItem();
+  nodeItem->setEditable(true);
+  nodeItem->setData(enabled, Active);
+  nodeItem->setData(TextField, WidgetType);
+  nodeItem->setData(pub.sparkplugEdgeNodeId(), EditableValue);
+  nodeItem->setData(kMqttPublisher_SparkplugEdgeNode, ParameterType);
+  nodeItem->setData(tr("Edge Node ID"), ParameterName);
+  nodeItem->setData(tr("SerialStudio"), PlaceholderValue);
+  nodeItem->setData(tr("Identifies this node inside the group"), ParameterDescription);
+  m_mqttPublisherModel->appendRow(nodeItem);
+
+  auto* deviceItem = new QStandardItem();
+  deviceItem->setEditable(true);
+  deviceItem->setData(enabled, Active);
+  deviceItem->setData(TextField, WidgetType);
+  deviceItem->setData(pub.sparkplugDeviceId(), EditableValue);
+  deviceItem->setData(kMqttPublisher_SparkplugDevice, ParameterType);
+  deviceItem->setData(tr("Device ID"), ParameterName);
+  deviceItem->setData(tr("Optional"), PlaceholderValue);
+  deviceItem->setData(tr("When set, datasets are published as a device of this node"),
+                      ParameterDescription);
+  m_mqttPublisherModel->appendRow(deviceItem);
 }
 #endif
 
@@ -491,6 +559,29 @@ static bool applyMqttClientIdentityEdit(MQTT::Publisher& pub, int type, const QV
 }
 #endif
 
+#ifdef BUILD_COMMERCIAL
+/**
+ * @brief Applies the Sparkplug identity edits that need no model rebuild; returns true when the
+ *        parameter was one of them.
+ */
+static bool applyMqttSparkplugEdit(MQTT::Publisher& pub, int type, const QVariant& value)
+{
+  switch (type) {
+    case kMqttPublisher_SparkplugGroupId:
+      pub.setSparkplugGroupId(value.toString());
+      return true;
+    case kMqttPublisher_SparkplugEdgeNode:
+      pub.setSparkplugEdgeNodeId(value.toString());
+      return true;
+    case kMqttPublisher_SparkplugDevice:
+      pub.setSparkplugDeviceId(value.toString());
+      return true;
+    default:
+      return false;
+  }
+}
+#endif
+
 /**
  * @brief Pushes MQTT Publisher form edits back into the live Publisher singleton.
  */
@@ -505,6 +596,9 @@ void DataModel::ProjectEditor::onMqttPublisherItemChanged(QStandardItem* item)
   const auto value = item->data(EditableValue);
 
   if (applyMqttClientIdentityEdit(pub, type, value))
+    return;
+
+  if (applyMqttSparkplugEdit(pub, type, value))
     return;
 
   switch (type) {
@@ -535,6 +629,10 @@ void DataModel::ProjectEditor::onMqttPublisherItemChanged(QStandardItem* item)
     case kMqttPublisher_NotificationTopic:
       pub.setNotificationTopic(value.toString());
       break;
+    case kMqttPublisher_SparkplugEnabled:
+      pub.setSparkplugEnabled(value.toBool());
+      buildMqttPublisherModel();
+      return;
     case kMqttPublisher_Hostname:
       pub.setHostname(value.toString());
       break;

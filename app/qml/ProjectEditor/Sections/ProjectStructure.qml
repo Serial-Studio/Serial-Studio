@@ -158,7 +158,8 @@ Widgets.Pane {
         [ProjectEditor.KindWorkspaceFolder]: "workspace-folder",
         [ProjectEditor.KindWorkspace]: "workspace",
         [ProjectEditor.KindControlScript]: "control-script",
-        [ProjectEditor.KindMqttPublisher]: "mqtt-publisher"
+        [ProjectEditor.KindMqttPublisher]: "mqtt-publisher",
+        [ProjectEditor.KindInfluxSink]: "influx-sink"
       })
 
       //

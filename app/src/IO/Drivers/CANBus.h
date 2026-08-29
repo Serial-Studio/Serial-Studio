@@ -32,7 +32,9 @@
 #include <QSettings>
 #include <QString>
 #include <QTimer>
+#include <QVariantMap>
 
+#include "IO/Drivers/CANBus/CanReassembly.h"
 #include "IO/HAL_Driver.h"
 
 namespace IO {
@@ -74,6 +76,10 @@ class CANBus : public HAL_Driver {
              READ listenOnly
              WRITE setListenOnly
              NOTIFY listenOnlyChanged)
+  Q_PROPERTY(bool tpReassembly
+             READ tpReassembly
+             WRITE setTpReassembly
+             NOTIFY tpReassemblyChanged)
   Q_PROPERTY(QStringList pluginList
              READ pluginList
              NOTIFY availablePluginsChanged)
@@ -98,6 +104,7 @@ signals:
   void interfaceSupportsFDChanged();
   void loopbackChanged();
   void listenOnlyChanged();
+  void tpReassemblyChanged();
   void pluginIndexChanged();
   void interfaceIndexChanged();
   void availablePluginsChanged();
@@ -130,6 +137,7 @@ public:
   [[nodiscard]] bool canFD() const;
   [[nodiscard]] bool loopback() const;
   [[nodiscard]] bool listenOnly() const;
+  [[nodiscard]] bool tpReassembly() const;
   [[nodiscard]] bool interfaceSupportsFD() const;
   [[nodiscard]] quint8 pluginIndex() const;
   [[nodiscard]] quint8 interfaceIndex() const;
@@ -142,6 +150,7 @@ public:
   [[nodiscard]] QStringList dataBitrateList() const;
   [[nodiscard]] QString interfaceError() const;
 
+  [[nodiscard]] Q_INVOKABLE QVariantMap reassemblyCounters() const;
   [[nodiscard]] Q_INVOKABLE QString pluginDisplayName(const QString& plugin) const;
 
 public slots:
@@ -150,6 +159,7 @@ public slots:
   void setCanFD(const bool enabled);
   void setLoopback(const bool enabled);
   void setListenOnly(const bool enabled);
+  void setTpReassembly(const bool enabled);
   void setBitrate(const quint32 bitrate);
   void setDataBitrate(const quint32 bitrate);
   void setPluginIndex(const quint8 index);
@@ -175,6 +185,14 @@ private:
   [[nodiscard]] CapturedData::SteadyTimePoint rebaseFrameTimestamp(
     qint64 stampUsec, CapturedData::SteadyTimePoint now) noexcept;
 
+  void publishReassembled(quint32 can_id,
+                          const QByteArray& payload,
+                          CapturedData::SteadyTimePoint stamp);
+  [[nodiscard]] bool routeReassembly(quint32 can_id,
+                                     bool extended,
+                                     const QByteArray& payload,
+                                     CapturedData::SteadyTimePoint stamp);
+
 private:
   QCanBusDevice* m_device;
   QElapsedTimer m_errorBoxTimer;
@@ -183,6 +201,7 @@ private:
   bool m_canFD;
   bool m_loopback;
   bool m_listenOnly;
+  bool m_tpReassembly;
   quint8 m_pluginIndex;
   quint8 m_interfaceIndex;
   quint32 m_bitrate;
@@ -190,6 +209,9 @@ private:
 
   bool m_hwStampAnchored;
   CapturedData::SteadyClock::duration m_hwStampOffset;
+
+  IsoTpReassembler m_isoTp;
+  J1939TransportReassembler m_j1939;
 
   QSettings m_settings;
   QString m_interfaceError;

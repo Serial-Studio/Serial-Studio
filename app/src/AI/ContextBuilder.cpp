@@ -127,6 +127,8 @@ static QString buildRoleBlock(bool device_control, bool memory_on, bool probe_on
            "  output_widgets    -> project.outputWidget.*\n"
            "  mqtt              -> project.mqtt.* (publisher + subscriber config)\n"
            "  can_modbus        -> io.canbus.*, io.modbus.*\n"
+           "  industrial_plc    -> io.s7.*, io.eip.*, io.iec104.* (Siemens S7, "
+           "EtherNet/IP, IEC 60870-5-104: addressing, polling, generateProject)\n"
            "  filesystem        -> fs.* (read/list/search the workspace folder and "
            "dragged-in paths; write/append/delete inside the 'AI/' subfolder)\n"
            "  debugging         -> meta.snapshot, project.validate, *.dryRun, "
@@ -784,6 +786,7 @@ QStringList AI::ContextBuilder::skillIds()
     QStringLiteral("workspace_design"),
     QStringLiteral("mqtt"),
     QStringLiteral("can_modbus"),
+    QStringLiteral("industrial_plc"),
     QStringLiteral("filesystem"),
     QStringLiteral("dashboard_layout"),
     QStringLiteral("debugging"),

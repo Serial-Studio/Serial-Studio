@@ -204,6 +204,24 @@
   "file": "Drivers-OPC-UA.md"
  },
  {
+  "id": "drivers-s7",
+  "title": "Siemens S7comm",
+  "section": "Drivers",
+  "file": "Drivers-S7.md"
+ },
+ {
+  "id": "drivers-ethernet-ip",
+  "title": "EtherNet/IP",
+  "section": "Drivers",
+  "file": "Drivers-EtherNet-IP.md"
+ },
+ {
+  "id": "drivers-iec-104",
+  "title": "IEC 60870-5-104",
+  "section": "Drivers",
+  "file": "Drivers-IEC-104.md"
+ },
+ {
   "id": "drivers-can-bus",
   "title": "CAN Bus",
   "section": "Drivers",

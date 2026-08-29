@@ -176,6 +176,9 @@ public:
     Process,
     Mqtt,
     OpcUa,
+    S7,
+    EthernetIp,
+    Iec104,
 #endif
   };
   Q_ENUM(BusType)

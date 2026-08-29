@@ -93,6 +93,23 @@
       "obd",
       "slcan"
     ],
+    "industrial_plc": [
+      "siemens",
+      "s7comm",
+      "s7-1200",
+      "s7-1500",
+      "ethernet/ip",
+      "ethernetip",
+      "controllogix",
+      "compactlogix",
+      "micrologix",
+      "allen-bradley",
+      "cip tag",
+      "iec 104",
+      "iec-104",
+      "60870",
+      "telecontrol"
+    ],
     "filesystem": [
       "read the file",
       "open the file",

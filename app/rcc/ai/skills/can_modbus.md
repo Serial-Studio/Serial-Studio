@@ -30,18 +30,23 @@ For real CAN networks, import a DBC file via the Project Editor's DBC
 importer (no API endpoint yet — surface this to the user). The importer
 generates groups + datasets for every signal in every message.
 
-Multiplexed signals: simple multiplexing is supported. The importer
-recognises the message's `MultiplexorSwitch` selector and emits one
-dataset per muxed signal titled `<name> (mux N)`. The configured
-Built-In signal map extracts the selector first and only updates a
-muxed signal when the selector's raw value equals its mux value, so
-muxed datasets don't decode noise from other payloads sharing the same
-bits — they keep their last valid value when the selector doesn't
-match. Extended multiplexing (`SG_MUL_VAL_`, `SwitchAndSignal`
-intermediates, value ranges) is not supported; those signals are
-skipped and the post-import dialog reports how many were dropped. Tell
-the user to switch the source to Lua or JavaScript and write a custom
-parser if extended mux is required.
+Multiplexed signals: both simple and extended multiplexing import.
+The importer emits one dataset per muxed signal, titled `<name> (mux
+N)` — or `<name> (mux lo-hi)`, and `<parent>=<values>` joined by `/`
+when several switches gate it. The selector itself is titled `<name>
+(selector)`. The generated Lua parser walks each message's signals in
+decode order, reads every selector before the signals it gates, and
+publishes only the signals whose gates match, so a muxed dataset
+never decodes noise from another payload sharing the same bits — it
+keeps its last valid value. `SG_MUL_VAL_` switch ranges and
+`SwitchAndSignal` intermediates (a switch that is itself multiplexed)
+are handled, so nested chains import too.
+
+Only two cases are dropped: a switch value that does not fit a signed
+64-bit integer, and a circular or dangling `SG_MUL_VAL_` chain. The
+post-import dialog reports how many signals that cost. If the user
+needs those, they write a custom parser by hand — the generated Lua
+is a readable, editable starting point.
 
 ### Without a DBC
 

@@ -33,11 +33,14 @@
 #ifdef BUILD_COMMERCIAL
 #  include "IO/Drivers/Audio.h"
 #  include "IO/Drivers/CANBus.h"
+#  include "IO/Drivers/EthernetIp.h"
 #  include "IO/Drivers/HID.h"
+#  include "IO/Drivers/Iec104.h"
 #  include "IO/Drivers/Modbus.h"
 #  include "IO/Drivers/MQTT.h"
 #  include "IO/Drivers/OpcUa.h"
 #  include "IO/Drivers/Process.h"
+#  include "IO/Drivers/S7.h"
 #  include "IO/Drivers/USB.h"
 #endif
 
@@ -78,6 +81,9 @@ public:
   [[nodiscard]] IO::Drivers::CANBus* canBus() const noexcept;
   [[nodiscard]] IO::Drivers::Modbus* modbus() const noexcept;
   [[nodiscard]] IO::Drivers::Process* process() const noexcept;
+  [[nodiscard]] IO::Drivers::S7* s7() const noexcept;
+  [[nodiscard]] IO::Drivers::EthernetIp* ethernetIp() const noexcept;
+  [[nodiscard]] IO::Drivers::Iec104* iec104() const noexcept;
 #endif
 
 private:
@@ -93,6 +99,9 @@ private:
   std::unique_ptr<IO::Drivers::CANBus> m_canBus;
   std::unique_ptr<IO::Drivers::Modbus> m_modbus;
   std::unique_ptr<IO::Drivers::Process> m_process;
+  std::unique_ptr<IO::Drivers::S7> m_s7;
+  std::unique_ptr<IO::Drivers::EthernetIp> m_ethernetIp;
+  std::unique_ptr<IO::Drivers::Iec104> m_iec104;
 #endif
 };
 }  // namespace IO

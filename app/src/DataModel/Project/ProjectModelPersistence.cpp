@@ -336,6 +336,9 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
   if (!m_mqttPublisher.isEmpty())
     json.insert(Keys::MqttPublisher, m_mqttPublisher);
 
+  if (!m_influxSink.isEmpty())
+    json.insert(Keys::InfluxSink, m_influxSink);
+
   return json;
 }
 

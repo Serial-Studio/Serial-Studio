@@ -46,6 +46,12 @@ QString API::EnumLabels::busTypeSlug(int value)
       return QStringLiteral("mqtt");
     case SerialStudio::BusType::OpcUa:
       return QStringLiteral("opcua");
+    case SerialStudio::BusType::S7:
+      return QStringLiteral("s7");
+    case SerialStudio::BusType::EthernetIp:
+      return QStringLiteral("ethernetip");
+    case SerialStudio::BusType::Iec104:
+      return QStringLiteral("iec104");
 #endif
   }
   return QStringLiteral("unknown");
@@ -80,6 +86,12 @@ QString API::EnumLabels::busTypeLabel(int value)
       return QStringLiteral("MQTT subscriber");
     case SerialStudio::BusType::OpcUa:
       return QStringLiteral("OPC UA");
+    case SerialStudio::BusType::S7:
+      return QStringLiteral("Siemens S7comm");
+    case SerialStudio::BusType::EthernetIp:
+      return QStringLiteral("EtherNet/IP");
+    case SerialStudio::BusType::Iec104:
+      return QStringLiteral("IEC 60870-5-104");
 #endif
   }
   return QStringLiteral("Unknown");

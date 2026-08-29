@@ -138,6 +138,10 @@ typedef enum {
   kMqttPublisher_KeyPassphrase,
   kMqttPublisher_AlpnEnabled,
   kMqttPublisher_AlpnProtocol,
+  kMqttPublisher_SparkplugEnabled,
+  kMqttPublisher_SparkplugGroupId,
+  kMqttPublisher_SparkplugEdgeNode,
+  kMqttPublisher_SparkplugDevice,
 } MqttPublisherItem;
 
 // clang-format on

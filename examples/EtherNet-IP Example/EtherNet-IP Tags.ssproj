@@ -1,0 +1,272 @@
+{
+    "actions": [
+    ],
+    "changeDrivenTransforms": false,
+    "frozen": true,
+    "groups": [
+        {
+            "datasets": [
+                {
+                    "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 0,
+                    "index": 1,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Tank_Level",
+                    "uniqueId": 1,
+                    "units": "%",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": false,
+                    "groupId": 0,
+                    "index": 2,
+                    "led": true,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Pump_Running",
+                    "uniqueId": 2,
+                    "units": "",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 1,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 0,
+                    "index": 3,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Batch_Count",
+                    "uniqueId": 3,
+                    "units": "",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                }
+            ],
+            "title": "Controller Tags",
+            "uniqueId": 0,
+            "widget": "datagrid"
+        },
+        {
+            "datasets": [
+                {
+                    "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 1,
+                    "index": 4,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Zone1_Temp",
+                    "uniqueId": 5,
+                    "units": "degC",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                }
+            ],
+            "title": "Program:Main",
+            "uniqueId": 4,
+            "widget": "datagrid"
+        }
+    ],
+    "hexadecimalDelimiters": false,
+    "influxSink": {
+        "bucket": "",
+        "enabled": false,
+        "measurement": "serial_studio",
+        "org": "",
+        "url": ""
+    },
+    "luaFastMode": false,
+    "mqttPublisher": {
+        "alpnEnabled": false,
+        "alpnProtocol": "x-amzn-mqtt-ca",
+        "cleanSession": true,
+        "clientCertPath": "",
+        "customClientId": false,
+        "enabled": false,
+        "hostname": "127.0.0.1",
+        "keepAlive": 60,
+        "mode": 0,
+        "mqttVersion": 2,
+        "notificationTopic": "",
+        "peerVerifyDepth": 10,
+        "peerVerifyMode": 3,
+        "port": 1883,
+        "privateKeyPath": "",
+        "publishFrequency": 10,
+        "publishNotifications": false,
+        "scriptCode": "",
+        "scriptLanguage": 0,
+        "scriptTopic": "",
+        "sparkplugDeviceId": "",
+        "sparkplugEdgeNodeId": "",
+        "sparkplugEnabled": false,
+        "sparkplugGroupId": "",
+        "sslEnabled": false,
+        "sslProtocol": 5,
+        "topicBase": ""
+    },
+    "nextUniqueId": 6,
+    "plotTimeRange": 10,
+    "pointCount": 500,
+    "schemaVersion": 3,
+    "sources": [
+        {
+            "busType": 12,
+            "checksum": "",
+            "checksumAlgorithm": "",
+            "connection": {
+                "cipPath": "1,0",
+                "host": "127.0.0.1",
+                "plcType": 1,
+                "pollInterval": 250,
+                "tags": [
+                    {
+                        "element": -1,
+                        "name": "Tank_Level",
+                        "t": "f32",
+                        "tag": "Tank_Level"
+                    },
+                    {
+                        "element": -1,
+                        "name": "Pump_Running",
+                        "t": "bool",
+                        "tag": "Pump_Running"
+                    },
+                    {
+                        "element": -1,
+                        "name": "Batch_Count",
+                        "t": "i32",
+                        "tag": "Batch_Count"
+                    },
+                    {
+                        "element": 0,
+                        "name": "Zone1_Temp",
+                        "t": "f32",
+                        "tag": "Program:Main.Zone_Temps"
+                    }
+                ]
+            },
+            "decoder": 3,
+            "decoderMethod": 3,
+            "frameDetection": 2,
+            "frameEnd": "",
+            "frameParserLanguage": 2,
+            "frameParserParams": {
+                "schema": [
+                    {
+                        "index": 0,
+                        "name": "Tank_Level"
+                    },
+                    {
+                        "index": 1,
+                        "name": "Pump_Running"
+                    },
+                    {
+                        "index": 2,
+                        "name": "Batch_Count"
+                    },
+                    {
+                        "index": 3,
+                        "name": "Zone1_Temp"
+                    }
+                ]
+            },
+            "frameParserTemplate": "ethernetip",
+            "frameStart": "",
+            "hexadecimalDelimiters": false,
+            "sourceId": 0,
+            "title": "EtherNet/IP"
+        }
+    ],
+    "title": "EtherNet/IP Logix Tags",
+    "treeExpansion": {
+        "": false,
+        "EtherNet/IP Logix Tags": true,
+        "EtherNet/IP Logix Tags/ ": false,
+        "EtherNet/IP Logix Tags/Control Loop": false,
+        "EtherNet/IP Logix Tags/Dashboard Widgets": true,
+        "EtherNet/IP Logix Tags/Dashboard Widgets/Controller Tags": true,
+        "EtherNet/IP Logix Tags/Dashboard Widgets/Controller Tags/Batch_Count": false,
+        "EtherNet/IP Logix Tags/Dashboard Widgets/Controller Tags/Pump_Running": false,
+        "EtherNet/IP Logix Tags/Dashboard Widgets/Controller Tags/Tank_Level": false,
+        "EtherNet/IP Logix Tags/Dashboard Widgets/Program:Main": true,
+        "EtherNet/IP Logix Tags/Dashboard Widgets/Program:Main/Zone1_Temp": false,
+        "EtherNet/IP Logix Tags/EtherNet/IP": true,
+        "EtherNet/IP Logix Tags/EtherNet/IP/Frame Parser": false,
+        "EtherNet/IP Logix Tags/InfluxDB Sink": false,
+        "EtherNet/IP Logix Tags/MQTT Publisher": false,
+        "EtherNet/IP Logix Tags/Variables": true,
+        "EtherNet/IP Logix Tags/Variables/Dataset Values": false,
+        "EtherNet/IP Logix Tags/Workspaces": true,
+        "EtherNet/IP Logix Tags/Workspaces/All Data": false,
+        "EtherNet/IP Logix Tags/Workspaces/Controller Tags": false,
+        "EtherNet/IP Logix Tags/Workspaces/Overview": false,
+        "EtherNet/IP Logix Tags/Workspaces/Program:Main": false
+    },
+    "writerVersion": "4.0.3",
+    "writerVersionAtCreation": "4.0.3"
+}

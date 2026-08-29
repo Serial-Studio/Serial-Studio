@@ -456,6 +456,26 @@ ss_add_unit_test(tst_enum_labels
 )
 
 #
+# The same TU compiled with BUILD_COMMERCIAL defined: EnumLabels.cpp's commercial BusType and
+# DashboardWidget cases are unreachable in the GPL binary above, so their slug/label mappings would
+# otherwise never be tested. The #ifdef BUILD_COMMERCIAL rows in tst_enum_labels.cpp swap the
+# "falls back to unknown" gap assertions for the real commercial round-trip and uniqueness sweeps.
+# The define is set on the target (like tst_opcua_wire) so the tier stays independent of the
+# application's own configuration.
+#
+ss_add_unit_test(tst_enum_labels_commercial
+  SOURCES tst_enum_labels.cpp
+          ${SS_APP_SRC}/API/EnumLabels.cpp
+          ${SS_APP_SRC}/UI/LayoutPatterns.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+)
+if(TARGET tst_enum_labels_commercial)
+  target_compile_definitions(tst_enum_labels_commercial PRIVATE BUILD_COMMERCIAL)
+endif()
+
+#
 # PasswordHash.cpp includes QPasswordDigestor, which lives in QtNetwork (not QtCore) despite the
 # rest of the file being Core-only; without Qt6::Network here the TU fails to find the header.
 #
@@ -560,6 +580,141 @@ if(TARGET tst_tls_identity)
 endif()
 
 #
+# SparkplugPayload.{h,cpp} (spec 0073) is the hand-rolled Sparkplug B v1.0 protobuf codec the MQTT
+# session layer decodes broker traffic with. The bytes arrive from the network, so the suite is
+# where the bounds checks and the fixed caps are proven; no protobuf runtime is linked and the TU
+# compiles against Qt Core alone, so unlike the other commercial suites here it needs no
+# BUILD_COMMERCIAL define.
+#
+ss_add_unit_test(tst_sparkplug_payload
+  SOURCES tst_sparkplug_payload.cpp
+          ${SS_APP_SRC}/IO/Drivers/MQTT/SparkplugPayload.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# SparkplugSession.{h,cpp} (spec 0073) is the birth-certificate state machine the codec above feeds:
+# alias tables, the bounded pre-birth buffer, sequence gaps and the synthetic Online metric. It is
+# QObject-free and header-only in its dependencies (OpcUaWire.h supplies the slot ceiling), so the
+# link set is the codec plus SSAssert.cpp and no BUILD_COMMERCIAL define is needed.
+#
+ss_add_unit_test(tst_sparkplug_session
+  SOURCES tst_sparkplug_session.cpp
+          ${SS_APP_SRC}/IO/Drivers/MQTT/SparkplugSession.cpp
+          ${SS_APP_SRC}/IO/Drivers/MQTT/SparkplugPayload.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# SparkplugPublisher.{h,cpp} (spec 0073 A1b) is the outbound Edge Node state machine: the alias
+# registry, the seq/bdSeq counters the specification pins, and the birth/data/death payloads. It
+# produces topic+payload pairs rather than performing I/O, so the suite drives the whole publishing
+# lifecycle with no broker and round-trips every payload back through the decoder.
+#
+ss_add_unit_test(tst_sparkplug_publisher
+  SOURCES tst_sparkplug_publisher.cpp
+          ${SS_APP_SRC}/MQTT/SparkplugPublisher.cpp
+          ${SS_APP_SRC}/IO/Drivers/MQTT/SparkplugPayload.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# S7Address.{h,cpp} (spec 0073) turns the absolute S7 spellings an engineer types ("DB5.DBD20",
+# "MW10", "Q0.1") into an area, an offset and a read width. A misparsed offset reads the wrong
+# memory on a live controller, so the grammar and every rejection reason are pinned here; the TU is
+# Qt-Core-only and QObject-free, so no BUILD_COMMERCIAL define and no driver are linked.
+#
+ss_add_unit_test(tst_s7_address
+  SOURCES tst_s7_address.cpp
+          ${SS_APP_SRC}/IO/Drivers/S7Address.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# S7/IsoTsap.{h,cpp} (spec 0073) is the ISO-on-TCP transport the in-house S7comm client rides on:
+# RFC 1006 TPKT framing, the ISO 8073 class-0 handshake that carries the rack and slot, and the
+# data TPDUs a message is reassembled out of. It owns no socket -- the receive buffer is handed in
+# on every decode -- so partial arrivals and hostile framing are driven here byte by byte.
+#
+ss_add_unit_test(tst_s7comm_isotsap
+  SOURCES tst_s7comm_isotsap.cpp
+          ${SS_APP_SRC}/IO/Drivers/S7/IsoTsap.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# S7/S7Pdu.{h,cpp} (spec 0073) is the S7comm application layer: the setup negotiation that fixes
+# the message budget, the chunking that budget imposes on a variable list, the read-variable
+# request bytes and the response walk. A misplaced octet reads the wrong memory on a live machine
+# and a mis-sized chunk is silently truncated by the controller, so the whole service is pinned
+# against golden bytes here; S7Address.cpp comes with it because the items are built from real
+# parsed addresses rather than from hand-filled structs.
+#
+ss_add_unit_test(tst_s7comm_pdu
+  SOURCES tst_s7comm_pdu.cpp
+          ${SS_APP_SRC}/IO/Drivers/S7/S7Pdu.cpp
+          ${SS_APP_SRC}/IO/Drivers/S7Address.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# Apci.{h,cpp} (spec 0073) is the IEC 60870-5-104 transport layer: the I/S/U frame formats, the
+# 15-bit sequence counters, the k/w windows and the t1/t2/t3 deadlines. It owns no QTimer and no
+# socket -- every deadline is a query against a caller-supplied millisecond clock -- so the whole
+# timing contract runs here against a fake clock. Qt-Core-only and QObject-free.
+#
+ss_add_unit_test(tst_iec104_apci
+  SOURCES tst_iec104_apci.cpp
+          ${SS_APP_SRC}/IO/Drivers/Iec104/Apci.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# Asdu.{h,cpp} (spec 0073) is the IEC 60870-5-104 application layer. A misread element width
+# shifts every point after it in the same object list, so each of the twelve monitor types, both
+# SQ addressing modes and every quality descriptor is golden-decoded here; the TU is Qt-Core-only
+# and links neither the driver nor a network stack.
+#
+ss_add_unit_test(tst_iec104_asdu
+  SOURCES tst_iec104_asdu.cpp
+          ${SS_APP_SRC}/IO/Drivers/Iec104/Asdu.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# LineProtocol.h (spec 0073) renders the InfluxDB sink's points. The escaping rules differ per
+# line-protocol position and a wrong one is a silently rejected write, so the suite is where they
+# are pinned; the header is deliberately Qt-Core-only and header-only, so nothing else is linked
+# and no BUILD_COMMERCIAL define is needed.
+#
+ss_add_unit_test(tst_influx_lineprotocol
+  SOURCES tst_influx_lineprotocol.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# CanReassembly.{h,cpp} (spec 0073) joins J1939 transport-protocol and ISO 15765-2 fragments back
+# into single messages. The fragments arrive from the bus, so the suite is where the fixed session
+# caps, the timeout eviction and the drop-the-whole-session discipline are proven; the TU is
+# QObject-free and compiles against Qt Core alone, so it needs no BUILD_COMMERCIAL define and links
+# neither QtSerialBus nor the driver.
+#
+ss_add_unit_test(tst_can_reassembly
+  SOURCES tst_can_reassembly.cpp
+          ${SS_APP_SRC}/IO/Drivers/CANBus/CanReassembly.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
 # Header-only suite (MirrorProtocol.h precedent): GsUsbProtocol.h carries the gs_usb wire
 # vocabulary the CANable backend compiles against, so the solver and DLC tables test without
 # linking libusb or QtSerialBus.
@@ -580,6 +735,7 @@ ss_add_unit_test(tst_opcua_wire
           ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/NativeTemplateRegistry.cpp
           ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextTemplates.cpp
           ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp
           ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp
           ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
           ${SS_APP_SRC}/SSAssert.cpp
@@ -725,6 +881,7 @@ ss_add_unit_test(tst_cframe_parser
           ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/NativeTemplateRegistry.cpp
           ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextTemplates.cpp
           ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp
           ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp
           ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
           ${SS_APP_SRC}/Misc/Utilities.cpp
@@ -789,6 +946,44 @@ ss_add_unit_test(tst_frame_reader_modes
 #           Qt6::Gui
 #           Qt6::Widgets
 # )
+#
+
+#
+# tst_dbc_importer (spec 0073 T19) covers the extended-multiplexing import: SG_MUL_VAL_ ranges in
+# the generated Lua spec, the topological selector-before-dependent order a nested chain needs, and
+# the unchanged numeric gate a simple-mux DBC still gets. It hits the identical wall, symbol group
+# for symbol group, so it stays unregistered next to its sibling:
+#
+#   DBCImporter.cpp:158,168,222        Misc::Utilities::showMessageBox    -> Misc/Utilities.cpp
+#   DBCImporter.cpp:210,232            ProjectModel::importCompleted,
+#                                      importProjectFromJson, metaobject  -> ProjectModel.cpp + the
+#                                                                            17 Project/*.cpp TUs
+#   DBCImporter.cpp:373..1132          SerialStudio::groupWidgetId,
+#                                      datasetWidgetId                    -> SerialStudio.cpp
+#   SessionContext dtor closure        same nine-module closure as above
+#
+# AxisTicks.h and ImporterCommon.h are header-only, so they add nothing; the blocker is entirely
+# the GUI/session surface (importDBC, showPreview, confirmImport) plus the stack SessionContext.
+# Splitting those three slots into a second TU removes the first three groups but not the fourth,
+# which is why the unblock is the same SessionContext test-double seam (M2-T16). Flip the comment
+# once that lands. Until then the coverage that runs is the codegen assertion set in
+# tests/scripts/test_cpp_regressions.py (R15/R17).
+#
+# ss_add_unit_test(tst_dbc_importer
+#   SOURCES tst_dbc_importer.cpp
+#           ${SS_APP_SRC}/DataModel/Importers/DBCImporter.cpp
+#           ${SS_APP_SRC}/SessionContext.cpp
+#           ${SS_APP_SRC}/SSAssert.cpp
+#   LIBS    Qt6::Core
+#           Qt6::Gui
+#           Qt6::SerialBus
+#           Qt6::Widgets
+# )
+#
+# if(TARGET tst_dbc_importer)
+#   target_compile_definitions(tst_dbc_importer
+#     PRIVATE SS_DBC_FIXTURE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../../tests/fixtures/dbc")
+# endif()
 #
 
 #

@@ -49,7 +49,10 @@
 #ifdef BUILD_COMMERCIAL
 #  include "API/Handlers/AudioHandler.h"
 #  include "API/Handlers/CANBusHandler.h"
+#  include "API/Handlers/EipHandler.h"
 #  include "API/Handlers/HIDHandler.h"
+#  include "API/Handlers/Iec104Handler.h"
+#  include "API/Handlers/InfluxHandler.h"
 #  include "API/Handlers/LicensingHandler.h"
 #  include "API/Handlers/MDF4ExportHandler.h"
 #  include "API/Handlers/MDF4PlayerHandler.h"
@@ -58,6 +61,7 @@
 #  include "API/Handlers/NotificationsHandler.h"
 #  include "API/Handlers/OpcUaHandler.h"
 #  include "API/Handlers/ProcessHandler.h"
+#  include "API/Handlers/S7Handler.h"
 #  include "API/Handlers/SessionsHandler.h"
 #  include "API/Handlers/USBHandler.h"
 #endif
@@ -274,6 +278,10 @@ void API::CommandHandler::initializeHandlers()
   Handlers::NotificationsHandler::registerCommands();
   Handlers::SessionsHandler::registerCommands();
   Handlers::MqttHandler::registerCommands();
+  Handlers::InfluxHandler::registerCommands();
+  Handlers::S7Handler::registerCommands();
+  Handlers::EipHandler::registerCommands();
+  Handlers::Iec104Handler::registerCommands();
 #endif
 
   m_initialized = true;

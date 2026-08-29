@@ -133,6 +133,7 @@
         <file>ai/skills/debugging.md</file>
         <file>ai/skills/filesystem.md</file>
         <file>ai/skills/frame_parsers.md</file>
+        <file>ai/skills/industrial_plc.md</file>
         <file>ai/skills/mqtt.md</file>
         <file>ai/skills/output_widgets.md</file>
         <file>ai/skills/painter.md</file>
@@ -428,34 +429,43 @@
         <file>icons/devices/16/audio.svg</file>
         <file>icons/devices/16/bluetooth.svg</file>
         <file>icons/devices/16/canbus.svg</file>
+        <file>icons/devices/16/ethernetip.svg</file>
         <file>icons/devices/16/hid.svg</file>
+        <file>icons/devices/16/iec104.svg</file>
         <file>icons/devices/16/modbus.svg</file>
         <file>icons/devices/16/opcua.svg</file>
         <file>icons/devices/16/mqtt.svg</file>
         <file>icons/devices/16/network.svg</file>
         <file>icons/devices/16/process.svg</file>
+        <file>icons/devices/16/s7.svg</file>
         <file>icons/devices/16/uart.svg</file>
         <file>icons/devices/16/usb.svg</file>
         <file>icons/devices/24/audio.svg</file>
         <file>icons/devices/24/bluetooth.svg</file>
         <file>icons/devices/24/canbus.svg</file>
+        <file>icons/devices/24/ethernetip.svg</file>
         <file>icons/devices/24/hid.svg</file>
+        <file>icons/devices/24/iec104.svg</file>
         <file>icons/devices/24/modbus.svg</file>
         <file>icons/devices/24/opcua.svg</file>
         <file>icons/devices/24/mqtt.svg</file>
         <file>icons/devices/24/network.svg</file>
         <file>icons/devices/24/process.svg</file>
+        <file>icons/devices/24/s7.svg</file>
         <file>icons/devices/24/uart.svg</file>
         <file>icons/devices/24/usb.svg</file>
         <file>icons/devices/32/audio.svg</file>
         <file>icons/devices/32/bluetooth.svg</file>
         <file>icons/devices/32/canbus.svg</file>
+        <file>icons/devices/32/ethernetip.svg</file>
         <file>icons/devices/32/hid.svg</file>
+        <file>icons/devices/32/iec104.svg</file>
         <file>icons/devices/32/modbus.svg</file>
         <file>icons/devices/32/opcua.svg</file>
         <file>icons/devices/32/mqtt.svg</file>
         <file>icons/devices/32/network.svg</file>
         <file>icons/devices/32/process.svg</file>
+        <file>icons/devices/32/s7.svg</file>
         <file>icons/devices/32/uart.svg</file>
         <file>icons/devices/32/usb.svg</file>
         <file>icons/editor/16/action.svg</file>
@@ -502,6 +512,7 @@
         <file>icons/editor/16/group.svg</file>
         <file>icons/editor/16/hide.svg</file>
         <file>icons/editor/16/indicator.svg</file>
+        <file>icons/editor/16/influx.svg</file>
         <file>icons/editor/16/led.svg</file>
         <file>icons/editor/16/left.svg</file>
         <file>icons/editor/16/move-down.svg</file>
@@ -590,6 +601,7 @@
         <file>icons/editor/24/fft.svg</file>
         <file>icons/editor/24/help.svg</file>
         <file>icons/editor/24/import-table.svg</file>
+        <file>icons/editor/24/influx.svg</file>
         <file>icons/editor/24/insert-constant.svg</file>
         <file>icons/editor/24/led.svg</file>
         <file>icons/editor/24/load-ca-certs.svg</file>
@@ -650,6 +662,7 @@
         <file>icons/editor/32/export-table.svg</file>
         <file>icons/editor/32/group.svg</file>
         <file>icons/editor/32/help.svg</file>
+        <file>icons/editor/32/influx.svg</file>
         <file>icons/editor/32/insert-constant.svg</file>
         <file>icons/editor/32/load-ca-certs.svg</file>
         <file>icons/editor/32/lock.svg</file>
@@ -697,6 +710,7 @@
         <file>icons/editor/48/device.svg</file>
         <file>icons/editor/48/expand.svg</file>
         <file>icons/editor/48/group.svg</file>
+        <file>icons/editor/48/influx.svg</file>
         <file>icons/editor/48/mqtt-publisher.svg</file>
         <file>icons/editor/48/open.svg</file>
         <file>icons/editor/48/show.svg</file>
@@ -993,6 +1007,7 @@
         <file>scripts/native/rtcm_corrections.md</file>
         <file>scripts/native/sirf_binary.md</file>
         <file>scripts/native/slip_encoded.md</file>
+        <file>scripts/native/sparkplug.md</file>
         <file>scripts/native/time_series_2d.md</file>
         <file>scripts/native/ubx_ublox.md</file>
         <file>scripts/native/url_encoded.md</file>

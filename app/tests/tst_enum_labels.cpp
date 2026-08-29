@@ -28,9 +28,12 @@
 #include "API/EnumLabels.h"
 
 // Every test function here is self-contained: no state is carried between slots, so Qt Test's
-// declaration-order execution is never load-bearing. This is a GPL (non-BUILD_COMMERCIAL) unit
-// binary, so only GPL-reachable enumerators are exercised; the commercial gaps in BusType and
-// DashboardWidget are covered as "falls back to unknown" cases instead.
+// declaration-order execution is never load-bearing. This TU is compiled twice (see
+// app/tests/CMakeLists.txt): once without BUILD_COMMERCIAL as the GPL binary, where the commercial
+// BusType and DashboardWidget ordinals are absent and are covered as "falls back to unknown"
+// cases, and once with BUILD_COMMERCIAL defined, where the same sweeps additionally exercise the
+// real commercial slug/label mappings. The #ifdef BUILD_COMMERCIAL blocks below are the rows that
+// only exist in the second build.
 
 //--------------------------------------------------------------------------------------------------
 // Shared helpers
@@ -128,6 +131,30 @@ void TstEnumLabels::busTypeGplSweep_data()
                            << QStringLiteral("Network (TCP/UDP/WebSocket/HTTP)");
   QTest::newRow("BluetoothLE") << static_cast<int>(SerialStudio::BusType::BluetoothLE)
                                << QStringLiteral("bluetooth-le") << QStringLiteral("Bluetooth LE");
+#ifdef BUILD_COMMERCIAL
+  QTest::newRow("Audio") << static_cast<int>(SerialStudio::BusType::Audio)
+                         << QStringLiteral("audio") << QStringLiteral("Audio input");
+  QTest::newRow("ModBus") << static_cast<int>(SerialStudio::BusType::ModBus)
+                          << QStringLiteral("modbus") << QStringLiteral("Modbus");
+  QTest::newRow("CanBus") << static_cast<int>(SerialStudio::BusType::CanBus)
+                          << QStringLiteral("canbus") << QStringLiteral("CAN bus");
+  QTest::newRow("RawUsb") << static_cast<int>(SerialStudio::BusType::RawUsb)
+                          << QStringLiteral("usb") << QStringLiteral("USB (libusb)");
+  QTest::newRow("HidDevice") << static_cast<int>(SerialStudio::BusType::HidDevice)
+                             << QStringLiteral("hid") << QStringLiteral("HID");
+  QTest::newRow("Process") << static_cast<int>(SerialStudio::BusType::Process)
+                           << QStringLiteral("process") << QStringLiteral("Process I/O");
+  QTest::newRow("Mqtt") << static_cast<int>(SerialStudio::BusType::Mqtt) << QStringLiteral("mqtt")
+                        << QStringLiteral("MQTT subscriber");
+  QTest::newRow("OpcUa") << static_cast<int>(SerialStudio::BusType::OpcUa)
+                         << QStringLiteral("opcua") << QStringLiteral("OPC UA");
+  QTest::newRow("S7") << static_cast<int>(SerialStudio::BusType::S7) << QStringLiteral("s7")
+                      << QStringLiteral("Siemens S7comm");
+  QTest::newRow("EthernetIp") << static_cast<int>(SerialStudio::BusType::EthernetIp)
+                              << QStringLiteral("ethernetip") << QStringLiteral("EtherNet/IP");
+  QTest::newRow("Iec104") << static_cast<int>(SerialStudio::BusType::Iec104)
+                          << QStringLiteral("iec104") << QStringLiteral("IEC 60870-5-104");
+#endif
 }
 
 /**
@@ -148,26 +175,40 @@ void TstEnumLabels::busTypeGplSweep()
  */
 void TstEnumLabels::busTypeSlugsAreWellFormedAndUnique()
 {
+  QList<SerialStudio::BusType> buses = {SerialStudio::BusType::UART,
+                                        SerialStudio::BusType::Network,
+                                        SerialStudio::BusType::BluetoothLE};
+#ifdef BUILD_COMMERCIAL
+  buses << SerialStudio::BusType::Audio << SerialStudio::BusType::ModBus
+        << SerialStudio::BusType::CanBus << SerialStudio::BusType::RawUsb
+        << SerialStudio::BusType::HidDevice << SerialStudio::BusType::Process
+        << SerialStudio::BusType::Mqtt << SerialStudio::BusType::OpcUa << SerialStudio::BusType::S7
+        << SerialStudio::BusType::EthernetIp << SerialStudio::BusType::Iec104;
+#endif
+
   QSet<QString> slugs;
-  for (auto value : {SerialStudio::BusType::UART,
-                     SerialStudio::BusType::Network,
-                     SerialStudio::BusType::BluetoothLE}) {
+  for (auto value : buses) {
     const auto slug = API::EnumLabels::busTypeSlug(static_cast<int>(value));
     QVERIFY(isWellFormedSlug(slug));
     slugs.insert(slug);
   }
 
-  QCOMPARE(slugs.size(), qsizetype(3));
+  QCOMPARE(slugs.size(), buses.size());
 }
 
 void TstEnumLabels::busTypeUnknownGapsFallBackToDefault_data()
 {
   QTest::addColumn<int>("value");
 
+#ifndef BUILD_COMMERCIAL
   QTest::newRow("commercial-Audio-ordinal") << 3;
   QTest::newRow("commercial-ModBus-ordinal") << 4;
   QTest::newRow("commercial-Mqtt-ordinal") << 9;
   QTest::newRow("commercial-OpcUa-ordinal") << 10;
+  QTest::newRow("commercial-S7-ordinal") << 11;
+  QTest::newRow("commercial-EthernetIp-ordinal") << 12;
+  QTest::newRow("commercial-Iec104-ordinal") << 13;
+#endif
   QTest::newRow("negative") << -1;
   QTest::newRow("far-out-of-range") << 100;
 }
@@ -737,10 +778,22 @@ void TstEnumLabels::dashboardWidgetFromSlugBogusOrEmptyMissesToMinusOne()
  */
 void TstEnumLabels::dashboardWidgetCommercialGapsFallBackToUnknownInGplBuild()
 {
+#ifndef BUILD_COMMERCIAL
   QCOMPARE(API::EnumLabels::dashboardWidgetSlug(18), QStringLiteral("unknown"));
   QCOMPARE(API::EnumLabels::dashboardWidgetFromSlug(QStringLiteral("imageview")), -1);
   QCOMPARE(API::EnumLabels::dashboardWidgetFromSlug(QStringLiteral("waterfall")), -1);
   QCOMPARE(API::EnumLabels::dashboardWidgetFromSlug(QStringLiteral("painter")), -1);
+#else
+  for (auto value : {SerialStudio::DashboardImageView,
+                     SerialStudio::DashboardOutputPanel,
+                     SerialStudio::DashboardNotificationLog,
+                     SerialStudio::DashboardWaterfall,
+                     SerialStudio::DashboardPainter}) {
+    const auto slug = API::EnumLabels::dashboardWidgetSlug(static_cast<int>(value));
+    QVERIFY(isWellFormedSlug(slug));
+    QCOMPARE(API::EnumLabels::dashboardWidgetFromSlug(slug), static_cast<int>(value));
+  }
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------

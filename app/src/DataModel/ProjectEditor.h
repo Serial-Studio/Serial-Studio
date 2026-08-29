@@ -237,6 +237,7 @@ public:
     GroupFolderView,
     TableFolderView,
     MqttPublisherView,
+    InfluxSinkView,
     ControlScriptView,
     MultiSelectionView,
   };
@@ -318,6 +319,7 @@ public:
     KindTablesRoot,
     KindSystemDatasets,
     KindWorkspacesRoot,
+    KindInfluxSink,
   };
   Q_ENUM(ItemKind)
 
@@ -415,6 +417,7 @@ public slots:
   void selectGroupFolder(int folderId);
   void selectTableFolder(int folderId);
   void selectMqttPublisher();
+  void selectInfluxSink();
   void selectControlScript();
   void openMqttScriptEditor();
   void setTreeSearchQuery(const QString& query);
@@ -438,6 +441,7 @@ public slots:
   void buildMqttBrokerSection(const MQTT::Publisher& pub, bool enabled);
   void buildMqttBrokerCredentials(const MQTT::Publisher& pub, bool enabled);
   void buildMqttSslSection(const MQTT::Publisher& pub, bool enabled);
+  void buildMqttSparkplugSection(const MQTT::Publisher& pub, bool enabled);
 #endif
   void displayFrameParserView(int sourceId);
   void selectSource(int sourceId);
@@ -515,6 +519,7 @@ private:
   bool selectDataTableItem(QStandardItem* item);
   bool selectWorkspaceTreeItem(QStandardItem* item);
   bool selectMqttPublisherItem(QStandardItem* item);
+  bool selectInfluxSinkItem(QStandardItem* item);
   bool selectControlScriptItem(QStandardItem* item);
 
   /**
@@ -577,6 +582,7 @@ private:
   [[nodiscard]] QHash<int, QStandardItem*> appendTableFolderItems(
     QStandardItem* tablesRoot, const QString& pathPrefix, QHash<QString, bool>& expandedStates);
   void appendMqttPublisherTreeItem(QStandardItem* root);
+  void appendInfluxSinkTreeItem(QStandardItem* root);
   void appendControlScriptTreeItem(QStandardItem* root);
   void appendDatasetChildren(QStandardItem* groupItem, const DataModel::Group& group);
   void appendOutputWidgetChildren(QStandardItem* groupItem, const DataModel::Group& group);
@@ -672,6 +678,7 @@ private:
   int m_selectedFolderId;
 
   QStandardItem* m_mqttPublisherItem;
+  QStandardItem* m_influxSinkItem;
   QStandardItem* m_controlScriptItem;
 
   QString m_treeSearchQuery;

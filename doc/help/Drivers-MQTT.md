@@ -67,6 +67,50 @@ The driver is transport-only. It does not decode the payload; it hands the bytes
 
 The frame-detection rules on the source still apply. If the publisher embeds start/end delimiters inside the payload, configure them; otherwise leave **No Delimiters** selected so each MQTT message becomes one frame.
 
+## Sparkplug
+
+Sparkplug is a convention layered on MQTT: a fixed topic namespace rooted at `spBv1.0`, protobuf payloads, birth certificates that declare what a node publishes, and a death certificate the broker delivers when that node drops off. Serial Studio speaks both halves of it. As a subscriber, the MQTT driver acts as a host application and turns the namespace into datasets. As a producer, the [MQTT Publisher](MQTT-Publisher.md) acts as an edge node. Payloads on both sides follow the Sparkplug B v1.0 specification, in the Eclipse Tahu schema.
+
+### Subscribing
+
+Tick **Sparkplug** in the Setup pane's MQTT section. The checkbox replaces **Topic Filter**: the driver subscribes to the `spBv1.0` namespace itself, so no filter is required and the one configured for plain subscription does not apply while Sparkplug is on. Two rows appear below the checkbox:
+
+| Field | Controls |
+|-------|----------|
+| **Sparkplug Group ID** | Restricts the subscription to one group. Empty means every group on the broker. Wildcards and `/` are refused, because a group id is a single topic element. |
+| **Create Project from Births** | Generates a project from the metrics discovered so far. Enabled once the source is connected. |
+
+Decoding is birth-driven. A node's birth certificate names its metrics and hands out the numeric aliases its later data messages carry; the driver assigns each named metric a wire slot, latches the birth values, and resolves every later alias through that table. A data message whose scope has no certificate yet, or that carries an alias the certificate never declared, is not guessed at: it is held until the birth arrives and counted if it cannot be resolved. Every edge node also gets a synthetic `Online` metric carrying its birth and death state, so a node that dies reads as offline on the dashboard instead of merely going stale.
+
+Sequence numbers are checked per node, and a gap is counted rather than interpolated over.
+
+The session's state is capped rather than grown on demand: 2048 metric slots, 256 nodes, 64 devices per node, and 256 messages held ahead of a birth. Traffic past a ceiling is refused and counted.
+
+### Create Project from Births
+
+Connect first, let the certificates arrive, then generate. The button builds a project with one source of type MQTT Subscriber carrying the broker settings and the group id, one group per publishing scope (an edge node, or a device when the node publishes devices), one dataset per discovered metric, and a Built-In frame parser using the **Sparkplug** template. The template's schema parameter is machine-managed: connect again to discover more metrics and generate again rather than editing it by hand. Generating before any certificate has arrived reports that nothing was discovered instead of writing an empty project.
+
+The project opens in the Project Editor for customization.
+
+### Publishing as an edge node
+
+The outbound direction is configured in the Project Editor, in the MQTT publisher's **Sparkplug** section:
+
+| Field | Controls |
+|-------|----------|
+| **Publish as Edge Node** | Publishes the dashboard's datasets into the Sparkplug namespace instead of the payload mode selected above. |
+| **Group ID** | The logical group this node belongs to. |
+| **Edge Node ID** | Identifies this node inside the group. |
+| **Device ID** | Optional. When set, the datasets are published as a device of this node, under its birth and data topics rather than the node's own. |
+
+The publisher owns the lifecycle. The death certificate is registered as the connection's will before CONNECT, because a will armed after CONNECT never fires and a node that exits ungracefully would then read as online forever. The birth certificate goes out on connect and declares every dataset as a metric with an alias; each publish tick afterwards sends one data message addressed by alias, carrying only the metrics that changed. A dataset that appears later grows the registry, and the node re-publishes its certificate before the next data message so no host ever receives an alias it cannot resolve. The node also subscribes to its own command topic and answers a rebirth request by publishing the certificate again.
+
+An edge node publishes its own namespace and nothing else. While it is on, the raw-byte and script payload modes are suppressed and their queues drained rather than left to grow behind a mode that is not running.
+
+### Monitoring
+
+`project.mqtt.subscriber.getStatus` returns a `sparkplug` block beside the connection state. It reports whether the mode is on, the group id, the number of discovered metrics, and the pulled counters: sequence gaps, cap drops, decode errors, ignored messages, messages held and dropped before a birth, rebirth requests, and metrics whose datatype the decoder does not support.
+
 ## Multiple MQTT subscribers in one project
 
 The project editor treats MQTT subscribers the same as any other bus type, so a project with two ESP32 fleets on different brokers — one local, one cloud — is a normal multi-source project:
@@ -109,7 +153,7 @@ The TLS configuration is per-source, so two MQTT subscribers in the same project
 ## See also
 
 - [MQTT Topics & Semantics](MQTT-Topics.md): the protocol vocabulary — topics, wildcards, QoS, retained messages, sessions.
-- [MQTT Publisher](MQTT-Publisher.md): the project-level outbound side, when Serial Studio is the producer.
+- [MQTT Publisher](MQTT-Publisher.md): the project-level outbound side, when Serial Studio is the producer, and where the edge-node fields of [Sparkplug](#sparkplug) are configured.
 - [Protocol Setup Guides](Protocol-Setup-Guides.md): step-by-step MQTT setup in the project editor.
 - [Drivers: Network](Drivers-Network.md): raw TCP/UDP, when you do not need a broker.
 - [Data Sources](Data-Sources.md): driver capability summary across all transports.

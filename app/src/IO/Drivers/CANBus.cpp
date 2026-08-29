@@ -32,9 +32,13 @@
 #include "IO/Drivers/CANBus/GsUsbCanBackend.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Utilities.h"
+#include "SSAssert.h"
 
 // Default CAN FD data-phase bitrate (the gs_usb backend applies the same fallback)
 static constexpr quint32 kDefaultDataBitrate = 2000000;
+
+// DLC byte marking a reassembled long frame (a bus frame never exceeds 64)
+static constexpr quint8 kLongFrameDlcMarker = 0xFF;
 
 //--------------------------------------------------------------------------------------------------
 // Synthetic (libusb/serial) CAN backend plugin helpers
@@ -54,6 +58,51 @@ static QStringList enumerateCanPlugins()
   return list;
 }
 
+/**
+ * @brief Serializes one bus frame into the driver's wire layout: standard frames as
+ * [ID_hi, ID_lo, DLC, payload...] padded to 11 bytes, extended as [0x80|ID28..24, ID23..16,
+ * ID15..8, ID7..0, DLC, payload...] padded to 13.
+ */
+static QByteArray serializeCanFrame(const quint32 can_id,
+                                    const bool extended,
+                                    const QByteArray& payload)
+{
+  QByteArray data;
+  data.reserve(extended ? 13 : 11);
+
+  if (extended) {
+    data.append(static_cast<char>(0x80 | ((can_id >> 24) & 0x1F)));
+    data.append(static_cast<char>((can_id >> 16) & 0xFF));
+  }
+
+  data.append(static_cast<char>((can_id >> 8) & 0xFF));
+  data.append(static_cast<char>(can_id & 0xFF));
+  data.append(static_cast<char>(static_cast<quint8>(payload.size())));
+  data.append(payload);
+
+  const qsizetype min_size = extended ? 13 : 11;
+  while (data.size() < min_size)
+    data.append(static_cast<char>(0));
+
+  return data;
+}
+
+/**
+ * @brief Copies one reassembler's counters into a variant map for the pulled diagnostics.
+ */
+static QVariantMap reassemblyCountersMap(const IO::Drivers::CanReassemblyCounters& counters)
+{
+  QVariantMap map;
+  map.insert(QStringLiteral("aborted"), static_cast<qulonglong>(counters.aborted));
+  map.insert(QStringLiteral("timeouts"), static_cast<qulonglong>(counters.timeouts));
+  map.insert(QStringLiteral("completed"), static_cast<qulonglong>(counters.completed));
+  map.insert(QStringLiteral("malformed"), static_cast<qulonglong>(counters.malformed));
+  map.insert(QStringLiteral("sizeOverruns"), static_cast<qulonglong>(counters.sizeOverruns));
+  map.insert(QStringLiteral("sequenceErrors"), static_cast<qulonglong>(counters.sequenceErrors));
+  map.insert(QStringLiteral("sessionOverruns"), static_cast<qulonglong>(counters.sessionOverruns));
+  return map;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Constructor/destructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
@@ -66,6 +115,7 @@ IO::Drivers::CANBus::CANBus()
   , m_canFD(false)
   , m_loopback(false)
   , m_listenOnly(false)
+  , m_tpReassembly(false)
   , m_pluginIndex(0)
   , m_interfaceIndex(0)
   , m_bitrate(500000)
@@ -78,6 +128,7 @@ IO::Drivers::CANBus::CANBus()
   m_canFD          = m_settings.value("CanBusDriver/canFD", false).toBool();
   m_loopback       = m_settings.value("CanBusDriver/loopback", false).toBool();
   m_listenOnly     = m_settings.value("CanBusDriver/listenOnly", false).toBool();
+  m_tpReassembly   = m_settings.value("CanBusDriver/tpReassembly", false).toBool();
   m_bitrate        = m_settings.value("CanBusDriver/bitrate", 500000).toUInt();
   m_dataBitrate    = m_settings.value("CanBusDriver/dataBitrate", kDefaultDataBitrate).toUInt();
   m_pluginIndex    = m_settings.value("CanBusDriver/pluginIndex", 0).toUInt();
@@ -110,6 +161,10 @@ IO::Drivers::CANBus::CANBus()
     this, &IO::Drivers::CANBus::loopbackChanged, this, &IO::Drivers::CANBus::configurationChanged);
   connect(this,
           &IO::Drivers::CANBus::listenOnlyChanged,
+          this,
+          &IO::Drivers::CANBus::configurationChanged);
+  connect(this,
+          &IO::Drivers::CANBus::tpReassemblyChanged,
           this,
           &IO::Drivers::CANBus::configurationChanged);
 
@@ -465,6 +520,30 @@ bool IO::Drivers::CANBus::listenOnly() const
 }
 
 /**
+ * @brief Returns true if J1939 transport-protocol and ISO-TP reassembly is enabled
+ */
+bool IO::Drivers::CANBus::tpReassembly() const
+{
+  return m_tpReassembly;
+}
+
+/**
+ * @brief Returns the pulled reassembly diagnostics, one sub-map per protocol (spec 0033): the
+ * counters are plain integers the reassemblers increment in place, so reading them costs a copy
+ * on the caller's cadence and nothing on the receive path.
+ */
+QVariantMap IO::Drivers::CANBus::reassemblyCounters() const
+{
+  QVariantMap map;
+  map.insert(QStringLiteral("enabled"), m_tpReassembly);
+  map.insert(QStringLiteral("j1939"), reassemblyCountersMap(m_j1939.counters()));
+  map.insert(QStringLiteral("isotp"), reassemblyCountersMap(m_isoTp.counters()));
+  map.insert(QStringLiteral("j1939Sessions"), m_j1939.activeSessions());
+  map.insert(QStringLiteral("isotpSessions"), m_isoTp.activeSessions());
+  return map;
+}
+
+/**
  * @brief Returns the current plugin index
  */
 quint8 IO::Drivers::CANBus::pluginIndex() const
@@ -628,6 +707,26 @@ void IO::Drivers::CANBus::setListenOnly(const bool enabled)
 }
 
 /**
+ * @brief Sets whether J1939 transport-protocol and ISO-TP frames are reassembled. Defaults to off
+ * because interpreting the TP parameter groups on a bus that is not J1939 would turn ordinary
+ * traffic into synthesized long frames; toggling it discards any half-collected session, so the
+ * two settings never mix inside one message.
+ */
+void IO::Drivers::CANBus::setTpReassembly(const bool enabled)
+{
+  if (m_tpReassembly == enabled)
+    return;
+
+  m_tpReassembly = enabled;
+  m_settings.setValue("CanBusDriver/tpReassembly", enabled);
+
+  m_j1939.reset();
+  m_isoTp.reset();
+
+  Q_EMIT tpReassemblyChanged();
+}
+
+/**
  * @brief Sets the bitrate for the CAN bus.
  */
 void IO::Drivers::CANBus::setBitrate(const quint32 bitrate)
@@ -697,10 +796,10 @@ void IO::Drivers::CANBus::setupExternalConnections()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Drains available CAN frames and publishes them in the legacy layout: standard frames
- * as [ID_hi, ID_lo, DLC, payload...] (11 bytes), extended as [0x80|ID28..24, ID23..16,
- * ID15..8, ID7..0, DLC, payload...] (13 bytes); payloads over 64 bytes are dropped. Plugin
- * stamps are rebased via rebaseFrameTimestamp(); unstamped frames use drain time.
+ * @brief Drains available CAN frames and publishes them in the legacy layout: standard frames as
+ * [ID_hi, ID_lo, DLC, payload...] (11 bytes), extended as [0x80|ID28..24, ID23..16, ID15..8,
+ * ID7..0, DLC, payload...] (13 bytes); payloads over 64 bytes are dropped. Plugin stamps rebase
+ * through rebaseFrameTimestamp(). Reassembly, when on, consumes transport frames beforehand.
  */
 void IO::Drivers::CANBus::onFramesReceived()
 {
@@ -724,36 +823,86 @@ void IO::Drivers::CANBus::onFramesReceived()
 
       const bool extended  = frame.hasExtendedFrameFormat();
       const quint32 can_id = frame.frameId() & (extended ? 0x1FFFFFFFu : 0x7FFu);
+      SS_ASSERT_LOG(payload.size() <= 64);
+      SS_ASSERT_LOG(can_id <= 0x1FFFFFFFu);
 
-      QByteArray data;
-      data.reserve(extended ? 13 : 11);
+      const auto raw         = frame.timeStamp();
+      const qint64 stampUsec = raw.seconds() * 1000000 + raw.microSeconds();
+      const auto stamp       = stampUsec > 0 ? rebaseFrameTimestamp(stampUsec, now) : now;
 
-      if (extended) {
-        data.append(static_cast<char>(0x80 | ((can_id >> 24) & 0x1F)));
-        data.append(static_cast<char>((can_id >> 16) & 0xFF));
-      }
+      if (m_tpReassembly && routeReassembly(can_id, extended, payload, stamp))
+        continue;
 
-      data.append(static_cast<char>((can_id >> 8) & 0xFF));
-      data.append(static_cast<char>(can_id & 0xFF));
-      data.append(static_cast<char>(static_cast<quint8>(payload.size())));
-      data.append(payload);
-
-      const qsizetype min_size = extended ? 13 : 11;
-      while (data.size() < min_size)
-        data.append(static_cast<char>(0));
-
-      const auto stamp       = frame.timeStamp();
-      const qint64 stampUsec = stamp.seconds() * 1000000 + stamp.microSeconds();
-      if (stampUsec > 0)
-        publishReceivedData(std::move(data), rebaseFrameTimestamp(stampUsec, now));
-      else
-        publishReceivedData(std::move(data), now);
+      publishReceivedData(serializeCanFrame(can_id, extended, payload), stamp);
     }
   } catch (const std::exception& e) {
     qWarning() << "CAN frame read failed:" << e.what();
   } catch (...) {
     qWarning() << "CAN frame read failed: unknown exception";
   }
+}
+
+/**
+ * @brief Routes one frame into the reassemblers and reports whether it was consumed. Only the two
+ * J1939 transport parameter groups and the ISO 15765-4 standardized diagnostic ranges are claimed,
+ * and an ISO-TP SingleFrame is never claimed at all, so everything else falls through to the
+ * unchanged publish path.
+ */
+bool IO::Drivers::CANBus::routeReassembly(const quint32 can_id,
+                                          const bool extended,
+                                          const QByteArray& payload,
+                                          const CapturedData::SteadyTimePoint stamp)
+{
+  SS_ASSERT(m_tpReassembly, return false);
+  SS_ASSERT_LOG(payload.size() <= 64);
+
+  if (extended && J1939TransportReassembler::isTransportFrame(can_id)) {
+    const auto done = m_j1939.feed(can_id, payload, stamp);
+    if (done.has_value()) {
+      const quint32 id = (static_cast<quint32>(done->priority & 0x07u) << 26)
+                       | ((done->pgn & 0x3FFFFu) << 8) | done->sourceAddr;
+      publishReassembled(id, done->bytes, done->firstSeen);
+    }
+
+    return true;
+  }
+
+  if (!IsoTpReassembler::isDiagnosticId(can_id, extended))
+    return false;
+
+  if (!IsoTpReassembler::isMultiFrame(payload))
+    return false;
+
+  const auto done = m_isoTp.feed(can_id, extended, payload, stamp);
+  if (done.has_value())
+    publishReassembled(done->canId, done->bytes, done->firstSeen);
+
+  return true;
+}
+
+/**
+ * @brief Publishes one reassembled message as a single extended-format frame whose DLC byte is the
+ * long-frame marker and whose payload is appended whole, deliberately bypassing the 64-byte drop
+ * that still guards the raw path. @p stamp is the capture time of the session's FIRST packet: the
+ * source owns time, so the message is dated when it began, not when its last fragment landed.
+ */
+void IO::Drivers::CANBus::publishReassembled(const quint32 can_id,
+                                             const QByteArray& payload,
+                                             const CapturedData::SteadyTimePoint stamp)
+{
+  SS_ASSERT(!payload.isEmpty(), return);
+  SS_ASSERT_LOG(can_id <= 0x1FFFFFFFu);
+
+  QByteArray data;
+  data.reserve(payload.size() + 5);
+  data.append(static_cast<char>(0x80 | ((can_id >> 24) & 0x1F)));
+  data.append(static_cast<char>((can_id >> 16) & 0xFF));
+  data.append(static_cast<char>((can_id >> 8) & 0xFF));
+  data.append(static_cast<char>(can_id & 0xFF));
+  data.append(static_cast<char>(kLongFrameDlcMarker));
+  data.append(payload);
+
+  publishReceivedData(std::move(data), stamp);
 }
 
 /**
@@ -1060,6 +1209,13 @@ QList<IO::DriverProperty> IO::Drivers::CANBus::driverProperties() const
   listenOnly.value = m_listenOnly;
   props.append(listenOnly);
 
+  IO::DriverProperty reassembly;
+  reassembly.key   = QStringLiteral("tpReassembly");
+  reassembly.label = tr("Multi-Frame Reassembly");
+  reassembly.type  = IO::DriverProperty::CheckBox;
+  reassembly.value = m_tpReassembly;
+  props.append(reassembly);
+
   return props;
 }
 
@@ -1097,6 +1253,11 @@ void IO::Drivers::CANBus::setDriverProperty(const QString& key, const QVariant& 
 
   if (key == QLatin1String("listenOnly")) {
     setListenOnly(value.toBool());
+    return;
+  }
+
+  if (key == QLatin1String("tpReassembly")) {
+    setTpReassembly(value.toBool());
     return;
   }
 

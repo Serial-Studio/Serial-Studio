@@ -468,7 +468,8 @@ void DataModel::ProjectEditor::buildSourceCommonRows(const DataModel::Source& so
   QStringList busTypes = {tr("Serial Port"), tr("Network"), tr("Bluetooth LE")};
 #ifdef BUILD_COMMERCIAL
   busTypes << tr("Audio Input") << tr("Modbus") << tr("CAN Bus") << tr("Raw USB")
-           << tr("HID Device") << tr("Process") << tr("MQTT Subscriber") << tr("OPC UA");
+           << tr("HID Device") << tr("Process") << tr("MQTT Subscriber") << tr("OPC UA")
+           << tr("Siemens S7") << tr("EtherNet/IP") << tr("IEC 60870-5-104");
 #endif
 
   busItem->setData(busTypes, ComboBoxData);

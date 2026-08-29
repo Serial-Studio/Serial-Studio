@@ -133,6 +133,7 @@ MQTT::PublisherWorker::PublisherWorker(
   , m_bytesSent(bytesSent)
   , m_script(nullptr)
   , m_csvHeaderDirty(true)
+  , m_pendingStructureGeneration(0)
 {
   m_sslConfiguration.setProtocol(QSsl::SecureProtocols);
   m_sslConfiguration.setPeerVerifyMode(QSslSocket::AutoVerifyPeer);
@@ -217,6 +218,11 @@ void MQTT::PublisherWorker::processData()
   if (!isResourceOpen())
     return;
 
+  if (sparkplugActive()) {
+    discardSuppressedPayloads();
+    return;
+  }
+
   const int mode = m_mode->load(std::memory_order_relaxed);
 
   if (m_rawQueue && mode != static_cast<int>(Publisher::Mode::RawRxData)) {
@@ -292,7 +298,15 @@ void MQTT::PublisherWorker::processItems(const std::vector<DataModel::DataBlockP
   if (items.empty())
     return;
 
-  if (!isResourceOpen() || m_cfg.topicBase.isEmpty())
+  if (!isResourceOpen())
+    return;
+
+  if (sparkplugActive()) {
+    publishSparkplugBlocks(items);
+    return;
+  }
+
+  if (m_cfg.topicBase.isEmpty())
     return;
 
   const int mode = m_mode->load(std::memory_order_relaxed);
@@ -320,11 +334,23 @@ void MQTT::PublisherWorker::processItems(const std::vector<DataModel::DataBlockP
 }
 
 /**
+ * @brief Caches the frame-pool generation the next structure publish belongs to (spec 0074). The
+ *        FrameBuilder emits this immediately before the paired structurePublished, both queued to
+ *        this worker in order, so the value is current when setTemplateFrame runs the reconcile;
+ *        the inner Frame does not carry the generation, which is why it arrives on its own signal.
+ */
+void MQTT::PublisherWorker::setStructureGeneration(quint64 generation)
+{
+  m_pendingStructureGeneration = generation;
+}
+
+/**
  * @brief Adopts one source's structure; MQTT publishes frame-shaped payloads (spec 0055 D5).
  */
 void MQTT::PublisherWorker::setTemplateFrame(int sourceId, const DataModel::Frame& frame)
 {
   DataModel::bind_frame_template(m_templates[sourceId], frame);
+  registerSparkplugMetrics(frame);
 }
 
 /**
@@ -503,9 +529,10 @@ void MQTT::PublisherWorker::recompileScriptIfNeeded()
 }
 
 /**
- * @brief Publishes a payload and increments the stats counters.
+ * @brief Publishes a payload, increments the stats counters, and reports whether the broker
+ *        accepted it, so a caller that must confirm delivery (the Sparkplug birth) can act on it.
  */
-void MQTT::PublisherWorker::publishAndCount(const QMqttTopicName& topic, const QByteArray& payload)
+bool MQTT::PublisherWorker::publishAndCount(const QMqttTopicName& topic, const QByteArray& payload)
 {
   const auto id = m_client->publish(topic, payload);
   qCDebug(lcMqttPub) << "publish topic=" << topic.name() << "size=" << payload.size() << "id=" << id
@@ -513,7 +540,7 @@ void MQTT::PublisherWorker::publishAndCount(const QMqttTopicName& topic, const Q
 
   if (id < 0) {
     qCWarning(lcMqttPub) << "publish returned -1 for topic" << topic.name();
-    return;
+    return false;
   }
 
   if (m_messagesSent)
@@ -521,6 +548,8 @@ void MQTT::PublisherWorker::publishAndCount(const QMqttTopicName& topic, const Q
 
   if (m_bytesSent)
     m_bytesSent->fetch_add(static_cast<quint64>(payload.size()), std::memory_order_relaxed);
+
+  return true;
 }
 
 /**
@@ -537,7 +566,10 @@ void MQTT::PublisherWorker::applyBrokerConfig(const MQTT::BrokerConfig& cfg)
     || cfg.peerVerifyDepth != m_cfg.peerVerifyDepth || cfg.caCertificates != m_cfg.caCertificates
     || cfg.clientCertificate != m_cfg.clientCertificate
     || cfg.clientPrivateKey != m_cfg.clientPrivateKey || cfg.alpnProtocol != m_cfg.alpnProtocol
-    || cfg.enabled != m_cfg.enabled;
+    || cfg.enabled != m_cfg.enabled || cfg.sparkplugEnabled != m_cfg.sparkplugEnabled
+    || cfg.sparkplugGroupId != m_cfg.sparkplugGroupId
+    || cfg.sparkplugEdgeNode != m_cfg.sparkplugEdgeNode
+    || cfg.sparkplugDeviceId != m_cfg.sparkplugDeviceId;
 
   m_csvHeaderDirty = true;
   m_csvFrameTitle.clear();
@@ -632,7 +664,9 @@ Async::Task* MQTT::PublisherWorker::buildReconnectFlow()
 
 /**
  * @brief Writes the staged broker properties into the client. Caller must guarantee
- *        state == Disconnected.
+ *        state == Disconnected. The Sparkplug will is registered here for that reason: a will set
+ *        after CONNECT never arms, and an unarmed will leaves the node reading online forever
+ *        after an ungraceful disconnect (R42).
  */
 void MQTT::PublisherWorker::applyClientPropertiesUnsafe()
 {
@@ -644,6 +678,7 @@ void MQTT::PublisherWorker::applyClientPropertiesUnsafe()
   m_client->setKeepAlive(m_cfg.keepAlive);
   m_client->setCleanSession(m_cfg.cleanSession);
   m_client->setProtocolVersion(m_cfg.mqttVersion);
+  configureSparkplugWill();
 }
 
 /**
@@ -784,10 +819,17 @@ void MQTT::PublisherWorker::runTestConnection()
 }
 
 /**
- * @brief Forwards the client state to the main thread.
+ * @brief Forwards the client state to the main thread, issuing the Sparkplug birth certificate on
+ *        the transition into Connected: a host may only resolve aliases it saw in a birth, so the
+ *        birth has to precede the first data message of every session (R40).
  */
 void MQTT::PublisherWorker::onClientStateChanged(QMqttClient::ClientState state)
 {
+  if (state == QMqttClient::Connected && sparkplugActive()) {
+    subscribeSparkplugCommands();
+    publishSparkplugBirth();
+  }
+
   Q_EMIT brokerStateChanged(static_cast<int>(state));
 }
 
@@ -839,6 +881,7 @@ MQTT::Publisher::Publisher()
   , m_customClientId(false)
   , m_hostname(QStringLiteral("127.0.0.1"))
   , m_scriptLanguage(0)
+  , m_sparkplugEnabled(false)
   , m_alpnEnabled(false)
   , m_alpnProtocol(QStringLiteral("x-amzn-mqtt-ca"))
   , m_rawBytesQueue(8192)
@@ -891,6 +934,11 @@ MQTT::Publisher::Publisher()
     w, &PublisherWorker::testConnectionFinished, this, &Publisher::onWorkerTestConnectionFinished);
 
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
+  connect(&frameBuilder,
+          &DataModel::FrameBuilder::structureGenerationChanged,
+          w,
+          &PublisherWorker::setStructureGeneration,
+          Qt::QueuedConnection);
   connect(&frameBuilder,
           &DataModel::FrameBuilder::structurePublished,
           w,
@@ -1317,6 +1365,10 @@ QJsonObject MQTT::Publisher::toJson() const
   obj.insert(kKeyPrivateKeyPath, m_privateKeyPath);
   obj.insert(kKeyAlpnEnabled, m_alpnEnabled);
   obj.insert(kKeyAlpnProtocol, m_alpnProtocol);
+  obj.insert(kKeySparkplugEnabled, m_sparkplugEnabled);
+  obj.insert(kKeySparkplugGroupId, m_sparkplugGroupId);
+  obj.insert(kKeySparkplugEdgeNodeId, m_sparkplugEdgeNodeId);
+  obj.insert(kKeySparkplugDeviceId, m_sparkplugDeviceId);
   return obj;
 }
 
@@ -1362,6 +1414,11 @@ void MQTT::Publisher::applyProjectConfig(const QJsonObject& cfg)
 
   setAlpnEnabled(cfg.value(kKeyAlpnEnabled).toBool(false));
   setAlpnProtocol(cfg.value(kKeyAlpnProtocol).toString(QStringLiteral("x-amzn-mqtt-ca")));
+
+  setSparkplugEnabled(cfg.value(kKeySparkplugEnabled).toBool(false));
+  setSparkplugGroupId(cfg.value(kKeySparkplugGroupId).toString());
+  setSparkplugEdgeNodeId(cfg.value(kKeySparkplugEdgeNodeId).toString());
+  setSparkplugDeviceId(cfg.value(kKeySparkplugDeviceId).toString());
 
   m_clientCertificatePath = cfg.value(kKeyClientCertPath).toString();
   m_privateKeyPath        = cfg.value(kKeyPrivateKeyPath).toString();
@@ -1971,32 +2028,36 @@ void MQTT::Publisher::setScriptLanguage(const int language)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Enqueues the frame for the worker; rate-limiting and broker I/O happen off-main.
+ * @brief Enqueues the frame for the worker; rate-limiting and broker I/O happen off-main. An edge
+ *        node addresses its own spBv1.0 topics and declares datasets whatever the payload mode is,
+ *        so Sparkplug takes the block on its own terms; with Sparkplug off the gate is unchanged.
  */
 void MQTT::Publisher::ingestBlock(const DataModel::DataBlockPtr& block)
 {
   if (!m_enabled || !licenseValid()) [[likely]]
     return;
 
-  if (m_mode != static_cast<int>(Mode::DashboardDataJson)
+  if (!m_sparkplugEnabled && m_mode != static_cast<int>(Mode::DashboardDataJson)
       && m_mode != static_cast<int>(Mode::DashboardDataCsv))
     return;
 
-  if (!block || m_topicBase.isEmpty())
+  if (!block || (!m_sparkplugEnabled && m_topicBase.isEmpty()))
     return;
 
   enqueueData(block);
 }
 
 /**
- * @brief Enqueues raw driver bytes for the worker (RawRxData mode only).
+ * @brief Enqueues raw driver bytes for the worker (RawRxData mode only). A Sparkplug edge node
+ *        publishes its own namespace, so the raw queue is dead under it: gate the enqueue off
+ *        rather than filling a queue only discardSuppressedPayloads will drain.
  */
 void MQTT::Publisher::hotpathTxRawBytes(int deviceId, const IO::CapturedDataPtr& data)
 {
   if (!m_enabled || !licenseValid()) [[likely]]
     return;
 
-  if (m_mode != static_cast<int>(Mode::RawRxData))
+  if (m_sparkplugEnabled || m_mode != static_cast<int>(Mode::RawRxData))
     return;
 
   if (!data || data->data.isEmpty() || m_topicBase.isEmpty())
@@ -2007,14 +2068,15 @@ void MQTT::Publisher::hotpathTxRawBytes(int deviceId, const IO::CapturedDataPtr&
 }
 
 /**
- * @brief Enqueues a delimited frame's raw bytes for the script mode worker.
+ * @brief Enqueues a delimited frame's raw bytes for the script mode worker. Suppressed while a
+ *        Sparkplug edge node owns the session, whose own namespace leaves the script queue dead.
  */
 void MQTT::Publisher::hotpathTxRawFrame(int deviceId, const IO::CapturedDataPtr& data)
 {
   if (!m_enabled || !licenseValid()) [[likely]]
     return;
 
-  if (m_mode != static_cast<int>(Mode::ScriptDriven))
+  if (m_sparkplugEnabled || m_mode != static_cast<int>(Mode::ScriptDriven))
     return;
 
   if (!data || data->data.isEmpty() || m_topicBase.isEmpty())
@@ -2188,6 +2250,10 @@ MQTT::BrokerConfig MQTT::Publisher::snapshotConfig() const
   cfg.scriptCode           = m_scriptCode;
   cfg.scriptTopic          = m_scriptTopic;
   cfg.scriptLanguage       = m_scriptLanguage;
+  cfg.sparkplugEnabled     = m_sparkplugEnabled;
+  cfg.sparkplugGroupId     = m_sparkplugGroupId;
+  cfg.sparkplugEdgeNode    = m_sparkplugEdgeNodeId;
+  cfg.sparkplugDeviceId    = m_sparkplugDeviceId;
   cfg.caCertificates       = m_caCertificates;
   cfg.clientCertificate    = m_tlsIdentity.certificate;
   cfg.clientPrivateKey     = m_tlsIdentity.privateKey;

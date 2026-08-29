@@ -49,6 +49,7 @@ IO::Drivers::MQTT::MQTT()
   , m_autoKeepAlive(true)
   , m_userWantsOpen(false)
   , m_reconnectPending(false)
+  , m_sparkplugEnabled(false)
   , m_port(1883)
   , m_keepAlive(60)
   , m_protocolVersion(QMqttClient::MQTT_5_0)
@@ -149,11 +150,12 @@ bool IO::Drivers::MQTT::isWritable() const noexcept
 }
 
 /**
- * @brief Configuration is OK when host, port and topic filter are set.
+ * @brief Configuration is OK when host, port and topic filter are set. Sparkplug mode derives
+ *        the filter from the group ID, so a user topic filter is not required there.
  */
 bool IO::Drivers::MQTT::configurationOk() const noexcept
 {
-  return !m_hostname.isEmpty() && m_port > 0 && !m_topicFilter.isEmpty();
+  return !m_hostname.isEmpty() && m_port > 0 && (m_sparkplugEnabled || !m_topicFilter.isEmpty());
 }
 
 /**
@@ -192,7 +194,7 @@ bool IO::Drivers::MQTT::open(const QIODevice::OpenMode mode)
     return false;
   }
 
-  if (m_topicFilter.isEmpty()) {
+  if (effectiveTopicFilter().isEmpty()) {
     qCWarning(lcMqttSub) << "open() rejected: empty topic filter";
     return false;
   }
@@ -251,6 +253,14 @@ bool IO::Drivers::MQTT::autoKeepAlive() const noexcept
 bool IO::Drivers::MQTT::cleanSession() const noexcept
 {
   return m_cleanSession;
+}
+
+/**
+ * @brief Returns whether the driver subscribes to the Sparkplug B namespace.
+ */
+bool IO::Drivers::MQTT::sparkplugEnabled() const noexcept
+{
+  return m_sparkplugEnabled;
 }
 
 /**
@@ -363,6 +373,23 @@ QString IO::Drivers::MQTT::password() const
 QString IO::Drivers::MQTT::topicFilter() const
 {
   return m_topicFilter;
+}
+
+/**
+ * @brief Returns the Sparkplug B group identifier; empty means every group.
+ */
+QString IO::Drivers::MQTT::sparkplugGroupId() const
+{
+  return m_sparkplugGroupId;
+}
+
+/**
+ * @brief Filter used both to subscribe and to match; a stale second check drops every message.
+ *        Cached by the setters that can change it, so the per-message match costs no allocation.
+ */
+QString IO::Drivers::MQTT::effectiveTopicFilter() const
+{
+  return m_effectiveFilter;
 }
 
 /**
@@ -683,6 +710,44 @@ void IO::Drivers::MQTT::setTopicFilter(const QString& topic)
 
   m_topicFilter = topic;
   m_settings.setValue(settingsKey("topicFilter"), topic);
+  refreshTopicFilterCache();
+  scheduleReconnectIfActive();
+  Q_EMIT mqttConfigurationChanged();
+}
+
+/**
+ * @brief Enables or disables Sparkplug subscription, which overrides the user topic filter. The
+ *        flag owns the publishing tick, so disabling stops it; only a broker connect re-arms it.
+ */
+void IO::Drivers::MQTT::setSparkplugEnabled(const bool enabled)
+{
+  if (m_sparkplugEnabled == enabled)
+    return;
+
+  m_sparkplugEnabled = enabled;
+  if (!enabled)
+    m_sparkplugTimer.stop();
+
+  m_settings.setValue(settingsKey("sparkplugEnabled"), enabled);
+  refreshTopicFilterCache();
+  scheduleReconnectIfActive();
+  Q_EMIT mqttConfigurationChanged();
+}
+
+/**
+ * @brief Sets the Sparkplug group ID scoping the subscription; wildcards and '/' are refused.
+ */
+void IO::Drivers::MQTT::setSparkplugGroupId(const QString& groupId)
+{
+  if (m_sparkplugGroupId == groupId)
+    return;
+
+  if (rejectSparkplugGroupId(groupId))
+    return;
+
+  m_sparkplugGroupId = groupId;
+  m_settings.setValue(settingsKey("sparkplugGroupId"), groupId);
+  refreshTopicFilterCache();
   scheduleReconnectIfActive();
   Q_EMIT mqttConfigurationChanged();
 }
@@ -720,6 +785,20 @@ QList<IO::DriverProperty> IO::Drivers::MQTT::driverProperties() const
   topic.type  = IO::DriverProperty::Text;
   topic.value = m_topicFilter;
   props.append(topic);
+
+  IO::DriverProperty spark;
+  spark.key   = QStringLiteral("sparkplugEnabled");
+  spark.label = tr("Sparkplug");
+  spark.type  = IO::DriverProperty::CheckBox;
+  spark.value = m_sparkplugEnabled;
+  props.append(spark);
+
+  IO::DriverProperty group;
+  group.key   = QStringLiteral("sparkplugGroupId");
+  group.label = tr("Sparkplug Group ID");
+  group.type  = IO::DriverProperty::Text;
+  group.value = m_sparkplugGroupId;
+  props.append(group);
 
   IO::DriverProperty cid;
   cid.key   = QStringLiteral("clientId");
@@ -850,10 +929,31 @@ void IO::Drivers::MQTT::appendMqttSslProperties(QList<IO::DriverProperty>& props
 }
 
 /**
+ * @brief Applies a Sparkplug key, true when consumed; split out to keep setDriverProperty short.
+ */
+bool IO::Drivers::MQTT::applySparkplugProperty(const QString& key, const QVariant& value)
+{
+  if (key == QLatin1String("sparkplugEnabled")) {
+    setSparkplugEnabled(value.toBool());
+    return true;
+  }
+
+  if (key == QLatin1String("sparkplugGroupId")) {
+    setSparkplugGroupId(value.toString());
+    return true;
+  }
+
+  return false;
+}
+
+/**
  * @brief Applies a single MQTT input configuration change by key.
  */
 void IO::Drivers::MQTT::setDriverProperty(const QString& key, const QVariant& value)
 {
+  if (applySparkplugProperty(key, value))
+    return;
+
   if (key == QLatin1String("hostname")) {
     setHostname(value.toString());
     return;
@@ -960,6 +1060,7 @@ void IO::Drivers::MQTT::onStateChanged(QMqttClient::ClientState state)
 {
   qCInfo(lcMqttSub) << "state changed:" << state;
   Q_EMIT connectedChanged();
+  sparkplugStateChanged(state == QMqttClient::Connected);
 
   if (state == QMqttClient::Connected)
     reportOpenFinished(true);
@@ -975,22 +1076,20 @@ void IO::Drivers::MQTT::onStateChanged(QMqttClient::ClientState state)
     return;
   }
 
-  if (state == QMqttClient::Connected && !m_topicFilter.isEmpty()) {
-    QMqttTopicFilter filter;
-    filter.setFilter(m_topicFilter);
-
-    auto* sub = m_client.subscribe(filter, 0);
+  const auto active = effectiveTopicFilter();
+  if (state == QMqttClient::Connected && !active.isEmpty()) {
+    auto* sub = m_client.subscribe(m_topicMatcher, 0);
     if (!sub || sub->state() == QMqttSubscription::Error) {
-      qCCritical(lcMqttSub) << "subscribe failed for filter" << m_topicFilter;
+      qCCritical(lcMqttSub) << "subscribe failed for filter" << active;
       logDriverError(tr("MQTT Subscription Error"),
-                     tr("Failed to subscribe to topic \"%1\".").arg(m_topicFilter));
+                     tr("Failed to subscribe to topic \"%1\".").arg(active));
       return;
     }
 
-    qCInfo(lcMqttSub) << "subscribed to" << m_topicFilter << "initial state:" << sub->state();
+    qCInfo(lcMqttSub) << "subscribed to" << active << "initial state:" << sub->state();
     connect(
       sub, &QMqttSubscription::stateChanged, this, [this](QMqttSubscription::SubscriptionState s) {
-        qCInfo(lcMqttSub) << "subscription state for" << m_topicFilter << "->" << s;
+        qCInfo(lcMqttSub) << "subscription state for" << effectiveTopicFilter() << "->" << s;
       });
   }
 }
@@ -1067,7 +1166,7 @@ void IO::Drivers::MQTT::onErrorChanged(QMqttClient::ClientError error)
 }
 
 /**
- * @brief Forwards a received MQTT message into the frame-reader pipeline.
+ * @brief Forwards a received MQTT message into the pipeline, or into the Sparkplug session.
  */
 void IO::Drivers::MQTT::onMessageReceived(const QByteArray& message, const QMqttTopicName& topic)
 {
@@ -1084,26 +1183,22 @@ void IO::Drivers::MQTT::onMessageReceived(const QByteArray& message, const QMqtt
     return;
   }
 
-  QMqttTopicFilter filter(m_topicFilter);
-  if (!filter.match(topic)) {
+  if (!m_topicMatcher.match(topic)) {
     qCInfo(lcMqttSub) << "messageReceived: topic" << topic.name() << "did not match filter"
-                      << m_topicFilter << "-- dropped";
+                      << m_effectiveFilter << "-- dropped";
     return;
   }
 
   qCDebug(lcMqttSub) << "messageReceived on" << topic.name() << "size=" << message.size()
                      << "preview=" << message.left(80);
 
-  publishReceivedData(message);
+  routeReceivedMessage(message, topic);
 }
 
 //--------------------------------------------------------------------------------------------------
 // Persistence helpers
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Restores broker configuration from QSettings under the driver namespace.
- */
 /**
  * @brief Returns the client certificate PEM path used for mutual TLS (empty = off).
  */
@@ -1302,6 +1397,7 @@ void IO::Drivers::MQTT::loadPersistedSettings()
   const auto host = m_settings.value(settingsKey("hostname"), m_hostname).toString();
   const auto cid  = m_settings.value(settingsKey("clientId"), QString()).toString();
   const auto top  = m_settings.value(settingsKey("topicFilter"), QString()).toString();
+  const auto grp  = m_settings.value(settingsKey("sparkplugGroupId"), QString()).toString();
 
   const auto p    = m_settings.value(settingsKey("port"), m_port).toUInt();
   const auto ka   = m_settings.value(settingsKey("keepAlive"), m_keepAlive).toUInt();
@@ -1313,6 +1409,7 @@ void IO::Drivers::MQTT::loadPersistedSettings()
   const auto autoKa = m_settings.value(settingsKey("autoKeepAlive"), m_autoKeepAlive).toBool();
   const auto clean  = m_settings.value(settingsKey("cleanSession"), m_cleanSession).toBool();
   const auto ssl    = m_settings.value(settingsKey("sslEnabled"), false).toBool();
+  const auto spark  = m_settings.value(settingsKey("sparkplugEnabled"), false).toBool();
 
   const auto port16        = static_cast<quint16>(p);
   auto creds               = m_vault.credentials(host, port16);
@@ -1335,6 +1432,8 @@ void IO::Drivers::MQTT::loadPersistedSettings()
   setUsername(creds.username);
   setPassword(creds.password);
   setTopicFilter(top);
+  setSparkplugEnabled(spark);
+  setSparkplugGroupId(grp);
   setKeepAlive(static_cast<quint16>(ka));
   setAutoKeepAlive(autoKa);
   setCleanSession(clean);
@@ -1350,6 +1449,7 @@ void IO::Drivers::MQTT::loadPersistedSettings()
     m_settings.value(settingsKey("alpnProtocol"), QStringLiteral("x-amzn-mqtt-ca")).toString();
   m_clientCertificatePath = m_settings.value(settingsKey("clientCertPath"), QString()).toString();
   m_privateKeyPath        = m_settings.value(settingsKey("privateKeyPath"), QString()).toString();
+  refreshTopicFilterCache();
   reloadTlsIdentity(false);
   Q_EMIT sslConfigurationChanged();
 }

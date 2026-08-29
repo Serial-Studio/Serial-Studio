@@ -41,7 +41,10 @@
 #include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
 #ifdef BUILD_COMMERCIAL
+#  include "IO/Drivers/EthernetIp.h"
+#  include "IO/Drivers/Iec104.h"
 #  include "IO/Drivers/OpcUaWire.h"
+#  include "IO/Drivers/S7.h"
 #endif
 #include "IO/FileTransmission.h"
 #include "Misc/ModuleManager.h"
@@ -174,6 +177,24 @@ void CLI::registerOptions()
   m_parser.addOption(m_opts.opcuaPassOpt);
   m_parser.addOption(m_opts.opcuaIntervalOpt);
   m_parser.addOption(m_opts.opcuaTagOpt);
+  m_parser.addOption(m_opts.s7Opt);
+  m_parser.addOption(m_opts.s7RackOpt);
+  m_parser.addOption(m_opts.s7SlotOpt);
+  m_parser.addOption(m_opts.s7IntervalOpt);
+  m_parser.addOption(m_opts.s7VariableOpt);
+  m_parser.addOption(m_opts.eipOpt);
+  m_parser.addOption(m_opts.eipPathOpt);
+  m_parser.addOption(m_opts.eipPlcOpt);
+  m_parser.addOption(m_opts.eipIntervalOpt);
+  m_parser.addOption(m_opts.eipTagOpt);
+  m_parser.addOption(m_opts.iec104Opt);
+  m_parser.addOption(m_opts.iec104PortOpt);
+  m_parser.addOption(m_opts.iec104CaOpt);
+  m_parser.addOption(m_opts.iec104KOpt);
+  m_parser.addOption(m_opts.iec104WOpt);
+  m_parser.addOption(m_opts.iec104T1Opt);
+  m_parser.addOption(m_opts.iec104T2Opt);
+  m_parser.addOption(m_opts.iec104T3Opt);
 #endif
 }
 
@@ -744,6 +765,21 @@ void CLI::applyBusConfiguration()
 
   if (m_parser.isSet(m_opts.opcuaOpt)) {
     setupOpcUaConnection();
+    return;
+  }
+
+  if (m_parser.isSet(m_opts.s7Opt)) {
+    setupS7Connection();
+    return;
+  }
+
+  if (m_parser.isSet(m_opts.eipOpt)) {
+    setupEthernetIpConnection();
+    return;
+  }
+
+  if (m_parser.isSet(m_opts.iec104Opt)) {
+    setupIec104Connection();
     return;
   }
 #endif
@@ -1601,6 +1637,293 @@ void CLI::setupCanbusConnection()
 
   if (m_parser.isSet(m_opts.canbusFdOpt))
     connectionManager.canBus()->setCanFD(true);
+
+  connectionManager.connectDevice();
+}
+
+//---------------------------------------------------------------------------------------------------
+// Commercial: PLC helpers (spec 0073)
+//---------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Applies the shared endpoint options of a PLC bus: the poll interval. The range is
+ *        rejected here (like --opcua-interval and Modbus) rather than left to the driver's qBound,
+ *        which cannot tell a mistyped value from a deliberate one.
+ */
+static void applyPollInterval(IO::HAL_Driver* driver, const QString& value)
+{
+  bool ok            = false;
+  const int interval = value.toInt(&ok);
+  if (!ok || interval < 50 || interval > 60000) {
+    qWarning() << "Invalid poll interval (50-60000 ms):" << value;
+    return;
+  }
+
+  driver->setDriverProperty(QStringLiteral("pollInterval"), interval);
+}
+
+/**
+ * @brief One validated S7 variable parsed from an --s7-variable argument.
+ */
+struct S7VarSpec {
+  QString name;
+  QString address;
+};
+
+/**
+ * @brief One validated EtherNet/IP tag parsed from an --ethernetip-tag argument.
+ */
+struct EipTagSpec {
+  int element;
+  QString tag;
+  QString type;
+};
+
+/**
+ * @brief Parses a numeric CLI option into @p out, rejecting a non-numeric or out-of-range token
+ *        with a warning that names it. Returns true only when @p out was assigned, so the caller
+ *        touches the driver only for a value that actually validated (a mistyped 0 is never
+ *        persisted the way a bare qBound would). @p lo must not exceed @p hi.
+ */
+[[nodiscard]] static bool parseIntOption(const QCommandLineParser& parser,
+                                         const QCommandLineOption& opt,
+                                         const int lo,
+                                         const int hi,
+                                         const QString& label,
+                                         int& out)
+{
+  if (!parser.isSet(opt))
+    return false;
+
+  bool ok       = false;
+  const int val = parser.value(opt).toInt(&ok);
+  if (!ok || val < lo || val > hi) {
+    qWarning().noquote()
+      << QStringLiteral("Invalid %1 (%2-%3):").arg(label, QString::number(lo), QString::number(hi))
+      << parser.value(opt);
+    return false;
+  }
+
+  out = val;
+  return true;
+}
+
+/**
+ * @brief Splits an `address[:name]` variable spec. An S7 address may itself carry a `:TYPE`
+ *        suffix, so the longest prefix the driver accepts wins and the remainder becomes the
+ *        channel name; an empty return means no prefix parsed as an address at all.
+ */
+[[nodiscard]] static QString splitS7Spec(const IO::Drivers::S7& driver,
+                                         const QString& spec,
+                                         QString& name)
+{
+  name.clear();
+
+  const int fields = static_cast<int>(spec.count(QLatin1Char(':'))) + 1;
+  for (int last = fields - 1; last >= 0; --last) {
+    const auto candidate = spec.section(QLatin1Char(':'), 0, last);
+    if (!driver.validateAddress(candidate).isEmpty())
+      continue;
+
+    name = last + 1 < fields ? spec.section(QLatin1Char(':'), last + 1) : QString();
+    return candidate;
+  }
+
+  return {};
+}
+
+/**
+ * @brief Configures and connects a Siemens S7 controller from CLI options.
+ */
+void CLI::setupS7Connection()
+{
+  static auto& connectionManager = IO::ConnectionManager::instance();
+  auto* s7                       = connectionManager.s7();
+  connectionManager.setBusType(SerialStudio::BusType::S7);
+  s7->setHost(m_parser.value(m_opts.s7Opt));
+
+  int rack = 0;
+  if (parseIntOption(m_parser, m_opts.s7RackOpt, 0, 7, QStringLiteral("S7 rack"), rack))
+    s7->setRack(rack);
+
+  int slot = 0;
+  if (parseIntOption(m_parser, m_opts.s7SlotOpt, 0, 31, QStringLiteral("S7 slot"), slot))
+    s7->setSlot(slot);
+
+  if (m_parser.isSet(m_opts.s7IntervalOpt))
+    applyPollInterval(s7, m_parser.value(m_opts.s7IntervalOpt));
+
+  QList<S7VarSpec> variables;
+  const auto specs = m_parser.values(m_opts.s7VariableOpt);
+  for (const auto& spec : specs) {
+    QString name;
+    const auto address = splitS7Spec(*s7, spec, name);
+    if (address.isEmpty())
+      qWarning() << "Invalid S7 variable spec:" << spec;
+    else
+      variables.append({name, address});
+  }
+
+  if (variables.isEmpty()) {
+    qWarning() << "No S7 variables given (--s7-variable); nothing to poll";
+    return;
+  }
+
+  s7->clearVariables();
+  for (const auto& variable : variables)
+    s7->addVariable(variable.name, variable.address);
+
+  if (!m_parser.isSet(m_opts.projectOpt) && !s7->loadGeneratedProject())
+    qWarning() << "Could not generate a project for the S7 variables";
+
+  connectionManager.connectDevice();
+}
+
+/**
+ * @brief Configures and connects an EtherNet/IP controller from CLI options.
+ */
+void CLI::setupEthernetIpConnection()
+{
+  static auto& connectionManager = IO::ConnectionManager::instance();
+  auto* eip                      = connectionManager.ethernetIp();
+  connectionManager.setBusType(SerialStudio::BusType::EthernetIp);
+  eip->setHost(m_parser.value(m_opts.eipOpt));
+
+  if (m_parser.isSet(m_opts.eipPathOpt))
+    eip->setCipPath(m_parser.value(m_opts.eipPathOpt));
+
+  if (m_parser.isSet(m_opts.eipPlcOpt)) {
+    const auto families = eip->plcTypeList();
+    const int index =
+      static_cast<int>(families.indexOf(m_parser.value(m_opts.eipPlcOpt).toLower()));
+    if (index < 0)
+      qWarning() << "Unknown controller family:" << m_parser.value(m_opts.eipPlcOpt);
+    else
+      eip->setPlcTypeIndex(index);
+  }
+
+  if (m_parser.isSet(m_opts.eipIntervalOpt))
+    applyPollInterval(eip, m_parser.value(m_opts.eipIntervalOpt));
+
+  QList<EipTagSpec> tags;
+  const auto specs = m_parser.values(m_opts.eipTagOpt);
+  for (const auto& spec : specs) {
+    const auto parts   = spec.split(QLatin1Char(':'));
+    const auto address = parts.value(0);
+    if (address.isEmpty()) {
+      qWarning() << "Invalid EtherNet/IP tag spec (empty tag name):" << spec;
+      continue;
+    }
+
+    int element = -1;
+    if (parts.size() > 2) {
+      bool ok = false;
+      element = parts.at(2).toInt(&ok);
+      if (!ok || element < 0) {
+        qWarning() << "Invalid EtherNet/IP tag element (>= 0):" << spec;
+        continue;
+      }
+    }
+
+    tags.append({element, address, parts.size() > 1 ? parts.at(1) : QStringLiteral("f32")});
+  }
+
+  if (tags.isEmpty()) {
+    qWarning() << "No EtherNet/IP tags given (--ethernetip-tag); nothing to poll";
+    return;
+  }
+
+  eip->clearTags();
+  for (const auto& tag : tags)
+    eip->addTag(QString(), tag.tag, tag.type, tag.element);
+
+  if (!m_parser.isSet(m_opts.projectOpt) && !eip->loadGeneratedProject())
+    qWarning() << "Could not generate a project for the EtherNet/IP tags";
+
+  connectionManager.connectDevice();
+}
+
+/**
+ * @brief Configures and connects an IEC 60870-5-104 station from CLI options. The point table is
+ *        DISCOVERED by the station interrogation, so a first headless run has nothing to generate
+ *        a project from; the warning says so rather than failing silently.
+ */
+void CLI::setupIec104Connection()
+{
+  static auto& connectionManager = IO::ConnectionManager::instance();
+  auto* iec104                   = connectionManager.iec104();
+  connectionManager.setBusType(SerialStudio::BusType::Iec104);
+  iec104->setHost(m_parser.value(m_opts.iec104Opt));
+
+  int value = 0;
+  if (parseIntOption(
+        m_parser, m_opts.iec104PortOpt, 1, 65535, QStringLiteral("IEC 60870-5-104 port"), value))
+    iec104->setPort(value);
+
+  if (parseIntOption(m_parser,
+                     m_opts.iec104CaOpt,
+                     0,
+                     65535,
+                     QStringLiteral("IEC 60870-5-104 common address"),
+                     value))
+    iec104->setCommonAddress(value);
+
+  int windowK      = 0;
+  const bool haveK = parseIntOption(m_parser,
+                                    m_opts.iec104KOpt,
+                                    1,
+                                    32767,
+                                    QStringLiteral("IEC 60870-5-104 send window k"),
+                                    windowK);
+  if (haveK)
+    iec104->setWindowK(windowK);
+
+  int windowW      = 0;
+  const bool haveW = parseIntOption(
+    m_parser, m_opts.iec104WOpt, 1, 32767, QStringLiteral("IEC 60870-5-104 ack window w"), windowW);
+  if (haveW) {
+    if (haveK && windowW > windowK)
+      qWarning() << "IEC 60870-5-104 ack window w exceeds send window k; the station clamps w to k";
+
+    iec104->setWindowW(windowW);
+  }
+
+  int t1            = 0;
+  const bool haveT1 = parseIntOption(m_parser,
+                                     m_opts.iec104T1Opt,
+                                     1000,
+                                     255000,
+                                     QStringLiteral("IEC 60870-5-104 t1 timeout (ms)"),
+                                     t1);
+  if (haveT1)
+    iec104->setTimeoutT1(t1);
+
+  int t2            = 0;
+  const bool haveT2 = parseIntOption(m_parser,
+                                     m_opts.iec104T2Opt,
+                                     1000,
+                                     255000,
+                                     QStringLiteral("IEC 60870-5-104 t2 timeout (ms)"),
+                                     t2);
+  if (haveT2) {
+    if (haveT1 && t2 > t1)
+      qWarning() << "IEC 60870-5-104 t2 timeout exceeds t1; the station clamps t2 to t1";
+
+    iec104->setTimeoutT2(t2);
+  }
+
+  int t3 = 0;
+  if (parseIntOption(m_parser,
+                     m_opts.iec104T3Opt,
+                     1000,
+                     255000,
+                     QStringLiteral("IEC 60870-5-104 t3 timeout (ms)"),
+                     t3))
+    iec104->setTimeoutT3(t3);
+
+  if (!m_parser.isSet(m_opts.projectOpt) && !iec104->loadGeneratedProject())
+    qWarning() << "No IEC 60870-5-104 points are known yet; connect once so the station "
+                  "interrogation can discover them, then re-run to generate a project";
 
   connectionManager.connectDevice();
 }

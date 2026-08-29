@@ -70,6 +70,7 @@ extern "C" {
 #include "UI/Dashboard.h"
 
 #ifdef BUILD_COMMERCIAL
+#  include "InfluxDB/Export.h"
 #  include "IO/Drivers/Audio.h"
 #  include "Licensing/CommercialToken.h"
 #  include "Licensing/LemonSqueezy.h"
@@ -372,9 +373,10 @@ void DataModel::FrameBuilder::noteStructurePublished(int sourceId) noexcept
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Publishes @p sourceId's structure if the current generation has not been announced yet.
- *        Runs before the source's first block of that generation, so the dashboard has reconfigured
- *        by the time values referring to the new layout arrive.
+ * @brief Publishes @p sourceId's structure once per pool generation, before that source's first
+ *        block, so the dashboard reconfigures before values for the new layout arrive. The
+ *        generation is announced first (spec 0074) on its own signal -- the inner Frame does not
+ *        carry it -- and the Sparkplug publisher pairs it with the structurePublished that follows.
  */
 void DataModel::FrameBuilder::ensureStructurePublished(int sourceId, const DataModel::Frame& src)
 {
@@ -385,6 +387,7 @@ void DataModel::FrameBuilder::ensureStructurePublished(int sourceId, const DataM
   pipeline.publishStructureToDashboard(buildStructureSnapshot(src));
   noteStructurePublished(sourceId);
 
+  Q_EMIT structureGenerationChanged(m_framePoolGeneration);
   Q_EMIT structurePublished(sourceId, src);
 }
 
@@ -865,6 +868,9 @@ void DataModel::FrameBuilder::setupExternalConnections()
           &Widgets::AudioExport::activeSessionsChanged,
           this,
           [this] { refreshAnyAsyncSink(); });
+  connect(&InfluxDB::Export::instance(), &InfluxDB::Export::enabledChanged, this, [this] {
+    refreshAnyAsyncSink();
+  });
 #endif
 #ifdef ENABLE_GRPC
   connect(&API::GRPC::GRPCServer::instance(), &API::GRPC::GRPCServer::enabledChanged, this, [this] {
@@ -1000,8 +1006,9 @@ void DataModel::FrameBuilder::refreshAnyAsyncSink()
   static auto& sessionsExport = Sessions::Export::instance();
   static auto& mqttPublisher  = MQTT::Publisher::instance();
   static auto& audioExport    = Widgets::AudioExport::instance();
+  static auto& influxExport   = InfluxDB::Export::instance();
   any                         = any || sessionsExport.exportEnabled() || mqttPublisher.enabled()
-     || audioExport.hasActiveSessions();
+     || audioExport.hasActiveSessions() || influxExport.exportEnabled();
 #endif
 #ifdef ENABLE_GRPC
   static auto& grpc = API::GRPC::GRPCServer::instance();
@@ -3312,6 +3319,7 @@ void DataModel::FrameBuilder::publishBlock(const DataModel::DataBlockPtr& block)
   static auto& sqliteExport  = Sessions::Export::instance();
   static auto& mqttPublisher = MQTT::Publisher::instance();
   static auto& audioExport   = Widgets::AudioExport::instance();
+  static auto& influxExport  = InfluxDB::Export::instance();
 #endif
 
   csvExport.ingestBlock(detached);
@@ -3321,6 +3329,7 @@ void DataModel::FrameBuilder::publishBlock(const DataModel::DataBlockPtr& block)
   sqliteExport.ingestBlock(detached);
   mqttPublisher.ingestBlock(detached);
   audioExport.ingestBlock(detached);
+  influxExport.ingestBlock(detached);
 #endif
 #ifdef ENABLE_GRPC
   grpcServer.ingestBlock(detached);

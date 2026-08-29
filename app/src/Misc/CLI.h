@@ -216,6 +216,40 @@ struct CliOptions {
     "opcua-tag",
     "Subscribes to a tag: nodeId[:type[:name]] (repeatable, type default f64)",
     "spec"};
+  QCommandLineOption s7Opt{"s7", "Connects to a Siemens S7 controller (e.g., 192.168.0.1)", "host"};
+  QCommandLineOption s7RackOpt{"s7-rack", "Sets the S7 rack number (0-7, default: 0)", "rack"};
+  QCommandLineOption s7SlotOpt{"s7-slot", "Sets the S7 slot number (0-31, default: 1)", "slot"};
+  QCommandLineOption s7IntervalOpt{
+    "s7-interval", "Sets the S7 poll interval in ms (50-60000, default: 200)", "ms"};
+  QCommandLineOption s7VariableOpt{
+    "s7-variable", "Polls a variable: address[:name] (repeatable, e.g. DB5.DBD20:REAL)", "spec"};
+  QCommandLineOption eipOpt{
+    "ethernetip", "Connects to an EtherNet/IP gateway (e.g., 192.168.0.10)", "host"};
+  QCommandLineOption eipPathOpt{
+    "ethernetip-path", "Sets the CIP routing path (default: 1,0)", "path"};
+  QCommandLineOption eipPlcOpt{
+    "ethernetip-plc", "Sets the controller family (default: controllogix)", "family"};
+  QCommandLineOption eipIntervalOpt{
+    "ethernetip-interval",
+    "Sets the EtherNet/IP poll interval in ms (50-60000, default: 250)",
+    "ms"};
+  QCommandLineOption eipTagOpt{
+    "ethernetip-tag", "Polls a tag: tag[:type[:element]] (repeatable, type default f32)", "spec"};
+  QCommandLineOption iec104Opt{
+    "iec104", "Connects to an IEC 60870-5-104 station (e.g., 192.168.0.20)", "host"};
+  QCommandLineOption iec104PortOpt{
+    "iec104-port", "Sets the IEC 60870-5-104 port (default: 2404)", "port"};
+  QCommandLineOption iec104CaOpt{
+    "iec104-ca", "Sets the common address of ASDU (0-65535, default: 1)", "address"};
+  QCommandLineOption iec104KOpt{"iec104-k", "Sets the send window k (default: 12)", "frames"};
+  QCommandLineOption iec104WOpt{
+    "iec104-w", "Sets the acknowledgement window w (default: 8)", "frames"};
+  QCommandLineOption iec104T1Opt{
+    "iec104-t1", "Sets the send/confirm timeout in ms (default: 15000)", "ms"};
+  QCommandLineOption iec104T2Opt{
+    "iec104-t2", "Sets the acknowledgement timeout in ms (default: 10000)", "ms"};
+  QCommandLineOption iec104T3Opt{
+    "iec104-t3", "Sets the idle-test timeout in ms (default: 20000)", "ms"};
 #endif
 };
 
@@ -290,6 +324,9 @@ private:
   void setupModbusTcpConnection();
   void setupCanbusConnection();
   void setupOpcUaConnection();
+  void setupS7Connection();
+  void setupEthernetIpConnection();
+  void setupIec104Connection();
   void applyModbusCommonOptions();
   void applyOperatorTaskbarSettings();
 #endif

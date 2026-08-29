@@ -127,7 +127,7 @@ Click **Edit Script** in the header to open the editor dialog. It has the same l
 - **Template** dropdown: ready-made starters for common integrations:
   - **Home Assistant Discovery + State**: publishes the auto-discovery config message and per-frame state updates.
   - **InfluxDB Line Protocol**: formats `measurement,tag=value field=value timestamp` lines suitable for a Telegraf `mqtt_consumer` input. Timestamps come from `os.time()`.
-  - **Sparkplug B (NDATA)**: Eclipse Sparkplug B-shaped JSON surrogate; swap the body for a protobuf encoder in production. Timestamps come from `os.time()`.
+  - **Sparkplug B (NDATA)**: a JSON payload shaped like a Sparkplug data message, for a consumer that only needs the shape. For a real edge node, with protobuf payloads, aliases, birth and death certificates and rebirth handling, tick **Publish as Edge Node** instead of using this template ([Sparkplug](Drivers-MQTT.md#sparkplug)). Timestamps come from `os.time()`.
   - **AWS IoT / Azure IoT Shadow**: `{"state":{"reported":{...}}}` payload accepted by both clouds.
 - Code editor with syntax highlighting, Ctrl-I to format the selection, Ctrl-Shift-I to format the document.
 - Test row at the bottom: paste sample bytes in **Frame**, tick **Hex** if they are hex-encoded, click **Test**, and the dialog shows the string the script would publish (or the error). This runs in a disposable engine and never touches the live broker session.

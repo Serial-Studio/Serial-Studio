@@ -325,7 +325,7 @@ void API::Handlers::DashboardHandler::registerQueryCommands()
                    "exporters), this lets a control script that only writes tables (tableSet()) "
                    "render table-driven computed datasets from the very first loop(), and it also "
                    "fans the synthesized frame out to the enabled export sinks "
-                   "(CSV/MDF4/session/MQTT/API). SDK: dashboardTick()."),
+                   "(CSV/MDF4/session/MQTT/InfluxDB/API). SDK: dashboardTick()."),
     emptySchema,
     &tick);
 }

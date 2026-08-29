@@ -179,6 +179,9 @@ public:
   [[nodiscard]] IO::Drivers::Modbus* modbus() const noexcept;
   [[nodiscard]] IO::Drivers::OpcUa* opcUa() const noexcept;
   [[nodiscard]] IO::Drivers::Process* process() const noexcept;
+  [[nodiscard]] IO::Drivers::S7* s7() const noexcept;
+  [[nodiscard]] IO::Drivers::EthernetIp* ethernetIp() const noexcept;
+  [[nodiscard]] IO::Drivers::Iec104* iec104() const noexcept;
   [[nodiscard]] IO::Drivers::USB* usb() const noexcept;
 #endif
 

@@ -88,6 +88,17 @@
     "requiresPro": true
   },
   {
+    "id": "EtherNet-IP Example",
+    "title": "EtherNet/IP Logix Tags",
+    "description": "Polls controller-scoped and program-scoped tags from an Allen-Bradley CompactLogix or ControlLogix over EtherNet/IP, covering the CIP path, tag naming, array elements, and the type codes the driver accepts.",
+    "category": "Industrial Automation",
+    "difficulty": "Advanced",
+    "hasProjectFile": true,
+    "projectFileName": "EtherNet-IP Tags.ssproj",
+    "hasScreenshot": false,
+    "requiresPro": true
+  },
+  {
     "id": "HexadecimalADC",
     "title": "Command-Based ADC Sampling",
     "description": "Showcases binary data parsing, custom serial actions, timed execution, and CRC-16 checksum validation for Arduino-based sensor data acquisition with FFT analysis.",
@@ -107,6 +118,17 @@
     "hasProjectFile": true,
     "projectFileName": "Hydrogen.ssproj",
     "hasScreenshot": true,
+    "requiresPro": true
+  },
+  {
+    "id": "IEC 104 Example",
+    "title": "IEC 60870-5-104 Station Simulator",
+    "description": "Simulated substation served over IEC 60870-5-104: STARTDT handshake, station interrogation, short-float measurands and single points, spontaneous updates, and full k/w sequence-number accounting.",
+    "category": "Industrial Automation",
+    "difficulty": "Intermediate",
+    "hasProjectFile": true,
+    "projectFileName": "IEC 104 Station.ssproj",
+    "hasScreenshot": false,
     "requiresPro": true
   },
   {
@@ -252,6 +274,28 @@
     "projectFileName": "RC Plane Simulator.ssproj",
     "hasScreenshot": true,
     "requiresPro": false
+  },
+  {
+    "id": "S7 PLC Example",
+    "title": "Siemens S7 PLC Simulator",
+    "description": "ISO-on-TCP simulator that speaks S7comm well enough for a real session: connect confirm, PDU length negotiation, and read requests served out of a drifting DB1, with the absolute address syntax documented.",
+    "category": "Industrial Automation",
+    "difficulty": "Intermediate",
+    "hasProjectFile": true,
+    "projectFileName": "S7 PLC Simulator.ssproj",
+    "hasScreenshot": false,
+    "requiresPro": true
+  },
+  {
+    "id": "Sparkplug Example",
+    "title": "Sparkplug Edge Node",
+    "description": "Sparkplug edge node that publishes an aliased birth certificate, alias-only NDATA, an NDEATH last will, and answers a rebirth command, decoded by Serial Studio's MQTT driver in Sparkplug mode.",
+    "category": "Industrial Automation",
+    "difficulty": "Intermediate",
+    "hasProjectFile": true,
+    "projectFileName": "Sparkplug Edge Node.ssproj",
+    "hasScreenshot": false,
+    "requiresPro": true
   },
   {
     "id": "System Monitor",

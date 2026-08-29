@@ -126,6 +126,7 @@
 #  include "DataModel/Editors/PainterCodeEditor.h"
 #  include "DataModel/Importers/DBCImporter.h"
 #  include "DataModel/Importers/ModbusMapImporter.h"
+#  include "InfluxDB/Export.h"
 #  include "Licensing/LemonSqueezy.h"
 #  include "Licensing/MachineID.h"
 #  include "Licensing/OfflineLicense.h"
@@ -432,6 +433,7 @@ void Misc::ModuleManager::stopFrameConsumerWorkers()
 #ifdef BUILD_COMMERCIAL
   Sessions::Export::instance().stopWorker();
   MQTT::Publisher::instance().stopWorker();
+  InfluxDB::Export::instance().stopWorker();
   Widgets::AudioExport::instance().stopWorker();
   Widgets::ImageExport::instance().stopWorker();
 #endif
@@ -772,6 +774,20 @@ static void wireProblemCenterSessionReset(IO::ConnectionManager* manager,
                    });
 }
 
+#ifdef BUILD_COMMERCIAL
+/**
+ * @brief Runs setupExternalConnections on the Pro modules that own their own singleton, so the
+ *        composition root's wiring pass stays one screen long as the Pro set grows.
+ */
+static void setupCommercialModuleConnections()
+{
+  Sessions::Export::instance().setupExternalConnections();
+  Sessions::DatabaseManager::instance().setupExternalConnections();
+  MQTT::Publisher::instance().setupExternalConnections();
+  InfluxDB::Export::instance().setupExternalConnections();
+}
+#endif
+
 /**
  * @brief Wires inter-module signals and runs each module's setupExternalConnections. The
  *        session context is published right after the pinned order and before any wiring,
@@ -813,9 +829,7 @@ void Misc::ModuleManager::setupCrossModuleConnections()
   wireProblemCenterSessionReset(ioManager, problemCenter);
   Misc::ConnectionDiagnostics::instance().setupExternalConnections();
 #ifdef BUILD_COMMERCIAL
-  Sessions::Export::instance().setupExternalConnections();
-  Sessions::DatabaseManager::instance().setupExternalConnections();
-  MQTT::Publisher::instance().setupExternalConnections();
+  setupCommercialModuleConnections();
 #endif
 
   connect(miscExtensionManager,
@@ -947,6 +961,9 @@ void Misc::ModuleManager::registerCommercialContextProperties(QQmlContext* ctx)
   ctx->setContextProperty("Cpp_IO_CANBus", ioManager->canBus());
   ctx->setContextProperty("Cpp_IO_Modbus", ioManager->modbus());
   ctx->setContextProperty("Cpp_IO_OpcUa", ioManager->opcUa());
+  ctx->setContextProperty("Cpp_IO_S7", ioManager->s7());
+  ctx->setContextProperty("Cpp_IO_Eip", ioManager->ethernetIp());
+  ctx->setContextProperty("Cpp_IO_Iec104", ioManager->iec104());
   ctx->setContextProperty("Cpp_IO_USB", ioManager->usb());
   ctx->setContextProperty("Cpp_IO_HID", ioManager->hid());
   ctx->setContextProperty("Cpp_IO_Process", ioManager->process());
@@ -958,6 +975,7 @@ void Misc::ModuleManager::registerCommercialContextProperties(QQmlContext* ctx)
   ctx->setContextProperty("Cpp_Licensing_LemonSqueezy", &Licensing::LemonSqueezy::instance());
   ctx->setContextProperty("Cpp_Licensing_OfflineLicense", &Licensing::OfflineLicense::instance());
   ctx->setContextProperty("Cpp_Sessions_Export", &Sessions::Export::instance());
+  ctx->setContextProperty("Cpp_InfluxDB_Export", &InfluxDB::Export::instance());
   ctx->setContextProperty("Cpp_Sessions_Player", &Sessions::Player::instance());
   ctx->setContextProperty("Cpp_Sessions_Manager", &Sessions::DatabaseManager::instance());
   ctx->setContextProperty("Cpp_ShortcutGenerator", &Misc::ShortcutGenerator::instance());

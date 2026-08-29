@@ -2343,6 +2343,38 @@ jobs:
         lipo -info "$APP_EXE" | grep -q "arm64" && lipo -info "$APP_EXE" | grep -q "x86_64"
 
     #
+    # Every dynamically-linked dependency inside the bundle needs the same treatment as the
+    # executable: the arm64 job's Frameworks directory is arm64-only, so without this the DMG
+    # would advertise itself as universal while that library failed to load on Intel. dlopen
+    # failing at runtime is the only symptom: the build, the signature and the notarisation all
+    # pass. No such dependency exists today, so the step no-ops on the missing Frameworks
+    # directory; it stays because the failure it guards against is invisible until a user hits it.
+    #
+    - name: '🔗 Lipo bundled dynamic libraries'
+      run: |
+        FW="${{env.APPLICATION}}.app/Contents/Frameworks"
+        if [ ! -d "$FW" ]; then
+          echo "No Frameworks directory; nothing to merge."
+          exit 0
+        fi
+
+        shopt -s nullglob
+        for LIB in "$FW"/*.dylib; do
+          BASE="$(basename "$LIB")"
+          SLICE="intel-frameworks/$BASE"
+          if [ ! -f "$SLICE" ]; then
+            echo "::error::$BASE has no x86_64 slice; the universal bundle would ship it arm64-only."
+            exit 1
+          fi
+
+          lipo -create "$LIB" "$SLICE" -output "$LIB.universal"
+          mv "$LIB.universal" "$LIB"
+          lipo -info "$LIB"
+          lipo -info "$LIB" | grep -q "arm64"
+          lipo -info "$LIB" | grep -q "x86_64"
+        done
+
+    #
     # The stamp goes in before codesign: any edit to the bundle afterwards invalidates the
     # signature
     #

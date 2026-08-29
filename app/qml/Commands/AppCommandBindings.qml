@@ -84,7 +84,10 @@ QtObject {
     "driver.bluetooth": root.cmdDriverBluetooth,
     "driver.canbus": root.cmdDriverCanbus,
     "driver.process": root.cmdDriverProcess,
-    "driver.opcua": root.cmdDriverOpcUa
+    "driver.opcua": root.cmdDriverOpcUa,
+    "driver.s7": root.cmdDriverS7,
+    "driver.ethernetip": root.cmdDriverEthernetIp,
+    "driver.iec104": root.cmdDriverIec104
   })
 
   //
@@ -332,5 +335,23 @@ QtObject {
     readonly property bool enabled: root.driverSelectionEnabled
     readonly property bool checked: Cpp_IO_Manager.busType === SerialStudio.OpcUa
     function run() { Cpp_IO_Manager.busType = SerialStudio.OpcUa }
+  }
+
+  readonly property QtObject cmdDriverS7: QtObject {
+    readonly property bool enabled: root.driverSelectionEnabled
+    readonly property bool checked: Cpp_IO_Manager.busType === SerialStudio.S7
+    function run() { Cpp_IO_Manager.busType = SerialStudio.S7 }
+  }
+
+  readonly property QtObject cmdDriverEthernetIp: QtObject {
+    readonly property bool enabled: root.driverSelectionEnabled
+    readonly property bool checked: Cpp_IO_Manager.busType === SerialStudio.EthernetIp
+    function run() { Cpp_IO_Manager.busType = SerialStudio.EthernetIp }
+  }
+
+  readonly property QtObject cmdDriverIec104: QtObject {
+    readonly property bool enabled: root.driverSelectionEnabled
+    readonly property bool checked: Cpp_IO_Manager.busType === SerialStudio.Iec104
+    function run() { Cpp_IO_Manager.busType = SerialStudio.Iec104 }
   }
 }

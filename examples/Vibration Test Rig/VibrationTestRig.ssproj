@@ -301,6 +301,13 @@
         }
     ],
     "hexadecimalDelimiters": false,
+    "influxSink": {
+        "bucket": "",
+        "enabled": false,
+        "measurement": "serial_studio",
+        "org": "",
+        "url": ""
+    },
     "luaFastMode": false,
     "mqttPublisher": {
         "alpnEnabled": false,
@@ -323,6 +330,10 @@
         "scriptCode": "",
         "scriptLanguage": 0,
         "scriptTopic": "",
+        "sparkplugDeviceId": "",
+        "sparkplugEdgeNodeId": "",
+        "sparkplugEnabled": false,
+        "sparkplugGroupId": "",
         "sslEnabled": false,
         "sslProtocol": 5,
         "topicBase": ""
@@ -376,6 +387,7 @@
         "Vibration Test Rig/Dashboard Widgets/Vibration (Campbell)/Vibration": false,
         "Vibration Test Rig/Dashboard Widgets/Vibration Gauge": true,
         "Vibration Test Rig/Dashboard Widgets/Vibration Gauge/Vibration (RMS)": false,
+        "Vibration Test Rig/InfluxDB Sink": false,
         "Vibration Test Rig/MQTT Publisher": false,
         "Vibration Test Rig/Variables": true,
         "Vibration Test Rig/Variables/Dataset Values": false,

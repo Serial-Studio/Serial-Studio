@@ -146,6 +146,7 @@ void DataModel::ProjectEditor::buildTreeModel()
   m_systemDatasetsItem = nullptr;
   m_workspacesRootItem = nullptr;
   m_mqttPublisherItem  = nullptr;
+  m_influxSinkItem     = nullptr;
   m_controlScriptItem  = nullptr;
 
   const bool seeding      = m_seedExpansionFromModel;
@@ -859,6 +860,32 @@ void DataModel::ProjectEditor::appendMqttPublisherTreeItem(QStandardItem* root)
 }
 
 /**
+ * @brief Appends the single InfluxDB sink node to the tree.
+ */
+void DataModel::ProjectEditor::appendInfluxSinkTreeItem(QStandardItem* root)
+{
+  SS_ASSERT(root != nullptr, return);
+
+  const QString q         = m_treeSearchQuery.trimmed();
+  const bool filterActive = !q.isEmpty();
+  if (filterActive && !SerialStudio::searchMatches(q, tr("InfluxDB Sink")))
+    return;
+
+  static auto& registry = Misc::IconRegistry::instance();
+  auto* item            = new QStandardItem(tr("InfluxDB Sink"));
+  item->setData(tr("InfluxDB Sink"), TreeViewText);
+  item->setData(registry.icon(QStringLiteral("editor"), QStringLiteral("influx"), 16),
+                TreeViewIcon);
+  item->setData(-1, TreeViewFrameIndex);
+  item->setData(KindInfluxSink, TreeItemKind);
+  item->setData(-1, TreeItemId);
+  item->setData(-1, TreeItemParentId);
+
+  root->appendRow(item);
+  m_influxSinkItem = item;
+}
+
+/**
  * @brief Appends the project-global control-script node to the tree.
  */
 void DataModel::ProjectEditor::appendControlScriptTreeItem(QStandardItem* root)
@@ -895,6 +922,7 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
   appendControlScriptTreeItem(root);
 #ifdef BUILD_COMMERCIAL
   appendMqttPublisherTreeItem(root);
+  appendInfluxSinkTreeItem(root);
 #endif
 
   appendActionTreeItems(root);
@@ -1007,6 +1035,9 @@ QStandardItem* DataModel::ProjectEditor::containerSelectionItem() const
 
   if (m_currentView == MqttPublisherView)
     return m_mqttPublisherItem;
+
+  if (m_currentView == InfluxSinkView)
+    return m_influxSinkItem;
 
   if (m_currentView == ControlScriptView)
     return m_controlScriptItem;

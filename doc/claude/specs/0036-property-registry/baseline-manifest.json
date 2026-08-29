@@ -25,6 +25,10 @@
       "sha256": "6694172db32af7e28bd9278ef8635f5d148618c4e0cc98bcb81941093f7f5cf4"
     },
     {
+      "path": "examples/EtherNet-IP Example/EtherNet-IP Tags.ssproj",
+      "sha256": "2890cdef2d2dec381cca8e66edad3673c529281be3d1832732405e9623ce33f5"
+    },
+    {
       "path": "examples/HexadecimalADC/HexadecimalADC.ssproj",
       "sha256": "812588cba6b5f08451703a486b28679afb32f6c7202e23c017d6cf58f43ee547"
     },
@@ -33,8 +37,12 @@
       "sha256": "5312969e73e9dfe94382a828bbdfc4707f176eca4f0db3fa952b31a46943679e"
     },
     {
+      "path": "examples/IEC 104 Example/IEC 104 Station.ssproj",
+      "sha256": "bed06cc9256be4f222665afa0580de6d3e9eb3d6d9b175e89102edea63f596f1"
+    },
+    {
       "path": "examples/IMU Simulator/imu_batched.ssproj",
-      "sha256": "62dd052de7c572f768b05d5be11dcc46dab2b39bae31c5b96f66edd9c5042ab0"
+      "sha256": "47f6c82d4245c1717687a889d7860c1606b06a220b3afbad309716cf6c3971c3"
     },
     {
       "path": "examples/ISS Tracker/iss-tracker.ssproj",
@@ -46,7 +54,7 @@
     },
     {
       "path": "examples/LorenzAttractor/LorenzAttractor.ssproj",
-      "sha256": "8489d6ecf3c38123352cd047144e561a182300d49c88787a33552fdf1f857b29"
+      "sha256": "ab1a42c82b95429dc8a935a8dea716b942977785f759668c91bf38f59b308111"
     },
     {
       "path": "examples/MPU6050/MPU6050.ssproj",
@@ -66,15 +74,23 @@
     },
     {
       "path": "examples/OPC UA PLC Simulator/OPC UA PLC Simulator.ssproj",
-      "sha256": "13d4af3471beb353b7711cb3be872a989f6ffb2f0e2ce2a7bfde494840a42522"
+      "sha256": "54e1486c48804f96abfbc24fd7cac6fb4be96e75a88af41832b5d854b1d089d2"
     },
     {
       "path": "examples/Protobuf Example/Protobuf Example.ssproj",
-      "sha256": "0753686cd4e748f48e25773fce667fed02a92ff28075a1bc98a7e5326e9e33c8"
+      "sha256": "14894201e04479b3200508c9a5345c02990da85045ca86a25a2bc305ade8126f"
     },
     {
       "path": "examples/RC Plane Simulator/RC Plane Simulator.ssproj",
       "sha256": "35f90d726b08136d44be33ce27bea95e36d6a1be6cd6699a40718fad43de87fd"
+    },
+    {
+      "path": "examples/S7 PLC Example/S7 PLC Simulator.ssproj",
+      "sha256": "d3ca15185ff24487c01973c40906bd670356dcbaf3b78aded519b0a336cc22f8"
+    },
+    {
+      "path": "examples/Sparkplug Example/Sparkplug Edge Node.ssproj",
+      "sha256": "bbca92e0a091ea91a2af9d26107aac20f35faf092fb5118674c5674f2add0d43"
     },
     {
       "path": "examples/System Monitor/system-monitor.ssproj",
@@ -90,7 +106,7 @@
     },
     {
       "path": "examples/Vibration Test Rig/VibrationTestRig.ssproj",
-      "sha256": "435749d714ec3ab97ee35d8b2cbf9618c3c7e6d7d9d0b0c2354d5e61faf5b5ad"
+      "sha256": "6161d45b700340b77456b299fba38fec1f0f2af4d7518cb9d46ed518b4be0da2"
     }
   ]
 }

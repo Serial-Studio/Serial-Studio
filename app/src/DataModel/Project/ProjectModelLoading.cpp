@@ -958,8 +958,21 @@ void DataModel::ProjectModel::loadWidgetSettingsAndWorkspaces(const QJsonObject&
 
   sanitizeTableFolders();
 
+  loadSinkConfigs(json);
+}
+
+/**
+ * @brief Loads the per-project sink configurations. Both objects are opaque to the model: their
+ *        owning modules parse them, and an absent key leaves that sink unconfigured, which is what
+ *        keeps a project written before either sink existed loading unchanged.
+ */
+void DataModel::ProjectModel::loadSinkConfigs(const QJsonObject& json)
+{
   m_mqttPublisher = json.value(Keys::MqttPublisher).toObject();
   Q_EMIT mqttPublisherChanged();
+
+  m_influxSink = json.value(Keys::InfluxSink).toObject();
+  Q_EMIT influxSinkChanged();
 }
 
 /**

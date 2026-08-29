@@ -243,6 +243,9 @@ inline constexpr KeyView PasswordHash("passwordHash");
 // Per-project MQTT publisher configuration (Pro).
 inline constexpr KeyView MqttPublisher("mqttPublisher");
 
+// Per-project InfluxDB sink configuration (Pro); absent means disabled, token lives in the vault.
+inline constexpr KeyView InfluxSink("influxSink");
+
 inline QString layoutKey(int groupId)
 {
   return QStringLiteral("layout:") + QString::number(groupId);

@@ -26,10 +26,6 @@
 #include "DataModel/Scripting/NativeTemplates/NativeTemplate.h"
 #include "SSAssert.h"
 
-#ifdef BUILD_COMMERCIAL
-#  include "IO/Drivers/OpcUaWire.h"
-#endif
-
 using DataModel::INativeParser;
 using DataModel::INativeTemplate;
 using DataModel::NativeParamSpec;
@@ -2436,157 +2432,13 @@ public:
 };
 
 //--------------------------------------------------------------------------------------------------
-// OPC UA delta frames (spec 0066)
-//--------------------------------------------------------------------------------------------------
-
-#ifdef BUILD_COMMERCIAL
-
-/**
- * @brief Latching decoder for the OPC UA driver's delta frames: only changed tags travel, the
- *        schema param pins each tag's index and wire type, and unknown or mistyped entries are
- *        skipped without touching the latch.
- */
-class OpcUaParser final : public DataModel::NativeLatchParser {
-public:
-  /**
-   * @brief Stores the per-index expected wire type (Invalid = not in schema).
-   */
-  explicit OpcUaParser(const QList<IO::Drivers::OpcUaWire::Type>& schema)
-    : NativeLatchParser(static_cast<int>(schema.size())), m_schema(schema)
-  {
-    SS_ASSERT_LOG(!m_schema.isEmpty());
-    SS_ASSERT_LOG(m_schema.size() <= IO::Drivers::OpcUaWire::kMaxTags);
-  }
-
-  /**
-   * @brief Treats text frames as raw bytes and reuses the binary path.
-   */
-  [[nodiscard]] QList<QStringList> parseText(const QString& frame) override
-  {
-    return parseBinary(frame.toUtf8());
-  }
-
-  /**
-   * @brief UTF-8 text frames already carry the raw bytes; skips the QString round-trip.
-   */
-  [[nodiscard]] QList<QStringList> parseUtf8(const QByteArray& frame) override
-  {
-    return parseBinary(frame);
-  }
-
-  /**
-   * @brief Walks [version][index u16][type u8][payload]* and latches every schema-matching
-   *        entry; a version mismatch or a truncated entry ends the walk and keeps the latch.
-   */
-  [[nodiscard]] QList<QStringList> parseBinary(const QByteArray& frame) override
-  {
-    using namespace IO::Drivers::OpcUaWire;
-    SS_ASSERT(!m_schema.isEmpty(), return latchedFrame());
-
-    const QByteArrayView view(frame.constData(), qMin<qsizetype>(frame.size(), kMaxBytesPerFrame));
-    if (!checkHeader(view))
-      return latchedFrame();
-
-    qsizetype pos = kHeaderBytes;
-    Entry entry;
-    for (int n = 0; n < kMaxTags && pos < view.size(); ++n) {
-      if (!readEntry(view, pos, entry))
-        break;
-
-      SS_ASSERT_LOG(entry.index >= 0);
-      if (entry.index >= 0 && entry.index < m_schema.size() && m_schema[entry.index] == entry.type)
-        storeAt(entry.index, entry.text);
-    }
-
-    return latchedFrame();
-  }
-
-private:
-  QList<IO::Drivers::OpcUaWire::Type> m_schema;
-};
-
-/**
- * @brief Descriptor for the OPC UA delta-frame template; the schema is machine-managed by the
- *        driver's project generator.
- */
-class OpcUaTemplate final : public INativeTemplate {
-public:
-  /**
-   * @brief Returns the stable template id.
-   */
-  [[nodiscard]] QString id() const override { return QStringLiteral("opcua"); }
-
-  /**
-   * @brief Returns the translated display name.
-   */
-  [[nodiscard]] QString name() const override { return trBinary("OPC UA tag frames"); }
-
-  /**
-   * @brief Returns the translated one-line description.
-   */
-  [[nodiscard]] QString description() const override
-  {
-    return trBinary("Decodes the OPC UA driver's tag update frames into one latched channel "
-                    "per subscribed tag. Generated with the OPC UA project; use with the "
-                    "Binary decoder.");
-  }
-
-  /**
-   * @brief Returns the parameter schema for the template.
-   */
-  [[nodiscard]] QList<NativeParamSpec> params() const override
-  {
-    auto schema = DataModel::nativeParam(
-      "schema",
-      NativeParamType::Json,
-      QT_TRANSLATE_NOOP("NativeTemplates", "Tag schema"),
-      QT_TRANSLATE_NOOP("NativeTemplates",
-                        "Ordered tag list written by the OPC UA project generator: one "
-                        "{\"i\": index, \"t\": type} entry per channel."),
-      QJsonArray());
-    return {schema};
-  }
-
-  /**
-   * @brief Validates the schema and builds a configured parser instance.
-   */
-  [[nodiscard]] std::unique_ptr<INativeParser> makeParser(const QJsonObject& params,
-                                                          QString& error) const override
-  {
-    using namespace IO::Drivers::OpcUaWire;
-
-    const auto items = DataModel::nativeParamArray(params, QStringLiteral("schema"));
-    if (items.isEmpty() || items.size() > kMaxTags) {
-      error = trBinary("The tag schema must list between 1 and %1 tags.").arg(kMaxTags);
-      return nullptr;
-    }
-
-    QList<Type> schema(items.size(), Type::Invalid);
-    for (const auto& item : items) {
-      const auto obj  = item.toObject();
-      const int index = obj.value(QStringLiteral("i")).toInt(-1);
-      const auto type = typeFromCode(obj.value(QStringLiteral("t")).toString());
-      if (index < 0 || index >= schema.size() || type == Type::Invalid
-          || schema[index] != Type::Invalid) {
-        error = trBinary("The tag schema has an invalid, duplicate or missing index.");
-        return nullptr;
-      }
-
-      schema[index] = type;
-    }
-
-    return std::make_unique<OpcUaParser>(schema);
-  }
-};
-
-#endif
-
-//--------------------------------------------------------------------------------------------------
 // Family registry
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the binary-protocol native templates in display order.
+ * @brief Returns the binary-protocol native templates in display order, followed by the
+ *        driver-generated wire-latch family (WireLatchTemplates.cpp), which is empty in a GPL
+ *        build.
  */
 QList<const DataModel::INativeTemplate*> DataModel::binaryNativeTemplates()
 {
@@ -2603,26 +2455,20 @@ QList<const DataModel::INativeTemplate*> DataModel::binaryNativeTemplates()
   static const RtcmTemplate s_rtcm;
   static const ModbusTemplate s_modbus;
   static const MessagePackTemplate s_messagePack;
-#ifdef BUILD_COMMERCIAL
-  static const OpcUaTemplate s_opcUa;
-#endif
 
-  QList<const DataModel::INativeTemplate*> list = {&s_rawBytes,
-                                                   &s_hexBytes,
-                                                   &s_base64,
-                                                   &s_binaryTlv,
-                                                   &s_cobs,
-                                                   &s_slip,
-                                                   &s_ubx,
-                                                   &s_sirf,
-                                                   &s_mavlink,
-                                                   &s_nmea2000,
-                                                   &s_rtcm,
-                                                   &s_modbus,
-                                                   &s_messagePack};
-#ifdef BUILD_COMMERCIAL
-  list.append(&s_opcUa);
-#endif
-
+  QList<const DataModel::INativeTemplate*> list  = {&s_rawBytes,
+                                                    &s_hexBytes,
+                                                    &s_base64,
+                                                    &s_binaryTlv,
+                                                    &s_cobs,
+                                                    &s_slip,
+                                                    &s_ubx,
+                                                    &s_sirf,
+                                                    &s_mavlink,
+                                                    &s_nmea2000,
+                                                    &s_rtcm,
+                                                    &s_modbus,
+                                                    &s_messagePack};
+  list                                          += wireLatchNativeTemplates();
   return list;
 }

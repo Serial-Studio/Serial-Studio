@@ -468,6 +468,13 @@
     }
   ],
   "hexadecimalDelimiters": false,
+  "influxSink": {
+    "bucket": "",
+    "enabled": false,
+    "measurement": "serial_studio",
+    "org": "",
+    "url": ""
+  },
   "luaFastMode": false,
   "mqttPublisher": {
     "alpnEnabled": false,
@@ -490,6 +497,10 @@
     "scriptCode": "",
     "scriptLanguage": 0,
     "scriptTopic": "",
+    "sparkplugDeviceId": "",
+    "sparkplugEdgeNodeId": "",
+    "sparkplugEnabled": false,
+    "sparkplugGroupId": "",
     "sslEnabled": false,
     "sslProtocol": 5,
     "topicBase": ""

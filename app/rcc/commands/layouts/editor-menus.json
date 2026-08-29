@@ -72,6 +72,7 @@
         {"type": "separator"},
         {"type": "command", "id": "editor.menu.editControlLoop"},
         {"type": "command", "id": "editor.menu.configureMqtt"},
+        {"type": "command", "id": "editor.menu.configureInflux"},
         {"type": "separator"},
         {"type": "command", "id": "editor.expandTree"},
         {"type": "command", "id": "editor.collapseTree"},
@@ -250,6 +251,9 @@
     ] },
     { "name": "mqtt-publisher", "items": [
         {"type": "command", "id": "editor.menu.configureMqtt"}
+    ] },
+    { "name": "influx-sink", "items": [
+        {"type": "command", "id": "editor.menu.configureInflux"}
     ] },
     { "name": "transform", "items": [
         {"type": "command", "id": "editor.menu.editTransform"}

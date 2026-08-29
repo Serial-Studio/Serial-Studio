@@ -1206,6 +1206,43 @@ void DataModel::ProjectModel::setMqttPublisher(const QJsonObject& config)
 }
 
 /**
+ * @brief Returns the project's InfluxDB sink configuration (empty when unset, i.e. disabled).
+ */
+const QJsonObject& DataModel::ProjectModel::influxSink() const noexcept
+{
+  return m_influxSink;
+}
+
+/**
+ * @brief Replaces the InfluxDB sink configuration and marks the project as modified. The API
+ *        token is never part of @p config: it stays in the machine-bound credential vault.
+ */
+void DataModel::ProjectModel::setInfluxSink(const QJsonObject& config)
+{
+  if (m_influxSink == config)
+    return;
+
+  const ProjectUndoScope undo_scope{*this, tr("Change InfluxDB Sink")};
+
+  m_influxSink = config;
+  setModified(true);
+  Q_EMIT influxSinkChanged();
+}
+
+/**
+ * @brief Notifies the sink modules that a document reset cleared their configuration, each one
+ *        only when it actually had one, so a fresh document does not churn every sink.
+ */
+void DataModel::ProjectModel::emitSinkConfigResets(bool hadMqttPublisher, bool hadInfluxSink)
+{
+  if (hadMqttPublisher)
+    Q_EMIT mqttPublisherChanged();
+
+  if (hadInfluxSink)
+    Q_EMIT influxSinkChanged();
+}
+
+/**
  * @brief Stages a single widget setting and marks the project dirty. QML callers pass JS
  *        arrays/objects as QJSValue-wrapped variants, which QJsonValue::fromVariant silently
  *        turns into null, so they are unwrapped first.
@@ -1541,7 +1578,9 @@ void DataModel::ProjectModel::newJsonFile()
   m_customizeWorkspaces = false;
 
   const bool hadMqttPublisher = !m_mqttPublisher.isEmpty();
+  const bool hadInfluxSink    = !m_influxSink.isEmpty();
   m_mqttPublisher             = QJsonObject();
+  m_influxSink                = QJsonObject();
 
   const bool wasLocked = m_locked;
   m_passwordHash.clear();
@@ -1615,8 +1654,7 @@ void DataModel::ProjectModel::newJsonFile()
   if (wasLocked)
     Q_EMIT lockedChanged();
 
-  if (hadMqttPublisher)
-    Q_EMIT mqttPublisherChanged();
+  emitSinkConfigResets(hadMqttPublisher, hadInfluxSink);
 
   if (!m_silentReload)
     Q_EMIT sourceStructureChanged();
@@ -2131,6 +2169,11 @@ void DataModel::ProjectModel::clearTransientState()
   if (!m_mqttPublisher.isEmpty()) {
     m_mqttPublisher = QJsonObject();
     Q_EMIT mqttPublisherChanged();
+  }
+
+  if (!m_influxSink.isEmpty()) {
+    m_influxSink = QJsonObject();
+    Q_EMIT influxSinkChanged();
   }
 
   setModified(false);

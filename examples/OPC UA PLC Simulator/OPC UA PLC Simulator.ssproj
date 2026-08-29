@@ -769,6 +769,13 @@
         }
     ],
     "hexadecimalDelimiters": false,
+    "influxSink": {
+        "bucket": "",
+        "enabled": false,
+        "measurement": "serial_studio",
+        "org": "",
+        "url": ""
+    },
     "luaFastMode": false,
     "mqttPublisher": {
         "alpnEnabled": false,
@@ -791,6 +798,10 @@
         "scriptCode": "",
         "scriptLanguage": 0,
         "scriptTopic": "",
+        "sparkplugDeviceId": "",
+        "sparkplugEdgeNodeId": "",
+        "sparkplugEnabled": false,
+        "sparkplugGroupId": "",
         "sslEnabled": false,
         "sslProtocol": 5,
         "topicBase": ""
@@ -1181,6 +1192,7 @@
         "OPC UA Bottling Line/Dashboard Widgets/Utilities/ChilledWater_C": false,
         "OPC UA Bottling Line/Dashboard Widgets/Utilities/Frequency_Hz": false,
         "OPC UA Bottling Line/Dashboard Widgets/Utilities/Power_kW": false,
+        "OPC UA Bottling Line/InfluxDB Sink": false,
         "OPC UA Bottling Line/MQTT Publisher": false,
         "OPC UA Bottling Line/OPC UA": true,
         "OPC UA Bottling Line/OPC UA/Frame Parser": false,

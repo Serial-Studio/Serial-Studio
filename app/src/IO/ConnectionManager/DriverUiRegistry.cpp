@@ -28,7 +28,7 @@
 /**
  * @brief Upper bound on the drivers a commercial build instantiates.
  */
-static constexpr size_t kMaxUiDrivers = 11;
+static constexpr size_t kMaxUiDrivers = 14;
 
 /**
  * @brief Builds one configuration-only driver per bus type available to this build.
@@ -46,6 +46,9 @@ IO::DriverUiRegistry::DriverUiRegistry()
   , m_canBus(std::make_unique<IO::Drivers::CANBus>())
   , m_modbus(std::make_unique<IO::Drivers::Modbus>())
   , m_process(std::make_unique<IO::Drivers::Process>())
+  , m_s7(std::make_unique<IO::Drivers::S7>())
+  , m_ethernetIp(std::make_unique<IO::Drivers::EthernetIp>())
+  , m_iec104(std::make_unique<IO::Drivers::Iec104>())
 #endif
 {}
 
@@ -76,6 +79,9 @@ void IO::DriverUiRegistry::releaseAll()
   m_canBus.reset();
   m_modbus.reset();
   m_process.reset();
+  m_s7.reset();
+  m_ethernetIp.reset();
+  m_iec104.reset();
 #endif
 }
 
@@ -132,6 +138,9 @@ std::vector<IO::HAL_Driver*> IO::DriverUiRegistry::all() const
   add(m_canBus.get());
   add(m_modbus.get());
   add(m_process.get());
+  add(m_s7.get());
+  add(m_ethernetIp.get());
+  add(m_iec104.get());
 #endif
 
   SS_ASSERT(drivers.size() <= kMaxUiDrivers, return drivers);
@@ -167,10 +176,16 @@ IO::HAL_Driver* IO::DriverUiRegistry::forBusType(SerialStudio::BusType type) con
       return m_mqtt.get();
     case SerialStudio::BusType::OpcUa:
       return m_opcUa.get();
+    case SerialStudio::BusType::S7:
+      return m_s7.get();
+    case SerialStudio::BusType::EthernetIp:
+      return m_ethernetIp.get();
+    case SerialStudio::BusType::Iec104:
+      return m_iec104.get();
 #endif
-    default:
-      return nullptr;
   }
+
+  return nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -264,5 +279,29 @@ IO::Drivers::Modbus* IO::DriverUiRegistry::modbus() const noexcept
 IO::Drivers::Process* IO::DriverUiRegistry::process() const noexcept
 {
   return m_process.get();
+}
+
+/**
+ * @brief Returns the UI-config Siemens S7comm driver instance.
+ */
+IO::Drivers::S7* IO::DriverUiRegistry::s7() const noexcept
+{
+  return m_s7.get();
+}
+
+/**
+ * @brief Returns the UI-config EtherNet/IP driver instance.
+ */
+IO::Drivers::EthernetIp* IO::DriverUiRegistry::ethernetIp() const noexcept
+{
+  return m_ethernetIp.get();
+}
+
+/**
+ * @brief Returns the UI-config IEC 60870-5-104 driver instance.
+ */
+IO::Drivers::Iec104* IO::DriverUiRegistry::iec104() const noexcept
+{
+  return m_iec104.get();
 }
 #endif

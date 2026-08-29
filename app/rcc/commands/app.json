@@ -502,6 +502,42 @@
       "category": "connection"
     },
     {
+      "id": "driver.s7",
+      "title": "Siemens S7",
+      "icon": "devices/s7",
+      "tooltip": "Select Siemens S7comm communication (Pro)",
+      "kind": "toggle",
+      "contexts": [
+        "app"
+      ],
+      "pro": true,
+      "category": "connection"
+    },
+    {
+      "id": "driver.ethernetip",
+      "title": "EtherNet/IP",
+      "icon": "devices/ethernetip",
+      "tooltip": "Select EtherNet/IP communication (Pro)",
+      "kind": "toggle",
+      "contexts": [
+        "app"
+      ],
+      "pro": true,
+      "category": "connection"
+    },
+    {
+      "id": "driver.iec104",
+      "title": "IEC 60870-5-104",
+      "icon": "devices/iec104",
+      "tooltip": "Select IEC 60870-5-104 communication (Pro)",
+      "kind": "toggle",
+      "contexts": [
+        "app"
+      ],
+      "pro": true,
+      "category": "connection"
+    },
+    {
       "id": "mode.quickPlot",
       "title": "Quick Plot Mode",
       "icon": "widgets/plot",

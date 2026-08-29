@@ -926,7 +926,8 @@ Item {
   // Icon helpers.
   function busTypeIcon(busType) {
     const names = ["uart", "network", "bluetooth", "audio", "modbus",
-                   "canbus", "usb", "hid", "process", "mqtt", "opcua"]
+                   "canbus", "usb", "hid", "process", "mqtt", "opcua",
+                   "s7", "ethernetip", "iec104"]
     return Cpp_Misc_IconRegistry.icon("devices", names[busType] || "uart", 24)
   }
 

@@ -109,6 +109,7 @@ QtObject {
     "editor.menu.editPainterCode": root.cmdEditPainterCode,
     "editor.menu.editControlLoop": root.cmdEditControlLoop,
     "editor.menu.configureMqtt": root.cmdConfigureMqtt,
+    "editor.menu.configureInflux": root.cmdConfigureInflux,
     "editor.menu.seedAliases": root.cmdSeedAliases,
     "editor.menu.showHiddenGroups": root.cmdShowHiddenGroups,
     "editor.menu.sharedMemoryHelp": root.cmdSharedMemoryHelp,
@@ -818,6 +819,11 @@ QtObject {
   readonly property QtObject cmdConfigureMqtt: QtObject {
     readonly property bool enabled: Cpp_CommercialBuild
     function run() { Cpp_JSON_ProjectEditor.selectMqttPublisher() }
+  }
+
+  readonly property QtObject cmdConfigureInflux: QtObject {
+    readonly property bool enabled: Cpp_CommercialBuild
+    function run() { Cpp_JSON_ProjectEditor.selectInfluxSink() }
   }
 
   readonly property QtObject cmdEditWorkspace: QtObject {

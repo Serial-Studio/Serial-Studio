@@ -47,11 +47,14 @@
 #ifdef BUILD_COMMERCIAL
 #  include "IO/Drivers/Audio.h"
 #  include "IO/Drivers/CANBus.h"
+#  include "IO/Drivers/EthernetIp.h"
 #  include "IO/Drivers/HID.h"
+#  include "IO/Drivers/Iec104.h"
 #  include "IO/Drivers/Modbus.h"
 #  include "IO/Drivers/MQTT.h"
 #  include "IO/Drivers/OpcUa.h"
 #  include "IO/Drivers/Process.h"
+#  include "IO/Drivers/S7.h"
 #  include "IO/Drivers/USB.h"
 #  include "Licensing/CommercialToken.h"
 #  include "Licensing/LemonSqueezy.h"
@@ -300,6 +303,9 @@ QStringList IO::ConnectionManager::availableBuses() const
   list.append(tr("Process"));
   list.append(tr("MQTT Subscriber"));
   list.append(tr("OPC UA"));
+  list.append(tr("Siemens S7"));
+  list.append(tr("EtherNet/IP"));
+  list.append(tr("IEC 60870-5-104"));
 #endif
   return list;
 }
@@ -448,6 +454,30 @@ IO::Drivers::OpcUa* IO::ConnectionManager::opcUa() const noexcept
 IO::Drivers::Process* IO::ConnectionManager::process() const noexcept
 {
   return m_uiDrivers.process();
+}
+
+/**
+ * @brief Returns the UI-config Siemens S7comm driver instance.
+ */
+IO::Drivers::S7* IO::ConnectionManager::s7() const noexcept
+{
+  return m_uiDrivers.s7();
+}
+
+/**
+ * @brief Returns the UI-config EtherNet/IP driver instance.
+ */
+IO::Drivers::EthernetIp* IO::ConnectionManager::ethernetIp() const noexcept
+{
+  return m_uiDrivers.ethernetIp();
+}
+
+/**
+ * @brief Returns the UI-config IEC 60870-5-104 driver instance.
+ */
+IO::Drivers::Iec104* IO::ConnectionManager::iec104() const noexcept
+{
+  return m_uiDrivers.iec104();
 }
 
 /**
@@ -2105,6 +2135,32 @@ IO::FrameConfig IO::ConnectionManager::buildFrameConfig(int deviceId) const
   return cfg;
 }
 
+#ifdef BUILD_COMMERCIAL
+/**
+ * @brief Builds a licensed PLC driver for a live source and points the UI-config instance at it so
+ *        the pane and the API read live counters (spec 0073); the single session peer slot makes
+ *        these listen-only buses one-live-session-per-bus (a second same-type source overwrites the
+ *        first), as is the MQTT/Sparkplug peer below. Returns nullptr when the licence excludes it.
+ */
+template<typename Driver>
+[[nodiscard]] static std::unique_ptr<IO::HAL_Driver> makePlcDriver(Driver* uiDriver)
+{
+  const auto& tk = Licensing::CommercialToken::current();
+  if (!tk.isValid() || !SS_LICENSE_GUARD())
+    return nullptr;
+
+  auto driver = std::make_unique<Driver>();
+  driver->setPersistent(false);
+  if (!uiDriver)
+    return driver;
+
+  uiDriver->setSessionPeer(driver.get());
+  QObject::connect(
+    driver.get(), &Driver::statusChanged, uiDriver, &Driver::statusChanged, Qt::UniqueConnection);
+  return driver;
+}
+#endif
+
 /**
  * @brief Creates a fresh driver instance for the given bus @p type.
  */
@@ -2169,7 +2225,12 @@ std::unique_ptr<IO::HAL_Driver> IO::ConnectionManager::createDriver(
       if (!tk.isValid() || !SS_LICENSE_GUARD())
         return nullptr;
 
-      return std::make_unique<IO::Drivers::MQTT>();
+      auto driver  = std::make_unique<IO::Drivers::MQTT>();
+      auto* mqttUi = m_uiDrivers.mqtt();
+      if (mqttUi)
+        mqttUi->setSparkplugPeer(driver.get());
+
+      return driver;
     }
     case SerialStudio::BusType::OpcUa: {
       const auto& tk = Licensing::CommercialToken::current();
@@ -2190,8 +2251,14 @@ std::unique_ptr<IO::HAL_Driver> IO::ConnectionManager::createDriver(
 
       return driver;
     }
+    case SerialStudio::BusType::S7:
+      return makePlcDriver<IO::Drivers::S7>(m_uiDrivers.s7());
+    case SerialStudio::BusType::EthernetIp:
+      return makePlcDriver<IO::Drivers::EthernetIp>(m_uiDrivers.ethernetIp());
+    case SerialStudio::BusType::Iec104:
+      return makePlcDriver<IO::Drivers::Iec104>(m_uiDrivers.iec104());
 #endif
-    default:
-      return nullptr;
   }
+
+  return nullptr;
 }

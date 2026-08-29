@@ -207,6 +207,13 @@
         }
     ],
     "hexadecimalDelimiters": false,
+    "influxSink": {
+        "bucket": "",
+        "enabled": false,
+        "measurement": "serial_studio",
+        "org": "",
+        "url": ""
+    },
     "luaFastMode": false,
     "mqttPublisher": {
         "alpnEnabled": false,
@@ -229,6 +236,10 @@
         "scriptCode": "",
         "scriptLanguage": 0,
         "scriptTopic": "",
+        "sparkplugDeviceId": "",
+        "sparkplugEdgeNodeId": "",
+        "sparkplugEnabled": false,
+        "sparkplugGroupId": "",
         "sslEnabled": false,
         "sslProtocol": 5,
         "topicBase": ""
@@ -300,6 +311,7 @@
         "Lorenz Attractor/Dashboard Widgets/3D Visualization/Z": false,
         "Lorenz Attractor/Dummy Device": true,
         "Lorenz Attractor/Dummy Device/Frame Parser": false,
+        "Lorenz Attractor/InfluxDB Sink": false,
         "Lorenz Attractor/MQTT Publisher": false,
         "Lorenz Attractor/Variables": true,
         "Lorenz Attractor/Variables/Dataset Values": false,
@@ -322,9 +334,9 @@
             "visibleCurves": null
         },
         "6:1:-1": {
-            "anaglyphEnabled": false,
+            "anaglyphEnabled": true,
             "autoCenter": false,
-            "eyeSeparation": 0.03,
+            "eyeSeparation": 0.066,
             "interpolationEnabled": true,
             "invertEyePositions": false
         },

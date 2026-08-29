@@ -46,12 +46,12 @@ Q_LOGGING_CATEGORY(lcOpcUa, "serialstudio.io.opcua")
 static constexpr int kOpcUaDialDeadlineMs      = 15000;
 static constexpr int kOpcUaBrowseDeadlineMs    = 15000;
 static constexpr int kOpcUaDiscoveryDeadlineMs = 8000;
-static constexpr int kMinIntervalMs            = 10;
-static constexpr int kMaxIntervalMs            = 60000;
+static constexpr int kOpcUaMinIntervalMs       = 10;
+static constexpr int kOpcUaMaxIntervalMs       = 60000;
 static constexpr int kOpcUaDefaultIntervalMs   = 100;
-static constexpr qint64 kNsPerMs               = 1000000LL;
+static constexpr qint64 kOpcUaNsPerMs          = 1000000LL;
 static constexpr qint64 kMaxClockSkewMs        = 5000;
-static constexpr int kDefaultPort              = 4840;
+static constexpr int kOpcUaDefaultPort         = 4840;
 static constexpr int kWatchdogMs               = 1000;
 static constexpr int kSilenceFactor            = 6;
 static constexpr int kMinSilenceMs             = 3000;
@@ -190,7 +190,7 @@ void IO::Drivers::OpcUa::loadSettings()
   m_username    = m_settings.value("OpcUaDriver/username", QString()).toString();
   m_publishingInterval =
     m_settings.value("OpcUaDriver/publishingInterval", kOpcUaDefaultIntervalMs).toInt();
-  m_publishingInterval = qBound(kMinIntervalMs, m_publishingInterval, kMaxIntervalMs);
+  m_publishingInterval = qBound(kOpcUaMinIntervalMs, m_publishingInterval, kOpcUaMaxIntervalMs);
 
   m_securityPolicy =
     m_settings.value("OpcUaDriver/securityPolicy", QString::fromLatin1(kPolicyNone)).toString();
@@ -206,7 +206,7 @@ void IO::Drivers::OpcUa::loadSettings()
   const QUrl url(m_endpointUrl);
   if (url.isValid() && !url.host().isEmpty())
     m_password =
-      m_vault.credentials(url.host(), static_cast<quint16>(url.port(kDefaultPort))).password;
+      m_vault.credentials(url.host(), static_cast<quint16>(url.port(kOpcUaDefaultPort))).password;
 
   const auto doc =
     QJsonDocument::fromJson(m_settings.value("OpcUaDriver/tags", QByteArray("[]")).toByteArray());
@@ -601,7 +601,7 @@ IO::Drivers::OpcUaTypes::Endpoint IO::Drivers::OpcUa::dialEndpoint() const
     return endpoint;
 
   advertised.setHost(typed.host());
-  advertised.setPort(typed.port(advertised.port(kDefaultPort)));
+  advertised.setPort(typed.port(advertised.port(kOpcUaDefaultPort)));
   endpoint.endpointUrl = advertised.toString();
   return endpoint;
 }
@@ -840,7 +840,7 @@ void IO::Drivers::OpcUa::subscribeAll()
 
   const auto steady     = std::chrono::steady_clock::now().time_since_epoch();
   const qint64 steadyNs = std::chrono::duration_cast<std::chrono::nanoseconds>(steady).count();
-  m_clockOffsetNs       = steadyNs - QDateTime::currentMSecsSinceEpoch() * kNsPerMs;
+  m_clockOffsetNs       = steadyNs - QDateTime::currentMSecsSinceEpoch() * kOpcUaNsPerMs;
   m_clockValid          = true;
   m_lastStampNs         = 0;
   m_lastNotifyNs        = steadyNs;
@@ -960,7 +960,7 @@ void IO::Drivers::OpcUa::adoptRevisedInterval()
   if (revised <= 0 || revised == m_revisedInterval)
     return;
 
-  m_revisedInterval = qBound(kMinIntervalMs, revised, kMaxIntervalMs);
+  m_revisedInterval = qBound(kOpcUaMinIntervalMs, revised, kOpcUaMaxIntervalMs);
   if (m_frameTimer->isActive())
     m_frameTimer->start(m_revisedInterval);
 
@@ -1001,7 +1001,7 @@ void IO::Drivers::OpcUa::onWatchdogTick()
 
   const auto now        = std::chrono::steady_clock::now().time_since_epoch();
   const qint64 nowNs    = std::chrono::duration_cast<std::chrono::nanoseconds>(now).count();
-  const qint64 silentMs = (nowNs - m_lastNotifyNs) / kNsPerMs;
+  const qint64 silentMs = (nowNs - m_lastNotifyNs) / kOpcUaNsPerMs;
   const qint64 budgetMs =
     qMax<qint64>(kMinSilenceMs, static_cast<qint64>(m_revisedInterval) * kSilenceFactor);
 
@@ -1185,7 +1185,7 @@ IO::CapturedData::SteadyTimePoint IO::Drivers::OpcUa::toSteady(const QDateTime& 
     if (skewMs > kMaxClockSkewMs || skewMs < -kMaxClockSkewMs)
       ++m_unstampedCount;
     else
-      stamp = (sourceTs.toMSecsSinceEpoch() - m_serverOffsetMs) * kNsPerMs + m_clockOffsetNs;
+      stamp = (sourceTs.toMSecsSinceEpoch() - m_serverOffsetMs) * kOpcUaNsPerMs + m_clockOffsetNs;
   }
 
   stamp         = qMax(stamp, m_lastStampNs + 1);
@@ -1960,7 +1960,8 @@ void IO::Drivers::OpcUa::setEndpointUrl(const QString& url)
   const QUrl parsed(m_endpointUrl);
   if (parsed.isValid() && !parsed.host().isEmpty())
     m_password =
-      m_vault.credentials(parsed.host(), static_cast<quint16>(parsed.port(kDefaultPort))).password;
+      m_vault.credentials(parsed.host(), static_cast<quint16>(parsed.port(kOpcUaDefaultPort)))
+        .password;
 
   Q_EMIT endpointUrlChanged();
   Q_EMIT endpointsChanged();
@@ -2027,7 +2028,7 @@ void IO::Drivers::OpcUa::setUsername(const QString& username)
     m_settings.setValue("OpcUaDriver/username", m_username);
     if (url.isValid() && !url.host().isEmpty())
       m_vault.setCredentials(
-        url.host(), static_cast<quint16>(url.port(kDefaultPort)), m_username, m_password);
+        url.host(), static_cast<quint16>(url.port(kOpcUaDefaultPort)), m_username, m_password);
   }
 
   Q_EMIT usernameChanged();
@@ -2045,7 +2046,7 @@ void IO::Drivers::OpcUa::setPassword(const QString& password)
   const QUrl url(m_endpointUrl);
   if (m_persistent && url.isValid() && !url.host().isEmpty())
     m_vault.setCredentials(
-      url.host(), static_cast<quint16>(url.port(kDefaultPort)), m_username, m_password);
+      url.host(), static_cast<quint16>(url.port(kOpcUaDefaultPort)), m_username, m_password);
 
   Q_EMIT passwordChanged();
 }
@@ -2055,7 +2056,7 @@ void IO::Drivers::OpcUa::setPassword(const QString& password)
  */
 void IO::Drivers::OpcUa::setPublishingInterval(const int interval)
 {
-  const int clamped = qBound(kMinIntervalMs, interval, kMaxIntervalMs);
+  const int clamped = qBound(kOpcUaMinIntervalMs, interval, kOpcUaMaxIntervalMs);
   if (m_publishingInterval == clamped)
     return;
 
@@ -2719,8 +2720,8 @@ QList<IO::DriverProperty> IO::Drivers::OpcUa::driverProperties() const
   interval.label = tr("Poll Interval (ms)");
   interval.type  = IO::DriverProperty::IntField;
   interval.value = m_publishingInterval;
-  interval.min   = kMinIntervalMs;
-  interval.max   = kMaxIntervalMs;
+  interval.min   = kOpcUaMinIntervalMs;
+  interval.max   = kOpcUaMaxIntervalMs;
   props.append(interval);
 
   IO::DriverProperty policy;

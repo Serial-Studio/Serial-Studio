@@ -341,6 +341,9 @@ API::CommandResponse API::Handlers::CANBusHandler::getConfiguration(const QStrin
   result[QStringLiteral("loopback")]    = canbus->loopback();
   result[QStringLiteral("listenOnly")]  = canbus->listenOnly();
 
+  result[QStringLiteral("tpReassembly")] = canbus->tpReassembly();
+  result[QStringLiteral("reassembly")] = QJsonObject::fromVariantMap(canbus->reassemblyCounters());
+
   result[QStringLiteral("isOpen")]          = canbus->isOpen();
   result[QStringLiteral("configurationOk")] = canbus->configurationOk();
 

@@ -21,6 +21,7 @@
 #  include "IO/Drivers/MQTT.h"
 #  include "MQTT/CredentialVault.h"
 #  include "MQTT/Publisher.h"
+#  include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Helpers
@@ -206,7 +207,9 @@ void API::Handlers::MqttHandler::registerSubscriberCommands()
 
   registry.registerCommand(
     QStringLiteral("project.mqtt.subscriber.getStatus"),
-    QStringLiteral("Snapshot subscriber driver live state (isOpen, hostname, port)."),
+    QStringLiteral("Snapshot subscriber driver live state (isOpen, hostname, port) plus "
+                   "the 'sparkplug' block: discovered metric count and the pulled session "
+                   "counters (decodeErrors, capDrops, preBirthDropped, seqGaps, ...)."),
     API::emptySchema(),
     &subscriberGetStatus);
 }
@@ -611,6 +614,33 @@ API::CommandResponse API::Handlers::MqttHandler::subscriberSetConfig(const QStri
 }
 
 /**
+ * @brief Snapshots the Sparkplug session the subscriber feeds: the discovered metric count plus
+ *        the pulled hardening counters (spec 0033), read through the live link's session.
+ */
+[[nodiscard]] static QJsonObject sparkplugStatus(const IO::Drivers::MQTT* d)
+{
+  SS_ASSERT(d != nullptr, return QJsonObject());
+  SS_ASSERT_LOG(d->sparkplugSlotCount() >= 0);
+
+  const auto counters = d->sparkplugCounters();
+
+  QJsonObject sparkplug;
+  sparkplug[QStringLiteral("enabled")]          = d->sparkplugEnabled();
+  sparkplug[QStringLiteral("groupId")]          = d->sparkplugGroupId();
+  sparkplug[QStringLiteral("metrics")]          = d->sparkplugSlotCount();
+  sparkplug[QStringLiteral("seqGaps")]          = static_cast<qint64>(counters.seqGaps);
+  sparkplug[QStringLiteral("capDrops")]         = static_cast<qint64>(counters.capDrops);
+  sparkplug[QStringLiteral("decodeErrors")]     = static_cast<qint64>(counters.decodeErrors);
+  sparkplug[QStringLiteral("ignoredMessages")]  = static_cast<qint64>(counters.ignoredMessages);
+  sparkplug[QStringLiteral("preBirthBuffered")] = static_cast<qint64>(counters.preBirthBuffered);
+  sparkplug[QStringLiteral("preBirthDropped")]  = static_cast<qint64>(counters.preBirthDropped);
+  sparkplug[QStringLiteral("rebirthRequests")]  = static_cast<qint64>(counters.rebirthRequests);
+  sparkplug[QStringLiteral("unsupportedMetrics")] =
+    static_cast<qint64>(counters.unsupportedMetrics);
+  return sparkplug;
+}
+
+/**
  * @brief Snapshots subscriber driver live state.
  */
 API::CommandResponse API::Handlers::MqttHandler::subscriberGetStatus(const QString& id,
@@ -624,9 +654,10 @@ API::CommandResponse API::Handlers::MqttHandler::subscriberGetStatus(const QStri
       id, ErrorCode::ExecutionError, QStringLiteral("MQTT subscriber driver unavailable"));
 
   QJsonObject result;
-  result[QStringLiteral("isOpen")]   = d->isOpen();
-  result[QStringLiteral("hostname")] = d->hostname();
-  result[QStringLiteral("port")]     = d->port();
+  result[QStringLiteral("isOpen")]    = d->isOpen();
+  result[QStringLiteral("hostname")]  = d->hostname();
+  result[QStringLiteral("port")]      = d->port();
+  result[QStringLiteral("sparkplug")] = sparkplugStatus(d);
   return CommandResponse::makeSuccess(id, result);
 }
 

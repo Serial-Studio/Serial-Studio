@@ -92,18 +92,21 @@ contexts and you must not invent function names from one in another.
 
 ## io.* is a forest, not a flat scope
 
-Eight driver subscopes live under `io.*`. Don't `meta.listCommands`
-each one blindly; pick by the device class the user is asking about:
+Driver subscopes live under `io.*`. Don't `meta.listCommands` each one
+blindly; pick by the device class the user is asking about:
 
 | Subscope         | When to use                                 |
 |------------------|---------------------------------------------|
 | `io.audio.*`     | Microphone / line-in capture                |
 | `io.ble.*`       | Bluetooth Low Energy peripherals            |
 | `io.canbus.*`    | CAN bus (load `can_modbus` skill)           |
+| `io.eip.*`       | EtherNet/IP (load `industrial_plc` skill)   |
 | `io.hid.*`       | USB HID gamepads / sensors                  |
+| `io.iec104.*`    | IEC 60870-5-104 (load `industrial_plc`)     |
 | `io.modbus.*`    | Modbus RTU/TCP (load `can_modbus` skill)    |
 | `io.network.*`   | TCP / UDP / WebSocket / HTTP (all clients)  |
 | `io.process.*`   | Subprocess stdout (Pro)                     |
+| `io.s7.*`        | Siemens S7 (load `industrial_plc` skill)    |
 | `io.uart.*`      | UART / serial port (most projects start here)|
 
 Top-level `io.*` itself has bus-management and tail/peek commands; use

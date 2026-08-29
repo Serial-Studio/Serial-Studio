@@ -32,6 +32,56 @@ Item {
   implicitHeight: layout.implicitHeight
   implicitWidth: layout.implicitWidth + 16
 
+  //
+  // Enabling Sparkplug reveals rows below the checkbox; a scrolled pane would hide them, so the
+  // hosting Flickable is nudged just far enough to show the last of them.
+  //
+  property bool sparkplugWasEnabled: false
+
+  Component.onCompleted: root.sparkplugWasEnabled = Cpp_IO_Mqtt.sparkplugEnabled
+
+  function hostFlickable() {
+    let item = root.parent
+    for (let i = 0; i < 16 && item; ++i) {
+      if (item.contentY !== undefined && item.contentHeight !== undefined)
+        return item
+
+      item = item.parent
+    }
+
+    return null
+  }
+
+  function revealSparkplugRows() {
+    const flick = root.hostFlickable()
+    if (!flick || flick.contentHeight <= flick.height || !_generate.visible)
+      return
+
+    const bottom = _generate.mapToItem(flick.contentItem, 0, _generate.height).y
+    const target = Math.min(bottom + 8 - flick.height, flick.contentHeight - flick.height)
+    if (target > flick.contentY)
+      flick.contentY = Math.max(0, target)
+  }
+
+  Timer {
+    id: _revealTimer
+
+    interval: 50
+    repeat: false
+    onTriggered: root.revealSparkplugRows()
+  }
+
+  Connections {
+    target: Cpp_IO_Mqtt
+    function onMqttConfigurationChanged() {
+      const on = Cpp_IO_Mqtt.sparkplugEnabled
+      if (on && !root.sparkplugWasEnabled)
+        _revealTimer.restart()
+
+      root.sparkplugWasEnabled = on
+    }
+  }
+
   ColumnLayout {
     id: layout
 
@@ -223,6 +273,69 @@ Item {
               _clean.checked = Cpp_IO_Mqtt.cleanSession
           }
         }
+      }
+
+      //
+      // Sparkplug
+      //
+      Label {
+        text: qsTr("Sparkplug") + ":"
+        enabled: app.ioEnabled
+        opacity: _sparkplug.enabled ? 1 : 0.5
+      } CheckBox {
+        id: _sparkplug
+
+        Layout.leftMargin: -8
+        enabled: app.ioEnabled
+        opacity: enabled ? 1 : 0.5
+        Layout.alignment: Qt.AlignLeft
+        checked: Cpp_IO_Mqtt.sparkplugEnabled
+        onClicked: Cpp_IO_Mqtt.sparkplugEnabled = checked
+
+        Connections {
+          target: Cpp_IO_Mqtt
+          function onMqttConfigurationChanged() {
+            if (_sparkplug.checked !== Cpp_IO_Mqtt.sparkplugEnabled)
+              _sparkplug.checked = Cpp_IO_Mqtt.sparkplugEnabled
+          }
+        }
+      }
+
+      //
+      // Sparkplug group ID
+      //
+      Label {
+        text: qsTr("Group ID") + ":"
+        visible: Cpp_IO_Mqtt.sparkplugEnabled
+        enabled: app.ioEnabled && Cpp_IO_Mqtt.sparkplugEnabled
+        opacity: enabled ? 1 : 0.5
+      } Widgets.BoundField {
+        Layout.fillWidth: true
+        opacity: enabled ? 1 : 0.5
+        placeholderText: qsTr("All groups")
+        visible: Cpp_IO_Mqtt.sparkplugEnabled
+        externalValue: Cpp_IO_Mqtt.sparkplugGroupId
+        enabled: app.ioEnabled && Cpp_IO_Mqtt.sparkplugEnabled
+        onEdited: text => Cpp_IO_Mqtt.sparkplugGroupId = text
+      }
+
+      //
+      // Sparkplug project generation
+      //
+      Label {
+        text: qsTr("Sparkplug Project") + ":"
+        visible: Cpp_IO_Mqtt.sparkplugEnabled
+        enabled: app.ioEnabled && Cpp_IO_Mqtt.sparkplugEnabled
+        opacity: enabled ? 1 : 0.5
+      } Button {
+        id: _generate
+
+        Layout.fillWidth: true
+        opacity: enabled ? 1 : 0.5
+        visible: Cpp_IO_Mqtt.sparkplugEnabled
+        text: qsTr("Create Project from Births")
+        enabled: app.ioEnabled && Cpp_IO_Mqtt.sparkplugEnabled && Cpp_IO_Manager.isConnected
+        onClicked: Cpp_IO_Mqtt.generateProject()
       }
 
       //
