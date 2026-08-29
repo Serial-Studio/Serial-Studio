@@ -46,7 +46,7 @@
     },
     {
       "path": "examples/ISS Tracker/iss-tracker.ssproj",
-      "sha256": "f9ccb362b5ec51b0622a8af988a242b80217154878feeb7660c632528d59a8ea"
+      "sha256": "1592962c6e84eab34f3eeea7f563677c7e16a1508de6bbd504237adcadfbd4c3"
     },
     {
       "path": "examples/LTE modem/LTE Modem.ssproj",
@@ -54,7 +54,7 @@
     },
     {
       "path": "examples/LorenzAttractor/LorenzAttractor.ssproj",
-      "sha256": "7a6443cbddd3bbae795281934a73dedb04aa0007bf9a2ae060e0d163a32c6ddd"
+      "sha256": "ab1a42c82b95429dc8a935a8dea716b942977785f759668c91bf38f59b308111"
     },
     {
       "path": "examples/MPU6050/MPU6050.ssproj",

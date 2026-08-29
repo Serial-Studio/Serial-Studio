@@ -130,15 +130,24 @@ class DeviceSimulator:
         connection would close it out from under an in-flight send -> EBADF /
         "No client connected" / silently-dropped frames. A peek that returns EOF
         means the peer already closed (the probe); BlockingIOError means a live
-        client that simply has not sent yet -- keep that one.
+        client that simply has not sent yet -- keep that one. The non-blocking
+        window comes from setblocking(False), not MSG_DONTWAIT: that flag does
+        not exist on Windows, and the AttributeError it raised there escaped
+        every except clause and killed the accept loop on the first connection.
         """
         try:
-            peeked = client.recv(1, socket.MSG_PEEK | socket.MSG_DONTWAIT)
+            client.setblocking(False)
+            peeked = client.recv(1, socket.MSG_PEEK)
             return peeked == b""
         except BlockingIOError:
             return False
         except OSError:
             return True
+        finally:
+            try:
+                client.setblocking(True)
+            except OSError:
+                pass
 
     def _monitor_client(self, client: socket.socket) -> None:
         """Spawn a thread that clears _client_socket when the remote side closes."""

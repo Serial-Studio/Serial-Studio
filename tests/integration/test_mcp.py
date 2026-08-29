@@ -414,7 +414,7 @@ class TestToolsList:
             t for t in mcp.tools_list() if t["name"] == "io.network.setSocketType"
         )
         props = tool["inputSchema"]["properties"]
-        assert props["socketTypeIndex"]["enum"] == [0, 1]
+        assert props["socketTypeIndex"]["enum"] == [0, 1, 2, 3]
 
     def test_io_manager_set_bus_type_schema(self, mcp):
         tool = next(t for t in mcp.tools_list() if t["name"] == "io.setBusType")
