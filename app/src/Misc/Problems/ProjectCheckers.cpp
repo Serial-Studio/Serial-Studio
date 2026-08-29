@@ -58,6 +58,17 @@ static const QString kJumpDataset = QStringLiteral("dataset");
 }
 
 /**
+ * @brief The project document every checker in this file reads, resolved once: the checkers are
+ *        free functions with no constructor to capture in, so the singleton reach is funnelled
+ *        through a single accessor instead of a per-checker static.
+ */
+[[nodiscard]] static DataModel::ProjectModel& projectModel()
+{
+  static auto& model = DataModel::ProjectModel::instance();
+  return model;
+}
+
+/**
  * @brief Assembles one finding; the checker id is stamped by the problem center after the run.
  */
 [[nodiscard]] static Finding makeFinding(Severity severity,
@@ -107,13 +118,12 @@ static void capFindings(QList<Finding>& out)
  */
 [[nodiscard]] static bool projectAvailable()
 {
-  static auto& state   = AppState::instance();
-  static auto& project = DataModel::ProjectModel::instance();
+  static auto& state = AppState::instance();
 
   if (state.operationMode() != SerialStudio::ProjectFile)
     return false;
 
-  return project.groupCount() > 0;
+  return projectModel().groupCount() > 0;
 }
 
 /**
@@ -211,7 +221,7 @@ static void checkFrameIndices(QList<Finding>& out)
   if (!projectAvailable())
     return;
 
-  static auto& project = DataModel::ProjectModel::instance();
+  auto& project = projectModel();
 
   QHash<quint64, QString> seen;
   const auto& groups = project.groups();
@@ -235,7 +245,7 @@ static void checkEmptyGroups(QList<Finding>& out)
   if (!projectAvailable())
     return;
 
-  static auto& project = DataModel::ProjectModel::instance();
+  auto& project = projectModel();
 
   const auto& groups = project.groups();
   for (const auto& group : groups) {
@@ -334,7 +344,7 @@ static void inspectSourceReferences(const QSet<int>& sourceIds, QList<Finding>& 
   if (sourceIds.isEmpty())
     return;
 
-  static auto& project = DataModel::ProjectModel::instance();
+  auto& project = projectModel();
   for (const auto& action : project.actions()) {
     if (sourceIds.contains(action.sourceId))
       continue;
@@ -378,7 +388,7 @@ static void checkDanglingReferences(QList<Finding>& out)
   if (!projectAvailable())
     return;
 
-  static auto& project = DataModel::ProjectModel::instance();
+  auto& project = projectModel();
 
   QSet<int> groupIds;
   QSet<int> datasetIds;
@@ -546,7 +556,7 @@ static void checkNumericRanges(QList<Finding>& out)
   if (!projectAvailable())
     return;
 
-  static auto& project = DataModel::ProjectModel::instance();
+  auto& project = projectModel();
 
   const auto& groups = project.groups();
   for (const auto& group : groups) {
@@ -575,7 +585,7 @@ static void checkDuplicateAliases(QList<Finding>& out)
   if (!projectAvailable())
     return;
 
-  static auto& project = DataModel::ProjectModel::instance();
+  auto& project = projectModel();
 
   QHash<QString, QString> seen;
   const auto& groups = project.groups();
@@ -634,7 +644,7 @@ static void checkUnlicensedSources(QList<Finding>& out)
   if (SerialStudio::activated())
     return;
 
-  static auto& project = DataModel::ProjectModel::instance();
+  auto& project = projectModel();
   for (const auto& src : project.sources()) {
     if (!busRequiresCommercial(src.busType))
       continue;

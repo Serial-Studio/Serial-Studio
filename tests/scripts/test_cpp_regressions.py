@@ -1097,23 +1097,24 @@ def test_dashboard_snapshots_and_restores_time_rings_on_reconfigure():
     resetData(false), which cleared every TimeRing. The snapshot/restore pair now
     preserves per-uniqueId ring contents across reconfigures."""
     text = _read("app/src/UI/Dashboard.cpp")
-    header = _read("app/src/UI/Dashboard.h")
+    header = _read("app/src/UI/Dashboard/ReplaySeekEngine.h")
 
-    # The four helpers must be declared and defined. The ring type is DSP::EnvelopeRing
-    # since the spec 0057 cascading-envelope rework (was DSP::TimeRing).
+    # The four helpers live on UI::ReplaySeekEngine since the spec-0070 wave-7 extraction.
+    # The ring type is DSP::EnvelopeRing since the spec 0057 cascading-envelope rework.
     for sig in (
         "QHash<qint64, DSP::EnvelopeRing> snapshotPlotTimeRings() const;",
         "QHash<qint64, std::vector<DSP::EnvelopeRing>> snapshotMultiplotTimeRings() const;",
         "void restorePlotTimeRings(QHash<qint64, DSP::EnvelopeRing>& snapshot);",
         "void restoreMultiplotTimeRings(QHash<qint64, std::vector<DSP::EnvelopeRing>>& snapshot);",
     ):
-        assert sig in header, f"missing in Dashboard.h: {sig}"
+        assert sig in header, f"missing in ReplaySeekEngine.h: {sig}"
 
     # restorePlotTimeRings handles both same-shape splice and different-shape replay.
     # Shape/interval are read off the base level (level0) of the envelope ring.
+    engine = _read("app/src/UI/Dashboard/ReplaySeekEngine.cpp")
     plot_restore = re.search(
-        r"void UI::Dashboard::restorePlotTimeRings\([\s\S]*?\n\}",
-        text,
+        r"void UI::ReplaySeekEngine::restorePlotTimeRings\([\s\S]*?\n\}",
+        engine,
     )
     assert plot_restore is not None
     snippet = plot_restore.group(0)
@@ -1124,8 +1125,8 @@ def test_dashboard_snapshots_and_restores_time_rings_on_reconfigure():
 
     # Same for the multiplot variant (per-curve splice/replay).
     multi_restore = re.search(
-        r"void UI::Dashboard::restoreMultiplotTimeRings\([\s\S]*?\n\}",
-        text,
+        r"void UI::ReplaySeekEngine::restoreMultiplotTimeRings\([\s\S]*?\n\}",
+        engine,
     )
     assert multi_restore is not None
     multi_snippet = multi_restore.group(0)
@@ -1144,7 +1145,9 @@ def test_dashboard_snapshots_and_restores_time_rings_on_reconfigure():
 # Matches the snapshot declaration regardless of clang-format's alignment padding.
 # The `=` aligns to the widest declarator in its block, so the gap varies per site
 # (setPlotTimeRange also snapshots the sweep configs, widening the column).
-_SNAPSHOT_DECL = re.compile(r"auto savedPlotRings += snapshotPlotTimeRings\(\);")
+_SNAPSHOT_DECL = re.compile(
+    r"auto savedPlotRings\s*= m_replaySeek\.snapshotPlotTimeRings\(\);"
+)
 
 
 def test_dashboard_snapshots_around_every_clearing_trigger():
@@ -1163,7 +1166,7 @@ def test_dashboard_snapshots_around_every_clearing_trigger():
     snap_pos = snap_match.start() if snap_match else -1
     reset_pos = snippet.find("resetData(false);")
     update_pos = snippet.find("updateDataSeries();")
-    restore_pos = snippet.find("restorePlotTimeRings(savedPlotRings);")
+    restore_pos = snippet.find("m_replaySeek.restorePlotTimeRings(savedPlotRings);")
     assert snap_pos != -1 and reset_pos != -1
     assert update_pos != -1 and restore_pos != -1
     assert (

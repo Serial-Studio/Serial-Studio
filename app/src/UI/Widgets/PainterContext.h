@@ -33,65 +33,14 @@
 #  include <QVariantMap>
 #  include <vector>
 
+#  include "UI/Widgets/Painter/PainterGradient.h"
+#  include "UI/Widgets/Painter/PainterPattern.h"
+
 namespace Misc {
 class CommonFonts;
 }  // namespace Misc
 
 namespace Widgets {
-
-/**
- * @brief Canvas2D-shaped gradient handle exposed to JS.
- */
-class PainterGradient : public QObject {
-  Q_OBJECT
-
-public:
-  enum class Kind {
-    Linear,
-    Radial,
-    Conic
-  };
-
-  explicit PainterGradient(Kind kind, QObject* parent = nullptr);
-  ~PainterGradient() override = default;
-
-  void setLinear(qreal x0, qreal y0, qreal x1, qreal y1);
-  void setRadial(qreal x0, qreal y0, qreal r0, qreal x1, qreal y1, qreal r1);
-  void setConic(qreal cx, qreal cy, qreal startRad);
-
-  [[nodiscard]] QBrush brush() const;
-
-  [[nodiscard]] Kind kind() const noexcept { return m_kind; }
-
-public slots:
-  void addColorStop(qreal offset, const QString& color);
-
-private:
-  Kind m_kind;
-  QGradientStops m_stops;
-  qreal m_x0, m_y0, m_x1, m_y1;
-  qreal m_r0, m_r1;
-  qreal m_startRad;
-};
-
-/**
- * @brief Canvas2D-shaped pattern handle exposed to JS.
- */
-class PainterPattern : public QObject {
-  Q_OBJECT
-
-public:
-  explicit PainterPattern(const QPixmap& tile,
-                          const QString& repetition,
-                          QObject* parent = nullptr);
-  ~PainterPattern() override = default;
-
-  [[nodiscard]] QBrush brush() const;
-
-private:
-  QPixmap m_tile;
-  QString m_repetition;
-};
 
 /**
  * @brief Canvas2D-shaped facade over QPainter exposed to the painter widget JS.
@@ -255,7 +204,6 @@ private:
 
   [[nodiscard]] bool active() const noexcept;
   [[nodiscard]] QColor parseColor(const QString& spec) const;
-  [[nodiscard]] QFont parseFontSpec(const QString& spec) const;
   [[nodiscard]] QString resolveImagePath(const QString& src) const;
   [[nodiscard]] QPointF alignTextOrigin(const QString& text, qreal x, qreal y) const;
   void applyDashToPen();

@@ -52,6 +52,7 @@ AI::Assistant& AI::Assistant::instance()
  */
 AI::Assistant::Assistant()
   : QObject(nullptr)
+  , m_commandRegistry(CommandRegistry::instance())
   , m_currentProvider(0)
   , m_cacheReadTokens(0)
   , m_cacheCreatedTokens(0)
@@ -77,8 +78,7 @@ AI::Assistant::Assistant()
   m_autoApproveEdits = m_settings.value(QStringLiteral("ai/autoApproveEdits"), false).toBool();
 
   m_allowDeviceControl = m_settings.value(QStringLiteral("ai/allowDeviceControl"), false).toBool();
-  static auto& commandRegistry = CommandRegistry::instance();
-  commandRegistry.setDeviceControlAllowed(m_allowDeviceControl);
+  m_commandRegistry.setDeviceControlAllowed(m_allowDeviceControl);
 
   m_contextProbeEnabled   = m_settings.value(QStringLiteral("ai/contextProbe"), true).toBool();
   m_memoryEnabled         = m_settings.value(QStringLiteral("ai/memory"), true).toBool();
@@ -252,8 +252,7 @@ void AI::Assistant::setAllowDeviceControl(bool enabled)
 
   m_allowDeviceControl = enabled;
   m_settings.setValue(QStringLiteral("ai/allowDeviceControl"), m_allowDeviceControl);
-  static auto& commandRegistry = CommandRegistry::instance();
-  commandRegistry.setDeviceControlAllowed(m_allowDeviceControl);
+  m_commandRegistry.setDeviceControlAllowed(m_allowDeviceControl);
   Q_EMIT allowDeviceControlChanged();
 }
 

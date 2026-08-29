@@ -30,6 +30,8 @@
 #include <QVariantList>
 
 namespace Misc {
+class ThemeManager;
+
 /**
  * @brief Provides an in-app help center that fetches and displays documentation
  *        pages from GitHub with local caching.
@@ -164,5 +166,6 @@ private:
   QHash<QString, QString> m_pageContents;
 
   QNetworkAccessManager m_nam;
+  Misc::ThemeManager* m_theme;
 };
 }  // namespace Misc

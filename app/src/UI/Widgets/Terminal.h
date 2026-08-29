@@ -31,6 +31,7 @@
 
 #include "UI/Widgets/Terminal/AnsiPalette.h"
 #include "UI/Widgets/Terminal/AnsiStateMachine.h"
+#include "UI/Widgets/Terminal/TerminalBuffer.h"
 #include "UI/Widgets/Terminal/TerminalSearch.h"
 
 namespace Console {
@@ -55,22 +56,10 @@ class TimerEvents;
 
 namespace Widgets {
 /**
- * @brief Stores foreground and background colors for a character.
- */
-struct CharColor {
-  QColor foreground;
-  QColor background;
-
-  CharColor() : foreground(), background() {}
-
-  CharColor(const QColor& fg, const QColor& bg = QColor()) : foreground(fg), background(bg) {}
-};
-
-/**
- * @brief QML terminal widget with optional VT-100 emulation. The widget owns the text buffer, the
- *        painter and the input handlers; the escape-sequence parser, the ANSI color palette and
- *        the in-buffer search are separate objects it drives. AnsiSink is inherited privately: the
- *        state machine is the only caller of those operations.
+ * @brief QML terminal widget with optional VT-100 emulation. The widget owns the painter, the
+ *        selection and the input handlers; the line store, the escape-sequence parser, the ANSI
+ *        color palette and the in-buffer search are separate objects it drives. AnsiSink is
+ *        inherited privately: the state machine is the only caller of those operations.
  */
 class Terminal
   : public QQuickPaintedItem
@@ -211,15 +200,12 @@ private slots:
 
 private:
   void initBuffer();
-  void trimExcessLines(int linesToDrop);
-  [[nodiscard]] bool collapseCompletedLine();
-  [[nodiscard]] QStringView lineContentView(QStringView line) const;
-  [[nodiscard]] static bool hasTimestampPrefix(QStringView line);
+  void syncAutoscroll();
+  void syncBufferGeometry();
+  void drainBufferEvents();
+  void applyLineDrop(int linesToDrop);
   void refreshSearchMatches();
   void scrollToCurrentMatch();
-  void processText(const QChar& byte, QString& text);
-  static int scanPrintableRun(const QString& data, int pos);
-  static bool lineHasRtlChar(QStringView line);
 
   [[nodiscard]] QPoint currentCursor() const override;
   void eraseAllRows() override;
@@ -232,7 +218,6 @@ private:
 
   void setCursorPosition(const QPoint& position);
   void setCursorPosition(const int x, const int y);
-  void replaceData(int x, int y, const QChar& byte);
 
   [[nodiscard]] int findCharAtPixelX(const QString& line,
                                      int segStart,
@@ -282,9 +267,7 @@ private:
   [[nodiscard]] bool handleScrollbarPress(const QPoint& pos);
   void applyScrollbarOffset(const int offset);
 
-  static QByteArray translateKeyToVt100(const QKeyEvent* event);
-  static QByteArray translateSpecialKey(int key);
-  static QByteArray translateEnterKey();
+  [[nodiscard]] QByteArray translateEnterKey() const;
 
 protected:
   bool shouldEndSelection(const QChar& c);
@@ -308,9 +291,6 @@ private:
   Misc::TimerEvents& m_timerEvents;
 
   QPalette m_palette;
-  QStringList m_data;
-  QList<QList<CharColor>> m_colorData;
-  QList<int> m_repeatCounts;
 
   QFont m_font;
   int m_cWidth;
@@ -319,11 +299,9 @@ private:
   int m_borderX;
   int m_borderY;
   int m_scrollOffsetY;
-  int m_maxLines;
   int m_dragThumbGrabY;
 
   QTimer m_cursorTimer;
-  QPoint m_cursorPosition;
 
   QPoint m_selectionEnd;
   QPoint m_selectionStart;
@@ -333,7 +311,6 @@ private:
   bool m_autoscroll;
   bool m_ansiColors;
   bool m_emulateVt100;
-  bool m_collapseDuplicates;
   bool m_cursorVisible;
   bool m_mouseTracking;
   bool m_draggingScrollbar;
@@ -342,6 +319,7 @@ private:
   bool m_cursorHidden;
 
   AnsiPalette m_ansiPalette;
+  TerminalBuffer m_buffer;
   AnsiStateMachine m_ansi;
   TerminalSearch m_search;
 

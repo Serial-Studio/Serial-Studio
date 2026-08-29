@@ -3376,8 +3376,10 @@ _REGISTRY_GENERATED_DIRS = (
 # Non-generated files that legitimately name several dataset keys, each with the
 # reason it is not a parallel field map.
 _REGISTRY_KEY_ALLOWED = {
-    # Home of the Keys:: constants and of the group/action/source serializers.
-    "app/src/DataModel/Frame.h": "Keys:: declarations + sibling-entity serializers",
+    # Home of the group/action/source serializers (Keys:: constants moved to FrameKeys.h,
+    # spec 0070).
+    "app/src/DataModel/Frame.h": "sibling-entity serializers",
+    "app/src/DataModel/FrameKeys.h": "Keys:: declarations",
     # Alarm bands and FFT markers are nested entities the manifest routes to
     # hand-written readers through declared subEntity hooks.
     "app/src/DataModel/Frame.cpp": "hand-written sub-entity readers declared as manifest hooks",

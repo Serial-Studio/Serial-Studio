@@ -63,13 +63,13 @@ void API::ProcessLauncher::setupExternalConnections()
   m_connectionManager = &IO::ConnectionManager::instance();
   m_projectModel      = &DataModel::ProjectModel::instance();
 
-  m_lastProjectPath = DataModel::ProjectModel::instance().jsonFilePath();
+  m_lastProjectPath = m_projectModel->jsonFilePath();
 
-  connect(&IO::ConnectionManager::instance(),
+  connect(m_connectionManager,
           &IO::ConnectionManager::sessionClosed,
           this,
           &API::ProcessLauncher::killAll);
-  connect(&DataModel::ProjectModel::instance(),
+  connect(m_projectModel,
           &DataModel::ProjectModel::jsonFileChanged,
           this,
           &API::ProcessLauncher::onProjectFileChanged);

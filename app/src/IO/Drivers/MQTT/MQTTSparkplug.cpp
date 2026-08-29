@@ -645,26 +645,23 @@ void IO::Drivers::MQTT::generateProject()
     return;
   }
 
-  static auto& pm       = DataModel::ProjectModel::instance();
-  static auto& appState = AppState::instance();
-
   const auto project      = buildSparkplugProject();
-  const auto previousMode = appState.operationMode();
-  appState.setOperationMode(SerialStudio::ProjectFile);
-  if (!pm.loadFromJsonDocument(QJsonDocument(project), QString())) {
-    appState.setOperationMode(previousMode);
+  const auto previousMode = m_appState.operationMode();
+  m_appState.setOperationMode(SerialStudio::ProjectFile);
+  if (!m_projectModel.loadFromJsonDocument(QJsonDocument(project), QString())) {
+    m_appState.setOperationMode(previousMode);
     logDriverError(tr("Failed to load generated project"),
                    tr("The generated project JSON could not be loaded."));
     return;
   }
 
-  pm.setModified(true);
+  m_projectModel.setModified(true);
   sparkplugSession().markGenerated();
 
   const int groupCount = project.value(Keys::Groups).toArray().size();
   const int datasets   = sparkplugSession().slotCount();
   QObject::connect(
-    &pm,
+    &m_projectModel,
     &DataModel::ProjectModel::saveDialogCompleted,
     this,
     [groupCount, datasets](bool accepted) {
@@ -681,5 +678,5 @@ void IO::Drivers::MQTT::generateProject()
     },
     Qt::SingleShotConnection);
 
-  (void)pm.saveJsonFile(true);
+  (void)m_projectModel.saveJsonFile(true);
 }

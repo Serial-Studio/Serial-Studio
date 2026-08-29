@@ -33,10 +33,10 @@ namespace DataModel {
 class ProjectModel;
 
 /**
- * @brief Group, dataset and action editing for the project document, plus the fixed-layout group
- *        widget machinery. The group and action vectors stay on the facade; this class owns
- *        behaviour only. Every mutating entry point opens its ProjectUndoScope and commits it
- *        through ProjectModel::setModified, keeping the two-phase memento contract intact.
+ * @brief Group, dataset and action editing for the project document (the fixed-layout templates
+ *        live in ProjectFixedLayouts); the vectors stay on the facade, behaviour only lives here.
+ *        Every mutating entry point opens its ProjectUndoScope and commits it through
+ *        ProjectModel::setModified, keeping the two-phase memento contract intact.
  */
 class ProjectEntities {
 public:
@@ -96,7 +96,6 @@ private:
   void remapGroupIdsAfterReorder(const std::vector<int>& oldToNewGid);
   [[nodiscard]] bool confirmGroupWidgetChange(Group& grp, SerialStudio::GroupWidget widget);
   [[nodiscard]] bool applyGroupWidget(Group& grp, SerialStudio::GroupWidget widget);
-  [[nodiscard]] bool populateFixedLayoutGroup(Group& grp, SerialStudio::GroupWidget widget);
 
 private:
   ProjectModel& m_model;

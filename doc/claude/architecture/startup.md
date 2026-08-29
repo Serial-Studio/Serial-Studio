@@ -35,6 +35,13 @@ invariants hold it together:
   inline as each constructs. A class that takes the context by injection can therefore never be
   constructed before the context exists. See "Session Context" below for the ownership contract.
 
+**Known pre-order exemption (found 2026-08-28, pre-existing):** `ModuleManager` holds
+`NativeWindow` by value, so its ctor runs before `instantiateCoreModules()` and reaches
+`ThemeManager::instance()`, whose ctor pulls `WorkspaceManager` and `Translator` — those three
+construct ahead of the pinned sequence on every platform. Benign today (order-independent
+leaves), but it means a ctor init-list capture inside ThemeManager/NativeWindow cannot rely on
+the pinned order; treat those files as pre-root code.
+
 **Pinned instantiation order** (the topological order the modules must construct in, verbatim from
 `instantiateCoreModules()`): `Translator`, `TimerEvents`, `CommonFonts`, `WorkspaceManager`,
 `NotificationCenter`, `Misc::ProblemCenter`, `Misc::ConnectionDiagnostics`, `ThemeManager`,

@@ -51,6 +51,17 @@ static const QString kExtensionJumpDataset = QStringLiteral("dataset");
 }
 
 /**
+ * @brief The installed-widget catalog these checkers query, resolved once: the checkers are free
+ *        functions with no constructor to capture in, so the singleton reach is funnelled through
+ *        one accessor instead of a per-checker static.
+ */
+[[nodiscard]] static UI::WidgetExtensions& widgetCatalog()
+{
+  static auto& catalog = UI::WidgetExtensions::instance();
+  return catalog;
+}
+
+/**
  * @brief Assembles one finding for a project entity that names a widget package.
  */
 [[nodiscard]] static Finding makeEntityFinding(Severity severity,
@@ -83,7 +94,7 @@ static void checkEntityReference(const QString& widget,
                                  const QString& jump,
                                  QList<Finding>& out)
 {
-  static auto& catalog = UI::WidgetExtensions::instance();
+  auto& catalog = widgetCatalog();
 
   if (!catalog.contains(widget)) {
     out.append(makeEntityFinding(
@@ -126,8 +137,7 @@ static void checkEntityReference(const QString& widget,
  */
 static void checkCatalogFindings(QList<Finding>& out)
 {
-  static auto& catalog = UI::WidgetExtensions::instance();
-  out.append(catalog.findings());
+  out.append(widgetCatalog().findings());
 }
 
 /**

@@ -317,7 +317,7 @@ bool DataModel::ProtoParser::parseField(ProtoMessage& msg)
 
   QString typeName = m_cur.text;
   advance();
-  while (m_cur.kind == ProtoTokenKind::Dot) {
+  while (m_cur.kind != ProtoTokenKind::Eof && m_cur.kind == ProtoTokenKind::Dot) {
     typeName += QLatin1Char('.');
     advance();
     if (m_cur.kind == ProtoTokenKind::Ident) {
@@ -472,7 +472,8 @@ bool DataModel::ProtoParser::parse()
     if (kw == QLatin1String("package")) {
       advance();
       QString pkg;
-      while (m_cur.kind == ProtoTokenKind::Ident || m_cur.kind == ProtoTokenKind::Dot) {
+      while (m_cur.kind != ProtoTokenKind::Eof
+             && (m_cur.kind == ProtoTokenKind::Ident || m_cur.kind == ProtoTokenKind::Dot)) {
         pkg += m_cur.text;
         advance();
       }

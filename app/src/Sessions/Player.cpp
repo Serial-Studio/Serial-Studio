@@ -105,12 +105,14 @@ Sessions::Player& Sessions::Player::instance()
  */
 Sessions::ReplaySynthesis& Sessions::Player::synthesis()
 {
-  if (!m_synthesis)
-    m_synthesis = std::make_unique<ReplaySynthesis>(m_reader,
-                                                    m_layout,
-                                                    AppState::instance(),
-                                                    DataModel::FrameBuilder::instance(),
-                                                    IO::ConnectionManager::instance());
+  if (!m_synthesis) {
+    static auto& appState          = AppState::instance();
+    static auto& frameBuilder      = DataModel::FrameBuilder::instance();
+    static auto& connectionManager = IO::ConnectionManager::instance();
+
+    m_synthesis = std::make_unique<ReplaySynthesis>(
+      m_reader, m_layout, appState, frameBuilder, connectionManager);
+  }
 
   return *m_synthesis;
 }

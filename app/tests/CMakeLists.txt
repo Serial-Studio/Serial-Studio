@@ -1506,6 +1506,124 @@ ss_add_unit_test(tst_project_folders
           Qt6::Gui
 )
 
+#
+# Canvas widget enum mappers (spec 0070): the five Canvas2D string<->Qt maps, header-inline
+# so the per-frame call sites keep full inlinability. Commercial-only headers.
+#
+ss_add_unit_test(tst_painter_enums
+  SOURCES tst_painter_enums.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+)
+if(TARGET tst_painter_enums)
+  target_compile_definitions(tst_painter_enums PRIVATE BUILD_COMMERCIAL)
+endif()
+
+#
+# Canvas widget path geometry (spec 0070): sweep normalization, arc/ellipse/roundRect/arcTo
+# construction, including the degenerate fallbacks. Header-inline, commercial-only.
+#
+ss_add_unit_test(tst_painter_geometry
+  SOURCES tst_painter_geometry.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+)
+if(TARGET tst_painter_geometry)
+  target_compile_definitions(tst_painter_geometry PRIVATE BUILD_COMMERCIAL)
+endif()
+
+#
+# CLI spec parsers (spec 0070): the pure text->value half of bus configuration (int ranges,
+# Modbus TCP addresses and register specs, serial index tables). QtCore only.
+#
+ss_add_unit_test(tst_cli_spec_parsers
+  SOURCES tst_cli_spec_parsers.cpp
+          ${SS_APP_SRC}/Misc/CLI/CliSpecParsers.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# The io.getLatestFrame capture lane (spec 0070): SPSC mirror ring, arming latch, sequence
+# dedup and the 1 Hz parse-load mirror, driven GUI-side with a stub builder thread.
+# HAL_Driver.h is listed for AUTOMOC (header-only Q_OBJECT).
+#
+ss_add_unit_test(tst_latest_frame_tap
+  SOURCES tst_latest_frame_tap.cpp
+          ${SS_APP_SRC}/DataModel/FrameBuilder/LatestFrameTap.cpp
+          ${SS_APP_SRC}/IO/HAL_Driver.h
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# The GUI table-snapshot channel (spec 0070): pool + ring moved whole; the suite stubs the
+# two PipelineHost statics DataTable.cpp reaches (same precedent as tst_stream_worker).
+#
+ss_add_unit_test(tst_table_snapshot_channel
+  SOURCES tst_table_snapshot_channel.cpp
+          ${SS_APP_SRC}/DataModel/FrameBuilder/TableSnapshotChannel.cpp
+          ${SS_APP_SRC}/DataModel/DataTable.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core Qt6::Gui Qt6::Qml
+)
+
+#
+# Chat digest builders (spec 0070): handoff digest window, title selection, stale-card
+# downgrade -- pure over QVariantList, with the Redactor scrub in the link set.
+#
+ss_add_unit_test(tst_chat_digest
+  SOURCES tst_chat_digest.cpp
+          ${SS_APP_SRC}/AI/Conversation/ChatDigest.cpp
+          ${SS_APP_SRC}/AI/Redactor.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# The terminal's line store (spec 0070): wrapping at the column count, the scrollback trim,
+# duplicate collapsing with and without a timestamp prefix, and cursor clamping -- no
+# QQuickItem in the link set. AnsiPalette.cpp comes along because the buffer writes the
+# SGR-selected colors into each cell.
+#
+ss_add_unit_test(tst_terminal_buffer
+  SOURCES tst_terminal_buffer.cpp
+          ${SS_APP_SRC}/UI/Widgets/Terminal/TerminalBuffer.cpp
+          ${SS_APP_SRC}/UI/Widgets/Terminal/AnsiPalette.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Gui
+)
+
+#
+# OPC UA project generation (spec 0070): tag-list -> project-JSON translation. Pure, same
+# link tier as tst_modbus_generation; commercial bus enum, so the target defines the macro.
+#
+ss_add_unit_test(tst_opcua_project_builder
+  SOURCES tst_opcua_project_builder.cpp
+          ${SS_APP_SRC}/IO/Drivers/OpcUa/OpcUaProjectBuilder.cpp
+          ${SS_APP_SRC}/DataModel/Frame.cpp
+          ${SS_APP_SRC}/DataModel/Generated/DatasetSerialization.cpp
+          ${SS_APP_SRC}/DataModel/Project/PropertyValidators.cpp
+          ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Core5Compat
+          Qt6::Gui
+)
+if(TARGET tst_opcua_project_builder)
+  target_compile_definitions(tst_opcua_project_builder PRIVATE BUILD_COMMERCIAL)
+endif()
+
+#
+# The replay seek engine (spec 0070): seek keys, series enumeration, ring snapshot/restore
+# including the same-uniqueId-two-sources case that once crashed replay. QtCore + SSAssert.
+#
+ss_add_unit_test(tst_replay_seek_engine
+  SOURCES tst_replay_seek_engine.cpp
+          ${SS_APP_SRC}/UI/Dashboard/ReplaySeekEngine.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
 #---------------------------------------------------------------------------------------------------
 # Aggregate target
 #---------------------------------------------------------------------------------------------------

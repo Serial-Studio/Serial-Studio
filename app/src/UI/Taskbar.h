@@ -30,6 +30,7 @@
 #include "UI/Taskbar/TaskbarModel.h"
 #include "UI/Taskbar/TaskbarSearch.h"
 #include "UI/Taskbar/TaskbarWindowMap.h"
+#include "UI/Taskbar/TaskbarWorkspaces.h"
 #include "UI/WidgetRegistry.h"
 #include "UI/WindowManager.h"
 
@@ -37,7 +38,6 @@ class AppState;
 
 namespace DataModel {
 class ProjectModel;
-struct WidgetRef;
 }  // namespace DataModel
 
 namespace UI {
@@ -133,8 +133,12 @@ public:
   [[nodiscard]] TaskbarModel* fullModel() const;
   [[nodiscard]] TaskbarModel* taskbarButtons() const;
   [[nodiscard]] WindowManager* windowManager() const;
+  [[nodiscard]] const TaskbarWindowMap& windowMap() const;
 
   [[nodiscard]] bool hasMaximizedWindow() const;
+  [[nodiscard]] QStandardItem* findItemByWindowId(int windowId,
+                                                  QStandardItem* parentItem = nullptr,
+                                                  int depth                 = 0) const;
 
   Q_INVOKABLE [[nodiscard]] QQuickItem* firstWindow() const;
   Q_INVOKABLE [[nodiscard]] QQuickItem* windowData(const int id) const;
@@ -184,9 +188,7 @@ private:
   void connectToRegistry();
   void startFocusCycle();
   void applySavedWindowStates(const QJsonObject& layout);
-  void populateTaskbarFromWorkspace(int groupId);
   void populateTaskbarFromGroup(int groupId);
-  void removeWorkspaceTaskbarRow(int windowId);
   void selectGroupAfterRebuild();
   void appendGroupChildItem(QStandardItem* groupItem,
                             int groupId,
@@ -202,17 +204,11 @@ private:
                               const QString& extensionId,
                               int mainWindowId,
                               bool alreadyRegistered);
-  [[nodiscard]] QStandardItem* findItemByWindowId(int windowId,
-                                                  QStandardItem* parentItem = nullptr,
-                                                  int depth                 = 0) const;
   [[nodiscard]] QStandardItem* findItemByWidgetId(UI::WidgetID widgetId,
                                                   QStandardItem* parentItem = nullptr) const;
   [[nodiscard]] QStandardItem* findGroupItemByGroupId(int groupId) const;
   [[nodiscard]] QStandardItem* createItemFromWidgetInfo(const UI::WidgetInfo& info);
-  [[nodiscard]] int resolveWorkspaceRefWindowId(const DataModel::WidgetRef& ref) const;
-  [[nodiscard]] int indexForGroupId(int groupId) const;
   [[nodiscard]] QString layoutContextKey() const;
-  void emitWorkspaceChangeAnticipation(int toGroupId);
 
   UI::Dashboard& m_dashboard;
   DataModel::ProjectModel& m_projectModel;
@@ -239,6 +235,7 @@ private:
   TaskbarWindowMap m_windowMap;
   FocusCycler m_focusCycler;
   TaskbarSearch m_search;
+  TaskbarWorkspaces m_workspaces;
 };
 
 }  // namespace UI

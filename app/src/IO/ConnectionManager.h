@@ -29,26 +29,60 @@
 #include <QSettings>
 #include <QTimer>
 #include <unordered_map>
+#include <vector>
 
 #include "IO/ConnectionManager/ConnectFanOut.h"
+#include "IO/ConnectionManager/DriverFactory.h"
 #include "IO/ConnectionManager/DriverUiRegistry.h"
 #include "IO/ConnectionManager/ReplyCapture.h"
+#include "IO/ConnectionManager/StreamConfigBuilder.h"
+#include "IO/ConnectionManager/StreamWorkerPool.h"
+#include "IO/ConnectionManager/UiDriverSync.h"
 #include "IO/DeviceManager.h"
 #include "IO/HAL_Driver.h"
 #include "IO/StreamWorker.h"
 #include "SerialStudio.h"
 
+class AppState;
 class SessionContext;
+
+namespace API {
+class Server;
+}  // namespace API
+
+namespace Console {
+class Handler;
+}  // namespace Console
 
 namespace DataModel {
 struct Source;
+class FrameBuilder;
+class ProjectModel;
 }  // namespace DataModel
 
 namespace Misc::Diagnostics {
 enum class Bus : int;
 }  // namespace Misc::Diagnostics
 
+#ifdef BUILD_COMMERCIAL
+namespace MQTT {
+class Publisher;
+}  // namespace MQTT
+
+namespace Sessions {
+class Export;
+}  // namespace Sessions
+#endif
+
+#ifdef ENABLE_GRPC
+namespace API::GRPC {
+class GRPCServer;
+}  // namespace API::GRPC
+#endif
+
 namespace IO {
+
+class FileTransmission;
 
 /**
  * @brief Link counters summed across every open device, sampled once per second by the problem
@@ -245,19 +279,14 @@ private:
   [[nodiscard]] bool anyDeviceConnecting() const;
 
   [[nodiscard]] bool projectConfigurationOk() const;
-  [[nodiscard]] bool diagnosticsBusFor(int deviceId, Misc::Diagnostics::Bus& bus) const;
-  [[nodiscard]] std::unique_ptr<HAL_Driver> createDriver(SerialStudio::BusType type) const;
-  [[nodiscard]] QString streamLaneForSource(int deviceId) const;
-  [[nodiscard]] StreamConfig buildStreamConfig(int deviceId, HAL_Driver* driver) const;
-  void publishStreamTemplates();
-  void wireStreamWorkerSinks(StreamWorker& worker);
+  [[nodiscard]] int deviceIdForDriver(const HAL_Driver* driver) const;
+  [[nodiscard]] std::vector<int> deviceIdSnapshot(bool projectSourcesOnly) const;
   void wireStreamLifecycle();
   void dropUnavailablePrimaryDevice(SerialStudio::BusType type);
 
 private:
   std::atomic<bool> m_paused;
   bool m_writeEnabled;
-  bool m_syncingFromProject;
   bool m_rebuildingDevices;
   SerialStudio::BusType m_busType;
 
@@ -268,12 +297,30 @@ private:
   QSettings m_settings;
   QTimer m_uiDriverSaveTimer;
 
+  AppState& m_appState;
+  DataModel::FrameBuilder& m_frameBuilder;
+  DataModel::ProjectModel& m_projectModel;
+
+  API::Server* m_apiServer;
+  Console::Handler* m_console;
+  IO::FileTransmission* m_fileTransmission;
+#ifdef BUILD_COMMERCIAL
+  MQTT::Publisher* m_mqttPublisher;
+  Sessions::Export* m_sessionExport;
+#endif
+#ifdef ENABLE_GRPC
+  API::GRPC::GRPCServer* m_grpcServer;
+#endif
+
   std::unordered_map<int, std::unique_ptr<DeviceManager>> m_devices;
-  std::vector<std::unique_ptr<StreamWorker>> m_streamWorkers;
 
   ConnectFanOut m_fanOut;
   ReplyCapture m_replyCapture;
   DriverUiRegistry m_uiDrivers;
+  DriverFactory m_driverFactory;
+  StreamConfigBuilder m_streamConfigs;
+  StreamWorkerPool m_streamPool;
+  UiDriverSync m_uiSync;
 };
 
 }  // namespace IO

@@ -25,6 +25,7 @@
 #include <QList>
 #include <QString>
 #include <QStringList>
+#include <QVariantList>
 
 #include "IO/Drivers/OpcUaTypes.h"
 
@@ -32,9 +33,10 @@ namespace IO {
 namespace Drivers {
 
 /**
- * @brief The policy catalogue and the endpoint ranking behind an OPC UA dial (spec 0067). Pure
- *        functions over advertised endpoint descriptions: no session, no settings and no driver
- *        state, so the ranking can be pinned by the unit tier without the protocol stack.
+ * @brief The policy catalogue, the endpoint ranking and the human-readable rendering of both
+ *        behind an OPC UA dial (spec 0067). Pure functions over advertised endpoint descriptions:
+ *        no session, no settings and no driver state, so the ranking and the picker rows can be
+ *        pinned by the unit tier without the protocol stack.
  */
 namespace OpcUaEndpointSelection {
 
@@ -60,6 +62,14 @@ struct EndpointChoice {
 [[nodiscard]] bool policyIsDeprecated(const QString& policyUri);
 [[nodiscard]] bool endpointUsable(const OpcUaTypes::Endpoint& endpoint);
 [[nodiscard]] bool endpointAcceptsToken(const OpcUaTypes::Endpoint& endpoint, int authMode);
+
+[[nodiscard]] QStringList policyNames();
+[[nodiscard]] QStringList securityModeNames();
+[[nodiscard]] QVariantList policyDeprecationFlags();
+[[nodiscard]] QString describeMode(OpcUaTypes::SecurityMode mode);
+[[nodiscard]] QStringList endpointRows(const QList<OpcUaTypes::Endpoint>& endpoints);
+[[nodiscard]] QVariantList endpointSelectable(const QList<OpcUaTypes::Endpoint>& endpoints,
+                                              int authMode);
 [[nodiscard]] EndpointChoice selectBestEndpoint(const QList<OpcUaTypes::Endpoint>& endpoints,
                                                 int authMode,
                                                 const QString& preferredPolicy,

@@ -39,6 +39,10 @@
 #   Re-apply deterministic capitalization (NO LLM):
 #     python3 llm_translate.py --verify-only
 #
+#   Reuse translations for strings that only moved to another context (NO LLM):
+#     python3 llm_translate.py --reuse-only
+#     python3 llm_translate.py --reuse-only --lang fr_FR
+#
 #   Lint en_US.ts for source-string style violations (NO LLM):
 #     python3 llm_translate.py --lint-sources
 #
@@ -58,6 +62,11 @@
 #      'de'), French 'Grille de Données', German capitalizes nouns.
 #   6. en_US.ts is never sent to the LLM — translations are direct copies of
 #      the source strings.
+#   7. Translation reuse — Qt keys entries by (context, source), so a string a
+#      refactor moves to another class comes back unfinished even though the
+#      old context still holds the finished translation. A pre-pass copies it
+#      across when every donor for that source (+ <comment>) agrees, before
+#      any batch is formed. See reuse_existing_translations / --reuse-only.
 #
 # WRITING STYLE (enforced in the GPT prompt and the lint mode):
 #   The Serial Studio UI follows an Apple-HIG-style voice — concise, neutral,
@@ -1632,6 +1641,215 @@ def verify_capitalization_batch(entries, lang_code):
 
 
 # ------------------------------------------------------------------------------
+# Translation Reuse (identical strings whose context moved)
+# ------------------------------------------------------------------------------
+
+# Qt keys .ts entries by (context, source), and lupdate only carries a
+# translation forward inside the same context. A tr() string that a refactor
+# moves to another class therefore arrives as a brand-new unfinished entry
+# while the finished translation survives under the old context. The reuse
+# pass below recovers those before any batch is formed, so a refactor does not
+# re-bill the whole moved set in every language.
+
+
+def _message_is_numerus(message, translation) -> bool:
+    """Return True when MESSAGE carries plural forms.
+
+    Qt stamps numerus="yes" on <message>, other tooling stamps it on
+    <translation>, so the <numerusform> children are the authoritative signal.
+    """
+    if message.get("numerus") == "yes":
+        return True
+    if translation is None:
+        return False
+    if translation.get("numerus") == "yes":
+        return True
+    return translation.find("numerusform") is not None
+
+
+def _reuse_key(message, source) -> tuple[str, str | None]:
+    """Key an entry by exact source text plus its <comment> disambiguator.
+
+    A commented entry and an uncommented one with the same source are distinct
+    strings by Qt's own rules, so they never donate to each other.
+    """
+    comment = message.find("comment")
+    return (source.text, comment.text if comment is not None else None)
+
+
+def _numerus_forms(translation) -> tuple[str, ...] | None:
+    """Return TRANSLATION's plural forms, or None if any form is missing/empty."""
+    forms = translation.findall("numerusform")
+    if not forms:
+        return None
+
+    texts = tuple(form.text or "" for form in forms)
+    if any(not text.strip() for text in texts):
+        return None
+
+    return texts
+
+
+def _write_numerus_forms(translation, forms: tuple[str, ...]) -> None:
+    """Overwrite TRANSLATION's plural forms with FORMS.
+
+    Existing <numerusform> children are reused when the count already matches
+    so the file's original indentation survives the rewrite.
+    """
+    existing = translation.findall("numerusform")
+    if len(existing) == len(forms):
+        for node, text in zip(existing, forms):
+            node.text = text
+        return
+
+    for node in existing:
+        translation.remove(node)
+    for text in forms:
+        etree.SubElement(translation, "numerusform").text = text
+
+
+def _index_reuse_entries(root):
+    """Split every translatable message into finished donors and pending entries.
+
+    Returns a (simple_donors, plural_donors, pending) triple. Both donor maps
+    go from (source, comment) to the SET of distinct finished translations seen
+    under that key, so a caller can tell agreement from conflict. Plural and
+    simple entries are indexed separately and never donate across the divide.
+    Pending items are (key, message, translation, is_plural) tuples;
+    `translation` is None when the message has no <translation> element yet.
+    """
+    simple_donors: dict[tuple[str, str | None], set[str]] = {}
+    plural_donors: dict[tuple[str, str | None], set[tuple[str, ...]]] = {}
+    pending: list[tuple[tuple[str, str | None], object, object, bool]] = []
+
+    for context in root.findall("context"):
+        for message in context.findall("message"):
+            source = message.find("source")
+            if source is None or not source.text or not source.text.strip():
+                continue
+
+            translation = message.find("translation")
+            is_plural = _message_is_numerus(message, translation)
+            key = _reuse_key(message, source)
+            unfinished = translation is None or translation.get("type") == "unfinished"
+
+            if is_plural:
+                forms = _numerus_forms(translation) if translation is not None else None
+                if unfinished or forms is None:
+                    pending.append((key, message, translation, True))
+                else:
+                    plural_donors.setdefault(key, set()).add(forms)
+                continue
+
+            text = (translation.text or "") if translation is not None else ""
+            if unfinished or not text.strip():
+                pending.append((key, message, translation, False))
+            else:
+                simple_donors.setdefault(key, set()).add(text)
+
+    return simple_donors, plural_donors, pending
+
+
+def reuse_existing_translations(root, lang_code: str, log_fn=print) -> int:
+    """Fill unfinished entries from identical strings already translated here.
+
+    Matches every unfinished or empty entry against the finished entries of the
+    same file by exact source text plus <comment> disambiguator, ignoring
+    context and location. When every donor for that key agrees on the
+    translation it is copied and type="unfinished" is dropped; when donors
+    disagree the entry is left alone for the LLM or a human to resolve.
+    Plural entries reuse only from a plural donor whose forms all agree, and
+    every form is copied.
+
+    This runs before the LLM batches are formed, so recovered entries never
+    reach a paid call and harvest_translation_memory() then picks them up as
+    few-shot examples for whatever is left. PINNED_TRANSLATIONS keeps priority:
+    a pinned source is skipped here and filled by the pinning path.
+
+    Args:
+        root: Parsed <TS> root element of the target file.
+        lang_code (str): Language code, e.g. 'de_DE'. en_US is excluded — it
+            has its own source-copy fill path.
+        log_fn (callable): Sink for the one-line per-file report.
+
+    Returns:
+        int: Number of entries filled from an existing translation.
+    """
+    if lang_code == "en_US":
+        return 0
+
+    simple_donors, plural_donors, pending = _index_reuse_entries(root)
+
+    reused = 0
+    conflicts = 0
+    left = 0
+
+    for key, message, translation, is_plural in pending:
+        if PINNED_TRANSLATIONS.get(key[0], {}).get(lang_code) is not None:
+            continue
+
+        donors = plural_donors.get(key) if is_plural else simple_donors.get(key)
+        if not donors:
+            left += 1
+            continue
+
+        if len(donors) > 1:
+            conflicts += 1
+            continue
+
+        if translation is None:
+            translation = etree.SubElement(message, "translation")
+
+        donor = next(iter(donors))
+        if is_plural:
+            _write_numerus_forms(translation, donor)
+        else:
+            translation.text = donor
+
+        translation.attrib.pop("type", None)
+        reused += 1
+
+    log_fn(
+        f"{lang_code}.ts: reuse pass recovered {reused} entries "
+        f"({conflicts} conflicting keys skipped, {left} left for the LLM)."
+    )
+    return reused
+
+
+def reuse_translations_ts_file(filename) -> int:
+    """Run the reuse pass on one .ts file and save it. No LLM calls.
+
+    Stand-alone counterpart of the pre-pass inside translate_ts_file(), used by
+    --reuse-only. Operates on the .ts file as it stands; run
+    `translation_manager.py --lupdate` first if the sources moved since the
+    last update.
+
+    Args:
+        filename (str): TS file to process (e.g. 'fr_FR.ts').
+
+    Returns:
+        int: Number of entries recovered from existing translations.
+    """
+    lang_code = filename.replace(".ts", "")
+    if lang_code == "en_US":
+        return 0
+
+    if lang_code not in LANGUAGE_MAP:
+        print(f"Skipping {filename}: unsupported language code.")
+        return 0
+
+    ts_path = os.path.join(SCRIPT_DIR, TS_DIRECTORY, filename)
+    tree = etree.parse(ts_path)
+    root = tree.getroot()
+
+    reused = reuse_existing_translations(root, lang_code)
+    if reused > 0:
+        tree.write(ts_path, encoding="utf-8", xml_declaration=True)
+
+    return reused
+
+
+# ------------------------------------------------------------------------------
 # Core Translation Logic
 # ------------------------------------------------------------------------------
 
@@ -1702,6 +1920,11 @@ def translate_ts_file(
             )
             progress.update(lang_code, state="done", done=en_total, total=en_total)
         return
+
+    # Reuse pass FIRST: entries whose string only moved to a new context are
+    # filled from the finished copy that stayed behind, so they never reach a
+    # paid call and the harvest below can quote them as few-shot examples.
+    reuse_existing_translations(root, lang_code, log_fn=log_fn)
 
     # Harvest translation memory ONCE per file. Stays stable across batches.
     tm = harvest_translation_memory(root)
@@ -2510,6 +2733,13 @@ def main():
         "No LLM calls.",
     )
     parser.add_argument(
+        "--reuse-only",
+        action="store_true",
+        help="Fill unfinished entries from identical strings already "
+        "translated elsewhere in the same file (strings whose context or "
+        "location moved). No LLM calls.",
+    )
+    parser.add_argument(
         "--lint-sources",
         action="store_true",
         help="Scan en_US.ts for English source-string style violations.",
@@ -2559,7 +2789,7 @@ def main():
         )
         reset_translations(only_lang=args.lang)
         # If reset is the only action requested, stop here.
-        if not args.verify_only and not args.lint_sources:
+        if not args.verify_only and not args.lint_sources and not args.reuse_only:
             return
 
     # --lint-sources is a stand-alone read-only mode.
@@ -2568,7 +2798,7 @@ def main():
         lint_source_strings()
         return
 
-    if not args.verify_only:
+    if not args.verify_only and not args.reuse_only:
         run_qt_translation_tool("--lupdate")
 
     ts_files = sorted(
@@ -2581,6 +2811,20 @@ def main():
         if not ts_files:
             print(f"No .ts file matches --lang {args.lang!r}.")
             return
+
+    if args.reuse_only:
+        # Reuse is local XML surgery only; keep it serial for predictable output.
+        grand_total = 0
+        for file in ts_files:
+            if file == "en_US.ts":
+                continue
+            print(f"\n=== Reusing existing translations: {file} ===")
+            grand_total += reuse_translations_ts_file(file)
+        print(
+            f"\nReuse complete — {grand_total} entries recovered without an LLM call."
+        )
+        run_qt_translation_tool("--lrelease")
+        return
 
     if args.verify_only:
         # Verify is local CPU + disk only; keep it serial for predictable output.

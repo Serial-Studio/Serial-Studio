@@ -41,6 +41,7 @@
 #include "IO/HAL_Driver.h"
 
 class QTimer;
+class AppState;
 class QTcpSocket;
 
 namespace DataModel {
@@ -209,6 +210,9 @@ private:
   [[nodiscard]] static QString pointName(const Iec104Point& point);
   [[nodiscard]] static OpcUaWire::Type wireTypeFor(Iec104Proto::PointKind kind) noexcept;
   [[nodiscard]] static DataModel::Dataset datasetFor(const Iec104Point& point, int index);
+
+  AppState& m_appState;
+  DataModel::ProjectModel& m_projectModel;
 
   bool m_open;
   bool m_loading;

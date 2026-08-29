@@ -38,6 +38,12 @@
 #include "MQTT/CredentialVault.h"
 #include "MQTT/TlsIdentity.h"
 
+class AppState;
+
+namespace DataModel {
+class ProjectModel;
+}  // namespace DataModel
+
 namespace IO {
 namespace Drivers {
 
@@ -289,6 +295,9 @@ private:
     SparkplugState() : earliestMs(0), offsetNs(0), lastStampNs(0), diagTicks(0), clockValid(false)
     {}
   };
+
+  AppState& m_appState;
+  DataModel::ProjectModel& m_projectModel;
 
   bool m_sslEnabled;
   bool m_cleanSession;

@@ -3083,6 +3083,9 @@ def _comment_narration_findings(
 _FONT_PIXEL_OK_FILES = frozenset(
     {
         "FFTPlot.qml",
+        "NodePill.qml",
+        "NodeCard.qml",
+        "NodeFolder.qml",
         "Plot.qml",
         "MultiPlot.qml",
         "Bar.qml",

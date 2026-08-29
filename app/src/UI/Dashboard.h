@@ -37,11 +37,37 @@
 #include "SerialStudio.h"
 #include "UI/Dashboard/DashboardTools.h"
 #include "UI/Dashboard/DashboardViewState.h"
+#include "UI/Dashboard/PlotControlBank.h"
+#include "UI/Dashboard/ReplaySeekEngine.h"
 #include "UI/Dashboard/WidgetMapBuilder.h"
 #include "UI/WidgetRegistry.h"
 
 class AppState;
 class SessionContext;
+
+namespace CSV {
+class Player;
+}  // namespace CSV
+
+namespace MDF4 {
+class Player;
+}  // namespace MDF4
+
+namespace IO {
+class PipelineHost;
+class ConnectionManager;
+}  // namespace IO
+
+namespace DataModel {
+class FrameBuilder;
+class ProjectModel;
+}  // namespace DataModel
+
+#ifdef BUILD_COMMERCIAL
+namespace Sessions {
+class Player;
+}  // namespace Sessions
+#endif
 
 namespace UI {
 /**
@@ -174,50 +200,106 @@ public:
   [[nodiscard]] static Dashboard& instance();
 
   [[nodiscard]] bool available() const;
-  [[nodiscard]] bool showActionPanel() const noexcept;
   [[nodiscard]] bool streamAvailable() const;
-  [[nodiscard]] bool terminalEnabled() const noexcept;
-  [[nodiscard]] bool notificationLogEnabled() const noexcept;
-  [[nodiscard]] bool clockEnabled() const noexcept;
-  [[nodiscard]] bool stopwatchEnabled() const noexcept;
-  [[nodiscard]] bool autoHideToolbar() const noexcept;
-  [[nodiscard]] bool showAlignmentGuides() const noexcept;
   [[nodiscard]] bool frozen() const;
-  [[nodiscard]] bool thinningActive() const noexcept;
-  [[nodiscard]] double plotTimeRange() const noexcept;
+
+  [[nodiscard]] bool thinningActive() const noexcept { return m_thinningActive; }
+
+  [[nodiscard]] double plotTimeRange() const noexcept { return m_plotTimeRange; }
+
   [[nodiscard]] bool pointsWidgetVisible() const;
   [[nodiscard]] bool containsCommercialFeatures() const noexcept;
 
-  [[nodiscard]] int points() const noexcept;
-  [[nodiscard]] int actionCount() const;
-  [[nodiscard]] int totalWidgetCount() const noexcept;
-  [[nodiscard]] int layoutMargin() const noexcept;
-  [[nodiscard]] int layoutSpacing() const noexcept;
+  [[nodiscard]] int points() const noexcept { return m_points; }
 
-  [[nodiscard]] Q_INVOKABLE bool frameValid() const;
-  [[nodiscard]] Q_INVOKABLE QJsonObject widgetViewState(const QString& widgetId) const;
-  [[nodiscard]] Q_INVOKABLE QJsonObject globalViewState() const;
-  [[nodiscard]] QString viewStateJson() const;
-  [[nodiscard]] Q_INVOKABLE int relativeIndex(const int widgetIndex) const;
+  [[nodiscard]] int totalWidgetCount() const noexcept { return m_widgetCount; }
+
+  [[nodiscard]] bool clockEnabled() const noexcept { return m_tools.clockEnabled(); }
+
+  [[nodiscard]] bool terminalEnabled() const noexcept { return m_tools.terminalEnabled(); }
+
+  [[nodiscard]] bool stopwatchEnabled() const noexcept { return m_tools.stopwatchEnabled(); }
+
+  [[nodiscard]] bool notificationLogEnabled() const noexcept
+  {
+    return m_tools.notificationLogEnabled();
+  }
+
+  [[nodiscard]] int actionCount() const { return m_tools.actionCount(); }
+
+  [[nodiscard]] QVariantList actions() const { return m_tools.actions(); }
+
+  [[nodiscard]] int actionIndexForId(int actionId) const noexcept
+  {
+    return m_tools.actionIndexForId(actionId);
+  }
+
+  [[nodiscard]] int layoutMargin() const noexcept { return m_viewState.layoutMargin(); }
+
+  [[nodiscard]] int layoutSpacing() const noexcept { return m_viewState.layoutSpacing(); }
+
+  [[nodiscard]] bool showActionPanel() const noexcept { return m_viewState.showActionPanel(); }
+
+  [[nodiscard]] bool autoHideToolbar() const noexcept { return m_viewState.autoHideToolbar(); }
+
+  [[nodiscard]] bool showAlignmentGuides() const noexcept
+  {
+    return m_viewState.showAlignmentGuides();
+  }
+
+  [[nodiscard]] QString viewStateJson() const { return m_viewState.viewStateJson(); }
+
+  [[nodiscard]] Q_INVOKABLE QJsonObject globalViewState() const
+  {
+    return m_viewState.globalViewState();
+  }
+
+  [[nodiscard]] Q_INVOKABLE QJsonObject widgetViewState(const QString& widgetId) const
+  {
+    return m_viewState.widgetViewState(widgetId);
+  }
+
+  [[nodiscard]] Q_INVOKABLE bool frameValid() const { return m_lastFrame.groups.size() > 0; }
+
   [[nodiscard]] Q_INVOKABLE QString formatValue(double val, double min, double max) const;
-  [[nodiscard]] Q_INVOKABLE SerialStudio::DashboardWidget widgetType(const int widgetIndex) const;
+
+  [[nodiscard]] Q_INVOKABLE int relativeIndex(const int widgetIndex) const
+  {
+    const auto it = m_widgetMap.constFind(widgetIndex);
+    return it != m_widgetMap.cend() ? it->second : -1;
+  }
+
+  [[nodiscard]] Q_INVOKABLE SerialStudio::DashboardWidget widgetType(const int widgetIndex) const
+  {
+    const auto it = m_widgetMap.constFind(widgetIndex);
+    return it != m_widgetMap.cend() ? it->first : SerialStudio::DashboardNoWidget;
+  }
+
   [[nodiscard]] Q_INVOKABLE int widgetCount(const SerialStudio::DashboardWidget widget) const;
-  [[nodiscard]] Q_INVOKABLE QString extensionIdAt(const bool group, const int bucketIndex) const;
+
+  [[nodiscard]] Q_INVOKABLE QString extensionIdAt(const bool group, const int bucketIndex) const
+  {
+    return m_widgetMapBuilder.extensionIdAt(group, bucketIndex);
+  }
+
   [[nodiscard]] ExtensionSlot extensionSlot(const int relativeIndex) const;
   [[nodiscard]] ExtensionSlot widgetSlot(const SerialStudio::DashboardWidget type,
                                          const int relativeIndex) const;
 
-  [[nodiscard]] const QString& title() const;
-  [[nodiscard]] QVariantList actions() const;
-  [[nodiscard]] int actionIndexForId(int actionId) const noexcept;
-  [[nodiscard]] const SerialStudio::WidgetMap& widgetMap() const;
+  [[nodiscard]] const QString& title() const { return m_lastFrame.title; }
+
+  [[nodiscard]] const SerialStudio::WidgetMap& widgetMap() const { return m_widgetMap; }
 
   [[nodiscard]] int groupIdForUniqueId(int uniqueId) const;
   [[nodiscard]] int groupUniqueIdForGroupId(int groupId) const;
-  [[nodiscard]] DatasetExtremes datasetExtremes(int uniqueId) const;
+
+  [[nodiscard]] DatasetExtremes datasetExtremes(int uniqueId) const
+  {
+    return m_datasetExtremes.value(uniqueId);
+  }
 
   // clang-format off
-  [[nodiscard]] const QMap<int, DataModel::Dataset> &datasets() const;
+  [[nodiscard]] const QMap<int, DataModel::Dataset> &datasets() const { return m_datasets; }
   [[nodiscard]] const DataModel::Group &getGroupWidget(const SerialStudio::DashboardWidget widget, const int index) const;
   [[nodiscard]] const DataModel::Dataset &getDatasetWidget(const SerialStudio::DashboardWidget widget, const int index) const;
   // clang-format on
@@ -225,32 +307,64 @@ public:
   [[nodiscard]] bool useTimeXAxis(const DataModel::Dataset& dataset) const;
   [[nodiscard]] bool useTimeXAxisGroup(const DataModel::Group& group) const;
 
-  [[nodiscard]] const DataModel::Frame& rawFrame();
-  [[nodiscard]] const DataModel::Frame& processedFrame();
+  [[nodiscard]] const DataModel::Frame& rawFrame() { return m_lastFrame; }
+
+  [[nodiscard]] const DataModel::Frame& processedFrame() { return m_lastFrame; }
+
   [[nodiscard]] const DSP::AxisData& fftData(const int index) const;
   [[nodiscard]] const DSP::GpsSeries& gpsSeries(const int index) const;
   [[nodiscard]] const DSP::LineSeries& plotData(const int index) const;
   [[nodiscard]] const DSP::MultiLineSeries& multiplotData(const int index) const;
   [[nodiscard]] const DSP::EnvelopeRing& plotTimeRing(const int index) const;
   [[nodiscard]] const std::vector<DSP::EnvelopeRing>& multiplotTimeRings(const int index) const;
-  [[nodiscard]] const DSP::SweepEngine& plotSweep(const int index) const;
-  [[nodiscard]] const DSP::SweepEngine& multiplotSweep(const int index) const;
+
+  [[nodiscard]] const DSP::SweepEngine& plotSweep(const int index) const
+  {
+    return m_plotControls.plotSweep(index);
+  }
+
+  [[nodiscard]] const DSP::SweepEngine& multiplotSweep(const int index) const
+  {
+    return m_plotControls.multiplotSweep(index);
+  }
 
 #ifdef BUILD_COMMERCIAL
   [[nodiscard]] const DSP::LineSeries3D& plotData3D(const int index) const;
   [[nodiscard]] const DSP::AxisData& waterfallData(const int index) const;
 #endif
 
-  [[nodiscard]] static qint64 replaySeekKey(int sourceId, int uniqueId) noexcept;
-  [[nodiscard]] QList<std::pair<int, int>> replaySeekSeries() const;
+  [[nodiscard]] static qint64 replaySeekKey(int sourceId, int uniqueId) noexcept
+  {
+    return ReplaySeekEngine::seekKey(sourceId, uniqueId);
+  }
+
+  [[nodiscard]] QList<std::pair<int, int>> replaySeekSeries() const
+  {
+    return m_replaySeek.seekSeries();
+  }
+
   void bulkLoadPlotWindow(const QVector<double>& timesSec,
                           const QHash<qint64, QVector<double>>& series);
 
-  [[nodiscard]] bool plotRunning(const int index);
-  [[nodiscard]] bool fftPlotRunning(const int index);
-  [[nodiscard]] bool multiplotRunning(const int index);
+  [[nodiscard]] bool plotRunning(const int index) const
+  {
+    return m_plotControls.plotRunning(index);
+  }
+
+  [[nodiscard]] bool fftPlotRunning(const int index) const
+  {
+    return m_plotControls.fftPlotRunning(index);
+  }
+
+  [[nodiscard]] bool multiplotRunning(const int index) const
+  {
+    return m_plotControls.multiplotRunning(index);
+  }
 #ifdef BUILD_COMMERCIAL
-  [[nodiscard]] bool waterfallRunning(const int index);
+  [[nodiscard]] bool waterfallRunning(const int index) const
+  {
+    return m_plotControls.waterfallRunning(index);
+  }
 
   void setFftAudioTap(const int index, const bool enabled, const quint32 key);
   void setWaterfallAudioTap(const int index, const bool enabled, const quint32 key);
@@ -261,10 +375,6 @@ public slots:
   void resetData(const bool notify = true);
   void clearPlotData();
   void setShowActionPanel(const bool enabled);
-  void setTerminalEnabled(const bool enabled);
-  void setNotificationLogEnabled(const bool enabled);
-  void setClockEnabled(const bool enabled);
-  void setStopwatchEnabled(const bool enabled);
   void setAutoHideToolbar(const bool enabled);
   void setShowAlignmentGuides(const bool enabled);
   void setLayoutMargin(const int margin);
@@ -272,13 +382,39 @@ public slots:
   void setFrozen(const bool frozen);
   void setPlotTimeRange(const double seconds);
   void setSettingsPersistent(const bool persistent);
-  void activateAction(const int index, const bool guiTrigger = false);
 
-  void setPlotRunning(const int index, const bool enabled);
-  void setFFTPlotRunning(const int index, const bool enabled);
-  void setMultiplotRunning(const int index, const bool enabled);
+  void setClockEnabled(const bool enabled) { m_tools.setClockEnabled(enabled); }
+
+  void setTerminalEnabled(const bool enabled) { m_tools.setTerminalEnabled(enabled); }
+
+  void setStopwatchEnabled(const bool enabled) { m_tools.setStopwatchEnabled(enabled); }
+
+  void setNotificationLogEnabled(const bool enabled) { m_tools.setNotificationLogEnabled(enabled); }
+
+  void activateAction(const int index, const bool guiTrigger = false)
+  {
+    m_tools.activateAction(index, guiTrigger);
+  }
+
+  void setPlotRunning(const int index, const bool enabled)
+  {
+    m_plotControls.setPlotRunning(index, enabled);
+  }
+
+  void setFFTPlotRunning(const int index, const bool enabled)
+  {
+    m_plotControls.setFFTPlotRunning(index, enabled);
+  }
+
+  void setMultiplotRunning(const int index, const bool enabled)
+  {
+    m_plotControls.setMultiplotRunning(index, enabled);
+  }
 #ifdef BUILD_COMMERCIAL
-  void setWaterfallRunning(const int index, const bool enabled);
+  void setWaterfallRunning(const int index, const bool enabled)
+  {
+    m_plotControls.setWaterfallRunning(index, enabled);
+  }
 #endif
 
   void setPlotSweep(const int index,
@@ -287,7 +423,11 @@ public slots:
                     const int edge,
                     const int mode,
                     const double holdoff,
-                    const double timebase);
+                    const double timebase)
+  {
+    m_plotControls.setPlotSweep(index, enabled, level, edge, mode, holdoff, timebase);
+  }
+
   void setMultiplotSweep(const int index,
                          const bool enabled,
                          const double level,
@@ -295,10 +435,20 @@ public slots:
                          const int mode,
                          const double holdoff,
                          const int triggerCurve,
-                         const double timebase);
-  void armPlotSweep(const int index);
-  void armMultiplotSweep(const int index);
-  void setPlotSweepRetention(const int index, const int count);
+                         const double timebase)
+  {
+    m_plotControls.setMultiplotSweep(
+      index, enabled, level, edge, mode, holdoff, triggerCurve, timebase);
+  }
+
+  void armPlotSweep(const int index) { m_plotControls.armPlotSweep(index); }
+
+  void armMultiplotSweep(const int index) { m_plotControls.armMultiplotSweep(index); }
+
+  void setPlotSweepRetention(const int index, const int count)
+  {
+    m_plotControls.setPlotSweepRetention(index, count);
+  }
 
   void saveWidgetViewState(const QString& widgetId, const QString& key, const QVariant& value);
   void saveGlobalViewState(const QString& key, const QVariant& value);
@@ -313,6 +463,10 @@ public slots:
   void onDisplayTick();
 
 private:
+  void connectToolSignals();
+  void connectDisplayTimers();
+  void connectSessionResets();
+  void applyOperationModeDefaults();
   void restorePersistedSettings();
   void connectStreamAvailableInputs();
   void connectViewStateResets(AppState& appState);
@@ -338,25 +492,10 @@ private:
   void configureMultiLineSeries();
   void buildMultiplotPushes();
 
-  [[nodiscard]] QHash<qint64, DSP::EnvelopeRing> snapshotPlotTimeRings() const;
-  [[nodiscard]] QHash<qint64, std::vector<DSP::EnvelopeRing>> snapshotMultiplotTimeRings() const;
-  void restorePlotTimeRings(QHash<qint64, DSP::EnvelopeRing>& snapshot);
-  void restoreMultiplotTimeRings(QHash<qint64, std::vector<DSP::EnvelopeRing>>& snapshot);
-  void restorePlotSweepConfig(const QMap<int, DSP::SweepEngine>& saved);
-  void restoreMultiplotSweepConfig(const QMap<int, DSP::SweepEngine>& saved);
 #ifdef BUILD_COMMERCIAL
   void configureWaterfallSeries();
 #endif
 
-  void fillSeekPlotSingle(int index,
-                          const QVector<double>& timesSec,
-                          const QHash<qint64, QVector<double>>& series,
-                          double timeOffset,
-                          QSet<const DSP::AxisData*>& filled);
-  void fillSeekPlotMulti(int index,
-                         const QVector<double>& timesSec,
-                         const QHash<qint64, QVector<double>>& series,
-                         double timeOffset);
   void foldExtremes(int sourceId);
   void clearPushTables();
 
@@ -501,6 +640,12 @@ private:
     std::chrono::steady_clock::time_point origin = {};
   };
 
+  // Resolved once at construction: Dashboard is built last, so no method body resolves a singleton.
+  AppState* m_appState;
+  WidgetRegistry* m_widgetRegistry;
+  DataModel::FrameBuilder* m_frameBuilder;
+  DataModel::ProjectModel* m_projectModel;
+
   QSettings m_settings;
   qint64 m_drainBudgetNs;
   int m_points;
@@ -582,9 +727,11 @@ private:
   QHash<int, quint64> m_sourceStructureGen;
   QHash<int, quint64> m_quarantinedSources;
 
-  // Declared last: WidgetMapBuilder binds the members above by reference, in declaration order
+  // Declared last: these bind the members above by reference, in declaration order
   DashboardTools m_tools;
   DashboardViewState m_viewState;
+  PlotControlBank m_plotControls;
+  ReplaySeekEngine m_replaySeek;
   WidgetMapBuilder m_widgetMapBuilder;
 };
 }  // namespace UI

@@ -232,14 +232,22 @@ void Misc::Diagnostics::NetworkChecks::TcpProbeTask::onErrorOccurred(
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief The driver owner the endpoint reads query, resolved once: these are free functions with
+ *        no constructor to capture in, so the singleton reach is funnelled through one accessor.
+ */
+[[nodiscard]] static IO::ConnectionManager& connectionManager()
+{
+  static auto& manager = IO::ConnectionManager::instance();
+  return manager;
+}
+
+/**
  * @brief Reads the network source's TCP endpoint. Only TCP is probed: UDP carries no connection,
  *        and the URL transports are not reachable through a host-and-port probe.
  */
 [[nodiscard]] static bool networkEndpoint(QString& host, quint16& port)
 {
-  static auto& manager = IO::ConnectionManager::instance();
-
-  auto* network = manager.network();
+  auto* network = connectionManager().network();
   if (network == nullptr || network->socketType() != IO::Drivers::Network::SocketType::Tcp)
     return false;
 
@@ -254,9 +262,7 @@ void Misc::Diagnostics::NetworkChecks::TcpProbeTask::onErrorOccurred(
 [[nodiscard]] static bool brokerEndpoint(QString& host, quint16& port)
 {
 #ifdef BUILD_COMMERCIAL
-  static auto& manager = IO::ConnectionManager::instance();
-
-  auto* mqtt = manager.mqtt();
+  auto* mqtt = connectionManager().mqtt();
   if (mqtt == nullptr)
     return false;
 

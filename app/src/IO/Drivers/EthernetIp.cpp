@@ -574,7 +574,9 @@ quint64 IO::Drivers::EipPollWorker::framesPublished() const noexcept
  * @brief Constructs the driver, restores persisted settings and wires the configuration signals.
  */
 IO::Drivers::EthernetIp::EthernetIp()
-  : m_open(false)
+  : m_appState(AppState::instance())
+  , m_projectModel(DataModel::ProjectModel::instance())
+  , m_open(false)
   , m_persistent(true)
   , m_plcTypeIndex(0)
   , m_pollInterval(kEipDefaultIntervalMs)
@@ -1448,17 +1450,15 @@ DataModel::ProjectModel* IO::Drivers::EthernetIp::loadGeneratedProject()
   if (m_tags.isEmpty())
     return nullptr;
 
-  static auto& pm       = DataModel::ProjectModel::instance();
-  static auto& appState = AppState::instance();
-  appState.setOperationMode(SerialStudio::ProjectFile);
-  if (!pm.loadFromJsonDocument(QJsonDocument(buildProject()), QString())) {
+  m_appState.setOperationMode(SerialStudio::ProjectFile);
+  if (!m_projectModel.loadFromJsonDocument(QJsonDocument(buildProject()), QString())) {
     logDriverError(tr("Failed to load generated project"),
                    tr("The generated project JSON could not be loaded."));
     return nullptr;
   }
 
-  pm.setModified(true);
-  return &pm;
+  m_projectModel.setModified(true);
+  return &m_projectModel;
 }
 
 /**

@@ -92,12 +92,12 @@ Misc::HelpCenter::HelpCenter()
   , m_versionIndex(-1)
   , m_defaultVersion(-1)
   , m_pendingPreloads(0)
+  , m_theme(&Misc::ThemeManager::instance())
 {
   m_nam.setTransferTimeout(15 * 1000);
 
   onThemeChanged();
-  static auto& themeManager = Misc::ThemeManager::instance();
-  connect(&themeManager, &Misc::ThemeManager::themeChanged, this, &HelpCenter::onThemeChanged);
+  connect(m_theme, &Misc::ThemeManager::themeChanged, this, &HelpCenter::onThemeChanged);
 }
 
 /**
@@ -720,8 +720,7 @@ void Misc::HelpCenter::onPreloadReply()
  */
 void Misc::HelpCenter::onThemeChanged()
 {
-  static const auto* t = &Misc::ThemeManager::instance();
-  const auto& colors   = t->colors();
+  const auto& colors = m_theme->colors();
 
   const auto bgHex = colors.value(QStringLiteral("groupbox_background")).toString();
   const QColor bgCol(bgHex);

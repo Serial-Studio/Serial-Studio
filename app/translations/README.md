@@ -109,6 +109,17 @@ python3 llm_translate.py --verify-only
 
 Walks existing translations and re-applies the title-case / acronym / language-specific casing rules without calling the LLM.
 
+### Reuse translations for moved strings (no LLM)
+
+```bash
+python3 llm_translate.py --reuse-only
+python3 llm_translate.py --reuse-only --lang fr_FR
+```
+
+Qt keys `.ts` entries by (context, source), and `lupdate` only carries a translation forward inside the same context. A `tr()` string that a refactor moves to another class therefore comes back `unfinished` while the finished translation still sits under the old context. This pass matches unfinished entries against finished ones by exact source text plus the `<comment>` disambiguator — ignoring context and location — and copies the translation when every donor for that key agrees. Entries whose donors disagree are left for the LLM or a human. Plural entries reuse only from a plural donor whose forms all agree.
+
+The same pass runs automatically at the start of every normal translation run, before batches are formed, so moved strings never reach a paid call.
+
 ### Lint `en_US.ts` source strings (no LLM)
 
 ```bash
@@ -119,6 +130,7 @@ Scans the English source strings for style violations (Apple-HIG voice: imperati
 
 ### Quality features
 
+- Translation reuse — unfinished entries whose string only moved to a new context are filled from the finished copy that stayed behind, before any LLM batch is formed.
 - Domain glossary in the prompt — disambiguates `Will Topic` (MQTT field), `Holding Register` (Modbus), `Frame` (CAN/serial vs UI), `Dataset` (data series).
 - Translation memory — top-K most similar already-validated translations from the same `.ts` file are injected as few-shot examples per batch.
 - Confidence scoring — the LLM rates each translation 1–5; entries below `--min-score` (default 4) keep `type='unfinished'` so Qt Linguist surfaces them for human review.

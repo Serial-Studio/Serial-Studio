@@ -310,24 +310,10 @@ private:
   ProcessResult runSelfTests();
 #endif
 
-  void setupUartConnection();
-  void setupTcpConnection(const QString& tcpAddress);
-  void setupUdpConnection();
-  void setupWebSocketConnection(const QString& url);
-  void setupHttpConnection(const QString& url);
-
 #ifdef BUILD_COMMERCIAL
   int activateLicense(QApplication& app, const QString& licenseKey);
   int deactivateLicense(QApplication& app);
 
-  void setupModbusRtuConnection();
-  void setupModbusTcpConnection();
-  void setupCanbusConnection();
-  void setupOpcUaConnection();
-  void setupS7Connection();
-  void setupEthernetIpConnection();
-  void setupIec104Connection();
-  void applyModbusCommonOptions();
   void applyOperatorTaskbarSettings();
 #endif
 

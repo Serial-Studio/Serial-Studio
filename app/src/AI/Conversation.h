@@ -21,19 +21,31 @@
 #include <QVariantList>
 #include <QVariantMap>
 
+#include "AI/Conversation/AutoVerifier.h"
 #include "AI/Conversation/HelpFetcher.h"
+#include "AI/Conversation/MetaToolRunner.h"
 #include "AI/SentinelProbe.h"
+
+namespace DataModel {
+class ProjectModel;
+}  // namespace DataModel
 
 namespace AI {
 
-class Provider;
 class Reply;
+class Provider;
+class Assistant;
 class ToolDispatcher;
+class CommandRegistry;
 
 /**
  * @brief Owns the chat history, the active streaming Reply, and the tool-call loop state.
+ *        Implements MetaToolSink so the meta.* runner reaches the card/tool-result
+ *        bookkeeping without ever touching the streaming state kept private here.
  */
-class Conversation : public QObject {
+class Conversation
+  : public QObject
+  , public MetaToolSink {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(QVariantList messages
@@ -64,18 +76,7 @@ public:
   static constexpr int kAutoSaveDebounceMs  = 800;
   static constexpr int kRetryBaseMs         = 1500;
 
-  /**
-   * @brief Status pill rendered by QML for each tool-call card.
-   */
-  enum class CallStatus : int {
-    Running         = 0,
-    AwaitingConfirm = 1,
-    Done            = 2,
-    Error           = 3,
-    Denied          = 4,
-    Blocked         = 5,
-  };
-  Q_ENUM(CallStatus)
+  using CallStatus = ToolCallStatus;
 
   explicit Conversation(QObject* parent = nullptr);
   ~Conversation() override;
@@ -144,40 +145,22 @@ private:
   void appendToolCallCard(const QString& callId,
                           const QString& name,
                           const QJsonObject& arguments,
-                          CallStatus status);
+                          CallStatus status) override;
   void updateToolCallCard(const QString& callId,
                           CallStatus status,
                           const QJsonObject& result       = {},
-                          const QJsonObject& verification = {});
+                          const QJsonObject& verification = {}) override;
   void runToolCall(const QString& callId, const QString& name, const QJsonObject& arguments);
-  [[nodiscard]] QJsonObject runAutoVerify(const QString& name,
-                                          const QJsonObject& arguments,
-                                          const QJsonObject& reply);
-  [[nodiscard]] QJsonObject verifySourceUpdate(const QJsonObject& arguments);
-  void recordToolResult(const QString& callId, const QString& name, const QJsonObject& payload);
-  bool dispatchMetaTool(const QString& callId, const QString& name, const QJsonObject& arguments);
+  void recordToolResult(const QString& callId,
+                        const QString& name,
+                        const QJsonObject& payload) override;
   void dispatchByCallSafety(const QString& callId,
                             const QString& name,
-                            const QJsonObject& arguments);
-  void runMetaDescribe(const QString& callId, const QString& name, const QJsonObject& arguments);
-  void runMetaScriptingDocs(const QString& callId,
-                            const QString& name,
-                            const QJsonObject& arguments);
-  void runMetaHowTo(const QString& callId, const QString& name, const QJsonObject& arguments);
-  void runMetaListCategories(const QString& callId,
-                             const QString& name,
-                             const QJsonObject& arguments);
-  void runMetaSnapshot(const QString& callId, const QString& name, const QJsonObject& arguments);
-  void runMetaListCommands(const QString& callId,
-                           const QString& name,
-                           const QJsonObject& arguments);
-  void runMetaExecuteCommand(const QString& callId,
-                             const QString& name,
-                             const QJsonObject& arguments);
-  void runMetaLoadSkill(const QString& callId, const QString& name, const QJsonObject& arguments);
-  void runMetaSearchDocs(const QString& callId, const QString& name, const QJsonObject& arguments);
+                            const QJsonObject& arguments) override;
+  void noteSkillLoaded(const QString& skillId) override;
+  [[nodiscard]] QList<DocSearch::Hit> searchDocs(const QString& query, int k) const override;
   void resumeAfterToolBatch();
-  void releaseOutstandingToolResult();
+  void releaseOutstandingToolResult() override;
   void teardownReply();
   [[nodiscard]] bool shouldRetryAfterError() const;
   void scheduleTransientRetry(const QString& message);
@@ -187,6 +170,7 @@ private:
   void setLastError(const QString& message);
   void flushPendingStreamUpdate();
   void scheduleUiFlush();
+  [[nodiscard]] static Assistant& assistant();
   [[nodiscard]] QJsonArray dispatcherTools() const;
   [[nodiscard]] QJsonArray budgetedHistory(const QJsonArray& tools) const;
 
@@ -202,6 +186,9 @@ private:
   Provider* m_provider;
   ToolDispatcher* m_dispatcher;
   Reply* m_reply;
+
+  const CommandRegistry& m_commands;
+  DataModel::ProjectModel& m_project;
 
   QJsonArray m_history;
   QVariantList m_uiMessages;
@@ -226,6 +213,8 @@ private:
   bool m_lastAwaitingFlag;
 
   HelpFetcher m_helpFetcher;
+  MetaToolRunner m_metaTools;
+  AutoVerifier m_autoVerify;
 
   QTimer* m_streamFlushTimer;
   bool m_streamDirty;

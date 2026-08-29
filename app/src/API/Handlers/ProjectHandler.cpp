@@ -45,9 +45,9 @@ API::Handlers::ProjectHandler::ProjectHandler(CommandRegistry& registry)
  *        registry entries it installs, which hold plain function pointers into the command
  *        classes rather than bound member functions.
  */
-void API::Handlers::ProjectHandler::registerCommands()
+void API::Handlers::ProjectHandler::registerCommands(CommandRegistry& registry)
 {
-  static ProjectHandler handler(CommandRegistry::instance());
+  static ProjectHandler handler(registry);
   handler.registerAll();
 }
 

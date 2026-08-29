@@ -124,22 +124,22 @@ Every device action still requires your explicit per-call approval in the chat, 
 كل إجراء للجهاز لا يزال يتطلب موافقتك الصريحة لكل استدعاء في المحادثة، حتى عند تفعيل الموافقة التلقائية. فعّل هذا فقط إذا كنت تثق بمزود AI المكوّن للوصول إلى الأجهزة.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="639"/>
+        <location filename="../../src/AI/Assistant.cpp" line="638"/>
         <source>Switch AI provider?</source>
         <translation>تبديل موفر الذكاء الاصطناعي؟</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="640"/>
+        <location filename="../../src/AI/Assistant.cpp" line="639"/>
         <source>Switching to a different provider clears the current conversation. Do you want to continue?</source>
         <translation>سيؤدي التبديل إلى موفر مختلف إلى مسح المحادثة الحالية. هل تريد المتابعة؟</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="643"/>
+        <location filename="../../src/AI/Assistant.cpp" line="642"/>
         <source>Assistant</source>
         <translation>المساعد</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="680"/>
+        <location filename="../../src/AI/Assistant.cpp" line="679"/>
         <source>AI Assistant is not available in this build</source>
         <translation>مساعد الذكاء الاصطناعي غير متوفر في هذا الإصدار</translation>
     </message>
@@ -148,9 +148,32 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation type="vanished">يتطلب مساعد الذكاء الاصطناعي ترخيص Pro</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="685"/>
+        <location filename="../../src/AI/Assistant.cpp" line="684"/>
         <source>Set an API key first</source>
         <translation>قم بتعيين مفتاح API أولاً</translation>
+    </message>
+</context>
+<context>
+    <name>AI::AutoVerifier</name>
+    <message>
+        <location filename="../../src/AI/Conversation/AutoVerifier.cpp" line="116"/>
+        <source>%1 operation(s) failed</source>
+        <translation>فشلت %1 عملية/عمليات</translation>
+    </message>
+    <message>
+        <location filename="../../src/AI/Conversation/AutoVerifier.cpp" line="168"/>
+        <source>Source list read-back failed</source>
+        <translation>فشل قراءة قائمة المصدر</translation>
+    </message>
+    <message>
+        <location filename="../../src/AI/Conversation/AutoVerifier.cpp" line="189"/>
+        <source>Source %1 not found after update</source>
+        <translation>المصدر %1 غير موجود بعد التحديث</translation>
+    </message>
+    <message>
+        <location filename="../../src/AI/Conversation/AutoVerifier.cpp" line="207"/>
+        <source>Fields did not round-trip: %1</source>
+        <translation>الحقول لم تكتمل دورتها: %1</translation>
     </message>
 </context>
 <context>
@@ -160,63 +183,59 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation type="vanished">يتطلب مساعد AI ترخيص Pro</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="163"/>
+        <location filename="../../src/AI/Conversation.cpp" line="183"/>
         <source>AI Assistant is not available in this build</source>
         <translation>مساعد الذكاء الاصطناعي غير متوفر في هذا الإصدار</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="169"/>
-        <location filename="../../src/AI/Conversation.cpp" line="1208"/>
+        <location filename="../../src/AI/Conversation.cpp" line="189"/>
+        <location filename="../../src/AI/Conversation.cpp" line="859"/>
         <source>AI subsystem not initialized</source>
         <translation>نظام AI الفرعي غير مهيأ</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="175"/>
+        <location filename="../../src/AI/Conversation.cpp" line="195"/>
         <source>Already busy with a previous request</source>
         <translation>مشغول بالفعل بطلب سابق</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="593"/>
+        <location filename="../../src/AI/Conversation.cpp" line="610"/>
         <source>Tool-call budget reached for this turn; no further tools will run.</source>
         <translation>تم الوصول إلى حد استدعاءات الأدوات لهذه الدورة؛ لن يتم تشغيل المزيد من الأدوات.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1223"/>
+        <location filename="../../src/AI/Conversation.cpp" line="874"/>
         <source>Waiting for %1 to respond. Loading the model and processing the prompt can take a while on local hardware...</source>
         <translation>في انتظار استجابة %1. قد يستغرق تحميل النموذج ومعالجة الطلب بعض الوقت على الأجهزة المحلية...</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1567"/>
         <source>%1 operation(s) failed</source>
-        <translation>فشلت %1 عملية/عمليات</translation>
+        <translation type="vanished">فشلت %1 عملية/عمليات</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1620"/>
         <source>Source list read-back failed</source>
-        <translation>فشل قراءة قائمة المصدر</translation>
+        <translation type="vanished">فشل قراءة قائمة المصدر</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1641"/>
         <source>Source %1 not found after update</source>
-        <translation>المصدر %1 غير موجود بعد التحديث</translation>
+        <translation type="vanished">المصدر %1 غير موجود بعد التحديث</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1659"/>
         <source>Fields did not round-trip: %1</source>
-        <translation>الحقول لم تكتمل دورتها: %1</translation>
+        <translation type="vanished">الحقول لم تكتمل دورتها: %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1734"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1235"/>
         <source>You have reached the tool-call budget for this turn. Do not request more tools. Summarize what you found so far, and if the task is incomplete, say which steps remain so the user can tell you to continue.</source>
         <translation>لقد وصلت إلى حد استدعاءات الأدوات لهذه الدورة. لا تطلب المزيد من الأدوات. لخص ما وجدته حتى الآن، وإذا كانت المهمة غير مكتملة، اذكر الخطوات المتبقية حتى يتمكن المستخدم من إخبارك بالمتابعة.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="2060"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1487"/>
         <source>The model stopped reproducing its context-integrity line. Long conversations degrade silently; recent replies may be less reliable.</source>
         <translation>توقف النموذج عن إعادة إنتاج سطر سلامة السياق. تتدهور المحادثات الطويلة بصمت؛ قد تكون الردود الأخيرة أقل موثوقية.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="2063"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1490"/>
         <source>The model altered its context-integrity line (drifted segment: %1). Long conversations degrade silently; recent replies may be less reliable.</source>
         <translation>قام النموذج بتعديل سطر سلامة السياق (المقطع المنحرف: %1). تتدهور المحادثات الطويلة بصمت؛ قد تكون الردود الأخيرة أقل موثوقية.</translation>
     </message>
@@ -225,17 +244,17 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation type="vanished">تم تجاوز حد استدعاءات الأدوات</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1055"/>
+        <location filename="../../src/AI/Conversation.cpp" line="706"/>
         <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider's safety filters.)</source>
         <translation>(أعاد النموذج استجابة فارغة. حاول إعادة الصياغة، أو التبديل إلى نموذج مختلف، أو التحقق من أن الطلب مسموح به بواسطة مرشحات الأمان الخاصة بالمزود.)</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1227"/>
+        <location filename="../../src/AI/Conversation.cpp" line="878"/>
         <source>Sending request to %1...</source>
         <translation>إرسال الطلب إلى %1...</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1245"/>
+        <location filename="../../src/AI/Conversation.cpp" line="896"/>
         <source>Provider returned no reply</source>
         <translation>لم يُرجع المزود أي رد</translation>
     </message>
@@ -324,12 +343,12 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>API::GRPC::GRPCServer</name>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="449"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="450"/>
         <source>Export Protobuf File</source>
         <translation>تصدير ملف Protobuf</translation>
     </message>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="451"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="452"/>
         <source>Protocol Buffers (*.proto)</source>
         <translation>Protocol Buffers ‏(*.proto)</translation>
     </message>
@@ -4587,42 +4606,42 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>Console::Handler</name>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="300"/>
+        <location filename="../../src/Console/Handler.cpp" line="299"/>
         <source>ASCII</source>
         <translation>ASCII</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="301"/>
+        <location filename="../../src/Console/Handler.cpp" line="300"/>
         <source>HEX</source>
         <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="311"/>
+        <location filename="../../src/Console/Handler.cpp" line="310"/>
         <source>No Line Ending</source>
         <translation>بدون نهاية سطر</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="312"/>
+        <location filename="../../src/Console/Handler.cpp" line="311"/>
         <source>New Line</source>
         <translation>سطر جديد</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="313"/>
+        <location filename="../../src/Console/Handler.cpp" line="312"/>
         <source>Carriage Return</source>
         <translation>إرجاع السطر</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="314"/>
+        <location filename="../../src/Console/Handler.cpp" line="313"/>
         <source>CR + NL</source>
         <translation>CR + NL</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="324"/>
+        <location filename="../../src/Console/Handler.cpp" line="323"/>
         <source>Text</source>
         <translation>نص</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="325"/>
+        <location filename="../../src/Console/Handler.cpp" line="324"/>
         <source>Hex</source>
         <translation>هيكس</translation>
     </message>
@@ -4635,12 +4654,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">سداسي عشري</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="347"/>
+        <location filename="../../src/Console/Handler.cpp" line="346"/>
         <source>No Checksum</source>
         <translation>بدون مجموع تدقيق</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="1024"/>
+        <location filename="../../src/Console/Handler.cpp" line="1013"/>
         <source>Device %1</source>
         <translation>الجهاز %1</translation>
     </message>
@@ -6145,12 +6164,12 @@ v
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2746"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2560"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>تم تجاوز حد تحويل JavaScript</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2747"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2561"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>استغرق تحويل مجموعة بيانات وقتًا أطول من %1 مللي ثانية؛ تم استخدام القيم الخام للمجموعات المتبقية في الإطار حتى الإطار التالي. قم بتحليل أو تبسيط كود التحويل.</translation>
     </message>
@@ -6163,7 +6182,7 @@ v
         <translation type="vanished">أحد المستهلكين في المسار (لوحة البيانات، تصدير CSV/MDF4، قاعدة بيانات الجلسات، أو مشترك API) لا يفرغ الإطارات بالسرعة الكافية. يقوم Serial Studio بالتحول إلى تخصيصات لكل إطار حتى يتم تصفية التراكم. قم بإيقاف مستهلك ثقيل أو خفّض معدل البيانات.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="567"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="554"/>
         <source>Block pool exhausted</source>
         <translation>تم استنفاد مخزن الكتل</translation>
     </message>
@@ -6172,7 +6191,7 @@ v
         <translation type="vanished">مستهلك لاحق (لوحة المعلومات، تصدير CSV/MDF4، قاعدة بيانات الجلسة، أو مشترك API) لا يستنزف بسرعة كافية، لذا يتم إسقاط البيانات من العرض ومن أي تسجيل نشط. عطّل مستهلكًا ثقيلًا أو قلل معدل البيانات.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="569"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="556"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, historian, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
         <translation>مستهلك لاحق (لوحة المعلومات، تصدير CSV/MDF4، المؤرخ، أو مشترك API) لا يستنزف البيانات بسرعة كافية، لذا يتم إسقاط البيانات من العرض ومن أي تسجيل نشط. قم بتعطيل مستهلك ثقيل أو تقليل معدل البيانات.</translation>
     </message>
@@ -8611,105 +8630,105 @@ Add %4 dataset(s) using the template's defaults?</source>
 <context>
     <name>DataModel::ProjectModel</name>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="211"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="220"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="234"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="187"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="196"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="210"/>
         <source>Project error</source>
         <translation>خطأ في المشروع</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="211"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="187"/>
         <source>Project title cannot be empty!</source>
         <translation>لا يمكن أن يكون عنوان المشروع فارغاً!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="220"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="196"/>
         <source>You need to add at least one group!</source>
         <translation>يجب إضافة مجموعة واحدة على الأقل!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="234"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="210"/>
         <source>You need to add at least one dataset!</source>
         <translation>يجب إضافة مجموعة بيانات واحدة على الأقل!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="282"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="250"/>
         <source>Your project needs a title</source>
         <translation>مشروعك يحتاج إلى عنوان</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="284"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="252"/>
         <source>Add a group to get started</source>
         <translation>أضف مجموعة للبدء</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="286"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="254"/>
         <source>Add a dataset to a group</source>
         <translation>إضافة مجموعة بيانات إلى مجموعة</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="300"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="268"/>
         <source>Open the Project view at the top of the tree and enter a name. You can rename the project at any time.</source>
         <translation>افتح عرض المشروع في أعلى الشجرة وأدخل اسمًا. يمكنك إعادة تسمية المشروع في أي وقت.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="303"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="271"/>
         <source>Groups organize datasets into dashboard widgets. Use the Group button in the toolbar above to create one, then add datasets to it.</source>
         <translation>تنظم المجموعات مجموعات البيانات في عناصر لوحة المعلومات. استخدم زر المجموعة في شريط الأدوات أعلاه لإنشاء واحدة، ثم أضف مجموعات البيانات إليها.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="307"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="275"/>
         <source>Datasets are the values that appear on the dashboard. Select a group in the tree and use the Dataset button in the toolbar to add one.</source>
         <translation>مجموعات البيانات هي القيم التي تظهر على لوحة المعلومات. حدد مجموعة في الشجرة واستخدم زر مجموعة البيانات في شريط الأدوات لإضافة واحدة.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="341"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="350"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="293"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="302"/>
         <source>Lock Project</source>
         <translation>قفل المشروع</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="342"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="294"/>
         <source>Choose a password to lock the project:</source>
         <translation>اختر كلمة مرور لقفل المشروع:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="350"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="302"/>
         <source>Confirm the password:</source>
         <translation>تأكيد كلمة المرور:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="355"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="307"/>
         <source>Passwords do not match</source>
         <translation>كلمات المرور غير متطابقة</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="356"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="308"/>
         <source>The two passwords you entered do not match. The project was not locked.</source>
         <translation>كلمتا المرور اللتان أدخلتهما غير متطابقتين. لم يتم قفل المشروع.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="393"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="345"/>
         <source>Unlock Project</source>
         <translation>فتح قفل المشروع</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="394"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="346"/>
         <source>Enter the project password:</source>
         <translation>أدخل كلمة مرور المشروع:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="404"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="356"/>
         <source>Incorrect password</source>
         <translation>كلمة المرور غير صحيحة</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="405"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="357"/>
         <source>The password you entered does not match the one stored in the project file.</source>
         <translation>كلمة المرور التي أدخلتها لا تطابق الكلمة المحفوظة في ملف المشروع.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="534"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="438"/>
         <source>New Project</source>
         <translation>مشروع جديد</translation>
     </message>
@@ -8718,12 +8737,12 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">العينات</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="936"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="580"/>
         <source>Change MQTT Publisher</source>
         <translation>تغيير ناشر MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="960"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="596"/>
         <source>Change InfluxDB Sink</source>
         <translation>تغيير مصب InfluxDB</translation>
     </message>
@@ -8736,47 +8755,47 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">عنوان العرض (فارغ يستعيد الأصلي):</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1430"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="853"/>
         <source>Change Project Title</source>
         <translation>تغيير عنوان المشروع</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1454"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="869"/>
         <source>Edit Control Script</source>
         <translation>تحرير سكريبت التحكم</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1471"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="886"/>
         <source>Change Point Count</source>
         <translation>تغيير عدد النقاط</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1494"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="909"/>
         <source>Change Plot Time Range</source>
         <translation>تغيير نطاق وقت الرسم البياني</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1520"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="935"/>
         <source>Toggle Freeze</source>
         <translation>تبديل التجميد</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1535"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="950"/>
         <source>Toggle Change-Driven Transforms</source>
         <translation>تبديل التحويلات المدفوعة بالتغيير</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1552"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="967"/>
         <source>Toggle Fast Lua Execution</source>
         <translation>تبديل التنفيذ السريع لـ Lua</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1573"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="988"/>
         <source>Enable Fast Lua Execution?</source>
         <translation>تمكين التنفيذ السريع لـ Lua؟</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1574"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="989"/>
         <source>Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x faster), but the runaway-script watchdog cannot operate: a script stuck in an infinite loop will stall its data source until you disconnect.
 
 Enable it only for scripts you trust and have tested in Safe mode first.</source>
@@ -8785,37 +8804,37 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
 قم بتمكينه فقط للبرامج النصية التي تثق بها وقمت باختبارها في الوضع الآمن أولاً.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1579"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="994"/>
         <source>Fast Lua Execution</source>
         <translation>التنفيذ السريع لـ Lua</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1608"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1023"/>
         <source>Change Frame Start Sequence</source>
         <translation>تغيير تسلسل بداية الإطار</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1627"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1042"/>
         <source>Change Frame End Sequence</source>
         <translation>تغيير تسلسل نهاية الإطار</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1646"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1061"/>
         <source>Change Checksum</source>
         <translation>تغيير المجموع الاختباري</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1665"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1080"/>
         <source>Change Frame Detection</source>
         <translation>تغيير كشف الإطار</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1684"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1099"/>
         <source>Change Decoder</source>
         <translation>تغيير وحدة فك الترميز</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1703"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1118"/>
         <source>Toggle Hex Delimiters</source>
         <translation>تبديل المحددات السداسية عشرية</translation>
     </message>
@@ -8908,12 +8927,12 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">ملفات مشروع Serial Studio (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1302"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="725"/>
         <source>Untitled Project</source>
         <translation>مشروع بدون عنوان</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1318"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="741"/>
         <source>Device A</source>
         <translation>الجهاز A</translation>
     </message>
@@ -10086,6 +10105,81 @@ Valid format: 01 A2 FF 3C</source>
     </message>
 </context>
 <context>
+    <name>DiagramLayout</name>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="242"/>
+        <source>Group</source>
+        <translation>مجموعة</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="369"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="785"/>
+        <source>Folder</source>
+        <translation>مجلد</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="401"/>
+        <source>Control Loop</source>
+        <translation>حلقة التحكم</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="403"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="737"/>
+        <source>empty</source>
+        <translation>فارغ</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="447"/>
+        <source>Frame Parser</source>
+        <translation>محلل الإطارات</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="454"/>
+        <source>Device %1</source>
+        <translation>الجهاز %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="531"/>
+        <source>Output Panel</source>
+        <translation>لوحة الإخراج</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="567"/>
+        <source>Control</source>
+        <translation>عنصر تحكم</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="600"/>
+        <source>Outputs</source>
+        <translation>المخرجات</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="638"/>
+        <source>Action</source>
+        <translation>إجراء</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="723"/>
+        <source>Table</source>
+        <translation>جدول</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="737"/>
+        <source>%1 regs</source>
+        <translation>%1 سجلات</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="828"/>
+        <source>Variables</source>
+        <translation>المتغيرات</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="872"/>
+        <source>MQTT Publisher</source>
+        <translation>ناشر MQTT</translation>
+    </message>
+</context>
+<context>
     <name>Donate</name>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="36"/>
@@ -11212,75 +11306,60 @@ Add controller tags above to poll them.</source>
 <context>
     <name>FlowDiagram</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="457"/>
         <source>Frame Parser</source>
-        <translation>محلل الإطارات</translation>
+        <translation type="vanished">محلل الإطارات</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="464"/>
         <source>Device %1</source>
-        <translation>الجهاز %1</translation>
+        <translation type="vanished">الجهاز %1</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="252"/>
         <source>Group</source>
-        <translation>مجموعة</translation>
+        <translation type="vanished">مجموعة</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="379"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="795"/>
         <source>Folder</source>
-        <translation>مجلد</translation>
+        <translation type="vanished">مجلد</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="648"/>
         <source>Action</source>
-        <translation>إجراء</translation>
+        <translation type="vanished">إجراء</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="541"/>
         <source>Output Panel</source>
-        <translation>لوحة الإخراج</translation>
+        <translation type="vanished">لوحة الإخراج</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="577"/>
         <source>Control</source>
-        <translation>عنصر تحكم</translation>
+        <translation type="vanished">عنصر تحكم</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="733"/>
         <source>Table</source>
-        <translation>جدول</translation>
+        <translation type="vanished">جدول</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="747"/>
         <source>%1 regs</source>
-        <translation>%1 سجلات</translation>
+        <translation type="vanished">%1 سجلات</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="838"/>
         <source>Variables</source>
-        <translation>المتغيرات</translation>
+        <translation type="vanished">المتغيرات</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="413"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="747"/>
         <source>empty</source>
-        <translation>فارغ</translation>
+        <translation type="vanished">فارغ</translation>
     </message>
     <message>
         <source>Control Script</source>
         <translation type="vanished">سكريبت التحكم</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="882"/>
         <source>MQTT Publisher</source>
-        <translation>ناشر MQTT</translation>
+        <translation type="vanished">ناشر MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1283"/>
         <source>Open the transform code editor for this dataset.</source>
-        <translation>فتح محرر كود التحويل لمجموعة البيانات هذه.</translation>
+        <translation type="vanished">فتح محرر كود التحويل لمجموعة البيانات هذه.</translation>
     </message>
     <message>
         <source>Dataset Container</source>
@@ -11363,14 +11442,12 @@ Add controller tags above to poll them.</source>
         <translation type="vanished">مقياس حرارة</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="411"/>
         <source>Control Loop</source>
-        <translation>حلقة التحكم</translation>
+        <translation type="vanished">حلقة التحكم</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="610"/>
         <source>Outputs</source>
-        <translation>المخرجات</translation>
+        <translation type="vanished">المخرجات</translation>
     </message>
     <message>
         <source>Shared Memory</source>
@@ -12456,7 +12533,7 @@ Add controller tags above to poll them.</source>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="287"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="280"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
@@ -12465,92 +12542,92 @@ Add controller tags above to poll them.</source>
         <translation type="vanished">مقبس الشبكة</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="288"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="280"/>
         <source>Network</source>
         <translation>الشبكة</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="289"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="280"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="291"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="282"/>
         <source>Audio</source>
         <translation>الصوت</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="292"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="282"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="293"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="282"/>
         <source>CAN Bus</source>
         <translation>ناقل CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="294"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="282"/>
         <source>USB Device</source>
         <translation>جهاز USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="295"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="282"/>
         <source>HID Device</source>
         <translation>جهاز HID</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="296"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="283"/>
         <source>Process</source>
         <translation>العملية</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="297"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="283"/>
         <source>MQTT Subscriber</source>
         <translation>مشترك MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="298"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="283"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="299"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="283"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="300"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="284"/>
         <source>EtherNet/IP</source>
         <translation>EtherNet/IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="301"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="284"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="716"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="670"/>
         <source>Your trial period has ended.</source>
         <translation>انتهت فترة التجربة.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="717"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="671"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>لمتابعة استخدام Serial Studio، يُرجى تفعيل الترخيص.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="802"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="748"/>
         <source>connection attempt failed</source>
         <translation>فشلت محاولة الاتصال</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1300"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1220"/>
         <source>This connection type requires an active license or trial.</source>
         <translation>يتطلب نوع الاتصال هذا ترخيصًا نشطًا أو نسخة تجريبية.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1301"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1221"/>
         <source>Activate Serial Studio Pro or start a trial to use this device type.</source>
         <translation>قم بتفعيل Serial Studio Pro أو ابدأ نسخة تجريبية لاستخدام نوع الجهاز هذا.</translation>
     </message>
@@ -12999,128 +13076,128 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::EthernetIp</name>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="793"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="795"/>
         <source>The connection is not configured: check the host and the tag list</source>
         <translation>الاتصال غير مُهيأ: تحقق من المضيف وقائمة الوسوم</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="815"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="817"/>
         <source>EtherNet/IP Connection Failed</source>
         <translation>فشل اتصال EtherNet/IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="816"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="818"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="817"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="819"/>
         <source>the controller did not answer</source>
         <translation>لم يستجب المتحكم</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="860"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="862"/>
         <source>EtherNet/IP Connection Lost</source>
         <translation>فُقد اتصال EtherNet/IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="941"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="943"/>
         <source>ControlLogix</source>
         <translation>ControlLogix</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="942"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="944"/>
         <source>CompactLogix</source>
         <translation>CompactLogix</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="943"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="945"/>
         <source>MicroLogix</source>
         <translation>MicroLogix</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="944"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="946"/>
         <source>Micro800</source>
         <translation>Micro800</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="945"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="947"/>
         <source>PLC-5</source>
         <translation>PLC-5</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="946"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="948"/>
         <source>SLC 500</source>
         <translation>SLC 500</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="947"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="949"/>
         <source>Logix PCCC</source>
         <translation>Logix PCCC</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="948"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="950"/>
         <source>Omron NJ/NX</source>
         <translation>Omron NJ/NX</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="991"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="993"/>
         <source>Not connected</source>
         <translation>غير متصل</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="994"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="996"/>
         <source>Polling %1 tags at %2 Hz</source>
         <translation>استقصاء %1 وسم بتردد %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1211"/>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1220"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1213"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1222"/>
         <source>EtherNet/IP Tag</source>
         <translation>وسم EtherNet/IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1212"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1214"/>
         <source>The tag name "%1" is too long or contains characters that are not allowed (no '&amp;', '=' or whitespace).</source>
         <translation>اسم الوسم "%1" طويل جداً أو يحتوي على أحرف غير مسموح بها (لا يُسمح بـ '&amp;' أو '=' أو مسافات).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1220"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1222"/>
         <source>Unknown tag type "%1".</source>
         <translation>نوع وسم غير معروف "%1".</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1272"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1274"/>
         <source>Gateway</source>
         <translation>البوابة</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1279"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1281"/>
         <source>CIP Path</source>
         <translation>مسار CIP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1286"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1288"/>
         <source>Controller Family</source>
         <translation>عائلة المتحكم</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1294"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1296"/>
         <source>Poll Interval (ms)</source>
         <translation>فترة الاستقصاء (ميلي ثانية)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1388"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1390"/>
         <source>EtherNet/IP Project</source>
         <translation>مشروع EtherNet/IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1393"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1395"/>
         <source>EtherNet/IP</source>
         <translation>EtherNet/IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1422"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1424"/>
         <source>Controller Tags</source>
         <translation>وسوم المتحكم</translation>
     </message>
@@ -13300,107 +13377,107 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Iec104</name>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="377"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="379"/>
         <source>The connection is not configured: check the host and the port</source>
         <translation>الاتصال غير مُهيأ: تحقق من المضيف والمنفذ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="432"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="434"/>
         <source>IEC 104 Connection Failed</source>
         <translation>فشل اتصال IEC 104</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="433"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="435"/>
         <source>Cannot connect to %1:%2 (%3)</source>
         <translation>تعذر الاتصال بـ %1:%2 (%3)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="471"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="473"/>
         <source>The station sent more than the receive buffer holds</source>
         <translation>أرسلت المحطة بيانات أكثر مما يتسع له مخزن الاستقبال</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="509"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="511"/>
         <source>The station sent a frame this link could not decode</source>
         <translation>أرسلت المحطة إطارًا لا يمكن لهذا الرابط فك تشفيره</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="655"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="657"/>
         <source>The station did not answer within t1</source>
         <translation>لم تستجب المحطة خلال t1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="759"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="761"/>
         <source>IEC 104 Connection Lost</source>
         <translation>فُقد اتصال IEC 104</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="881"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="883"/>
         <source>Not connected</source>
         <translation>غير متصل</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="884"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="886"/>
         <source>Starting data transfer…</source>
         <translation>بدء نقل البيانات…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="886"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="888"/>
         <source>Monitoring %1 point(s) from station %2</source>
         <translation>مراقبة %1 نقطة من المحطة %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1167"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1169"/>
         <source>Host</source>
         <translation>المضيف</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1174"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1176"/>
         <source>Port</source>
         <translation>المنفذ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1183"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1185"/>
         <source>Common Address</source>
         <translation>العنوان المشترك</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1195"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1197"/>
         <source>Send Window (k)</source>
         <translation>نافذة الإرسال (k)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1195"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1197"/>
         <source>Ack Window (w)</source>
         <translation>نافذة الإقرار (w)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1208"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1210"/>
         <source>Timeout t%1 (ms)</source>
         <translation>المهلة t%1 (مللي ثانية)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1332"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1334"/>
         <source>IEC 60870-5-104 Project</source>
         <translation>مشروع IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1337"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1339"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1367"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1369"/>
         <source>Status Points</source>
         <translation>نقاط الحالة</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1368"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1370"/>
         <source>Counters</source>
         <translation>العدادات</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1368"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1370"/>
         <source>Measurements</source>
         <translation>القياسات</translation>
     </message>
@@ -13444,72 +13521,72 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::MQTT</name>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="60"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="64"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="61"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="65"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="62"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="66"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="64"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="68"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="65"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="69"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="66"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="70"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3 أو أحدث</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="67"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="71"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2 أو أحدث</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="68"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="72"/>
         <source>Any Protocol</source>
         <translation>أي بروتوكول</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="69"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="73"/>
         <source>Secure Protocols Only</source>
         <translation>البروتوكولات الآمنة فقط</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="71"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="75"/>
         <source>None</source>
         <translation>بدون</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="72"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="76"/>
         <source>Query Peer</source>
         <translation>استعلام النظير</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="73"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="77"/>
         <source>Verify Peer</source>
         <translation>التحقق من النظير</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="74"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="78"/>
         <source>Auto Verify Peer</source>
         <translation>التحقق التلقائي من النظير</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="183"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="187"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>ميزة MQTT تتطلب ترخيصاً تجارياً</translation>
     </message>
@@ -13518,157 +13595,157 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">الاشتراك في وسيط MQTT متاح فقط مع ترخيص Serial Studio تجاري صالح (مستوى Hobbyist أو أعلى).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="184"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="188"/>
         <source>Subscribing to an MQTT broker is only available with a valid Serial Studio license or an active trial.</source>
         <translation>الاشتراك في وسيط MQTT متاح فقط مع ترخيص Serial Studio صالح أو فترة تجريبية نشطة.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="441"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="445"/>
         <source>Use System Database</source>
         <translation>استخدام قاعدة بيانات النظام</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="442"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="446"/>
         <source>Load From Folder…</source>
         <translation>تحميل من مجلد…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="475"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="479"/>
         <source>Select PEM Certificates Directory</source>
         <translation>تحديد دليل شهادات PEM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="768"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="772"/>
         <source>Hostname</source>
         <translation>اسم المضيف</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="775"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="779"/>
         <source>Port</source>
         <translation>المنفذ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="784"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="788"/>
         <source>Topic Filter</source>
         <translation>مرشح الموضوع</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="791"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="795"/>
         <source>Sparkplug</source>
         <translation>Sparkplug</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="798"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="802"/>
         <source>Sparkplug Group ID</source>
         <translation>معرّف مجموعة Sparkplug</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="805"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="809"/>
         <source>Client ID</source>
         <translation>معرف العميل</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="812"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="816"/>
         <source>Username</source>
         <translation>اسم المستخدم</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="819"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="823"/>
         <source>Password</source>
         <translation>كلمة المرور</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="826"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="830"/>
         <source>MQTT Version</source>
         <translation>إصدار MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="834"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="838"/>
         <source>Clean Session</source>
         <translation>جلسة نظيفة</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="841"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="845"/>
         <source>Keep Alive (s)</source>
         <translation>الإبقاء على الاتصال (ث)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="850"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="854"/>
         <source>Auto Keep Alive</source>
         <translation>الإبقاء على الاتصال تلقائيًا</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="867"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="871"/>
         <source>SSL/TLS Enabled</source>
         <translation>SSL/TLS مُفعّل</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="877"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="881"/>
         <source>SSL Protocol</source>
         <translation>بروتوكول SSL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="885"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="889"/>
         <source>Peer Verify Mode</source>
         <translation>وضع التحقق من النظير</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="893"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="897"/>
         <source>Peer Verify Depth</source>
         <translation>عمق التحقق من النظير</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="902"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="906"/>
         <source>Client Certificate (PEM)</source>
         <translation>شهادة العميل (PEM)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="909"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="913"/>
         <source>Private Key (PEM)</source>
         <translation>المفتاح الخاص (PEM)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="916"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="920"/>
         <source>ALPN (MQTT over port 443)</source>
         <translation>ALPN (MQTT عبر المنفذ 443)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="924"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="928"/>
         <source>ALPN Protocol</source>
         <translation>بروتوكول ALPN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1069"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1073"/>
         <source>The broker closed the connection during the attempt</source>
         <translation>أغلق الوسيط الاتصال أثناء المحاولة</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1084"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1088"/>
         <source>MQTT Subscription Error</source>
         <translation>خطأ في اشتراك MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1085"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1089"/>
         <source>Failed to subscribe to topic "%1".</source>
         <translation>فشل الاشتراك في الموضوع "%1".</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1338"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1342"/>
         <source>MQTT Client Certificate Error</source>
         <translation>خطأ في شهادة عميل MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1355"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1359"/>
         <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
         <translation>ملفات PEM (*.pem *.crt *.cer *.key);;جميع الملفات (*)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1381"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1385"/>
         <source>Select Client Certificate</source>
         <translation>اختر شهادة العميل</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1389"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1393"/>
         <source>Select Private Key</source>
         <translation>اختر المفتاح الخاص</translation>
     </message>
@@ -13677,97 +13754,97 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">أغلق الوسيط الاتصال.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1112"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1116"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>إصدار بروتوكول MQTT غير صالح</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1113"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1117"/>
         <source>The broker rejected the configured MQTT protocol version.</source>
         <translation>رفض الوسيط إصدار بروتوكول MQTT المُحدد.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1116"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1120"/>
         <source>Client ID Rejected</source>
         <translation>رُفض معرّف العميل</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1117"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1121"/>
         <source>The broker rejected the client ID. Try a different identifier.</source>
         <translation>رفض الوسيط معرّف العميل. جرّب معرّفاً مختلفاً.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1120"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1124"/>
         <source>MQTT Server Unavailable</source>
         <translation>خادم MQTT غير متاح</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1121"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1125"/>
         <source>The broker is currently unavailable. Retry later.</source>
         <translation>الوسيط غير متاح حالياً. أعد المحاولة لاحقاً.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1124"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1128"/>
         <source>Authentication Error</source>
         <translation>خطأ في المصادقة</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1125"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1129"/>
         <source>The credentials provided were rejected by the broker.</source>
         <translation>رفض الوسيط بيانات الاعتماد المُقدمة.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1128"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1132"/>
         <source>Authorization Error</source>
         <translation>خطأ في التفويض</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1129"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1133"/>
         <source>Account lacks permission for this operation.</source>
         <translation>الحساب لا يملك صلاحية لهذه العملية.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1132"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1136"/>
         <source>Network or Transport Error</source>
         <translation>خطأ في الشبكة أو النقل</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1133"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1137"/>
         <source>Network/transport layer issue while connecting to the broker.</source>
         <translation>مشكلة في طبقة الشبكة/النقل أثناء الاتصال بـ Broker.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1136"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1140"/>
         <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
         <translation>تم تكوين شهادة عميل: تحقق من مطابقتها للمفتاح الخاص وتفعيلها على الوسيط.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1141"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1145"/>
         <source>MQTT Protocol Violation</source>
         <translation>انتهاك بروتوكول MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1142"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1146"/>
         <source>The broker reported a protocol violation and closed the connection.</source>
         <translation>أبلغ Broker عن انتهاك للبروتوكول وأغلق الاتصال.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1145"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1149"/>
         <source>MQTT 5 Error</source>
         <translation>خطأ MQTT 5</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1146"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1150"/>
         <source>An MQTT 5 protocol-level error occurred.</source>
         <translation>حدث خطأ على مستوى بروتوكول MQTT 5.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1149"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1153"/>
         <source>MQTT Error</source>
         <translation>خطأ MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1150"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1154"/>
         <source>An unexpected MQTT error occurred.</source>
         <translation>حدث خطأ MQTT غير متوقع.</translation>
     </message>
@@ -13803,27 +13880,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
     </message>
     <message>
         <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="644"/>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="680"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="677"/>
         <source>Sparkplug Project Generator</source>
         <translation>مُنشئ مشروع Sparkplug</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="656"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="653"/>
         <source>Failed to load generated project</source>
         <translation>فشل تحميل المشروع المُنشأ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="657"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="654"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>تعذر تحميل JSON للمشروع المُنشأ.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="675"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="672"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>تم إنشاء المشروع بنجاح مع %1 مجموعة و %2 مجموعة بيانات.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="678"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="675"/>
         <source>The project editor is now open for customization.</source>
         <translation>محرر المشروع مفتوح الآن للتخصيص.</translation>
     </message>
@@ -13831,37 +13908,37 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Modbus</name>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="343"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="345"/>
         <source>Invalid Serial Port</source>
         <translation>منفذ تسلسلي غير صالح</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="344"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="346"/>
         <source>The selected serial port "%1" is no longer available. Refresh the port list and try again.</source>
         <translation>المنفذ التسلسلي المحدد "%1" لم يعد متاحاً. قم بتحديث قائمة المنافذ وحاول مرة أخرى.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="387"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="389"/>
         <source>Modbus Initialization Failed</source>
         <translation>فشل تهيئة Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="388"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="390"/>
         <source>Unable to create Modbus device. Check your system configuration and try again.</source>
         <translation>تعذر إنشاء جهاز Modbus. تحقق من إعدادات النظام وأعد المحاولة.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="410"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="412"/>
         <source>Nothing is listening at %1</source>
         <translation>لا يوجد شيء يستمع على %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="468"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="470"/>
         <source>Modbus Connection Failed</source>
         <translation>فشل اتصال Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="470"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="472"/>
         <source>Unable to connect to "%1". Check your connection settings.</source>
         <translation>تعذر الاتصال بـ "%1". تحقق من إعدادات الاتصال.</translation>
     </message>
@@ -13870,7 +13947,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">رفض عميل Modbus بدء الاتصال.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="471"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="473"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
@@ -13879,62 +13956,62 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">انتهت مهلة محاولة الاتصال</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="587"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="589"/>
         <source>None</source>
         <translation>بدون</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="588"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="590"/>
         <source>Even</source>
         <translation>زوجي</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="589"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="591"/>
         <source>Odd</source>
         <translation>فردي</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="590"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="592"/>
         <source>Space</source>
         <translation>مسافة</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="591"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="593"/>
         <source>Mark</source>
         <translation>علامة</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="643"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="645"/>
         <source>Holding Registers (0x03)</source>
         <translation>سجلات الاحتفاظ (0x03)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="644"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="646"/>
         <source>Input Registers (0x04)</source>
         <translation>سجلات الإدخال (0x04)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="645"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="647"/>
         <source>Coils (0x01)</source>
         <translation>الملفات (0x01)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="646"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="648"/>
         <source>Discrete Inputs (0x02)</source>
         <translation>مداخل منفصلة (0x02)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="803"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="805"/>
         <source>No register groups configured</source>
         <translation>لم يتم تكوين مجموعات سجلات</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="804"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="806"/>
         <source>Add at least one register group before generating a project.</source>
         <translation>أضف مجموعة سجلات واحدة على الأقل قبل إنشاء المشروع.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="806"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="808"/>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="844"/>
         <source>Modbus Project Generator</source>
         <translation>مولّد مشروع Modbus</translation>
@@ -14268,7 +14345,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::OpcUa</name>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="410"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="338"/>
         <source>OPC UA Initialization Failed</source>
         <translation>فشل تهيئة OPC UA</translation>
     </message>
@@ -14277,30 +14354,29 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">الواجهة الخلفية %1 غير متوفرة في هذا الإصدار.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="584"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="500"/>
         <source>OPC UA Connection Failed</source>
         <translation>فشل اتصال OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="585"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="501"/>
         <source>Unable to connect to "%1".</source>
         <translation>تعذر الاتصال بـ "%1".</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="586"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="732"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="832"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1915"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="502"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="648"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1290"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="602"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="518"/>
         <source>OPC UA Connection Lost</source>
         <translation>فُقد اتصال OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="616"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="532"/>
         <source>Timed out after %1 s</source>
         <translation>انتهت المهلة بعد %1 ثانية</translation>
     </message>
@@ -14309,7 +14385,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">أغلق الخادم الاتصال</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="662"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="578"/>
         <source>The server closed the session</source>
         <translation>أغلق الخادم الجلسة</translation>
     </message>
@@ -14354,13 +14430,13 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">حدث خطأ غير متوقع في الواجهة الخلفية</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="688"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="604"/>
         <source>"%1" is not a valid endpoint URL</source>
         <translation>"%1" ليس عنوان URL صالح لنقطة النهاية</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="689"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1915"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="605"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1290"/>
         <source>OPC UA Discovery</source>
         <translation>اكتشاف OPC UA</translation>
     </message>
@@ -14369,12 +14445,12 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">الواجهة الخلفية %1 غير متوفرة في هذا الإصدار</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="731"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="647"/>
         <source>Discovery failed: %1</source>
         <translation>فشل الاكتشاف: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="732"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="648"/>
         <source>OPC UA Discovery Failed</source>
         <translation>فشل اكتشاف OPC UA</translation>
     </message>
@@ -14383,85 +14459,76 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">لا توجد نقطة نهاية بسياسة None؛ القنوات الآمنة غير مدعومة في هذا الإصدار</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="402"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="330"/>
         <source>The connection is not configured: check the endpoint and the tag list</source>
         <translation>الاتصال غير مُهيأ: تحقق من نقطة النهاية وقائمة الوسوم</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="409"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="697"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="337"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="613"/>
         <source>The %1 stack is not available in this build</source>
         <translation>مكدس %1 غير متوفر في هذا الإصدار</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="452"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="376"/>
         <source>The connection attempt could not be started</source>
         <translation>تعذر بدء محاولة الاتصال</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="466"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="390"/>
         <source>OPC UA Certificate</source>
         <translation>شهادة OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="467"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="391"/>
         <source>The client certificate could not be generated; secure channels will be refused.</source>
         <translation>تعذر إنشاء شهادة العميل؛ سيتم رفض القنوات الآمنة.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="730"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="646"/>
         <source>The server did not answer within %1 s</source>
         <translation>لم يستجب الخادم خلال %1 ث</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="762"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="678"/>
         <source>Endpoint discovery failed</source>
         <translation>فشل اكتشاف نقطة النهاية</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="831"/>
         <source>OPC UA Monitored Item Refused</source>
-        <translation>عنصر OPC UA المراقب مرفوض</translation>
+        <translation type="vanished">عنصر OPC UA المراقب مرفوض</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="838"/>
         <source>the server refused every monitored item</source>
-        <translation>رفض الخادم كل عنصر مراقب</translation>
+        <translation type="vanished">رفض الخادم كل عنصر مراقب</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="858"/>
         <source>the server retired the subscription</source>
-        <translation>سحب الخادم الاشتراك</translation>
+        <translation type="vanished">سحب الخادم الاشتراك</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="894"/>
         <source>OPC UA Subscription Unavailable</source>
-        <translation>اشتراك OPC UA غير متاح</translation>
+        <translation type="vanished">اشتراك OPC UA غير متاح</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="895"/>
         <source>Falling back to polling: %1.</source>
-        <translation>العودة إلى الاستقصاء: %1.</translation>
+        <translation type="vanished">العودة إلى الاستقصاء: %1.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="921"/>
         <source>no notification for %1 s</source>
-        <translation>لا يوجد إشعار لمدة %1 ث</translation>
+        <translation type="vanished">لا يوجد إشعار لمدة %1 ث</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="974"/>
         <source>OPC UA Read Failed</source>
-        <translation>فشلت قراءة OPC UA</translation>
+        <translation type="vanished">فشلت قراءة OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1019"/>
         <source>OPC UA Type Mismatch</source>
-        <translation>عدم تطابق نوع OPC UA</translation>
+        <translation type="vanished">عدم تطابق نوع OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1020"/>
         <source>Channel %1 is declared %2 but the server sends %3; the value is coerced.</source>
-        <translation>القناة %1 معلنة كـ %2 لكن الخادم يرسل %3؛ تم تحويل القيمة.</translation>
+        <translation type="vanished">القناة %1 معلنة كـ %2 لكن الخادم يرسل %3؛ تم تحويل القيمة.</translation>
     </message>
     <message>
         <source>Browse of %1 failed: %2</source>
@@ -14488,106 +14555,94 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">تعذر فتح جلسة استعراض على %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1131"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="738"/>
         <source>Failed to load generated project</source>
         <translation>فشل تحميل المشروع المُنشأ</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1132"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="739"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>تعذر تحميل JSON للمشروع المُنشأ.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1146"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="753"/>
         <source>No tags selected</source>
         <translation>لم يتم تحديد أي وسوم</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1147"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="754"/>
         <source>Browse the server and select at least one tag before generating a project.</source>
         <translation>استعرض الخادم وحدد وسماً واحداً على الأقل قبل إنشاء المشروع.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1150"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1174"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="757"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="781"/>
         <source>OPC UA Project Generator</source>
         <translation>مُنشئ مشروع OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1169"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="776"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>تم إنشاء المشروع بنجاح مع %1 مجموعة و %2 مجموعة بيانات.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1172"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="779"/>
         <source>The project editor is now open for customization.</source>
         <translation>محرر المشروع مفتوح الآن للتخصيص.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1220"/>
         <source>OPC UA Project</source>
-        <translation>مشروع OPC UA</translation>
+        <translation type="vanished">مشروع OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1225"/>
         <source>OPC UA</source>
-        <translation>OPC UA</translation>
+        <translation type="vanished">OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1252"/>
         <source>Tags</source>
-        <translation>الوسوم</translation>
+        <translation type="vanished">الوسوم</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1304"/>
         <source> (deprecated)</source>
-        <translation>(مُهمل)</translation>
+        <translation type="vanished">(مُهمل)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1320"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1973"/>
         <source>None</source>
-        <translation>بدون</translation>
+        <translation type="vanished">بدون</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1322"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1973"/>
         <source>Sign</source>
-        <translation>توقيع</translation>
+        <translation type="vanished">توقيع</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1324"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1973"/>
         <source>Sign and Encrypt</source>
-        <translation>توقيع وتشفير</translation>
+        <translation type="vanished">توقيع وتشفير</translation>
     </message>
     <message>
         <source>Sign &amp;&amp; Encrypt</source>
         <translation type="vanished">توقيع وتشفير</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1329"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1973"/>
         <source>Invalid</source>
-        <translation>غير صالح</translation>
+        <translation type="vanished">غير صالح</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2234"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1518"/>
         <source>Security Policy</source>
         <translation>سياسة الأمان</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2242"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1526"/>
         <source>Security Mode</source>
         <translation>وضع الأمان</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2250"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1534"/>
         <source>User Certificate</source>
         <translation>شهادة المستخدم</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2257"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1541"/>
         <source>User Private Key</source>
         <translation>المفتاح الخاص للمستخدم</translation>
     </message>
@@ -14596,59 +14651,58 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">توقيع وتشفير</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1452"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="859"/>
         <source>Connecting to %1</source>
         <translation>الاتصال بـ %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1455"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="862"/>
         <source>Not connected</source>
         <translation>غير متصل</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1461"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="870"/>
         <source>Subscribing, %1 of %2 tags</source>
         <translation>الاشتراك، %1 من %2 وسم</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1466"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="875"/>
         <source>Subscribed %1 tags, polling %2 refused, %3 Hz</source>
         <translation>تم الاشتراك بـ %1 وسم، رفض الاستقصاء لـ %2، %3 هرتز</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1472"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="881"/>
         <source>Polling (server refused subscriptions), %1 tags, %2 Hz</source>
         <translation>الاستقصاء (رفض الخادم الاشتراكات)، %1 وسم، %2 هرتز</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1476"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="885"/>
         <source>Subscribed, %1 tags, %2 Hz</source>
         <translation>تم الاشتراك، %1 وسم، %2 هرتز</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1514"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="915"/>
         <source>Anonymous</source>
         <translation>مجهول</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1514"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="915"/>
         <source>Username / Password</source>
         <translation>اسم المستخدم / كلمة المرور</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1514"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="915"/>
         <source>X.509 Certificate</source>
         <translation>شهادة X.509</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1914"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1289"/>
         <source>No endpoint this build can open with the selected identity</source>
         <translation>لا توجد نقطة نهاية يمكن لهذا الإصدار فتحها بالهوية المحددة</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1942"/>
         <source>%1 (deprecated)</source>
-        <translation>%1 (مهمل)</translation>
+        <translation type="vanished">%1 (مهمل)</translation>
     </message>
     <message>
         <source>The server certificate has expired</source>
@@ -14667,27 +14721,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">تعذر تحليل شهادة الخادم</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2196"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1480"/>
         <source>Endpoint URL</source>
         <translation>عنوان URL للنقطة الطرفية</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2203"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1487"/>
         <source>Authentication</source>
         <translation>المصادقة</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2211"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1495"/>
         <source>Username</source>
         <translation>اسم المستخدم</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2218"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1502"/>
         <source>Password</source>
         <translation>كلمة المرور</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2225"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1509"/>
         <source>Poll Interval (ms)</source>
         <translation>فترة الاستقصاء (ميلي ثانية)</translation>
     </message>
@@ -14761,6 +14815,59 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaCertificateStore.cpp" line="246"/>
         <source>The server certificate could not be parsed</source>
         <translation>تعذر تحليل شهادة الخادم</translation>
+    </message>
+</context>
+<context>
+    <name>IO::Drivers::OpcUaSubscriptions</name>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="195"/>
+        <source>OPC UA Monitored Item Refused</source>
+        <translation>عنصر OPC UA المراقب مرفوض</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="196"/>
+        <source>"%1": %2</source>
+        <translation>"%1": %2</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="202"/>
+        <source>the server refused every monitored item</source>
+        <translation>رفض الخادم كل عنصر مراقب</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="222"/>
+        <source>the server retired the subscription</source>
+        <translation>سحب الخادم الاشتراك</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="260"/>
+        <source>OPC UA Subscription Unavailable</source>
+        <translation>اشتراك OPC UA غير متاح</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="261"/>
+        <source>Falling back to polling: %1.</source>
+        <translation>العودة إلى الاستقصاء: %1.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="287"/>
+        <source>no notification for %1 s</source>
+        <translation>لا يوجد إشعار لمدة %1 ث</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="343"/>
+        <source>OPC UA Read Failed</source>
+        <translation>فشلت قراءة OPC UA</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="431"/>
+        <source>OPC UA Type Mismatch</source>
+        <translation>عدم تطابق نوع OPC UA</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="432"/>
+        <source>Channel %1 is declared %2 but the server sends %3; the value is coerced.</source>
+        <translation>القناة %1 معلنة كـ %2 لكن الخادم يرسل %3؛ تم تحويل القيمة.</translation>
     </message>
 </context>
 <context>
@@ -14902,92 +15009,92 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::S7</name>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="773"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="775"/>
         <source>The connection is not configured: check the host and the variable list</source>
         <translation>الاتصال غير مُهيأ: تحقق من المضيف وقائمة المتغيرات</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="795"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="797"/>
         <source>S7 Connection Failed</source>
         <translation>فشل اتصال S7</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="796"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="798"/>
         <source>"%1" (rack %2, slot %3): %4</source>
         <translation>"%1" (رف %2، فتحة %3): %4</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="800"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="802"/>
         <source>the controller did not answer</source>
         <translation>المتحكم لم يستجب</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="843"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="845"/>
         <source>S7 Connection Lost</source>
         <translation>فُقد اتصال S7</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="914"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="916"/>
         <source>Not connected</source>
         <translation>غير متصل</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="917"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="919"/>
         <source>Polling %1 variables at %2 Hz</source>
         <translation>استقصاء %1 متغير بمعدل %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="933"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="935"/>
         <source>invalid</source>
         <translation>غير صالح</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="951"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="953"/>
         <source>The address could not be parsed.</source>
         <translation>تعذر تحليل العنوان.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1175"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1177"/>
         <source>S7 Address</source>
         <translation>عنوان S7</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1226"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1228"/>
         <source>Host</source>
         <translation>المضيف</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1233"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1235"/>
         <source>Rack</source>
         <translation>الرف</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1242"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1244"/>
         <source>Slot</source>
         <translation>الفتحة</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1251"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1253"/>
         <source>Poll Interval (ms)</source>
         <translation>فترة الاستقصاء (ميلي ثانية)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1371"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1373"/>
         <source>Siemens S7 Project</source>
         <translation>مشروع Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1376"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1378"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1405"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1407"/>
         <source>DB%1</source>
         <translation>DB%1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1405"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1407"/>
         <source>Memory</source>
         <translation>الذاكرة</translation>
     </message>
@@ -15608,49 +15715,49 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation>بدء نقل %1…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="617"/>
-        <location filename="../../src/IO/FileTransmission.cpp" line="639"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="614"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="636"/>
         <source>Transmission complete</source>
         <translation>اكتمل الإرسال</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="619"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="616"/>
         <source>Plain text transmission complete</source>
         <translation>اكتمل إرسال النص العادي</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="641"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="638"/>
         <source>Raw binary transmission complete (%1 bytes)</source>
         <translation>اكتمل إرسال البيانات الثنائية الخام (%1 بايت)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="665"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="662"/>
         <source>Transfer complete</source>
         <translation>اكتمل النقل</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="666"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="663"/>
         <source>Transfer completed successfully (%1 bytes)</source>
         <translation>اكتمل النقل بنجاح (%1 بايت)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="668"/>
-        <location filename="../../src/IO/FileTransmission.cpp" line="669"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="665"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="666"/>
         <source>Transfer failed: %1</source>
         <translation>فشل النقل: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="754"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="751"/>
         <source>%1 B/s</source>
         <translation>%1 بايت/ث</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="756"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="753"/>
         <source>%1 KB/s</source>
         <translation>%1 كيلوبايت/ث</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="758"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="755"/>
         <source>%1 MB/s</source>
         <translation>%1 ميجابايت/ث</translation>
     </message>
@@ -19463,6 +19570,14 @@ Add groups above to poll multiple register types.</source>
     </message>
 </context>
 <context>
+    <name>NodeTransform</name>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/NodeTransform.qml" line="60"/>
+        <source>Open the transform code editor for this dataset.</source>
+        <translation>فتح محرر كود التحويل لمجموعة البيانات هذه.</translation>
+    </message>
+</context>
+<context>
     <name>NotificationLog</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/NotificationLog.qml" line="137"/>
@@ -20512,9 +20627,100 @@ Add groups above to poll multiple register types.</source>
     </message>
 </context>
 <context>
+    <name>PlotFormatter</name>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotFormatter.qml" line="411"/>
+        <source>Drag to move, right-click to clear</source>
+        <translation>اسحب للتحريك، انقر بالزر الأيمن للمسح</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotFormatter.qml" line="412"/>
+        <source>ΔX: %1  ΔY: %2</source>
+        <translation>ΔX: %1  ΔY: %2</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotFormatter.qml" line="414"/>
+        <location filename="../../qml/Widgets/PlotWidget/PlotFormatter.qml" line="421"/>
+        <source>%1 — %2</source>
+        <translation>%1 — %2</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotFormatter.qml" line="418"/>
+        <source>%1  1/ΔX: %2</source>
+        <translation>%1  1/ΔX: %2</translation>
+    </message>
+</context>
+<context>
+    <name>PlotMarkerPopup</name>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="50"/>
+        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="59"/>
+        <source>M%1</source>
+        <translation>M%1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="67"/>
+        <source>Marker name:</source>
+        <translation>اسم العلامة:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="79"/>
+        <source>Add</source>
+        <translation>إضافة</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="84"/>
+        <source>Cancel</source>
+        <translation>إلغاء</translation>
+    </message>
+</context>
+<context>
+    <name>PlotRulerMenu</name>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotRulerMenu.qml" line="49"/>
+        <source>Add marker here...</source>
+        <translation>إضافة علامة هنا...</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotRulerMenu.qml" line="56"/>
+        <source>Remove marker "%1"</source>
+        <translation>إزالة العلامة "%1"</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotRulerMenu.qml" line="62"/>
+        <source>Clear all markers</source>
+        <translation>مسح جميع العلامات</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotRulerMenu.qml" line="71"/>
+        <source>Set time zero here</source>
+        <translation>تعيين الصفر الزمني هنا</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotRulerMenu.qml" line="71"/>
+        <source>Set zero here</source>
+        <translation>تعيين الصفر هنا</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotRulerMenu.qml" line="77"/>
+        <source>Reset time zero</source>
+        <translation>إعادة تعيين الصفر الزمني</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotRulerMenu.qml" line="77"/>
+        <source>Reset zero</source>
+        <translation>إعادة تعيين الصفر</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotRulerMenu.qml" line="85"/>
+        <source>Hover marker</source>
+        <translation>علامة التمرير</translation>
+    </message>
+</context>
+<context>
     <name>PlotWidget</name>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1999"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="844"/>
         <source>Time</source>
         <translation>الوقت</translation>
     </message>
@@ -20523,99 +20729,81 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">ΔX: %1  ΔY: %2 — اسحب للتحريك، انقر بالزر الأيمن للمسح</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="554"/>
         <source>Drag to move, right-click to clear</source>
-        <translation>اسحب للتحريك، انقر بالزر الأيمن للمسح</translation>
+        <translation type="vanished">اسحب للتحريك، انقر بالزر الأيمن للمسح</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="555"/>
         <source>ΔX: %1  ΔY: %2</source>
-        <translation>ΔX: %1  ΔY: %2</translation>
+        <translation type="vanished">ΔX: %1  ΔY: %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="557"/>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="564"/>
         <source>%1 — %2</source>
-        <translation>%1 — %2</translation>
+        <translation type="vanished">%1 — %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="561"/>
         <source>%1  1/ΔX: %2</source>
-        <translation>%1  1/ΔX: %2</translation>
+        <translation type="vanished">%1  1/ΔX: %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1490"/>
         <source>Add marker here...</source>
-        <translation>إضافة علامة هنا...</translation>
+        <translation type="vanished">إضافة علامة هنا...</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1497"/>
         <source>Remove marker "%1"</source>
-        <translation>إزالة العلامة "%1"</translation>
+        <translation type="vanished">إزالة العلامة "%1"</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1503"/>
         <source>Clear all markers</source>
-        <translation>مسح جميع العلامات</translation>
+        <translation type="vanished">مسح جميع العلامات</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1512"/>
         <source>Set time zero here</source>
-        <translation>تعيين الصفر الزمني هنا</translation>
+        <translation type="vanished">تعيين الصفر الزمني هنا</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1512"/>
         <source>Set zero here</source>
-        <translation>تعيين الصفر هنا</translation>
+        <translation type="vanished">تعيين الصفر هنا</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1518"/>
         <source>Reset time zero</source>
-        <translation>إعادة تعيين الصفر الزمني</translation>
+        <translation type="vanished">إعادة تعيين الصفر الزمني</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1518"/>
         <source>Reset zero</source>
-        <translation>إعادة تعيين الصفر</translation>
+        <translation type="vanished">إعادة تعيين الصفر</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1526"/>
         <source>Hover marker</source>
-        <translation>علامة التمرير</translation>
+        <translation type="vanished">علامة التمرير</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1548"/>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1556"/>
         <source>M%1</source>
-        <translation>M%1</translation>
+        <translation type="vanished">M%1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1564"/>
         <source>Marker name:</source>
-        <translation>اسم العلامة:</translation>
+        <translation type="vanished">اسم العلامة:</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1576"/>
         <source>Add</source>
-        <translation>إضافة</translation>
+        <translation type="vanished">إضافة</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1581"/>
         <source>Cancel</source>
-        <translation>إلغاء</translation>
+        <translation type="vanished">إلغاء</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="2000"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="845"/>
         <source>%1 from zero</source>
         <translation>%1 من الصفر</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="2026"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="871"/>
         <source>Click to place cursor</source>
         <translation>انقر لوضع المؤشر</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="2028"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="873"/>
         <source>Click to place second cursor — Drag to move</source>
         <translation>انقر لوضع المؤشر الثاني — اسحب للتحريك</translation>
     </message>
@@ -21342,7 +21530,7 @@ Click Refresh to update the list.</source>
         <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="312"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="494"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="521"/>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="912"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="791"/>
         <source>This action cannot be undone.</source>
         <translation>لا يمكن التراجع عن هذا الإجراء.</translation>
     </message>
@@ -21398,7 +21586,7 @@ Click Refresh to update the list.</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="706"/>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="311"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="343"/>
         <source>Untitled Project</source>
         <translation>مشروع بدون عنوان</translation>
     </message>
@@ -21409,463 +21597,463 @@ Click Refresh to update the list.</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="715"/>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="290"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="322"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
-        <translation type="unfinished">ملفات مشروع Serial Studio (*.ssproj)</translation>
+        <translation>ملفات مشروع Serial Studio (*.ssproj)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="750"/>
         <source>File open error</source>
-        <translation type="unfinished">خطأ في فتح الملف</translation>
+        <translation>خطأ في فتح الملف</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="869"/>
         <source>Device A</source>
-        <translation type="unfinished"/>
+        <translation>الجهاز أ</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="922"/>
         <source>Multi-source projects require a Pro license</source>
-        <translation type="unfinished">المشاريع متعددة المصادر تتطلب ترخيص Pro</translation>
+        <translation>المشاريع متعددة المصادر تتطلب ترخيص Pro</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="923"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
-        <translation type="unfinished">يحتوي هذا المشروع على مصادر بيانات متعددة. تم تحميل المصدر الأول فقط. يلزم ترخيص Serial Studio Pro لاستخدام المشاريع متعددة المصادر.</translation>
+        <translation>يحتوي هذا المشروع على مصادر بيانات متعددة. تم تحميل المصدر الأول فقط. يلزم ترخيص Serial Studio Pro لاستخدام المشاريع متعددة المصادر.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="1015"/>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="1033"/>
         <source>Workspace IDs remapped on load</source>
-        <translation type="unfinished">تم إعادة تعيين معرفات مساحة العمل عند التحميل</translation>
+        <translation>تم إعادة تعيين معرفات مساحة العمل عند التحميل</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="1016"/>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="1034"/>
         <source>%1 custom workspace ID(s) overlapped the new reserved auto range and were moved into the user range. Save the project to make the remap permanent.</source>
-        <translation type="unfinished">%1 من معرفات مساحات العمل المخصصة تداخلت مع النطاق التلقائي المحجوز الجديد وتم نقلها إلى نطاق المستخدم. احفظ المشروع لجعل إعادة التعيين دائمة.</translation>
+        <translation>%1 من معرفات مساحات العمل المخصصة تداخلت مع النطاق التلقائي المحجوز الجديد وتم نقلها إلى نطاق المستخدم. احفظ المشروع لجعل إعادة التعيين دائمة.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="248"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="280"/>
         <source>Do you want to save your changes?</source>
-        <translation type="unfinished">حفظ التغييرات؟</translation>
+        <translation>حفظ التغييرات؟</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="249"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="281"/>
         <source>You have unsaved modifications in this project!</source>
-        <translation type="unfinished">يوجد تعديلات غير محفوظة في هذا المشروع!</translation>
+        <translation>يوجد تعديلات غير محفوظة في هذا المشروع!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="288"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="320"/>
         <source>Save Serial Studio Project</source>
-        <translation type="unfinished">حفظ مشروع Serial Studio</translation>
+        <translation>حفظ مشروع Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="381"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="413"/>
         <source>File save error</source>
-        <translation type="unfinished">خطأ في حفظ الملف</translation>
+        <translation>خطأ في حفظ الملف</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="589"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="621"/>
         <source>Project file removed from disk</source>
-        <translation type="unfinished">تمت إزالة ملف المشروع من القرص</translation>
+        <translation>تمت إزالة ملف المشروع من القرص</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="590"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="622"/>
         <source>%1 was deleted or renamed by another program. Save the project to recreate it.</source>
-        <translation type="unfinished">تم حذف %1 أو إعادة تسميته بواسطة برنامج آخر. احفظ المشروع لإعادة إنشائه.</translation>
+        <translation>تم حذف %1 أو إعادة تسميته بواسطة برنامج آخر. احفظ المشروع لإعادة إنشائه.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="613"/>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="635"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="645"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="667"/>
         <source>Project file changed on disk</source>
-        <translation type="unfinished">تغيّر ملف المشروع على القرص</translation>
+        <translation>تغيّر ملف المشروع على القرص</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="614"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="646"/>
         <source>%1 was modified by another program. The in-memory project was kept; reopen the file to load the external changes.</source>
-        <translation type="unfinished">تم تعديل %1 بواسطة برنامج آخر. تم الاحتفاظ بالمشروع في الذاكرة؛ أعد فتح الملف لتحميل التغييرات الخارجية.</translation>
+        <translation>تم تعديل %1 بواسطة برنامج آخر. تم الاحتفاظ بالمشروع في الذاكرة؛ أعد فتح الملف لتحميل التغييرات الخارجية.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="632"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="664"/>
         <source>The project file was modified by another program.
 
 Reload it and discard your unsaved changes?</source>
-        <translation type="unfinished">تم تعديل ملف المشروع بواسطة برنامج آخر.
+        <translation>تم تعديل ملف المشروع بواسطة برنامج آخر.
 
 إعادة تحميله وتجاهل التغييرات غير المحفوظة؟</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="634"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="666"/>
         <source>The project file was modified by another program.
 
 Reload it?</source>
-        <translation type="unfinished">تم تعديل ملف المشروع بواسطة برنامج آخر.
+        <translation>تم تعديل ملف المشروع بواسطة برنامج آخر.
 
 إعادة تحميله؟</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="55"/>
         <source>Add Output Panel</source>
-        <translation type="unfinished">إضافة لوحة إخراج</translation>
+        <translation>إضافة لوحة إخراج</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="57"/>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="96"/>
         <source>Output Controls</source>
-        <translation type="unfinished">عناصر التحكم في الإخراج</translation>
+        <translation>عناصر التحكم في الإخراج</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="71"/>
         <source>Add Output Widget</source>
-        <translation type="unfinished">إضافة عنصر إخراج</translation>
+        <translation>إضافة عنصر إخراج</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="108"/>
         <source>New Button</source>
-        <translation type="unfinished">زر جديد</translation>
+        <translation>زر جديد</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="111"/>
         <source>New Slider</source>
-        <translation type="unfinished">شريط تمرير جديد</translation>
+        <translation>شريط تمرير جديد</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="114"/>
         <source>New Toggle</source>
-        <translation type="unfinished">مفتاح تبديل جديد</translation>
+        <translation>مفتاح تبديل جديد</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="117"/>
         <source>New Text Field</source>
-        <translation type="unfinished">حقل نص جديد</translation>
+        <translation>حقل نص جديد</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="120"/>
         <source>New Knob</source>
-        <translation type="unfinished">مقبض دوار جديد</translation>
+        <translation>مقبض دوار جديد</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="149"/>
         <source>Change Output Widget Type</source>
-        <translation type="unfinished">تغيير نوع عنصر الإخراج</translation>
+        <translation>تغيير نوع عنصر الإخراج</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="180"/>
         <source>Change Output Widget Icon</source>
-        <translation type="unfinished">تغيير أيقونة عنصر الإخراج</translation>
+        <translation>تغيير أيقونة عنصر الإخراج</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="208"/>
         <source>Edit Output Widget</source>
-        <translation type="unfinished">تحرير عنصر الإخراج</translation>
+        <translation>تحرير عنصر الإخراج</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="238"/>
         <source>Do you want to delete output widget "%1"?</source>
-        <translation type="unfinished">هل تريد حذف عنصر الإخراج "%1"؟</translation>
+        <translation>هل تريد حذف عنصر الإخراج "%1"؟</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="240"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="345"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="387"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="422"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="301"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="343"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="378"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
-        <translation type="unfinished">لا يمكن التراجع عن هذا الإجراء. هل تريد المتابعة؟</translation>
+        <translation>لا يمكن التراجع عن هذا الإجراء. هل تريد المتابعة؟</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="260"/>
         <source>Delete Output Widget</source>
-        <translation type="unfinished">حذف عنصر الإخراج</translation>
+        <translation>حذف عنصر الإخراج</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="303"/>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="376"/>
         <source>Duplicate Output Widget</source>
-        <translation type="unfinished">تكرار عنصر الإخراج</translation>
+        <translation>تكرار عنصر الإخراج</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="404"/>
         <source>Move Output Widget</source>
-        <translation type="unfinished">نقل عنصر الإخراج</translation>
+        <translation>نقل عنصر الإخراج</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectPresentation.cpp" line="541"/>
         <source>Rename Widget</source>
-        <translation type="unfinished">إعادة تسمية عنصر الواجهة</translation>
+        <translation>إعادة تسمية عنصر الواجهة</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectPresentation.cpp" line="542"/>
         <source>Display title (empty restores the original):</source>
-        <translation type="unfinished">عنوان العرض (فارغ يستعيد الأصلي):</translation>
+        <translation>عنوان العرض (فارغ يستعيد الأصلي):</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectPresentation.cpp" line="594"/>
         <location filename="../../src/DataModel/Project/ProjectPresentation.cpp" line="643"/>
         <source>Time</source>
-        <translation type="unfinished">الوقت</translation>
+        <translation>الوقت</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectPresentation.cpp" line="595"/>
         <source>Samples</source>
-        <translation type="unfinished">العينات</translation>
+        <translation>العينات</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="175"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="131"/>
         <source>Edit Group</source>
-        <translation type="unfinished">تحرير المجموعة</translation>
+        <translation>تحرير المجموعة</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="197"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="153"/>
         <source>Edit Dataset</source>
-        <translation type="unfinished">تحرير مجموعة البيانات</translation>
+        <translation>تحرير مجموعة البيانات</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="237"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="193"/>
         <source>Edit Action</source>
-        <translation type="unfinished">تحرير الإجراء</translation>
+        <translation>تحرير الإجراء</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="255"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="211"/>
         <source>Seed Dataset Aliases</source>
-        <translation type="unfinished">تعيين أسماء مستعارة لمجموعة البيانات</translation>
+        <translation>تعيين أسماء مستعارة لمجموعة البيانات</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="292"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="248"/>
         <source>Toggle Group</source>
-        <translation type="unfinished">تبديل المجموعة</translation>
+        <translation>تبديل المجموعة</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="315"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="271"/>
         <source>Toggle Dataset</source>
-        <translation type="unfinished">تبديل مجموعة البيانات</translation>
+        <translation>تبديل مجموعة البيانات</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="344"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="300"/>
         <source>Do you want to delete group "%1"?</source>
-        <translation type="unfinished">هل تريد حذف المجموعة "%1"؟</translation>
+        <translation>هل تريد حذف المجموعة "%1"؟</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="358"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="314"/>
         <source>Delete Group</source>
-        <translation type="unfinished">حذف المجموعة</translation>
+        <translation>حذف المجموعة</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="386"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="342"/>
         <source>Do you want to delete action "%1"?</source>
-        <translation type="unfinished">هل تريد حذف الإجراء "%1"؟</translation>
+        <translation>هل تريد حذف الإجراء "%1"؟</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="400"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="356"/>
         <source>Delete Action</source>
-        <translation type="unfinished">حذف الإجراء</translation>
+        <translation>حذف الإجراء</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="420"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="376"/>
         <source>Do you want to delete dataset "%1"?</source>
-        <translation type="unfinished">هل تريد حذف مجموعة البيانات "%1"؟</translation>
+        <translation>هل تريد حذف مجموعة البيانات "%1"؟</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="441"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="397"/>
         <source>Delete Dataset</source>
-        <translation type="unfinished">حذف مجموعة البيانات</translation>
+        <translation>حذف مجموعة البيانات</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="498"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1286"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="454"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1147"/>
         <source>Duplicate Group</source>
-        <translation type="unfinished">تكرار المجموعة</translation>
+        <translation>تكرار المجموعة</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="541"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1404"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="497"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1265"/>
         <source>Duplicate Action</source>
-        <translation type="unfinished">تكرار الإجراء</translation>
+        <translation>تكرار الإجراء</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="575"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1347"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="531"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1208"/>
         <source>Duplicate Dataset</source>
-        <translation type="unfinished">تكرار مجموعة البيانات</translation>
+        <translation>تكرار مجموعة البيانات</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="612"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="857"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="568"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="813"/>
         <source>Add Group</source>
-        <translation type="unfinished">إضافة مجموعة</translation>
+        <translation>إضافة مجموعة</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="648"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="604"/>
         <source>Group</source>
-        <translation type="unfinished"/>
+        <translation>مجموعة</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="657"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="613"/>
         <source>Add Dataset</source>
-        <translation type="unfinished">إضافة مجموعة بيانات</translation>
+        <translation>إضافة مجموعة بيانات</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="669"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="625"/>
         <source>New Dataset</source>
-        <translation type="unfinished">مجموعة بيانات جديدة</translation>
+        <translation>مجموعة بيانات جديدة</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="672"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="628"/>
         <source>New Plot</source>
-        <translation type="unfinished">رسم بياني جديد</translation>
+        <translation>رسم بياني جديد</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="676"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="632"/>
         <source>New FFT Plot</source>
-        <translation type="unfinished">مخطط FFT جديد</translation>
+        <translation>مخطط FFT جديد</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="680"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="636"/>
         <source>New Level Indicator</source>
-        <translation type="unfinished">مؤشر مستوى جديد</translation>
+        <translation>مؤشر مستوى جديد</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="684"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="640"/>
         <source>New Gauge</source>
-        <translation type="unfinished">مقياس جديد</translation>
+        <translation>مقياس جديد</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="688"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="644"/>
         <source>New Compass</source>
-        <translation type="unfinished">بوصلة جديدة</translation>
+        <translation>بوصلة جديدة</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="694"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="650"/>
         <source>New Meter</source>
-        <translation type="unfinished">مقياس جديد</translation>
+        <translation>مقياس جديد</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="698"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="654"/>
         <source>New LED Indicator</source>
-        <translation type="unfinished">مؤشر LED جديد</translation>
+        <translation>مؤشر LED جديد</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="702"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="658"/>
         <source>New Waterfall</source>
-        <translation type="unfinished">شلال جديد</translation>
+        <translation>شلال جديد</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="733"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="689"/>
         <source>Edit Canvas Datasets</source>
-        <translation type="unfinished">تحرير مجموعات بيانات اللوحة</translation>
+        <translation>تحرير مجموعات بيانات اللوحة</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="754"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="710"/>
         <source>Channel %1</source>
-        <translation type="unfinished">القناة %1</translation>
+        <translation>القناة %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="775"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="731"/>
         <source>Change Dataset Option</source>
-        <translation type="unfinished">تغيير خيار مجموعة البيانات</translation>
+        <translation>تغيير خيار مجموعة البيانات</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="827"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="783"/>
         <source>Add Action</source>
-        <translation type="unfinished">إضافة إجراء</translation>
+        <translation>إضافة إجراء</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="836"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="792"/>
         <source>New Action</source>
-        <translation type="unfinished">إجراء جديد</translation>
+        <translation>إجراء جديد</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="895"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="851"/>
         <source>Change Group Widget</source>
-        <translation type="unfinished">تغيير عنصر واجهة المجموعة</translation>
+        <translation>تغيير عنصر واجهة المجموعة</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="945"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="901"/>
         <source>Are you sure you want to change the group-level widget?</source>
-        <translation type="unfinished">هل أنت متأكد من تغيير عنصر واجهة مستوى المجموعة؟</translation>
+        <translation>هل أنت متأكد من تغيير عنصر واجهة مستوى المجموعة؟</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="946"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="902"/>
         <source>Existing datasets for this group are deleted</source>
-        <translation type="unfinished">سيتم حذف مجموعات البيانات الموجودة لهذه المجموعة</translation>
+        <translation>سيتم حذف مجموعات البيانات الموجودة لهذه المجموعة</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1019"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1020"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1021"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="78"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="79"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="80"/>
         <source>Accelerometer %1</source>
-        <translation type="unfinished">مقياس التسارع %1</translation>
+        <translation>مقياس التسارع %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1037"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1038"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1039"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="96"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="97"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="98"/>
         <source>Gyro %1</source>
-        <translation type="unfinished">الجيروسكوب %1</translation>
+        <translation>الجيروسكوب %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1055"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="114"/>
         <source>Latitude</source>
-        <translation type="unfinished">خط العرض</translation>
+        <translation>خط العرض</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1055"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="114"/>
         <source>Longitude</source>
-        <translation type="unfinished">خط الطول</translation>
+        <translation>خط الطول</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1055"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="114"/>
         <source>Altitude</source>
-        <translation type="unfinished">الارتفاع</translation>
+        <translation>الارتفاع</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1071"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1087"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="130"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="146"/>
         <source>X</source>
-        <translation type="unfinished">X</translation>
+        <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1071"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1087"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="130"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="146"/>
         <source>Y</source>
-        <translation type="unfinished">Y</translation>
+        <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1071"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1087"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="130"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="146"/>
         <source>Z</source>
-        <translation type="unfinished">Z</translation>
+        <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1112"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="973"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="672"/>
         <source>Move Group</source>
-        <translation type="unfinished">نقل مجموعة</translation>
+        <translation>نقل مجموعة</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1169"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1030"/>
         <source>Move Dataset</source>
-        <translation type="unfinished">نقل مجموعة البيانات</translation>
+        <translation>نقل مجموعة البيانات</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1211"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1072"/>
         <source>Move Action</source>
-        <translation type="unfinished">نقل الإجراء</translation>
+        <translation>نقل الإجراء</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1434"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1295"/>
         <source>Rename Group</source>
-        <translation type="unfinished">إعادة تسمية المجموعة</translation>
+        <translation>إعادة تسمية المجموعة</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1435"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1464"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1490"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1296"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1325"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1351"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="382"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="411"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="434"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="457"/>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="277"/>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="863"/>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="890"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="742"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="769"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="498"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="521"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="549"/>
@@ -21875,151 +22063,151 @@ Reload it?</source>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="980"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="1007"/>
         <source>Name:</source>
-        <translation type="unfinished">الاسم:</translation>
+        <translation>الاسم:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1463"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1324"/>
         <source>Rename Dataset</source>
-        <translation type="unfinished">إعادة تسمية مجموعة البيانات</translation>
+        <translation>إعادة تسمية مجموعة البيانات</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1489"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1350"/>
         <source>Rename Action</source>
-        <translation type="unfinished">إعادة تسمية الإجراء</translation>
+        <translation>إعادة تسمية الإجراء</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="117"/>
         <source>Add Table</source>
-        <translation type="unfinished">إضافة جدول</translation>
+        <translation>إضافة جدول</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="123"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="384"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="982"/>
         <source>Shared Table</source>
-        <translation type="unfinished">الجدول المشترك</translation>
+        <translation>الجدول المشترك</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="152"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="502"/>
         <source>Delete Table</source>
-        <translation type="unfinished">حذف الجدول</translation>
+        <translation>حذف الجدول</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="167"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="410"/>
         <source>Rename Table</source>
-        <translation type="unfinished">إعادة تسمية الجدول</translation>
+        <translation>إعادة تسمية الجدول</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="241"/>
         <source>Add Variable</source>
-        <translation type="unfinished">إضافة متغير</translation>
+        <translation>إضافة متغير</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="250"/>
         <source>variable</source>
-        <translation type="unfinished">متغير</translation>
+        <translation>متغير</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="280"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="523"/>
         <source>Delete Variable</source>
-        <translation type="unfinished">حذف متغير</translation>
+        <translation>حذف متغير</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="311"/>
         <source>Edit Variable</source>
-        <translation type="unfinished">تعديل متغير</translation>
+        <translation>تعديل متغير</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="381"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <source>New Shared Table</source>
-        <translation type="unfinished">جدول مشترك جديد</translation>
+        <translation>جدول مشترك جديد</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="433"/>
         <source>New Variable</source>
-        <translation type="unfinished">متغير جديد</translation>
+        <translation>متغير جديد</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="456"/>
         <source>Rename Variable</source>
-        <translation type="unfinished">إعادة تسمية متغير</translation>
+        <translation>إعادة تسمية متغير</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="495"/>
         <source>This removes %1 variable(s) along with the table. This action cannot be undone.</source>
-        <translation type="unfinished">سيؤدي هذا إلى إزالة %1 متغير مع الجدول. لا يمكن التراجع عن هذا الإجراء.</translation>
+        <translation>سيؤدي هذا إلى إزالة %1 متغير مع الجدول. لا يمكن التراجع عن هذا الإجراء.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="499"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="520"/>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="911"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="790"/>
         <source>Delete "%1"?</source>
-        <translation type="unfinished">حذف "%1"؟</translation>
+        <translation>حذف "%1"؟</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="551"/>
         <source>Export Table</source>
-        <translation type="unfinished">تصدير الجدول</translation>
+        <translation>تصدير الجدول</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="553"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="596"/>
         <source>CSV files (*.csv)</source>
-        <translation type="unfinished">ملفات CSV (*.CSV)</translation>
+        <translation>ملفات CSV (*.CSV)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="594"/>
         <source>Import Table</source>
-        <translation type="unfinished">استيراد الجدول</translation>
+        <translation>استيراد الجدول</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="605"/>
         <source>Import Table CSV</source>
-        <translation type="unfinished">استيراد جدول CSV</translation>
+        <translation>استيراد جدول CSV</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="69"/>
         <source>Add Device</source>
-        <translation type="unfinished">إضافة جهاز</translation>
+        <translation>إضافة جهاز</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="74"/>
         <source>Multiple data sources require a Pro license</source>
-        <translation type="unfinished">مصادر البيانات المتعددة تتطلب ترخيص Pro</translation>
+        <translation>مصادر البيانات المتعددة تتطلب ترخيص Pro</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="75"/>
         <source>Serial Studio Pro allows connecting to multiple devices simultaneously. Please upgrade to unlock this feature.</source>
-        <translation type="unfinished">يتيح Serial Studio Pro الاتصال بأجهزة متعددة في نفس الوقت. يرجى الترقية لفتح هذه الميزة.</translation>
+        <translation>يتيح Serial Studio Pro الاتصال بأجهزة متعددة في نفس الوقت. يرجى الترقية لفتح هذه الميزة.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="87"/>
         <source>Device %1</source>
-        <translation type="unfinished"/>
+        <translation>الجهاز %1</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="120"/>
         <source>Do you want to delete data source "%1"?</source>
-        <translation type="unfinished">هل تريد حذف مصدر البيانات "%1"؟</translation>
+        <translation>هل تريد حذف مصدر البيانات "%1"؟</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="121"/>
         <source>Groups using this source will move to the default source. This action cannot be undone.</source>
-        <translation type="unfinished">المجموعات التي تستخدم هذا المصدر ستنتقل إلى المصدر الافتراضي. لا يمكن التراجع عن هذا الإجراء.</translation>
+        <translation>المجموعات التي تستخدم هذا المصدر ستنتقل إلى المصدر الافتراضي. لا يمكن التراجع عن هذا الإجراء.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="130"/>
         <source>Delete Device</source>
-        <translation type="unfinished">حذف الجهاز</translation>
+        <translation>حذف الجهاز</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="165"/>
         <source>Duplicate Device</source>
-        <translation type="unfinished">تكرار الجهاز</translation>
+        <translation>تكرار الجهاز</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="200"/>
@@ -22027,101 +22215,101 @@ Reload it?</source>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="331"/>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="358"/>
         <source>Edit Device</source>
-        <translation type="unfinished">تحرير الجهاز</translation>
+        <translation>تحرير الجهاز</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="232"/>
         <source>Rename Device</source>
-        <translation type="unfinished">إعادة تسمية الجهاز</translation>
+        <translation>إعادة تسمية الجهاز</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="248"/>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="372"/>
         <source>Change Bus Type</source>
-        <translation type="unfinished">تغيير نوع الناقل</translation>
+        <translation>تغيير نوع الناقل</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="276"/>
         <source>Rename Data Source</source>
-        <translation type="unfinished">إعادة تسمية مصدر البيانات</translation>
+        <translation>إعادة تسمية مصدر البيانات</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="391"/>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="451"/>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="574"/>
         <source>Edit Frame Parser</source>
-        <translation type="unfinished">تحرير محلل الإطارات</translation>
+        <translation>تحرير محلل الإطارات</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="403"/>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="465"/>
         <source>Change Parser Language</source>
-        <translation type="unfinished">تغيير لغة المحلل</translation>
+        <translation>تغيير لغة المحلل</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="419"/>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="492"/>
         <source>Change Parser Template</source>
-        <translation type="unfinished">تغيير قالب المحلل</translation>
+        <translation>تغيير قالب المحلل</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="431"/>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="516"/>
         <source>Change Parser Parameters</source>
-        <translation type="unfinished">تغيير معاملات المحلل</translation>
+        <translation>تغيير معاملات المحلل</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="545"/>
         <source>Change Stream Lane</source>
-        <translation type="unfinished">تغيير مسار التدفق</translation>
+        <translation>تغيير مسار التدفق</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="484"/>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="865"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="363"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="744"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="523"/>
         <source>Workspace</source>
-        <translation type="unfinished">مساحة العمل</translation>
+        <translation>مساحة العمل</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="862"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="741"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="520"/>
         <source>New Workspace</source>
-        <translation type="unfinished">مساحة عمل جديدة</translation>
+        <translation>مساحة عمل جديدة</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="889"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="768"/>
         <source>Rename Workspace</source>
-        <translation type="unfinished">إعادة تسمية مساحة العمل</translation>
+        <translation>إعادة تسمية مساحة العمل</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="914"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="793"/>
         <source>Delete Workspace</source>
-        <translation type="unfinished">حذف مساحة العمل</translation>
+        <translation>حذف مساحة العمل</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="976"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="855"/>
         <source>Overview</source>
-        <translation type="unfinished">نظرة عامة</translation>
+        <translation>نظرة عامة</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="985"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="864"/>
         <source>All Data</source>
-        <translation type="unfinished">جميع البيانات</translation>
+        <translation>جميع البيانات</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="1254"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="1133"/>
         <source>Discard workspace customisations?</source>
-        <translation type="unfinished">تجاهل تخصيصات مساحة العمل؟</translation>
+        <translation>تجاهل تخصيصات مساحة العمل؟</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="1255"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="1134"/>
         <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
-        <translation type="unfinished">إيقاف التخصيص يتجاهل التعديلات ويعيد بناء قائمة مساحات العمل من مجموعات المشروع.</translation>
+        <translation>إيقاف التخصيص يتجاهل التعديلات ويعيد بناء قائمة مساحات العمل من مجموعات المشروع.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="1258"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="1137"/>
         <source>Customize Workspaces</source>
-        <translation type="unfinished">تخصيص مساحات العمل</translation>
+        <translation>تخصيص مساحات العمل</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="326"/>
@@ -22131,14 +22319,14 @@ Reload it?</source>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="826"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="959"/>
         <source>Folder</source>
-        <translation type="unfinished"/>
+        <translation>مجلد</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="497"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="734"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="956"/>
         <source>New Folder</source>
-        <translation type="unfinished">مجلد جديد</translation>
+        <translation>مجلد جديد</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="548"/>
@@ -22147,19 +22335,19 @@ Reload it?</source>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="839"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="1006"/>
         <source>Rename Folder</source>
-        <translation type="unfinished">إعادة تسمية المجلد</translation>
+        <translation>إعادة تسمية المجلد</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="570"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="783"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="1028"/>
         <source>Delete folder "%1"?</source>
-        <translation type="unfinished">حذف المجلد "%1"؟</translation>
+        <translation>حذف المجلد "%1"؟</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="571"/>
         <source>The folder is removed; its workspaces and sub-folders move up to the parent.</source>
-        <translation type="unfinished">تتم إزالة المجلد؛ وتنتقل مساحات العمل والمجلدات الفرعية إلى المجلد الأب.</translation>
+        <translation>تتم إزالة المجلد؛ وتنتقل مساحات العمل والمجلدات الفرعية إلى المجلد الأب.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="574"/>
@@ -22168,13 +22356,13 @@ Reload it?</source>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="860"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="1032"/>
         <source>Delete Folder</source>
-        <translation type="unfinished">حذف المجلد</translation>
+        <translation>حذف المجلد</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="603"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="815"/>
         <source>Add Folder</source>
-        <translation type="unfinished">إضافة مجلد</translation>
+        <translation>إضافة مجلد</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="693"/>
@@ -22182,22 +22370,22 @@ Reload it?</source>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="915"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="941"/>
         <source>Move Folder</source>
-        <translation type="unfinished">نقل مجلد</translation>
+        <translation>نقل مجلد</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="784"/>
         <source>The folder is removed; its groups and sub-folders move up to the parent.</source>
-        <translation type="unfinished">تتم إزالة المجلد؛ وتنتقل المجموعات والمجلدات الفرعية إلى المجلد الأب.</translation>
+        <translation>تتم إزالة المجلد؛ وتنتقل المجموعات والمجلدات الفرعية إلى المجلد الأب.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="887"/>
         <source>Move Table</source>
-        <translation type="unfinished">نقل جدول</translation>
+        <translation>نقل جدول</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="1029"/>
         <source>The folder is removed; its tables and sub-folders move up to the parent. The accessor path of those tables changes accordingly.</source>
-        <translation type="unfinished">تتم إزالة المجلد؛ وتنتقل الجداول والمجلدات الفرعية إلى المجلد الأب. ويتغير مسار الوصول لتلك الجداول وفقاً لذلك.</translation>
+        <translation>تتم إزالة المجلد؛ وتنتقل الجداول والمجلدات الفرعية إلى المجلد الأب. ويتغير مسار الوصول لتلك الجداول وفقاً لذلك.</translation>
     </message>
 </context>
 <context>
@@ -22862,12 +23050,12 @@ Reload it?</source>
         <translation>تحذير</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="969"/>
+        <location filename="../../src/Misc/CLI.cpp" line="749"/>
         <source>Project file not found</source>
         <translation>ملف المشروع غير موجود</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="970"/>
+        <location filename="../../src/Misc/CLI.cpp" line="750"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -22876,17 +23064,17 @@ Reload it?</source>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="973"/>
+        <location filename="../../src/Misc/CLI.cpp" line="753"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>هل تريد حذف هذا الاختصار؟</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="977"/>
+        <location filename="../../src/Misc/CLI.cpp" line="757"/>
         <source>Delete Shortcut</source>
         <translation>حذف الاختصار</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="979"/>
+        <location filename="../../src/Misc/CLI.cpp" line="759"/>
         <source>Quit</source>
         <translation>إنهاء</translation>
     </message>
@@ -23341,7 +23529,7 @@ function parse(%1) { ... }
         <translation>رمز غير متوقع '%1' في نطاق الملف</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="508"/>
+        <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="509"/>
         <source>Unsupported top-level keyword '%1'</source>
         <translation>كلمة مفتاحية '%1' غير مدعومة في المستوى الأعلى</translation>
     </message>
@@ -25315,63 +25503,63 @@ Add absolute addresses above to poll the controller.</source>
 <context>
     <name>Sessions::Player</name>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="312"/>
+        <location filename="../../src/Sessions/Player.cpp" line="314"/>
         <source>Open Session File</source>
         <translation>فتح ملف الجلسة</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="314"/>
+        <location filename="../../src/Sessions/Player.cpp" line="316"/>
         <source>Session files (*.db)</source>
         <translation>ملفات الجلسات (*.db)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="396"/>
+        <location filename="../../src/Sessions/Player.cpp" line="398"/>
         <source>Device Connection Active</source>
         <translation>اتصال الجهاز نشط</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="397"/>
+        <location filename="../../src/Sessions/Player.cpp" line="399"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>لاستخدام هذه الميزة، يجب قطع الاتصال بالجهاز. هل تريد المتابعة؟</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="445"/>
-        <location filename="../../src/Sessions/Player.cpp" line="469"/>
+        <location filename="../../src/Sessions/Player.cpp" line="447"/>
+        <location filename="../../src/Sessions/Player.cpp" line="471"/>
         <source>Cannot open session file</source>
         <translation>تعذر فتح ملف الجلسة</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="446"/>
+        <location filename="../../src/Sessions/Player.cpp" line="448"/>
         <source>Unknown error</source>
         <translation>خطأ غير معروف</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="462"/>
+        <location filename="../../src/Sessions/Player.cpp" line="464"/>
         <source>No project data</source>
         <translation>لا توجد بيانات مشروع</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="463"/>
+        <location filename="../../src/Sessions/Player.cpp" line="465"/>
         <source>This session does not contain an embedded project file — the dashboard falls back to a quick-plot layout.</source>
         <translation>لا تحتوي هذه الجلسة على ملف مشروع مضمّن — تستخدم لوحة المعلومات تخطيط رسم سريع بدلاً من ذلك.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="470"/>
+        <location filename="../../src/Sessions/Player.cpp" line="472"/>
         <source>Check file permissions and try again.</source>
         <translation>تحقق من أذونات الملف وحاول مرة أخرى.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="621"/>
+        <location filename="../../src/Sessions/Player.cpp" line="623"/>
         <source>Sessions</source>
         <translation>الجلسات</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="622"/>
+        <location filename="../../src/Sessions/Player.cpp" line="624"/>
         <source>Recording uses an older copy of the project</source>
         <translation>التسجيل يستخدم نسخة أقدم من المشروع</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="623"/>
+        <location filename="../../src/Sessions/Player.cpp" line="625"/>
         <source>The dashboard shown is the one embedded in the recording; the project on disk has changed since. Close the session to return to the current project.</source>
         <translation>لوحة المعلومات المعروضة هي المضمنة في التسجيل؛ المشروع على القرص تغير منذ ذلك الحين. أغلق الجلسة للعودة إلى المشروع الحالي.</translation>
     </message>
@@ -25418,86 +25606,86 @@ Add absolute addresses above to poll the controller.</source>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="169"/>
         <source>Export Session to CSV</source>
-        <translation type="unfinished">تصدير الجلسة إلى CSV</translation>
+        <translation>تصدير الجلسة إلى CSV</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="169"/>
         <source>CSV files (*.csv)</source>
-        <translation type="unfinished">ملفات CSV (*.CSV)</translation>
+        <translation>ملفات CSV (*.CSV)</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="281"/>
         <source>Loading session data…</source>
-        <translation type="unfinished">تحميل بيانات الجلسة…</translation>
+        <translation>تحميل بيانات الجلسة…</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="309"/>
         <source>Save PDF Report</source>
-        <translation type="unfinished">حفظ تقرير PDF</translation>
+        <translation>حفظ تقرير PDF</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="309"/>
         <source>Save HTML Report</source>
-        <translation type="unfinished">حفظ تقرير HTML</translation>
+        <translation>حفظ تقرير HTML</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="310"/>
         <source>PDF files (*.pdf)</source>
-        <translation type="unfinished">ملفات PDF (*.PDF)</translation>
+        <translation>ملفات PDF (*.PDF)</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="310"/>
         <source>HTML files (*.html)</source>
-        <translation type="unfinished">ملفات HTML (*.HTML)</translation>
+        <translation>ملفات HTML (*.HTML)</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="379"/>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="413"/>
         <source>Failed</source>
-        <translation type="unfinished">فشل</translation>
+        <translation>فشل</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="384"/>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="422"/>
         <source>Report Failed</source>
-        <translation type="unfinished">فشل التقرير</translation>
+        <translation>فشل التقرير</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="385"/>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="423"/>
         <source>Could not generate the report.</source>
-        <translation type="unfinished">تعذر إنشاء التقرير.</translation>
+        <translation>تعذر إنشاء التقرير.</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="413"/>
         <source>Done</source>
-        <translation type="unfinished">تم</translation>
+        <translation>تم</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="441"/>
         <source>Select logo image</source>
-        <translation type="unfinished">اختر صورة الشعار</translation>
+        <translation>اختر صورة الشعار</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="443"/>
         <source>Images (*.png *.jpg *.jpeg *.svg)</source>
-        <translation type="unfinished">صور (*.png *.jpg *.jpeg *.svg)</translation>
+        <translation>صور (*.png *.jpg *.jpeg *.svg)</translation>
     </message>
 </context>
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="34"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="35"/>
         <source>Preferences</source>
         <translation>التفضيلات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="61"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="62"/>
         <source>General</source>
         <translation>عام</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="67"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="68"/>
         <source>Startup</source>
         <translation>بدء التشغيل</translation>
     </message>
@@ -25506,252 +25694,207 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">لوحة المعلومات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="85"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="86"/>
         <source>Taskbar</source>
         <translation>شريط المهام</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="91"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1396"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="92"/>
         <source>Console</source>
         <translation>وحدة التحكم</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="104"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1397"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="105"/>
         <source>Notifications</source>
         <translation>الإشعارات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="165"/>
         <source>Appearance</source>
-        <translation>المظهر</translation>
+        <translation type="vanished">المظهر</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="180"/>
         <source>Language</source>
-        <translation>اللغة</translation>
+        <translation type="vanished">اللغة</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="196"/>
         <source>Theme</source>
-        <translation>السمة</translation>
+        <translation type="vanished">السمة</translation>
     </message>
     <message>
         <source>Files &amp; Updates</source>
         <translation type="vanished">الملفات والتحديثات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="290"/>
         <source>Workspace Folder</source>
-        <translation>مجلد مساحة العمل</translation>
+        <translation type="vanished">مجلد مساحة العمل</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="685"/>
         <source>Automatically Check for Updates</source>
-        <translation>التحقق من التحديثات تلقائيًا</translation>
+        <translation type="vanished">التحقق من التحديثات تلقائيًا</translation>
     </message>
     <message>
         <source>Advanced</source>
         <translation type="vanished">متقدم</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="487"/>
         <source>Rendering Backend</source>
-        <translation>محرك العرض</translation>
+        <translation type="vanished">محرك العرض</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1147"/>
         <source>Auto-Hide Toolbar</source>
-        <translation>إخفاء شريط الأدوات تلقائيًا</translation>
+        <translation type="vanished">إخفاء شريط الأدوات تلقائيًا</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="274"/>
         <source>Files</source>
-        <translation>الملفات</translation>
+        <translation type="vanished">الملفات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="337"/>
         <source>Enable API Server (Port 7777)</source>
-        <translation>تفعيل خادم API (المنفذ 7777)</translation>
+        <translation type="vanished">تفعيل خادم API (المنفذ 7777)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="362"/>
         <source>Allow External API Connections</source>
-        <translation>السماح باتصالات API خارجية</translation>
+        <translation type="vanished">السماح باتصالات API خارجية</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="387"/>
         <source>API Access Token</source>
-        <translation>رمز الوصول لـ API</translation>
+        <translation type="vanished">رمز الوصول لـ API</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="417"/>
         <source>Export Protobuf File</source>
-        <translation>تصدير ملف Protobuf</translation>
+        <translation type="vanished">تصدير ملف Protobuf</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="419"/>
         <source>Export…</source>
-        <translation>تصدير…</translation>
+        <translation type="vanished">تصدير…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="469"/>
         <source>Graphics</source>
-        <translation>الرسومات</translation>
+        <translation type="vanished">الرسومات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="590"/>
         <source>System</source>
-        <translation>النظام</translation>
+        <translation type="vanished">النظام</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="606"/>
         <source>Apply Performance Hints</source>
-        <translation>تطبيق تلميحات الأداء</translation>
+        <translation type="vanished">تطبيق تلميحات الأداء</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="629"/>
         <source>Keep Display Awake</source>
-        <translation>إبقاء الشاشة نشطة</translation>
+        <translation type="vanished">إبقاء الشاشة نشطة</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="658"/>
         <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
-        <translation>تلميحات الأداء ترفع أولوية العملية وتلغي الاشتراك في تقييد الطاقة من النظام. تصبح التغييرات سارية عند بدء Serial Studio في المرة القادمة.</translation>
+        <translation type="vanished">تلميحات الأداء ترفع أولوية العملية وتلغي الاشتراك في تقييد الطاقة من النظام. تصبح التغييرات سارية عند بدء Serial Studio في المرة القادمة.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="669"/>
         <source>Updates &amp; News</source>
-        <translation>التحديثات والأخبار</translation>
+        <translation type="vanished">التحديثات والأخبار</translation>
     </message>
     <message>
         <source>Show What's New on Startup</source>
         <translation type="vanished">عرض ما الجديد عند بدء التشغيل</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="805"/>
         <source>Data Plotting</source>
-        <translation>رسم البيانات</translation>
+        <translation type="vanished">رسم البيانات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="872"/>
         <source>Point Count</source>
-        <translation>عدد النقاط</translation>
+        <translation type="vanished">عدد النقاط</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="820"/>
         <source>Time Range</source>
-        <translation>النطاق الزمني</translation>
+        <translation type="vanished">النطاق الزمني</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="223"/>
         <source>Window</source>
-        <translation>النافذة</translation>
+        <translation type="vanished">النافذة</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="242"/>
         <source>Custom Window Decorations</source>
-        <translation>زخارف النوافذ المخصصة</translation>
+        <translation type="vanished">زخارف النوافذ المخصصة</translation>
     </message>
     <message>
         <source>Window Shadow</source>
         <translation type="vanished">ظل النافذة</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="265"/>
         <source>Window decoration changes apply after restarting %1.</source>
-        <translation>تُطبق تغييرات زخرفة النافذة بعد إعادة تشغيل %1.</translation>
+        <translation type="vanished">تُطبق تغييرات زخرفة النافذة بعد إعادة تشغيل %1.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="321"/>
         <source>API &amp; Plugins</source>
-        <translation>واجهة برمجة التطبيقات والإضافات</translation>
+        <translation type="vanished">واجهة برمجة التطبيقات والإضافات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="520"/>
         <source>Display Scaling</source>
-        <translation>تحجيم العرض</translation>
+        <translation type="vanished">تحجيم العرض</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="553"/>
         <source>Custom Scale (%)</source>
-        <translation>مقياس مخصص (%)</translation>
+        <translation type="vanished">مقياس مخصص (%)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="897"/>
         <source>UI Refresh Rate (Hz)</source>
-        <translation>معدل تحديث الواجهة (Hz)</translation>
+        <translation type="vanished">معدل تحديث الواجهة (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="958"/>
         <source>Dashboard Font</source>
-        <translation>خط لوحة المعلومات</translation>
+        <translation type="vanished">خط لوحة المعلومات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="973"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1569"/>
         <source>Font Family</source>
-        <translation>عائلة الخط</translation>
+        <translation type="vanished">عائلة الخط</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="995"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1591"/>
         <source>Font Size</source>
-        <translation>حجم الخط</translation>
+        <translation type="vanished">حجم الخط</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1005"/>
         <source>Small</source>
-        <translation>صغير</translation>
+        <translation type="vanished">صغير</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1005"/>
         <source>Normal</source>
-        <translation>عادي</translation>
+        <translation type="vanished">عادي</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1005"/>
         <source>Large</source>
-        <translation>كبير</translation>
+        <translation type="vanished">كبير</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1005"/>
         <source>Extra Large</source>
-        <translation>كبير جداً</translation>
+        <translation type="vanished">كبير جداً</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1005"/>
         <source>Custom</source>
-        <translation>مخصص</translation>
+        <translation type="vanished">مخصص</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="79"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1066"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="80"/>
         <source>Layout</source>
         <translation>التخطيط</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1081"/>
         <source>Layout Margin</source>
-        <translation>هامش التخطيط</translation>
+        <translation type="vanished">هامش التخطيط</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1106"/>
         <source>Layout Spacing</source>
-        <translation>تباعد التخطيط</translation>
+        <translation type="vanished">تباعد التخطيط</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1131"/>
         <source>Show Actions Panel</source>
-        <translation>إظهار لوحة الإجراءات</translation>
+        <translation type="vanished">إظهار لوحة الإجراءات</translation>
     </message>
     <message>
         <source>Auto-Layout Margin</source>
         <translation type="vanished">هامش التخطيط التلقائي</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="97"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="98"/>
         <source>Export</source>
         <translation>تصدير</translation>
     </message>
@@ -25764,229 +25907,642 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">تباعد التخطيط اليدوي</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1170"/>
         <source>Show Alignment Guides</source>
-        <translation>إظهار أدلة المحاذاة</translation>
+        <translation type="vanished">إظهار أدلة المحاذاة</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1994"/>
         <source>Video Export</source>
-        <translation>تصدير الفيديو</translation>
+        <translation type="vanished">تصدير الفيديو</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2012"/>
         <source>Save Videos by Default</source>
-        <translation>حفظ الفيديوهات افتراضياً</translation>
+        <translation type="vanished">حفظ الفيديوهات افتراضياً</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1227"/>
         <source>Behavior</source>
-        <translation>السلوك</translation>
+        <translation type="vanished">السلوك</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="73"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="74"/>
         <source>Plotting</source>
         <translation>الرسم البياني</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="708"/>
         <source>Check for Extension Updates</source>
-        <translation>التحقق من تحديثات الإضافات</translation>
+        <translation type="vanished">التحقق من تحديثات الإضافات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="732"/>
         <source>Install Extension Updates Automatically</source>
-        <translation>تثبيت تحديثات الإضافات تلقائيًا</translation>
+        <translation type="vanished">تثبيت تحديثات الإضافات تلقائيًا</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="762"/>
         <source>Installed extensions and themes are checked when Serial Studio starts, together with application updates. Serial Studio asks before installing them unless automatic installation is enabled.</source>
-        <translation>يتم التحقق من الإضافات والسمات المثبتة عند بدء Serial Studio، مع تحديثات التطبيق. يطلب Serial Studio الإذن قبل تثبيتها ما لم يتم تفعيل التثبيت التلقائي.</translation>
+        <translation type="vanished">يتم التحقق من الإضافات والسمات المثبتة عند بدء Serial Studio، مع تحديثات التطبيق. يطلب Serial Studio الإذن قبل تثبيتها ما لم يتم تفعيل التثبيت التلقائي.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1248"/>
         <source>Always Show Taskbar Buttons</source>
-        <translation>إظهار أزرار شريط المهام دائمًا</translation>
+        <translation type="vanished">إظهار أزرار شريط المهام دائمًا</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1272"/>
         <source>Show Search Field</source>
-        <translation>إظهار حقل البحث</translation>
+        <translation type="vanished">إظهار حقل البحث</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1296"/>
         <source>Auto-hide Taskbar</source>
-        <translation>إخفاء شريط المهام تلقائيًا</translation>
+        <translation type="vanished">إخفاء شريط المهام تلقائيًا</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1323"/>
         <source>Hide Delay (ms)</source>
-        <translation>تأخير الإخفاء (ميلي ثانية)</translation>
+        <translation type="vanished">تأخير الإخفاء (ميلي ثانية)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1356"/>
         <source>Pinned Buttons</source>
-        <translation>الأزرار المثبتة</translation>
+        <translation type="vanished">الأزرار المثبتة</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1374"/>
         <source>Drag a pinned button on the taskbar to reorder it.</source>
-        <translation>اسحب زرًا مثبتًا على شريط المهام لإعادة ترتيبه.</translation>
+        <translation type="vanished">اسحب زرًا مثبتًا على شريط المهام لإعادة ترتيبه.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1395"/>
         <source>Settings</source>
-        <translation>الإعدادات</translation>
+        <translation type="vanished">الإعدادات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1398"/>
         <source>Clock</source>
-        <translation>ساعة</translation>
+        <translation type="vanished">ساعة</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1399"/>
         <source>Stopwatch</source>
-        <translation>ساعة إيقاف</translation>
+        <translation type="vanished">ساعة إيقاف</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1400"/>
         <source>Pause / Resume</source>
-        <translation>إيقاف مؤقت / استئناف</translation>
+        <translation type="vanished">إيقاف مؤقت / استئناف</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1401"/>
         <source>File Transmission</source>
-        <translation>نقل الملفات</translation>
+        <translation type="vanished">نقل الملفات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1402"/>
         <source>AI Assistant</source>
-        <translation>مساعد الذكاء الاصطناعي</translation>
+        <translation type="vanished">مساعد الذكاء الاصطناعي</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1532"/>
         <source>Display</source>
-        <translation>العرض</translation>
+        <translation type="vanished">العرض</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1547"/>
         <source>Display Mode</source>
-        <translation>وضع العرض</translation>
+        <translation type="vanished">وضع العرض</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1615"/>
         <source>Scrollback Lines</source>
-        <translation>سطور التمرير للخلف</translation>
+        <translation type="vanished">سطور التمرير للخلف</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1640"/>
         <source>Show Timestamps</source>
-        <translation>إظهار الطوابع الزمنية</translation>
+        <translation type="vanished">إظهار الطوابع الزمنية</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1668"/>
         <source>Data Transmission</source>
-        <translation>إرسال البيانات</translation>
+        <translation type="vanished">إرسال البيانات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1683"/>
         <source>Line Ending</source>
-        <translation>نهاية السطر</translation>
+        <translation type="vanished">نهاية السطر</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1705"/>
         <source>Input Mode</source>
-        <translation>وضع الإدخال</translation>
+        <translation type="vanished">وضع الإدخال</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1727"/>
         <source>Text Encoding</source>
-        <translation>ترميز النص</translation>
+        <translation type="vanished">ترميز النص</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1749"/>
         <source>Checksum</source>
-        <translation>المجموع الاختباري</translation>
+        <translation type="vanished">المجموع الاختباري</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1771"/>
         <source>Echo Sent Data</source>
-        <translation>عكس البيانات المُرسَلة</translation>
+        <translation type="vanished">عكس البيانات المُرسَلة</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1799"/>
         <source>Escape Codes</source>
-        <translation>أكواد الهروب</translation>
+        <translation type="vanished">أكواد الهروب</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1814"/>
         <source>VT100 Emulation</source>
-        <translation>محاكاة VT100</translation>
+        <translation type="vanished">محاكاة VT100</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1840"/>
         <source>ANSI Colors</source>
-        <translation>ألوان ANSI</translation>
+        <translation type="vanished">ألوان ANSI</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1904"/>
         <source>CSV Export</source>
-        <translation>تصدير CSV</translation>
+        <translation type="vanished">تصدير CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1919"/>
         <source>Row Interval (ms)</source>
-        <translation>الفاصل الزمني للصف (مللي ثانية)</translation>
+        <translation type="vanished">الفاصل الزمني للصف (مللي ثانية)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1981"/>
         <source>0 writes one row per received frame. A positive value logs one snapshot row of every channel at that interval, which keeps file size bounded for multi-source or high-rate projects.</source>
-        <translation>0 يكتب صفًا واحدًا لكل إطار مستلم. القيمة الموجبة تسجل صف لقطة واحد لكل قناة عند هذا الفاصل الزمني، مما يحافظ على حجم الملف محدودًا للمشاريع متعددة المصادر أو عالية المعدل.</translation>
+        <translation type="vanished">0 يكتب صفًا واحدًا لكل إطار مستلم. القيمة الموجبة تسجل صف لقطة واحد لكل قناة عند هذا الفاصل الزمني، مما يحافظ على حجم الملف محدودًا للمشاريع متعددة المصادر أو عالية المعدل.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2069"/>
         <source>Delivery</source>
-        <translation>التسليم</translation>
+        <translation type="vanished">التسليم</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2084"/>
         <source>System Notifications</source>
-        <translation>إشعارات النظام</translation>
+        <translation type="vanished">إشعارات النظام</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2105"/>
         <source>Show Warning/Critical events as OS desktop notifications when Serial Studio is not the foreground window.</source>
-        <translation>عرض أحداث التحذير/الحرجة كإشعارات سطح المكتب عندما لا يكون Serial Studio في النافذة النشطة.</translation>
+        <translation type="vanished">عرض أحداث التحذير/الحرجة كإشعارات سطح المكتب عندما لا يكون Serial Studio في النافذة النشطة.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2115"/>
         <source>Application Logs</source>
-        <translation>سجلات التطبيق</translation>
+        <translation type="vanished">سجلات التطبيق</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2130"/>
         <source>Route Warnings to Notifications</source>
-        <translation>توجيه التحذيرات إلى الإشعارات</translation>
+        <translation type="vanished">توجيه التحذيرات إلى الإشعارات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2151"/>
         <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
-        <translation>معطل افتراضياً — تصدر QT و QML تحذيرات بشكل متكرر وتفعيل هذا قد يطغى على التنبيهات الحقيقية. الرسائل الحرجة يتم توجيهها دائماً بغض النظر عن هذا الإعداد.</translation>
+        <translation type="vanished">معطل افتراضياً — تصدر QT و QML تحذيرات بشكل متكرر وتفعيل هذا قد يطغى على التنبيهات الحقيقية. الرسائل الحرجة يتم توجيهها دائماً بغض النظر عن هذا الإعداد.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2170"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="174"/>
         <source>Reset</source>
         <translation>إعادة تعيين</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2227"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="231"/>
         <source>Close</source>
         <translation>إغلاق</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2235"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="239"/>
         <source>Apply</source>
         <translation>تطبيق</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsConsolePage</name>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="58"/>
+        <source>Display</source>
+        <translation>العرض</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="73"/>
+        <source>Display Mode</source>
+        <translation>وضع العرض</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="95"/>
+        <source>Font Family</source>
+        <translation>عائلة الخط</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="117"/>
+        <source>Font Size</source>
+        <translation>حجم الخط</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="141"/>
+        <source>Scrollback Lines</source>
+        <translation>سطور التمرير للخلف</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="166"/>
+        <source>Show Timestamps</source>
+        <translation>إظهار الطوابع الزمنية</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="194"/>
+        <source>Data Transmission</source>
+        <translation>إرسال البيانات</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="209"/>
+        <source>Line Ending</source>
+        <translation>نهاية السطر</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="231"/>
+        <source>Input Mode</source>
+        <translation>وضع الإدخال</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="253"/>
+        <source>Text Encoding</source>
+        <translation>ترميز النص</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="275"/>
+        <source>Checksum</source>
+        <translation>المجموع الاختباري</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="297"/>
+        <source>Echo Sent Data</source>
+        <translation>عكس البيانات المُرسَلة</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="325"/>
+        <source>Escape Codes</source>
+        <translation>أكواد الهروب</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="340"/>
+        <source>VT100 Emulation</source>
+        <translation>محاكاة VT100</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="366"/>
+        <source>ANSI Colors</source>
+        <translation>ألوان ANSI</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsExportPage</name>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="56"/>
+        <source>CSV Export</source>
+        <translation>تصدير CSV</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="71"/>
+        <source>Row Interval (ms)</source>
+        <translation>الفاصل الزمني للصف (مللي ثانية)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="133"/>
+        <source>0 writes one row per received frame. A positive value logs one snapshot row of every channel at that interval, which keeps file size bounded for multi-source or high-rate projects.</source>
+        <translation>0 يكتب صفًا واحدًا لكل إطار مستلم. القيمة الموجبة تسجل صف لقطة واحد لكل قناة عند هذا الفاصل الزمني، مما يحافظ على حجم الملف محدودًا للمشاريع متعددة المصادر أو عالية المعدل.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="146"/>
+        <source>Video Export</source>
+        <translation>تصدير الفيديو</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="164"/>
+        <source>Save Videos by Default</source>
+        <translation>حفظ الفيديوهات افتراضياً</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsGeneralPage</name>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="58"/>
+        <source>Appearance</source>
+        <translation>المظهر</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="73"/>
+        <source>Language</source>
+        <translation>اللغة</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="89"/>
+        <source>Theme</source>
+        <translation>السمة</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="116"/>
+        <source>Window</source>
+        <translation>النافذة</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="135"/>
+        <source>Custom Window Decorations</source>
+        <translation>زخارف النوافذ المخصصة</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="158"/>
+        <source>Window decoration changes apply after restarting %1.</source>
+        <translation>تُطبق تغييرات زخرفة النافذة بعد إعادة تشغيل %1.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="167"/>
+        <source>Files</source>
+        <translation>الملفات</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="183"/>
+        <source>Workspace Folder</source>
+        <translation>مجلد مساحة العمل</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="214"/>
+        <source>API &amp; Plugins</source>
+        <translation>واجهة برمجة التطبيقات والإضافات</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="230"/>
+        <source>Enable API Server (Port 7777)</source>
+        <translation>تفعيل خادم API (المنفذ 7777)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="255"/>
+        <source>Allow External API Connections</source>
+        <translation>السماح باتصالات API خارجية</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="280"/>
+        <source>API Access Token</source>
+        <translation>رمز الوصول لـ API</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="310"/>
+        <source>Export Protobuf File</source>
+        <translation>تصدير ملف Protobuf</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="312"/>
+        <source>Export…</source>
+        <translation>تصدير…</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsLayoutPage</name>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="58"/>
+        <source>Dashboard Font</source>
+        <translation>خط لوحة المعلومات</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="73"/>
+        <source>Font Family</source>
+        <translation>عائلة الخط</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="95"/>
+        <source>Font Size</source>
+        <translation>حجم الخط</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <source>Small</source>
+        <translation>صغير</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <source>Normal</source>
+        <translation>عادي</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <source>Large</source>
+        <translation>كبير</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <source>Extra Large</source>
+        <translation>كبير جداً</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <source>Custom</source>
+        <translation>مخصص</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="166"/>
+        <source>Layout</source>
+        <translation>التخطيط</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="181"/>
+        <source>Layout Margin</source>
+        <translation>هامش التخطيط</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="206"/>
+        <source>Layout Spacing</source>
+        <translation>تباعد التخطيط</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="231"/>
+        <source>Show Actions Panel</source>
+        <translation>إظهار لوحة الإجراءات</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="247"/>
+        <source>Auto-Hide Toolbar</source>
+        <translation>إخفاء شريط الأدوات تلقائيًا</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="270"/>
+        <source>Show Alignment Guides</source>
+        <translation>إظهار أدلة المحاذاة</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsNotificationsPage</name>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="59"/>
+        <source>Delivery</source>
+        <translation>التسليم</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="74"/>
+        <source>System Notifications</source>
+        <translation>إشعارات النظام</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="95"/>
+        <source>Show Warning/Critical events as OS desktop notifications when Serial Studio is not the foreground window.</source>
+        <translation>عرض أحداث التحذير/الحرجة كإشعارات سطح المكتب عندما لا يكون Serial Studio في النافذة النشطة.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="105"/>
+        <source>Application Logs</source>
+        <translation>سجلات التطبيق</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="120"/>
+        <source>Route Warnings to Notifications</source>
+        <translation>توجيه التحذيرات إلى الإشعارات</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="141"/>
+        <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
+        <translation>معطل افتراضياً — تصدر QT و QML تحذيرات بشكل متكرر وتفعيل هذا قد يطغى على التنبيهات الحقيقية. الرسائل الحرجة يتم توجيهها دائماً بغض النظر عن هذا الإعداد.</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsPlottingPage</name>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="56"/>
+        <source>Data Plotting</source>
+        <translation>رسم البيانات</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="71"/>
+        <source>Time Range</source>
+        <translation>النطاق الزمني</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="123"/>
+        <source>Point Count</source>
+        <translation>عدد النقاط</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="148"/>
+        <source>UI Refresh Rate (Hz)</source>
+        <translation>معدل تحديث الواجهة (Hz)</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsStartupPage</name>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="59"/>
+        <source>Graphics</source>
+        <translation>الرسومات</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="77"/>
+        <source>Rendering Backend</source>
+        <translation>محرك العرض</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="110"/>
+        <source>Display Scaling</source>
+        <translation>تحجيم العرض</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="143"/>
+        <source>Custom Scale (%)</source>
+        <translation>مقياس مخصص (%)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="180"/>
+        <source>System</source>
+        <translation>النظام</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="196"/>
+        <source>Apply Performance Hints</source>
+        <translation>تطبيق تلميحات الأداء</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="219"/>
+        <source>Keep Display Awake</source>
+        <translation>إبقاء الشاشة نشطة</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="248"/>
+        <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
+        <translation>تلميحات الأداء ترفع أولوية العملية وتلغي الاشتراك في تقييد الطاقة من النظام. تصبح التغييرات سارية عند بدء Serial Studio في المرة القادمة.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="259"/>
+        <source>Updates &amp; News</source>
+        <translation>التحديثات والأخبار</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="275"/>
+        <source>Automatically Check for Updates</source>
+        <translation>التحقق من التحديثات تلقائيًا</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="298"/>
+        <source>Check for Extension Updates</source>
+        <translation>التحقق من تحديثات الإضافات</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="322"/>
+        <source>Install Extension Updates Automatically</source>
+        <translation>تثبيت تحديثات الإضافات تلقائيًا</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="352"/>
+        <source>Installed extensions and themes are checked when Serial Studio starts, together with application updates. Serial Studio asks before installing them unless automatic installation is enabled.</source>
+        <translation>يتم التحقق من الإضافات والسمات المثبتة عند بدء Serial Studio، مع تحديثات التطبيق. يطلب Serial Studio الإذن قبل تثبيتها ما لم يتم تفعيل التثبيت التلقائي.</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsTaskbarPage</name>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="53"/>
+        <source>Behavior</source>
+        <translation>السلوك</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="74"/>
+        <source>Always Show Taskbar Buttons</source>
+        <translation>إظهار أزرار شريط المهام دائمًا</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="98"/>
+        <source>Show Search Field</source>
+        <translation>إظهار حقل البحث</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="122"/>
+        <source>Auto-hide Taskbar</source>
+        <translation>إخفاء شريط المهام تلقائيًا</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="149"/>
+        <source>Hide Delay (ms)</source>
+        <translation>تأخير الإخفاء (ميلي ثانية)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="182"/>
+        <source>Pinned Buttons</source>
+        <translation>الأزرار المثبتة</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="200"/>
+        <source>Drag a pinned button on the taskbar to reorder it.</source>
+        <translation>اسحب زرًا مثبتًا على شريط المهام لإعادة ترتيبه.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="221"/>
+        <source>Settings</source>
+        <translation>الإعدادات</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="222"/>
+        <source>Console</source>
+        <translation>وحدة التحكم</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="223"/>
+        <source>Notifications</source>
+        <translation>الإشعارات</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="224"/>
+        <source>Clock</source>
+        <translation>ساعة</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="225"/>
+        <source>Stopwatch</source>
+        <translation>ساعة إيقاف</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="226"/>
+        <source>Pause / Resume</source>
+        <translation>إيقاف مؤقت / استئناف</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="227"/>
+        <source>File Transmission</source>
+        <translation>نقل الملفات</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="228"/>
+        <source>AI Assistant</source>
+        <translation>مساعد AI</translation>
     </message>
 </context>
 <context>
@@ -28073,22 +28629,22 @@ Add absolute addresses above to poll the controller.</source>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2569"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1913"/>
         <source>Console</source>
         <translation>وحدة التحكم</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2577"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1921"/>
         <source>Notifications</source>
         <translation>الإشعارات</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2585"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1929"/>
         <source>Clock</source>
         <translation>ساعة</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2592"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1936"/>
         <source>Stopwatch</source>
         <translation>ساعة إيقاف</translation>
     </message>
@@ -29058,7 +29614,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation type="vanished">نصيحة: اضغط %1 في أي مكان لفتح لوحة الأوامر.</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Terminal.cpp" line="1537"/>
+        <location filename="../../src/UI/Widgets/Terminal.cpp" line="1416"/>
         <source>Tip: Press %1 anywhere to open the command palette.</source>
         <translation>تلميح: اضغط %1 في أي مكان لفتح لوحة الأوامر.</translation>
     </message>

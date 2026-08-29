@@ -77,7 +77,9 @@ static constexpr qint64 kIec104NsPerMs             = 1000000;
  * @brief Constructs the driver, restores persisted settings and wires the configuration signals.
  */
 IO::Drivers::Iec104::Iec104()
-  : m_open(false)
+  : m_appState(AppState::instance())
+  , m_projectModel(DataModel::ProjectModel::instance())
+  , m_open(false)
   , m_loading(true)
   , m_started(false)
   , m_persistent(true)
@@ -1395,17 +1397,15 @@ DataModel::ProjectModel* IO::Drivers::Iec104::loadGeneratedProject()
   if (pointTable().isEmpty())
     return nullptr;
 
-  static auto& pm       = DataModel::ProjectModel::instance();
-  static auto& appState = AppState::instance();
-  appState.setOperationMode(SerialStudio::ProjectFile);
-  if (!pm.loadFromJsonDocument(QJsonDocument(buildProject()), QString())) {
+  m_appState.setOperationMode(SerialStudio::ProjectFile);
+  if (!m_projectModel.loadFromJsonDocument(QJsonDocument(buildProject()), QString())) {
     logDriverError(tr("Failed to load generated project"),
                    tr("The generated project JSON could not be loaded."));
     return nullptr;
   }
 
-  pm.setModified(true);
-  return &pm;
+  m_projectModel.setModified(true);
+  return &m_projectModel;
 }
 
 /**

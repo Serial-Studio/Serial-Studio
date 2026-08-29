@@ -104,6 +104,19 @@ DataModel::ProjectPersistence::ProjectPersistence(ProjectModel& model)
 QJsonObject DataModel::ProjectPersistence::serializeToJson() const
 {
   QJsonObject json;
+  serializeDocumentScalars(json);
+  serializeEntityArrays(json);
+  serializeWorkspacesAndTables(json);
+  serializePresentationAndSinks(json);
+  return json;
+}
+
+/**
+ * @brief Writes the document-level scalars, the schema/writer stamps, and the two optional
+ *        whole-document strings (password hash, control script).
+ */
+void DataModel::ProjectPersistence::serializeDocumentScalars(QJsonObject& json) const
+{
   json.insert(Keys::Title, m_model.m_title);
   json.insert(Keys::PointCount, m_model.m_pointCount);
   json.insert(Keys::PlotTimeRange, m_model.m_plotTimeRange);
@@ -125,7 +138,13 @@ QJsonObject DataModel::ProjectPersistence::serializeToJson() const
 
   if (!m_model.m_controlScriptCode.isEmpty())
     json.insert(Keys::ControlScriptCode, m_model.m_controlScriptCode);
+}
 
+/**
+ * @brief Writes the group, group-folder, action and source arrays.
+ */
+void DataModel::ProjectPersistence::serializeEntityArrays(QJsonObject& json) const
+{
   QJsonArray groupArray;
   for (const auto& group : std::as_const(m_model.m_groups))
     groupArray.append(DataModel::serialize(group));
@@ -147,7 +166,15 @@ QJsonObject DataModel::ProjectPersistence::serializeToJson() const
     sourcesArray.append(DataModel::serialize(source));
 
   json.insert(Keys::Sources, sourcesArray);
+}
 
+/**
+ * @brief Writes the customised workspace list and its folder tree, the hidden auto-group ids, and
+ *        the data tables with their folder tree. Each block is omitted when empty, so a project
+ *        that never left the auto layout keeps the smaller file it had.
+ */
+void DataModel::ProjectPersistence::serializeWorkspacesAndTables(QJsonObject& json) const
+{
   if (m_model.m_workspaces.customizeWorkspaces()) {
     json.insert(Keys::CustomizeWorkspaces, true);
 
@@ -186,7 +213,14 @@ QJsonObject DataModel::ProjectPersistence::serializeToJson() const
   const auto& tableFolders = m_model.m_folders.tableFolders();
   if (!tableFolders.empty())
     json.insert(Keys::TableFolders, serializeFolders(tableFolders));
+}
 
+/**
+ * @brief Writes the presentation blobs and the per-project sink configurations, each only when it
+ *        carries something.
+ */
+void DataModel::ProjectPersistence::serializePresentationAndSinks(QJsonObject& json) const
+{
   const auto& presentation = m_model.m_presentation;
   if (!presentation.widgetSettingsBlob().isEmpty())
     json.insert(Keys::WidgetSettings, presentation.widgetSettingsBlob());
@@ -205,8 +239,6 @@ QJsonObject DataModel::ProjectPersistence::serializeToJson() const
 
   if (!m_model.m_influxSink.isEmpty())
     json.insert(Keys::InfluxSink, m_model.m_influxSink);
-
-  return json;
 }
 
 //--------------------------------------------------------------------------------------------------

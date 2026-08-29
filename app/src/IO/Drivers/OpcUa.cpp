@@ -35,6 +35,7 @@
 #include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
 #include "IO/Drivers/OpcUa/OpcUaEndpointSelection.h"
+#include "IO/Drivers/OpcUa/OpcUaProjectBuilder.h"
 #include "Misc/Translator.h"
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
@@ -44,14 +45,8 @@ Q_LOGGING_CATEGORY(lcOpcUa, "serialstudio.io.opcua")
 
 static constexpr int kOpcUaDialDeadlineMs      = 15000;
 static constexpr int kOpcUaDiscoveryDeadlineMs = 8000;
-static constexpr int kOpcUaMinIntervalMs       = 10;
-static constexpr int kOpcUaMaxIntervalMs       = 60000;
 static constexpr int kOpcUaDefaultIntervalMs   = 100;
-static constexpr qint64 kOpcUaNsPerMs          = 1000000LL;
 static constexpr int kOpcUaDefaultPort         = 4840;
-static constexpr int kWatchdogMs               = 1000;
-static constexpr int kSilenceFactor            = 6;
-static constexpr int kMinSilenceMs             = 3000;
 static constexpr const char* kBackendName      = "open62541";
 
 using IO::Drivers::OpcUaEndpointSelection::endpointAcceptsToken;
@@ -71,33 +66,21 @@ using IO::Drivers::OpcUaEndpointSelection::policyIsDeprecated;
 IO::Drivers::OpcUa::OpcUa()
   : m_connecting(false)
   , m_discovering(false)
-  , m_pollMode(false)
   , m_persistent(true)
-  , m_readInFlight(false)
-  , m_subscribing(false)
   , m_hasDeferred(false)
   , m_pendingDial(PendingDial::None)
   , m_authMode(0)
   , m_endpointIndex(-1)
   , m_publishingInterval(kOpcUaDefaultIntervalMs)
-  , m_pendingMonitors(0)
-  , m_failedMonitors(0)
-  , m_revisedInterval(0)
-  , m_framesPublished(0)
   , m_linkDrops(0)
-  , m_skippedPolls(0)
   , m_endpointUrl(QStringLiteral("opc.tcp://127.0.0.1:4840"))
   , m_securityMode(static_cast<int>(OpcUaTypes::SecurityMode::None))
   , m_dialTimer(new QTimer(this))
   , m_discoveryTimer(new QTimer(this))
-  , m_watchdog(new QTimer(this))
-  , m_pollTimer(new QTimer(this))
-  , m_frameTimer(new QTimer(this))
   , m_session(nullptr)
   , m_discoverySession(nullptr)
-  , m_lastNotifyNs(0)
   , m_certificates(this)
-  , m_assembler(this)
+  , m_subscriptions(*this, this)
   , m_browser(*this, this)
   , m_vault(QStringLiteral("opcua"))
 {
@@ -107,9 +90,6 @@ IO::Drivers::OpcUa::OpcUa()
   m_discoveryTimer->setSingleShot(true);
   connect(m_dialTimer, &QTimer::timeout, this, &IO::Drivers::OpcUa::onDialTimeout);
   connect(m_discoveryTimer, &QTimer::timeout, this, &IO::Drivers::OpcUa::onDiscoveryTimeout);
-  connect(m_pollTimer, &QTimer::timeout, this, &IO::Drivers::OpcUa::onPollTick);
-  connect(m_frameTimer, &QTimer::timeout, this, &IO::Drivers::OpcUa::onFrameTick);
-  connect(m_watchdog, &QTimer::timeout, this, &IO::Drivers::OpcUa::onWatchdogTick);
 
   connect(&m_certificates,
           &OpcUaCertificateStore::certificateChanged,
@@ -120,7 +100,7 @@ IO::Drivers::OpcUa::OpcUa()
           this,
           &IO::Drivers::OpcUa::serverCertificateUntrusted);
   connect(
-    &m_assembler, &OpcUaFrameAssembler::typeMismatch, this, &IO::Drivers::OpcUa::onTypeMismatch);
+    &m_subscriptions, &OpcUaSubscriptions::statusChanged, this, &IO::Drivers::OpcUa::statusChanged);
   connect(&m_browser, &OpcUaBrowser::browsingChanged, this, &IO::Drivers::OpcUa::browsingChanged);
   connect(&m_browser, &OpcUaBrowser::browseFailed, this, &IO::Drivers::OpcUa::browseFailed);
   connect(
@@ -295,28 +275,16 @@ void IO::Drivers::OpcUa::doClose()
     m_pendingDial = PendingDial::None;
 
   m_dialTimer->stop();
-  m_pollTimer->stop();
-  m_frameTimer->stop();
-
-  m_nodeIndex.clear();
-  m_assembler.reset();
-  m_watchdog->stop();
-  m_polledTags.clear();
-  m_pendingMonitors = 0;
-  m_failedMonitors  = 0;
-  m_revisedInterval = 0;
-  m_readInFlight    = false;
-  m_subscribing     = false;
-  m_pollMode        = false;
-  m_lastNotifyNs    = 0;
+  m_subscriptions.reset();
 
   teardownSession(m_session);
 }
 
 /**
  * @brief Disconnects every signal from a session and retires it; the pointer is nulled so a late
- *        callback can never reach a freed object. The session's own close() is what stops the
- *        iterate pump before the open62541 client is destroyed.
+ *        callback can never reach a freed object. The subscription engine listens to the same
+ *        session, so it is released here too. The session's own close() is what stops the iterate
+ *        pump before the open62541 client is destroyed.
  */
 void IO::Drivers::OpcUa::teardownSession(OpcUaSession*& session)
 {
@@ -324,41 +292,10 @@ void IO::Drivers::OpcUa::teardownSession(OpcUaSession*& session)
     return;
 
   disconnect(session, nullptr, this, nullptr);
+  m_subscriptions.unbindSession(session);
   session->close();
   session->deleteLater();
   session = nullptr;
-}
-
-/**
- * @brief Returns true while the session is established.
- */
-bool IO::Drivers::OpcUa::isOpen() const noexcept
-{
-  return m_session && m_session->isOpen();
-}
-
-/**
- * @brief Returns true while a dial is in flight.
- */
-bool IO::Drivers::OpcUa::isConnecting() const noexcept
-{
-  return m_connecting;
-}
-
-/**
- * @brief Tag values arrive through the session, so readable means open.
- */
-bool IO::Drivers::OpcUa::isReadable() const noexcept
-{
-  return isOpen();
-}
-
-/**
- * @brief Writing tags is out of scope (spec 0066 non-goal).
- */
-bool IO::Drivers::OpcUa::isWritable() const noexcept
-{
-  return false;
 }
 
 /**
@@ -376,15 +313,6 @@ bool IO::Drivers::OpcUa::configurationOk() const noexcept
     return endpointUsable(m_endpoints.at(m_endpointIndex));
 
   return QUrl(m_endpointUrl).isValid() && !QUrl(m_endpointUrl).host().isEmpty();
-}
-
-/**
- * @brief The driver never writes (see isWritable()).
- */
-qint64 IO::Drivers::OpcUa::write(const QByteArray& data)
-{
-  Q_UNUSED(data)
-  return 0;
 }
 
 /**
@@ -415,11 +343,7 @@ bool IO::Drivers::OpcUa::open(const QIODevice::OpenMode mode)
   connect(m_session, &OpcUaSession::connected, this, &IO::Drivers::OpcUa::onSessionConnected);
   connect(m_session, &OpcUaSession::disconnected, this, &IO::Drivers::OpcUa::onSessionDisconnected);
   connect(m_session, &OpcUaSession::connectFailed, this, &IO::Drivers::OpcUa::onConnectFailed);
-  connect(m_session, &OpcUaSession::subscribed, this, &IO::Drivers::OpcUa::onSubscribed);
-  connect(m_session, &OpcUaSession::valueChanged, this, &IO::Drivers::OpcUa::onValueChanged);
-  connect(
-    m_session, &OpcUaSession::subscriptionLost, this, &IO::Drivers::OpcUa::onSubscriptionLost);
-  connect(m_session, &OpcUaSession::readFinished, this, &IO::Drivers::OpcUa::onReadFinished);
+  m_subscriptions.bindSession(m_session);
 
   m_connecting = true;
   m_lastError.clear();
@@ -502,14 +426,6 @@ bool IO::Drivers::OpcUa::hasSelectedEndpoint() const noexcept
   return m_endpointIndex >= 0 && m_endpointIndex < m_endpoints.size()
       && endpointUsable(m_endpoints.at(m_endpointIndex))
       && endpointAcceptsToken(m_endpoints.at(m_endpointIndex), m_authMode);
-}
-
-/**
- * @brief Creates a session bound to this driver's thread.
- */
-IO::Drivers::OpcUaSession* IO::Drivers::OpcUa::makeSession()
-{
-  return new OpcUaSession(this);
 }
 
 /**
@@ -645,7 +561,7 @@ void IO::Drivers::OpcUa::onSessionConnected()
   m_dialTimer->stop();
   m_connecting = false;
   reportOpenFinished(true);
-  subscribeAll();
+  m_subscriptions.subscribeAll();
 
   Q_EMIT statusChanged();
   Q_EMIT configurationChanged();
@@ -656,7 +572,7 @@ void IO::Drivers::OpcUa::onSessionConnected()
  */
 void IO::Drivers::OpcUa::onSessionDisconnected()
 {
-  if (m_connecting || m_assembler.idle())
+  if (m_connecting || m_subscriptions.idle())
     return;
 
   onLinkDropped(m_lastError.isEmpty() ? tr("The server closed the session") : m_lastError);
@@ -771,309 +687,8 @@ void IO::Drivers::OpcUa::continuePendingDial()
 }
 
 //--------------------------------------------------------------------------------------------------
-// Subscription, poll fallback and the publish tick
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Computes the wire layout, reserves the frame once and asks the session for ONE
- *        subscription carrying every tag; the per-item verdicts arrive together in onSubscribed().
- */
-void IO::Drivers::OpcUa::subscribeAll()
-{
-  SS_ASSERT(m_session != nullptr, return);
-  SS_ASSERT(!m_tags.isEmpty(), return);
-
-  const auto steady = std::chrono::steady_clock::now().time_since_epoch();
-  m_lastNotifyNs    = std::chrono::duration_cast<std::chrono::nanoseconds>(steady).count();
-  m_assembler.beginSession();
-  m_assembler.reserve(m_tags);
-
-  m_pendingMonitors = m_tags.size();
-  m_failedMonitors  = 0;
-  m_revisedInterval = m_publishingInterval;
-  m_pollMode        = false;
-  m_subscribing     = true;
-  m_polledTags.clear();
-
-  QStringList nodeIds;
-  nodeIds.reserve(m_tags.size());
-  for (int i = 0; i < m_tags.size(); ++i) {
-    nodeIds.append(m_tags.at(i).nodeId);
-    m_nodeIndex.insert(m_tags.at(i).nodeId, i);
-  }
-
-  if (!m_session->subscribe(nodeIds, m_publishingInterval))
-    onSubscribed(QList<OpcUaTypes::StatusCode>(m_tags.size(), OpcUaTypes::kStatusBadInternal));
-
-  m_frameTimer->start(m_publishingInterval);
-  m_watchdog->start(kWatchdogMs);
-}
-
-/**
- * @brief The batch verdict, one status per tag. A refusal stays INDIVIDUAL: the refused tags move
- *        to timed reads and the rest keep their subscription, and only an all-refused verdict
- *        flips the whole session into poll mode.
- */
-void IO::Drivers::OpcUa::onSubscribed(const QList<OpcUaTypes::StatusCode>& perItemStatus)
-{
-  m_subscribing     = false;
-  m_pendingMonitors = 0;
-  m_failedMonitors  = 0;
-  m_polledTags.clear();
-
-  for (int i = 0; i < perItemStatus.size() && i < m_tags.size(); ++i) {
-    if (OpcUaTypes::isGood(perItemStatus.at(i)))
-      continue;
-
-    ++m_failedMonitors;
-    m_polledTags.append(i);
-    logDriverError(
-      tr("OPC UA Monitored Item Refused"),
-      tr("\"%1\": %2").arg(m_tags.at(i).nodeId, OpcUaSession::describeStatus(perItemStatus.at(i))));
-  }
-
-  adoptRevisedInterval();
-
-  if (m_failedMonitors >= m_tags.size()) {
-    enterPollMode(tr("the server refused every monitored item"));
-    return;
-  }
-
-  if (!m_polledTags.isEmpty()) {
-    m_pollTimer->start(m_revisedInterval);
-    onPollTick();
-  }
-
-  Q_EMIT statusChanged();
-}
-
-/**
- * @brief The server dropped the subscription on its own; timed reads take over.
- */
-void IO::Drivers::OpcUa::onSubscriptionLost(const QString& reason)
-{
-  if (!isOpen())
-    return;
-
-  enterPollMode(reason.isEmpty() ? tr("the server retired the subscription") : reason);
-}
-
-/**
- * @brief Adopts the interval the server revised the subscription to; a PLC that floors publishing
- *        at 100 ms must not leave the pane claiming the rate the user asked for.
- */
-void IO::Drivers::OpcUa::adoptRevisedInterval()
-{
-  SS_ASSERT(m_session != nullptr, return);
-
-  const int revised = m_session->revisedInterval();
-  if (revised <= 0 || revised == m_revisedInterval)
-    return;
-
-  m_revisedInterval = qBound(kOpcUaMinIntervalMs, revised, kOpcUaMaxIntervalMs);
-  if (m_frameTimer->isActive())
-    m_frameTimer->start(m_revisedInterval);
-
-  if (m_pollTimer->isActive())
-    m_pollTimer->start(m_revisedInterval);
-}
-
-/**
- * @brief Switches to timed reads at the publishing interval.
- */
-void IO::Drivers::OpcUa::enterPollMode(const QString& reason)
-{
-  if (m_pollMode)
-    return;
-
-  m_pollMode = true;
-  m_polledTags.clear();
-  for (int i = 0; i < m_tags.size(); ++i)
-    m_polledTags.append(i);
-
-  logDriverError(tr("OPC UA Subscription Unavailable"),
-                 tr("Falling back to polling: %1.").arg(reason));
-
-  m_pollTimer->start(m_revisedInterval > 0 ? m_revisedInterval : m_publishingInterval);
-  onPollTick();
-  Q_EMIT statusChanged();
-}
-
-/**
- * @brief Nothing has arrived for several publishing periods while the session is still up: a
- *        server that silently dropped the subscription (project reload, PLC stop) looks healthy
- *        otherwise, so the session falls back to polling rather than freezing the dashboard.
- */
-void IO::Drivers::OpcUa::onWatchdogTick()
-{
-  if (!isOpen() || m_pollMode || m_subscribing || m_lastNotifyNs == 0)
-    return;
-
-  const auto now        = std::chrono::steady_clock::now().time_since_epoch();
-  const qint64 nowNs    = std::chrono::duration_cast<std::chrono::nanoseconds>(now).count();
-  const qint64 silentMs = (nowNs - m_lastNotifyNs) / kOpcUaNsPerMs;
-  const qint64 budgetMs =
-    qMax<qint64>(kMinSilenceMs, static_cast<qint64>(m_revisedInterval) * kSilenceFactor);
-
-  if (silentMs < budgetMs)
-    return;
-
-  enterPollMode(tr("no notification for %1 s").arg(silentMs / 1000));
-}
-
-/**
- * @brief Issues one batched read of every tag's Value attribute.
- */
-void IO::Drivers::OpcUa::onPollTick()
-{
-  if (!isOpen() || m_polledTags.isEmpty())
-    return;
-
-  if (m_readInFlight) {
-    ++m_skippedPolls;
-    return;
-  }
-
-  issueRead(m_polledTags);
-}
-
-/**
- * @brief Issues the batched Value read for a tag subset. Exactly one read is outstanding at a
- *        time: queueing them behind a slow PLC grows latency without bound and eventually times
- *        the session out, so the session drops the overflow rather than queueing it.
- */
-void IO::Drivers::OpcUa::issueRead(const QList<int>& tags)
-{
-  SS_ASSERT(m_session != nullptr, return);
-  SS_ASSERT(!tags.isEmpty(), return);
-
-  QStringList nodeIds;
-  nodeIds.reserve(tags.size());
-  for (const int tag : tags) {
-    if (tag < 0 || tag >= m_tags.size())
-      continue;
-
-    nodeIds.append(m_tags.at(tag).nodeId);
-  }
-
-  if (!nodeIds.isEmpty())
-    m_readInFlight = m_session->readValues(nodeIds);
-}
-
-/**
- * @brief Routes batched read results into the slot cache by node id.
- */
-void IO::Drivers::OpcUa::onReadFinished(quint32 token,
-                                        const QList<OpcUaTypes::ReadRow>& rows,
-                                        OpcUaTypes::StatusCode status)
-{
-  Q_UNUSED(token)
-
-  m_readInFlight = false;
-  if (!OpcUaTypes::isGood(status)) {
-    logDriverError(tr("OPC UA Read Failed"), OpcUaSession::describeStatus(status));
-    return;
-  }
-
-  for (const auto& row : rows) {
-    const int tag = m_nodeIndex.value(row.nodeId, -1);
-    if (tag < 0)
-      continue;
-
-    m_assembler.storeValue(tag, row.value, row.status, row.sourceTimestamp);
-  }
-}
-
-/**
- * @brief Monitored-item update: the tag index and the server's own timestamps travel with the
- *        notification, so nothing has to be looked up or re-stamped here.
- */
-void IO::Drivers::OpcUa::onValueChanged(const OpcUaTypes::MonitoredValue& value)
-{
-  SS_ASSERT(value.tag >= 0, return);
-  if (value.tag >= m_tags.size())
-    return;
-
-  const auto now = std::chrono::steady_clock::now().time_since_epoch();
-  m_lastNotifyNs = std::chrono::duration_cast<std::chrono::nanoseconds>(now).count();
-
-  m_assembler.noteServerTimestamp(value.serverTimestamp);
-  m_assembler.storeValue(value.tag, value.value, value.status, value.sourceTimestamp);
-}
-
-/**
- * @brief The node ids whose newest value carried a Bad status (R11 diagnostics).
- */
-QStringList IO::Drivers::OpcUa::badTags() const
-{
-  return m_assembler.badTags(m_tags);
-}
-
-/**
- * @brief A slot whose values do not match the type the tag was declared with, reported once per
- *        slot. The warning is raised here rather than in the encoder because a driver's console
- *        line is the facade's to write.
- */
-void IO::Drivers::OpcUa::onTypeMismatch(int index, const QString& declared, const QString& actual)
-{
-  logDriverError(tr("OPC UA Type Mismatch"),
-                 tr("Channel %1 is declared %2 but the server sends %3; the value is coerced.")
-                   .arg(QString::number(index), declared, actual));
-}
-
-/**
- * @brief Publishing tick: hands the assembled delta frame to the pipeline, stamped with the
- *        earliest source time it carries. No dirty slot, no frame.
- */
-void IO::Drivers::OpcUa::onFrameTick()
-{
-  if (!isOpen())
-    return;
-
-  QByteArray frame;
-  CapturedData::SteadyTimePoint timestamp;
-  if (!m_assembler.assemble(frame, timestamp))
-    return;
-
-  ++m_framesPublished;
-  publishReceivedData(std::move(frame), timestamp);
-}
-
-//--------------------------------------------------------------------------------------------------
 // Browse session and project generation
 //--------------------------------------------------------------------------------------------------
-
-/**
- * @brief The picker's model, owned by the browse session that feeds it.
- */
-IO::Drivers::OpcUaTagModel* IO::Drivers::OpcUa::tagModel()
-{
-  return m_browser.tagModel();
-}
-
-/**
- * @brief QML-facing view of the tag model.
- */
-QObject* IO::Drivers::OpcUa::tagModelObject()
-{
-  return m_browser.tagModelObject();
-}
-
-/**
- * @brief Opens the picker's browse-only session beside the live one.
- */
-void IO::Drivers::OpcUa::startBrowse()
-{
-  m_browser.start();
-}
-
-/**
- * @brief Commits the picker's selection as the tag list and ends the browse session.
- */
-void IO::Drivers::OpcUa::stopBrowse()
-{
-  m_browser.stop();
-}
 
 /**
  * @brief Ends the browse session WITHOUT committing the picker selection (the dialog's Cancel).
@@ -1093,14 +708,6 @@ void IO::Drivers::OpcUa::requestBrowseDiscovery()
 {
   m_pendingDial = PendingDial::Browse;
   discoverEndpoints();
-}
-
-/**
- * @brief Adopts the tag list the picker committed.
- */
-void IO::Drivers::OpcUa::commitBrowsedTags(const QJsonArray& tags)
-{
-  setTags(tags);
 }
 
 /**
@@ -1179,155 +786,23 @@ void IO::Drivers::OpcUa::generateProject()
 }
 
 /**
- * @brief One dataset for a tag (or one array element): LED for booleans, plot for numerics.
- */
-DataModel::Dataset IO::Drivers::OpcUa::datasetFor(const OpcUaTag& tag, int element, int index)
-{
-  SS_ASSERT_LOG(index >= 1);
-  const auto type = wireTypeFor(tag);
-
-  DataModel::Dataset dataset;
-  dataset.index = index;
-  dataset.log   = true;
-  dataset.units = tag.unit;
-  dataset.title = qMax(1, tag.arrayLen) > 1
-                  ? QStringLiteral("%1[%2]").arg(tag.name, QString::number(element))
-                  : tag.name;
-
-  if (type == OpcUaWire::Type::Bool) {
-    dataset.led     = true;
-    dataset.ledHigh = 1;
-    dataset.wgtMax  = 1;
-  } else if (type != OpcUaWire::Type::Str) {
-    dataset.plt = true;
-    if (tag.max > tag.min) {
-      dataset.wgtMin = tag.min;
-      dataset.wgtMax = tag.max;
-      dataset.pltMin = tag.min;
-      dataset.pltMax = tag.max;
-    }
-  }
-
-  return dataset;
-}
-
-/**
- * @brief One group per parent folder, one dataset per wire index, the opcua native template.
+ * @brief One group per parent folder, one dataset per wire index, the opcua native template. The
+ *        connection settings are the driver's own property model, minus the password: a project
+ *        file is shared, and the vault is what keeps the secret out of it.
  */
 QJsonObject IO::Drivers::OpcUa::buildProject() const
 {
-  QJsonObject project;
-  project[Keys::Title]   = tr("OPC UA Project");
-  project[Keys::Actions] = QJsonArray();
-
-  QJsonObject source;
-  source[Keys::SourceId]              = 0;
-  source[Keys::Title]                 = tr("OPC UA");
-  source[Keys::BusType]               = static_cast<int>(SerialStudio::BusType::OpcUa);
-  source[Keys::FrameStart]            = QString();
-  source[Keys::FrameEnd]              = QString();
-  source[Keys::Checksum]              = QString();
-  source[Keys::FrameDetection]        = static_cast<int>(SerialStudio::NoDelimiters);
-  source[Keys::Decoder]               = static_cast<int>(SerialStudio::Binary);
-  source[Keys::HexadecimalDelimiters] = false;
-  source[Keys::FrameParserCode]       = QString();
-  source[Keys::FrameParserLanguage]   = static_cast<int>(SerialStudio::Native);
-  source[Keys::FrameParserTemplate]   = QStringLiteral("opcua");
-  source[Keys::FrameParserParams]     = QJsonObject{
-        {QStringLiteral("schema"), wireSchema()}
-  };
-
   QJsonObject conn;
   for (const auto& prop : driverProperties())
     if (prop.type != IO::DriverProperty::Password)
       conn.insert(prop.key, QJsonValue::fromVariant(prop.value));
 
-  source[Keys::SourceConn] = conn;
-  project[Keys::Sources]   = QJsonArray{source};
-
-  QStringList order;
-  QHash<QString, DataModel::Group> groups;
-  int index = 0;
-  for (const auto& tag : m_tags) {
-    const QString key = tag.path.isEmpty() ? tr("Tags") : tag.path;
-    if (!groups.contains(key)) {
-      DataModel::Group group;
-      group.groupId = order.size();
-      group.widget  = QStringLiteral("datagrid");
-      group.title   = key.section(QLatin1Char('/'), -1);
-      groups.insert(key, group);
-      order.append(key);
-    }
-
-    auto& group = groups[key];
-    for (int i = 0; i < qMax(1, tag.arrayLen); ++i, ++index)
-      group.datasets.push_back(datasetFor(tag, i, index + 1));
-  }
-
-  QJsonArray groupArray;
-  for (const auto& key : order)
-    groupArray.append(DataModel::serialize(groups.value(key)));
-
-  project[Keys::Groups] = groupArray;
-  return project;
+  return OpcUaProjectBuilder(m_tags).buildProject(conn);
 }
 
 //--------------------------------------------------------------------------------------------------
 // Property getters
 //--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Returns the typed endpoint URL.
- */
-QString IO::Drivers::OpcUa::endpointUrl() const
-{
-  return m_endpointUrl;
-}
-
-/**
- * @brief Returns the selected discovered endpoint row, or -1.
- */
-int IO::Drivers::OpcUa::endpointIndex() const
-{
-  return m_endpointIndex;
-}
-
-/**
- * @brief "policy / mode / url" rows for the endpoint combo.
- */
-QStringList IO::Drivers::OpcUa::endpointList() const
-{
-  QStringList list;
-  for (const auto& endpoint : m_endpoints) {
-    auto policy = endpoint.securityPolicyUri.section(QLatin1Char('#'), -1);
-    if (policyIsDeprecated(endpoint.securityPolicyUri))
-      policy += tr(" (deprecated)");
-
-    list.append(QStringLiteral("%1 / %2 / %3")
-                  .arg(policy, describeMode(endpoint.securityMode), endpoint.endpointUrl));
-  }
-
-  return list;
-}
-
-/**
- * @brief The translated name of a message security mode.
- */
-QString IO::Drivers::OpcUa::describeMode(OpcUaTypes::SecurityMode mode)
-{
-  switch (mode) {
-    case OpcUaTypes::SecurityMode::None:
-      return tr("None");
-    case OpcUaTypes::SecurityMode::Sign:
-      return tr("Sign");
-    case OpcUaTypes::SecurityMode::SignAndEncrypt:
-      return tr("Sign and Encrypt");
-    case OpcUaTypes::SecurityMode::Invalid:
-      break;
-  }
-
-  return tr("Invalid");
-}
 
 /**
  * @brief Structured view of the discovered endpoints for API clients: policy, mode, URL, the
@@ -1372,74 +847,6 @@ QJsonArray IO::Drivers::OpcUa::endpointsJson() const
 }
 
 /**
- * @brief True when a tag edit is waiting for the live session to close.
- */
-bool IO::Drivers::OpcUa::tagsDeferred() const
-{
-  return m_hasDeferred;
-}
-
-/**
- * @brief Parallel to endpointList(): true where the row can be dialed by this build.
- */
-QVariantList IO::Drivers::OpcUa::endpointSelectable() const
-{
-  QVariantList list;
-  for (const auto& endpoint : m_endpoints)
-    list.append(endpointUsable(endpoint) && endpointAcceptsToken(endpoint, m_authMode));
-
-  return list;
-}
-
-/**
- * @brief Returns true while an endpoint request is in flight.
- */
-bool IO::Drivers::OpcUa::discovering() const
-{
-  return m_discovering;
-}
-
-/**
- * @brief Returns the authentication mode (0 anonymous, 1 username).
- */
-int IO::Drivers::OpcUa::authMode() const
-{
-  return m_authMode;
-}
-
-/**
- * @brief Returns the username for mode 1.
- */
-QString IO::Drivers::OpcUa::username() const
-{
-  return m_username;
-}
-
-/**
- * @brief Returns the vault-backed password for mode 1.
- */
-QString IO::Drivers::OpcUa::password() const
-{
-  return m_password;
-}
-
-/**
- * @brief Returns the publishing interval in milliseconds.
- */
-int IO::Drivers::OpcUa::publishingInterval() const
-{
-  return m_publishingInterval;
-}
-
-/**
- * @brief Returns the number of selected tags.
- */
-int IO::Drivers::OpcUa::tagCount() const
-{
-  return m_tags.size();
-}
-
-/**
  * @brief One-line session status for the pane, read from the live session when this instance
  *        is the UI-config one.
  */
@@ -1454,21 +861,23 @@ QString IO::Drivers::OpcUa::statusText() const
   if (!isOpen())
     return m_lastError.isEmpty() ? tr("Not connected") : m_lastError;
 
-  const int interval = m_revisedInterval > 0 ? m_revisedInterval : m_publishingInterval;
+  const int revised  = m_subscriptions.revisedInterval();
+  const int refused  = m_subscriptions.refusedTags();
+  const int interval = revised > 0 ? revised : m_publishingInterval;
   const double hz    = 1000.0 / qMax(1, interval);
 
-  if (m_subscribing)
+  if (m_subscriptions.subscribing())
     return tr("Subscribing, %1 of %2 tags")
-      .arg(m_tags.size() - m_pendingMonitors)
+      .arg(m_tags.size() - m_subscriptions.pendingMonitors())
       .arg(m_tags.size());
 
-  if (!m_pollMode && !m_polledTags.isEmpty())
+  if (!m_subscriptions.pollMode() && refused > 0)
     return tr("Subscribed %1 tags, polling %2 refused, %3 Hz")
-      .arg(m_tags.size() - m_polledTags.size())
-      .arg(m_polledTags.size())
+      .arg(m_tags.size() - refused)
+      .arg(refused)
       .arg(hz, 0, 'f', 1);
 
-  if (m_pollMode)
+  if (m_subscriptions.pollMode())
     return tr("Polling (server refused subscriptions), %1 tags, %2 Hz")
       .arg(m_tags.size())
       .arg(hz, 0, 'f', 1);
@@ -1484,7 +893,7 @@ bool IO::Drivers::OpcUa::pollMode() const
   if (const auto* peer = sessionPeer())
     return peer->pollMode();
 
-  return m_pollMode;
+  return m_subscriptions.pollMode();
 }
 
 /**
@@ -1495,15 +904,7 @@ int IO::Drivers::OpcUa::revisedInterval() const
   if (const auto* peer = sessionPeer())
     return peer->revisedInterval();
 
-  return m_revisedInterval;
-}
-
-/**
- * @brief Returns true while the browse session is up.
- */
-bool IO::Drivers::OpcUa::browsing() const
-{
-  return m_browser.browsing();
+  return m_subscriptions.revisedInterval();
 }
 
 /**
@@ -1512,14 +913,6 @@ bool IO::Drivers::OpcUa::browsing() const
 QStringList IO::Drivers::OpcUa::authModeList() const
 {
   return {tr("Anonymous"), tr("Username / Password"), tr("X.509 Certificate")};
-}
-
-/**
- * @brief Returns the selected tags in wire order.
- */
-const QList<IO::Drivers::OpcUaTag>& IO::Drivers::OpcUa::tags() const noexcept
-{
-  return m_tags;
 }
 
 /**
@@ -1539,19 +932,7 @@ QJsonArray IO::Drivers::OpcUa::tagsJson() const
  */
 QJsonArray IO::Drivers::OpcUa::wireSchema() const
 {
-  QJsonArray schema;
-  int index = 0;
-  for (const auto& tag : m_tags) {
-    const auto code = OpcUaWire::codeFromType(wireTypeFor(tag));
-    for (int i = 0; i < qMax(1, tag.arrayLen) && index < OpcUaWire::kMaxTags; ++i, ++index)
-      schema.append(QJsonObject{
-        { QStringLiteral("i"),      index},
-        { QStringLiteral("t"),       code},
-        {QStringLiteral("id"), tag.nodeId}
-      });
-  }
-
-  return schema;
+  return OpcUaProjectBuilder(m_tags).wireSchema();
 }
 
 /**
@@ -1569,34 +950,36 @@ QJsonObject IO::Drivers::OpcUa::statusJson() const
   }
 
   const auto pending = OpcUaCertificateStore::certificateObject(m_certificates.pendingTrust());
-  const auto values  = static_cast<qint64>(m_assembler.valuesReceived());
-  const auto bad     = static_cast<qint64>(m_assembler.badStatusCount());
-  const auto skewed  = static_cast<qint64>(m_assembler.unstampedCount());
+  const auto values  = static_cast<qint64>(m_subscriptions.valuesReceived());
+  const auto bad     = static_cast<qint64>(m_subscriptions.badStatusCount());
+  const auto skewed  = static_cast<qint64>(m_subscriptions.unstampedCount());
+  const auto frames  = static_cast<qint64>(m_subscriptions.framesPublished());
+  const auto skipped = static_cast<qint64>(m_subscriptions.skippedPolls());
 
   return QJsonObject{
-    {         QStringLiteral("connected"),                               isOpen()},
-    {        QStringLiteral("connecting"),                           m_connecting},
-    {          QStringLiteral("pollMode"),                             m_pollMode},
-    {       QStringLiteral("subscribing"),                          m_subscribing},
-    {   QStringLiteral("revisedInterval"),                      m_revisedInterval},
-    {       QStringLiteral("refusedTags"),                    m_polledTags.size()},
-    {      QStringLiteral("skippedPolls"),    static_cast<qint64>(m_skippedPolls)},
-    {           QStringLiteral("badTags"),  QJsonArray::fromStringList(badTags())},
-    {          QStringLiteral("endpoint"),                  selectedEndpointUrl()},
-    {    QStringLiteral("securityPolicy"),                     negotiatedPolicy()},
-    {      QStringLiteral("securityMode"),                       negotiatedMode()},
-    {  QStringLiteral("configuredPolicy"),                       m_securityPolicy},
-    {    QStringLiteral("configuredMode"),                         m_securityMode},
-    {QStringLiteral("credentialsExposed"),                   credentialsExposed()},
-    { QStringLiteral("serverCertificate"),                                pending},
-    {          QStringLiteral("tagCount"),                          m_tags.size()},
-    {    QStringLiteral("valuesReceived"),                                 values},
-    {         QStringLiteral("badStatus"),                                    bad},
-    {         QStringLiteral("unstamped"),                                 skewed},
-    {   QStringLiteral("framesPublished"), static_cast<qint64>(m_framesPublished)},
-    {        QStringLiteral("reconnects"),       static_cast<qint64>(m_linkDrops)},
-    {         QStringLiteral("lastError"),                            m_lastError},
-    {        QStringLiteral("statusText"),                           statusText()},
+    {         QStringLiteral("connected"),                              isOpen()},
+    {        QStringLiteral("connecting"),                          m_connecting},
+    {          QStringLiteral("pollMode"),            m_subscriptions.pollMode()},
+    {       QStringLiteral("subscribing"),         m_subscriptions.subscribing()},
+    {   QStringLiteral("revisedInterval"),     m_subscriptions.revisedInterval()},
+    {       QStringLiteral("refusedTags"),         m_subscriptions.refusedTags()},
+    {      QStringLiteral("skippedPolls"),                               skipped},
+    {           QStringLiteral("badTags"), QJsonArray::fromStringList(badTags())},
+    {          QStringLiteral("endpoint"),                 selectedEndpointUrl()},
+    {    QStringLiteral("securityPolicy"),                    negotiatedPolicy()},
+    {      QStringLiteral("securityMode"),                      negotiatedMode()},
+    {  QStringLiteral("configuredPolicy"),                      m_securityPolicy},
+    {    QStringLiteral("configuredMode"),                        m_securityMode},
+    {QStringLiteral("credentialsExposed"),                  credentialsExposed()},
+    { QStringLiteral("serverCertificate"),                               pending},
+    {          QStringLiteral("tagCount"),                         m_tags.size()},
+    {    QStringLiteral("valuesReceived"),                                values},
+    {         QStringLiteral("badStatus"),                                   bad},
+    {         QStringLiteral("unstamped"),                                skewed},
+    {   QStringLiteral("framesPublished"),                                frames},
+    {        QStringLiteral("reconnects"),      static_cast<qint64>(m_linkDrops)},
+    {         QStringLiteral("lastError"),                           m_lastError},
+    {        QStringLiteral("statusText"),                          statusText()},
   };
 }
 
@@ -1764,15 +1147,7 @@ void IO::Drivers::OpcUa::setPublishingInterval(const int interval)
   if (m_persistent)
     m_settings.setValue("OpcUaDriver/publishingInterval", m_publishingInterval);
 
-  if (m_session)
-    (void)m_session->modifyPublishingInterval(m_publishingInterval);
-
-  m_revisedInterval = m_publishingInterval;
-  if (m_frameTimer->isActive())
-    m_frameTimer->start(m_publishingInterval);
-
-  if (m_pollTimer->isActive())
-    m_pollTimer->start(m_publishingInterval);
+  m_subscriptions.applyPublishingInterval(m_publishingInterval);
 
   Q_EMIT publishingIntervalChanged();
   Q_EMIT statusChanged();
@@ -1916,61 +1291,11 @@ void IO::Drivers::OpcUa::selectBestEndpoint(const QString& previousUrl)
 }
 
 /**
- * @brief The configured security policy URI.
- */
-QString IO::Drivers::OpcUa::securityPolicy() const
-{
-  return m_securityPolicy;
-}
-
-/**
  * @brief The configured policy as a row of securityPolicyList().
  */
 int IO::Drivers::OpcUa::securityPolicyIndex() const
 {
   return qMax(0, supportedPolicies().indexOf(m_securityPolicy));
-}
-
-/**
- * @brief Short names of the supported policies, for the picker.
- */
-QStringList IO::Drivers::OpcUa::securityPolicyList() const
-{
-  QStringList out;
-  for (const auto& uri : supportedPolicies()) {
-    const auto name = uri.section(QLatin1Char('#'), -1);
-    out.append(policyIsDeprecated(uri) ? tr("%1 (deprecated)").arg(name) : name);
-  }
-
-  return out;
-}
-
-/**
- * @brief Parallel to securityPolicyList(): true where the row is a deprecated policy.
- */
-QVariantList IO::Drivers::OpcUa::securityPolicyDeprecated() const
-{
-  QVariantList out;
-  for (const auto& uri : supportedPolicies())
-    out.append(policyIsDeprecated(uri));
-
-  return out;
-}
-
-/**
- * @brief The configured message security mode.
- */
-int IO::Drivers::OpcUa::securityMode() const
-{
-  return m_securityMode;
-}
-
-/**
- * @brief Translated message-security-mode labels, indexed by the OPC UA enumeration.
- */
-QStringList IO::Drivers::OpcUa::securityModeList() const
-{
-  return {tr("Invalid"), tr("None"), tr("Sign"), tr("Sign and Encrypt")};
 }
 
 /**
@@ -2035,22 +1360,6 @@ void IO::Drivers::OpcUa::setSecurityMode(const int mode)
 }
 
 /**
- * @brief The user certificate presented for X.509 identity (authentication mode 2).
- */
-QString IO::Drivers::OpcUa::userCertificatePath() const
-{
-  return m_userCertificatePath;
-}
-
-/**
- * @brief The private key that proves ownership of the user certificate.
- */
-QString IO::Drivers::OpcUa::userKeyPath() const
-{
-  return m_userKeyPath;
-}
-
-/**
  * @brief Sets the user certificate path.
  */
 void IO::Drivers::OpcUa::setUserCertificatePath(const QString& value)
@@ -2083,15 +1392,6 @@ void IO::Drivers::OpcUa::setUserKeyPath(const QString& value)
   Q_EMIT securityChanged();
 }
 
-/**
- * @brief True when the chosen identity would send a secret over a channel that does not encrypt
- *        it, which is what the pane's warning banner is conditional on.
- */
-bool IO::Drivers::OpcUa::credentialsExposed() const
-{
-  return credentialsAreExposed();
-}
-
 //--------------------------------------------------------------------------------------------------
 // Certificates and trust
 //--------------------------------------------------------------------------------------------------
@@ -2118,27 +1418,11 @@ QVariantMap IO::Drivers::OpcUa::clientCertificate() const
 }
 
 /**
- * @brief The installation's client certificate, for the API.
- */
-QJsonObject IO::Drivers::OpcUa::certificateJson() const
-{
-  return m_certificates.certificateJson();
-}
-
-/**
  * @brief Every server certificate the user has accepted.
  */
 QVariantList IO::Drivers::OpcUa::trustedCertificates() const
 {
   return m_certificates.trustedCertificates();
-}
-
-/**
- * @brief Every accepted server certificate, for the API.
- */
-QJsonArray IO::Drivers::OpcUa::trustedJson() const
-{
-  return m_certificates.trustedJson();
 }
 
 /**

@@ -144,24 +144,15 @@ DataModel::FrameBuilder::FrameBuilder()
   , m_parsedFrameCount(0)
   , m_skippedFrameCount(0)
   , m_jsTransformTimedOut(false)
-  , m_publishedTableGeneration(-1)
-  , m_publishedTableClock(0)
   , m_projectSyncInFlight(false)
-  , m_guiTableApiUsers(false)
-  , m_tableSnapshotRequested(false)
-  , m_tableMirrorRing(kTableMirrorSlots)
-  , m_tableSnapshotPoolHint(0)
+  , m_tableChannel(*this, m_tableStore)
   , m_quickPlot(m_operationMode)
-  , m_tableApi(*this, m_tableStore, m_guiTableSnapshot)
+  , m_tableApi(*this, m_tableStore, m_tableChannel.guiSnapshot())
   , m_transforms(m_frame, m_tableStore, [this](lua_State* L) { injectTableApiLua(L); })
   , m_streamValuesDirty(false)
   , m_latestFrameSourceId(-1)
   , m_latestFrameSeq(0)
-  , m_publishedLatestFrameSeq(0)
-  , m_guiLatestFrameUsers(false)
-  , m_latestFrameSnapshotRequested(false)
-  , m_latestFrameMirrorRing(kLatestFrameMirrorSlots)
-  , m_parseLoadMirrorRing(kParseLoadMirrorSlots)
+  , m_latestTap(*this, m_latestFrames, m_latestFrameSourceId, m_latestFrameSeq, m_parseBudget)
   , m_engineCacheSourceId(-1)
   , m_luaEngineForSource(nullptr)
   , m_jsEngineForSource(nullptr)
@@ -177,10 +168,6 @@ DataModel::FrameBuilder::FrameBuilder()
   m_framePool.reserve(kFramePoolSize);
   for (int i = 0; i < kFramePoolSize; ++i)
     m_framePool.emplace_back(std::make_shared<PooledFrameSlot>());
-
-  m_tableSnapshotPool.reserve(kTableSnapshotPoolSlots);
-  for (size_t i = 0; i < kTableSnapshotPoolSlots; ++i)
-    m_tableSnapshotPool.emplace_back(std::make_shared<DataModel::DataTableSnapshot>());
 
   m_blockPool.reserve(kBlockPoolSlots);
   for (int i = 0; i < kBlockPoolSlots; ++i)
@@ -744,13 +731,6 @@ DataModel::DataTableStore& DataModel::FrameBuilder::tableStore() noexcept
 }
 
 /**
- * @brief Default-constructs an empty latest-frame snapshot (no chunk, sequence 0).
- */
-DataModel::FrameBuilder::LatestFrameInfo::LatestFrameInfo()
-  : sourceId(-1), sequence(0), timestampMs(0), channelsSequence(0)
-{}
-
-/**
  * @brief Returns the latest captured frame for @p sourceId, the newest across all sources when
  *        @p sourceId is negative, or nullptr when capture is off or nothing arrived yet.
  */
@@ -811,7 +791,7 @@ void DataModel::FrameBuilder::setupExternalConnections()
 
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this, [this] {
     m_parseBudget.maintain(BudgetClock::now());
-    publishParseLoads();
+    m_latestTap.publishParseLoads();
   });
 
   wireDisplayTickHooks(Misc::TimerEvents::instance(), IO::PipelineHost::instance());
@@ -1019,7 +999,7 @@ void DataModel::FrameBuilder::refreshLatestFrameCapture()
 
 /**
  * @brief Drops every retained capture and moves the sequence on, so the GUI mirror republishes
- *        the empty map: publishLatestFrameSnapshot() compares sequences, and a clear that left
+ *        the empty map: the latest-frame mirror compares sequences, and a clear that left
  *        the sequence alone kept io.getLatestFrame serving the previous connection's frame.
  */
 void DataModel::FrameBuilder::clearLatestFrames()
@@ -1563,42 +1543,18 @@ bool DataModel::FrameBuilder::dashboardTick()
 }
 
 /**
- * @brief GUI-side half of the data-table mirror (spec 0051 M5): adopts the newest snapshot the
- *        builder thread published, then requests the next. Runs once per display tick before
- *        updated() reaches painter and output-widget scripts, so their tableGet/datasetGet calls
- *        read a GUI-local copy instead of parking the tick behind the pipeline thread.
+ * @brief GUI-side entry point of the data-table mirror (spec 0051 M5): the channel adopts the
+ *        newest snapshot the builder thread published and reports whether the next publish still
+ *        has to be requested. The request hop stays here because the marshal into the pipeline
+ *        thread is the facade's to own.
  */
 void DataModel::FrameBuilder::drainTableSnapshot()
 {
   SS_ASSERT(qApp != nullptr, return);
   SS_ASSERT(QThread::currentThread() == qApp->thread(), return);
 
-  if (!m_guiTableApiUsers.load(std::memory_order_relaxed)) [[likely]]
-    return;
-
-  DataModel::DataTableSnapshotPtr snapshot;
-  // code-verify off
-  // Ring drain: bounded by the mirror ring capacity (4), provably finite per tick.
-  while (m_tableMirrorRing.try_dequeue(snapshot))
-    if (snapshot)
-      m_guiTableSnapshot = snapshot;
-  // code-verify on
-
-  snapshot.reset();
-
-  if (!m_tableSnapshotRequested.exchange(true, std::memory_order_acq_rel))
-    invokeOnBuilderThread([this] { publishTableSnapshot(); });
-}
-
-/**
- * @brief Arms the mirror when a script engine is wired up on the GUI thread. Engines injected on
- *        the pipeline thread (the parser and every dataset transform) read the live store
- *        directly, so they must not make the builder pay for a snapshot nobody reads.
- */
-void DataModel::FrameBuilder::noteGuiTableApiUser()
-{
-  if (qApp && QThread::currentThread() == qApp->thread())
-    m_guiTableApiUsers.store(true, std::memory_order_relaxed);
+  if (m_tableChannel.drainForGui())
+    invokeOnBuilderThread([this] { m_tableChannel.publish(); });
 }
 
 /**
@@ -1608,62 +1564,8 @@ void DataModel::FrameBuilder::noteGuiTableApiUser()
  */
 const DataModel::TableApiContext& DataModel::FrameBuilder::guiTableApiContext()
 {
-  noteGuiTableApiUser();
+  m_tableChannel.noteGuiUser();
   return m_tableApi.context();
-}
-
-/**
- * @brief Claims a free pooled snapshot slot, or null when every slot is in flight (the caller
- *        skips the publish and the next display-tick request retries the same state). The
- *        use_count probe is an atomic read and the acquire fence pairs with the GUI's release
- *        of its previously adopted snapshot, so slot reuse happens-after every consumer read.
- */
-std::shared_ptr<DataModel::DataTableSnapshot> DataModel::FrameBuilder::claimTableSnapshotSlot()
-{
-  SS_ASSERT(!m_tableSnapshotPool.empty(), return nullptr);
-
-  const std::size_t n = m_tableSnapshotPool.size();
-  for (std::size_t k = 0; k < n; ++k) {
-    const std::size_t idx = (m_tableSnapshotPoolHint + k) % n;
-    if (m_tableSnapshotPool[idx].use_count() != 1)
-      continue;
-
-    std::atomic_thread_fence(std::memory_order_acquire);
-    m_tableSnapshotPoolHint = (idx + 1) % n;
-    return m_tableSnapshotPool[idx];
-  }
-
-  return nullptr;
-}
-
-/**
- * @brief Builder-thread half of the mirror: fills a reused pool slot from the store when its
- *        layout generation or write clock moved since the last publish, so the steady state
- *        allocates nothing. Runs on request at display-tick rate, never per frame. Pool
- *        exhaustion or a full ring leaves the bookkeeping untouched so the next request retries.
- */
-void DataModel::FrameBuilder::publishTableSnapshot()
-{
-  SS_ASSERT(QThread::currentThread() == thread(), return);
-
-  m_tableSnapshotRequested.store(false, std::memory_order_release);
-
-  const int generation = m_tableStore.isInitialized() ? m_tableStore.generation() : -1;
-  const quint64 clock  = m_tableStore.writeClock();
-  if (generation == m_publishedTableGeneration && clock == m_publishedTableClock)
-    return;
-
-  const auto slot = claimTableSnapshotSlot();
-  if (!slot) [[unlikely]]
-    return;
-
-  m_tableStore.snapshotInto(*slot);
-  if (!m_tableMirrorRing.try_enqueue(DataModel::DataTableSnapshotPtr(slot, slot.get())))
-    [[unlikely]]
-    return;
-
-  m_publishedTableGeneration = generation;
-  m_publishedTableClock      = clock;
 }
 
 /**
@@ -2310,7 +2212,7 @@ std::vector<DataModel::FrameBuilder::ParseLoad> DataModel::FrameBuilder::parseLo
 {
   if (QThread::currentThread() != thread()) {
     if (qApp && QThread::currentThread() == qApp->thread())
-      return guiParseLoads();
+      return m_latestTap.guiParseLoads();
 
     std::vector<ParseLoad> loads;
     invokeOnBuilderThreadBlocking([this, &loads] { loads = m_parseBudget.snapshot(); });
@@ -2318,36 +2220,6 @@ std::vector<DataModel::FrameBuilder::ParseLoad> DataModel::FrameBuilder::parseLo
   }
 
   return m_parseBudget.snapshot();
-}
-
-/**
- * @brief Builder-thread half of the parse-load mirror, published on the same 1 Hz tick the
- *        diagnostics sample at, so the GUI reader never marshals.
- */
-void DataModel::FrameBuilder::publishParseLoads()
-{
-  SS_ASSERT(QThread::currentThread() == thread(), return);
-
-  auto sample = std::make_shared<const std::vector<ParseLoad>>(m_parseBudget.snapshot());
-  (void)m_parseLoadMirrorRing.try_enqueue(std::move(sample));
-}
-
-/**
- * @brief GUI-thread read of the parse loads: adopts the newest published sample and serves it.
- *        One tick of staleness is inherent to a 1 Hz diagnostic.
- */
-std::vector<DataModel::FrameBuilder::ParseLoad> DataModel::FrameBuilder::guiParseLoads()
-{
-  ParseLoadsPtr sample;
-  // code-verify off
-  // Ring drain: bounded by the mirror ring capacity (4), provably finite per call.
-  while (m_parseLoadMirrorRing.try_dequeue(sample))
-    if (sample)
-      m_guiParseLoads = sample;
-  // code-verify on
-
-  sample.reset();
-  return m_guiParseLoads ? *m_guiParseLoads : std::vector<ParseLoad>();
 }
 
 /**
@@ -2363,7 +2235,7 @@ DataModel::FrameBuilder::LatestFrameInfo DataModel::FrameBuilder::latestFrameSna
   }
 
   if (qApp && QThread::currentThread() == qApp->thread())
-    return guiLatestFrame(sourceId);
+    return m_latestTap.guiLatestFrame(sourceId);
 
   LatestFrameInfo copy;
   invokeOnBuilderThreadBlocking([this, sourceId, &copy] {
@@ -2376,75 +2248,17 @@ DataModel::FrameBuilder::LatestFrameInfo DataModel::FrameBuilder::latestFrameSna
 }
 
 /**
- * @brief GUI-thread read of the latest capture: serves the mirror the builder publishes on the
- *        display tick and arms it on first use. Marshaling here would spin a nested event loop
- *        inside the API dispatch and park the GUI behind the pipeline (spec 0051 M5 rule), which
- *        is what made a polling control script freeze the window's OS event handling.
- */
-DataModel::FrameBuilder::LatestFrameInfo DataModel::FrameBuilder::guiLatestFrame(int sourceId)
-{
-  m_guiLatestFrameUsers.store(true, std::memory_order_relaxed);
-
-  const auto mirror = m_guiLatestFrameMirror;
-  if (!mirror)
-    return LatestFrameInfo();
-
-  const int key = (sourceId >= 0) ? sourceId : mirror->newestSourceId;
-  if (key < 0)
-    return LatestFrameInfo();
-
-  const auto it = mirror->frames.constFind(key);
-  return (it != mirror->frames.constEnd()) ? it.value() : LatestFrameInfo();
-}
-
-/**
- * @brief Builder-thread half of the latest-frame mirror: copies the capture map for the GUI when
- *        a new frame landed since the last publish. Runs at display-tick rate, never per frame.
- */
-void DataModel::FrameBuilder::publishLatestFrameSnapshot()
-{
-  SS_ASSERT(QThread::currentThread() == thread(), return);
-
-  m_latestFrameSnapshotRequested.store(false, std::memory_order_release);
-
-  if (m_latestFrameSeq == m_publishedLatestFrameSeq)
-    return;
-
-  auto mirror            = std::make_shared<LatestFrameMirror>();
-  mirror->newestSourceId = m_latestFrameSourceId;
-  mirror->frames         = m_latestFrames;
-
-  if (!m_latestFrameMirrorRing.try_enqueue(LatestFrameMirrorPtr(std::move(mirror)))) [[unlikely]]
-    return;
-
-  m_publishedLatestFrameSeq = m_latestFrameSeq;
-}
-
-/**
- * @brief GUI-side half of the latest-frame mirror: adopts the newest published copy, then
- *        requests the next. Gated on a GUI-thread reader having asked at least once, so a session
- *        without a polling script or API client never makes the builder pay for the copy.
+ * @brief GUI-side entry point of the latest-frame mirror: the tap adopts the newest published
+ *        copy and reports whether the next publish still has to be requested. The request hop
+ *        stays here because the marshal into the pipeline thread is the facade's to own.
  */
 void DataModel::FrameBuilder::drainLatestFrameSnapshot()
 {
   SS_ASSERT(qApp != nullptr, return);
   SS_ASSERT(QThread::currentThread() == qApp->thread(), return);
 
-  if (!m_guiLatestFrameUsers.load(std::memory_order_relaxed)) [[likely]]
-    return;
-
-  LatestFrameMirrorPtr mirror;
-  // code-verify off
-  // Ring drain: bounded by the mirror ring capacity (4), provably finite per tick.
-  while (m_latestFrameMirrorRing.try_dequeue(mirror))
-    if (mirror)
-      m_guiLatestFrameMirror = mirror;
-  // code-verify on
-
-  mirror.reset();
-
-  if (!m_latestFrameSnapshotRequested.exchange(true, std::memory_order_acq_rel))
-    invokeOnBuilderThread([this] { publishLatestFrameSnapshot(); });
+  if (m_latestTap.drainForGui())
+    invokeOnBuilderThread([this] { m_latestTap.publish(); });
 }
 
 /**
@@ -3513,7 +3327,7 @@ void DataModel::FrameBuilder::injectTableApiLua(lua_State* L)
     m_captureFlagsDirty     = true;
   });
 
-  noteGuiTableApiUser();
+  m_tableChannel.noteGuiUser();
   m_tableApi.installLua(L);
 }
 
@@ -3529,6 +3343,6 @@ void DataModel::FrameBuilder::injectTableApiJS(QJSEngine* js)
     m_captureFlagsDirty     = true;
   });
 
-  noteGuiTableApiUser();
+  m_tableChannel.noteGuiUser();
   m_tableApi.installJs(js);
 }

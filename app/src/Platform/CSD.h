@@ -29,6 +29,11 @@
 #include <QQuickWindow>
 #include <QWindow>
 
+namespace Misc {
+class CommonFonts;
+class ThemeManager;
+}  // namespace Misc
+
 namespace CSD {
 // Chrome dimensions shared between CSD.cpp and NativeWindow_CSD.cpp (pre-show fallback).
 inline constexpr int TitleBarHeight          = 32;
@@ -116,6 +121,9 @@ private:
   QColor m_backgroundColor;
   QHash<QString, QPixmap> m_iconCache;
 
+  Misc::ThemeManager* m_theme;
+  Misc::CommonFonts* m_commonFonts;
+
   mutable QColor m_fgCache;
   mutable QColor m_fgCacheKey;
 };
@@ -186,5 +194,6 @@ private:
   QPointer<QWindow> m_window;
   QQuickItem* m_contentContainer;
   Qt::CursorShape m_lastCursor;
+  Misc::ThemeManager* m_theme;
 };
 }  // namespace CSD

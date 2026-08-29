@@ -28,6 +28,7 @@
 #include <QSet>
 
 #include "AppInfo.h"
+#include "DataModel/Project/ProjectFixedLayouts.h"
 #include "DataModel/Project/ProjectFolders.h"
 #include "DataModel/Project/ProjectHistory.h"
 #include "DataModel/Project/ProjectNaming.h"
@@ -38,51 +39,6 @@
 #include "SSAssert.h"
 
 namespace DataModel {
-
-namespace detail {
-
-/**
- * @brief Layout config for fixed three-axis group widgets (Accel/Gyro/GPS/Plot3D).
- */
-struct ThreeAxisLayout {
-  const char* widgetTag;
-  const char* axisWidgets[3];
-  QString units[3];
-  QString titles[3];
-  double wgtMin[3];
-  double wgtMax[3];
-  bool plt;
-};
-
-}  // namespace detail
-
-using detail::ThreeAxisLayout;
-
-/**
- * @brief Populates a group with three canonical axis datasets per supplied layout.
- */
-static void populateThreeAxisDatasets(DataModel::Group& grp,
-                                      int baseIndex,
-                                      const ThreeAxisLayout& layout)
-{
-  grp.widget = QString::fromUtf8(layout.widgetTag);
-
-  DataModel::Dataset axes[3];
-  for (int i = 0; i < 3; ++i) {
-    axes[i].datasetId = i;
-    axes[i].groupId   = grp.groupId;
-    axes[i].sourceId  = grp.sourceId;
-    axes[i].index     = baseIndex + i;
-    axes[i].units     = layout.units[i];
-    axes[i].widget    = QString::fromUtf8(layout.axisWidgets[i]);
-    axes[i].title     = layout.titles[i];
-    axes[i].wgtMin    = layout.wgtMin[i];
-    axes[i].wgtMax    = layout.wgtMax[i];
-    axes[i].plt       = layout.plt;
-
-    grp.datasets.push_back(axes[i]);
-  }
-}
 
 /**
  * @brief Returns @a base when unused, otherwise base with the lowest '-N' suffix (N>=2) not already
@@ -994,107 +950,12 @@ bool DataModel::ProjectEntities::applyGroupWidget(DataModel::Group& grp,
   if (widget == SerialStudio::Painter) {
     grp.widget = "painter";
     if (grp.datasets.empty())
-      return populateFixedLayoutGroup(grp, widget);
+      return FixedLayouts::populateFixedLayoutGroup(grp, widget, m_model.nextDatasetIndex());
 
     return true;
   }
 
-  return populateFixedLayoutGroup(grp, widget);
-}
-
-/**
- * @brief Fills a group with the three-axis canonical datasets for sensor-style widgets.
- */
-bool DataModel::ProjectEntities::populateFixedLayoutGroup(DataModel::Group& grp,
-                                                          SerialStudio::GroupWidget widget)
-{
-  const int baseIndex = m_model.nextDatasetIndex();
-
-  if (widget == SerialStudio::Accelerometer) {
-    // code-verify off
-    ThreeAxisLayout layout{
-      "accelerometer",
-      {                                          "x","y",                                  "z"                                                              },
-      {                                       "m/s²", "m/s²",                                       "m/s²"},
-      {ProjectModel::tr("Accelerometer %1").arg("X"),
-        ProjectModel::tr("Accelerometer %1").arg("Y"),
-        ProjectModel::tr("Accelerometer %1").arg("Z")                                                      },
-      {                                            0,      0,                                            0},
-      {                                            0,      0,                                            0},
-      true
-    };
-    // code-verify on
-    populateThreeAxisDatasets(grp, baseIndex, layout);
-    return true;
-  }
-
-  if (widget == SerialStudio::Gyroscope) {
-    // code-verify off
-    ThreeAxisLayout layout{
-      "gyro",
-      {                                 "x","y",                       "z"                                                      },
-      {                             "deg/s", "deg/s",                            "deg/s"},
-      {ProjectModel::tr("Gyro %1").arg("X"),
-        ProjectModel::tr("Gyro %1").arg("Y"),
-        ProjectModel::tr("Gyro %1").arg("Z")                                             },
-      {                                   0,       0,                                  0},
-      {                                   0,       0,                                  0},
-      true
-    };
-    // code-verify on
-    populateThreeAxisDatasets(grp, baseIndex, layout);
-    return true;
-  }
-
-  if (widget == SerialStudio::GPS) {
-    // code-verify off
-    ThreeAxisLayout layout{
-      "gps",
-      {                       "lat",                         "lon",                        "alt"},
-      {                         "°",                           "°",                          "m"},
-      {ProjectModel::tr("Latitude"), ProjectModel::tr("Longitude"), ProjectModel::tr("Altitude")},
-      {                       -90.0,                        -180.0,                       -500.0},
-      {                        90.0,                         180.0,                    1000000.0},
-      false
-    };
-    // code-verify on
-    populateThreeAxisDatasets(grp, baseIndex, layout);
-    return true;
-  }
-
-  if (widget == SerialStudio::Plot3D) {
-    // code-verify off
-    ThreeAxisLayout layout{
-      "plot3d",
-      {                  "x",                   "y",                   "z"},
-      {                   "",                    "",                    ""},
-      {ProjectModel::tr("X"), ProjectModel::tr("Y"), ProjectModel::tr("Z")},
-      {                    0,                     0,                     0},
-      {                    0,                     0,                     0},
-      false
-    };
-    // code-verify on
-    populateThreeAxisDatasets(grp, baseIndex, layout);
-    return true;
-  }
-
-  if (widget == SerialStudio::Painter) {
-    // code-verify off
-    ThreeAxisLayout layout{
-      "painter",
-      {                   "",                    "",                    ""},
-      {                   "",                    "",                    ""},
-      {ProjectModel::tr("X"), ProjectModel::tr("Y"), ProjectModel::tr("Z")},
-      {                 -100,                  -100,                  -100},
-      {                  100,                   100,                   100},
-      false
-    };
-    // code-verify on
-    populateThreeAxisDatasets(grp, baseIndex, layout);
-    return true;
-  }
-
-  return true;
+  return FixedLayouts::populateFixedLayoutGroup(grp, widget, m_model.nextDatasetIndex());
 }
 
 //--------------------------------------------------------------------------------------------------

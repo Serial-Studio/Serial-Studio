@@ -315,24 +315,25 @@ private:
  * @brief Constructs the gRPC server singleton.
  */
 API::GRPC::GRPCServer::GRPCServer()
-  : m_enabled(false), m_clientCount(0), m_writerRunning(false), m_frameQueue(4096), m_rawQueue(4096)
+  : m_apiServer(API::Server::instance())
+  , m_enabled(false)
+  , m_clientCount(0)
+  , m_writerRunning(false)
+  , m_frameQueue(4096)
+  , m_rawQueue(4096)
 {
-  static auto& server = API::Server::instance();
-
-  connect(&server, &API::Server::enabledChanged, this, [this]() {
-    static auto& apiServer = API::Server::instance();
-    setEnabled(apiServer.enabled());
+  connect(&m_apiServer, &API::Server::enabledChanged, this, [this]() {
+    setEnabled(m_apiServer.enabled());
   });
 
-  connect(&server,
+  connect(&m_apiServer,
           &API::Server::externalConnectionsChanged,
           this,
           &GRPCServer::onExternalConnectionsChanged);
 
   QTimer::singleShot(0, this, [this]() {
-    static auto& apiServer    = API::Server::instance();
     static auto& frameBuilder = DataModel::FrameBuilder::instance();
-    setEnabled(apiServer.enabled());
+    setEnabled(m_apiServer.enabled());
 
     connect(&frameBuilder,
             &DataModel::FrameBuilder::structurePublished,
@@ -480,8 +481,7 @@ void API::GRPC::GRPCServer::onExternalConnectionsChanged()
  */
 void API::GRPC::GRPCServer::startServer()
 {
-  static auto& server = API::Server::instance();
-  const bool external = server.externalConnections();
+  const bool external = m_apiServer.externalConnections();
   const auto address  = external ? QStringLiteral("0.0.0.0:%1").arg(API_GRPC_PORT)
                                  : QStringLiteral("127.0.0.1:%1").arg(API_GRPC_PORT);
 

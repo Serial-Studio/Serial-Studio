@@ -29,6 +29,7 @@
 #include <vector>
 
 #include "DataModel/Frame.h"
+#include "DataModel/Project/ProjectWorkspaceRefs.h"
 
 namespace DataModel {
 
@@ -42,17 +43,8 @@ class ProjectModel;
  */
 class ProjectWorkspaces {
 public:
-  /**
-   * @brief Stable anchor for a workspace ref across group/dataset reorders.
-   */
-  struct RefAnchor {
-    int widgetType;
-    int sourceGid;
-    int datasetFrameIndex;
-    bool isGroupOrLed;
-  };
-
-  using RefAnchors = QHash<int, std::vector<RefAnchor>>;
+  using RefAnchor  = WorkspaceRefs::RefAnchor;
+  using RefAnchors = WorkspaceRefs::RefAnchors;
 
   explicit ProjectWorkspaces(ProjectModel& model);
   ProjectWorkspaces(ProjectWorkspaces&&)                 = delete;
@@ -124,15 +116,32 @@ public:
   void showAllHiddenGroups();
   [[nodiscard]] QVariantList hiddenGroupsSummary() const;
 
-  [[nodiscard]] QMap<int, int> widgetTypeCountsForGroup(const Group& g) const;
+  [[nodiscard]] QMap<int, int> widgetTypeCountsForGroup(const Group& g) const
+  {
+    return WorkspaceRefs::widgetTypeCountsForGroup(g);
+  }
+
   void shiftWorkspaceRefsAfterGroupDelete(int deletedGid, const QMap<int, int>& deletedTypeCounts);
   void shiftWorkspaceRefsAfterDatasetDelete(int groupId, const QMap<int, int>& datasetTypeCounts);
-  void shiftHiddenGroupIdsAfterGroupDelete(int deletedGid);
+
+  void shiftHiddenGroupIdsAfterGroupDelete(int deletedGid)
+  {
+    WorkspaceRefs::shiftHiddenGroupIdsAfterGroupDelete(m_hiddenGroupIds, deletedGid);
+  }
+
   void shiftLayoutKeysAfterGroupDelete(int deletedGid);
 
-  void remapHiddenGroupIdsAfterReorder(const std::vector<int>& oldToNewGid);
+  void remapHiddenGroupIdsAfterReorder(const std::vector<int>& oldToNewGid)
+  {
+    WorkspaceRefs::remapHiddenGroupIdsAfterReorder(m_hiddenGroupIds, oldToNewGid);
+  }
+
   void remapLayoutKeysAfterReorder(const std::vector<int>& oldToNewGid);
-  void remapAutoWorkspaceIdsAfterReorder(const std::vector<int>& oldToNewGid);
+
+  void remapAutoWorkspaceIdsAfterReorder(const std::vector<int>& oldToNewGid)
+  {
+    WorkspaceRefs::remapAutoWorkspaceIdsAfterReorder(m_workspaces, oldToNewGid);
+  }
 
   [[nodiscard]] RefAnchors snapshotRefAnchors() const;
   void resolveRefAnchors(const RefAnchors& anchors);

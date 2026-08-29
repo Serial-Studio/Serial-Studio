@@ -237,10 +237,10 @@ User-facing naming (2026-08-19): the Project Editor section is **Variables**, ta
   elsewhere. **Never make a GUI-thread read block on the pipeline thread** — the wait spins a
   nested `QEventLoop` that fires the display tick and re-enters the very script that is
   mid-call, and at 26 reads per painter frame it blew the 250 ms watchdog outright.
-- **The mirror.** `FrameBuilder::publishTableSnapshot()` (pipeline) copies the store into a
-  4-slot SPSC ring only when `generation`/`writeClock` moved; `drainTableSnapshot()` (GUI)
+- **The mirror.** `DataModel::TableSnapshotChannel::publish()` (pipeline, spec 0070) copies the store into a
+  4-slot SPSC ring only when `generation`/`writeClock` moved; `FrameBuilder::drainTableSnapshot()` (GUI)
   adopts the newest and requests the next, once per display tick, before `Dashboard::updated()`.
-  It is one tick stale by construction, and armed only by `noteGuiTableApiUser()` — i.e. when a
+  It is one tick stale by construction, and armed only by `TableSnapshotChannel::noteGuiUser()` — i.e. when a
   script engine is wired up *on the GUI thread*, so pipeline-side transform engines never make
   the builder pay for a snapshot nobody reads.
 - **Lua closures: resolve, route, then push.** A `lua_State` belongs to one thread, so no
@@ -303,5 +303,5 @@ installing it; `controlscript.getCode`/`setCode` are registry aliases of `get`/`
 agent-facing globals reference is `:/ai/docs/control_script_js.md`
 (`meta.fetchScriptingDocs{kind:'control_script_js'}`; allow-lists in
 `ContextBuilder::scriptingDocFor` AND the `meta.fetchScriptingDocs` entry in
-`ToolDispatcher`'s tool table, dispatched by `Conversation::runMetaScriptingDocs`, plus
+`ToolDispatcher`'s tool table, dispatched by `AI::MetaToolRunner::runScriptingDocs` (spec 0070), plus
 `rcc.qrc`).

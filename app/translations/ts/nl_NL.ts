@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="nl_NL" sourcelanguage="en_US">
 <context>
-    <name></name>
+    <name/>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="354"/>
         <source>Mixed</source>
@@ -124,22 +124,22 @@ Every device action still requires your explicit per-call approval in the chat, 
 Elke apparaatactie vereist nog steeds je expliciete goedkeuring per aanroep in de chat, zelfs wanneer automatisch goedkeuren is ingeschakeld. Schakel dit alleen in als je de geconfigureerde AI-provider vertrouwt met hardwaretoegang.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="639"/>
+        <location filename="../../src/AI/Assistant.cpp" line="638"/>
         <source>Switch AI provider?</source>
         <translation>Van AI-provider wisselen?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="640"/>
+        <location filename="../../src/AI/Assistant.cpp" line="639"/>
         <source>Switching to a different provider clears the current conversation. Do you want to continue?</source>
         <translation>Wisselen naar een andere provider wist het huidige gesprek. Doorgaan?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="643"/>
+        <location filename="../../src/AI/Assistant.cpp" line="642"/>
         <source>Assistant</source>
         <translation>Assistent</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="680"/>
+        <location filename="../../src/AI/Assistant.cpp" line="679"/>
         <source>AI Assistant is not available in this build</source>
         <translation>AI-assistent is niet beschikbaar in deze build</translation>
     </message>
@@ -148,9 +148,32 @@ Elke apparaatactie vereist nog steeds je expliciete goedkeuring per aanroep in d
         <translation type="vanished">AI-assistent vereist een Pro-licentie</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="685"/>
+        <location filename="../../src/AI/Assistant.cpp" line="684"/>
         <source>Set an API key first</source>
         <translation>Stel eerst een API-sleutel in</translation>
+    </message>
+</context>
+<context>
+    <name>AI::AutoVerifier</name>
+    <message>
+        <location filename="../../src/AI/Conversation/AutoVerifier.cpp" line="116"/>
+        <source>%1 operation(s) failed</source>
+        <translation>%1 operatie(s) mislukt</translation>
+    </message>
+    <message>
+        <location filename="../../src/AI/Conversation/AutoVerifier.cpp" line="168"/>
+        <source>Source list read-back failed</source>
+        <translation>Lezen van bronlijst mislukt</translation>
+    </message>
+    <message>
+        <location filename="../../src/AI/Conversation/AutoVerifier.cpp" line="189"/>
+        <source>Source %1 not found after update</source>
+        <translation>Bron %1 niet gevonden na update</translation>
+    </message>
+    <message>
+        <location filename="../../src/AI/Conversation/AutoVerifier.cpp" line="207"/>
+        <source>Fields did not round-trip: %1</source>
+        <translation>Velden kwamen niet terug: %1</translation>
     </message>
 </context>
 <context>
@@ -160,63 +183,59 @@ Elke apparaatactie vereist nog steeds je expliciete goedkeuring per aanroep in d
         <translation type="vanished">AI-assistent vereist een Pro-licentie</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="163"/>
+        <location filename="../../src/AI/Conversation.cpp" line="183"/>
         <source>AI Assistant is not available in this build</source>
         <translation>AI-assistent is niet beschikbaar in deze build</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="169"/>
-        <location filename="../../src/AI/Conversation.cpp" line="1208"/>
+        <location filename="../../src/AI/Conversation.cpp" line="189"/>
+        <location filename="../../src/AI/Conversation.cpp" line="859"/>
         <source>AI subsystem not initialized</source>
         <translation>AI-subsysteem niet geïnitialiseerd</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="175"/>
+        <location filename="../../src/AI/Conversation.cpp" line="195"/>
         <source>Already busy with a previous request</source>
         <translation>Al bezig met een eerder verzoek</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="593"/>
+        <location filename="../../src/AI/Conversation.cpp" line="610"/>
         <source>Tool-call budget reached for this turn; no further tools will run.</source>
         <translation>Budgetlimiet voor tool-aanroepen bereikt voor deze beurt; er worden geen verdere tools uitgevoerd.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1223"/>
+        <location filename="../../src/AI/Conversation.cpp" line="874"/>
         <source>Waiting for %1 to respond. Loading the model and processing the prompt can take a while on local hardware...</source>
         <translation>Wachten op reactie van %1. Het laden van het model en verwerken van de prompt kan even duren op lokale hardware...</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1567"/>
         <source>%1 operation(s) failed</source>
-        <translation>%1 operatie(s) mislukt</translation>
+        <translation type="vanished">%1 operatie(s) mislukt</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1620"/>
         <source>Source list read-back failed</source>
-        <translation>Lezen van bronlijst mislukt</translation>
+        <translation type="vanished">Lezen van bronlijst mislukt</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1641"/>
         <source>Source %1 not found after update</source>
-        <translation>Bron %1 niet gevonden na update</translation>
+        <translation type="vanished">Bron %1 niet gevonden na update</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1659"/>
         <source>Fields did not round-trip: %1</source>
-        <translation>Velden kwamen niet terug: %1</translation>
+        <translation type="vanished">Velden kwamen niet terug: %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1734"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1235"/>
         <source>You have reached the tool-call budget for this turn. Do not request more tools. Summarize what you found so far, and if the task is incomplete, say which steps remain so the user can tell you to continue.</source>
         <translation>U heeft de budgetlimiet voor tool-aanroepen voor deze beurt bereikt. Vraag geen verdere tools aan. Vat samen wat u tot nu toe heeft gevonden, en als de taak onvolledig is, geef dan aan welke stappen resteren zodat de gebruiker u kan vragen door te gaan.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="2060"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1487"/>
         <source>The model stopped reproducing its context-integrity line. Long conversations degrade silently; recent replies may be less reliable.</source>
         <translation>Het model is gestopt met reproduceren van zijn context-integriteitslijn. Lange gesprekken degraderen ongemerkt; recente antwoorden kunnen minder betrouwbaar zijn.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="2063"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1490"/>
         <source>The model altered its context-integrity line (drifted segment: %1). Long conversations degrade silently; recent replies may be less reliable.</source>
         <translation>Het model heeft zijn context-integriteitslijn gewijzigd (gedrift segment: %1). Lange gesprekken degraderen ongemerkt; recente antwoorden kunnen minder betrouwbaar zijn.</translation>
     </message>
@@ -225,17 +244,17 @@ Elke apparaatactie vereist nog steeds je expliciete goedkeuring per aanroep in d
         <translation type="vanished">Budget voor tool-aanroepen overschreden</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1055"/>
-        <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider&apos;s safety filters.)</source>
+        <location filename="../../src/AI/Conversation.cpp" line="706"/>
+        <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider's safety filters.)</source>
         <translation>(Het model heeft een lege respons geretourneerd. Probeer de vraag anders te formuleren, schakel over naar een ander model of controleer of het verzoek is toegestaan door de veiligheidsfilters van de provider.)</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1227"/>
+        <location filename="../../src/AI/Conversation.cpp" line="878"/>
         <source>Sending request to %1...</source>
         <translation>Verzoek wordt verzonden naar %1...</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1245"/>
+        <location filename="../../src/AI/Conversation.cpp" line="896"/>
         <source>Provider returned no reply</source>
         <translation>Provider heeft geen antwoord geretourneerd</translation>
     </message>
@@ -328,12 +347,12 @@ Elke apparaatactie vereist nog steeds je expliciete goedkeuring per aanroep in d
 <context>
     <name>API::GRPC::GRPCServer</name>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="449"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="450"/>
         <source>Export Protobuf File</source>
         <translation>Protobuf-bestand Exporteren</translation>
     </message>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="451"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="452"/>
         <source>Protocol Buffers (*.proto)</source>
         <translation>Protocol Buffers (*.proto)</translation>
     </message>
@@ -374,7 +393,7 @@ Elke apparaatactie vereist nog steeds je expliciete goedkeuring per aanroep in d
     </message>
     <message>
         <location filename="../../src/API/Mirror/MirrorClient.cpp" line="566"/>
-        <source>The remote&apos;s dataset layout does not match its announced hash</source>
+        <source>The remote's dataset layout does not match its announced hash</source>
         <translation>De dataset-indeling van de externe bron komt niet overeen met de aangekondigde hash</translation>
     </message>
     <message>
@@ -415,8 +434,8 @@ Elke apparaatactie vereist nog steeds je expliciete goedkeuring per aanroep in d
     </message>
     <message>
         <location filename="../../src/API/ProcessLauncher.cpp" line="97"/>
-        <source>Program &quot;%1&quot; not found in PATH</source>
-        <translation>Programma &quot;%1&quot; niet gevonden in PATH</translation>
+        <source>Program "%1" not found in PATH</source>
+        <translation>Programma "%1" niet gevonden in PATH</translation>
     </message>
 </context>
 <context>
@@ -438,7 +457,7 @@ Elke apparaatactie vereist nog steeds je expliciete goedkeuring per aanroep in d
 Only enable this on trusted networks. Untrusted clients may read live data or send commands to your device.</source>
         <translation>Het blootstellen van de API-server aan externe hosts stelt andere apparaten op uw netwerk in staat verbinding te maken met Serial Studio op poort 7777.
 
-Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen live data lezen of commando&apos;s naar uw apparaat sturen.</translation>
+Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen live data lezen of commando's naar uw apparaat sturen.</translation>
     </message>
     <message>
         <location filename="../../src/API/Server.cpp" line="316"/>
@@ -450,7 +469,7 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
         <translation type="vanished">API-apparaatbesturing toestaan?</translation>
     </message>
     <message>
-        <source>A program using Serial Studio&apos;s local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
+        <source>A program using Serial Studio's local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
         <translation type="vanished">Een programma dat de lokale API van Serial Studio gebruikt, vraagt toestemming om gegevens naar het aangesloten apparaat te verzenden. API-clients toestaan naar het apparaat te schrijven?</translation>
     </message>
     <message>
@@ -473,17 +492,17 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
     <message>
         <location filename="../../src/API/Server/ServerAuth.cpp" line="138"/>
         <source>Allow API device control?</source>
-        <translation type="unfinished">API-apparaatbesturing toestaan?</translation>
+        <translation>API-apparaatbesturing toestaan?</translation>
     </message>
     <message>
         <location filename="../../src/API/Server/ServerAuth.cpp" line="139"/>
-        <source>A program using Serial Studio&apos;s local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
-        <translation type="unfinished">Een programma dat de lokale API van Serial Studio gebruikt, vraagt toestemming om gegevens naar het aangesloten apparaat te verzenden. API-clients toestaan naar het apparaat te schrijven?</translation>
+        <source>A program using Serial Studio's local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
+        <translation>Een programma dat de lokale API van Serial Studio gebruikt, vraagt toestemming om gegevens naar het aangesloten apparaat te verzenden. API-clients toestaan naar het apparaat te schrijven?</translation>
     </message>
     <message>
         <location filename="../../src/API/Server/ServerAuth.cpp" line="142"/>
         <source>Serial Studio</source>
-        <translation type="unfinished">Serial Studio</translation>
+        <translation>Serial Studio</translation>
     </message>
 </context>
 <context>
@@ -553,8 +572,8 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="174"/>
-        <source>This software is provided &apos;as is&apos; without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
-        <translation>Deze software wordt geleverd &apos;zoals het is&apos; zonder enige garantie, expliciet of impliciet, inclusief maar niet beperkt tot garanties van verkoopbaarheid of geschiktheid voor een bepaald doel. In geen geval is de auteur aansprakelijk voor schade voortvloeiend uit het gebruik van deze software.</translation>
+        <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
+        <translation>Deze software wordt geleverd 'zoals het is' zonder enige garantie, expliciet of impliciet, inclusief maar niet beperkt tot garanties van verkoopbaarheid of geschiktheid voor een bepaald doel. In geen geval is de auteur aansprakelijk voor schade voortvloeiend uit het gebruik van deze software.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="195"/>
@@ -576,7 +595,7 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
         <translation type="vanished">Projectdemo</translation>
     </message>
     <message>
-        <source>What&apos;s New</source>
+        <source>What's New</source>
         <translation type="vanished">Wat Is Nieuw</translation>
     </message>
     <message>
@@ -1103,7 +1122,7 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
         <translation type="vanished">Voorinstelling Toepassen</translation>
     </message>
     <message>
-        <source>Replace the current bands with the selected preset, scaled to this dataset&apos;s range.</source>
+        <source>Replace the current bands with the selected preset, scaled to this dataset's range.</source>
         <translation type="vanished">Vervang de huidige banden door de geselecteerde voorinstelling, geschaald naar het bereik van deze dataset.</translation>
     </message>
     <message>
@@ -1321,7 +1340,7 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="421"/>
-        <source>Help me discover Serial Studio&apos;s features</source>
+        <source>Help me discover Serial Studio's features</source>
         <translation>Help me de functies van Serial Studio te ontdekken</translation>
     </message>
     <message>
@@ -1447,13 +1466,13 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="776"/>
-        <source>Added folder &quot;%1&quot; - readable this session</source>
-        <translation>Map &quot;%1&quot; toegevoegd - leesbaar deze sessie</translation>
+        <source>Added folder "%1" - readable this session</source>
+        <translation>Map "%1" toegevoegd - leesbaar deze sessie</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="777"/>
-        <source>Added &quot;%1&quot; - readable this session</source>
-        <translation>&quot;%1&quot; toegevoegd - leesbaar deze sessie</translation>
+        <source>Added "%1" - readable this session</source>
+        <translation>"%1" toegevoegd - leesbaar deze sessie</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="782"/>
@@ -1806,7 +1825,7 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
     <message>
         <location filename="../../qml/Dialogs/BackupRecovery.qml" line="164"/>
         <source>Title changes from “%1” to “%2”. Group structure unchanged.</source>
-        <translation>Titel wijzigt van &quot;%1&quot; naar &quot;%2&quot;. Groepstructuur ongewijzigd.</translation>
+        <translation>Titel wijzigt van "%1" naar "%2". Groepstructuur ongewijzigd.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/BackupRecovery.qml" line="169"/>
@@ -1898,7 +1917,7 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
     </message>
     <message>
         <location filename="../../qml/Dialogs/Benchmark.qml" line="124"/>
-        <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio&apos;s data pipeline.</source>
+        <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio's data pipeline.</source>
         <translation>Meet hoe snel deze computer frames kan extraheren, parseren en visualiseren via de datapijplijn van Serial Studio.</translation>
     </message>
     <message>
@@ -2364,7 +2383,7 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="291"/>
-        <source>We&apos;ll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
+        <source>We'll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
         <translation>Serial Studio wordt bijgewerkt om met dit besturingssysteem te werken zodra QT het officieel ondersteunt</translation>
     </message>
 </context>
@@ -2373,12 +2392,12 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="57"/>
         <source>No CAN Drivers Found</source>
-        <translation>Geen CAN-stuurprogramma&apos;s Gevonden</translation>
+        <translation>Geen CAN-stuurprogramma's Gevonden</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="70"/>
         <source>Install CAN hardware drivers for your system</source>
-        <translation>Installeer CAN-hardwarestuurprogramma&apos;s voor dit systeem</translation>
+        <translation>Installeer CAN-hardwarestuurprogramma's voor dit systeem</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="97"/>
@@ -3501,7 +3520,7 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="197"/>
-        <source>Export this table&apos;s variables to CSV</source>
+        <source>Export this table's variables to CSV</source>
         <translation>Variabelen van deze tabel exporteren naar CSV</translation>
     </message>
     <message>
@@ -3516,7 +3535,7 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="223"/>
-        <source>Import this table&apos;s variables from CSV</source>
+        <source>Import this table's variables from CSV</source>
         <translation>Variabelen van deze tabel importeren vanuit CSV</translation>
     </message>
     <message>
@@ -3593,7 +3612,7 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
         <translation>Geselecteerde sessie naar CSV exporteren</translation>
     </message>
     <message>
-        <source>Export this table&apos;s registers to CSV</source>
+        <source>Export this table's registers to CSV</source>
         <translation type="vanished">Registers van deze tabel exporteren naar CSV</translation>
     </message>
     <message>
@@ -3716,7 +3735,7 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
         <translation type="vanished">Registers Importeren</translation>
     </message>
     <message>
-        <source>Import this table&apos;s registers from CSV</source>
+        <source>Import this table's registers from CSV</source>
         <translation type="vanished">Registers van deze tabel importeren vanuit CSV</translation>
     </message>
     <message>
@@ -3762,7 +3781,7 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="233"/>
         <source>Macros</source>
-        <translation>Macro&apos;s</translation>
+        <translation>Macro's</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="234"/>
@@ -4141,7 +4160,7 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="306"/>
         <source>Run API commands and script macros interactively</source>
-        <translation>Voer API-opdrachten en scriptmacro&apos;s interactief uit</translation>
+        <translation>Voer API-opdrachten en scriptmacro's interactief uit</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="307"/>
@@ -4432,7 +4451,7 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="362"/>
-        <source>Watch another Serial Studio instance&apos;s dashboard over the network</source>
+        <source>Watch another Serial Studio instance's dashboard over the network</source>
         <translation>Bekijk het dashboard van een andere Serial Studio-instantie via het netwerk</translation>
     </message>
     <message>
@@ -4512,22 +4531,22 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
     </message>
     <message>
         <location filename="../../src/Console/Annotations.cpp" line="1139"/>
-        <source>the script must define a global &apos;decoder&apos; object</source>
-        <translation>het script moet een globaal &apos;decoder&apos;-object definiëren</translation>
+        <source>the script must define a global 'decoder' object</source>
+        <translation>het script moet een globaal 'decoder'-object definiëren</translation>
     </message>
     <message>
         <location filename="../../src/Console/Annotations.cpp" line="1145"/>
-        <source>&apos;decoder.decode(bytes, offset, ctx, size)&apos; is not a function</source>
-        <translation>&apos;decoder.decode(bytes, offset, ctx, size)&apos; is geen functie</translation>
+        <source>'decoder.decode(bytes, offset, ctx, size)' is not a function</source>
+        <translation>'decoder.decode(bytes, offset, ctx, size)' is geen functie</translation>
     </message>
     <message>
-        <source>&apos;decoder.decode(bytes, offset, ctx)&apos; is not a function</source>
-        <translation type="vanished">&apos;decoder.decode(bytes, offset, ctx)&apos; is geen functie</translation>
+        <source>'decoder.decode(bytes, offset, ctx)' is not a function</source>
+        <translation type="vanished">'decoder.decode(bytes, offset, ctx)' is geen functie</translation>
     </message>
     <message>
         <location filename="../../src/Console/Annotations.cpp" line="1184"/>
-        <source>&apos;decoder.rows&apos; and &apos;decoder.classes&apos; must be non-empty arrays</source>
-        <translation>&apos;decoder.rows&apos; en &apos;decoder.classes&apos; moeten niet-lege arrays zijn</translation>
+        <source>'decoder.rows' and 'decoder.classes' must be non-empty arrays</source>
+        <translation>'decoder.rows' en 'decoder.classes' moeten niet-lege arrays zijn</translation>
     </message>
     <message>
         <location filename="../../src/Console/Annotations.cpp" line="1198"/>
@@ -4599,42 +4618,42 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
 <context>
     <name>Console::Handler</name>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="300"/>
+        <location filename="../../src/Console/Handler.cpp" line="299"/>
         <source>ASCII</source>
         <translation>ASCII</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="301"/>
+        <location filename="../../src/Console/Handler.cpp" line="300"/>
         <source>HEX</source>
         <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="311"/>
+        <location filename="../../src/Console/Handler.cpp" line="310"/>
         <source>No Line Ending</source>
         <translation>Geen Regeleindiging</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="312"/>
+        <location filename="../../src/Console/Handler.cpp" line="311"/>
         <source>New Line</source>
         <translation>Nieuwe Regel</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="313"/>
+        <location filename="../../src/Console/Handler.cpp" line="312"/>
         <source>Carriage Return</source>
         <translation>Carriage Return</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="314"/>
+        <location filename="../../src/Console/Handler.cpp" line="313"/>
         <source>CR + NL</source>
         <translation>CR + NL</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="324"/>
+        <location filename="../../src/Console/Handler.cpp" line="323"/>
         <source>Text</source>
         <translation>Tekst</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="325"/>
+        <location filename="../../src/Console/Handler.cpp" line="324"/>
         <source>Hex</source>
         <translation>Hex</translation>
     </message>
@@ -4647,12 +4666,12 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
         <translation type="vanished">Hexadecimaal</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="347"/>
+        <location filename="../../src/Console/Handler.cpp" line="346"/>
         <source>No Checksum</source>
         <translation>Geen Checksum</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="1024"/>
+        <location filename="../../src/Console/Handler.cpp" line="1013"/>
         <source>Device %1</source>
         <translation>Apparaat %1</translation>
     </message>
@@ -5068,7 +5087,7 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="157"/>
-        <source>Euler&apos;s number</source>
+        <source>Euler's number</source>
         <translation>Getal van Euler</translation>
     </message>
     <message>
@@ -5405,13 +5424,13 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
         <location filename="../../src/UI/Dashboard/WidgetMapBuilder.cpp" line="177"/>
         <location filename="../../src/UI/Dashboard/WidgetMapBuilder.cpp" line="192"/>
         <source>%1 (Fallback)</source>
-        <translation type="unfinished">%1 (Terugval)</translation>
+        <translation>%1 (Terugval)</translation>
     </message>
     <message>
         <location filename="../../src/UI/Dashboard/WidgetMapBuilder.cpp" line="214"/>
         <location filename="../../src/UI/Dashboard/WidgetMapBuilder.cpp" line="292"/>
         <source>LED Panel (%1)</source>
-        <translation type="unfinished">LED-paneel (%1)</translation>
+        <translation>LED-paneel (%1)</translation>
     </message>
 </context>
 <context>
@@ -5883,7 +5902,7 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
 # Lines starting with # are comments.
 #
 # Inputs:
-#    v     this sample&apos;s raw value
+#    v     this sample's raw value
 #    t     seconds since the frame stream started
 #    dt    seconds since the previous sample
 #    n     sample index, starting at 0
@@ -6145,7 +6164,7 @@ v
 # Lines starting with # are comments.
 #
 # Inputs:
-#    v     this sample&apos;s raw value
+#    v     this sample's raw value
 #    t     seconds since the frame stream started
 #    dt    seconds since the previous sample
 #    n     sample index, starting at 0
@@ -6221,7 +6240,7 @@ v
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="569"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="556"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, historian, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
         <translation>Een downstream-consument (dashboard, CSV/MDF4-export, historian of API-abonnee) verwerkt niet snel genoeg, waardoor gegevens worden weggelaten uit de weergave en uit actieve opnames. Schakel een zware consument uit of verlaag de gegevenssnelheid.</translation>
     </message>
@@ -6242,7 +6261,7 @@ v
         <translation type="vanished">Snelle Plot</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="567"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="554"/>
         <source>Block pool exhausted</source>
         <translation>Blokpool uitgeput</translation>
     </message>
@@ -6251,12 +6270,12 @@ v
         <translation type="vanished">Een downstream-verbruiker (dashboard, CSV/MDF4-export, sessie-DB of API-abonnee) verwerkt niet snel genoeg, waardoor data wordt weggegooid uit de weergave en uit elke actieve opname. Schakel een zware verbruiker uit of verlaag de datasnelheid.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2746"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2560"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>JavaScript-transformatie overschreed het budget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2747"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2561"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>Een datasettransformatie duurde langer dan %1 ms; resterende datasets in de frame zijn teruggevallen op ruwe waarden tot de volgende frame. Profiler of vereenvoudig de transformatiecode.</translation>
     </message>
@@ -6499,11 +6518,11 @@ Geldig formaat: 01 A2 FF 3C</translation>
         <translation type="vanished">Waarde</translation>
     </message>
     <message>
-        <source>Enter frame data above, enable HEX mode if needed, then click &quot;Evaluate&quot; to run the frame parser.
+        <source>Enter frame data above, enable HEX mode if needed, then click "Evaluate" to run the frame parser.
 
 Example (Text): a,b,c,d,e,f
 Example (HEX):  48 65 6C 6C 6F</source>
-        <translation type="vanished">Voer framegegevens hierboven in, schakel HEX-modus in indien nodig en klik op &quot;Evalueren&quot; om de frameparser uit te voeren.
+        <translation type="vanished">Voer framegegevens hierboven in, schakel HEX-modus in indien nodig en klik op "Evalueren" om de frameparser uit te voeren.
 
 Voorbeeld (Tekst): a,b,c,d,e,f
 Voorbeeld (HEX):  48 65 6C 6C 6F</translation>
@@ -6796,10 +6815,10 @@ Niet-opgeslagen wijzigingen gaan verloren. Doorgaan?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="369"/>
-        <source>&quot;%1&quot; expects %2 dataset(s); the current group has %3.
+        <source>"%1" expects %2 dataset(s); the current group has %3.
 
-Add %4 dataset(s) using the template&apos;s defaults?</source>
-        <translation>&quot;%1&quot; verwacht %2 dataset(s); de huidige groep heeft er %3.
+Add %4 dataset(s) using the template's defaults?</source>
+        <translation>"%1" verwacht %2 dataset(s); de huidige groep heeft er %3.
 
 Voeg %4 dataset(s) toe met de standaardwaarden van de sjabloon?</translation>
     </message>
@@ -7390,7 +7409,7 @@ Voeg %4 dataset(s) toe met de standaardwaarden van de sjabloon?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="516"/>
-        <source>How strictly the broker&apos;s certificate chain is validated</source>
+        <source>How strictly the broker's certificate chain is validated</source>
         <translation>Hoe strikt de certificaatketen van de broker wordt gevalideerd</translation>
     </message>
     <message>
@@ -7724,7 +7743,7 @@ Voeg %4 dataset(s) toe met de standaardwaarden van de sjabloon?</translation>
         <translation>Verbergen op Dashboard</translation>
     </message>
     <message>
-        <source>Suppress this dataset&apos;s standalone dashboard tile; the painter widget can still read its values</source>
+        <source>Suppress this dataset's standalone dashboard tile; the painter widget can still read its values</source>
         <translation type="vanished">Onderdruk de standalone dashboardtegel van deze dataset; de painter widget kan de waarden nog steeds uitlezen</translation>
     </message>
     <message>
@@ -7759,7 +7778,7 @@ Voeg %4 dataset(s) toe met de standaardwaarden van de sjabloon?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="251"/>
-        <source>Suppress this dataset&apos;s standalone dashboard tile; the canvas widget can still read its values</source>
+        <source>Suppress this dataset's standalone dashboard tile; the canvas widget can still read its values</source>
         <translation>Onderdruk de standalone dashboardtegel van deze dataset; de canvaswidget kan de waarden nog steeds uitlezen</translation>
     </message>
     <message>
@@ -8655,8 +8674,8 @@ Voeg %4 dataset(s) toe met de standaardwaarden van de sjabloon?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="668"/>
-        <source>Alias &quot;%1&quot; is already in use</source>
-        <translation>Alias &quot;%1&quot; is al in gebruik</translation>
+        <source>Alias "%1" is already in use</source>
+        <translation>Alias "%1" is al in gebruik</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="669"/>
@@ -8670,13 +8689,13 @@ Voeg %4 dataset(s) toe met de standaardwaarden van de sjabloon?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="682"/>
-        <source>Alias &quot;%1&quot; contains only digits</source>
-        <translation>Alias &quot;%1&quot; bevat alleen cijfers</translation>
+        <source>Alias "%1" contains only digits</source>
+        <translation>Alias "%1" bevat alleen cijfers</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="683"/>
-        <source>Scripts must quote it as a string, e.g. getDataset(&quot;%1&quot;); a numeric argument is read as a uniqueId, not this alias.</source>
-        <translation>Scripts moeten het als string citeren, bijv. getDataset(&quot;%1&quot;); een numeriek argument wordt gelezen als uniqueId, niet als deze alias.</translation>
+        <source>Scripts must quote it as a string, e.g. getDataset("%1"); a numeric argument is read as a uniqueId, not this alias.</source>
+        <translation>Scripts moeten het als string citeren, bijv. getDataset("%1"); een numeriek argument wordt gelezen als uniqueId, niet als deze alias.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="687"/>
@@ -8707,53 +8726,53 @@ Voeg %4 dataset(s) toe met de standaardwaarden van de sjabloon?</translation>
 <context>
     <name>DataModel::ProjectModel</name>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="341"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="350"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="293"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="302"/>
         <source>Lock Project</source>
         <translation>Project Vergrendelen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="342"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="294"/>
         <source>Choose a password to lock the project:</source>
         <translation>Kies een wachtwoord om het project te vergrendelen:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="350"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="302"/>
         <source>Confirm the password:</source>
         <translation>Bevestig het wachtwoord:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="355"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="307"/>
         <source>Passwords do not match</source>
         <translation>Wachtwoorden komen niet overeen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="356"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="308"/>
         <source>The two passwords you entered do not match. The project was not locked.</source>
         <translation>De twee ingevoerde wachtwoorden komen niet overeen. Het project is niet vergrendeld.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="393"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="345"/>
         <source>Unlock Project</source>
         <translation>Project Ontgrendelen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="394"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="346"/>
         <source>Enter the project password:</source>
         <translation>Voer het projectwachtwoord in:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="404"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="356"/>
         <source>Incorrect password</source>
         <translation>Onjuist wachtwoord</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="405"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="357"/>
         <source>The password you entered does not match the one stored in the project file.</source>
         <translation>Het ingevoerde wachtwoord komt niet overeen met het wachtwoord in het projectbestand.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="534"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="438"/>
         <source>New Project</source>
         <translation>Nieuw Project</translation>
     </message>
@@ -8762,12 +8781,12 @@ Voeg %4 dataset(s) toe met de standaardwaarden van de sjabloon?</translation>
         <translation type="vanished">Samples</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="936"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="580"/>
         <source>Change MQTT Publisher</source>
         <translation>MQTT Publisher Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="960"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="596"/>
         <source>Change InfluxDB Sink</source>
         <translation>Influxdb-sink Wijzigen</translation>
     </message>
@@ -8780,47 +8799,47 @@ Voeg %4 dataset(s) toe met de standaardwaarden van de sjabloon?</translation>
         <translation type="vanished">Weergavetitel (leeg herstelt het origineel):</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1430"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="853"/>
         <source>Change Project Title</source>
         <translation>Projecttitel Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1454"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="869"/>
         <source>Edit Control Script</source>
         <translation>Controlescript Bewerken</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1471"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="886"/>
         <source>Change Point Count</source>
         <translation>Puntenaantal Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1494"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="909"/>
         <source>Change Plot Time Range</source>
         <translation>Plotbereik Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1520"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="935"/>
         <source>Toggle Freeze</source>
         <translation>Bevriezen Schakelen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1535"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="950"/>
         <source>Toggle Change-Driven Transforms</source>
         <translation>Wijzigingsgestuurde Transformaties Schakelen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1552"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="967"/>
         <source>Toggle Fast Lua Execution</source>
         <translation>Schakel Snelle Lua-uitvoering In/uit</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1573"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="988"/>
         <source>Enable Fast Lua Execution?</source>
         <translation>Snelle Lua-Uitvoering Inschakelen?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1574"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="989"/>
         <source>Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x faster), but the runaway-script watchdog cannot operate: a script stuck in an infinite loop will stall its data source until you disconnect.
 
 Enable it only for scripts you trust and have tested in Safe mode first.</source>
@@ -8829,37 +8848,37 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
 Schakel dit alleen in voor scripts die u vertrouwt en eerst in Veilige modus hebt getest.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1579"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="994"/>
         <source>Fast Lua Execution</source>
         <translation>Snelle Lua-uitvoering</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1608"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1023"/>
         <source>Change Frame Start Sequence</source>
         <translation>Framestartreeks Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1627"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1042"/>
         <source>Change Frame End Sequence</source>
         <translation>Frameeindreeks Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1646"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1061"/>
         <source>Change Checksum</source>
         <translation>Checksum Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1665"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1080"/>
         <source>Change Frame Detection</source>
         <translation>Framedetectie Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1684"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1099"/>
         <source>Change Decoder</source>
         <translation>Decoder Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1703"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1118"/>
         <source>Toggle Hex Delimiters</source>
         <translation>Hex-scheidingstekens Schakelen</translation>
     </message>
@@ -8932,54 +8951,54 @@ Schakel dit alleen in voor scripts die u vertrouwt en eerst in Veilige modus heb
         <translation type="vanished">Dit project bevat niet-opgeslagen wijzigingen!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="211"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="220"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="234"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="187"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="196"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="210"/>
         <source>Project error</source>
         <translation>Projectfout</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="211"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="187"/>
         <source>Project title cannot be empty!</source>
         <translation>Projecttitel mag niet leeg zijn!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="220"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="196"/>
         <source>You need to add at least one group!</source>
         <translation>Voeg minimaal één groep toe!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="234"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="210"/>
         <source>You need to add at least one dataset!</source>
         <translation>Voeg minimaal één dataset toe!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="282"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="250"/>
         <source>Your project needs a title</source>
         <translation>Je project heeft een titel nodig</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="284"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="252"/>
         <source>Add a group to get started</source>
         <translation>Voeg een groep toe om te beginnen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="286"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="254"/>
         <source>Add a dataset to a group</source>
         <translation>Voeg een dataset toe aan een groep</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="300"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="268"/>
         <source>Open the Project view at the top of the tree and enter a name. You can rename the project at any time.</source>
         <translation>Open de Projectweergave bovenaan de boom en voer een naam in. Je kunt het project op elk moment hernoemen.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="303"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="271"/>
         <source>Groups organize datasets into dashboard widgets. Use the Group button in the toolbar above to create one, then add datasets to it.</source>
         <translation>Groepen organiseren datasets in dashboardwidgets. Gebruik de Groep-knop in de werkbalk hierboven om er een te maken en voeg er vervolgens datasets aan toe.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="307"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="275"/>
         <source>Datasets are the values that appear on the dashboard. Select a group in the tree and use the Dataset button in the toolbar to add one.</source>
         <translation>Datasets zijn de waarden die op het dashboard verschijnen. Selecteer een groep in de boom en gebruik de Dataset-knop in de werkbalk om er een toe te voegen.</translation>
     </message>
@@ -8988,8 +9007,8 @@ Schakel dit alleen in voor scripts die u vertrouwt en eerst in Veilige modus heb
         <translation type="vanished">Tijd</translation>
     </message>
     <message>
-        <source>Do you want to delete data source &quot;%1&quot;?</source>
-        <translation type="vanished">Wil je gegevensbron &quot;%1&quot; verwijderen?</translation>
+        <source>Do you want to delete data source "%1"?</source>
+        <translation type="vanished">Wil je gegevensbron "%1" verwijderen?</translation>
     </message>
     <message>
         <source>Groups using this source will move to the default source. This action cannot be undone.</source>
@@ -9004,12 +9023,12 @@ Schakel dit alleen in voor scripts die u vertrouwt en eerst in Veilige modus heb
         <translation type="vanished">Serial Studio-projectbestanden (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1302"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="725"/>
         <source>Untitled Project</source>
         <translation>Naamloos Project</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1318"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="741"/>
         <source>Device A</source>
         <translation>Apparaat A</translation>
     </message>
@@ -9047,35 +9066,35 @@ Schakel dit alleen in voor scripts die u vertrouwt en eerst in Veilige modus heb
     </message>
     <message>
         <source>Workspace IDs remapped on load</source>
-        <translation type="vanished">Workspace-ID&apos;s opnieuw toegewezen bij het laden</translation>
+        <translation type="vanished">Workspace-ID's opnieuw toegewezen bij het laden</translation>
     </message>
     <message>
         <source>%1 custom workspace ID(s) overlapped the new reserved auto range and were moved into the user range. Save the project to make the remap permanent.</source>
-        <translation type="vanished">%1 aangepaste werkruimte-ID&apos;s overlapten met het nieuwe gereserveerde automatische bereik en zijn verplaatst naar het gebruikersbereik. Sla het project op om de herindeling permanent te maken.</translation>
+        <translation type="vanished">%1 aangepaste werkruimte-ID's overlapten met het nieuwe gereserveerde automatische bereik en zijn verplaatst naar het gebruikersbereik. Sla het project op om de herindeling permanent te maken.</translation>
     </message>
     <message>
         <source>Legacy frame parser function updated</source>
         <translation type="vanished">Verouderde frame-parserfunctie bijgewerkt</translation>
     </message>
     <message>
-        <source>Your project used a legacy frame parser function with a &apos;separator&apos; argument. It has been automatically migrated to the new format.</source>
-        <translation type="vanished">Je project gebruikte een verouderde frame-parserfunctie met een &apos;separator&apos;-argument. Deze is automatisch gemigreerd naar het nieuwe formaat.</translation>
+        <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
+        <translation type="vanished">Je project gebruikte een verouderde frame-parserfunctie met een 'separator'-argument. Deze is automatisch gemigreerd naar het nieuwe formaat.</translation>
     </message>
     <message>
-        <source>Do you want to delete group &quot;%1&quot;?</source>
-        <translation type="vanished">Wil je groep &quot;%1&quot; verwijderen?</translation>
+        <source>Do you want to delete group "%1"?</source>
+        <translation type="vanished">Wil je groep "%1" verwijderen?</translation>
     </message>
     <message>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation type="vanished">Deze actie kan niet ongedaan worden gemaakt. Doorgaan?</translation>
     </message>
     <message>
-        <source>Do you want to delete action &quot;%1&quot;?</source>
-        <translation type="vanished">Wil je actie &quot;%1&quot; verwijderen?</translation>
+        <source>Do you want to delete action "%1"?</source>
+        <translation type="vanished">Wil je actie "%1" verwijderen?</translation>
     </message>
     <message>
-        <source>Do you want to delete dataset &quot;%1&quot;?</source>
-        <translation type="vanished">Wil je dataset &quot;%1&quot; verwijderen?</translation>
+        <source>Do you want to delete dataset "%1"?</source>
+        <translation type="vanished">Wil je dataset "%1" verwijderen?</translation>
     </message>
     <message>
         <source>%1 (Copy)</source>
@@ -9178,8 +9197,8 @@ Schakel dit alleen in voor scripts die u vertrouwt en eerst in Veilige modus heb
         <translation type="vanished">Nieuwe Knop</translation>
     </message>
     <message>
-        <source>Do you want to delete output widget &quot;%1&quot;?</source>
-        <translation type="vanished">Wilt u outputwidget &quot;%1&quot; verwijderen?</translation>
+        <source>Do you want to delete output widget "%1"?</source>
+        <translation type="vanished">Wilt u outputwidget "%1" verwijderen?</translation>
     </message>
     <message>
         <source>Delete Output Widget</source>
@@ -9390,8 +9409,8 @@ Schakel dit alleen in voor scripts die u vertrouwt en eerst in Veilige modus heb
         <translation type="vanished">Dit verwijdert %1 register(s) samen met de tabel. Deze actie kan niet ongedaan worden gemaakt.</translation>
     </message>
     <message>
-        <source>Delete &quot;%1&quot;?</source>
-        <translation type="vanished">&quot;%1&quot; Verwijderen?</translation>
+        <source>Delete "%1"?</source>
+        <translation type="vanished">"%1" Verwijderen?</translation>
     </message>
     <message>
         <source>Add Table</source>
@@ -9478,8 +9497,8 @@ Schakel dit alleen in voor scripts die u vertrouwt en eerst in Veilige modus heb
         <translation type="vanished">Map Hernoemen</translation>
     </message>
     <message>
-        <source>Delete folder &quot;%1&quot;?</source>
-        <translation type="vanished">Map &quot;%1&quot; verwijderen?</translation>
+        <source>Delete folder "%1"?</source>
+        <translation type="vanished">Map "%1" verwijderen?</translation>
     </message>
     <message>
         <source>The folder is removed; its workspaces and sub-folders move up to the parent.</source>
@@ -9526,7 +9545,7 @@ Schakel dit alleen in voor scripts die u vertrouwt en eerst in Veilige modus heb
         <translation type="vanished">Werkruimte-aanpassingen verwijderen?</translation>
     </message>
     <message>
-        <source>Switching off Customize discards your edits and rebuilds the workspace list from the project&apos;s groups.</source>
+        <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
         <translation type="vanished">Aanpassen uitschakelen verwijdert uw bewerkingen en herbouwt de werkruimtelijst vanuit de groepen van het project.</translation>
     </message>
     <message>
@@ -9684,34 +9703,34 @@ Opnieuw laden?</translation>
     <message>
         <location filename="../../src/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="79"/>
         <source>Device A</source>
-        <translation type="unfinished">Apparaat A</translation>
+        <translation>Apparaat A</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="118"/>
         <location filename="../../src/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="264"/>
         <source>Channel %1</source>
-        <translation type="unfinished">Kanaal %1</translation>
+        <translation>Kanaal %1</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="127"/>
         <location filename="../../src/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="280"/>
         <source>Quick Plot</source>
-        <translation type="unfinished">Snelle Plot</translation>
+        <translation>Snelle Plot</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="134"/>
         <source>Quick Plot Data</source>
-        <translation type="unfinished">Snelle Plotgegevens</translation>
+        <translation>Snelle Plotgegevens</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="146"/>
         <source>Multi-Plot</source>
-        <translation type="unfinished">Meervoudige Plot</translation>
+        <translation>Meervoudige Plot</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="275"/>
         <source>Audio Input</source>
-        <translation type="unfinished">Audio-invoer</translation>
+        <translation>Audio-invoer</translation>
     </message>
 </context>
 <context>
@@ -10105,7 +10124,7 @@ Geldig formaat: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="344"/>
-        <source>Define colored value ranges with severity tiers for this dataset&apos;s gauge or LED.</source>
+        <source>Define colored value ranges with severity tiers for this dataset's gauge or LED.</source>
         <translation>Definieer gekleurde waardebereiken met ernstniveaus voor de meter of LED van deze dataset.</translation>
     </message>
     <message>
@@ -10147,7 +10166,7 @@ Geldig formaat: 01 A2 FF 3C</translation>
         <translation>Alarmbanden</translation>
     </message>
     <message>
-        <source>Define colored value ranges with severity tiers for this dataset&apos;s gauge.</source>
+        <source>Define colored value ranges with severity tiers for this dataset's gauge.</source>
         <translation type="vanished">Definieer gekleurde waardebereiken met ernstniveaus voor de meter van deze dataset.</translation>
     </message>
     <message>
@@ -10179,6 +10198,81 @@ Geldig formaat: 01 A2 FF 3C</translation>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="393"/>
         <source>Delete this dataset from the group</source>
         <translation>Verwijder deze dataset uit de groep</translation>
+    </message>
+</context>
+<context>
+    <name>DiagramLayout</name>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="242"/>
+        <source>Group</source>
+        <translation>Groep</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="369"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="785"/>
+        <source>Folder</source>
+        <translation>Map</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="401"/>
+        <source>Control Loop</source>
+        <translation>Besturingslus</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="403"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="737"/>
+        <source>empty</source>
+        <translation>leeg</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="447"/>
+        <source>Frame Parser</source>
+        <translation>Frame-parser</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="454"/>
+        <source>Device %1</source>
+        <translation>Apparaat %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="531"/>
+        <source>Output Panel</source>
+        <translation>Uitvoerpaneel</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="567"/>
+        <source>Control</source>
+        <translation>Besturing</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="600"/>
+        <source>Outputs</source>
+        <translation>Uitgangen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="638"/>
+        <source>Action</source>
+        <translation>Actie</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="723"/>
+        <source>Table</source>
+        <translation>Tabel</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="737"/>
+        <source>%1 regs</source>
+        <translation>%1 regs</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="828"/>
+        <source>Variables</source>
+        <translation>Variabelen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="872"/>
+        <source>MQTT Publisher</source>
+        <translation>MQTT Publisher</translation>
     </message>
 </context>
 <context>
@@ -10265,8 +10359,8 @@ Geldig formaat: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="276"/>
-        <source>Click &quot;OK&quot; to begin installing the update</source>
-        <translation>Klik op &quot;OK&quot; om de installatie van de update te starten</translation>
+        <source>Click "OK" to begin installing the update</source>
+        <translation>Klik op "OK" om de installatie van de update te starten</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="278"/>
@@ -10285,8 +10379,8 @@ Geldig formaat: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="298"/>
-        <source>Click the &quot;Open&quot; button to apply the update</source>
-        <translation>Klik op de knop &quot;Openen&quot; om de update toe te passen</translation>
+        <source>Click the "Open" button to apply the update</source>
+        <translation>Klik op de knop "Openen" om de update toe te passen</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="311"/>
@@ -10829,7 +10923,7 @@ Voeg hierboven controller-tags toe om ze te pollen.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="242"/>
-        <source>Don&apos;t Allow</source>
+        <source>Don't Allow</source>
         <translation>Niet Toestaan</translation>
     </message>
     <message>
@@ -10853,7 +10947,7 @@ Voeg hierboven controller-tags toe om ze te pollen.</translation>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="132"/>
         <source>Repos</source>
-        <translation>Repo&apos;s</translation>
+        <translation>Repo's</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="162"/>
@@ -10978,7 +11072,7 @@ Voeg hierboven controller-tags toe om ze te pollen.</translation>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1144"/>
         <source>Add URLs to remote repositories or local folder paths.</source>
-        <translation>Voeg URL&apos;s toe naar externe repositories of lokale mappaden.</translation>
+        <translation>Voeg URL's toe naar externe repositories of lokale mappaden.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1181"/>
@@ -11164,7 +11258,7 @@ Voeg hierboven controller-tags toe om ze te pollen.</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="745"/>
-        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>Niet beschikbaar via een externe verbinding. Deze widget heeft de ruwe samplestroom van de externe bron nodig, die de dashboardspiegel niet doorgeeft.</translation>
     </message>
     <message>
@@ -11308,59 +11402,48 @@ Voeg hierboven controller-tags toe om ze te pollen.</translation>
 <context>
     <name>FlowDiagram</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="457"/>
         <source>Frame Parser</source>
-        <translation>Frame-parser</translation>
+        <translation type="vanished">Frame-parser</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="464"/>
         <source>Device %1</source>
-        <translation>Apparaat %1</translation>
+        <translation type="vanished">Apparaat %1</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="541"/>
         <source>Output Panel</source>
-        <translation>Uitvoerpaneel</translation>
+        <translation type="vanished">Uitvoerpaneel</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="577"/>
         <source>Control</source>
-        <translation>Besturing</translation>
+        <translation type="vanished">Besturing</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="733"/>
         <source>Table</source>
-        <translation>Tabel</translation>
+        <translation type="vanished">Tabel</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="747"/>
         <source>%1 regs</source>
-        <translation>%1 regs</translation>
+        <translation type="vanished">%1 regs</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="838"/>
         <source>Variables</source>
-        <translation>Variabelen</translation>
+        <translation type="vanished">Variabelen</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="413"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="747"/>
         <source>empty</source>
-        <translation>leeg</translation>
+        <translation type="vanished">leeg</translation>
     </message>
     <message>
         <source>Control Script</source>
         <translation type="vanished">Controlescript</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="882"/>
         <source>MQTT Publisher</source>
-        <translation>MQTT Publisher</translation>
+        <translation type="vanished">MQTT Publisher</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1283"/>
         <source>Open the transform code editor for this dataset.</source>
-        <translation>Open de transformcode-editor voor deze dataset.</translation>
+        <translation type="vanished">Open de transformcode-editor voor deze dataset.</translation>
     </message>
     <message>
         <source>Dataset Container</source>
@@ -11443,14 +11526,12 @@ Voeg hierboven controller-tags toe om ze te pollen.</translation>
         <translation type="vanished">Thermometer</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="411"/>
         <source>Control Loop</source>
-        <translation>Besturingslus</translation>
+        <translation type="vanished">Besturingslus</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="610"/>
         <source>Outputs</source>
-        <translation>Uitgangen</translation>
+        <translation type="vanished">Uitgangen</translation>
     </message>
     <message>
         <source>Shared Memory</source>
@@ -11549,20 +11630,16 @@ Voeg hierboven controller-tags toe om ze te pollen.</translation>
         <translation type="vanished">Bewerk Besturingslus…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="252"/>
         <source>Group</source>
-        <translation>Groep</translation>
+        <translation type="vanished">Groep</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="379"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="795"/>
         <source>Folder</source>
-        <translation>Map</translation>
+        <translation type="vanished">Map</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="648"/>
         <source>Action</source>
-        <translation>Actie</translation>
+        <translation type="vanished">Actie</translation>
     </message>
     <message>
         <source>No groups defined yet</source>
@@ -12364,7 +12441,7 @@ Voeg hierboven controller-tags toe om ze te pollen.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="283"/>
         <source>Add a toggle switch for on/off commands</source>
-        <translation>Voeg een schakelaar toe voor aan/uit-commando&apos;s</translation>
+        <translation>Voeg een schakelaar toe voor aan/uit-commando's</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="290"/>
@@ -12374,7 +12451,7 @@ Voeg hierboven controller-tags toe om ze te pollen.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="293"/>
         <source>Add a text field for typing and sending commands</source>
-        <translation>Voeg een tekstveld toe voor het typen en verzenden van commando&apos;s</translation>
+        <translation>Voeg een tekstveld toe voor het typen en verzenden van commando's</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="299"/>
@@ -12515,7 +12592,7 @@ Voeg hierboven controller-tags toe om ze te pollen.</translation>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="95"/>
         <source>Fetching help pages…</source>
-        <translation>Helppagina&apos;s ophalen…</translation>
+        <translation>Helppagina's ophalen…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="186"/>
@@ -12545,7 +12622,7 @@ Voeg hierboven controller-tags toe om ze te pollen.</translation>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="422"/>
         <source>%1 pages</source>
-        <translation>%1 pagina&apos;s</translation>
+        <translation>%1 pagina's</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="431"/>
@@ -12556,7 +12633,7 @@ Voeg hierboven controller-tags toe om ze te pollen.</translation>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="287"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="280"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
@@ -12565,92 +12642,92 @@ Voeg hierboven controller-tags toe om ze te pollen.</translation>
         <translation type="vanished">Netwerksocket</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="288"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="280"/>
         <source>Network</source>
         <translation>Netwerk</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="289"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="280"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="291"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="282"/>
         <source>Audio</source>
         <translation>Audio</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="292"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="282"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="293"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="282"/>
         <source>CAN Bus</source>
         <translation>CAN-bus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="294"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="282"/>
         <source>USB Device</source>
         <translation>USB-apparaat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="295"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="282"/>
         <source>HID Device</source>
         <translation>HID-apparaat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="296"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="283"/>
         <source>Process</source>
         <translation>Proces</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="297"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="283"/>
         <source>MQTT Subscriber</source>
         <translation>MQTT-abonnee</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="298"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="283"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="299"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="283"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="300"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="284"/>
         <source>EtherNet/IP</source>
         <translation>Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="301"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="284"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="716"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="670"/>
         <source>Your trial period has ended.</source>
         <translation>Uw proefperiode is afgelopen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="717"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="671"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>Activeer uw licentie om Serial Studio te blijven gebruiken.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="802"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="748"/>
         <source>connection attempt failed</source>
         <translation>verbindingspoging mislukt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1300"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1220"/>
         <source>This connection type requires an active license or trial.</source>
         <translation>Dit verbindingstype vereist een actieve licentie of proefperiode.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1301"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1221"/>
         <source>Activate Serial Studio Pro or start a trial to use this device type.</source>
         <translation>Activeer Serial Studio Pro of start een proefperiode om dit apparaattype te gebruiken.</translation>
     </message>
@@ -12930,7 +13007,7 @@ Zorg er op Linux voor dat SOCKETCAN-kernelmodules zijn geladen.</translation>
 On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
         <translation>Geen CAN-bus-plugins gevonden op dit systeem.
 
-Installeer op Windows CAN-hardwarestuurprogramma&apos;s (PEAK, VECTOR, etc.).</translation>
+Installeer op Windows CAN-hardwarestuurprogramma's (PEAK, VECTOR, etc.).</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="438"/>
@@ -12950,7 +13027,7 @@ Installeer op Windows CAN-hardwarestuurprogramma&apos;s (PEAK, VECTOR, etc.).</t
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="366"/>
         <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
-        <translation>Kan CAN-busapparaat niet aanmaken. Controleer de hardware en stuurprogramma&apos;s.</translation>
+        <translation>Kan CAN-busapparaat niet aanmaken. Controleer de hardware en stuurprogramma's.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="394"/>
@@ -13003,28 +13080,28 @@ Installeer op Windows CAN-hardwarestuurprogramma&apos;s (PEAK, VECTOR, etc.).</t
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="995"/>
-        <source>Install &lt;a href=&apos;https://www.peak-system.com/Drivers.523.0.html?&amp;L=1&apos;&gt;PEAK CAN drivers&lt;/a&gt;</source>
-        <translation>Installeer &lt;a href=&apos;https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1&apos;&gt;PEAK CAN-stuurprogramma&apos;s&lt;/a&gt;</translation>
+        <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
+        <translation>Installeer &lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN-stuurprogramma's&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="999"/>
-        <source>Install &lt;a href=&apos;https://www.vector.com/us/en/products/products-a-z/libraries-drivers/&apos;&gt;Vector CAN drivers&lt;/a&gt;</source>
-        <translation>Installeer &lt;a href=&apos;https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/&apos;&gt;VECTOR CAN-stuurprogramma&apos;s&lt;/a&gt;</translation>
+        <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
+        <translation>Installeer &lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;VECTOR CAN-stuurprogramma's&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="1003"/>
-        <source>Install &lt;a href=&apos;https://www.systec-electronic.com/en/company/support/driver&apos;&gt;SysTec CAN drivers&lt;/a&gt;</source>
-        <translation>Installeer &lt;a href=&apos;https://www.systec-electronic.com/en/company/support/driver&apos;&gt;SysTec CAN-stuurprogramma&apos;s&lt;/a&gt;</translation>
+        <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
+        <translation>Installeer &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN-stuurprogramma's&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="1006"/>
         <source>Install %1 drivers</source>
-        <translation>Installeer %1-stuurprogramma&apos;s</translation>
+        <translation>Installeer %1-stuurprogramma's</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="1009"/>
         <source>Install %1 drivers for macOS</source>
-        <translation>Installeer %1-stuurprogramma&apos;s voor macOS</translation>
+        <translation>Installeer %1-stuurprogramma's voor macOS</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="1023"/>
@@ -13082,8 +13159,8 @@ sudo ip link set %1 up type can bitrate %2
     <name>IO::Drivers::EipPollWorker</name>
     <message>
         <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="370"/>
-        <source>&quot;%1&quot;: %2</source>
-        <translation>&quot;%1&quot;: %2</translation>
+        <source>"%1": %2</source>
+        <translation>"%1": %2</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="377"/>
@@ -13099,128 +13176,128 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::EthernetIp</name>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="793"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="795"/>
         <source>The connection is not configured: check the host and the tag list</source>
         <translation>De verbinding is niet geconfigureerd: controleer de host en de taglijst</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="815"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="817"/>
         <source>EtherNet/IP Connection Failed</source>
         <translation>Ethernet/IP-verbinding Mislukt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="816"/>
-        <source>&quot;%1&quot;: %2</source>
-        <translation>&quot;%1&quot;: %2</translation>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="818"/>
+        <source>"%1": %2</source>
+        <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="817"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="819"/>
         <source>the controller did not answer</source>
         <translation>de controller heeft niet geantwoord</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="860"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="862"/>
         <source>EtherNet/IP Connection Lost</source>
         <translation>Ethernet/IP-verbinding Verbroken</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="941"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="943"/>
         <source>ControlLogix</source>
         <translation>Controllogix</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="942"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="944"/>
         <source>CompactLogix</source>
         <translation>Compactlogix</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="943"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="945"/>
         <source>MicroLogix</source>
         <translation>Micrologix</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="944"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="946"/>
         <source>Micro800</source>
         <translation>Micro800</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="945"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="947"/>
         <source>PLC-5</source>
         <translation>PLC-5</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="946"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="948"/>
         <source>SLC 500</source>
         <translation>SLC 500</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="947"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="949"/>
         <source>Logix PCCC</source>
         <translation>Logix PCCC</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="948"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="950"/>
         <source>Omron NJ/NX</source>
         <translation>Omron NJ/NX</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="991"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="993"/>
         <source>Not connected</source>
         <translation>Niet verbonden</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="994"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="996"/>
         <source>Polling %1 tags at %2 Hz</source>
         <translation>Polling van %1 tags op %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1211"/>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1220"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1213"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1222"/>
         <source>EtherNet/IP Tag</source>
         <translation>Ethernet/IP Tag</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1212"/>
-        <source>The tag name &quot;%1&quot; is too long or contains characters that are not allowed (no &apos;&amp;&apos;, &apos;=&apos; or whitespace).</source>
-        <translation>De tagnaam &quot;%1&quot; is te lang of bevat niet-toegestane tekens (geen &apos;&amp;&apos;, &apos;=&apos; of witruimte).</translation>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1214"/>
+        <source>The tag name "%1" is too long or contains characters that are not allowed (no '&amp;', '=' or whitespace).</source>
+        <translation>De tagnaam "%1" is te lang of bevat niet-toegestane tekens (geen '&amp;', '=' of witruimte).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1220"/>
-        <source>Unknown tag type &quot;%1&quot;.</source>
-        <translation>Onbekend tagtype &quot;%1&quot;.</translation>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1222"/>
+        <source>Unknown tag type "%1".</source>
+        <translation>Onbekend tagtype "%1".</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1272"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1274"/>
         <source>Gateway</source>
         <translation>Gateway</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1279"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1281"/>
         <source>CIP Path</source>
         <translation>Cip-pad</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1286"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1288"/>
         <source>Controller Family</source>
         <translation>Controllerfamilie</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1294"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1296"/>
         <source>Poll Interval (ms)</source>
         <translation>Poll-Interval (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1388"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1390"/>
         <source>EtherNet/IP Project</source>
         <translation>Ethernet/IP-project</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1393"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1395"/>
         <source>EtherNet/IP</source>
         <translation>Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1422"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1424"/>
         <source>Controller Tags</source>
         <translation>Controller-tags</translation>
     </message>
@@ -13366,15 +13443,15 @@ sudo ip link set %1 up type can bitrate %2
         <location filename="../../src/IO/Drivers/HID.cpp" line="183"/>
         <source>
 
-Check that your user is in the &apos;plugdev&apos; group or that a udev rule grants access to this device.</source>
-        <translation>Controleer of uw gebruiker in de groep &apos;plugdev&apos; zit of dat een udev-regel toegang verleent tot dit apparaat.
+Check that your user is in the 'plugdev' group or that a udev rule grants access to this device.</source>
+        <translation>Controleer of uw gebruiker in de groep 'plugdev' zit of dat een udev-regel toegang verleent tot dit apparaat.
 
 </translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/HID.cpp" line="186"/>
-        <source>Failed to open &quot;%1&quot;</source>
-        <translation>Openen van &quot;%1&quot; mislukt</translation>
+        <source>Failed to open "%1"</source>
+        <translation>Openen van "%1" mislukt</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/HID.cpp" line="291"/>
@@ -13400,107 +13477,107 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
 <context>
     <name>IO::Drivers::Iec104</name>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="377"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="379"/>
         <source>The connection is not configured: check the host and the port</source>
         <translation>De verbinding is niet geconfigureerd: controleer de host en de poort</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="432"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="434"/>
         <source>IEC 104 Connection Failed</source>
         <translation>IEC 104-Verbinding Mislukt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="433"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="435"/>
         <source>Cannot connect to %1:%2 (%3)</source>
         <translation>Kan geen verbinding maken met %1:%2 (%3)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="471"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="473"/>
         <source>The station sent more than the receive buffer holds</source>
         <translation>Het station heeft meer verzonden dan de ontvangstbuffer bevat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="509"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="511"/>
         <source>The station sent a frame this link could not decode</source>
         <translation>Het station heeft een frame verzonden dat deze link niet kon decoderen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="655"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="657"/>
         <source>The station did not answer within t1</source>
         <translation>Het station heeft niet binnen t1 geantwoord</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="759"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="761"/>
         <source>IEC 104 Connection Lost</source>
         <translation>IEC 104-Verbinding Verbroken</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="881"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="883"/>
         <source>Not connected</source>
         <translation>Niet verbonden</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="884"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="886"/>
         <source>Starting data transfer…</source>
         <translation>Gegevensoverdracht starten…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="886"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="888"/>
         <source>Monitoring %1 point(s) from station %2</source>
         <translation>%1 punt(en) van station %2 bewaken</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1167"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1169"/>
         <source>Host</source>
         <translation>Host</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1174"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1176"/>
         <source>Port</source>
         <translation>Poort</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1183"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1185"/>
         <source>Common Address</source>
         <translation>Gemeenschappelijk Adres</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1195"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1197"/>
         <source>Send Window (k)</source>
         <translation>Verzendvenster (k)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1195"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1197"/>
         <source>Ack Window (w)</source>
         <translation>Bevestigingsvenster (w)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1208"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1210"/>
         <source>Timeout t%1 (ms)</source>
         <translation>Time-out t%1 (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1332"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1334"/>
         <source>IEC 60870-5-104 Project</source>
         <translation>IEC 60870-5-104 Project</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1337"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1339"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1367"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1369"/>
         <source>Status Points</source>
         <translation>Statuspunten</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1368"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1370"/>
         <source>Counters</source>
         <translation>Tellers</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1368"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1370"/>
         <source>Measurements</source>
         <translation>Metingen</translation>
     </message>
@@ -13544,72 +13621,72 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
 <context>
     <name>IO::Drivers::MQTT</name>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="60"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="64"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="61"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="65"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="62"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="66"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="64"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="68"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="65"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="69"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="66"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="70"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3 of Later</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="67"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="71"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2 of Later</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="68"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="72"/>
         <source>Any Protocol</source>
         <translation>Elk Protocol</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="69"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="73"/>
         <source>Secure Protocols Only</source>
         <translation>Alleen Beveiligde Protocollen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="71"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="75"/>
         <source>None</source>
         <translation>Geen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="72"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="76"/>
         <source>Query Peer</source>
         <translation>Peer Opvragen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="73"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="77"/>
         <source>Verify Peer</source>
         <translation>Peer Verifiëren</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="74"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="78"/>
         <source>Auto Verify Peer</source>
         <translation>Peer Automatisch Verifiëren</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="183"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="187"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>MQTT-Functie Vereist een Commerciële Licentie</translation>
     </message>
@@ -13618,157 +13695,157 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation type="vanished">Abonneren op een MQTT-broker is alleen beschikbaar met een geldige commerciële licentie van Serial Studio (Hobbyist-tier of hoger).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="184"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="188"/>
         <source>Subscribing to an MQTT broker is only available with a valid Serial Studio license or an active trial.</source>
         <translation>Abonneren op een MQTT-broker is alleen beschikbaar met een geldige Serial Studio-licentie of een actieve proefperiode.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="441"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="445"/>
         <source>Use System Database</source>
         <translation>Systeemdatabase Gebruiken</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="442"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="446"/>
         <source>Load From Folder…</source>
         <translation>Laden Uit Map…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="475"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="479"/>
         <source>Select PEM Certificates Directory</source>
         <translation>Selecteer Pem-certificatenmap</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="768"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="772"/>
         <source>Hostname</source>
         <translation>Hostnaam</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="775"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="779"/>
         <source>Port</source>
         <translation>Poort</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="784"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="788"/>
         <source>Topic Filter</source>
         <translation>Topicfilter</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="791"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="795"/>
         <source>Sparkplug</source>
         <translation>Sparkplug</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="798"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="802"/>
         <source>Sparkplug Group ID</source>
         <translation>Sparkplug Groep-ID</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="805"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="809"/>
         <source>Client ID</source>
         <translation>Client-ID</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="812"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="816"/>
         <source>Username</source>
         <translation>Gebruikersnaam</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="819"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="823"/>
         <source>Password</source>
         <translation>Wachtwoord</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="826"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="830"/>
         <source>MQTT Version</source>
         <translation>MQTT-versie</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="834"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="838"/>
         <source>Clean Session</source>
         <translation>Clean Session</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="841"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="845"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (s)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="850"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="854"/>
         <source>Auto Keep Alive</source>
         <translation>Automatische Keep Alive</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="867"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="871"/>
         <source>SSL/TLS Enabled</source>
         <translation>SSL/TLS Ingeschakeld</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="877"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="881"/>
         <source>SSL Protocol</source>
         <translation>SSL-protocol</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="885"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="889"/>
         <source>Peer Verify Mode</source>
         <translation>Peer-verificatiemodus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="893"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="897"/>
         <source>Peer Verify Depth</source>
         <translation>Peer-verificatiediepte</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="902"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="906"/>
         <source>Client Certificate (PEM)</source>
         <translation>Clientcertificaat (PEM)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="909"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="913"/>
         <source>Private Key (PEM)</source>
         <translation>Privésleutel (PEM)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="916"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="920"/>
         <source>ALPN (MQTT over port 443)</source>
         <translation>ALPN (MQTT over poort 443)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="924"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="928"/>
         <source>ALPN Protocol</source>
         <translation>Alpn-protocol</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1069"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1073"/>
         <source>The broker closed the connection during the attempt</source>
         <translation>De broker heeft de verbinding gesloten tijdens de poging</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1084"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1088"/>
         <source>MQTT Subscription Error</source>
         <translation>MQTT-abonnementsfout</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1085"/>
-        <source>Failed to subscribe to topic &quot;%1&quot;.</source>
-        <translation>Abonneren op topic &quot;%1&quot; mislukt.</translation>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1089"/>
+        <source>Failed to subscribe to topic "%1".</source>
+        <translation>Abonneren op topic "%1" mislukt.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1338"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1342"/>
         <source>MQTT Client Certificate Error</source>
         <translation>MQTT-clientcertificaatfout</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1355"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1359"/>
         <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
         <translation>PEM-bestanden (*.pem *.crt *.cer *.key);;Alle bestanden (*)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1381"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1385"/>
         <source>Select Client Certificate</source>
         <translation>Selecteer Clientcertificaat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1389"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1393"/>
         <source>Select Private Key</source>
         <translation>Selecteer Privésleutel</translation>
     </message>
@@ -13777,97 +13854,97 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation type="vanished">De broker heeft de verbinding gesloten.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1112"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1116"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>Ongeldige MQTT-protocolversie</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1113"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1117"/>
         <source>The broker rejected the configured MQTT protocol version.</source>
         <translation>De broker heeft de geconfigureerde MQTT-protocolversie geweigerd.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1116"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1120"/>
         <source>Client ID Rejected</source>
         <translation>Client-ID Geweigerd</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1117"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1121"/>
         <source>The broker rejected the client ID. Try a different identifier.</source>
         <translation>De broker heeft de client-ID geweigerd. Probeer een andere identificatie.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1120"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1124"/>
         <source>MQTT Server Unavailable</source>
         <translation>MQTT-server Niet Beschikbaar</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1121"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1125"/>
         <source>The broker is currently unavailable. Retry later.</source>
         <translation>De broker is momenteel niet beschikbaar. Probeer het later opnieuw.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1124"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1128"/>
         <source>Authentication Error</source>
         <translation>Authenticatiefout</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1125"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1129"/>
         <source>The credentials provided were rejected by the broker.</source>
         <translation>De opgegeven inloggegevens zijn geweigerd door de broker.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1128"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1132"/>
         <source>Authorization Error</source>
         <translation>Autorisatiefout</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1129"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1133"/>
         <source>Account lacks permission for this operation.</source>
         <translation>Account heeft geen toestemming voor deze bewerking.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1132"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1136"/>
         <source>Network or Transport Error</source>
         <translation>Netwerk- of Transportfout</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1133"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1137"/>
         <source>Network/transport layer issue while connecting to the broker.</source>
         <translation>Netwerk-/transportlaagprobleem tijdens verbinding met de broker.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1136"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1140"/>
         <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
         <translation>Een clientcertificaat is geconfigureerd: controleer of het overeenkomt met de privésleutel en geactiveerd is op de broker.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1141"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1145"/>
         <source>MQTT Protocol Violation</source>
         <translation>MQTT-protocolschending</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1142"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1146"/>
         <source>The broker reported a protocol violation and closed the connection.</source>
         <translation>De broker meldde een protocolschending en sloot de verbinding.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1145"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1149"/>
         <source>MQTT 5 Error</source>
         <translation>MQTT 5-Fout</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1146"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1150"/>
         <source>An MQTT 5 protocol-level error occurred.</source>
         <translation>Er is een MQTT 5-protocolfout opgetreden.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1149"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1153"/>
         <source>MQTT Error</source>
         <translation>MQTT-fout</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1150"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1154"/>
         <source>An unexpected MQTT error occurred.</source>
         <translation>Er is een onverwachte MQTT-fout opgetreden.</translation>
     </message>
@@ -13878,8 +13955,8 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     </message>
     <message>
         <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="302"/>
-        <source>A group ID cannot contain &apos;+&apos;, &apos;#&apos; or &apos;/&apos;; keeping &quot;%1&quot;.</source>
-        <translation>Een groep-ID mag geen &apos;+&apos;, &apos;#&apos; of &apos;/&apos; bevatten; &quot;%1&quot; wordt behouden.</translation>
+        <source>A group ID cannot contain '+', '#' or '/'; keeping "%1".</source>
+        <translation>Een groep-ID mag geen '+', '#' of '/' bevatten; "%1" wordt behouden.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="597"/>
@@ -13903,27 +13980,27 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     </message>
     <message>
         <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="644"/>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="680"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="677"/>
         <source>Sparkplug Project Generator</source>
         <translation>Sparkplug-projectgenerator</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="656"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="653"/>
         <source>Failed to load generated project</source>
         <translation>Gegenereerd project laden mislukt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="657"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="654"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>De gegenereerde project-JSON kon niet worden geladen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="675"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="672"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>Project met %1 groepen en %2 datasets succesvol gegenereerd.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="678"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="675"/>
         <source>The project editor is now open for customization.</source>
         <translation>De projecteditor is nu geopend voor aanpassing.</translation>
     </message>
@@ -13931,110 +14008,110 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
 <context>
     <name>IO::Drivers::Modbus</name>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="343"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="345"/>
         <source>Invalid Serial Port</source>
         <translation>Ongeldige Seriële Poort</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="387"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="389"/>
         <source>Modbus Initialization Failed</source>
         <translation>Modbus-initialisatie Mislukt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="410"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="412"/>
         <source>Nothing is listening at %1</source>
         <translation>Er luistert niets op %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="468"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="470"/>
         <source>Modbus Connection Failed</source>
         <translation>Modbus-verbinding Mislukt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="344"/>
-        <source>The selected serial port &quot;%1&quot; is no longer available. Refresh the port list and try again.</source>
-        <translation>De geselecteerde seriële poort &quot;%1&quot; is niet langer beschikbaar. Ververs de poortenlijst en probeer opnieuw.</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="346"/>
+        <source>The selected serial port "%1" is no longer available. Refresh the port list and try again.</source>
+        <translation>De geselecteerde seriële poort "%1" is niet langer beschikbaar. Ververs de poortenlijst en probeer opnieuw.</translation>
     </message>
     <message>
         <source>The Modbus client refused to start the connection.</source>
         <translation type="vanished">De Modbus-client weigerde de verbinding te starten.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="388"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="390"/>
         <source>Unable to create Modbus device. Check your system configuration and try again.</source>
         <translation>Kan Modbus-apparaat niet aanmaken. Controleer de systeemconfiguratie en probeer opnieuw.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="470"/>
-        <source>Unable to connect to &quot;%1&quot;. Check your connection settings.</source>
-        <translation>Kan geen verbinding maken met &quot;%1&quot;. Controleer de verbindingsinstellingen.</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="472"/>
+        <source>Unable to connect to "%1". Check your connection settings.</source>
+        <translation>Kan geen verbinding maken met "%1". Controleer de verbindingsinstellingen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="471"/>
-        <source>&quot;%1&quot;: %2</source>
-        <translation>&quot;%1&quot;: %2</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="473"/>
+        <source>"%1": %2</source>
+        <translation>"%1": %2</translation>
     </message>
     <message>
         <source>Connection attempt timed out</source>
         <translation type="vanished">Verbindingspoging verlopen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="587"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="589"/>
         <source>None</source>
         <translation>Geen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="588"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="590"/>
         <source>Even</source>
         <translation>Even</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="589"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="591"/>
         <source>Odd</source>
         <translation>Oneven</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="590"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="592"/>
         <source>Space</source>
         <translation>Spatie</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="591"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="593"/>
         <source>Mark</source>
         <translation>Markering</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="643"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="645"/>
         <source>Holding Registers (0x03)</source>
         <translation>Holding Registers (0x03)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="644"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="646"/>
         <source>Input Registers (0x04)</source>
         <translation>Input Registers (0x04)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="645"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="647"/>
         <source>Coils (0x01)</source>
         <translation>Coils (0x01)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="646"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="648"/>
         <source>Discrete Inputs (0x02)</source>
         <translation>Discrete Inputs (0x02)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="803"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="805"/>
         <source>No register groups configured</source>
         <translation>Geen registergroepen geconfigureerd</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="804"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="806"/>
         <source>Add at least one register group before generating a project.</source>
         <translation>Voeg minimaal één registergroep toe voordat een project wordt gegenereerd.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="806"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="808"/>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="844"/>
         <source>Modbus Project Generator</source>
         <translation>Modbus Projectgenerator</translation>
@@ -14205,13 +14282,13 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Network.cpp" line="318"/>
-        <source>&quot;%1&quot; is not a valid URL</source>
-        <translation>&quot;%1&quot; is geen geldige URL</translation>
+        <source>"%1" is not a valid URL</source>
+        <translation>"%1" is geen geldige URL</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Network.cpp" line="324"/>
-        <source>&quot;%1&quot; must start with %2://</source>
-        <translation>&quot;%1&quot; moet beginnen met %2://</translation>
+        <source>"%1" must start with %2://</source>
+        <translation>"%1" moet beginnen met %2://</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Network.cpp" line="448"/>
@@ -14376,7 +14453,7 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
 <context>
     <name>IO::Drivers::OpcUa</name>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="410"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="338"/>
         <source>OPC UA Initialization Failed</source>
         <translation>OPC Ua-initialisatie Mislukt</translation>
     </message>
@@ -14385,30 +14462,29 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation type="vanished">De %1-backend is niet beschikbaar in deze build.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="584"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="500"/>
         <source>OPC UA Connection Failed</source>
         <translation>OPC Ua-verbinding Mislukt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="585"/>
-        <source>Unable to connect to &quot;%1&quot;.</source>
-        <translation>Kan geen verbinding maken met &quot;%1&quot;.</translation>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="501"/>
+        <source>Unable to connect to "%1".</source>
+        <translation>Kan geen verbinding maken met "%1".</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="586"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="732"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="832"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1915"/>
-        <source>&quot;%1&quot;: %2</source>
-        <translation>&quot;%1&quot;: %2</translation>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="502"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="648"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1290"/>
+        <source>"%1": %2</source>
+        <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="602"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="518"/>
         <source>OPC UA Connection Lost</source>
         <translation>OPC Ua-verbinding Verbroken</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="616"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="532"/>
         <source>Timed out after %1 s</source>
         <translation>Time-out na %1 s</translation>
     </message>
@@ -14417,7 +14493,7 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation type="vanished">De server heeft de verbinding gesloten</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="662"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="578"/>
         <source>The server closed the session</source>
         <translation>De server heeft de sessie gesloten</translation>
     </message>
@@ -14462,13 +14538,13 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation type="vanished">Onverwachte backend-fout</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="688"/>
-        <source>&quot;%1&quot; is not a valid endpoint URL</source>
-        <translation>&quot;%1&quot; is geen geldige endpoint-URL</translation>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="604"/>
+        <source>"%1" is not a valid endpoint URL</source>
+        <translation>"%1" is geen geldige endpoint-URL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="689"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1915"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="605"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1290"/>
         <source>OPC UA Discovery</source>
         <translation>OPC Ua-ontdekking</translation>
     </message>
@@ -14477,12 +14553,12 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation type="vanished">De %1-backend is niet beschikbaar in deze build</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="731"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="647"/>
         <source>Discovery failed: %1</source>
         <translation>Ontdekking mislukt: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="732"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="648"/>
         <source>OPC UA Discovery Failed</source>
         <translation>OPC Ua-ontdekking Mislukt</translation>
     </message>
@@ -14491,93 +14567,84 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation type="vanished">Geen None-policy-endpoint; beveiligde kanalen worden niet ondersteund in deze versie</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="402"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="330"/>
         <source>The connection is not configured: check the endpoint and the tag list</source>
         <translation>De verbinding is niet geconfigureerd: controleer het endpoint en de taglijst</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="409"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="697"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="337"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="613"/>
         <source>The %1 stack is not available in this build</source>
         <translation>De %1-stack is niet beschikbaar in deze build</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="452"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="376"/>
         <source>The connection attempt could not be started</source>
         <translation>De verbindingspoging kon niet worden gestart</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="466"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="390"/>
         <source>OPC UA Certificate</source>
         <translation>OPC Ua-certificaat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="467"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="391"/>
         <source>The client certificate could not be generated; secure channels will be refused.</source>
         <translation>Het clientcertificaat kon niet worden gegenereerd; beveiligde kanalen worden geweigerd.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="730"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="646"/>
         <source>The server did not answer within %1 s</source>
         <translation>De server heeft niet binnen %1 s geantwoord</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="762"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="678"/>
         <source>Endpoint discovery failed</source>
         <translation>Endpoint-ontdekking mislukt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="831"/>
         <source>OPC UA Monitored Item Refused</source>
-        <translation>OPC UA Gecontroleerd Item Geweigerd</translation>
+        <translation type="vanished">OPC UA Gecontroleerd Item Geweigerd</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="838"/>
         <source>the server refused every monitored item</source>
-        <translation>de server heeft elk gecontroleerd item geweigerd</translation>
+        <translation type="vanished">de server heeft elk gecontroleerd item geweigerd</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="858"/>
         <source>the server retired the subscription</source>
-        <translation>de server heeft het abonnement beëindigd</translation>
+        <translation type="vanished">de server heeft het abonnement beëindigd</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="894"/>
         <source>OPC UA Subscription Unavailable</source>
-        <translation>OPC UA Abonnement Niet Beschikbaar</translation>
+        <translation type="vanished">OPC UA Abonnement Niet Beschikbaar</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="895"/>
         <source>Falling back to polling: %1.</source>
-        <translation>Terugvallen op polling: %1.</translation>
+        <translation type="vanished">Terugvallen op polling: %1.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="921"/>
         <source>no notification for %1 s</source>
-        <translation>geen notificatie gedurende %1 s</translation>
+        <translation type="vanished">geen notificatie gedurende %1 s</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="974"/>
         <source>OPC UA Read Failed</source>
-        <translation>OPC UA Lezen Mislukt</translation>
+        <translation type="vanished">OPC UA Lezen Mislukt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1019"/>
         <source>OPC UA Type Mismatch</source>
-        <translation>OPC UA Type Komt Niet Overeen</translation>
+        <translation type="vanished">OPC UA Type Komt Niet Overeen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1020"/>
         <source>Channel %1 is declared %2 but the server sends %3; the value is coerced.</source>
-        <translation>Kanaal %1 is gedeclareerd als %2 maar de server stuurt %3; de waarde wordt geconverteerd.</translation>
+        <translation type="vanished">Kanaal %1 is gedeclareerd als %2 maar de server stuurt %3; de waarde wordt geconverteerd.</translation>
     </message>
     <message>
         <source>Browse of %1 failed: %2</source>
         <translation type="vanished">Bladeren van %1 mislukt: %2</translation>
     </message>
     <message>
-        <source>&quot;%1&quot; is not a valid endpoint URL.</source>
-        <translation type="vanished">&quot;%1&quot; is geen geldige endpoint-URL.</translation>
+        <source>"%1" is not a valid endpoint URL.</source>
+        <translation type="vanished">"%1" is geen geldige endpoint-URL.</translation>
     </message>
     <message>
         <source>The %1 stack is not available in this build.</source>
@@ -14596,106 +14663,94 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation type="vanished">Kon geen bladersessie openen op %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1131"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="738"/>
         <source>Failed to load generated project</source>
         <translation>Gegenereerd project laden mislukt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1132"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="739"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>De gegenereerde project-JSON kon niet worden geladen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1146"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="753"/>
         <source>No tags selected</source>
         <translation>Geen tags geselecteerd</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1147"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="754"/>
         <source>Browse the server and select at least one tag before generating a project.</source>
         <translation>Blader door de server en selecteer minimaal één tag voordat u een project genereert.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1150"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1174"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="757"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="781"/>
         <source>OPC UA Project Generator</source>
         <translation>OPC UA Projectgenerator</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1169"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="776"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>Project succesvol gegenereerd met %1 groepen en %2 datasets.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1172"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="779"/>
         <source>The project editor is now open for customization.</source>
         <translation>De projecteditor is nu geopend voor aanpassing.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1220"/>
         <source>OPC UA Project</source>
-        <translation>OPC Ua-project</translation>
+        <translation type="vanished">OPC Ua-project</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1225"/>
         <source>OPC UA</source>
-        <translation>OPC UA</translation>
+        <translation type="vanished">OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1252"/>
         <source>Tags</source>
-        <translation>Tags</translation>
+        <translation type="vanished">Tags</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1304"/>
         <source> (deprecated)</source>
-        <translation>(verouderd)</translation>
+        <translation type="vanished">(verouderd)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1320"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1973"/>
         <source>None</source>
-        <translation>Geen</translation>
+        <translation type="vanished">Geen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1322"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1973"/>
         <source>Sign</source>
-        <translation>Ondertekenen</translation>
+        <translation type="vanished">Ondertekenen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1324"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1973"/>
         <source>Sign and Encrypt</source>
-        <translation>Ondertekenen en Versleutelen</translation>
+        <translation type="vanished">Ondertekenen en Versleutelen</translation>
     </message>
     <message>
         <source>Sign &amp;&amp; Encrypt</source>
         <translation type="vanished">Ondertekenen &amp;&amp; Versleutelen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1329"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1973"/>
         <source>Invalid</source>
-        <translation>Ongeldig</translation>
+        <translation type="vanished">Ongeldig</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2234"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1518"/>
         <source>Security Policy</source>
         <translation>Beveiligingsbeleid</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2242"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1526"/>
         <source>Security Mode</source>
         <translation>Beveiligingsmodus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2250"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1534"/>
         <source>User Certificate</source>
         <translation>Gebruikerscertificaat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2257"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1541"/>
         <source>User Private Key</source>
         <translation>Privésleutel Gebruiker</translation>
     </message>
@@ -14704,59 +14759,58 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation type="vanished">Ondertekenen &amp; Versleutelen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1452"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="859"/>
         <source>Connecting to %1</source>
         <translation>Verbinden met %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1455"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="862"/>
         <source>Not connected</source>
         <translation>Niet verbonden</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1461"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="870"/>
         <source>Subscribing, %1 of %2 tags</source>
         <translation>Abonneren, %1 van %2 tags</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1466"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="875"/>
         <source>Subscribed %1 tags, polling %2 refused, %3 Hz</source>
         <translation>Geabonneerd op %1 tags, polling %2 geweigerd, %3 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1472"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="881"/>
         <source>Polling (server refused subscriptions), %1 tags, %2 Hz</source>
         <translation>Polling (server weigerde abonnementen), %1 tags, %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1476"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="885"/>
         <source>Subscribed, %1 tags, %2 Hz</source>
         <translation>Geabonneerd, %1 tags, %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1514"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="915"/>
         <source>Anonymous</source>
         <translation>Anoniem</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1514"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="915"/>
         <source>Username / Password</source>
         <translation>Gebruikersnaam / Wachtwoord</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1514"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="915"/>
         <source>X.509 Certificate</source>
         <translation>X.509-certificaat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1914"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1289"/>
         <source>No endpoint this build can open with the selected identity</source>
         <translation>Geen endpoint dat deze build kan openen met de geselecteerde identiteit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1942"/>
         <source>%1 (deprecated)</source>
-        <translation>%1 (verouderd)</translation>
+        <translation type="vanished">%1 (verouderd)</translation>
     </message>
     <message>
         <source>The server certificate has expired</source>
@@ -14775,27 +14829,27 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation type="vanished">Het servercertificaat kon niet worden geparseerd</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2196"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1480"/>
         <source>Endpoint URL</source>
         <translation>Endpoint-URL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2203"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1487"/>
         <source>Authentication</source>
         <translation>Authenticatie</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2211"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1495"/>
         <source>Username</source>
         <translation>Gebruikersnaam</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2218"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1502"/>
         <source>Password</source>
         <translation>Wachtwoord</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2225"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1509"/>
         <source>Poll Interval (ms)</source>
         <translation>Poll-Interval (ms)</translation>
     </message>
@@ -14804,43 +14858,43 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     <name>IO::Drivers::OpcUaBrowser</name>
     <message>
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="79"/>
-        <source>&quot;%1&quot; is not a valid endpoint URL.</source>
-        <translation type="unfinished">&quot;%1&quot; is geen geldige endpoint-URL.</translation>
+        <source>"%1" is not a valid endpoint URL.</source>
+        <translation>"%1" is geen geldige endpoint-URL.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="86"/>
         <source>The %1 stack is not available in this build.</source>
-        <translation type="unfinished">De %1-stack is niet beschikbaar in deze build.</translation>
+        <translation>De %1-stack is niet beschikbaar in deze build.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="93"/>
         <source>The browse session was closed by the server</source>
-        <translation type="unfinished">De bladersessie is door de server gesloten</translation>
+        <translation>De bladersessie is door de server gesloten</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="104"/>
         <source>The browse session could not be started</source>
-        <translation type="unfinished">De bladersessie kon niet worden gestart</translation>
+        <translation>De bladersessie kon niet worden gestart</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="172"/>
         <source>Endpoint discovery failed</source>
-        <translation type="unfinished">Endpoint-ontdekking mislukt</translation>
+        <translation>Endpoint-ontdekking mislukt</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="193"/>
         <source>Browse of %1 failed: %2</source>
-        <translation type="unfinished">Bladeren van %1 mislukt: %2</translation>
+        <translation>Bladeren van %1 mislukt: %2</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="234"/>
         <source>Could not open a browse session on %1</source>
-        <translation type="unfinished">Kon geen bladersessie openen op %1</translation>
+        <translation>Kon geen bladersessie openen op %1</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="255"/>
         <source>Timed out after %1 s</source>
-        <translation type="unfinished">Time-out na %1 s</translation>
+        <translation>Time-out na %1 s</translation>
     </message>
 </context>
 <context>
@@ -14848,27 +14902,80 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     <message>
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaCertificateStore.cpp" line="238"/>
         <source>The server certificate is not trusted</source>
-        <translation type="unfinished">Het servercertificaat wordt niet vertrouwd</translation>
+        <translation>Het servercertificaat wordt niet vertrouwd</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaCertificateStore.cpp" line="240"/>
         <source>The server certificate has expired</source>
-        <translation type="unfinished">Het servercertificaat is verlopen</translation>
+        <translation>Het servercertificaat is verlopen</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaCertificateStore.cpp" line="242"/>
         <source>The server certificate is not valid yet</source>
-        <translation type="unfinished">Het servercertificaat is nog niet geldig</translation>
+        <translation>Het servercertificaat is nog niet geldig</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaCertificateStore.cpp" line="244"/>
         <source>The server certificate was not issued for this host</source>
-        <translation type="unfinished">Het servercertificaat is niet uitgegeven voor deze host</translation>
+        <translation>Het servercertificaat is niet uitgegeven voor deze host</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaCertificateStore.cpp" line="246"/>
         <source>The server certificate could not be parsed</source>
-        <translation type="unfinished">Het servercertificaat kon niet worden geparseerd</translation>
+        <translation>Het servercertificaat kon niet worden geparseerd</translation>
+    </message>
+</context>
+<context>
+    <name>IO::Drivers::OpcUaSubscriptions</name>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="195"/>
+        <source>OPC UA Monitored Item Refused</source>
+        <translation>OPC UA Gecontroleerd Item Geweigerd</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="196"/>
+        <source>"%1": %2</source>
+        <translation>"%1": %2</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="202"/>
+        <source>the server refused every monitored item</source>
+        <translation>de server heeft elk gecontroleerd item geweigerd</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="222"/>
+        <source>the server retired the subscription</source>
+        <translation>de server heeft het abonnement beëindigd</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="260"/>
+        <source>OPC UA Subscription Unavailable</source>
+        <translation>OPC UA Abonnement Niet Beschikbaar</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="261"/>
+        <source>Falling back to polling: %1.</source>
+        <translation>Terugvallen op polling: %1.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="287"/>
+        <source>no notification for %1 s</source>
+        <translation>geen notificatie gedurende %1 s</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="343"/>
+        <source>OPC UA Read Failed</source>
+        <translation>OPC UA Lezen Mislukt</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="431"/>
+        <source>OPC UA Type Mismatch</source>
+        <translation>OPC UA Type Komt Niet Overeen</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="432"/>
+        <source>Channel %1 is declared %2 but the server sends %3; the value is coerced.</source>
+        <translation>Kanaal %1 is gedeclareerd als %2 maar de server stuurt %3; de waarde wordt geconverteerd.</translation>
     </message>
 </context>
 <context>
@@ -14897,8 +15004,8 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="201"/>
-        <source>Executable &quot;%1&quot; not found in PATH.</source>
-        <translation>Uitvoerbaar bestand &quot;%1&quot; niet gevonden in PATH.</translation>
+        <source>Executable "%1" not found in PATH.</source>
+        <translation>Uitvoerbaar bestand "%1" niet gevonden in PATH.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="376"/>
@@ -14927,8 +15034,8 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="532"/>
-        <source>Process &quot;%1&quot; stopped</source>
-        <translation>Proces &quot;%1&quot; gestopt</translation>
+        <source>Process "%1" stopped</source>
+        <translation>Proces "%1" gestopt</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="542"/>
@@ -14957,8 +15064,8 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="571"/>
-        <source>The named pipe &quot;%1&quot; was closed on the other end.</source>
-        <translation>De named pipe &quot;%1&quot; is aan de andere kant gesloten.</translation>
+        <source>The named pipe "%1" was closed on the other end.</source>
+        <translation>De named pipe "%1" is aan de andere kant gesloten.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="592"/>
@@ -15010,92 +15117,92 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
 <context>
     <name>IO::Drivers::S7</name>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="773"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="775"/>
         <source>The connection is not configured: check the host and the variable list</source>
         <translation>De verbinding is niet geconfigureerd: controleer de host en de variabelenlijst</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="795"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="797"/>
         <source>S7 Connection Failed</source>
         <translation>S7-verbinding Mislukt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="796"/>
-        <source>&quot;%1&quot; (rack %2, slot %3): %4</source>
-        <translation>&quot;%1&quot; (rack %2, slot %3): %4</translation>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="798"/>
+        <source>"%1" (rack %2, slot %3): %4</source>
+        <translation>"%1" (rack %2, slot %3): %4</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="800"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="802"/>
         <source>the controller did not answer</source>
         <translation>de controller heeft niet geantwoord</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="843"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="845"/>
         <source>S7 Connection Lost</source>
         <translation>S7-verbinding Verbroken</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="914"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="916"/>
         <source>Not connected</source>
         <translation>Niet verbonden</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="917"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="919"/>
         <source>Polling %1 variables at %2 Hz</source>
         <translation>%1 variabelen worden gepolld op %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="933"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="935"/>
         <source>invalid</source>
         <translation>ongeldig</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="951"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="953"/>
         <source>The address could not be parsed.</source>
         <translation>Het adres kon niet worden geparseerd.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1175"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1177"/>
         <source>S7 Address</source>
         <translation>S7-adres</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1226"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1228"/>
         <source>Host</source>
         <translation>Host</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1233"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1235"/>
         <source>Rack</source>
         <translation>Rack</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1242"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1244"/>
         <source>Slot</source>
         <translation>Slot</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1251"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1253"/>
         <source>Poll Interval (ms)</source>
         <translation>Poll-Interval (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1371"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1373"/>
         <source>Siemens S7 Project</source>
         <translation>Siemens S7-project</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1376"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1378"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1405"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1407"/>
         <source>DB%1</source>
         <translation>DB%1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1405"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1407"/>
         <source>Memory</source>
         <translation>Geheugen</translation>
     </message>
@@ -15268,8 +15375,8 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="612"/>
-        <source>&quot;%1&quot; is not a valid path</source>
-        <translation>&quot;%1&quot; is geen geldig pad</translation>
+        <source>"%1" is not a valid path</source>
+        <translation>"%1" is geen geldig pad</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="613"/>
@@ -15293,8 +15400,8 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="306"/>
-        <source>Failed to connect to serial port &quot;%1&quot;</source>
-        <translation>Kan geen verbinding maken met seriële poort &quot;%1&quot;</translation>
+        <source>Failed to connect to serial port "%1"</source>
+        <translation>Kan geen verbinding maken met seriële poort "%1"</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="285"/>
@@ -15304,8 +15411,8 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="286"/>
-        <source>Baud rate %1 rejected for port &quot;%2&quot;: %3</source>
-        <translation>Baudrate %1 geweigerd voor poort &quot;%2&quot;: %3</translation>
+        <source>Baud rate %1 rejected for port "%2": %3</source>
+        <translation>Baudrate %1 geweigerd voor poort "%2": %3</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="549"/>
@@ -15319,8 +15426,8 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="867"/>
-        <source>Critical error on serial port &quot;%1&quot;</source>
-        <translation>Kritieke fout op seriële poort &quot;%1&quot;</translation>
+        <source>Critical error on serial port "%1"</source>
+        <translation>Kritieke fout op seriële poort "%1"</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="868"/>
@@ -15450,26 +15557,26 @@ Controleer op Linux of u lees-/schrijfrechten hebt op het apparaatknooppunt (voe
     </message>
     <message>
         <location filename="../../src/IO/Drivers/USB.cpp" line="180"/>
-        <source>Failed to open &quot;%1&quot;</source>
-        <translation>Kan &quot;%1&quot; niet openen</translation>
+        <source>Failed to open "%1"</source>
+        <translation>Kan "%1" niet openen</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/USB.cpp" line="818"/>
         <source>No isochronous IN endpoint was found on this device, but bulk or interrupt endpoints are available.
 
-Switch the Transfer Mode to &quot;Bulk/Interrupt Stream&quot; and try again.</source>
+Switch the Transfer Mode to "Bulk/Interrupt Stream" and try again.</source>
         <translation>Geen isochroon IN-eindpunt gevonden op dit apparaat, maar bulk- of interrupt-eindpunten zijn beschikbaar.
 
-Schakel de Overdrachtsmodus over naar &quot;Bulk/Interrupt-stroom&quot; en probeer opnieuw.</translation>
+Schakel de Overdrachtsmodus over naar "Bulk/Interrupt-stroom" en probeer opnieuw.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/USB.cpp" line="823"/>
         <source>No bulk or interrupt IN endpoint was found on this device, but isochronous endpoints are available.
 
-Switch the Transfer Mode to &quot;Isochronous&quot; and try again.</source>
+Switch the Transfer Mode to "Isochronous" and try again.</source>
         <translation>Geen bulk- of interrupt IN-eindpunt gevonden op dit apparaat, maar isochrone eindpunten zijn beschikbaar.
 
-Schakel de Overdrachtsmodus over naar &quot;Isochroon&quot; en probeer opnieuw.</translation>
+Schakel de Overdrachtsmodus over naar "Isochroon" en probeer opnieuw.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/USB.cpp" line="827"/>
@@ -15592,18 +15699,18 @@ Een ander stuurprogramma of toepassing heeft deze mogelijk al geopend. Probeer o
     <message>
         <source>No isochronous IN endpoint was found on this device, but bulk endpoints are available.
 
-Switch the Transfer Mode to &quot;Bulk Stream&quot; and try again.</source>
+Switch the Transfer Mode to "Bulk Stream" and try again.</source>
         <translation type="vanished">Geen isochrone IN-eindpunt gevonden op dit apparaat, maar bulk-eindpunten zijn beschikbaar.
 
-Schakel de Overdrachtsmodus over naar &quot;Bulkstroom&quot; en probeer opnieuw.</translation>
+Schakel de Overdrachtsmodus over naar "Bulkstroom" en probeer opnieuw.</translation>
     </message>
     <message>
         <source>No bulk IN endpoint was found on this device, but isochronous endpoints are available.
 
-Switch the Transfer Mode to &quot;Isochronous&quot; and try again.</source>
+Switch the Transfer Mode to "Isochronous" and try again.</source>
         <translation type="vanished">Geen bulk IN-eindpunt gevonden op dit apparaat, maar isochrone eindpunten zijn beschikbaar.
 
-Schakel de Overdrachtsmodus over naar &quot;Isochroon&quot; en probeer opnieuw.</translation>
+Schakel de Overdrachtsmodus over naar "Isochroon" en probeer opnieuw.</translation>
     </message>
     <message>
         <source>No usable IN endpoint was found on this device.
@@ -15716,49 +15823,49 @@ Het apparaat biedt mogelijk geen data-eindpunten in zijn actieve configuratie, o
         <translation>%1-overdracht starten…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="617"/>
-        <location filename="../../src/IO/FileTransmission.cpp" line="639"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="614"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="636"/>
         <source>Transmission complete</source>
         <translation>Overdracht voltooid</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="619"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="616"/>
         <source>Plain text transmission complete</source>
         <translation>Platte Tekst-overdracht voltooid</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="641"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="638"/>
         <source>Raw binary transmission complete (%1 bytes)</source>
         <translation>Ruwe binaire overdracht voltooid (%1 bytes)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="665"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="662"/>
         <source>Transfer complete</source>
         <translation>Overdracht voltooid</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="666"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="663"/>
         <source>Transfer completed successfully (%1 bytes)</source>
         <translation>Overdracht succesvol voltooid (%1 bytes)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="668"/>
-        <location filename="../../src/IO/FileTransmission.cpp" line="669"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="665"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="666"/>
         <source>Transfer failed: %1</source>
         <translation>Overdracht mislukt: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="754"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="751"/>
         <source>%1 B/s</source>
         <translation>%1 B/s</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="756"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="753"/>
         <source>%1 KB/s</source>
         <translation>%1 Kb/s</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="758"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="755"/>
         <source>%1 MB/s</source>
         <translation>%1 Mb/s</translation>
     </message>
@@ -16219,7 +16326,7 @@ Het apparaat biedt mogelijk geen data-eindpunten in zijn actieve configuratie, o
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="271"/>
-        <source>Connect to discover the station&apos;s points</source>
+        <source>Connect to discover the station's points</source>
         <translation>Verbind om de punten van het station te ontdekken</translation>
     </message>
 </context>
@@ -16468,7 +16575,7 @@ Het apparaat biedt mogelijk geen data-eindpunten in zijn actieve configuratie, o
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="70"/>
         <source>Groq. Hardware-accelerated inference (LPUs) for very fast Llama, Mixtral, Gemma, DeepSeek-R1 distill, and Qwen models. Generous free tier with daily token limits.</source>
-        <translation>Groq. Hardware-versnelde inferentie (LPU&apos;s) voor zeer snelle Llama-, Mixtral-, Gemma-, DeepSeek-R1 distill- en Qwen-modellen. Royale gratis tier met dagelijkse tokenlimieten.</translation>
+        <translation>Groq. Hardware-versnelde inferentie (LPU's) voor zeer snelle Llama-, Mixtral-, Gemma-, DeepSeek-R1 distill- en Qwen-modellen. Royale gratis tier met dagelijkse tokenlimieten.</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="74"/>
@@ -16477,8 +16584,8 @@ Het apparaat biedt mogelijk geen data-eindpunten in zijn actieve configuratie, o
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="78"/>
-        <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp&apos;s llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
-        <translation>Lokale modelserver. Werkt met elk OpenAI-compatibel eindpunt -- Ollama, llama.cpp&apos;s llama-server, LM Studio of vLLM. Niets verlaat je machine. De modellijst wordt live van de server opgehaald.</translation>
+        <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp's llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
+        <translation>Lokale modelserver. Werkt met elk OpenAI-compatibel eindpunt -- Ollama, llama.cpp's llama-server, LM Studio of vLLM. Niets verlaat je machine. De modellijst wordt live van de server opgehaald.</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="204"/>
@@ -16507,7 +16614,7 @@ Het apparaat biedt mogelijk geen data-eindpunten in zijn actieve configuratie, o
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="225"/>
-        <source>Open the provider&apos;s console to create a new key</source>
+        <source>Open the provider's console to create a new key</source>
         <translation>Open de console van de provider om een nieuwe sleutel aan te maken</translation>
     </message>
     <message>
@@ -16995,7 +17102,7 @@ Om deze plaats op een ander apparaat te hergebruiken, stuur een e-mail naar alex
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="509"/>
-        <source>Part of the file&apos;s data section could not be read; the recording may be truncated.</source>
+        <source>Part of the file's data section could not be read; the recording may be truncated.</source>
         <translation>Een deel van de gegevenssectie van het bestand kon niet worden gelezen; de opname kan afgebroken zijn.</translation>
     </message>
     <message>
@@ -17283,7 +17390,7 @@ Activeer uw licentie of bezoek de winkel om deze functie te ontgrendelen.</trans
         <translation type="vanished">MQTT Topic Niet Ingesteld</translation>
     </message>
     <message>
-        <source>You won&apos;t receive any messages until a topic is configured.</source>
+        <source>You won't receive any messages until a topic is configured.</source>
         <translation type="vanished">Er worden geen berichten ontvangen totdat een topic is geconfigureerd.</translation>
     </message>
     <message>
@@ -17295,8 +17402,8 @@ Activeer uw licentie of bezoek de winkel om deze functie te ontgrendelen.</trans
         <translation type="vanished">Ongeldig MQTT-topic</translation>
     </message>
     <message>
-        <source>The topic &quot;%1&quot; is not valid.</source>
-        <translation type="vanished">Het topic &quot;%1&quot; is niet geldig.</translation>
+        <source>The topic "%1" is not valid.</source>
+        <translation type="vanished">Het topic "%1" is niet geldig.</translation>
     </message>
     <message>
         <source>Select PEM Certificates Directory</source>
@@ -17307,8 +17414,8 @@ Activeer uw licentie of bezoek de winkel om deze functie te ontgrendelen.</trans
         <translation type="vanished">Abonnementsfout</translation>
     </message>
     <message>
-        <source>Failed to subscribe to topic &quot;%1&quot;.</source>
-        <translation type="vanished">Abonneren op topic &quot;%1&quot; mislukt.</translation>
+        <source>Failed to subscribe to topic "%1".</source>
+        <translation type="vanished">Abonneren op topic "%1" mislukt.</translation>
     </message>
     <message>
         <source>Invalid MQTT Protocol Version</source>
@@ -17403,10 +17510,10 @@ Activeer uw licentie of bezoek de winkel om deze functie te ontgrendelen.</trans
         <translation type="vanished">MQTT-authenticatie Vereist</translation>
     </message>
     <message>
-        <source>The MQTT broker requires authentication using method: &quot;%1&quot;.
+        <source>The MQTT broker requires authentication using method: "%1".
 
 Please provide the necessary credentials.</source>
-        <translation type="vanished">De MQTT-broker vereist authenticatie met methode: &quot;%1&quot;.
+        <translation type="vanished">De MQTT-broker vereist authenticatie met methode: "%1".
 
 Geef de benodigde inloggegevens op.</translation>
     </message>
@@ -17939,7 +18046,7 @@ Geef de benodigde inloggegevens op.</translation>
     <message>
         <location filename="../../qml/Dialogs/Macros.qml" line="29"/>
         <source>Macros</source>
-        <translation>Macro&apos;s</translation>
+        <translation>Macro's</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Macros.qml" line="193"/>
@@ -18008,8 +18115,8 @@ Geef de benodigde inloggegevens op.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Macros.qml" line="674"/>
-        <source>command.name { &quot;parameter&quot;: value }</source>
-        <translation>opdracht.naam { &quot;parameter&quot;: waarde }</translation>
+        <source>command.name { "parameter": value }</source>
+        <translation>opdracht.naam { "parameter": waarde }</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Macros.qml" line="816"/>
@@ -18552,13 +18659,13 @@ Wilt u deze nu bijwerken?</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1153"/>
-        <source>Plugin &quot;%1&quot; is not installed.</source>
-        <translation>Plugin &quot;%1&quot; is niet geïnstalleerd.</translation>
+        <source>Plugin "%1" is not installed.</source>
+        <translation>Plugin "%1" is niet geïnstalleerd.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1163"/>
-        <source>Extension &quot;%1&quot; is not a plugin (type: %2).</source>
-        <translation>Extensie &quot;%1&quot; is geen plugin (type: %2).</translation>
+        <source>Extension "%1" is not a plugin (type: %2).</source>
+        <translation>Extensie "%1" is geen plugin (type: %2).</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1184"/>
@@ -18569,8 +18676,8 @@ Wilt u deze nu bijwerken?</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1208"/>
-        <source>Plugin &quot;%1&quot; requires gRPC but this build does not include gRPC support.</source>
-        <translation>Plugin &quot;%1&quot; vereist GRPC maar deze build bevat geen GRPC-ondersteuning.</translation>
+        <source>Plugin "%1" requires gRPC but this build does not include gRPC support.</source>
+        <translation>Plugin "%1" vereist GRPC maar deze build bevat geen GRPC-ondersteuning.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1218"/>
@@ -18588,8 +18695,8 @@ Wilt u deze nu inschakelen?</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1251"/>
-        <source>Plugin &quot;%1&quot; has no &apos;entry&apos; field in info.json.</source>
-        <translation>Plugin &quot;%1&quot; heeft geen &apos;entry&apos;-veld in info.json.</translation>
+        <source>Plugin "%1" has no 'entry' field in info.json.</source>
+        <translation>Plugin "%1" heeft geen 'entry'-veld in info.json.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1261"/>
@@ -18600,8 +18707,8 @@ Wilt u deze nu inschakelen?</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1269"/>
-        <source>Plugin &quot;%1&quot; has an invalid entry point path.</source>
-        <translation>Plugin &quot;%1&quot; heeft een ongeldig ingangspuntpad.</translation>
+        <source>Plugin "%1" has an invalid entry point path.</source>
+        <translation>Plugin "%1" heeft een ongeldig ingangspuntpad.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1312"/>
@@ -18610,10 +18717,10 @@ Wilt u deze nu inschakelen?</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1313"/>
-        <source>This plugin requires &quot;%1&quot; but it was not found on your system.
+        <source>This plugin requires "%1" but it was not found on your system.
 
 Would you like to open the download page?</source>
-        <translation>Deze plugin vereist &quot;%1&quot; maar deze is niet gevonden op uw systeem.
+        <translation>Deze plugin vereist "%1" maar deze is niet gevonden op uw systeem.
 
 Wilt u de downloadpagina openen?</translation>
     </message>
@@ -18849,8 +18956,8 @@ Wilt u de downloadpagina openen?</translation>
         <translation type="vanished">Automatisch controleren op updates?</translation>
     </message>
     <message>
-        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
-        <translation type="vanished">Moet %1 automatisch controleren op updates? Controleren op updates kan altijd handmatig vanuit het &quot;Over&quot;-venster</translation>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the "About" dialog</source>
+        <translation type="vanished">Moet %1 automatisch controleren op updates? Controleren op updates kan altijd handmatig vanuit het "Over"-venster</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="190"/>
@@ -19324,7 +19431,7 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
     </message>
     <message>
         <source>Show Legends</source>
-        <translation type="vanished">Toon Legenda&apos;s</translation>
+        <translation type="vanished">Toon Legenda's</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="400"/>
@@ -19549,8 +19656,8 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="135"/>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="146"/>
-        <source>Interprets each value as two&apos;s-complement signed.</source>
-        <translation>Interpreteert elke waarde als two&apos;s-complement getekend.</translation>
+        <source>Interprets each value as two's-complement signed.</source>
+        <translation>Interpreteert elke waarde als two's-complement getekend.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTlv.cpp" line="130"/>
@@ -19560,7 +19667,7 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTlv.cpp" line="131"/>
         <source>Comma-separated tag:index entries, e.g. 1:0,2:1,3:2. Tags may be decimal or 0x-prefixed hex.</source>
-        <translation>Door komma&apos;s gescheiden tag:index-vermeldingen, bijv. 1:0,2:1,3:2. Tags kunnen decimaal zijn of met 0x-prefix hexadecimaal.</translation>
+        <translation>Door komma's gescheiden tag:index-vermeldingen, bijv. 1:0,2:1,3:2. Tags kunnen decimaal zijn of met 0x-prefix hexadecimaal.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="216"/>
@@ -19617,7 +19724,7 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryModbus.cpp" line="200"/>
         <source>Address offset subtracted from single-write echoes (40001 for legacy Modicon maps).</source>
-        <translation>Adres-offset afgetrokken van single-write echo&apos;s (40001 voor legacy Modicon-kaarten).</translation>
+        <translation>Adres-offset afgetrokken van single-write echo's (40001 voor legacy Modicon-kaarten).</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryModbus.cpp" line="210"/>
@@ -19626,8 +19733,8 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryModbus.cpp" line="211"/>
-        <source>Interprets 16-bit registers as two&apos;s-complement signed values.</source>
-        <translation>Interpreteert 16-bit registers als two&apos;s-complement signed waarden.</translation>
+        <source>Interprets 16-bit registers as two's-complement signed values.</source>
+        <translation>Interpreteert 16-bit registers als two's-complement signed waarden.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryMessagePack.cpp" line="315"/>
@@ -19657,8 +19764,8 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="268"/>
-        <source>Ordered tag list written by the OPC UA project generator: one {&quot;i&quot;: index, &quot;t&quot;: type} entry per channel.</source>
-        <translation>Geordende taglijst geschreven door de OPC UA-projectgenerator: één {&quot;i&quot;: index, &quot;t&quot;: type} invoer per kanaal.</translation>
+        <source>Ordered tag list written by the OPC UA project generator: one {"i": index, "t": type} entry per channel.</source>
+        <translation>Geordende taglijst geschreven door de OPC UA-projectgenerator: één {"i": index, "t": type} invoer per kanaal.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="341"/>
@@ -19667,8 +19774,8 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="342"/>
-        <source>Ordered metric list written by the MQTT project generator: one {&quot;index&quot;: index, &quot;name&quot;: name} entry per channel.</source>
-        <translation>Geordende metrieklijst geschreven door de MQTT-projectgenerator: één {&quot;index&quot;: index, &quot;name&quot;: name} item per kanaal.</translation>
+        <source>Ordered metric list written by the MQTT project generator: one {"index": index, "name": name} entry per channel.</source>
+        <translation>Geordende metrieklijst geschreven door de MQTT-projectgenerator: één {"index": index, "name": name} item per kanaal.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="356"/>
@@ -19682,8 +19789,8 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="401"/>
-        <source>Ordered variable list written by the S7 project generator: one {&quot;index&quot;: index, &quot;name&quot;: name} entry per channel.</source>
-        <translation>Geordende variabelenlijst geschreven door de S7-projectgenerator: één {&quot;index&quot;: index, &quot;name&quot;: name} invoer per kanaal.</translation>
+        <source>Ordered variable list written by the S7 project generator: one {"index": index, "name": name} entry per channel.</source>
+        <translation>Geordende variabelenlijst geschreven door de S7-projectgenerator: één {"index": index, "name": name} invoer per kanaal.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="415"/>
@@ -19692,8 +19799,8 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="461"/>
-        <source>Ordered tag list written by the EtherNet/IP project generator: one {&quot;index&quot;: index, &quot;name&quot;: name} entry per channel.</source>
-        <translation>Geordende taglijst geschreven door de EtherNet/IP-projectgenerator: één {&quot;index&quot;: index, &quot;name&quot;: name} invoer per kanaal.</translation>
+        <source>Ordered tag list written by the EtherNet/IP project generator: one {"index": index, "name": name} entry per channel.</source>
+        <translation>Geordende taglijst geschreven door de EtherNet/IP-projectgenerator: één {"index": index, "name": name} invoer per kanaal.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="475"/>
@@ -19707,8 +19814,8 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="521"/>
-        <source>Ordered point list written by the IEC 60870-5-104 project generator: one {&quot;index&quot;: index, &quot;name&quot;: name} entry per channel.</source>
-        <translation>Geordende puntenlijst geschreven door de IEC 60870-5-104-projectgenerator: één {&quot;index&quot;: index, &quot;name&quot;: name} invoer per kanaal.</translation>
+        <source>Ordered point list written by the IEC 60870-5-104 project generator: one {"index": index, "name": name} entry per channel.</source>
+        <translation>Geordende puntenlijst geschreven door de IEC 60870-5-104-projectgenerator: één {"index": index, "name": name} invoer per kanaal.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="535"/>
@@ -19763,7 +19870,7 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/TextFixedWidth.cpp" line="127"/>
         <source>Comma-separated character counts per field. Leave empty to split on whitespace.</source>
-        <translation>Door komma&apos;s gescheiden tekentellingen per veld. Laat leeg om op witruimte te splitsen.</translation>
+        <translation>Door komma's gescheiden tekentellingen per veld. Laat leeg om op witruimte te splitsen.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/TextFixedWidth.cpp" line="135"/>
@@ -19788,7 +19895,7 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/TextKeyValue.cpp" line="147"/>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/TextYamlData.cpp" line="175"/>
         <source>Comma-separated key names. The position of each key sets its channel index.</source>
-        <translation>Door komma&apos;s gescheiden sleutelnamen. De positie van elke sleutel bepaalt de kanaalindex.</translation>
+        <translation>Door komma's gescheiden sleutelnamen. De positie van elke sleutel bepaalt de kanaalindex.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/TextKeyValue.cpp" line="155"/>
@@ -19868,7 +19975,7 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/TextXmlData.cpp" line="128"/>
         <source>Comma-separated tag names. The position of each tag sets its channel index.</source>
-        <translation>Door komma&apos;s gescheiden tagnamen. De positie van elke tag bepaalt de kanaalindex.</translation>
+        <translation>Door komma's gescheiden tagnamen. De positie van elke tag bepaalt de kanaalindex.</translation>
     </message>
     <message>
         <source>Register blocks</source>
@@ -19973,6 +20080,14 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
     </message>
 </context>
 <context>
+    <name>NodeTransform</name>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/NodeTransform.qml" line="60"/>
+        <source>Open the transform code editor for this dataset.</source>
+        <translation>Open de transformcode-editor voor deze dataset.</translation>
+    </message>
+</context>
+<context>
     <name>NotificationLog</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/NotificationLog.qml" line="137"/>
@@ -20018,7 +20133,7 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OfflineActivation.qml" line="95"/>
-        <source>Save this computer&apos;s device file. It identifies this machine and contains no personal information.</source>
+        <source>Save this computer's device file. It identifies this machine and contains no personal information.</source>
         <translation>Sla het apparaatbestand van deze computer op. Het identificeert deze machine en bevat geen persoonlijke informatie.</translation>
     </message>
     <message>
@@ -20490,7 +20605,7 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="156"/>
         <source>Send on/off commands</source>
-        <translation>Aan/uit-commando&apos;s verzenden</translation>
+        <translation>Aan/uit-commando's verzenden</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="161"/>
@@ -20500,7 +20615,7 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="165"/>
         <source>Type and send arbitrary commands</source>
-        <translation>Willekeurige commando&apos;s typen en verzenden</translation>
+        <translation>Willekeurige commando's typen en verzenden</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="169"/>
@@ -21002,7 +21117,7 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="368"/>
-        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>Niet beschikbaar via een externe verbinding. Deze widget heeft de ruwe samplestroom van de externe bron nodig, die de dashboardspiegel niet doorgeeft.</translation>
     </message>
 </context>
@@ -21030,9 +21145,100 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
     </message>
 </context>
 <context>
+    <name>PlotFormatter</name>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotFormatter.qml" line="411"/>
+        <source>Drag to move, right-click to clear</source>
+        <translation>Sleep om te verplaatsen, rechtsklik om te wissen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotFormatter.qml" line="412"/>
+        <source>ΔX: %1  ΔY: %2</source>
+        <translation>ΔX: %1  ΔY: %2</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotFormatter.qml" line="414"/>
+        <location filename="../../qml/Widgets/PlotWidget/PlotFormatter.qml" line="421"/>
+        <source>%1 — %2</source>
+        <translation>%1 — %2</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotFormatter.qml" line="418"/>
+        <source>%1  1/ΔX: %2</source>
+        <translation>%1  1/ΔX: %2</translation>
+    </message>
+</context>
+<context>
+    <name>PlotMarkerPopup</name>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="50"/>
+        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="59"/>
+        <source>M%1</source>
+        <translation>M%1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="67"/>
+        <source>Marker name:</source>
+        <translation>Markeringsnaam:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="79"/>
+        <source>Add</source>
+        <translation>Toevoegen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="84"/>
+        <source>Cancel</source>
+        <translation>Annuleren</translation>
+    </message>
+</context>
+<context>
+    <name>PlotRulerMenu</name>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotRulerMenu.qml" line="49"/>
+        <source>Add marker here...</source>
+        <translation>Markering hier toevoegen...</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotRulerMenu.qml" line="56"/>
+        <source>Remove marker "%1"</source>
+        <translation>Markering "%1" verwijderen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotRulerMenu.qml" line="62"/>
+        <source>Clear all markers</source>
+        <translation>Alle markeringen wissen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotRulerMenu.qml" line="71"/>
+        <source>Set time zero here</source>
+        <translation>Tijdnulpunt hier instellen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotRulerMenu.qml" line="71"/>
+        <source>Set zero here</source>
+        <translation>Nulpunt hier instellen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotRulerMenu.qml" line="77"/>
+        <source>Reset time zero</source>
+        <translation>Tijdnulpunt resetten</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotRulerMenu.qml" line="77"/>
+        <source>Reset zero</source>
+        <translation>Nulpunt resetten</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotRulerMenu.qml" line="85"/>
+        <source>Hover marker</source>
+        <translation>Zwevende markering</translation>
+    </message>
+</context>
+<context>
     <name>PlotWidget</name>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1999"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="844"/>
         <source>Time</source>
         <translation>Tijd</translation>
     </message>
@@ -21041,99 +21247,81 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
         <translation type="vanished">ΔX: %1  ΔY: %2 — Sleep om te verplaatsen, rechtsklik om te wissen</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="554"/>
         <source>Drag to move, right-click to clear</source>
-        <translation>Sleep om te verplaatsen, rechtsklik om te wissen</translation>
+        <translation type="vanished">Sleep om te verplaatsen, rechtsklik om te wissen</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="555"/>
         <source>ΔX: %1  ΔY: %2</source>
-        <translation>ΔX: %1  ΔY: %2</translation>
+        <translation type="vanished">ΔX: %1  ΔY: %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="557"/>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="564"/>
         <source>%1 — %2</source>
-        <translation>%1 — %2</translation>
+        <translation type="vanished">%1 — %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="561"/>
         <source>%1  1/ΔX: %2</source>
-        <translation>%1  1/ΔX: %2</translation>
+        <translation type="vanished">%1  1/ΔX: %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1490"/>
         <source>Add marker here...</source>
-        <translation>Markering hier toevoegen...</translation>
+        <translation type="vanished">Markering hier toevoegen...</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1497"/>
-        <source>Remove marker &quot;%1&quot;</source>
-        <translation>Markering &quot;%1&quot; verwijderen</translation>
+        <source>Remove marker "%1"</source>
+        <translation type="vanished">Markering "%1" verwijderen</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1503"/>
         <source>Clear all markers</source>
-        <translation>Alle markeringen wissen</translation>
+        <translation type="vanished">Alle markeringen wissen</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1512"/>
         <source>Set time zero here</source>
-        <translation>Tijdnulpunt hier instellen</translation>
+        <translation type="vanished">Tijdnulpunt hier instellen</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1512"/>
         <source>Set zero here</source>
-        <translation>Nulpunt hier instellen</translation>
+        <translation type="vanished">Nulpunt hier instellen</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1518"/>
         <source>Reset time zero</source>
-        <translation>Tijdnulpunt resetten</translation>
+        <translation type="vanished">Tijdnulpunt resetten</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1518"/>
         <source>Reset zero</source>
-        <translation>Nulpunt resetten</translation>
+        <translation type="vanished">Nulpunt resetten</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1526"/>
         <source>Hover marker</source>
-        <translation>Zwevende markering</translation>
+        <translation type="vanished">Zwevende markering</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1548"/>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1556"/>
         <source>M%1</source>
-        <translation>M%1</translation>
+        <translation type="vanished">M%1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1564"/>
         <source>Marker name:</source>
-        <translation>Markeringsnaam:</translation>
+        <translation type="vanished">Markeringsnaam:</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1576"/>
         <source>Add</source>
-        <translation>Toevoegen</translation>
+        <translation type="vanished">Toevoegen</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1581"/>
         <source>Cancel</source>
-        <translation>Annuleren</translation>
+        <translation type="vanished">Annuleren</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="2000"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="845"/>
         <source>%1 from zero</source>
         <translation>%1 vanaf nul</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="2026"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="871"/>
         <source>Click to place cursor</source>
         <translation>Klik om cursor te plaatsen</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="2028"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="873"/>
         <source>Click to place second cursor — Drag to move</source>
         <translation>Klik om tweede cursor te plaatsen — Sleep om te verplaatsen</translation>
     </message>
@@ -21844,546 +22032,546 @@ Klik op Vernieuwen om de lijst bij te werken.</translation>
     <message>
         <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="135"/>
         <source>Duplicate Selection</source>
-        <translation type="unfinished">Selectie Dupliceren</translation>
+        <translation>Selectie Dupliceren</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="213"/>
         <source>Delete Selection</source>
-        <translation type="unfinished">Selectie Verwijderen</translation>
+        <translation>Selectie Verwijderen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="311"/>
         <source>Delete %1 selected items?</source>
-        <translation type="unfinished">%1 geselecteerde items verwijderen?</translation>
+        <translation>%1 geselecteerde items verwijderen?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="312"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="494"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="521"/>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="912"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="791"/>
         <source>This action cannot be undone.</source>
-        <translation type="unfinished">Deze actie kan niet ongedaan worden gemaakt.</translation>
+        <translation>Deze actie kan niet ongedaan worden gemaakt.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="314"/>
         <source>Delete Items</source>
-        <translation type="unfinished">Items Verwijderen</translation>
+        <translation>Items Verwijderen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="335"/>
         <source>Move Selection</source>
-        <translation type="unfinished">Selectie Verplaatsen</translation>
+        <translation>Selectie Verplaatsen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="400"/>
         <source>Toggle Selection</source>
-        <translation type="unfinished">Selectie Schakelen</translation>
+        <translation>Selectie Schakelen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="451"/>
         <source>Legacy frame parser function updated</source>
-        <translation type="unfinished">Verouderde frame-parserfunctie bijgewerkt</translation>
+        <translation>Verouderde frame-parserfunctie bijgewerkt</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="452"/>
-        <source>Your project used a legacy frame parser function with a &apos;separator&apos; argument. It has been automatically migrated to the new format.</source>
-        <translation type="unfinished">Je project gebruikte een verouderde frame-parserfunctie met een &apos;separator&apos;-argument. Deze is automatisch gemigreerd naar het nieuwe formaat.</translation>
+        <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
+        <translation>Je project gebruikte een verouderde frame-parserfunctie met een 'separator'-argument. Deze is automatisch gemigreerd naar het nieuwe formaat.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="486"/>
         <source>Select Project File</source>
-        <translation type="unfinished">Selecteer Projectbestand</translation>
+        <translation>Selecteer Projectbestand</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="488"/>
         <source>Project Files (*.json *.ssproj)</source>
-        <translation type="unfinished">Projectbestanden (*.json *.ssproj)</translation>
+        <translation>Projectbestanden (*.json *.ssproj)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="535"/>
         <source>JSON validation error</source>
-        <translation type="unfinished">JSON-validatiefout</translation>
+        <translation>JSON-validatiefout</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="588"/>
         <source>Project upgraded from an earlier file format</source>
-        <translation type="unfinished">Project geüpgraded vanaf een ouder bestandsformaat</translation>
+        <translation>Project geüpgraded vanaf een ouder bestandsformaat</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="590"/>
         <source>This project was saved with schema version %1; the current version is %2. Defaults have been applied to any new fields. Save the project to lock in the upgrade.</source>
-        <translation type="unfinished">Dit project is opgeslagen met schema-versie %1; de huidige versie is %2. Standaardwaarden zijn toegepast op nieuwe velden. Sla het project op om de upgrade vast te leggen.</translation>
+        <translation>Dit project is opgeslagen met schema-versie %1; de huidige versie is %2. Standaardwaarden zijn toegepast op nieuwe velden. Sla het project op om de upgrade vast te leggen.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="706"/>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="311"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="343"/>
         <source>Untitled Project</source>
-        <translation type="unfinished">Naamloos Project</translation>
+        <translation>Naamloos Project</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="713"/>
         <source>Save Imported Project</source>
-        <translation type="unfinished">Geïmporteerd Project Opslaan</translation>
+        <translation>Geïmporteerd Project Opslaan</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="715"/>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="290"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="322"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
-        <translation type="unfinished">Serial Studio-projectbestanden (*.ssproj)</translation>
+        <translation>Serial Studio-projectbestanden (*.ssproj)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="750"/>
         <source>File open error</source>
-        <translation type="unfinished">Fout bij openen bestand</translation>
+        <translation>Fout bij openen bestand</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="869"/>
         <source>Device A</source>
-        <translation type="unfinished">Apparaat A</translation>
+        <translation>Apparaat A</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="922"/>
         <source>Multi-source projects require a Pro license</source>
-        <translation type="unfinished">Multi-source-projecten vereisen een Pro-licentie</translation>
+        <translation>Multi-source-projecten vereisen een Pro-licentie</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="923"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
-        <translation type="unfinished">Dit project bevat meerdere gegevensbronnen. Alleen de eerste bron is geladen. Een Serial Studio Pro-licentie is vereist om multi-source-projecten te gebruiken.</translation>
+        <translation>Dit project bevat meerdere gegevensbronnen. Alleen de eerste bron is geladen. Een Serial Studio Pro-licentie is vereist om multi-source-projecten te gebruiken.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="1015"/>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="1033"/>
         <source>Workspace IDs remapped on load</source>
-        <translation type="unfinished">Workspace-ID&apos;s opnieuw toegewezen bij het laden</translation>
+        <translation>Workspace-ID's opnieuw toegewezen bij het laden</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="1016"/>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="1034"/>
         <source>%1 custom workspace ID(s) overlapped the new reserved auto range and were moved into the user range. Save the project to make the remap permanent.</source>
-        <translation type="unfinished">%1 aangepaste werkruimte-ID&apos;s overlapten met het nieuwe gereserveerde automatische bereik en zijn verplaatst naar het gebruikersbereik. Sla het project op om de herindeling permanent te maken.</translation>
+        <translation>%1 aangepaste werkruimte-ID's overlapten met het nieuwe gereserveerde automatische bereik en zijn verplaatst naar het gebruikersbereik. Sla het project op om de herindeling permanent te maken.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="248"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="280"/>
         <source>Do you want to save your changes?</source>
-        <translation type="unfinished">Wijzigingen opslaan?</translation>
+        <translation>Wijzigingen opslaan?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="249"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="281"/>
         <source>You have unsaved modifications in this project!</source>
-        <translation type="unfinished">Dit project bevat niet-opgeslagen wijzigingen!</translation>
+        <translation>Dit project bevat niet-opgeslagen wijzigingen!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="288"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="320"/>
         <source>Save Serial Studio Project</source>
-        <translation type="unfinished">Serial Studio-project Opslaan</translation>
+        <translation>Serial Studio-project Opslaan</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="381"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="413"/>
         <source>File save error</source>
-        <translation type="unfinished">Fout bij opslaan bestand</translation>
+        <translation>Fout bij opslaan bestand</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="589"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="621"/>
         <source>Project file removed from disk</source>
-        <translation type="unfinished">Projectbestand verwijderd van schijf</translation>
+        <translation>Projectbestand verwijderd van schijf</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="590"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="622"/>
         <source>%1 was deleted or renamed by another program. Save the project to recreate it.</source>
-        <translation type="unfinished">%1 is verwijderd of hernoemd door een ander programma. Sla het project op om het opnieuw aan te maken.</translation>
+        <translation>%1 is verwijderd of hernoemd door een ander programma. Sla het project op om het opnieuw aan te maken.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="613"/>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="635"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="645"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="667"/>
         <source>Project file changed on disk</source>
-        <translation type="unfinished">Projectbestand gewijzigd op schijf</translation>
+        <translation>Projectbestand gewijzigd op schijf</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="614"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="646"/>
         <source>%1 was modified by another program. The in-memory project was kept; reopen the file to load the external changes.</source>
-        <translation type="unfinished">%1 is gewijzigd door een ander programma. Het project in het geheugen is behouden; heropen het bestand om de externe wijzigingen te laden.</translation>
+        <translation>%1 is gewijzigd door een ander programma. Het project in het geheugen is behouden; heropen het bestand om de externe wijzigingen te laden.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="632"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="664"/>
         <source>The project file was modified by another program.
 
 Reload it and discard your unsaved changes?</source>
-        <translation type="unfinished">Het projectbestand is gewijzigd door een ander programma.
+        <translation>Het projectbestand is gewijzigd door een ander programma.
 
 Opnieuw laden en niet-opgeslagen wijzigingen verwerpen?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="634"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="666"/>
         <source>The project file was modified by another program.
 
 Reload it?</source>
-        <translation type="unfinished">Het projectbestand is gewijzigd door een ander programma.
+        <translation>Het projectbestand is gewijzigd door een ander programma.
 
 Opnieuw laden?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="55"/>
         <source>Add Output Panel</source>
-        <translation type="unfinished">Uitvoerpaneel Toevoegen</translation>
+        <translation>Uitvoerpaneel Toevoegen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="57"/>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="96"/>
         <source>Output Controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Uitvoerbesturingen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="71"/>
         <source>Add Output Widget</source>
-        <translation type="unfinished">Uitvoerwidget Toevoegen</translation>
+        <translation>Uitvoerwidget Toevoegen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="108"/>
         <source>New Button</source>
-        <translation type="unfinished">Nieuwe Knop</translation>
+        <translation>Nieuwe Knop</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="111"/>
         <source>New Slider</source>
-        <translation type="unfinished">Nieuwe Schuifregelaar</translation>
+        <translation>Nieuwe Schuifregelaar</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="114"/>
         <source>New Toggle</source>
-        <translation type="unfinished">Nieuwe Schakelaar</translation>
+        <translation>Nieuwe Schakelaar</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="117"/>
         <source>New Text Field</source>
-        <translation type="unfinished">Nieuw Tekstveld</translation>
+        <translation>Nieuw Tekstveld</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="120"/>
         <source>New Knob</source>
-        <translation type="unfinished">Nieuwe Knop</translation>
+        <translation>Nieuwe Knop</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="149"/>
         <source>Change Output Widget Type</source>
-        <translation type="unfinished">Uitvoerwidgettype Wijzigen</translation>
+        <translation>Uitvoerwidgettype Wijzigen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="180"/>
         <source>Change Output Widget Icon</source>
-        <translation type="unfinished">Uitvoerwidgetpictogram Wijzigen</translation>
+        <translation>Uitvoerwidgetpictogram Wijzigen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="208"/>
         <source>Edit Output Widget</source>
-        <translation type="unfinished"></translation>
+        <translation>Uitvoerwidget Bewerken</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="238"/>
-        <source>Do you want to delete output widget &quot;%1&quot;?</source>
-        <translation type="unfinished">Wilt u outputwidget &quot;%1&quot; verwijderen?</translation>
+        <source>Do you want to delete output widget "%1"?</source>
+        <translation>Wilt u outputwidget "%1" verwijderen?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="240"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="345"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="387"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="422"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="301"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="343"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="378"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
-        <translation type="unfinished">Deze actie kan niet ongedaan worden gemaakt. Doorgaan?</translation>
+        <translation>Deze actie kan niet ongedaan worden gemaakt. Doorgaan?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="260"/>
         <source>Delete Output Widget</source>
-        <translation type="unfinished">Uitvoerwidget Verwijderen</translation>
+        <translation>Uitvoerwidget Verwijderen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="303"/>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="376"/>
         <source>Duplicate Output Widget</source>
-        <translation type="unfinished">Uitvoerwidget Dupliceren</translation>
+        <translation>Uitvoerwidget Dupliceren</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="404"/>
         <source>Move Output Widget</source>
-        <translation type="unfinished">Uitvoerwidget Verplaatsen</translation>
+        <translation>Uitvoerwidget Verplaatsen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectPresentation.cpp" line="541"/>
         <source>Rename Widget</source>
-        <translation type="unfinished">Widget Hernoemen</translation>
+        <translation>Widget Hernoemen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectPresentation.cpp" line="542"/>
         <source>Display title (empty restores the original):</source>
-        <translation type="unfinished">Weergavetitel (leeg herstelt het origineel):</translation>
+        <translation>Weergavetitel (leeg herstelt het origineel):</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectPresentation.cpp" line="594"/>
         <location filename="../../src/DataModel/Project/ProjectPresentation.cpp" line="643"/>
         <source>Time</source>
-        <translation type="unfinished">Tijd</translation>
+        <translation>Tijd</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectPresentation.cpp" line="595"/>
         <source>Samples</source>
-        <translation type="unfinished">Samples</translation>
+        <translation>Samples</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="175"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="131"/>
         <source>Edit Group</source>
-        <translation type="unfinished">Groep Bewerken</translation>
+        <translation>Groep Bewerken</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="197"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="153"/>
         <source>Edit Dataset</source>
-        <translation type="unfinished">Dataset Bewerken</translation>
+        <translation>Dataset Bewerken</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="237"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="193"/>
         <source>Edit Action</source>
-        <translation type="unfinished">Actie Bewerken</translation>
+        <translation>Actie Bewerken</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="255"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="211"/>
         <source>Seed Dataset Aliases</source>
-        <translation type="unfinished">Dataset-aliassen Initialiseren</translation>
+        <translation>Dataset-aliassen Initialiseren</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="292"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="248"/>
         <source>Toggle Group</source>
-        <translation type="unfinished">Groep Schakelen</translation>
+        <translation>Groep Schakelen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="315"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="271"/>
         <source>Toggle Dataset</source>
-        <translation type="unfinished">Dataset Schakelen</translation>
+        <translation>Dataset Schakelen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="344"/>
-        <source>Do you want to delete group &quot;%1&quot;?</source>
-        <translation type="unfinished">Wil je groep &quot;%1&quot; verwijderen?</translation>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="300"/>
+        <source>Do you want to delete group "%1"?</source>
+        <translation>Wil je groep "%1" verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="358"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="314"/>
         <source>Delete Group</source>
-        <translation type="unfinished">Groep Verwijderen</translation>
+        <translation>Groep Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="386"/>
-        <source>Do you want to delete action &quot;%1&quot;?</source>
-        <translation type="unfinished">Wil je actie &quot;%1&quot; verwijderen?</translation>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="342"/>
+        <source>Do you want to delete action "%1"?</source>
+        <translation>Wil je actie "%1" verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="400"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="356"/>
         <source>Delete Action</source>
-        <translation type="unfinished">Actie Verwijderen</translation>
+        <translation>Actie Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="420"/>
-        <source>Do you want to delete dataset &quot;%1&quot;?</source>
-        <translation type="unfinished">Wil je dataset &quot;%1&quot; verwijderen?</translation>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="376"/>
+        <source>Do you want to delete dataset "%1"?</source>
+        <translation>Wil je dataset "%1" verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="441"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="397"/>
         <source>Delete Dataset</source>
-        <translation type="unfinished">Dataset Verwijderen</translation>
+        <translation>Dataset Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="498"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1286"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="454"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1147"/>
         <source>Duplicate Group</source>
-        <translation type="unfinished">Groep Dupliceren</translation>
+        <translation>Groep Dupliceren</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="541"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1404"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="497"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1265"/>
         <source>Duplicate Action</source>
-        <translation type="unfinished">Actie Dupliceren</translation>
+        <translation>Actie Dupliceren</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="575"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1347"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="531"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1208"/>
         <source>Duplicate Dataset</source>
-        <translation type="unfinished">Dataset Dupliceren</translation>
+        <translation>Dataset Dupliceren</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="612"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="857"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="568"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="813"/>
         <source>Add Group</source>
-        <translation type="unfinished">Groep Toevoegen</translation>
+        <translation>Groep Toevoegen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="648"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="604"/>
         <source>Group</source>
-        <translation type="unfinished">Groep</translation>
+        <translation>Groep</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="657"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="613"/>
         <source>Add Dataset</source>
-        <translation type="unfinished">Dataset Toevoegen</translation>
+        <translation>Dataset Toevoegen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="669"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="625"/>
         <source>New Dataset</source>
-        <translation type="unfinished">Nieuwe Dataset</translation>
+        <translation>Nieuwe Dataset</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="672"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="628"/>
         <source>New Plot</source>
-        <translation type="unfinished">Nieuwe Plot</translation>
+        <translation>Nieuwe Plot</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="676"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="632"/>
         <source>New FFT Plot</source>
-        <translation type="unfinished">Nieuwe FFT-plot</translation>
+        <translation>Nieuwe FFT-plot</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="680"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="636"/>
         <source>New Level Indicator</source>
-        <translation type="unfinished">Nieuwe Niveauindicator</translation>
+        <translation>Nieuwe Niveauindicator</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="684"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="640"/>
         <source>New Gauge</source>
-        <translation type="unfinished">Nieuwe Meter</translation>
+        <translation>Nieuwe Meter</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="688"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="644"/>
         <source>New Compass</source>
-        <translation type="unfinished">Nieuw Kompas</translation>
+        <translation>Nieuw Kompas</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="694"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="650"/>
         <source>New Meter</source>
-        <translation type="unfinished">Nieuwe Meter</translation>
+        <translation>Nieuwe Meter</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="698"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="654"/>
         <source>New LED Indicator</source>
-        <translation type="unfinished">Nieuwe LED-indicator</translation>
+        <translation>Nieuwe LED-indicator</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="702"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="658"/>
         <source>New Waterfall</source>
-        <translation type="unfinished">Nieuwe Waterval</translation>
+        <translation>Nieuwe Waterval</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="733"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="689"/>
         <source>Edit Canvas Datasets</source>
-        <translation type="unfinished">Canvasdatasets Bewerken</translation>
+        <translation>Canvasdatasets Bewerken</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="754"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="710"/>
         <source>Channel %1</source>
-        <translation type="unfinished">Kanaal %1</translation>
+        <translation>Kanaal %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="775"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="731"/>
         <source>Change Dataset Option</source>
-        <translation type="unfinished">Dataset-optie Wijzigen</translation>
+        <translation>Dataset-optie Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="827"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="783"/>
         <source>Add Action</source>
-        <translation type="unfinished">Actie Toevoegen</translation>
+        <translation>Actie Toevoegen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="836"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="792"/>
         <source>New Action</source>
-        <translation type="unfinished">Nieuwe Actie</translation>
+        <translation>Nieuwe Actie</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="895"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="851"/>
         <source>Change Group Widget</source>
-        <translation type="unfinished">Groepswidget Wijzigen</translation>
+        <translation>Groepswidget Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="945"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="901"/>
         <source>Are you sure you want to change the group-level widget?</source>
-        <translation type="unfinished">Weet u zeker dat u de widget op groepsniveau wilt wijzigen?</translation>
+        <translation>Weet u zeker dat u de widget op groepsniveau wilt wijzigen?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="946"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="902"/>
         <source>Existing datasets for this group are deleted</source>
-        <translation type="unfinished">Bestaande datasets voor deze groep worden verwijderd</translation>
+        <translation>Bestaande datasets voor deze groep worden verwijderd</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1019"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1020"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1021"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="78"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="79"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="80"/>
         <source>Accelerometer %1</source>
-        <translation type="unfinished">Accelerometer %1</translation>
+        <translation>Accelerometer %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1037"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1038"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1039"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="96"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="97"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="98"/>
         <source>Gyro %1</source>
-        <translation type="unfinished">GYRO %1</translation>
+        <translation>GYRO %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1055"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="114"/>
         <source>Latitude</source>
-        <translation type="unfinished">Breedtegraad</translation>
+        <translation>Breedtegraad</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1055"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="114"/>
         <source>Longitude</source>
-        <translation type="unfinished">Lengtegraad</translation>
+        <translation>Lengtegraad</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1055"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="114"/>
         <source>Altitude</source>
-        <translation type="unfinished">Hoogte</translation>
+        <translation>Hoogte</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1071"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1087"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="130"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="146"/>
         <source>X</source>
-        <translation type="unfinished">X</translation>
+        <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1071"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1087"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="130"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="146"/>
         <source>Y</source>
-        <translation type="unfinished">Y</translation>
+        <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1071"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1087"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="130"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="146"/>
         <source>Z</source>
-        <translation type="unfinished">Z</translation>
+        <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1112"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="973"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="672"/>
         <source>Move Group</source>
-        <translation type="unfinished">Groep Verplaatsen</translation>
+        <translation>Groep Verplaatsen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1169"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1030"/>
         <source>Move Dataset</source>
-        <translation type="unfinished">Dataset Verplaatsen</translation>
+        <translation>Dataset Verplaatsen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1211"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1072"/>
         <source>Move Action</source>
-        <translation type="unfinished">Actie Verplaatsen</translation>
+        <translation>Actie Verplaatsen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1434"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1295"/>
         <source>Rename Group</source>
-        <translation type="unfinished">Groep Hernoemen</translation>
+        <translation>Groep Hernoemen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1435"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1464"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1490"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1296"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1325"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1351"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="382"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="411"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="434"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="457"/>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="277"/>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="863"/>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="890"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="742"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="769"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="498"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="521"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="549"/>
@@ -22393,151 +22581,151 @@ Opnieuw laden?</translation>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="980"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="1007"/>
         <source>Name:</source>
-        <translation type="unfinished">Naam:</translation>
+        <translation>Naam:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1463"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1324"/>
         <source>Rename Dataset</source>
-        <translation type="unfinished">Dataset Hernoemen</translation>
+        <translation>Dataset Hernoemen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1489"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1350"/>
         <source>Rename Action</source>
-        <translation type="unfinished">Actie Hernoemen</translation>
+        <translation>Actie Hernoemen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="117"/>
         <source>Add Table</source>
-        <translation type="unfinished">Tabel Toevoegen</translation>
+        <translation>Tabel Toevoegen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="123"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="384"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="982"/>
         <source>Shared Table</source>
-        <translation type="unfinished">Gedeelde Tabel</translation>
+        <translation>Gedeelde Tabel</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="152"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="502"/>
         <source>Delete Table</source>
-        <translation type="unfinished">Tabel Verwijderen</translation>
+        <translation>Tabel Verwijderen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="167"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="410"/>
         <source>Rename Table</source>
-        <translation type="unfinished">Tabel Hernoemen</translation>
+        <translation>Tabel Hernoemen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="241"/>
         <source>Add Variable</source>
-        <translation type="unfinished">Variabele Toevoegen</translation>
+        <translation>Variabele Toevoegen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="250"/>
         <source>variable</source>
-        <translation type="unfinished">variabele</translation>
+        <translation>variabele</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="280"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="523"/>
         <source>Delete Variable</source>
-        <translation type="unfinished">Variabele Verwijderen</translation>
+        <translation>Variabele Verwijderen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="311"/>
         <source>Edit Variable</source>
-        <translation type="unfinished">Variabele Bewerken</translation>
+        <translation>Variabele Bewerken</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="381"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <source>New Shared Table</source>
-        <translation type="unfinished">Nieuwe Gedeelde Tabel</translation>
+        <translation>Nieuwe Gedeelde Tabel</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="433"/>
         <source>New Variable</source>
-        <translation type="unfinished">Nieuwe Variabele</translation>
+        <translation>Nieuwe Variabele</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="456"/>
         <source>Rename Variable</source>
-        <translation type="unfinished">Variabele Hernoemen</translation>
+        <translation>Variabele Hernoemen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="495"/>
         <source>This removes %1 variable(s) along with the table. This action cannot be undone.</source>
-        <translation type="unfinished">Dit verwijdert %1 variabele(n) samen met de tabel. Deze actie kan niet ongedaan worden gemaakt.</translation>
+        <translation>Dit verwijdert %1 variabele(n) samen met de tabel. Deze actie kan niet ongedaan worden gemaakt.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="499"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="520"/>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="911"/>
-        <source>Delete &quot;%1&quot;?</source>
-        <translation type="unfinished">&quot;%1&quot; Verwijderen?</translation>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="790"/>
+        <source>Delete "%1"?</source>
+        <translation>"%1" Verwijderen?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="551"/>
         <source>Export Table</source>
-        <translation type="unfinished">Tabel Exporteren</translation>
+        <translation>Tabel Exporteren</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="553"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="596"/>
         <source>CSV files (*.csv)</source>
-        <translation type="unfinished">CSV-bestanden (*.CSV)</translation>
+        <translation>CSV-bestanden (*.CSV)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="594"/>
         <source>Import Table</source>
-        <translation type="unfinished">Tabel Importeren</translation>
+        <translation>Tabel Importeren</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="605"/>
         <source>Import Table CSV</source>
-        <translation type="unfinished">Tabel-CSV Importeren</translation>
+        <translation>Tabel-CSV Importeren</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="69"/>
         <source>Add Device</source>
-        <translation type="unfinished">Apparaat Toevoegen</translation>
+        <translation>Apparaat Toevoegen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="74"/>
         <source>Multiple data sources require a Pro license</source>
-        <translation type="unfinished">Meerdere gegevensbronnen vereisen een Pro-licentie</translation>
+        <translation>Meerdere gegevensbronnen vereisen een Pro-licentie</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="75"/>
         <source>Serial Studio Pro allows connecting to multiple devices simultaneously. Please upgrade to unlock this feature.</source>
-        <translation type="unfinished">Serial Studio Pro maakt het mogelijk om gelijktijdig verbinding te maken met meerdere apparaten. Upgrade om deze functie te ontgrendelen.</translation>
+        <translation>Serial Studio Pro maakt het mogelijk om gelijktijdig verbinding te maken met meerdere apparaten. Upgrade om deze functie te ontgrendelen.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="87"/>
         <source>Device %1</source>
-        <translation type="unfinished">Apparaat %1</translation>
+        <translation>Apparaat %1</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="120"/>
-        <source>Do you want to delete data source &quot;%1&quot;?</source>
-        <translation type="unfinished">Wil je gegevensbron &quot;%1&quot; verwijderen?</translation>
+        <source>Do you want to delete data source "%1"?</source>
+        <translation>Wil je gegevensbron "%1" verwijderen?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="121"/>
         <source>Groups using this source will move to the default source. This action cannot be undone.</source>
-        <translation type="unfinished">Groepen die deze bron gebruiken worden verplaatst naar de standaardbron. Deze actie kan niet ongedaan worden gemaakt.</translation>
+        <translation>Groepen die deze bron gebruiken worden verplaatst naar de standaardbron. Deze actie kan niet ongedaan worden gemaakt.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="130"/>
         <source>Delete Device</source>
-        <translation type="unfinished">Apparaat Verwijderen</translation>
+        <translation>Apparaat Verwijderen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="165"/>
         <source>Duplicate Device</source>
-        <translation type="unfinished">Apparaat Dupliceren</translation>
+        <translation>Apparaat Dupliceren</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="200"/>
@@ -22545,101 +22733,101 @@ Opnieuw laden?</translation>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="331"/>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="358"/>
         <source>Edit Device</source>
-        <translation type="unfinished">Apparaat Bewerken</translation>
+        <translation>Apparaat Bewerken</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="232"/>
         <source>Rename Device</source>
-        <translation type="unfinished">Apparaat Hernoemen</translation>
+        <translation>Apparaat Hernoemen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="248"/>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="372"/>
         <source>Change Bus Type</source>
-        <translation type="unfinished">Bustype Wijzigen</translation>
+        <translation>Bustype Wijzigen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="276"/>
         <source>Rename Data Source</source>
-        <translation type="unfinished">Gegevensbron Hernoemen</translation>
+        <translation>Gegevensbron Hernoemen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="391"/>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="451"/>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="574"/>
         <source>Edit Frame Parser</source>
-        <translation type="unfinished">Frame-parser Bewerken</translation>
+        <translation>Frame-parser Bewerken</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="403"/>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="465"/>
         <source>Change Parser Language</source>
-        <translation type="unfinished">Parsertaal Wijzigen</translation>
+        <translation>Parsertaal Wijzigen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="419"/>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="492"/>
         <source>Change Parser Template</source>
-        <translation type="unfinished">Parsersjabloon Wijzigen</translation>
+        <translation>Parsersjabloon Wijzigen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="431"/>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="516"/>
         <source>Change Parser Parameters</source>
-        <translation type="unfinished">Parserparameters Wijzigen</translation>
+        <translation>Parserparameters Wijzigen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="545"/>
         <source>Change Stream Lane</source>
-        <translation type="unfinished">Streamlane Wijzigen</translation>
+        <translation>Streamlane Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="484"/>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="865"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="363"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="744"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="523"/>
         <source>Workspace</source>
-        <translation type="unfinished">Werkruimte</translation>
+        <translation>Werkruimte</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="862"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="741"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="520"/>
         <source>New Workspace</source>
-        <translation type="unfinished">Nieuwe Werkruimte</translation>
+        <translation>Nieuwe Werkruimte</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="889"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="768"/>
         <source>Rename Workspace</source>
-        <translation type="unfinished">Werkruimte Hernoemen</translation>
+        <translation>Werkruimte Hernoemen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="914"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="793"/>
         <source>Delete Workspace</source>
-        <translation type="unfinished">Werkruimte Verwijderen</translation>
+        <translation>Werkruimte Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="976"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="855"/>
         <source>Overview</source>
-        <translation type="unfinished">Overzicht</translation>
+        <translation>Overzicht</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="985"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="864"/>
         <source>All Data</source>
-        <translation type="unfinished">Alle Gegevens</translation>
+        <translation>Alle Gegevens</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="1254"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="1133"/>
         <source>Discard workspace customisations?</source>
-        <translation type="unfinished">Werkruimte-aanpassingen verwijderen?</translation>
+        <translation>Werkruimte-aanpassingen verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="1255"/>
-        <source>Switching off Customize discards your edits and rebuilds the workspace list from the project&apos;s groups.</source>
-        <translation type="unfinished">Aanpassen uitschakelen verwijdert uw bewerkingen en herbouwt de werkruimtelijst vanuit de groepen van het project.</translation>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="1134"/>
+        <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
+        <translation>Aanpassen uitschakelen verwijdert uw bewerkingen en herbouwt de werkruimtelijst vanuit de groepen van het project.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="1258"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="1137"/>
         <source>Customize Workspaces</source>
-        <translation type="unfinished">Werkruimten Aanpassen</translation>
+        <translation>Werkruimten Aanpassen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="326"/>
@@ -22649,14 +22837,14 @@ Opnieuw laden?</translation>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="826"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="959"/>
         <source>Folder</source>
-        <translation type="unfinished">Map</translation>
+        <translation>Map</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="497"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="734"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="956"/>
         <source>New Folder</source>
-        <translation type="unfinished">Nieuwe Map</translation>
+        <translation>Nieuwe Map</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="548"/>
@@ -22665,19 +22853,19 @@ Opnieuw laden?</translation>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="839"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="1006"/>
         <source>Rename Folder</source>
-        <translation type="unfinished">Map Hernoemen</translation>
+        <translation>Map Hernoemen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="570"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="783"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="1028"/>
-        <source>Delete folder &quot;%1&quot;?</source>
-        <translation type="unfinished">Map &quot;%1&quot; verwijderen?</translation>
+        <source>Delete folder "%1"?</source>
+        <translation>Map "%1" verwijderen?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="571"/>
         <source>The folder is removed; its workspaces and sub-folders move up to the parent.</source>
-        <translation type="unfinished">De map wordt verwijderd; de werkruimten en submappen worden verplaatst naar de bovenliggende map.</translation>
+        <translation>De map wordt verwijderd; de werkruimten en submappen worden verplaatst naar de bovenliggende map.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="574"/>
@@ -22686,13 +22874,13 @@ Opnieuw laden?</translation>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="860"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="1032"/>
         <source>Delete Folder</source>
-        <translation type="unfinished">Map Verwijderen</translation>
+        <translation>Map Verwijderen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="603"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="815"/>
         <source>Add Folder</source>
-        <translation type="unfinished">Map Toevoegen</translation>
+        <translation>Map Toevoegen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="693"/>
@@ -22700,22 +22888,22 @@ Opnieuw laden?</translation>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="915"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="941"/>
         <source>Move Folder</source>
-        <translation type="unfinished">Map Verplaatsen</translation>
+        <translation>Map Verplaatsen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="784"/>
         <source>The folder is removed; its groups and sub-folders move up to the parent.</source>
-        <translation type="unfinished">De map wordt verwijderd; de groepen en submappen worden verplaatst naar de bovenliggende map.</translation>
+        <translation>De map wordt verwijderd; de groepen en submappen worden verplaatst naar de bovenliggende map.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="887"/>
         <source>Move Table</source>
-        <translation type="unfinished">Tabel Verplaatsen</translation>
+        <translation>Tabel Verplaatsen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="1029"/>
         <source>The folder is removed; its tables and sub-folders move up to the parent. The accessor path of those tables changes accordingly.</source>
-        <translation type="unfinished">De map wordt verwijderd; de tabellen en submappen worden verplaatst naar de bovenliggende map. Het toegangspad van die tabellen wordt dienovereenkomstig aangepast.</translation>
+        <translation>De map wordt verwijderd; de tabellen en submappen worden verplaatst naar de bovenliggende map. Het toegangspad van die tabellen wordt dienovereenkomstig aangepast.</translation>
     </message>
 </context>
 <context>
@@ -23185,7 +23373,7 @@ Opnieuw laden?</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="256"/>
-        <source>Run a dataset&apos;s transform only when one of its inputs changes. Speeds up large table-driven projects; off by default.</source>
+        <source>Run a dataset's transform only when one of its inputs changes. Speeds up large table-driven projects; off by default.</source>
         <translation>Voer de transformatie van een dataset alleen uit wanneer een van de invoerwaarden wijzigt. Versnelt grote tabelgestuurde projecten; standaard uitgeschakeld.</translation>
     </message>
     <message>
@@ -23316,7 +23504,7 @@ Opnieuw laden?</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/PublisherWorker.cpp" line="206"/>
-        <source>The broker rejected the connection due to an unsupported protocol version. Match the broker&apos;s MQTT version and try again.</source>
+        <source>The broker rejected the connection due to an unsupported protocol version. Match the broker's MQTT version and try again.</source>
         <translation>De MQTT-broker heeft de verbinding geweigerd vanwege een niet-ondersteunde protocolversie. Zorg dat de MQTT-versie overeenkomt met die van de broker en probeer opnieuw.</translation>
     </message>
     <message>
@@ -23337,7 +23525,7 @@ Opnieuw laden?</translation>
     <message>
         <location filename="../../src/MQTT/PublisherWorker.cpp" line="218"/>
         <source>The broker denied the connection due to insufficient permissions. Verify that the account has the required ACLs.</source>
-        <translation>De broker heeft de verbinding geweigerd wegens onvoldoende rechten. Controleer of het account over de vereiste ACL&apos;s beschikt.</translation>
+        <translation>De broker heeft de verbinding geweigerd wegens onvoldoende rechten. Controleer of het account over de vereiste ACL's beschikt.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/PublisherWorker.cpp" line="221"/>
@@ -23356,7 +23544,7 @@ Opnieuw laden?</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/PublisherWorker.cpp" line="230"/>
-        <source>An MQTT 5 protocol-level error occurred. Inspect the broker&apos;s reason code for details.</source>
+        <source>An MQTT 5 protocol-level error occurred. Inspect the broker's reason code for details.</source>
         <translation>Er is een MQTT 5-protocolfout opgetreden. Raadpleeg de redencode van de broker voor details.</translation>
     </message>
     <message>
@@ -23523,11 +23711,11 @@ Serial Studio kan de niet-ondersteunde operatoren herschrijven als bit.*-aanroep
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="677"/>
-        <source>The &apos;parse&apos; function is not defined in the script.
+        <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
 function parse(frame) ... end</source>
-        <translation>De &apos;parse&apos;-functie is niet gedefinieerd in het script.
+        <translation>De 'parse'-functie is niet gedefinieerd in het script.
 
 Zorg ervoor dat uw code het volgende bevat:
 function parse(frame) ... end</translation>
@@ -23609,11 +23797,11 @@ Meest waarschijnlijke oorzaak: een oneindige lus op het hoogste niveau van het s
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="509"/>
-        <source>The &apos;parse&apos; function is not defined in the script.
+        <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
 function parse(frame) { ... }</source>
-        <translation>De &apos;parse&apos;-functie is niet gedefinieerd in het script.
+        <translation>De 'parse'-functie is niet gedefinieerd in het script.
 
 Zorg ervoor dat uw code het volgende bevat:
 function parse(frame) { ... }</translation>
@@ -23638,12 +23826,12 @@ Corrigeer de fout in de functiebody.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="662"/>
-        <source>No callable &apos;parse&apos; export found.
+        <source>No callable 'parse' export found.
 
 Define one of:
   function parse(frame) { ... }
   const parse = (frame) =&gt; { ... }</source>
-        <translation>Geen aanroepbare &apos;parse&apos;-export gevonden.
+        <translation>Geen aanroepbare 'parse'-export gevonden.
 
 Definieer een van de volgende:
   function parse(frame) { ... }
@@ -23651,15 +23839,15 @@ Definieer een van de volgende:
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="678"/>
-        <source>The &apos;parse&apos; function must accept at least one parameter (the frame payload).</source>
-        <translation>De &apos;parse&apos;-functie moet minimaal één parameter accepteren (de frame-payload).</translation>
+        <source>The 'parse' function must accept at least one parameter (the frame payload).</source>
+        <translation>De 'parse'-functie moet minimaal één parameter accepteren (de frame-payload).</translation>
     </message>
     <message>
-        <source>No valid &apos;parse&apos; function declaration found.
+        <source>No valid 'parse' function declaration found.
 
 Expected format:
 function parse(frame) { ... }</source>
-        <translation type="vanished">Geen geldige &apos;parse&apos;-functiedeclaratie gevonden.
+        <translation type="vanished">Geen geldige 'parse'-functiedeclaratie gevonden.
 
 Verwacht formaat:
 function parse(frame) { ... }</translation>
@@ -23670,11 +23858,11 @@ function parse(frame) { ... }</translation>
         <translation>Ongeldige Functieparameter</translation>
     </message>
     <message>
-        <source>The &apos;parse&apos; function must have at least one parameter.
+        <source>The 'parse' function must have at least one parameter.
 
 Expected format:
 function parse(frame) { ... }</source>
-        <translation type="vanished">De &apos;parse&apos;-functie moet minimaal één parameter hebben.
+        <translation type="vanished">De 'parse'-functie moet minimaal één parameter hebben.
 
 Verwacht formaat:
 function parse(frame) { ... }</translation>
@@ -23686,13 +23874,13 @@ function parse(frame) { ... }</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="644"/>
-        <source>The &apos;parse&apos; function uses the old two-parameter format: parse(%1, %2)
+        <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
 
 This format is no longer supported. Please update to the new single-parameter format:
 function parse(%1) { ... }
 
 The separator parameter is no longer needed.</source>
-        <translation>De &apos;parse&apos;-functie gebruikt het oude twee-parameter formaat: parse(%1, %2)
+        <translation>De 'parse'-functie gebruikt het oude twee-parameter formaat: parse(%1, %2)
 
 Dit formaat wordt niet langer ondersteund. Werk bij naar het nieuwe enkel-parameter formaat:
 function parse(%1) { ... }
@@ -23710,12 +23898,12 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="969"/>
+        <location filename="../../src/Misc/CLI.cpp" line="749"/>
         <source>Project file not found</source>
         <translation>Projectbestand niet gevonden</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="970"/>
+        <location filename="../../src/Misc/CLI.cpp" line="750"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -23724,17 +23912,17 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="973"/>
+        <location filename="../../src/Misc/CLI.cpp" line="753"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Wilt u deze snelkoppeling verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="977"/>
+        <location filename="../../src/Misc/CLI.cpp" line="757"/>
         <source>Delete Shortcut</source>
         <translation>Snelkoppeling Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="979"/>
+        <location filename="../../src/Misc/CLI.cpp" line="759"/>
         <source>Quit</source>
         <translation>Afsluiten</translation>
     </message>
@@ -23808,13 +23996,13 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="120"/>
-        <source>Expected %1, got &apos;%2&apos;</source>
-        <translation>Verwacht %1, ontvangen &apos;%2&apos;</translation>
+        <source>Expected %1, got '%2'</source>
+        <translation>Verwacht %1, ontvangen '%2'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="193"/>
-        <source>Expected enum name after &apos;enum&apos;</source>
-        <translation>Enum-naam verwacht na &apos;enum&apos;</translation>
+        <source>Expected enum name after 'enum'</source>
+        <translation>Enum-naam verwacht na 'enum'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="207"/>
@@ -23823,8 +24011,8 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="236"/>
-        <source>Field tag &apos;%1&apos; out of range (1..%2)</source>
-        <translation>Veldtag &apos;%1&apos; buiten bereik (1..%2)</translation>
+        <source>Field tag '%1' out of range (1..%2)</source>
+        <translation>Veldtag '%1' buiten bereik (1..%2)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="254"/>
@@ -23848,8 +24036,8 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="314"/>
-        <source>Expected field type, got &apos;%1&apos;</source>
-        <translation>Veldtype verwacht, &apos;%1&apos; ontvangen</translation>
+        <source>Expected field type, got '%1'</source>
+        <translation>Veldtype verwacht, '%1' ontvangen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="333"/>
@@ -23873,13 +24061,13 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="462"/>
-        <source>Unexpected token &apos;%1&apos; at file scope</source>
-        <translation>Onverwacht token &apos;%1&apos; op bestandsniveau</translation>
+        <source>Unexpected token '%1' at file scope</source>
+        <translation>Onverwacht token '%1' op bestandsniveau</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="508"/>
-        <source>Unsupported top-level keyword &apos;%1&apos;</source>
-        <translation>Niet-ondersteund sleutelwoord op hoofdniveau &apos;%1&apos;</translation>
+        <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="509"/>
+        <source>Unsupported top-level keyword '%1'</source>
+        <translation>Niet-ondersteund sleutelwoord op hoofdniveau '%1'</translation>
     </message>
     <message>
         <location filename="../../src/Misc/GraphicsBackend.cpp" line="295"/>
@@ -23920,8 +24108,8 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
         <translation type="vanished">De native parserconfiguratie is geen geldig JSON-object.</translation>
     </message>
     <message>
-        <source>Unknown native parser template: &quot;%1&quot;.</source>
-        <translation type="vanished">Onbekende native parsersjabloon: &quot;%1&quot;.</translation>
+        <source>Unknown native parser template: "%1".</source>
+        <translation type="vanished">Onbekende native parsersjabloon: "%1".</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="190"/>
@@ -23930,8 +24118,8 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="200"/>
-        <source>Unknown Built-In parser template: &quot;%1&quot;.</source>
-        <translation>Onbekende ingebouwde parsersjabloon: &quot;%1&quot;.</translation>
+        <source>Unknown Built-In parser template: "%1".</source>
+        <translation>Onbekende ingebouwde parsersjabloon: "%1".</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="334"/>
@@ -24065,14 +24253,14 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="368"/>
-        <source>expected &apos;%1&apos;</source>
-        <translation>&apos;%1&apos; verwacht</translation>
+        <source>expected '%1'</source>
+        <translation>'%1' verwacht</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="408"/>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="463"/>
-        <source>unknown name &apos;%1&apos;</source>
-        <translation>onbekende naam &apos;%1&apos;</translation>
+        <source>unknown name '%1'</source>
+        <translation>onbekende naam '%1'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="425"/>
@@ -24089,8 +24277,8 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
         <translation type="vanished">table() vereist als tweede een registernaam</translation>
     </message>
     <message>
-        <source>unknown register &apos;%1.%2&apos;</source>
-        <translation type="vanished">onbekend register &apos;%1.%2&apos;</translation>
+        <source>unknown register '%1.%2'</source>
+        <translation type="vanished">onbekend register '%1.%2'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="436"/>
@@ -24099,8 +24287,8 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="441"/>
-        <source>unknown variable &apos;%1.%2&apos;</source>
-        <translation>onbekende variabele &apos;%1.%2&apos;</translation>
+        <source>unknown variable '%1.%2'</source>
+        <translation>onbekende variabele '%1.%2'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="459"/>
@@ -24114,8 +24302,8 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="529"/>
-        <source>unknown function &apos;%1&apos;</source>
-        <translation>onbekende functie &apos;%1&apos;</translation>
+        <source>unknown function '%1'</source>
+        <translation>onbekende functie '%1'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="540"/>
@@ -24130,8 +24318,8 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="565"/>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="658"/>
-        <source>unexpected &apos;%1&apos;</source>
-        <translation>onverwacht &apos;%1&apos;</translation>
+        <source>unexpected '%1'</source>
+        <translation>onverwacht '%1'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="618"/>
@@ -24230,7 +24418,7 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RemoteAttach.qml" line="133"/>
-        <source>Watch another Serial Studio instance&apos;s dashboard over the network. The view is read-only: nothing you do here reaches the remote device.</source>
+        <source>Watch another Serial Studio instance's dashboard over the network. The view is read-only: nothing you do here reaches the remote device.</source>
         <translation>Bekijk het dashboard van een andere Serial Studio-instantie via het netwerk. De weergave is alleen-lezen: niets wat u hier doet bereikt het externe apparaat.</translation>
     </message>
     <message>
@@ -24618,7 +24806,7 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="96"/>
-        <source>Serial Studio couldn&apos;t reach your device.</source>
+        <source>Serial Studio couldn't reach your device.</source>
         <translation>Serial Studio kon uw apparaat niet bereiken.</translation>
     </message>
     <message>
@@ -24628,7 +24816,7 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="108"/>
-        <source>Make sure it&apos;s plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
+        <source>Make sure it's plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
         <translation>Controleer of het is aangesloten, ingeschakeld en niet al in gebruik is door een andere app. U kunt het opnieuw proberen, een ander apparaat kiezen of afsluiten.</translation>
     </message>
     <message>
@@ -25179,7 +25367,7 @@ Voeg hierboven absolute adressen toe om de controller te pollen.</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="630"/>
-        <source>Compares this session&apos;s decoded values against the project currently open in the editor. The result reflects a transient candidate and is not stored with the session.</source>
+        <source>Compares this session's decoded values against the project currently open in the editor. The result reflects a transient candidate and is not stored with the session.</source>
         <translation>Vergelijkt de gedecodeerde waarden van deze sessie met het project dat momenteel geopend is in de editor. Het resultaat weerspiegelt een tijdelijke kandidaat en wordt niet opgeslagen bij de sessie.</translation>
     </message>
     <message>
@@ -25863,63 +26051,63 @@ Voeg hierboven absolute adressen toe om de controller te pollen.</translation>
 <context>
     <name>Sessions::Player</name>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="312"/>
+        <location filename="../../src/Sessions/Player.cpp" line="314"/>
         <source>Open Session File</source>
         <translation>Open Sessiebestand</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="314"/>
+        <location filename="../../src/Sessions/Player.cpp" line="316"/>
         <source>Session files (*.db)</source>
         <translation>Sessiebestanden (*.db)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="396"/>
+        <location filename="../../src/Sessions/Player.cpp" line="398"/>
         <source>Device Connection Active</source>
         <translation>Apparaatverbinding Actief</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="397"/>
+        <location filename="../../src/Sessions/Player.cpp" line="399"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>Om deze functie te gebruiken moet de verbinding met het apparaat worden verbroken. Doorgaan?</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="445"/>
-        <location filename="../../src/Sessions/Player.cpp" line="469"/>
+        <location filename="../../src/Sessions/Player.cpp" line="447"/>
+        <location filename="../../src/Sessions/Player.cpp" line="471"/>
         <source>Cannot open session file</source>
         <translation>Kan sessiebestand niet openen</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="446"/>
+        <location filename="../../src/Sessions/Player.cpp" line="448"/>
         <source>Unknown error</source>
         <translation>Onbekende fout</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="462"/>
+        <location filename="../../src/Sessions/Player.cpp" line="464"/>
         <source>No project data</source>
         <translation>Geen projectgegevens</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="463"/>
+        <location filename="../../src/Sessions/Player.cpp" line="465"/>
         <source>This session does not contain an embedded project file — the dashboard falls back to a quick-plot layout.</source>
         <translation>Deze sessie bevat geen ingesloten projectbestand — het dashboard valt terug op een snelle-plot-indeling.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="470"/>
+        <location filename="../../src/Sessions/Player.cpp" line="472"/>
         <source>Check file permissions and try again.</source>
         <translation>Controleer bestandsrechten en probeer opnieuw.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="621"/>
+        <location filename="../../src/Sessions/Player.cpp" line="623"/>
         <source>Sessions</source>
         <translation>Sessies</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="622"/>
+        <location filename="../../src/Sessions/Player.cpp" line="624"/>
         <source>Recording uses an older copy of the project</source>
         <translation>Opname gebruikt een oudere kopie van het project</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="623"/>
+        <location filename="../../src/Sessions/Player.cpp" line="625"/>
         <source>The dashboard shown is the one embedded in the recording; the project on disk has changed since. Close the session to return to the current project.</source>
         <translation>Het getoonde dashboard is het dashboard dat in de opname is opgeslagen; het project op schijf is sindsdien gewijzigd. Sluit de sessie om terug te keren naar het huidige project.</translation>
     </message>
@@ -25990,168 +26178,153 @@ Voeg hierboven absolute adressen toe om de controller te pollen.</translation>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="169"/>
         <source>Export Session to CSV</source>
-        <translation type="unfinished">Exporteer Sessie naar CSV</translation>
+        <translation>Exporteer Sessie naar CSV</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="169"/>
         <source>CSV files (*.csv)</source>
-        <translation type="unfinished">CSV-bestanden (*.CSV)</translation>
+        <translation>CSV-bestanden (*.CSV)</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="281"/>
         <source>Loading session data…</source>
-        <translation type="unfinished">Sessiegegevens laden…</translation>
+        <translation>Sessiegegevens laden…</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="309"/>
         <source>Save PDF Report</source>
-        <translation type="unfinished">PDF-rapport Opslaan</translation>
+        <translation>PDF-rapport Opslaan</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="309"/>
         <source>Save HTML Report</source>
-        <translation type="unfinished">HTML-rapport Opslaan</translation>
+        <translation>HTML-rapport Opslaan</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="310"/>
         <source>PDF files (*.pdf)</source>
-        <translation type="unfinished">PDF-bestanden (*.PDF)</translation>
+        <translation>PDF-bestanden (*.PDF)</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="310"/>
         <source>HTML files (*.html)</source>
-        <translation type="unfinished">HTML-bestanden (*.HTML)</translation>
+        <translation>HTML-bestanden (*.HTML)</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="379"/>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="413"/>
         <source>Failed</source>
-        <translation type="unfinished">Mislukt</translation>
+        <translation>Mislukt</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="384"/>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="422"/>
         <source>Report Failed</source>
-        <translation type="unfinished">Rapport Mislukt</translation>
+        <translation>Rapport Mislukt</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="385"/>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="423"/>
         <source>Could not generate the report.</source>
-        <translation type="unfinished">Kan het rapport niet genereren.</translation>
+        <translation>Kan het rapport niet genereren.</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="413"/>
         <source>Done</source>
-        <translation type="unfinished">Voltooid</translation>
+        <translation>Voltooid</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="441"/>
         <source>Select logo image</source>
-        <translation type="unfinished">Selecteer logo-afbeelding</translation>
+        <translation>Selecteer logo-afbeelding</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="443"/>
         <source>Images (*.png *.jpg *.jpeg *.svg)</source>
-        <translation type="unfinished">Afbeeldingen (*.png *.jpg *.jpeg *.svg)</translation>
+        <translation>Afbeeldingen (*.png *.jpg *.jpeg *.svg)</translation>
     </message>
 </context>
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="34"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="35"/>
         <source>Preferences</source>
         <translation>Voorkeuren</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="61"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="62"/>
         <source>General</source>
         <translation>Algemeen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="97"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="98"/>
         <source>Export</source>
         <translation>Exporteren</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="180"/>
         <source>Language</source>
-        <translation>Taal</translation>
+        <translation type="vanished">Taal</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="196"/>
         <source>Theme</source>
-        <translation>Thema</translation>
+        <translation type="vanished">Thema</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="290"/>
         <source>Workspace Folder</source>
-        <translation>Werkruimtemap</translation>
+        <translation type="vanished">Werkruimtemap</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="337"/>
         <source>Enable API Server (Port 7777)</source>
-        <translation>API-server Inschakelen (Poort 7777)</translation>
+        <translation type="vanished">API-server Inschakelen (Poort 7777)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="685"/>
         <source>Automatically Check for Updates</source>
-        <translation>Automatisch Controleren op Updates</translation>
+        <translation type="vanished">Automatisch Controleren op Updates</translation>
     </message>
     <message>
         <source>Dashboard</source>
         <translation type="vanished">Dashboard</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="419"/>
         <source>Export…</source>
-        <translation>Exporteren…</translation>
+        <translation type="vanished">Exporteren…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="805"/>
         <source>Data Plotting</source>
-        <translation>Gegevensweergave</translation>
+        <translation type="vanished">Gegevensweergave</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="872"/>
         <source>Point Count</source>
-        <translation>Aantal Punten</translation>
+        <translation type="vanished">Aantal Punten</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="897"/>
         <source>UI Refresh Rate (Hz)</source>
-        <translation>Ui-verversingsfrequentie (Hz)</translation>
+        <translation type="vanished">Ui-verversingsfrequentie (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1081"/>
         <source>Layout Margin</source>
-        <translation>Marge Indeling</translation>
+        <translation type="vanished">Marge Indeling</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1106"/>
         <source>Layout Spacing</source>
-        <translation>Afstand Indeling</translation>
+        <translation type="vanished">Afstand Indeling</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1131"/>
         <source>Show Actions Panel</source>
-        <translation>Actiepaneel Tonen</translation>
+        <translation type="vanished">Actiepaneel Tonen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1248"/>
         <source>Always Show Taskbar Buttons</source>
-        <translation>Taakbalkknoppen Altijd Tonen</translation>
+        <translation type="vanished">Taakbalkknoppen Altijd Tonen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="91"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1396"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="92"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="165"/>
         <source>Appearance</source>
-        <translation>Uiterlijk</translation>
+        <translation type="vanished">Uiterlijk</translation>
     </message>
     <message>
         <source>Files &amp; Updates</source>
@@ -26162,141 +26335,117 @@ Voeg hierboven absolute adressen toe om de controller te pollen.</translation>
         <translation type="vanished">Geavanceerd</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="362"/>
         <source>Allow External API Connections</source>
-        <translation>Externe API-verbindingen Toestaan</translation>
+        <translation type="vanished">Externe API-verbindingen Toestaan</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1147"/>
         <source>Auto-Hide Toolbar</source>
-        <translation>Werkbalk Automatisch Verbergen</translation>
+        <translation type="vanished">Werkbalk Automatisch Verbergen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="85"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="86"/>
         <source>Taskbar</source>
         <translation>Taakbalk</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="487"/>
         <source>Rendering Backend</source>
-        <translation>Rendering-backend</translation>
+        <translation type="vanished">Rendering-backend</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="387"/>
         <source>API Access Token</source>
-        <translation>API-toegangstoken</translation>
+        <translation type="vanished">API-toegangstoken</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="67"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="68"/>
         <source>Startup</source>
         <translation>Opstarten</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="223"/>
         <source>Window</source>
-        <translation>Venster</translation>
+        <translation type="vanished">Venster</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="242"/>
         <source>Custom Window Decorations</source>
-        <translation>Aangepaste Vensterdecoratief</translation>
+        <translation type="vanished">Aangepaste Vensterdecoratief</translation>
     </message>
     <message>
         <source>Window Shadow</source>
         <translation type="vanished">Venster Schaduw</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="265"/>
         <source>Window decoration changes apply after restarting %1.</source>
-        <translation>Wijzigingen in vensterdecoratief worden toegepast na het herstarten van %1.</translation>
+        <translation type="vanished">Wijzigingen in vensterdecoratief worden toegepast na het herstarten van %1.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="274"/>
         <source>Files</source>
-        <translation>Bestanden</translation>
+        <translation type="vanished">Bestanden</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="321"/>
         <source>API &amp; Plugins</source>
-        <translation>API &amp; Plugins</translation>
+        <translation type="vanished">API &amp; Plugins</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="469"/>
         <source>Graphics</source>
-        <translation>Grafisch</translation>
+        <translation type="vanished">Grafisch</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="520"/>
         <source>Display Scaling</source>
-        <translation>Weergaveschaling</translation>
+        <translation type="vanished">Weergaveschaling</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="553"/>
         <source>Custom Scale (%)</source>
-        <translation>Aangepaste Schaal (%)</translation>
+        <translation type="vanished">Aangepaste Schaal (%)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="590"/>
         <source>System</source>
-        <translation>Systeem</translation>
+        <translation type="vanished">Systeem</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="606"/>
         <source>Apply Performance Hints</source>
-        <translation>Prestatietips Toepassen</translation>
+        <translation type="vanished">Prestatietips Toepassen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="629"/>
         <source>Keep Display Awake</source>
-        <translation>Scherm Actief Houden</translation>
+        <translation type="vanished">Scherm Actief Houden</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="658"/>
         <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
-        <translation>Prestatietips verhogen de procesprioriteit en schakelen OS-energiebeperking uit. Wijzigingen worden van kracht bij de volgende start van Serial Studio.</translation>
+        <translation type="vanished">Prestatietips verhogen de procesprioriteit en schakelen OS-energiebeperking uit. Wijzigingen worden van kracht bij de volgende start van Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="669"/>
         <source>Updates &amp; News</source>
-        <translation>Updates &amp; Nieuws</translation>
+        <translation type="vanished">Updates &amp; Nieuws</translation>
     </message>
     <message>
-        <source>Show What&apos;s New on Startup</source>
+        <source>Show What's New on Startup</source>
         <translation type="vanished">Wat Is Nieuw Tonen bij Opstarten</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="820"/>
         <source>Time Range</source>
-        <translation>Tijdsbereik</translation>
+        <translation type="vanished">Tijdsbereik</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1005"/>
         <source>Small</source>
-        <translation>Klein</translation>
+        <translation type="vanished">Klein</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1005"/>
         <source>Normal</source>
-        <translation>Normaal</translation>
+        <translation type="vanished">Normaal</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1005"/>
         <source>Large</source>
-        <translation>Groot</translation>
+        <translation type="vanished">Groot</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1005"/>
         <source>Extra Large</source>
-        <translation>Extra Groot</translation>
+        <translation type="vanished">Extra Groot</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1005"/>
         <source>Custom</source>
-        <translation>Aangepast</translation>
+        <translation type="vanished">Aangepast</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="79"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1066"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="80"/>
         <source>Layout</source>
         <translation>Indeling</translation>
     </message>
@@ -26313,142 +26462,114 @@ Voeg hierboven absolute adressen toe om de controller te pollen.</translation>
         <translation type="vanished">Afstand Handmatige Indeling</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1170"/>
         <source>Show Alignment Guides</source>
-        <translation>Uitlijningshulplijnen Tonen</translation>
+        <translation type="vanished">Uitlijningshulplijnen Tonen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1994"/>
         <source>Video Export</source>
-        <translation>Video-export</translation>
+        <translation type="vanished">Video-export</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2012"/>
         <source>Save Videos by Default</source>
-        <translation>Video&apos;s Standaard Opslaan</translation>
+        <translation type="vanished">Video's Standaard Opslaan</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1227"/>
         <source>Behavior</source>
-        <translation>Gedrag</translation>
+        <translation type="vanished">Gedrag</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="73"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="74"/>
         <source>Plotting</source>
         <translation>Weergave</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="708"/>
         <source>Check for Extension Updates</source>
-        <translation>Controleer op Extensie-updates</translation>
+        <translation type="vanished">Controleer op Extensie-updates</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="732"/>
         <source>Install Extension Updates Automatically</source>
-        <translation>Extensie-updates Automatisch Installeren</translation>
+        <translation type="vanished">Extensie-updates Automatisch Installeren</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="762"/>
         <source>Installed extensions and themes are checked when Serial Studio starts, together with application updates. Serial Studio asks before installing them unless automatic installation is enabled.</source>
-        <translation>Geïnstalleerde extensies en thema&apos;s worden gecontroleerd wanneer Serial Studio start, samen met applicatie-updates. Serial Studio vraagt om bevestiging voordat ze worden geïnstalleerd, tenzij automatische installatie is ingeschakeld.</translation>
+        <translation type="vanished">Geïnstalleerde extensies en thema's worden gecontroleerd wanneer Serial Studio start, samen met applicatie-updates. Serial Studio vraagt om bevestiging voordat ze worden geïnstalleerd, tenzij automatische installatie is ingeschakeld.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1272"/>
         <source>Show Search Field</source>
-        <translation>Zoekveld Tonen</translation>
+        <translation type="vanished">Zoekveld Tonen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1296"/>
         <source>Auto-hide Taskbar</source>
-        <translation>Taakbalk Automatisch Verbergen</translation>
+        <translation type="vanished">Taakbalk Automatisch Verbergen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1323"/>
         <source>Hide Delay (ms)</source>
-        <translation>Verbergvertraging (ms)</translation>
+        <translation type="vanished">Verbergvertraging (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1356"/>
         <source>Pinned Buttons</source>
-        <translation>Vastgezette Knoppen</translation>
+        <translation type="vanished">Vastgezette Knoppen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1374"/>
         <source>Drag a pinned button on the taskbar to reorder it.</source>
-        <translation>Sleep een vastgezette knop op de taakbalk om de volgorde te wijzigen.</translation>
+        <translation type="vanished">Sleep een vastgezette knop op de taakbalk om de volgorde te wijzigen.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1395"/>
         <source>Settings</source>
-        <translation>Instellingen</translation>
+        <translation type="vanished">Instellingen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1398"/>
         <source>Clock</source>
-        <translation>Klok</translation>
+        <translation type="vanished">Klok</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1399"/>
         <source>Stopwatch</source>
-        <translation>Stopwatch</translation>
+        <translation type="vanished">Stopwatch</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1400"/>
         <source>Pause / Resume</source>
-        <translation>Pauzeren / Hervatten</translation>
+        <translation type="vanished">Pauzeren / Hervatten</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1401"/>
         <source>File Transmission</source>
-        <translation>Bestandsoverdracht</translation>
+        <translation type="vanished">Bestandsoverdracht</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1402"/>
         <source>AI Assistant</source>
-        <translation>Ai-assistent</translation>
+        <translation type="vanished">Ai-assistent</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1532"/>
         <source>Display</source>
-        <translation>Weergave</translation>
+        <translation type="vanished">Weergave</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1547"/>
         <source>Display Mode</source>
-        <translation>Weergavemodus</translation>
+        <translation type="vanished">Weergavemodus</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1615"/>
         <source>Scrollback Lines</source>
-        <translation>Scrollback-regels</translation>
+        <translation type="vanished">Scrollback-regels</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="973"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1569"/>
         <source>Font Family</source>
-        <translation>Lettertypefamilie</translation>
+        <translation type="vanished">Lettertypefamilie</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="104"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1397"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="105"/>
         <source>Notifications</source>
         <translation>Meldingen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="417"/>
         <source>Export Protobuf File</source>
-        <translation>Protobuf-bestand Exporteren</translation>
+        <translation type="vanished">Protobuf-bestand Exporteren</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="958"/>
         <source>Dashboard Font</source>
-        <translation>Dashboard-lettertype</translation>
+        <translation type="vanished">Dashboard-lettertype</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="995"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1591"/>
         <source>Font Size</source>
-        <translation>Lettergrootte</translation>
+        <translation type="vanished">Lettergrootte</translation>
     </message>
     <message>
         <source>Image Export</source>
@@ -26459,114 +26580,549 @@ Voeg hierboven absolute adressen toe om de controller te pollen.</translation>
         <translation type="vanished">Afbeeldingen Standaard Opslaan</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1640"/>
         <source>Show Timestamps</source>
-        <translation>Tijdstempels Tonen</translation>
+        <translation type="vanished">Tijdstempels Tonen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1668"/>
         <source>Data Transmission</source>
-        <translation>Gegevensoverdracht</translation>
+        <translation type="vanished">Gegevensoverdracht</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1683"/>
         <source>Line Ending</source>
-        <translation>Regeleindiging</translation>
+        <translation type="vanished">Regeleindiging</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1705"/>
         <source>Input Mode</source>
-        <translation>Invoermodus</translation>
+        <translation type="vanished">Invoermodus</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1727"/>
         <source>Text Encoding</source>
-        <translation>Tekstcodering</translation>
+        <translation type="vanished">Tekstcodering</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1749"/>
         <source>Checksum</source>
-        <translation>Checksum</translation>
+        <translation type="vanished">Checksum</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1771"/>
         <source>Echo Sent Data</source>
-        <translation>Echo Verzonden Gegevens</translation>
+        <translation type="vanished">Echo Verzonden Gegevens</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1799"/>
         <source>Escape Codes</source>
-        <translation>Escape-codes</translation>
+        <translation type="vanished">Escape-codes</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1814"/>
         <source>VT100 Emulation</source>
-        <translation>Vt100-emulatie</translation>
+        <translation type="vanished">Vt100-emulatie</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1840"/>
         <source>ANSI Colors</source>
-        <translation>Ansi-kleuren</translation>
+        <translation type="vanished">Ansi-kleuren</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1904"/>
         <source>CSV Export</source>
-        <translation>CSV-export</translation>
+        <translation type="vanished">CSV-export</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1919"/>
         <source>Row Interval (ms)</source>
-        <translation>Rij-Interval (ms)</translation>
+        <translation type="vanished">Rij-Interval (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1981"/>
         <source>0 writes one row per received frame. A positive value logs one snapshot row of every channel at that interval, which keeps file size bounded for multi-source or high-rate projects.</source>
-        <translation>0 schrijft één rij per ontvangen frame. Een positieve waarde logt één momentopname-rij van elk kanaal op dat interval, wat de bestandsgrootte begrensd houdt voor projecten met meerdere bronnen of hoge snelheid.</translation>
+        <translation type="vanished">0 schrijft één rij per ontvangen frame. Een positieve waarde logt één momentopname-rij van elk kanaal op dat interval, wat de bestandsgrootte begrensd houdt voor projecten met meerdere bronnen of hoge snelheid.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2069"/>
         <source>Delivery</source>
-        <translation>Aflevering</translation>
+        <translation type="vanished">Aflevering</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2084"/>
         <source>System Notifications</source>
-        <translation>Systeemmeldingen</translation>
+        <translation type="vanished">Systeemmeldingen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2105"/>
         <source>Show Warning/Critical events as OS desktop notifications when Serial Studio is not the foreground window.</source>
-        <translation>Toon waarschuwingen/kritieke gebeurtenissen als OS-desktopmeldingen wanneer Serial Studio niet het actieve venster is.</translation>
+        <translation type="vanished">Toon waarschuwingen/kritieke gebeurtenissen als OS-desktopmeldingen wanneer Serial Studio niet het actieve venster is.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2115"/>
         <source>Application Logs</source>
-        <translation>Applicatielogboeken</translation>
+        <translation type="vanished">Applicatielogboeken</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2130"/>
         <source>Route Warnings to Notifications</source>
-        <translation>Stuur Waarschuwingen naar Meldingen</translation>
+        <translation type="vanished">Stuur Waarschuwingen naar Meldingen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2151"/>
         <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
-        <translation>Standaard uit — QT en QML geven vaak waarschuwingen en het inschakelen hiervan kan echte alarmen overstemmen. Kritieke berichten worden altijd doorgestuurd, ongeacht deze instelling.</translation>
+        <translation type="vanished">Standaard uit — QT en QML geven vaak waarschuwingen en het inschakelen hiervan kan echte alarmen overstemmen. Kritieke berichten worden altijd doorgestuurd, ongeacht deze instelling.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2170"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="174"/>
         <source>Reset</source>
         <translation>Resetten</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2227"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="231"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2235"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="239"/>
         <source>Apply</source>
         <translation>Toepassen</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsConsolePage</name>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="58"/>
+        <source>Display</source>
+        <translation>Weergave</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="73"/>
+        <source>Display Mode</source>
+        <translation>Weergavemodus</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="95"/>
+        <source>Font Family</source>
+        <translation>Lettertypefamilie</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="117"/>
+        <source>Font Size</source>
+        <translation>Lettergrootte</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="141"/>
+        <source>Scrollback Lines</source>
+        <translation>Scrollback-regels</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="166"/>
+        <source>Show Timestamps</source>
+        <translation>Tijdstempels Tonen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="194"/>
+        <source>Data Transmission</source>
+        <translation>Gegevensoverdracht</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="209"/>
+        <source>Line Ending</source>
+        <translation>Regeleindiging</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="231"/>
+        <source>Input Mode</source>
+        <translation>Invoermodus</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="253"/>
+        <source>Text Encoding</source>
+        <translation>Tekstcodering</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="275"/>
+        <source>Checksum</source>
+        <translation>Checksum</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="297"/>
+        <source>Echo Sent Data</source>
+        <translation>Echo Verzonden Gegevens</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="325"/>
+        <source>Escape Codes</source>
+        <translation>Escape-codes</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="340"/>
+        <source>VT100 Emulation</source>
+        <translation>Vt100-emulatie</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="366"/>
+        <source>ANSI Colors</source>
+        <translation>Ansi-kleuren</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsExportPage</name>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="56"/>
+        <source>CSV Export</source>
+        <translation>CSV-export</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="71"/>
+        <source>Row Interval (ms)</source>
+        <translation>Rij-Interval (ms)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="133"/>
+        <source>0 writes one row per received frame. A positive value logs one snapshot row of every channel at that interval, which keeps file size bounded for multi-source or high-rate projects.</source>
+        <translation>0 schrijft één rij per ontvangen frame. Een positieve waarde logt één momentopname-rij van elk kanaal op dat interval, wat de bestandsgrootte begrensd houdt voor projecten met meerdere bronnen of hoge snelheid.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="146"/>
+        <source>Video Export</source>
+        <translation>Video-export</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="164"/>
+        <source>Save Videos by Default</source>
+        <translation>Video's Standaard Opslaan</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsGeneralPage</name>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="58"/>
+        <source>Appearance</source>
+        <translation>Uiterlijk</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="73"/>
+        <source>Language</source>
+        <translation>Taal</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="89"/>
+        <source>Theme</source>
+        <translation>Thema</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="116"/>
+        <source>Window</source>
+        <translation>Venster</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="135"/>
+        <source>Custom Window Decorations</source>
+        <translation>Aangepaste Vensterdecoratief</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="158"/>
+        <source>Window decoration changes apply after restarting %1.</source>
+        <translation>Wijzigingen in vensterdecoratief worden toegepast na het herstarten van %1.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="167"/>
+        <source>Files</source>
+        <translation>Bestanden</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="183"/>
+        <source>Workspace Folder</source>
+        <translation>Werkruimtemap</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="214"/>
+        <source>API &amp; Plugins</source>
+        <translation>API &amp; Plugins</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="230"/>
+        <source>Enable API Server (Port 7777)</source>
+        <translation>API-server Inschakelen (Poort 7777)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="255"/>
+        <source>Allow External API Connections</source>
+        <translation>Externe API-verbindingen Toestaan</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="280"/>
+        <source>API Access Token</source>
+        <translation>API-toegangstoken</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="310"/>
+        <source>Export Protobuf File</source>
+        <translation>Protobuf-bestand Exporteren</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="312"/>
+        <source>Export…</source>
+        <translation>Exporteren…</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsLayoutPage</name>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="58"/>
+        <source>Dashboard Font</source>
+        <translation>Dashboard-lettertype</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="73"/>
+        <source>Font Family</source>
+        <translation>Lettertypefamilie</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="95"/>
+        <source>Font Size</source>
+        <translation>Lettergrootte</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <source>Small</source>
+        <translation>Klein</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <source>Normal</source>
+        <translation>Normaal</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <source>Large</source>
+        <translation>Groot</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <source>Extra Large</source>
+        <translation>Extra Groot</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <source>Custom</source>
+        <translation>Aangepast</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="166"/>
+        <source>Layout</source>
+        <translation>Indeling</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="181"/>
+        <source>Layout Margin</source>
+        <translation>Marge Indeling</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="206"/>
+        <source>Layout Spacing</source>
+        <translation>Afstand Indeling</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="231"/>
+        <source>Show Actions Panel</source>
+        <translation>Actiepaneel Tonen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="247"/>
+        <source>Auto-Hide Toolbar</source>
+        <translation>Werkbalk Automatisch Verbergen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="270"/>
+        <source>Show Alignment Guides</source>
+        <translation>Uitlijningshulplijnen Tonen</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsNotificationsPage</name>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="59"/>
+        <source>Delivery</source>
+        <translation>Aflevering</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="74"/>
+        <source>System Notifications</source>
+        <translation>Systeemmeldingen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="95"/>
+        <source>Show Warning/Critical events as OS desktop notifications when Serial Studio is not the foreground window.</source>
+        <translation>Toon waarschuwingen/kritieke gebeurtenissen als OS-desktopmeldingen wanneer Serial Studio niet het actieve venster is.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="105"/>
+        <source>Application Logs</source>
+        <translation>Applicatielogboeken</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="120"/>
+        <source>Route Warnings to Notifications</source>
+        <translation>Stuur Waarschuwingen naar Meldingen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="141"/>
+        <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
+        <translation>Standaard uit — QT en QML geven vaak waarschuwingen en het inschakelen hiervan kan echte alarmen overstemmen. Kritieke berichten worden altijd doorgestuurd, ongeacht deze instelling.</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsPlottingPage</name>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="56"/>
+        <source>Data Plotting</source>
+        <translation>Gegevensweergave</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="71"/>
+        <source>Time Range</source>
+        <translation>Tijdsbereik</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="123"/>
+        <source>Point Count</source>
+        <translation>Aantal Punten</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="148"/>
+        <source>UI Refresh Rate (Hz)</source>
+        <translation>Ui-verversingsfrequentie (Hz)</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsStartupPage</name>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="59"/>
+        <source>Graphics</source>
+        <translation>Grafisch</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="77"/>
+        <source>Rendering Backend</source>
+        <translation>Rendering-backend</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="110"/>
+        <source>Display Scaling</source>
+        <translation>Weergaveschaling</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="143"/>
+        <source>Custom Scale (%)</source>
+        <translation>Aangepaste Schaal (%)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="180"/>
+        <source>System</source>
+        <translation>Systeem</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="196"/>
+        <source>Apply Performance Hints</source>
+        <translation>Prestatietips Toepassen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="219"/>
+        <source>Keep Display Awake</source>
+        <translation>Scherm Actief Houden</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="248"/>
+        <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
+        <translation>Prestatietips verhogen de procesprioriteit en schakelen OS-energiebeperking uit. Wijzigingen worden van kracht bij de volgende start van Serial Studio.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="259"/>
+        <source>Updates &amp; News</source>
+        <translation>Updates &amp; Nieuws</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="275"/>
+        <source>Automatically Check for Updates</source>
+        <translation>Automatisch Controleren op Updates</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="298"/>
+        <source>Check for Extension Updates</source>
+        <translation>Controleer op Extensie-updates</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="322"/>
+        <source>Install Extension Updates Automatically</source>
+        <translation>Extensie-updates Automatisch Installeren</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="352"/>
+        <source>Installed extensions and themes are checked when Serial Studio starts, together with application updates. Serial Studio asks before installing them unless automatic installation is enabled.</source>
+        <translation>Geïnstalleerde extensies en thema's worden gecontroleerd wanneer Serial Studio start, samen met applicatie-updates. Serial Studio vraagt om bevestiging voordat ze worden geïnstalleerd, tenzij automatische installatie is ingeschakeld.</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsTaskbarPage</name>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="53"/>
+        <source>Behavior</source>
+        <translation>Gedrag</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="74"/>
+        <source>Always Show Taskbar Buttons</source>
+        <translation>Taakbalkknoppen Altijd Tonen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="98"/>
+        <source>Show Search Field</source>
+        <translation>Zoekveld Tonen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="122"/>
+        <source>Auto-hide Taskbar</source>
+        <translation>Taakbalk Automatisch Verbergen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="149"/>
+        <source>Hide Delay (ms)</source>
+        <translation>Verbergvertraging (ms)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="182"/>
+        <source>Pinned Buttons</source>
+        <translation>Vastgezette Knoppen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="200"/>
+        <source>Drag a pinned button on the taskbar to reorder it.</source>
+        <translation>Sleep een vastgezette knop op de taakbalk om de volgorde te wijzigen.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="221"/>
+        <source>Settings</source>
+        <translation>Instellingen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="222"/>
+        <source>Console</source>
+        <translation>Console</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="223"/>
+        <source>Notifications</source>
+        <translation>Meldingen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="224"/>
+        <source>Clock</source>
+        <translation>Klok</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="225"/>
+        <source>Stopwatch</source>
+        <translation>Stopwatch</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="226"/>
+        <source>Pause / Resume</source>
+        <translation>Pauzeren / Hervatten</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="227"/>
+        <source>File Transmission</source>
+        <translation>Bestandsoverdracht</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="228"/>
+        <source>AI Assistant</source>
+        <translation>Ai-assistent</translation>
     </message>
 </context>
 <context>
@@ -26811,7 +27367,7 @@ Voeg hierboven absolute adressen toe om de controller te pollen.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="449"/>
-        <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
+        <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
         <translation>Dubbelklikken op deze implementatie brengt iemand direct naar het live dashboard voor dit project. Er is geen werkbalk of instellingenpaneel, alleen de gegevens, en Serial Studio sluit zodra het apparaat de verbinding verbreekt.</translation>
     </message>
     <message>
@@ -26930,7 +27486,7 @@ Voeg hierboven absolute adressen toe om de controller te pollen.</translation>
         <translation>Volledig Scherm</translation>
     </message>
     <message>
-        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
+        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
         <translation type="vanished">Dubbelklikken op deze snelkoppeling brengt iemand direct naar het live dashboard voor dit project. Er is geen werkbalk of instellingenpaneel, alleen de gegevens, en Serial Studio sluit zodra het apparaat de verbinding verbreekt.</translation>
     </message>
     <message>
@@ -26938,7 +27494,7 @@ Voeg hierboven absolute adressen toe om de controller te pollen.</translation>
         <translation type="vanished">Project Insluiten</translation>
     </message>
     <message>
-        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.
+        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.
 
 Turn on Embed Project to bake the project into the shortcut, so it keeps working even if the original file is moved or deleted.</source>
         <translation type="vanished">Dubbelklikken op deze snelkoppeling brengt iemand direct naar het live dashboard voor dit project. Er is geen werkbalk of instellingenpaneel, alleen de gegevens, en Serial Studio sluit zodra het apparaat wordt losgekoppeld.
@@ -27253,8 +27809,8 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="392"/>
-        <source>Show &quot;%1&quot;</source>
-        <translation>Toon &quot;%1&quot;</translation>
+        <source>Show "%1"</source>
+        <translation>Toon "%1"</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="397"/>
@@ -27840,7 +28396,7 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="243"/>
         <source>Utilities</source>
-        <translation>Hulpprogramma&apos;s</translation>
+        <translation>Hulpprogramma's</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="301"/>
@@ -27984,7 +28540,7 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
     </message>
     <message>
         <source>Close the loop without extra tooling. Output Controls let you send commands back to your device straight from the dashboard.</source>
-        <translation type="vanished">Sluit de lus zonder extra gereedschap. Uitvoerbesturingen laten je commando&apos;s rechtstreeks vanuit het dashboard naar je apparaat sturen.</translation>
+        <translation type="vanished">Sluit de lus zonder extra gereedschap. Uitvoerbesturingen laten je commando's rechtstreeks vanuit het dashboard naar je apparaat sturen.</translation>
     </message>
     <message>
         <source>Build a visualization nobody else has. The Painter widget runs your own script to draw fully custom graphics from incoming data.</source>
@@ -28035,23 +28591,23 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
     <name>TlsIdentity</name>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="141"/>
-        <source>The file &quot;%1&quot; does not exist.</source>
-        <translation>Het bestand &quot;%1&quot; bestaat niet.</translation>
+        <source>The file "%1" does not exist.</source>
+        <translation>Het bestand "%1" bestaat niet.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="144"/>
-        <source>The file &quot;%1&quot; cannot be read.</source>
-        <translation>Het bestand &quot;%1&quot; kan niet worden gelezen.</translation>
+        <source>The file "%1" cannot be read.</source>
+        <translation>Het bestand "%1" kan niet worden gelezen.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="147"/>
-        <source>&quot;%1&quot; is not a valid PEM certificate or key file.</source>
-        <translation>&quot;%1&quot; is geen geldig PEM-certificaat- of sleutelbestand.</translation>
+        <source>"%1" is not a valid PEM certificate or key file.</source>
+        <translation>"%1" is geen geldig PEM-certificaat- of sleutelbestand.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="151"/>
-        <source>&quot;%1&quot; is too large to be a PEM certificate or key file.</source>
-        <translation>&quot;%1&quot; is te groot om een PEM-certificaat- of sleutelbestand te zijn.</translation>
+        <source>"%1" is too large to be a PEM certificate or key file.</source>
+        <translation>"%1" is te groot om een PEM-certificaat- of sleutelbestand te zijn.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="156"/>
@@ -28060,13 +28616,13 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="160"/>
-        <source>The private key &quot;%1&quot; is encrypted. Enter its passphrase and try again.</source>
-        <translation>De privésleutel &quot;%1&quot; is versleuteld. Voer de wachtwoordzin in en probeer opnieuw.</translation>
+        <source>The private key "%1" is encrypted. Enter its passphrase and try again.</source>
+        <translation>De privésleutel "%1" is versleuteld. Voer de wachtwoordzin in en probeer opnieuw.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="165"/>
-        <source>The passphrase does not unlock the private key &quot;%1&quot;.</source>
-        <translation>De wachtwoordzin ontgrendelt de privésleutel &quot;%1&quot; niet.</translation>
+        <source>The passphrase does not unlock the private key "%1".</source>
+        <translation>De wachtwoordzin ontgrendelt de privésleutel "%1" niet.</translation>
     </message>
 </context>
 <context>
@@ -28536,7 +29092,7 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
     </message>
     <message>
         <location filename="../../qml/Dialogs/TriggerDialog.qml" line="388"/>
-        <source>Leave timebase empty to use the plot&apos;s time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
+        <source>Leave timebase empty to use the plot's time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
         <translation>Laat tijdbasis leeg om het tijdsbereik van de plot te gebruiken; verlaag om in te zoomen op een snel signaal. Holdoff negeert nieuwe triggers even na elke trigger.</translation>
     </message>
     <message>
@@ -28602,7 +29158,7 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
         <translation>0</translation>
     </message>
     <message>
-        <source>Timebase sets how much time one sweep shows; leave it empty to use the plot&apos;s time range. Lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each one.</source>
+        <source>Timebase sets how much time one sweep shows; leave it empty to use the plot's time range. Lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each one.</source>
         <translation type="vanished">Tijdbasis stelt in hoeveel tijd één sweep toont; laat leeg om het tijdsbereik van de plot te gebruiken. Verlaag om in te zoomen op een snel signaal. Holdoff negeert nieuwe triggers even na elke trigger.</translation>
     </message>
     <message>
@@ -28721,22 +29277,22 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2569"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1913"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2577"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1921"/>
         <source>Notifications</source>
         <translation>Meldingen</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2585"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1929"/>
         <source>Clock</source>
         <translation>Klok</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2592"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1936"/>
         <source>Stopwatch</source>
         <translation>Stopwatch</translation>
     </message>
@@ -29167,7 +29723,7 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Waterfall.qml" line="506"/>
-        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>Niet beschikbaar via een externe verbinding. Deze widget heeft de ruwe samplestroom van de externe bron nodig, die de dashboardspiegel niet doorgeeft.</translation>
     </message>
     <message>
@@ -29185,7 +29741,7 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
     <message>
         <location filename="../../qml/Widgets/Dashboard/WebView.qml" line="81"/>
         <source>This build of Serial Studio was compiled without Qt WebEngine, so web pages cannot be displayed.</source>
-        <translation>Deze build van Serial Studio is gecompileerd zonder QT WebEngine, waardoor webpagina&apos;s niet kunnen worden weergegeven.</translation>
+        <translation>Deze build van Serial Studio is gecompileerd zonder QT WebEngine, waardoor webpagina's niet kunnen worden weergegeven.</translation>
     </message>
 </context>
 <context>
@@ -29233,7 +29789,7 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="285"/>
-        <source>You&apos;re currently using the fully-featured trial of %1 Pro. It&apos;s valid for 14 days of personal, non-commercial use.</source>
+        <source>You're currently using the fully-featured trial of %1 Pro. It's valid for 14 days of personal, non-commercial use.</source>
         <translation>U gebruikt momenteel de volledig functionele proefversie van %1 Pro. Deze is 14 dagen geldig voor persoonlijk, niet-commercieel gebruik.</translation>
     </message>
     <message>
@@ -29248,13 +29804,13 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="312"/>
-        <source>To see available subscription plans, click &quot;Upgrade Now&quot; below.</source>
-        <translation>Klik hieronder op &quot;Nu Upgraden&quot; om de beschikbare abonnementen te bekijken.</translation>
+        <source>To see available subscription plans, click "Upgrade Now" below.</source>
+        <translation>Klik hieronder op "Nu Upgraden" om de beschikbare abonnementen te bekijken.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="333"/>
-        <source>Don&apos;t nag me about the trial.
-I understand that when it ends, I&apos;ll need to buy a license or build the GPLv3 version.</source>
+        <source>Don't nag me about the trial.
+I understand that when it ends, I'll need to buy a license or build the GPLv3 version.</source>
         <translation>Herinner me niet meer aan de proefperiode.
 Ik begrijp dat ik bij het einde een licentie moet kopen of de GPLv3-versie moet bouwen.</translation>
     </message>
@@ -29315,7 +29871,7 @@ Ik begrijp dat ik bij het einde een licentie moet kopen of de GPLv3-versie moet 
 <context>
     <name>WhatsNew</name>
     <message>
-        <source>What&apos;s New in %1</source>
+        <source>What's New in %1</source>
         <translation type="vanished">Wat is er Nieuw in %1</translation>
     </message>
     <message>
@@ -29451,7 +30007,7 @@ Ik begrijp dat ik bij het einde een licentie moet kopen of de GPLv3-versie moet 
         <translation type="vanished">Welkom bij %1!</translation>
     </message>
     <message>
-        <source>Here&apos;s what&apos;s new in version %1.</source>
+        <source>Here's what's new in version %1.</source>
         <translation type="vanished">Dit is nieuw in versie %1.</translation>
     </message>
     <message>
@@ -29660,7 +30216,7 @@ Ik begrijp dat ik bij het einde een licentie moet kopen of de GPLv3-versie moet 
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="380"/>
-        <source>We can&apos;t offer unrestricted access because the ArcGIS API key incurs real costs.</source>
+        <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
         <translation>Onbeperkte toegang is niet mogelijk omdat de ArcGIS API-sleutel echte kosten met zich meebrengt.</translation>
     </message>
 </context>
@@ -29718,7 +30274,7 @@ Ik begrijp dat ik bij het einde een licentie moet kopen of de GPLv3-versie moet 
         <translation type="vanished">Tip: druk overal op %1 om het opdrachtenpalet te openen.</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Terminal.cpp" line="1537"/>
+        <location filename="../../src/UI/Widgets/Terminal.cpp" line="1416"/>
         <source>Tip: Press %1 anywhere to open the command palette.</source>
         <translation>Tip: Druk overal op %1 om het opdrachtpalet te openen.</translation>
     </message>

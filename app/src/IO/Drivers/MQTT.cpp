@@ -29,6 +29,8 @@
 #include <QRandomGenerator>
 #include <QStandardPaths>
 
+#include "AppState.h"
+#include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
 #include "Licensing/CommercialToken.h"
 #include "Misc/Utilities.h"
@@ -44,7 +46,9 @@ Q_LOGGING_CATEGORY(lcMqttSub, "serialstudio.mqtt.subscriber", QtCriticalMsg)
  * @brief Constructs the MQTT input driver and restores persisted broker settings.
  */
 IO::Drivers::MQTT::MQTT()
-  : m_sslEnabled(false)
+  : m_appState(AppState::instance())
+  , m_projectModel(DataModel::ProjectModel::instance())
+  , m_sslEnabled(false)
   , m_cleanSession(true)
   , m_autoKeepAlive(true)
   , m_userWantsOpen(false)

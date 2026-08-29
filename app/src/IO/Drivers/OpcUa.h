@@ -25,7 +25,6 @@
 #include <chrono>
 #include <QByteArray>
 #include <QDateTime>
-#include <QHash>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QList>
@@ -36,11 +35,13 @@
 #include <QStringList>
 #include <QTimer>
 #include <QVariant>
+#include <utility>
 
 #include "DataModel/Frame.h"
 #include "IO/Drivers/OpcUa/OpcUaBrowser.h"
 #include "IO/Drivers/OpcUa/OpcUaCertificateStore.h"
-#include "IO/Drivers/OpcUa/OpcUaFrameAssembler.h"
+#include "IO/Drivers/OpcUa/OpcUaEndpointSelection.h"
+#include "IO/Drivers/OpcUa/OpcUaSubscriptions.h"
 #include "IO/Drivers/OpcUa/OpcUaTag.h"
 #include "IO/Drivers/OpcUaSession.h"
 #include "IO/Drivers/OpcUaTypes.h"
@@ -65,12 +66,13 @@ namespace Drivers {
 /**
  * @brief HAL driver for OPC UA servers (spec 0066): endpoint discovery, anonymous or
  *        username/password authentication, monitored-item subscription with a timed-read fallback,
- *        and one delta frame per publishing tick. The certificate store, browse session and value
- *        cache are sub-objects (spec 0070); this class stays the session, dial and config core.
+ *        and one delta frame per publishing tick. Certificate store, browse session, subscriptions
+ *        and project builder are sub-objects (spec 0070); this class alone owns the open verdict.
  */
 class OpcUa
   : public HAL_Driver
-  , public OpcUaBrowseHost {
+  , public OpcUaBrowseHost
+  , public OpcUaSubscriptionHost {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(QString endpointUrl
@@ -198,66 +200,119 @@ public:
   void setPersistent(const bool persistent) noexcept;
   void setSessionPeer(OpcUa* peer);
 
-  [[nodiscard]] bool isOpen() const noexcept override;
-  [[nodiscard]] bool isConnecting() const noexcept override;
-  [[nodiscard]] bool isReadable() const noexcept override;
-  [[nodiscard]] bool isWritable() const noexcept override;
   [[nodiscard]] bool configurationOk() const noexcept override;
-  [[nodiscard]] qint64 write(const QByteArray& data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
   [[nodiscard]] QList<IO::DriverProperty> driverProperties() const override;
 
-  [[nodiscard]] QString endpointUrl() const override;
-  [[nodiscard]] int endpointIndex() const;
-  [[nodiscard]] QStringList endpointList() const;
-  [[nodiscard]] QVariantList endpointSelectable() const;
+  [[nodiscard]] bool isReadable() const noexcept override { return isOpen(); }
+
+  [[nodiscard]] bool isWritable() const noexcept override { return false; }
+
+  [[nodiscard]] bool isConnecting() const noexcept override { return m_connecting; }
+
+  [[nodiscard]] bool isOpen() const noexcept override { return m_session && m_session->isOpen(); }
+
+  [[nodiscard]] qint64 write(const QByteArray& data) override
+  {
+    Q_UNUSED(data)
+    return 0;
+  }
+
   [[nodiscard]] QJsonArray endpointsJson() const;
-  [[nodiscard]] bool tagsDeferred() const;
-  [[nodiscard]] bool discovering() const;
-  [[nodiscard]] int authMode() const;
-  [[nodiscard]] QString username() const;
-  [[nodiscard]] QString password() const;
-  [[nodiscard]] int publishingInterval() const;
-  [[nodiscard]] int tagCount() const;
   [[nodiscard]] QString statusText() const;
   [[nodiscard]] bool pollMode() const;
   [[nodiscard]] int revisedInterval() const;
-  [[nodiscard]] bool browsing() const;
   [[nodiscard]] QStringList authModeList() const;
 
-  [[nodiscard]] QString securityPolicy() const;
+  [[nodiscard]] int authMode() const { return m_authMode; }
+
+  [[nodiscard]] bool discovering() const { return m_discovering; }
+
+  [[nodiscard]] bool tagsDeferred() const { return m_hasDeferred; }
+
+  [[nodiscard]] QString username() const { return m_username; }
+
+  [[nodiscard]] QString password() const { return m_password; }
+
+  [[nodiscard]] int endpointIndex() const { return m_endpointIndex; }
+
+  [[nodiscard]] bool browsing() const { return m_browser.browsing(); }
+
+  [[nodiscard]] QString endpointUrl() const override { return m_endpointUrl; }
+
+  [[nodiscard]] int tagCount() const { return static_cast<int>(m_tags.size()); }
+
+  [[nodiscard]] int publishingInterval() const override { return m_publishingInterval; }
+
   [[nodiscard]] int securityPolicyIndex() const;
-  [[nodiscard]] QStringList securityPolicyList() const;
   [[nodiscard]] static const QStringList& supportedPolicies();
-  [[nodiscard]] QVariantList securityPolicyDeprecated() const;
-  [[nodiscard]] int securityMode() const;
-  [[nodiscard]] QStringList securityModeList() const;
-  [[nodiscard]] QString userCertificatePath() const;
-  [[nodiscard]] QString userKeyPath() const;
   [[nodiscard]] QVariantMap clientCertificate() const;
   [[nodiscard]] QVariantList trustedCertificates() const;
-  [[nodiscard]] bool credentialsExposed() const;
-  [[nodiscard]] QJsonObject certificateJson() const;
   [[nodiscard]] QString negotiatedPolicy() const;
   [[nodiscard]] int negotiatedMode() const;
-  [[nodiscard]] QJsonArray trustedJson() const;
 
-  [[nodiscard]] const QList<OpcUaTag>& tags() const noexcept override;
+  [[nodiscard]] QStringList securityModeList() const
+  {
+    return OpcUaEndpointSelection::securityModeNames();
+  }
+
+  [[nodiscard]] QStringList securityPolicyList() const
+  {
+    return OpcUaEndpointSelection::policyNames();
+  }
+
+  [[nodiscard]] QVariantList securityPolicyDeprecated() const
+  {
+    return OpcUaEndpointSelection::policyDeprecationFlags();
+  }
+
+  [[nodiscard]] QStringList endpointList() const
+  {
+    return OpcUaEndpointSelection::endpointRows(m_endpoints);
+  }
+
+  [[nodiscard]] QVariantList endpointSelectable() const
+  {
+    return OpcUaEndpointSelection::endpointSelectable(m_endpoints, m_authMode);
+  }
+
+  [[nodiscard]] int securityMode() const { return m_securityMode; }
+
+  [[nodiscard]] QString securityPolicy() const { return m_securityPolicy; }
+
+  [[nodiscard]] QString userKeyPath() const { return m_userKeyPath; }
+
+  [[nodiscard]] QString userCertificatePath() const { return m_userCertificatePath; }
+
+  [[nodiscard]] bool credentialsExposed() const { return credentialsAreExposed(); }
+
+  [[nodiscard]] QJsonArray trustedJson() const { return m_certificates.trustedJson(); }
+
+  [[nodiscard]] QJsonObject certificateJson() const { return m_certificates.certificateJson(); }
+
   [[nodiscard]] QJsonArray tagsJson() const;
   [[nodiscard]] QJsonArray wireSchema() const;
   [[nodiscard]] QJsonObject statusJson() const;
-  [[nodiscard]] QStringList badTags() const;
   [[nodiscard]] QJsonObject buildProject() const;
   [[nodiscard]] DataModel::ProjectModel* loadGeneratedProject();
-  [[nodiscard]] OpcUaTagModel* tagModel();
-  [[nodiscard]] QObject* tagModelObject();
+
+  [[nodiscard]] OpcUaTagModel* tagModel() { return m_browser.tagModel(); }
+
+  [[nodiscard]] QObject* tagModelObject() { return m_browser.tagModelObject(); }
+
+  [[nodiscard]] QStringList badTags() const { return m_subscriptions.badTags(); }
+
+  [[nodiscard]] const QList<OpcUaTag>& tags() const noexcept override { return m_tags; }
 
   [[nodiscard]] Q_INVOKABLE QString tagInfo(const int index) const;
 
 public slots:
   void discoverEndpoints();
-  void startBrowse();
-  void stopBrowse();
+
+  void startBrowse() { m_browser.start(); }
+
+  void stopBrowse() { m_browser.stop(); }
+
   void cancelBrowse();
   void generateProject();
   void setupExternalConnections();
@@ -289,18 +344,8 @@ private slots:
   void onEndpointsFinished(const QList<OpcUaTypes::Endpoint>& endpoints,
                            OpcUaTypes::StatusCode status);
   void onBrowseFailed(const QString& reason);
-  void onTypeMismatch(int index, const QString& declared, const QString& actual);
-  void onSubscribed(const QList<OpcUaTypes::StatusCode>& perItemStatus);
-  void onSubscriptionLost(const QString& reason);
-  void onValueChanged(const OpcUaTypes::MonitoredValue& value);
-  void onReadFinished(quint32 token,
-                      const QList<OpcUaTypes::ReadRow>& rows,
-                      OpcUaTypes::StatusCode status);
   void onDialTimeout();
   void onDiscoveryTimeout();
-  void onPollTick();
-  void onFrameTick();
-  void onWatchdogTick();
 
 private:
   void doClose();
@@ -313,27 +358,36 @@ private:
   void publishEndpointSelection(const int index);
   void warnAboutPlaintextCredentials() const;
   [[nodiscard]] bool credentialsAreExposed() const;
-  [[nodiscard]] static QString describeMode(OpcUaTypes::SecurityMode mode);
 
   void prepareClientIdentity() override;
   void requestBrowseDiscovery() override;
-  void commitBrowsedTags(const QJsonArray& tags) override;
   void reportTrustFailure(const OpcUaSession* session) override;
-  [[nodiscard]] OpcUaSession* makeSession() override;
+
+  void commitBrowsedTags(const QJsonArray& tags) override { setTags(tags); }
+
+  [[nodiscard]] OpcUaSession* makeSession() override { return new OpcUaSession(this); }
+
   [[nodiscard]] bool hasSelectedEndpoint() const noexcept override;
   [[nodiscard]] QString selectedEndpointUrl() const override;
   [[nodiscard]] OpcUaTypes::Endpoint dialEndpoint() const override;
   [[nodiscard]] OpcUaSession::Identity identity() const override;
 
-  void subscribeAll();
-  void enterPollMode(const QString& reason);
-  void adoptRevisedInterval();
-  void issueRead(const QList<int>& tags);
+  [[nodiscard]] OpcUaSession* liveSession() const override { return m_session; }
+
+  void publishFrame(QByteArray&& frame, CapturedData::SteadyTimePoint timestamp) override
+  {
+    publishReceivedData(std::move(frame), timestamp);
+  }
+
+  void reportDriverError(const QString& title, const QString& detail) const override
+  {
+    logDriverError(title, detail);
+  }
+
   [[nodiscard]] bool tagsFrozen() const;
   [[nodiscard]] const OpcUa* sessionPeer() const;
   void applyDeferredTags();
 
-  [[nodiscard]] static DataModel::Dataset datasetFor(const OpcUaTag& tag, int element, int index);
   void loadSettings();
   void saveTags();
 
@@ -348,21 +402,13 @@ private:
 
   bool m_connecting;
   bool m_discovering;
-  bool m_pollMode;
   bool m_persistent;
-  bool m_readInFlight;
-  bool m_subscribing;
   bool m_hasDeferred;
   PendingDial m_pendingDial;
   int m_authMode;
   int m_endpointIndex;
   int m_publishingInterval;
-  int m_pendingMonitors;
-  int m_failedMonitors;
-  int m_revisedInterval;
-  quint64 m_framesPublished;
   quint64 m_linkDrops;
-  quint64 m_skippedPolls;
   QString m_username;
   QString m_password;
   QString m_endpointUrl;
@@ -373,20 +419,14 @@ private:
   int m_securityMode;
   QTimer* m_dialTimer;
   QTimer* m_discoveryTimer;
-  QTimer* m_watchdog;
-  QTimer* m_pollTimer;
-  QTimer* m_frameTimer;
   OpcUaSession* m_session;
   OpcUaSession* m_discoverySession;
   QPointer<OpcUa> m_sessionPeer;
-  QList<int> m_polledTags;
-  qint64 m_lastNotifyNs;
   QList<OpcUaTag> m_tags;
   QJsonArray m_deferredTags;
-  QHash<QString, int> m_nodeIndex;
   QList<OpcUaTypes::Endpoint> m_endpoints;
   OpcUaCertificateStore m_certificates;
-  OpcUaFrameAssembler m_assembler;
+  OpcUaSubscriptions m_subscriptions;
   OpcUaBrowser m_browser;
   ::MQTT::CredentialVault m_vault;
   QSettings m_settings;

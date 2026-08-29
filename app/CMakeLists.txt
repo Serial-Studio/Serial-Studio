@@ -245,6 +245,9 @@ set(SOURCES
   src/Misc/CrashTracker.cpp
   src/Misc/BackupManager.cpp
   src/Misc/CLI.cpp
+  src/Misc/CLI/CliBusConfig.cpp
+  src/Misc/CLI/CliIndustrialConfig.cpp
+  src/Misc/CLI/CliSpecParsers.cpp
   src/SelfTest/SelfTest.cpp
   src/SSAssert.cpp
   src/Benchmark/HotpathBenchmark.cpp
@@ -254,6 +257,8 @@ set(SOURCES
   src/UI/DashboardWidget.cpp
   src/UI/Dashboard.cpp
   src/UI/Dashboard/DashboardTools.cpp
+  src/UI/Dashboard/PlotControlBank.cpp
+  src/UI/Dashboard/ReplaySeekEngine.cpp
   src/UI/Dashboard/DashboardViewState.cpp
   src/UI/Dashboard/WidgetMapBuilder.cpp
   src/UI/AlarmMonitor.cpp
@@ -262,6 +267,7 @@ set(SOURCES
   src/UI/Taskbar/TaskbarWindowMap.cpp
   src/UI/Taskbar/FocusCycler.cpp
   src/UI/Taskbar/TaskbarSearch.cpp
+  src/UI/Taskbar/TaskbarWorkspaces.cpp
   src/UI/WindowManager/WindowGeometry.cpp
   src/UI/WindowManager/SnapOverlay.cpp
   src/UI/WindowManager/WindowLayoutStore.cpp
@@ -290,6 +296,8 @@ set(SOURCES
   src/UI/Widgets/DataGrid.cpp
   src/UI/Widgets/Terminal.cpp
   src/UI/Widgets/Terminal/AnsiPalette.cpp
+  src/UI/Widgets/Terminal/TerminalBuffer.cpp
+  src/UI/Widgets/Terminal/Vt100Keymap.cpp
   src/UI/Widgets/Terminal/AnsiStateMachine.cpp
   src/UI/Widgets/Terminal/TerminalSearch.cpp
   src/UI/Widgets/Gyroscope.cpp
@@ -368,6 +376,10 @@ set(SOURCES
   src/IO/ConnectionManager/DriverUiRegistry.cpp
   src/IO/ConnectionManager/ConnectFanOut.cpp
   src/IO/ConnectionManager/ReplyCapture.cpp
+  src/IO/ConnectionManager/DriverFactory.cpp
+  src/IO/ConnectionManager/StreamConfigBuilder.cpp
+  src/IO/ConnectionManager/StreamWorkerPool.cpp
+  src/IO/ConnectionManager/UiDriverSync.cpp
   src/IO/PipelineHost.cpp
   src/IO/StreamWorker.cpp
   src/Async/TaskTree.cpp
@@ -455,6 +467,8 @@ set(SOURCES
   src/DataModel/Project/ProjectLoader.cpp
   src/DataModel/Project/ProjectFolders.cpp
   src/DataModel/Project/ProjectWorkspaces.cpp
+  src/DataModel/Project/ProjectWorkspaceRefs.cpp
+  src/DataModel/Project/ProjectFixedLayouts.cpp
   src/DataModel/Project/ProjectTables.cpp
   src/DataModel/Project/ProjectSources.cpp
   src/DataModel/Project/ProjectEntities.cpp
@@ -474,7 +488,9 @@ set(SOURCES
   src/DataModel/Importers/ProtoLexer.cpp
   src/DataModel/Importers/ProtoParser.cpp
   src/DataModel/FrameBuilder.cpp
+  src/DataModel/FrameBuilder/LatestFrameTap.cpp
   src/DataModel/FrameBuilder/QuickPlotBuilder.cpp
+  src/DataModel/FrameBuilder/TableSnapshotChannel.cpp
   src/DataModel/FrameBuilder/TableScriptBridge.cpp
   src/DataModel/FrameBuilder/TransformCompiler.cpp
   src/DataModel/FramePoolPolicy.cpp
@@ -542,6 +558,8 @@ set(HEADERS
   src/Misc/BackupManager.h
   src/UI/Dashboard.h
   src/UI/Dashboard/DashboardTools.h
+  src/UI/Dashboard/PlotControlBank.h
+  src/UI/Dashboard/ReplaySeekEngine.h
   src/UI/Dashboard/DashboardViewState.h
   src/UI/Dashboard/WidgetMapBuilder.h
   src/UI/DashboardWidget.h
@@ -551,6 +569,7 @@ set(HEADERS
   src/UI/Taskbar/TaskbarWindowMap.h
   src/UI/Taskbar/FocusCycler.h
   src/UI/Taskbar/TaskbarSearch.h
+  src/UI/Taskbar/TaskbarWorkspaces.h
   src/UI/WindowManager/WindowGeometry.h
   src/UI/WindowManager/SnapOverlay.h
   src/UI/WindowManager/WindowLayoutStore.h
@@ -583,6 +602,8 @@ set(HEADERS
   src/UI/Widgets/Compass.h
   src/UI/Widgets/Terminal.h
   src/UI/Widgets/Terminal/AnsiPalette.h
+  src/UI/Widgets/Terminal/TerminalBuffer.h
+  src/UI/Widgets/Terminal/Vt100Keymap.h
   src/UI/Widgets/Terminal/AnsiStateMachine.h
   src/UI/Widgets/Terminal/TerminalSearch.h
   src/API/Server.h
@@ -645,6 +666,9 @@ set(HEADERS
   src/API/Handlers/AssistantHandler.h
   src/UI/UISessionRegistry.h
   src/Misc/CLI.h
+  src/Misc/CLI/CliBusConfig.h
+  src/Misc/CLI/CliIndustrialConfig.h
+  src/Misc/CLI/CliSpecParsers.h
   src/SelfTest/SelfTest.h
   src/SSAssert.h
   src/Platform/AppPlatform.h
@@ -662,6 +686,10 @@ set(HEADERS
   src/IO/ConnectionManager/DriverUiRegistry.h
   src/IO/ConnectionManager/ConnectFanOut.h
   src/IO/ConnectionManager/ReplyCapture.h
+  src/IO/ConnectionManager/DriverFactory.h
+  src/IO/ConnectionManager/StreamConfigBuilder.h
+  src/IO/ConnectionManager/StreamWorkerPool.h
+  src/IO/ConnectionManager/UiDriverSync.h
   src/IO/PipelineHost.h
   src/IO/StreamWorker.h
   src/Async/TaskTree.h
@@ -748,6 +776,8 @@ set(HEADERS
   src/DataModel/Project/ProjectLoader.h
   src/DataModel/Project/ProjectFolders.h
   src/DataModel/Project/ProjectWorkspaces.h
+  src/DataModel/Project/ProjectWorkspaceRefs.h
+  src/DataModel/Project/ProjectFixedLayouts.h
   src/DataModel/Project/ProjectTables.h
   src/DataModel/Project/ProjectSources.h
   src/DataModel/Project/ProjectEntities.h
@@ -763,10 +793,13 @@ set(HEADERS
   src/DataModel/Importers/ProtoParser.h
   src/DataModel/DataBlock.h
   src/DataModel/Frame.h
+  src/DataModel/FrameKeys.h
   src/IO/Drivers/BluetoothLE/BleUuids.h
   src/IO/Drivers/SerialPortIdentity.h
   src/DataModel/FrameBuilder.h
+  src/DataModel/FrameBuilder/LatestFrameTap.h
   src/DataModel/FrameBuilder/QuickPlotBuilder.h
+  src/DataModel/FrameBuilder/TableSnapshotChannel.h
   src/DataModel/FrameBuilder/TableScriptBridge.h
   src/DataModel/FrameBuilder/TransformCompiler.h
   src/DataModel/FramePoolPolicy.h
@@ -794,6 +827,7 @@ set(HEADERS
   src/ThirdParty/readerwritercircularbuffer.h
   src/AppInfo.h
   src/DSP.h
+  src/DSPDownsample.h
   src/DSPSimd.h
   src/AppState.h
   src/SessionContext.h
@@ -834,6 +868,14 @@ set(QML_SOURCES
   qml/Dialogs/IconPicker.qml
   qml/Dialogs/OnlineIconPicker.qml
   qml/Dialogs/Settings.qml
+  qml/Dialogs/Settings/SettingsGeneralPage.qml
+  qml/Dialogs/Settings/SettingsStartupPage.qml
+  qml/Dialogs/Settings/SettingsPlottingPage.qml
+  qml/Dialogs/Settings/SettingsLayoutPage.qml
+  qml/Dialogs/Settings/SettingsTaskbarPage.qml
+  qml/Dialogs/Settings/SettingsConsolePage.qml
+  qml/Dialogs/Settings/SettingsExportPage.qml
+  qml/Dialogs/Settings/SettingsNotificationsPage.qml
   qml/Dialogs/Welcome.qml
   qml/Dialogs/WorkspaceDialog.qml
   qml/Dialogs/ExtensionManager.qml
@@ -874,6 +916,15 @@ set(QML_SOURCES
   qml/ProjectEditor/Views/AddWidgetDialog.qml
   qml/ProjectEditor/Views/ConstantsLibraryDialog.qml
   qml/ProjectEditor/Views/FlowDiagram.qml
+  qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml
+  qml/ProjectEditor/Views/FlowDiagram/DiagramIcons.qml
+  qml/ProjectEditor/Views/FlowDiagram/DiagramArrows.qml
+  qml/ProjectEditor/Views/FlowDiagram/DiagramNode.qml
+  qml/ProjectEditor/Views/FlowDiagram/DiagramMenuController.qml
+  qml/ProjectEditor/Views/FlowDiagram/NodePill.qml
+  qml/ProjectEditor/Views/FlowDiagram/NodeTransform.qml
+  qml/ProjectEditor/Views/FlowDiagram/NodeCard.qml
+  qml/ProjectEditor/Views/FlowDiagram/NodeFolder.qml
   qml/ProjectEditor/Views/NativeParserPane.qml
   qml/ProjectEditor/Views/GroupView.qml
   qml/ProjectEditor/Views/ProjectView.qml
@@ -937,6 +988,13 @@ set(QML_SOURCES
   qml/Widgets/RibbonSection.qml
   qml/Widgets/RibbonSpacer.qml
   qml/Widgets/PlotWidget.qml
+  qml/Widgets/PlotWidget/PlotFormatter.qml
+  qml/Widgets/PlotWidget/PlotInteraction.qml
+  qml/Widgets/PlotWidget/PlotRulerOverlay.qml
+  qml/Widgets/PlotWidget/PlotRulerMenu.qml
+  qml/Widgets/PlotWidget/PlotMarkerPopup.qml
+  qml/Widgets/PlotWidget/PlotCursor.qml
+  qml/Widgets/PlotWidget/PlotTriggerLine.qml
   qml/Widgets/ProjectTableHeader.qml
   qml/Widgets/ProjectTableRow.qml
   qml/Widgets/ProNotice.qml
@@ -1016,6 +1074,8 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/OpcUa/OpcUaCertificateStore.h
     src/IO/Drivers/OpcUa/OpcUaEndpointSelection.h
     src/IO/Drivers/OpcUa/OpcUaFrameAssembler.h
+    src/IO/Drivers/OpcUa/OpcUaProjectBuilder.h
+    src/IO/Drivers/OpcUa/OpcUaSubscriptions.h
     src/IO/Drivers/OpcUa/OpcUaTag.h
     src/IO/Drivers/OpcUaWire.h
     src/IO/Drivers/OpcUaTypes.h
@@ -1042,6 +1102,12 @@ if(BUILD_COMMERCIAL)
   src/UI/Widgets/Waterfall/WaterfallMath.h
     src/UI/Widgets/Painter.h
     src/UI/Widgets/PainterContext.h
+    src/UI/Widgets/Painter/PainterGradient.h
+    src/UI/Widgets/Painter/PainterPattern.h
+    src/UI/Widgets/Painter/PainterEnums.h
+    src/UI/Widgets/Painter/PainterGeometry.h
+    src/UI/Widgets/Painter/PainterBlur.h
+    src/UI/Widgets/Painter/PainterFont.h
     src/UI/Widgets/PainterDataBridge.h
     src/DataModel/Editors/PainterCodeEditor.h
     src/UI/ImageProvider.h
@@ -1112,7 +1178,11 @@ if(BUILD_COMMERCIAL)
     src/AI/SseEventReader.h
     src/AI/ContextBuilder.h
     src/AI/Conversation.h
+    src/AI/Conversation/AutoVerifier.h
+    src/AI/Conversation/ChatDigest.h
     src/AI/Conversation/HelpFetcher.h
+    src/AI/Conversation/MetaToolRunner.h
+    src/AI/Conversation/ToolCallStatus.h
     src/AI/Conversation/HistorySurgery.h
     src/AI/Conversation/MetaToolCatalog.h
     src/AI/Conversation/ReplyAssembly.h
@@ -1194,6 +1264,8 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/OpcUa/OpcUaCertificateStore.cpp
     src/IO/Drivers/OpcUa/OpcUaEndpointSelection.cpp
     src/IO/Drivers/OpcUa/OpcUaFrameAssembler.cpp
+    src/IO/Drivers/OpcUa/OpcUaProjectBuilder.cpp
+    src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp
     src/IO/Drivers/OpcUa/OpcUaTag.cpp
     src/IO/Drivers/OpcUaMarshal.cpp
     src/IO/Drivers/OpcUaSession.cpp
@@ -1222,6 +1294,8 @@ if(BUILD_COMMERCIAL)
     src/UI/Widgets/Painter.cpp
     src/UI/Widgets/PainterContext.cpp
   src/UI/Widgets/Painter/PainterGradient.cpp
+  src/UI/Widgets/Painter/PainterBlur.cpp
+  src/UI/Widgets/Painter/PainterFont.cpp
   src/UI/Widgets/Painter/PainterPattern.cpp
     src/UI/Widgets/PainterDataBridge.cpp
     src/DataModel/Editors/PainterCodeEditor.cpp
@@ -1289,7 +1363,10 @@ if(BUILD_COMMERCIAL)
     src/AI/SseEventReader.cpp
     src/AI/ContextBuilder.cpp
     src/AI/Conversation.cpp
+    src/AI/Conversation/AutoVerifier.cpp
+    src/AI/Conversation/ChatDigest.cpp
     src/AI/Conversation/HelpFetcher.cpp
+    src/AI/Conversation/MetaToolRunner.cpp
     src/AI/Conversation/HistorySurgery.cpp
     src/AI/Conversation/MetaToolCatalog.cpp
     src/AI/Conversation/ReplyAssembly.cpp

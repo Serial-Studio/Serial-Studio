@@ -34,16 +34,11 @@
 #include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
 #include "SSAssert.h"
+#include "UI/Widgets/Terminal/Vt100Keymap.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "Licensing/LemonSqueezy.h"
 #endif
-
-/**
- * @brief Cap on the upfront buffer reservation so large scrollback settings do not
- *        front-load multi-megabyte allocations; growth beyond it is amortized.
- */
-constexpr int MAX_UPFRONT_RESERVE = 10000;
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & initialization
@@ -67,21 +62,22 @@ Widgets::Terminal::Terminal(QQuickItem* parent)
   , m_borderX(0)
   , m_borderY(0)
   , m_scrollOffsetY(0)
-  , m_maxLines(m_consoleHandler.scrollbackLines())
   , m_dragThumbGrabY(0)
   , m_paused(false)
   , m_autoscroll(true)
   , m_ansiColors(false)
   , m_emulateVt100(false)
-  , m_collapseDuplicates(m_consoleHandler.collapseDuplicates())
   , m_cursorVisible(true)
   , m_mouseTracking(false)
   , m_draggingScrollbar(false)
   , m_stateChanged(false)
   , m_cursorHidden(false)
+  , m_buffer(m_ansiPalette)
   , m_ansi(*this)
   , m_badgeMetrics(QFont())
 {
+  m_buffer.setMaxLines(m_consoleHandler.scrollbackLines());
+  m_buffer.setCollapseDuplicates(m_consoleHandler.collapseDuplicates());
   initBuffer();
 
   setFlag(ItemHasContents, true);
@@ -103,7 +99,7 @@ Widgets::Terminal::Terminal(QQuickItem* parent)
     &m_themeManager, &Misc::ThemeManager::themeChanged, this, &Widgets::Terminal::onThemeChanged);
   connect(&m_consoleHandler, &Console::Handler::displayString, this, &Widgets::Terminal::append);
   connect(&m_consoleHandler, &Console::Handler::collapseDuplicatesChanged, this, [this] {
-    m_collapseDuplicates = m_consoleHandler.collapseDuplicates();
+    m_buffer.setCollapseDuplicates(m_consoleHandler.collapseDuplicates());
   });
   connect(&m_consoleHandler,
           &Console::Handler::scrollbackLinesChanged,
@@ -113,22 +109,15 @@ Widgets::Terminal::Terminal(QQuickItem* parent)
   connect(&m_connectionManager, &IO::ConnectionManager::connectedChanged, this, [=, this] {
     if (m_connectionManager.isConnected())
       clear();
-    else if (m_data.isEmpty())
+    else if (m_buffer.lines().isEmpty())
       loadWelcomeGuide();
   });
 
   connect(this, &Widgets::Terminal::visibleChanged, this, [=, this] {
     if (isVisible()) {
       if (autoscroll() && linesPerPage() > 0) {
-        int cursorLine   = m_cursorPosition.y();
-        int wrappedLines = 1;
-        if (cursorLine < m_data.size()) {
-          int lineLength = m_data[cursorLine].length();
-          wrappedLines   = (lineLength + maxCharsPerLine() - 1) / maxCharsPerLine();
-        }
-
-        int visualBottom = cursorLine + wrappedLines - 1;
-        setScrollOffsetY(qMax(0, visualBottom - linesPerPage() + 1));
+        syncBufferGeometry();
+        setScrollOffsetY(qMax(0, m_buffer.visualBottomRow() - linesPerPage() + 1));
       }
 
       update();
@@ -296,9 +285,10 @@ void Widgets::Terminal::renderAnsiSegment(QPainter* painter,
  */
 void Widgets::Terminal::drawCursor(QPainter* painter, int firstLine, int lastVLine, int lineHeight)
 {
-  const int cursorLine = m_cursorPosition.y();
-  const int cursorCol  = m_cursorPosition.x();
-  const bool rtl       = m_translator.rtl();
+  const QStringList& data = m_buffer.lines();
+  const int cursorLine    = m_buffer.cursor().y();
+  const int cursorCol     = m_buffer.cursor().x();
+  const bool rtl          = m_translator.rtl();
   const int emptyCursorX =
     rtl ? (width() - m_borderX - painter->fontMetrics().horizontalAdvance(QChar(0x2588)))
         : m_borderX;
@@ -306,8 +296,8 @@ void Widgets::Terminal::drawCursor(QPainter* painter, int firstLine, int lastVLi
   int visualLineY  = m_borderY;
   bool cursorDrawn = false;
 
-  for (int i = firstLine; i <= lastVLine && i < m_data.size(); ++i) {
-    const QString& line = m_data[i];
+  for (int i = firstLine; i <= lastVLine && i < data.size(); ++i) {
+    const QString& line = data[i];
 
     if (line.isEmpty()) {
       if (i == cursorLine) {
@@ -344,7 +334,7 @@ void Widgets::Terminal::drawCursor(QPainter* painter, int firstLine, int lastVLi
       break;
   }
 
-  if (!cursorDrawn && cursorLine >= m_data.size()) {
+  if (!cursorDrawn && cursorLine >= data.size()) {
     painter->setPen(m_palette.color(QPalette::Text));
     // code-verify off
     painter->drawText(emptyCursorX, visualLineY + m_cHeight, QStringLiteral("█"));
@@ -419,9 +409,11 @@ void Widgets::Terminal::paintSelectionHighlights(QPainter* painter,
                                                  int lastVLine,
                                                  int lineHeight)
 {
+  const QStringList& data = m_buffer.lines();
+
   int y = m_borderY;
   for (int i = firstLine; i <= lastVLine && y < height() - m_borderY; ++i) {
-    const QString& line = m_data[i];
+    const QString& line = data[i];
     bool lineFullySelected =
       !m_selectionEnd.isNull() && i >= m_selectionStart.y() && i < m_selectionEnd.y();
 
@@ -521,7 +513,8 @@ void Widgets::Terminal::paintSearchHighlights(QPainter* painter,
   if (searchMatches.isEmpty())
     return;
 
-  const QFontMetrics fm = painter->fontMetrics();
+  const QFontMetrics fm   = painter->fontMetrics();
+  const QStringList& data = m_buffer.lines();
 
   const qsizetype matchCount = searchMatches.size();
   qsizetype k                = 0;
@@ -530,7 +523,7 @@ void Widgets::Terminal::paintSearchHighlights(QPainter* painter,
 
   int y = m_borderY;
   for (int i = firstLine; i <= lastVLine && y < height() - m_borderY; ++i) {
-    const QString& line = m_data[i];
+    const QString& line = data[i];
 
     const qsizetype lineFirst = k;
     while (k < matchCount && searchMatches[k].y() <= i)
@@ -602,10 +595,13 @@ void Widgets::Terminal::paintTextContent(QPainter* painter,
   const int ascent              = painter->fontMetrics().ascent();
   const auto& fm                = painter->fontMetrics();
 
-  const auto savedDir = painter->layoutDirection();
+  const auto savedDir       = painter->layoutDirection();
+  const QStringList& data   = m_buffer.lines();
+  const auto& colorRows     = m_buffer.colorRows();
+  const QList<int>& repeats = m_buffer.repeatCounts();
 
   for (int i = firstLine; i <= lastVLine && y < height() - m_borderY; ++i) {
-    const QString& line = m_data[i];
+    const QString& line = data[i];
 
     if (line.isEmpty()) {
       y += lineHeight;
@@ -613,13 +609,13 @@ void Widgets::Terminal::paintTextContent(QPainter* painter,
     }
 
     if (rtlMode) {
-      const bool lineHasRtl = lineHasRtlChar(line);
+      const bool lineHasRtl = TerminalBuffer::lineHasRtlChar(line);
       painter->setLayoutDirection(lineHasRtl ? Qt::RightToLeft : Qt::LeftToRight);
     }
 
     const QList<CharColor>* colorLine = nullptr;
-    if (ansiColors() && i < m_colorData.size())
-      colorLine = &m_colorData[i];
+    if (ansiColors() && i < colorRows.size())
+      colorLine = &colorRows[i];
 
     int start = 0;
     while (start < line.length()) {
@@ -629,8 +625,8 @@ void Widgets::Terminal::paintTextContent(QPainter* painter,
 
       paintSegment(painter, segment, start, colorLine, defaultTextColor, x, y, ascent, rtlMode);
 
-      if (end == line.length() && i < m_repeatCounts.size() && m_repeatCounts[i] > 1)
-        drawRepeatBadge(painter, m_repeatCounts[i], fm.horizontalAdvance(segment), y, rtlMode);
+      if (end == line.length() && i < repeats.size() && repeats[i] > 1)
+        drawRepeatBadge(painter, repeats[i], fm.horizontalAdvance(segment), y, rtlMode);
 
       y     += lineHeight;
       start  = end;
@@ -819,7 +815,7 @@ bool Widgets::Terminal::autoscroll() const
  */
 bool Widgets::Terminal::copyAvailable() const
 {
-  return (!m_selectionEnd.isNull() || !m_selectionStart.isNull()) && !m_data.isEmpty();
+  return (!m_selectionEnd.isNull() || !m_selectionStart.isNull()) && !m_buffer.lines().isEmpty();
 }
 
 /**
@@ -847,7 +843,7 @@ bool Widgets::Terminal::ansiColors() const
  */
 int Widgets::Terminal::lineCount() const
 {
-  return m_data.size();
+  return m_buffer.lineCount();
 }
 
 /**
@@ -907,7 +903,7 @@ void Widgets::Terminal::keyPressEvent(QKeyEvent* event)
     return;
   }
 
-  const QByteArray seq = translateKeyToVt100(event);
+  const QByteArray seq = Vt100Keymap::translate(event, translateEnterKey());
   if (!seq.isEmpty()) {
     const int deviceId = m_consoleHandler.currentDeviceId();
     if (deviceId >= 0)
@@ -923,45 +919,12 @@ void Widgets::Terminal::keyPressEvent(QKeyEvent* event)
 }
 
 /**
- * @brief Maps a Qt key event to its VT-100 byte sequence; empty if unmapped.
- */
-QByteArray Widgets::Terminal::translateKeyToVt100(const QKeyEvent* event)
-{
-  QByteArray seq;
-  const Qt::KeyboardModifiers mods = event->modifiers();
-  const int key                    = event->key();
-
-  if ((mods & Qt::ControlModifier) && key >= Qt::Key_A && key <= Qt::Key_Z) {
-    seq.append(char(key - Qt::Key_A + 1));
-    return seq;
-  }
-
-  if ((mods & Qt::ControlModifier) && key == Qt::Key_BracketLeft) {
-    seq.append('\x1b');
-    return seq;
-  }
-
-  if (key == Qt::Key_Return || key == Qt::Key_Enter)
-    return translateEnterKey();
-
-  seq = translateSpecialKey(key);
-  if (!seq.isEmpty())
-    return seq;
-
-  if (!event->text().isEmpty())
-    seq = event->text().toUtf8();
-
-  return seq;
-}
-
-/**
  * @brief Returns the byte sequence for Return/Enter under the active line ending.
  */
-QByteArray Widgets::Terminal::translateEnterKey()
+QByteArray Widgets::Terminal::translateEnterKey() const
 {
   QByteArray seq;
-  static auto& consoleHandler = Console::Handler::instance();
-  switch (consoleHandler.lineEnding()) {
+  switch (m_consoleHandler.lineEnding()) {
     case Console::Handler::LineEnding::NoLineEnding:
       break;
     case Console::Handler::LineEnding::NewLine:
@@ -980,106 +943,16 @@ QByteArray Widgets::Terminal::translateEnterKey()
 }
 
 /**
- * @brief Maps editing, navigation, and F-keys to their VT-100 byte sequences.
- */
-QByteArray Widgets::Terminal::translateSpecialKey(int key)
-{
-  QByteArray seq;
-  switch (key) {
-    case Qt::Key_Backspace:
-      seq.append('\x7f');
-      break;
-    case Qt::Key_Delete:
-      seq.append("\x1b[3~");
-      break;
-    case Qt::Key_Tab:
-      seq.append('\t');
-      break;
-    case Qt::Key_Backtab:
-      seq.append("\x1b[Z");
-      break;
-    case Qt::Key_Escape:
-      seq.append('\x1b');
-      break;
-    case Qt::Key_Up:
-      seq.append("\x1b[A");
-      break;
-    case Qt::Key_Down:
-      seq.append("\x1b[B");
-      break;
-    case Qt::Key_Right:
-      seq.append("\x1b[C");
-      break;
-    case Qt::Key_Left:
-      seq.append("\x1b[D");
-      break;
-    case Qt::Key_Home:
-      seq.append("\x1b[H");
-      break;
-    case Qt::Key_End:
-      seq.append("\x1b[F");
-      break;
-    case Qt::Key_PageUp:
-      seq.append("\x1b[5~");
-      break;
-    case Qt::Key_PageDown:
-      seq.append("\x1b[6~");
-      break;
-    case Qt::Key_Insert:
-      seq.append("\x1b[2~");
-      break;
-    case Qt::Key_F1:
-      seq.append("\x1bOP");
-      break;
-    case Qt::Key_F2:
-      seq.append("\x1bOQ");
-      break;
-    case Qt::Key_F3:
-      seq.append("\x1bOR");
-      break;
-    case Qt::Key_F4:
-      seq.append("\x1bOS");
-      break;
-    case Qt::Key_F5:
-      seq.append("\x1b[15~");
-      break;
-    case Qt::Key_F6:
-      seq.append("\x1b[17~");
-      break;
-    case Qt::Key_F7:
-      seq.append("\x1b[18~");
-      break;
-    case Qt::Key_F8:
-      seq.append("\x1b[19~");
-      break;
-    case Qt::Key_F9:
-      seq.append("\x1b[20~");
-      break;
-    case Qt::Key_F10:
-      seq.append("\x1b[21~");
-      break;
-    case Qt::Key_F11:
-      seq.append("\x1b[23~");
-      break;
-    case Qt::Key_F12:
-      seq.append("\x1b[24~");
-      break;
-    default:
-      break;
-  }
-
-  return seq;
-}
-
-/**
  * @brief Emits terminalSizeChanged() whenever the widget is resized.
  */
 void Widgets::Terminal::geometryChange(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
   QQuickPaintedItem::geometryChange(newGeometry, oldGeometry);
 
-  if (newGeometry.size() != oldGeometry.size())
+  if (newGeometry.size() != oldGeometry.size()) {
+    syncBufferGeometry();
     Q_EMIT terminalSizeChanged();
+  }
 }
 
 /**
@@ -1087,7 +960,7 @@ void Widgets::Terminal::geometryChange(const QRectF& newGeometry, const QRectF& 
  */
 const QPoint& Widgets::Terminal::cursorPosition() const
 {
-  return m_cursorPosition;
+  return m_buffer.cursor();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1133,18 +1006,19 @@ int Widgets::Terminal::calcCursorPixelX(
  */
 QPoint Widgets::Terminal::positionToCursor(const QPoint& pos) const
 {
-  int localY     = (pos.y() - m_borderY) / m_cHeight;
-  int remainingY = localY;
+  const QStringList& data = m_buffer.lines();
+  int localY              = (pos.y() - m_borderY) / m_cHeight;
+  int remainingY          = localY;
 
   if (localY < 0) {
-    if (m_scrollOffsetY < m_data.size())
+    if (m_scrollOffsetY < data.size())
       return QPoint(0, m_scrollOffsetY);
 
     return QPoint(0, 0);
   }
 
-  for (int i = m_scrollOffsetY; i < m_data.size(); ++i) {
-    const QString& line = m_data[i];
+  for (int i = m_scrollOffsetY; i < data.size(); ++i) {
+    const QString& line = data[i];
 
     if (line.isEmpty()) {
       if (remainingY == 0)
@@ -1170,9 +1044,9 @@ QPoint Widgets::Terminal::positionToCursor(const QPoint& pos) const
     return QPoint(findCharAtPixelX(line, segmentStart, segmentEnd, relX), i);
   }
 
-  if (!m_data.isEmpty()) {
-    int lastLine = m_data.size() - 1;
-    int lastChar = m_data.last().length();
+  if (!data.isEmpty()) {
+    int lastLine = static_cast<int>(data.size()) - 1;
+    int lastChar = static_cast<int>(data.last().length());
     return QPoint(lastChar, lastLine);
   }
 
@@ -1188,14 +1062,15 @@ void Widgets::Terminal::copy()
     return;
 
   QString copiedText;
-  QPoint start = m_selectionStart;
-  QPoint end   = m_selectionEnd;
+  const QStringList& data = m_buffer.lines();
+  QPoint start            = m_selectionStart;
+  QPoint end              = m_selectionEnd;
 
   if (start.y() > end.y() || (start.y() == end.y() && start.x() > end.x()))
     std::swap(start, end);
 
   for (int lineIndex = start.y(); lineIndex <= end.y(); ++lineIndex) {
-    const QString& line = m_data[lineIndex];
+    const QString& line = data[lineIndex];
 
     int startX = (lineIndex == start.y()) ? start.x() : 0;
     int endX   = (lineIndex == end.y()) ? end.x() : line.size();
@@ -1235,12 +1110,13 @@ void Widgets::Terminal::clear()
  */
 void Widgets::Terminal::selectAll()
 {
-  if (m_data.isEmpty())
+  const QStringList& data = m_buffer.lines();
+  if (data.isEmpty())
     return;
 
   m_selectionStart       = QPoint(0, 0);
-  int lastLineIndex      = m_data.size() - 1;
-  int lastCharIndex      = m_data[lastLineIndex].size();
+  int lastLineIndex      = static_cast<int>(data.size()) - 1;
+  int lastCharIndex      = static_cast<int>(data[lastLineIndex].size());
   m_selectionEnd         = QPoint(lastCharIndex, lastLineIndex);
   m_selectionStartCursor = m_selectionStart;
 
@@ -1337,7 +1213,7 @@ void Widgets::Terminal::clearSearch()
  */
 void Widgets::Terminal::refreshSearchMatches()
 {
-  m_search.refresh(m_data);
+  m_search.refresh(m_buffer.lines());
   m_stateChanged = true;
   Q_EMIT searchResultsChanged();
 }
@@ -1387,6 +1263,7 @@ void Widgets::Terminal::setFont(const QFont& font)
   m_badgeFont.setPointSize(qMax(6, m_font.pointSize() - 2));
   m_badgeMetrics = QFontMetrics(m_badgeFont);
 
+  syncBufferGeometry();
   Q_EMIT fontChanged();
 }
 
@@ -1446,6 +1323,7 @@ void Widgets::Terminal::setColorPalette(const QPalette& palette)
 void Widgets::Terminal::setVt100Emulation(const bool enabled)
 {
   m_emulateVt100 = enabled;
+  m_buffer.setAnsiColors(ansiColors());
   Q_EMIT vt100EmulationChanged();
 }
 
@@ -1455,10 +1333,11 @@ void Widgets::Terminal::setVt100Emulation(const bool enabled)
 void Widgets::Terminal::setAnsiColors(const bool enabled)
 {
   m_ansiColors = enabled;
+  m_buffer.setAnsiColors(ansiColors());
 
   if (enabled) {
     m_ansiPalette.resetForeground();
-    m_colorData.reserve(qMin(m_maxLines, MAX_UPFRONT_RESERVE));
+    m_buffer.reserveColorRows();
   }
 
   Q_EMIT ansiColorsChanged();
@@ -1538,17 +1417,8 @@ void Widgets::Terminal::loadWelcomeGuide()
   setAutoscroll(true);
 
   const int lines = linesPerPage();
-  if (lines > 0 && height() > 0) {
-    int cursorLine   = m_cursorPosition.y();
-    int wrappedLines = 1;
-    if (cursorLine < m_data.size()) {
-      int lineLength = m_data[cursorLine].length();
-      wrappedLines   = (lineLength + maxCharsPerLine() - 1) / maxCharsPerLine();
-    }
-
-    int visualBottom = cursorLine + wrappedLines - 1;
-    setScrollOffsetY(qMax(0, visualBottom - lines + 1));
-  }
+  if (lines > 0 && height() > 0)
+    setScrollOffsetY(qMax(0, m_buffer.visualBottomRow() - lines + 1));
 
   m_stateChanged = true;
 }
@@ -1558,50 +1428,17 @@ void Widgets::Terminal::loadWelcomeGuide()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Appends a string of data to the terminal, processing each character accordingly.
- */
-/**
- * @brief Scans a printable-character run starting at @p pos in @p data; returns end offset.
- */
-int Widgets::Terminal::scanPrintableRun(const QString& data, int pos)
-{
-  const int len = data.size();
-  while (pos < len) {
-    const auto ch = data[pos].unicode();
-
-    if (ch == 0x1b || ch == '\n' || ch == '\r' || ch == '\b' || ch == 0x7F || ch == '\t')
-      break;
-
-    if (ch < 0x20)
-      break;
-
-    ++pos;
-  }
-
-  return pos;
-}
-
-/**
- * @brief Returns true when @p line contains any RTL-direction character.
- */
-bool Widgets::Terminal::lineHasRtlChar(QStringView line)
-{
-  for (const QChar c : line) {
-    const auto dir = c.direction();
-    if (dir == QChar::DirR || dir == QChar::DirAL)
-      return true;
-  }
-
-  return false;
-}
-
-/**
- * @brief Appends data to the terminal, processing it through the VT-100 state machine.
+ * @brief Appends data to the terminal, processing it through the VT-100 state machine. The line
+ *        store owns the control-character lane and reports back the one thing it cannot handle
+ *        itself: an ESC that opens an escape sequence.
  */
 void Widgets::Terminal::append(const QString& data)
 {
   if (m_paused)
     return;
+
+  syncBufferGeometry();
+  m_buffer.setShowTimestamps(m_consoleHandler.showTimestamp());
 
   QString text;
   text.reserve(data.size());
@@ -1610,22 +1447,24 @@ void Widgets::Terminal::append(const QString& data)
   const int len = data.size();
 
   while (pos < len) {
-    if (m_ansi.inTextState()) [[likely]] {
-      const int runStart = pos;
-      pos                = scanPrintableRun(data, pos);
-
-      if (pos > runStart)
-        text.append(QStringView(data).mid(runStart, pos - runStart));
-
-      if (pos < len && m_ansi.inTextState()) {
-        processText(data[pos], text);
-        ++pos;
-      }
-
+    if (!m_ansi.inTextState()) [[unlikely]] {
+      m_ansi.feed(data[pos]);
+      ++pos;
       continue;
     }
 
-    m_ansi.feed(data[pos]);
+    const int runStart = pos;
+    pos                = TerminalBuffer::scanPrintableRun(data, pos);
+
+    if (pos > runStart)
+      text.append(QStringView(data).mid(runStart, pos - runStart));
+
+    if (pos >= len || !m_ansi.inTextState())
+      continue;
+
+    if (m_buffer.processText(data[pos], text, vt100emulation()) == TerminalBuffer::BeginEscape)
+      m_ansi.beginEscape();
+
     ++pos;
   }
 
@@ -1638,60 +1477,59 @@ void Widgets::Terminal::append(const QString& data)
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Pushes the live character geometry into the line store, whose cursor clamp and
+ *        wrapped-row math are computed from it; refreshed before every feed and on every font or
+ *        size change so the buffer never has to read back from the widget per character.
+ */
+void Widgets::Terminal::syncBufferGeometry()
+{
+  m_buffer.setColumns(maxCharsPerLine());
+}
+
+/**
  * @brief Re-reads the scrollback setting and trims the buffer front when it now exceeds
  *        the cap, squeezing afterwards because a QList front-erase strands its capacity;
  *        raising the cap only lets future appends grow further.
  */
 void Widgets::Terminal::applyScrollbackLimit()
 {
-  m_maxLines = m_consoleHandler.scrollbackLines();
-  SS_ASSERT(m_maxLines >= 100 && m_maxLines <= 100000,
-            m_maxLines = qBound(100, m_maxLines, 100000));
+  int maxLines = m_consoleHandler.scrollbackLines();
+  SS_ASSERT(maxLines >= 100 && maxLines <= 100000, maxLines = qBound(100, maxLines, 100000));
+  m_buffer.setMaxLines(maxLines);
 
-  const int excess = static_cast<int>(m_data.size()) - m_maxLines;
-  if (excess > 0) {
-    trimExcessLines(excess);
-    m_data.squeeze();
-    m_colorData.squeeze();
-    m_repeatCounts.squeeze();
-  }
+  const int dropped = m_buffer.trimToMaxLines();
+  drainBufferEvents();
+  if (dropped > 0)
+    m_buffer.squeeze();
 
   m_stateChanged = true;
   update();
 }
 
 /**
- * @brief Drops @p linesToDrop rows from the front of the buffer, keeping the color rows,
- *        repeat counts, cursor, scroll offset, selection, and search state in lockstep.
+ * @brief Publishes what a buffer mutation changed. The line store is not a QObject: it records
+ *        dropped rows and cursor moves, and this is the one place that turns them into the view
+ *        state and the signals the QML side binds to.
  */
-void Widgets::Terminal::trimExcessLines(int linesToDrop)
+void Widgets::Terminal::drainBufferEvents()
+{
+  const int dropped = m_buffer.takeDroppedLines();
+  if (dropped > 0)
+    applyLineDrop(dropped);
+
+  if (m_buffer.takeCursorMoved())
+    Q_EMIT cursorMoved();
+}
+
+/**
+ * @brief Shifts the scroll offset, the selection and the search state after @p linesToDrop rows
+ *        left the front of the buffer; the cursor row was already moved by the buffer itself.
+ */
+void Widgets::Terminal::applyLineDrop(int linesToDrop)
 {
   SS_ASSERT(linesToDrop > 0, return);
-  SS_ASSERT(linesToDrop <= m_data.size(), linesToDrop = static_cast<int>(m_data.size()));
-
-  m_data.erase(m_data.begin(), m_data.begin() + linesToDrop);
-
-  // code-verify off
-  // Trim color rows in lockstep with text rows regardless of the ansiColors() toggle: rows
-  // recorded while colors were on must not survive as a stale, misaligned front.
-  if (!m_colorData.isEmpty()) {
-    const int colorDrop = qMin(linesToDrop, static_cast<int>(m_colorData.size()));
-    m_colorData.erase(m_colorData.begin(), m_colorData.begin() + colorDrop);
-  }
-
-  if (!m_repeatCounts.isEmpty()) {
-    const int countDrop = qMin(linesToDrop, static_cast<int>(m_repeatCounts.size()));
-    m_repeatCounts.erase(m_repeatCounts.begin(), m_repeatCounts.begin() + countDrop);
-  }
 
   m_search.markDirty();
-  // code-verify on
-
-  if (m_cursorPosition.y() >= linesToDrop)
-    m_cursorPosition.setY(m_cursorPosition.y() - linesToDrop);
-  else
-    m_cursorPosition.setY(0);
-
   setScrollOffsetY(qMax(0, m_scrollOffsetY - linesToDrop));
 
   if (!m_selectionEnd.isNull() || !m_selectionStart.isNull()) {
@@ -1720,122 +1558,27 @@ void Widgets::Terminal::trimExcessLines(int linesToDrop)
 }
 
 /**
+ * @brief Pins the bottom of the viewport to the cursor's last visual row while autoscroll is on.
+ */
+void Widgets::Terminal::syncAutoscroll()
+{
+  if (!autoscroll())
+    return;
+
+  m_scrollOffsetY = qMax(0, m_buffer.visualBottomRow() - linesPerPage() + 1);
+  if (isVisible())
+    Q_EMIT scrollOffsetYChanged();
+}
+
+/**
  * @brief Appends a string to the terminal's data buffer, updating the cursor position.
  */
 void Widgets::Terminal::appendString(QStringView string)
 {
-  const int linesToDrop = m_data.size() - m_maxLines + 1;
-  if (m_data.size() >= m_maxLines && linesToDrop > 0)
-    trimExcessLines(linesToDrop);
-
-  for (const auto& character : string) {
-    int cursorX = m_cursorPosition.x();
-    int cursorY = m_cursorPosition.y();
-    replaceData(cursorX, cursorY, character);
-    setCursorPosition(cursorX + 1, cursorY);
-
-    if (m_cursorPosition.x() >= maxCharsPerLine())
-      setCursorPosition(0, m_cursorPosition.y() + 1);
-  }
-
-  if (autoscroll()) {
-    int cursorLine   = m_cursorPosition.y();
-    int wrappedLines = 1;
-    if (cursorLine < m_data.size()) {
-      int lineLength = m_data[cursorLine].length();
-      wrappedLines   = (lineLength + maxCharsPerLine() - 1) / maxCharsPerLine();
-    }
-
-    int visualBottom = cursorLine + wrappedLines - 1;
-
-    m_scrollOffsetY = qMax(0, visualBottom - linesPerPage() + 1);
-    if (isVisible())
-      Q_EMIT scrollOffsetYChanged();
-  }
-}
-
-/**
- * @brief Returns true when @p line starts with a well-formed "HH:mm:ss.zzz -> " stamp.
- */
-bool Widgets::Terminal::hasTimestampPrefix(QStringView line)
-{
-  constexpr int kStampLen        = 16;
-  constexpr int kDigitIndices[9] = {0, 1, 3, 4, 6, 7, 9, 10, 11};
-
-  if (line.size() < kStampLen)
-    return false;
-
-  if (line[2] != QLatin1Char(':') || line[5] != QLatin1Char(':') || line[8] != QLatin1Char('.'))
-    return false;
-
-  if (line[12] != QLatin1Char(' ') || line[13] != QLatin1Char('-') || line[14] != QLatin1Char('>')
-      || line[15] != QLatin1Char(' '))
-    return false;
-
-  for (const int index : kDigitIndices)
-    if (!line[index].isDigit())
-      return false;
-
-  return true;
-}
-
-/**
- * @brief Returns the comparable content of @p line for duplicate collapsing, skipping the
- *        timestamp stamp prefix when timestamps are enabled and the prefix shape matches.
- */
-QStringView Widgets::Terminal::lineContentView(QStringView line) const
-{
-  constexpr int kStampLen = 16;
-
-  if (!m_consoleHandler.showTimestamp() || !hasTimestampPrefix(line))
-    return line;
-
-  return line.mid(kStampLen);
-}
-
-/**
- * @brief Merges the just-completed line into the previous row when duplicate collapsing is
- *        on and both rows carry identical content; returns true when the row was merged so
- *        the caller reuses the freed row index for the next line.
- */
-bool Widgets::Terminal::collapseCompletedLine()
-{
-  if (!m_collapseDuplicates)
-    return false;
-
-  const int y = m_cursorPosition.y();
-  if (y < 1 || y != m_data.size() - 1)
-    return false;
-
-  const auto current  = lineContentView(m_data[y]);
-  const auto previous = lineContentView(m_data[y - 1]);
-  if (current.trimmed().isEmpty() || current != previous)
-    return false;
-
-  m_data.removeLast();
-  if (m_colorData.size() > m_data.size())
-    m_colorData.resize(m_data.size());
-
-  if (m_repeatCounts.size() > m_data.size())
-    m_repeatCounts.resize(m_data.size());
-
-  if (y - 1 < m_repeatCounts.size() && m_repeatCounts[y - 1] < INT_MAX)
-    ++m_repeatCounts[y - 1];
-
+  m_buffer.appendText(string);
   m_search.markDirty();
-
-  if (autoscroll()) {
-    const int lastRow = m_data.size() - 1;
-    const int length  = m_data[lastRow].length();
-    const int wrapped = qMax(1, (length + maxCharsPerLine() - 1) / maxCharsPerLine());
-
-    m_scrollOffsetY = qMax(0, lastRow + wrapped - linesPerPage());
-    if (isVisible())
-      Q_EMIT scrollOffsetYChanged();
-  }
-
-  m_stateChanged = true;
-  return true;
+  drainBufferEvents();
+  syncAutoscroll();
 }
 
 /**
@@ -1843,34 +1586,12 @@ bool Widgets::Terminal::collapseCompletedLine()
  */
 void Widgets::Terminal::removeStringFromCursor(const Direction direction, int len)
 {
-  const auto positionX = m_cursorPosition.x();
-  const auto positionY = m_cursorPosition.y();
+  const auto sense =
+    (direction == LeftDirection) ? AnsiEraseDirection::Left : AnsiEraseDirection::Right;
 
-  if (len < 0)
-    len = INT_MAX;
-
-  int removeSize = 0;
-  if (direction == RightDirection) {
-    const qsizetype lineLen =
-      (positionY >= 0 && positionY < m_data.size()) ? m_data[positionY].size() : qsizetype(0);
-    const qsizetype l1 = lineLen - positionX;
-    const qsizetype l2 = static_cast<qsizetype>(len);
-    removeSize         = static_cast<int>(qMin(qMax(l1, qsizetype(0)), l2));
-  }
-
-  else
-    removeSize = qMin(len, m_cursorPosition.x());
-
-  int offset = 0;
-  const QChar clearChar('\x7F');
-  for (int i = 0; i < removeSize; ++i) {
-    if (direction == LeftDirection)
-      offset = -1 - i;
-    else if (direction == RightDirection)
-      offset = i;
-
-    replaceData(m_cursorPosition.x() + offset, positionY, clearChar);
-  }
+  m_buffer.removeFromCursor(sense, len);
+  m_search.markDirty();
+  drainBufferEvents();
 }
 
 /**
@@ -1878,93 +1599,12 @@ void Widgets::Terminal::removeStringFromCursor(const Direction direction, int le
  */
 void Widgets::Terminal::initBuffer()
 {
-  const int reserveLines = qMin(m_maxLines, MAX_UPFRONT_RESERVE);
-
-  m_data.clear();
-  m_data.squeeze();
+  m_buffer.reset();
   m_scrollOffsetY = 0;
-  m_data.reserve(reserveLines);
-  m_colorData.clear();
-  m_colorData.squeeze();
-  m_repeatCounts.clear();
-  m_repeatCounts.squeeze();
-  m_repeatCounts.reserve(reserveLines);
   m_search.markDirty();
 
-  if (ansiColors()) {
-    m_colorData.reserve(reserveLines);
+  if (ansiColors())
     m_ansiPalette.resetForeground();
-  }
-}
-
-//--------------------------------------------------------------------------------------------------
-// Text lane
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Processes a single character in the context of normal text input.
- */
-void Widgets::Terminal::processText(const QChar& byte, QString& text)
-{
-  const ushort code = byte.unicode();
-  const bool vt     = vt100emulation();
-
-  if (code == '\n') {
-    appendString(text);
-    text.clear();
-
-    const int next_row = m_cursorPosition.y() + (collapseCompletedLine() ? 0 : 1);
-    setCursorPosition(0, next_row);
-    return;
-  }
-
-  if (!vt) {
-    if (byte.isPrint())
-      text.append(byte);
-
-    return;
-  }
-
-  switch (code) {
-    case 0x1b:
-      appendString(text);
-      text.clear();
-      m_ansi.beginEscape();
-      return;
-    case '\r':
-      appendString(text);
-      text.clear();
-      setCursorPosition(0, m_cursorPosition.y());
-      return;
-    case '\b':
-      if (m_cursorPosition.x() == 0)
-        return;
-
-      appendString(text);
-      text.clear();
-      setCursorPosition(m_cursorPosition.x() - 1, m_cursorPosition.y());
-      return;
-    case 0x7F:
-      appendString(text);
-      text.clear();
-      removeStringFromCursor(RightDirection, 1);
-      return;
-    case '\t': {
-      appendString(text);
-      text.clear();
-      const int nextTab = (m_cursorPosition.x() / 8 + 1) * 8;
-      const int spaces  = nextTab - m_cursorPosition.x();
-      text.fill(' ', spaces);
-      appendString(text);
-      text.clear();
-      return;
-    }
-    default:
-      break;
-  }
-
-  if (byte.isPrint())
-    text.append(byte);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1976,7 +1616,7 @@ void Widgets::Terminal::processText(const QChar& byte, QString& text)
  */
 QPoint Widgets::Terminal::currentCursor() const
 {
-  return m_cursorPosition;
+  return m_buffer.cursor();
 }
 
 /**
@@ -2021,16 +1661,7 @@ void Widgets::Terminal::eraseFromCursor(AnsiEraseDirection direction, int length
  */
 void Widgets::Terminal::eraseRowsAfter(int row)
 {
-  if (row + 1 >= m_data.size())
-    return;
-
-  m_data.erase(m_data.begin() + row + 1, m_data.end());
-  if (ansiColors() && row + 1 < m_colorData.size())
-    m_colorData.erase(m_colorData.begin() + row + 1, m_colorData.end());
-
-  if (row + 1 < m_repeatCounts.size())
-    m_repeatCounts.erase(m_repeatCounts.begin() + row + 1, m_repeatCounts.end());
-
+  m_buffer.eraseRowsAfter(row);
   m_search.markDirty();
 }
 
@@ -2040,17 +1671,7 @@ void Widgets::Terminal::eraseRowsAfter(int row)
  */
 void Widgets::Terminal::eraseRowsBefore(int row)
 {
-  if (row <= 0)
-    return;
-
-  m_data.erase(m_data.begin(), m_data.begin() + row);
-  if (ansiColors() && row < m_colorData.size())
-    m_colorData.erase(m_colorData.begin(), m_colorData.begin() + row);
-
-  const auto countDrop = qMin<qsizetype>(row, m_repeatCounts.size());
-  if (countDrop > 0)
-    m_repeatCounts.erase(m_repeatCounts.begin(), m_repeatCounts.begin() + countDrop);
-
+  m_buffer.eraseRowsBefore(row);
   m_search.markDirty();
 }
 
@@ -2127,16 +1748,13 @@ QString Widgets::Terminal::formatDebugMessage(QtMsgType type,
 }
 
 /**
- * @brief Sets the cursor position to a specified point.
+ * @brief Sets the cursor position to a specified point; the line store clamps it to the column
+ *        count and the scrollback cap, and reports back whether it actually moved.
  */
 void Widgets::Terminal::setCursorPosition(const QPoint& position)
 {
-  const QPoint clamped(qBound(0, position.x(), maxCharsPerLine()),
-                       qBound(0, position.y(), m_maxLines));
-  if (m_cursorPosition != clamped) {
-    m_cursorPosition = clamped;
-    Q_EMIT cursorMoved();
-  }
+  m_buffer.setCursor(position);
+  drainBufferEvents();
 }
 
 /**
@@ -2145,51 +1763,6 @@ void Widgets::Terminal::setCursorPosition(const QPoint& position)
 void Widgets::Terminal::setCursorPosition(const int x, const int y)
 {
   setCursorPosition(QPoint(x, y));
-}
-
-/**
- * @brief Replaces or inserts a character in the terminal buffer at a specified position.
- */
-void Widgets::Terminal::replaceData(int x, int y, const QChar& byte)
-{
-  if (y >= m_data.size())
-    m_data.resize(y + 1);
-
-  while (m_repeatCounts.size() < m_data.size())
-    m_repeatCounts.append(1);
-
-  m_search.markDirty();
-  QString& line = m_data[y];
-
-  if (ansiColors()) {
-    if (y >= m_colorData.size())
-      m_colorData.resize(y + 1);
-
-    QList<CharColor>& colorLine = m_colorData[y];
-
-    if (x > line.size()) {
-      const int padCount = x - line.size();
-      for (int i = 0; i < padCount; ++i)
-        colorLine.append(CharColor());
-    }
-
-    while (colorLine.size() < line.size())
-      colorLine.append(CharColor());
-
-    const CharColor charColor(m_ansiPalette.foreground(), m_ansiPalette.background());
-    if (x >= 0 && x < colorLine.size())
-      colorLine[x] = charColor;
-    else if (x >= 0)
-      colorLine.append(charColor);
-  }
-
-  if (x > line.size())
-    line = line.leftJustified(x, ' ');
-
-  if (x >= 0 && x < line.size())
-    line[x] = byte.isPrint() ? byte : ' ';
-  else if (x >= 0)
-    line.append(byte.isPrint() ? byte : ' ');
 }
 
 /**
@@ -2344,9 +1917,10 @@ void Widgets::Terminal::mouseDoubleClickEvent(QMouseEvent* event)
   if (isOverScrollbar(event->position().toPoint()))
     return;
 
-  auto cursorPos = positionToCursor(event->pos());
-  if (cursorPos.y() >= 0 && cursorPos.y() < m_data.size()) {
-    const QString& line = m_data[cursorPos.y()];
+  const QStringList& data = m_buffer.lines();
+  auto cursorPos          = positionToCursor(event->pos());
+  if (cursorPos.y() >= 0 && cursorPos.y() < data.size()) {
+    const QString& line = data[cursorPos.y()];
 
     int wordStartX = cursorPos.x();
     int wordEndX   = cursorPos.x();

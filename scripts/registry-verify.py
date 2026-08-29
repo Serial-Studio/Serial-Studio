@@ -697,6 +697,7 @@ def check_api_snapshot(errors: list[str]) -> None:
 
 PROPERTY_SCHEMA = RCC / "properties" / "schema.json"
 FRAME_H = ROOT / "app" / "src" / "DataModel" / "Frame.h"
+FRAME_KEYS_H = ROOT / "app" / "src" / "DataModel" / "FrameKeys.h"
 HOOKS_H = ROOT / "app" / "src" / "DataModel" / "Project" / "PropertyHooks.h"
 EDITOR_H = ROOT / "app" / "src" / "DataModel" / "ProjectEditor.h"
 MODEL_H = ROOT / "app" / "src" / "DataModel" / "ProjectModel.h"
@@ -854,7 +855,7 @@ def manifest_field_owners(manifest: dict) -> dict[str, list[str]]:
 
 
 def check_manifest_keys(errors: list[str], manifest: dict, keys: set[str]) -> None:
-    """Every jsonKey the manifest names must be a real Keys:: constant in Frame.h."""
+    """Every jsonKey the manifest names must be a real Keys:: constant in FrameKeys.h."""
     referenced: list[tuple[str, str]] = []
     for prop in manifest["properties"]:
         if prop.get("jsonKey"):
@@ -873,7 +874,7 @@ def check_manifest_keys(errors: list[str], manifest: dict, keys: set[str]) -> No
             fail(
                 errors,
                 f"dataset.json: {owner} names jsonKey '{constant}', which is not a "
-                "Keys:: constant in app/src/DataModel/Frame.h",
+                "Keys:: constant in app/src/DataModel/FrameKeys.h",
             )
 
 
@@ -1054,7 +1055,10 @@ def check_property_manifests(errors: list[str]) -> None:
         seen.add(prop["id"])
 
     frame_text = FRAME_H.read_text(encoding="utf-8") if FRAME_H.exists() else ""
-    keys = set(re.findall(r"inline constexpr KeyView (\w+)\(", frame_text))
+    keys_text = (
+        FRAME_KEYS_H.read_text(encoding="utf-8") if FRAME_KEYS_H.exists() else ""
+    )
+    keys = set(re.findall(r"inline constexpr KeyView (\w+)\(", frame_text + keys_text))
     fields = struct_fields(frame_text, manifest["entity"])
     if not fields:
         fail(errors, f"could not parse struct {manifest['entity']} from Frame.h")

@@ -10,7 +10,7 @@
 - `ConnectionManager` (singleton, `Cpp_IO_Manager`) owns one **UI-config** instance per type:
   `instance().uart()`, `.network()`, `.bluetoothLE()`, etc. QML context properties
   (`Cpp_IO_Serial`, etc.) point at these.
-- `createDriver()` makes **fresh** instances for live connections, owned by `DeviceManager`.
+- `IO::DriverFactory::create()` (spec 0070) makes **fresh** instances for live connections, owned by `DeviceManager`.
 - `configurationOk()` checks the **UI** driver, not the live one. UI driver's
   `configurationChanged` forwards to `ConnectionManager::configurationChanged`. All drivers
   must `Q_EMIT configurationChanged()` from their ctor.

@@ -771,23 +771,23 @@ void MQTT::Publisher::setupExternalConnections()
           this,
           &Publisher::onNotificationPosted);
 
-  auto& projectModel = DataModel::ProjectModel::instance();
-  connect(&projectModel, &DataModel::ProjectModel::mqttPublisherChanged, this, [this] {
+  auto* projectModel = &DataModel::ProjectModel::instance();
+  connect(projectModel, &DataModel::ProjectModel::mqttPublisherChanged, this, [this, projectModel] {
     if (m_savingToProjectModel)
       return;
 
-    applyProjectConfig(DataModel::ProjectModel::instance().mqttPublisher());
+    applyProjectConfig(projectModel->mqttPublisher());
   });
-  connect(this, &Publisher::configurationChanged, this, [this] {
+  connect(this, &Publisher::configurationChanged, this, [this, projectModel] {
     if (m_skipNextSync)
       return;
 
     m_savingToProjectModel = true;
-    DataModel::ProjectModel::instance().setMqttPublisher(toJson());
+    projectModel->setMqttPublisher(toJson());
     m_savingToProjectModel = false;
   });
 
-  applyProjectConfig(projectModel.mqttPublisher());
+  applyProjectConfig(projectModel->mqttPublisher());
 }
 
 //--------------------------------------------------------------------------------------------------

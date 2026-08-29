@@ -74,6 +74,9 @@ private:
   void seedDefaultSourceFromUi(const QString& legacyParserCode);
   void enforceGplSingleSource();
   void loadWidgetSettingsAndWorkspaces(const QJsonObject& json);
+  void loadCustomWorkspaces(const QJsonObject& json);
+  void loadWorkspaceAndGroupFolders(const QJsonObject& json);
+  void loadHiddenGroupsAndTables(const QJsonObject& json);
   void loadSinkConfigs(const QJsonObject& json);
   void loadPointCount(const QJsonObject& json);
   void loadPlotTimeRange(const QJsonObject& json);

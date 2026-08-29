@@ -2,33 +2,23 @@
   "rule": "cxx-tu-too-long",
   "regenerate": "python scripts/code-verify.py --tu-census --accept",
   "threshold": 1500,
-  "excess": 11924,
-  "files": 19,
-  "worst": 3544,
+  "excess": 3970,
+  "files": 9,
+  "worst": 3348,
   "buckets": {
     "critical": 0,
-    "god": 3,
-    "oversized": 16
+    "god": 2,
+    "oversized": 7
   },
   "per_file": {
-    "app/src/UI/Dashboard.cpp": 3544,
-    "app/src/DataModel/FrameBuilder.cpp": 3534,
-    "app/src/DataModel/ProjectModel.cpp": 3095,
-    "app/src/UI/Widgets/Terminal.cpp": 2364,
-    "app/src/IO/Drivers/OpcUa.cpp": 2338,
-    "app/qml/Dialogs/Settings.qml": 2243,
-    "app/src/IO/ConnectionManager.cpp": 2208,
-    "app/qml/Widgets/PlotWidget.qml": 2161,
-    "app/src/AI/Conversation.cpp": 2086,
-    "app/src/Misc/CLI.cpp": 1943,
-    "app/src/DSP.h": 1934,
-    "app/qml/ProjectEditor/Views/FlowDiagram.qml": 1703,
-    "app/src/UI/Taskbar.cpp": 1700,
-    "app/src/DataModel/Project/ProjectWorkspaces.cpp": 1683,
-    "app/src/UI/Widgets/PainterContext.cpp": 1666,
-    "app/src/DataModel/Frame.h": 1606,
+    "app/src/DataModel/FrameBuilder.cpp": 3348,
+    "app/src/UI/Dashboard.cpp": 2724,
+    "app/src/UI/Widgets/Terminal.cpp": 1938,
+    "app/src/IO/ConnectionManager.cpp": 1705,
+    "app/src/IO/Drivers/OpcUa.cpp": 1624,
     "app/src/CSV/Player.cpp": 1586,
     "app/src/MQTT/Publisher.cpp": 1529,
-    "app/src/DataModel/Project/ProjectEntities.cpp": 1501
+    "app/src/AI/Conversation.cpp": 1513,
+    "app/src/IO/Drivers/MQTT.cpp": 1503
   }
 }

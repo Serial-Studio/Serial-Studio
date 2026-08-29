@@ -246,7 +246,7 @@ void API::CommandHandler::initializeHandlers()
   Handlers::NetworkHandler::registerCommands();
   Handlers::BluetoothLEHandler::registerCommands();
   Handlers::CSVExportHandler::registerCommands();
-  Handlers::ProjectHandler::registerCommands();
+  Handlers::ProjectHandler::registerCommands(registry);
   Handlers::ConsoleHandler::registerCommands();
   Handlers::CSVPlayerHandler::registerCommands();
   Handlers::DashboardHandler::registerCommands();

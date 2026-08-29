@@ -103,7 +103,7 @@ Console::Handler::Handler()
   , m_currentDeviceId(-1)
   , m_fontFamilyIndex(0)
   , m_textBuffer(10 * 1024)
-  , m_commonFonts(nullptr)
+  , m_commonFonts(&Misc::CommonFonts::instance())
   , m_connectionManager(nullptr)
   , m_appState(nullptr)
   , m_projectModel(nullptr)
@@ -113,19 +113,18 @@ Console::Handler::Handler()
 {
   m_annotationFilter->setSourceModel(m_annotations);
   clear();
-  static auto& commonFonts = Misc::CommonFonts::instance();
-  const auto defaultFont   = commonFonts.monoFont();
-  m_fontFamily          = m_settings.value("Console/FontFamily", defaultFont.family()).toString();
-  m_fontSize            = m_settings.value("Console/FontSize", defaultFont.pointSize()).toInt();
-  m_echo                = m_settings.value("Console/Echo", true).toBool();
-  m_showTimestamp       = m_settings.value("Console/ShowTimestamp", false).toBool();
-  m_collapseDuplicates  = m_settings.value("Console/CollapseDuplicates", false).toBool();
-  m_searchCaseSensitive = m_settings.value("Console/SearchCaseSensitive", false).toBool();
-  m_vt100Emulation      = m_settings.value("Console/VT100Emulation", true).toBool();
-  m_ansiColors          = m_settings.value("Console/AnsiColors", true).toBool();
-  m_checksumMethod      = m_settings.value("Console/ChecksumMethod", 0).toInt();
-  m_scrollbackLines     = m_settings.value("Console/ScrollbackLines", 1000).toInt();
-  m_dataMode            = static_cast<DataMode>(m_settings.value("Console/DataMode", 0).toInt());
+  const auto defaultFont = m_commonFonts->monoFont();
+  m_fontFamily           = m_settings.value("Console/FontFamily", defaultFont.family()).toString();
+  m_fontSize             = m_settings.value("Console/FontSize", defaultFont.pointSize()).toInt();
+  m_echo                 = m_settings.value("Console/Echo", true).toBool();
+  m_showTimestamp        = m_settings.value("Console/ShowTimestamp", false).toBool();
+  m_collapseDuplicates   = m_settings.value("Console/CollapseDuplicates", false).toBool();
+  m_searchCaseSensitive  = m_settings.value("Console/SearchCaseSensitive", false).toBool();
+  m_vt100Emulation       = m_settings.value("Console/VT100Emulation", true).toBool();
+  m_ansiColors           = m_settings.value("Console/AnsiColors", true).toBool();
+  m_checksumMethod       = m_settings.value("Console/ChecksumMethod", 0).toInt();
+  m_scrollbackLines      = m_settings.value("Console/ScrollbackLines", 1000).toInt();
+  m_dataMode             = static_cast<DataMode>(m_settings.value("Console/DataMode", 0).toInt());
   m_lineEnding  = static_cast<LineEnding>(m_settings.value("Console/LineEnding", 0).toInt());
   m_displayMode = static_cast<DisplayMode>(m_settings.value("Console/DisplayMode", 0).toInt());
 
@@ -400,9 +399,8 @@ int Console::Handler::fontFamilyIndex() const
 QStringList Console::Handler::availableFonts() const
 {
   QStringList monospaceFonts;
-  const auto allFonts      = QFontDatabase::families();
-  static auto& commonFonts = Misc::CommonFonts::instance();
-  auto defaultFamily       = commonFonts.monoFont().family();
+  const auto allFonts = QFontDatabase::families();
+  auto defaultFamily  = m_commonFonts->monoFont().family();
   for (const auto& family : allFonts) {
     QFontInfo fontInfo(family);
     if (fontInfo.fixedPitch() && !monospaceFonts.contains(family))
@@ -537,7 +535,6 @@ void Console::Handler::historyDown()
  */
 void Console::Handler::setupExternalConnections()
 {
-  m_commonFonts       = &Misc::CommonFonts::instance();
   m_connectionManager = &IO::ConnectionManager::instance();
   m_appState          = &AppState::instance();
   m_projectModel      = &DataModel::ProjectModel::instance();
@@ -553,24 +550,16 @@ void Console::Handler::setupExternalConnections()
     Q_EMIT imageWidgetActiveChanged();
   };
 
-  connect(&DataModel::ProjectModel::instance(),
-          &DataModel::ProjectModel::groupsChanged,
-          this,
-          notifyTerminal);
+  connect(m_projectModel, &DataModel::ProjectModel::groupsChanged, this, notifyTerminal);
+  connect(m_appState, &AppState::operationModeChanged, this, notifyTerminal);
+  connect(m_connectionManager, &IO::ConnectionManager::connectedChanged, this, notifyTerminal);
 
-  connect(&AppState::instance(), &AppState::operationModeChanged, this, notifyTerminal);
-
-  connect(&IO::ConnectionManager::instance(),
-          &IO::ConnectionManager::connectedChanged,
-          this,
-          notifyTerminal);
-
-  connect(&DataModel::ProjectModel::instance(),
+  connect(m_projectModel,
           &DataModel::ProjectModel::sourceStructureChanged,
           this,
           &Console::Handler::onDevicesChanged,
           Qt::QueuedConnection);
-  connect(&IO::ConnectionManager::instance(),
+  connect(m_connectionManager,
           &IO::ConnectionManager::connectedChanged,
           this,
           &Console::Handler::onDevicesChanged);
@@ -1126,11 +1115,10 @@ void Console::Handler::updateFont()
   QFontInfo fontInfo(testFont);
 
   if (!fontInfo.fixedPitch()) {
-    static auto& commonFonts = Misc::CommonFonts::instance();
-    const auto defaultFont   = commonFonts.monoFont();
-    m_fontFamily             = defaultFont.family();
-    m_fontFamilyIndex        = availableFonts().indexOf(m_fontFamily);
-    m_fontSize               = defaultFont.pointSize();
+    const auto defaultFont = m_commonFonts->monoFont();
+    m_fontFamily           = defaultFont.family();
+    m_fontFamilyIndex      = availableFonts().indexOf(m_fontFamily);
+    m_fontSize             = defaultFont.pointSize();
     m_settings.setValue("Console/FontFamily", m_fontFamily);
     m_settings.setValue("Console/FontSize", m_fontSize);
     testFont = defaultFont;

@@ -13,163 +13,23 @@
 
 #  include "UI/Widgets/PainterContext.h"
 
-#  include <array>
 #  include <cmath>
-#  include <cstdint>
 #  include <functional>
-#  include <QConicalGradient>
-#  include <QDir>
 #  include <QFileInfo>
 #  include <QFontMetricsF>
 #  include <QImage>
-#  include <QImageReader>
-#  include <QLinearGradient>
 #  include <QPainterPathStroker>
 #  include <QPixmap>
-#  include <QRadialGradient>
-#  include <QRegularExpression>
-#  include <QStringList>
 
 #  include "Misc/CommonFonts.h"
-#  include "SerialStudio.h"
-
-//--------------------------------------------------------------------------------------------------
-// Constants
-//--------------------------------------------------------------------------------------------------
-
-// Shadow blur radius is clamped to [1, 32] in renderWithShadow; max tap count is 2*32+1
-static constexpr int kMaxBlurTaps         = 65;
-static constexpr int kBlurReciprocalShift = 24;
-
-/**
- * @brief Maps Canvas2D line-cap names to Qt::PenCapStyle.
- */
-[[nodiscard]] static Qt::PenCapStyle mapLineCap(const QString& cap)
-{
-  if (cap == QLatin1String("round"))
-    return Qt::RoundCap;
-
-  if (cap == QLatin1String("square"))
-    return Qt::SquareCap;
-
-  return Qt::FlatCap;
-}
-
-/**
- * @brief Maps Qt::PenCapStyle back to its Canvas2D name.
- */
-[[nodiscard]] static QString unmapLineCap(Qt::PenCapStyle cap)
-{
-  switch (cap) {
-    case Qt::RoundCap:
-      return QStringLiteral("round");
-    case Qt::SquareCap:
-      return QStringLiteral("square");
-    case Qt::FlatCap:
-    default:
-      return QStringLiteral("butt");
-  }
-}
-
-/**
- * @brief Maps Canvas2D line-join names to Qt::PenJoinStyle.
- */
-[[nodiscard]] static Qt::PenJoinStyle mapLineJoin(const QString& join)
-{
-  if (join == QLatin1String("round"))
-    return Qt::RoundJoin;
-
-  if (join == QLatin1String("bevel"))
-    return Qt::BevelJoin;
-
-  return Qt::MiterJoin;
-}
-
-/**
- * @brief Maps Qt::PenJoinStyle back to its Canvas2D name.
- */
-[[nodiscard]] static QString unmapLineJoin(Qt::PenJoinStyle join)
-{
-  switch (join) {
-    case Qt::RoundJoin:
-      return QStringLiteral("round");
-    case Qt::BevelJoin:
-      return QStringLiteral("bevel");
-    case Qt::MiterJoin:
-    default:
-      return QStringLiteral("miter");
-  }
-}
-
-/**
- * @brief Maps a Canvas2D globalCompositeOperation name to QPainter::CompositionMode.
- */
-[[nodiscard]] static QPainter::CompositionMode mapComposite(const QString& op)
-{
-  static const struct {
-    QLatin1String name;
-    QPainter::CompositionMode mode;
-  } table[] = {
-    {     QLatin1String("source-over"),      QPainter::CompositionMode_SourceOver},
-    {       QLatin1String("source-in"),        QPainter::CompositionMode_SourceIn},
-    {      QLatin1String("source-out"),       QPainter::CompositionMode_SourceOut},
-    {     QLatin1String("source-atop"),      QPainter::CompositionMode_SourceAtop},
-    {QLatin1String("destination-over"), QPainter::CompositionMode_DestinationOver},
-    {  QLatin1String("destination-in"),   QPainter::CompositionMode_DestinationIn},
-    { QLatin1String("destination-out"),  QPainter::CompositionMode_DestinationOut},
-    {QLatin1String("destination-atop"), QPainter::CompositionMode_DestinationAtop},
-    {         QLatin1String("lighter"),            QPainter::CompositionMode_Plus},
-    {            QLatin1String("copy"),          QPainter::CompositionMode_Source},
-    {             QLatin1String("xor"),             QPainter::CompositionMode_Xor},
-    {        QLatin1String("multiply"),        QPainter::CompositionMode_Multiply},
-    {          QLatin1String("screen"),          QPainter::CompositionMode_Screen},
-    {         QLatin1String("overlay"),         QPainter::CompositionMode_Overlay},
-    {          QLatin1String("darken"),          QPainter::CompositionMode_Darken},
-    {         QLatin1String("lighten"),         QPainter::CompositionMode_Lighten},
-    {     QLatin1String("color-dodge"),      QPainter::CompositionMode_ColorDodge},
-    {      QLatin1String("color-burn"),       QPainter::CompositionMode_ColorBurn},
-    {      QLatin1String("hard-light"),       QPainter::CompositionMode_HardLight},
-    {      QLatin1String("soft-light"),       QPainter::CompositionMode_SoftLight},
-    {      QLatin1String("difference"),      QPainter::CompositionMode_Difference},
-    {       QLatin1String("exclusion"),       QPainter::CompositionMode_Exclusion},
-  };
-
-  for (const auto& e : table)
-    if (op == e.name)
-      return e.mode;
-
-  return QPainter::CompositionMode_SourceOver;
-}
+#  include "UI/Widgets/Painter/PainterBlur.h"
+#  include "UI/Widgets/Painter/PainterEnums.h"
+#  include "UI/Widgets/Painter/PainterFont.h"
+#  include "UI/Widgets/Painter/PainterGeometry.h"
 
 //--------------------------------------------------------------------------------------------------
 // Construction
 //--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Resolves a CSS-style font family to a real installed family.
- */
-[[nodiscard]] static QString resolveFontFamily(const QString& family)
-{
-  static auto& commonFonts = Misc::CommonFonts::instance();
-
-  const QString trimmed = family.trimmed();
-  if (trimmed.isEmpty())
-    return commonFonts.widgetFontFamily();
-
-  const QString lower = trimmed.toLower();
-  if (lower == QLatin1String("sans-serif") || lower == QLatin1String("system-ui")
-      || lower == QLatin1String("ui-sans-serif"))
-    return commonFonts.widgetFontFamily();
-
-  if (lower == QLatin1String("monospace") || lower == QLatin1String("ui-monospace"))
-    return commonFonts.monoFont().family();
-
-  if (lower == QLatin1String("serif") || lower == QLatin1String("ui-serif")
-      || lower == QLatin1String("cursive") || lower == QLatin1String("fantasy"))
-    return commonFonts.uiFont().family();
-
-  return trimmed;
-}
 
 /**
  * @brief Initialises the context with sensible Canvas2D defaults.
@@ -290,7 +150,7 @@ qreal Widgets::PainterContext::lineWidth() const
  */
 QString Widgets::PainterContext::lineCap() const
 {
-  return unmapLineCap(m_state.strokePen.capStyle());
+  return PainterEnums::unmapLineCap(m_state.strokePen.capStyle());
 }
 
 /**
@@ -298,7 +158,7 @@ QString Widgets::PainterContext::lineCap() const
  */
 QString Widgets::PainterContext::lineJoin() const
 {
-  return unmapLineJoin(m_state.strokePen.joinStyle());
+  return PainterEnums::unmapLineJoin(m_state.strokePen.joinStyle());
 }
 
 /**
@@ -497,7 +357,7 @@ void Widgets::PainterContext::setLineWidth(qreal w)
  */
 void Widgets::PainterContext::setLineCap(const QString& cap)
 {
-  m_state.strokePen.setCapStyle(mapLineCap(cap));
+  m_state.strokePen.setCapStyle(PainterEnums::mapLineCap(cap));
 
   if (m_painter)
     m_painter->setPen(m_state.strokePen);
@@ -508,7 +368,7 @@ void Widgets::PainterContext::setLineCap(const QString& cap)
  */
 void Widgets::PainterContext::setLineJoin(const QString& join)
 {
-  m_state.strokePen.setJoinStyle(mapLineJoin(join));
+  m_state.strokePen.setJoinStyle(PainterEnums::mapLineJoin(join));
 
   if (m_painter)
     m_painter->setPen(m_state.strokePen);
@@ -543,7 +403,7 @@ void Widgets::PainterContext::setLineDashOffset(qreal offset)
  */
 void Widgets::PainterContext::setFontSpec(const QString& spec)
 {
-  const QFont f          = parseFontSpec(spec);
+  const QFont f          = PainterFont::parseFontSpec(spec, m_commonFonts);
   m_state.font           = f;
   m_state.fontSpecCached = spec;
 
@@ -584,7 +444,7 @@ void Widgets::PainterContext::setGlobalAlpha(qreal a)
 void Widgets::PainterContext::setGlobalCompositeOperation(const QString& op)
 {
   m_state.compositionModeName = op;
-  m_state.compositionMode     = mapComposite(op);
+  m_state.compositionMode     = PainterEnums::mapComposite(op);
 
   if (m_painter)
     m_painter->setCompositionMode(m_state.compositionMode);
@@ -860,27 +720,7 @@ void Widgets::PainterContext::roundRect(qreal x, qreal y, qreal w, qreal h, cons
   else if (radii.isArray())
     parseRoundRectRadiiArray(radii, tl, tr, br, bl);
 
-  const qreal maxR = qMin(std::abs(w), std::abs(h)) * 0.5;
-  tl               = qBound<qreal>(0.0, tl, maxR);
-  tr               = qBound<qreal>(0.0, tr, maxR);
-  br               = qBound<qreal>(0.0, br, maxR);
-  bl               = qBound<qreal>(0.0, bl, maxR);
-
-  if (qFuzzyIsNull(tl) && qFuzzyIsNull(tr) && qFuzzyIsNull(br) && qFuzzyIsNull(bl)) {
-    m_path.addRect(x, y, w, h);
-    return;
-  }
-
-  m_path.moveTo(x + tl, y);
-  m_path.lineTo(x + w - tr, y);
-  m_path.arcTo(x + w - 2 * tr, y, 2 * tr, 2 * tr, 90, -90);
-  m_path.lineTo(x + w, y + h - br);
-  m_path.arcTo(x + w - 2 * br, y + h - 2 * br, 2 * br, 2 * br, 0, -90);
-  m_path.lineTo(x + bl, y + h);
-  m_path.arcTo(x, y + h - 2 * bl, 2 * bl, 2 * bl, -90, -90);
-  m_path.lineTo(x, y + tl);
-  m_path.arcTo(x, y, 2 * tl, 2 * tl, 180, -90);
-  m_path.closeSubpath();
+  PainterGeometry::appendRoundRect(m_path, x, y, w, h, tl, tr, br, bl);
 }
 
 /**
@@ -889,26 +729,7 @@ void Widgets::PainterContext::roundRect(qreal x, qreal y, qreal w, qreal h, cons
 void Widgets::PainterContext::arc(
   qreal x, qreal y, qreal r, qreal startRad, qreal endRad, bool counterClockwise)
 {
-  if (r <= 0.0)
-    return;
-
-  constexpr qreal kTau = 2.0 * M_PI;
-  const qreal raw      = endRad - startRad;
-  qreal sweepRad;
-  if (std::abs(raw) >= kTau)
-    sweepRad = counterClockwise ? -kTau : kTau;
-  else {
-    sweepRad = std::fmod(raw, kTau);
-    if (!counterClockwise && sweepRad < 0.0)
-      sweepRad += kTau;
-    else if (counterClockwise && sweepRad > 0.0)
-      sweepRad -= kTau;
-  }
-
-  const qreal startDeg = -qRadiansToDegrees(startRad);
-  const qreal sweepDeg = -qRadiansToDegrees(sweepRad);
-  const QRectF box(x - r, y - r, 2.0 * r, 2.0 * r);
-  m_path.arcTo(box, startDeg, sweepDeg);
+  PainterGeometry::appendArc(m_path, x, y, r, startRad, endRad, counterClockwise);
 }
 
 /**
@@ -916,71 +737,7 @@ void Widgets::PainterContext::arc(
  */
 void Widgets::PainterContext::arcTo(qreal x1, qreal y1, qreal x2, qreal y2, qreal r)
 {
-  if (r < 0.0)
-    return;
-
-  if (m_path.isEmpty()) {
-    m_path.moveTo(x1, y1);
-    return;
-  }
-
-  const QPointF p0 = m_path.currentPosition();
-  const qreal v1x  = p0.x() - x1;
-  const qreal v1y  = p0.y() - y1;
-  const qreal v2x  = x2 - x1;
-  const qreal v2y  = y2 - y1;
-  const qreal len1 = std::hypot(v1x, v1y);
-  const qreal len2 = std::hypot(v2x, v2y);
-  if (qFuzzyIsNull(len1) || qFuzzyIsNull(len2) || qFuzzyIsNull(r)) {
-    m_path.lineTo(x1, y1);
-    return;
-  }
-
-  const qreal cos_a = (v1x * v2x + v1y * v2y) / (len1 * len2);
-  const qreal a     = std::acos(qBound<qreal>(-1.0, cos_a, 1.0));
-  if (qFuzzyCompare(a, M_PI) || qFuzzyIsNull(a)) {
-    m_path.lineTo(x1, y1);
-    return;
-  }
-
-  const qreal d       = r / std::tan(a * 0.5);
-  const qreal invLen1 = 1.0 / len1;
-  const qreal invLen2 = 1.0 / len2;
-  const qreal n1x     = v1x * invLen1;
-  const qreal n1y     = v1y * invLen1;
-  const qreal n2x     = v2x * invLen2;
-  const qreal n2y     = v2y * invLen2;
-  const qreal tx1     = x1 + n1x * d;
-  const qreal ty1     = y1 + n1y * d;
-  const qreal tx2     = x1 + n2x * d;
-  const qreal ty2     = y1 + n2y * d;
-
-  const qreal sx = n1x + n2x;
-  const qreal sy = n1y + n2y;
-  const qreal sl = std::hypot(sx, sy);
-  if (qFuzzyIsNull(sl)) {
-    m_path.lineTo(x1, y1);
-    return;
-  }
-
-  const qreal cR    = r / std::sin(a * 0.5);
-  const qreal invSl = 1.0 / sl;
-  const qreal cX    = x1 + (sx * invSl) * cR;
-  const qreal cY    = y1 + (sy * invSl) * cR;
-  const qreal cross = v1x * v2y - v1y * v2x;
-
-  m_path.lineTo(tx1, ty1);
-
-  const qreal startAng = std::atan2(ty1 - cY, tx1 - cX);
-  const qreal endAng   = std::atan2(ty2 - cY, tx2 - cX);
-  qreal sweep          = endAng - startAng;
-  if (cross < 0.0 && sweep < 0.0)
-    sweep += 2.0 * M_PI;
-  else if (cross > 0.0 && sweep > 0.0)
-    sweep -= 2.0 * M_PI;
-
-  const QRectF box(cX - r, cY - r, 2.0 * r, 2.0 * r);
-  m_path.arcTo(box, -qRadiansToDegrees(startAng), -qRadiansToDegrees(sweep));
+  PainterGeometry::appendArcTo(m_path, x1, y1, x2, y2, r);
 }
 
 /**
@@ -995,31 +752,8 @@ void Widgets::PainterContext::ellipse(qreal x,
                                       qreal endRad,
                                       bool counterClockwise)
 {
-  if (rx <= 0.0 || ry <= 0.0)
-    return;
-
-  constexpr qreal kTau = 2.0 * M_PI;
-  const qreal raw      = endRad - startRad;
-  qreal sweepRad;
-  if (std::abs(raw) >= kTau)
-    sweepRad = counterClockwise ? -kTau : kTau;
-  else {
-    sweepRad = std::fmod(raw, kTau);
-    if (!counterClockwise && sweepRad < 0.0)
-      sweepRad += kTau;
-    else if (counterClockwise && sweepRad > 0.0)
-      sweepRad -= kTau;
-  }
-
-  QPainterPath sub;
-  const QRectF box(-rx, -ry, 2.0 * rx, 2.0 * ry);
-  sub.arcMoveTo(box, -qRadiansToDegrees(startRad));
-  sub.arcTo(box, -qRadiansToDegrees(startRad), -qRadiansToDegrees(sweepRad));
-
-  QTransform t;
-  t.translate(x, y);
-  t.rotateRadians(rotation);
-  m_path.connectPath(t.map(sub));
+  PainterGeometry::appendEllipse(
+    m_path, x, y, rx, ry, rotation, startRad, endRad, counterClockwise);
 }
 
 /**
@@ -1330,6 +1064,59 @@ QVariantList Widgets::PainterContext::getLineDash() const
 }
 
 //--------------------------------------------------------------------------------------------------
+// Gradients / patterns
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Allocates a JS-visible linear-gradient handle parented to the context.
+ */
+Widgets::PainterGradient* Widgets::PainterContext::createLinearGradient(qreal x0,
+                                                                        qreal y0,
+                                                                        qreal x1,
+                                                                        qreal y1)
+{
+  auto* g = new PainterGradient(PainterGradient::Kind::Linear, this);
+  g->setLinear(x0, y0, x1, y1);
+  return g;
+}
+
+/**
+ * @brief Allocates a JS-visible radial-gradient handle parented to the context.
+ */
+Widgets::PainterGradient* Widgets::PainterContext::createRadialGradient(
+  qreal x0, qreal y0, qreal r0, qreal x1, qreal y1, qreal r1)
+{
+  auto* g = new PainterGradient(PainterGradient::Kind::Radial, this);
+  g->setRadial(x0, y0, r0, x1, y1, r1);
+  return g;
+}
+
+/**
+ * @brief Allocates a JS-visible conic-gradient handle parented to the context.
+ */
+Widgets::PainterGradient* Widgets::PainterContext::createConicGradient(qreal startRad,
+                                                                       qreal cx,
+                                                                       qreal cy)
+{
+  auto* g = new PainterGradient(PainterGradient::Kind::Conic, this);
+  g->setConic(cx, cy, startRad);
+  return g;
+}
+
+/**
+ * @brief Allocates a JS-visible pattern handle from a sandbox-resolved image path.
+ */
+Widgets::PainterPattern* Widgets::PainterContext::createPattern(const QString& src,
+                                                                const QString& repetition)
+{
+  const QString resolved = resolveImagePath(src);
+  if (resolved.isEmpty())
+    return new PainterPattern(QPixmap(), repetition, this);
+
+  return new PainterPattern(QPixmap(resolved), repetition, this);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Geometry getters
 //--------------------------------------------------------------------------------------------------
 
@@ -1371,47 +1158,6 @@ QColor Widgets::PainterContext::parseColor(const QString& spec) const
     return QColor();
 
   return QColor::fromString(trimmed);
-}
-
-/**
- * @brief Parses a "<size>px <family>" font shorthand into a QFont.
- */
-QFont Widgets::PainterContext::parseFontSpec(const QString& spec) const
-{
-  static const QRegularExpression sizeRe(QStringLiteral("(\\d+(?:\\.\\d+)?)\\s*px"));
-
-  bool bold   = false;
-  bool italic = false;
-  qreal size  = 10.0;
-
-  const auto sizeMatch = sizeRe.match(spec);
-  if (sizeMatch.hasMatch())
-    size = SerialStudio::toDouble(sizeMatch.captured(1));
-
-  const QString lower = spec.toLower();
-  if (lower.contains(QLatin1String("italic")))
-    italic = true;
-
-  if (lower.contains(QLatin1String("bold")) || lower.contains(QLatin1String(" 700"))
-      || lower.contains(QLatin1String(" 800")) || lower.contains(QLatin1String(" 900")))
-    bold = true;
-
-  QString family;
-  if (sizeMatch.hasMatch()) {
-    const int sizeEnd  = sizeMatch.capturedEnd();
-    const QString tail = spec.mid(sizeEnd).trimmed();
-    static const QRegularExpression kSep(QStringLiteral("[,\\s]+"));
-    const QStringList tokens = tail.split(kSep, Qt::SkipEmptyParts);
-    if (!tokens.isEmpty())
-      family = tokens.first();
-  }
-
-  QFont f(resolveFontFamily(family), 10);
-  f.setPointSizeF(size * 0.75);
-  f.setBold(bold);
-  f.setItalic(italic);
-
-  return f;
 }
 
 /**
@@ -1516,98 +1262,6 @@ bool Widgets::PainterContext::shadowActive() const noexcept
 }
 
 /**
- * @brief Builds the Q24 ceiling-reciprocal table so `(sum * inv) >> 24 == sum / n` exactly.
- */
-static const std::array<int64_t, kMaxBlurTaps + 1>& blurReciprocalTable()
-{
-  static const auto table = []() {
-    std::array<int64_t, kMaxBlurTaps + 1> t{};
-    const int64_t one = int64_t(1) << kBlurReciprocalShift;
-    for (int n = 1; n <= kMaxBlurTaps; ++n)
-      t[n] = (one + n - 1) / n;
-
-    return t;
-  }();
-  return table;
-}
-
-/**
- * @brief Horizontal pass of a box-blur with the given radius.
- */
-static void boxBlurHorizontal(const QImage& src, QImage& dst, int radius)
-{
-  const int w     = src.width();
-  const int h     = src.height();
-  const auto& inv = blurReciprocalTable();
-  for (int y = 0; y < h; ++y) {
-    const QRgb* srow = reinterpret_cast<const QRgb*>(src.constScanLine(y));
-    QRgb* drow       = reinterpret_cast<QRgb*>(dst.scanLine(y));
-    for (int x = 0; x < w; ++x) {
-      int r = 0, g = 0, b = 0, a = 0, n = 0;
-      const int x0 = qMax(0, x - radius);
-      const int x1 = qMin(w - 1, x + radius);
-      for (int k = x0; k <= x1; ++k) {
-        r += qRed(srow[k]);
-        g += qGreen(srow[k]);
-        b += qBlue(srow[k]);
-        a += qAlpha(srow[k]);
-        ++n;
-      }
-      const int64_t recip = inv[n];
-      drow[x]             = qRgba(static_cast<int>((r * recip) >> kBlurReciprocalShift),
-                      static_cast<int>((g * recip) >> kBlurReciprocalShift),
-                      static_cast<int>((b * recip) >> kBlurReciprocalShift),
-                      static_cast<int>((a * recip) >> kBlurReciprocalShift));
-    }
-  }
-}
-
-/**
- * @brief Vertical pass of a box-blur with the given radius.
- */
-static void boxBlurVertical(const QImage& src, QImage& dst, int radius)
-{
-  const int w     = src.width();
-  const int h     = src.height();
-  const auto& inv = blurReciprocalTable();
-  for (int x = 0; x < w; ++x) {
-    for (int y = 0; y < h; ++y) {
-      int r = 0, g = 0, b = 0, a = 0, n = 0;
-      const int y0 = qMax(0, y - radius);
-      const int y1 = qMin(h - 1, y + radius);
-      for (int k = y0; k <= y1; ++k) {
-        const QRgb px  = reinterpret_cast<const QRgb*>(src.constScanLine(k))[x];
-        r             += qRed(px);
-        g             += qGreen(px);
-        b             += qBlue(px);
-        a             += qAlpha(px);
-        ++n;
-      }
-      const int64_t recip = inv[n];
-      reinterpret_cast<QRgb*>(dst.scanLine(y))[x] =
-        qRgba(static_cast<int>((r * recip) >> kBlurReciprocalShift),
-              static_cast<int>((g * recip) >> kBlurReciprocalShift),
-              static_cast<int>((b * recip) >> kBlurReciprocalShift),
-              static_cast<int>((a * recip) >> kBlurReciprocalShift));
-    }
-  }
-}
-
-/**
- * @brief Three-pass separable box-blur applied in place to the given image.
- */
-static void applyBoxBlur(QImage& image, int radius)
-{
-  for (int pass = 0; pass < 3; ++pass) {
-    QImage blurred(image.size(), QImage::Format_ARGB32_Premultiplied);
-    blurred.fill(Qt::transparent);
-    boxBlurHorizontal(image, blurred, radius);
-    image.fill(Qt::transparent);
-    boxBlurVertical(blurred, image, radius);
-  }
-}
-
-/**
  * @brief Renders the given draw callback as a coloured drop shadow.
  */
 void Widgets::PainterContext::renderWithShadow(const std::function<void(QPainter*)>& draw,
@@ -1634,8 +1288,8 @@ void Widgets::PainterContext::renderWithShadow(const std::function<void(QPainter
   }
 
   if (m_state.shadowBlur > 0.0) {
-    const int radius = qBound(1, int(std::ceil(m_state.shadowBlur)), 32);
-    applyBoxBlur(shadow, radius);
+    const int radius = qBound(1, int(std::ceil(m_state.shadowBlur)), PainterBlur::kMaxBlurRadius);
+    PainterBlur::applyBoxBlur(shadow, radius);
   }
 
   m_painter->save();

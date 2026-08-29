@@ -68,7 +68,7 @@ void applySimpleAlarmFields(DataModel::Dataset& d,
  */
 class ProjectHandler {
 public:
-  static void registerCommands();
+  static void registerCommands(CommandRegistry& registry);
 
   [[nodiscard]] static QString applyDatasetUpdateParams(DataModel::Dataset& d,
                                                         const QJsonObject& params,

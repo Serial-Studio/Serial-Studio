@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="uk_UA" sourcelanguage="en_US">
 <context>
-    <name></name>
+    <name/>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMultiSelect.cpp" line="354"/>
         <source>Mixed</source>
@@ -119,27 +119,27 @@
         <source>This lets the AI assistant configure devices, open and close connections, and send data to your hardware.
 
 Every device action still requires your explicit per-call approval in the chat, even when auto-approve is enabled. Only enable this if you trust the configured AI provider with hardware access.</source>
-        <translation>Це дозволяє AI-асистенту налаштовувати пристрої, відкривати та закривати з&apos;єднання і надсилати дані на ваше обладнання.
+        <translation>Це дозволяє AI-асистенту налаштовувати пристрої, відкривати та закривати з'єднання і надсилати дані на ваше обладнання.
 
 Кожна дія з пристроєм все одно вимагає вашого явного підтвердження в чаті, навіть коли увімкнено автоматичне схвалення. Вмикайте це лише якщо ви довіряєте налаштованому AI-провайдеру доступ до обладнання.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="639"/>
+        <location filename="../../src/AI/Assistant.cpp" line="638"/>
         <source>Switch AI provider?</source>
         <translation>Змінити провайдера AI?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="640"/>
+        <location filename="../../src/AI/Assistant.cpp" line="639"/>
         <source>Switching to a different provider clears the current conversation. Do you want to continue?</source>
         <translation>Перемикання на іншого провайдера очищує поточну розмову. Продовжити?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="643"/>
+        <location filename="../../src/AI/Assistant.cpp" line="642"/>
         <source>Assistant</source>
         <translation>Асистент</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="680"/>
+        <location filename="../../src/AI/Assistant.cpp" line="679"/>
         <source>AI Assistant is not available in this build</source>
         <translation>AI-Асистент недоступний у цій збірці</translation>
     </message>
@@ -148,9 +148,32 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation type="vanished">AI-Асистент потребує ліцензії Pro</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="685"/>
+        <location filename="../../src/AI/Assistant.cpp" line="684"/>
         <source>Set an API key first</source>
         <translation>Спочатку встановіть ключ API</translation>
+    </message>
+</context>
+<context>
+    <name>AI::AutoVerifier</name>
+    <message>
+        <location filename="../../src/AI/Conversation/AutoVerifier.cpp" line="116"/>
+        <source>%1 operation(s) failed</source>
+        <translation>%1 операцій завершилися помилкою</translation>
+    </message>
+    <message>
+        <location filename="../../src/AI/Conversation/AutoVerifier.cpp" line="168"/>
+        <source>Source list read-back failed</source>
+        <translation>Помилка зчитування списку джерел</translation>
+    </message>
+    <message>
+        <location filename="../../src/AI/Conversation/AutoVerifier.cpp" line="189"/>
+        <source>Source %1 not found after update</source>
+        <translation>Джерело %1 не знайдено після оновлення</translation>
+    </message>
+    <message>
+        <location filename="../../src/AI/Conversation/AutoVerifier.cpp" line="207"/>
+        <source>Fields did not round-trip: %1</source>
+        <translation>Поля не пройшли повний цикл: %1</translation>
     </message>
 </context>
 <context>
@@ -160,63 +183,59 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation type="vanished">Асистент AI потребує ліцензії Pro</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="163"/>
+        <location filename="../../src/AI/Conversation.cpp" line="183"/>
         <source>AI Assistant is not available in this build</source>
         <translation>AI-Асистент недоступний у цій збірці</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="169"/>
-        <location filename="../../src/AI/Conversation.cpp" line="1208"/>
+        <location filename="../../src/AI/Conversation.cpp" line="189"/>
+        <location filename="../../src/AI/Conversation.cpp" line="859"/>
         <source>AI subsystem not initialized</source>
         <translation>Підсистему AI не ініціалізовано</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="175"/>
+        <location filename="../../src/AI/Conversation.cpp" line="195"/>
         <source>Already busy with a previous request</source>
         <translation>Вже зайнято попереднім запитом</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="593"/>
+        <location filename="../../src/AI/Conversation.cpp" line="610"/>
         <source>Tool-call budget reached for this turn; no further tools will run.</source>
         <translation>Досягнуто ліміту викликів інструментів для цього ходу; більше інструментів не буде запущено.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1223"/>
+        <location filename="../../src/AI/Conversation.cpp" line="874"/>
         <source>Waiting for %1 to respond. Loading the model and processing the prompt can take a while on local hardware...</source>
         <translation>Очікування відповіді від %1. Завантаження моделі та обробка запиту можуть зайняти деякий час на локальному обладнанні...</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1567"/>
         <source>%1 operation(s) failed</source>
-        <translation>%1 операцій завершилися помилкою</translation>
+        <translation type="vanished">%1 операцій завершилися помилкою</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1620"/>
         <source>Source list read-back failed</source>
-        <translation>Помилка зчитування списку джерел</translation>
+        <translation type="vanished">Помилка зчитування списку джерел</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1641"/>
         <source>Source %1 not found after update</source>
-        <translation>Джерело %1 не знайдено після оновлення</translation>
+        <translation type="vanished">Джерело %1 не знайдено після оновлення</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1659"/>
         <source>Fields did not round-trip: %1</source>
-        <translation>Поля не пройшли повний цикл: %1</translation>
+        <translation type="vanished">Поля не пройшли повний цикл: %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1734"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1235"/>
         <source>You have reached the tool-call budget for this turn. Do not request more tools. Summarize what you found so far, and if the task is incomplete, say which steps remain so the user can tell you to continue.</source>
         <translation>Ви досягли ліміту викликів інструментів для цього ходу. Не запитуйте більше інструментів. Підсумуйте те, що знайшли досі, і якщо завдання не завершено, вкажіть, які кроки залишилися, щоб користувач міг попросити вас продовжити.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="2060"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1487"/>
         <source>The model stopped reproducing its context-integrity line. Long conversations degrade silently; recent replies may be less reliable.</source>
         <translation>Модель припинила відтворювати свій рядок цілісності контексту. Довгі розмови деградують непомітно; останні відповіді можуть бути менш надійними.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="2063"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1490"/>
         <source>The model altered its context-integrity line (drifted segment: %1). Long conversations degrade silently; recent replies may be less reliable.</source>
         <translation>Модель змінила свій рядок цілісності контексту (дрейфуючий сегмент: %1). Довгі розмови деградують непомітно; останні відповіді можуть бути менш надійними.</translation>
     </message>
@@ -225,17 +244,17 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation type="vanished">Перевищено ліміт викликів інструментів</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1055"/>
-        <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider&apos;s safety filters.)</source>
+        <location filename="../../src/AI/Conversation.cpp" line="706"/>
+        <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider's safety filters.)</source>
         <translation>(Модель повернула порожню відповідь. Спробуйте перефразувати, перейти на іншу модель або перевірити, чи дозволено запит фільтрами безпеки провайдера.)</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1227"/>
+        <location filename="../../src/AI/Conversation.cpp" line="878"/>
         <source>Sending request to %1...</source>
         <translation>Надсилання запиту до %1...</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1245"/>
+        <location filename="../../src/AI/Conversation.cpp" line="896"/>
         <source>Provider returned no reply</source>
         <translation>Провайдер не повернув відповіді</translation>
     </message>
@@ -328,12 +347,12 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>API::GRPC::GRPCServer</name>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="449"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="450"/>
         <source>Export Protobuf File</source>
         <translation>Експортувати Файл Protobuf</translation>
     </message>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="451"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="452"/>
         <source>Protocol Buffers (*.proto)</source>
         <translation>Protocol Buffers (*.proto)</translation>
     </message>
@@ -345,7 +364,7 @@ Every device action still requires your explicit per-call approval in the chat, 
     <message>
         <location filename="../../src/API/GRPC/GRPCServer.cpp" line="500"/>
         <source>Failed to bind to %1</source>
-        <translation>Не вдалося прив&apos;язатися до %1</translation>
+        <translation>Не вдалося прив'язатися до %1</translation>
     </message>
 </context>
 <context>
@@ -374,7 +393,7 @@ Every device action still requires your explicit per-call approval in the chat, 
     </message>
     <message>
         <location filename="../../src/API/Mirror/MirrorClient.cpp" line="566"/>
-        <source>The remote&apos;s dataset layout does not match its announced hash</source>
+        <source>The remote's dataset layout does not match its announced hash</source>
         <translation>Структура наборів даних віддаленого вузла не відповідає заявленому хешу</translation>
     </message>
     <message>
@@ -388,12 +407,12 @@ Every device action still requires your explicit per-call approval in the chat, 
     <message>
         <location filename="../../src/API/Mirror/MirrorSession.cpp" line="315"/>
         <source>Enter a host name and a port to attach</source>
-        <translation>Введіть ім&apos;я хоста та порт для підключення</translation>
+        <translation>Введіть ім'я хоста та порт для підключення</translation>
     </message>
     <message>
         <location filename="../../src/API/Mirror/MirrorSession.cpp" line="322"/>
         <source>Disconnect the local device or close the open recording before attaching to a remote dashboard</source>
-        <translation>Від&apos;єднайте локальний пристрій або закрийте відкритий запис перед підключенням до віддаленої панелі</translation>
+        <translation>Від'єднайте локальний пристрій або закрийте відкритий запис перед підключенням до віддаленої панелі</translation>
     </message>
     <message>
         <location filename="../../src/API/Mirror/MirrorSession.cpp" line="527"/>
@@ -415,8 +434,8 @@ Every device action still requires your explicit per-call approval in the chat, 
     </message>
     <message>
         <location filename="../../src/API/ProcessLauncher.cpp" line="97"/>
-        <source>Program &quot;%1&quot; not found in PATH</source>
-        <translation>Програму &quot;%1&quot; не знайдено в PATH</translation>
+        <source>Program "%1" not found in PATH</source>
+        <translation>Програму "%1" не знайдено в PATH</translation>
     </message>
 </context>
 <context>
@@ -450,7 +469,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Дозволити керування пристроєм через API?</translation>
     </message>
     <message>
-        <source>A program using Serial Studio&apos;s local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
+        <source>A program using Serial Studio's local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
         <translation type="vanished">Програма, що використовує локальний API Serial Studio, запитує дозвіл на надсилання даних до підключеного пристрою. Дозволити клієнтам API записувати дані на пристрій?</translation>
     </message>
     <message>
@@ -473,17 +492,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../src/API/Server/ServerAuth.cpp" line="138"/>
         <source>Allow API device control?</source>
-        <translation type="unfinished">Дозволити керування пристроєм через API?</translation>
+        <translation>Дозволити керування пристроєм через API?</translation>
     </message>
     <message>
         <location filename="../../src/API/Server/ServerAuth.cpp" line="139"/>
-        <source>A program using Serial Studio&apos;s local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
-        <translation type="unfinished">Програма, що використовує локальний API Serial Studio, запитує дозвіл на надсилання даних до підключеного пристрою. Дозволити клієнтам API записувати дані на пристрій?</translation>
+        <source>A program using Serial Studio's local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
+        <translation>Програма, що використовує локальний API Serial Studio, запитує дозвіл на надсилання даних до підключеного пристрою. Дозволити клієнтам API записувати дані на пристрій?</translation>
     </message>
     <message>
         <location filename="../../src/API/Server/ServerAuth.cpp" line="142"/>
         <source>Serial Studio</source>
-        <translation type="unfinished">Serial Studio</translation>
+        <translation>Serial Studio</translation>
     </message>
 </context>
 <context>
@@ -502,7 +521,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../src/API/TerminalBridge.cpp" line="105"/>
         <source>Parameters must be a JSON object</source>
-        <translation>Параметри мають бути об&apos;єктом JSON</translation>
+        <translation>Параметри мають бути об'єктом JSON</translation>
     </message>
     <message>
         <location filename="../../src/API/TerminalBridge.cpp" line="122"/>
@@ -553,7 +572,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="174"/>
-        <source>This software is provided &apos;as is&apos; without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
+        <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
         <translation>Це програмне забезпечення надається «як є» без будь-яких гарантій, явних чи неявних, включаючи, але не обмежуючись гарантіями придатності для продажу або придатності для певної мети. Автор не несе відповідальності за будь-які збитки, що виникають внаслідок використання цього програмного забезпечення.</translation>
     </message>
     <message>
@@ -576,7 +595,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Демонстрація Проєкту</translation>
     </message>
     <message>
-        <source>What&apos;s New</source>
+        <source>What's New</source>
         <translation type="vanished">Що Нового</translation>
     </message>
     <message>
@@ -1103,7 +1122,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Застосувати Пресет</translation>
     </message>
     <message>
-        <source>Replace the current bands with the selected preset, scaled to this dataset&apos;s range.</source>
+        <source>Replace the current bands with the selected preset, scaled to this dataset's range.</source>
         <translation type="vanished">Замінити поточні смуги обраним пресетом, масштабованим до діапазону цього набору даних.</translation>
     </message>
     <message>
@@ -1162,7 +1181,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="641"/>
         <source>(optional)</source>
-        <translation>(необов&apos;язково)</translation>
+        <translation>(необов'язково)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="658"/>
@@ -1237,7 +1256,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="293"/>
         <source>Assistant memory</source>
-        <translation>Пам&apos;ять асистента</translation>
+        <translation>Пам'ять асистента</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="309"/>
@@ -1257,7 +1276,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="356"/>
         <source>Manage memory…</source>
-        <translation>Керувати пам&apos;яттю…</translation>
+        <translation>Керувати пам'яттю…</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="361"/>
@@ -1302,7 +1321,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="519"/>
         <source>To start chatting, paste an API key for the selected provider. Keys are encrypted on this machine and never leave your computer except to talk to the provider you choose.</source>
-        <translation>Щоб почати спілкування, вставте API-ключ для обраного провайдера. Ключі шифруються на цій машині та ніколи не залишають ваш комп&apos;ютер, окрім зв&apos;язку з обраним вами провайдером.</translation>
+        <translation>Щоб почати спілкування, вставте API-ключ для обраного провайдера. Ключі шифруються на цій машині та ніколи не залишають ваш комп'ютер, окрім зв'язку з обраним вами провайдером.</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="540"/>
@@ -1321,7 +1340,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="421"/>
-        <source>Help me discover Serial Studio&apos;s features</source>
+        <source>Help me discover Serial Studio's features</source>
         <translation>Допоможіть мені відкрити можливості Serial Studio</translation>
     </message>
     <message>
@@ -1447,18 +1466,18 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="776"/>
-        <source>Added folder &quot;%1&quot; - readable this session</source>
-        <translation>Додано папку &quot;%1&quot; — доступна для читання в цьому сеансі</translation>
+        <source>Added folder "%1" - readable this session</source>
+        <translation>Додано папку "%1" — доступна для читання в цьому сеансі</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="777"/>
-        <source>Added &quot;%1&quot; - readable this session</source>
-        <translation>Додано &quot;%1&quot; — доступний для читання в цьому сеансі</translation>
+        <source>Added "%1" - readable this session</source>
+        <translation>Додано "%1" — доступний для читання в цьому сеансі</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="782"/>
         <source>Assistant memory updated</source>
-        <translation>Пам&apos;ять асистента оновлено</translation>
+        <translation>Пам'ять асистента оновлено</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="822"/>
@@ -1473,12 +1492,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="889"/>
         <source>Remember (%1)?</source>
-        <translation>Запам&apos;ятати (%1)?</translation>
+        <translation>Запам'ятати (%1)?</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="894"/>
         <source>Remember</source>
-        <translation>Запам&apos;ятати</translation>
+        <translation>Запам'ятати</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="903"/>
@@ -1612,11 +1631,11 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <source>Please provide the user name and password for the download location.</source>
-        <translation type="vanished">Надайте ім&apos;я користувача та пароль для місця завантаження.</translation>
+        <translation type="vanished">Надайте ім'я користувача та пароль для місця завантаження.</translation>
     </message>
     <message>
         <source>&amp;User name:</source>
-        <translation type="vanished">&amp;Ім&apos;я користувача:</translation>
+        <translation type="vanished">&amp;Ім'я користувача:</translation>
     </message>
     <message>
         <source>&amp;Password:</source>
@@ -1806,7 +1825,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/Dialogs/BackupRecovery.qml" line="164"/>
         <source>Title changes from “%1” to “%2”. Group structure unchanged.</source>
-        <translation>Назва змінюється з &quot;%1&quot; на &quot;%2&quot;. Структура групи без змін.</translation>
+        <translation>Назва змінюється з "%1" на "%2". Структура групи без змін.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/BackupRecovery.qml" line="169"/>
@@ -1898,8 +1917,8 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/Dialogs/Benchmark.qml" line="124"/>
-        <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio&apos;s data pipeline.</source>
-        <translation>Вимірює швидкість обробки, аналізу та візуалізації кадрів через конвеєр даних Serial Studio на цьому комп&apos;ютері.</translation>
+        <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio's data pipeline.</source>
+        <translation>Вимірює швидкість обробки, аналізу та візуалізації кадрів через конвеєр даних Serial Studio на цьому комп'ютері.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Benchmark.qml" line="170"/>
@@ -1974,7 +1993,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/Dialogs/Benchmark.qml" line="368"/>
         <source>Disconnect the active device before running a benchmark.</source>
-        <translation>Від&apos;єднайте активний пристрій перед запуском тесту продуктивності.</translation>
+        <translation>Від'єднайте активний пристрій перед запуском тесту продуктивності.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Benchmark.qml" line="369"/>
@@ -2009,7 +2028,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/Dialogs/Benchmark.qml" line="555"/>
         <source>Peak memory: %1</source>
-        <translation>Пікова пам&apos;ять: %1</translation>
+        <translation>Пікова пам'ять: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Benchmark.qml" line="569"/>
@@ -2264,7 +2283,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="293"/>
         <source>Peak memory: %1</source>
-        <translation>Пікова пам&apos;ять: %1</translation>
+        <translation>Пікова пам'ять: %1</translation>
     </message>
     <message>
         <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="343"/>
@@ -2364,7 +2383,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="291"/>
-        <source>We&apos;ll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
+        <source>We'll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
         <translation>Ми оновимо Serial Studio для роботи з цією операційною системою, щойно QT офіційно її підтримає</translation>
     </message>
 </context>
@@ -2466,7 +2485,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../src/CSV/Player.cpp" line="481"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
-        <translation>Щоб використати цю функцію, необхідно від&apos;єднатися від пристрою. Продовжити?</translation>
+        <translation>Щоб використати цю функцію, необхідно від'єднатися від пристрою. Продовжити?</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="495"/>
@@ -2915,7 +2934,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="72"/>
         <source>Add a Fast Fourier Transform plot</source>
-        <translation>Додати графік швидкого перетворення Фур&apos;є</translation>
+        <translation>Додати графік швидкого перетворення Фур'є</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="73"/>
@@ -3067,7 +3086,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <source>Add a shared-memory table</source>
-        <translation type="vanished">Додати таблицю спільної пам&apos;яті</translation>
+        <translation type="vanished">Додати таблицю спільної пам'яті</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="101"/>
@@ -3267,7 +3286,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="140"/>
         <source>Clean Up Unresolved Widgets</source>
-        <translation>Очистити Нерозв&apos;язані Віджети</translation>
+        <translation>Очистити Нерозв'язані Віджети</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="141"/>
@@ -3367,7 +3386,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="160"/>
         <source>Connect or disconnect from the configured device</source>
-        <translation>Підключитися або від&apos;єднатися від налаштованого пристрою</translation>
+        <translation>Підключитися або від'єднатися від налаштованого пристрою</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="161"/>
@@ -3452,7 +3471,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="177"/>
         <source>Disconnect</source>
-        <translation>Від&apos;єднатися</translation>
+        <translation>Від'єднатися</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="178"/>
@@ -3501,7 +3520,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="197"/>
-        <source>Export this table&apos;s variables to CSV</source>
+        <source>Export this table's variables to CSV</source>
         <translation>Експортувати змінні цієї таблиці до CSV</translation>
     </message>
     <message>
@@ -3516,7 +3535,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="223"/>
-        <source>Import this table&apos;s variables from CSV</source>
+        <source>Import this table's variables from CSV</source>
         <translation>Імпортувати змінні цієї таблиці з CSV</translation>
     </message>
     <message>
@@ -3593,7 +3612,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>Експортувати вибрану сесію в CSV</translation>
     </message>
     <message>
-        <source>Export this table&apos;s registers to CSV</source>
+        <source>Export this table's registers to CSV</source>
         <translation type="vanished">Експортувати регістри цієї таблиці до CSV</translation>
     </message>
     <message>
@@ -3716,7 +3735,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Імпортувати Регістри</translation>
     </message>
     <message>
-        <source>Import this table&apos;s registers from CSV</source>
+        <source>Import this table's registers from CSV</source>
         <translation type="vanished">Імпортувати регістри цієї таблиці з CSV</translation>
     </message>
     <message>
@@ -3944,7 +3963,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <source>Open the shared-memory documentation</source>
-        <translation type="vanished">Відкрити документацію спільної пам&apos;яті</translation>
+        <translation type="vanished">Відкрити документацію спільної пам'яті</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="270"/>
@@ -4181,52 +4200,52 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="314"/>
         <source>Select Bluetooth Low Energy communication</source>
-        <translation>Вибрати зв&apos;язок Bluetooth Low Energy</translation>
+        <translation>Вибрати зв'язок Bluetooth Low Energy</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="315"/>
         <source>Select CAN Bus communication (Pro)</source>
-        <translation>Вибрати зв&apos;язок через CAN Bus (Pro)</translation>
+        <translation>Вибрати зв'язок через CAN Bus (Pro)</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="316"/>
         <source>Select EtherNet/IP communication (Pro)</source>
-        <translation>Вибрати зв&apos;язок через EtherNet/IP (Pro)</translation>
+        <translation>Вибрати зв'язок через EtherNet/IP (Pro)</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="317"/>
         <source>Select HID device communication (Pro)</source>
-        <translation>Вибрати зв&apos;язок через HID пристрій (Pro)</translation>
+        <translation>Вибрати зв'язок через HID пристрій (Pro)</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="318"/>
         <source>Select IEC 60870-5-104 communication (Pro)</source>
-        <translation>Вибрати зв&apos;язок через IEC 60870-5-104 (Pro)</translation>
+        <translation>Вибрати зв'язок через IEC 60870-5-104 (Pro)</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="319"/>
         <source>Select MODBUS communication (Pro)</source>
-        <translation>Вибрати зв&apos;язок через MODBUS (Pro)</translation>
+        <translation>Вибрати зв'язок через MODBUS (Pro)</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="320"/>
         <source>Select OPC UA communication (Pro)</source>
-        <translation>Вибрати зв&apos;язок через OPC UA (Pro)</translation>
+        <translation>Вибрати зв'язок через OPC UA (Pro)</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="321"/>
         <source>Select Serial port (UART) communication</source>
-        <translation>Вибрати зв&apos;язок через послідовний порт (UART)</translation>
+        <translation>Вибрати зв'язок через послідовний порт (UART)</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="322"/>
         <source>Select Siemens S7comm communication (Pro)</source>
-        <translation>Вибрати зв&apos;язок через Siemens S7comm (Pro)</translation>
+        <translation>Вибрати зв'язок через Siemens S7comm (Pro)</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="323"/>
         <source>Select TCP/UDP network communication</source>
-        <translation>Вибрати зв&apos;язок через мережу TCP/UDP</translation>
+        <translation>Вибрати зв'язок через мережу TCP/UDP</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="324"/>
@@ -4236,12 +4255,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="325"/>
         <source>Select process pipe communication (Pro)</source>
-        <translation>Вибрати зв&apos;язок через канал процесу (Pro)</translation>
+        <translation>Вибрати зв'язок через канал процесу (Pro)</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="326"/>
         <source>Select raw USB communication (Pro)</source>
-        <translation>Вибрати прямий зв&apos;язок через USB (Pro)</translation>
+        <translation>Вибрати прямий зв'язок через USB (Pro)</translation>
     </message>
     <message>
         <source>Session Database</source>
@@ -4263,7 +4282,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <source>Shared Memory Help</source>
-        <translation type="vanished">Довідка Про Спільну Пам&apos;ять</translation>
+        <translation type="vanished">Довідка Про Спільну Пам'ять</translation>
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="329"/>
@@ -4432,7 +4451,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../src/UI/CommandStrings.cpp" line="362"/>
-        <source>Watch another Serial Studio instance&apos;s dashboard over the network</source>
+        <source>Watch another Serial Studio instance's dashboard over the network</source>
         <translation>Спостерігати за панеллю іншого екземпляра Serial Studio через мережу</translation>
     </message>
     <message>
@@ -4512,22 +4531,22 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../src/Console/Annotations.cpp" line="1139"/>
-        <source>the script must define a global &apos;decoder&apos; object</source>
-        <translation>скрипт повинен визначати глобальний об&apos;єкт &apos;decoder&apos;</translation>
+        <source>the script must define a global 'decoder' object</source>
+        <translation>скрипт повинен визначати глобальний об'єкт 'decoder'</translation>
     </message>
     <message>
         <location filename="../../src/Console/Annotations.cpp" line="1145"/>
-        <source>&apos;decoder.decode(bytes, offset, ctx, size)&apos; is not a function</source>
-        <translation>&apos;decoder.decode(bytes, offset, ctx, size)&apos; не є функцією</translation>
+        <source>'decoder.decode(bytes, offset, ctx, size)' is not a function</source>
+        <translation>'decoder.decode(bytes, offset, ctx, size)' не є функцією</translation>
     </message>
     <message>
-        <source>&apos;decoder.decode(bytes, offset, ctx)&apos; is not a function</source>
-        <translation type="vanished">&apos;decoder.decode(bytes, offset, ctx)&apos; не є функцією</translation>
+        <source>'decoder.decode(bytes, offset, ctx)' is not a function</source>
+        <translation type="vanished">'decoder.decode(bytes, offset, ctx)' не є функцією</translation>
     </message>
     <message>
         <location filename="../../src/Console/Annotations.cpp" line="1184"/>
-        <source>&apos;decoder.rows&apos; and &apos;decoder.classes&apos; must be non-empty arrays</source>
-        <translation>&apos;decoder.rows&apos; і &apos;decoder.classes&apos; повинні бути непорожніми масивами</translation>
+        <source>'decoder.rows' and 'decoder.classes' must be non-empty arrays</source>
+        <translation>'decoder.rows' і 'decoder.classes' повинні бути непорожніми масивами</translation>
     </message>
     <message>
         <location filename="../../src/Console/Annotations.cpp" line="1198"/>
@@ -4599,42 +4618,42 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>Console::Handler</name>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="300"/>
+        <location filename="../../src/Console/Handler.cpp" line="299"/>
         <source>ASCII</source>
         <translation>ASCII</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="301"/>
+        <location filename="../../src/Console/Handler.cpp" line="300"/>
         <source>HEX</source>
         <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="311"/>
+        <location filename="../../src/Console/Handler.cpp" line="310"/>
         <source>No Line Ending</source>
         <translation>Без Завершення Рядка</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="312"/>
+        <location filename="../../src/Console/Handler.cpp" line="311"/>
         <source>New Line</source>
         <translation>Новий Рядок</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="313"/>
+        <location filename="../../src/Console/Handler.cpp" line="312"/>
         <source>Carriage Return</source>
         <translation>Повернення Каретки</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="314"/>
+        <location filename="../../src/Console/Handler.cpp" line="313"/>
         <source>CR + NL</source>
         <translation>CR + NL</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="324"/>
+        <location filename="../../src/Console/Handler.cpp" line="323"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="325"/>
+        <location filename="../../src/Console/Handler.cpp" line="324"/>
         <source>Hex</source>
         <translation>Хекс</translation>
     </message>
@@ -4647,12 +4666,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Шістнадцятковий</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="347"/>
+        <location filename="../../src/Console/Handler.cpp" line="346"/>
         <source>No Checksum</source>
         <translation>Без Контрольної Суми</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="1024"/>
+        <location filename="../../src/Console/Handler.cpp" line="1013"/>
         <source>Device %1</source>
         <translation>Пристрій %1</translation>
     </message>
@@ -4762,7 +4781,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="617"/>
         <source>%1 labels merged (bytes %2 to %3). Shrink the window to separate them.</source>
-        <translation>%1 міток об&apos;єднано (байти з %2 до %3). Зменшіть вікно, щоб розділити їх.</translation>
+        <translation>%1 міток об'єднано (байти з %2 до %3). Зменшіть вікно, щоб розділити їх.</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="622"/>
@@ -5068,7 +5087,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="157"/>
-        <source>Euler&apos;s number</source>
+        <source>Euler's number</source>
         <translation>Число Ейлера</translation>
     </message>
     <message>
@@ -5405,13 +5424,13 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <location filename="../../src/UI/Dashboard/WidgetMapBuilder.cpp" line="177"/>
         <location filename="../../src/UI/Dashboard/WidgetMapBuilder.cpp" line="192"/>
         <source>%1 (Fallback)</source>
-        <translation type="unfinished">%1 (Резервний)</translation>
+        <translation>%1 (Резервний)</translation>
     </message>
     <message>
         <location filename="../../src/UI/Dashboard/WidgetMapBuilder.cpp" line="214"/>
         <location filename="../../src/UI/Dashboard/WidgetMapBuilder.cpp" line="292"/>
         <source>LED Panel (%1)</source>
-        <translation type="unfinished">LED-Панель (%1)</translation>
+        <translation>LED-Панель (%1)</translation>
     </message>
 </context>
 <context>
@@ -5716,7 +5735,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../src/DataModel/Importers/DBCImporter.cpp" line="218"/>
         <source> Skipped %1 signal(s) whose multiplexing could not be resolved: a switch value outside the integer range, or a circular SG_MUL_VAL_ chain.</source>
-        <translation>Пропущено %1 сигнал(ів), мультиплексування яких не вдалося розв&apos;язати: значення перемикача поза діапазоном цілих чисел або циклічний ланцюг SG_MUL_VAL_.</translation>
+        <translation>Пропущено %1 сигнал(ів), мультиплексування яких не вдалося розв'язати: значення перемикача поза діапазоном цілих чисел або циклічний ланцюг SG_MUL_VAL_.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/DBCImporter.cpp" line="269"/>
@@ -5883,7 +5902,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 # Lines starting with # are comments.
 #
 # Inputs:
-#    v     this sample&apos;s raw value
+#    v     this sample's raw value
 #    t     seconds since the frame stream started
 #    dt    seconds since the previous sample
 #    n     sample index, starting at 0
@@ -6145,7 +6164,7 @@ v
 # Lines starting with # are comments.
 #
 # Inputs:
-#    v     this sample&apos;s raw value
+#    v     this sample's raw value
 #    t     seconds since the frame stream started
 #    dt    seconds since the previous sample
 #    n     sample index, starting at 0
@@ -6221,7 +6240,7 @@ v
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="569"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="556"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, historian, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
         <translation>Споживач даних (панель, експорт CSV/MDF4, історик або підписник API) не встигає обробляти дані, тому частина даних втрачається при відображенні та під час активного запису. Вимкніть ресурсномісткий споживач або зменште швидкість передачі даних.</translation>
     </message>
@@ -6242,7 +6261,7 @@ v
         <translation type="vanished">Швидкий Графік</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="567"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="554"/>
         <source>Block pool exhausted</source>
         <translation>Пул блоків вичерпано</translation>
     </message>
@@ -6251,12 +6270,12 @@ v
         <translation type="vanished">Споживач нижче за потоком (панель приладів, експорт CSV/MDF4, база даних сесії або підписник API) не встигає обробляти дані, тому дані втрачаються з відображення та з будь-якого активного запису. Вимкніть ресурсомісткий споживач або зменшіть швидкість передачі даних.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2746"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2560"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>Перетворення JavaScript перевищило ліміт</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2747"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2561"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>Перетворення для одного з наборів даних тривало більше ніж %1 мс; решта наборів даних у фреймі були повернуті у вигляді сирих значень до наступного фрейму. Проаналізуйте або спростіть код перетворення.</translation>
     </message>
@@ -6499,7 +6518,7 @@ Valid format: 01 A2 FF 3C</source>
         <translation type="vanished">Значення</translation>
     </message>
     <message>
-        <source>Enter frame data above, enable HEX mode if needed, then click &quot;Evaluate&quot; to run the frame parser.
+        <source>Enter frame data above, enable HEX mode if needed, then click "Evaluate" to run the frame parser.
 
 Example (Text): a,b,c,d,e,f
 Example (HEX):  48 65 6C 6C 6F</source>
@@ -6796,10 +6815,10 @@ Any unsaved changes are lost. Continue?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="369"/>
-        <source>&quot;%1&quot; expects %2 dataset(s); the current group has %3.
+        <source>"%1" expects %2 dataset(s); the current group has %3.
 
-Add %4 dataset(s) using the template&apos;s defaults?</source>
-        <translation>&quot;%1&quot; очікує %2 набір(ів) даних; поточна група має %3.
+Add %4 dataset(s) using the template's defaults?</source>
+        <translation>"%1" очікує %2 набір(ів) даних; поточна група має %3.
 
 Додати %4 набір(ів) даних з використанням типових значень шаблону?</translation>
     </message>
@@ -7031,7 +7050,7 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="412"/>
         <source>Select how this group of datasets should be visualized (optional)</source>
-        <translation>Виберіть спосіб візуалізації цієї групи наборів даних (необов&apos;язково)</translation>
+        <translation>Виберіть спосіб візуалізації цієї групи наборів даних (необов'язково)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorForms.cpp" line="199"/>
@@ -7083,7 +7102,7 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     </message>
     <message>
         <source>Shared Memory</source>
-        <translation type="vanished">Спільна Пам&apos;ять</translation>
+        <translation type="vanished">Спільна Пам'ять</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorSummaries.cpp" line="134"/>
@@ -7251,7 +7270,7 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="264"/>
         <source>Optional</source>
-        <translation>Необов&apos;язково</translation>
+        <translation>Необов'язково</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="265"/>
@@ -7266,7 +7285,7 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="290"/>
         <source>Hostname</source>
-        <translation>Ім&apos;я Хоста</translation>
+        <translation>Ім'я Хоста</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="291"/>
@@ -7276,7 +7295,7 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="292"/>
         <source>Hostname or IP address of the MQTT broker</source>
-        <translation>Ім&apos;я хоста або IP-адреса MQTT-брокера</translation>
+        <translation>Ім'я хоста або IP-адреса MQTT-брокера</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="301"/>
@@ -7341,12 +7360,12 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="377"/>
         <source>Username</source>
-        <translation>Ім&apos;я Користувача</translation>
+        <translation>Ім'я Користувача</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="378"/>
         <source>Username for broker authentication (leave empty for anonymous)</source>
-        <translation>Ім&apos;я користувача для автентифікації брокера (залиште порожнім для анонімного доступу)</translation>
+        <translation>Ім'я користувача для автентифікації брокера (залиште порожнім для анонімного доступу)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="388"/>
@@ -7371,7 +7390,7 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="491"/>
         <source>Tunnel the broker connection over TLS</source>
-        <translation>Тунелювати з&apos;єднання з брокером через TLS</translation>
+        <translation>Тунелювати з'єднання з брокером через TLS</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="504"/>
@@ -7390,7 +7409,7 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorMqtt.cpp" line="516"/>
-        <source>How strictly the broker&apos;s certificate chain is validated</source>
+        <source>How strictly the broker's certificate chain is validated</source>
         <translation>Наскільки строго перевіряється ланцюжок сертифікатів брокера</translation>
     </message>
     <message>
@@ -7724,7 +7743,7 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
         <translation>Приховати на Панелі</translation>
     </message>
     <message>
-        <source>Suppress this dataset&apos;s standalone dashboard tile; the painter widget can still read its values</source>
+        <source>Suppress this dataset's standalone dashboard tile; the painter widget can still read its values</source>
         <translation type="vanished">Приховати окрему плитку панелі для цього набору даних; віджет малювання все ще зможе читати його значення</translation>
     </message>
     <message>
@@ -7759,7 +7778,7 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="251"/>
-        <source>Suppress this dataset&apos;s standalone dashboard tile; the canvas widget can still read its values</source>
+        <source>Suppress this dataset's standalone dashboard tile; the canvas widget can still read its values</source>
         <translation>Приховати окрему плитку панелі для цього набору даних; віджет полотна все ще зможе читати його значення</translation>
     </message>
     <message>
@@ -7770,7 +7789,7 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="305"/>
         <source>Stable name for getDataset-style script/API lookups; must be unique (optional)</source>
-        <translation>Стабільна назва для пошуку через getDataset у скриптах/API; має бути унікальною (необов&apos;язково)</translation>
+        <translation>Стабільна назва для пошуку через getDataset у скриптах/API; має бути унікальною (необов'язково)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="345"/>
@@ -7825,7 +7844,7 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="509"/>
         <source>Choose Time (default) or any dataset whose value drives the Y axis -- produces a Campbell diagram when bound to e.g. RPM</source>
-        <translation>Виберіть Час (за замовчуванням) або будь-який набір даних, значення якого керує віссю Y -- створює діаграму Кемпбелла при прив&apos;язці до, наприклад, RPM</translation>
+        <translation>Виберіть Час (за замовчуванням) або будь-який набір даних, значення якого керує віссю Y -- створює діаграму Кемпбелла при прив'язці до, наприклад, RPM</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="549"/>
@@ -7860,7 +7879,7 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="590"/>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="714"/>
         <source>Minimum Value (optional)</source>
-        <translation>Мінімальне Значення (необов&apos;язково)</translation>
+        <translation>Мінімальне Значення (необов'язково)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="591"/>
@@ -7871,7 +7890,7 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="603"/>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="726"/>
         <source>Maximum Value (optional)</source>
-        <translation>Максимальне Значення (необов&apos;язково)</translation>
+        <translation>Максимальне Значення (необов'язково)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="604"/>
@@ -7997,7 +8016,7 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="279"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
-        <translation>Одиниця вимірювання, наприклад вольти або ампери (необов&apos;язково)</translation>
+        <translation>Одиниця вимірювання, наприклад вольти або ампери (необов'язково)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="372"/>
@@ -8026,7 +8045,7 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     </message>
     <message>
         <source>Minimum Plot Value (optional)</source>
-        <translation type="vanished">Мінімальне Значення Графіка (необов&apos;язково)</translation>
+        <translation type="vanished">Мінімальне Значення Графіка (необов'язково)</translation>
     </message>
     <message>
         <source>Lower bound for plot display range</source>
@@ -8034,7 +8053,7 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     </message>
     <message>
         <source>Maximum Plot Value (optional)</source>
-        <translation type="vanished">Максимальне Значення Графіка (необов&apos;язково)</translation>
+        <translation type="vanished">Максимальне Значення Графіка (необов'язково)</translation>
     </message>
     <message>
         <source>Upper bound for plot display range</source>
@@ -8071,7 +8090,7 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     </message>
     <message>
         <source>Choose Time (default) or any dataset whose value drives the Y axis — produces a Campbell diagram when bound to e.g. RPM</source>
-        <translation type="vanished">Виберіть Час (за замовчуванням) або будь-який набір даних, значення якого керує віссю Y — створює діаграму Кемпбелла при прив&apos;язці до, наприклад, RPM</translation>
+        <translation type="vanished">Виберіть Час (за замовчуванням) або будь-який набір даних, значення якого керує віссю Y — створює діаграму Кемпбелла при прив'язці до, наприклад, RPM</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="534"/>
@@ -8086,7 +8105,7 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="563"/>
         <source>FFT Sampling Rate (Hz, required)</source>
-        <translation>Частота Дискретизації FFT (Гц, обов&apos;язково)</translation>
+        <translation>Частота Дискретизації FFT (Гц, обов'язково)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="564"/>
@@ -8126,7 +8145,7 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     </message>
     <message>
         <source>Minimum Display Value (required)</source>
-        <translation type="vanished">Мінімальне Значення Відображення (обов&apos;язково)</translation>
+        <translation type="vanished">Мінімальне Значення Відображення (обов'язково)</translation>
     </message>
     <message>
         <source>Lower bound of the gauge or bar display range</source>
@@ -8134,7 +8153,7 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     </message>
     <message>
         <source>Maximum Display Value (required)</source>
-        <translation type="vanished">Максимальне Значення Відображення (обов&apos;язково)</translation>
+        <translation type="vanished">Максимальне Значення Відображення (обов'язково)</translation>
     </message>
     <message>
         <source>Upper bound of the gauge or bar display range</source>
@@ -8222,7 +8241,7 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     <message>
         <location filename="../../src/DataModel/Generated/DatasetForm.cpp" line="782"/>
         <source>LED On Threshold (required)</source>
-        <translation>Поріг увімкнення LED (обов&apos;язково)</translation>
+        <translation>Поріг увімкнення LED (обов'язково)</translation>
     </message>
     <message>
         <source>LED lights up when value meets or exceeds this threshold</source>
@@ -8655,8 +8674,8 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="668"/>
-        <source>Alias &quot;%1&quot; is already in use</source>
-        <translation>Псевдонім &quot;%1&quot; вже використовується</translation>
+        <source>Alias "%1" is already in use</source>
+        <translation>Псевдонім "%1" вже використовується</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="669"/>
@@ -8670,13 +8689,13 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="682"/>
-        <source>Alias &quot;%1&quot; contains only digits</source>
-        <translation>Псевдонім &quot;%1&quot; містить лише цифри</translation>
+        <source>Alias "%1" contains only digits</source>
+        <translation>Псевдонім "%1" містить лише цифри</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="683"/>
-        <source>Scripts must quote it as a string, e.g. getDataset(&quot;%1&quot;); a numeric argument is read as a uniqueId, not this alias.</source>
-        <translation>Скрипти повинні вказувати його як рядок, наприклад getDataset(&quot;%1&quot;); числовий аргумент читається як uniqueId, а не цей псевдонім.</translation>
+        <source>Scripts must quote it as a string, e.g. getDataset("%1"); a numeric argument is read as a uniqueId, not this alias.</source>
+        <translation>Скрипти повинні вказувати його як рядок, наприклад getDataset("%1"); числовий аргумент читається як uniqueId, а не цей псевдонім.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="687"/>
@@ -8707,53 +8726,53 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
 <context>
     <name>DataModel::ProjectModel</name>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="341"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="350"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="293"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="302"/>
         <source>Lock Project</source>
         <translation>Заблокувати Проєкт</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="342"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="294"/>
         <source>Choose a password to lock the project:</source>
         <translation>Виберіть пароль для блокування проєкту:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="350"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="302"/>
         <source>Confirm the password:</source>
         <translation>Підтвердіть пароль:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="355"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="307"/>
         <source>Passwords do not match</source>
         <translation>Паролі не збігаються</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="356"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="308"/>
         <source>The two passwords you entered do not match. The project was not locked.</source>
         <translation>Введені паролі не збігаються. Проєкт не заблоковано.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="393"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="345"/>
         <source>Unlock Project</source>
         <translation>Розблокувати Проєкт</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="394"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="346"/>
         <source>Enter the project password:</source>
         <translation>Введіть пароль проєкту:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="404"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="356"/>
         <source>Incorrect password</source>
         <translation>Неправильний пароль</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="405"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="357"/>
         <source>The password you entered does not match the one stored in the project file.</source>
         <translation>Введений пароль не збігається з паролем, збереженим у файлі проєкту.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="534"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="438"/>
         <source>New Project</source>
         <translation>Новий Проєкт</translation>
     </message>
@@ -8762,12 +8781,12 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
         <translation type="vanished">Зразки</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="936"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="580"/>
         <source>Change MQTT Publisher</source>
         <translation>Змінити Видавця MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="960"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="596"/>
         <source>Change InfluxDB Sink</source>
         <translation>Змінити Приймач Influxdb</translation>
     </message>
@@ -8780,86 +8799,86 @@ Add %4 dataset(s) using the template&apos;s defaults?</source>
         <translation type="vanished">Назва для відображення (порожнє відновлює оригінальну):</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1430"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="853"/>
         <source>Change Project Title</source>
         <translation>Змінити Назву Проєкту</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1454"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="869"/>
         <source>Edit Control Script</source>
         <translation>Редагувати Скрипт Керування</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1471"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="886"/>
         <source>Change Point Count</source>
         <translation>Змінити Кількість Точок</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1494"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="909"/>
         <source>Change Plot Time Range</source>
         <translation>Змінити Діапазон Часу Графіка</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1520"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="935"/>
         <source>Toggle Freeze</source>
         <translation>Перемкнути Заморожування</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1535"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="950"/>
         <source>Toggle Change-Driven Transforms</source>
         <translation>Перемкнути Перетворення За Зміною</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1552"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="967"/>
         <source>Toggle Fast Lua Execution</source>
         <translation>Перемкнути Швидке Виконання Lua</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1573"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="988"/>
         <source>Enable Fast Lua Execution?</source>
         <translation>Увімкнути швидке виконання Lua?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1574"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="989"/>
         <source>Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x faster), but the runaway-script watchdog cannot operate: a script stuck in an infinite loop will stall its data source until you disconnect.
 
 Enable it only for scripts you trust and have tested in Safe mode first.</source>
-        <translation>Швидкий режим виконує парсери Lua та перетворення через JIT-компілятор (до ~40× швидше), але сторожовий таймер зациклених скриптів не працює: скрипт, що потрапив у нескінченний цикл, заблокує джерело даних до від&apos;єднання.
+        <translation>Швидкий режим виконує парсери Lua та перетворення через JIT-компілятор (до ~40× швидше), але сторожовий таймер зациклених скриптів не працює: скрипт, що потрапив у нескінченний цикл, заблокує джерело даних до від'єднання.
 
 Вмикайте його лише для скриптів, яким ви довіряєте і які перевірили в безпечному режимі.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1579"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="994"/>
         <source>Fast Lua Execution</source>
         <translation>Швидке Виконання Lua</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1608"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1023"/>
         <source>Change Frame Start Sequence</source>
         <translation>Змінити Послідовність Початку Кадру</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1627"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1042"/>
         <source>Change Frame End Sequence</source>
         <translation>Змінити Послідовність Кінця Кадру</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1646"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1061"/>
         <source>Change Checksum</source>
         <translation>Змінити Контрольну Суму</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1665"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1080"/>
         <source>Change Frame Detection</source>
         <translation>Змінити Виявлення Кадрів</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1684"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1099"/>
         <source>Change Decoder</source>
         <translation>Змінити Декодер</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1703"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1118"/>
         <source>Toggle Hex Delimiters</source>
         <translation>Перемкнути Hex Роздільники</translation>
     </message>
@@ -8932,54 +8951,54 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">У цьому проєкті є незбережені зміни!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="211"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="220"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="234"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="187"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="196"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="210"/>
         <source>Project error</source>
         <translation>Помилка проєкту</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="211"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="187"/>
         <source>Project title cannot be empty!</source>
         <translation>Назва проєкту не може бути порожньою!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="220"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="196"/>
         <source>You need to add at least one group!</source>
         <translation>Необхідно додати принаймні одну групу!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="234"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="210"/>
         <source>You need to add at least one dataset!</source>
         <translation>Необхідно додати принаймні один набір даних!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="282"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="250"/>
         <source>Your project needs a title</source>
         <translation>Проєкту потрібна назва</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="284"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="252"/>
         <source>Add a group to get started</source>
         <translation>Додайте групу, щоб почати</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="286"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="254"/>
         <source>Add a dataset to a group</source>
         <translation>Додайте набір даних до групи</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="300"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="268"/>
         <source>Open the Project view at the top of the tree and enter a name. You can rename the project at any time.</source>
         <translation>Відкрийте вигляд Проєкту у верхній частині дерева та введіть назву. Проєкт можна перейменувати в будь-який час.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="303"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="271"/>
         <source>Groups organize datasets into dashboard widgets. Use the Group button in the toolbar above to create one, then add datasets to it.</source>
         <translation>Групи організовують набори даних у віджети панелі. Використайте кнопку Група на панелі інструментів вище, щоб створити групу, а потім додайте до неї набори даних.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="307"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="275"/>
         <source>Datasets are the values that appear on the dashboard. Select a group in the tree and use the Dataset button in the toolbar to add one.</source>
         <translation>Набори даних — це значення, які відображаються на панелі приладів. Виберіть групу в дереві та використайте кнопку «Набір даних» на панелі інструментів, щоб додати його.</translation>
     </message>
@@ -8988,8 +9007,8 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">Час</translation>
     </message>
     <message>
-        <source>Do you want to delete data source &quot;%1&quot;?</source>
-        <translation type="vanished">Видалити джерело даних &quot;%1&quot;?</translation>
+        <source>Do you want to delete data source "%1"?</source>
+        <translation type="vanished">Видалити джерело даних "%1"?</translation>
     </message>
     <message>
         <source>Groups using this source will move to the default source. This action cannot be undone.</source>
@@ -9004,12 +9023,12 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">Файли Проєктів Serial Studio (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1302"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="725"/>
         <source>Untitled Project</source>
         <translation>Проєкт Без Назви</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1318"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="741"/>
         <source>Device A</source>
         <translation>Пристрій A</translation>
     </message>
@@ -9058,24 +9077,24 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">Застарілу функцію парсера кадрів оновлено</translation>
     </message>
     <message>
-        <source>Your project used a legacy frame parser function with a &apos;separator&apos; argument. It has been automatically migrated to the new format.</source>
-        <translation type="vanished">Ваш проєкт використовував застарілу функцію парсера фреймів з аргументом &apos;separator&apos;. Її автоматично перенесено до нового формату.</translation>
+        <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
+        <translation type="vanished">Ваш проєкт використовував застарілу функцію парсера фреймів з аргументом 'separator'. Її автоматично перенесено до нового формату.</translation>
     </message>
     <message>
-        <source>Do you want to delete group &quot;%1&quot;?</source>
-        <translation type="vanished">Видалити групу &quot;%1&quot;?</translation>
+        <source>Do you want to delete group "%1"?</source>
+        <translation type="vanished">Видалити групу "%1"?</translation>
     </message>
     <message>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation type="vanished">Цю дію неможливо скасувати. Продовжити?</translation>
     </message>
     <message>
-        <source>Do you want to delete action &quot;%1&quot;?</source>
-        <translation type="vanished">Видалити дію &quot;%1&quot;?</translation>
+        <source>Do you want to delete action "%1"?</source>
+        <translation type="vanished">Видалити дію "%1"?</translation>
     </message>
     <message>
-        <source>Do you want to delete dataset &quot;%1&quot;?</source>
-        <translation type="vanished">Видалити набір даних &quot;%1&quot;?</translation>
+        <source>Do you want to delete dataset "%1"?</source>
+        <translation type="vanished">Видалити набір даних "%1"?</translation>
     </message>
     <message>
         <source>%1 (Copy)</source>
@@ -9178,8 +9197,8 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">Новий Регулятор</translation>
     </message>
     <message>
-        <source>Do you want to delete output widget &quot;%1&quot;?</source>
-        <translation type="vanished">Видалити віджет виводу &quot;%1&quot;?</translation>
+        <source>Do you want to delete output widget "%1"?</source>
+        <translation type="vanished">Видалити віджет виводу "%1"?</translation>
     </message>
     <message>
         <source>Delete Output Widget</source>
@@ -9390,8 +9409,8 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">Це видалить %1 регістр(ів) разом із таблицею. Цю дію не можна скасувати.</translation>
     </message>
     <message>
-        <source>Delete &quot;%1&quot;?</source>
-        <translation type="vanished">Видалити &quot;%1&quot;?</translation>
+        <source>Delete "%1"?</source>
+        <translation type="vanished">Видалити "%1"?</translation>
     </message>
     <message>
         <source>Add Table</source>
@@ -9478,8 +9497,8 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">Перейменувати Теку</translation>
     </message>
     <message>
-        <source>Delete folder &quot;%1&quot;?</source>
-        <translation type="vanished">Видалити теку &quot;%1&quot;?</translation>
+        <source>Delete folder "%1"?</source>
+        <translation type="vanished">Видалити теку "%1"?</translation>
     </message>
     <message>
         <source>The folder is removed; its workspaces and sub-folders move up to the parent.</source>
@@ -9526,7 +9545,7 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">Відкинути налаштування робочого простору?</translation>
     </message>
     <message>
-        <source>Switching off Customize discards your edits and rebuilds the workspace list from the project&apos;s groups.</source>
+        <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
         <translation type="vanished">Вимкнення режиму налаштування відкине ваші зміни та перебудує список робочих просторів із груп проєкту.</translation>
     </message>
     <message>
@@ -9551,7 +9570,7 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
     </message>
     <message>
         <source>%1 was modified by another program. The in-memory project was kept; reopen the file to load the external changes.</source>
-        <translation type="vanished">%1 було змінено іншою програмою. Проєкт у пам&apos;яті збережено; відкрийте файл повторно, щоб завантажити зовнішні зміни.</translation>
+        <translation type="vanished">%1 було змінено іншою програмою. Проєкт у пам'яті збережено; відкрийте файл повторно, щоб завантажити зовнішні зміни.</translation>
     </message>
     <message>
         <source>The project file was modified by another program.
@@ -9684,34 +9703,34 @@ Reload it?</source>
     <message>
         <location filename="../../src/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="79"/>
         <source>Device A</source>
-        <translation type="unfinished">Пристрій A</translation>
+        <translation>Пристрій A</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="118"/>
         <location filename="../../src/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="264"/>
         <source>Channel %1</source>
-        <translation type="unfinished">Канал %1</translation>
+        <translation>Канал %1</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="127"/>
         <location filename="../../src/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="280"/>
         <source>Quick Plot</source>
-        <translation type="unfinished">Швидкий Графік</translation>
+        <translation>Швидкий Графік</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="134"/>
         <source>Quick Plot Data</source>
-        <translation type="unfinished">Дані Швидкого Графіка</translation>
+        <translation>Дані Швидкого Графіка</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="146"/>
         <source>Multi-Plot</source>
-        <translation type="unfinished">Множинний Графік</translation>
+        <translation>Множинний Графік</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="275"/>
         <source>Audio Input</source>
-        <translation type="unfinished">Аудіовхід</translation>
+        <translation>Аудіовхід</translation>
     </message>
 </context>
 <context>
@@ -9774,12 +9793,12 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="247"/>
         <source>Raw string output appears here</source>
-        <translation>Тут з&apos;являється необроблений рядковий вихід</translation>
+        <translation>Тут з'являється необроблений рядковий вихід</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="248"/>
         <source>Hex byte output appears here</source>
-        <translation>Тут з&apos;являється шістнадцятковий байтовий вихід</translation>
+        <translation>Тут з'являється шістнадцятковий байтовий вихід</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="251"/>
@@ -9811,7 +9830,7 @@ Valid format: 01 A2 FF 3C</source>
     <name>DataTablesView</name>
     <message>
         <source>Shared Memory</source>
-        <translation type="vanished">Спільна Пам&apos;ять</translation>
+        <translation type="vanished">Спільна Пам'ять</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="35"/>
@@ -9851,7 +9870,7 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <source>Open help documentation for shared memory</source>
-        <translation type="vanished">Відкрити довідкову документацію зі спільної пам&apos;яті</translation>
+        <translation type="vanished">Відкрити довідкову документацію зі спільної пам'яті</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="222"/>
@@ -10105,7 +10124,7 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="344"/>
-        <source>Define colored value ranges with severity tiers for this dataset&apos;s gauge or LED.</source>
+        <source>Define colored value ranges with severity tiers for this dataset's gauge or LED.</source>
         <translation>Визначте кольорові діапазони значень з рівнями серйозності для датчика або LED цього набору даних.</translation>
     </message>
     <message>
@@ -10116,7 +10135,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="357"/>
         <source>Pin labeled frequencies or bands on the FFT plot and waterfall, with optional warning and alarm levels.</source>
-        <translation>Закріплюйте позначені частоти або смуги на графіку FFT і водоспаді, з необов&apos;язковими рівнями попередження та тривоги.</translation>
+        <translation>Закріплюйте позначені частоти або смуги на графіку FFT і водоспаді, з необов'язковими рівнями попередження та тривоги.</translation>
     </message>
     <message>
         <source>Thermometer</source>
@@ -10147,7 +10166,7 @@ Valid format: 01 A2 FF 3C</source>
         <translation>Діапазони Тривог</translation>
     </message>
     <message>
-        <source>Define colored value ranges with severity tiers for this dataset&apos;s gauge.</source>
+        <source>Define colored value ranges with severity tiers for this dataset's gauge.</source>
         <translation type="vanished">Визначте кольорові діапазони значень з рівнями серйозності для датчика цього набору даних.</translation>
     </message>
     <message>
@@ -10179,6 +10198,81 @@ Valid format: 01 A2 FF 3C</source>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="393"/>
         <source>Delete this dataset from the group</source>
         <translation>Видалити цей набір даних з групи</translation>
+    </message>
+</context>
+<context>
+    <name>DiagramLayout</name>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="242"/>
+        <source>Group</source>
+        <translation>Група</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="369"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="785"/>
+        <source>Folder</source>
+        <translation>Папка</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="401"/>
+        <source>Control Loop</source>
+        <translation>Цикл Керування</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="403"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="737"/>
+        <source>empty</source>
+        <translation>порожньо</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="447"/>
+        <source>Frame Parser</source>
+        <translation>Парсер Фреймів</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="454"/>
+        <source>Device %1</source>
+        <translation>Пристрій %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="531"/>
+        <source>Output Panel</source>
+        <translation>Панель Виводу</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="567"/>
+        <source>Control</source>
+        <translation>Керування</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="600"/>
+        <source>Outputs</source>
+        <translation>Виходи</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="638"/>
+        <source>Action</source>
+        <translation>Дія</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="723"/>
+        <source>Table</source>
+        <translation>Таблиця</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="737"/>
+        <source>%1 regs</source>
+        <translation>%1 рег.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="828"/>
+        <source>Variables</source>
+        <translation>Змінні</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/DiagramLayout.qml" line="872"/>
+        <source>MQTT Publisher</source>
+        <translation>MQTT Видавець</translation>
     </message>
 </context>
 <context>
@@ -10265,7 +10359,7 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="276"/>
-        <source>Click &quot;OK&quot; to begin installing the update</source>
+        <source>Click "OK" to begin installing the update</source>
         <translation>Натисніть «OK», щоб почати встановлення оновлення</translation>
     </message>
     <message>
@@ -10281,11 +10375,11 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="282"/>
         <source>In order to install the update, you may need to quit the application. This is a mandatory update, exiting now will close the application.</source>
-        <translation>Для встановлення оновлення може знадобитися закрити застосунок. Це обов&apos;язкове оновлення, вихід зараз закриє застосунок.</translation>
+        <translation>Для встановлення оновлення може знадобитися закрити застосунок. Це обов'язкове оновлення, вихід зараз закриє застосунок.</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="298"/>
-        <source>Click the &quot;Open&quot; button to apply the update</source>
+        <source>Click the "Open" button to apply the update</source>
         <translation>Натисніть кнопку «Відкрити», щоб застосувати оновлення</translation>
     </message>
     <message>
@@ -10301,7 +10395,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="317"/>
         <source>Are you sure you want to cancel the download? This is a mandatory update, exiting now will close the application</source>
-        <translation>Ви впевнені, що хочете скасувати завантаження? Це обов&apos;язкове оновлення, вихід зараз закриє застосунок</translation>
+        <translation>Ви впевнені, що хочете скасувати завантаження? Це обов'язкове оновлення, вихід зараз закриє застосунок</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="372"/>
@@ -10820,16 +10914,16 @@ Add controller tags above to poll them.</source>
     <message>
         <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="212"/>
         <source>This widget runs inside Serial Studio with the same privileges as the application itself. It can read and change files on this computer, use the network, and do anything Serial Studio can do. Serial Studio does not restrict what it does, and cannot undo what it does.</source>
-        <translation>Цей віджет виконується всередині Serial Studio з тими самими привілеями, що й сам додаток. Він може читати та змінювати файли на цьому комп&apos;ютері, використовувати мережу та робити все, що може Serial Studio. Serial Studio не обмежує його дії та не може скасувати те, що він робить.</translation>
+        <translation>Цей віджет виконується всередині Serial Studio з тими самими привілеями, що й сам додаток. Він може читати та змінювати файли на цьому комп'ютері, використовувати мережу та робити все, що може Serial Studio. Serial Studio не обмежує його дії та не може скасувати те, що він робить.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="224"/>
         <source>Allow it only if you trust its author. Your answer is remembered for this version of the package; a later update asks again.</source>
-        <translation>Дозволяйте лише якщо ви довіряєте його автору. Ваша відповідь запам&apos;ятовується для цієї версії пакета; наступне оновлення запитає знову.</translation>
+        <translation>Дозволяйте лише якщо ви довіряєте його автору. Ваша відповідь запам'ятовується для цієї версії пакета; наступне оновлення запитає знову.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="242"/>
-        <source>Don&apos;t Allow</source>
+        <source>Don't Allow</source>
         <translation>Не Дозволяти</translation>
     </message>
     <message>
@@ -11164,7 +11258,7 @@ Add controller tags above to poll them.</source>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="745"/>
-        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>Недоступно через віддалене підключення. Цей віджет потребує потоку необроблених зразків з віддаленого пристрою, який дзеркало панелі не передає.</translation>
     </message>
     <message>
@@ -11308,59 +11402,48 @@ Add controller tags above to poll them.</source>
 <context>
     <name>FlowDiagram</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="457"/>
         <source>Frame Parser</source>
-        <translation>Парсер Кадрів</translation>
+        <translation type="vanished">Парсер Кадрів</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="464"/>
         <source>Device %1</source>
-        <translation>Пристрій %1</translation>
+        <translation type="vanished">Пристрій %1</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="541"/>
         <source>Output Panel</source>
-        <translation>Панель Виводу</translation>
+        <translation type="vanished">Панель Виводу</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="577"/>
         <source>Control</source>
-        <translation>Керування</translation>
+        <translation type="vanished">Керування</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="733"/>
         <source>Table</source>
-        <translation>Таблиця</translation>
+        <translation type="vanished">Таблиця</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="747"/>
         <source>%1 regs</source>
-        <translation>%1 рег.</translation>
+        <translation type="vanished">%1 рег.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="838"/>
         <source>Variables</source>
-        <translation>Змінні</translation>
+        <translation type="vanished">Змінні</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="413"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="747"/>
         <source>empty</source>
-        <translation>порожньо</translation>
+        <translation type="vanished">порожньо</translation>
     </message>
     <message>
         <source>Control Script</source>
         <translation type="vanished">Скрипт Керування</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="882"/>
         <source>MQTT Publisher</source>
-        <translation>Видавець MQTT</translation>
+        <translation type="vanished">Видавець MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1283"/>
         <source>Open the transform code editor for this dataset.</source>
-        <translation>Відкрити редактор коду перетворення для цього набору даних.</translation>
+        <translation type="vanished">Відкрити редактор коду перетворення для цього набору даних.</translation>
     </message>
     <message>
         <source>Dataset Container</source>
@@ -11443,18 +11526,16 @@ Add controller tags above to poll them.</source>
         <translation type="vanished">Термометр</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="411"/>
         <source>Control Loop</source>
-        <translation>Цикл Керування</translation>
+        <translation type="vanished">Цикл Керування</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="610"/>
         <source>Outputs</source>
-        <translation>Виходи</translation>
+        <translation type="vanished">Виходи</translation>
     </message>
     <message>
         <source>Shared Memory</source>
-        <translation type="vanished">Спільна Пам&apos;ять</translation>
+        <translation type="vanished">Спільна Пам'ять</translation>
     </message>
     <message>
         <source>Bar Panel</source>
@@ -11549,20 +11630,16 @@ Add controller tags above to poll them.</source>
         <translation type="vanished">Редагувати Цикл Керування…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="252"/>
         <source>Group</source>
-        <translation>Група</translation>
+        <translation type="vanished">Група</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="379"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="795"/>
         <source>Folder</source>
-        <translation>Тека</translation>
+        <translation type="vanished">Тека</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="648"/>
         <source>Action</source>
-        <translation>Дія</translation>
+        <translation type="vanished">Дія</translation>
     </message>
     <message>
         <source>No groups defined yet</source>
@@ -11993,7 +12070,7 @@ Add controller tags above to poll them.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="592"/>
         <source>(optional)</source>
-        <translation>(необов&apos;язково)</translation>
+        <translation>(необов'язково)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="609"/>
@@ -12556,7 +12633,7 @@ Add controller tags above to poll them.</source>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="287"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="280"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
@@ -12565,92 +12642,92 @@ Add controller tags above to poll them.</source>
         <translation type="vanished">Мережевий Сокет</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="288"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="280"/>
         <source>Network</source>
         <translation>Мережа</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="289"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="280"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="291"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="282"/>
         <source>Audio</source>
         <translation>Аудіо</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="292"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="282"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="293"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="282"/>
         <source>CAN Bus</source>
         <translation>Шина CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="294"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="282"/>
         <source>USB Device</source>
         <translation>USB-Пристрій</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="295"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="282"/>
         <source>HID Device</source>
         <translation>HID-Пристрій</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="296"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="283"/>
         <source>Process</source>
         <translation>Процес</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="297"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="283"/>
         <source>MQTT Subscriber</source>
         <translation>Підписник MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="298"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="283"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="299"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="283"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="300"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="284"/>
         <source>EtherNet/IP</source>
         <translation>Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="301"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="284"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="716"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="670"/>
         <source>Your trial period has ended.</source>
         <translation>Ваш пробний період закінчився.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="717"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="671"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>Щоб продовжити використання Serial Studio, активуйте вашу ліцензію.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="802"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="748"/>
         <source>connection attempt failed</source>
         <translation>спроба підключення не вдалася</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1300"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1220"/>
         <source>This connection type requires an active license or trial.</source>
         <translation>Цей тип підключення вимагає активної ліцензії або пробного періоду.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1301"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1221"/>
         <source>Activate Serial Studio Pro or start a trial to use this device type.</source>
         <translation>Активуйте Serial Studio Pro або розпочніть пробний період для використання цього типу пристрою.</translation>
     </message>
@@ -12664,7 +12741,7 @@ Add controller tags above to poll them.</source>
     </message>
     <message>
         <source>%1: link lost</source>
-        <translation type="vanished">%1: з&apos;єднання втрачено</translation>
+        <translation type="vanished">%1: з'єднання втрачено</translation>
     </message>
     <message>
         <source>Attempting to reconnect automatically</source>
@@ -12672,11 +12749,11 @@ Add controller tags above to poll them.</source>
     </message>
     <message>
         <source>%1: link restored</source>
-        <translation type="vanished">%1: з&apos;єднання відновлено</translation>
+        <translation type="vanished">%1: з'єднання відновлено</translation>
     </message>
     <message>
         <source>The connection recovered automatically</source>
-        <translation type="vanished">З&apos;єднання відновлено автоматично</translation>
+        <translation type="vanished">З'єднання відновлено автоматично</translation>
     </message>
     <message>
         <source>Device %1</source>
@@ -12973,7 +13050,7 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="943"/>
         <source>CAN Bus Communication Error</source>
-        <translation>Помилка Зв&apos;язку Magistrali CAN</translation>
+        <translation>Помилка Зв'язку Magistrali CAN</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="1049"/>
@@ -13003,18 +13080,18 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="995"/>
-        <source>Install &lt;a href=&apos;https://www.peak-system.com/Drivers.523.0.html?&amp;L=1&apos;&gt;PEAK CAN drivers&lt;/a&gt;</source>
-        <translation>Встановіть &lt;a href=&apos;https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1&apos;&gt;драйвери PEAK CAN&lt;/a&gt;</translation>
+        <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
+        <translation>Встановіть &lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;драйвери PEAK CAN&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="999"/>
-        <source>Install &lt;a href=&apos;https://www.vector.com/us/en/products/products-a-z/libraries-drivers/&apos;&gt;Vector CAN drivers&lt;/a&gt;</source>
-        <translation>Встановіть &lt;a href=&apos;https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/&apos;&gt;драйвери VECTOR CAN&lt;/a&gt;</translation>
+        <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
+        <translation>Встановіть &lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;драйвери VECTOR CAN&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="1003"/>
-        <source>Install &lt;a href=&apos;https://www.systec-electronic.com/en/company/support/driver&apos;&gt;SysTec CAN drivers&lt;/a&gt;</source>
-        <translation>Встановіть &lt;a href=&apos;https://www.systec-electronic.com/en/company/support/driver&apos;&gt;драйвери SysTec CAN&lt;/a&gt;</translation>
+        <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
+        <translation>Встановіть &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;драйвери SysTec CAN&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="1006"/>
@@ -13082,13 +13159,13 @@ sudo ip link set %1 up type can bitrate %2
     <name>IO::Drivers::EipPollWorker</name>
     <message>
         <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="370"/>
-        <source>&quot;%1&quot;: %2</source>
-        <translation>&quot;%1&quot;: %2</translation>
+        <source>"%1": %2</source>
+        <translation>"%1": %2</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="377"/>
         <source>The controller did not open every tag within the connection deadline</source>
-        <translation>Контролер не відкрив усі теги в межах часу очікування з&apos;єднання</translation>
+        <translation>Контролер не відкрив усі теги в межах часу очікування з'єднання</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="444"/>
@@ -13099,128 +13176,128 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::EthernetIp</name>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="793"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="795"/>
         <source>The connection is not configured: check the host and the tag list</source>
-        <translation>З&apos;єднання не налаштовано: перевірте хост та список тегів</translation>
-    </message>
-    <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="815"/>
-        <source>EtherNet/IP Connection Failed</source>
-        <translation>Помилка З&apos;єднання Ethernet/IP</translation>
-    </message>
-    <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="816"/>
-        <source>&quot;%1&quot;: %2</source>
-        <translation>&quot;%1&quot;: %2</translation>
+        <translation>З'єднання не налаштовано: перевірте хост та список тегів</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="817"/>
+        <source>EtherNet/IP Connection Failed</source>
+        <translation>Помилка З'єднання Ethernet/IP</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="818"/>
+        <source>"%1": %2</source>
+        <translation>"%1": %2</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="819"/>
         <source>the controller did not answer</source>
         <translation>контролер не відповів</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="860"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="862"/>
         <source>EtherNet/IP Connection Lost</source>
         <translation>Втрачено Підключення Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="941"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="943"/>
         <source>ControlLogix</source>
         <translation>Controllogix</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="942"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="944"/>
         <source>CompactLogix</source>
         <translation>Compactlogix</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="943"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="945"/>
         <source>MicroLogix</source>
         <translation>Micrologix</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="944"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="946"/>
         <source>Micro800</source>
         <translation>Micro800</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="945"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="947"/>
         <source>PLC-5</source>
         <translation>PLC-5</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="946"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="948"/>
         <source>SLC 500</source>
         <translation>SLC 500</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="947"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="949"/>
         <source>Logix PCCC</source>
         <translation>Logix PCCC</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="948"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="950"/>
         <source>Omron NJ/NX</source>
         <translation>Omron NJ/NX</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="991"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="993"/>
         <source>Not connected</source>
         <translation>Не підключено</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="994"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="996"/>
         <source>Polling %1 tags at %2 Hz</source>
         <translation>Опитування %1 тегів на частоті %2 Гц</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1211"/>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1220"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1213"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1222"/>
         <source>EtherNet/IP Tag</source>
         <translation>Тег Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1212"/>
-        <source>The tag name &quot;%1&quot; is too long or contains characters that are not allowed (no &apos;&amp;&apos;, &apos;=&apos; or whitespace).</source>
-        <translation>Ім&apos;я тегу &quot;%1&quot; занадто довге або містить недопустимі символи (без &apos;&amp;&apos;, &apos;=&apos; або пробілів).</translation>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1214"/>
+        <source>The tag name "%1" is too long or contains characters that are not allowed (no '&amp;', '=' or whitespace).</source>
+        <translation>Ім'я тегу "%1" занадто довге або містить недопустимі символи (без '&amp;', '=' або пробілів).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1220"/>
-        <source>Unknown tag type &quot;%1&quot;.</source>
-        <translation>Невідомий тип тегу &quot;%1&quot;.</translation>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1222"/>
+        <source>Unknown tag type "%1".</source>
+        <translation>Невідомий тип тегу "%1".</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1272"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1274"/>
         <source>Gateway</source>
         <translation>Шлюз</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1279"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1281"/>
         <source>CIP Path</source>
         <translation>Шлях CIP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1286"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1288"/>
         <source>Controller Family</source>
         <translation>Сімейство Контролера</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1294"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1296"/>
         <source>Poll Interval (ms)</source>
         <translation>Інтервал Опитування (мс)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1388"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1390"/>
         <source>EtherNet/IP Project</source>
         <translation>Проєкт Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1393"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1395"/>
         <source>EtherNet/IP</source>
         <translation>Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1422"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1424"/>
         <source>Controller Tags</source>
         <translation>Теги Контролера</translation>
     </message>
@@ -13306,7 +13383,7 @@ sudo ip link set %1 up type can bitrate %2
     <message>
         <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="782"/>
         <source>The CANable adapter was disconnected.</source>
-        <translation>Адаптер CANable було від&apos;єднано.</translation>
+        <translation>Адаптер CANable було від'єднано.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="859"/>
@@ -13366,15 +13443,15 @@ sudo ip link set %1 up type can bitrate %2
         <location filename="../../src/IO/Drivers/HID.cpp" line="183"/>
         <source>
 
-Check that your user is in the &apos;plugdev&apos; group or that a udev rule grants access to this device.</source>
-        <translation>Переконайтеся, що ваш користувач входить до групи &apos;plugdev&apos; або що правило udev надає доступ до цього пристрою.
+Check that your user is in the 'plugdev' group or that a udev rule grants access to this device.</source>
+        <translation>Переконайтеся, що ваш користувач входить до групи 'plugdev' або що правило udev надає доступ до цього пристрою.
 
 </translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/HID.cpp" line="186"/>
-        <source>Failed to open &quot;%1&quot;</source>
-        <translation>Не вдалося відкрити &quot;%1&quot;</translation>
+        <source>Failed to open "%1"</source>
+        <translation>Не вдалося відкрити "%1"</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/HID.cpp" line="291"/>
@@ -13384,7 +13461,7 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     <message>
         <location filename="../../src/IO/Drivers/HID.cpp" line="292"/>
         <source>The HID device was disconnected or encountered a fatal read error.</source>
-        <translation>Пристрій HID було від&apos;єднано або виникла критична помилка зчитування.</translation>
+        <translation>Пристрій HID було від'єднано або виникла критична помилка зчитування.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/HID.cpp" line="436"/>
@@ -13400,107 +13477,107 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
 <context>
     <name>IO::Drivers::Iec104</name>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="377"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="379"/>
         <source>The connection is not configured: check the host and the port</source>
-        <translation>З&apos;єднання не налаштовано: перевірте хост і порт</translation>
+        <translation>З'єднання не налаштовано: перевірте хост і порт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="432"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="434"/>
         <source>IEC 104 Connection Failed</source>
-        <translation>Помилка З&apos;єднання IEC 104</translation>
+        <translation>Помилка З'єднання IEC 104</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="433"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="435"/>
         <source>Cannot connect to %1:%2 (%3)</source>
         <translation>Не вдається підключитися до %1:%2 (%3)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="471"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="473"/>
         <source>The station sent more than the receive buffer holds</source>
         <translation>Станція надіслала більше даних, ніж вміщує буфер прийому</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="509"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="511"/>
         <source>The station sent a frame this link could not decode</source>
-        <translation>Станція надіслала кадр, який це з&apos;єднання не змогло декодувати</translation>
+        <translation>Станція надіслала кадр, який це з'єднання не змогло декодувати</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="655"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="657"/>
         <source>The station did not answer within t1</source>
         <translation>Станція не відповіла протягом t1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="759"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="761"/>
         <source>IEC 104 Connection Lost</source>
-        <translation>З&apos;єднання IEC 104 Втрачено</translation>
+        <translation>З'єднання IEC 104 Втрачено</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="881"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="883"/>
         <source>Not connected</source>
         <translation>Не підключено</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="884"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="886"/>
         <source>Starting data transfer…</source>
         <translation>Початок передачі даних…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="886"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="888"/>
         <source>Monitoring %1 point(s) from station %2</source>
         <translation>Моніторинг %1 точок від станції %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1167"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1169"/>
         <source>Host</source>
         <translation>Хост</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1174"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1176"/>
         <source>Port</source>
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1183"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1185"/>
         <source>Common Address</source>
         <translation>Загальна Адреса</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1195"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1197"/>
         <source>Send Window (k)</source>
         <translation>Вікно Відправлення (k)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1195"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1197"/>
         <source>Ack Window (w)</source>
         <translation>Вікно Підтвердження (w)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1208"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1210"/>
         <source>Timeout t%1 (ms)</source>
         <translation>Тайм-аут t%1 (мс)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1332"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1334"/>
         <source>IEC 60870-5-104 Project</source>
         <translation>Проєкт IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1337"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1339"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1367"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1369"/>
         <source>Status Points</source>
         <translation>Точки Стану</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1368"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1370"/>
         <source>Counters</source>
         <translation>Лічильники</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1368"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1370"/>
         <source>Measurements</source>
         <translation>Вимірювання</translation>
     </message>
@@ -13544,72 +13621,72 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
 <context>
     <name>IO::Drivers::MQTT</name>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="60"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="64"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="61"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="65"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="62"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="66"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="64"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="68"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="65"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="69"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="66"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="70"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3 або Новіше</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="67"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="71"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2 або Новіше</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="68"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="72"/>
         <source>Any Protocol</source>
         <translation>Будь-який Протокол</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="69"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="73"/>
         <source>Secure Protocols Only</source>
         <translation>Тільки Захищені Протоколи</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="71"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="75"/>
         <source>None</source>
         <translation>Немає</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="72"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="76"/>
         <source>Query Peer</source>
         <translation>Запит до Вузла</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="73"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="77"/>
         <source>Verify Peer</source>
         <translation>Перевірка Вузла</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="74"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="78"/>
         <source>Auto Verify Peer</source>
         <translation>Автоматична Перевірка Вузла</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="183"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="187"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>Функція MQTT Потребує Комерційної Ліцензії</translation>
     </message>
@@ -13618,157 +13695,157 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation type="vanished">Підписка на MQTT-брокер доступна лише з дійсною комерційною ліцензією Serial Studio (рівень Hobbyist або вище).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="184"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="188"/>
         <source>Subscribing to an MQTT broker is only available with a valid Serial Studio license or an active trial.</source>
         <translation>Підписка на MQTT-брокер доступна лише з дійсною ліцензією Serial Studio або активним пробним періодом.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="441"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="445"/>
         <source>Use System Database</source>
         <translation>Використовувати Системну Базу Даних</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="442"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="446"/>
         <source>Load From Folder…</source>
         <translation>Завантажити з Теки…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="475"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="479"/>
         <source>Select PEM Certificates Directory</source>
         <translation>Вибрати Теку Сертифікатів PEM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="768"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="772"/>
         <source>Hostname</source>
-        <translation>Ім&apos;я Хоста</translation>
+        <translation>Ім'я Хоста</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="775"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="779"/>
         <source>Port</source>
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="784"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="788"/>
         <source>Topic Filter</source>
         <translation>Фільтр Теми</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="791"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="795"/>
         <source>Sparkplug</source>
         <translation>Sparkplug</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="798"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="802"/>
         <source>Sparkplug Group ID</source>
         <translation>ID Групи Sparkplug</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="805"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="809"/>
         <source>Client ID</source>
         <translation>ID Клієнта</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="812"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="816"/>
         <source>Username</source>
-        <translation>Ім&apos;я Користувача</translation>
+        <translation>Ім'я Користувача</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="819"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="823"/>
         <source>Password</source>
         <translation>Пароль</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="826"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="830"/>
         <source>MQTT Version</source>
         <translation>Версія MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="834"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="838"/>
         <source>Clean Session</source>
         <translation>Чиста Сесія</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="841"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="845"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (с)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="850"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="854"/>
         <source>Auto Keep Alive</source>
         <translation>Автоматичний Keep Alive</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="867"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="871"/>
         <source>SSL/TLS Enabled</source>
         <translation>SSL/TLS Увімкнено</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="877"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="881"/>
         <source>SSL Protocol</source>
         <translation>Протокол SSL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="885"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="889"/>
         <source>Peer Verify Mode</source>
         <translation>Режим Перевірки Вузла</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="893"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="897"/>
         <source>Peer Verify Depth</source>
         <translation>Глибина Перевірки Вузла</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="902"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="906"/>
         <source>Client Certificate (PEM)</source>
         <translation>Сертифікат Клієнта (PEM)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="909"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="913"/>
         <source>Private Key (PEM)</source>
         <translation>Приватний Ключ (PEM)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="916"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="920"/>
         <source>ALPN (MQTT over port 443)</source>
         <translation>ALPN (MQTT через порт 443)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="924"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="928"/>
         <source>ALPN Protocol</source>
         <translation>Протокол ALPN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1069"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1073"/>
         <source>The broker closed the connection during the attempt</source>
         <translation>Брокер закрив підключення під час спроби</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1084"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1088"/>
         <source>MQTT Subscription Error</source>
         <translation>Помилка Підписки MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1085"/>
-        <source>Failed to subscribe to topic &quot;%1&quot;.</source>
-        <translation>Не вдалося підписатися на тему &quot;%1&quot;.</translation>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1089"/>
+        <source>Failed to subscribe to topic "%1".</source>
+        <translation>Не вдалося підписатися на тему "%1".</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1338"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1342"/>
         <source>MQTT Client Certificate Error</source>
         <translation>Помилка Сертифіката Клієнта MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1355"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1359"/>
         <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
         <translation>Файли PEM (*.pem *.crt *.cer *.key);;Усі файли (*)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1381"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1385"/>
         <source>Select Client Certificate</source>
         <translation>Вибрати Сертифікат Клієнта</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1389"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1393"/>
         <source>Select Private Key</source>
         <translation>Вибрати Приватний Ключ</translation>
     </message>
@@ -13777,97 +13854,97 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation type="vanished">Брокер закрив підключення.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1112"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1116"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>Недійсна Версія Протоколу MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1113"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1117"/>
         <source>The broker rejected the configured MQTT protocol version.</source>
         <translation>Брокер відхилив налаштовану версію протоколу MQTT.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1116"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1120"/>
         <source>Client ID Rejected</source>
         <translation>Ідентифікатор Клієнта Відхилено</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1117"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1121"/>
         <source>The broker rejected the client ID. Try a different identifier.</source>
         <translation>Брокер відхилив ідентифікатор клієнта. Спробуйте інший ідентифікатор.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1120"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1124"/>
         <source>MQTT Server Unavailable</source>
         <translation>Сервер MQTT Недоступний</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1121"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1125"/>
         <source>The broker is currently unavailable. Retry later.</source>
         <translation>Брокер наразі недоступний. Повторіть спробу пізніше.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1124"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1128"/>
         <source>Authentication Error</source>
         <translation>Помилка Автентифікації</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1125"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1129"/>
         <source>The credentials provided were rejected by the broker.</source>
         <translation>Надані облікові дані були відхилені брокером.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1128"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1132"/>
         <source>Authorization Error</source>
         <translation>Помилка Авторизації</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1129"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1133"/>
         <source>Account lacks permission for this operation.</source>
         <translation>Обліковий запис не має дозволу для цієї операції.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1132"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1136"/>
         <source>Network or Transport Error</source>
         <translation>Помилка мережі або транспортного рівня</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1133"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1137"/>
         <source>Network/transport layer issue while connecting to the broker.</source>
         <translation>Проблема мережі/транспортного рівня під час підключення до брокера.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1136"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1140"/>
         <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
         <translation>Налаштовано сертифікат клієнта: переконайтеся, що він відповідає приватному ключу та активований на брокері.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1141"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1145"/>
         <source>MQTT Protocol Violation</source>
         <translation>Порушення Протоколу MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1142"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1146"/>
         <source>The broker reported a protocol violation and closed the connection.</source>
-        <translation>Брокер повідомив про порушення протоколу та закрив з&apos;єднання.</translation>
+        <translation>Брокер повідомив про порушення протоколу та закрив з'єднання.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1145"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1149"/>
         <source>MQTT 5 Error</source>
         <translation>Помилка MQTT 5</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1146"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1150"/>
         <source>An MQTT 5 protocol-level error occurred.</source>
         <translation>Сталася помилка протоколу MQTT 5.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1149"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1153"/>
         <source>MQTT Error</source>
         <translation>Помилка MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1150"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1154"/>
         <source>An unexpected MQTT error occurred.</source>
         <translation>Сталася неочікувана помилка MQTT.</translation>
     </message>
@@ -13878,8 +13955,8 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     </message>
     <message>
         <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="302"/>
-        <source>A group ID cannot contain &apos;+&apos;, &apos;#&apos; or &apos;/&apos;; keeping &quot;%1&quot;.</source>
-        <translation>ID групи не може містити &apos;+&apos;, &apos;#&apos; або &apos;/&apos;; залишено &quot;%1&quot;.</translation>
+        <source>A group ID cannot contain '+', '#' or '/'; keeping "%1".</source>
+        <translation>ID групи не може містити '+', '#' або '/'; залишено "%1".</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="597"/>
@@ -13903,27 +13980,27 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     </message>
     <message>
         <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="644"/>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="680"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="677"/>
         <source>Sparkplug Project Generator</source>
         <translation>Генератор Проєктів Sparkplug</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="656"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="653"/>
         <source>Failed to load generated project</source>
         <translation>Не вдалося завантажити згенерований проєкт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="657"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="654"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>Не вдалося завантажити згенерований JSON проєкту.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="675"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="672"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>Успішно згенеровано проєкт із %1 групами та %2 наборами даних.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="678"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="675"/>
         <source>The project editor is now open for customization.</source>
         <translation>Редактор проєкту тепер відкритий для налаштування.</translation>
     </message>
@@ -13931,110 +14008,110 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
 <context>
     <name>IO::Drivers::Modbus</name>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="343"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="345"/>
         <source>Invalid Serial Port</source>
         <translation>Недійсний Послідовний Порт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="387"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="389"/>
         <source>Modbus Initialization Failed</source>
         <translation>Не Вдалося Ініціалізувати Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="410"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="412"/>
         <source>Nothing is listening at %1</source>
         <translation>Нічого не прослуховується на %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="468"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="470"/>
         <source>Modbus Connection Failed</source>
         <translation>Не Вдалося Підключитися до Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="344"/>
-        <source>The selected serial port &quot;%1&quot; is no longer available. Refresh the port list and try again.</source>
-        <translation>Вибраний послідовний порт &quot;%1&quot; більше недоступний. Оновіть список портів та спробуйте ще раз.</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="346"/>
+        <source>The selected serial port "%1" is no longer available. Refresh the port list and try again.</source>
+        <translation>Вибраний послідовний порт "%1" більше недоступний. Оновіть список портів та спробуйте ще раз.</translation>
     </message>
     <message>
         <source>The Modbus client refused to start the connection.</source>
         <translation type="vanished">Клієнт Modbus відмовився розпочати підключення.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="388"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="390"/>
         <source>Unable to create Modbus device. Check your system configuration and try again.</source>
         <translation>Не вдалося створити пристрій Modbus. Перевірте конфігурацію системи та спробуйте ще раз.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="470"/>
-        <source>Unable to connect to &quot;%1&quot;. Check your connection settings.</source>
-        <translation>Не вдалося підключитися до &quot;%1&quot;. Перевірте налаштування підключення.</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="472"/>
+        <source>Unable to connect to "%1". Check your connection settings.</source>
+        <translation>Не вдалося підключитися до "%1". Перевірте налаштування підключення.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="471"/>
-        <source>&quot;%1&quot;: %2</source>
-        <translation>&quot;%1&quot;: %2</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="473"/>
+        <source>"%1": %2</source>
+        <translation>"%1": %2</translation>
     </message>
     <message>
         <source>Connection attempt timed out</source>
         <translation type="vanished">Тайм-аут спроби підключення</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="587"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="589"/>
         <source>None</source>
         <translation>Немає</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="588"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="590"/>
         <source>Even</source>
         <translation>Парний</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="589"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="591"/>
         <source>Odd</source>
         <translation>Непарний</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="590"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="592"/>
         <source>Space</source>
         <translation>Пробіл</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="591"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="593"/>
         <source>Mark</source>
         <translation>Мітка</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="643"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="645"/>
         <source>Holding Registers (0x03)</source>
         <translation>Регістри Зберігання (0x03)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="644"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="646"/>
         <source>Input Registers (0x04)</source>
         <translation>Вхідні Регістри (0x04)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="645"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="647"/>
         <source>Coils (0x01)</source>
         <translation>Котушки (0x01)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="646"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="648"/>
         <source>Discrete Inputs (0x02)</source>
         <translation>Дискретні Входи (0x02)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="803"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="805"/>
         <source>No register groups configured</source>
         <translation>Групи регістрів не налаштовано</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="804"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="806"/>
         <source>Add at least one register group before generating a project.</source>
         <translation>Додайте принаймні одну групу регістрів перед генерацією проєкту.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="806"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="808"/>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="844"/>
         <source>Modbus Project Generator</source>
         <translation>Генератор Проєктів Modbus</translation>
@@ -14115,7 +14192,7 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="1167"/>
         <source>Modbus Communication Error</source>
-        <translation>Помилка Зв&apos;язку Modbus</translation>
+        <translation>Помилка Зв'язку Modbus</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="1179"/>
@@ -14205,13 +14282,13 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Network.cpp" line="318"/>
-        <source>&quot;%1&quot; is not a valid URL</source>
-        <translation>&quot;%1&quot; не є дійсним URL</translation>
+        <source>"%1" is not a valid URL</source>
+        <translation>"%1" не є дійсним URL</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Network.cpp" line="324"/>
-        <source>&quot;%1&quot; must start with %2://</source>
-        <translation>&quot;%1&quot; має починатися з %2://</translation>
+        <source>"%1" must start with %2://</source>
+        <translation>"%1" має починатися з %2://</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Network.cpp" line="448"/>
@@ -14376,7 +14453,7 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
 <context>
     <name>IO::Drivers::OpcUa</name>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="410"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="338"/>
         <source>OPC UA Initialization Failed</source>
         <translation>Помилка Ініціалізації OPC UA</translation>
     </message>
@@ -14385,30 +14462,29 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation type="vanished">Бекенд %1 недоступний у цій збірці.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="584"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="500"/>
         <source>OPC UA Connection Failed</source>
         <translation>Помилка Підключення OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="585"/>
-        <source>Unable to connect to &quot;%1&quot;.</source>
-        <translation>Не вдалося підключитися до &quot;%1&quot;.</translation>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="501"/>
+        <source>Unable to connect to "%1".</source>
+        <translation>Не вдалося підключитися до "%1".</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="586"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="732"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="832"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1915"/>
-        <source>&quot;%1&quot;: %2</source>
-        <translation>&quot;%1&quot;: %2</translation>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="502"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="648"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1290"/>
+        <source>"%1": %2</source>
+        <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="602"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="518"/>
         <source>OPC UA Connection Lost</source>
         <translation>Втрачено Підключення OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="616"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="532"/>
         <source>Timed out after %1 s</source>
         <translation>Тайм-аут після %1 с</translation>
     </message>
@@ -14417,7 +14493,7 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation type="vanished">Сервер закрив підключення</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="662"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="578"/>
         <source>The server closed the session</source>
         <translation>Сервер закрив сесію</translation>
     </message>
@@ -14462,13 +14538,13 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation type="vanished">Неочікувана помилка бекенду</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="688"/>
-        <source>&quot;%1&quot; is not a valid endpoint URL</source>
-        <translation>&quot;%1&quot; не є дійсною URL-адресою кінцевої точки</translation>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="604"/>
+        <source>"%1" is not a valid endpoint URL</source>
+        <translation>"%1" не є дійсною URL-адресою кінцевої точки</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="689"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1915"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="605"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1290"/>
         <source>OPC UA Discovery</source>
         <translation>Виявлення OPC UA</translation>
     </message>
@@ -14477,12 +14553,12 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation type="vanished">Бекенд %1 недоступний у цій збірці</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="731"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="647"/>
         <source>Discovery failed: %1</source>
         <translation>Виявлення не вдалося: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="732"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="648"/>
         <source>OPC UA Discovery Failed</source>
         <translation>Помилка Виявлення OPC UA</translation>
     </message>
@@ -14491,93 +14567,84 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation type="vanished">Відсутня кінцева точка з політикою None; захищені канали не підтримуються в цій версії</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="402"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="330"/>
         <source>The connection is not configured: check the endpoint and the tag list</source>
-        <translation>З&apos;єднання не налаштовано: перевірте кінцеву точку та список тегів</translation>
+        <translation>З'єднання не налаштовано: перевірте кінцеву точку та список тегів</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="409"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="697"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="337"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="613"/>
         <source>The %1 stack is not available in this build</source>
         <translation>Стек %1 недоступний у цій збірці</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="452"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="376"/>
         <source>The connection attempt could not be started</source>
-        <translation>Не вдалося розпочати спробу з&apos;єднання</translation>
+        <translation>Не вдалося розпочати спробу з'єднання</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="466"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="390"/>
         <source>OPC UA Certificate</source>
         <translation>Сертифікат OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="467"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="391"/>
         <source>The client certificate could not be generated; secure channels will be refused.</source>
         <translation>Не вдалося згенерувати сертифікат клієнта; захищені канали буде відхилено.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="730"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="646"/>
         <source>The server did not answer within %1 s</source>
         <translation>Сервер не відповів протягом %1 с</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="762"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="678"/>
         <source>Endpoint discovery failed</source>
         <translation>Виявлення кінцевої точки не вдалося</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="831"/>
         <source>OPC UA Monitored Item Refused</source>
-        <translation>Відмовлено У Відстежуваному Елементі OPC UA</translation>
+        <translation type="vanished">Відмовлено У Відстежуваному Елементі OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="838"/>
         <source>the server refused every monitored item</source>
-        <translation>сервер відмовив у кожному відстежуваному елементі</translation>
+        <translation type="vanished">сервер відмовив у кожному відстежуваному елементі</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="858"/>
         <source>the server retired the subscription</source>
-        <translation>сервер відкликав підписку</translation>
+        <translation type="vanished">сервер відкликав підписку</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="894"/>
         <source>OPC UA Subscription Unavailable</source>
-        <translation>Підписка OPC UA Недоступна</translation>
+        <translation type="vanished">Підписка OPC UA Недоступна</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="895"/>
         <source>Falling back to polling: %1.</source>
-        <translation>Повернення до опитування: %1.</translation>
+        <translation type="vanished">Повернення до опитування: %1.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="921"/>
         <source>no notification for %1 s</source>
-        <translation>немає сповіщення протягом %1 с</translation>
+        <translation type="vanished">немає сповіщення протягом %1 с</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="974"/>
         <source>OPC UA Read Failed</source>
-        <translation>Помилка Зчитування OPC UA</translation>
+        <translation type="vanished">Помилка Зчитування OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1019"/>
         <source>OPC UA Type Mismatch</source>
-        <translation>Невідповідність Типів OPC UA</translation>
+        <translation type="vanished">Невідповідність Типів OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1020"/>
         <source>Channel %1 is declared %2 but the server sends %3; the value is coerced.</source>
-        <translation>Канал %1 оголошено як %2, але сервер надсилає %3; значення приведено.</translation>
+        <translation type="vanished">Канал %1 оголошено як %2, але сервер надсилає %3; значення приведено.</translation>
     </message>
     <message>
         <source>Browse of %1 failed: %2</source>
         <translation type="vanished">Огляд %1 завершився помилкою: %2</translation>
     </message>
     <message>
-        <source>&quot;%1&quot; is not a valid endpoint URL.</source>
-        <translation type="vanished">&quot;%1&quot; не є дійсною URL-адресою кінцевої точки.</translation>
+        <source>"%1" is not a valid endpoint URL.</source>
+        <translation type="vanished">"%1" не є дійсною URL-адресою кінцевої точки.</translation>
     </message>
     <message>
         <source>The %1 stack is not available in this build.</source>
@@ -14596,106 +14663,94 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation type="vanished">Не вдалося відкрити сеанс перегляду на %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1131"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="738"/>
         <source>Failed to load generated project</source>
         <translation>Не вдалося завантажити згенерований проєкт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1132"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="739"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>Не вдалося завантажити згенерований JSON проєкту.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1146"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="753"/>
         <source>No tags selected</source>
         <translation>Теги не вибрано</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1147"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="754"/>
         <source>Browse the server and select at least one tag before generating a project.</source>
         <translation>Перегляньте сервер і виберіть принаймні один тег перед генерацією проєкту.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1150"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1174"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="757"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="781"/>
         <source>OPC UA Project Generator</source>
         <translation>Генератор Проєктів OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1169"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="776"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>Успішно згенеровано проєкт із %1 групами та %2 наборами даних.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1172"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="779"/>
         <source>The project editor is now open for customization.</source>
         <translation>Редактор проєкту тепер відкритий для налаштування.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1220"/>
         <source>OPC UA Project</source>
-        <translation>Проєкт OPC UA</translation>
+        <translation type="vanished">Проєкт OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1225"/>
         <source>OPC UA</source>
-        <translation>OPC UA</translation>
+        <translation type="vanished">OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1252"/>
         <source>Tags</source>
-        <translation>Теги</translation>
+        <translation type="vanished">Теги</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1304"/>
         <source> (deprecated)</source>
-        <translation>(застарілий)</translation>
+        <translation type="vanished">(застарілий)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1320"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1973"/>
         <source>None</source>
-        <translation>Немає</translation>
+        <translation type="vanished">Немає</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1322"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1973"/>
         <source>Sign</source>
-        <translation>Підпис</translation>
+        <translation type="vanished">Підпис</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1324"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1973"/>
         <source>Sign and Encrypt</source>
-        <translation>Підпис і Шифрування</translation>
+        <translation type="vanished">Підпис і Шифрування</translation>
     </message>
     <message>
         <source>Sign &amp;&amp; Encrypt</source>
         <translation type="vanished">Підпис і Шифрування</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1329"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1973"/>
         <source>Invalid</source>
-        <translation>Недійсний</translation>
+        <translation type="vanished">Недійсний</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2234"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1518"/>
         <source>Security Policy</source>
         <translation>Політика Безпеки</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2242"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1526"/>
         <source>Security Mode</source>
         <translation>Режим Безпеки</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2250"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1534"/>
         <source>User Certificate</source>
         <translation>Сертифікат Користувача</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2257"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1541"/>
         <source>User Private Key</source>
         <translation>Приватний Ключ Користувача</translation>
     </message>
@@ -14704,59 +14759,58 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation type="vanished">Підпис і Шифрування</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1452"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="859"/>
         <source>Connecting to %1</source>
         <translation>Підключення до %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1455"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="862"/>
         <source>Not connected</source>
         <translation>Не підключено</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1461"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="870"/>
         <source>Subscribing, %1 of %2 tags</source>
         <translation>Підписка, %1 з %2 тегів</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1466"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="875"/>
         <source>Subscribed %1 tags, polling %2 refused, %3 Hz</source>
         <translation>Підписано %1 тегів, опитування %2 відхилено, %3 Гц</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1472"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="881"/>
         <source>Polling (server refused subscriptions), %1 tags, %2 Hz</source>
         <translation>Опитування (сервер відхилив підписки), %1 тегів, %2 Гц</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1476"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="885"/>
         <source>Subscribed, %1 tags, %2 Hz</source>
         <translation>Підписано, %1 тегів, %2 Гц</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1514"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="915"/>
         <source>Anonymous</source>
         <translation>Анонімний</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1514"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="915"/>
         <source>Username / Password</source>
-        <translation>Ім&apos;я Користувача / Пароль</translation>
+        <translation>Ім'я Користувача / Пароль</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1514"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="915"/>
         <source>X.509 Certificate</source>
         <translation>Сертифікат X.509</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1914"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1289"/>
         <source>No endpoint this build can open with the selected identity</source>
         <translation>Немає кінцевої точки, яку ця збірка може відкрити з вибраною ідентифікацією</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1942"/>
         <source>%1 (deprecated)</source>
-        <translation>%1 (застарілий)</translation>
+        <translation type="vanished">%1 (застарілий)</translation>
     </message>
     <message>
         <source>The server certificate has expired</source>
@@ -14775,27 +14829,27 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
         <translation type="vanished">Не вдалося розібрати сертифікат сервера</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2196"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1480"/>
         <source>Endpoint URL</source>
         <translation>URL Кінцевої Точки</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2203"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1487"/>
         <source>Authentication</source>
         <translation>Автентифікація</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2211"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1495"/>
         <source>Username</source>
-        <translation>Ім&apos;я Користувача</translation>
+        <translation>Ім'я Користувача</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2218"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1502"/>
         <source>Password</source>
         <translation>Пароль</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="2225"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1509"/>
         <source>Poll Interval (ms)</source>
         <translation>Інтервал Опитування (мс)</translation>
     </message>
@@ -14804,43 +14858,43 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     <name>IO::Drivers::OpcUaBrowser</name>
     <message>
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="79"/>
-        <source>&quot;%1&quot; is not a valid endpoint URL.</source>
-        <translation type="unfinished">&quot;%1&quot; не є дійсною URL-адресою кінцевої точки.</translation>
+        <source>"%1" is not a valid endpoint URL.</source>
+        <translation>"%1" не є дійсною URL-адресою кінцевої точки.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="86"/>
         <source>The %1 stack is not available in this build.</source>
-        <translation type="unfinished">Стек %1 недоступний у цій збірці.</translation>
+        <translation>Стек %1 недоступний у цій збірці.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="93"/>
         <source>The browse session was closed by the server</source>
-        <translation type="unfinished">Сервер закрив сеанс перегляду</translation>
+        <translation>Сервер закрив сеанс перегляду</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="104"/>
         <source>The browse session could not be started</source>
-        <translation type="unfinished">Не вдалося розпочати сеанс перегляду</translation>
+        <translation>Не вдалося розпочати сеанс перегляду</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="172"/>
         <source>Endpoint discovery failed</source>
-        <translation type="unfinished">Виявлення кінцевої точки не вдалося</translation>
+        <translation>Виявлення кінцевої точки не вдалося</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="193"/>
         <source>Browse of %1 failed: %2</source>
-        <translation type="unfinished">Огляд %1 завершився помилкою: %2</translation>
+        <translation>Огляд %1 завершився помилкою: %2</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="234"/>
         <source>Could not open a browse session on %1</source>
-        <translation type="unfinished">Не вдалося відкрити сеанс перегляду на %1</translation>
+        <translation>Не вдалося відкрити сеанс перегляду на %1</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="255"/>
         <source>Timed out after %1 s</source>
-        <translation type="unfinished">Тайм-аут після %1 с</translation>
+        <translation>Тайм-аут після %1 с</translation>
     </message>
 </context>
 <context>
@@ -14848,27 +14902,80 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     <message>
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaCertificateStore.cpp" line="238"/>
         <source>The server certificate is not trusted</source>
-        <translation type="unfinished">Сертифікат сервера не є довіреним</translation>
+        <translation>Сертифікат сервера не є довіреним</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaCertificateStore.cpp" line="240"/>
         <source>The server certificate has expired</source>
-        <translation type="unfinished">Термін дії сертифіката сервера минув</translation>
+        <translation>Термін дії сертифіката сервера минув</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaCertificateStore.cpp" line="242"/>
         <source>The server certificate is not valid yet</source>
-        <translation type="unfinished">Сертифікат сервера ще не є дійсним</translation>
+        <translation>Сертифікат сервера ще не є дійсним</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaCertificateStore.cpp" line="244"/>
         <source>The server certificate was not issued for this host</source>
-        <translation type="unfinished">Сертифікат сервера не був виданий для цього хоста</translation>
+        <translation>Сертифікат сервера не був виданий для цього хоста</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaCertificateStore.cpp" line="246"/>
         <source>The server certificate could not be parsed</source>
-        <translation type="unfinished">Не вдалося розібрати сертифікат сервера</translation>
+        <translation>Не вдалося розібрати сертифікат сервера</translation>
+    </message>
+</context>
+<context>
+    <name>IO::Drivers::OpcUaSubscriptions</name>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="195"/>
+        <source>OPC UA Monitored Item Refused</source>
+        <translation>Відмовлено У Відстежуваному Елементі OPC UA</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="196"/>
+        <source>"%1": %2</source>
+        <translation>"%1": %2</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="202"/>
+        <source>the server refused every monitored item</source>
+        <translation>сервер відмовив у кожному відстежуваному елементі</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="222"/>
+        <source>the server retired the subscription</source>
+        <translation>сервер відкликав підписку</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="260"/>
+        <source>OPC UA Subscription Unavailable</source>
+        <translation>Підписка OPC UA Недоступна</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="261"/>
+        <source>Falling back to polling: %1.</source>
+        <translation>Повернення до опитування: %1.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="287"/>
+        <source>no notification for %1 s</source>
+        <translation>немає сповіщення протягом %1 с</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="343"/>
+        <source>OPC UA Read Failed</source>
+        <translation>Помилка Зчитування OPC UA</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="431"/>
+        <source>OPC UA Type Mismatch</source>
+        <translation>Невідповідність Типів OPC UA</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp" line="432"/>
+        <source>Channel %1 is declared %2 but the server sends %3; the value is coerced.</source>
+        <translation>Канал %1 оголошено як %2, але сервер надсилає %3; значення приведено.</translation>
     </message>
 </context>
 <context>
@@ -14897,8 +15004,8 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="201"/>
-        <source>Executable &quot;%1&quot; not found in PATH.</source>
-        <translation>Виконуваний файл &quot;%1&quot; не знайдено в PATH.</translation>
+        <source>Executable "%1" not found in PATH.</source>
+        <translation>Виконуваний файл "%1" не знайдено в PATH.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="376"/>
@@ -14927,8 +15034,8 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="532"/>
-        <source>Process &quot;%1&quot; stopped</source>
-        <translation>Процес &quot;%1&quot; зупинено</translation>
+        <source>Process "%1" stopped</source>
+        <translation>Процес "%1" зупинено</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="542"/>
@@ -14957,8 +15064,8 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="571"/>
-        <source>The named pipe &quot;%1&quot; was closed on the other end.</source>
-        <translation>Іменований канал &quot;%1&quot; було закрито з іншого боку.</translation>
+        <source>The named pipe "%1" was closed on the other end.</source>
+        <translation>Іменований канал "%1" було закрито з іншого боку.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Process.cpp" line="592"/>
@@ -15010,94 +15117,94 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
 <context>
     <name>IO::Drivers::S7</name>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="773"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="775"/>
         <source>The connection is not configured: check the host and the variable list</source>
         <translation>Підключення не налаштовано: перевірте хост і список змінних</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="795"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="797"/>
         <source>S7 Connection Failed</source>
         <translation>Помилка Підключення S7</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="796"/>
-        <source>&quot;%1&quot; (rack %2, slot %3): %4</source>
-        <translation>&quot;%1&quot; (стійка %2, слот %3): %4</translation>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="798"/>
+        <source>"%1" (rack %2, slot %3): %4</source>
+        <translation>"%1" (стійка %2, слот %3): %4</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="800"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="802"/>
         <source>the controller did not answer</source>
         <translation>контролер не відповів</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="843"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="845"/>
         <source>S7 Connection Lost</source>
         <translation>Втрачено Підключення S7</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="914"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="916"/>
         <source>Not connected</source>
         <translation>Не підключено</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="917"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="919"/>
         <source>Polling %1 variables at %2 Hz</source>
         <translation>Опитування %1 змінних на частоті %2 Гц</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="933"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="935"/>
         <source>invalid</source>
         <translation>недійсний</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="951"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="953"/>
         <source>The address could not be parsed.</source>
         <translation>Не вдалося розібрати адресу.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1175"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1177"/>
         <source>S7 Address</source>
         <translation>Адреса S7</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1226"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1228"/>
         <source>Host</source>
         <translation>Хост</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1233"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1235"/>
         <source>Rack</source>
         <translation>Стійка</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1242"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1244"/>
         <source>Slot</source>
         <translation>Слот</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1251"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1253"/>
         <source>Poll Interval (ms)</source>
         <translation>Інтервал Опитування (мс)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1371"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1373"/>
         <source>Siemens S7 Project</source>
         <translation>Проєкт Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1376"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1378"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1405"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1407"/>
         <source>DB%1</source>
         <translation>DB%1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1405"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1407"/>
         <source>Memory</source>
-        <translation>Пам&apos;ять</translation>
+        <translation>Пам'ять</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/S7.cpp" line="1438"/>
@@ -15141,12 +15248,12 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     <message>
         <location filename="../../src/IO/Drivers/S7.cpp" line="183"/>
         <source>The ISO connection request could not be sent</source>
-        <translation>Не вдалося надіслати запит ISO-з&apos;єднання</translation>
+        <translation>Не вдалося надіслати запит ISO-з'єднання</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/S7.cpp" line="189"/>
         <source>The controller refused the ISO connection: check the rack and slot numbers</source>
-        <translation>Контролер відхилив ISO-з&apos;єднання: перевірте номери rack і slot</translation>
+        <translation>Контролер відхилив ISO-з'єднання: перевірте номери rack і slot</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/S7.cpp" line="208"/>
@@ -15268,8 +15375,8 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="612"/>
-        <source>&quot;%1&quot; is not a valid path</source>
-        <translation>&quot;%1&quot; не є дійсним шляхом</translation>
+        <source>"%1" is not a valid path</source>
+        <translation>"%1" не є дійсним шляхом</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="613"/>
@@ -15279,7 +15386,7 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="895"/>
         <source>The specified device could not be found. Check the connection and try again.</source>
-        <translation>Вказаний пристрій не знайдено. Перевірте з&apos;єднання та спробуйте ще раз.</translation>
+        <translation>Вказаний пристрій не знайдено. Перевірте з'єднання та спробуйте ще раз.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="902"/>
@@ -15293,8 +15400,8 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="306"/>
-        <source>Failed to connect to serial port &quot;%1&quot;</source>
-        <translation>Не вдалося підключитися до послідовного порту &quot;%1&quot;</translation>
+        <source>Failed to connect to serial port "%1"</source>
+        <translation>Не вдалося підключитися до послідовного порту "%1"</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="285"/>
@@ -15304,8 +15411,8 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="286"/>
-        <source>Baud rate %1 rejected for port &quot;%2&quot;: %3</source>
-        <translation>Швидкість передачі %1 відхилено для порту &quot;%2&quot;: %3</translation>
+        <source>Baud rate %1 rejected for port "%2": %3</source>
+        <translation>Швидкість передачі %1 відхилено для порту "%2": %3</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="549"/>
@@ -15319,8 +15426,8 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="867"/>
-        <source>Critical error on serial port &quot;%1&quot;</source>
-        <translation>Критична помилка послідовного порту &quot;%1&quot;</translation>
+        <source>Critical error on serial port "%1"</source>
+        <translation>Критична помилка послідовного порту "%1"</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="868"/>
@@ -15355,7 +15462,7 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="900"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
-        <translation>Сталася критична помилка ресурсу. Можливо, пристрій було від&apos;єднано або він більше недоступний.</translation>
+        <translation>Сталася критична помилка ресурсу. Можливо, пристрій було від'єднано або він більше недоступний.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="901"/>
@@ -15436,7 +15543,7 @@ Check that your user is in the &apos;plugdev&apos; group or that a udev rule gra
 On Linux, ensure you have read/write permission on the device node (add a udev rule or run as root). On macOS, the kernel driver may need to be detached first.</source>
         <translation>Не вдалося відкрити USB-пристрій: %1.
 
-У Linux переконайтеся, що маєте дозвіл на читання/запис вузла пристрою (додайте правило udev або запустіть від root). У macOS може знадобитися спочатку від&apos;єднати драйвер ядра.</translation>
+У Linux переконайтеся, що маєте дозвіл на читання/запис вузла пристрою (додайте правило udev або запустіть від root). У macOS може знадобитися спочатку від'єднати драйвер ядра.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/USB.cpp" line="171"/>
@@ -15450,26 +15557,26 @@ On Linux, ensure you have read/write permission on the device node (add a udev r
     </message>
     <message>
         <location filename="../../src/IO/Drivers/USB.cpp" line="180"/>
-        <source>Failed to open &quot;%1&quot;</source>
-        <translation>Не вдалося відкрити &quot;%1&quot;</translation>
+        <source>Failed to open "%1"</source>
+        <translation>Не вдалося відкрити "%1"</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/USB.cpp" line="818"/>
         <source>No isochronous IN endpoint was found on this device, but bulk or interrupt endpoints are available.
 
-Switch the Transfer Mode to &quot;Bulk/Interrupt Stream&quot; and try again.</source>
+Switch the Transfer Mode to "Bulk/Interrupt Stream" and try again.</source>
         <translation>На цьому пристрої не знайдено ізохронної IN кінцевої точки, але доступні масові або переривання кінцеві точки.
 
-Перейдіть у Режимі Передачі на &quot;Масовий/Переривання Потік&quot; і спробуйте знову.</translation>
+Перейдіть у Режимі Передачі на "Масовий/Переривання Потік" і спробуйте знову.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/USB.cpp" line="823"/>
         <source>No bulk or interrupt IN endpoint was found on this device, but isochronous endpoints are available.
 
-Switch the Transfer Mode to &quot;Isochronous&quot; and try again.</source>
+Switch the Transfer Mode to "Isochronous" and try again.</source>
         <translation>На цьому пристрої не знайдено масової або переривання IN кінцевої точки, але доступні ізохронні кінцеві точки.
 
-Перейдіть у Режимі Передачі на &quot;Ізохронний&quot; і спробуйте знову.</translation>
+Перейдіть у Режимі Передачі на "Ізохронний" і спробуйте знову.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/USB.cpp" line="827"/>
@@ -15587,23 +15694,23 @@ Another driver or application may already have it open. On Linux, try unloading 
     <message>
         <location filename="../../src/IO/Drivers/USB.cpp" line="582"/>
         <source>The USB device was disconnected or encountered a fatal read error.</source>
-        <translation>Пристрій USB було від&apos;єднано або виникла критична помилка зчитування.</translation>
+        <translation>Пристрій USB було від'єднано або виникла критична помилка зчитування.</translation>
     </message>
     <message>
         <source>No isochronous IN endpoint was found on this device, but bulk endpoints are available.
 
-Switch the Transfer Mode to &quot;Bulk Stream&quot; and try again.</source>
+Switch the Transfer Mode to "Bulk Stream" and try again.</source>
         <translation type="vanished">На цьому пристрої не знайдено ізохронної IN кінцевої точки, але доступні масові кінцеві точки.
 
-Перейдіть у Режимі Передачі на &quot;Масовий Потік&quot; і спробуйте знову.</translation>
+Перейдіть у Режимі Передачі на "Масовий Потік" і спробуйте знову.</translation>
     </message>
     <message>
         <source>No bulk IN endpoint was found on this device, but isochronous endpoints are available.
 
-Switch the Transfer Mode to &quot;Isochronous&quot; and try again.</source>
+Switch the Transfer Mode to "Isochronous" and try again.</source>
         <translation type="vanished">На цьому пристрої не знайдено масової IN кінцевої точки, але доступні ізохронні кінцеві точки.
 
-Перейдіть у Режимі Передачі на &quot;Ізохронний&quot; і спробуйте знову.</translation>
+Перейдіть у Режимі Передачі на "Ізохронний" і спробуйте знову.</translation>
     </message>
     <message>
         <source>No usable IN endpoint was found on this device.
@@ -15716,49 +15823,49 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation>Початок передачі %1…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="617"/>
-        <location filename="../../src/IO/FileTransmission.cpp" line="639"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="614"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="636"/>
         <source>Transmission complete</source>
         <translation>Передачу завершено</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="619"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="616"/>
         <source>Plain text transmission complete</source>
         <translation>Передачу звичайного тексту завершено</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="641"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="638"/>
         <source>Raw binary transmission complete (%1 bytes)</source>
         <translation>Передачу необроблених бінарних даних завершено (%1 байт)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="665"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="662"/>
         <source>Transfer complete</source>
         <translation>Передачу завершено</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="666"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="663"/>
         <source>Transfer completed successfully (%1 bytes)</source>
         <translation>Передачу успішно завершено (%1 байт)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="668"/>
-        <location filename="../../src/IO/FileTransmission.cpp" line="669"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="665"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="666"/>
         <source>Transfer failed: %1</source>
         <translation>Помилка передачі: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="754"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="751"/>
         <source>%1 B/s</source>
         <translation>%1 Б/с</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="756"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="753"/>
         <source>%1 KB/s</source>
         <translation>%1 Кб/с</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="758"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="755"/>
         <source>%1 MB/s</source>
         <translation>%1 Мб/с</translation>
     </message>
@@ -16219,7 +16326,7 @@ The device may not expose data endpoints in its active configuration, or it may 
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="271"/>
-        <source>Connect to discover the station&apos;s points</source>
+        <source>Connect to discover the station's points</source>
         <translation>Підключіться для виявлення точок станції</translation>
     </message>
 </context>
@@ -16434,7 +16541,7 @@ The device may not expose data endpoints in its active configuration, or it may 
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="100"/>
         <source>Bring your own API keys. They are encrypted at rest with a per-machine key and never leave your computer except to communicate with the provider you select.</source>
-        <translation>Використовуйте власні API-ключі. Вони зберігаються в зашифрованому вигляді з унікальним ключем для кожної машини і ніколи не залишають ваш комп&apos;ютер, окрім зв&apos;язку з обраним вами провайдером.</translation>
+        <translation>Використовуйте власні API-ключі. Вони зберігаються в зашифрованому вигляді з унікальним ключем для кожної машини і ніколи не залишають ваш комп'ютер, окрім зв'язку з обраним вами провайдером.</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="166"/>
@@ -16477,8 +16584,8 @@ The device may not expose data endpoints in its active configuration, or it may 
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="78"/>
-        <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp&apos;s llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
-        <translation>Локальний сервер моделей. Працює з будь-якою кінцевою точкою, сумісною з OpenAI — Ollama, llama-server від llama.cpp, LM Studio або vLLM. Нічого не залишає ваш комп&apos;ютер. Список моделей запитується в реальному часі з сервера.</translation>
+        <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp's llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
+        <translation>Локальний сервер моделей. Працює з будь-якою кінцевою точкою, сумісною з OpenAI — Ollama, llama-server від llama.cpp, LM Studio або vLLM. Нічого не залишає ваш комп'ютер. Список моделей запитується в реальному часі з сервера.</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="204"/>
@@ -16507,7 +16614,7 @@ The device may not expose data endpoints in its active configuration, or it may 
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="225"/>
-        <source>Open the provider&apos;s console to create a new key</source>
+        <source>Open the provider's console to create a new key</source>
         <translation>Відкрийте консоль провайдера для створення нового ключа</translation>
     </message>
     <message>
@@ -16981,12 +17088,12 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="289"/>
         <source>Disconnect from device?</source>
-        <translation>Від&apos;єднатися від пристрою?</translation>
+        <translation>Від'єднатися від пристрою?</translation>
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="290"/>
         <source>You must disconnect from the current device before opening a MDF4 file.</source>
-        <translation>Ви повинні від&apos;єднатися від поточного пристрою перед відкриттям файлу MDF4.</translation>
+        <translation>Ви повинні від'єднатися від поточного пристрою перед відкриттям файлу MDF4.</translation>
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="508"/>
@@ -16995,7 +17102,7 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="509"/>
-        <source>Part of the file&apos;s data section could not be read; the recording may be truncated.</source>
+        <source>Part of the file's data section could not be read; the recording may be truncated.</source>
         <translation>Частину секції даних файлу не вдалося прочитати; запис може бути обрізаний.</translation>
     </message>
     <message>
@@ -17030,7 +17137,7 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="101"/>
         <source>Hostname</source>
-        <translation>Ім&apos;я Хоста</translation>
+        <translation>Ім'я Хоста</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="109"/>
@@ -17065,7 +17172,7 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="180"/>
         <source>Username</source>
-        <translation>Ім&apos;я Користувача</translation>
+        <translation>Ім'я Користувача</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="195"/>
@@ -17150,7 +17257,7 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="483"/>
         <source>Optional (mutual TLS)</source>
-        <translation>Необов&apos;язково (взаємний TLS)</translation>
+        <translation>Необов'язково (взаємний TLS)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="490"/>
@@ -17283,7 +17390,7 @@ To unlock this feature, please activate your license or visit the store.</source
         <translation type="vanished">Тему MQTT Не Встановлено</translation>
     </message>
     <message>
-        <source>You won&apos;t receive any messages until a topic is configured.</source>
+        <source>You won't receive any messages until a topic is configured.</source>
         <translation type="vanished">Повідомлення не надходитимуть, доки не буде налаштовано тему.</translation>
     </message>
     <message>
@@ -17295,8 +17402,8 @@ To unlock this feature, please activate your license or visit the store.</source
         <translation type="vanished">Недійсна Тема MQTT</translation>
     </message>
     <message>
-        <source>The topic &quot;%1&quot; is not valid.</source>
-        <translation type="vanished">Тема &quot;%1&quot; недійсна.</translation>
+        <source>The topic "%1" is not valid.</source>
+        <translation type="vanished">Тема "%1" недійсна.</translation>
     </message>
     <message>
         <source>Select PEM Certificates Directory</source>
@@ -17307,8 +17414,8 @@ To unlock this feature, please activate your license or visit the store.</source
         <translation type="vanished">Помилка Підписки</translation>
     </message>
     <message>
-        <source>Failed to subscribe to topic &quot;%1&quot;.</source>
-        <translation type="vanished">Не вдалося підписатися на тему &quot;%1&quot;.</translation>
+        <source>Failed to subscribe to topic "%1".</source>
+        <translation type="vanished">Не вдалося підписатися на тему "%1".</translation>
     </message>
     <message>
         <source>Invalid MQTT Protocol Version</source>
@@ -17316,7 +17423,7 @@ To unlock this feature, please activate your license or visit the store.</source
     </message>
     <message>
         <source>The MQTT broker rejected the connection due to an unsupported protocol version. Ensure that your client and broker support the same protocol version.</source>
-        <translation type="vanished">Брокер MQTT відхилив з&apos;єднання через непідтримувану версію протоколу. Переконайтеся, що ваш клієнт і брокер підтримують однакову версію протоколу.</translation>
+        <translation type="vanished">Брокер MQTT відхилив з'єднання через непідтримувану версію протоколу. Переконайтеся, що ваш клієнт і брокер підтримують однакову версію протоколу.</translation>
     </message>
     <message>
         <source>Client ID Rejected</source>
@@ -17332,7 +17439,7 @@ To unlock this feature, please activate your license or visit the store.</source
     </message>
     <message>
         <source>The network connection was established, but the broker is currently unavailable. Verify the broker status and try again later.</source>
-        <translation type="vanished">Мережеве з&apos;єднання встановлено, але брокер наразі недоступний. Перевірте стан брокера та повторіть спробу пізніше.</translation>
+        <translation type="vanished">Мережеве з'єднання встановлено, але брокер наразі недоступний. Перевірте стан брокера та повторіть спробу пізніше.</translation>
     </message>
     <message>
         <source>Authentication Error</source>
@@ -17340,7 +17447,7 @@ To unlock this feature, please activate your license or visit the store.</source
     </message>
     <message>
         <source>The username or password provided is incorrect or malformed. Double-check your credentials and try again.</source>
-        <translation type="vanished">Вказано неправильне або некоректне ім&apos;я користувача чи пароль. Перевірте облікові дані та повторіть спробу.</translation>
+        <translation type="vanished">Вказано неправильне або некоректне ім'я користувача чи пароль. Перевірте облікові дані та повторіть спробу.</translation>
     </message>
     <message>
         <source>Authorization Error</source>
@@ -17348,7 +17455,7 @@ To unlock this feature, please activate your license or visit the store.</source
     </message>
     <message>
         <source>The MQTT broker denied the connection due to insufficient permissions. Ensure that your account has the necessary access rights.</source>
-        <translation type="vanished">MQTT-брокер відхилив з&apos;єднання через недостатні права доступу. Переконайтеся, що ваш обліковий запис має необхідні права доступу.</translation>
+        <translation type="vanished">MQTT-брокер відхилив з'єднання через недостатні права доступу. Переконайтеся, що ваш обліковий запис має необхідні права доступу.</translation>
     </message>
     <message>
         <source>Network or Transport Error</source>
@@ -17356,7 +17463,7 @@ To unlock this feature, please activate your license or visit the store.</source
     </message>
     <message>
         <source>A network or transport layer issue occurred, causing an unexpected connection failure. Check your network connection and broker settings.</source>
-        <translation type="vanished">Виникла проблема на рівні мережі або транспортного рівня, що спричинила несподіване переривання з&apos;єднання. Перевірте мережеве з&apos;єднання та налаштування брокера.</translation>
+        <translation type="vanished">Виникла проблема на рівні мережі або транспортного рівня, що спричинила несподіване переривання з'єднання. Перевірте мережеве з'єднання та налаштування брокера.</translation>
     </message>
     <message>
         <source>MQTT Protocol Violation</source>
@@ -17364,7 +17471,7 @@ To unlock this feature, please activate your license or visit the store.</source
     </message>
     <message>
         <source>The client detected a violation of the MQTT protocol and closed the connection. Check your MQTT implementation for compliance.</source>
-        <translation type="vanished">Клієнт виявив порушення протоколу MQTT і закрив з&apos;єднання. Перевірте вашу реалізацію MQTT на відповідність стандарту.</translation>
+        <translation type="vanished">Клієнт виявив порушення протоколу MQTT і закрив з'єднання. Перевірте вашу реалізацію MQTT на відповідність стандарту.</translation>
     </message>
     <message>
         <source>Unknown Error</source>
@@ -17403,20 +17510,20 @@ To unlock this feature, please activate your license or visit the store.</source
         <translation type="vanished">Потрібна Автентифікація MQTT</translation>
     </message>
     <message>
-        <source>The MQTT broker requires authentication using method: &quot;%1&quot;.
+        <source>The MQTT broker requires authentication using method: "%1".
 
 Please provide the necessary credentials.</source>
-        <translation type="vanished">MQTT-брокер вимагає автентифікацію за методом: &quot;%1&quot;.
+        <translation type="vanished">MQTT-брокер вимагає автентифікацію за методом: "%1".
 
 Надайте необхідні облікові дані.</translation>
     </message>
     <message>
         <source>Enter MQTT Username</source>
-        <translation type="vanished">Введіть Ім&apos;я Користувача MQTT</translation>
+        <translation type="vanished">Введіть Ім'я Користувача MQTT</translation>
     </message>
     <message>
         <source>Username:</source>
-        <translation type="vanished">Ім&apos;я Користувача:</translation>
+        <translation type="vanished">Ім'я Користувача:</translation>
     </message>
     <message>
         <source>Enter MQTT Password</source>
@@ -17786,7 +17893,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/MQTT/PublisherWorker.cpp" line="757"/>
         <source>Configure broker hostname and port before testing the connection.</source>
-        <translation>Налаштуйте ім&apos;я хоста та порт брокера перед тестуванням з&apos;єднання.</translation>
+        <translation>Налаштуйте ім'я хоста та порт брокера перед тестуванням з'єднання.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/PublisherWorker.cpp" line="793"/>
@@ -17851,11 +17958,11 @@ Please provide the necessary credentials.</source>
     </message>
     <message>
         <source>Username</source>
-        <translation type="vanished">Ім&apos;я Користувача</translation>
+        <translation type="vanished">Ім'я Користувача</translation>
     </message>
     <message>
         <source>MQTT Username</source>
-        <translation type="vanished">MQTT Ім&apos;я Користувача</translation>
+        <translation type="vanished">MQTT Ім'я Користувача</translation>
     </message>
     <message>
         <source>Password</source>
@@ -17903,7 +18010,7 @@ Please provide the necessary credentials.</source>
     </message>
     <message>
         <source>e.g. Device unexpectedly disconnected</source>
-        <translation type="vanished">напр. Пристрій несподівано від&apos;єднано</translation>
+        <translation type="vanished">напр. Пристрій несподівано від'єднано</translation>
     </message>
     <message>
         <source>Enable SSL</source>
@@ -17927,7 +18034,7 @@ Please provide the necessary credentials.</source>
     </message>
     <message>
         <source>Disconnect</source>
-        <translation type="vanished">Від&apos;єднатися</translation>
+        <translation type="vanished">Від'єднатися</translation>
     </message>
     <message>
         <source>Connect</source>
@@ -18008,8 +18115,8 @@ Please provide the necessary credentials.</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Macros.qml" line="674"/>
-        <source>command.name { &quot;parameter&quot;: value }</source>
-        <translation>command.name { &quot;parameter&quot;: value }</translation>
+        <source>command.name { "parameter": value }</source>
+        <translation>command.name { "parameter": value }</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Macros.qml" line="816"/>
@@ -18209,12 +18316,12 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/AI/MemoryManagerDialog.qml" line="23"/>
         <source>Assistant Memory</source>
-        <translation>Пам&apos;ять Асистента</translation>
+        <translation>Пам'ять Асистента</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MemoryManagerDialog.qml" line="50"/>
         <source>Facts the assistant carries into every chat. Stored only on this computer. Delete anything you no longer want it to know.</source>
-        <translation>Факти, які асистент використовує в кожному чаті. Зберігаються лише на цьому комп&apos;ютері. Видаліть все, що більше не потрібно йому знати.</translation>
+        <translation>Факти, які асистент використовує в кожному чаті. Зберігаються лише на цьому комп'ютері. Видаліть все, що більше не потрібно йому знати.</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MemoryManagerDialog.qml" line="65"/>
@@ -18224,7 +18331,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/AI/MemoryManagerDialog.qml" line="65"/>
         <source>feedback</source>
-        <translation>зворотний зв&apos;язок</translation>
+        <translation>зворотний зв'язок</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MemoryManagerDialog.qml" line="65"/>
@@ -18239,12 +18346,12 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/AI/MemoryManagerDialog.qml" line="73"/>
         <source>Something the assistant should remember…</source>
-        <translation>Щось, що асистент повинен запам&apos;ятати…</translation>
+        <translation>Щось, що асистент повинен запам'ятати…</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MemoryManagerDialog.qml" line="77"/>
         <source>Remember</source>
-        <translation>Запам&apos;ятати</translation>
+        <translation>Запам'ятати</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MemoryManagerDialog.qml" line="146"/>
@@ -18254,7 +18361,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/AI/MemoryManagerDialog.qml" line="162"/>
         <source>Nothing remembered yet. Add a fact above, or approve one when the assistant proposes it in chat.</source>
-        <translation>Поки що нічого не запам&apos;ятовано. Додайте факт вище або підтвердьте той, який асистент запропонує в чаті.</translation>
+        <translation>Поки що нічого не запам'ятовано. Додайте факт вище або підтвердьте той, який асистент запропонує в чаті.</translation>
     </message>
 </context>
 <context>
@@ -18327,7 +18434,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/AI/MessageBubble.qml" line="355"/>
         <source>Remember this…</source>
-        <translation>Запам&apos;ятати це…</translation>
+        <translation>Запам'ятати це…</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageBubble.qml" line="358"/>
@@ -18552,13 +18659,13 @@ Do you want to update them now?</source>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1153"/>
-        <source>Plugin &quot;%1&quot; is not installed.</source>
-        <translation>Плагін &quot;%1&quot; не встановлено.</translation>
+        <source>Plugin "%1" is not installed.</source>
+        <translation>Плагін "%1" не встановлено.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1163"/>
-        <source>Extension &quot;%1&quot; is not a plugin (type: %2).</source>
-        <translation>Розширення &quot;%1&quot; не є плагіном (тип: %2).</translation>
+        <source>Extension "%1" is not a plugin (type: %2).</source>
+        <translation>Розширення "%1" не є плагіном (тип: %2).</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1184"/>
@@ -18569,8 +18676,8 @@ Do you want to update them now?</source>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1208"/>
-        <source>Plugin &quot;%1&quot; requires gRPC but this build does not include gRPC support.</source>
-        <translation>Плагін &quot;%1&quot; потребує GRPC, але ця збірка не включає підтримку GRPC.</translation>
+        <source>Plugin "%1" requires gRPC but this build does not include gRPC support.</source>
+        <translation>Плагін "%1" потребує GRPC, але ця збірка не включає підтримку GRPC.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1218"/>
@@ -18588,8 +18695,8 @@ Would you like to enable it now?</source>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1251"/>
-        <source>Plugin &quot;%1&quot; has no &apos;entry&apos; field in info.json.</source>
-        <translation>Плагін &quot;%1&quot; не має поля &apos;entry&apos; у info.json.</translation>
+        <source>Plugin "%1" has no 'entry' field in info.json.</source>
+        <translation>Плагін "%1" не має поля 'entry' у info.json.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1261"/>
@@ -18600,8 +18707,8 @@ Would you like to enable it now?</source>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1269"/>
-        <source>Plugin &quot;%1&quot; has an invalid entry point path.</source>
-        <translation>Плагін &quot;%1&quot; має недійсний шлях до точки входу.</translation>
+        <source>Plugin "%1" has an invalid entry point path.</source>
+        <translation>Плагін "%1" має недійсний шлях до точки входу.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1312"/>
@@ -18610,17 +18717,17 @@ Would you like to enable it now?</source>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1313"/>
-        <source>This plugin requires &quot;%1&quot; but it was not found on your system.
+        <source>This plugin requires "%1" but it was not found on your system.
 
 Would you like to open the download page?</source>
-        <translation>Цей плагін потребує &quot;%1&quot;, але його не знайдено у вашій системі.
+        <translation>Цей плагін потребує "%1", але його не знайдено у вашій системі.
 
 Відкрити сторінку завантаження?</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1221"/>
         <source>Plugins need the API server to communicate with Serial Studio. Would you like to enable it now?</source>
-        <translation>Плагінам потрібен API-сервер для зв&apos;язку з Serial Studio. Увімкнути його зараз?</translation>
+        <translation>Плагінам потрібен API-сервер для зв'язку з Serial Studio. Увімкнути його зараз?</translation>
     </message>
 </context>
 <context>
@@ -18849,7 +18956,7 @@ Would you like to open the download page?</source>
         <translation type="vanished">Перевіряти оновлення автоматично?</translation>
     </message>
     <message>
-        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the "About" dialog</source>
         <translation type="vanished">Чи повинен %1 автоматично перевіряти оновлення? Ви завжди можете перевірити оновлення вручну з діалогу «Про програму»</translation>
     </message>
     <message>
@@ -19247,7 +19354,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="133"/>
         <source>Test Connection</source>
-        <translation>Тестувати З&apos;єднання</translation>
+        <translation>Тестувати З'єднання</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="138"/>
@@ -19526,7 +19633,7 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="117"/>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="128"/>
         <source>Number of bytes combined into each channel value.</source>
-        <translation>Кількість байтів, об&apos;єднаних у кожне значення каналу.</translation>
+        <translation>Кількість байтів, об'єднаних у кожне значення каналу.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
@@ -19538,7 +19645,7 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="126"/>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="137"/>
         <source>Byte order used when combining multi-byte values.</source>
-        <translation>Порядок байтів, що використовується при об&apos;єднанні багатобайтових значень.</translation>
+        <translation>Порядок байтів, що використовується при об'єднанні багатобайтових значень.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="134"/>
@@ -19549,7 +19656,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="135"/>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="146"/>
-        <source>Interprets each value as two&apos;s-complement signed.</source>
+        <source>Interprets each value as two's-complement signed.</source>
         <translation>Інтерпретує кожне значення як знакове у доповняльному коді.</translation>
     </message>
     <message>
@@ -19626,7 +19733,7 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryModbus.cpp" line="211"/>
-        <source>Interprets 16-bit registers as two&apos;s-complement signed values.</source>
+        <source>Interprets 16-bit registers as two's-complement signed values.</source>
         <translation>Інтерпретує 16-бітні регістри як знакові значення з доповненням до двох.</translation>
     </message>
     <message>
@@ -19657,8 +19764,8 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="268"/>
-        <source>Ordered tag list written by the OPC UA project generator: one {&quot;i&quot;: index, &quot;t&quot;: type} entry per channel.</source>
-        <translation>Упорядкований список тегів, створений генератором проєкту OPC UA: один запис {&quot;i&quot;: індекс, &quot;t&quot;: тип} на канал.</translation>
+        <source>Ordered tag list written by the OPC UA project generator: one {"i": index, "t": type} entry per channel.</source>
+        <translation>Упорядкований список тегів, створений генератором проєкту OPC UA: один запис {"i": індекс, "t": тип} на канал.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="341"/>
@@ -19667,8 +19774,8 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="342"/>
-        <source>Ordered metric list written by the MQTT project generator: one {&quot;index&quot;: index, &quot;name&quot;: name} entry per channel.</source>
-        <translation>Впорядкований список метрик, записаний генератором проєктів MQTT: один запис {&quot;index&quot;: index, &quot;name&quot;: name} на канал.</translation>
+        <source>Ordered metric list written by the MQTT project generator: one {"index": index, "name": name} entry per channel.</source>
+        <translation>Впорядкований список метрик, записаний генератором проєктів MQTT: один запис {"index": index, "name": name} на канал.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="356"/>
@@ -19682,8 +19789,8 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="401"/>
-        <source>Ordered variable list written by the S7 project generator: one {&quot;index&quot;: index, &quot;name&quot;: name} entry per channel.</source>
-        <translation>Упорядкований список змінних, створений генератором проєкту S7: один запис {&quot;index&quot;: індекс, &quot;name&quot;: назва} на канал.</translation>
+        <source>Ordered variable list written by the S7 project generator: one {"index": index, "name": name} entry per channel.</source>
+        <translation>Упорядкований список змінних, створений генератором проєкту S7: один запис {"index": індекс, "name": назва} на канал.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="415"/>
@@ -19692,8 +19799,8 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="461"/>
-        <source>Ordered tag list written by the EtherNet/IP project generator: one {&quot;index&quot;: index, &quot;name&quot;: name} entry per channel.</source>
-        <translation>Упорядкований список тегів, створений генератором проєкту EtherNet/IP: один запис {&quot;index&quot;: індекс, &quot;name&quot;: назва} на канал.</translation>
+        <source>Ordered tag list written by the EtherNet/IP project generator: one {"index": index, "name": name} entry per channel.</source>
+        <translation>Упорядкований список тегів, створений генератором проєкту EtherNet/IP: один запис {"index": індекс, "name": назва} на канал.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="475"/>
@@ -19707,8 +19814,8 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="521"/>
-        <source>Ordered point list written by the IEC 60870-5-104 project generator: one {&quot;index&quot;: index, &quot;name&quot;: name} entry per channel.</source>
-        <translation>Упорядкований список точок, створений генератором проєкту IEC 60870-5-104: один запис {&quot;index&quot;: індекс, &quot;name&quot;: назва} на канал.</translation>
+        <source>Ordered point list written by the IEC 60870-5-104 project generator: one {"index": index, "name": name} entry per channel.</source>
+        <translation>Упорядкований список точок, створений генератором проєкту IEC 60870-5-104: один запис {"index": індекс, "name": назва} на канал.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp" line="535"/>
@@ -19743,7 +19850,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/MultiFrameTimeSeries2d.cpp" line="151"/>
         <source>JSON field holding the array of record objects.</source>
-        <translation>Поле JSON, що містить масив об&apos;єктів записів.</translation>
+        <translation>Поле JSON, що містить масив об'єктів записів.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/NativeTemplates/MultiFrameTimeSeries2d.cpp" line="157"/>
@@ -19954,7 +20061,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="439"/>
         <source>Optional</source>
-        <translation>Необов&apos;язково</translation>
+        <translation>Необов'язково</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="459"/>
@@ -19970,6 +20077,14 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="496"/>
         <source>Ignore TLS Errors</source>
         <translation>Ігнорувати Помилки TLS</translation>
+    </message>
+</context>
+<context>
+    <name>NodeTransform</name>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram/NodeTransform.qml" line="60"/>
+        <source>Open the transform code editor for this dataset.</source>
+        <translation>Відкрити редактор коду перетворення для цього набору даних.</translation>
     </message>
 </context>
 <context>
@@ -20009,7 +20124,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/Dialogs/OfflineActivation.qml" line="55"/>
         <source>Activate Serial Studio Pro on a machine with no internet access. No account or connection is needed on this computer.</source>
-        <translation>Активувати Serial Studio Pro на комп&apos;ютері без доступу до інтернету. Обліковий запис або підключення на цьому комп&apos;ютері не потрібні.</translation>
+        <translation>Активувати Serial Studio Pro на комп'ютері без доступу до інтернету. Обліковий запис або підключення на цьому комп'ютері не потрібні.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OfflineActivation.qml" line="86"/>
@@ -20018,8 +20133,8 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OfflineActivation.qml" line="95"/>
-        <source>Save this computer&apos;s device file. It identifies this machine and contains no personal information.</source>
-        <translation>Зберегти файл пристрою цього комп&apos;ютера. Він ідентифікує цю машину і не містить особистої інформації.</translation>
+        <source>Save this computer's device file. It identifies this machine and contains no personal information.</source>
+        <translation>Зберегти файл пристрою цього комп'ютера. Він ідентифікує цю машину і не містить особистої інформації.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OfflineActivation.qml" line="102"/>
@@ -20034,7 +20149,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/Dialogs/OfflineActivation.qml" line="145"/>
         <source>On another computer with internet access, go to the address below, upload the device file, and enter your email and license key.</source>
-        <translation>На іншому комп&apos;ютері з доступом до інтернету перейдіть за адресою нижче, завантажте файл пристрою та введіть свою електронну адресу й ліцензійний ключ.</translation>
+        <translation>На іншому комп'ютері з доступом до інтернету перейдіть за адресою нижче, завантажте файл пристрою та введіть свою електронну адресу й ліцензійний ключ.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OfflineActivation.qml" line="157"/>
@@ -20049,7 +20164,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/Dialogs/OfflineActivation.qml" line="202"/>
         <source>Copy the license file to this computer and import it. Pro features unlock immediately.</source>
-        <translation>Скопіюйте файл ліцензії на цей комп&apos;ютер і імпортуйте його. Функції Pro розблокуються негайно.</translation>
+        <translation>Скопіюйте файл ліцензії на цей комп'ютер і імпортуйте його. Функції Pro розблокуються негайно.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OfflineActivation.qml" line="209"/>
@@ -20261,7 +20376,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="344"/>
         <source>Generated on the first secure connection</source>
-        <translation>Генерується при першому захищеному з&apos;єднанні</translation>
+        <translation>Генерується при першому захищеному з'єднанні</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="352"/>
@@ -20322,7 +20437,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="226"/>
         <source>Username</source>
-        <translation>Ім&apos;я Користувача</translation>
+        <translation>Ім'я Користувача</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="243"/>
@@ -20417,7 +20532,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="108"/>
         <source>Subject:</source>
-        <translation>Суб&apos;єкт:</translation>
+        <translation>Суб'єкт:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="119"/>
@@ -21002,7 +21117,7 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="368"/>
-        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>Недоступно через віддалене підключення. Цей віджет потребує потоку необроблених зразків з віддаленого пристрою, який дзеркало панелі не передає.</translation>
     </message>
 </context>
@@ -21030,9 +21145,100 @@ Add groups above to poll multiple register types.</source>
     </message>
 </context>
 <context>
+    <name>PlotFormatter</name>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotFormatter.qml" line="411"/>
+        <source>Drag to move, right-click to clear</source>
+        <translation>Перетягніть для переміщення, клацніть правою кнопкою для очищення</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotFormatter.qml" line="412"/>
+        <source>ΔX: %1  ΔY: %2</source>
+        <translation>ΔX: %1  ΔY: %2</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotFormatter.qml" line="414"/>
+        <location filename="../../qml/Widgets/PlotWidget/PlotFormatter.qml" line="421"/>
+        <source>%1 — %2</source>
+        <translation>%1 — %2</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotFormatter.qml" line="418"/>
+        <source>%1  1/ΔX: %2</source>
+        <translation>%1  1/ΔX: %2</translation>
+    </message>
+</context>
+<context>
+    <name>PlotMarkerPopup</name>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="50"/>
+        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="59"/>
+        <source>M%1</source>
+        <translation>M%1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="67"/>
+        <source>Marker name:</source>
+        <translation>Назва маркера:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="79"/>
+        <source>Add</source>
+        <translation>Додати</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="84"/>
+        <source>Cancel</source>
+        <translation>Скасувати</translation>
+    </message>
+</context>
+<context>
+    <name>PlotRulerMenu</name>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotRulerMenu.qml" line="49"/>
+        <source>Add marker here...</source>
+        <translation>Додати маркер тут...</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotRulerMenu.qml" line="56"/>
+        <source>Remove marker "%1"</source>
+        <translation>Видалити маркер "%1"</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotRulerMenu.qml" line="62"/>
+        <source>Clear all markers</source>
+        <translation>Очистити всі маркери</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotRulerMenu.qml" line="71"/>
+        <source>Set time zero here</source>
+        <translation>Встановити нульовий час тут</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotRulerMenu.qml" line="71"/>
+        <source>Set zero here</source>
+        <translation>Встановити нуль тут</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotRulerMenu.qml" line="77"/>
+        <source>Reset time zero</source>
+        <translation>Скинути нульовий час</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotRulerMenu.qml" line="77"/>
+        <source>Reset zero</source>
+        <translation>Скинути нуль</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget/PlotRulerMenu.qml" line="85"/>
+        <source>Hover marker</source>
+        <translation>Маркер при наведенні</translation>
+    </message>
+</context>
+<context>
     <name>PlotWidget</name>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1999"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="844"/>
         <source>Time</source>
         <translation>Час</translation>
     </message>
@@ -21041,99 +21247,81 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">ΔX: %1  ΔY: %2 — Перетягніть для переміщення, клацніть правою кнопкою для очищення</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="554"/>
         <source>Drag to move, right-click to clear</source>
-        <translation>Перетягніть для переміщення, клацніть правою кнопкою для очищення</translation>
+        <translation type="vanished">Перетягніть для переміщення, клацніть правою кнопкою для очищення</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="555"/>
         <source>ΔX: %1  ΔY: %2</source>
-        <translation>ΔX: %1  ΔY: %2</translation>
+        <translation type="vanished">ΔX: %1  ΔY: %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="557"/>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="564"/>
         <source>%1 — %2</source>
-        <translation>%1 — %2</translation>
+        <translation type="vanished">%1 — %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="561"/>
         <source>%1  1/ΔX: %2</source>
-        <translation>%1  1/ΔX: %2</translation>
+        <translation type="vanished">%1  1/ΔX: %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1490"/>
         <source>Add marker here...</source>
-        <translation>Додати маркер тут...</translation>
+        <translation type="vanished">Додати маркер тут...</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1497"/>
-        <source>Remove marker &quot;%1&quot;</source>
-        <translation>Видалити маркер &quot;%1&quot;</translation>
+        <source>Remove marker "%1"</source>
+        <translation type="vanished">Видалити маркер "%1"</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1503"/>
         <source>Clear all markers</source>
-        <translation>Очистити всі маркери</translation>
+        <translation type="vanished">Очистити всі маркери</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1512"/>
         <source>Set time zero here</source>
-        <translation>Встановити нульовий час тут</translation>
+        <translation type="vanished">Встановити нульовий час тут</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1512"/>
         <source>Set zero here</source>
-        <translation>Встановити нуль тут</translation>
+        <translation type="vanished">Встановити нуль тут</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1518"/>
         <source>Reset time zero</source>
-        <translation>Скинути нульовий час</translation>
+        <translation type="vanished">Скинути нульовий час</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1518"/>
         <source>Reset zero</source>
-        <translation>Скинути нуль</translation>
+        <translation type="vanished">Скинути нуль</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1526"/>
         <source>Hover marker</source>
-        <translation>Маркер при наведенні</translation>
+        <translation type="vanished">Маркер при наведенні</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1548"/>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1556"/>
         <source>M%1</source>
-        <translation>M%1</translation>
+        <translation type="vanished">M%1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1564"/>
         <source>Marker name:</source>
-        <translation>Назва маркера:</translation>
+        <translation type="vanished">Назва маркера:</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1576"/>
         <source>Add</source>
-        <translation>Додати</translation>
+        <translation type="vanished">Додати</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1581"/>
         <source>Cancel</source>
-        <translation>Скасувати</translation>
+        <translation type="vanished">Скасувати</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="2000"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="845"/>
         <source>%1 from zero</source>
         <translation>%1 від нуля</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="2026"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="871"/>
         <source>Click to place cursor</source>
         <translation>Клацніть для розміщення курсора</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="2028"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="873"/>
         <source>Click to place second cursor — Drag to move</source>
         <translation>Клацніть для розміщення другого курсора — Перетягніть для переміщення</translation>
     </message>
@@ -21314,7 +21502,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="200"/>
         <source>(optional) /working/directory</source>
-        <translation>(необов&apos;язково) /робочий/каталог</translation>
+        <translation>(необов'язково) /робочий/каталог</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="235"/>
@@ -21844,546 +22032,546 @@ Click Refresh to update the list.</source>
     <message>
         <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="135"/>
         <source>Duplicate Selection</source>
-        <translation type="unfinished">Дублювати Виділене</translation>
+        <translation>Дублювати Виділене</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="213"/>
         <source>Delete Selection</source>
-        <translation type="unfinished">Видалити Виділене</translation>
+        <translation>Видалити Виділене</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="311"/>
         <source>Delete %1 selected items?</source>
-        <translation type="unfinished">Видалити вибрані елементи (%1)?</translation>
+        <translation>Видалити вибрані елементи (%1)?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="312"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="494"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="521"/>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="912"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="791"/>
         <source>This action cannot be undone.</source>
-        <translation type="unfinished">Цю дію не можна скасувати.</translation>
+        <translation>Цю дію не можна скасувати.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="314"/>
         <source>Delete Items</source>
-        <translation type="unfinished">Видалити Елементи</translation>
+        <translation>Видалити Елементи</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="335"/>
         <source>Move Selection</source>
-        <translation type="unfinished">Перемістити Виділене</translation>
+        <translation>Перемістити Виділене</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="400"/>
         <source>Toggle Selection</source>
-        <translation type="unfinished">Перемкнути Виділене</translation>
+        <translation>Перемкнути Виділене</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="451"/>
         <source>Legacy frame parser function updated</source>
-        <translation type="unfinished">Застарілу функцію парсера кадрів оновлено</translation>
+        <translation>Застарілу функцію парсера кадрів оновлено</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="452"/>
-        <source>Your project used a legacy frame parser function with a &apos;separator&apos; argument. It has been automatically migrated to the new format.</source>
-        <translation type="unfinished">Ваш проєкт використовував застарілу функцію парсера фреймів з аргументом &apos;separator&apos;. Її автоматично перенесено до нового формату.</translation>
+        <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
+        <translation>Ваш проєкт використовував застарілу функцію парсера фреймів з аргументом 'separator'. Її автоматично перенесено до нового формату.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="486"/>
         <source>Select Project File</source>
-        <translation type="unfinished">Вибрати Файл Проєкту</translation>
+        <translation>Вибрати Файл Проєкту</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="488"/>
         <source>Project Files (*.json *.ssproj)</source>
-        <translation type="unfinished">Файли Проєктів (*.json *.ssproj)</translation>
+        <translation>Файли Проєктів (*.json *.ssproj)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="535"/>
         <source>JSON validation error</source>
-        <translation type="unfinished">Помилка валідації JSON</translation>
+        <translation>Помилка валідації JSON</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="588"/>
         <source>Project upgraded from an earlier file format</source>
-        <translation type="unfinished">Проєкт оновлено з попереднього формату файлу</translation>
+        <translation>Проєкт оновлено з попереднього формату файлу</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="590"/>
         <source>This project was saved with schema version %1; the current version is %2. Defaults have been applied to any new fields. Save the project to lock in the upgrade.</source>
-        <translation type="unfinished">Цей проєкт було збережено зі схемою версії %1; поточна версія — %2. Для нових полів застосовано значення за замовчуванням. Збережіть проєкт, щоб зафіксувати оновлення.</translation>
+        <translation>Цей проєкт було збережено зі схемою версії %1; поточна версія — %2. Для нових полів застосовано значення за замовчуванням. Збережіть проєкт, щоб зафіксувати оновлення.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="706"/>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="311"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="343"/>
         <source>Untitled Project</source>
-        <translation type="unfinished">Проєкт Без Назви</translation>
+        <translation>Проєкт Без Назви</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="713"/>
         <source>Save Imported Project</source>
-        <translation type="unfinished">Зберегти Імпортований Проєкт</translation>
+        <translation>Зберегти Імпортований Проєкт</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="715"/>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="290"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="322"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
-        <translation type="unfinished">Файли Проєктів Serial Studio (*.ssproj)</translation>
+        <translation>Файли Проєктів Serial Studio (*.ssproj)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="750"/>
         <source>File open error</source>
-        <translation type="unfinished">Помилка відкриття файлу</translation>
+        <translation>Помилка відкриття файлу</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="869"/>
         <source>Device A</source>
-        <translation type="unfinished">Пристрій A</translation>
+        <translation>Пристрій A</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="922"/>
         <source>Multi-source projects require a Pro license</source>
-        <translation type="unfinished">Багатоджерельні проєкти потребують ліцензії Pro</translation>
+        <translation>Багатоджерельні проєкти потребують ліцензії Pro</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="923"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
-        <translation type="unfinished">Цей проєкт містить кілька джерел даних. Завантажено лише перше джерело. Для використання багатоджерельних проєктів потрібна ліцензія Serial Studio Pro.</translation>
+        <translation>Цей проєкт містить кілька джерел даних. Завантажено лише перше джерело. Для використання багатоджерельних проєктів потрібна ліцензія Serial Studio Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="1015"/>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="1033"/>
         <source>Workspace IDs remapped on load</source>
-        <translation type="unfinished">Ідентифікатори робочих просторів переназначено під час завантаження</translation>
+        <translation>Ідентифікатори робочих просторів переназначено під час завантаження</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="1016"/>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="1034"/>
         <source>%1 custom workspace ID(s) overlapped the new reserved auto range and were moved into the user range. Save the project to make the remap permanent.</source>
-        <translation type="unfinished">%1 власних ідентифікаторів робочих просторів перекрили новий зарезервований автоматичний діапазон і були переміщені в користувацький діапазон. Збережіть проєкт, щоб зробити переназначення постійним.</translation>
+        <translation>%1 власних ідентифікаторів робочих просторів перекрили новий зарезервований автоматичний діапазон і були переміщені в користувацький діапазон. Збережіть проєкт, щоб зробити переназначення постійним.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="248"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="280"/>
         <source>Do you want to save your changes?</source>
-        <translation type="unfinished">Зберегти зміни?</translation>
+        <translation>Зберегти зміни?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="249"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="281"/>
         <source>You have unsaved modifications in this project!</source>
-        <translation type="unfinished">У цьому проєкті є незбережені зміни!</translation>
+        <translation>У цьому проєкті є незбережені зміни!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="288"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="320"/>
         <source>Save Serial Studio Project</source>
-        <translation type="unfinished">Зберегти Проєкт Serial Studio</translation>
+        <translation>Зберегти Проєкт Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="381"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="413"/>
         <source>File save error</source>
-        <translation type="unfinished">Помилка збереження файлу</translation>
+        <translation>Помилка збереження файлу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="589"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="621"/>
         <source>Project file removed from disk</source>
-        <translation type="unfinished">Файл проєкту видалено з диска</translation>
+        <translation>Файл проєкту видалено з диска</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="590"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="622"/>
         <source>%1 was deleted or renamed by another program. Save the project to recreate it.</source>
-        <translation type="unfinished">%1 було видалено або перейменовано іншою програмою. Збережіть проєкт, щоб відновити його.</translation>
+        <translation>%1 було видалено або перейменовано іншою програмою. Збережіть проєкт, щоб відновити його.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="613"/>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="635"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="645"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="667"/>
         <source>Project file changed on disk</source>
-        <translation type="unfinished">Файл проєкту змінено на диску</translation>
+        <translation>Файл проєкту змінено на диску</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="614"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="646"/>
         <source>%1 was modified by another program. The in-memory project was kept; reopen the file to load the external changes.</source>
-        <translation type="unfinished">%1 було змінено іншою програмою. Проєкт у пам&apos;яті збережено; відкрийте файл повторно, щоб завантажити зовнішні зміни.</translation>
+        <translation>%1 було змінено іншою програмою. Проєкт у пам'яті збережено; відкрийте файл повторно, щоб завантажити зовнішні зміни.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="632"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="664"/>
         <source>The project file was modified by another program.
 
 Reload it and discard your unsaved changes?</source>
-        <translation type="unfinished">Файл проєкту було змінено іншою програмою.
+        <translation>Файл проєкту було змінено іншою програмою.
 
 Перезавантажити його та відкинути незбережені зміни?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="634"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="666"/>
         <source>The project file was modified by another program.
 
 Reload it?</source>
-        <translation type="unfinished">Файл проєкту було змінено іншою програмою.
+        <translation>Файл проєкту було змінено іншою програмою.
 
 Перезавантажити його?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="55"/>
         <source>Add Output Panel</source>
-        <translation type="unfinished">Додати Панель Виводу</translation>
+        <translation>Додати Панель Виводу</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="57"/>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="96"/>
         <source>Output Controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Елементи Керування Виводом</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="71"/>
         <source>Add Output Widget</source>
-        <translation type="unfinished">Додати Віджет Виводу</translation>
+        <translation>Додати Віджет Виводу</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="108"/>
         <source>New Button</source>
-        <translation type="unfinished">Нова Кнопка</translation>
+        <translation>Нова Кнопка</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="111"/>
         <source>New Slider</source>
-        <translation type="unfinished">Новий Повзунок</translation>
+        <translation>Новий Повзунок</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="114"/>
         <source>New Toggle</source>
-        <translation type="unfinished">Новий Перемикач</translation>
+        <translation>Новий Перемикач</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="117"/>
         <source>New Text Field</source>
-        <translation type="unfinished">Нове Текстове Поле</translation>
+        <translation>Нове Текстове Поле</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="120"/>
         <source>New Knob</source>
-        <translation type="unfinished">Новий Регулятор</translation>
+        <translation>Новий Регулятор</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="149"/>
         <source>Change Output Widget Type</source>
-        <translation type="unfinished">Змінити Тип Віджета Виводу</translation>
+        <translation>Змінити Тип Віджета Виводу</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="180"/>
         <source>Change Output Widget Icon</source>
-        <translation type="unfinished">Змінити Іконку Віджета Виводу</translation>
+        <translation>Змінити Іконку Віджета Виводу</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="208"/>
         <source>Edit Output Widget</source>
-        <translation type="unfinished">Редагувати Віджет Виводу</translation>
+        <translation>Редагувати Віджет Виводу</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="238"/>
-        <source>Do you want to delete output widget &quot;%1&quot;?</source>
-        <translation type="unfinished">Видалити віджет виводу &quot;%1&quot;?</translation>
+        <source>Do you want to delete output widget "%1"?</source>
+        <translation>Видалити віджет виводу "%1"?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="240"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="345"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="387"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="422"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="301"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="343"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="378"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
-        <translation type="unfinished">Цю дію неможливо скасувати. Продовжити?</translation>
+        <translation>Цю дію неможливо скасувати. Продовжити?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="260"/>
         <source>Delete Output Widget</source>
-        <translation type="unfinished">Видалити Віджет Виводу</translation>
+        <translation>Видалити Віджет Виводу</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="303"/>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="376"/>
         <source>Duplicate Output Widget</source>
-        <translation type="unfinished">Дублювати Віджет Виводу</translation>
+        <translation>Дублювати Віджет Виводу</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="404"/>
         <source>Move Output Widget</source>
-        <translation type="unfinished">Перемістити Віджет Виводу</translation>
+        <translation>Перемістити Віджет Виводу</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectPresentation.cpp" line="541"/>
         <source>Rename Widget</source>
-        <translation type="unfinished">Перейменувати Віджет</translation>
+        <translation>Перейменувати Віджет</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectPresentation.cpp" line="542"/>
         <source>Display title (empty restores the original):</source>
-        <translation type="unfinished">Назва для відображення (порожнє відновлює оригінальну):</translation>
+        <translation>Назва для відображення (порожнє відновлює оригінальну):</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectPresentation.cpp" line="594"/>
         <location filename="../../src/DataModel/Project/ProjectPresentation.cpp" line="643"/>
         <source>Time</source>
-        <translation type="unfinished">Час</translation>
+        <translation>Час</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectPresentation.cpp" line="595"/>
         <source>Samples</source>
-        <translation type="unfinished">Зразки</translation>
+        <translation>Зразки</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="175"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="131"/>
         <source>Edit Group</source>
-        <translation type="unfinished">Редагувати Групу</translation>
+        <translation>Редагувати Групу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="197"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="153"/>
         <source>Edit Dataset</source>
-        <translation type="unfinished">Редагувати Набір Даних</translation>
+        <translation>Редагувати Набір Даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="237"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="193"/>
         <source>Edit Action</source>
-        <translation type="unfinished">Редагувати Дію</translation>
+        <translation>Редагувати Дію</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="255"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="211"/>
         <source>Seed Dataset Aliases</source>
-        <translation type="unfinished">Заповнити Псевдоніми Набору Даних</translation>
+        <translation>Заповнити Псевдоніми Набору Даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="292"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="248"/>
         <source>Toggle Group</source>
-        <translation type="unfinished">Перемкнути Групу</translation>
+        <translation>Перемкнути Групу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="315"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="271"/>
         <source>Toggle Dataset</source>
-        <translation type="unfinished">Перемкнути Набір Даних</translation>
+        <translation>Перемкнути Набір Даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="344"/>
-        <source>Do you want to delete group &quot;%1&quot;?</source>
-        <translation type="unfinished">Видалити групу &quot;%1&quot;?</translation>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="300"/>
+        <source>Do you want to delete group "%1"?</source>
+        <translation>Видалити групу "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="358"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="314"/>
         <source>Delete Group</source>
-        <translation type="unfinished">Видалити Групу</translation>
+        <translation>Видалити Групу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="386"/>
-        <source>Do you want to delete action &quot;%1&quot;?</source>
-        <translation type="unfinished">Видалити дію &quot;%1&quot;?</translation>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="342"/>
+        <source>Do you want to delete action "%1"?</source>
+        <translation>Видалити дію "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="400"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="356"/>
         <source>Delete Action</source>
-        <translation type="unfinished">Видалити Дію</translation>
+        <translation>Видалити Дію</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="420"/>
-        <source>Do you want to delete dataset &quot;%1&quot;?</source>
-        <translation type="unfinished">Видалити набір даних &quot;%1&quot;?</translation>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="376"/>
+        <source>Do you want to delete dataset "%1"?</source>
+        <translation>Видалити набір даних "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="441"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="397"/>
         <source>Delete Dataset</source>
-        <translation type="unfinished">Видалити Набір Даних</translation>
+        <translation>Видалити Набір Даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="498"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1286"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="454"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1147"/>
         <source>Duplicate Group</source>
-        <translation type="unfinished">Дублювати Групу</translation>
+        <translation>Дублювати Групу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="541"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1404"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="497"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1265"/>
         <source>Duplicate Action</source>
-        <translation type="unfinished">Дублювати Дію</translation>
+        <translation>Дублювати Дію</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="575"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1347"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="531"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1208"/>
         <source>Duplicate Dataset</source>
-        <translation type="unfinished">Дублювати Набір Даних</translation>
+        <translation>Дублювати Набір Даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="612"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="857"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="568"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="813"/>
         <source>Add Group</source>
-        <translation type="unfinished">Додати Групу</translation>
+        <translation>Додати Групу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="648"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="604"/>
         <source>Group</source>
-        <translation type="unfinished">Група</translation>
+        <translation>Група</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="657"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="613"/>
         <source>Add Dataset</source>
-        <translation type="unfinished">Додати Набір Даних</translation>
+        <translation>Додати Набір Даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="669"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="625"/>
         <source>New Dataset</source>
-        <translation type="unfinished">Новий Набір Даних</translation>
+        <translation>Новий Набір Даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="672"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="628"/>
         <source>New Plot</source>
-        <translation type="unfinished">Новий Графік</translation>
+        <translation>Новий Графік</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="676"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="632"/>
         <source>New FFT Plot</source>
-        <translation type="unfinished">Новий FFT Графік</translation>
+        <translation>Новий FFT Графік</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="680"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="636"/>
         <source>New Level Indicator</source>
-        <translation type="unfinished">Новий Індикатор Рівня</translation>
+        <translation>Новий Індикатор Рівня</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="684"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="640"/>
         <source>New Gauge</source>
-        <translation type="unfinished">Новий Датчик</translation>
+        <translation>Новий Датчик</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="688"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="644"/>
         <source>New Compass</source>
-        <translation type="unfinished">Новий Компас</translation>
+        <translation>Новий Компас</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="694"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="650"/>
         <source>New Meter</source>
-        <translation type="unfinished">Новий Лічильник</translation>
+        <translation>Новий Лічильник</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="698"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="654"/>
         <source>New LED Indicator</source>
-        <translation type="unfinished">Новий Світлодіодний Індикатор</translation>
+        <translation>Новий Світлодіодний Індикатор</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="702"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="658"/>
         <source>New Waterfall</source>
-        <translation type="unfinished">Новий Водоспад</translation>
+        <translation>Новий Водоспад</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="733"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="689"/>
         <source>Edit Canvas Datasets</source>
-        <translation type="unfinished">Редагувати Набори Даних Полотна</translation>
+        <translation>Редагувати Набори Даних Полотна</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="754"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="710"/>
         <source>Channel %1</source>
-        <translation type="unfinished">Канал %1</translation>
+        <translation>Канал %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="775"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="731"/>
         <source>Change Dataset Option</source>
-        <translation type="unfinished">Змінити Параметр Набору Даних</translation>
+        <translation>Змінити Параметр Набору Даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="827"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="783"/>
         <source>Add Action</source>
-        <translation type="unfinished">Додати Дію</translation>
+        <translation>Додати Дію</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="836"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="792"/>
         <source>New Action</source>
-        <translation type="unfinished">Нова Дія</translation>
+        <translation>Нова Дія</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="895"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="851"/>
         <source>Change Group Widget</source>
-        <translation type="unfinished">Змінити Віджет Групи</translation>
+        <translation>Змінити Віджет Групи</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="945"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="901"/>
         <source>Are you sure you want to change the group-level widget?</source>
-        <translation type="unfinished">Ви впевнені, що хочете змінити віджет рівня групи?</translation>
+        <translation>Ви впевнені, що хочете змінити віджет рівня групи?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="946"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="902"/>
         <source>Existing datasets for this group are deleted</source>
-        <translation type="unfinished">Наявні набори даних для цієї групи буде видалено</translation>
+        <translation>Наявні набори даних для цієї групи буде видалено</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1019"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1020"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1021"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="78"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="79"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="80"/>
         <source>Accelerometer %1</source>
-        <translation type="unfinished">Акселерометр %1</translation>
+        <translation>Акселерометр %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1037"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1038"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1039"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="96"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="97"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="98"/>
         <source>Gyro %1</source>
-        <translation type="unfinished">Гіроскоп %1</translation>
+        <translation>Гіроскоп %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1055"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="114"/>
         <source>Latitude</source>
-        <translation type="unfinished">Широта</translation>
+        <translation>Широта</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1055"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="114"/>
         <source>Longitude</source>
-        <translation type="unfinished">Довгота</translation>
+        <translation>Довгота</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1055"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="114"/>
         <source>Altitude</source>
-        <translation type="unfinished">Висота</translation>
+        <translation>Висота</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1071"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1087"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="130"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="146"/>
         <source>X</source>
-        <translation type="unfinished">X</translation>
+        <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1071"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1087"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="130"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="146"/>
         <source>Y</source>
-        <translation type="unfinished">Y</translation>
+        <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1071"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1087"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="130"/>
+        <location filename="../../src/DataModel/Project/ProjectFixedLayouts.cpp" line="146"/>
         <source>Z</source>
-        <translation type="unfinished">Z</translation>
+        <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1112"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="973"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="672"/>
         <source>Move Group</source>
-        <translation type="unfinished">Перемістити Групу</translation>
+        <translation>Перемістити Групу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1169"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1030"/>
         <source>Move Dataset</source>
-        <translation type="unfinished">Перемістити Набір Даних</translation>
+        <translation>Перемістити Набір Даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1211"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1072"/>
         <source>Move Action</source>
-        <translation type="unfinished">Перемістити Дію</translation>
+        <translation>Перемістити Дію</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1434"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1295"/>
         <source>Rename Group</source>
-        <translation type="unfinished">Перейменувати Групу</translation>
+        <translation>Перейменувати Групу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1435"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1464"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1490"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1296"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1325"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1351"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="382"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="411"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="434"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="457"/>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="277"/>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="863"/>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="890"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="742"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="769"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="498"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="521"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="549"/>
@@ -22393,151 +22581,151 @@ Reload it?</source>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="980"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="1007"/>
         <source>Name:</source>
-        <translation type="unfinished">Назва:</translation>
+        <translation>Назва:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1463"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1324"/>
         <source>Rename Dataset</source>
-        <translation type="unfinished">Перейменувати Набір Даних</translation>
+        <translation>Перейменувати Набір Даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1489"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1350"/>
         <source>Rename Action</source>
-        <translation type="unfinished">Перейменувати Дію</translation>
+        <translation>Перейменувати Дію</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="117"/>
         <source>Add Table</source>
-        <translation type="unfinished">Додати Таблицю</translation>
+        <translation>Додати Таблицю</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="123"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="384"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="982"/>
         <source>Shared Table</source>
-        <translation type="unfinished">Спільна Таблиця</translation>
+        <translation>Спільна Таблиця</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="152"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="502"/>
         <source>Delete Table</source>
-        <translation type="unfinished">Видалити Таблицю</translation>
+        <translation>Видалити Таблицю</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="167"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="410"/>
         <source>Rename Table</source>
-        <translation type="unfinished">Перейменувати Таблицю</translation>
+        <translation>Перейменувати Таблицю</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="241"/>
         <source>Add Variable</source>
-        <translation type="unfinished">Додати Змінну</translation>
+        <translation>Додати Змінну</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="250"/>
         <source>variable</source>
-        <translation type="unfinished">змінна</translation>
+        <translation>змінна</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="280"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="523"/>
         <source>Delete Variable</source>
-        <translation type="unfinished">Видалити Змінну</translation>
+        <translation>Видалити Змінну</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="311"/>
         <source>Edit Variable</source>
-        <translation type="unfinished">Редагувати Змінну</translation>
+        <translation>Редагувати Змінну</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="381"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <source>New Shared Table</source>
-        <translation type="unfinished">Нова Спільна Таблиця</translation>
+        <translation>Нова Спільна Таблиця</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="433"/>
         <source>New Variable</source>
-        <translation type="unfinished">Нова Змінна</translation>
+        <translation>Нова Змінна</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="456"/>
         <source>Rename Variable</source>
-        <translation type="unfinished">Перейменувати Змінну</translation>
+        <translation>Перейменувати Змінну</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="495"/>
         <source>This removes %1 variable(s) along with the table. This action cannot be undone.</source>
-        <translation type="unfinished">Це видалить %1 змінн(их) разом із таблицею. Цю дію не можна скасувати.</translation>
+        <translation>Це видалить %1 змінн(их) разом із таблицею. Цю дію не можна скасувати.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="499"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="520"/>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="911"/>
-        <source>Delete &quot;%1&quot;?</source>
-        <translation type="unfinished">Видалити &quot;%1&quot;?</translation>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="790"/>
+        <source>Delete "%1"?</source>
+        <translation>Видалити "%1"?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="551"/>
         <source>Export Table</source>
-        <translation type="unfinished">Експортувати Таблицю</translation>
+        <translation>Експортувати Таблицю</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="553"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="596"/>
         <source>CSV files (*.csv)</source>
-        <translation type="unfinished">Файли CSV (*.CSV)</translation>
+        <translation>Файли CSV (*.CSV)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="594"/>
         <source>Import Table</source>
-        <translation type="unfinished">Імпортувати Таблицю</translation>
+        <translation>Імпортувати Таблицю</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="605"/>
         <source>Import Table CSV</source>
-        <translation type="unfinished">Імпортувати CSV Таблиці</translation>
+        <translation>Імпортувати CSV Таблиці</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="69"/>
         <source>Add Device</source>
-        <translation type="unfinished">Додати Пристрій</translation>
+        <translation>Додати Пристрій</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="74"/>
         <source>Multiple data sources require a Pro license</source>
-        <translation type="unfinished">Кілька джерел даних вимагають ліцензії Pro</translation>
+        <translation>Кілька джерел даних вимагають ліцензії Pro</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="75"/>
         <source>Serial Studio Pro allows connecting to multiple devices simultaneously. Please upgrade to unlock this feature.</source>
-        <translation type="unfinished">Serial Studio Pro дозволяє підключатися до кількох пристроїв одночасно. Будь ласка, оновіть версію, щоб розблокувати цю функцію.</translation>
+        <translation>Serial Studio Pro дозволяє підключатися до кількох пристроїв одночасно. Будь ласка, оновіть версію, щоб розблокувати цю функцію.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="87"/>
         <source>Device %1</source>
-        <translation type="unfinished">Пристрій %1</translation>
+        <translation>Пристрій %1</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="120"/>
-        <source>Do you want to delete data source &quot;%1&quot;?</source>
-        <translation type="unfinished">Видалити джерело даних &quot;%1&quot;?</translation>
+        <source>Do you want to delete data source "%1"?</source>
+        <translation>Видалити джерело даних "%1"?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="121"/>
         <source>Groups using this source will move to the default source. This action cannot be undone.</source>
-        <translation type="unfinished">Групи, що використовують це джерело, буде переміщено до типового джерела. Цю дію не можна скасувати.</translation>
+        <translation>Групи, що використовують це джерело, буде переміщено до типового джерела. Цю дію не можна скасувати.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="130"/>
         <source>Delete Device</source>
-        <translation type="unfinished">Видалити Пристрій</translation>
+        <translation>Видалити Пристрій</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="165"/>
         <source>Duplicate Device</source>
-        <translation type="unfinished">Дублювати Пристрій</translation>
+        <translation>Дублювати Пристрій</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="200"/>
@@ -22545,101 +22733,101 @@ Reload it?</source>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="331"/>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="358"/>
         <source>Edit Device</source>
-        <translation type="unfinished">Редагувати Пристрій</translation>
+        <translation>Редагувати Пристрій</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="232"/>
         <source>Rename Device</source>
-        <translation type="unfinished">Перейменувати Пристрій</translation>
+        <translation>Перейменувати Пристрій</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="248"/>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="372"/>
         <source>Change Bus Type</source>
-        <translation type="unfinished">Змінити Тип Шини</translation>
+        <translation>Змінити Тип Шини</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="276"/>
         <source>Rename Data Source</source>
-        <translation type="unfinished">Перейменувати Джерело Даних</translation>
+        <translation>Перейменувати Джерело Даних</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="391"/>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="451"/>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="574"/>
         <source>Edit Frame Parser</source>
-        <translation type="unfinished">Редагувати Парсер Кадрів</translation>
+        <translation>Редагувати Парсер Кадрів</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="403"/>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="465"/>
         <source>Change Parser Language</source>
-        <translation type="unfinished">Змінити Мову Парсера</translation>
+        <translation>Змінити Мову Парсера</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="419"/>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="492"/>
         <source>Change Parser Template</source>
-        <translation type="unfinished">Змінити Шаблон Парсера</translation>
+        <translation>Змінити Шаблон Парсера</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="431"/>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="516"/>
         <source>Change Parser Parameters</source>
-        <translation type="unfinished">Змінити Параметри Парсера</translation>
+        <translation>Змінити Параметри Парсера</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="545"/>
         <source>Change Stream Lane</source>
-        <translation type="unfinished">Змінити Смугу Потоку</translation>
+        <translation>Змінити Смугу Потоку</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="484"/>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="865"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="363"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="744"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="523"/>
         <source>Workspace</source>
-        <translation type="unfinished">Робоча Область</translation>
+        <translation>Робоча Область</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="862"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="741"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="520"/>
         <source>New Workspace</source>
-        <translation type="unfinished">Нова Робоча Область</translation>
+        <translation>Нова Робоча Область</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="889"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="768"/>
         <source>Rename Workspace</source>
-        <translation type="unfinished">Перейменувати Робочу Область</translation>
+        <translation>Перейменувати Робочу Область</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="914"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="793"/>
         <source>Delete Workspace</source>
-        <translation type="unfinished">Видалити Робочу Область</translation>
+        <translation>Видалити Робочу Область</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="976"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="855"/>
         <source>Overview</source>
-        <translation type="unfinished">Огляд</translation>
+        <translation>Огляд</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="985"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="864"/>
         <source>All Data</source>
-        <translation type="unfinished">Усі Дані</translation>
+        <translation>Усі Дані</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="1254"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="1133"/>
         <source>Discard workspace customisations?</source>
-        <translation type="unfinished">Відкинути налаштування робочого простору?</translation>
+        <translation>Відкинути налаштування робочого простору?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="1255"/>
-        <source>Switching off Customize discards your edits and rebuilds the workspace list from the project&apos;s groups.</source>
-        <translation type="unfinished">Вимкнення режиму налаштування відкине ваші зміни та перебудує список робочих просторів із груп проєкту.</translation>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="1134"/>
+        <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
+        <translation>Вимкнення режиму налаштування відкине ваші зміни та перебудує список робочих просторів із груп проєкту.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="1258"/>
+        <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="1137"/>
         <source>Customize Workspaces</source>
-        <translation type="unfinished">Налаштувати Робочі Простори</translation>
+        <translation>Налаштувати Робочі Простори</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="326"/>
@@ -22649,14 +22837,14 @@ Reload it?</source>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="826"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="959"/>
         <source>Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Папка</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="497"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="734"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="956"/>
         <source>New Folder</source>
-        <translation type="unfinished">Нова Тека</translation>
+        <translation>Нова Тека</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="548"/>
@@ -22665,19 +22853,19 @@ Reload it?</source>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="839"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="1006"/>
         <source>Rename Folder</source>
-        <translation type="unfinished">Перейменувати Теку</translation>
+        <translation>Перейменувати Теку</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="570"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="783"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="1028"/>
-        <source>Delete folder &quot;%1&quot;?</source>
-        <translation type="unfinished">Видалити теку &quot;%1&quot;?</translation>
+        <source>Delete folder "%1"?</source>
+        <translation>Видалити теку "%1"?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="571"/>
         <source>The folder is removed; its workspaces and sub-folders move up to the parent.</source>
-        <translation type="unfinished">Теку буде видалено; її робочі простори та підтеки переміщуються до батьківської теки.</translation>
+        <translation>Теку буде видалено; її робочі простори та підтеки переміщуються до батьківської теки.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="574"/>
@@ -22686,13 +22874,13 @@ Reload it?</source>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="860"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="1032"/>
         <source>Delete Folder</source>
-        <translation type="unfinished">Видалити Теку</translation>
+        <translation>Видалити Теку</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="603"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="815"/>
         <source>Add Folder</source>
-        <translation type="unfinished">Додати Теку</translation>
+        <translation>Додати Теку</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="693"/>
@@ -22700,22 +22888,22 @@ Reload it?</source>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="915"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="941"/>
         <source>Move Folder</source>
-        <translation type="unfinished">Перемістити Теку</translation>
+        <translation>Перемістити Теку</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="784"/>
         <source>The folder is removed; its groups and sub-folders move up to the parent.</source>
-        <translation type="unfinished">Теку буде видалено; її групи та підтеки переміщуються до батьківської теки.</translation>
+        <translation>Теку буде видалено; її групи та підтеки переміщуються до батьківської теки.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="887"/>
         <source>Move Table</source>
-        <translation type="unfinished">Перемістити Таблицю</translation>
+        <translation>Перемістити Таблицю</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="1029"/>
         <source>The folder is removed; its tables and sub-folders move up to the parent. The accessor path of those tables changes accordingly.</source>
-        <translation type="unfinished">Теку буде видалено; її таблиці та підтеки переміщуються до батьківської теки. Шлях доступу цих таблиць змінюється відповідно.</translation>
+        <translation>Теку буде видалено; її таблиці та підтеки переміщуються до батьківської теки. Шлях доступу цих таблиць змінюється відповідно.</translation>
     </message>
 </context>
 <context>
@@ -22968,7 +23156,7 @@ Reload it?</source>
     </message>
     <message>
         <source>Add a Fast Fourier Transform plot</source>
-        <translation type="vanished">Додати графік швидкого перетворення Фур&apos;є</translation>
+        <translation type="vanished">Додати графік швидкого перетворення Фур'є</translation>
     </message>
     <message>
         <source>Gauge</source>
@@ -23185,7 +23373,7 @@ Reload it?</source>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="256"/>
-        <source>Run a dataset&apos;s transform only when one of its inputs changes. Speeds up large table-driven projects; off by default.</source>
+        <source>Run a dataset's transform only when one of its inputs changes. Speeds up large table-driven projects; off by default.</source>
         <translation>Виконувати перетворення набору даних лише при зміні одного з його входів. Прискорює великі табличні проєкти; вимкнено за замовчуванням.</translation>
     </message>
     <message>
@@ -23316,8 +23504,8 @@ Reload it?</source>
     </message>
     <message>
         <location filename="../../src/MQTT/PublisherWorker.cpp" line="206"/>
-        <source>The broker rejected the connection due to an unsupported protocol version. Match the broker&apos;s MQTT version and try again.</source>
-        <translation>Брокер відхилив з&apos;єднання через непідтримувану версію протоколу. Встановіть відповідність версії MQTT брокера та спробуйте знову.</translation>
+        <source>The broker rejected the connection due to an unsupported protocol version. Match the broker's MQTT version and try again.</source>
+        <translation>Брокер відхилив з'єднання через непідтримувану версію протоколу. Встановіть відповідність версії MQTT брокера та спробуйте знову.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/PublisherWorker.cpp" line="209"/>
@@ -23332,22 +23520,22 @@ Reload it?</source>
     <message>
         <location filename="../../src/MQTT/PublisherWorker.cpp" line="215"/>
         <source>The username or password is incorrect or malformed. Double-check the credentials and try again.</source>
-        <translation>Ім&apos;я користувача або пароль неправильні або некоректні. Перевірте облікові дані та повторіть спробу.</translation>
+        <translation>Ім'я користувача або пароль неправильні або некоректні. Перевірте облікові дані та повторіть спробу.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/PublisherWorker.cpp" line="218"/>
         <source>The broker denied the connection due to insufficient permissions. Verify that the account has the required ACLs.</source>
-        <translation>Брокер відхилив з&apos;єднання через недостатні права доступу. Переконайтеся, що обліковий запис має необхідні ACL.</translation>
+        <translation>Брокер відхилив з'єднання через недостатні права доступу. Переконайтеся, що обліковий запис має необхідні ACL.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/PublisherWorker.cpp" line="221"/>
         <source>A network or transport-layer issue prevented the connection. Check connectivity, ports, and TLS configuration.</source>
-        <translation>Проблема мережевого або транспортного рівня перешкодила з&apos;єднанню. Перевірте підключення, порти та конфігурацію TLS.</translation>
+        <translation>Проблема мережевого або транспортного рівня перешкодила з'єднанню. Перевірте підключення, порти та конфігурацію TLS.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/PublisherWorker.cpp" line="224"/>
         <source>The client detected an MQTT protocol violation and closed the connection. Verify broker and client compatibility.</source>
-        <translation>Клієнт виявив порушення протоколу MQTT і закрив з&apos;єднання. Перевірте сумісність брокера та клієнта.</translation>
+        <translation>Клієнт виявив порушення протоколу MQTT і закрив з'єднання. Перевірте сумісність брокера та клієнта.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/PublisherWorker.cpp" line="227"/>
@@ -23356,7 +23544,7 @@ Reload it?</source>
     </message>
     <message>
         <location filename="../../src/MQTT/PublisherWorker.cpp" line="230"/>
-        <source>An MQTT 5 protocol-level error occurred. Inspect the broker&apos;s reason code for details.</source>
+        <source>An MQTT 5 protocol-level error occurred. Inspect the broker's reason code for details.</source>
         <translation>Сталася помилка протоколу MQTT 5. Перевірте код причини брокера для отримання додаткової інформації.</translation>
     </message>
     <message>
@@ -23407,7 +23595,7 @@ Reload it?</source>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="328"/>
         <source>The server response is missing required fields.</source>
-        <translation>У відповіді сервера відсутні обов&apos;язкові поля.</translation>
+        <translation>У відповіді сервера відсутні обов'язкові поля.</translation>
     </message>
     <message>
         <location filename="../../src/Console/Export.cpp" line="170"/>
@@ -23523,11 +23711,11 @@ Serial Studio може переписати непідтримувані опе�
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="677"/>
-        <source>The &apos;parse&apos; function is not defined in the script.
+        <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
 function parse(frame) ... end</source>
-        <translation>Функція &apos;parse&apos; не визначена у скрипті.
+        <translation>Функція 'parse' не визначена у скрипті.
 
 Переконайтеся, що ваш код містить:
 function parse(frame) ... end</translation>
@@ -23609,11 +23797,11 @@ Most likely cause: an infinite loop at the top level of the script.</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="509"/>
-        <source>The &apos;parse&apos; function is not defined in the script.
+        <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
 function parse(frame) { ... }</source>
-        <translation>Функція &apos;parse&apos; не визначена в скрипті.
+        <translation>Функція 'parse' не визначена в скрипті.
 
 Переконайтеся, що ваш код містить:
 function parse(frame) { ... }</translation>
@@ -23638,12 +23826,12 @@ Please fix the error in the function body.</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="662"/>
-        <source>No callable &apos;parse&apos; export found.
+        <source>No callable 'parse' export found.
 
 Define one of:
   function parse(frame) { ... }
   const parse = (frame) =&gt; { ... }</source>
-        <translation>Не знайдено викликаного експорту &apos;parse&apos;.
+        <translation>Не знайдено викликаного експорту 'parse'.
 
 Визначте одну з функцій:
   function parse(frame) { ... }
@@ -23651,15 +23839,15 @@ Define one of:
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="678"/>
-        <source>The &apos;parse&apos; function must accept at least one parameter (the frame payload).</source>
-        <translation>Функція &apos;parse&apos; повинна приймати принаймні один параметр (навантаження фрейму).</translation>
+        <source>The 'parse' function must accept at least one parameter (the frame payload).</source>
+        <translation>Функція 'parse' повинна приймати принаймні один параметр (навантаження фрейму).</translation>
     </message>
     <message>
-        <source>No valid &apos;parse&apos; function declaration found.
+        <source>No valid 'parse' function declaration found.
 
 Expected format:
 function parse(frame) { ... }</source>
-        <translation type="vanished">Не знайдено дійсного оголошення функції &apos;parse&apos;.
+        <translation type="vanished">Не знайдено дійсного оголошення функції 'parse'.
 
 Очікуваний формат:
 function parse(frame) { ... }</translation>
@@ -23670,11 +23858,11 @@ function parse(frame) { ... }</translation>
         <translation>Недійсний Параметр Функції</translation>
     </message>
     <message>
-        <source>The &apos;parse&apos; function must have at least one parameter.
+        <source>The 'parse' function must have at least one parameter.
 
 Expected format:
 function parse(frame) { ... }</source>
-        <translation type="vanished">Функція &apos;parse&apos; повинна мати принаймні один параметр.
+        <translation type="vanished">Функція 'parse' повинна мати принаймні один параметр.
 
 Очікуваний формат:
 function parse(frame) { ... }</translation>
@@ -23686,13 +23874,13 @@ function parse(frame) { ... }</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="644"/>
-        <source>The &apos;parse&apos; function uses the old two-parameter format: parse(%1, %2)
+        <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
 
 This format is no longer supported. Please update to the new single-parameter format:
 function parse(%1) { ... }
 
 The separator parameter is no longer needed.</source>
-        <translation>Функція &apos;parse&apos; використовує старий формат з двома параметрами: parse(%1, %2)
+        <translation>Функція 'parse' використовує старий формат з двома параметрами: parse(%1, %2)
 
 Цей формат більше не підтримується. Будь ласка, оновіть до нового формату з одним параметром:
 function parse(%1) { ... }
@@ -23710,12 +23898,12 @@ function parse(%1) { ... }
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="969"/>
+        <location filename="../../src/Misc/CLI.cpp" line="749"/>
         <source>Project file not found</source>
         <translation>Файл проєкту не знайдено</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="970"/>
+        <location filename="../../src/Misc/CLI.cpp" line="750"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -23724,17 +23912,17 @@ function parse(%1) { ... }
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="973"/>
+        <location filename="../../src/Misc/CLI.cpp" line="753"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Видалити цей ярлик?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="977"/>
+        <location filename="../../src/Misc/CLI.cpp" line="757"/>
         <source>Delete Shortcut</source>
         <translation>Видалити Ярлик</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="979"/>
+        <location filename="../../src/Misc/CLI.cpp" line="759"/>
         <source>Quit</source>
         <translation>Вийти</translation>
     </message>
@@ -23808,13 +23996,13 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="120"/>
-        <source>Expected %1, got &apos;%2&apos;</source>
-        <translation>Очікувалося %1, отримано &apos;%2&apos;</translation>
+        <source>Expected %1, got '%2'</source>
+        <translation>Очікувалося %1, отримано '%2'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="193"/>
-        <source>Expected enum name after &apos;enum&apos;</source>
-        <translation>Очікується назва enum після &apos;enum&apos;</translation>
+        <source>Expected enum name after 'enum'</source>
+        <translation>Очікується назва enum після 'enum'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="207"/>
@@ -23823,8 +24011,8 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="236"/>
-        <source>Field tag &apos;%1&apos; out of range (1..%2)</source>
-        <translation>Тег поля &apos;%1&apos; поза діапазоном (1..%2)</translation>
+        <source>Field tag '%1' out of range (1..%2)</source>
+        <translation>Тег поля '%1' поза діапазоном (1..%2)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="254"/>
@@ -23848,8 +24036,8 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="314"/>
-        <source>Expected field type, got &apos;%1&apos;</source>
-        <translation>Очікується тип поля, отримано &apos;%1&apos;</translation>
+        <source>Expected field type, got '%1'</source>
+        <translation>Очікується тип поля, отримано '%1'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="333"/>
@@ -23873,13 +24061,13 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="462"/>
-        <source>Unexpected token &apos;%1&apos; at file scope</source>
-        <translation>Неочікуваний токен &apos;%1&apos; в області видимості файлу</translation>
+        <source>Unexpected token '%1' at file scope</source>
+        <translation>Неочікуваний токен '%1' в області видимості файлу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="508"/>
-        <source>Unsupported top-level keyword &apos;%1&apos;</source>
-        <translation>Непідтримуване ключове слово верхнього рівня &apos;%1&apos;</translation>
+        <location filename="../../src/DataModel/Importers/ProtoParser.cpp" line="509"/>
+        <source>Unsupported top-level keyword '%1'</source>
+        <translation>Непідтримуване ключове слово верхнього рівня '%1'</translation>
     </message>
     <message>
         <location filename="../../src/Misc/GraphicsBackend.cpp" line="295"/>
@@ -23917,21 +24105,21 @@ function parse(%1) { ... }
     </message>
     <message>
         <source>The native parser configuration is not a valid JSON object.</source>
-        <translation type="vanished">Конфігурація вбудованого парсера не є дійсним об&apos;єктом JSON.</translation>
+        <translation type="vanished">Конфігурація вбудованого парсера не є дійсним об'єктом JSON.</translation>
     </message>
     <message>
-        <source>Unknown native parser template: &quot;%1&quot;.</source>
-        <translation type="vanished">Невідомий шаблон вбудованого парсера: &quot;%1&quot;.</translation>
+        <source>Unknown native parser template: "%1".</source>
+        <translation type="vanished">Невідомий шаблон вбудованого парсера: "%1".</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="190"/>
         <source>The Built-In parser configuration is not a valid JSON object.</source>
-        <translation>Конфігурація вбудованого парсера не є дійсним об&apos;єктом JSON.</translation>
+        <translation>Конфігурація вбудованого парсера не є дійсним об'єктом JSON.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="200"/>
-        <source>Unknown Built-In parser template: &quot;%1&quot;.</source>
-        <translation>Невідомий шаблон вбудованого парсера: &quot;%1&quot;.</translation>
+        <source>Unknown Built-In parser template: "%1".</source>
+        <translation>Невідомий шаблон вбудованого парсера: "%1".</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="334"/>
@@ -23965,7 +24153,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../src/IO/Drivers/USB/UsbHex.cpp" line="90"/>
         <source>device disconnected</source>
-        <translation>пристрій від&apos;єднано</translation>
+        <translation>пристрій від'єднано</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/USB/UsbHex.cpp" line="92"/>
@@ -24065,14 +24253,14 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="368"/>
-        <source>expected &apos;%1&apos;</source>
-        <translation>очікувалося &apos;%1&apos;</translation>
+        <source>expected '%1'</source>
+        <translation>очікувалося '%1'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="408"/>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="463"/>
-        <source>unknown name &apos;%1&apos;</source>
-        <translation>невідоме ім&apos;я &apos;%1&apos;</translation>
+        <source>unknown name '%1'</source>
+        <translation>невідоме ім'я '%1'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="425"/>
@@ -24089,8 +24277,8 @@ function parse(%1) { ... }
         <translation type="vanished">table() потребує назву регістра другим параметром</translation>
     </message>
     <message>
-        <source>unknown register &apos;%1.%2&apos;</source>
-        <translation type="vanished">невідомий регістр &apos;%1.%2&apos;</translation>
+        <source>unknown register '%1.%2'</source>
+        <translation type="vanished">невідомий регістр '%1.%2'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="436"/>
@@ -24099,8 +24287,8 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="441"/>
-        <source>unknown variable &apos;%1.%2&apos;</source>
-        <translation>невідома змінна &apos;%1.%2&apos;</translation>
+        <source>unknown variable '%1.%2'</source>
+        <translation>невідома змінна '%1.%2'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="459"/>
@@ -24114,8 +24302,8 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="529"/>
-        <source>unknown function &apos;%1&apos;</source>
-        <translation>невідома функція &apos;%1&apos;</translation>
+        <source>unknown function '%1'</source>
+        <translation>невідома функція '%1'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="540"/>
@@ -24130,8 +24318,8 @@ function parse(%1) { ... }
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="565"/>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="658"/>
-        <source>unexpected &apos;%1&apos;</source>
-        <translation>неочікуваний &apos;%1&apos;</translation>
+        <source>unexpected '%1'</source>
+        <translation>неочікуваний '%1'</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="618"/>
@@ -24216,12 +24404,12 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/Dialogs/RemoteAttach.qml" line="83"/>
         <source>Attached to %1 - no response, the link may be down.</source>
-        <translation>Підключено до %1 — немає відповіді, з&apos;єднання може бути розірване.</translation>
+        <translation>Підключено до %1 — немає відповіді, з'єднання може бути розірване.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RemoteAttach.qml" line="87"/>
         <source>Attached to %1 - connected, the remote is not producing data.</source>
-        <translation>Підключено до %1 — з&apos;єднання встановлено, віддалений пристрій не передає дані.</translation>
+        <translation>Підключено до %1 — з'єднання встановлено, віддалений пристрій не передає дані.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RemoteAttach.qml" line="90"/>
@@ -24230,7 +24418,7 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/Dialogs/RemoteAttach.qml" line="133"/>
-        <source>Watch another Serial Studio instance&apos;s dashboard over the network. The view is read-only: nothing you do here reaches the remote device.</source>
+        <source>Watch another Serial Studio instance's dashboard over the network. The view is read-only: nothing you do here reaches the remote device.</source>
         <translation>Спостереження за панеллю приладів іншого екземпляра Serial Studio через мережу. Перегляд лише для читання: жодна дія тут не досягає віддаленого пристрою.</translation>
     </message>
     <message>
@@ -24246,7 +24434,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/Dialogs/RemoteAttach.qml" line="180"/>
         <source>Host name or IP address</source>
-        <translation>Ім&apos;я хоста або IP-адреса</translation>
+        <translation>Ім'я хоста або IP-адреса</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RemoteAttach.qml" line="184"/>
@@ -24261,7 +24449,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/Dialogs/RemoteAttach.qml" line="211"/>
         <source>Required only for connections from another machine</source>
-        <translation>Потрібно лише для підключень з іншого комп&apos;ютера</translation>
+        <translation>Потрібно лише для підключень з іншого комп'ютера</translation>
     </message>
     <message>
         <source>Rate</source>
@@ -24274,7 +24462,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/Dialogs/RemoteAttach.qml" line="263"/>
         <source>The link is not encrypted. The token authorizes the connection but does not protect what travels over it, so use this on a trusted network or through a tunnel.</source>
-        <translation>З&apos;єднання не зашифроване. Токен авторизує підключення, але не захищає дані, що передаються, тому використовуйте це лише в довіреній мережі або через тунель.</translation>
+        <translation>З'єднання не зашифроване. Токен авторизує підключення, але не захищає дані, що передаються, тому використовуйте це лише в довіреній мережі або через тунель.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RemoteAttach.qml" line="281"/>
@@ -24284,7 +24472,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/Dialogs/RemoteAttach.qml" line="290"/>
         <source>Detach</source>
-        <translation>Від&apos;єднати</translation>
+        <translation>Від'єднати</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RemoteAttach.qml" line="300"/>
@@ -24448,7 +24636,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="672"/>
         <source>Prepared by (optional)</source>
-        <translation>Підготував (необов&apos;язково)</translation>
+        <translation>Підготував (необов'язково)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="681"/>
@@ -24463,7 +24651,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="705"/>
         <source>PNG, JPG or SVG (optional)</source>
-        <translation>PNG, JPG або SVG (необов&apos;язково)</translation>
+        <translation>PNG, JPG або SVG (необов'язково)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="707"/>
@@ -24618,8 +24806,8 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="96"/>
-        <source>Serial Studio couldn&apos;t reach your device.</source>
-        <translation>Serial Studio не вдалося зв&apos;язатися з пристроєм.</translation>
+        <source>Serial Studio couldn't reach your device.</source>
+        <translation>Serial Studio не вдалося зв'язатися з пристроєм.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="105"/>
@@ -24628,7 +24816,7 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="108"/>
-        <source>Make sure it&apos;s plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
+        <source>Make sure it's plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
         <translation>Переконайтеся, що він підключений, увімкнений і не використовується іншою програмою. Можна спробувати ще раз, вибрати інший пристрій або вийти.</translation>
     </message>
     <message>
@@ -24745,7 +24933,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="166"/>
         <source>Address absolute memory directly: DB5.DBD20:REAL, DB1.DBX0.3, MW10:INT, IB0, QW4.</source>
-        <translation>Пряме звернення до абсолютної пам&apos;яті: DB5.DBD20:REAL, DB1.DBX0.3, MW10:INT, IB0, QW4.</translation>
+        <translation>Пряме звернення до абсолютної пам'яті: DB5.DBD20:REAL, DB1.DBX0.3, MW10:INT, IB0, QW4.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="174"/>
@@ -25179,7 +25367,7 @@ Add absolute addresses above to poll the controller.</source>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="630"/>
-        <source>Compares this session&apos;s decoded values against the project currently open in the editor. The result reflects a transient candidate and is not stored with the session.</source>
+        <source>Compares this session's decoded values against the project currently open in the editor. The result reflects a transient candidate and is not stored with the session.</source>
         <translation>Порівнює декодовані значення цієї сесії з проєктом, який наразі відкрито в редакторі. Результат відображає тимчасовий варіант і не зберігається разом із сесією.</translation>
     </message>
     <message>
@@ -25863,63 +26051,63 @@ Add absolute addresses above to poll the controller.</source>
 <context>
     <name>Sessions::Player</name>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="312"/>
+        <location filename="../../src/Sessions/Player.cpp" line="314"/>
         <source>Open Session File</source>
         <translation>Відкрити Файл Сесії</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="314"/>
+        <location filename="../../src/Sessions/Player.cpp" line="316"/>
         <source>Session files (*.db)</source>
         <translation>Файли сесій (*.db)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="396"/>
+        <location filename="../../src/Sessions/Player.cpp" line="398"/>
         <source>Device Connection Active</source>
         <translation>Активне Підключення до Пристрою</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="397"/>
+        <location filename="../../src/Sessions/Player.cpp" line="399"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
-        <translation>Щоб використати цю функцію, необхідно від&apos;єднатися від пристрою. Продовжити?</translation>
+        <translation>Щоб використати цю функцію, необхідно від'єднатися від пристрою. Продовжити?</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="445"/>
-        <location filename="../../src/Sessions/Player.cpp" line="469"/>
+        <location filename="../../src/Sessions/Player.cpp" line="447"/>
+        <location filename="../../src/Sessions/Player.cpp" line="471"/>
         <source>Cannot open session file</source>
         <translation>Не вдається відкрити файл сесії</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="446"/>
+        <location filename="../../src/Sessions/Player.cpp" line="448"/>
         <source>Unknown error</source>
         <translation>Невідома помилка</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="462"/>
+        <location filename="../../src/Sessions/Player.cpp" line="464"/>
         <source>No project data</source>
         <translation>Немає даних проєкту</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="463"/>
+        <location filename="../../src/Sessions/Player.cpp" line="465"/>
         <source>This session does not contain an embedded project file — the dashboard falls back to a quick-plot layout.</source>
         <translation>Ця сесія не містить вбудованого файлу проєкту — панель приладів використовує швидкий макет графіків.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="470"/>
+        <location filename="../../src/Sessions/Player.cpp" line="472"/>
         <source>Check file permissions and try again.</source>
         <translation>Перевірте дозволи файлу та спробуйте ще раз.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="621"/>
+        <location filename="../../src/Sessions/Player.cpp" line="623"/>
         <source>Sessions</source>
         <translation>Сесії</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="622"/>
+        <location filename="../../src/Sessions/Player.cpp" line="624"/>
         <source>Recording uses an older copy of the project</source>
         <translation>Запис використовує старішу копію проєкту</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="623"/>
+        <location filename="../../src/Sessions/Player.cpp" line="625"/>
         <source>The dashboard shown is the one embedded in the recording; the project on disk has changed since. Close the session to return to the current project.</source>
         <translation>Показана панель приладів вбудована в запис; проєкт на диску змінився з того часу. Закрийте сесію, щоб повернутися до поточного проєкту.</translation>
     </message>
@@ -25990,168 +26178,153 @@ Add absolute addresses above to poll the controller.</source>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="169"/>
         <source>Export Session to CSV</source>
-        <translation type="unfinished">Експортувати сесію в CSV</translation>
+        <translation>Експортувати сесію в CSV</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="169"/>
         <source>CSV files (*.csv)</source>
-        <translation type="unfinished">Файли CSV (*.CSV)</translation>
+        <translation>Файли CSV (*.CSV)</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="281"/>
         <source>Loading session data…</source>
-        <translation type="unfinished">Завантаження даних сесії…</translation>
+        <translation>Завантаження даних сесії…</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="309"/>
         <source>Save PDF Report</source>
-        <translation type="unfinished">Зберегти PDF-Звіт</translation>
+        <translation>Зберегти PDF-Звіт</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="309"/>
         <source>Save HTML Report</source>
-        <translation type="unfinished">Зберегти HTML-Звіт</translation>
+        <translation>Зберегти HTML-Звіт</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="310"/>
         <source>PDF files (*.pdf)</source>
-        <translation type="unfinished">PDF-файли (*.PDF)</translation>
+        <translation>PDF-файли (*.PDF)</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="310"/>
         <source>HTML files (*.html)</source>
-        <translation type="unfinished">HTML-файли (*.HTML)</translation>
+        <translation>HTML-файли (*.HTML)</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="379"/>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="413"/>
         <source>Failed</source>
-        <translation type="unfinished">Помилка</translation>
+        <translation>Помилка</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="384"/>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="422"/>
         <source>Report Failed</source>
-        <translation type="unfinished">Помилка Звіту</translation>
+        <translation>Помилка Звіту</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="385"/>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="423"/>
         <source>Could not generate the report.</source>
-        <translation type="unfinished">Не вдалося створити звіт.</translation>
+        <translation>Не вдалося створити звіт.</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="413"/>
         <source>Done</source>
-        <translation type="unfinished"></translation>
+        <translation>Готово</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="441"/>
         <source>Select logo image</source>
-        <translation type="unfinished">Виберіть зображення логотипу</translation>
+        <translation>Виберіть зображення логотипу</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="443"/>
         <source>Images (*.png *.jpg *.jpeg *.svg)</source>
-        <translation type="unfinished">Зображення (*.png *.jpg *.jpeg *.svg)</translation>
+        <translation>Зображення (*.png *.jpg *.jpeg *.svg)</translation>
     </message>
 </context>
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="34"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="35"/>
         <source>Preferences</source>
         <translation>Налаштування</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="61"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="62"/>
         <source>General</source>
         <translation>Загальні</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="97"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="98"/>
         <source>Export</source>
         <translation>Експорт</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="180"/>
         <source>Language</source>
-        <translation>Мова</translation>
+        <translation type="vanished">Мова</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="196"/>
         <source>Theme</source>
-        <translation>Тема</translation>
+        <translation type="vanished">Тема</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="290"/>
         <source>Workspace Folder</source>
-        <translation>Тека Робочої Області</translation>
+        <translation type="vanished">Тека Робочої Області</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="685"/>
         <source>Automatically Check for Updates</source>
-        <translation>Автоматично Перевіряти Оновлення</translation>
+        <translation type="vanished">Автоматично Перевіряти Оновлення</translation>
     </message>
     <message>
         <source>Dashboard</source>
         <translation type="vanished">Панель Приладів</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="419"/>
         <source>Export…</source>
-        <translation>Експортувати…</translation>
+        <translation type="vanished">Експортувати…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="805"/>
         <source>Data Plotting</source>
-        <translation>Побудова Графіків Даних</translation>
+        <translation type="vanished">Побудова Графіків Даних</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="872"/>
         <source>Point Count</source>
-        <translation>Кількість Точок</translation>
+        <translation type="vanished">Кількість Точок</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="897"/>
         <source>UI Refresh Rate (Hz)</source>
-        <translation>Частота Оновлення UI (Гц)</translation>
+        <translation type="vanished">Частота Оновлення UI (Гц)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1081"/>
         <source>Layout Margin</source>
-        <translation>Поле Макета</translation>
+        <translation type="vanished">Поле Макета</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1106"/>
         <source>Layout Spacing</source>
-        <translation>Відступ Макета</translation>
+        <translation type="vanished">Відступ Макета</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1248"/>
         <source>Always Show Taskbar Buttons</source>
-        <translation>Завжди Показувати Кнопки на Панелі Завдань</translation>
+        <translation type="vanished">Завжди Показувати Кнопки на Панелі Завдань</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1131"/>
         <source>Show Actions Panel</source>
-        <translation>Показувати Панель Дій</translation>
+        <translation type="vanished">Показувати Панель Дій</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="337"/>
         <source>Enable API Server (Port 7777)</source>
-        <translation>Увімкнути API-Сервер (Порт 7777)</translation>
+        <translation type="vanished">Увімкнути API-Сервер (Порт 7777)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="91"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1396"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="92"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="165"/>
         <source>Appearance</source>
-        <translation>Зовнішній Вигляд</translation>
+        <translation type="vanished">Зовнішній Вигляд</translation>
     </message>
     <message>
         <source>Files &amp; Updates</source>
@@ -26162,141 +26335,117 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">Розширені</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="362"/>
         <source>Allow External API Connections</source>
-        <translation>Дозволити Зовнішні Підключення до API</translation>
+        <translation type="vanished">Дозволити Зовнішні Підключення до API</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1147"/>
         <source>Auto-Hide Toolbar</source>
-        <translation>Автоматично Приховувати Панель Інструментів</translation>
+        <translation type="vanished">Автоматично Приховувати Панель Інструментів</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="85"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="86"/>
         <source>Taskbar</source>
         <translation>Панель Завдань</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="487"/>
         <source>Rendering Backend</source>
-        <translation>Механізм Рендерингу</translation>
+        <translation type="vanished">Механізм Рендерингу</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="387"/>
         <source>API Access Token</source>
-        <translation>Токен Доступу API</translation>
+        <translation type="vanished">Токен Доступу API</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="67"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="68"/>
         <source>Startup</source>
         <translation>Запуск</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="223"/>
         <source>Window</source>
-        <translation>Вікно</translation>
+        <translation type="vanished">Вікно</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="242"/>
         <source>Custom Window Decorations</source>
-        <translation>Власні Декорації Вікна</translation>
+        <translation type="vanished">Власні Декорації Вікна</translation>
     </message>
     <message>
         <source>Window Shadow</source>
         <translation type="vanished">Тінь Вікна</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="265"/>
         <source>Window decoration changes apply after restarting %1.</source>
-        <translation>Зміни декорацій вікна застосовуються після перезапуску %1.</translation>
+        <translation type="vanished">Зміни декорацій вікна застосовуються після перезапуску %1.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="274"/>
         <source>Files</source>
-        <translation>Файли</translation>
+        <translation type="vanished">Файли</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="321"/>
         <source>API &amp; Plugins</source>
-        <translation>API та Плагіни</translation>
+        <translation type="vanished">API та Плагіни</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="469"/>
         <source>Graphics</source>
-        <translation>Графіка</translation>
+        <translation type="vanished">Графіка</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="520"/>
         <source>Display Scaling</source>
-        <translation>Масштабування Дисплея</translation>
+        <translation type="vanished">Масштабування Дисплея</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="553"/>
         <source>Custom Scale (%)</source>
-        <translation>Користувацький Масштаб (%)</translation>
+        <translation type="vanished">Користувацький Масштаб (%)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="590"/>
         <source>System</source>
-        <translation>Система</translation>
+        <translation type="vanished">Система</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="606"/>
         <source>Apply Performance Hints</source>
-        <translation>Застосувати Підказки Продуктивності</translation>
+        <translation type="vanished">Застосувати Підказки Продуктивності</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="629"/>
         <source>Keep Display Awake</source>
-        <translation>Підтримувати Дисплей Активним</translation>
+        <translation type="vanished">Підтримувати Дисплей Активним</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="658"/>
         <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
-        <translation>Підказки продуктивності підвищують пріоритет процесу та відключають обмеження живлення ОС. Зміни набудуть чинності при наступному запуску Serial Studio.</translation>
+        <translation type="vanished">Підказки продуктивності підвищують пріоритет процесу та відключають обмеження живлення ОС. Зміни набудуть чинності при наступному запуску Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="669"/>
         <source>Updates &amp; News</source>
-        <translation>Оновлення та Новини</translation>
+        <translation type="vanished">Оновлення та Новини</translation>
     </message>
     <message>
-        <source>Show What&apos;s New on Startup</source>
+        <source>Show What's New on Startup</source>
         <translation type="vanished">Показувати Що Нового при Запуску</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="820"/>
         <source>Time Range</source>
-        <translation>Діапазон Часу</translation>
+        <translation type="vanished">Діапазон Часу</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1005"/>
         <source>Small</source>
-        <translation>Малий</translation>
+        <translation type="vanished">Малий</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1005"/>
         <source>Normal</source>
-        <translation>Звичайний</translation>
+        <translation type="vanished">Звичайний</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1005"/>
         <source>Large</source>
-        <translation>Великий</translation>
+        <translation type="vanished">Великий</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1005"/>
         <source>Extra Large</source>
-        <translation>Дуже Великий</translation>
+        <translation type="vanished">Дуже Великий</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1005"/>
         <source>Custom</source>
-        <translation>Користувацький</translation>
+        <translation type="vanished">Користувацький</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="79"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1066"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="80"/>
         <source>Layout</source>
         <translation>Макет</translation>
     </message>
@@ -26313,142 +26462,114 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">Відступ Ручного Компонування</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1170"/>
         <source>Show Alignment Guides</source>
-        <translation>Показувати Напрямні Вирівнювання</translation>
+        <translation type="vanished">Показувати Напрямні Вирівнювання</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1994"/>
         <source>Video Export</source>
-        <translation>Експорт Відео</translation>
+        <translation type="vanished">Експорт Відео</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2012"/>
         <source>Save Videos by Default</source>
-        <translation>Зберігати Відео за Замовчуванням</translation>
+        <translation type="vanished">Зберігати Відео за Замовчуванням</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1227"/>
         <source>Behavior</source>
-        <translation>Поведінка</translation>
+        <translation type="vanished">Поведінка</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="73"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="74"/>
         <source>Plotting</source>
         <translation>Побудова Графіків</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="708"/>
         <source>Check for Extension Updates</source>
-        <translation>Перевірити Оновлення Розширень</translation>
+        <translation type="vanished">Перевірити Оновлення Розширень</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="732"/>
         <source>Install Extension Updates Automatically</source>
-        <translation>Встановлювати Оновлення Розширень Автоматично</translation>
+        <translation type="vanished">Встановлювати Оновлення Розширень Автоматично</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="762"/>
         <source>Installed extensions and themes are checked when Serial Studio starts, together with application updates. Serial Studio asks before installing them unless automatic installation is enabled.</source>
-        <translation>Встановлені розширення та теми перевіряються під час запуску Serial Studio разом з оновленнями програми. Serial Studio запитує перед їх встановленням, якщо автоматичне встановлення не увімкнено.</translation>
+        <translation type="vanished">Встановлені розширення та теми перевіряються під час запуску Serial Studio разом з оновленнями програми. Serial Studio запитує перед їх встановленням, якщо автоматичне встановлення не увімкнено.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1272"/>
         <source>Show Search Field</source>
-        <translation>Показувати Поле Пошуку</translation>
+        <translation type="vanished">Показувати Поле Пошуку</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1296"/>
         <source>Auto-hide Taskbar</source>
-        <translation>Автоматично Приховувати Панель Завдань</translation>
+        <translation type="vanished">Автоматично Приховувати Панель Завдань</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1323"/>
         <source>Hide Delay (ms)</source>
-        <translation>Затримка Приховування (мс)</translation>
+        <translation type="vanished">Затримка Приховування (мс)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1356"/>
         <source>Pinned Buttons</source>
-        <translation>Закріплені Кнопки</translation>
+        <translation type="vanished">Закріплені Кнопки</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1374"/>
         <source>Drag a pinned button on the taskbar to reorder it.</source>
-        <translation>Перетягніть закріплену кнопку на панелі завдань, щоб змінити порядок.</translation>
+        <translation type="vanished">Перетягніть закріплену кнопку на панелі завдань, щоб змінити порядок.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1395"/>
         <source>Settings</source>
-        <translation>Налаштування</translation>
+        <translation type="vanished">Налаштування</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1398"/>
         <source>Clock</source>
-        <translation>Годинник</translation>
+        <translation type="vanished">Годинник</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1399"/>
         <source>Stopwatch</source>
-        <translation>Секундомір</translation>
+        <translation type="vanished">Секундомір</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1400"/>
         <source>Pause / Resume</source>
-        <translation>Пауза / Відновити</translation>
+        <translation type="vanished">Пауза / Відновити</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1401"/>
         <source>File Transmission</source>
-        <translation>Передача Файлу</translation>
+        <translation type="vanished">Передача Файлу</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1402"/>
         <source>AI Assistant</source>
-        <translation>AI-Асистент</translation>
+        <translation type="vanished">AI-Асистент</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1532"/>
         <source>Display</source>
-        <translation>Відображення</translation>
+        <translation type="vanished">Відображення</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1547"/>
         <source>Display Mode</source>
-        <translation>Режим Відображення</translation>
+        <translation type="vanished">Режим Відображення</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1615"/>
         <source>Scrollback Lines</source>
-        <translation>Рядки Прокрутки</translation>
+        <translation type="vanished">Рядки Прокрутки</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="973"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1569"/>
         <source>Font Family</source>
-        <translation>Сімейство Шрифту</translation>
+        <translation type="vanished">Сімейство Шрифту</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="104"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1397"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="105"/>
         <source>Notifications</source>
         <translation>Сповіщення</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="417"/>
         <source>Export Protobuf File</source>
-        <translation>Експортувати Файл Protobuf</translation>
+        <translation type="vanished">Експортувати Файл Protobuf</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="958"/>
         <source>Dashboard Font</source>
-        <translation>Шрифт Панелі Приладів</translation>
+        <translation type="vanished">Шрифт Панелі Приладів</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="995"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1591"/>
         <source>Font Size</source>
-        <translation>Розмір Шрифту</translation>
+        <translation type="vanished">Розмір Шрифту</translation>
     </message>
     <message>
         <source>Image Export</source>
@@ -26459,114 +26580,549 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">Зберігати Зображення за Замовчуванням</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1640"/>
         <source>Show Timestamps</source>
-        <translation>Показувати Мітки Часу</translation>
+        <translation type="vanished">Показувати Мітки Часу</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1668"/>
         <source>Data Transmission</source>
-        <translation>Передача Даних</translation>
+        <translation type="vanished">Передача Даних</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1683"/>
         <source>Line Ending</source>
-        <translation>Завершення Рядка</translation>
+        <translation type="vanished">Завершення Рядка</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1705"/>
         <source>Input Mode</source>
-        <translation>Режим Входу</translation>
+        <translation type="vanished">Режим Входу</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1727"/>
         <source>Text Encoding</source>
-        <translation>Кодування Тексту</translation>
+        <translation type="vanished">Кодування Тексту</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1749"/>
         <source>Checksum</source>
-        <translation>Контрольна Сума</translation>
+        <translation type="vanished">Контрольна Сума</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1771"/>
         <source>Echo Sent Data</source>
-        <translation>Відлуння Надісланих Даних</translation>
+        <translation type="vanished">Відлуння Надісланих Даних</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1799"/>
         <source>Escape Codes</source>
-        <translation>Escape-коди</translation>
+        <translation type="vanished">Escape-коди</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1814"/>
         <source>VT100 Emulation</source>
-        <translation>Емуляція VT100</translation>
+        <translation type="vanished">Емуляція VT100</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1840"/>
         <source>ANSI Colors</source>
-        <translation>Кольори ANSI</translation>
+        <translation type="vanished">Кольори ANSI</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1904"/>
         <source>CSV Export</source>
-        <translation>Експорт CSV</translation>
+        <translation type="vanished">Експорт CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1919"/>
         <source>Row Interval (ms)</source>
-        <translation>Інтервал Рядків (мс)</translation>
+        <translation type="vanished">Інтервал Рядків (мс)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1981"/>
         <source>0 writes one row per received frame. A positive value logs one snapshot row of every channel at that interval, which keeps file size bounded for multi-source or high-rate projects.</source>
-        <translation>0 записує один рядок на отриманий кадр. Додатне значення записує один рядок знімка всіх каналів з цим інтервалом, що обмежує розмір файлу для багатоджерельних або високочастотних проєктів.</translation>
+        <translation type="vanished">0 записує один рядок на отриманий кадр. Додатне значення записує один рядок знімка всіх каналів з цим інтервалом, що обмежує розмір файлу для багатоджерельних або високочастотних проєктів.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2069"/>
         <source>Delivery</source>
-        <translation>Доставка</translation>
+        <translation type="vanished">Доставка</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2084"/>
         <source>System Notifications</source>
-        <translation>Системні Сповіщення</translation>
+        <translation type="vanished">Системні Сповіщення</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2105"/>
         <source>Show Warning/Critical events as OS desktop notifications when Serial Studio is not the foreground window.</source>
-        <translation>Показувати попередження та критичні події як системні сповіщення, коли Serial Studio не є активним вікном.</translation>
+        <translation type="vanished">Показувати попередження та критичні події як системні сповіщення, коли Serial Studio не є активним вікном.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2115"/>
         <source>Application Logs</source>
-        <translation>Журнали Застосунку</translation>
+        <translation type="vanished">Журнали Застосунку</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2130"/>
         <source>Route Warnings to Notifications</source>
-        <translation>Направляти Попередження до Сповіщень</translation>
+        <translation type="vanished">Направляти Попередження до Сповіщень</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2151"/>
         <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
-        <translation>Вимкнено за замовчуванням — QT і QML часто генерують попередження, і увімкнення цього може заглушити справжні сигнали тривоги. Критичні повідомлення завжди маршрутизуються незалежно від цього налаштування.</translation>
+        <translation type="vanished">Вимкнено за замовчуванням — QT і QML часто генерують попередження, і увімкнення цього може заглушити справжні сигнали тривоги. Критичні повідомлення завжди маршрутизуються незалежно від цього налаштування.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2170"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="174"/>
         <source>Reset</source>
         <translation>Скинути</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2227"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="231"/>
         <source>Close</source>
         <translation>Закрити</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="2235"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="239"/>
         <source>Apply</source>
         <translation>Застосувати</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsConsolePage</name>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="58"/>
+        <source>Display</source>
+        <translation>Відображення</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="73"/>
+        <source>Display Mode</source>
+        <translation>Режим Відображення</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="95"/>
+        <source>Font Family</source>
+        <translation>Сімейство Шрифту</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="117"/>
+        <source>Font Size</source>
+        <translation>Розмір Шрифту</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="141"/>
+        <source>Scrollback Lines</source>
+        <translation>Рядки Прокрутки</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="166"/>
+        <source>Show Timestamps</source>
+        <translation>Показувати Мітки Часу</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="194"/>
+        <source>Data Transmission</source>
+        <translation>Передача Даних</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="209"/>
+        <source>Line Ending</source>
+        <translation>Завершення Рядка</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="231"/>
+        <source>Input Mode</source>
+        <translation>Режим Входу</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="253"/>
+        <source>Text Encoding</source>
+        <translation>Кодування Тексту</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="275"/>
+        <source>Checksum</source>
+        <translation>Контрольна Сума</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="297"/>
+        <source>Echo Sent Data</source>
+        <translation>Відлуння Надісланих Даних</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="325"/>
+        <source>Escape Codes</source>
+        <translation>Escape-коди</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="340"/>
+        <source>VT100 Emulation</source>
+        <translation>Емуляція VT100</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="366"/>
+        <source>ANSI Colors</source>
+        <translation>Кольори ANSI</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsExportPage</name>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="56"/>
+        <source>CSV Export</source>
+        <translation>Експорт CSV</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="71"/>
+        <source>Row Interval (ms)</source>
+        <translation>Інтервал Рядків (мс)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="133"/>
+        <source>0 writes one row per received frame. A positive value logs one snapshot row of every channel at that interval, which keeps file size bounded for multi-source or high-rate projects.</source>
+        <translation>0 записує один рядок на отриманий кадр. Додатне значення записує один рядок знімка всіх каналів з цим інтервалом, що обмежує розмір файлу для багатоджерельних або високочастотних проєктів.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="146"/>
+        <source>Video Export</source>
+        <translation>Експорт Відео</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="164"/>
+        <source>Save Videos by Default</source>
+        <translation>Зберігати Відео за Замовчуванням</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsGeneralPage</name>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="58"/>
+        <source>Appearance</source>
+        <translation>Зовнішній Вигляд</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="73"/>
+        <source>Language</source>
+        <translation>Мова</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="89"/>
+        <source>Theme</source>
+        <translation>Тема</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="116"/>
+        <source>Window</source>
+        <translation>Вікно</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="135"/>
+        <source>Custom Window Decorations</source>
+        <translation>Власні Декорації Вікна</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="158"/>
+        <source>Window decoration changes apply after restarting %1.</source>
+        <translation>Зміни декорацій вікна застосовуються після перезапуску %1.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="167"/>
+        <source>Files</source>
+        <translation>Файли</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="183"/>
+        <source>Workspace Folder</source>
+        <translation>Тека Робочої Області</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="214"/>
+        <source>API &amp; Plugins</source>
+        <translation>API та Плагіни</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="230"/>
+        <source>Enable API Server (Port 7777)</source>
+        <translation>Увімкнути API-Сервер (Порт 7777)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="255"/>
+        <source>Allow External API Connections</source>
+        <translation>Дозволити Зовнішні Підключення до API</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="280"/>
+        <source>API Access Token</source>
+        <translation>Токен Доступу API</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="310"/>
+        <source>Export Protobuf File</source>
+        <translation>Експортувати Файл Protobuf</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="312"/>
+        <source>Export…</source>
+        <translation>Експорт…</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsLayoutPage</name>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="58"/>
+        <source>Dashboard Font</source>
+        <translation>Шрифт Панелі Приладів</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="73"/>
+        <source>Font Family</source>
+        <translation>Сімейство Шрифту</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="95"/>
+        <source>Font Size</source>
+        <translation>Розмір Шрифту</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <source>Small</source>
+        <translation>Малий</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <source>Normal</source>
+        <translation>Звичайний</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <source>Large</source>
+        <translation>Великий</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <source>Extra Large</source>
+        <translation>Дуже Великий</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <source>Custom</source>
+        <translation>Користувацький</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="166"/>
+        <source>Layout</source>
+        <translation>Макет</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="181"/>
+        <source>Layout Margin</source>
+        <translation>Поле Макета</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="206"/>
+        <source>Layout Spacing</source>
+        <translation>Відступ Макета</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="231"/>
+        <source>Show Actions Panel</source>
+        <translation>Показувати Панель Дій</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="247"/>
+        <source>Auto-Hide Toolbar</source>
+        <translation>Автоматично Приховувати Панель Інструментів</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="270"/>
+        <source>Show Alignment Guides</source>
+        <translation>Показувати Напрямні Вирівнювання</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsNotificationsPage</name>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="59"/>
+        <source>Delivery</source>
+        <translation>Доставка</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="74"/>
+        <source>System Notifications</source>
+        <translation>Системні Сповіщення</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="95"/>
+        <source>Show Warning/Critical events as OS desktop notifications when Serial Studio is not the foreground window.</source>
+        <translation>Показувати попередження та критичні події як системні сповіщення, коли Serial Studio не є активним вікном.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="105"/>
+        <source>Application Logs</source>
+        <translation>Журнали Застосунку</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="120"/>
+        <source>Route Warnings to Notifications</source>
+        <translation>Направляти Попередження до Сповіщень</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="141"/>
+        <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
+        <translation>Вимкнено за замовчуванням — QT і QML часто генерують попередження, і увімкнення цього може заглушити справжні сигнали тривоги. Критичні повідомлення завжди маршрутизуються незалежно від цього налаштування.</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsPlottingPage</name>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="56"/>
+        <source>Data Plotting</source>
+        <translation>Побудова Графіків Даних</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="71"/>
+        <source>Time Range</source>
+        <translation>Діапазон Часу</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="123"/>
+        <source>Point Count</source>
+        <translation>Кількість Точок</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="148"/>
+        <source>UI Refresh Rate (Hz)</source>
+        <translation>Частота Оновлення UI (Гц)</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsStartupPage</name>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="59"/>
+        <source>Graphics</source>
+        <translation>Графіка</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="77"/>
+        <source>Rendering Backend</source>
+        <translation>Механізм Рендерингу</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="110"/>
+        <source>Display Scaling</source>
+        <translation>Масштабування Дисплея</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="143"/>
+        <source>Custom Scale (%)</source>
+        <translation>Користувацький Масштаб (%)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="180"/>
+        <source>System</source>
+        <translation>Система</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="196"/>
+        <source>Apply Performance Hints</source>
+        <translation>Застосувати Підказки Продуктивності</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="219"/>
+        <source>Keep Display Awake</source>
+        <translation>Підтримувати Дисплей Активним</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="248"/>
+        <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
+        <translation>Підказки продуктивності підвищують пріоритет процесу та відключають обмеження живлення ОС. Зміни набудуть чинності при наступному запуску Serial Studio.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="259"/>
+        <source>Updates &amp; News</source>
+        <translation>Оновлення та Новини</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="275"/>
+        <source>Automatically Check for Updates</source>
+        <translation>Автоматично Перевіряти Оновлення</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="298"/>
+        <source>Check for Extension Updates</source>
+        <translation>Перевірити Оновлення Розширень</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="322"/>
+        <source>Install Extension Updates Automatically</source>
+        <translation>Встановлювати Оновлення Розширень Автоматично</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="352"/>
+        <source>Installed extensions and themes are checked when Serial Studio starts, together with application updates. Serial Studio asks before installing them unless automatic installation is enabled.</source>
+        <translation>Встановлені розширення та теми перевіряються під час запуску Serial Studio разом з оновленнями програми. Serial Studio запитує перед їх встановленням, якщо автоматичне встановлення не увімкнено.</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsTaskbarPage</name>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="53"/>
+        <source>Behavior</source>
+        <translation>Поведінка</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="74"/>
+        <source>Always Show Taskbar Buttons</source>
+        <translation>Завжди Показувати Кнопки на Панелі Завдань</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="98"/>
+        <source>Show Search Field</source>
+        <translation>Показувати Поле Пошуку</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="122"/>
+        <source>Auto-hide Taskbar</source>
+        <translation>Автоматично Приховувати Панель Завдань</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="149"/>
+        <source>Hide Delay (ms)</source>
+        <translation>Затримка Приховування (мс)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="182"/>
+        <source>Pinned Buttons</source>
+        <translation>Закріплені Кнопки</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="200"/>
+        <source>Drag a pinned button on the taskbar to reorder it.</source>
+        <translation>Перетягніть закріплену кнопку на панелі завдань, щоб змінити порядок.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="221"/>
+        <source>Settings</source>
+        <translation>Налаштування</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="222"/>
+        <source>Console</source>
+        <translation>Консоль</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="223"/>
+        <source>Notifications</source>
+        <translation>Сповіщення</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="224"/>
+        <source>Clock</source>
+        <translation>Годинник</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="225"/>
+        <source>Stopwatch</source>
+        <translation>Секундомір</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="226"/>
+        <source>Pause / Resume</source>
+        <translation>Пауза / Відновити</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="227"/>
+        <source>File Transmission</source>
+        <translation>Передача Файлу</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="228"/>
+        <source>AI Assistant</source>
+        <translation>AI Асистент</translation>
     </message>
 </context>
 <context>
@@ -26811,8 +27367,8 @@ Add absolute addresses above to poll the controller.</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="449"/>
-        <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
-        <translation>Подвійне клацання на цьому розгортанні відкриває панель даних реального часу для цього проєкту. Без панелі інструментів чи налаштувань, лише дані, а Serial Studio завершує роботу після від&apos;єднання пристрою.</translation>
+        <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
+        <translation>Подвійне клацання на цьому розгортанні відкриває панель даних реального часу для цього проєкту. Без панелі інструментів чи налаштувань, лише дані, а Serial Studio завершує роботу після від'єднання пристрою.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="495"/>
@@ -26852,7 +27408,7 @@ Add absolute addresses above to poll the controller.</source>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="554"/>
         <source>The taskbar slides in when the user moves the cursor near the bottom edge.</source>
-        <translation>Панель завдань з&apos;являється, коли користувач наближає курсор до нижнього краю.</translation>
+        <translation>Панель завдань з'являється, коли користувач наближає курсор до нижнього краю.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="556"/>
@@ -26930,18 +27486,18 @@ Add absolute addresses above to poll the controller.</source>
         <translation>Повноекранний Режим</translation>
     </message>
     <message>
-        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
-        <translation type="vanished">Подвійне клацання на цьому ярлику відкриває панель даних реального часу для цього проєкту. Без панелі інструментів чи налаштувань, лише дані, а Serial Studio завершує роботу після від&apos;єднання пристрою.</translation>
+        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
+        <translation type="vanished">Подвійне клацання на цьому ярлику відкриває панель даних реального часу для цього проєкту. Без панелі інструментів чи налаштувань, лише дані, а Serial Studio завершує роботу після від'єднання пристрою.</translation>
     </message>
     <message>
         <source>Embed Project</source>
         <translation type="vanished">Вбудувати Проєкт</translation>
     </message>
     <message>
-        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There&apos;s no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.
+        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.
 
 Turn on Embed Project to bake the project into the shortcut, so it keeps working even if the original file is moved or deleted.</source>
-        <translation type="vanished">Подвійне клацання цього ярлика відкриває панель даних реального часу для цього проєкту. Немає панелі інструментів чи налаштувань, лише дані, і Serial Studio завершує роботу, щойно пристрій від&apos;єднується.
+        <translation type="vanished">Подвійне клацання цього ярлика відкриває панель даних реального часу для цього проєкту. Немає панелі інструментів чи налаштувань, лише дані, і Serial Studio завершує роботу, щойно пристрій від'єднується.
 
 Увімкніть Вбудувати Проєкт, щоб інтегрувати проєкт у ярлик, тож він працюватиме, навіть якщо оригінальний файл переміщено або видалено.</translation>
     </message>
@@ -27274,8 +27830,8 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="392"/>
-        <source>Show &quot;%1&quot;</source>
-        <translation>Показати &quot;%1&quot;</translation>
+        <source>Show "%1"</source>
+        <translation>Показати "%1"</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="397"/>
@@ -27352,7 +27908,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <source>Disconnect</source>
-        <translation type="vanished">Від&apos;єднатися</translation>
+        <translation type="vanished">Від'єднатися</translation>
     </message>
 </context>
 <context>
@@ -27992,7 +28548,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <source>One tool for every link. Serial Studio reads from UART, TCP/UDP, Bluetooth LE, Modbus, CAN Bus, audio, USB, HID, MQTT, and Process I/O.</source>
-        <translation type="vanished">Один інструмент для кожного з&apos;єднання. Serial Studio читає з UART, TCP/UDP, Bluetooth LE, Modbus, CAN Bus, аудіо, USB, HID, MQTT та Process I/O.</translation>
+        <translation type="vanished">Один інструмент для кожного з'єднання. Serial Studio читає з UART, TCP/UDP, Bluetooth LE, Modbus, CAN Bus, аудіо, USB, HID, MQTT та Process I/O.</translation>
     </message>
     <message>
         <source>Skip the terminal dance. Send and receive files over your serial link with the built-in XMODEM, YMODEM, and ZMODEM protocols.</source>
@@ -28035,23 +28591,23 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     <name>TlsIdentity</name>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="141"/>
-        <source>The file &quot;%1&quot; does not exist.</source>
-        <translation>Файл &quot;%1&quot; не існує.</translation>
+        <source>The file "%1" does not exist.</source>
+        <translation>Файл "%1" не існує.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="144"/>
-        <source>The file &quot;%1&quot; cannot be read.</source>
-        <translation>Файл &quot;%1&quot; неможливо прочитати.</translation>
+        <source>The file "%1" cannot be read.</source>
+        <translation>Файл "%1" неможливо прочитати.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="147"/>
-        <source>&quot;%1&quot; is not a valid PEM certificate or key file.</source>
-        <translation>&quot;%1&quot; не є дійсним файлом сертифіката або ключа PEM.</translation>
+        <source>"%1" is not a valid PEM certificate or key file.</source>
+        <translation>"%1" не є дійсним файлом сертифіката або ключа PEM.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="151"/>
-        <source>&quot;%1&quot; is too large to be a PEM certificate or key file.</source>
-        <translation>&quot;%1&quot; занадто великий, щоб бути файлом сертифіката або ключа PEM.</translation>
+        <source>"%1" is too large to be a PEM certificate or key file.</source>
+        <translation>"%1" занадто великий, щоб бути файлом сертифіката або ключа PEM.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="156"/>
@@ -28060,13 +28616,13 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="160"/>
-        <source>The private key &quot;%1&quot; is encrypted. Enter its passphrase and try again.</source>
-        <translation>Приватний ключ &quot;%1&quot; зашифровано. Введіть парольну фразу та спробуйте ще раз.</translation>
+        <source>The private key "%1" is encrypted. Enter its passphrase and try again.</source>
+        <translation>Приватний ключ "%1" зашифровано. Введіть парольну фразу та спробуйте ще раз.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/TlsIdentity.cpp" line="165"/>
-        <source>The passphrase does not unlock the private key &quot;%1&quot;.</source>
-        <translation>Парольна фраза не розблоковує приватний ключ &quot;%1&quot;.</translation>
+        <source>The passphrase does not unlock the private key "%1".</source>
+        <translation>Парольна фраза не розблоковує приватний ключ "%1".</translation>
     </message>
 </context>
 <context>
@@ -28276,7 +28832,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <source>Configure MQTT connection (publish or subscribe)</source>
-        <translation type="vanished">Налаштувати MQTT-з&apos;єднання (публікація або підписка)</translation>
+        <translation type="vanished">Налаштувати MQTT-з'єднання (публікація або підписка)</translation>
     </message>
     <message>
         <source>Deploy</source>
@@ -28292,7 +28848,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <source>Select Serial port (UART) communication</source>
-        <translation type="vanished">Вибрати послідовний порт (UART) зв&apos;язку</translation>
+        <translation type="vanished">Вибрати послідовний порт (UART) зв'язку</translation>
     </message>
     <message>
         <source>Audio</source>
@@ -28308,7 +28864,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <source>Select raw USB communication (Pro)</source>
-        <translation type="vanished">Вибрати прямий USB-зв&apos;язок (Pro)</translation>
+        <translation type="vanished">Вибрати прямий USB-зв'язок (Pro)</translation>
     </message>
     <message>
         <source>Network</source>
@@ -28316,11 +28872,11 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <source>Select TCP/UDP network communication</source>
-        <translation type="vanished">Вибрати TCP/UDP мережевий зв&apos;язок</translation>
+        <translation type="vanished">Вибрати TCP/UDP мережевий зв'язок</translation>
     </message>
     <message>
         <source>Select MODBUS communication (Pro)</source>
-        <translation type="vanished">Вибрати Modbus-зв&apos;язок (Pro)</translation>
+        <translation type="vanished">Вибрати Modbus-зв'язок (Pro)</translation>
     </message>
     <message>
         <source>HID</source>
@@ -28328,7 +28884,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <source>Select HID device communication (Pro)</source>
-        <translation type="vanished">Вибрати зв&apos;язок через пристрій HID (Pro)</translation>
+        <translation type="vanished">Вибрати зв'язок через пристрій HID (Pro)</translation>
     </message>
     <message>
         <source>Bluetooth</source>
@@ -28336,7 +28892,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <source>Select Bluetooth Low Energy communication</source>
-        <translation type="vanished">Вибрати зв&apos;язок через Bluetooth Low Energy</translation>
+        <translation type="vanished">Вибрати зв'язок через Bluetooth Low Energy</translation>
     </message>
     <message>
         <source>CAN Bus</source>
@@ -28344,7 +28900,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <source>Select CAN Bus communication (Pro)</source>
-        <translation type="vanished">Вибрати зв&apos;язок через шину CAN (Pro)</translation>
+        <translation type="vanished">Вибрати зв'язок через шину CAN (Pro)</translation>
     </message>
     <message>
         <source>Process</source>
@@ -28352,7 +28908,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <source>Select process pipe communication (Pro)</source>
-        <translation type="vanished">Вибрати зв&apos;язок через канал процесу (Pro)</translation>
+        <translation type="vanished">Вибрати зв'язок через канал процесу (Pro)</translation>
     </message>
     <message>
         <source>Examples</source>
@@ -28438,12 +28994,12 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="293"/>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="304"/>
         <source>Disconnect</source>
-        <translation>Від&apos;єднатися</translation>
+        <translation>Від'єднатися</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="293"/>
         <source>Connect</source>
-        <translation>Під&apos;єднатися</translation>
+        <translation>Під'єднатися</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="293"/>
@@ -28452,7 +29008,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <source>Connect or disconnect from device or MQTT broker</source>
-        <translation type="vanished">Під&apos;єднатися або від&apos;єднатися від пристрою чи MQTT-брокера</translation>
+        <translation type="vanished">Під'єднатися або від'єднатися від пристрою чи MQTT-брокера</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="254"/>
@@ -28536,7 +29092,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/Dialogs/TriggerDialog.qml" line="388"/>
-        <source>Leave timebase empty to use the plot&apos;s time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
+        <source>Leave timebase empty to use the plot's time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
         <translation>Залиште часову базу порожньою, щоб використати діапазон часу графіка; зменшіть для збільшення швидкого сигналу. Затримка ігнорує нові тригери протягом моменту після кожного.</translation>
     </message>
     <message>
@@ -28602,7 +29158,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>0</translation>
     </message>
     <message>
-        <source>Timebase sets how much time one sweep shows; leave it empty to use the plot&apos;s time range. Lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each one.</source>
+        <source>Timebase sets how much time one sweep shows; leave it empty to use the plot's time range. Lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each one.</source>
         <translation type="vanished">Часова база встановлює, скільки часу показує одна розгортка; залиште порожнім, щоб використати діапазон часу графіка. Зменшіть для збільшення швидкого сигналу. Затримка ігнорує нові тригери протягом моменту після кожного.</translation>
     </message>
     <message>
@@ -28721,22 +29277,22 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2569"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1913"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2577"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1921"/>
         <source>Notifications</source>
         <translation>Сповіщення</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2585"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1929"/>
         <source>Clock</source>
         <translation>Годинник</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2592"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1936"/>
         <source>Stopwatch</source>
         <translation>Секундомір</translation>
     </message>
@@ -28882,7 +29438,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="479"/>
         <source>Would you like to download the update now?&lt;br /&gt;This is a mandatory update, exiting now will close the application.</source>
-        <translation>Завантажити оновлення зараз?&lt;br /&gt;Це обов&apos;язкове оновлення, вихід зараз закриє застосунок.</translation>
+        <translation>Завантажити оновлення зараз?&lt;br /&gt;Це обов'язкове оновлення, вихід зараз закриє застосунок.</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="485"/>
@@ -28970,7 +29526,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="187"/>
         <source>Transfer result appears here.</source>
-        <translation>Результат передачі з&apos;явиться тут.</translation>
+        <translation>Результат передачі з'явиться тут.</translation>
     </message>
 </context>
 <context>
@@ -29078,7 +29634,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <source>Open help documentation for shared memory</source>
-        <translation type="vanished">Відкрити довідкову документацію зі спільної пам&apos;яті</translation>
+        <translation type="vanished">Відкрити довідкову документацію зі спільної пам'яті</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="293"/>
@@ -29167,7 +29723,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Waterfall.qml" line="506"/>
-        <source>Not available over a remote attach. This widget needs the remote&apos;s raw sample stream, which the dashboard mirror does not carry.</source>
+        <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>Недоступно через віддалене підключення. Цей віджет потребує потоку необроблених семплів віддаленого пристрою, який дзеркало панелі не передає.</translation>
     </message>
     <message>
@@ -29233,7 +29789,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="285"/>
-        <source>You&apos;re currently using the fully-featured trial of %1 Pro. It&apos;s valid for 14 days of personal, non-commercial use.</source>
+        <source>You're currently using the fully-featured trial of %1 Pro. It's valid for 14 days of personal, non-commercial use.</source>
         <translation>Ви зараз використовуєте повнофункціональну пробну версію %1 Pro. Вона дійсна протягом 14 днів для особистого некомерційного використання.</translation>
     </message>
     <message>
@@ -29248,13 +29804,13 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="312"/>
-        <source>To see available subscription plans, click &quot;Upgrade Now&quot; below.</source>
+        <source>To see available subscription plans, click "Upgrade Now" below.</source>
         <translation>Щоб переглянути доступні плани підписки, натисніть «Оновити зараз» нижче.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="333"/>
-        <source>Don&apos;t nag me about the trial.
-I understand that when it ends, I&apos;ll need to buy a license or build the GPLv3 version.</source>
+        <source>Don't nag me about the trial.
+I understand that when it ends, I'll need to buy a license or build the GPLv3 version.</source>
         <translation>Не нагадувати мені про пробну версію.
 Я розумію, що після її завершення потрібно буде придбати ліцензію або зібрати версію GPLv3.</translation>
     </message>
@@ -29315,7 +29871,7 @@ I understand that when it ends, I&apos;ll need to buy a license or build the GPL
 <context>
     <name>WhatsNew</name>
     <message>
-        <source>What&apos;s New in %1</source>
+        <source>What's New in %1</source>
         <translation type="vanished">Що нового у %1</translation>
     </message>
     <message>
@@ -29451,7 +30007,7 @@ I understand that when it ends, I&apos;ll need to buy a license or build the GPL
         <translation type="vanished">Ласкаво просимо до %1!</translation>
     </message>
     <message>
-        <source>Here&apos;s what&apos;s new in version %1.</source>
+        <source>Here's what's new in version %1.</source>
         <translation type="vanished">Ось що нового у версії %1.</translation>
     </message>
     <message>
@@ -29516,7 +30072,7 @@ I understand that when it ends, I&apos;ll need to buy a license or build the GPL
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="707"/>
         <source>Device Disconnected</source>
-        <translation>Пристрій Від&apos;єднано</translation>
+        <translation>Пристрій Від'єднано</translation>
     </message>
 </context>
 <context>
@@ -29660,7 +30216,7 @@ I understand that when it ends, I&apos;ll need to buy a license or build the GPL
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="380"/>
-        <source>We can&apos;t offer unrestricted access because the ArcGIS API key incurs real costs.</source>
+        <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
         <translation>Ми не можемо надати необмежений доступ, оскільки ключ API ArcGIS має реальну вартість.</translation>
     </message>
 </context>
@@ -29718,7 +30274,7 @@ I understand that when it ends, I&apos;ll need to buy a license or build the GPL
         <translation type="vanished">Порада: натисніть %1 будь-де, щоб відкрити палітру команд.</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Terminal.cpp" line="1537"/>
+        <location filename="../../src/UI/Widgets/Terminal.cpp" line="1416"/>
         <source>Tip: Press %1 anywhere to open the command palette.</source>
         <translation>Порада: Натисніть %1 будь-де, щоб відкрити палітру команд.</translation>
     </message>

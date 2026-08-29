@@ -11,30 +11,10 @@
 
 #ifdef BUILD_COMMERCIAL
 
-#  include <array>
-#  include <cmath>
-#  include <cstdint>
-#  include <functional>
-#  include <QConicalGradient>
-#  include <QDir>
-#  include <QFileInfo>
-#  include <QFontMetricsF>
+#  include "UI/Widgets/Painter/PainterPattern.h"
+
 #  include <QImage>
-#  include <QImageReader>
-#  include <QLinearGradient>
-#  include <QPainterPathStroker>
-#  include <QPixmap>
-#  include <QRadialGradient>
-#  include <QRegularExpression>
-#  include <QStringList>
-
-#  include "Misc/CommonFonts.h"
-#  include "SerialStudio.h"
-#  include "UI/Widgets/PainterContext.h"
-
-//--------------------------------------------------------------------------------------------------
-// PainterPattern
-//--------------------------------------------------------------------------------------------------
+#  include <QPainter>
 
 /**
  * @brief Stores the tile pixmap and repetition string.
@@ -76,4 +56,4 @@ QBrush Widgets::PainterPattern::brush() const
   return QBrush(QPixmap::fromImage(img));
 }
 
-#endif
+#endif  // BUILD_COMMERCIAL

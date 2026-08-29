@@ -70,6 +70,25 @@ static quint64 s_totalOverflowBytes  = 0;
 }
 
 /**
+ * @brief The link owner these checkers sample, resolved once: the checkers are free functions with
+ *        no constructor to capture in, so the singleton reach is funnelled through one accessor.
+ */
+[[nodiscard]] static IO::ConnectionManager& connectionManager()
+{
+  static auto& manager = IO::ConnectionManager::instance();
+  return manager;
+}
+
+/**
+ * @brief The frame builder these checkers sample, resolved once, for the same reason as above.
+ */
+[[nodiscard]] static DataModel::FrameBuilder& frameBuilder()
+{
+  static auto& builder = DataModel::FrameBuilder::instance();
+  return builder;
+}
+
+/**
  * @brief Assembles one finding; the checker id is stamped by the problem center after the run.
  */
 [[nodiscard]] static Finding makeLinkFinding(Severity severity,
@@ -171,9 +190,7 @@ static void resetSampler()
   if (SerialStudio::isAnyPlayerOpen())
     return true;
 
-  static auto& manager = IO::ConnectionManager::instance();
-
-  return !manager.isConnected();
+  return !connectionManager().isConnected();
 }
 
 /**
@@ -231,11 +248,8 @@ static void advanceSampler()
   if (s_haveBaseline && (now - s_lastSampleMs) < kMinSampleMs)
     return;
 
-  static auto& manager = IO::ConnectionManager::instance();
-  static auto& builder = DataModel::FrameBuilder::instance();
-
-  const auto stats  = manager.linkStats();
-  const auto parsed = builder.parsedFrameCount();
+  const auto stats  = connectionManager().linkStats();
+  const auto parsed = frameBuilder().parsedFrameCount();
   if (!s_haveBaseline || countersWereReset(stats, parsed))
     resetWindows();
   else
@@ -375,7 +389,7 @@ static void reportDroppedFrames(QList<Finding>& out)
  */
 [[nodiscard]] static QString sourceLabel(int sourceId)
 {
-  static auto& builder = DataModel::FrameBuilder::instance();
+  auto& builder = frameBuilder();
 
   QString title;
   builder.invokeOnBuilderThreadBlocking([&] {
@@ -399,7 +413,7 @@ static void reportDroppedFrames(QList<Finding>& out)
  */
 static void reportParseThinning(QList<Finding>& out)
 {
-  static auto& builder = DataModel::FrameBuilder::instance();
+  auto& builder = frameBuilder();
   if (!builder.parseBudgetThinning())
     return;
 

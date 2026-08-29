@@ -54,7 +54,7 @@
 
 | Mistake | Fix |
 |---------|-----|
-| `createDriver()` for UI config | `ConnectionManager::instance().uart()` etc. |
+| `DriverFactory::create()` for UI config | `ConnectionManager::instance().uart()` etc. |
 | Live driver with empty device list | Call `refreshSerialDevices()` / `refreshSerialPorts()` in `open()` if empty. |
 | BLE `selectDevice(index)` with placeholder compensation in `setDriverProperty` | `setDriverProperty` is raw; `selectDevice` subtracts 1. |
 | Querying the **live** driver for `configurationOk()` | Check the **UI** driver — live may not be synced yet. |

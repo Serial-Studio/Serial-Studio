@@ -535,7 +535,9 @@ quint64 IO::Drivers::S7PollWorker::framesPublished() const noexcept
  * @brief Constructs the driver, restores persisted settings and wires the configuration signals.
  */
 IO::Drivers::S7::S7()
-  : m_open(false)
+  : m_appState(AppState::instance())
+  , m_projectModel(DataModel::ProjectModel::instance())
+  , m_open(false)
   , m_persistent(true)
   , m_rack(0)
   , m_slot(kS7DefaultSlot)
@@ -1431,17 +1433,15 @@ DataModel::ProjectModel* IO::Drivers::S7::loadGeneratedProject()
   if (m_variables.isEmpty())
     return nullptr;
 
-  static auto& pm       = DataModel::ProjectModel::instance();
-  static auto& appState = AppState::instance();
-  appState.setOperationMode(SerialStudio::ProjectFile);
-  if (!pm.loadFromJsonDocument(QJsonDocument(buildProject()), QString())) {
+  m_appState.setOperationMode(SerialStudio::ProjectFile);
+  if (!m_projectModel.loadFromJsonDocument(QJsonDocument(buildProject()), QString())) {
     logDriverError(tr("Failed to load generated project"),
                    tr("The generated project JSON could not be loaded."));
     return nullptr;
   }
 
-  pm.setModified(true);
-  return &pm;
+  m_projectModel.setModified(true);
+  return &m_projectModel;
 }
 
 /**

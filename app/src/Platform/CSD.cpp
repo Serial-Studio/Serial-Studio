@@ -151,6 +151,8 @@ Titlebar::Titlebar(QQuickItem* parent)
   , m_hoveredButton(Button::None)
   , m_pressedButton(Button::None)
   , m_backgroundColor(QStringLiteral("#2d2d2d"))
+  , m_theme(&Misc::ThemeManager::instance())
+  , m_commonFonts(&Misc::CommonFonts::instance())
 {
   setOpaquePainting(false);
   setAcceptHoverEvents(true);
@@ -190,12 +192,10 @@ void Titlebar::paint(QPainter* painter)
 
 #if defined(Q_OS_WIN)
   rect.setX(CSD::IconSize + CSD::IconMargin * 2);
-  static auto& commonFonts = Misc::CommonFonts::instance();
-  painter->setFont(commonFonts.uiFont());
+  painter->setFont(m_commonFonts->uiFont());
   painter->drawText(rect, Qt::AlignVCenter | Qt::AlignLeft, title());
 #else
-  static auto& commonFonts = Misc::CommonFonts::instance();
-  painter->setFont(commonFonts.boldUiFont());
+  painter->setFont(m_commonFonts->boldUiFont());
   painter->drawText(rect, Qt::AlignCenter, title());
 #endif
 
@@ -261,11 +261,10 @@ QColor Titlebar::foregroundColor() const
 
   m_fgCacheKey = m_backgroundColor;
 
-  static auto& theme      = Misc::ThemeManager::instance();
-  const QColor toolbarTop = theme.getColor(QStringLiteral("toolbar_top"));
+  const QColor toolbarTop = m_theme->getColor(QStringLiteral("toolbar_top"));
 
   if (m_backgroundColor == toolbarTop) {
-    m_fgCache = theme.getColor(QStringLiteral("titlebar_text"));
+    m_fgCache = m_theme->getColor(QStringLiteral("titlebar_text"));
     return m_fgCache;
   }
 
@@ -449,13 +448,12 @@ QColor Titlebar::buttonIconColor(Button button, bool hovered, bool pressed) cons
   return foregroundColor();
 #else
   Q_UNUSED(button)
-  static auto& theme = Misc::ThemeManager::instance();
 
   if (pressed)
-    return theme.getColor(QStringLiteral("highlight")).darker(120);
+    return m_theme->getColor(QStringLiteral("highlight")).darker(120);
 
   if (hovered)
-    return theme.getColor(QStringLiteral("highlight"));
+    return m_theme->getColor(QStringLiteral("highlight"));
 
   if (!m_windowActive) {
     QColor c = foregroundColor();
@@ -743,6 +741,7 @@ Window::Window(QWindow* window, const QString& color, QObject* parent)
   , m_window(window)
   , m_contentContainer(nullptr)
   , m_lastCursor(Qt::ArrowCursor)
+  , m_theme(&Misc::ThemeManager::instance())
 {
   if (!m_window)
     return;
@@ -776,8 +775,7 @@ Window::Window(QWindow* window, const QString& color, QObject* parent)
   connect(m_window, &QWindow::minimumWidthChanged, this, &Window::onMinimumSizeChanged);
   connect(m_window, &QWindow::minimumHeightChanged, this, &Window::onMinimumSizeChanged);
 
-  static auto& themeManager = Misc::ThemeManager::instance();
-  connect(&themeManager, &Misc::ThemeManager::themeChanged, this, &Window::updateTheme);
+  connect(m_theme, &Misc::ThemeManager::themeChanged, this, &Window::updateTheme);
   updateTheme();
   updateMinimumSize();
 }
@@ -1133,16 +1131,14 @@ QSize Window::preferredSize() const
  */
 void Window::updateTheme()
 {
-  static auto& theme = Misc::ThemeManager::instance();
-
   if (m_titleBar) {
     const QString color =
-      m_color.isEmpty() ? theme.getColor(QStringLiteral("toolbar_top")).name() : m_color;
+      m_color.isEmpty() ? m_theme->getColor(QStringLiteral("toolbar_top")).name() : m_color;
     m_titleBar->setBackgroundColor(QColor(color));
   }
 
   if (m_contentContainer)
-    m_contentContainer->setProperty("color", theme.getColor(QStringLiteral("toolbar_top")));
+    m_contentContainer->setProperty("color", m_theme->getColor(QStringLiteral("toolbar_top")));
 }
 
 /**

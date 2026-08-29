@@ -108,7 +108,9 @@ static constexpr int kDialDeadlineMs = 5000;
  * @brief Constructs the Modbus driver and restores persisted settings and register groups.
  */
 IO::Drivers::Modbus::Modbus()
-  : m_connecting(false)
+  : m_appState(AppState::instance())
+  , m_projectModel(DataModel::ProjectModel::instance())
+  , m_connecting(false)
   , m_pollTimer(new QTimer(this))
   , m_device(nullptr)
   , m_lastReply(nullptr)
@@ -814,21 +816,19 @@ void IO::Drivers::Modbus::generateProject()
   const ModbusProjectGenerator generator(m_registerGroups.groups());
   const auto project = generator.buildProject(conn_settings);
 
-  static auto& pm       = DataModel::ProjectModel::instance();
-  static auto& appState = AppState::instance();
-  appState.setOperationMode(SerialStudio::ProjectFile);
-  if (!pm.loadFromJsonDocument(QJsonDocument(project), QString())) {
+  m_appState.setOperationMode(SerialStudio::ProjectFile);
+  if (!m_projectModel.loadFromJsonDocument(QJsonDocument(project), QString())) {
     logDriverError(tr("Failed to load generated project"),
                    tr("The generated project JSON could not be loaded."));
     return;
   }
 
-  pm.setModified(true);
+  m_projectModel.setModified(true);
 
   const int total_datasets = generator.totalDatasets();
   const int groupCount     = m_registerGroups.count();
   QObject::connect(
-    &pm,
+    &m_projectModel,
     &DataModel::ProjectModel::saveDialogCompleted,
     this,
     [groupCount, total_datasets](bool accepted) {
@@ -845,7 +845,7 @@ void IO::Drivers::Modbus::generateProject()
     },
     Qt::SingleShotConnection);
 
-  (void)pm.saveJsonFile(true);
+  (void)m_projectModel.saveJsonFile(true);
 }
 
 //--------------------------------------------------------------------------------------------------

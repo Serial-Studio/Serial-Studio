@@ -73,6 +73,17 @@ static const QString kScriptJumpDataset = QStringLiteral("dataset");
 }
 
 /**
+ * @brief The project document the label helpers read, resolved once: the checkers are free
+ *        functions with no constructor to capture in, so the singleton reach is funnelled through
+ *        one accessor instead of a per-helper static.
+ */
+[[nodiscard]] static DataModel::ProjectModel& projectModel()
+{
+  static auto& model = DataModel::ProjectModel::instance();
+  return model;
+}
+
+/**
  * @brief Maps a live error counter onto a decade bucket, so the finding text stays identical while
  *        the failure keeps repeating and the panel is not reset once per second.
  */
@@ -107,9 +118,7 @@ static const QString kScriptJumpDataset = QStringLiteral("dataset");
  */
 [[nodiscard]] static QString scriptSourceLabel(int sourceId)
 {
-  static auto& project = DataModel::ProjectModel::instance();
-
-  const auto& sources = project.sources();
+  const auto& sources = projectModel().sources();
   for (const auto& source : sources)
     if (source.sourceId == sourceId && !source.title.isEmpty())
       return source.title;
@@ -123,9 +132,7 @@ static const QString kScriptJumpDataset = QStringLiteral("dataset");
  */
 [[nodiscard]] static QString scriptDatasetLabel(int uniqueId)
 {
-  static auto& project = DataModel::ProjectModel::instance();
-
-  const auto& groups = project.groups();
+  const auto& groups = projectModel().groups();
   for (const auto& group : groups) {
     for (const auto& dataset : group.datasets)
       if (dataset.uniqueId == uniqueId && !dataset.title.isEmpty())

@@ -38,7 +38,6 @@
 #include "UI/Widgets/FFTWindow.h"
 
 #ifdef BUILD_COMMERCIAL
-#  include "Licensing/CommercialToken.h"
 #  include "Licensing/LemonSqueezy.h"
 #  include "Sessions/Player.h"
 #  include "UI/Widgets/AudioExport.h"
@@ -47,7 +46,6 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
-#include <QSet>
 
 //--------------------------------------------------------------------------------------------------
 // Constants
@@ -133,25 +131,21 @@ static double streamSampleRate(const int sourceId)
   return 0.0;
 }
 
-/**
- * @brief Composite snapshot key: dataset uniqueIds repeat across sources, so the time-ring
- *        snapshot must include the sourceId or two plots collapse onto one entry and the second
- *        restore move-assigns a moved-from (null-buffer) ring, crashing appendDecimated.
- */
-static qint64 ringSnapshotKey(const int sourceId, const int uniqueId)
-{
-  return (static_cast<qint64>(sourceId) << 32) | static_cast<quint32>(uniqueId);
-}
-
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Constructs the Dashboard, wires reset signals and loads persisted settings.
+ * @brief Constructs the Dashboard, wires reset signals and loads persisted settings. Every module
+ *        bound here is already built: the composition root pins this object last, so the binding
+ *        resolves an existing instance instead of constructing one inside a constructor.
  */
 UI::Dashboard::Dashboard()
-  : m_drainBudgetNs(kDrainBudgetNs / kMaxDisplayFps)
+  : m_appState(&AppState::instance())
+  , m_widgetRegistry(&UI::WidgetRegistry::instance())
+  , m_frameBuilder(&DataModel::FrameBuilder::instance())
+  , m_projectModel(&DataModel::ProjectModel::instance())
+  , m_drainBudgetNs(kDrainBudgetNs / kMaxDisplayFps)
   , m_points(kDefaultPlotPoints)
   , m_widgetCount(0)
   , m_updateRequired(false)
@@ -165,6 +159,22 @@ UI::Dashboard::Dashboard()
   , m_multipltXAxis(kDefaultPlotPoints)
   , m_tools(m_settings, IO::ConnectionManager::instance())
   , m_viewState(m_settings)
+  , m_plotControls(UI::PlotControlBindings{.activePlots      = m_activePlots,
+                                           .activeFFTPlots   = m_activeFFTPlots,
+                                           .activeMultiplots = m_activeMultiplots,
+#ifdef BUILD_COMMERCIAL
+                                           .activeWaterfalls = m_activeWaterfalls,
+#endif
+                                           .plotSweep      = m_plotSweep,
+                                           .multiplotSweep = m_multiplotSweep})
+  , m_replaySeek(UI::ReplaySeekBindings{.xAxisData          = m_xAxisData,
+                                        .yAxisData          = m_yAxisData,
+                                        .plotTimeRings      = m_plotTimeRings,
+                                        .multiplotTimeRings = m_multiplotTimeRings,
+                                        .multiplotValues    = m_multipltValues,
+                                        .datasets           = m_datasets,
+                                        .widgetGroups       = m_widgetGroups,
+                                        .widgetDatasets     = m_widgetDatasets})
   , m_widgetMapBuilder(UI::WidgetModelBindings{.widgetCount         = m_widgetCount,
                                                .lastFrame           = m_lastFrame,
                                                .widgetMap           = m_widgetMap,
@@ -178,90 +188,122 @@ UI::Dashboard::Dashboard()
                                                .datasetReferences   = m_datasetReferences,
                                                .widgetGroups        = m_widgetGroups,
                                                .widgetDatasets      = m_widgetDatasets},
-                       AppState::instance(),
-                       DataModel::ProjectModel::instance(),
-                       UI::WidgetRegistry::instance(),
+                       *m_appState,
+                       *m_projectModel,
+                       *m_widgetRegistry,
                        UI::WidgetExtensions::instance())
 {
-  static auto& csvPlayer    = CSV::Player::instance();
-  static auto& mdf4Player   = MDF4::Player::instance();
-  static auto& ioManager    = IO::ConnectionManager::instance();
-  static auto& appState     = AppState::instance();
-  static auto& frameBuilder = DataModel::FrameBuilder::instance();
-  static auto& projectModel = DataModel::ProjectModel::instance();
+  connectSessionResets();
+  connectStreamAvailableInputs();
+  connectViewStateResets(*m_appState);
+  connectDisplayTimers();
+  connectToolSignals();
+
+  updateStreamAvailable();
+  restorePersistedSettings();
+}
+
+/**
+ * @brief Wires every input that invalidates the dashboard's data: a player opening or closing, a
+ *        device disconnect that leaves no stream behind, a project-file swap, an operation-mode
+ *        change, and the builder's source-map edits.
+ */
+void UI::Dashboard::connectSessionResets()
+{
+  static auto* csvPlayer  = &CSV::Player::instance();
+  static auto* mdf4Player = &MDF4::Player::instance();
+  static auto* ioManager  = &IO::ConnectionManager::instance();
 
   // clang-format off
-  connect(&csvPlayer, &CSV::Player::openChanged, this, [=, this] { resetData(true); }, Qt::QueuedConnection);
-  connect(&mdf4Player, &MDF4::Player::openChanged, this, [=, this] { resetData(true); }, Qt::QueuedConnection);
-  connect(&ioManager, &IO::ConnectionManager::connectedChanged, this, [=, this] {
-    if (!ioManager.isConnected() && !streamAvailable())
+  connect(csvPlayer, &CSV::Player::openChanged, this, [this] { resetData(true); }, Qt::QueuedConnection);
+  connect(mdf4Player, &MDF4::Player::openChanged, this, [this] { resetData(true); }, Qt::QueuedConnection);
+  connect(ioManager, &IO::ConnectionManager::connectedChanged, this, [this] {
+    if (!ioManager->isConnected() && !streamAvailable())
       resetData(true);
   }, Qt::QueuedConnection);
-  connect(&appState, &AppState::projectFileChanged, this, [=, this] { resetData(); }, Qt::QueuedConnection);
-  connect(&frameBuilder, &DataModel::FrameBuilder::jsonFileMapChanged, this, [this] {
+  connect(m_appState, &AppState::projectFileChanged, this, [this] { resetData(); }, Qt::QueuedConnection);
+  connect(m_frameBuilder, &DataModel::FrameBuilder::jsonFileMapChanged, this, [this] {
     m_sourceRawFrames.clear();
     m_datasetReferences.clear();
     m_valuePushes.clear();
   }, Qt::QueuedConnection);
-  connect(&appState, &AppState::operationModeChanged, this, [=, this] {
-    const auto mode = appState.operationMode();
-    if (mode == SerialStudio::ProjectFile) {
-      const int project_pts = projectModel.pointCount();
-      if (project_pts > 0 && m_points != project_pts) {
-        m_points = project_pts;
-        Q_EMIT pointsChanged();
-      }
-
-      const double project_range = projectModel.plotTimeRange();
-      if (project_range > 0 && !qFuzzyCompare(m_plotTimeRange, project_range)) {
-        m_plotTimeRange = project_range;
-        Q_EMIT plotTimeRangeChanged();
-      }
-    } else {
-      if (m_points != kDefaultPlotPoints) {
-        m_points = kDefaultPlotPoints;
-        Q_EMIT pointsChanged();
-      }
-
-      const double saved
-        = qMax(0.001, SerialStudio::toDouble(m_settings.value("Dashboard/PlotTimeRange", 10.0)));
-      if (!qFuzzyCompare(m_plotTimeRange, saved)) {
-        m_plotTimeRange = saved;
-        Q_EMIT plotTimeRangeChanged();
-      }
-    }
-
-    if (mode != SerialStudio::ProjectFile)
-      resetData(true);
-
-    Q_EMIT frozenChanged();
-  }, Qt::QueuedConnection);
+  connect(m_appState, &AppState::operationModeChanged, this, &UI::Dashboard::applyOperationModeDefaults, Qt::QueuedConnection);
   // clang-format on
 
 #ifdef BUILD_COMMERCIAL
-  static auto& sessPlayer = Sessions::Player::instance();
+  static auto* sessPlayer = &Sessions::Player::instance();
   connect(
-    &sessPlayer,
+    sessPlayer,
     &Sessions::Player::openChanged,
     this,
-    [=, this] { resetData(true); },
+    [this] { resetData(true); },
     Qt::QueuedConnection);
 #endif
+}
 
-  connectStreamAvailableInputs();
-  connectViewStateResets(appState);
+/**
+ * @brief Re-derives the point count and the plot window after an operation-mode change: a project
+ *        file dictates both, every other mode falls back to the persisted preference and drops the
+ *        data, because a mode change replaces the widget identity space.
+ */
+void UI::Dashboard::applyOperationModeDefaults()
+{
+  const auto mode = m_appState->operationMode();
+  if (mode == SerialStudio::ProjectFile) {
+    const int project_pts = m_projectModel->pointCount();
+    if (project_pts > 0 && m_points != project_pts) {
+      m_points = project_pts;
+      Q_EMIT pointsChanged();
+    }
 
-  static auto& timerEvents = Misc::TimerEvents::instance();
-  connect(&timerEvents, &Misc::TimerEvents::uiTimeout, this, &UI::Dashboard::onDisplayTick);
+    const double project_range = m_projectModel->plotTimeRange();
+    if (project_range > 0 && !qFuzzyCompare(m_plotTimeRange, project_range)) {
+      m_plotTimeRange = project_range;
+      Q_EMIT plotTimeRangeChanged();
+    }
+  } else {
+    if (m_points != kDefaultPlotPoints) {
+      m_points = kDefaultPlotPoints;
+      Q_EMIT pointsChanged();
+    }
+
+    const double saved =
+      qMax(0.001, SerialStudio::toDouble(m_settings.value("Dashboard/PlotTimeRange", 10.0)));
+    if (!qFuzzyCompare(m_plotTimeRange, saved)) {
+      m_plotTimeRange = saved;
+      Q_EMIT plotTimeRangeChanged();
+    }
+
+    resetData(true);
+  }
+
+  Q_EMIT frozenChanged();
+}
+
+/**
+ * @brief Wires the display tick, the 1 Hz thinning poll and the per-tick ring-drain budget, which
+ *        is re-derived whenever the user changes the display frame rate.
+ */
+void UI::Dashboard::connectDisplayTimers()
+{
+  static auto* timerEvents = &Misc::TimerEvents::instance();
+  connect(timerEvents, &Misc::TimerEvents::uiTimeout, this, &UI::Dashboard::onDisplayTick);
+  connect(timerEvents, &Misc::TimerEvents::timeout1Hz, this, &UI::Dashboard::pollThinningState);
 
   const auto refreshDrainBudget = [this] {
-    m_drainBudgetNs = kDrainBudgetNs / qBound(1, timerEvents.fps(), kMaxDisplayFps);
+    m_drainBudgetNs = kDrainBudgetNs / qBound(1, timerEvents->fps(), kMaxDisplayFps);
   };
-  connect(&timerEvents, &Misc::TimerEvents::fpsChanged, this, refreshDrainBudget);
+
+  connect(timerEvents, &Misc::TimerEvents::fpsChanged, this, refreshDrainBudget);
   refreshDrainBudget();
+}
 
-  connect(&timerEvents, &Misc::TimerEvents::timeout1Hz, this, &UI::Dashboard::pollThinningState);
-
+/**
+ * @brief Republishes the notifications QML binds to through the facade: the tool-window flags and
+ *        action list owned by DashboardTools, and the project's freeze and display-title edits.
+ */
+void UI::Dashboard::connectToolSignals()
+{
   connect(this, &UI::Dashboard::widgetCountChanged, this, &UI::Dashboard::actionStatusChanged);
 
   // clang-format off
@@ -273,19 +315,16 @@ UI::Dashboard::Dashboard()
   // clang-format on
 
   connect(
-    &projectModel, &DataModel::ProjectModel::frozenChanged, this, &UI::Dashboard::frozenChanged);
-  connect(&projectModel,
+    m_projectModel, &DataModel::ProjectModel::frozenChanged, this, &UI::Dashboard::frozenChanged);
+  connect(m_projectModel,
           &DataModel::ProjectModel::widgetDisplayChanged,
           this,
           &UI::Dashboard::refreshDisplayTitles);
 #ifdef BUILD_COMMERCIAL
-  static auto& lemonSqueezy = Licensing::LemonSqueezy::instance();
+  static auto* lemonSqueezy = &Licensing::LemonSqueezy::instance();
   connect(
-    &lemonSqueezy, &Licensing::LemonSqueezy::activatedChanged, this, &UI::Dashboard::frozenChanged);
+    lemonSqueezy, &Licensing::LemonSqueezy::activatedChanged, this, &UI::Dashboard::frozenChanged);
 #endif
-
-  updateStreamAvailable();
-  restorePersistedSettings();
 }
 
 /**
@@ -858,31 +897,6 @@ UI::Dashboard& UI::Dashboard::instance()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief View state one widget pushed (cursors, zoom/pan, paused, ...); empty when none.
- *        View state is session state, never project state: it never marks the project modified.
- */
-QJsonObject UI::Dashboard::widgetViewState(const QString& widgetId) const
-{
-  return m_viewState.widgetViewState(widgetId);
-}
-
-/**
- * @brief Global view state (active workspace, plot time range, theme id).
- */
-QJsonObject UI::Dashboard::globalViewState() const
-{
-  return m_viewState.globalViewState();
-}
-
-/**
- * @brief The whole view state as one compact JSON document (what a recording bundles).
- */
-QString UI::Dashboard::viewStateJson() const
-{
-  return m_viewState.viewStateJson();
-}
-
-/**
  * @brief Records one per-widget view value; emits viewStateChanged only on a real change so the
  *        recording bundle's debounce sees edits, not repaints.
  */
@@ -935,31 +949,6 @@ bool UI::Dashboard::available() const
 }
 
 /**
- * @brief Returns true if a rectangle with a list of actions should be displayed alongside the
- * dashboard.
- */
-bool UI::Dashboard::showActionPanel() const noexcept
-{
-  return m_viewState.showActionPanel();
-}
-
-/**
- * @brief Returns true if the toolbar should automatically hide when the dashboard is visible.
- */
-bool UI::Dashboard::autoHideToolbar() const noexcept
-{
-  return m_viewState.autoHideToolbar();
-}
-
-/**
- * @brief Returns true if smart alignment guides are shown during manual-mode gestures.
- */
-bool UI::Dashboard::showAlignmentGuides() const noexcept
-{
-  return m_viewState.showAlignmentGuides();
-}
-
-/**
  * @brief Returns the effective dashboard freeze state: the project's stored flag gated on an
  *        active Pro/Trial license and ProjectFile mode; QML-binding-time only, never read on
  *        the frame path. QuickPlot/ConsoleOnly is always live so a frozen project cannot lock
@@ -967,19 +956,8 @@ bool UI::Dashboard::showAlignmentGuides() const noexcept
  */
 bool UI::Dashboard::frozen() const
 {
-  static auto& appState     = AppState::instance();
-  static auto& projectModel = DataModel::ProjectModel::instance();
-  return projectModel.frozen() && SerialStudio::activated()
-      && appState.operationMode() == SerialStudio::ProjectFile;
-}
-
-/**
- * @brief Returns whether the parse governor is thinning any source, polled at 1 Hz for the
- *        taskbar badge; never read or refreshed on the frame path.
- */
-bool UI::Dashboard::thinningActive() const noexcept
-{
-  return m_thinningActive;
+  return m_projectModel->frozen() && SerialStudio::activated()
+      && m_appState->operationMode() == SerialStudio::ProjectFile;
 }
 
 /**
@@ -988,38 +966,11 @@ bool UI::Dashboard::thinningActive() const noexcept
  */
 void UI::Dashboard::pollThinningState()
 {
-  static auto& builder    = DataModel::FrameBuilder::instance();
-  const bool now_thinning = builder.parseBudgetThinning();
+  const bool now_thinning = m_frameBuilder->parseBudgetThinning();
   if (now_thinning != m_thinningActive) {
     m_thinningActive = now_thinning;
     Q_EMIT thinningActiveChanged();
   }
-}
-
-/**
- * @brief Returns the visible plot time window in seconds (newest sample at 0).
- */
-double UI::Dashboard::plotTimeRange() const noexcept
-{
-  return m_plotTimeRange;
-}
-
-/**
- * @brief Returns the margin (px) reserved between the widget canvas and the pane edges,
- *        shared by the auto and manual layout modes.
- */
-int UI::Dashboard::layoutMargin() const noexcept
-{
-  return m_viewState.layoutMargin();
-}
-
-/**
- * @brief Returns the spacing (px) between adjacent windows in both layout modes: the auto
- *        tiler inserts it, manual gestures snap and weld to it (-1 = shared border).
- */
-int UI::Dashboard::layoutSpacing() const noexcept
-{
-  return m_viewState.layoutSpacing();
 }
 
 /**
@@ -1140,38 +1091,6 @@ void UI::Dashboard::connectViewStateResets(AppState& appState)
 }
 
 /**
- * @brief Returns true if a terminal widget should be displayed within the dashboard.
- */
-bool UI::Dashboard::terminalEnabled() const noexcept
-{
-  return m_tools.terminalEnabled();
-}
-
-/**
- * @brief Returns true if the notification log widget should be displayed within the dashboard.
- */
-bool UI::Dashboard::notificationLogEnabled() const noexcept
-{
-  return m_tools.notificationLogEnabled();
-}
-
-/**
- * @brief Returns true if the clock widget should be displayed within the dashboard.
- */
-bool UI::Dashboard::clockEnabled() const noexcept
-{
-  return m_tools.clockEnabled();
-}
-
-/**
- * @brief Returns true if the stopwatch widget should be displayed within the dashboard.
- */
-bool UI::Dashboard::stopwatchEnabled() const noexcept
-{
-  return m_tools.stopwatchEnabled();
-}
-
-/**
  * @brief Determines if the point-selector widget should be visible.
  */
 bool UI::Dashboard::pointsWidgetVisible() const
@@ -1199,53 +1118,8 @@ bool UI::Dashboard::containsCommercialFeatures() const noexcept
 }
 
 //--------------------------------------------------------------------------------------------------
-// UI configuration queries
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Gets the current point/sample count setting for the dashboard plots.
- */
-int UI::Dashboard::points() const noexcept
-{
-  return m_points;
-}
-
-/**
- * @brief Retrieves the count of actions available within the dashboard.
- */
-int UI::Dashboard::actionCount() const
-{
-  return m_tools.actionCount();
-}
-
-/**
- * @brief Gets the total count of widgets currently available on the dashboard.
- */
-int UI::Dashboard::totalWidgetCount() const noexcept
-{
-  return m_widgetCount;
-}
-
-//--------------------------------------------------------------------------------------------------
 // Data & widget queries
 //--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Checks if the current frame is valid for processing.
- */
-bool UI::Dashboard::frameValid() const
-{
-  return m_lastFrame.groups.size() > 0;
-}
-
-/**
- * @brief Retrieves the relative index of a widget within its type group.
- */
-int UI::Dashboard::relativeIndex(const int widgetIndex) const
-{
-  const auto it = m_widgetMap.constFind(widgetIndex);
-  return it != m_widgetMap.cend() ? it->second : -1;
-}
 
 /**
  * @brief Formats a numerical value according to its context range.
@@ -1253,15 +1127,6 @@ int UI::Dashboard::relativeIndex(const int widgetIndex) const
 QString UI::Dashboard::formatValue(double val, double min, double max) const
 {
   return FMT_VAL(val, min, max);
-}
-
-/**
- * @brief Retrieves the type of widget associated with a given widget index.
- */
-SerialStudio::DashboardWidget UI::Dashboard::widgetType(const int widgetIndex) const
-{
-  const auto it = m_widgetMap.constFind(widgetIndex);
-  return it != m_widgetMap.cend() ? it->first : SerialStudio::DashboardNoWidget;
 }
 
 /**
@@ -1283,14 +1148,6 @@ int UI::Dashboard::widgetCount(const SerialStudio::DashboardWidget widget) const
   }
 
   return 0;
-}
-
-/**
- * @brief Returns the package id owning one entry of the extension bucket, empty when out of range.
- */
-QString UI::Dashboard::extensionIdAt(const bool group, const int bucketIndex) const
-{
-  return m_widgetMapBuilder.extensionIdAt(group, bucketIndex);
 }
 
 /**
@@ -1337,38 +1194,6 @@ UI::Dashboard::ExtensionSlot UI::Dashboard::widgetSlot(const SerialStudio::Dashb
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Retrieves the title of the current frame in the dashboard.
- */
-const QString& UI::Dashboard::title() const
-{
-  return m_lastFrame.title;
-}
-
-/**
- * @brief Returns a list of available dashboard actions with their metadata.
- */
-QVariantList UI::Dashboard::actions() const
-{
-  return m_tools.actions();
-}
-
-/**
- * @brief Returns the runtime index of the action with the given public @p actionId, or -1.
- */
-int UI::Dashboard::actionIndexForId(int actionId) const noexcept
-{
-  return m_tools.actionIndexForId(actionId);
-}
-
-/**
- * @brief Retrieves a map of all widgets/windows in the dashboard.
- */
-const SerialStudio::WidgetMap& UI::Dashboard::widgetMap() const
-{
-  return m_widgetMap;
-}
-
-/**
  * @brief Resolves a Group.uniqueId to its positional groupId in the live frame.
  */
 int UI::Dashboard::groupIdForUniqueId(int uniqueId) const
@@ -1398,26 +1223,9 @@ int UI::Dashboard::groupUniqueIdForGroupId(int groupId) const
   return -1;
 }
 
-/**
- * @brief Returns the min/max hold state for one extreme-hold dataset; invalid when the dataset
- *        never opted in or no finite sample arrived since the last data reset.
- */
-UI::Dashboard::DatasetExtremes UI::Dashboard::datasetExtremes(int uniqueId) const
-{
-  return m_datasetExtremes.value(uniqueId);
-}
-
 //--------------------------------------------------------------------------------------------------
 // Dataset & group access functions
 //--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Provides access to the map of dataset objects.
- */
-const QMap<int, DataModel::Dataset>& UI::Dashboard::datasets() const
-{
-  return m_datasets;
-}
 
 /**
  * @brief Retrieves a group widget by type and index.
@@ -1461,26 +1269,6 @@ const DataModel::Dataset& UI::Dashboard::getDatasetWidget(
   }
 
   return it->at(index);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Frame access
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Retrieves the last unmodified DataModel frame for the dashboard.
- */
-const DataModel::Frame& UI::Dashboard::rawFrame()
-{
-  return m_lastFrame;
-}
-
-/**
- * @brief Retrieves the processed DataModel frame for the dashboard.
- */
-const DataModel::Frame& UI::Dashboard::processedFrame()
-{
-  return m_lastFrame;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1567,34 +1355,6 @@ const std::vector<DSP::EnvelopeRing>& UI::Dashboard::multiplotTimeRings(const in
   return it.value();
 }
 
-/**
- * @brief Returns the sweep/trigger engine for a time-axis plot widget.
- */
-const DSP::SweepEngine& UI::Dashboard::plotSweep(const int index) const
-{
-  const auto it = m_plotSweep.find(index);
-  if (it == m_plotSweep.end()) [[unlikely]] {
-    static const DSP::SweepEngine kEmpty{};
-    return kEmpty;
-  }
-
-  return it.value();
-}
-
-/**
- * @brief Returns the sweep/trigger engine for a time-axis multiplot widget.
- */
-const DSP::SweepEngine& UI::Dashboard::multiplotSweep(const int index) const
-{
-  const auto it = m_multiplotSweep.find(index);
-  if (it == m_multiplotSweep.end()) [[unlikely]] {
-    static const DSP::SweepEngine kEmpty{};
-    return kEmpty;
-  }
-
-  return it.value();
-}
-
 #ifdef BUILD_COMMERCIAL
 /**
  * @brief Returns the 3D trajectory data for a 3D plot widget.
@@ -1634,56 +1394,6 @@ const DSP::AxisData& UI::Dashboard::waterfallData(const int index) const
 #endif
 
 //--------------------------------------------------------------------------------------------------
-// Plot active status getters
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Checks whether a plot is currently active.
- */
-bool UI::Dashboard::plotRunning(const int index)
-{
-  if (m_activePlots.contains(index))
-    return m_activePlots[index];
-
-  return false;
-}
-
-/**
- * @brief Checks whether an FFT plot is currently active.
- */
-bool UI::Dashboard::fftPlotRunning(const int index)
-{
-  if (m_activeFFTPlots.contains(index))
-    return m_activeFFTPlots[index];
-
-  return false;
-}
-
-/**
- * @brief Checks whether a multiplot is currently active.
- */
-bool UI::Dashboard::multiplotRunning(const int index)
-{
-  if (m_activeMultiplots.contains(index))
-    return m_activeMultiplots[index];
-
-  return false;
-}
-
-#ifdef BUILD_COMMERCIAL
-/**
- * @brief Checks whether a waterfall plot is currently active.
- */
-bool UI::Dashboard::waterfallRunning(const int index)
-{
-  if (m_activeWaterfalls.contains(index))
-    return m_activeWaterfalls[index];
-
-  return false;
-}
-#endif
-
-//--------------------------------------------------------------------------------------------------
 // UI configuration setters
 //--------------------------------------------------------------------------------------------------
 
@@ -1695,18 +1405,17 @@ void UI::Dashboard::setPoints(const int points)
   if (m_points != points) {
     m_points = points;
 
-    static auto& appState = AppState::instance();
-    if (appState.operationMode() != SerialStudio::ProjectFile)
+    if (m_appState->operationMode() != SerialStudio::ProjectFile)
       m_settings.setValue("Dashboard/Points", m_points);
 
-    auto savedPlotRings      = snapshotPlotTimeRings();
-    auto savedMultiplotRings = snapshotMultiplotTimeRings();
+    auto savedPlotRings      = m_replaySeek.snapshotPlotTimeRings();
+    auto savedMultiplotRings = m_replaySeek.snapshotMultiplotTimeRings();
 
     configureLineSeries();
     configureMultiLineSeries();
 
-    restorePlotTimeRings(savedPlotRings);
-    restoreMultiplotTimeRings(savedMultiplotRings);
+    m_replaySeek.restorePlotTimeRings(savedPlotRings);
+    m_replaySeek.restoreMultiplotTimeRings(savedMultiplotRings);
 
     Q_EMIT pointsChanged();
   }
@@ -1745,14 +1454,12 @@ void UI::Dashboard::clearPushTables()
  */
 void UI::Dashboard::resetData(const bool notify)
 {
-  static auto& appState = AppState::instance();
-  if (appState.operationMode() != SerialStudio::ProjectFile && m_points != kDefaultPlotPoints) {
+  if (m_appState->operationMode() != SerialStudio::ProjectFile && m_points != kDefaultPlotPoints) {
     m_points = kDefaultPlotPoints;
     Q_EMIT pointsChanged();
   }
 
-  static auto& widgetRegistry = WidgetRegistry::instance();
-  widgetRegistry.clear();
+  m_widgetRegistry->clear();
 
   m_fftValues.clear();
   m_pltValues.clear();
@@ -1808,11 +1515,11 @@ void UI::Dashboard::resetData(const bool notify)
   m_quarantinedSources.clear();
   m_updateRetryInProgress = false;
 
-  if (appState.operationMode() == SerialStudio::ProjectFile) {
-    static auto& frameBuilder = DataModel::FrameBuilder::instance();
+  if (m_appState->operationMode() == SerialStudio::ProjectFile) {
     DataModel::Frame templateFrame;
-    frameBuilder.invokeOnBuilderThreadBlocking(
-      [&templateFrame] { templateFrame = frameBuilder.frame(); });
+    auto* builder = m_frameBuilder;
+    builder->invokeOnBuilderThreadBlocking(
+      [&templateFrame, builder] { templateFrame = builder->frame(); });
     m_tools.configureActions(templateFrame);
   }
 
@@ -1824,8 +1531,7 @@ void UI::Dashboard::resetData(const bool notify)
     // marks; the reconfigure path re-enters resetData(false), and forgetting there loops
     // reconfigure -> republish -> reconfigure at block rate (2026-08-19 incident).
     // code-verify on
-    static auto& frameBuilder = DataModel::FrameBuilder::instance();
-    frameBuilder.forgetPublishedStructures();
+    m_frameBuilder->forgetPublishedStructures();
 
     m_updateRequired = true;
 
@@ -1862,12 +1568,7 @@ void UI::Dashboard::clearPlotData()
     for (auto& ring : it.value())
       ring.clear();
 
-  for (auto it = m_plotSweep.begin(); it != m_plotSweep.end(); ++it)
-    it.value().resetState();
-
-  for (auto it = m_multiplotSweep.begin(); it != m_multiplotSweep.end(); ++it)
-    it.value().resetState();
-
+  m_plotControls.resetSweepStates();
   resetPlotClocks();
 
   for (auto& multiSeries : m_multipltValues)
@@ -1894,189 +1595,21 @@ void UI::Dashboard::clearPlotData()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Packs a (sourceId, uniqueId) pair into one hash key; uniqueIds alone are not unique
- *        across sources.
- */
-qint64 UI::Dashboard::replaySeekKey(int sourceId, int uniqueId) noexcept
-{
-  return (static_cast<qint64>(sourceId) << 32) | static_cast<quint32>(uniqueId);
-}
-
-/**
- * @brief Lists every (sourceId, uniqueId) pair the plot widgets consume, including dataset-X
- *        axis sources and multiplot curves, so a replay player knows which columns to sample
- *        for bulkLoadPlotWindow().
- */
-QList<std::pair<int, int>> UI::Dashboard::replaySeekSeries() const
-{
-  QList<std::pair<int, int>> out;
-  QSet<qint64> seen;
-
-  auto add = [&](int sourceId, int uniqueId) {
-    const qint64 key = replaySeekKey(sourceId, uniqueId);
-    if (seen.contains(key))
-      return;
-
-    seen.insert(key);
-    out.append({sourceId, uniqueId});
-  };
-
-  const int plotCount = widgetCount(SerialStudio::DashboardPlot);
-  for (int i = 0; i < plotCount; ++i) {
-    const auto& ds = getDatasetWidget(SerialStudio::DashboardPlot, i);
-    add(ds.sourceId, ds.uniqueId);
-
-    if (useTimeXAxis(ds))
-      continue;
-
-    const auto xIt = m_datasets.constFind(ds.xAxisId);
-    if (xIt != m_datasets.constEnd())
-      add(xIt.value().sourceId, ds.xAxisId);
-  }
-
-  const int multiCount = widgetCount(SerialStudio::DashboardMultiPlot);
-  for (int i = 0; i < multiCount; ++i) {
-    const auto& group = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
-    for (const auto& ds : group.datasets)
-      add(group.sourceId, ds.uniqueId);
-  }
-
-  return out;
-}
-
-/**
- * @brief Fills one single-plot widget's ring from the seek window: decimating TimeRing for
- *        time plots, y/x sample rings otherwise. @p filled dedups shared sample rings.
- */
-void UI::Dashboard::fillSeekPlotSingle(int index,
-                                       const QVector<double>& timesSec,
-                                       const QHash<qint64, QVector<double>>& series,
-                                       double timeOffset,
-                                       QSet<const DSP::AxisData*>& filled)
-{
-  SS_ASSERT(index >= 0, return);
-  SS_ASSERT(index < widgetCount(SerialStudio::DashboardPlot), return);
-
-  const auto& ds     = getDatasetWidget(SerialStudio::DashboardPlot, index);
-  const auto& values = series.value(replaySeekKey(ds.sourceId, ds.uniqueId));
-  const int count    = qMin(timesSec.size(), values.size());
-
-  if (useTimeXAxis(ds)) {
-    const auto rIt = m_plotTimeRings.find(index);
-    if (rIt == m_plotTimeRings.end()) [[unlikely]]
-      return;
-
-    rIt.value().clear();
-    for (int k = 0; k < count; ++k)
-      rIt.value().appendDecimated(timesSec[k] + timeOffset, values[k]);
-
-    return;
-  }
-
-  const auto yIt = m_yAxisData.find(ds.uniqueId);
-  if (yIt != m_yAxisData.end() && !filled.contains(&yIt.value())) {
-    filled.insert(&yIt.value());
-    yIt.value().clear();
-    for (int k = 0; k < count; ++k)
-      yIt.value().push(values[k]);
-  }
-
-  const auto xDsIt = m_datasets.constFind(ds.xAxisId);
-  if (xDsIt == m_datasets.constEnd())
-    return;
-
-  const auto xIt = m_xAxisData.find(ds.xAxisId);
-  if (xIt == m_xAxisData.end() || filled.contains(&xIt.value()))
-    return;
-
-  const auto& xValues = series.value(replaySeekKey(xDsIt.value().sourceId, ds.xAxisId));
-  const int xCount    = qMin(timesSec.size(), xValues.size());
-  filled.insert(&xIt.value());
-  xIt.value().clear();
-  for (int k = 0; k < xCount; ++k)
-    xIt.value().push(xValues[k]);
-}
-
-/**
- * @brief Fills one multiplot widget's curves from the seek window: per-curve TimeRings for
- *        time-mode groups, per-curve y sample rings otherwise.
- */
-void UI::Dashboard::fillSeekPlotMulti(int index,
-                                      const QVector<double>& timesSec,
-                                      const QHash<qint64, QVector<double>>& series,
-                                      double timeOffset)
-{
-  SS_ASSERT(index >= 0, return);
-  SS_ASSERT(index < widgetCount(SerialStudio::DashboardMultiPlot), return);
-
-  const auto& group = getGroupWidget(SerialStudio::DashboardMultiPlot, index);
-
-  const auto rIt = m_multiplotTimeRings.find(index);
-  if (rIt != m_multiplotTimeRings.end()) {
-    auto& rings        = rIt.value();
-    const size_t count = std::min(group.datasets.size(), rings.size());
-    for (size_t j = 0; j < count; ++j) {
-      const auto& ds     = group.datasets[j];
-      const auto& values = series.value(replaySeekKey(group.sourceId, ds.uniqueId));
-      const int n        = qMin(timesSec.size(), values.size());
-      rings[j].clear();
-      for (int k = 0; k < n; ++k)
-        rings[j].appendDecimated(timesSec[k] + timeOffset, values[k]);
-    }
-
-    return;
-  }
-
-  if (index >= m_multipltValues.size()) [[unlikely]]
-    return;
-
-  auto& multiSeries  = m_multipltValues[index];
-  const size_t count = std::min(group.datasets.size(), multiSeries.y.size());
-  for (size_t j = 0; j < count; ++j) {
-    const auto& ds     = group.datasets[j];
-    const auto& values = series.value(replaySeekKey(group.sourceId, ds.uniqueId));
-    const int n        = qMin(timesSec.size(), values.size());
-    multiSeries.y[j].clear();
-    for (int k = 0; k < n; ++k)
-      multiSeries.y[j].push(values[k]);
-  }
-}
-
-/**
- * @brief Rebuilds every plot ring from a replay seek window (spec 0020): ascending recorded
- *        seconds + series keyed by replaySeekKey, normalized to end at 0 so the decimation
- *        grid and later live appends stay monotonic. Writes rings only and resets the plot
- *        clocks so play-after-scrub re-anchors; FFT/GPS/3D/waterfall settle at rest.
+ * @brief Rebuilds every plot ring from a replay seek window (spec 0020), then re-anchors what the
+ *        rewritten timeline invalidated: the sweep captures and the plot clocks. Resetting the
+ *        clocks stays the facade's job -- m_plotClocks and m_plotDisplayTimeSec are one state and
+ *        only resetPlotClocks() clears both.
  */
 void UI::Dashboard::bulkLoadPlotWindow(const QVector<double>& timesSec,
                                        const QHash<qint64, QVector<double>>& series)
 {
-  // code-verify off
-  // Debug-only ordering check: is_sorted is O(n) over the whole seek window, so a release
-  // evaluation would walk every sample on every scrub.
-  Q_ASSERT(std::is_sorted(timesSec.cbegin(), timesSec.cend()));
-  // code-verify on
-
-  if (!m_layoutValid || timesSec.isEmpty()) [[unlikely]]
+  if (!m_layoutValid) [[unlikely]]
     return;
 
-  const double timeOffset = -timesSec.last();
+  if (!m_replaySeek.bulkLoadPlotWindow(timesSec, series))
+    return;
 
-  QSet<const DSP::AxisData*> filled;
-  const int plotCount = widgetCount(SerialStudio::DashboardPlot);
-  for (int i = 0; i < plotCount; ++i)
-    fillSeekPlotSingle(i, timesSec, series, timeOffset, filled);
-
-  const int multiCount = widgetCount(SerialStudio::DashboardMultiPlot);
-  for (int i = 0; i < multiCount; ++i)
-    fillSeekPlotMulti(i, timesSec, series, timeOffset);
-
-  for (auto it = m_plotSweep.begin(); it != m_plotSweep.end(); ++it)
-    it.value().resetState();
-
-  for (auto it = m_multiplotSweep.begin(); it != m_multiplotSweep.end(); ++it)
-    it.value().resetState();
-
+  m_plotControls.resetSweepStates();
   resetPlotClocks();
   m_updateRequired = true;
 }
@@ -2134,12 +1667,10 @@ void UI::Dashboard::setLayoutSpacing(const int spacing)
  */
 void UI::Dashboard::setFrozen(const bool frozen)
 {
-  static auto& appState = AppState::instance();
-  if (appState.operationMode() != SerialStudio::ProjectFile)
+  if (m_appState->operationMode() != SerialStudio::ProjectFile)
     return;
 
-  static auto& projectModel = DataModel::ProjectModel::instance();
-  projectModel.setFrozen(frozen);
+  m_projectModel->setFrozen(frozen);
 }
 
 /**
@@ -2153,22 +1684,21 @@ void UI::Dashboard::setPlotTimeRange(const double seconds)
 
   m_plotTimeRange = clamped;
 
-  static auto& appState = AppState::instance();
-  if (appState.operationMode() != SerialStudio::ProjectFile)
+  if (m_appState->operationMode() != SerialStudio::ProjectFile)
     m_settings.setValue("Dashboard/PlotTimeRange", m_plotTimeRange);
 
-  auto savedPlotRings            = snapshotPlotTimeRings();
-  auto savedMultiplotRings       = snapshotMultiplotTimeRings();
+  auto savedPlotRings            = m_replaySeek.snapshotPlotTimeRings();
+  auto savedMultiplotRings       = m_replaySeek.snapshotMultiplotTimeRings();
   const auto savedPlotSweep      = m_plotSweep;
   const auto savedMultiplotSweep = m_multiplotSweep;
 
   configureLineSeries();
   configureMultiLineSeries();
 
-  restorePlotTimeRings(savedPlotRings);
-  restoreMultiplotTimeRings(savedMultiplotRings);
-  restorePlotSweepConfig(savedPlotSweep);
-  restoreMultiplotSweepConfig(savedMultiplotSweep);
+  m_replaySeek.restorePlotTimeRings(savedPlotRings);
+  m_replaySeek.restoreMultiplotTimeRings(savedMultiplotRings);
+  m_plotControls.restorePlotSweepConfig(savedPlotSweep);
+  m_plotControls.restoreMultiplotSweepConfig(savedMultiplotSweep);
 
   m_updateRequired = true;
   Q_EMIT plotTimeRangeChanged();
@@ -2181,192 +1711,6 @@ void UI::Dashboard::setSettingsPersistent(const bool persistent)
 {
   m_tools.setSettingsPersistent(persistent);
   m_viewState.setSettingsPersistent(persistent);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Dashboard tools (terminal, notification log, clock, stopwatch)
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Shows or hides the terminal tool window. The widget itself is always registered;
- *        the flag only drives external-window visibility, so no rebuild occurs.
- */
-void UI::Dashboard::setTerminalEnabled(const bool enabled)
-{
-  m_tools.setTerminalEnabled(enabled);
-}
-
-/**
- * @brief Shows or hides the notification log tool window (Pro-only widget).
- */
-void UI::Dashboard::setNotificationLogEnabled(const bool enabled)
-{
-  m_tools.setNotificationLogEnabled(enabled);
-}
-
-/**
- * @brief Shows or hides the clock tool window.
- */
-void UI::Dashboard::setClockEnabled(const bool enabled)
-{
-  m_tools.setClockEnabled(enabled);
-}
-
-/**
- * @brief Shows or hides the stopwatch tool window.
- */
-void UI::Dashboard::setStopwatchEnabled(const bool enabled)
-{
-  m_tools.setStopwatchEnabled(enabled);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Action handling
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Activates a dashboard action by transmitting its associated data and handling timer
- *        logic. actionStatusChanged makes QML rebuild the whole actions list, so it only fires
- *        when a timer's activity flips; per-tick transmissions emit nothing.
- */
-void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
-{
-  m_tools.activateAction(index, guiTrigger);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Plot active state setters
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Sets the active state of a plot.
- */
-void UI::Dashboard::setPlotRunning(const int index, const bool enabled)
-{
-  if (m_activePlots.contains(index))
-    m_activePlots[index] = enabled;
-}
-
-/**
- * @brief Sets the active state of an FFT plot.
- */
-void UI::Dashboard::setFFTPlotRunning(const int index, const bool enabled)
-{
-  if (m_activeFFTPlots.contains(index))
-    m_activeFFTPlots[index] = enabled;
-}
-
-/**
- * @brief Sets the active state of a multiplot.
- */
-void UI::Dashboard::setMultiplotRunning(const int index, const bool enabled)
-{
-  if (m_activeMultiplots.contains(index))
-    m_activeMultiplots[index] = enabled;
-}
-
-#ifdef BUILD_COMMERCIAL
-/**
- * @brief Sets the active state of a waterfall plot.
- */
-void UI::Dashboard::setWaterfallRunning(const int index, const bool enabled)
-{
-  if (m_activeWaterfalls.contains(index))
-    m_activeWaterfalls[index] = enabled;
-}
-#endif
-
-/**
- * @brief Configures sweep/trigger mode for a plot; gated to commercial tiers.
- */
-void UI::Dashboard::setPlotSweep(const int index,
-                                 const bool enabled,
-                                 const double level,
-                                 const int edge,
-                                 const int mode,
-                                 const double holdoff,
-                                 const double timebase)
-{
-  auto it = m_plotSweep.find(index);
-  if (it == m_plotSweep.end())
-    return;
-
-#ifdef BUILD_COMMERCIAL
-  const auto& tk = Licensing::CommercialToken::current();
-  const bool ok  = enabled && tk.isValid() && SS_LICENSE_GUARD();
-#else
-  const bool ok = false;
-#endif
-
-  auto& engine = it.value();
-  engine.setTrigger(level, edge, mode, holdoff, 0);
-  engine.setTimebase(timebase);
-  if (engine.enabled != ok) {
-    engine.enabled = ok;
-    engine.resetState();
-  }
-}
-
-/**
- * @brief Configures sweep/trigger mode for a multiplot; gated to commercial tiers.
- */
-void UI::Dashboard::setMultiplotSweep(const int index,
-                                      const bool enabled,
-                                      const double level,
-                                      const int edge,
-                                      const int mode,
-                                      const double holdoff,
-                                      const int triggerCurve,
-                                      const double timebase)
-{
-  auto it = m_multiplotSweep.find(index);
-  if (it == m_multiplotSweep.end())
-    return;
-
-#ifdef BUILD_COMMERCIAL
-  const auto& tk = Licensing::CommercialToken::current();
-  const bool ok  = enabled && tk.isValid() && SS_LICENSE_GUARD();
-#else
-  const bool ok = false;
-#endif
-
-  auto& engine = it.value();
-  engine.setTrigger(level, edge, mode, holdoff, triggerCurve);
-  engine.setTimebase(timebase);
-  if (engine.enabled != ok) {
-    engine.enabled = ok;
-    engine.resetState();
-  }
-}
-
-/**
- * @brief Sets how many completed sweeps a plot retains (spec 0061; 0 = off, byte-budget clamped).
- */
-void UI::Dashboard::setPlotSweepRetention(const int index, const int count)
-{
-  auto it = m_plotSweep.find(index);
-  if (it != m_plotSweep.end())
-    it.value().setSegmentRetention(count);
-}
-
-/**
- * @brief Re-arms a single-shot plot sweep capture.
- */
-void UI::Dashboard::armPlotSweep(const int index)
-{
-  auto it = m_plotSweep.find(index);
-  if (it != m_plotSweep.end())
-    it.value().arm();
-}
-
-/**
- * @brief Re-arms a single-shot multiplot sweep capture.
- */
-void UI::Dashboard::armMultiplotSweep(const int index)
-{
-  auto it = m_multiplotSweep.find(index);
-  if (it != m_multiplotSweep.end())
-    it.value().arm();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2553,8 +1897,8 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
   auto savedClocks        = m_plotClocks;
   const double savedClock = m_plotDisplayTimeSec;
 
-  auto savedPlotRings      = snapshotPlotTimeRings();
-  auto savedMultiplotRings = snapshotMultiplotTimeRings();
+  auto savedPlotRings      = m_replaySeek.snapshotPlotTimeRings();
+  auto savedMultiplotRings = m_replaySeek.snapshotMultiplotTimeRings();
 
   resetData(false);
 
@@ -2605,8 +1949,8 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
   updateDataSeries();
   m_tools.configureActions(frame);
 
-  restorePlotTimeRings(savedPlotRings);
-  restoreMultiplotTimeRings(savedMultiplotRings);
+  m_replaySeek.restorePlotTimeRings(savedPlotRings);
+  m_replaySeek.restoreMultiplotTimeRings(savedMultiplotRings);
 
   m_layoutValid = true;
 
@@ -2626,7 +1970,7 @@ void UI::Dashboard::refreshDisplayTitles()
 
   m_widgetMapBuilder.applyDisplayTitles();
 
-  static auto& registry = WidgetRegistry::instance();
+  auto& registry = *m_widgetRegistry;
   for (auto i = m_widgetGroups.constBegin(); i != m_widgetGroups.constEnd(); ++i) {
     const auto key = i.key();
     for (int j = 0; j < i.value().size(); ++j)
@@ -3090,170 +2434,6 @@ void UI::Dashboard::registerXAxisIfNeeded(const DataModel::Dataset& dataset)
 
   DSP::AxisData xAxis(points() + 1);
   m_xAxisData.insert(xSource, xAxis);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Time-ring snapshot / restore
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Snapshots plot time-ring contents keyed by dataset uniqueId.
- */
-QHash<qint64, DSP::EnvelopeRing> UI::Dashboard::snapshotPlotTimeRings() const
-{
-  QHash<qint64, DSP::EnvelopeRing> out;
-  const int n = widgetCount(SerialStudio::DashboardPlot);
-  for (int i = 0; i < n; ++i) {
-    const auto it = m_plotTimeRings.find(i);
-    if (it == m_plotTimeRings.end())
-      continue;
-
-    const auto& d = getDatasetWidget(SerialStudio::DashboardPlot, i);
-    out.insert(ringSnapshotKey(d.sourceId, d.uniqueId), it.value());
-  }
-
-  return out;
-}
-
-/**
- * @brief Snapshots multiplot time-ring contents keyed by group uniqueId.
- */
-QHash<qint64, std::vector<DSP::EnvelopeRing>> UI::Dashboard::snapshotMultiplotTimeRings() const
-{
-  QHash<qint64, std::vector<DSP::EnvelopeRing>> out;
-  const int n = widgetCount(SerialStudio::DashboardMultiPlot);
-  for (int i = 0; i < n; ++i) {
-    const auto it = m_multiplotTimeRings.find(i);
-    if (it == m_multiplotTimeRings.end())
-      continue;
-
-    const auto& g = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
-    out.insert(ringSnapshotKey(g.sourceId, g.uniqueId), it.value());
-  }
-
-  return out;
-}
-
-/**
- * @brief Replays a saved ring's level-0 samples into @p target via appendDecimated, which rebuilds
- *        the coarse levels as a side effect. Used when the new ring has a different capacity /
- *        interval than the saved one.
- */
-static void replayTimeRing(const DSP::EnvelopeRing& saved, DSP::EnvelopeRing& target)
-{
-  const std::size_t n = std::min(saved.level0.time.size(), saved.level0.value.size());
-  for (std::size_t k = 0; k < n; ++k)
-    target.appendDecimated(saved.level0.time[k], saved.level0.value[k]);
-}
-
-/**
- * @brief Restores saved plot rings into the currently configured widget slots. Splices when
- *        the new ring shape matches the saved one, replays through appendDecimated otherwise.
- */
-void UI::Dashboard::restorePlotTimeRings(QHash<qint64, DSP::EnvelopeRing>& snapshot)
-{
-  if (snapshot.isEmpty())
-    return;
-
-  const int n = widgetCount(SerialStudio::DashboardPlot);
-  for (int i = 0; i < n; ++i) {
-    auto ringIt = m_plotTimeRings.find(i);
-    if (ringIt == m_plotTimeRings.end())
-      continue;
-
-    const auto& d = getDatasetWidget(SerialStudio::DashboardPlot, i);
-    auto savedIt  = snapshot.find(ringSnapshotKey(d.sourceId, d.uniqueId));
-    if (savedIt == snapshot.end())
-      continue;
-
-    auto& live = ringIt.value();
-    auto& kept = savedIt.value();
-    if (kept.level0.time.raw() == nullptr)
-      continue;
-
-    if (live.level0.time.capacity() == kept.level0.time.capacity()
-        && qFuzzyCompare(live.level0.interval, kept.level0.interval))
-      live = std::move(kept);
-    else
-      replayTimeRing(kept, live);
-
-    snapshot.erase(savedIt);
-  }
-}
-
-/**
- * @brief Restores saved multiplot rings; matches by group uniqueId and per-curve shape.
- */
-void UI::Dashboard::restoreMultiplotTimeRings(
-  QHash<qint64, std::vector<DSP::EnvelopeRing>>& snapshot)
-{
-  if (snapshot.isEmpty())
-    return;
-
-  const int n = widgetCount(SerialStudio::DashboardMultiPlot);
-  for (int i = 0; i < n; ++i) {
-    auto ringIt = m_multiplotTimeRings.find(i);
-    if (ringIt == m_multiplotTimeRings.end())
-      continue;
-
-    const auto& g = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
-    auto savedIt  = snapshot.find(ringSnapshotKey(g.sourceId, g.uniqueId));
-    if (savedIt == snapshot.end())
-      continue;
-
-    auto& live = ringIt.value();
-    auto& kept = savedIt.value();
-
-    const std::size_t count = std::min(live.size(), kept.size());
-    for (std::size_t j = 0; j < count; ++j) {
-      if (kept[j].level0.time.raw() == nullptr)
-        continue;
-
-      if (live[j].level0.time.capacity() == kept[j].level0.time.capacity()
-          && qFuzzyCompare(live[j].level0.interval, kept[j].level0.interval))
-        live[j] = std::move(kept[j]);
-      else
-        replayTimeRing(kept[j], live[j]);
-    }
-
-    snapshot.erase(savedIt);
-  }
-}
-
-/**
- * @brief Re-applies saved sweep trigger settings onto freshly configured plot engines.
- */
-void UI::Dashboard::restorePlotSweepConfig(const QMap<int, DSP::SweepEngine>& saved)
-{
-  for (auto it = saved.begin(); it != saved.end(); ++it) {
-    auto live = m_plotSweep.find(it.key());
-    if (live == m_plotSweep.end())
-      continue;
-
-    const auto& src = it.value();
-    live->setTrigger(src.level, src.edge, src.mode, src.holdoffSec, src.triggerCurve);
-    live->setTimebase(src.timebaseSec);
-    live->enabled = src.enabled;
-    live->takeSegmentsFrom(src);
-  }
-}
-
-/**
- * @brief Re-applies saved sweep trigger settings onto freshly configured multiplot engines.
- */
-void UI::Dashboard::restoreMultiplotSweepConfig(const QMap<int, DSP::SweepEngine>& saved)
-{
-  for (auto it = saved.begin(); it != saved.end(); ++it) {
-    auto live = m_multiplotSweep.find(it.key());
-    if (live == m_multiplotSweep.end())
-      continue;
-
-    const auto& src = it.value();
-    live->setTrigger(src.level, src.edge, src.mode, src.holdoffSec, src.triggerCurve);
-    live->setTimebase(src.timebaseSec);
-    live->enabled = src.enabled;
-    live->takeSegmentsFrom(src);
-  }
 }
 
 /**

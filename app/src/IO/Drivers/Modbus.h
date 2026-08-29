@@ -35,6 +35,12 @@
 #include "IO/Drivers/Modbus/ModbusRegisterGroups.h"
 #include "IO/HAL_Driver.h"
 
+class AppState;
+
+namespace DataModel {
+class ProjectModel;
+}  // namespace DataModel
+
 namespace IO {
 namespace Drivers {
 /**
@@ -208,6 +214,9 @@ private:
   [[nodiscard]] QByteArray buildRtuFrame(const QModbusDataUnit& unit) const;
   void appendTcpProperties(QList<IO::DriverProperty>& props) const;
   void appendRtuProperties(QList<IO::DriverProperty>& props) const;
+
+  AppState& m_appState;
+  DataModel::ProjectModel& m_projectModel;
 
   bool m_connecting;
   QString m_dialTarget;

@@ -49,8 +49,10 @@ extern "C" {
 #include "DataModel/DataBlock.h"
 #include "DataModel/DataTable.h"
 #include "DataModel/Frame.h"
+#include "DataModel/FrameBuilder/LatestFrameTap.h"
 #include "DataModel/FrameBuilder/QuickPlotBuilder.h"
 #include "DataModel/FrameBuilder/TableScriptBridge.h"
+#include "DataModel/FrameBuilder/TableSnapshotChannel.h"
 #include "DataModel/FrameBuilder/TransformCompiler.h"
 #include "DataModel/FramePoolPolicy.h"
 #include "DataModel/ParseBudget.h"
@@ -93,20 +95,7 @@ private:
   FrameBuilder& operator=(const FrameBuilder&) = delete;
 
 public:
-  /**
-   * @brief Latest received frame snapshot for script/API consumers: the raw chunk (a retained
-   *        FrameReader pool reference), the parser's channel tokens, and capture sequence
-   *        numbers. Channel tokens are valid only when channelsSequence == sequence.
-   */
-  struct LatestFrameInfo {
-    LatestFrameInfo();
-    int sourceId;
-    quint64 sequence;
-    qint64 timestampMs;
-    quint64 channelsSequence;
-    QStringList channels;
-    IO::CapturedDataPtr chunk;
-  };
+  using LatestFrameInfo = DataModel::LatestFrameInfo;
 
   [[nodiscard]] static FrameBuilder& instance();
 
@@ -270,37 +259,17 @@ private:
   DataModel::Frame m_frame;
   DataModel::DataTableStore m_tableStore;
 
-  static constexpr size_t kTableMirrorSlots = 4;
-
-  int m_publishedTableGeneration;
-  quint64 m_publishedTableClock;
-
   // code-verify off
-  // One is written once at bridge injection, the other toggles once per display tick. No
-  // steady-state cross-core write traffic, so sharing a cache line is harmless.
   // Latches a project sync already in flight: its blocking marshal pumps the GUI loop, and a
   // nested sync delivered there would spin another loop and recurse without bound
   std::atomic<bool> m_projectSyncInFlight;
-  std::atomic<bool> m_guiTableApiUsers;
-  std::atomic<bool> m_tableSnapshotRequested;
   // code-verify on
 
-  DataModel::DataTableSnapshotPtr m_guiTableSnapshot;
-  moodycamel::ReaderWriterQueue<DataModel::DataTableSnapshotPtr> m_tableMirrorRing;
-
-  static constexpr size_t kTableSnapshotPoolSlots = kTableMirrorSlots + 4;
-
-  std::vector<std::shared_ptr<DataModel::DataTableSnapshot>> m_tableSnapshotPool;
-  std::size_t m_tableSnapshotPoolHint;
-
   // Concern sub-objects: their references bind members declared above, so addresses never move
+  DataModel::TableSnapshotChannel m_tableChannel;
   DataModel::QuickPlotBuilder m_quickPlot;
   DataModel::TableScriptBridge m_tableApi;
   DataModel::TransformCompiler m_transforms;
-
-  void noteGuiTableApiUser();
-  void publishTableSnapshot();
-  [[nodiscard]] std::shared_ptr<DataModel::DataTableSnapshot> claimTableSnapshotSlot();
 
   bool m_streamValuesDirty;
   QSet<int> m_streamSourceIds;
@@ -315,43 +284,8 @@ private:
   quint64 m_latestFrameSeq;
   QHash<int, LatestFrameInfo> m_latestFrames;
 
-  /**
-   * @brief GUI-side copy of every source's latest capture, published by the builder thread at
-   *        display-tick rate so an API handler serving a script never marshals into the pipeline.
-   */
-  struct LatestFrameMirror {
-    int newestSourceId;
-    QHash<int, LatestFrameInfo> frames;
-  };
-
-  using LatestFrameMirrorPtr = std::shared_ptr<const LatestFrameMirror>;
-
-  static constexpr size_t kLatestFrameMirrorSlots = 4;
-
-  quint64 m_publishedLatestFrameSeq;
-
-  // code-verify off
-  // One is armed once by the first GUI-thread reader, the other toggles once per display tick.
-  // No steady-state cross-core write traffic, so sharing a cache line is harmless.
-  std::atomic<bool> m_guiLatestFrameUsers;
-  std::atomic<bool> m_latestFrameSnapshotRequested;
-  // code-verify on
-
-  LatestFrameMirrorPtr m_guiLatestFrameMirror;
-  moodycamel::ReaderWriterQueue<LatestFrameMirrorPtr> m_latestFrameMirrorRing;
-
-  [[nodiscard]] LatestFrameInfo guiLatestFrame(int sourceId);
-  void publishLatestFrameSnapshot();
-
-  using ParseLoadsPtr = std::shared_ptr<const std::vector<ParseLoad>>;
-
-  static constexpr size_t kParseLoadMirrorSlots = 4;
-
-  ParseLoadsPtr m_guiParseLoads;
-  moodycamel::ReaderWriterQueue<ParseLoadsPtr> m_parseLoadMirrorRing;
-
-  [[nodiscard]] std::vector<ParseLoad> guiParseLoads();
-  void publishParseLoads();
+  // Mirrors the capture state declared above GUI-ward; the capture writes stay in this TU
+  DataModel::LatestFrameTap m_latestTap;
 
   int m_engineCacheSourceId;
   DataModel::TransformEngine* m_luaEngineForSource;

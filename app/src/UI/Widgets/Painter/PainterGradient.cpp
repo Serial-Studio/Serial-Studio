@@ -11,30 +11,13 @@
 
 #ifdef BUILD_COMMERCIAL
 
-#  include <array>
-#  include <cmath>
-#  include <cstdint>
-#  include <functional>
+#  include "UI/Widgets/Painter/PainterGradient.h"
+
+#  include <algorithm>
 #  include <QConicalGradient>
-#  include <QDir>
-#  include <QFileInfo>
-#  include <QFontMetricsF>
-#  include <QImage>
-#  include <QImageReader>
 #  include <QLinearGradient>
-#  include <QPainterPathStroker>
-#  include <QPixmap>
 #  include <QRadialGradient>
-#  include <QRegularExpression>
-#  include <QStringList>
-
-#  include "Misc/CommonFonts.h"
-#  include "SerialStudio.h"
-#  include "UI/Widgets/PainterContext.h"
-
-//--------------------------------------------------------------------------------------------------
-// PainterGradient
-//--------------------------------------------------------------------------------------------------
+#  include <QtMath>
 
 /**
  * @brief Constructs an empty gradient of the given kind.
@@ -129,57 +112,4 @@ QBrush Widgets::PainterGradient::brush() const
   return b;
 }
 
-//--------------------------------------------------------------------------------------------------
-// Gradients / patterns
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Allocates a JS-visible linear-gradient handle parented to the context.
- */
-Widgets::PainterGradient* Widgets::PainterContext::createLinearGradient(qreal x0,
-                                                                        qreal y0,
-                                                                        qreal x1,
-                                                                        qreal y1)
-{
-  auto* g = new PainterGradient(PainterGradient::Kind::Linear, this);
-  g->setLinear(x0, y0, x1, y1);
-  return g;
-}
-
-/**
- * @brief Allocates a JS-visible radial-gradient handle parented to the context.
- */
-Widgets::PainterGradient* Widgets::PainterContext::createRadialGradient(
-  qreal x0, qreal y0, qreal r0, qreal x1, qreal y1, qreal r1)
-{
-  auto* g = new PainterGradient(PainterGradient::Kind::Radial, this);
-  g->setRadial(x0, y0, r0, x1, y1, r1);
-  return g;
-}
-
-/**
- * @brief Allocates a JS-visible conic-gradient handle parented to the context.
- */
-Widgets::PainterGradient* Widgets::PainterContext::createConicGradient(qreal startRad,
-                                                                       qreal cx,
-                                                                       qreal cy)
-{
-  auto* g = new PainterGradient(PainterGradient::Kind::Conic, this);
-  g->setConic(cx, cy, startRad);
-  return g;
-}
-
-/**
- * @brief Allocates a JS-visible pattern handle from a sandbox-resolved image path.
- */
-Widgets::PainterPattern* Widgets::PainterContext::createPattern(const QString& src,
-                                                                const QString& repetition)
-{
-  const QString resolved = resolveImagePath(src);
-  if (resolved.isEmpty())
-    return new PainterPattern(QPixmap(), repetition, this);
-
-  return new PainterPattern(QPixmap(resolved), repetition, this);
-}
-
-#endif
+#endif  // BUILD_COMMERCIAL

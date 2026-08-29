@@ -44,6 +44,7 @@
 #include "IO/HAL_Driver.h"
 
 class QTimer;
+class AppState;
 class QTcpSocket;
 
 namespace DataModel {
@@ -273,6 +274,9 @@ private:
   [[nodiscard]] static DataModel::Dataset datasetFor(const S7Variable& variable,
                                                      S7Address::Type type,
                                                      int index);
+
+  AppState& m_appState;
+  DataModel::ProjectModel& m_projectModel;
 
   bool m_open;
   bool m_persistent;

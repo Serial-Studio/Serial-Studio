@@ -29,6 +29,7 @@
 
 namespace AI {
 
+class CommandRegistry;
 class Conversation;
 class Provider;
 class ToolDispatcher;
@@ -228,6 +229,7 @@ private:
   [[nodiscard]] static QString modelSettingsKey(int providerIdx);
 
 private:
+  CommandRegistry& m_commandRegistry;
   KeyVault m_vault;
   mutable QSettings m_settings;
   std::unique_ptr<QNetworkAccessManager> m_nam;

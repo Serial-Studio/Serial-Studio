@@ -40,17 +40,6 @@
 namespace DataModel {
 
 /**
- * @brief Increments the per-type counter for every eligible dataset widget.
- */
-static void tallyDatasetWidgetTypes(const DataModel::Dataset& ds, QMap<int, int>& counts)
-{
-  const auto keys = SerialStudio::getDashboardWidgets(ds);
-  for (const auto& k : keys)
-    if (SerialStudio::datasetWidgetEligibleForWorkspace(k))
-      counts[static_cast<int>(k)] += 1;
-}
-
-/**
  * @brief Appends a dataset widget ref unless the widget type is the LED aggregator.
  */
 static bool appendDatasetRef(SerialStudio::DashboardWidget k,
@@ -148,116 +137,6 @@ static std::vector<DataModel::WidgetRef> buildAutoRefsForGroup(
       SerialStudio::DashboardLED, group.uniqueId, groupIdx, groupRefs, allRefs, overviewRefs);
 
   return groupRefs;
-}
-
-/**
- * @brief Resolves a workspace ref into a stable RefAnchor before a reorder.
- */
-static ProjectWorkspaces::RefAnchor anchorRef(const DataModel::WidgetRef& r,
-                                              const std::vector<DataModel::Group>& groups)
-{
-  ProjectWorkspaces::RefAnchor a;
-  a.widgetType        = r.widgetType;
-  a.sourceGid         = r.groupUniqueId;
-  a.datasetFrameIndex = -1;
-  a.isGroupOrLed      = false;
-
-  auto git = std::find_if(groups.begin(), groups.end(), [uid = r.groupUniqueId](const auto& g) {
-    return g.uniqueId == uid;
-  });
-  if (git == groups.end())
-    return a;
-
-  const auto& g            = *git;
-  const auto groupKey      = SerialStudio::getDashboardWidget(g);
-  const bool emptyOutPanel = g.groupType == DataModel::GroupType::Output && g.outputWidgets.empty();
-  const bool groupRef = SerialStudio::groupWidgetEligibleForWorkspace(groupKey) && !emptyOutPanel
-                     && static_cast<int>(groupKey) == r.widgetType;
-  const bool ledAggregate = (r.widgetType == static_cast<int>(SerialStudio::DashboardLED));
-  if (groupRef || ledAggregate) {
-    a.isGroupOrLed = true;
-    return a;
-  }
-
-  int slot = 0;
-  for (const auto& d : g.datasets) {
-    const auto keys = SerialStudio::getDashboardWidgets(d);
-    for (const auto& k : keys) {
-      if (static_cast<int>(k) != r.widgetType)
-        continue;
-
-      if (!SerialStudio::datasetWidgetEligibleForWorkspace(k))
-        continue;
-
-      if (slot == r.relativeIndex) {
-        a.datasetFrameIndex = d.index;
-        return a;
-      }
-
-      slot += 1;
-    }
-  }
-
-  return a;
-}
-
-/**
- * @brief Re-resolves a RefAnchor into a per-type slot index in the given group.
- *        Returns -1 if the anchor's dataset is not present.
- */
-static int slotForAnchor(const ProjectWorkspaces::RefAnchor& a, const DataModel::Group& g)
-{
-  if (a.datasetFrameIndex < 0)
-    return -1;
-
-  int slot = 0;
-  for (const auto& d : g.datasets) {
-    const auto keys = SerialStudio::getDashboardWidgets(d);
-    for (const auto& k : keys) {
-      if (static_cast<int>(k) != a.widgetType)
-        continue;
-
-      if (!SerialStudio::datasetWidgetEligibleForWorkspace(k))
-        continue;
-
-      if (d.index == a.datasetFrameIndex)
-        return slot;
-
-      slot += 1;
-    }
-  }
-
-  return -1;
-}
-
-/**
- * @brief Walks one workspace's refs against the new group/dataset layout, refreshing
- *        the dataset slot. The group identity is uniqueId-based so it never needs remapping.
- */
-static void resolveOneWorkspaceRefs(DataModel::Workspace& ws,
-                                    const std::vector<ProjectWorkspaces::RefAnchor>& src,
-                                    const std::vector<DataModel::Group>& groups)
-{
-  SS_ASSERT_LOG(src.size() == ws.widgetRefs.size());
-
-  const size_t count = std::min(src.size(), ws.widgetRefs.size());
-  for (size_t i = 0; i < count; ++i) {
-    auto& r       = ws.widgetRefs[i];
-    const auto& a = src[i];
-
-    if (a.sourceGid < 0 || a.isGroupOrLed)
-      continue;
-
-    auto git = std::find_if(groups.begin(), groups.end(), [uid = r.groupUniqueId](const auto& g) {
-      return g.uniqueId == uid;
-    });
-    if (git == groups.end())
-      continue;
-
-    const int newSlot = slotForAnchor(a, *git);
-    if (newSlot >= 0)
-      r.relativeIndex = newSlot;
-  }
 }
 
 }  // namespace DataModel
@@ -1355,170 +1234,27 @@ QVariantList DataModel::ProjectWorkspaces::hiddenGroupsSummary() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Counts, per dashboard-widget type, how many widgets the given group
- *        contributes to Dashboard::buildWidgetGroups's running type counter.
- */
-QMap<int, int> DataModel::ProjectWorkspaces::widgetTypeCountsForGroup(const Group& g) const
-{
-  QMap<int, int> counts;
-
-  if (!SerialStudio::groupEligibleForWorkspace(g))
-    return counts;
-
-  auto groupKey = SerialStudio::getDashboardWidget(g);
-  if (groupKey == SerialStudio::DashboardPlot3D && !SerialStudio::activated())
-    groupKey = SerialStudio::DashboardMultiPlot;
-
-  const bool isEmptyOutputPanel =
-    g.groupType == DataModel::GroupType::Output && g.outputWidgets.empty();
-
-  if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey) && !isEmptyOutputPanel)
-    counts[static_cast<int>(groupKey)] += 1;
-
-  bool groupHasLed = false;
-  for (const auto& ds : g.datasets) {
-    if (ds.hideOnDashboard)
-      continue;
-
-    const auto keys = SerialStudio::getDashboardWidgets(ds);
-    for (const auto& k : keys) {
-      if (k == SerialStudio::DashboardLED) {
-        groupHasLed = true;
-        continue;
-      }
-      if (!SerialStudio::datasetWidgetEligibleForWorkspace(k))
-        continue;
-
-      counts[static_cast<int>(k)] += 1;
-    }
-  }
-
-  if (groupHasLed)
-    counts[static_cast<int>(SerialStudio::DashboardLED)] += 1;
-
-  return counts;
-}
-
-/**
  * @brief Shifts or drops user-customised widget refs after a group delete.
  */
 void DataModel::ProjectWorkspaces::shiftWorkspaceRefsAfterGroupDelete(
   int deletedGid, const QMap<int, int>& deletedTypeCounts)
 {
-  SS_ASSERT(deletedGid >= 0, return);
   SS_ASSERT(m_customizeWorkspaces, return);
-
-  const int deletedAutoId = WorkspaceIds::PerGroupStart + deletedGid;
-
-  m_workspaces.erase(
-    std::remove_if(m_workspaces.begin(),
-                   m_workspaces.end(),
-                   [deletedAutoId](const Workspace& w) { return w.workspaceId == deletedAutoId; }),
-    m_workspaces.end());
-
-  for (auto& ws : m_workspaces) {
-    if (ws.workspaceId > deletedAutoId && ws.workspaceId < WorkspaceIds::PerFolderStart)
-      ws.workspaceId -= 1;
-
-    for (auto it = ws.widgetRefs.begin(); it != ws.widgetRefs.end();) {
-      const int newPos = m_model.groupIdForUniqueId(it->groupUniqueId);
-      if (newPos < 0) {
-        it = ws.widgetRefs.erase(it);
-        continue;
-      }
-
-      if (newPos >= deletedGid) {
-        const int lost    = deletedTypeCounts.value(it->widgetType, 0);
-        it->relativeIndex = std::max(0, it->relativeIndex - lost);
-      }
-
-      ++it;
-    }
-  }
+  WorkspaceRefs::shiftRefsAfterGroupDelete(
+    m_workspaces, m_model.m_groups, deletedGid, deletedTypeCounts);
 }
 
 /**
  * @brief Shifts user-customised widget refs after a single dataset is deleted from a surviving
- * group.
+ *        group.
  */
 void DataModel::ProjectWorkspaces::shiftWorkspaceRefsAfterDatasetDelete(
   int groupId, const QMap<int, int>& datasetTypeCounts)
 {
-  SS_ASSERT(groupId >= 0, return);
   SS_ASSERT(m_customizeWorkspaces, return);
-
-  if (datasetTypeCounts.isEmpty())
-    return;
-
-  QMap<int, int> runningAtGroup;
-  for (const auto& g : m_model.m_groups) {
-    if (!SerialStudio::groupEligibleForWorkspace(g))
-      continue;
-
-    if (g.groupId == groupId)
-      break;
-
-    const auto groupKey = SerialStudio::getDashboardWidget(g);
-
-    const bool isEmptyOutputPanel =
-      g.groupType == DataModel::GroupType::Output && g.outputWidgets.empty();
-
-    if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey) && !isEmptyOutputPanel)
-      runningAtGroup[static_cast<int>(groupKey)] += 1;
-
-    for (const auto& ds : g.datasets)
-      tallyDatasetWidgetTypes(ds, runningAtGroup);
-  }
-
   const int groupUid = m_model.groupUniqueIdForGroupId(groupId);
-
-  for (auto& ws : m_workspaces) {
-    ws.widgetRefs.erase(std::remove_if(ws.widgetRefs.begin(),
-                                       ws.widgetRefs.end(),
-                                       [&](const WidgetRef& r) {
-                                         const int lost = datasetTypeCounts.value(r.widgetType, 0);
-                                         if (lost == 0 || r.groupUniqueId != groupUid)
-                                           return false;
-
-                                         const int base = runningAtGroup.value(r.widgetType, 0);
-                                         return r.relativeIndex >= base
-                                             && r.relativeIndex < base + lost;
-                                       }),
-                        ws.widgetRefs.end());
-
-    for (auto& r : ws.widgetRefs) {
-      const int lost = datasetTypeCounts.value(r.widgetType, 0);
-      if (lost == 0)
-        continue;
-
-      const int base = runningAtGroup.value(r.widgetType, 0);
-      if (r.relativeIndex < base + lost)
-        continue;
-
-      r.relativeIndex -= lost;
-      SS_ASSERT(r.relativeIndex >= 0, r.relativeIndex = 0);
-    }
-  }
-}
-
-/**
- * @brief Updates the hidden-group set after a group is removed and surviving groups are renumbered
- *        down by 1.
- */
-void DataModel::ProjectWorkspaces::shiftHiddenGroupIdsAfterGroupDelete(int deletedGid)
-{
-  if (m_hiddenGroupIds.isEmpty())
-    return;
-
-  QSet<int> updated;
-  for (const int id : std::as_const(m_hiddenGroupIds)) {
-    if (id == deletedGid)
-      continue;
-
-    updated.insert(id > deletedGid ? id - 1 : id);
-  }
-
-  m_hiddenGroupIds = std::move(updated);
+  WorkspaceRefs::shiftRefsAfterDatasetDelete(
+    m_workspaces, m_model.m_groups, groupId, groupUid, datasetTypeCounts);
 }
 
 /**
@@ -1527,62 +1263,8 @@ void DataModel::ProjectWorkspaces::shiftHiddenGroupIdsAfterGroupDelete(int delet
 void DataModel::ProjectWorkspaces::shiftLayoutKeysAfterGroupDelete(int deletedGid)
 {
   auto& widgetSettings = m_model.m_presentation.mutableWidgetSettings();
-  if (widgetSettings.isEmpty())
-    return;
-
-  const auto keys = widgetSettings.keys();
-  bool changed    = false;
-
-  if (widgetSettings.contains(Keys::layoutKey(deletedGid))) {
-    widgetSettings.remove(Keys::layoutKey(deletedGid));
-    changed = true;
-  }
-
-  const QString prefix = QStringLiteral("layout:");
-  QList<QPair<int, QJsonObject>> moves;
-  for (const auto& key : keys) {
-    if (!key.startsWith(prefix))
-      continue;
-
-    bool ok      = false;
-    const int id = key.mid(prefix.length()).toInt(&ok);
-    if (!ok || id <= deletedGid)
-      continue;
-
-    moves.append({id, widgetSettings.value(key).toObject()});
-  }
-
-  std::sort(
-    moves.begin(), moves.end(), [](const auto& a, const auto& b) { return a.first < b.first; });
-
-  for (const auto& move : moves) {
-    widgetSettings.remove(Keys::layoutKey(move.first));
-    widgetSettings.insert(Keys::layoutKey(move.first - 1), move.second);
-    changed = true;
-  }
-
-  if (changed)
+  if (WorkspaceRefs::shiftLayoutKeysAfterGroupDelete(widgetSettings, deletedGid))
     Q_EMIT m_model.widgetSettingsChanged();
-}
-
-/**
- * @brief Updates the hidden-group set so each hidden ID follows its renamed group.
- */
-void DataModel::ProjectWorkspaces::remapHiddenGroupIdsAfterReorder(
-  const std::vector<int>& oldToNewGid)
-{
-  if (m_hiddenGroupIds.isEmpty())
-    return;
-
-  QSet<int> updated;
-  for (const int id : std::as_const(m_hiddenGroupIds)) {
-    if (id < 0 || static_cast<size_t>(id) >= oldToNewGid.size())
-      continue;
-
-    updated.insert(oldToNewGid[static_cast<size_t>(id)]);
-  }
-
-  m_hiddenGroupIds = std::move(updated);
 }
 
 /**
@@ -1590,62 +1272,8 @@ void DataModel::ProjectWorkspaces::remapHiddenGroupIdsAfterReorder(
  */
 void DataModel::ProjectWorkspaces::remapLayoutKeysAfterReorder(const std::vector<int>& oldToNewGid)
 {
-  auto& widgetSettings = m_model.m_presentation.mutableWidgetSettings();
-  if (widgetSettings.isEmpty())
-    return;
-
-  const QString prefix = QStringLiteral("layout:");
-  QMap<int, QJsonObject> snapshot;
-
-  for (const auto& key : widgetSettings.keys()) {
-    if (!key.startsWith(prefix))
-      continue;
-
-    bool ok      = false;
-    const int id = key.mid(prefix.length()).toInt(&ok);
-    if (!ok || id < 0 || static_cast<size_t>(id) >= oldToNewGid.size())
-      continue;
-
-    snapshot.insert(id, widgetSettings.value(key).toObject());
-    widgetSettings.remove(key);
-  }
-
-  for (auto it = snapshot.constBegin(); it != snapshot.constEnd(); ++it) {
-    const int newId = oldToNewGid[static_cast<size_t>(it.key())];
-    widgetSettings.insert(Keys::layoutKey(newId), it.value());
-  }
-}
-
-/**
- * @brief Renames per-group auto workspaces (PerGroupStart + groupId) so they
- *        track their group across a reorder.
- */
-void DataModel::ProjectWorkspaces::remapAutoWorkspaceIdsAfterReorder(
-  const std::vector<int>& oldToNewGid)
-{
-  for (auto& ws : m_workspaces) {
-    if (ws.workspaceId < WorkspaceIds::PerGroupStart || ws.workspaceId >= WorkspaceIds::UserStart)
-      continue;
-
-    const int oldGid = ws.workspaceId - WorkspaceIds::PerGroupStart;
-    if (oldGid < 0 || static_cast<size_t>(oldGid) >= oldToNewGid.size())
-      continue;
-
-    ws.workspaceId = WorkspaceIds::PerGroupStart + oldToNewGid[static_cast<size_t>(oldGid)];
-  }
-
-  std::stable_sort(
-    m_workspaces.begin(), m_workspaces.end(), [](const Workspace& a, const Workspace& b) {
-      const bool aUser = a.workspaceId >= WorkspaceIds::UserStart;
-      const bool bUser = b.workspaceId >= WorkspaceIds::UserStart;
-      if (aUser != bUser)
-        return !aUser;
-
-      if (!aUser && !bUser)
-        return a.workspaceId < b.workspaceId;
-
-      return false;
-    });
+  WorkspaceRefs::remapLayoutKeysAfterReorder(m_model.m_presentation.mutableWidgetSettings(),
+                                             oldToNewGid);
 }
 
 /**
@@ -1654,17 +1282,7 @@ void DataModel::ProjectWorkspaces::remapAutoWorkspaceIdsAfterReorder(
  */
 DataModel::ProjectWorkspaces::RefAnchors DataModel::ProjectWorkspaces::snapshotRefAnchors() const
 {
-  RefAnchors out;
-  out.reserve(static_cast<qsizetype>(m_workspaces.size()));
-  for (const auto& ws : m_workspaces) {
-    std::vector<RefAnchor> bucket;
-    bucket.reserve(ws.widgetRefs.size());
-    for (const auto& r : ws.widgetRefs)
-      bucket.push_back(anchorRef(r, m_model.m_groups));
-
-    out.insert(ws.workspaceId, std::move(bucket));
-  }
-  return out;
+  return WorkspaceRefs::snapshotRefAnchors(m_workspaces, m_model.m_groups);
 }
 
 /**
@@ -1673,11 +1291,5 @@ DataModel::ProjectWorkspaces::RefAnchors DataModel::ProjectWorkspaces::snapshotR
  */
 void DataModel::ProjectWorkspaces::resolveRefAnchors(const RefAnchors& anchors)
 {
-  for (auto& ws : m_workspaces) {
-    const auto it = anchors.constFind(ws.workspaceId);
-    if (it == anchors.constEnd())
-      continue;
-
-    resolveOneWorkspaceRefs(ws, it.value(), m_model.m_groups);
-  }
+  WorkspaceRefs::resolveRefAnchors(m_workspaces, anchors, m_model.m_groups);
 }

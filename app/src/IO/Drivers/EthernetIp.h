@@ -42,6 +42,7 @@
 #include "IO/HAL_Driver.h"
 
 class QTimer;
+class AppState;
 
 namespace DataModel {
 class ProjectModel;
@@ -260,6 +261,9 @@ private:
   [[nodiscard]] bool tagsFrozen() const noexcept;
   [[nodiscard]] const EthernetIp* sessionPeer() const;
   [[nodiscard]] static DataModel::Dataset datasetFor(const EipTag& tag, int index);
+
+  AppState& m_appState;
+  DataModel::ProjectModel& m_projectModel;
 
   bool m_open;
   bool m_persistent;

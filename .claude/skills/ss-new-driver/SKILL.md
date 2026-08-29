@@ -30,9 +30,10 @@ see [ss-hotpath]). Never re-stamp downstream.
 1. `app/src/IO/Drivers/<Name>.h` / `.cpp` — the driver class, SPDX header, `.h` ordering rules.
 2. `app/src/SerialStudio.h` — add the value to the `BusType` enum (QML uses `SerialStudio.BusType.*`,
    never integer literals).
-3. `app/src/IO/ConnectionManager.{h,cpp}` — accessor (e.g. `network()` / `uart()` analogue), a
-   UI-driver member pointer, and **three** `BusType` switches: `activeUiDriver()`,
-   `uiDriverForBusType()`, and `createDriver()` — plus signal forwarding. Update all three.
+3. `app/src/IO/ConnectionManager.{h,cpp}` — accessor (e.g. `network()` / `uart()` analogue)
+   plus signal forwarding; the bus lookups live in `ConnectionManager/DriverUiRegistry.cpp`
+   (`forBusType()`) and the live-instance switch in `ConnectionManager/DriverFactory.cpp`
+   (`DriverFactory::create()`, spec 0070). Update both.
 4. `app/CMakeLists.txt` — add `src/IO/Drivers/<Name>.cpp` to the `SOURCES` list (sources are
    listed explicitly, not globbed; commercial drivers go in the guarded
    `set(SOURCES ${SOURCES} ...)` block).

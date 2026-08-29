@@ -464,28 +464,25 @@ void IO::FileTransmission::beginTransmission()
 void IO::FileTransmission::setupExternalConnections()
 {
   m_connectionManager = &IO::ConnectionManager::instance();
+  auto& translator    = Misc::Translator::instance();
 
-  connect(&IO::ConnectionManager::instance(),
+  connect(m_connectionManager,
           &IO::ConnectionManager::connectedChanged,
           this,
           &FileTransmission::stopTransmission);
 
-  connect(&IO::ConnectionManager::instance(),
+  connect(m_connectionManager,
           &IO::ConnectionManager::connectedChanged,
           this,
           &FileTransmission::fileChanged);
 
   connect(qApp, &QApplication::aboutToQuit, this, &FileTransmission::closeFile);
 
-  connect(&Misc::Translator::instance(),
-          &Misc::Translator::languageChanged,
-          this,
-          &IO::FileTransmission::languageChanged);
+  connect(
+    &translator, &Misc::Translator::languageChanged, this, &IO::FileTransmission::languageChanged);
 
-  connect(&Misc::Translator::instance(),
-          &Misc::Translator::languageChanged,
-          this,
-          &IO::FileTransmission::fileChanged);
+  connect(
+    &translator, &Misc::Translator::languageChanged, this, &IO::FileTransmission::fileChanged);
 }
 
 //--------------------------------------------------------------------------------------------------

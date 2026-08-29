@@ -174,3 +174,142 @@ Status legend: `[ ]` pending · `[~]` agent running · `[R]` under manager revie
 
 ## Deferral log
 (anything `[-]`, with reason and follow-up shape)
+
+
+## Wave 7 — Round 2 (2026-08-28 night 2): census reduction + singleton captures
+Directive: build is green and pushed; drive TU census (19 files / 11,924 excess) and
+singleton census (1198 static-cache sites) down hard. Same model: manager briefs, opus
+executors, disjoint ownership, integrator handles CMake/docs/gates. After the main task:
+teach the translation pipeline to reuse identical strings whose context/location moved.
+
+- [x] Q1 Dashboard 3544→2724 — ctor split into 4 helpers; ReplaySeekEngine (bindings bundle
+      WITHOUT clocks — deliberately stronger than briefed: engine cannot desync the pair;
+      resetPlotClocks stays facade); PlotControlBank (one owner per state: rings→engine,
+      sweeps→bank, clocks→facade; license gate diversity preserved); 40/43 pinned bodies
+      byte-identical, 3 diffs = call-site reroutes only; captures 40→26, static-caches 34→13
+      (13 survivors = byte-identity-frozen sites). Benchmark watch: lua+dashboard floor;
+      designated-init-with-ifdef = likeliest compile complaint. Reviewed + registered +
+      1 suite.
+- [x] Q2 FrameBuilder 3534→3348 — TableSnapshotChannel + LatestFrameTap (SPSC lanes moved
+      whole; drain/publish handshake split so marshal stays facade-owned; per-frame capture
+      trio stayed). HONEST SHORTFALL vs ≤2900 accepted: full audit shows remaining lines are
+      forbidden per-frame core; only relaxation candidate = TransformRunner (~210, per-frame
+      Lua/JS — benchmark-gated follow-up). instance() 62→62 (all remaining in forbidden lanes
+      or ctor-reachable — proven). Ctor-order sensitivities documented. Reviewed + registered
+      + 2 suites (channel suite's PipelineHost stubs = only unproven link).
+- [x] Q3 ProjectModel complex — ProjectModel.cpp 3095→1149 (227 one-line forwarders inlined;
+      header 1224, 276 under cap; scope-bearing setters deliberately held back), Workspaces
+      1683→1295 via WorkspaceRefs free-fn unit (zero setModified/UndoScope — contract clean),
+      Entities 1501→1362 via FixedLayouts unit (ProjectModel::tr preserved), both long-fn
+      advisories fixed. instance() 120→120 (documented). Tests exempt (SerialStudio.cpp link
+      set; suite unlocks if eligibility predicates get a leaf TU — recorded). Follow-up:
+      naming rules consolidation into ProjectNaming.h. Reviewed + registered.
+- [x] Q4 Terminal 2364→1938 — TerminalBuffer value class (event-drain design: buffer records,
+      facade publishes once per chunk — cursorMoved/scrollOffsetY consumers verified absent/
+      unbound) + Vt100Keymap free fns; paint path proven substitution-only via diff range
+      audit; captures 7→6. Honest gap to 1600: TerminalRenderer (~590 lines) = named
+      follow-up, outside mandate. KATs validated against a Python model pre-write (caught 2
+      wrong assumptions). Reviewed + registered + 1 suite (21 slots).
+- [x] Q5 OpcUa 2338→1624 — OpcUaProjectBuilder (pure, tested, ModbusProjectGenerator shape),
+      OpcUaSubscriptions + host interface (P08's 7 'HAL-shared' members DISPROVEN by
+      inspection — 3 were already assembler-private, 4 engine-exclusive; dial-verdict
+      isolation proven by grep), endpoint presentation into existing pure unit. Captures
+      4→4 with live-vs-UI-instance reasoning (setupExternalConnections never runs on live
+      drivers — correct refusal). Morning: real-PLC watchdog/poll re-arm watch; lupdate.
+      Reviewed + registered + 1 suite.
+- [x] Q6 ConnectionManager 2208→1702 — StreamConfigBuilder, DriverFactory (guard diversity
+      INCREASED 8→11 dispatch sites — clever licensing preservation), UiDriverSync (echo
+      fence intact), StreamWorkerPool (queued blockReady verbatim); captures 65→18 (−47;
+      ctor refs justified by headless-verifier path). Integrator RE-VERIFIED ctor-edge proof:
+      PM 700 → AppState 701 → FB 702 → CM 704, sole construction site = root. Morning watch
+      #1: onDriverOpenFinished's deviceIdForDriver (hung-connect failure mode) — manual async
+      dial test. 4 units test-exempt (session-bound/device-bound — recorded). Reviewed +
+      registered.
+- [x] Q7 Conversation 2086→1513 — MetaToolRunner behind MetaToolSink (5 of 7 methods =
+      existing privates promoted to overrides — no forwarders), AutoVerifier, ChatDigest
+      (tested), ToolCallStatus namespace enum (Q_ENUM dropped — QML compares raw ints,
+      verified). Captures 13→4 with the load-bearing finding: Conversation is built INSIDE
+      Assistant's ctor — Assistant capture would re-enter the Meyers guard (2026-07-07
+      class); lazy accessor correct. DocSearch stays lazy (BM25 parse cost — considered
+      deviation, right call). Morning: lupdate (4 AutoVerifier strings). Reviewed +
+      registered + 1 suite.
+- [x] Q8 CLI 1943→995 — honest seam found: all 12 setup*Connection members read ONLY
+      m_parser/m_opts → free functions in CliBusConfig / CliIndustrialConfig (license-boundary
+      split: GPL builds stop compiling 6 Pro driver headers) / CliSpecParsers (pure, tested);
+      instance() 49→29, all conversions provably post-root; selftest paths byte-identical;
+      dead applyModbusCommonOptions decl removed; option-table + selftest moves declined with
+      numbers. Reviewed + registered + 1 suite.
+- [x] Q9 PainterContext 1666→1321 — multi-TU split ENDED (Gradient/Pattern own pairs +
+      factories back home), PainterEnums + PainterGeometry header-inline (per-frame inlining
+      kept), PainterBlur kernel verbatim (magic 32 → named constant), PainterFont takes
+      CommonFonts& (instance() −1). Style state + shadow pipeline stayed (honest). Review
+      watch: normalizedSweep fold (only genuine rewrite; heavily tested), M_PI include
+      provenance. Reviewed + registered + 2 suites (BUILD_COMMERCIAL).
+- [x] Q10 Taskbar 1700→1286 — TaskbarWorkspaces (Taskbar& back-ref documented as the
+      deliberate exception; signal-relay pattern; 5 deps by ctor ref, zero instance());
+      instance() 10→8. Review watch: selectGroupAfterRebuild optional return + deleteWorkspace
+      control-flow rewrite (semantics argued equivalent). Carried-over hazards flagged:
+      clearWorkspaceWidgets iterator invalidation (→P19 follow-up), tree recursion uncapped.
+      Reviewed + registered. Tests exempt (singleton-bound; data-seam extraction = follow-up).
+- [x] Q11 DSP.h 1934→1353 (DSPDownsample.h 628, include-through, MD5-verified byte-identical
+      region) + Frame.h 1606→1388 (FrameKeys.h 243; serializer set verdicted irreducible —
+      name-lookup-coupled + generator-derived). 540 excess lines retired, zero consumer
+      edits, spec-0021 contract untouched by construction. Reviewed + headers registered.
+- [x] Q12 Settings.qml 2243→247 — 8 zero-parameter pages under Dialogs/Settings/ (grep
+      proved zero outer-scope reaches; only coupling is root's implicitHeight Math.max over
+      instance ids — unchanged). Line-diff verified: only id renames. GPL empty-Notifications
+      StackLayout-index trick preserved. Reviewed + 8 QML files registered.
+- [x] Q13 PlotWidget.qml 2161→908 — 7 components (formatter, interaction, ruler overlay/menu,
+      marker popup, cursor ×2 instances, trigger line); core GraphsView block PROVEN
+      byte-identical by diff; all 4 consumers' symbols preserved by name; data-rate binding
+      changes limited to 4 one-hop formatter calls. Morning: visual smoke test (cursors,
+      ruler, hover marker, sweep trigger). Reviewed + 7 QML registered.
+- [x] Q14 FlowDiagram.qml 1703→357 — 9 components (layout engine QtObject with verbatim
+      build(), icons, arrows canvas, node delegate + 4 visuals, menu controller preserving
+      CommandMenu wiring); node records now carry stamped key (id-reach eliminated).
+      Integrator did the proper _FONT_PIXEL_OK_FILES fix + stripped fences. Morning items:
+      lupdate (14 strings → DiagramLayout context); dir/file name coexistence = loud-fail
+      risk at qmlcachegen. tablefolder dual-instantiation quirk preserved deliberately.
+      Reviewed + 9 QML registered.
+- [x] Q15 IO sweep — 50→47 total, static-cache 33→23 (−10): 5 drivers capture ProjectModel/
+      AppState by ctor ref (order proof: adopted at ModuleManager 700/701, drivers built at
+      704); 15 driver→ConnectionManager sites PROVEN unconvertible (ctor runs inside CM
+      construction — capture = startup qFatal). QCanBus = Qt's accessor, not ours. TWO
+      INTEGRATOR FOLLOW-UPS RECORDED: (a) FileTransmission → SessionContext 10th slot (fixes
+      2 real teardown defects — dangling CM pointer + post-QApplication dtor; full edit list
+      in report; maintainer call on core-module status), (b) PipelineHost::routeFrames could
+      use its own m_frameBuilder member instead of static cache (hotpath owner change,
+      benchmark-gated). Reviewed; no CMake.
+- [x] Q16 Misc/Licensing/Platform sweep — 133→106 sites (−27): checker free functions get
+      file-local accessors, Handler/CSD/HelpCenter ctor captures with order proofs, Licensing
+      untouched (security surface; ~−9 available if maintainer sanctions). FINDING recorded in
+      startup.md: NativeWindow by-value member constructs ThemeManager→WorkspaceManager→
+      Translator BEFORE the pinned order (pre-existing, benign, but exempts those files from
+      order-based captures). InfluxDB lambda raw-pointer tradeoff noted. Reviewed; no CMake.
+- [x] Q17 Sessions/CSV/MDF4/Importers sweep — Player synthesis() 3 sites → sanctioned cache
+      form (Player has NO setupExternalConnections; ctor capture ruled out by composition
+      order — correct deviation); ProtoParser loops given visible Eof sentinel (no numeric
+      cap — preserves valid pathological inputs); 74 files audited, all 148 remaining sites
+      already sanctioned forms; refused Dashboard ctor-captures (built last) and Export
+      wiring captures (null on headless path) — right calls. Owned advisories 6→1
+      (pre-existing TU length). Note: ProjectLoader/Persistence long-fn fixes are Q3's.
+- [x] Q18 API/AI/MQTT sweep — ProjectHandler::registerCommands(CommandRegistry&) threaded
+      from sole caller (zero new resolutions); real captures: ProcessLauncher 6→3, Publisher
+      7→5, Assistant + GRPCServer ctor-init refs (order proofs given); totals 599→589.
+      484 remaining = handler statics by design; load-bearing (void) registration forcer,
+      security surfaces, gRPC worker threads, ctor-edge guards all correctly left.
+      Reviewed; no CMake needed.
+- [x] Q19 Integration — all 18 packages registered; advisory cleanup 40→9 (9 = accepted TU
+      floor); doc drift fixed (TableSnapshotChannel/MetaToolRunner/DriverFactory renames);
+      claim-verify 0 errors; censuses re-seeded: TU 19 files/11,924 → 9/3,967 excess
+      (worst 3348, both remaining 'gods' = proven per-frame cores); singleton 1718→1584,
+      static-cache 1225→1075; two ring shape-pins updated to follow ReplaySeekEngine;
+      pytest 302 green; sanitize clean; NO commit.
+- [x] Q20 Translation reuse — reuse_existing_translations() pre-pass + --reuse-only mode in
+      llm_translate.py; keyed (source, comment), conflict-safe (all-donors-agree), numerus/
+      comment paths synthetic-fixture tested, PINNED_TRANSLATIONS priority kept, byte-identical
+      round-trip, idempotent. Dry run: 3,472 recoverable across 20 languages (141-196 each),
+      43 conflicts left for LLM, 3,471 of the recoveries are flag-only (lupdate had already
+      copied the text). NO .ts modified — maintainer runs `python3 llm_translate.py
+      --reuse-only` then the normal LLM pass for the 43. Known tradeoff: silently overwrites
+      a human's deliberately-unfinished draft (1 entry today).

@@ -279,9 +279,9 @@ def key(prop: dict) -> str:
 
 def key_constants() -> dict[str, str]:
     """Map every Keys:: literal to its constant name so emitted code never hard-codes a key."""
-    header = (ROOT / "app" / "src" / "DataModel" / "Frame.h").read_text(
+    header = (ROOT / "app" / "src" / "DataModel" / "FrameKeys.h").read_text(
         encoding="utf-8"
-    )
+    ) + (ROOT / "app" / "src" / "DataModel" / "Frame.h").read_text(encoding="utf-8")
     found: dict[str, str] = {}
     for name, value in re.findall(
         r"inline constexpr KeyView (\w+)\(\"([^\"]*)\"\)", header

@@ -14,6 +14,7 @@
 #include "AI/Assistant.h"
 #include "AI/CommandRegistry.h"
 #include "AI/ContextBuilder.h"
+#include "AI/Conversation/ChatDigest.h"
 #include "AI/Conversation/HistorySurgery.h"
 #include "AI/Conversation/MetaToolCatalog.h"
 #include "AI/Conversation/ReplyAssembly.h"
@@ -24,7 +25,6 @@
 #include "AI/Redactor.h"
 #include "AI/SkillRouter.h"
 #include "AI/ToolDispatcher.h"
-#include "DataModel/Frame.h"
 #include "DataModel/ProjectModel.h"
 #include "Licensing/CommercialToken.h"
 #include "SSAssert.h"
@@ -34,13 +34,18 @@
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Creates an idle conversation; provider and dispatcher are wired later.
+ * @brief Creates an idle conversation; provider and dispatcher are wired later. The command
+ *        registry and the project model are captured here because both already exist when
+ *        the Assistant builds this object; the Assistant itself is resolved lazily instead,
+ *        since this constructor runs inside its own.
  */
 AI::Conversation::Conversation(QObject* parent)
   : QObject(parent)
   , m_provider(nullptr)
   , m_dispatcher(nullptr)
   , m_reply(nullptr)
+  , m_commands(CommandRegistry::instance())
+  , m_project(DataModel::ProjectModel::instance())
   , m_assistantIndex(-1)
   , m_thinkingIsSynthetic(false)
   , m_outstandingToolResults(0)
@@ -51,6 +56,8 @@ AI::Conversation::Conversation(QObject* parent)
   , m_summaryForced(false)
   , m_busy(false)
   , m_lastAwaitingFlag(false)
+  , m_metaTools(*this, m_helpFetcher)
+  , m_autoVerify(m_commands)
   , m_streamFlushTimer(new QTimer(this))
   , m_streamDirty(false)
   , m_uiDirty(false)
@@ -64,22 +71,32 @@ AI::Conversation::Conversation(QObject* parent)
 
   m_autoSaveTimer->setInterval(kAutoSaveDebounceMs);
   m_autoSaveTimer->setSingleShot(true);
-  connect(m_autoSaveTimer, &QTimer::timeout, this, [] {
-    static auto& project = DataModel::ProjectModel::instance();
-    if (!project.modified())
+  connect(m_autoSaveTimer, &QTimer::timeout, this, [this] {
+    if (!m_project.modified())
       return;
 
-    if (project.jsonFilePath().isEmpty())
+    if (m_project.jsonFilePath().isEmpty())
       return;
 
-    project.setSuppressMessageBoxes(true);
-    const bool ok = project.saveJsonFile(false);
-    project.setSuppressMessageBoxes(false);
+    m_project.setSuppressMessageBoxes(true);
+    const bool ok = m_project.saveJsonFile(false);
+    m_project.setSuppressMessageBoxes(false);
     if (!ok)
       qCWarning(serialStudioAI) << "AI auto-save failed";
     else
-      qCDebug(serialStudioAI) << "AI auto-save:" << project.jsonFilePath();
+      qCDebug(serialStudioAI) << "AI auto-save:" << m_project.jsonFilePath();
   });
+}
+
+/**
+ * @brief Lazily resolves the Assistant singleton. Conversation is constructed inside the
+ *        Assistant constructor, so an init-list capture would re-enter the Meyers guard;
+ *        every caller below runs long after that constructor returned.
+ */
+AI::Assistant& AI::Conversation::assistant()
+{
+  static auto& singleton = Assistant::instance();
+  return singleton;
 }
 
 /**
@@ -103,11 +120,14 @@ void AI::Conversation::setProvider(Provider* provider)
 }
 
 /**
- * @brief Sets the tool dispatcher. The conversation does not take ownership.
+ * @brief Sets the tool dispatcher. The conversation does not take ownership, and forwards
+ *        it to the two sub-objects that dispatch through it.
  */
 void AI::Conversation::setDispatcher(ToolDispatcher* dispatcher)
 {
   m_dispatcher = dispatcher;
+  m_metaTools.setDispatcher(dispatcher);
+  m_autoVerify.setDispatcher(dispatcher);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -221,8 +241,7 @@ QString AI::Conversation::probeComplianceKey() const
  */
 void AI::Conversation::evaluateProbe()
 {
-  static auto& assistant = Assistant::instance();
-  if (!assistant.contextProbeEnabled())
+  if (!assistant().contextProbeEnabled())
     return;
 
   if (m_assistantText.isEmpty() || !m_pendingToolUseBlocks.isEmpty())
@@ -246,8 +265,7 @@ void AI::Conversation::evaluateProbe()
  */
 void AI::Conversation::injectRoutedSkill(const QString& userText)
 {
-  static auto& assistant = Assistant::instance();
-  if (!assistant.skillRoutingEnabled())
+  if (!assistant().skillRoutingEnabled())
     return;
 
   static const SkillRouter router;
@@ -281,8 +299,7 @@ void AI::Conversation::injectRoutedSkill(const QString& userText)
  */
 void AI::Conversation::maybeProposeMemory(const QString& userText)
 {
-  static auto& assistant = Assistant::instance();
-  if (!assistant.memoryEnabled())
+  if (!assistant().memoryEnabled())
     return;
 
   static const QStringList kTriggers = {
@@ -601,373 +618,10 @@ void AI::Conversation::onToolCallRequested(const QString& callId,
 
   ++m_outstandingToolResults;
 
-  if (dispatchMetaTool(callId, name, arguments))
+  if (m_metaTools.dispatch(callId, name, arguments))
     return;
 
   dispatchByCallSafety(callId, name, arguments);
-}
-
-/**
- * @brief Auto-handles meta-tool calls; returns true when consumed.
- */
-bool AI::Conversation::dispatchMetaTool(const QString& callId,
-                                        const QString& name,
-                                        const QJsonObject& arguments)
-{
-  if (name == QStringLiteral("meta.listCategories")) {
-    runMetaListCategories(callId, name, arguments);
-    return true;
-  }
-
-  if (name == QStringLiteral("meta.snapshot")) {
-    runMetaSnapshot(callId, name, arguments);
-    return true;
-  }
-
-  if (name == QStringLiteral("meta.listCommands")) {
-    runMetaListCommands(callId, name, arguments);
-    return true;
-  }
-
-  if (name == QStringLiteral("meta.describeCommand")) {
-    runMetaDescribe(callId, name, arguments);
-    return true;
-  }
-
-  if (name == QStringLiteral("meta.executeCommand")) {
-    runMetaExecuteCommand(callId, name, arguments);
-    return true;
-  }
-
-  if (name == QStringLiteral("meta.fetchHelp")) {
-    const auto path = arguments.value(QStringLiteral("path")).toString();
-    appendToolCallCard(callId, name, arguments, CallStatus::Running);
-    m_helpFetcher.fetchPage(callId, path);
-    return true;
-  }
-
-  if (name == QStringLiteral("meta.fetchScriptingDocs")) {
-    runMetaScriptingDocs(callId, name, arguments);
-    return true;
-  }
-
-  if (name == QStringLiteral("meta.howTo")) {
-    runMetaHowTo(callId, name, arguments);
-    return true;
-  }
-
-  if (name == QStringLiteral("meta.loadSkill")) {
-    runMetaLoadSkill(callId, name, arguments);
-    return true;
-  }
-
-  if (name == QStringLiteral("meta.searchDocs")) {
-    runMetaSearchDocs(callId, name, arguments);
-    return true;
-  }
-
-  if (name == QStringLiteral("meta.search")) {
-    appendToolCallCard(callId, name, arguments, CallStatus::Running);
-    const auto query = arguments.value(QStringLiteral("query")).toString().trimmed();
-    QJsonObject reply;
-    if (query.isEmpty()) {
-      reply[QStringLiteral("ok")]    = false;
-      reply[QStringLiteral("error")] = QStringLiteral("missing_query");
-      reply[QStringLiteral("hint")] =
-        QStringLiteral("query cannot be empty; use meta.listCommands to enumerate the catalog.");
-    } else {
-      reply = m_dispatcher->searchCommands(query,
-                                           arguments.value(QStringLiteral("offset")).toInt(0),
-                                           arguments.value(QStringLiteral("limit")).toInt(0));
-    }
-    const bool ok = reply.value(QStringLiteral("ok")).toBool();
-    recordToolResult(callId, name, reply);
-    updateToolCallCard(callId, ok ? CallStatus::Done : CallStatus::Error, reply);
-    releaseOutstandingToolResult();
-    return true;
-  }
-
-  return false;
-}
-
-/**
- * @brief meta.listCategories: returns the dispatcher's category list.
- */
-void AI::Conversation::runMetaListCategories(const QString& callId,
-                                             const QString& name,
-                                             const QJsonObject& arguments)
-{
-  appendToolCallCard(callId, name, arguments, CallStatus::Running);
-  const auto reply = m_dispatcher->listCategories();
-  recordToolResult(callId, name, reply);
-  updateToolCallCard(callId, CallStatus::Done, reply);
-  releaseOutstandingToolResult();
-}
-
-/**
- * @brief meta.snapshot: returns the dispatcher's current state snapshot.
- */
-void AI::Conversation::runMetaSnapshot(const QString& callId,
-                                       const QString& name,
-                                       const QJsonObject& arguments)
-{
-  appendToolCallCard(callId, name, arguments, CallStatus::Running);
-  QJsonObject reply;
-  reply[QStringLiteral("ok")]       = true;
-  reply[QStringLiteral("snapshot")] = m_dispatcher->getSnapshot();
-  recordToolResult(callId, name, reply);
-  updateToolCallCard(callId, CallStatus::Done, reply);
-  releaseOutstandingToolResult();
-}
-
-/**
- * @brief meta.listCommands: lists available commands filtered by prefix.
- */
-void AI::Conversation::runMetaListCommands(const QString& callId,
-                                           const QString& name,
-                                           const QJsonObject& arguments)
-{
-  appendToolCallCard(callId, name, arguments, CallStatus::Running);
-  const auto prefix    = arguments.value(QStringLiteral("prefix")).toString();
-  const int offset     = arguments.value(QStringLiteral("offset")).toInt(0);
-  const int limit      = arguments.value(QStringLiteral("limit")).toInt(0);
-  const bool namesOnly = arguments.value(QStringLiteral("namesOnly")).toBool(false);
-  const auto reply     = m_dispatcher->listCommands(prefix, offset, limit, namesOnly);
-  recordToolResult(callId, name, reply);
-  updateToolCallCard(callId, CallStatus::Done, reply);
-  releaseOutstandingToolResult();
-}
-
-/**
- * @brief meta.executeCommand: dispatches the inner tool with the same safety policy.
- */
-void AI::Conversation::runMetaExecuteCommand(const QString& callId,
-                                             const QString& name,
-                                             const QJsonObject& arguments)
-{
-  const auto target    = arguments.value(QStringLiteral("name")).toString();
-  const auto innerArgs = arguments.value(QStringLiteral("arguments")).toObject();
-
-  if (target.isEmpty()) {
-    QJsonObject err;
-    err[QStringLiteral("ok")]    = false;
-    err[QStringLiteral("error")] = QStringLiteral("missing_name");
-    appendToolCallCard(callId, name, arguments, CallStatus::Error);
-    recordToolResult(callId, name, err);
-    updateToolCallCard(callId, CallStatus::Error, err);
-    releaseOutstandingToolResult();
-    return;
-  }
-
-  dispatchByCallSafety(callId, target, innerArgs);
-}
-
-/**
- * @brief meta.loadSkill: returns the markdown body of a registered skill.
- */
-void AI::Conversation::runMetaLoadSkill(const QString& callId,
-                                        const QString& name,
-                                        const QJsonObject& arguments)
-{
-  appendToolCallCard(callId, name, arguments, CallStatus::Running);
-  const auto skillId = arguments.value(QStringLiteral("name")).toString();
-  const auto body    = AI::ContextBuilder::skillBody(skillId);
-
-  QJsonObject reply;
-  if (body.isEmpty()) {
-    reply[QStringLiteral("ok")]    = false;
-    reply[QStringLiteral("error")] = QStringLiteral("unknown_skill");
-    QJsonArray known;
-    for (const auto& s : AI::ContextBuilder::skillIds())
-      known.append(s);
-
-    reply[QStringLiteral("availableSkills")] = known;
-    recordToolResult(callId, name, reply);
-    updateToolCallCard(callId, CallStatus::Error, reply);
-  } else {
-    reply[QStringLiteral("ok")]    = true;
-    reply[QStringLiteral("skill")] = skillId;
-    reply[QStringLiteral("body")]  = body;
-    m_loadedSkills.insert(skillId);
-    recordToolResult(callId, name, reply);
-    updateToolCallCard(callId, CallStatus::Done, reply);
-  }
-  releaseOutstandingToolResult();
-}
-
-/**
- * @brief meta.searchDocs: BM25-style doc search via DocSearch singleton.
- */
-void AI::Conversation::runMetaSearchDocs(const QString& callId,
-                                         const QString& name,
-                                         const QJsonObject& arguments)
-{
-  appendToolCallCard(callId, name, arguments, CallStatus::Running);
-  const auto query = arguments.value(QStringLiteral("query")).toString();
-  const int k      = qBound(1, arguments.value(QStringLiteral("k")).toInt(5), 10);
-
-  static auto& docSearch = AI::DocSearch::instance();
-  const auto hits        = docSearch.search(query, k);
-
-  QJsonArray rows;
-  for (const auto& h : hits) {
-    QJsonObject row;
-    row[QStringLiteral("id")]     = h.id;
-    row[QStringLiteral("source")] = h.source;
-    row[QStringLiteral("title")]  = h.title;
-    row[QStringLiteral("body")]   = h.body;
-    row[QStringLiteral("score")]  = h.score;
-    rows.append(row);
-  }
-
-  QJsonObject reply;
-  reply[QStringLiteral("ok")]    = true;
-  reply[QStringLiteral("query")] = query;
-  reply[QStringLiteral("hits")]  = rows;
-  reply[QStringLiteral("count")] = rows.size();
-  if (rows.isEmpty()) {
-    reply[QStringLiteral("hint")] =
-      QStringLiteral("No matches. Try rephrasing with command-shaped terms (e.g. "
-                     "'project.dataset.add' instead of 'add a channel'), or fall back to "
-                     "meta.listCommands{prefix} / meta.fetchHelp{path: 'help.json'}.");
-  }
-
-  recordToolResult(callId, name, reply);
-  updateToolCallCard(callId, CallStatus::Done, reply);
-  releaseOutstandingToolResult();
-}
-
-/**
- * @brief Returns the skill id whose body documents @a commandName, or empty.
- */
-static QString skillForCommand(const QString& commandName)
-{
-  if (commandName.startsWith(QStringLiteral("project.workspace."))
-      || commandName == QStringLiteral("project.dataset.setOption")
-      || commandName == QStringLiteral("project.dataset.setOptions"))
-    return QStringLiteral("dashboard_layout");
-
-  if (commandName.startsWith(QStringLiteral("project.frameParser.")))
-    return QStringLiteral("frame_parsers");
-
-  if (commandName.startsWith(QStringLiteral("project.painter.")))
-    return QStringLiteral("painter");
-
-  if (commandName.startsWith(QStringLiteral("project.outputWidget.")))
-    return QStringLiteral("output_widgets");
-
-  if (commandName == QStringLiteral("project.dataset.setTransformCode")
-      || commandName == QStringLiteral("project.dataset.transform.dryRun")
-      || commandName.startsWith(QStringLiteral("project.dataTable.")))
-    return QStringLiteral("transforms");
-
-  if (commandName.startsWith(QStringLiteral("project.mqtt.")))
-    return QStringLiteral("mqtt");
-
-  if (commandName.startsWith(QStringLiteral("io.canbus."))
-      || commandName.startsWith(QStringLiteral("io.modbus.")))
-    return QStringLiteral("can_modbus");
-
-  if (commandName.startsWith(QStringLiteral("project.")))
-    return QStringLiteral("project_basics");
-
-  return QString();
-}
-
-/**
- * @brief meta.describeCommand handler: returns command schema or not_found.
- */
-void AI::Conversation::runMetaDescribe(const QString& callId,
-                                       const QString& name,
-                                       const QJsonObject& arguments)
-{
-  appendToolCallCard(callId, name, arguments, CallStatus::Running);
-  const auto target = arguments.value(QStringLiteral("name")).toString();
-  QJsonObject reply;
-  if (target.isEmpty()) {
-    reply[QStringLiteral("ok")]    = false;
-    reply[QStringLiteral("error")] = QStringLiteral("missing_name");
-  } else {
-    const auto desc = m_dispatcher->describeCommand(target);
-    if (desc.isEmpty()) {
-      reply[QStringLiteral("ok")]    = false;
-      reply[QStringLiteral("error")] = QStringLiteral("not_found");
-      reply[QStringLiteral("name")]  = target;
-    } else {
-      reply[QStringLiteral("ok")]      = true;
-      reply[QStringLiteral("command")] = desc;
-      const auto skill                 = skillForCommand(target);
-      if (!skill.isEmpty())
-        reply[QStringLiteral("loadSkillFirst")] = skill;
-    }
-  }
-  recordToolResult(callId, name, reply);
-  updateToolCallCard(callId,
-                     reply.value(QStringLiteral("ok")).toBool() ? CallStatus::Done
-                                                                : CallStatus::Error,
-                     reply);
-  releaseOutstandingToolResult();
-}
-
-/**
- * @brief meta.fetchScriptingDocs handler: returns the canonical doc body for a kind.
- */
-void AI::Conversation::runMetaScriptingDocs(const QString& callId,
-                                            const QString& name,
-                                            const QJsonObject& arguments)
-{
-  appendToolCallCard(callId, name, arguments, CallStatus::Running);
-  const auto kind = arguments.value(QStringLiteral("kind")).toString();
-  const auto body = ContextBuilder::scriptingDocFor(kind);
-
-  QJsonObject result;
-  if (body.isEmpty()) {
-    result[QStringLiteral("ok")] = false;
-    result[QStringLiteral("error")] =
-      QStringLiteral("Unknown kind '%1'. Valid: frame_parser_js, "
-                     "frame_parser_lua, transform_js, transform_lua, "
-                     "output_widget_js, painter_js, control_script_js, "
-                     "sdk_js, sdk_lua.")
-        .arg(kind);
-    updateToolCallCard(callId, CallStatus::Error, result);
-  } else {
-    result[QStringLiteral("ok")]      = true;
-    result[QStringLiteral("kind")]    = kind;
-    result[QStringLiteral("content")] = body;
-    updateToolCallCard(callId, CallStatus::Done, result);
-  }
-
-  recordToolResult(callId, name, result);
-  releaseOutstandingToolResult();
-}
-
-/**
- * @brief meta.howTo handler: returns a canned step-by-step recipe by task id.
- */
-void AI::Conversation::runMetaHowTo(const QString& callId,
-                                    const QString& name,
-                                    const QJsonObject& arguments)
-{
-  appendToolCallCard(callId, name, arguments, CallStatus::Running);
-  const auto task   = arguments.value(QStringLiteral("task")).toString();
-  const auto recipe = ContextBuilder::howToRecipe(task);
-
-  QJsonObject result;
-  if (recipe.isEmpty()) {
-    result[QStringLiteral("ok")] = false;
-    result[QStringLiteral("error")] =
-      QStringLiteral("Unknown task '%1'. Valid tasks: %2")
-        .arg(task, ContextBuilder::howToTasks().join(QStringLiteral(", ")));
-    updateToolCallCard(callId, CallStatus::Error, result);
-  } else {
-    result[QStringLiteral("ok")]    = true;
-    result[QStringLiteral("task")]  = task;
-    result[QStringLiteral("steps")] = recipe;
-    updateToolCallCard(callId, CallStatus::Done, result);
-  }
-
-  recordToolResult(callId, name, result);
-  releaseOutstandingToolResult();
 }
 
 /**
@@ -977,9 +631,8 @@ void AI::Conversation::dispatchByCallSafety(const QString& callId,
                                             const QString& requestedName,
                                             const QJsonObject& arguments)
 {
-  const QString name           = m_dispatcher->canonicalToolName(requestedName);
-  static auto& commandRegistry = AI::CommandRegistry::instance();
-  const auto safety            = commandRegistry.safetyOf(name);
+  const QString name = m_dispatcher->canonicalToolName(requestedName);
+  const auto safety  = m_commands.safetyOf(name);
   qCDebug(serialStudioAI) << "Tool call" << name << "safety=" << static_cast<int>(safety);
 
   if (safety == Safety::Blocked) {
@@ -995,10 +648,8 @@ void AI::Conversation::dispatchByCallSafety(const QString& callId,
 
   if (safety == Safety::Confirm || safety == Safety::AlwaysConfirm) {
     bool autoApprove = false;
-    if (safety == Safety::Confirm) {
-      static auto& assistant = Assistant::instance();
-      autoApprove            = assistant.autoApproveEdits();
-    }
+    if (safety == Safety::Confirm)
+      autoApprove = assistant().autoApproveEdits();
 
     if (autoApprove) {
       appendToolCallCard(callId, name, arguments, CallStatus::Running);
@@ -1255,8 +906,7 @@ void AI::Conversation::issueRequest()
   connect(m_reply, &Reply::finished, this, &Conversation::onReplyFinished);
   connect(m_reply, &Reply::errorOccurred, this, &Conversation::onReplyError);
   connect(m_reply, &Reply::cacheStatsAvailable, this, [](int read, int created) {
-    static auto& assistant = Assistant::instance();
-    assistant.reportCacheStats(read, created);
+    assistant().reportCacheStats(read, created);
   });
 }
 
@@ -1360,13 +1010,12 @@ void AI::Conversation::beginAssistantMessage()
 /**
  * @brief Returns "discovery" for read-only / meta calls, "execution" otherwise.
  */
-static QString toolCallCategory(const QString& name)
+static QString toolCallCategory(const AI::CommandRegistry& commands, const QString& name)
 {
   if (name.startsWith(QStringLiteral("meta.")))
     return QStringLiteral("discovery");
 
-  static auto& commandRegistry = AI::CommandRegistry::instance();
-  if (commandRegistry.safetyOf(name) == AI::Safety::Safe)
+  if (commands.safetyOf(name) == AI::Safety::Safe)
     return QStringLiteral("discovery");
 
   return QStringLiteral("execution");
@@ -1395,7 +1044,7 @@ void AI::Conversation::appendToolCallCard(const QString& callId,
   card[QStringLiteral("callId")]   = callId;
   card[QStringLiteral("name")]     = name;
   card[QStringLiteral("family")]   = family;
-  card[QStringLiteral("category")] = toolCallCategory(name);
+  card[QStringLiteral("category")] = toolCallCategory(m_commands, name);
   card[QStringLiteral("args")]     = QJsonDocument(arguments).toJson(QJsonDocument::Indented);
   card[QStringLiteral("status")]   = static_cast<int>(status);
   card[QStringLiteral("result")]   = QString();
@@ -1470,8 +1119,9 @@ void AI::Conversation::runToolCall(const QString& callId,
   const bool ok    = reply.value(QStringLiteral("ok")).toBool();
   qCDebug(serialStudioAI) << "Tool" << name << "result_ok=" << ok;
 
-  auto effective          = reply;
-  const auto verification = runAutoVerify(name, arguments, reply);
+  auto effective = reply;
+  const auto verification =
+    assistant().autoVerifyEnabled() ? m_autoVerify.verify(name, arguments, reply) : QJsonObject();
   if (!verification.isEmpty())
     effective[QStringLiteral("verification")] = verification;
 
@@ -1488,179 +1138,10 @@ void AI::Conversation::runToolCall(const QString& callId,
   const bool isExplicit =
     (name == QStringLiteral("project.save") || name == QStringLiteral("project.new")
      || name == QStringLiteral("project.open"));
-  static auto& commandRegistry = AI::CommandRegistry::instance();
-  const auto safety            = commandRegistry.safetyOf(name);
-  const bool isReadOnly        = (safety == Safety::Safe);
+  const auto safety     = m_commands.safetyOf(name);
+  const bool isReadOnly = (safety == Safety::Safe);
   if (ok && !isMeta && !isExplicit && !isReadOnly)
     m_autoSaveTimer->start();
-}
-
-/**
- * @brief Maps an apply-class mutation to its Safe-tier read-back check, mirroring the arg
- *        construction assistant.script.apply proved out; returns false when no map exists.
- */
-static bool readBackCommandFor(const QString& name,
-                               const QJsonObject& arguments,
-                               QString& cmd,
-                               QJsonObject& args)
-{
-  if (name == QStringLiteral("project.frameParser.setCode")) {
-    cmd  = QStringLiteral("project.frameParser.dryCompile");
-    args = arguments;
-    return true;
-  }
-
-  if (name == QStringLiteral("project.dataset.setTransformCode")) {
-    cmd  = QStringLiteral("project.dataset.transform.dryRun");
-    args = arguments;
-    if (!args.contains(QStringLiteral("values")))
-      args[QStringLiteral("values")] = QJsonArray{0.0};
-
-    return true;
-  }
-
-  if (name == QStringLiteral("project.painter.setCode")) {
-    cmd  = QStringLiteral("project.painter.dryRun");
-    args = arguments;
-    return true;
-  }
-
-  if (name == QStringLiteral("project.outputWidget.update")
-      && arguments.contains(QStringLiteral("transmitFunction"))) {
-    cmd  = QStringLiteral("project.outputWidget.dryRun");
-    args = QJsonObject{
-      {QStringLiteral("code"), arguments.value(QStringLiteral("transmitFunction"))}
-    };
-    return true;
-  }
-
-  return false;
-}
-
-/**
- * @brief Harness-enforced verification after a successful apply-class mutation: runs the
- *        matching Safe-tier read-back (asserted, never Confirm-class) and returns a
- *        verification object for the tool result and card, or empty when not applicable.
- */
-QJsonObject AI::Conversation::runAutoVerify(const QString& name,
-                                            const QJsonObject& arguments,
-                                            const QJsonObject& reply)
-{
-  static auto& assistant = Assistant::instance();
-  if (!assistant.autoVerifyEnabled() || !reply.value(QStringLiteral("ok")).toBool())
-    return {};
-
-  if (name == QStringLiteral("assistant.script.apply")) {
-    QJsonObject v;
-    v[QStringLiteral("ok")]     = true;
-    v[QStringLiteral("method")] = QStringLiteral("internal dry-run");
-    qCDebug(serialStudioAI) << "AutoVerify:" << name << "via internal dry-run ok= true";
-    return v;
-  }
-
-  if (name == QStringLiteral("assistant.project.bulkApply")) {
-    const int failures = reply.value(QStringLiteral("failureCount")).toInt();
-    QJsonObject v;
-    v[QStringLiteral("ok")]     = failures == 0;
-    v[QStringLiteral("method")] = QStringLiteral("batch failure scan");
-    if (failures > 0)
-      v[QStringLiteral("detail")] = tr("%1 operation(s) failed").arg(failures);
-
-    qCDebug(serialStudioAI) << "AutoVerify:" << name
-                            << "via batch failure scan ok=" << (failures == 0);
-    return v;
-  }
-
-  if (name == QStringLiteral("project.source.update"))
-    return verifySourceUpdate(arguments);
-
-  QString cmd;
-  QJsonObject args;
-  if (!readBackCommandFor(name, arguments, cmd, args))
-    return {};
-
-  static auto& registry = AI::CommandRegistry::instance();
-  const bool safe       = registry.safetyOf(cmd) == Safety::Safe;
-  if (!safe) {
-    qCWarning(serialStudioAI) << "AutoVerify: refusing non-Safe read-back" << cmd;
-    return {};
-  }
-
-  const auto check = m_dispatcher->executeCommand(cmd, args);
-  bool check_ok    = check.value(QStringLiteral("ok")).toBool();
-  const auto inner = check.value(QStringLiteral("result")).toObject();
-  if (check_ok && inner.contains(QStringLiteral("ok")))
-    check_ok = inner.value(QStringLiteral("ok")).toBool();
-
-  QJsonObject v;
-  v[QStringLiteral("ok")]     = check_ok;
-  v[QStringLiteral("method")] = cmd;
-  if (!check_ok)
-    v[QStringLiteral("detail")] =
-      QString::fromUtf8(QJsonDocument(check).toJson(QJsonDocument::Compact)).left(300);
-
-  qCDebug(serialStudioAI) << "AutoVerify:" << name << "via" << cmd << "ok=" << check_ok;
-  return v;
-}
-
-/**
- * @brief Read-back verification for project.source.update: fetches the Safe-tier source
- *        list and confirms every requested field actually round-tripped, because generic
- *        CRUD patches are where weak models misfire most (observed 2026-07-14).
- */
-QJsonObject AI::Conversation::verifySourceUpdate(const QJsonObject& arguments)
-{
-  QJsonObject v;
-  v[QStringLiteral("method")] = QStringLiteral("project.source.list");
-
-  const auto check =
-    m_dispatcher->executeCommand(QStringLiteral("project.source.list"), QJsonObject());
-  if (!check.value(QStringLiteral("ok")).toBool()) {
-    v[QStringLiteral("ok")]     = false;
-    v[QStringLiteral("detail")] = tr("Source list read-back failed");
-    qCDebug(serialStudioAI) << "AutoVerify: project.source.update via project.source.list "
-                               "ok= false (list failed)";
-    return v;
-  }
-
-  const int source_id = arguments.value(Keys::SourceId).toInt(-1);
-  const auto rows =
-    check.value(QStringLiteral("result")).toObject().value(QStringLiteral("sources")).toArray();
-
-  QJsonObject row;
-  for (const auto& r : rows) {
-    const auto obj = r.toObject();
-    if (obj.value(Keys::SourceId).toInt(-1) == source_id) {
-      row = obj;
-      break;
-    }
-  }
-
-  if (row.isEmpty()) {
-    v[QStringLiteral("ok")]     = false;
-    v[QStringLiteral("detail")] = tr("Source %1 not found after update").arg(source_id);
-    qCDebug(serialStudioAI) << "AutoVerify: project.source.update via project.source.list "
-                               "ok= false (source missing)";
-    return v;
-  }
-
-  QStringList mismatched;
-  for (auto it = arguments.constBegin(); it != arguments.constEnd(); ++it) {
-    if (it.key() == Keys::SourceId || !row.contains(it.key()))
-      continue;
-
-    if (row.value(it.key()) != it.value())
-      mismatched.append(it.key());
-  }
-
-  v[QStringLiteral("ok")] = mismatched.isEmpty();
-  if (!mismatched.isEmpty())
-    v[QStringLiteral("detail")] =
-      tr("Fields did not round-trip: %1").arg(mismatched.join(QStringLiteral(", ")));
-
-  qCDebug(serialStudioAI) << "AutoVerify: project.source.update via project.source.list ok="
-                          << mismatched.isEmpty();
-  return v;
 }
 
 /**
@@ -1708,6 +1189,26 @@ void AI::Conversation::releaseOutstandingToolResult()
 {
   if (m_outstandingToolResults > 0)
     --m_outstandingToolResults;
+}
+
+/**
+ * @brief Records that the model already holds a skill body, so the deterministic router
+ *        does not inject it again later in the same chat.
+ */
+void AI::Conversation::noteSkillLoaded(const QString& skillId)
+{
+  m_loadedSkills.insert(skillId);
+}
+
+/**
+ * @brief Runs a doc-corpus query for the meta.searchDocs handler. The index is resolved
+ *        here rather than injected because its constructor parses the whole BM25 corpus:
+ *        capturing it would move that cost into Assistant construction.
+ */
+QList<AI::DocSearch::Hit> AI::Conversation::searchDocs(const QString& query, int k) const
+{
+  static auto& docSearch = AI::DocSearch::instance();
+  return docSearch.search(query, k);
 }
 
 /**
@@ -1808,10 +1309,9 @@ QJsonArray AI::Conversation::dispatcherTools() const
   if (!m_dispatcher)
     return {};
 
-  const auto caps        = m_provider ? m_provider->capabilities() : ProviderCapabilities{};
-  static auto& assistant = Assistant::instance();
-  const bool memory_on   = assistant.memoryEnabled();
-  const int cache_key    = (caps.needsSmallToolSurface ? 1 : 0) | (memory_on ? 2 : 0);
+  const auto caps      = m_provider ? m_provider->capabilities() : ProviderCapabilities{};
+  const bool memory_on = assistant().memoryEnabled();
+  const int cache_key  = (caps.needsSmallToolSurface ? 1 : 0) | (memory_on ? 2 : 0);
 
   static QHash<int, QJsonArray> s_cache;
   const auto cached = s_cache.constFind(cache_key);
@@ -1913,25 +1413,7 @@ void AI::Conversation::loadSnapshot(const QJsonObject& doc)
   m_awaitingConfirm.clear();
   setLastError(QString());
 
-  for (int i = 0; i < m_uiMessages.size(); ++i) {
-    auto map     = m_uiMessages.at(i).toMap();
-    auto calls   = map.value(QStringLiteral("toolCalls")).toList();
-    bool changed = false;
-    for (int j = 0; j < calls.size(); ++j) {
-      auto card        = calls.at(j).toMap();
-      const auto state = card.value(QStringLiteral("status")).toInt();
-      if (state == static_cast<int>(CallStatus::Running)
-          || state == static_cast<int>(CallStatus::AwaitingConfirm)) {
-        card[QStringLiteral("status")] = static_cast<int>(CallStatus::Done);
-        calls[j]                       = card;
-        changed                        = true;
-      }
-    }
-    if (changed) {
-      map.insert(QStringLiteral("toolCalls"), calls);
-      m_uiMessages[i] = map;
-    }
-  }
+  ChatDigest::downgradeStaleToolCards(m_uiMessages);
 
   pruneHistory();
 
@@ -1944,12 +1426,7 @@ void AI::Conversation::loadSnapshot(const QJsonObject& doc)
  */
 QString AI::Conversation::firstUserText() const
 {
-  for (const auto& row : m_uiMessages) {
-    const auto map = row.toMap();
-    if (map.value(QStringLiteral("role")).toString() == QStringLiteral("user"))
-      return map.value(QStringLiteral("text")).toString();
-  }
-  return {};
+  return ChatDigest::firstUserText(m_uiMessages);
 }
 
 /**
@@ -1983,61 +1460,11 @@ QString AI::Conversation::handoffSeed() const
 }
 
 /**
- * @brief Builds the deterministic handoff digest from the visible chat (no model call):
- *        last user asks, recent completed non-meta tool actions, and the tail of the last
- *        reply, secret-scrubbed and capped. Scans the tail in reverse and stops once the
- *        digest inputs are full, so cost stays constant-bounded on long chats.
+ * @brief Builds the deterministic handoff digest from the visible chat (no model call).
  */
 QString AI::Conversation::buildHandoffDigest() const
 {
-  if (m_uiMessages.isEmpty())
-    return {};
-
-  QStringList asks;
-  QStringList actions;
-  QString last_reply;
-  for (int i = static_cast<int>(m_uiMessages.size()) - 1; i >= 0; --i) {
-    if (asks.size() >= 3 && !last_reply.isEmpty())
-      break;
-
-    const auto map  = m_uiMessages.at(i).toMap();
-    const auto role = map.value(QStringLiteral("role")).toString();
-    if (role == QStringLiteral("user") && asks.size() < 3) {
-      const auto text =
-        map.value(QStringLiteral("text")).toString().left(480).simplified().left(120);
-      if (!text.isEmpty())
-        asks.prepend(text);
-    }
-
-    if (role != QStringLiteral("assistant"))
-      continue;
-
-    if (last_reply.isEmpty())
-      last_reply = map.value(QStringLiteral("text")).toString().left(800).simplified().left(200);
-
-    const auto calls = map.value(QStringLiteral("toolCalls")).toList();
-    for (const auto& c : calls) {
-      const auto card = c.toMap();
-      const auto name = card.value(QStringLiteral("name")).toString();
-      const auto done =
-        card.value(QStringLiteral("status")).toInt() == static_cast<int>(CallStatus::Done);
-      if (done && !name.startsWith(QStringLiteral("meta.")) && !actions.contains(name)
-          && actions.size() < 10)
-        actions.append(name);
-    }
-  }
-
-  QString out;
-  out += QStringLiteral("Asked: ") + asks.join(QStringLiteral(" | ")) + QLatin1Char('\n');
-  if (!actions.isEmpty())
-    out += QStringLiteral("Actions: ") + actions.join(QStringLiteral(", ")) + QLatin1Char('\n');
-
-  if (!last_reply.isEmpty())
-    out += QStringLiteral("Last reply: ") + last_reply + QLatin1Char('\n');
-
-  (void)Redactor::scrub(out);
-  out.truncate(kMaxDigestChars);
-  return out;
+  return ChatDigest::buildHandoffDigest(m_uiMessages, kMaxDigestChars);
 }
 
 /**

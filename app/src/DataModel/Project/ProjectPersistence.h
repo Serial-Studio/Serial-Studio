@@ -76,6 +76,11 @@ private slots:
   void resolveDiskFileChange();
 
 private:
+  void serializeDocumentScalars(QJsonObject& json) const;
+  void serializeEntityArrays(QJsonObject& json) const;
+  void serializeWorkspacesAndTables(QJsonObject& json) const;
+  void serializePresentationAndSinks(QJsonObject& json) const;
+
   void promptDiskFileReload();
   [[nodiscard]] static QByteArray hashProjectFile(const QString& path);
 

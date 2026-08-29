@@ -984,44 +984,67 @@ void DataModel::ProjectLoader::loadWidgetSettingsAndWorkspaces(const QJsonObject
   m_model.m_folders.clearAll();
   workspaces.setCustomizeFlagFromFile(json.value(Keys::CustomizeWorkspaces).toBool(false));
 
-  if (workspaces.customizeWorkspaces() && json.contains(Keys::Workspaces)) {
-    auto& list         = workspaces.mutableList();
-    const auto wsArray = json.value(Keys::Workspaces).toArray();
-    for (const auto& val : wsArray) {
-      DataModel::Workspace ws;
-      if (DataModel::read(ws, val.toObject()))
-        list.push_back(ws);
-    }
+  loadCustomWorkspaces(json);
+  loadWorkspaceAndGroupFolders(json);
+  loadHiddenGroupsAndTables(json);
+  loadSinkConfigs(json);
+}
 
-    int collisions = 0;
-    int nextId     = WorkspaceIds::UserStart;
-    for (const auto& ws : std::as_const(list))
-      if (ws.workspaceId >= WorkspaceIds::UserStart && ws.workspaceId >= nextId)
-        nextId = ws.workspaceId + 1;
+/**
+ * @brief Reads the user-customised workspace list, moving any stored ID that now falls inside the
+ *        reserved auto range into the user range so a project written before the range split keeps
+ *        its workspaces instead of colliding with the synthesised ones.
+ */
+void DataModel::ProjectLoader::loadCustomWorkspaces(const QJsonObject& json)
+{
+  auto& workspaces = m_model.m_workspaces;
+  if (!workspaces.customizeWorkspaces() || !json.contains(Keys::Workspaces))
+    return;
 
-    for (auto& ws : list) {
-      if (ws.workspaceId >= WorkspaceIds::AutoStart && ws.workspaceId < WorkspaceIds::UserStart) {
-        ws.workspaceId = nextId++;
-        ++collisions;
-      }
-    }
+  auto& list         = workspaces.mutableList();
+  const auto wsArray = json.value(Keys::Workspaces).toArray();
+  for (const auto& val : wsArray) {
+    DataModel::Workspace ws;
+    if (DataModel::read(ws, val.toObject()))
+      list.push_back(ws);
+  }
 
-    if (collisions > 0) {
-      const int n = collisions;
-      QTimer::singleShot(0, &m_model, [n] {
-        static auto& nc = DataModel::NotificationCenter::instance();
-        nc.postWarning(
-          QStringLiteral("ProjectModel"),
-          ProjectModel::tr("Workspace IDs remapped on load"),
-          ProjectModel::tr("%1 custom workspace ID(s) overlapped the new reserved auto range and "
-                           "were moved into the user range. Save the project to make the remap "
-                           "permanent.")
-            .arg(n));
-      });
+  int collisions = 0;
+  int nextId     = WorkspaceIds::UserStart;
+  for (const auto& ws : std::as_const(list))
+    if (ws.workspaceId >= WorkspaceIds::UserStart && ws.workspaceId >= nextId)
+      nextId = ws.workspaceId + 1;
+
+  for (auto& ws : list) {
+    if (ws.workspaceId >= WorkspaceIds::AutoStart && ws.workspaceId < WorkspaceIds::UserStart) {
+      ws.workspaceId = nextId++;
+      ++collisions;
     }
   }
 
-  if (workspaces.customizeWorkspaces() && json.contains(Keys::WorkspaceFolders)) {
+  if (collisions == 0)
+    return;
+
+  const int n = collisions;
+  QTimer::singleShot(0, &m_model, [n] {
+    static auto& nc = DataModel::NotificationCenter::instance();
+    nc.postWarning(
+      QStringLiteral("ProjectModel"),
+      ProjectModel::tr("Workspace IDs remapped on load"),
+      ProjectModel::tr("%1 custom workspace ID(s) overlapped the new reserved auto range and "
+                       "were moved into the user range. Save the project to make the remap "
+                       "permanent.")
+        .arg(n));
+  });
+}
+
+/**
+ * @brief Reads the workspace and group folder trees, sanitising each one right after it is read so
+ *        a cyclic or orphaned parent from the file cannot reach the editor.
+ */
+void DataModel::ProjectLoader::loadWorkspaceAndGroupFolders(const QJsonObject& json)
+{
+  if (m_model.m_workspaces.customizeWorkspaces() && json.contains(Keys::WorkspaceFolders)) {
     auto& folders          = m_model.m_folders.mutableWorkspaceFolders();
     const auto folderArray = json.value(Keys::WorkspaceFolders).toArray();
     for (const auto& val : folderArray) {
@@ -1044,7 +1067,14 @@ void DataModel::ProjectLoader::loadWidgetSettingsAndWorkspaces(const QJsonObject
   }
 
   m_model.m_folders.sanitizeGroupFolders();
+}
 
+/**
+ * @brief Reads the hidden auto-group ids, the data tables, and the table folder tree.
+ */
+void DataModel::ProjectLoader::loadHiddenGroupsAndTables(const QJsonObject& json)
+{
+  auto& workspaces = m_model.m_workspaces;
   workspaces.clearHiddenGroupIds();
   if (json.contains(Keys::HiddenGroups)) {
     const auto hiddenArray = json.value(Keys::HiddenGroups).toArray();
@@ -1074,8 +1104,6 @@ void DataModel::ProjectLoader::loadWidgetSettingsAndWorkspaces(const QJsonObject
   }
 
   m_model.m_folders.sanitizeTableFolders();
-
-  loadSinkConfigs(json);
 }
 
 /**

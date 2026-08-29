@@ -655,20 +655,20 @@ QJsonObject InfluxDB::Export::toJson() const
  */
 void InfluxDB::Export::setupExternalConnections()
 {
-  auto& projectModel = DataModel::ProjectModel::instance();
-  connect(&projectModel, &DataModel::ProjectModel::influxSinkChanged, this, [this] {
+  auto* projectModel = &DataModel::ProjectModel::instance();
+  connect(projectModel, &DataModel::ProjectModel::influxSinkChanged, this, [this, projectModel] {
     if (m_savingToProjectModel)
       return;
 
-    applyProjectConfig(DataModel::ProjectModel::instance().influxSink());
+    applyProjectConfig(projectModel->influxSink());
   });
 
-  connect(this, &Export::configurationChanged, this, [this] {
+  connect(this, &Export::configurationChanged, this, [this, projectModel] {
     if (m_inApply)
       return;
 
     m_savingToProjectModel = true;
-    DataModel::ProjectModel::instance().setInfluxSink(toJson());
+    projectModel->setInfluxSink(toJson());
     m_savingToProjectModel = false;
   });
 
@@ -683,7 +683,7 @@ void InfluxDB::Export::setupExternalConnections()
   connect(
     &Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this, &Export::sampleStats);
 
-  applyProjectConfig(projectModel.influxSink());
+  applyProjectConfig(projectModel->influxSink());
 }
 
 /**
