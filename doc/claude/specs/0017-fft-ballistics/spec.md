@@ -38,12 +38,12 @@ large part of why those analyzers feel realtime.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — Maintainer: with ballistics on, music renders as one cohesive, smoothly
+- [x] **AC1** — Maintainer: with ballistics on, music renders as one cohesive, smoothly
       decaying spectrum (no low/high rhythm mismatch); peaks still hit full level.
-- [ ] **AC2** — Maintainer: toggling the checkbox off restores today's raw display.
-- [ ] **AC3** — pytest round-trip: both fields persist via API + save/load; absent keys
+- [x] **AC2** — Maintainer: toggling the checkbox off restores today's raw display.
+- [x] **AC3** — pytest round-trip: both fields persist via API + save/load; absent keys
       read off/300.
-- [ ] **AC4** — `--benchmark-hotpath` unchanged (nothing off the widget draw layer).
+- [x] **AC4** — `--benchmark-hotpath` unchanged (nothing off the widget draw layer).
 
 ## Decisions (2026-07-17)
 

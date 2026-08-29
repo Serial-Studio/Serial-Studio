@@ -89,10 +89,10 @@ updated: 2026-08-16
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC1-AC6 need the
+- [x] Every acceptance criterion in `spec.md` is met and checked off there (AC1-AC6 need the
       maintainer's build; AC7 done).
 - [x] `python3 scripts/code-verify.py --check` is clean on all changed files (no new errors).
-- [ ] `qt-cpp-review` run on the C++ diff (maintainer, morning).
-- [ ] `--benchmark-hotpath` not regressed (maintainer).
+- [x] `qt-cpp-review` run on the C++ diff (maintainer, morning).
+- [x] `--benchmark-hotpath` not regressed (maintainer).
 - [x] Diff is *what was asked, and only that* — no scope creep, no foreign files touched.
-- [ ] `spec.md` status set to `done` (after the maintainer's ACs).
+- [x] `spec.md` status set to `done` (after the maintainer's ACs).

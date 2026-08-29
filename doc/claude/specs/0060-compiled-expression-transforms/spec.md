@@ -68,14 +68,14 @@ datasets by name inside the same source.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — `v * 0.0625 - 40` on a 256 kHz Native numeric project costs less than 10 % of
+- [x] **AC1** — `v * 0.0625 - 40` on a 256 kHz Native numeric project costs less than 10 % of
       the equivalent Lua transform in the benchmark readout.
-- [ ] **AC2** — An audio stream (44.1 kHz) with `sqrt(v*v)` per sample never trips the stream
+- [x] **AC2** — An audio stream (44.1 kHz) with `sqrt(v*v)` per sample never trips the stream
       worker's drop counter on the reference machine.
-- [ ] **AC3** — `sample(Temperature, 1)` on the frame lane returns the previous frame's value;
+- [x] **AC3** — `sample(Temperature, 1)` on the frame lane returns the previous frame's value;
       on the stream lane the previous sample.
-- [ ] **AC4** — A typo (`sqtr(v)`) is a single edit-time finding; the dataset publishes raw.
-- [ ] **AC5** — Bit-identical results between the frame lane and the stream lane for the same
+- [x] **AC4** — A typo (`sqtr(v)`) is a single edit-time finding; the dataset publishes raw.
+- [x] **AC5** — Bit-identical results between the frame lane and the stream lane for the same
       expression and inputs.
 
 ## Constraints & Invariants

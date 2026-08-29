@@ -12,4 +12,4 @@ updated: 2026-08-17
 - [x] T3 `Sessions::Export` snapshot + debounce + worker `storeViewState`, `sessions.view_state` column, `kUserVersion` 4
 - [x] T4 `PlayerLoaderWorker` payload + `Sessions::Player` capture / apply / restore / divergence notice
 - [x] T5 docs (`export.md`)
-- [ ] T6 workspace + external windows in the bundle (needs a Taskbar wire in the composition root)
+- [x] T6 workspace + external windows in the bundle (needs a Taskbar wire in the composition root)

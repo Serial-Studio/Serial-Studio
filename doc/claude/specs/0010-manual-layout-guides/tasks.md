@@ -194,12 +194,12 @@ updated: 2026-07-15
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC1-AC11
+- [x] Every acceptance criterion in `spec.md` is met and checked off there (AC1-AC11
       maintainer-observed in-app; AC12 via one `--benchmark-hotpath` run, pass/fail only).
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] `--benchmark-hotpath` not regressed (formality — no hotpath code touched).
-- [ ] No pytest surface applies (canvas gestures unreachable via API); noted in plan.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that* — no scope creep, no foreign files touched.
-- [ ] `spec.md` status set to `done`.
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] `--benchmark-hotpath` not regressed (formality — no hotpath code touched).
+- [x] No pytest surface applies (canvas gestures unreachable via API); noted in plan.
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Diff is *what was asked, and only that* — no scope creep, no foreign files touched.
+- [x] `spec.md` status set to `done`.

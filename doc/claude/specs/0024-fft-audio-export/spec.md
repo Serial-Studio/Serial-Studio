@@ -93,30 +93,30 @@ producing a file that common tools will open.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — In a live session (e.g. the rocket demo or a sine-wave TCP feed) with an
+- [x] **AC1** — In a live session (e.g. the rocket demo or a sine-wave TCP feed) with an
   FFT widget, enabling the toggle and streaming for ~10 s produces a WAV file whose
   sample count ≈ configured sampling rate × elapsed seconds (±1 frame window), verified
   by opening it in Audacity or a Python `wave` reader. (R2, R3)
-- [ ] **AC2** — The WAV header's sample rate field equals the dataset's `fftSamplingRate`
+- [x] **AC2** — The WAV header's sample rate field equals the dataset's `fftSamplingRate`
   for at least two configured rates (e.g. 100 Hz and 8000 Hz). (R3)
-- [ ] **AC3** — Feeding a known full-range sine into a dataset with declared min/max
+- [x] **AC3** — Feeding a known full-range sine into a dataset with declared min/max
   yields a recorded waveform at full scale without clipping; the same signal without
   min/max yields an unclipped, peak-normalized waveform. (R4)
-- [ ] **AC4** — A 100 Hz recording finalizes with a companion audible WAV whose declared
+- [x] **AC4** — A 100 Hz recording finalizes with a companion audible WAV whose declared
   rate is within the standard audible range and whose sample count equals the primary
   file's; an 8 kHz recording produces no companion. (R5)
-- [ ] **AC5** — Disconnecting mid-recording leaves file(s) that Audacity opens without a
+- [x] **AC5** — Disconnecting mid-recording leaves file(s) that Audacity opens without a
   repair prompt; toggling on/off with no data in between leaves no file. (R6)
-- [ ] **AC6** — An FFT widget and a Waterfall widget recording simultaneously (same
+- [x] **AC6** — An FFT widget and a Waterfall widget recording simultaneously (same
   dataset) produce independent files, each matching the dataset's rate and its own
   elapsed sample count. (R1, R7)
-- [ ] **AC7** — Files appear under the workspace "Audio Recordings" tree and the toolbar
+- [x] **AC7** — Files appear under the workspace "Audio Recordings" tree and the toolbar
   button reveals that folder. (R8)
-- [ ] **AC8** — `--benchmark-hotpath` passes unchanged with the feature compiled in and
+- [x] **AC8** — `--benchmark-hotpath` passes unchanged with the feature compiled in and
   disabled. (R9)
-- [ ] **AC9** — Opening a CSV/session replay with recording enabled produces no file.
+- [x] **AC9** — Opening a CSV/session replay with recording enabled produces no file.
   (Non-goal / parity with video export)
-- [ ] **AC10** — A GPL build compiles without the feature and the FFT/Waterfall toolbars
+- [x] **AC10** — A GPL build compiles without the feature and the FFT/Waterfall toolbars
   show no recording controls. (R10)
 
 ## Constraints & Invariants

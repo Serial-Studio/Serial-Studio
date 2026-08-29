@@ -175,4 +175,4 @@ updated: 2026-08-10
 - [x] `pytest tests/integration/test_connection_verdicts.py` listed for the maintainer.
 - [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
 - [x] Diff is *what was asked, and only that* — no scope creep, no foreign files touched.
-- [ ] `spec.md` status set to `done`.
+- [x] `spec.md` status set to `done`.

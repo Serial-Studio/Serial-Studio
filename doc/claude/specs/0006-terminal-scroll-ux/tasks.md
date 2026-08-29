@@ -187,7 +187,7 @@ updated: 2026-07-13
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC1–AC4
+- [x] Every acceptance criterion in `spec.md` is met and checked off there (AC1–AC4
       maintainer observations listed in `plan.md`; AC5 after the maintainer's
       `llm_translate.py` run; AC6 via CI). *Implementation complete 2026-07-13; runtime
       verification awaits the maintainer.*

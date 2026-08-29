@@ -167,41 +167,41 @@ or native runtime on the user's machine.
 
 ## Acceptance Criteria
 
-- [ ] **AC1 (R1, R8, R14)** — A widget package hosted in a local repository folder installs
+- [x] **AC1 (R1, R8, R14)** — A widget package hosted in a local repository folder installs
       through the extension manager, appears in the installed list, and its files land under
       the user's workspace extension directory. Maintainer check: move or reinstall the
       application; the widget still loads.
-- [ ] **AC2 (R2)** — The project editor offers an installed widget only for entities matching
+- [x] **AC2 (R2)** — The project editor offers an installed widget only for entities matching
       its declaration: a dataset-scope widget does not appear in the group widget picker, a
       widget declaring one numeric dataset does not appear for a three-dataset group.
       Covered by `pytest` against the API's project surface.
-- [ ] **AC3 (R3)** — A widget declaring config properties renders an editable settings form
+- [x] **AC3 (R3)** — A widget declaring config properties renders an editable settings form
       with no widget-specific UI code, and the values round-trip through the project file
       like any other per-widget setting (which, as spec 0031 established, are presentation
       state and stay outside undo history).
-- [ ] **AC4 (R4)** — With N widget packages installed and a project that uses one, exactly one
+- [x] **AC4 (R4)** — With N widget packages installed and a project that uses one, exactly one
       widget QML component is compiled. Maintainer check: startup time with ten unused
       packages installed is indistinguishable from zero packages installed.
-- [ ] **AC5 (R5, R6, R7)** — Seeded failure cases each produce exactly one problem-center
+- [x] **AC5 (R5, R6, R7)** — Seeded failure cases each produce exactly one problem-center
       finding naming the package and cause, and no crash: malformed metadata, a compatibility
       range excluding the host, a missing required dependency, a QML syntax error, and a
       project referencing an uninstalled widget id. Covered by `pytest`.
-- [ ] **AC6 (R9)** — A newly installed widget does not execute until consent is given;
+- [x] **AC6 (R9)** — A newly installed widget does not execute until consent is given;
       declining leaves it installed and inert; the decision persists across restarts and is
       re-asked when the package version changes.
-- [ ] **AC7 (R10)** — On a free build and on an unactivated commercial build, an extension
+- [x] **AC7 (R10)** — On a free build and on an unactivated commercial build, an extension
       widget package that attempts to reach a Pro capability fails the same way any other
       unlicensed access does, and no Pro builtin becomes available. Maintainer check plus a
       `pytest` case for the project-surface half.
-- [ ] **AC8 (R11)** — The two converted widgets render identically to the previous build for
+- [x] **AC8 (R11)** — The two converted widgets render identically to the previous build for
       the example projects that use them, and a project file saved by the previous build
       loads with those widgets intact and unchanged on disk after a save.
-- [ ] **AC9 (R12)** — `--benchmark-hotpath` shows no regression against the pre-change
+- [x] **AC9 (R12)** — `--benchmark-hotpath` shows no regression against the pre-change
       baseline, on a project with no extension widget and on a project using a converted one.
-- [ ] **AC10 (R13)** — An extension widget can be moved, resized, popped out, frozen, added
+- [x] **AC10 (R13)** — An extension widget can be moved, resized, popped out, frozen, added
       to a workspace, retitled, and its layout persists across a project reload, identically
       to a builtin.
-- [ ] **AC11 (R14)** — A bundled example package plus the published authoring documentation
+- [x] **AC11 (R14)** — A bundled example package plus the published authoring documentation
       are sufficient for the maintainer to write and install a new widget without touching the
       source tree.
 

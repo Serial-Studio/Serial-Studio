@@ -125,41 +125,41 @@ associate with "how is this dashboard arranged", so that is where the choice bel
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — Each shipped pattern can be selected for a workspace and the dashboard
+- [x] **AC1** — Each shipped pattern can be selected for a workspace and the dashboard
       re-tiles accordingly (maintainer check against a workspace with several widgets).
-- [ ] **AC2** — For every pattern, adding and removing widgets across a 1..12 range produces
+- [x] **AC2** — For every pattern, adding and removing widgets across a 1..12 range produces
       a tiling with no gaps, no overlaps, and no widget smaller than the layout floor
       (automated check over the tiling function; no GUI required).
-- [ ] **AC3** — The selected pattern and ratio survive save/reload of the project, and
+- [x] **AC3** — The selected pattern and ratio survive save/reload of the project, and
       switching between two workspaces with different patterns applies each correctly
       (pytest project round-trip + maintainer check).
-- [ ] **AC4** — An existing project created before this change renders identically before and
+- [x] **AC4** — An existing project created before this change renders identically before and
       after (maintainer visual comparison against the current build).
-- [ ] **AC5** — Changing the split ratio re-tiles immediately and offers only ladder
+- [x] **AC5** — Changing the split ratio re-tiles immediately and offers only ladder
       fractions (maintainer check).
-- [ ] **AC6** — With the dashboard frozen and titlebars hidden, adjacent widgets show one
+- [x] **AC6** — With the dashboard frozen and titlebars hidden, adjacent widgets show one
       shared border; unfreezing or restoring a titlebar returns two (maintainer visual check
       in light and dark themes).
-- [ ] **AC7** — The project file gains no merge-related keys, and a project saved while
+- [x] **AC7** — The project file gains no merge-related keys, and a project saved while
       frozen-and-merged reloads identical to one saved unfrozen (round-trip test).
-- [ ] **AC8** — Manual mode still snaps, welds seams and honors its spacing setting exactly
+- [x] **AC8** — Manual mode still snaps, welds seams and honors its spacing setting exactly
       as before (existing spec-0052 behavior, re-checked).
-- [ ] **AC9** — For a manual layout of several adjacent widgets rescaled across a range of
+- [x] **AC9** — For a manual layout of several adjacent widgets rescaled across a range of
       canvas sizes (including non-uniform aspect changes), every shared edge measures exactly
       the configured spacing and every outer edge sits flush with the canvas, for spacing
       values of -1, 0, 4 and 16 (automated check over the rescale function; no GUI required).
-- [ ] **AC10** — Rescaling a manual layout from its stored reference to another canvas size and
+- [x] **AC10** — Rescaling a manual layout from its stored reference to another canvas size and
       back returns geometry identical to the start, ten times over. Where a layout is instead
       re-derived from an intermediate size — a save taken there, or an edit committed there —
       integer rounding may move an edge by at most 2 px on the first hop; repeating that cycle
       50 times must not move it further, and joins and outer-edge flushness stay exact
       throughout (automated).
-- [ ] **AC11** — After the dashboard is resized, moving or resizing one widget leaves every
+- [x] **AC11** — After the dashboard is resized, moving or resizing one widget leaves every
       other widget's geometry unchanged at commit time; returning to the earlier size leaves
       them within the AC10 bound of their earlier geometry, joins and flushness exact. The
       commit re-bases the reference to the current canvas by design — that size is what the
       user just authored against (automated plus maintainer check).
-- [ ] **AC12** — Clicking the taskbar auto-layout button opens the gallery with the active
+- [x] **AC12** — Clicking the taskbar auto-layout button opens the gallery with the active
       choice marked; each pattern and the Manual entry apply on selection, and the ratio
       control appears only for patterns with a primary region (maintainer check).
 

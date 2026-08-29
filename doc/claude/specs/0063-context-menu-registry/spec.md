@@ -126,39 +126,39 @@ only one where adding an entry is a QML edit rather than a data edit.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — In a running app with a project loaded, right-clicking each of the nineteen row
+- [x] **AC1** — In a running app with a project loaded, right-clicking each of the nineteen row
       kinds in R1 opens a menu, and no row kind opens the wrong menu. Maintainer observation with
       a project that exercises all kinds (multi-source, folders in all three families, an output
       panel, a shared table, a workspace).
-- [ ] **AC2** — Right-clicking the project root, the frame parser child, each of the four section
+- [x] **AC2** — Right-clicking the project root, the frame parser child, each of the four section
       headers, and the empty area below the tree opens a menu; right-clicking the blank spacer row
       opens nothing. Maintainer observation.
-- [ ] **AC3** — Creating one of each object type from the tree produces the same result as creating
+- [x] **AC3** — Creating one of each object type from the tree produces the same result as creating
       it from the diagram or the corresponding view toolbar: same defaults, same title, same
       parent. Verified against the project file written after each creation.
-- [ ] **AC4** — Target scoping holds: with source B and folder F present, adding a group from
+- [x] **AC4** — Target scoping holds: with source B and folder F present, adding a group from
       source B's menu yields a group attached to source B; adding a group from folder F's menu
       yields a group whose parent folder is F; adding a dataset from group G's menu yields a
       dataset in G, regardless of which row was selected beforehand. Verified in the saved project
       file and via the API server's project queries.
-- [ ] **AC5** — Adding one entry to an existing menu (a new dataset type is the worked example)
+- [x] **AC5** — Adding one entry to an existing menu (a new dataset type is the worked example)
       requires editing only manifest data plus one binding entry, and it appears in both the tree
       menu and the diagram menu. Demonstrated as a diff review at handoff.
-- [ ] **AC6** — Selecting three deletable rows and right-clicking shows no creation entries and a
+- [x] **AC6** — Selecting three deletable rows and right-clicking shows no creation entries and a
       delete entry labeled with the count 3; deleting removes all three. Maintainer observation.
-- [ ] **AC7** — On a GPL build, Pro-flagged entries are visible and disabled, and no menu evaluates
+- [x] **AC7** — On a GPL build, Pro-flagged entries are visible and disabled, and no menu evaluates
       a Pro symbol; on a commercial build the same entries are enabled. Verified by building the
       GPL variant and by the registry script's commercial-guard scan.
-- [ ] **AC8** — `scripts/registry-verify.py`, `scripts/generate-command-strings.py --check` and
+- [x] **AC8** — `scripts/registry-verify.py`, `scripts/generate-command-strings.py --check` and
       `scripts/code-verify.py --check` pass with the new manifests and menus in place.
-- [ ] **AC9** — Every existing tree and diagram entry from R11 is still present and still works,
+- [x] **AC9** — Every existing tree and diagram entry from R11 is still present and still works,
       checked row by row against the pre-change menus. Maintainer observation, with the enumeration
       recorded in the task list.
-- [ ] **AC10** — A dataset with plot enabled and FFT disabled shows the visualization submenu with
+- [x] **AC10** — A dataset with plot enabled and FFT disabled shows the visualization submenu with
       plot checked and FFT unchecked; toggling FFT from the menu enables it in the dataset view and
       in the saved project file, and toggling it back removes it. Maintainer observation plus the
       saved project file.
-- [ ] **AC11** — Switching the application language updates menu entry text on the next open, with
+- [x] **AC11** — Switching the application language updates menu entry text on the next open, with
       no restart and no untranslated entry. Maintainer observation.
 
 ## Constraints & Invariants

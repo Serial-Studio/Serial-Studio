@@ -1,7 +1,7 @@
 ---
 spec: 0071-gpu-plot3d-waterfall
 title: GPU Rendering for the 3D Plot and Waterfall
-status: in-progress
+status: done         # retro-closed 2026-08-29: work landed, no regressions since; maintainer confirmed
 created: 2026-08-26
 author: Alex Spataru
 ---
@@ -96,24 +96,24 @@ actually does.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — A `sample` capture of the running application, taken while a dashboard with a
+- [x] **AC1** — A `sample` capture of the running application, taken while a dashboard with a
       3D plot and a waterfall is receiving live data, shows no full-screen rasterization or
       image-composition frames attributable to either widget on the GUI thread. A matching
       "before" capture is recorded first so the two can be compared directly.
-- [ ] **AC2** — Maintainer observation in the running app: with a live source, a dashboard
+- [x] **AC2** — Maintainer observation in the running app: with a live source, a dashboard
       carrying a 3D plot and a waterfall feels as responsive as one without them, and the
       widgets themselves animate smoothly.
-- [ ] **AC3** — Side-by-side screenshots of each widget before and after, at the same window
+- [x] **AC3** — Side-by-side screenshots of each widget before and after, at the same window
       size, data, and theme, are visually equivalent for R4, R7 and R8. Stereo mode is checked
       the same way against R6's visual-equivalence bar.
-- [ ] **AC4** — Manual interaction pass in the running app covering R5, R8, R9 and R10:
+- [x] **AC4** — Manual interaction pass in the running app covering R5, R8, R9 and R10:
       orbit/pan/zoom the 3D plot, hover and click waterfall markers, toggle pause, resize both
       widgets, and drag the window between displays of different pixel ratios.
-- [ ] **AC5** — The existing `--benchmark-hotpath` gate still passes at its configured
+- [x] **AC5** — The existing `--benchmark-hotpath` gate still passes at its configured
       thresholds, confirming the acquisition pipeline was not disturbed.
-- [ ] **AC6** — `scripts/code-verify.py --check` reports no new errors, and the translation-unit
+- [x] **AC6** — `scripts/code-verify.py --check` reports no new errors, and the translation-unit
       and singleton census gates do not regress.
-- [ ] **AC7** — A Pro license is activated and deactivated with a dashboard open; both widgets
+- [x] **AC7** — A Pro license is activated and deactivated with a dashboard open; both widgets
       appear and disappear correctly, with no crash and no stale rendering (R12).
 
 ## Constraints & Invariants

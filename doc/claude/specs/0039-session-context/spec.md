@@ -135,7 +135,7 @@ measurement; the phased path to the roadmap's criterion is recorded below it.
   `::instance()` in that file returns only the class's own accessor definition.
   *`BackupManager.cpp`, `ProtoImporter.cpp`, `DBCImporter.cpp` each report exactly 1
   occurrence, all classified `accessor` by the census.*
-- [ ] **AC3 (R5)** — A C++ unit test constructs a context and a pilot on the stack, runs the
+- [x] **AC3 (R5)** — A C++ unit test constructs a context and a pilot on the stack, runs the
   pilot's pure generation path against a fixture, and asserts the produced project — with
   no composition root, no QML engine, and no project model constructed. (Runs on the R3
   unit target; if spec 0032 has not landed, the test source lands with the target stubbed
@@ -162,7 +162,7 @@ measurement; the phased path to the roadmap's criterion is recorded below it.
   *Closed 2026-07-25 via T12 + M2-T15: `startup.md` "Session Context (spec 0039)" section
   (ownership, INV-4/5/6, empty-ctor rule, shutdown point + crash class, the verbatim
   negative rule), CLAUDE.md "Startup & Composition Root" bullet, `directory-map.md` entry.*
-- [ ] **AC7 (R9)** — Maintainer launches in ProjectFile, QuickPlot, and ConsoleOnly modes:
+- [x] **AC7 (R9)** — Maintainer launches in ProjectFile, QuickPlot, and ConsoleOnly modes:
   startup, project restore, dashboard, and console behave as before. `--benchmark-hotpath`
   is *not required* — no hotpath file is touched — and the diff is checked to prove it.
   *The no-hotpath-file half is checked; the launches are the maintainer's.

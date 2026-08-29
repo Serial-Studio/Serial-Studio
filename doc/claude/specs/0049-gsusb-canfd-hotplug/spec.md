@@ -80,23 +80,23 @@ device, and both currently behave worse than the UART path the same users know.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — RH-02 Elite (candleLight FD firmware): FD toggle selectable, classic-only
+- [x] **AC1** — RH-02 Elite (candleLight FD firmware): FD toggle selectable, classic-only
       RH-02 shows it unavailable (maintainer observation, both adapters in hand).
-- [ ] **AC2** — FD session at 500k/2M against a known FD sender: 64-byte frames render in
+- [x] **AC2** — FD session at 500k/2M against a known FD sender: 64-byte frames render in
       console/dashboard; TX from Serial Studio observed correct on a second analyzer
       (maintainer bench check).
-- [ ] **AC3** — Classic regression: existing adapter connects and streams exactly as before
+- [x] **AC3** — Classic regression: existing adapter connects and streams exactly as before
       with FD off; `pytest tests/integration/` CAN suites stay green (bus type 5).
-- [ ] **AC4** — Plug/unplug with panel open: device appears/disappears within ~2 s on
+- [x] **AC4** — Plug/unplug with panel open: device appears/disappears within ~2 s on
       macOS, Linux, and Windows (maintainer observation per platform).
-- [ ] **AC5** — Mid-session unplug: session ends with device-removed notification; replug +
+- [x] **AC5** — Mid-session unplug: session ends with device-removed notification; replug +
       manual reconnect works without app restart (maintainer observation).
 - [x] **AC6** — Idle cost: with CAN Bus not in use, no recurring USB polling attributable to
       the new monitoring (verified by inspection: hot-plug is event-driven via libusb
       callback, no new timer runs idle; the 1 Hz interface diff only queries serial-port
       backends via `QSerialPortInfo`, never opens USB devices; gs_usb enumeration still
       happens only on hot-plug events and explicit refreshes).
-- [ ] **AC7** — `--benchmark-hotpath` gates unchanged (no new work on the frame path).
+- [x] **AC7** — `--benchmark-hotpath` gates unchanged (no new work on the frame path).
 
 ## Constraints & Invariants
 

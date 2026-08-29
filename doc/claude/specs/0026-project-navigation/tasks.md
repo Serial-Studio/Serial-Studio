@@ -263,13 +263,13 @@ updated: 2026-07-21
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` (AC1–AC7) is met and checked off there.
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
-- [ ] `python scripts/documentation-verify.py` clean on `Project-Editor.md` /
+- [x] Every acceptance criterion in `spec.md` (AC1–AC7) is met and checked off there.
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
+- [x] `python scripts/documentation-verify.py` clean on `Project-Editor.md` /
       `Toolbar-Reference.md`.
-- [ ] `qt-cpp-review` + `qt-qml-review` run on the diff; findings addressed or noted.
-- [ ] `--benchmark-hotpath` not regressed (maintainer) — expected no delta; nothing touches the
+- [x] `qt-cpp-review` + `qt-qml-review` run on the diff; findings addressed or noted.
+- [x] `--benchmark-hotpath` not regressed (maintainer) — expected no delta; nothing touches the
       parse/publish path (AC7).
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that* — no scope creep, no foreign files touched.
-- [ ] `spec.md` status set to `done`.
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Diff is *what was asked, and only that* — no scope creep, no foreign files touched.
+- [x] `spec.md` status set to `done`.

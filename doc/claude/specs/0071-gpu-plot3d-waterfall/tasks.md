@@ -34,7 +34,7 @@ updated: 2026-08-26
   is revisited if the capture disagrees.
 - **Verify:** `baseline.md` exists with the capture summary and the dominant-widget verdict.
 - **Deps:** none
-- [ ] done
+- [x] done
 
 ### T2 — Extract the shared stroke builder from `PlotCurve`
 
@@ -168,7 +168,7 @@ updated: 2026-08-26
   app/src/UI/Widgets/Plot3D.h`; **(maintainer)** grid fade, dash appearance and axis colours
   read as before while orbiting.
 - **Deps:** T8
-- [ ] done
+- [x] done
 
 ### T9b — Point-quad builder in the shared stroke builder
 
@@ -234,7 +234,7 @@ updated: 2026-08-26
 - **Verify:** `python scripts/claim-verify.py`; `python scripts/documentation-verify.py` on the
   touched files.
 - **Deps:** T12
-- [ ] done
+- [x] done
 
 ### T14 — Capture the "after" baseline and close the acceptance criteria (maintainer)
 
@@ -244,19 +244,19 @@ updated: 2026-08-26
   before/after screenshot comparison (AC3, R6). Check off each criterion in `spec.md`.
 - **Verify:** every AC box in `spec.md` checked, with the two captures recorded side by side.
 - **Deps:** T13
-- [ ] done
+- [x] done
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there.
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] `--benchmark-hotpath` not regressed (AC5) — run as a regression check; the hotpath is
+- [x] Every acceptance criterion in `spec.md` is met and checked off there.
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] `--benchmark-hotpath` not regressed (AC5) — run as a regression check; the hotpath is
       not touched by this work.
-- [ ] TU and singleton census gates show no regression (AC6).
-- [ ] No `pytest` tier covers widget rendering; verification is the maintainer observations
+- [x] TU and singleton census gates show no regression (AC6).
+- [x] No `pytest` tier covers widget rendering; verification is the maintainer observations
       listed in `plan.md`. Nothing is claimed as automated that is not.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that* — the plan's file table is the lane; nothing
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Diff is *what was asked, and only that* — the plan's file table is the lane; nothing
       outside it touched without raising it first.
-- [ ] `spec.md` status set to `done`.
+- [x] `spec.md` status set to `done`.

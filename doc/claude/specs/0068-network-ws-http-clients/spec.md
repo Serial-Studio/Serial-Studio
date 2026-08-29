@@ -125,36 +125,36 @@ so the user configures a URL instead of building a bridge.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** (R1, R14) — `pytest tests/integration/` — an API test asserts
+- [x] **AC1** (R1, R14) — `pytest tests/integration/` — an API test asserts
       `io.network.listSocketTypes` returns four entries with indices 0=TCP, 1=UDP,
       2=WebSocket, 3=HTTP, and that setting index 0 or 1 still round-trips through
       `getConfig` with the pre-existing field names and values.
-- [ ] **AC2** (R2, R5, R13) — `pytest tests/integration/` — setting each new property through
+- [x] **AC2** (R2, R5, R13) — `pytest tests/integration/` — setting each new property through
       `io.network.*` and reading it back through `getConfig` returns the written value;
       an invalid URL scheme is rejected with an error response rather than silently stored.
-- [ ] **AC3** (R3, R11, R12) — Maintainer observation against a throwaway local WebSocket
+- [x] **AC3** (R3, R11, R12) — Maintainer observation against a throwaway local WebSocket
       echo server: connecting to `ws://127.0.0.1:<port>` succeeds, each server message appears
       as one frame in the console with `NoDelimiters` selected, killing the server returns the
       app to disconnected with a stated reason, and connecting to a closed port fails at
       Connect with a reason and a re-armed Connect button.
-- [ ] **AC4** (R4, R8) — Maintainer observation: typing into the console send line while
+- [x] **AC4** (R4, R8) — Maintainer observation: typing into the console send line while
       connected in WebSocket mode delivers one message to the echo server; doing the same in
       HTTP mode produces exactly one request in the test server's log, with the typed bytes as
       its body, and the response appears as a frame.
-- [ ] **AC5** (R6, R7) — Maintainer observation against a local HTTP test server returning a
+- [x] **AC5** (R6, R7) — Maintainer observation against a local HTTP test server returning a
       JSON reading: with a 250 ms interval the dashboard updates ~4x/s and the server logs
       ~4 requests/s; with the interval set to 0 the server logs no requests until a write.
-- [ ] **AC6** (R9) — Maintainer observation: stopping the HTTP test server mid-run leaves the
+- [x] **AC6** (R9) — Maintainer observation: stopping the HTTP test server mid-run leaves the
       app connected, logs one error rather than a per-poll flood, and shows a rising failure
       count; restarting the server resumes charting without a reconnect.
-- [ ] **AC7** (R10) — Maintainer observation against a self-signed `https://` endpoint:
+- [x] **AC7** (R10) — Maintainer observation against a self-signed `https://` endpoint:
       the connection is refused with a certificate error by default, and succeeds with the
       console warning when **Ignore TLS errors** is enabled.
-- [ ] **AC8** (R13) — Maintainer observation: a project saved while in HTTP mode reopens with
+- [x] **AC8** (R13) — Maintainer observation: a project saved while in HTTP mode reopens with
       the URL, method, headers, body and interval restored, and connects without re-entry.
-- [ ] **AC9** (R15) — `--benchmark-hotpath` on the maintainer's build passes every gate, with
+- [x] **AC9** (R15) — `--benchmark-hotpath` on the maintainer's build passes every gate, with
       results inside the historical run-to-run band.
-- [ ] **AC10** (R16, all) — `scripts/code-verify.py --check` and
+- [x] **AC10** (R16, all) — `scripts/code-verify.py --check` and
       `scripts/documentation-verify.py` report no new errors, and the Network driver page
       documents both transports.
 

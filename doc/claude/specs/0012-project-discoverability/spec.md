@@ -219,12 +219,12 @@ runs them. Where a check is a maintainer observation, it is stated as such.>
 - [x] **AC7 (R7)** — `meta.describeCommand` returns a schema for each new command, and the AI
       static-surface test (`tests/scripts/test_ai_assistant_static.py`) passes with the new
       commands present in the catalog and classified read-only in the safety policy.
-- [ ] **AC8 (R8)** — `meta.search` with a substring that appears in several command names/
+- [x] **AC8 (R8)** — `meta.search` with a substring that appears in several command names/
       descriptions returns compact rows whose `name` each resolve via `meta.describeCommand`;
       rows span more than one namespace when matches exist in several (e.g. a query hitting both
       `project.*` and `fs.*`); paging with `nextOffset` covers all matches; `matchCount` reflects
       the full match set.
-- [ ] **AC9 (R9)** — The three incomplete-result notices use distinct wording: the truncation
+- [x] **AC9 (R9)** — The three incomplete-result notices use distinct wording: the truncation
       notice names the command's paging/filter parameters, the elision stub states the original
       call succeeded and was collapsed to save transcript space, and a windowed response
       identifies itself as a page. Verified by the AI static-surface test where the strings are

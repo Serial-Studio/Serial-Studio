@@ -115,39 +115,39 @@ run. Every symptom is a data-fidelity failure, so this spec treats them as one p
 
 ## Acceptance Criteria
 
-- [ ] **AC1** (R1, R2) — A new C++ ctest round-trip suite builds a synthetic multi-source project
+- [x] **AC1** (R1, R2) — A new C++ ctest round-trip suite builds a synthetic multi-source project
       containing script-driven/table-fed datasets alongside dense-stream datasets, drives a
       recording through the publication path, and asserts that every dataset appears in the written
       CSV and MDF4 with the expected sample count. The suite fails on today's code.
-- [ ] **AC2** (R3, R4) — The same ctest suite reads the CSV it just wrote back through the replay
+- [x] **AC2** (R3, R4) — The same ctest suite reads the CSV it just wrote back through the replay
       timestamp detection and asserts it is accepted as a numeric elapsed column with no prompt,
       and that the first elapsed value is >= 0 and the column is non-decreasing. A separate case
       feeds a file whose first elapsed value is negative (matching the recordings already on disk)
       and asserts it is likewise accepted.
-- [ ] **AC3** (R5) — A ctest case writes an MDF4 recording of a multi-source project, reads it back
+- [x] **AC3** (R5) — A ctest case writes an MDF4 recording of a multi-source project, reads it back
       through the replay channel mapping, and asserts each channel's values land on the dataset they
       were recorded from. A case with a project whose dataset ordering differs from its identifier
       ordering is included, because that is where the BADAQ project diverges.
-- [ ] **AC4** (R6) — A ctest or pytest case records a session in the current capture format,
+- [x] **AC4** (R6) — A ctest or pytest case records a session in the current capture format,
       reopens it, and asserts the recording contains blocks for every dataset and that replay
       restores them. Recording only the dense-stream datasets fails the check.
-- [ ] **AC5** (R1, R2, R8) — A pytest integration test drives a running app over the API: loads a
+- [x] **AC5** (R1, R2, R8) — A pytest integration test drives a running app over the API: loads a
       project with script/table-fed datasets, records, stops, reopens each recording, and asserts
       the dashboard reports the same populated dataset set as the live capture and that no new
       recording file or session row was created during replay.
-- [ ] **AC6** (R7) — A ctest case asserts that a synthetic refresh which feeds the sinks is reported
+- [x] **AC6** (R7) — A ctest case asserts that a synthetic refresh which feeds the sinks is reported
       as published, and that a second refresh with no changed value is suppressed.
-- [ ] **AC7** (R9) — The replay suites open at least one fixture recording produced by the current
+- [x] **AC7** (R9) — The replay suites open at least one fixture recording produced by the current
       released format and assert it still loads and replays.
-- [ ] **AC8** (R10) — A test generates a report from a recorded session containing both
+- [x] **AC8** (R10) — A test generates a report from a recorded session containing both
       script/table-fed and dense-stream datasets, and asserts that every dataset the report lists
       also carries plot data and summary statistics. A report that lists a dataset with no samples
       behind it fails the check.
-- [ ] **AC9** — Maintainer check on the real BADAQ project: record a short capture, then replay the
+- [x] **AC9** — Maintainer check on the real BADAQ project: record a short capture, then replay the
       CSV, the MDF4, and the session recording, and generate the session report. Each replay opens
       without a time-column prompt and shows a populated dashboard; the report plots the APS500 and
       CAN groups, not only the vibration channels.
-- [ ] **AC10** — `--benchmark-hotpath` still clears every tier at its default rate on the
+- [x] **AC10** — `--benchmark-hotpath` still clears every tier at its default rate on the
       PGO-optimized binary. No gate regresses.
 
 ## Constraints & Invariants
@@ -224,11 +224,11 @@ Mechanism, proven by reading against the spec-0055 storage layout:
 
 ### Acceptance Criteria (amendment)
 
-- [ ] **AC11** — Maintainer check: record an audio Quick Plot session, replay it. The waveform is
+- [x] **AC11** — Maintainer check: record an audio Quick Plot session, replay it. The waveform is
       undistorted at the recorded rate and the FFT widget shows the live spectrum during playback.
       Scrubbing and settling do not blank the audio plots.
-- [ ] **AC12** — A session recorded from a mixed project (frame-lane + dense-lane sources) replays
+- [x] **AC12** — A session recorded from a mixed project (frame-lane + dense-lane sources) replays
       both lanes: frame-lane values at their instants, dense blocks whole. Replay creates no new
       recording file or session row (R8 re-check).
-- [ ] **AC13** — A legacy spec-0054 recording with a populated `stream_blocks` table still replays
+- [x] **AC13** — A legacy spec-0054 recording with a populated `stream_blocks` table still replays
       (fixture or archived file).

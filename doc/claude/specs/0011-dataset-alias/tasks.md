@@ -285,19 +285,19 @@ updated: 2026-07-15
   regeneration.
 - **Verify:** sanitize-commit exits clean; findings from qt-cpp-review addressed or noted.
 - **Deps:** T1–T17
-- [ ] done
+- [x] done
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met or explicitly handed to the maintainer
+- [x] Every acceptance criterion in `spec.md` is met or explicitly handed to the maintainer
       (AC5/AC7 + in-app checks) and checked off there.
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] Hotpath invariants named and verified per T3/T4; `--benchmark-hotpath` handed to the
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] Hotpath invariants named and verified per T3/T4; `--benchmark-hotpath` handed to the
       maintainer/CI (AC7) with no regression expected from the design.
-- [ ] `pytest tests/scripts/ -v` passes locally; integration targets listed for the
+- [x] `pytest tests/scripts/ -v` passes locally; integration targets listed for the
       maintainer.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that* — no scope creep, no foreign files touched
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Diff is *what was asked, and only that* — no scope creep, no foreign files touched
       (WidgetDelegate.qml's pre-existing modification stays untouched).
-- [ ] `spec.md` status set to `done`.
+- [x] `spec.md` status set to `done`.

@@ -71,13 +71,13 @@ silently wins for the duration of playback and the pre-session project is restor
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — Record with two cursors on plot 1, zoomed 4x on plot 2, plot 3 paused, workspace
+- [x] **AC1** — Record with two cursors on plot 1, zoomed 4x on plot 2, plot 3 paused, workspace
       "Bench" active; stop; play back: all four are as they were.
-- [ ] **AC2** — Edit the project (rename a dataset) after recording; play back: the notice
+- [x] **AC2** — Edit the project (rename a dataset) after recording; play back: the notice
       appears once; "use recording's project" shows the old name, "keep mine" the new one.
-- [ ] **AC3** — A pre-0062 session file plays back unchanged (no notice, default view).
-- [ ] **AC4** — Stop playback: the live project and view are what they were before playback.
-- [ ] **AC5** — No GUI-thread DB access (existing rule); snapshot cost is not per frame.
+- [x] **AC3** — A pre-0062 session file plays back unchanged (no notice, default view).
+- [x] **AC4** — Stop playback: the live project and view are what they were before playback.
+- [x] **AC5** — No GUI-thread DB access (existing rule); snapshot cost is not per frame.
 
 ## Constraints & Invariants
 

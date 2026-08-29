@@ -399,10 +399,10 @@ updated: 2026-07-25
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there — including the
+- [x] Every acceptance criterion in `spec.md` is met and checked off there — including the
       **[maintainer]** and **[hardware]** ones (AC1-AC4, AC7, AC10-AC12), which the developer
       confirms; they cannot be closed from here.
-- [ ] AC1 specifically: on a Linux account outside the device group, a failed serial connect
+- [x] AC1 specifically: on a Linux account outside the device group, a failed serial connect
       shows the port, the owning group, and the exact `usermod` command — not a timeout.
 - [x] `python scripts/code-verify.py --check` clean on all changed C++/QML files — repo-wide
       3217 files, 0 errors; the new QML blocks add no advisory.
@@ -410,19 +410,19 @@ updated: 2026-07-25
       size, bindings, commercial guards).
 - [x] `python scripts/documentation-verify.py` clean on the changed Markdown (0 findings).
 - [x] `pytest tests/scripts/test_diagnostics_static.py -v` passes (18 tests).
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
 - [x] No `waitFor*`, `QEventLoop`, `processEvents`, or thread sleep introduced anywhere in
       the diff — the counterfactual check for this feature, since it lives next to the exact
       code spec 0034 exists to remove. Asserted by `test_diagnostics_never_block_the_event_loop`.
-- [ ] `--benchmark-hotpath` shows no regression on all nine gated tiers (guard only; the
+- [x] `--benchmark-hotpath` shows no regression on all nine gated tiers (guard only; the
       feature does not touch the parse path). **[maintainer]**
 - [x] The spec-0001 ctor-edge proof re-run and recorded for the new composition-root entry
       (recorded under T3: the constructor is a member-init list with no `::instance()` call).
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of new lint debt.
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of new lint debt.
 - [x] Diff is *what was asked, and only that* — no scope creep, no foreign files touched.
       In particular, the `app.problems` binding gap (T0) stays with spec 0033 unless that
       spec has closed.
-- [ ] `spec.md` status set to `done`.
+- [x] `spec.md` status set to `done`.
 
 ## Build registration owed (the developer edits `app/CMakeLists.txt`)
 

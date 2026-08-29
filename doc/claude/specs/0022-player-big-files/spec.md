@@ -90,21 +90,21 @@ on every played frame.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — Maintainer observation: opening a ≥1 GB CSV (≥10M rows) shows a responsive
+- [x] **AC1** — Maintainer observation: opening a ≥1 GB CSV (≥10M rows) shows a responsive
   UI immediately, playback available within ~2 s, background index completing with visible
   progress; memory monitor confirms R3's bound. Same observation for a large MDF4 file.
-- [ ] **AC2** — A CSV with more than 10M rows plays past row 10,000,001 (currently
+- [x] **AC2** — A CSV with more than 10M rows plays past row 10,000,001 (currently
   impossible); the last row of the file is reachable by scrubbing to the end.
-- [ ] **AC3** — Parity check on a reference recording: with the same project and a mid-size
+- [x] **AC3** — Parity check on a reference recording: with the same project and a mid-size
   CSV and MDF4 file, dashboards show identical values and the timeline behaves identically
   before/after the change (maintainer A/B, plus existing replay integration tests passing
   unmodified where they exist).
-- [ ] **AC4** — Textual parity: a CSV containing text cells and a recording with string
+- [x] **AC4** — Textual parity: a CSV containing text cells and a recording with string
   channels display those values verbatim during replay (spot-checked against the raw file).
-- [ ] **AC5** — `--benchmark-hotpath` passes at its current gates (live path untouched).
-- [ ] **AC6** — Kill test: closing the player and quitting the app mid-index/mid-decode
+- [x] **AC5** — `--benchmark-hotpath` passes at its current gates (live path untouched).
+- [x] **AC6** — Kill test: closing the player and quitting the app mid-index/mid-decode
   neither crashes nor leaves the UI wedged (maintainer observation, repeated).
-- [ ] **AC7** — Scrub-to-frontier: during background indexing, dragging the timeline past
+- [x] **AC7** — Scrub-to-frontier: during background indexing, dragging the timeline past
   the indexed region clamps and then advances as indexing completes (maintainer
   observation).
 

@@ -93,28 +93,28 @@ Network TCP with script-launched helpers; Modbus TCP with a simulator).
 
 ## Acceptance Criteria
 
-- [ ] **AC1** (R1) — pytest integration: TCP connect to a closed local port ends in
+- [x] **AC1** (R1) — pytest integration: TCP connect to a closed local port ends in
       disconnected status via the status API within the stated bound, with exactly one
       error surfaced; repeated for Modbus TCP against a closed port.
-- [ ] **AC2** (R2) — pytest integration: initiate Modbus TCP and Network dials against a
+- [x] **AC2** (R2) — pytest integration: initiate Modbus TCP and Network dials against a
       dead endpoint and assert the connecting flag in the status API drops within the
       bound; manual check on stage hardware: BLE dial to a powered-off peripheral resolves
       to disconnected with one notice.
-- [ ] **AC3** (R3) — manual checklist, all buses: with a device connected, every connection
+- [x] **AC3** (R3) — manual checklist, all buses: with a device connected, every connection
       settings control is disabled; BLE service/characteristic pickers remain enabled;
       disconnect re-enables everything.
-- [ ] **AC4** (R4) — soak: TCP connection to a hostname-addressed local server held 30
+- [x] **AC4** (R4) — soak: TCP connection to a hostname-addressed local server held 30
       minutes with project autosave active; frame counter strictly monotonic through the
       window, zero reconnects in the log.
-- [ ] **AC5** (R5) — pytest: re-apply the identical connection settings ten times via the
+- [x] **AC5** (R5) — pytest: re-apply the identical connection settings ten times via the
       API; assert no new undo entries, no autosave writes, no reconnects, and (hostname
       case) no additional DNS lookups are observable.
-- [ ] **AC6** (R6) — scripted: from cold start, open each script-launched example and
+- [x] **AC6** (R6) — scripted: from cold start, open each script-launched example and
       connect once; dashboards receive data on the first click; process table shows exactly
       one helper per project across three reconnects.
-- [ ] **AC7** (R7) — pytest: 20x connect/disconnect loop per scriptable bus (Network TCP,
+- [x] **AC7** (R7) — pytest: 20x connect/disconnect loop per scriptable bus (Network TCP,
       Modbus TCP, Process); final state identical to fresh state per the status API.
-- [ ] **AC8** — structural: the repo linter enforces same-value guards on every driver
+- [x] **AC8** — structural: the repo linter enforces same-value guards on every driver
       configuration setter, and its check passes tree-wide.
 
 ## Constraints & Invariants

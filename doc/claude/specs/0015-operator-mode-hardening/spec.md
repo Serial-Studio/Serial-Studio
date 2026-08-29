@@ -87,23 +87,23 @@ Title" mode) also mutates the project and is not gated in operator mode.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — Maintainer check, operator deployment of a frozen project: no freeze
+- [x] **AC1** — Maintainer check, operator deployment of a frozen project: no freeze
       control exists in taskbar or Start menu; layout is locked. Same deployment of an
       unfrozen project: layout is live and nothing offers to freeze it. Searching "freeze"
       in the taskbar search returns no freeze action.
-- [ ] **AC2** — Maintainer check, operator deployment with a user workspace active: the
+- [x] **AC2** — Maintainer check, operator deployment with a user workspace active: the
       edit-workspace button is gone, right-click on a taskbar widget button shows no
       removal action, and the workspace switcher offers switching only (no "New
       Workspace…", no context menu). Author mode on the same machine still offers all of
       these.
-- [ ] **AC3** — Maintainer check, New Deployment dialog: search-bar option present under
+- [x] **AC3** — Maintainer check, New Deployment dialog: search-bar option present under
       the taskbar options, default on, and presented as inapplicable when taskbar mode is
       "Hidden". Two generated deployments (search on / search off) behave per R5 on a
       machine whose author preference is the opposite of the deployment's setting.
-- [ ] **AC4** — Existing deployment shortcuts generated before this change still launch;
+- [x] **AC4** — Existing deployment shortcuts generated before this change still launch;
       their search bar shows (absence of the flag means "search on"), independent of the
       host machine's saved author preference.
-- [ ] **AC5** — Maintainer check, operator deployment: a widget's caption menu shows no
+- [x] **AC5** — Maintainer check, operator deployment: a widget's caption menu shows no
       "Rename Widget…" or "Freeze Title" entries but still offers "Open in External
       Window". Author mode shows the full menu.
 

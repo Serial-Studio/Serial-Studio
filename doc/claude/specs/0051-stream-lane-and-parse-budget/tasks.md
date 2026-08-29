@@ -732,19 +732,19 @@ no queuing collapse, so the marshal protocol is not a throughput factor.
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC6/AC19
+- [x] Every acceptance criterion in `spec.md` is met and checked off there (AC6/AC19
       marked provisional pending physical floor box, per spec).
 - [x] `python scripts/code-verify.py --check` clean on all changed files (singleton-census
       re-baseline named and justified). Re-verified 2026-08-14: full-repo `code-verify.py
       --check` is 0 errors/0 advisory across 3503 files, and `--singleton-census --check`
       reports 1686/1686 (baseline matches HEAD exactly).
-- [ ] `qt-cpp-review` run at every ◆ milestone; findings addressed or noted.
-- [ ] `--benchmark-hotpath` full gated suite green at M1/M2/M3/M4 boundaries; new
+- [x] `qt-cpp-review` run at every ◆ milestone; findings addressed or noted.
+- [x] `--benchmark-hotpath` full gated suite green at M1/M2/M3/M4 boundaries; new
       baseline archived after M2.
-- [ ] `pytest` targets listed in plan.md identified for the maintainer; runnable tiers
+- [x] `pytest` targets listed in plan.md identified for the maintainer; runnable tiers
       (tests/scripts/) green.
-- [ ] `python scripts/sanitize-commit.py` run before every commit; commits only with
+- [x] `python scripts/sanitize-commit.py` run before every commit; commits only with
       explicit per-turn permission.
-- [ ] Diff is what was asked, and only that — file list = plan's lane; discoveries named
+- [x] Diff is what was asked, and only that — file list = plan's lane; discoveries named
       in chat first.
-- [ ] `spec.md` status set to `done`.
+- [x] `spec.md` status set to `done`.

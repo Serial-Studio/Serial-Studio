@@ -728,7 +728,7 @@ before T26; the clean measurement points are T33 and T34.
 - **Verify:** `--benchmark-hotpath --min-fps 256000` exit code 0; per-tier numbers recorded in
   this file.
 - **Deps:** T32, and every consumer task T10-T25 complete
-- [ ] done
+- [x] done
 
 ### T34 — CSV reorder window sweep (D7)
 
@@ -737,7 +737,7 @@ before T26; the clean measurement points are T33 and T34.
   pins the value that keeps rows strictly ordered at bounded memory. Records the measurement.
 - **Verify:** `tst_csv_sparse_writer` passes at the chosen value; recorded memory ceiling.
 - **Deps:** T11, T33
-- [ ] done
+- [x] done
 
 ### T35 — Stream-visibility integration tests (AC2)
 
@@ -775,16 +775,16 @@ before T26; the clean measurement points are T33 and T34.
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there.
-- [ ] **AC1 audit:** every consumer has exactly one ingestion entry point; no consumer is left
+- [x] Every acceptance criterion in `spec.md` is met and checked off there.
+- [x] **AC1 audit:** every consumer has exactly one ingestion entry point; no consumer is left
       with only the frame path (Dashboard, CSV, MDF4, Sessions, API, gRPC, MQTT, Mirror,
       AudioExport, benchmark).
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] `--benchmark-hotpath` passes all nine gated tiers; per-tier before/after recorded in T33.
-- [ ] `pytest tests/integration/test_stream_visibility.py` plus the existing suite identified
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] `--benchmark-hotpath` passes all nine gated tiers; per-tier before/after recorded in T33.
+- [x] `pytest tests/integration/test_stream_visibility.py` plus the existing suite identified
       for the maintainer to run.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that* — no scope creep, no foreign files touched. The
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Diff is *what was asked, and only that* — no scope creep, no foreign files touched. The
       plan's affected-files table is the lane.
-- [ ] `spec.md` status set to `done`.
+- [x] `spec.md` status set to `done`.

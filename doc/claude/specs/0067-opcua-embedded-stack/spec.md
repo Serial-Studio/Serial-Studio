@@ -149,47 +149,47 @@ in capability. R7 onward add the secure channel on top of it.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — The spec 0066 integration suite passes unchanged against a build with the
+- [x] **AC1** — The spec 0066 integration suite passes unchanged against a build with the
       embedded stack, on every CI leg that runs the Pro tier. (R1, R3)
-- [ ] **AC2** — On a machine with no Qt OPC UA module and no system OpenSSL, a shipped Pro
+- [x] **AC2** — On a machine with no Qt OPC UA module and no system OpenSSL, a shipped Pro
       build connects to the example simulator and streams tags. Verified on Windows, where the
       driver is currently non-functional. (R1, R2)
-- [ ] **AC3** — Inspecting a shipped package shows no OPC UA protocol plugin and no
+- [x] **AC3** — Inspecting a shipped package shows no OPC UA protocol plugin and no
       cryptography library that was not already shipped before this spec. (R2)
-- [ ] **AC4** — A build configured for the no-network / packager case produces an application
+- [x] **AC4** — A build configured for the no-network / packager case produces an application
       that either connects over OPC UA or does not offer OPC UA at all; it never offers a
       source that fails to open. (R4)
-- [ ] **AC5** — A throughput and connect-time comparison against the pre-change build, at
+- [x] **AC5** — A throughput and connect-time comparison against the pre-change build, at
       equal tag count and publishing interval, shows no regression outside run-to-run noise.
       (R6)
-- [ ] **AC6** — The example simulator gains secure endpoints, and an integration test connects
+- [x] **AC6** — The example simulator gains secure endpoints, and an integration test connects
       over each supported policy in both modes, asserting the negotiated policy and mode and
       that tags stream. Deprecated policies are covered by the same test. (R7)
-- [ ] **AC7** — An integration test points the driver at a server offering *only* secure
+- [x] **AC7** — An integration test points the driver at a server offering *only* secure
       endpoints and asserts a successful session, the case that is impossible today. (R7, R9)
-- [ ] **AC8** — With several endpoints advertised, a test asserts which one is selected by
+- [x] **AC8** — With several endpoints advertised, a test asserts which one is selected by
       default and that a deprecated policy is never selected automatically. (R8, R9)
-- [ ] **AC9** — A test asserts a client certificate and key are generated on first secure use,
+- [x] **AC9** — A test asserts a client certificate and key are generated on first secure use,
       that a second connection reuses them rather than regenerating, and that the exported
       certificate is loadable by the simulator as a trusted peer. (R10, R11)
-- [ ] **AC10** — A test connecting to a server with an unknown certificate asserts the session
+- [x] **AC10** — A test connecting to a server with an unknown certificate asserts the session
       does not proceed until trust is granted, that the prompt carries subject, issuer,
       fingerprint and validity, and that after trusting, a subsequent connection does not
       prompt again. (R12, R13)
-- [ ] **AC11** — Tests using an expired certificate and a hostname-mismatched
+- [x] **AC11** — Tests using an expired certificate and a hostname-mismatched
       certificate assert each is reported with its own distinct reason. (R14)
-- [ ] **AC12** — A test asserts the plaintext-credential warning is absent on an encrypted
+- [x] **AC12** — A test asserts the plaintext-credential warning is absent on an encrypted
       session and present on a `None` and on a `Sign`-only session. (R15)
-- [ ] **AC13** — A test authenticates against a simulator configured to require an X.509
+- [x] **AC13** — A test authenticates against a simulator configured to require an X.509
       identity token, and asserts a wrong or missing user certificate fails with its own
       reason. (R16, R17)
-- [ ] **AC14** — For each security failure mode, a test asserts a distinct non-empty reason is
+- [x] **AC14** — For each security failure mode, a test asserts a distinct non-empty reason is
       reported exactly once and the connection state settles, matching the one-verdict contract
       spec 0066 R5 established. (R17)
-- [ ] **AC15** — A project configured with a secure endpoint, a policy, a mode and an identity
+- [x] **AC15** — A project configured with a secure endpoint, a policy, a mode and an identity
       token round-trips through save and reopen with all four preserved, and the saved file
       contains no private key and no password. (R18)
-- [ ] **AC16** — The in-app help manual documents secure connection setup, client-certificate
+- [x] **AC16** — The in-app help manual documents secure connection setup, client-certificate
       export, and server-certificate trust. (R11, R12)
 
 ## Constraints & Invariants

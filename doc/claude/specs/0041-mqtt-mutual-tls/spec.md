@@ -89,23 +89,23 @@ port-443 MQTT endpoints are unreachable even with valid credentials.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — Maintainer observation: against a real AWS IoT Core thing (cert + key +
+- [x] **AC1** — Maintainer observation: against a real AWS IoT Core thing (cert + key +
       Amazon Root CA 1 from the console), the publisher connects on port 8883 and published
       frames appear in the AWS IoT MQTT test client. (No CI path — needs live AWS
       credentials.)
-- [ ] **AC2** — Maintainer observation: same endpoint, ALPN enabled, port 443 — connection
+- [x] **AC2** — Maintainer observation: same endpoint, ALPN enabled, port 443 — connection
       and publish succeed.
-- [ ] **AC3** — Local mutual-TLS broker check (e.g. mosquitto with `require_certificate
+- [x] **AC3** — Local mutual-TLS broker check (e.g. mosquitto with `require_certificate
       true`): connection succeeds with a matching pair, is refused without a client
       certificate, and the refusal is reported as a TLS/authentication error in the UI.
-- [ ] **AC4** — Restart round-trip: configure cert, key, passphrase, ALPN; quit; relaunch;
+- [x] **AC4** — Restart round-trip: configure cert, key, passphrase, ALPN; quit; relaunch;
       all fields restore and a reconnect succeeds without re-entry. Passphrase is absent
       from every settings/config file on disk.
-- [ ] **AC5** — Negative-path sweep: nonexistent file path, a non-PEM file, and an
+- [x] **AC5** — Negative-path sweep: nonexistent file path, a non-PEM file, and an
       encrypted key with wrong passphrase each produce a distinct, user-readable error at
       selection/load time; a key that does not match the certificate produces a handshake
       error naming client-certificate authentication. No crash or hang in any case.
-- [ ] **AC6** — With both new fields left empty, existing TLS and non-TLS MQTT connections
+- [x] **AC6** — With both new fields left empty, existing TLS and non-TLS MQTT connections
       behave byte-for-byte as before (regression: current MQTT integration tests still
       pass).
 

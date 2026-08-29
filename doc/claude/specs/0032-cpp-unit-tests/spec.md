@@ -118,27 +118,27 @@ refactors that preserve behavior and passes on refactors that break it.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** (R1) — A configure with no new flags produces a build tree containing no
+- [x] **AC1** (R1) — A configure with no new flags produces a build tree containing no
       test target and no `Qt6::Test` lookup; the resulting binary is byte-comparable in
       behavior, and `--benchmark-hotpath` results are within run-to-run noise of the
       pre-change baseline.
-- [ ] **AC2** (R2, R3) — With the tier enabled, `ctest --output-on-failure` reports every
+- [x] **AC2** (R2, R3) — With the tier enabled, `ctest --output-on-failure` reports every
       suite green, and the maintainer confirms wall-clock time for the run is in seconds.
-- [ ] **AC3** (R4, R5) — Each shipped suite exists and passes; the DSP suite fails if the
+- [x] **AC3** (R4, R5) — Each shipped suite exists and passes; the DSP suite fails if the
       vector and scalar results of any kernel diverge by one bit, demonstrated by a
       maintainer-run scratch experiment that perturbs one kernel's vector block.
-- [ ] **AC4** (R5) — The DSP suite runs and passes on both an x86-64 and an aarch64 CI
+- [x] **AC4** (R5) — The DSP suite runs and passes on both an x86-64 and an aarch64 CI
       runner, and the run log shows which SIMD lane was exercised on each.
-- [ ] **AC5** (R6) — A seeded regression (one flipped byte comparison in the delimiter
+- [x] **AC5** (R6) — A seeded regression (one flipped byte comparison in the delimiter
       scan, on a scratch branch) turns the CI unit job red in under five minutes from
       workflow start, with no packaging job having produced an artifact.
-- [ ] **AC6** (R7) — `cmake --preset dev && cmake --build --preset dev && ctest --preset dev`
+- [x] **AC6** (R7) — `cmake --preset dev && cmake --build --preset dev && ctest --preset dev`
       works from a clean checkout; the `asan` and `tsan` presets each configure and build;
       the `analysis` preset produces a `compile_commands.json`.
-- [ ] **AC7** (R8) — `python scripts/code-verify.py --check` and
+- [x] **AC7** (R8) — `python scripts/code-verify.py --check` and
       `python scripts/sanitize-commit.py` run clean over the new sources, and the plan
       records exactly which rule set does and does not reach the test directory.
-- [ ] **AC8** (R9) — The in-app test flag runs inside the real application process,
+- [x] **AC8** (R9) — The in-app test flag runs inside the real application process,
       prints a pass/fail summary, exits with a meaningful status, and does not start the
       GUI. In a build without the flag's compile-time option, the flag is absent.
 

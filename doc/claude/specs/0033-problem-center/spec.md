@@ -151,7 +151,7 @@ hand. The same reading is mechanical and can be done by the application.
       no other file in the problem-center subsystem changes. Demonstrated by the fact that the
       project, link, and script checker sets are added in three independent tasks, each
       touching only its own file plus the registration point.
-- [ ] **AC2 (R3, R4, R8)** — `pytest tests/integration/test_problem_center.py`: loading a
+- [x] **AC2 (R3, R4, R8)** — `pytest tests/integration/test_problem_center.py`: loading a
       project with two datasets sharing a frame index in the same source lists exactly one
       error-severity finding naming both datasets; deleting one of them and re-running clears
       it; re-running with the problem still present leaves the list unchanged (no duplicates).
@@ -159,22 +159,22 @@ hand. The same reading is mechanical and can be done by the application.
       `test_duplicate_frame_index_reported_once` + `test_finding_clears_when_condition_fixed`.
       **Severity is Warning, not Error** — `plan.md` overrides this line: two datasets
       legitimately share an index when one value drives two widgets.
-- [ ] **AC3 (R8)** — Same test file: a dataset whose X-axis points at a deleted dataset
+- [x] **AC3 (R8)** — Same test file: a dataset whose X-axis points at a deleted dataset
       produces a finding whose jump target is the offending dataset; an empty group produces
       a warning; a plot with min above max produces a warning. *Code-complete; maintainer
       runs `test_dangling_xaxis_reference_has_jump_target` +
       `test_empty_group_and_inverted_range_are_warnings`.*
-- [ ] **AC4 (R9)** — Same test file, over a live TCP link: sending well-formed bytes with a
+- [x] **AC4 (R9)** — Same test file, over a live TCP link: sending well-formed bytes with a
       delimiter the project does not use produces a "bytes received, no frames extracted"
       finding within the sample window and clears once correct frames flow. *Code-complete;
       maintainer runs `test_delimiter_mismatch_reports_no_frames_extracted`.*
-- [ ] **AC5 (R9)** — Same test file: sending frames with deliberately wrong checksums raises
+- [x] **AC5 (R9)** — Same test file: sending frames with deliberately wrong checksums raises
       a checksum-failure-rate finding reporting a rate, and the finding clears after correct
       frames resume. *Code-complete; maintainer runs
       `test_checksum_failure_rate_reported_and_cleared`. The rate accumulates for the life of
       the reader, so the test clears it by reopening the link rather than by diluting the
       old total.*
-- [ ] **AC6 (R10)** — Same test file: a per-dataset transform that always throws produces a
+- [x] **AC6 (R10)** — Same test file: a per-dataset transform that always throws produces a
       finding carrying the error text and a failure count greater than one. *Code-complete;
       maintainer runs `test_failing_transform_reports_error_text_and_count`.*
 - [x] **AC7 (R11)** — Same test file: the read command returns the same findings the panel
@@ -183,12 +183,12 @@ hand. The same reading is mechanical and can be done by the application.
       `tests/scripts/`. — the safety-tier half is green
       (`tests/scripts/test_problem_center_static.py`, 10 passed); the live half is
       `test_problems_run_refreshes_list`, which the maintainer runs.
-- [ ] **AC8 (R5, R6, R7)** — Maintainer observation: the severity indicator shows counts and
+- [x] **AC8 (R5, R6, R7)** — Maintainer observation: the severity indicator shows counts and
       opens the panel; the command appears in the palette in both the main window and the
       project editor; activating a project finding selects the right entity in the editor
       tree; the notification center receives one summary per newly-appearing finding and
       nothing on a no-change re-run. *Pending maintainer observation.*
-- [ ] **AC9 (R12)** — `--benchmark-hotpath` shows no regression against the pre-change run on
+- [x] **AC9 (R12)** — `--benchmark-hotpath` shows no regression against the pre-change run on
       all nine gated tiers (maintainer runs). *Pending.*
 - [x] **AC10** — `python scripts/registry-verify.py` and `python scripts/code-verify.py
       --check` clean; `python scripts/sanitize-commit.py` runs without new lint debt. —

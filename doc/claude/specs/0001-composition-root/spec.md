@@ -122,24 +122,24 @@ Formalized **composition root + dependency capture**, not new machinery.
 
 ## Acceptance Criteria
 
-- [ ] **AC1 (R1, R2)** - The app launches and runs correctly in all three operation modes;
+- [x] **AC1 (R1, R2)** - The app launches and runs correctly in all three operation modes;
   the composition root instantiates ProjectModel before AppState in each. Verified by the
   maintainer launching each mode after the order is pinned, and by grep symmetry between the
   pinned-order body and what the root already constructs (recipe in `plan.md`).
-- [ ] **AC2 (R3)** - INV-1/INV-2/INV-3 hold: `restoreLastProject()` runs after every
+- [x] **AC2 (R3)** - INV-1/INV-2/INV-3 hold: `restoreLastProject()` runs after every
   `setupExternalConnections()`; context properties are registered after wiring and before QML
   load; the Qt message handler is installed only after `Console::Handler` and
   `NotificationCenter` exist. Verified by reading the composition-root sequence and the grep
   checks in `plan.md`.
-- [ ] **AC3 (R4)** - Per capture wave: `grep -c "X::instance()"` in each converted `.cpp` is
+- [x] **AC3 (R4)** - Per capture wave: `grep -c "X::instance()"` in each converted `.cpp` is
   zero outside the constructor init list (leaves) or the pre-wiring surface (pentagon); the
   header gained exactly one member per dependency; the advisory `::instance()` count strictly
   decreases.
-- [ ] **AC4 (R5)** - Running `python3 scripts/code-verify.py app/src` before and after the
+- [x] **AC4 (R5)** - Running `python3 scripts/code-verify.py app/src` before and after the
   new rule lands yields an identical blocking-error count; the advisory report gains only the
   new kind. A synthetic `Foo::instance()` snippet fires the rule; each sanctioned pattern does
   not.
-- [ ] **AC5 (R6)** - `--benchmark-hotpath` passes all seven tiers after the hotpath stage,
+- [x] **AC5 (R6)** - `--benchmark-hotpath` passes all seven tiers after the hotpath stage,
   with no regression versus the pre-stage baseline.
 
 ## Constraints & Invariants

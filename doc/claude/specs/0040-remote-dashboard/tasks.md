@@ -642,23 +642,23 @@ updated: 2026-07-25
   `python scripts/sanitize-commit.py`; maintainer runs `--benchmark-hotpath` and the three
   operation-mode launches.
 - **Deps:** T26
-- [ ] done
+- [x] done
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there.
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
-- [ ] `python scripts/registry-verify.py` clean (command + icon added in T19).
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] `--benchmark-hotpath` compared before/after and within tier; the diff contains exactly one
+- [x] Every acceptance criterion in `spec.md` is met and checked off there.
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
+- [x] `python scripts/registry-verify.py` clean (command + icon added in T19).
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] `--benchmark-hotpath` compared before/after and within tier; the diff contains exactly one
       capture-path file (`Dashboard.cpp`) and exactly one cached-flag input, wired direct.
-- [ ] AC6 bandwidth evidence and the benchmark comparison are recorded in this spec directory.
-- [ ] `pytest tests/unit/test_mirror_protocol.py` green (agent-runnable);
+- [x] AC6 bandwidth evidence and the benchmark comparison are recorded in this spec directory.
+- [x] `pytest tests/unit/test_mirror_protocol.py` green (agent-runnable);
       `tests/integration/test_remote_mirror.py` identified for the maintainer to run.
-- [ ] Existing `tests/integration/` suite re-run as a smoke check — no existing API behavior
+- [x] Existing `tests/integration/` suite re-run as a smoke check — no existing API behavior
       changed.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that* — read-only mirror, no control channel, no
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Diff is *what was asked, and only that* — read-only mirror, no control channel, no
       transport security work, no foreign files touched.
-- [ ] `spec.md` status set to `done`, with the P2/P3/P4 phases still listed as deferred rather
+- [x] `spec.md` status set to `done`, with the P2/P3/P4 phases still listed as deferred rather
       than quietly dropped.

@@ -207,7 +207,7 @@ updated: 2026-07-27
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met or handed to the maintainer with its
+- [x] Every acceptance criterion in `spec.md` is met or handed to the maintainer with its
       concrete check (AC1/AC2 AWS run, AC3 mosquitto, AC4 restart+grep, AC5 ctest +
       handshake, AC6 pytest regression).
 - [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
@@ -221,4 +221,4 @@ updated: 2026-07-27
 - [x] `python scripts/sanitize-commit.py` ran at commit time; the spec landed as commit
       b1929bdf. Only the maintainer ACs above remain open.
 - [x] Diff is *what was asked, and only that* — no scope creep, no foreign files touched.
-- [ ] `spec.md` status set to `done`.
+- [x] `spec.md` status set to `done`.

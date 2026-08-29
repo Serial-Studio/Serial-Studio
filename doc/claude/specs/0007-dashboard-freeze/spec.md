@@ -101,27 +101,27 @@ is a per-machine viewer setting, the feature does not deliver the finished-panel
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — In-app: toggling Freeze from each of the three entry points (button,
+- [x] **AC1** — In-app: toggling Freeze from each of the three entry points (button,
   shortcut, menu) flips the same state; all three stay in sync. (Maintainer observation.)
-- [ ] **AC2** — In-app: with a dashboard containing at least one toolbar widget (e.g. a
+- [x] **AC2** — In-app: with a dashboard containing at least one toolbar widget (e.g. a
   plot), one plain widget, and one output panel, freezing hides all captions, buttons,
   toolbars, and shadows; content fills the reclaimed space; unfreezing restores them with
   the arrangement intact. (Maintainer observation.)
-- [ ] **AC3** — In-app: while frozen, attempts to drag, resize, or restack widgets in both
+- [x] **AC3** — In-app: while frozen, attempts to drag, resize, or restack widgets in both
   auto and manual layout modes have no effect, while clicking an output button still
   transmits its payload. (Maintainer observation; transmit verified against a live
   connection or the transmit test dialog.)
-- [ ] **AC4** — Project round-trip: saving a frozen project and reopening it yields a
+- [x] **AC4** — Project round-trip: saving a frozen project and reopening it yields a
   frozen dashboard; the saved JSON contains the frozen flag. Verifiable via a `pytest`
   integration test using the API server's project save/load commands once the flag is
   exposed, plus direct inspection of the `.ssproj`.
-- [ ] **AC5** — Licensing: on an unlicensed build/tier the toggle is disabled with the
+- [x] **AC5** — Licensing: on an unlicensed build/tier the toggle is disabled with the
   standard upsell; a frozen `.ssproj` opens unfrozen; saving it back preserves the frozen
   flag in the JSON. (Maintainer observation + JSON inspection.)
-- [ ] **AC6** — Late activation: load a frozen project unlicensed, then activate (offline
+- [x] **AC6** — Late activation: load a frozen project unlicensed, then activate (offline
   activation path included) — the dashboard freezes without reloading the project.
   (Maintainer observation.)
-- [ ] **AC7** — The `--benchmark-hotpath` CI gate passes unchanged — freeze is view-layer
+- [x] **AC7** — The `--benchmark-hotpath` CI gate passes unchanged — freeze is view-layer
   only and must not add per-frame work to the data path.
 
 ## Constraints & Invariants

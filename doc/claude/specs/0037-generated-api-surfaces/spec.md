@@ -164,49 +164,49 @@ break.
 
 ## Acceptance Criteria
 
-- [ ] **AC1 (R1)** — Maintainer demonstration: add one property to the 0036 dataset manifest,
+- [x] **AC1 (R1)** — Maintainer demonstration: add one property to the 0036 dataset manifest,
       run the regeneration step and the maintainer's snapshot refresh, and confirm the field
       appears in the checked-in API snapshot, the MCP tool schema, the JS and Lua SDK
       wrappers, and the typed proto — with no hand edit to any of those four.
-- [ ] **AC2 (R2, R13)** — Seeding a divergence between the manifest and the committed API
+- [x] **AC2 (R2, R13)** — Seeding a divergence between the manifest and the committed API
       snapshot (add a manifest property without refreshing the snapshot) fails the check with
       a message naming the command, the field, and the ordered fix. Confirmed by seeding
       locally and reverting. The check runs with no build.
-- [ ] **AC3 (R3)** — Running every generator twice produces no diff; each generated artifact
+- [x] **AC3 (R3)** — Running every generator twice produces no diff; each generated artifact
       carries its do-not-edit marker and LF endings. Confirmed locally.
-- [ ] **AC4 (R4)** — Hand-editing each generated artifact (including deleting its marker)
+- [x] **AC4 (R4)** — Hand-editing each generated artifact (including deleting its marker)
       fails verification with a clear message. Confirmed by seeding each case and reverting.
-- [ ] **AC5 (R5)** — The CI lint job runs the registry verifier, the property-registry
+- [x] **AC5 (R5)** — The CI lint job runs the registry verifier, the property-registry
       generator check, the command-strings check, and the SDK check, and fails the build when
       any of them drifts. Confirmed by inspecting the workflow and by a deliberately drifted
       branch.
-- [ ] **AC6 (R6)** — Adding a property whose name sorts alphabetically before existing ones
+- [x] **AC6 (R6)** — Adding a property whose name sorts alphabetically before existing ones
       leaves every previously assigned field number unchanged and assigns the new field the
       next unused number. Verified by a static test over the numbering artifact plus a
       before/after diff in the seeded demonstration from AC1.
-- [ ] **AC7 (R6)** — Removing a property retires its number: the number is recorded as
+- [x] **AC7 (R6)** — Removing a property retires its number: the number is recorded as
       reserved and is never reassigned. Verified by the same static test.
-- [ ] **AC8 (R7)** — Maintainer check: the typed proto exported by the running application is
+- [x] **AC8 (R7)** — Maintainer check: the typed proto exported by the running application is
       byte-identical to the one checked into the repository, and `protoc` accepts the
       checked-in file.
-- [ ] **AC9 (R8)** — An MCP `tools/list` reply for the dataset update tool lists every
+- [x] **AC9 (R8)** — An MCP `tools/list` reply for the dataset update tool lists every
       declared field as a typed property with a description, and the enum-valued fields carry
       their domains. Verified by a new `pytest tests/integration/` case (maintainer runs; app
       must be up with the API server).
-- [ ] **AC10 (R9)** — The before and after `tools/list` payload sizes are recorded as numbers
+- [x] **AC10 (R9)** — The before and after `tools/list` payload sizes are recorded as numbers
       in the implementation notes, with the delta stated.
-- [ ] **AC11 (R10)** — The generated SDK's dataset update wrapper accepts an options bag
+- [x] **AC11 (R10)** — The generated SDK's dataset update wrapper accepts an options bag
       covering every declared field, and the SDK generator's verification mode fails on a
       stale committed SDK. Verified by inspecting the regenerated SDK plus a pytest case that
       sets fields through the SDK path.
-- [ ] **AC12 (R11)** — Seeding a bogus dataset field name and a wrong enum value into the
+- [x] **AC12 (R11)** — Seeding a bogus dataset field name and a wrong enum value into the
       bundled corpus fails the check; the corpus disagreements that exist today (the
       widget-option bitflag tables that disagree on the highest bit, and the duplicated
       range-field mapping) are reconciled against the manifest.
-- [ ] **AC13 (R12)** — Maintainer check on a GPL build: no Pro-only dataset property appears
+- [x] **AC13 (R12)** — Maintainer check on a GPL build: no Pro-only dataset property appears
       in the MCP tool schema, the SDK, or the typed proto, and the field numbering artifact is
       unchanged between a GPL and a commercial snapshot.
-- [ ] **AC14 (R1, R5)** — The commit pipeline runs the new generation and verification steps
+- [x] **AC14 (R1, R5)** — The commit pipeline runs the new generation and verification steps
       in an order that produces a clean tree on a second consecutive run.
 
 ## Constraints & Invariants

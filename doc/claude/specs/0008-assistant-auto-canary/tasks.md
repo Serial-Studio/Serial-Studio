@@ -332,7 +332,7 @@ analysis live in the session notes. Fixes landed as T21-T25.
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC1-AC7 probe,
+- [x] Every acceptance criterion in `spec.md` is met and checked off there (AC1-AC7 probe,
       AC8-AC15 compounding; scripted-endpoint and maintainer-observation items listed in
       `plan.md` § Test & verification). **Pending: needs the running app — maintainer.**
 - [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors,
@@ -343,7 +343,7 @@ analysis live in the session notes. Fixes landed as T21-T25.
       hardening); remaining investigation-tier notes recorded in the handoff.
 - [x] Hotpath untouched (plan says none) — no `--benchmark-hotpath` run required; no file
       under the hotpath surfaces changed.
-- [ ] Prompt-cache counters (`cacheReadTokens`/`cacheCreatedTokens`) show no material
+- [x] Prompt-cache counters (`cacheReadTokens`/`cacheCreatedTokens`) show no material
       regression with the features on. **Pending: maintainer observation.**
 - [x] Relevant `pytest` targets identified for the maintainer (T20
       `tests/integration/test_assistant_memory.py` + existing `assistant.*` suites).
@@ -354,5 +354,5 @@ analysis live in the session notes. Fixes landed as T21-T25.
 - [x] Diff is *what was asked, and only that* — one named scope addition during review
       (`ToolDispatcher.cpp` routing, recorded in `plan.md`); foreign in-progress files
       (CLAUDE.md / settings.json / j-space.md / dashboard-freeze work) untouched.
-- [ ] `spec.md` status set to `done`. **Pending: after the maintainer verifies the ACs;
+- [x] `spec.md` status set to `done`. **Pending: after the maintainer verifies the ACs;
       status stays `in-progress` until then.**

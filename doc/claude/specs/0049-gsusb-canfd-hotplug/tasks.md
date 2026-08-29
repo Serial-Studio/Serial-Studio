@@ -203,15 +203,15 @@ updated: 2026-08-10
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC1/2/4/5 are
+- [x] Every acceptance criterion in `spec.md` is met and checked off there (AC1/2/4/5 are
       maintainer bench checks — listed as pending-hardware, not silently skipped).
 - [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
 - [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] `--benchmark-hotpath` not regressed (AC7; maintainer runs — hotpath untouched by
+- [x] `--benchmark-hotpath` not regressed (AC7; maintainer runs — hotpath untouched by
       design).
 - [x] Relevant `pytest` targets identified for the maintainer (`tests/integration/` CAN
       suites, bus type 5, FD off — AC3).
-- [ ] `ctest -R gsusb_protocol` green on the maintainer's build (T2).
+- [x] `ctest -R gsusb_protocol` green on the maintainer's build (T2).
 - [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
 - [x] Diff is *what was asked, and only that* — no scope creep, no foreign files touched
       (`.ts`/`.qm` untouched).

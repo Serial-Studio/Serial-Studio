@@ -441,7 +441,7 @@ updated: 2026-07-25
   merged.
 - **Verify:** AC3 and AC5 in `spec.md` checked off with the observed timings.
 - **Deps:** T8, T11
-- [ ] done
+- [x] done
 
 ### T14 — Phase 2: in-app test mode (minimal)
 
@@ -492,7 +492,7 @@ updated: 2026-07-25
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there.
+- [x] Every acceptance criterion in `spec.md` is met and checked off there.
 - [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
       **Coverage note, verified against the script:** `code-verify.py`'s `_is_first_party()`
       matches only consecutive `app/src` or `app/qml` path segments, so `app/tests/*.cpp`
@@ -501,17 +501,17 @@ updated: 2026-07-25
       `default_targets()` at all. This is the deliberate relaxation recorded in `plan.md`,
       not a gap to work around — do not add `// code-verify off` fences to test code on the
       assumption that rules apply.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt. **This is
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt. **This is
       what actually enforces style on the new C++**: `SOURCE_DIRS = ("app", "doc",
       "examples")` means `app/tests/*.cpp` *is* clang-formatted (100-col, 2-space, pointer
       binds to type), which is why the tests live under `app/` rather than under `tests/`.
-- [ ] `qt-cpp-review` run on the C++ diff, with the `DSPSimd.h` edit called out explicitly.
-- [ ] `--benchmark-hotpath --min-fps 256000` not regressed after T6, and the default build's
+- [x] `qt-cpp-review` run on the C++ diff, with the `DSPSimd.h` edit called out explicitly.
+- [x] `--benchmark-hotpath --min-fps 256000` not regressed after T6, and the default build's
       preprocessed output for a `DSPSimd.h` consumer is unchanged.
-- [ ] `ctest` green locally on the maintainer's machine, in seconds, for all five suites.
-- [ ] The CI `unit` job is green on both the x86_64 and arm64 legs.
-- [ ] `git diff --stat` shows single-digit line counts for `CMakeLists.txt`,
+- [x] `ctest` green locally on the maintainer's machine, in seconds, for all five suites.
+- [x] The CI `unit` job is green on both the x86_64 and arm64 legs.
+- [x] `git diff --stat` shows single-digit line counts for `CMakeLists.txt`,
       `app/CMakeLists.txt`, and `app/src/DSPSimd.h`; no other existing file is touched except
       `ci.yml`, `tests/README.md`, and `CLAUDE.md`.
-- [ ] Diff is *what was asked, and only that* — no scope creep, no foreign files touched.
-- [ ] `spec.md` status set to `done`.
+- [x] Diff is *what was asked, and only that* — no scope creep, no foreign files touched.
+- [x] `spec.md` status set to `done`.

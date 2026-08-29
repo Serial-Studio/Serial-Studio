@@ -156,40 +156,40 @@ and hotpath benchmarks unchanged."* That criterion is achievable for **scalar an
 widgets** and is adopted below with that scope stated, because claiming a spectrum analyzer
 mirrors correctly at display cadence would be false.
 
-- [ ] **AC1 (R1, R2, R3, R8)** — Maintainer runs a headless instance with a multi-group project
+- [x] **AC1 (R1, R2, R3, R8)** — Maintainer runs a headless instance with a multi-group project
   on one machine — started from a single command line, with no prior graphical session on that
   machine having configured it — and attaches from a GUI on another. The dashboard shows the
   remote project's widgets with live values; the UI identifies the session as remote and names
   the endpoint. (The roadmap's shorthand `serial-studio --headless project.json` is not
   sufficient today: the API server is not enabled by headless mode, so the real invocation is
   part of what this criterion pins down. See R16.)
-- [ ] **AC2 (R4, R5, R6)** — With the attach live, the remote capture's own export/CSV output is
+- [x] **AC2 (R4, R5, R6)** — With the attach live, the remote capture's own export/CSV output is
   compared against an unattached control run over the same input: no gaps, no dropped frames,
   no rate change. Detach; the remote keeps capturing (verified from its own logs/exports).
   Reattach after changing the remote project; the new structure renders.
-- [ ] **AC3 (R7)** — Two GUIs attached simultaneously both show live, correct, mutually
+- [x] **AC3 (R7)** — Two GUIs attached simultaneously both show live, correct, mutually
   consistent values; closing one does not disturb the other or the capture.
-- [ ] **AC4 (R9)** — The link is severed mid-stream (cable pull or firewall drop). Within a
+- [x] **AC4 (R9)** — The link is severed mid-stream (cable pull or firewall drop). Within a
   stated bound the dashboard marks itself stale/disconnected; it never presents the frozen last
   values as current. Restoring the link recovers without a restart.
-- [ ] **AC5 (R10)** — A project containing a spectrum, waterfall, or 3D widget attaches, and
+- [x] **AC5 (R10)** — A project containing a spectrum, waterfall, or 3D widget attaches, and
   those widgets render an explicit "not available over remote attach" state while every scalar
   and plot widget in the same project works.
-- [ ] **AC6 (R11)** — A measured comparison on a real project: bytes-per-second on the mirror
+- [x] **AC6 (R11)** — A measured comparison on a real project: bytes-per-second on the mirror
   channel is recorded at a low device rate and at a rate at least two orders of magnitude
   higher, and the two are within the same order of magnitude of each other. The measurement is
   recorded in this spec directory, not asserted.
-- [ ] **AC7 (R12, R13)** — `--benchmark-hotpath` before and after are within run-to-run noise.
+- [x] **AC7 (R12, R13)** — `--benchmark-hotpath` before and after are within run-to-run noise.
   The diff is reviewed against the capture data path: the only permitted change there is the
   one named cached-flag input, and its change signal is confirmed wired per the dataflow rule.
   Startup time in all three operation modes is unchanged.
-- [ ] **AC8 (R14, R16)** — With the API server disabled, or enabled but bound to loopback only,
+- [x] **AC8 (R14, R16)** — With the API server disabled, or enabled but bound to loopback only,
   an attach attempt from another machine fails. With the token omitted or wrong, the attach is
   refused. The non-interactive opt-in is exercised on a machine with no persisted settings, and
   it does not silently widen exposure when omitted.
-- [ ] **AC9 (R15)** — A documentation page states the v1 trust model, names what the transport
+- [x] **AC9 (R15)** — A documentation page states the v1 trust model, names what the transport
   does not protect, and gives the recommended deployment (trusted network or tunnel).
-- [ ] **AC10 (protocol, pre-gate)** — The wire contract is written down and exercised by an
+- [x] **AC10 (protocol, pre-gate)** — The wire contract is written down and exercised by an
   automated client against a recorded fixture, independently of any GUI: structure message,
   snapshot message, epoch/versioning, and the reconnect handshake all round-trip.
 

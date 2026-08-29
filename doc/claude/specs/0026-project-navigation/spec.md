@@ -133,28 +133,28 @@ mouse, keyboard, and eye — without stealing screen space or touching the data 
      plus the parse-rate gate, since these are UI/QML behaviors the app must be running to
      show. -->
 
-- [ ] **AC1 (R1)** — In the running editor: select item A, then B, then C; Back returns to
+- [x] **AC1 (R1)** — In the running editor: select item A, then B, then C; Back returns to
       B, Back again to A; Forward returns to B. From B, selecting a new item D makes Forward
       unavailable (C is discarded).
-- [ ] **AC2 (R2)** — With history A→B→C, delete B, then press Back from C: navigation lands
+- [x] **AC2 (R2)** — With history A→B→C, delete B, then press Back from C: navigation lands
       on a valid item (A) and never on a blank/errored pane; no crash.
-- [ ] **AC3 (R3/R4)** — Mouse back/forward buttons navigate history; `Alt+Left`/`Alt+Right`
+- [x] **AC3 (R3/R4)** — Mouse back/forward buttons navigate history; `Alt+Left`/`Alt+Right`
       navigate history; `Backspace` navigates back when the tree is focused but does **not**
       when a text field in the editor is focused (typing Backspace in a field deletes a
       character as normal).
-- [ ] **AC4 (R5/R6/R7)** — The Project Structure caption shows back/forward + the four folder
+- [x] **AC4 (R5/R6/R7)** — The Project Structure caption shows back/forward + the four folder
       buttons with no increase in editor height; each button's enabled state tracks the
       current selection as specified; each shows a tooltip; folder buttons act on the current
       selection and produce the same result as the equivalent context-menu action.
-- [ ] **AC5 (R8/R9/R10)** — Switching workspaces (via each trigger path: switcher, keyboard
+- [x] **AC5 (R8/R9/R10)** — Switching workspaces (via each trigger path: switcher, keyboard
       cycle, keyboard jump, search) plays a directional slide whose direction matches the
       index delta; the settled workspace matches the non-animated result; no visual artifact
       when a snapshot cannot be produced.
-- [ ] **AC6 (R11–R14)** — The switcher overlay opens from its control and shortcut, shows all
+- [x] **AC6 (R11–R14)** — The switcher overlay opens from its control and shortcut, shows all
       workspaces, scrolls and type-filters with a large workspace set, is fully keyboard
       navigable (arrows/Enter/Escape), and activating a workspace matches the existing switch
       result.
-- [ ] **AC7 (all)** — `--benchmark-hotpath` still passes its gate; the feature adds no work
+- [x] **AC7 (all)** — `--benchmark-hotpath` still passes its gate; the feature adds no work
       to the per-frame parse/publish path (animation snapshot work occurs only on
       user-initiated workspace switches, never per frame).
 

@@ -88,25 +88,25 @@ the user owns rather than a coordinate the system derives.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — A `tests/scripts/` JS unit (or equivalent transform-path check) shows
+- [x] **AC1** — A `tests/scripts/` JS unit (or equivalent transform-path check) shows
   `datasetGetRaw("<alias>")` and `datasetGetRaw(<uid>)` returning the same value for the
   same dataset, and `datasetGetFinal` likewise, in both JS and Lua.
-- [ ] **AC2** — In the running app: assign an alias in the editor, reference it from a
+- [x] **AC2** — In the running app: assign an alias in the editor, reference it from a
   transform, observe the value; rename a *different* dataset's alias to the same string
   and observe the editor reject it (R2).
-- [ ] **AC3** — With an alias in use, restructure the project so the dataset's uniqueId
+- [x] **AC3** — With an alias in use, restructure the project so the dataset's uniqueId
   changes; the alias lookup still resolves to the same dataset (R5).
-- [ ] **AC4** — `datasetGetRaw("no-such-alias")` returns JS `null` / Lua `nil` and logs
+- [x] **AC4** — `datasetGetRaw("no-such-alias")` returns JS `null` / Lua `nil` and logs
   one warning naming the alias; repeating the call does not spam the log (R4).
-- [ ] **AC5** — A `pytest` integration test drives an API command that targets a dataset,
+- [x] **AC5** — A `pytest` integration test drives an API command that targets a dataset,
   once with the numeric uniqueId and once with the alias, and gets equivalent results;
   an unknown alias yields the "dataset not found" error naming the alias (R7).
-- [ ] **AC6** — Bulk seed on a project with duplicate titles yields all-unique, non-empty
+- [x] **AC6** — Bulk seed on a project with duplicate titles yields all-unique, non-empty
   aliases for previously-empty fields and leaves pre-existing aliases untouched (R8);
   verifiable in the editor and the saved `.ssproj`.
-- [ ] **AC7** — `--benchmark-hotpath` still clears all nine gates after the change (alias
+- [x] **AC7** — `--benchmark-hotpath` still clears all nine gates after the change (alias
   plumbing must be free when unused and cheap when used).
-- [ ] **AC8** — Loading a pre-alias `.ssproj` and re-saving it round-trips without data
+- [x] **AC8** — Loading a pre-alias `.ssproj` and re-saving it round-trips without data
   loss or schema complaints (R1).
 
 ## Constraints & Invariants

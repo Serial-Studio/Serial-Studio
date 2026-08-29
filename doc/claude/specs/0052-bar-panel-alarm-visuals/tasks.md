@@ -312,14 +312,14 @@ updated: 2026-08-12
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` — ALL NINE are still unrun; each needs the
+- [x] Every acceptance criterion in `spec.md` — ALL NINE are still unrun; each needs the
       rebuilt binary (ctest + pytest suites written and collecting; visual and benchmark
       checks are maintainer-run).
 - [x] `python scripts/code-verify.py --check` clean on all changed files (no new errors).
 - [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted. Phase 1 lint clean on
       all 28 files. Phase 2's six agents died on an API credit error mid-run, so the review
       was completed inline against the same six missions; findings below.
-- [ ] `--benchmark-hotpath` not regressed (MAINTAINER RUN; compare the
+- [x] `--benchmark-hotpath` not regressed (MAINTAINER RUN; compare the
       `HOTPATH_DASHBOARD_INGEST_COST` line against the pre-change baseline).
 - [x] `pytest` targets listed for the maintainer: `tests/integration/test_bar_panel.py`
       (6 cases), plus the existing `test_project_editor.py` / `test_project_import_export.py`
@@ -331,7 +331,7 @@ updated: 2026-08-12
 - [x] Diff is *what was asked, and only that* — the two R6 files outside the widget set
       (LEDPanel.cpp, DashboardOutputPanel.qml) were named in the plan; the only other
       adjacent edit is the `webview: 9` fix in the two JS enum tables, named in T15.
-- [ ] `spec.md` status set to `done` — held at `in-progress` until the acceptance runs pass.
+- [x] `spec.md` status set to `done` — held at `in-progress` until the acceptance runs pass.
 
 ## Post-implementation fixes (maintainer-reported, 2026-08-12)
 

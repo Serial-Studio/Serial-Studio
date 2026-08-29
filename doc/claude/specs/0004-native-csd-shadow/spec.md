@@ -86,27 +86,27 @@ defect class instead of patching each symptom.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — On Windows 10 and Linux, open every dialog reachable from the main window
+- [x] **AC1** — On Windows 10 and Linux, open every dialog reachable from the main window
   (Settings, About, Donate, Project Editor dialogs, CSV player, examples browser): each
   opens sized to its content with no blank margin bands and nothing clipped (R1, R2).
-- [ ] **AC2** — Drag the main window and a dialog against all four screen edges on
+- [x] **AC2** — Drag the main window and a dialog against all four screen edges on
   Windows 10 and Linux: the visible border touches the edge; OS snap/aero-snap gestures
   still work (R3).
-- [ ] **AC3** — Hover every edge and corner of a CSD window: the resize cursor appears
+- [x] **AC3** — Hover every edge and corner of a CSD window: the resize cursor appears
   exactly at the visible border and resizing works from it; the cursor does not change
   outside the visible window (R4).
-- [ ] **AC4** — Open long comboboxes near the bottom/right window border (e.g. driver
+- [x] **AC4** — Open long comboboxes near the bottom/right window border (e.g. driver
   pickers in Setup, theme picker in Settings): every item renders and is clickable (R5).
-- [ ] **AC5** — On Windows 10, the window has a DWM-drawn shadow visually consistent with
+- [x] **AC5** — On Windows 10, the window has a DWM-drawn shadow visually consistent with
   native apps; on KDE/KWin X11 the WM draws the shadow if the mechanism ships, otherwise
   the thin-border fallback appears (R6, R7).
-- [ ] **AC6** — On GNOME Wayland and KDE Wayland, windows show the thin-border fallback,
+- [x] **AC6** — On GNOME Wayland and KDE Wayland, windows show the thin-border fallback,
   move/resize/snap correctly, and popups behave (R5, R7).
-- [ ] **AC7** — Settings no longer shows the shadow toggle; launching with an existing
+- [x] **AC7** — Settings no longer shows the shadow toggle; launching with an existing
   `settings.ini` containing the old key neither crashes nor changes behavior (R8).
-- [ ] **AC8** — Windows 11 and macOS smoke pass: decoration behavior, caption colors, and
+- [x] **AC8** — Windows 11 and macOS smoke pass: decoration behavior, caption colors, and
   quit/minimize/maximize identical to current release (R9).
-- [ ] **AC9** — `pytest tests/integration/ -v` passes against the running app on at least
+- [x] **AC9** — `pytest tests/integration/ -v` passes against the running app on at least
   one CSD platform, confirming no API/window-manager interaction regressions.
 
 ## Constraints & Invariants

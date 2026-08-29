@@ -476,27 +476,27 @@ updated: 2026-07-25
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met or handed to the maintainer as a named
+- [x] Every acceptance criterion in `spec.md` is met or handed to the maintainer as a named
       runtime check (AC4/AC9 observations; AC2/AC3/AC5/AC6/AC11/AC12/AC13 pytest).
 - [x] `python scripts/code-verify.py --check` clean on all changed files, including the
       generated TUs and the new no-parallel-field-map rule (no new errors).
 - [x] `python scripts/registry-verify.py` clean, including the new property-manifest rule.
 - [x] `python scripts/generate-property-registry.py --check` clean; running the generator
       twice produces no diff.
-- [ ] `qt-cpp-review` run on the **hand-written** C++ diff (hooks + reduced call sites);
+- [x] `qt-cpp-review` run on the **hand-written** C++ diff (hooks + reduced call sites);
       findings addressed or noted.
-- [ ] `--benchmark-hotpath` run by the maintainer as an adjacency gate (no parse-path edit
+- [x] `--benchmark-hotpath` run by the maintainer as an adjacency gate (no parse-path edit
       expected; the `Dataset` struct and the shared serializer sit next to it).
-- [ ] `pytest tests/integration/test_property_registry.py` and
+- [x] `pytest tests/integration/test_property_registry.py` and
       `tests/integration/test_project_undo.py` listed for the maintainer, with the
       baseline-capture ordering called out (capture on the pre-change build in T1).
-- [ ] Project JSON round-trips byte-identically except the two declared defect fixes.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt. Note the
+- [x] Project JSON round-trips byte-identically except the two declared defect fixes.
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt. Note the
       required order for the SDK to pick up the new schema: build → `--dump-api-schema` →
       `sanitize-commit.py`.
-- [ ] Diff is *what was asked, and only that* — dataset entity only, no QML change, no
+- [x] Diff is *what was asked, and only that* — dataset entity only, no QML change, no
       foreign working-tree files touched.
-- [ ] `spec.md` status set to `done`.
+- [x] `spec.md` status set to `done`.
 
 ## Phase 1 build notes (2026-07-25)
 

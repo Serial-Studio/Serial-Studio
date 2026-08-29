@@ -80,16 +80,16 @@ we cannot offer that on the byte stream we already own.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — A worked example decoder for the app's own delimited frame format annotates
+- [x] **AC1** — A worked example decoder for the app's own delimited frame format annotates
       start delimiter, payload, checksum, end delimiter as four classes on two rows, live, at
       the default UART rate with no visible Terminal slowdown.
-- [ ] **AC2** — With 1M annotations of 8 distinct texts the intern table holds 8 strings and
+- [x] **AC2** — With 1M annotations of 8 distinct texts the intern table holds 8 strings and
       the model's memory is bounded by the Terminal's retained window.
-- [ ] **AC3** — Table view sort/filter/export round-trips into a CSV that reopens in a
+- [x] **AC3** — Table view sort/filter/export round-trips into a CSV that reopens in a
       spreadsheet with one row per annotation.
-- [ ] **AC4** — Payload view of class "payload" reproduces the concatenated payload bytes
+- [x] **AC4** — Payload view of class "payload" reproduces the concatenated payload bytes
       byte-for-byte for a known capture.
-- [ ] **AC5** — A decoder throwing on every chunk yields one Problem Center finding and a
+- [x] **AC5** — A decoder throwing on every chunk yields one Problem Center finding and a
       disabled decoder, not a dialog storm.
 
 ## Constraints & Invariants

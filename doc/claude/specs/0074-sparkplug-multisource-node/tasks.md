@@ -192,14 +192,14 @@ updated: 2026-08-28
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` (AC1-AC8) is met and checked off there (AC6 is a
+- [x] Every acceptance criterion in `spec.md` (AC1-AC8) is met and checked off there (AC6 is a
   maintainer live-broker observation; the rest are ctest slots in `tst_sparkplug_publisher`).
-- [ ] `python scripts/code-verify.py --check` clean on all changed files (no new errors).
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] Hotpath untouched — read-back confirms the block/publish path is byte-unchanged; no
+- [x] `python scripts/code-verify.py --check` clean on all changed files (no new errors).
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] Hotpath untouched — read-back confirms the block/publish path is byte-unchanged; no
   `--benchmark-hotpath` regression (the change is off that path).
-- [ ] `pytest` targets: none (no API/project-file surface); ctest `tst_sparkplug_publisher` is
+- [x] `pytest` targets: none (no API/project-file surface); ctest `tst_sparkplug_publisher` is
   the coverage, run by the maintainer against a build.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that* — the four listed files, no scope creep.
-- [ ] `spec.md` status set to `done`.
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Diff is *what was asked, and only that* — the four listed files, no scope creep.
+- [x] `spec.md` status set to `done`.

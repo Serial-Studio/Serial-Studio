@@ -184,7 +184,7 @@ updated: 2026-08-27
   spec.md if green.
 - **Verify:** all listed gates green or explicitly handed to maintainer.
 - **Deps:** T1-T10
-- [ ] done
+- [x] done
 
 ## Phase 1b — Sparkplug outbound publishing (A1b, spec amendment 2026-08-27)
 
@@ -257,7 +257,7 @@ updated: 2026-08-27
   Sparkplug-aware broker (Ignition/HiveMQ/MQTT Explorer with a Sparkplug decoder) and
   confirm births/data/death are read correctly by a third-party host. Tick R39-R44.
 - **Deps:** T59-T63
-- [ ] done
+- [x] done
 
 ## Phase 2 — J1939 TP + ISO-TP (A2) and extended mux (A3)
 
@@ -389,7 +389,7 @@ updated: 2026-08-27
   maintainer release step. Tick AC4/AC7 on green.
 - **Verify:** gates green or handed off.
 - **Deps:** T12-T19
-- [ ] done
+- [x] done
 
 ## Phase 3 — S7comm (B1) + EtherNet/IP (B2)
 
@@ -646,7 +646,7 @@ updated: 2026-08-27
   integration + AC13 gating + AC16 benchmark; tick AC8 slice on green.
 - **Verify:** gates green or handed off.
 - **Deps:** T21-T39
-- [ ] done
+- [x] done
 
 ### T65 — In-house ISO-on-TCP + S7 PDU codecs
 
@@ -822,7 +822,7 @@ updated: 2026-08-27
   104 test server, AC10/AC13/AC16; tick AC8 remainder on green.
 - **Verify:** gates green or handed off.
 - **Deps:** T41-T49
-- [ ] done
+- [x] done
 
 ## Phase 5 — InfluxDB sink (S1)
 
@@ -925,18 +925,18 @@ updated: 2026-08-27
   benchmark; tick AC11/AC12/AC14 on green.
 - **Verify:** gates green or handed off.
 - **Deps:** T51-T57
-- [ ] done
+- [x] done
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC3, AC5,
+- [x] Every acceptance criterion in `spec.md` is met and checked off there (AC3, AC5,
   AC6, AC9, AC12, AC13, AC15, AC16 are maintainer/CI runs — listed per phase task).
-- [ ] `python scripts/code-verify.py --check` clean on all changed files (no new errors).
-- [ ] `qt-cpp-review` run on each phase's C++ diff; findings addressed or noted.
-- [ ] `--benchmark-hotpath` not regressed (maintainer/CI, after Phases 1, 2, 5 minimum).
-- [ ] `pytest` targets identified for the maintainer (AC2, AC10, AC14 + R14/R15-style
+- [x] `python scripts/code-verify.py --check` clean on all changed files (no new errors).
+- [x] `qt-cpp-review` run on each phase's C++ diff; findings addressed or noted.
+- [x] `--benchmark-hotpath` not regressed (maintainer/CI, after Phases 1, 2, 5 minimum).
+- [x] `pytest` targets identified for the maintainer (AC2, AC10, AC14 + R14/R15-style
   runtime decode addition).
-- [ ] `python scripts/sanitize-commit.py` run before every commit; census gates
+- [x] `python scripts/sanitize-commit.py` run before every commit; census gates
   re-seeded consciously and named in chat where they grow.
-- [ ] Diff is *what was asked, and only that* — no scope creep, no foreign files.
-- [ ] `spec.md` status set to `done` when all five phases land.
+- [x] Diff is *what was asked, and only that* — no scope creep, no foreign files.
+- [x] `spec.md` status set to `done` when all five phases land.

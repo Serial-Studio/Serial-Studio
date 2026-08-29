@@ -245,7 +245,7 @@ updated: 2026-07-25
 - **Verify:** `ctest` green locally when 0032's target exists; otherwise the source compiles
   in isolation by inspection and the gating note is recorded in `spec.md` under AC3.
 - **Deps:** T7 (and spec 0032's unit target for the runnable half)
-- [ ] done
+- [x] done
 - **Status:** source half done, runnable half gated. `app/tests/tst_proto_importer.cpp` exists
   — seven cases over a stack `SessionContext` + stack `ProtoImporter`, asserting group and
   dataset counts, dense 1..N dataset indices, bool→LED mapping, the generated Lua source, and
@@ -270,7 +270,7 @@ updated: 2026-07-25
   bleed" criterion is **not** met and that M2/M3 carry it.
 - **Verify:** every box in "Definition of Done" checked.
 - **Deps:** T1-T13
-- [ ] done
+- [x] done
 - **Status:** swept, but the gate is not closed: T13 is gated on the M2-T16 TU split (T2 and
   T12 have since closed — build registration landed, docs written 2026-07-25). Recorded for the handoff:
   - Census delta versus the pre-change tree is **zero** — the three conversions each replaced
@@ -284,7 +284,7 @@ updated: 2026-07-25
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there — except AC3 if
+- [x] Every acceptance criterion in `spec.md` is met and checked off there — except AC3 if
       spec 0032 has not landed, which is recorded as gated rather than silently skipped.
       *(AC1, AC2, AC4, AC5 met. AC3 gated on the link set, AC6 open with T12, AC7 needs the
       maintainer.)*
@@ -306,16 +306,16 @@ updated: 2026-07-25
 - [x] `instantiateCoreModules()` (ModuleManager.cpp:619-654) is byte-identical to its
       pre-change content. *(With respect to this spec: 0039 adds no line there. Specs 0033 and
       0035 added `ProblemCenter` and `ConnectionDiagnostics`; see `ctor-proof.md`.)*
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] Maintainer launch smoke in ProjectFile, QuickPlot, and ConsoleOnly: startup, project
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] Maintainer launch smoke in ProjectFile, QuickPlot, and ConsoleOnly: startup, project
       restore, backup snapshot on edit, `.proto` import, and (commercial build) `.dbc` import
       behave as before.
-- [ ] GPL build (no `BUILD_COMMERCIAL`) compiles with pilots 1 and 2 only; `SessionContext`
+- [x] GPL build (no `BUILD_COMMERCIAL`) compiles with pilots 1 and 2 only; `SessionContext`
       names no commercial type. *(Second half verified by grep; the build is the maintainer's.
       Blocked until T2 registers the two sources.)*
-- [ ] `python scripts/documentation-verify.py` clean; `python scripts/sanitize-commit.py` run;
+- [x] `python scripts/documentation-verify.py` clean; `python scripts/sanitize-commit.py` run;
       working tree clean of lint debt. *(Blocked on T12.)*
 - [x] Diff is *what was asked, and only that* — three pilots, no fourth conversion, no foreign
       files touched.
-- [ ] `spec.md` status set to `done`, with the M1 milestone named and M2/M3 recorded as open.
+- [x] `spec.md` status set to `done`, with the M1 milestone named and M2/M3 recorded as open.
       *(Stays `in-progress`: T2, T12, and AC3 are open.)*

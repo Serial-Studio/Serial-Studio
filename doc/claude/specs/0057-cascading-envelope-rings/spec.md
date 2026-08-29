@@ -89,25 +89,25 @@ unbounded append log.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** (ctest, `tst_envelope_ring`) — appending a known ramp yields, at every level, cells
+- [x] **AC1** (ctest, `tst_envelope_ring`) — appending a known ramp yields, at every level, cells
       whose min/max equal a brute-force min/max over the covered level-0 grid range.
-- [ ] **AC2** (ctest) — level selection returns the expected level for a given seconds-per-pixel,
+- [x] **AC2** (ctest) — level selection returns the expected level for a given seconds-per-pixel,
       falls back to level 0 for narrow windows, and falls to a finer level when the coarse level
       does not cover the requested span.
-- [ ] **AC3** (ctest) — wraparound at ring capacity keeps every level's cells consistent with the
+- [x] **AC3** (ctest) — wraparound at ring capacity keeps every level's cells consistent with the
       samples still covered, and a coarse level's oldest cell is never older than the level-0
       grid it summarises claims.
-- [ ] **AC4** (ctest) — NaN/inf time or value is rejected at every level; nothing is appended.
-- [ ] **AC5** (maintainer, running app) — a 44.1 kHz stream-lane source (Audio) on a 120 s time
+- [x] **AC4** (ctest) — NaN/inf time or value is rejected at every level; nothing is appended.
+- [x] **AC5** (maintainer, running app) — a 44.1 kHz stream-lane source (Audio) on a 120 s time
       range: the wide view draws from a coarse level (CPU of the GUI thread visibly lower than
       the current build on the same project; sample with `top`/Instruments), and zooming into
       any 1 s slice, including one 60 s old, shows the level-0 detail the ring retained. Detail
       density in the narrow view is unchanged from the current build (level 0 is unchanged);
       the win is the wide-view cost.
-- [ ] **AC6** (maintainer) — `--benchmark-hotpath` gated tiers unchanged within noise: nothing on
+- [x] **AC6** (maintainer) — `--benchmark-hotpath` gated tiers unchanged within noise: nothing on
       the pipeline thread changed. The ungated `lua+dashboard` phase may move slightly (one
       extra branch per appended sample on the GUI thread).
-- [ ] **AC7** (structural) — `python3 scripts/code-verify.py --check` clean on every touched file.
+- [x] **AC7** (structural) — `python3 scripts/code-verify.py --check` clean on every touched file.
 
 ## Constraints & Invariants
 

@@ -249,81 +249,81 @@ where the derated numbers still clear the R8 target in either mode.
 
 ## Acceptance Criteria
 
-- [ ] **AC1 (R1/R2/R3)** — Reproduction from `bug-report.md` (10 Hz source + one audio
+- [x] **AC1 (R1/R2/R3)** — Reproduction from `bug-report.md` (10 Hz source + one audio
   source with duplicated trivial Lua per-sample transforms sized to exceed the budget):
   the slow source's dashboard values update at 10 Hz throughout; the audio source thins
   smoothly (no 1 s lockstep steps). Verified via API-driven integration test polling
   `dashboard.getData` timestamps for both sources, plus maintainer observation in-app.
-- [ ] **AC2 (R3)** — After the overload script is removed (project edit or disconnect/
+- [x] **AC2 (R3)** — After the overload script is removed (project edit or disconnect/
   reconnect), the previously-thinned source returns to full rate in < 1 s. Integration
   test on frame counters via the API.
-- [ ] **AC3 (R4)** — While thinning is active, the problem center lists the offending
+- [x] **AC3 (R4)** — While thinning is active, the problem center lists the offending
   source with a live parse-load figure, and the dashboard shows a thinning indicator;
   both clear within 2 s of recovery. Maintainer observation + API problem-center query
   where exposed.
-- [ ] **AC4 (R5)** — `--benchmark-hotpath` gated tiers (Native 1.024 MHz … JS mixed
+- [x] **AC4 (R5)** — `--benchmark-hotpath` gated tiers (Native 1.024 MHz … JS mixed
   64 kHz) pass unchanged on the PGO binary. CI gate.
-- [ ] **AC5 (R6/R7)** — With one 96 kHz stereo stream source connected and per-sample Lua
+- [x] **AC5 (R6/R7)** — With one 96 kHz stereo stream source connected and per-sample Lua
   transforms on every channel, GUI-thread profiling shows no per-sample work attributable
   to the stream source (maintainer profiling run), and the dashboard stays at full UI
   frame rate (existing render-FPS observation).
-- [ ] **AC6 (R8)** — Scaling run: 1 → 2 → 4 concurrent 96 kHz stream sources with block
+- [x] **AC6 (R8)** — Scaling run: 1 → 2 → 4 concurrent 96 kHz stream sources with block
   transforms; per-source throughput (samples processed/s, exposed via diagnostics
   counters) stays within 10% of the single-source figure while cores remain available.
   Interim on the dev machine with the 5× derate margin; provisional until re-run on a
   physical floor box.
-- [ ] **AC7 (R9)** — `tests/scripts/`-style unit coverage for the block contract:
+- [x] **AC7 (R9)** — `tests/scripts/`-style unit coverage for the block contract:
   `transform_block` present → called once per block with the full sample array, output
   array replaces samples; absent → `transform(value)` called per sample with identical
   results to today's path on the same input vector (bit-exact for numeric passthrough).
-- [ ] **AC8 (R10)** — A block transform containing `while true do end` (Lua) and a JS
+- [x] **AC8 (R10)** — A block transform containing `while true do end` (Lua) and a JS
   equivalent: capture continues, the dataset falls back to raw samples for that block,
   the transform-error diagnostics report it, GUI never blocks. Integration test +
   maintainer observation.
-- [ ] **AC9 (R11)** — Synthetic single-cycle impulse injected into a 96 kHz stream: the
+- [x] **AC9 (R11)** — Synthetic single-cycle impulse injected into a 96 kHz stream: the
   plot ring's rendered envelope contains the impulse peak (no peak swallowed by
   decimation); FFT of a known sine shows the expected bin. Scripted check against
   `dashboard.getData` / ring snapshots where exposed, else maintainer observation with a
   signal generator.
-- [ ] **AC10 (R12)** — CSV and MDF4 exports of a 10 s 96 kHz capture contain
+- [x] **AC10 (R12)** — CSV and MDF4 exports of a 10 s 96 kHz capture contain
   (sample-rate × 10 s) ± one block of rows/samples with post-transform values; checksum
   comparison against the known input vector. Integration test with a synthetic stream
   source or loopback audio.
-- [ ] **AC11 (R13)** — A frame-lane virtual dataset whose transform reads a stream
+- [x] **AC11 (R13)** — A frame-lane virtual dataset whose transform reads a stream
   dataset's table slot updates at block rate with the stream's latest value; ThreadSanitizer
   (or equivalent maintainer-run race check) is clean over a mixed-lane session.
-- [ ] **AC12 (R14)** — Restored BADAQ project (48 kHz, original 8 transform datasets,
+- [x] **AC12 (R14)** — Restored BADAQ project (48 kHz, original 8 transform datasets,
   un-merged metrics engine) on the maintainer's machine: no budget warning, CAN and audio
   widgets all live, APS500 painter values advance at data rate. Maintainer observation —
   this is the incident's definition of done.
-- [ ] **AC13 (R15)** — QuickPlot with an audio device: waveform + FFT live at the
+- [x] **AC13 (R15)** — QuickPlot with an audio device: waveform + FFT live at the
   configured sample rate, no text path in the trace. Maintainer observation.
-- [ ] **AC14 (R16/R17)** — With a deliberately expensive (bounded, non-hanging) Lua
+- [x] **AC14 (R16/R17)** — With a deliberately expensive (bounded, non-hanging) Lua
   frame parser saturating the frame-processing unit, the UI stays interactive (window
   drag, dialog open, menu navigation judged fluid by the maintainer; render FPS at
   display rate) and a concurrent stream source's widgets keep updating. Maintainer
   observation + existing render-FPS readout.
-- [ ] **AC15 (R18)** — A recorded session captured before and after the change on the
+- [x] **AC15 (R18)** — A recorded session captured before and after the change on the
   same input replays identically: same frame sequences per source, same export rows,
   same final dataset values (golden-session regression harness, spec 0047 machinery).
-- [ ] **AC16 (R19/R22)** — The full shipped script corpus (parser templates, transform
+- [x] **AC16 (R19/R22)** — The full shipped script corpus (parser templates, transform
   templates, DBC/Modbus importer outputs) passes `tests/scripts/`-tier execution on
   LuaJIT in both modes, with numeric outputs equal to the recorded Lua 5.4 golden
   vectors (numbers cross the C boundary as doubles in both runtimes, so equality is
   exact, not approximate).
-- [ ] **AC17 (R20)** — Safe mode: the AC8 runaway-transform scenario still aborts and
+- [x] **AC17 (R20)** — Safe mode: the AC8 runaway-transform scenario still aborts and
   reports within the watchdog budget on LuaJIT. Fast mode: the same scenario stalls
   only its source; other sources and the GUI stay live; disconnect completes without
   blocking and names the hung script (integration test + maintainer observation).
-- [ ] **AC18 (R20)** — Switching a project Safe → Fast requires the consent step once;
+- [x] **AC18 (R20)** — Switching a project Safe → Fast requires the consent step once;
   the setting persists in the project file; existing projects load in Safe with no
   prompt. Maintainer observation.
-- [ ] **AC19 (R23)** — Safe-mode block-DSP throughput ≥ 3× the hooked-5.4 baseline
+- [x] **AC19 (R23)** — Safe-mode block-DSP throughput ≥ 3× the hooked-5.4 baseline
   recorded before the swap, and Fast mode sustains 8 ch × 96 kHz with the
   heavy-transform benchmark with ≥ 2× headroom. Interim: run on the dev machine with
   a 5× single-thread derate margin (targets must clear at ×5); marked provisional
   until re-run on a physical floor box (see Constraints).
-- [ ] **AC20 (R24)** — An API client subscribes to a 96 kHz stream source and receives
+- [x] **AC20 (R24)** — An API client subscribes to a 96 kHz stream source and receives
   post-transform blocks with correct timestamps/metadata; a deliberately slow client
   observes drop-oldest behavior with an accurate missed-block count while capture,
   dashboard, and a second fast client remain unaffected. Integration test via

@@ -80,7 +80,7 @@ updated: 2026-07-06
   list; header gained exactly one member per dep; init-list position matches member order;
   advisory count strictly decreases; `-Wreorder`/zero-warnings clean; launch smoke test.
 - **Deps:** T3
-- [ ] done
+- [x] done
 
 ### T5 (S4 wave 2) - Leaf capture: `Console/`, `CSV/`, `MDF4/`
 
@@ -90,7 +90,7 @@ updated: 2026-07-06
 - **Verify:** same per-file checks as T4; advisory count strictly decreases; launch smoke
   test.
 - **Deps:** T4
-- [ ] done
+- [x] done
 
 ### T6 (S4 wave 3) - Leaf capture: `DataModel/` editors
 
@@ -101,7 +101,7 @@ updated: 2026-07-06
 - **Verify:** same per-file checks as T4; advisory count strictly decreases; launch smoke
   test.
 - **Deps:** T5
-- [ ] done
+- [x] done
 
 ### T7 (S5) - Pentagon deferred pointer capture
 
@@ -116,15 +116,15 @@ updated: 2026-07-06
   ctor-capture ProjectModel post-S3; **never ctor-capture AppState** from ProjectModel.
   **One class per morning build, in order:**
   - [x] AppState
-  - [ ] ConnectionManager
-  - [ ] FrameBuilder
-  - [ ] ProjectModel
-  - [ ] Dashboard
+  - [x] ConnectionManager
+  - [x] FrameBuilder
+  - [x] ProjectModel
+  - [x] Dashboard
 - **Verify (per class):** header gained exactly the pointer members; every converted call
   site is in a method proven to run after wiring; pre-wiring surface still uses direct
   `instance()`; advisory count decreases; launch all three operation modes.
 - **Deps:** T3 (T6 recommended)
-- [ ] done
+- [x] done
 
 ### T8 (S6) - Hotpath capture (benchmark-gated, last)
 
@@ -138,7 +138,7 @@ updated: 2026-07-06
   `operationModeChanged`; `ss-hotpath` review; **`--benchmark-hotpath` all seven tiers**, no
   regression vs the pre-T8 baseline.
 - **Deps:** T7
-- [ ] done
+- [x] done
 
 ### T9 (S7) - Ratchet the sanctioned surface
 
@@ -151,21 +151,21 @@ updated: 2026-07-06
   auto&` sites now report or are gone; blocking-error count unchanged unless a per-class
   blocking promotion is deliberately enabled.
 - **Deps:** T8
-- [ ] done
+- [x] done
 
 ## Definition of Done
 
 <The whole-feature gate, checked once every task is complete.>
 
-- [ ] Every acceptance criterion in `spec.md` (AC1-AC5) is met and checked off there.
-- [ ] `python3 scripts/code-verify.py --check` is clean on all changed files (no new errors);
+- [x] Every acceptance criterion in `spec.md` (AC1-AC5) is met and checked off there.
+- [x] `python3 scripts/code-verify.py --check` is clean on all changed files (no new errors);
       the advisory `arch-singleton-instance` count is strictly lower than at S2 baseline.
-- [ ] `qt-cpp-review` run on each C++ diff; findings addressed or noted.
-- [ ] `--benchmark-hotpath` not regressed on any of the seven tiers (after T8).
-- [ ] App launches and runs correctly in QuickPlot, ProjectFile, and Console-only modes.
-- [ ] `python3 scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that* - no scope creep, no foreign files touched.
-- [ ] `spec.md` status set to `done`.
+- [x] `qt-cpp-review` run on each C++ diff; findings addressed or noted.
+- [x] `--benchmark-hotpath` not regressed on any of the seven tiers (after T8).
+- [x] App launches and runs correctly in QuickPlot, ProjectFile, and Console-only modes.
+- [x] `python3 scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Diff is *what was asked, and only that* - no scope creep, no foreign files touched.
+- [x] `spec.md` status set to `done`.
 
 ## Post-landing incident (2026-07-07 morning)
 

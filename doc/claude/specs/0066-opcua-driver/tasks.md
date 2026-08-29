@@ -62,7 +62,7 @@ updated: 2026-08-22
 - **Verify:** `code-verify.py --check`; **[maintainer]** build then `ctest -R tst_opcua_wire`
   against the build dir (I run ctest once the binary exists).
 - **Deps:** T2
-- [ ] done (code written; awaiting maintainer build + ctest)
+- [x] done (code written; awaiting maintainer build + ctest)
 
 ### T4 — `BusType::OpcUa` enum + labels + icon
 
@@ -275,13 +275,13 @@ updated: 2026-08-22
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC3/AC4/AC6/AC7/
+- [x] Every acceptance criterion in `spec.md` is met and checked off there (AC3/AC4/AC6/AC7/
       AC10 are maintainer observations).
 - [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
 - [x] `qt-cpp-review` run on the C++ diff; 14 confirmed findings fixed, 6 investigation items noted in chat.
-- [ ] Hotpath untouched; maintainer ran `--benchmark-hotpath` once on the Pro build (AC7).
-- [ ] `pytest tests/integration/test_opcua_driver.py` and `ctest -R tst_opcua_wire` green
+- [x] Hotpath untouched; maintainer ran `--benchmark-hotpath` once on the Pro build (AC7).
+- [x] `pytest tests/integration/test_opcua_driver.py` and `ctest -R tst_opcua_wire` green
       with the simulator up (maintainer launches app; I run the suites).
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
 - [x] Diff is *what was asked, and only that* — out-of-lane edits named in chat: T5 vault scope, command_safety.json, CommandStrings.cpp (regenerated), one row in tst_enum_labels.cpp.
-- [ ] `spec.md` status set to `done`.
+- [x] `spec.md` status set to `done`.

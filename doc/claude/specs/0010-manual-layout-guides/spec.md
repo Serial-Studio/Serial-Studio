@@ -103,33 +103,33 @@ is the delegate's, not the widgets'.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — In-app: drag a window slowly past another window's left edge, top edge, and
+- [x] **AC1** — In-app: drag a window slowly past another window's left edge, top edge, and
   horizontal center; each alignment produces a visible snap plus guide line, and the dropped
   geometry differs by 0 px from the target alignment (verify via the R5 badge).
-- [ ] **AC2** — In-app: resize a window's right edge toward a neighbor's right edge; it
+- [x] **AC2** — In-app: resize a window's right edge toward a neighbor's right edge; it
   snaps flush, and the left edge does not move during the entire gesture.
-- [ ] **AC3** — In-app: with three windows in a row, drag the third until its gap matches
+- [x] **AC3** — In-app: with three windows in a row, drag the third until its gap matches
   the first pair's gap; the spacing indicator appears and the two gaps are pixel-identical
   after drop.
-- [ ] **AC4** — In-app: resize a window until its width matches a sibling's; the size-match
+- [x] **AC4** — In-app: resize a window until its width matches a sibling's; the size-match
   cue appears and both widths read identical in the badge.
-- [ ] **AC5** — In-app: the badge appears on gesture start, tracks live, matches the final
+- [x] **AC5** — In-app: the badge appears on gesture start, tracks live, matches the final
   saved geometry, and disappears on release.
-- [ ] **AC6** — In-app: enable the grid at a chosen cell size; moves land on grid lines;
+- [x] **AC6** — In-app: enable the grid at a chosen cell size; moves land on grid lines;
   disable it and freeform placement returns; the toggle state survives an app restart.
-- [ ] **AC7** — In-app: holding Alt while dragging through a known snap alignment produces
+- [x] **AC7** — In-app: holding Alt while dragging through a known snap alignment produces
   no snap and no guides; releasing Alt mid-drag re-enables them within the same gesture.
-- [ ] **AC8** — In-app: dragging a window against all four canvas edges never shows the old
+- [x] **AC8** — In-app: dragging a window against all four canvas edges never shows the old
   half/quarter-canvas snap rectangle in manual mode.
-- [ ] **AC9** — In-app: a window resizes down to exactly 48×48 and stops; close, minimize,
+- [x] **AC9** — In-app: a window resizes down to exactly 48×48 and stops; close, minimize,
   and maximize buttons remain visible and respond to clicks at that size; a 48×48 window
   survives save/reload of the layout at the same geometry.
-- [ ] **AC10** — In-app: toggle to auto-layout with several sub-356×320 windows present;
+- [x] **AC10** — In-app: toggle to auto-layout with several sub-356×320 windows present;
   packing succeeds with no overlapping or zero-sized windows; toggling back restores the
   saved manual geometry (existing round-trip behavior).
-- [ ] **AC11** — In-app: with freeze enabled, no gesture, guide, badge, or grid interaction
+- [x] **AC11** — In-app: with freeze enabled, no gesture, guide, badge, or grid interaction
   is possible; with auto-layout enabled, none of the new visuals ever appear.
-- [ ] **AC12** — Regression: `--benchmark-hotpath` gates unchanged (the feature is
+- [x] **AC12** — Regression: `--benchmark-hotpath` gates unchanged (the feature is
   interaction-time UI only; nothing runs on the frame path).
 
 ## Constraints & Invariants

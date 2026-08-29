@@ -139,4 +139,4 @@ updated: 2026-07-07
 - [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
 - [x] Diff is *what was asked, and only that* — no scope creep, no foreign files touched
       (ModuleManager.cpp is the maintainer's own pending edit, untouched).
-- [ ] `spec.md` status set to `done` after maintainer runtime verification.
+- [x] `spec.md` status set to `done` after maintainer runtime verification.

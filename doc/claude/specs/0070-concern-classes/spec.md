@@ -1,7 +1,7 @@
 ---
 spec: 0070-concern-classes
 title: Concern Classes for the God Objects
-status: in-progress
+status: done         # closed 2026-08-29: Wave 5 P24/P25 superseded by Wave 7 Q1/Q2; all waves landed
 created: 2026-08-25
 updated: 2026-08-28
 author: Alex Spataru

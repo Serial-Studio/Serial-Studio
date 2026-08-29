@@ -120,26 +120,26 @@ between a readable operator screen and a cluttered one.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** (R1, R9) — Integration test: set an override via the API, save, reload;
+- [x] **AC1** (R1, R9) — Integration test: set an override via the API, save, reload;
   the map round-trips and survives reordering groups/datasets. Deleting the target
   dataset leaves the project loadable and the entry inert.
-- [ ] **AC2** (R2) — In-app observation: with an override on one gauge dataset, the
+- [x] **AC2** (R2) — In-app observation: with an override on one gauge dataset, the
   window caption, freeze header (when enabled), painted gauge title, taskbar entry,
   and popped-out window all show the override; a second widget on the same dataset
   shows it too.
-- [ ] **AC3** (R3) — Integration test: with overrides set, CSV export headers and
+- [x] **AC3** (R3) — Integration test: with overrides set, CSV export headers and
   `project.dataset.get`/live-data API titles still return canonical titles.
-- [ ] **AC4** (R4, R5) — In-app observation: defaults match today (plot shows freeze
+- [x] **AC4** (R4, R5) — In-app observation: defaults match today (plot shows freeze
   header, gauge doesn't); flipping each toggle inverts it, and no widget ever shows
   two titles at once in freeze mode.
-- [ ] **AC5** (R6) — In-app observation: workspace editor rows show the editable title
+- [x] **AC5** (R6) — In-app observation: workspace editor rows show the editable title
   and visibility toggle; edits mark the project modified, save, and restore.
-- [ ] **AC6** (R7, R8) — In-app observation: renaming from the widget window updates
+- [x] **AC6** (R7, R8) — In-app observation: renaming from the widget window updates
   all surfaces immediately while a data stream is running, and persists after reload.
-- [ ] **AC7** (R10) — Integration test: the new/extended API commands read and mutate
+- [x] **AC7** (R10) — Integration test: the new/extended API commands read and mutate
   overrides and visibility flags; static test confirms safety-tier registration for
   any new mutating command.
-- [ ] **AC8** (hotpath) — `--benchmark-hotpath` gates unchanged: title resolution must
+- [x] **AC8** (hotpath) — `--benchmark-hotpath` gates unchanged: title resolution must
   not add per-frame work.
 
 ## Constraints & Invariants

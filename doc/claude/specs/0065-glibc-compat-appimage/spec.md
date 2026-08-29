@@ -84,29 +84,29 @@ compatible direction: host GPU/driver libraries built against older glibc still 
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — CI's Linux x64 and arm64 jobs each upload three compat artifacts (AppImage,
+- [x] **AC1** — CI's Linux x64 and arm64 jobs each upload three compat artifacts (AppImage,
   deb, rpm) on a normal push; the existing artifact list is unchanged (verify by diffing
   the artifact names of a run before and after).
-- [ ] **AC2** — On each arch, a CI step runs the compat AppImage (extracted; no FUSE)
+- [x] **AC2** — On each arch, a CI step runs the compat AppImage (extracted; no FUSE)
   inside a `rockylinux:8` container and passes `--selftest` plus a headless startup probe;
   the same step installs the compat rpm inside `rockylinux:8` and the compat deb inside
   `debian:10` and launches the installed app headless. These steps are hard gates on the
   jobs.
-- [ ] **AC3** — On a real or virtualized RHEL 8 / Rocky 8 x86_64 graphical session, the
+- [x] **AC3** — On a real or virtualized RHEL 8 / Rocky 8 x86_64 graphical session, the
   maintainer observes: app launch, one live connection with a rendering dashboard, and a
   Historian recording (one manual pass before first release; arm64 relies on the automated
   AC2 gates).
-- [ ] **AC4** — In the same session, a Process I/O driver command that runs a host binary
+- [x] **AC4** — In the same session, a Process I/O driver command that runs a host binary
   (e.g. `/usr/bin/uname -a`) produces the same output as running it from a shell (R4).
-- [ ] **AC5** — Help Center, WebView widget, and HTML report preview are each opened on the
+- [x] **AC5** — Help Center, WebView widget, and HTML report preview are each opened on the
   legacy host: each either works or shows its documented degraded state; none crashes the
   app (R5).
-- [ ] **AC6** — The compat AppImage launches and shows the main window on the modern
+- [x] **AC6** — The compat AppImage launches and shows the main window on the modern
   ubuntu-24.04 CI runners too (R6) — automated alongside AC2 on both arches.
-- [ ] **AC7** — The release workflow's signing verification covers all six compat artifacts
+- [x] **AC7** — The release workflow's signing verification covers all six compat artifacts
   (signature checks pass in CI, as they do for the existing artifacts), and the AC2
   container installs prove the deb/rpm dependency sets resolve on glibc 2.28 hosts.
-- [ ] **AC8** — The Linux installation help page documents the artifacts per R8 and passes
+- [x] **AC8** — The Linux installation help page documents the artifacts per R8 and passes
   the docs verification tooling.
 
 ## Constraints & Invariants

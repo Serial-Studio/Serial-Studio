@@ -285,7 +285,7 @@ updated: 2026-08-18
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there.
+- [x] Every acceptance criterion in `spec.md` is met and checked off there.
 - [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
 - [x] `python scripts/registry-verify.py` and `python scripts/generate-command-strings.py --check`
       pass, including the new menu checks.
@@ -297,5 +297,5 @@ updated: 2026-08-18
 - [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
 - [x] Diff is *what was asked, and only that* — the plan's file table is the lane; the view
       toolbars, dialogs, and project format stay untouched.
-- [ ] `spec.md` status set to `done` (after T19).
+- [x] `spec.md` status set to `done` (after T19).
 

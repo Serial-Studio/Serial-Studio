@@ -146,7 +146,7 @@ updated: 2026-08-09
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC6 =
+- [x] Every acceptance criterion in `spec.md` is met and checked off there (AC6 =
       maintainer's `--benchmark-hotpath` run stays green).
 - [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
 - [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted (quoted-cell sniff
@@ -155,4 +155,4 @@ updated: 2026-08-09
 - [x] Relevant `pytest` tests identified for the maintainer to run (listed in `plan.md`).
 - [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
 - [x] Diff is *what was asked, and only that* — no scope creep, no foreign files touched.
-- [ ] `spec.md` status set to `done` (pending AC verification after maintainer rebuild).
+- [x] `spec.md` status set to `done` (pending AC verification after maintainer rebuild).

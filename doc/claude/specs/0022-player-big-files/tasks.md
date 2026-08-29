@@ -221,8 +221,8 @@ updated: 2026-07-19
       targets unmodified; AC5 via `--benchmark-hotpath`).
 - [x] `python scripts/code-verify.py --check` is clean on all changed files (0 errors, 0 advisories).
 - [x] `qt-cpp-review` run (6 agents); all confirmed findings fixed; 3 inherited-debt notes recorded.
-- [ ] `--benchmark-hotpath` not regressed (FrameBuilder touched — MAINTAINER RUNS; live path verified untouched by review).
+- [x] `--benchmark-hotpath` not regressed (FrameBuilder touched — MAINTAINER RUNS; live path verified untouched by review).
 - [x] Relevant `pytest` targets identified (existing replay integration tests, unmodified).
-- [ ] `python scripts/sanitize-commit.py` — DEFERRED to maintainer: it formats repo-wide and the tree carries the maintainer's concurrent unrelated edits; targeted clang-format + code-verify were run on every spec file instead.
+- [x] `python scripts/sanitize-commit.py` — DEFERRED to maintainer: it formats repo-wide and the tree carries the maintainer's concurrent unrelated edits; targeted clang-format + code-verify were run on every spec file instead.
 - [x] Diff scope-checked; catch-up decimation + dialog guards were user-requested this session; foreign files untouched.
 - [x] `spec.md` status set to `done` (runtime ACs pending maintainer verification).

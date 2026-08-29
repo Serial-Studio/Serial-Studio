@@ -74,15 +74,15 @@ Four small, unrelated frictions in the time/line plot, all inherited from "guess
 
 ## Acceptance Criteria
 
-- [ ] **AC1** (maintainer, running app) — at 5 zoom levels, 3 UI font sizes and one wide-glyph
+- [x] **AC1** (maintainer, running app) — at 5 zoom levels, 3 UI font sizes and one wide-glyph
       locale, no two X labels overlap; the axis has at least as many labels as before at the
       default font.
-- [ ] **AC2** (maintainer) — cursor readout on a time axis shows `1/ΔX` with a sensible SI
+- [x] **AC2** (maintainer) — cursor readout on a time axis shows `1/ΔX` with a sensible SI
       prefix; on a Samples axis it does not; with A and B at the same X it does not.
-- [ ] **AC3** (maintainer) — a slowly breathing sine (amplitude drifting +/-10 %) keeps a stable
+- [x] **AC3** (maintainer) — a slowly breathing sine (amplitude drifting +/-10 %) keeps a stable
       Y range for long stretches and steps only at ladder boundaries, without flapping.
-- [ ] **AC4** (maintainer) — markers, time zero and hover toggle survive a project reload.
-- [ ] **AC5** (structural) — `code-verify.py --check` clean on touched files; every new
+- [x] **AC4** (maintainer) — markers, time zero and hover toggle survive a project reload.
+- [x] **AC5** (structural) — `code-verify.py --check` clean on touched files; every new
       user-visible string wrapped in `qsTr()`; no binding loops on plot open/zoom/pan.
 
 ## Constraints & Invariants

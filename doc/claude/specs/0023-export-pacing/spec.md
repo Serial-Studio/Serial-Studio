@@ -80,18 +80,18 @@ And `dashboardTick()` needs to be safe to call at arbitrary rates from control s
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — With CSV interval = 100 ms and the BADAQ project running (CAN + audio),
+- [x] **AC1** — With CSV interval = 100 ms and the BADAQ project running (CAN + audio),
   the CSV grows at ~10 rows/s x ~583 columns (order of 100 KB/min, not GB/5 s), while
   MDF4/Sessions still record per-sample. (Maintainer observes in the running app.)
-- [ ] **AC2** — A control script calling `dashboardTick()` in a tight loop produces at
+- [x] **AC2** — A control script calling `dashboardTick()` in a tight loop produces at
   most `uiRefreshRate` export rows/s on the tick path, and the script loop is not blocked
   by republish work. (Maintainer observes; `tests/integration/` control-script suite.)
-- [ ] **AC3** — With interval = 0 the CSV byte stream for a single-source project is
+- [x] **AC3** — With interval = 0 the CSV byte stream for a single-source project is
   identical to today's output. (Existing `pytest` CSV export integration tests pass
   unchanged.)
-- [ ] **AC4** — `--benchmark-hotpath` gates pass unchanged (the per-frame CSV path gains
+- [x] **AC4** — `--benchmark-hotpath` gates pass unchanged (the per-frame CSV path gains
   only a cached-mode branch; the parse pipeline is untouched).
-- [ ] **AC5** — `csvExport.getStatus` reports the interval; `csvExport.setInterval`
+- [x] **AC5** — `csvExport.getStatus` reports the interval; `csvExport.setInterval`
   changes it live; values persist across restart.
 
 ## Constraints & Invariants

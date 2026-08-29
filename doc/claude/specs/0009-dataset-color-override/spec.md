@@ -76,21 +76,21 @@ theme-driven assignment that works well for casual use.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — Maintainer check in the running app: a fresh project shows "Automatic" for
+- [x] **AC1** — Maintainer check in the running app: a fresh project shows "Automatic" for
       every dataset, and plots render with today's palette colors (R1).
-- [ ] **AC2** — Maintainer check: pick red for one dataset in a multi-plot group; that curve,
+- [x] **AC2** — Maintainer check: pick red for one dataset in a multi-plot group; that curve,
       its legend entry, and every other widget bound to the dataset turn red; the group's
       other curves keep their automatic colors (R2).
-- [ ] **AC3** — Maintainer check: revert the same dataset to Automatic; it returns to the
+- [x] **AC3** — Maintainer check: revert the same dataset to Automatic; it returns to the
       palette color it had before (R3).
-- [ ] **AC4** — Maintainer check: with one explicit and one automatic dataset visible, switch
+- [x] **AC4** — Maintainer check: with one explicit and one automatic dataset visible, switch
       themes; the explicit color is unchanged, the automatic one follows the new theme (R4).
-- [ ] **AC5** — `pytest` integration: set a dataset color through the project API, save,
+- [x] **AC5** — `pytest` integration: set a dataset color through the project API, save,
       reload, read it back; and loading a pre-feature `.ssproj` (e.g. an existing `examples/`
       project) yields automatic state for all datasets (R5, R7).
-- [ ] **AC6** — Maintainer check: change a color while connected and streaming; the dashboard
+- [x] **AC6** — Maintainer check: change a color while connected and streaming; the dashboard
       recolors without reconnecting (R6).
-- [ ] **AC7** — `--benchmark-hotpath` still clears all nine gates after the change (the
+- [x] **AC7** — `--benchmark-hotpath` still clears all nine gates after the change (the
       dataset model is copied on the hotpath; see Constraints).
 
 ## Constraints & Invariants

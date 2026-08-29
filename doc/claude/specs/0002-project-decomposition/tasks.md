@@ -245,7 +245,7 @@ updated: 2026-07-06
   `ProjectEditor.h:40` forward-decl + pointer-only use still holds.
 - **Deps:** none (prerequisite for S5c)
 - **Status:** NOT executed this run; `class CustomModel` stays in `ProjectEditor.h`, S5c blocked.
-- [ ] done
+- [x] done
 
 ### T2.12 - CMake registration + S2 closure
 
@@ -343,7 +343,7 @@ updated: 2026-07-06
 - **AC:** watcher re-arm invariant (`watchProjectFile()` after write/load/new) intact; disk
   changes surface under the same facade signal; QML untouched.
 - **Deps:** S1
-- [ ] done
+- [x] done
 
 ### T4b - AutoSaveController
 
@@ -351,7 +351,7 @@ updated: 2026-07-06
 - **AC:** `autoSave()` / `syncRuntime()` / `m_runtimeDirty` remain in the facade (CANNOT-MOVE
   #4); autosave cadence and suspend/resume behavior unchanged; no new race.
 - **Deps:** T4a
-- [ ] done
+- [x] done
 
 ### T4c - WorkspaceSynthesizer
 
@@ -359,7 +359,7 @@ updated: 2026-07-06
 - **AC:** synthesized workspaces byte-identical to the current output; auto-regen trigger
   ordering (ctor fence, CANNOT-MOVE #3) unchanged.
 - **Deps:** S1
-- [ ] done
+- [x] done
 
 ### T4d - LegacyMigrations
 
@@ -367,7 +367,7 @@ updated: 2026-07-06
 - **AC:** every legacy-file path produces identical migrated JSON; migration ordering
   preserved.
 - **Deps:** S1
-- [ ] done
+- [x] done
 
 ### T4e - ProjectUiStateStore
 
@@ -375,7 +375,7 @@ updated: 2026-07-06
 - **AC:** all UI-state getters/setters re-emit the same NOTIFY signals; QML bindings
   unchanged.
 - **Deps:** S1
-- [ ] done
+- [x] done
 
 ### T4f - ProjectSerializer/Loader (tail)
 
@@ -383,7 +383,7 @@ updated: 2026-07-06
 - **AC:** resolve the `ProjectDocument` aggregate vs `friend class` Open Question first;
   serialized output and load results byte-identical; watcher re-arm intact.
 - **Deps:** T4a-T4e
-- [ ] done
+- [x] done
 
 ---
 
@@ -398,7 +398,7 @@ updated: 2026-07-06
 - **AC:** combobox model contents identical; restore-race guards (`if (count <= 0) return`)
   preserved.
 - **Deps:** S2
-- [ ] done
+- [x] done
 
 ### T5b - ProjectTreeController
 
@@ -406,7 +406,7 @@ updated: 2026-07-06
 - **AC:** `groupsChanged` -> `buildTreeModel` stays `QueuedConnection` verbatim (CANNOT-MOVE
   #8); tree structure, selection mirrors, and expansion state behave identically.
 - **Deps:** S2
-- [ ] done
+- [x] done
 
 ### T5c - per-entity FormControllers
 
@@ -415,7 +415,7 @@ updated: 2026-07-06
 - **AC:** requires S2b `CustomModel.h`; each form's rows and commit behavior identical;
   title-edit invariant holds per controller.
 - **Deps:** S2, T2.11
-- [ ] done
+- [x] done
 
 ### T5d - MultiSelectionController
 
@@ -423,21 +423,21 @@ updated: 2026-07-06
 - **AC:** multi-select batch delete/dup/move behavior identical; selection mirrors
   (CANNOT-MOVE #6) intact.
 - **Deps:** S2
-- [ ] done
+- [x] done
 
 ## Definition of Done
 
 <Per-stage; the whole-feature gate is reached only after S1-S5 land in their scheduled runs.>
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC6 stays open
+- [x] Every acceptance criterion in `spec.md` is met and checked off there (AC6 stays open
   until S4/S5 land).
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] Hotpath not touched - `--benchmark-hotpath` need not be re-run for correctness.
-- [ ] Existing project-editor / API-handler `pytest` suites identified for the maintainer to
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] Hotpath not touched - `--benchmark-hotpath` need not be re-run for correctness.
+- [x] Existing project-editor / API-handler `pytest` suites identified for the maintainer to
   run (listed in `plan.md`); a failure means a body was altered, not moved.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that* - pure moves, no scope creep, no foreign files
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Diff is *what was asked, and only that* - pure moves, no scope creep, no foreign files
   touched.
-- [ ] `spec.md` status set to `done` only after S1-S5 are complete; interim runs leave it
+- [x] `spec.md` status set to `done` only after S1-S5 are complete; interim runs leave it
   `in-progress`.

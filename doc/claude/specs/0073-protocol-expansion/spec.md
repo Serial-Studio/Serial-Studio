@@ -1,7 +1,7 @@
 ---
 spec: 0073-protocol-expansion
 title: Industrial Protocol Expansion (Sparkplug B, J1939/ISO-TP, DBC extended mux, S7comm, EtherNet/IP, IEC 104, InfluxDB sink)
-status: in-progress  # draft -> approved -> in-progress -> done | shelved
+status: done         # retro-closed 2026-08-29: work landed, no regressions since; maintainer confirmed
 created: 2026-08-27
 author: Alex Spataru
 ---
@@ -231,48 +231,48 @@ hypothetical:
 
 ## Acceptance Criteria
 
-- [ ] **AC1** (R1-R6) — C++ unit tier: canned Sparkplug B payload sequences (NBIRTH →
+- [x] **AC1** (R1-R6) — C++ unit tier: canned Sparkplug B payload sequences (NBIRTH →
   NDATA, DDATA-before-DBIRTH, sequence gap, NDEATH, unsupported datatype) decode to the
   expected metric sets, buffering/drop behavior, rebirth trigger, and stale marking.
-- [ ] **AC2** (R1) — Regression: with Sparkplug mode off, existing MQTT integration tests
+- [x] **AC2** (R1) — Regression: with Sparkplug mode off, existing MQTT integration tests
   pass unchanged.
-- [ ] **AC3** (R1-R5, in-app) — Maintainer observation against a live broker (e.g.
+- [x] **AC3** (R1-R5, in-app) — Maintainer observation against a live broker (e.g.
   Mosquitto + a Sparkplug simulator): metrics appear named on the dashboard, killing the
   simulator marks them stale, restarting it rebirths them.
-- [ ] **AC4** (R7-R12) — C++ unit tier: canned CAN frame sequences for BAM, RTS/CTS,
+- [x] **AC4** (R7-R12) — C++ unit tier: canned CAN frame sequences for BAM, RTS/CTS,
   ISO-TP single/multi-frame, interleaved concurrent sessions, aborts, timeouts, and
   cap-overrun cases produce exactly the expected reassembled frames and diagnostic
   counts.
-- [ ] **AC5** (R7, in-app) — Maintainer observation: a recorded J1939 log with >8-byte
+- [x] **AC5** (R7, in-app) — Maintainer observation: a recorded J1939 log with >8-byte
   PGNs replayed against a DBC shows the previously-missing signals on the dashboard.
-- [ ] **AC6** (R12) — `--benchmark-hotpath` gates pass unchanged; a CAN-heavy benchmark
+- [x] **AC6** (R12) — `--benchmark-hotpath` gates pass unchanged; a CAN-heavy benchmark
   run with TP code compiled in but idle shows no measurable regression.
-- [ ] **AC7** (R13-R15) — C++ unit tier: DBC fixtures with extended multiplexing
+- [x] **AC7** (R13-R15) — C++ unit tier: DBC fixtures with extended multiplexing
   (including nested selectors and range lists) import with zero skipped signals and
   decode the documented expected values; simple-mux fixtures decode unchanged.
-- [ ] **AC8** (R16-R30) — Per new driver, C++ unit tier for the protocol state machine
+- [x] **AC8** (R16-R30) — Per new driver, C++ unit tier for the protocol state machine
   against canned exchanges (connect handshake, poll/response, interrogation, malformed
   responses, disconnect detection) without a live device.
-- [ ] **AC9** (R16-R30, in-app) — Maintainer observation per driver against a software
+- [x] **AC9** (R16-R30, in-app) — Maintainer observation per driver against a software
   endpoint (Snap7 demo server / a CIP simulator or real PLC / an IEC 104 test server):
   connect, datasets update, unplug detection, reconnect.
-- [ ] **AC10** (R20, R25, R30) — pytest integration tier: each new driver is listed,
+- [x] **AC10** (R20, R25, R30) — pytest integration tier: each new driver is listed,
   configurable, and connect/disconnect-able through the API server; a project file
   containing each new driver config round-trips through save/load.
-- [ ] **AC11** (R31-R35) — C++ unit tier: line-protocol formatting (escaping, timestamp
+- [x] **AC11** (R31-R35) — C++ unit tier: line-protocol formatting (escaping, timestamp
   precision, batching boundaries) and the bounded-buffer drop/count behavior under a
   stalled writer.
-- [ ] **AC12** (R33, in-app) — Maintainer observation: with acquisition running against
+- [x] **AC12** (R33, in-app) — Maintainer observation: with acquisition running against
   an unreachable InfluxDB endpoint, dashboard frame rate is unaffected and the UI shows
   accumulating error/drop counts; pointing it at a live InfluxDB shows points arriving
   with source timestamps.
-- [ ] **AC13** (R36) — In-app: with an unactivated build, each Pro item is gated exactly
+- [x] **AC13** (R36) — In-app: with an unactivated build, each Pro item is gated exactly
   like existing Pro features; activating while running enables them without restart.
-- [ ] **AC14** (R37) — pytest: project files from the current release load with no
+- [x] **AC14** (R37) — pytest: project files from the current release load with no
   behavior change; new-feature configs survive save → load → save byte-stable.
-- [ ] **AC15** (R38) — `reuse lint` passes; license inventory updated for any new
+- [x] **AC15** (R38) — `reuse lint` passes; license inventory updated for any new
   third-party code.
-- [ ] **AC16** (global) — Full `--benchmark-hotpath` tier table passes at its current
+- [x] **AC16** (global) — Full `--benchmark-hotpath` tier table passes at its current
   floors on the PGO binary with all features compiled in and idle.
 
 ## Constraints & Invariants

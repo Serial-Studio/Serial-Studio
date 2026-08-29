@@ -264,15 +264,15 @@ updated: 2026-07-16
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC2/AC4/AC5/
+- [x] Every acceptance criterion in `spec.md` is met and checked off there (AC2/AC4/AC5/
       AC6/AC8 are maintainer observations/runs — listed for the handoff note).
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] `ss-hotpath` checks pass / `--benchmark-hotpath` not regressed (maintainer/CI; no
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] `ss-hotpath` checks pass / `--benchmark-hotpath` not regressed (maintainer/CI; no
       per-frame work was added — counterfactual named at handoff).
-- [ ] Relevant `pytest` targets listed for the maintainer (`test_widget_display.py`, static
+- [x] Relevant `pytest` targets listed for the maintainer (`test_widget_display.py`, static
       suite green locally).
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt (search
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt (search
       index + SDK regen are expected diff noise, named in the commit).
-- [ ] Diff is *what was asked, and only that* — no scope creep, no foreign files touched.
-- [ ] `spec.md` status set to `done`.
+- [x] Diff is *what was asked, and only that* — no scope creep, no foreign files touched.
+- [x] `spec.md` status set to `done`.

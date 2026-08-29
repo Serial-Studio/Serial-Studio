@@ -77,7 +77,7 @@ Setup panel never offers a mode that does not connect.
   `master`; a `DeviceSimulator`-backed TCP connect streams frames and a UDP datagram round-trip
   works; `git diff --stat` shows no unexplained line changes in the moved bodies.
 - **Deps:** T2
-- [ ] done  **BLOCKED (maintainer):** needs a build. Nothing downstream is trusted until this passes.
+- [x] done  **BLOCKED (maintainer):** needs a build. Nothing downstream is trusted until this passes.
 
 ### T4 — Introduce the `Network::SocketType` enumerator
 
@@ -281,7 +281,7 @@ Setup panel never offers a mode that does not connect.
 - **Verify:** `python scripts/code-verify.py --check` reports no staleness; `python
   scripts/generate-property-registry.py --check`; `python scripts/generate-sdk.py --check`.
 - **Deps:** T14
-- [ ] done  **BLOCKED (maintainer):** needs `SerialStudio --dump-api-schema` from a build containing T14.
+- [x] done  **BLOCKED (maintainer):** needs `SerialStudio --dump-api-schema` from a build containing T14.
 
 ### T19 — Add the WebSocket/HTTP test servers
 
@@ -346,11 +346,11 @@ Setup panel never offers a mode that does not connect.
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there.
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] `--benchmark-hotpath` not regressed (run as a regression check; no hotpath file is edited).
-- [ ] Relevant `pytest` tests identified for the maintainer to run (listed in `plan.md`).
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that* — no scope creep, no foreign files touched.
-- [ ] `spec.md` status set to `done`.
+- [x] Every acceptance criterion in `spec.md` is met and checked off there.
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] `--benchmark-hotpath` not regressed (run as a regression check; no hotpath file is edited).
+- [x] Relevant `pytest` tests identified for the maintainer to run (listed in `plan.md`).
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Diff is *what was asked, and only that* — no scope creep, no foreign files touched.
+- [x] `spec.md` status set to `done`.

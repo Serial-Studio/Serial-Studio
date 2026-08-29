@@ -167,7 +167,7 @@ instead of rewriting QML surfaces.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — In the running app, the command palette browse grid and workspace switcher
+- [x] **AC1** — In the running app, the command palette browse grid and workspace switcher
   show crisp large-tier workspace/folder/widget icons at 32 px+, while the taskbar and
   start menu keep their current small icons — confirmed by maintainer observation
   (before/after screenshot comparison).
@@ -177,35 +177,35 @@ instead of rewriting QML surfaces.
 - [x] **AC3** — A grep sweep over QML and C++ sources finds no hardcoded fixed-UI icon
   paths outside the exempt sets (the `buttons` set and the user-pickable action library);
   every migrated reference goes through the registry entry point.
-- [ ] **AC4** — Dropping a new SVG into the icon tree and registering it in the resource
+- [x] **AC4** — Dropping a new SVG into the icon tree and registering it in the resource
   collection (no other edits) makes it resolvable by category/id at multiple requested
   sizes — verified once by the maintainer during review with a scratch icon.
-- [ ] **AC5** — Requesting a deliberately wrong id logs a warning and yields the defined
+- [x] **AC5** — Requesting a deliberately wrong id logs a warning and yields the defined
   placeholder/empty result; the app does not crash and no silent blank ships — verified in
   the running app.
-- [ ] **AC6** — Full-app visual pass by the maintainer over the migrated surfaces
+- [x] **AC6** — Full-app visual pass by the maintainer over the migrated surfaces
   (dashboard, project editor, toolbar, panes, dialogs, console, database, licensing,
   notifications, window controls): every icon renders the correct glyph at its prior size.
   Startup and dashboard interaction show no perceptible regression.
-- [ ] **AC7** — The three QML provider files (`ToolActions`, `MainWindowActions`,
+- [x] **AC7** — The three QML provider files (`ToolActions`, `MainWindowActions`,
   `ProjectEditorActions`) are deleted; palette tools, Start menu search, and taskbar
   search return the same entries as before, now from the registry — grep confirms no
   provider remnants, maintainer spot-checks each surface.
-- [ ] **AC8** — Adding a scratch command (one manifest entry + one bindings entry) makes
+- [x] **AC8** — Adding a scratch command (one manifest entry + one bindings entry) makes
   it appear in the palette, Start menu search, and its declared toolbar with working
   activation, shortcut, and tooltip — verified once by the maintainer, then reverted.
-- [ ] **AC9** — Both toolbars render from their layout manifests with visual parity
+- [x] **AC9** — Both toolbars render from their layout manifests with visual parity
   (before/after screenshots); swapping two entries in the manifest visibly reorders the
   toolbar with no QML change.
-- [ ] **AC10** — The Start menu renders its static entries and Tools submenu from the
+- [x] **AC10** — The Start menu renders its static entries and Tools submenu from the
   layout manifest with visual and behavioral parity; Workspaces, Actions, and Export
   submenus behave exactly as before.
-- [ ] **AC11** — Every keyboard shortcut that worked before the migration still fires
+- [x] **AC11** — Every keyboard shortcut that worked before the migration still fires
   (checklist of all 31 sequences across both windows); palette rows display shortcuts;
   no ambiguous-shortcut warning appears during a full app session.
-- [ ] **AC12** — Switching the application language re-translates command titles on the
+- [x] **AC12** — Switching the application language re-translates command titles on the
   palette, Start menu, and toolbars without restart.
-- [ ] **AC13** — The registry lint passes: manifests validate against the schema, ids are
+- [x] **AC13** — The registry lint passes: manifests validate against the schema, ids are
   unique, every icon reference resolves, no duplicate shortcut per context; and a GPL
   build's console shows no ReferenceError for commercial symbols.
 

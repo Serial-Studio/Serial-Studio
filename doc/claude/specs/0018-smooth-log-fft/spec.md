@@ -47,14 +47,14 @@ make it *draw* smooth, keep the feel uniform and realtime.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — Maintainer: log-axis FFT feels uniformly realtime — no low/high update
+- [x] **AC1** — Maintainer: log-axis FFT feels uniformly realtime — no low/high update
       differential; low decades render as smooth interpolated hills, no angular
       segments.
-- [ ] **AC2** — Maintainer: peaks read the same dB as before (monotone interpolation,
+- [x] **AC2** — Maintainer: peaks read the same dB as before (monotone interpolation,
       no overshoot); linear-axis FFT unchanged.
-- [ ] **AC3** — Existing pytest suite still green (no schema/API delta in this spec;
+- [x] **AC3** — Existing pytest suite still green (no schema/API delta in this spec;
       0014/0017 round-trip tests cover the persisted fields).
-- [ ] **AC4** — `--benchmark-hotpath` unchanged (widget draw layer only; the Dashboard
+- [x] **AC4** — `--benchmark-hotpath` unchanged (widget draw layer only; the Dashboard
       diff vs master is now just the input clamp).
 
 ## Files

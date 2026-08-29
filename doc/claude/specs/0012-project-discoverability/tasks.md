@@ -251,15 +251,15 @@ updated: 2026-07-16
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC5/AC9 live
+- [x] Every acceptance criterion in `spec.md` is met and checked off there (AC5/AC9 live
       halves + maintainer observation flagged for the maintainer's run).
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] Hotpath untouched (plan says none) — no benchmark delta expected; CI gate confirms.
-- [ ] `pytest tests/scripts/test_ai_assistant_static.py` passes locally;
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] Hotpath untouched (plan says none) — no benchmark delta expected; CI gate confirms.
+- [x] `pytest tests/scripts/test_ai_assistant_static.py` passes locally;
       `tests/integration/test_project_discovery.py` handed to the maintainer with the app-up
       instructions.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that* — no scope creep; `WorkspacesHandler.cpp` and
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Diff is *what was asked, and only that* — no scope creep; `WorkspacesHandler.cpp` and
       all foreign files untouched.
-- [ ] `spec.md` status set to `done`.
+- [x] `spec.md` status set to `done`.

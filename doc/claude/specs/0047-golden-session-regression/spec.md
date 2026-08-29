@@ -142,37 +142,37 @@ a regression harness.
 
 ## Acceptance Criteria
 
-- [ ] **AC1 — Identity.** Capture a session, leave the project untouched, run regression:
+- [x] **AC1 — Identity.** Capture a session, leave the project untouched, run regression:
   verdict *identical*, every dataset reports zero drift on all figures. (pytest via the
   automation surface, R1/R3/R5.)
-- [ ] **AC2 — Value drift.** Change one transform constant in the candidate, rerun: verdict
+- [x] **AC2 — Value drift.** Change one transform constant in the candidate, rerun: verdict
   *value drift*; the affected dataset reports the exact changed count, correct first
   divergence pair, and a max delta consistent with the edit; all other datasets report zero
   drift. (pytest, R2/R5/R6.)
-- [ ] **AC3 — Coverage drift, no false value diffs.** Use a candidate parser variant that
+- [x] **AC3 — Coverage drift, no false value diffs.** Use a candidate parser variant that
   rejects a known subset of archived frames: verdict *coverage drift*; the report shows
   exactly the rejected readings as missing and **zero values changed** — the ordinal-pairing
   failure mode from the motivating simulation must not occur. (pytest, R4/R5/R6.)
-- [ ] **AC4 — Structural drift.** Candidate adds one dataset and removes another: verdict
+- [x] **AC4 — Structural drift.** Candidate adds one dataset and removes another: verdict
   *structural drift*; report lists the added and removed datasets; surviving datasets
   report zero drift. (pytest, R5/R6.)
-- [ ] **AC5 — Explicit candidate file.** Run the same pass with a supplied project file
+- [x] **AC5 — Explicit candidate file.** Run the same pass with a supplied project file
   differing from the open project: results reflect the file, and the report's candidate
   identification names it. (pytest, R2.)
-- [ ] **AC6 — Classification honored.** A session with a data-table-fed transform returns
+- [x] **AC6 — Classification honored.** A session with a data-table-fed transform returns
   the not-mechanically-verifiable classification for the affected datasets, not a drift
   verdict; a pre-0044 fixture session runs best-effort with a legacy-qualified verdict.
   (pytest, R7.)
-- [ ] **AC7 — Golden-tag sweep.** Tag three sessions, run the tag sweep with a drifting
+- [x] **AC7 — Golden-tag sweep.** Tag three sessions, run the tag sweep with a drifting
   candidate: aggregated summary counts match the individual verdicts. (pytest, R8/R9.)
-- [ ] **AC8 — Non-interference.** Regression during a live capture disturbs neither the
+- [x] **AC8 — Non-interference.** Regression during a live capture disturbs neither the
   capture nor the dashboard; concurrent-use limits with 0044 verification are enforced
   cleanly rather than by corruption. (destructive-marked pytest + maintainer observation,
   R1.)
-- [ ] **AC9 — UI loop.** Maintainer runs the interactive loop: open project, edit a
+- [x] **AC9 — UI loop.** Maintainer runs the interactive loop: open project, edit a
   transform, run regression from the session browser, read the drift report, revert, rerun,
   see *identical*. (maintainer observation, R10.)
-- [ ] **AC10 — Hotpath unchanged.** `--benchmark-hotpath` gate unchanged; no capture-path
+- [x] **AC10 — Hotpath unchanged.** `--benchmark-hotpath` gate unchanged; no capture-path
   or dashboard-path cost is added. (CI gate, Constraints.)
 
 ## Constraints & Invariants

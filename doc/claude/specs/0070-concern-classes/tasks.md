@@ -1,7 +1,7 @@
 ---
 spec: 0070-concern-classes
 phase: tasks
-status: in-progress
+status: done         # closed 2026-08-29: Wave 5 P24/P25 superseded by Wave 7 Q1/Q2; all waves landed
 created: 2026-08-28
 author: Claude (Fable 5)
 ---
@@ -155,8 +155,10 @@ Status legend: `[ ]` pending · `[~]` agent running · `[R]` under manager revie
       CommandManifestLoader. Reviewed + registered + 1 suite.
 
 ## Wave 5 — Hotpath (serial, manager line review)
-- [ ] P24 FrameBuilder (per-frame lanes stay in facade TU / header-inline)
-- [ ] P25 Dashboard (drain/apply/push tables stay in facade TU)
+- [x] P24 FrameBuilder — superseded by Wave 7 Q2 (TableSnapshotChannel + LatestFrameTap,
+      3534→3348; remainder proven per-frame core, Q19). Closed 2026-08-29.
+- [x] P25 Dashboard — superseded by Wave 7 Q1 (ReplaySeekEngine + PlotControlBank + ctor
+      split, 3544→2724; push tables stayed facade). Closed 2026-08-29.
 
 ## Wave 6 — Integration (manager)
 - [x] T1 CMake registration — all 25 packages registered; deleted TUs de-registered

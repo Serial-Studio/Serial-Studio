@@ -180,14 +180,14 @@ updated: 2026-07-20
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC1–AC7 are
+- [x] Every acceptance criterion in `spec.md` is met and checked off there (AC1–AC7 are
       maintainer in-app observations; AC8 benchmark; AC9 replay; AC10 GPL build).
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] `ss-hotpath` checks pass / `--benchmark-hotpath` not regressed (user-run; taps-off is
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] `ss-hotpath` checks pass / `--benchmark-hotpath` not regressed (user-run; taps-off is
       the CI state).
-- [ ] No `pytest` surface (per plan.md) — maintainer AC list stands in.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that* — no scope creep, no foreign files touched
+- [x] No `pytest` surface (per plan.md) — maintainer AC list stands in.
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Diff is *what was asked, and only that* — no scope creep, no foreign files touched
       (the Waterfall ring-size hole stays out of lane).
-- [ ] `spec.md` status set to `done`.
+- [x] `spec.md` status set to `done`.

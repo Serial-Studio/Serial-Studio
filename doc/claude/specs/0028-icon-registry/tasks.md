@@ -353,16 +353,16 @@ updated: 2026-07-21
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there (runtime ACs
+- [x] Every acceptance criterion in `spec.md` is met and checked off there (runtime ACs
       confirmed by the maintainer: AC1, AC4-AC6, AC8-AC13).
 - [x] `python scripts/code-verify.py --check` is clean on all changed files (no new
       errors). — re-run repo-wide at HEAD: `3503 files scanned, 0 errors, 0 advisory`.
 - [x] `python scripts/registry-verify.py` clean (tree, qrc, manifests, shortcuts,
       commercial-symbol sweep). — re-run at HEAD: `registry-verify: CLEAN`.
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] Hotpath untouched — no `--benchmark-hotpath` run required (re-affirm at handoff).
-- [ ] Translation refresh flow run by the maintainer after `CommandStrings.cpp` lands.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that* — exempt sets untouched, no foreign files
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] Hotpath untouched — no `--benchmark-hotpath` run required (re-affirm at handoff).
+- [x] Translation refresh flow run by the maintainer after `CommandStrings.cpp` lands.
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Diff is *what was asked, and only that* — exempt sets untouched, no foreign files
       touched, `TaskbarSettings` untouched.
-- [ ] `spec.md` status set to `done`.
+- [x] `spec.md` status set to `done`.

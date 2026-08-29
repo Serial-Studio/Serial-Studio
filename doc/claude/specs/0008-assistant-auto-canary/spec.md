@@ -173,50 +173,50 @@ mechanisms ship as one feature.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — With a compliant model, a healthy multi-turn chat shows no sentinel text
+- [x] **AC1** — With a compliant model, a healthy multi-turn chat shows no sentinel text
       anywhere in the rendered replies (including mid-stream) and no indicator. Verified by
       maintainer observation with a hosted frontier model.
-- [ ] **AC2** — Copying a reply and exporting the conversation yields text without the
+- [x] **AC2** — Copying a reply and exporting the conversation yields text without the
       sentinel. Maintainer observation.
-- [ ] **AC3** — When a compliant model's reply arrives with the sentinel mutated or missing
+- [x] **AC3** — When a compliant model's reply arrives with the sentinel mutated or missing
       (reproducible via a local/scripted provider endpoint that replays canned replies), the
       indicator appears, names the failure kind, and its action starts a fresh chat which
       clears the indicator and carries the old chat's handoff. Maintainer observation
       against a scripted endpoint.
-- [ ] **AC4** — A model that never emits the sentinel (scripted endpoint returning plain
+- [x] **AC4** — A model that never emits the sentinel (scripted endpoint returning plain
       replies from turn one) produces no indicator across an entire conversation, and is
       still muted in a *new* conversation with the same provider+model. Maintainer
       observation.
-- [ ] **AC5** — With the probe toggle off, the outbound request contains no sentinel
+- [x] **AC5** — With the probe toggle off, the outbound request contains no sentinel
       instruction (verified in the assistant's request logging) and replies render
       unchanged.
-- [ ] **AC6** — The sentinel measured against a real provider costs ≤ ~30 completion tokens
+- [x] **AC6** — The sentinel measured against a real provider costs ≤ ~30 completion tokens
       per reply (verified via the assistant's token counters).
-- [ ] **AC7** — All probe validation outcomes from AC3/AC4 appear in the assistant
+- [x] **AC7** — All probe validation outcomes from AC3/AC4 appear in the assistant
       diagnostic log.
-- [ ] **AC8** — On the default Haiku model: state a durable fact in chat A, consent to
+- [x] **AC8** — On the default Haiku model: state a durable fact in chat A, consent to
       remember it, start chat B, ask a question that depends on it — the assistant answers
       correctly without being retold. Maintainer observation.
-- [ ] **AC9** — Request logging shows the memory index within its size cap on every turn;
+- [x] **AC9** — Request logging shows the memory index within its size cap on every turn;
       with the memory toggle off, the outbound request contains no memory content.
       Verified via the assistant's request logging and token counters.
-- [ ] **AC10** — On a small-surface model, a message in a skill's domain (e.g. asking for a
+- [x] **AC10** — On a small-surface model, a message in a skill's domain (e.g. asking for a
       frame parser) results in that skill's body being present in the request before the
       model's first tool call in the domain, with no model-initiated skill load. Verified
       in request logging.
-- [ ] **AC11** — After the assistant applies a script, the verification check runs without
+- [x] **AC11** — After the assistant applies a script, the verification check runs without
       the model requesting it and the chat shows a pass indicator; repeating with a
       deliberately broken apply (scripted provider endpoint replaying a canned bad tool
       call) shows a fail indicator plus the restore affordance. Maintainer observation
       against a scripted endpoint.
-- [ ] **AC12** — Closing a chat mid-task and starting a new seeded chat lets the user say
+- [x] **AC12** — Closing a chat mid-task and starting a new seeded chat lets the user say
       "continue" and get contextually correct continuation on a Haiku-class model.
       Maintainer observation.
-- [ ] **AC13** — Editing and deleting a remembered fact in the UI is reflected in the next
+- [x] **AC13** — Editing and deleting a remembered fact in the UI is reflected in the next
       request's memory content (edit) or absence (delete). Request logging.
-- [ ] **AC14** — Attempting to remember a string containing an API key results in refusal
+- [x] **AC14** — Attempting to remember a string containing an API key results in refusal
       or a stored fact with the secret redacted. Maintainer observation.
-- [ ] **AC15** — All harness actions from AC8–AC14 appear in the assistant diagnostic log.
+- [x] **AC15** — All harness actions from AC8–AC14 appear in the assistant diagnostic log.
 
 ## Constraints & Invariants
 

@@ -89,27 +89,27 @@ quick way to fire one command and inspect the reply without a test harness).
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — With the API server setting off, open the palette, run "API Terminal",
+- [x] **AC1** — With the API server setting off, open the palette, run "API Terminal",
   type `api.getCommands`, press return: the response lists the full command catalog.
   (In-app observation.)
-- [ ] **AC2** — Typing a prefix (e.g. `io.`) in the input shows completions restricted to
+- [x] **AC2** — Typing a prefix (e.g. `io.`) in the input shows completions restricted to
   that scope; accepting one inserts it. (In-app observation.)
-- [ ] **AC3** — Running an unknown command (`foo.bar`) prints an error response matching
+- [x] **AC3** — Running an unknown command (`foo.bar`) prints an error response matching
   the API server's unknown-command error shape. (In-app observation, cross-checked against
   a socket session.)
-- [ ] **AC4** — Search box: typing a word from a command description filters the tree to
+- [x] **AC4** — Search box: typing a word from a command description filters the tree to
   commands containing it; clearing the box restores the full tree. (In-app observation.)
-- [ ] **AC5** — Selecting `project.addMany` (or any parametered command) in the tree shows
+- [x] **AC5** — Selecting `project.addMany` (or any parametered command) in the tree shows
   its description and parameter table with required parameters marked, matching
   `api-schema.json` content exactly. (In-app observation + spot-check against the file.)
-- [ ] **AC6** — Up-arrow recalls the previously submitted command. (In-app observation.)
-- [ ] **AC7** — Close and reopen the window: geometry restored. Restart app: window
+- [x] **AC6** — Up-arrow recalls the previously submitted command. (In-app observation.)
+- [x] **AC7** — Close and reopen the window: geometry restored. Restart app: window
   reopens via the command with default content. (In-app observation.)
-- [ ] **AC8** — GPL build (no `BUILD_COMMERCIAL`): the command and window are present and
+- [x] **AC8** — GPL build (no `BUILD_COMMERCIAL`): the command and window are present and
   functional. (Maintainer build check.)
-- [ ] **AC9** — `registry-verify.py` and the sanitize pipeline pass with the new command,
+- [x] **AC9** — `registry-verify.py` and the sanitize pipeline pass with the new command,
   icon, and bindings registered. (Scripted check.)
-- [ ] **AC10** — Hotpath benchmark gate unaffected: `--benchmark-hotpath` still passes at
+- [x] **AC10** — Hotpath benchmark gate unaffected: `--benchmark-hotpath` still passes at
   the configured floors. (CI gate.)
 
 ## Constraints & Invariants

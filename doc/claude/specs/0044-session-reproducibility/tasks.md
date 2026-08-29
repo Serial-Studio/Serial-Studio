@@ -215,7 +215,7 @@ updated: 2026-08-05
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC1–AC7 via the
+- [x] Every acceptance criterion in `spec.md` is met and checked off there (AC1–AC7 via the
       T12 suite the maintainer runs; AC8 via the maintainer's `--benchmark-hotpath` run).
 - [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
 - [x] `qt-cpp-review` run on the C++ diff (6-agent pass, 2026-08-05); confirmed findings
@@ -223,7 +223,7 @@ updated: 2026-08-05
       fold, regen sanity gate, integrity-unreadable verdict, finalize fallback, QProcess
       crash-path stdout, id validation, device cap, override reset/guard); deferred:
       verification cancel action, verdict caching in DatabaseManager.
-- [ ] `--benchmark-hotpath` not regressed (maintainer runs; zero frame-path edits expected —
+- [x] `--benchmark-hotpath` not regressed (maintainer runs; zero frame-path edits expected —
       any regression is a red flag on the diff, not a tuning problem).
 - [x] `pytest tests/integration/test_session_verification.py` listed for the maintainer,
       destructive cases marked.

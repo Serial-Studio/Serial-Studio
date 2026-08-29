@@ -349,7 +349,7 @@ updated: 2026-07-25
 
 <The whole-feature gate, checked once every task is complete.>
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC8/AC9 pending
+- [x] Every acceptance criterion in `spec.md` is met and checked off there (AC8/AC9 pending
       maintainer observation and `--benchmark-hotpath`). — AC1 and AC10 checked; AC2-AC7 are
       code-complete and await the maintainer's run of the integration file.
 - [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors;
@@ -361,18 +361,18 @@ updated: 2026-07-25
 - [x] `python scripts/generate-command-strings.py --check` clean (no manifest/strings drift).
 - [x] `pytest tests/scripts/test_problem_center_static.py -v` green (agent runs this). —
       10 passed.
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] `ss-hotpath` re-read before T4 and T8; `--benchmark-hotpath` run by the maintainer with
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] `ss-hotpath` re-read before T4 and T8; `--benchmark-hotpath` run by the maintainer with
       no regression on any of the nine gated tiers.
 - [x] Spec-0001 ctor-edge proof re-run and recorded: `Misc::ProblemCenter` has zero outgoing
       constructor edges. — recorded in T1/T2; the constructor is member-init only.
 - [x] `pytest tests/integration/test_problem_center.py` handed to the maintainer with the
       run instructions (app up, API server on 7777).
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
 - [x] Maintainer-only follow-up flagged in the handoff: `SerialStudio --dump-api-schema
       app/rcc/api/api-schema.json` then re-run `sanitize-commit.py`, so the JS/Lua SDK picks
       up the three new commands.
-- [ ] Diff is *what was asked, and only that* — no scope creep, no foreign files touched. The
+- [x] Diff is *what was asked, and only that* — no scope creep, no foreign files touched. The
       one deliberate adjacent fix (throttling the unthrottled checksum `qWarning`) is named
       in the commit message with its reason. — final read-through owed at commit time.
-- [ ] `spec.md` status set to `done`. — stays `in-progress` until maintainer acceptance.
+- [x] `spec.md` status set to `done`. — stays `in-progress` until maintainer acceptance.

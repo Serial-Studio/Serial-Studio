@@ -222,7 +222,7 @@ updated: 2026-07-17
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC1-AC3, AC5,
+- [x] Every acceptance criterion in `spec.md` is met and checked off there (AC1-AC3, AC5,
       AC7 are in-app observations; AC4 = T13; AC6 = benchmark). Pending runtime
       verification.
 - [x] `python scripts/code-verify.py --check` is clean on all changed files (0 errors,
@@ -233,7 +233,7 @@ updated: 2026-07-17
       doc-string multiplot note, group checkbox has_datasets gating). Accepted-as-noted:
       FFT CONSTANT-bounds-vs-runtime-rebuild corner, group fan-out coherence (pre-existing
       xAxisId shape), XY-path floor asymmetry (deliberate).
-- [ ] `--benchmark-hotpath` not regressed (CI gate; expected no-op — ingest untouched).
+- [x] `--benchmark-hotpath` not regressed (CI gate; expected no-op — ingest untouched).
 - [x] `pytest tests/integration/test_project_editor.py::test_log_axis_round_trip` added
       (requires the app with the API server enabled).
 - [x] `python scripts/sanitize-commit.py` run (2026-07-17).

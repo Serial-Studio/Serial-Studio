@@ -97,32 +97,32 @@ emulators, log viewers) has find-in-buffer.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** (R1, R2) — In the running app: enable collapsing, feed a stream that repeats
+- [x] **AC1** (R1, R2) — In the running app: enable collapsing, feed a stream that repeats
   the same line in bursts; observe one line per burst with a live-updating counter, and
   interleaved distinct lines breaking runs correctly. Toggle off; subsequent duplicates
   append as separate lines again.
-- [ ] **AC2** (R1) — Restart the app; the collapsing toggle retains its last state.
-- [ ] **AC3** (R3) — With timestamps enabled, identical messages seconds apart still
+- [x] **AC2** (R1) — Restart the app; the collapsing toggle retains its last state.
+- [x] **AC3** (R3) — With timestamps enabled, identical messages seconds apart still
   collapse.
-- [ ] **AC4** (R4) — With collapsing on and console export enabled, the exported file
+- [x] **AC4** (R4) — With collapsing on and console export enabled, the exported file
   contains the full duplicate sequence with no "×N" annotations; select/copy of a collapsed
   line yields the line text without the badge.
-- [ ] **AC5** (R2, hotpath) — `--benchmark-hotpath` gates pass unchanged with the feature
+- [x] **AC5** (R2, hotpath) — `--benchmark-hotpath` gates pass unchanged with the feature
   compiled in (feature off). With collapsing on, the UDP Function Generator example at
   maximum rate shows no frame loss or UI stall (maintainer observation, per issue #285).
-- [ ] **AC6** (R6) — Two simultaneous device streams: duplicates collapse per device;
+- [x] **AC6** (R6) — Two simultaneous device streams: duplicates collapse per device;
   switching device views shows correct independent counters.
-- [ ] **AC7** (R7, amended) — With VT-100 emulation on and collapsing enabled: repeated
+- [x] **AC7** (R7, amended) — With VT-100 emulation on and collapsing enabled: repeated
   plain lines collapse with a live counter, while cursor-addressed output (interactive
   shells, redraws) renders as today because mid-screen rewrites never hit the
   last-row collapse guard.
-- [ ] **AC8** (R8–R11) — In the running app: Ctrl+F/Cmd+F opens the bar; typing a term
+- [x] **AC8** (R8–R11) — In the running app: Ctrl+F/Cmd+F opens the bar; typing a term
   present in old scrollback reports the correct total; Enter/Shift+Enter cycle with wrap;
   the view scrolls to each match; the case toggle changes the match set; Escape closes.
-- [ ] **AC9** (R12) — With a live high-rate stream running, open search and navigate
+- [x] **AC9** (R12) — With a live high-rate stream running, open search and navigate
   matches: the bar stays open, the view holds on the current match (autoscroll suspended),
   and no visual corruption occurs.
-- [ ] **AC10** (R13) — Search for a term contained in a collapsed line: reported as a
+- [x] **AC10** (R13) — Search for a term contained in a collapsed line: reported as a
   single match.
 
 ## Constraints & Invariants

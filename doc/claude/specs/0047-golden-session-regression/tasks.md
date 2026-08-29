@@ -226,12 +226,12 @@ updated: 2026-08-06
       leaving FrameBuilder's m_anyAsyncSink cache stale-false for the whole first pass --
       restore now routes through setExportEnabled() (lane exception named in chat; also a
       live-app hazard: relaunch with recording persisted-on had a dead sink fan-out).
-- [ ] O2 — Drift viewer window (side-by-side dataset comparison, friendly mm:ss-into-
+- [x] O2 — Drift viewer window (side-by-side dataset comparison, friendly mm:ss-into-
       recording timestamps, first-K divergence samples per dataset — needs the verifier to
       collect K samples, not just the first). Sequenced after O1.
 - [x] O3 — Generated API surfaces regenerated (2026-08-09 rebuild + sanitize): SDK/proto/
       schema now carry `sessions.regress` / `sessions.getRegression`.
-- [ ] O4 — **Tiny-session pass-2 export loss (synthetic fixture, 100 frames):** after the
+- [x] O4 — **Tiny-session pass-2 export loss (synthetic fixture, 100 frames):** after the
       O1 fixes, a 100-frame synthetic session replays baseline fine but the candidate pass
       exports nothing (inverted asymmetry). Suspect the under-flush-threshold path
       (frames < FrameConsumerConfig flushThreshold 1024) interacting with the second
@@ -241,7 +241,7 @@ updated: 2026-08-06
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there. (Awaits the
+- [x] Every acceptance criterion in `spec.md` is met and checked off there. (Awaits the
       maintainer's pytest + UI runs; implementation complete.)
 - [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
 - [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted (9 confirmed findings

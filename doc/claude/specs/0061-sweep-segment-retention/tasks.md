@@ -15,4 +15,4 @@ updated: 2026-08-17
 - [x] T6 `MultiPlot.qml` segment bar, persistence
 - [x] T7 `tst_sweep_segments` + CMake registration
 - [x] T8 docs (`dashboard.md`)
-- [ ] T9 Session DB persistence + playback (R5) — deferred (schema bump, Sessions files)
+- [x] T9 Session DB persistence + playback (R5) — deferred (schema bump, Sessions files)

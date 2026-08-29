@@ -1,7 +1,7 @@
 ---
 spec: 0072-plot3d-render-fidelity
 title: Plot3D Render Fidelity — Stereo Channel Isolation and Bounded Drawing
-status: in-progress  # draft -> approved -> in-progress -> done | shelved
+status: done         # retro-closed 2026-08-29: work landed, no regressions since; maintainer confirmed
 created: 2026-08-27
 author: Alex Spataru
 ---
@@ -100,30 +100,30 @@ that owns the pixels, which no widget is allowed to do.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** (R1, R3, R4) — A C++ unit under the `ctest` tier feeds each shipped theme's
+- [x] **AC1** (R1, R3, R4) — A C++ unit under the `ctest` tier feeds each shipped theme's
       dataset, axis and grid colours through the per-eye colour derivation and asserts, for
       each: the owned channels carry the expected value, the unowned channels are marked as
       not written, and the contrast against that theme's background clears a stated minimum
       for both eyes. The two historical failure cases are named fixtures in that unit.
-- [ ] **AC2** (R2) — Maintainer observation in the running app: with a project open and stereo
+- [x] **AC2** (R2) — Maintainer observation in the running app: with a project open and stereo
       enabled, sweep eye separation from minimum to maximum and confirm neither ghost fades as
       the two converge. Before this change the first-drawn ghost visibly weakens as separation
       drops.
-- [ ] **AC3** (R1) — Maintainer observation on the default light theme: the minor grid's two
+- [x] **AC3** (R1) — Maintainer observation on the default light theme: the minor grid's two
       ghosts read as pale cyan and pale red against the background, with no brown or muddy
       cast, matching the pre-0071 screenshots.
-- [ ] **AC4** (R5) — Maintainer observation with stereo off, on both a light and a dark theme:
+- [x] **AC4** (R5) — Maintainer observation with stereo off, on both a light and a dark theme:
       grid, axes, trace, labels and camera indicator are indistinguishable from the current
       build. Frame the camera so nothing projects past the widget edge — otherwise this fails
       on the R6 clip, which is the fix working, not a regression.
-- [ ] **AC5** (R6) — Maintainer observation: with a 3D plot on a dashboard alongside other
+- [x] **AC5** (R6) — Maintainer observation: with a 3D plot on a dashboard alongside other
       widgets, zoom and orbit until the trace would leave the widget, and confirm nothing is
       drawn over the neighbouring widgets, the dashboard toolbar or the window titlebar.
       Repeat in a popped-out widget window against that window's own chrome.
-- [ ] **AC6** (R7) — A C++ unit or in-app self-test asserts that when the preferred rendering
+- [x] **AC6** (R7) — A C++ unit or in-app self-test asserts that when the preferred rendering
       path is unavailable, the widget still produces stereo output through the fallback rather
       than an empty scene.
-- [ ] **AC7** (R8) — `scripts/code-verify.py` is clean, the translation-unit and singleton
+- [x] **AC7** (R8) — `scripts/code-verify.py` is clean, the translation-unit and singleton
       censuses are at or below baseline, and the maintainer confirms no visible change in
       dashboard smoothness with a 3D plot live.
 

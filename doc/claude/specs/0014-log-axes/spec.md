@@ -86,22 +86,22 @@ FFT rig opens with the right axes every time, not a per-session toggle.
 > verification (app + API server for AC4, visual checks for AC1-AC3/AC5/AC7, CI
 > benchmark for AC6).
 
-- [ ] **AC1** — Maintainer check, running app: an FFT dataset with sampling rate 44100
+- [x] **AC1** — Maintainer check, running app: an FFT dataset with sampling rate 44100
       and log frequency enabled shows decade ticks (10, 100, 1k, 10k Hz) with octaves
       evenly spaced; toggling back to linear restores today's rendering.
-- [ ] **AC2** — Maintainer check: a Plot dataset fed decades-spanning values (e.g. 0.01
+- [x] **AC2** — Maintainer check: a Plot dataset fed decades-spanning values (e.g. 0.01
       → 1000) with log Y shows each decade at equal height; the crosshair reads back the
       true values.
-- [ ] **AC3** — Maintainer check: feeding zero and negative values into a log-Y plot
+- [x] **AC3** — Maintainer check: feeding zero and negative values into a log-Y plot
       neither crashes nor blanks the widget; the curve clamps at the floor.
-- [ ] **AC4** — `pytest` integration: setting the axis-scale options via the project API,
+- [x] **AC4** — `pytest` integration: setting the axis-scale options via the project API,
       saving, and re-reading the project returns the same values; a project JSON without
       the new keys reports linear for all axes.
-- [ ] **AC5** — Maintainer check: a Time-axis Plot/MultiPlot shows no log-X option in the
+- [x] **AC5** — Maintainer check: a Time-axis Plot/MultiPlot shows no log-X option in the
       editor, and a project file that forces log X onto a time plot renders linear.
-- [ ] **AC6** — `--benchmark-hotpath` passes at its existing gates with log-axis projects
+- [x] **AC6** — `--benchmark-hotpath` passes at its existing gates with log-axis projects
       in the tree (no ingest-path regression).
-- [ ] **AC7** — Existing example projects load and render identically (all-linear
+- [x] **AC7** — Existing example projects load and render identically (all-linear
       default; no migration prompt, no modified-flag on open).
 
 ## Constraints & Invariants

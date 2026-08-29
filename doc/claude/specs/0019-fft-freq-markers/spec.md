@@ -108,25 +108,25 @@ that light up when exceeded.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — pytest round-trip: a project saved with markers (point + band, with and
+- [x] **AC1** — pytest round-trip: a project saved with markers (point + band, with and
       without thresholds) reloads identically; a project without markers is
       byte-identical to one saved by the previous build (`pytest tests/integration/`
       project persistence tests extended).
-- [ ] **AC2** — pytest API: dedicated get/set commands and the dataset-update key both
+- [x] **AC2** — pytest API: dedicated get/set commands and the dataset-update key both
       round-trip the marker list; invalid payloads (bad types, reversed band, negative
       freq) are rejected/clamped with a warning and the stored list stays valid.
-- [ ] **AC3** — Maintainer: on a live FFT (e.g. audio input), an 800 Hz point marker
+- [x] **AC3** — Maintainer: on a live FFT (e.g. audio input), an 800 Hz point marker
       and a labeled band render as described on both axis modes, follow zoom/pan, look
       intentional in light + dark themes, and the label chip shows a live dB readout.
-- [ ] **AC4** — Maintainer: setting a warning/alarm threshold below the current peak
+- [x] **AC4** — Maintainer: setting a warning/alarm threshold below the current peak
       escalates the marker (distinct warning and alarm visuals); raising it back
       de-escalates.
-- [ ] **AC5** — Maintainer: the editor dialog matches Alarm Bands in look/feel;
+- [x] **AC5** — Maintainer: the editor dialog matches Alarm Bands in look/feel;
       validation prevents out-of-range frequencies; Cancel discards, Apply persists and
       the widget updates live (dashboard re-syncs without restart).
-- [ ] **AC6** — Maintainer: the same markers appear on the Waterfall at the correct
+- [x] **AC6** — Maintainer: the same markers appear on the Waterfall at the correct
       frequencies under zoom/pan.
-- [ ] **AC7** — `--benchmark-hotpath` gates unchanged (no ingest-path edits).
+- [x] **AC7** — `--benchmark-hotpath` gates unchanged (no ingest-path edits).
 
 ## Constraints & Invariants
 

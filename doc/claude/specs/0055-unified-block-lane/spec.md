@@ -155,7 +155,7 @@ delimiter is inherently sequential and is not in scope to change.
       consumer receives against the values the pipeline produced: bit-exact for numerics,
       byte-exact for strings, and exact for every sample's time.
 
-- [ ] **AC4** (R5) — Recording a project with a 48 kHz source and a low-rate source produces
+- [x] **AC4** (R5) — Recording a project with a 48 kHz source and a low-rate source produces
       exactly one `.mf4` in the output directory. Opening it in a third-party MDF4 reader
       shows both sources' channels, each on its own time base at its own rate.
 
@@ -172,17 +172,17 @@ delimiter is inherently sequential and is not in scope to change.
       reproducibility verdict as it does on the shipped build. A `ctest` case pins this
       against a checked-in legacy archive.
 
-- [ ] **AC8** (R9) — Replaying a session recorded from a dense source reproduces the same
+- [x] **AC8** (R9) — Replaying a session recorded from a dense source reproduces the same
       dashboard trace as the live capture did; scrubbing to a position and letting the settle
       pass run leaves FFT, waterfall, GPS and 3D widgets showing the state they showed live at
       that position; and no new session file is created during replay.
 
-- [ ] **AC9** (R10) — `--benchmark-hotpath` passes every gated tier on a PGO-optimized build,
+- [x] **AC9** (R10) — `--benchmark-hotpath` passes every gated tier on a PGO-optimized build,
       with per-tier throughput no lower than the pre-change build measured on the same
       machine. The exporter and dashboard readouts are recorded before and after for
       comparison.
 
-- [ ] **AC10** (R11) — A synthetic overload (a dense source faster than a deliberately stalled
+- [x] **AC10** (R11) — A synthetic overload (a dense source faster than a deliberately stalled
       consumer) drops whole batches, increments the drop counter, and leaves the source's
       acquisition rate unchanged. No values are silently interleaved from a partially
       delivered batch.
@@ -191,7 +191,7 @@ delimiter is inherently sequential and is not in scope to change.
       version-mismatch message rather than plotting misaligned data. A session file at the old
       schema version is detected and read through the legacy path.
 
-- [ ] **AC12** — The existing `pytest` suite and the full `ctest` tier pass with no new
+- [x] **AC12** — The existing `pytest` suite and the full `ctest` tier pass with no new
       failures, and `scripts/code-verify.py --check` reports no new errors.
 
 ## Constraints & Invariants

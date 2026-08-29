@@ -114,29 +114,29 @@ are compile-gated follow-on specs (C-S6..C-S9).
 
 ## Acceptance Criteria
 
-- [ ] **AC1 (R1)** - a reader of the `architecture.md` "Plot X-Axis" bullet (currently
+- [x] **AC1 (R1)** - a reader of the `architecture.md` "Plot X-Axis" bullet (currently
       lines ~486-536) sees three live modes and the correct deserialize behavior. (The
       documentation-verify linter does not scan doc/claude/, so this AC is review-only.)
-- [ ] **AC2 (R2)** - `grep -rn "FeatureTier::Trial" app/src/{UI,Misc}` returns only the two
+- [x] **AC2 (R2)** - `grep -rn "FeatureTier::Trial" app/src/{UI,Misc}` returns only the two
       Sweep setters (`Dashboard.cpp:1369`, `:1402`); the replaced predicate is token-identical
       to `datasetXAxisEnabled()`'s body; no orphaned `tk`/`tk2` locals; GPL build compiles.
-- [ ] **AC3 (R3)** - `grep -rn "datasets.front().xAxisId" app/src` matches only inside
+- [x] **AC3 (R3)** - `grep -rn "datasets.front().xAxisId" app/src` matches only inside
       `groupXAxisMode`; `grep -rn "resolveXAxisPolicy" app/src` shows the definition and no
       call sites.
-- [ ] **AC4 (R4/R6)** - smoke on a running app: a time plot, a samples plot, an XY plot, an
+- [x] **AC4 (R4/R6)** - smoke on a running app: a time plot, a samples plot, an XY plot, an
       unlicensed dataset-X (degrades to Samples), and a sweep plot all render correctly; a
       multiplot group toggled Time<->Samples behaves as before; empty-group behavior unchanged.
-- [ ] **AC5 (R5)** - `git diff -w` on the C-S4 change shows only brace and comment lines;
+- [x] **AC5 (R5)** - `git diff -w` on the C-S4 change shows only brace and comment lines;
       nothing after the closing brace references `clk`.
-- [ ] **AC6 (R7)** - after C-S6, `grep xAxisId app/src/UI` matches only `resolveXAxisPolicy`
+- [x] **AC6 (R7)** - after C-S6, `grep xAxisId app/src/UI` matches only `resolveXAxisPolicy`
       sites and `Dashboard` configure internals; smoke matrix (time/samples/XY/unlicensed-
       degrade/sweep) passes; `--benchmark-hotpath` not regressed.
-- [ ] **AC7 (R8)** - a project saved by a new build loads on an old build (fan-out still
+- [x] **AC7 (R8)** - a project saved by a new build loads on an old build (fan-out still
       present) and vice versa (unknown group key ignored); migration promotes the right
       multiplot groups to Samples and leaves accel/gyro on Time.
-- [ ] **AC8 (R9)** - Plot and MultiPlot autoscale screenshots match the pre-change baseline
+- [x] **AC8 (R9)** - Plot and MultiPlot autoscale screenshots match the pre-change baseline
       (parameterize) or match the agreed unified target (unify), per the maintainer decision.
-- [ ] **AC9 (R10)** - all seven `--benchmark-hotpath` tiers pass at the default
+- [x] **AC9 (R10)** - all seven `--benchmark-hotpath` tiers pass at the default
       `--min-fps 256000`; C-S9 lands only if the LinePush key-lookup change does not regress
       the `datasets+publish` stage.
 

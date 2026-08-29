@@ -84,20 +84,20 @@ recorded data is not acceptable.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — Integration test (API-driven player): open a known recording, seek forward
+- [x] **AC1** — Integration test (API-driven player): open a known recording, seek forward
   to P1, then backward to P2 < P1; `dashboard.tailFrames` returns exactly the recorded
   trailing-window samples for P2, matching a fresh open + direct seek to P2. Covers CSV and
   MDF4; session replay verified by the same script on a commercial build.
-- [ ] **AC2** — Maintainer observation on BADAQ.ssproj + a real capture: dragging the
+- [x] **AC2** — Maintainer observation on BADAQ.ssproj + a real capture: dragging the
   timeline in both directions shows plots updating live with no multi-second freeze; an
   event visible in the recording can be located by scrubbing alone.
-- [ ] **AC3** — Integration test: replay a generated constant-rate recording of
+- [x] **AC3** — Integration test: replay a generated constant-rate recording of
   BADAQ-scale width; assert the reported timestamp tracks wall-clock within tolerance and
   the number of frames delivered to the dashboard equals the number of recorded rows
   (losslessness + pace together).
-- [ ] **AC4** — `--benchmark-hotpath` still passes every gated tier (the live parse path
+- [x] **AC4** — `--benchmark-hotpath` still passes every gated tier (the live parse path
   must not regress in service of replay).
-- [ ] **AC5** — Integration test: with CSV export enabled-then-replaying and during
+- [x] **AC5** — Integration test: with CSV export enabled-then-replaying and during
   scrubbing, no export file grows and no session rows are written.
 
 ## Constraints & Invariants

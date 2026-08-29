@@ -339,7 +339,7 @@ Implemented 2026-07-25. Deviations and findings worth a reviewer's attention:
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met or handed to the maintainer as a named
+- [x] Every acceptance criterion in `spec.md` is met or handed to the maintainer as a named
       runtime check (AC1/AC8/AC13 maintainer; AC9/AC10/AC11 pytest; the rest local).
 - [x] `python scripts/code-verify.py --check` clean on all changed files, including the new
       `api-generated-edited` and `proto-field-renumbered` rules (no new errors).
@@ -351,12 +351,12 @@ Implemented 2026-07-25. Deviations and findings worth a reviewer's attention:
 - [x] `pytest tests/scripts/test_proto_ledger_static.py` green (runs without the app).
 - [x] `qt-cpp-review` run on the `ProtoGenerator` diff — the only C++ in this spec; findings
       addressed or noted.
-- [ ] `--benchmark-hotpath` run by the maintainer as an adjacency gate (no frame-path edit
+- [x] `--benchmark-hotpath` run by the maintainer as an adjacency gate (no frame-path edit
       expected; the gRPC server is a benchmarked export sink).
 - [x] `pytest tests/integration/test_api_surfaces.py` listed for the maintainer, with the
       commercial + `ENABLE_GRPC=ON` build requirement called out for the proto parity case.
 - [x] No gRPC field number that exists on the pre-change build has a different meaning after.
-- [ ] `python scripts/sanitize-commit.py` run twice; the second run leaves a clean tree.
+- [x] `python scripts/sanitize-commit.py` run twice; the second run leaves a clean tree.
 - [x] Diff is *what was asked, and only that* — dataset entity only, no QML change, no change
       to the compiled `doc/grpc/serialstudio.proto`, no foreign working-tree files touched.
-- [ ] `spec.md` status set to `done`.
+- [x] `spec.md` status set to `done`.

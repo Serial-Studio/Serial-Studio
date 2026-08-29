@@ -193,50 +193,50 @@ currently an English paragraph.
 
 ## Acceptance Criteria
 
-- [ ] **AC1 (R1, R11)** — The dataset property declaration file exists and covers every
+- [x] **AC1 (R1, R11)** — The dataset property declaration file exists and covers every
       persisted/editable dataset field. Maintainer check: the reported before/after line
       counts and per-property edit cost are in the implementation notes, with the "add one
       property" path demonstrated as a single-file change.
-- [ ] **AC2 (R2)** — Round-trip fidelity: every project under `examples/` and every
+- [x] **AC2 (R2)** — Round-trip fidelity: every project under `examples/` and every
       template project opens and re-exports byte-identically to a baseline captured before
       the change, except for the declared defect fixes. Verified by a new
       `pytest tests/integration/` case driving `project.open` + `project.exportJson`
       against a checked-in baseline (maintainer runs; app must be up with the API server).
-- [ ] **AC3 (R2)** — The two known defects are fixed and pinned: `overviewDisplay`
+- [x] **AC3 (R2)** — The two known defects are fixed and pinned: `overviewDisplay`
       survives a save/reload cycle, and a project file omitting `fftSamples`,
       `fftSamplingRate`, `ledHigh`, or `index` yields the same values as a newly created
       dataset. Covered by the same pytest file.
-- [ ] **AC4 (R3)** — Maintainer observation: open the project editor, select a dataset of
+- [x] **AC4 (R3)** — Maintainer observation: open the project editor, select a dataset of
       each widget kind (plot, FFT, bar/gauge/compass, LED, waterfall, virtual, inside a
       painter group) and confirm the form is field-for-field identical to the previous
       build — same rows, order, labels, placeholders, enablement, and combo-box contents.
-- [ ] **AC5 (R4, R6)** — Maintainer observation plus test: editing each dataset form field
+- [x] **AC5 (R4, R6)** — Maintainer observation plus test: editing each dataset form field
       applies correctly and is undoable; a typing burst in a text field is one undo step;
       `project.dataset.update` with multiple fields is one undo step. Extends the existing
       `tests/integration/test_project_undo.py` coverage.
-- [ ] **AC6 (R5)** — The API schema entry for the dataset update verb declares its fields
+- [x] **AC6 (R5)** — The API schema entry for the dataset update verb declares its fields
       as typed schema properties with descriptions and enum domains, not as a prose
       paragraph. Verified by inspecting the regenerated schema and by a pytest case that
       sets every declared field through the API and reads each back.
-- [ ] **AC7 (R7)** — Seeding a drift (add a declaration entry without regenerating; edit a
+- [x] **AC7 (R7)** — Seeding a drift (add a declaration entry without regenerating; edit a
       generated file by hand; reference an undeclared field) makes the verify step fail
       with a clear message. Confirmed by seeding each case locally and reverting.
-- [ ] **AC8 (R8)** — Running the generator twice produces no diff; the generated files
+- [x] **AC8 (R8)** — Running the generator twice produces no diff; the generated files
       carry the do-not-edit marker and LF endings.
-- [ ] **AC9 (R9)** — Translation extraction still finds every property label/description in
+- [x] **AC9 (R9)** — Translation extraction still finds every property label/description in
       its existing context; no previously translated property string is orphaned.
-- [ ] **AC10 (R10)** — The bespoke rules that resist declaration (alias uniqueness, color
+- [x] **AC10 (R10)** — The bespoke rules that resist declaration (alias uniqueness, color
       validity, painter-group-only visibility, Pro-gated waterfall, alarm-band and
       frequency-marker sub-editors, the widget-change side effect that rewrites the widget
       range) exist once as named hooks, not duplicated per surface.
-- [ ] **AC11 (R12)** — Reading a dataset through the API and writing the returned object
+- [x] **AC11 (R12)** — Reading a dataset through the API and writing the returned object
       back unchanged produces no `unknown_field` warnings and no value loss. New pytest
       case.
-- [ ] **AC12 (R5)** — The regenerated JS/Lua SDK emits a dataset update wrapper that can
+- [x] **AC12 (R5)** — The regenerated JS/Lua SDK emits a dataset update wrapper that can
       set declared fields, and the schema-description verb returns the writable field list
       its own help text promises. Maintainer check on the regenerated SDK plus a pytest
       case driving the described fields.
-- [ ] **AC13 (R13)** — Every combo-box-backed dataset property renders the same options in
+- [x] **AC13 (R13)** — Every combo-box-backed dataset property renders the same options in
       the same order as the previous build, and selecting each option stores the same value
       it stores today. Covered by AC4's per-widget-kind walk-through plus a pytest case
       that sets each enum-valued field by value through the API and reads it back.

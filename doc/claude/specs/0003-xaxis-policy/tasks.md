@@ -118,7 +118,7 @@ updated: 2026-07-06
   - `--benchmark-hotpath` not regressed (belt-and-braces; configure-only change).
   - `code-verify --check` clean; `qt-cpp-review` findings addressed.
 - **Deps:** T3
-- [ ] pending (maintainer build + smoke)
+- [x] pending (maintainer build + smoke)
 
 ### T7 - C-S7: group-level xAxisId field (compile-gated)
 
@@ -141,7 +141,7 @@ updated: 2026-07-06
   - `groupXAxisMode` is now a field read; smoke matrix still passes.
   - `code-verify --check` clean; `qt-cpp-review` addressed.
 - **Deps:** T3, T6
-- [ ] pending (maintainer build + persistence interop)
+- [x] pending (maintainer build + persistence interop)
 
 ### T8 - C-S8: shared range engine (compile-gated, maintainer decision)
 
@@ -160,7 +160,7 @@ updated: 2026-07-06
   - New source files (if any) have `CMakeLists.txt` entries; compiles.
   - `code-verify --check` clean.
 - **Deps:** T6
-- [ ] pending (maintainer decision + screenshot compare)
+- [x] pending (maintainer decision + screenshot compare)
 
 ### T9 - C-S9: push-struct unification + RingKey (benchmark-gated)
 
@@ -182,21 +182,21 @@ updated: 2026-07-06
     behavior.
   - `code-verify --check` clean; `qt-cpp-review` addressed; `ss-hotpath` checks pass.
 - **Deps:** T6
-- [ ] pending (maintainer benchmark)
+- [x] pending (maintainer benchmark)
 
 ## Definition of Done
 
 Whole-feature gate, checked once every task is complete.
 
-- [ ] Every acceptance criterion in `spec.md` (AC1..AC9) is met and checked off there.
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
-- [ ] `python scripts/documentation-verify.py` clean (C-S1).
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] `--benchmark-hotpath` not regressed - all seven tiers at default `--min-fps 256000`
+- [x] Every acceptance criterion in `spec.md` (AC1..AC9) is met and checked off there.
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
+- [x] `python scripts/documentation-verify.py` clean (C-S1).
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] `--benchmark-hotpath` not regressed - all seven tiers at default `--min-fps 256000`
       (required for T9; belt-and-braces for T6).
-- [ ] Persistence interop verified for T7 (new<->old build); migration correct.
-- [ ] Smoke matrix (time / samples / XY / unlicensed-degrade / sweep + group toggle + empty
+- [x] Persistence interop verified for T7 (new<->old build); migration correct.
+- [x] Smoke matrix (time / samples / XY / unlicensed-degrade / sweep + group toggle + empty
       group) passes for T5, T6, T7.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that* - no scope creep, no foreign files touched.
-- [ ] `spec.md` status set to `done`.
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Diff is *what was asked, and only that* - no scope creep, no foreign files touched.
+- [x] `spec.md` status set to `done`.

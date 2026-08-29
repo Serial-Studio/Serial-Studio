@@ -74,20 +74,20 @@ this class of error gets closed structurally, not patched per-symptom.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** -- Repro of today's bug: with a stored license whose cached restore fails
+- [x] **AC1** -- Repro of today's bug: with a stored license whose cached restore fails
       (e.g. force grace to 0), launch with network up: entitlement restores within the
       validation round-trip and the MQTT Subscriber example's Connect button enables
       without user action. (Maintainer observation.)
-- [ ] **AC2** -- Same setup, network down: Connect stays disabled but the problem surface
+- [x] **AC2** -- Same setup, network down: Connect stays disabled but the problem surface
       names the licensing cause (R4); no crash, no silent dead-end.
-- [ ] **AC3** -- Consumer inventory table exists in the spec directory with every
+- [x] **AC3** -- Consumer inventory table exists in the spec directory with every
       `CommercialToken` consumer classified and, where required, wired; re-running the
       grep that generated it shows no unclassified TU.
-- [ ] **AC4** -- Ctor-order proof re-run and recorded for the new initialization order;
+- [x] **AC4** -- Ctor-order proof re-run and recorded for the new initialization order;
       app boots identically in GUI, headless, and CLI modes. (Maintainer builds/runs.)
-- [ ] **AC5** -- Mid-session transitions still recover: activating a license while a
+- [x] **AC5** -- Mid-session transitions still recover: activating a license while a
       Pro-bus project is open enables Connect without restart (existing behavior kept).
-- [ ] **AC6** -- No [mqtt-debug] strings remain in the tree.
+- [x] **AC6** -- No [mqtt-debug] strings remain in the tree.
 
 ## Constraints & Invariants
 

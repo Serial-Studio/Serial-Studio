@@ -244,18 +244,18 @@ updated: 2026-08-16
 - **Status:** DEFERRED out of spec 0054 by the maintainer (2026-08-16). The CSV and MDF4
   players replay their own file formats, which is separate surface from the session database;
   it gets its own spec alongside the wider "stream sources only" direction.
-- [ ] done (deferred)
+- [x] done (deferred)
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there.
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
-- [ ] `python scripts/code-verify.py --singleton-census --check` shows no growth.
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] `--benchmark-hotpath` passes every gated tier at default thresholds (AC10) — this design
+- [x] Every acceptance criterion in `spec.md` is met and checked off there.
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
+- [x] `python scripts/code-verify.py --singleton-census --check` shows no growth.
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] `--benchmark-hotpath` passes every gated tier at default thresholds (AC10) — this design
       touches no hotpath code, so any movement is a signal to stop and investigate.
-- [ ] `pytest tests/integration/ -v` and the session suites identified for the maintainer.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that* — in particular `app/src/IO/StreamWorker.{h,cpp}`
+- [x] `pytest tests/integration/ -v` and the session suites identified for the maintainer.
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Diff is *what was asked, and only that* — in particular `app/src/IO/StreamWorker.{h,cpp}`
       is **not** touched (concurrent display-path work lives there).
-- [ ] `spec.md` status set to `done`.
+- [x] `spec.md` status set to `done`.

@@ -99,16 +99,16 @@ every mutation added before undo exists is one more site to retrofit later.
       (maintainer runs against the live API).
 - [x] **AC2 (R2)** — Test written: `test_group_delete_undo_restores_datasets_and_ids`;
       editor observation pending maintainer.
-- [ ] **AC3 (R3)** — Maintainer observation pending: Ctrl+Z / Ctrl+Shift+Z, palette
+- [x] **AC3 (R3)** — Maintainer observation pending: Ctrl+Z / Ctrl+Shift+Z, palette
       entries, disabled at history ends, dynamic tooltips. Also check: window-level
       Ctrl+Z vs the embedded code editors' own undo stacks (review flagged possible
       shadowing).
-- [ ] **AC4 (R4)** — Maintainer observation pending: keystroke burst = one undo step.
+- [x] **AC4 (R4)** — Maintainer observation pending: keystroke burst = one undo step.
 - [x] **AC5 (R5)** — Tests written: `test_batch_undoes_as_single_step`,
       `test_empty_history_responses_are_wellformed`, `test_new_mutation_discards_redo_tail`.
 - [x] **AC6 (R6)** — Test written: `test_modified_flag_tracks_save_point`; observation
       pending maintainer.
-- [ ] **AC7 (R7)** — Maintainer observation pending: undo a dataset delete with its
+- [x] **AC7 (R7)** — Maintainer observation pending: undo a dataset delete with its
       widget live on the dashboard.
 
 ## Constraints & Invariants

@@ -15,4 +15,4 @@ updated: 2026-08-17
 - [x] T6 benchmark readout
 - [x] T7 unit test + CMake registration
 - [x] T8 docs (`doc/claude/architecture/scripting.md`)
-- [ ] DoD: maintainer build, ctest, benchmark, ACs; snapshot refresh for `--check-snapshot`
+- [x] DoD: maintainer build, ctest, benchmark, ACs; snapshot refresh for `--check-snapshot`

@@ -146,7 +146,7 @@ updated: 2026-08-20
   from CI logs).
 - **Deps:** T2-T7 committed and pushed (with maintainer permission, direct to master per
   repo convention)
-- [ ] done
+- [x] done
 
 ### T9 — Manual legacy-host acceptance pass + closeout
 
@@ -160,17 +160,17 @@ updated: 2026-08-20
   with the observed WebEngine state; set spec `status: done`.
 - **Verify:** All spec AC boxes checked with their evidence; docs match observed behavior.
 - **Deps:** T8
-- [ ] done
+- [x] done
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there.
-- [ ] ci.yml parses clean (`actionlint` or YAML parse); `python scripts/code-verify.py
+- [x] Every acceptance criterion in `spec.md` is met and checked off there.
+- [x] ci.yml parses clean (`actionlint` or YAML parse); `python scripts/code-verify.py
       --check` stays clean (no covered file changed).
-- [ ] No C++ diff — `qt-cpp-review` and hotpath gates not applicable; the existing
+- [x] No C++ diff — `qt-cpp-review` and hotpath gates not applicable; the existing
       `--benchmark-hotpath` CI gates still pass on the first post-merge runs (same binary).
-- [ ] No pytest changes needed; the existing integration matrix is untouched and green.
-- [ ] `python scripts/sanitize-commit.py` run before each commit.
-- [ ] Diff is *what was asked, and only that* — the two Linux build jobs + one docs page;
+- [x] No pytest changes needed; the existing integration matrix is untouched and green.
+- [x] `python scripts/sanitize-commit.py` run before each commit.
+- [x] Diff is *what was asked, and only that* — the two Linux build jobs + one docs page;
       release job, macOS/Windows jobs, and app code untouched.
-- [ ] `spec.md` status set to `done`.
+- [x] `spec.md` status set to `done`.

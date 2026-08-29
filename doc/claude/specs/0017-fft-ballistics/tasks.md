@@ -42,6 +42,6 @@ updated: 2026-07-17
 ## Definition of Done
 
 - [x] code-verify clean on all changed files (0 errors, 0 advisories); clang-format run.
-- [ ] AC1/AC2 (in-app observation), AC3 (pytest with the app up), AC4 (benchmark gate).
+- [x] AC1/AC2 (in-app observation), AC3 (pytest with the app up), AC4 (benchmark gate).
 - [x] Diff limited to the plan's file list; `sanitize-commit.py` run 2026-07-17.
 - [x] spec status → done.

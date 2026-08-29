@@ -82,24 +82,24 @@ command surface with none of that overhead.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — Write a JS macro that calls `apiCall("api.getCommands")`, iterates the
+- [x] **AC1** — Write a JS macro that calls `apiCall("api.getCommands")`, iterates the
   result, and prints a count: executing prints the count in the scrollback. (In-app.)
-- [ ] **AC2** — Same macro shape in Lua works after switching the language. (In-app.)
-- [ ] **AC3** — Verify on a script with a syntax error reports the error and line number
+- [x] **AC2** — Same macro shape in Lua works after switching the language. (In-app.)
+- [x] **AC3** — Verify on a script with a syntax error reports the error and line number
   without executing anything; Execute is refused until it parses. (In-app.)
-- [ ] **AC4** — Save a macro, clear the editor, load it back: byte-identical content.
+- [x] **AC4** — Save a macro, clear the editor, load it back: byte-identical content.
   (In-app.)
-- [ ] **AC5** — Execute `while (true) {}`: the app stays responsive enough to hit stop /
+- [x] **AC5** — Execute `while (true) {}`: the app stays responsive enough to hit stop /
   the watchdog fires, and the terminal reports the interruption; the app keeps working
   afterwards. (In-app.)
-- [ ] **AC6** — A macro that throws mid-run prints the error with line info; subsequent
+- [x] **AC6** — A macro that throws mid-run prints the error with line info; subsequent
   macros and single commands still work. (In-app.)
-- [ ] **AC7** — Single-command input, completion, docs panel, and history behave exactly
+- [x] **AC7** — Single-command input, completion, docs panel, and history behave exactly
   as before the change. (In-app regression pass.)
-- [ ] **AC8** — GPL build: feature present and functional. (Maintainer build check.)
-- [ ] **AC9** — `registry-verify.py`, `generate-command-strings.py --check`,
+- [x] **AC8** — GPL build: feature present and functional. (Maintainer build check.)
+- [x] **AC9** — `registry-verify.py`, `generate-command-strings.py --check`,
   `code-verify.py --check`, sanitize pipeline all clean. (Scripted.)
-- [ ] **AC10** — `--benchmark-hotpath` CI gate unaffected. (CI.)
+- [x] **AC10** — `--benchmark-hotpath` CI gate unaffected. (CI.)
 
 ## Constraints & Invariants
 

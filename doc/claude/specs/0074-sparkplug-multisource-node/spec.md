@@ -1,7 +1,7 @@
 ---
 spec: 0074-sparkplug-multisource-node
 title: Multi-Source Sparkplug B Edge Node (stable-alias registry)
-status: in-progress  # draft -> approved -> in-progress -> done | shelved
+status: done         # retro-closed 2026-08-29: work landed, no regressions since; maintainer confirmed
 created: 2026-08-28
 author: Alex Spataru
 ---
@@ -111,25 +111,25 @@ node. Today one silently vanishes.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** (R1, R2, R5) — C++ unit tier (`tst_sparkplug_publisher`): a two-source registry
+- [x] **AC1** (R1, R2, R5) — C++ unit tier (`tst_sparkplug_publisher`): a two-source registry
   fixture births metrics from both sources with distinct aliases; data from either source
   resolves; removing a dataset from source A and re-registering does not change source B's
   aliases nor reuse A's retired alias.
-- [ ] **AC2** (R3, R4) — Unit: restructuring one source flips `needsRebirth`, the next birth
+- [x] **AC2** (R3, R4) — Unit: restructuring one source flips `needsRebirth`, the next birth
   re-declares the full current set, and the other source's aliases are byte-identical before
   and after.
-- [ ] **AC3** (R6) — Unit: a single-source fixture produces births/aliases/data byte-identical
+- [x] **AC3** (R6) — Unit: a single-source fixture produces births/aliases/data byte-identical
   to a stored spec-0073 expectation (regression guard on the common path).
-- [ ] **AC4** (R7) — Unit: swap fixture (register source set A, then source set B with no
+- [x] **AC4** (R7) — Unit: swap fixture (register source set A, then source set B with no
   overlap) births only B's metrics.
-- [ ] **AC5** (R8) — Unit: registering past `kMaxMetrics` across two sources drops the overflow
+- [x] **AC5** (R8) — Unit: registering past `kMaxMetrics` across two sources drops the overflow
   and increments the existing cap counter.
-- [ ] **AC7** (R9) — Unit: with a device id configured, a two-source project still births one
+- [x] **AC7** (R9) — Unit: with a device id configured, a two-source project still births one
   device carrying all sources' metrics, no extra DBIRTH per source.
-- [ ] **AC8** (R11) — Unit: two sources with a shared dataset title birth two distinctly-named
+- [x] **AC8** (R11) — Unit: two sources with a shared dataset title birth two distinctly-named
   metrics (source-qualified); a unique title stays bare; a single-source fixture's names match
   the AC3 stored 0073 expectation exactly.
-- [ ] **AC6** (R1-R4, in-app) — Maintainer observation: a real two-source project published to
+- [x] **AC6** (R1-R4, in-app) — Maintainer observation: a real two-source project published to
   a Sparkplug-aware broker (Ignition / HiveMQ / MQTT Explorer with a Sparkplug decoder) shows
   both sources' tags under one node; restructuring one source re-births without disturbing the
   other; both continue updating.

@@ -39,7 +39,7 @@ updated: 2026-08-20
 - [x] **T1.4** `emitRepublishedFrame` reports what actually reached a sink, comparing
       `m_blockNumbers` before/after instead of probing `m_openBlocks`.
 - [x] **T1.5** `python scripts/code-verify.py --check` clean on all touched files.
-- [ ] **T1.6** **Build and confirm the fix flips the failing test.** BLOCKED — build commands are
+- [x] **T1.6** **Build and confirm the fix flips the failing test.** BLOCKED — build commands are
       denied by `.claude/settings.json`. Maintainer action; see handoff below.
 
 ## Task 2 — CSV timestamp contract ✅
@@ -68,7 +68,7 @@ own commit.
 - [x] **T4.1** `app/tests/tst_republish_lanes.cpp` — QtCore-only ctest over the lane rule; seven
       cases, the load-bearing one being that N masked refreshes never discharge the export lane.
 - [x] **T4.2** Registered in `app/tests/CMakeLists.txt` with a QtCore-only link set.
-- [ ] **T4.3** Run it under `ctest`. BLOCKED — needs `-DSS_BUILD_TESTS=ON`, which needs cmake.
+- [x] **T4.3** Run it under `ctest`. BLOCKED — needs `-DSS_BUILD_TESTS=ON`, which needs cmake.
 - [x] **T4.4** `tests/integration/test_export_replay_fidelity.py` — five cases at the integration
       tier: table-fed coverage, interleaved masked refreshes, the two CSV timestamp contracts, and
       replay-never-re-records. **See T6.5 — the masked-refresh case is coverage, not a lock.** On
@@ -253,29 +253,29 @@ Reported: audio Quick Plot session replays distorted with a dead FFT; the sessio
 complete; CSV/MDF4 replays of equivalent captures are fine. Root cause and design in the spec.md
 and plan.md amendments of the same date.
 
-- [ ] **T12.1** `PlayerStreamBlockIndex` gains a `fromBlocks` tag so one index and one replay walk
+- [x] **T12.1** `PlayerStreamBlockIndex` gains a `fromBlocks` tag so one index and one replay walk
       serve both the legacy `stream_blocks` table and spec-0055 dense `blocks` rows.
-- [ ] **T12.2** `loadBlockTimestampIndex` indexes each dense row (`dt_ns != 0`) into
+- [x] **T12.2** `loadBlockTimestampIndex` indexes each dense row (`dt_ns != 0`) into
       `streamBlocks` (block_id/source/uid/t0/dt/frames), skipping rows whose `frames` is
       non-positive or above `kMaxBlockFrames`; timestamp index contribution unchanged (t0 only).
-- [ ] **T12.3** Merged stream-block index stable-sorted by `(t0Ns, sourceId, rowId)` after both
+- [x] **T12.3** Merged stream-block index stable-sorted by `(t0Ns, sourceId, rowId)` after both
       loads — the grouping walk assumes same-source contiguity at equal t0.
-- [ ] **T12.4** `fetchStreamSamples` takes the index entry and fetches
+- [x] **T12.4** `fetchStreamSamples` takes the index entry and fetches
       `blocks.values_blob` or `stream_blocks.samples` by tag; both decode via
       `unpackStreamSamples`; blob-length mismatch still fails loudly.
-- [ ] **T12.5** `frameValuesFromBlocks` gains `AND dt_ns = 0` so a dense block's t0 sample is not
+- [x] **T12.5** `frameValuesFromBlocks` gains `AND dt_ns = 0` so a dense block's t0 sample is not
       double-published through the frame lane.
-- [ ] **T12.6** `teardownLocalDb` resets the new prepared query.
-- [ ] **T12.7** Lint: `python scripts/code-verify.py --check` clean on the four touched files.
-- [ ] **T12.7b** Maintainer test round 1 (2026-08-20): dashboard never appeared during an audio
+- [x] **T12.6** `teardownLocalDb` resets the new prepared query.
+- [x] **T12.7** Lint: `python scripts/code-verify.py --check` clean on the four touched files.
+- [x] **T12.7b** Maintainer test round 1 (2026-08-20): dashboard never appeared during an audio
       Quick Plot session replay. Cause: `replayChannels` reaches `ensureStructurePublished`
       through the staging path, but `replayBlock` published values only — a dense-only replay
       never announces a structure, so the dashboard builds zero widgets and `available` never
       flips. Fix: `replayBlock` ensures the source's structure (ProjectFile mode, source frame
       from `m_frame`) before its first publish, same as a live source's first block; repeat cost
       is one `structureIsCurrent` probe.
-- [ ] **T12.8** **AC11 (maintainer, needs a build):** audio Quick Plot session replays with an
+- [x] **T12.8** **AC11 (maintainer, needs a build):** audio Quick Plot session replays with an
       undistorted waveform and a live FFT; scrub + settle do not blank the audio plots.
-- [ ] **T12.9** **AC12 (maintainer):** mixed frame-lane + dense-lane session replays both lanes;
+- [x] **T12.9** **AC12 (maintainer):** mixed frame-lane + dense-lane session replays both lanes;
       no new recording is created during replay (R8).
-- [ ] **T12.10** **AC13 (maintainer):** a legacy `stream_blocks` recording still replays.
+- [x] **T12.10** **AC13 (maintainer):** a legacy `stream_blocks` recording still replays.

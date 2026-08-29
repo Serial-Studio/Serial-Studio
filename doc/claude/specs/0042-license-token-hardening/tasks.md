@@ -114,11 +114,11 @@ updated: 2026-07-28
 
 ## Definition of Done
 
-- [ ] AC1/AC2/AC4/AC5 handed to maintainer with their concrete runtime checks; AC3
+- [x] AC1/AC2/AC4/AC5 handed to maintainer with their concrete runtime checks; AC3
       (consumers.md) and AC6 (no mqtt-debug) verified in-repo.
-- [ ] `python scripts/code-verify.py --check` clean on all changed files.
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] Hotpath untouched; CI gate confirms.
-- [ ] `sanitize-commit.py` at commit time (tree carries unrelated uncommitted campaigns).
-- [ ] Diff is what was asked, and only that.
-- [ ] `spec.md` status set to `done` after maintainer ACs pass.
+- [x] `python scripts/code-verify.py --check` clean on all changed files.
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] Hotpath untouched; CI gate confirms.
+- [x] `sanitize-commit.py` at commit time (tree carries unrelated uncommitted campaigns).
+- [x] Diff is what was asked, and only that.
+- [x] `spec.md` status set to `done` after maintainer ACs pass.

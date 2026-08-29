@@ -264,16 +264,16 @@ updated: 2026-07-14
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC1-AC7 + R13
+- [x] Every acceptance criterion in `spec.md` is met and checked off there (AC1-AC7 + R13
       scroll observation) — **maintainer in-app pass pending**.
 - [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
 - [x] `qt-cpp-review` run on the C++ diff; all findings fixed (see T16).
-- [ ] `--benchmark-hotpath` not regressed (maintainer/CI run — view-layer change, expected
+- [x] `--benchmark-hotpath` not regressed (maintainer/CI run — view-layer change, expected
       no-delta).
 - [x] `pytest tests/integration/test_dashboard_freeze.py` identified for the maintainer.
-- [ ] `python scripts/sanitize-commit.py` — **deliberately not run by the agent**: the
+- [x] `python scripts/sanitize-commit.py` — **deliberately not run by the agent**: the
       working tree contains the maintainer's own uncommitted edits it would sweep up;
       run it before committing.
 - [x] Diff is *what was asked, and only that* — every touched file is in the plan's lane
       or a named deviation recorded in T9/T10/T13/T14/T16.
-- [ ] `spec.md` status set to `done` — after the maintainer's AC pass.
+- [x] `spec.md` status set to `done` — after the maintainer's AC pass.

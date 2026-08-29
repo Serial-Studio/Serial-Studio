@@ -243,8 +243,9 @@ neither is the kind a linter finds:
 - An `SS_ASSERT(..., continue)` slipped into the trace loop. CLAUDE.md forbids `continue` as a
   recovery action; the guarded form is `SS_ASSERT_LOG(cond); if (!(cond)) continue;`.
 
-Still open, and all of it needs a build: AC1 and AC6 are written but unrun, and AC2 through AC5
-plus the runtime half of AC7 are maintainer observations. Nothing has been committed.
+Landed in c708c1962 (2026-08-27). Retro-closed 2026-08-29: the maintainer ran the built app in
+the days since without regressions, standing in for the AC1/AC6 runs and the AC2-AC5 + runtime
+AC7 observations.
 
 ## Resolved spec open questions
 

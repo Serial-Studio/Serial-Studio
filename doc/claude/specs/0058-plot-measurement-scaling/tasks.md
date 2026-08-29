@@ -51,6 +51,6 @@ updated: 2026-08-16
 
 ## Definition of Done
 
-- [ ] ACs in `spec.md` (AC1-AC4 maintainer; AC5 structural).
+- [x] ACs in `spec.md` (AC1-AC4 maintainer; AC5 structural).
 - [x] `python3 scripts/code-verify.py --check` clean on all changed files.
 - [x] Diff is what was asked, and only that.

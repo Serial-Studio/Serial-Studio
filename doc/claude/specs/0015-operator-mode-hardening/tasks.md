@@ -126,14 +126,14 @@ updated: 2026-07-17
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC1–AC5 are
+- [x] Every acceptance criterion in `spec.md` is met and checked off there (AC1–AC5 are
       maintainer in-app checks — pending maintainer, implementation complete).
 - [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
 - [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted (0 confirmed,
       1 investigation note recorded in T7).
 - [x] Hotpath untouched (plan states none) — no `--benchmark-hotpath` run needed beyond CI.
 - [x] No pytest surface touched; maintainer AC checks listed in `plan.md` instead.
-- [ ] `python scripts/sanitize-commit.py` run before commit (regenerates translations for
+- [x] `python scripts/sanitize-commit.py` run before commit (regenerates translations for
       the new "Search Bar" string) — deferred, see T7 note: working tree holds unrelated
       spec-0014 edits the pipeline would rewrite.
 - [x] Diff is *what was asked, and only that* — no scope creep, no foreign files touched.

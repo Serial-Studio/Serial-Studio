@@ -187,56 +187,56 @@ the checks that populate it for the I/O stack.
 
 ## Acceptance Criteria
 
-- [ ] **AC1 (R6, R10) — the roadmap criterion.** On a fresh Linux machine whose account is
+- [x] **AC1 (R6, R10) — the roadmap criterion.** On a fresh Linux machine whose account is
       not a member of the device group, connecting to a serial port fails and the message
       the user sees names the port, names the owning group, and contains the exact command
       that fixes it. Adding the account to the group and starting a new session makes both
       the finding and the failure disappear. *Maintainer-run, requires a Linux machine and
       a USB-serial adapter.*
-- [ ] **AC2 (R6)** — On the same machine, with the account already added to the group but
+- [x] **AC2 (R6)** — On the same machine, with the account already added to the group but
       the session not yet restarted, the finding says the membership exists and the session
       must be restarted, and does **not** repeat the `usermod` command. *Maintainer-run,
       Linux.*
-- [ ] **AC3 (R6)** — With no serial adapter connected on any platform, a run reports that
+- [x] **AC3 (R6)** — With no serial adapter connected on any platform, a run reports that
       no serial ports were found, and the remedy names the common USB-serial driver
       families to install on that platform. *Maintainer-run, all three platforms.*
-- [ ] **AC4 (R7)** — With Bluetooth switched off in system settings, a run reports the
+- [x] **AC4 (R7)** — With Bluetooth switched off in system settings, a run reports the
       adapter as powered off with a remedy naming the setting to change; switching it on
       and re-running clears the finding. The driver's own device discovery is unaffected by
       the run — a scan already in progress is neither interrupted nor duplicated.
       *Maintainer-run, requires a machine with a Bluetooth adapter.*
-- [ ] **AC5 (R8, R3)** — `pytest tests/integration/test_connection_diagnostics.py`:
+- [x] **AC5 (R8, R3)** — `pytest tests/integration/test_connection_diagnostics.py`:
       configuring a network source with an unresolvable host name produces a
       "name did not resolve" finding; a resolvable host with a closed port produces a
       "connection refused" finding; a routable address that black-holes traffic produces a
       "timed out" finding within the declared timeout and not later. The three findings
       carry three different remedies.
-- [ ] **AC6 (R8)** — Same test file: with a listener bound to a local port and configured
+- [x] **AC6 (R8)** — Same test file: with a listener bound to a local port and configured
       as the source host and port, a run reports no reachability finding, and the listener
       records a connection that carried zero application bytes.
-- [ ] **AC7 (R9)** — With the audio bus available and the previously selected input device
+- [x] **AC7 (R9)** — With the audio bus available and the previously selected input device
       removed, a run reports that the configured input device is gone and names it.
       *Maintainer-run, commercial build, requires unplugging an input device.*
-- [ ] **AC8 (R14)** — Same test file: the API run command returns immediately with the list
+- [x] **AC8 (R14)** — Same test file: the API run command returns immediately with the list
       of checks it started; polling the status command reports the run as finished within
       the declared worst case; the problem-center read command then returns the diagnostics
       findings alongside any other findings. The commands appear in the assistant safety
       manifest — asserted by a runnable static test under `tests/scripts/`.
-- [ ] **AC9 (R5, R11)** — Same test file: a failed open on a network source produces
+- [x] **AC9 (R5, R11)** — Same test file: a failed open on a network source produces
       network findings and produces no Bluetooth, serial, or audio findings; a second
       failed open within the rate-limit window does not start a second probing run.
-- [ ] **AC10 (R4, R12, R13)** — Maintainer observation: the command appears in the palette
+- [x] **AC10 (R4, R12, R13)** — Maintainer observation: the command appears in the palette
       and the Start menu; the setup pane offers the run and shows the outcome; findings
       appear in the problem-center panel with the other findings, contribute to the badge
       counts, and produce one notification summary on first appearance and none on an
       unchanged re-run.
-- [ ] **AC11 (R3, R15)** — Maintainer observation: during a full run against an
+- [x] **AC11 (R3, R15)** — Maintainer observation: during a full run against an
       unreachable host, the interface stays responsive — windows redraw, menus open, and
       the run can be cancelled — and no dialog, wait cursor, or frozen frame appears. With
       no run in progress the application has no diagnostics timer active.
-- [ ] **AC12 (R15)** — `--benchmark-hotpath` shows no regression against the pre-change run
+- [x] **AC12 (R15)** — `--benchmark-hotpath` shows no regression against the pre-change run
       on all nine gated tiers. *Maintainer-run.*
-- [ ] **AC13** — `python scripts/code-verify.py --check` and `python scripts/registry-verify.py`
+- [x] **AC13** — `python scripts/code-verify.py --check` and `python scripts/registry-verify.py`
       clean; `python scripts/sanitize-commit.py` runs with no new lint debt.
 
 ## Constraints & Invariants

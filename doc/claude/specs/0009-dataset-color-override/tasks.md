@@ -216,18 +216,18 @@ updated: 2026-07-14
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC1-AC4, AC6
+- [x] Every acceptance criterion in `spec.md` is met and checked off there (AC1-AC4, AC6
       are maintainer in-app observations; AC5 via the new pytest cases; AC7 via
       `--benchmark-hotpath` / CI).
 - [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
 - [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted (see T13).
-- [ ] `--benchmark-hotpath` not regressed (structure-only field; maintainer/CI runs the
+- [x] `--benchmark-hotpath` not regressed (structure-only field; maintainer/CI runs the
       nine gates).
 - [x] `pytest tests/integration/test_project_editor.py` identified for the maintainer (app
       up, API server on :7777) — three new color cases added.
-- [ ] `python scripts/sanitize-commit.py` run before commit (drives clang-format, SDK regen,
+- [x] `python scripts/sanitize-commit.py` run before commit (drives clang-format, SDK regen,
       search-index rebuild); `api-schema.json` re-dump is the maintainer's step (needs the
       binary).
 - [x] Diff is *what was asked, and only that* — matches the plan's file table (minus dropped
       T6); foreign working-tree files untouched.
-- [ ] `spec.md` status set to `done`.
+- [x] `spec.md` status set to `done`.

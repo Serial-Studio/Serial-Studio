@@ -106,35 +106,35 @@ close the app — so they are specified together.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — Record 60 s of a 48 kHz audio source in Quick Plot with session recording on
+- [x] **AC1** — Record 60 s of a 48 kHz audio source in Quick Plot with session recording on
       and CSV, MDF4, and API export all off. The resulting database contains recorded stream
       data covering the full 60 s, and the sample count matches the source's rate to within
       one block.
-- [ ] **AC2** — For the AC1 capture, run the same capture simultaneously to CSV. Every recorded
+- [x] **AC2** — For the AC1 capture, run the same capture simultaneously to CSV. Every recorded
       sample corresponds to a CSV row, in the same order, with none dropped or duplicated. CSV
       is the lossy side of this comparison — it writes ten significant digits while the database
       keeps full precision — so the exact check is that re-formatting the recorded sample at
       CSV's precision reproduces the CSV text. The database is never the side that rounds.
-- [ ] **AC3** — The AC1 database is under 50 MB.
-- [ ] **AC4** — Replay the AC1 session. The dashboard plots the recorded waveform, playback
+- [x] **AC3** — The AC1 database is under 50 MB.
+- [x] **AC4** — Replay the AC1 session. The dashboard plots the recorded waveform, playback
       duration matches the original capture, and the reported timestamps advance at the
       original rate.
-- [ ] **AC5** — The reproducibility verifier reports a match for the AC1 session.
-- [ ] **AC6** — Record and replay a frame-lane (non-stream) session. Database size, contents,
+- [x] **AC5** — The reproducibility verifier reports a match for the AC1 session.
+- [x] **AC6** — Record and replay a frame-lane (non-stream) session. Database size, contents,
       and replay behavior are unchanged from a build without this feature.
-- [ ] **AC7** — A session database captured with the current shipped build opens, replays, and
+- [x] **AC7** — A session database captured with the current shipped build opens, replays, and
       verifies without error.
-- [ ] **AC8** — With a session player open, close the application window 20 times in a row
+- [x] **AC8** — With a session player open, close the application window 20 times in a row
       across fresh launches. No crash.
-- [ ] **AC9** — Load a project, open and then close a session via the UI: the original project
+- [x] **AC9** — Load a project, open and then close a session via the UI: the original project
       is loaded and the operation mode restored. Repeat, closing via the window close button:
       same end state.
-- [ ] **AC10** — `--benchmark-hotpath` passes every gated tier at its default thresholds, with
+- [x] **AC10** — `--benchmark-hotpath` passes every gated tier at its default thresholds, with
       no regression against the current baseline.
-- [ ] **AC11** — The existing `pytest` session and integration suites pass.
-- [ ] **AC12** — After the AC1 capture, the database explorer shows the stream source with its
+- [x] **AC11** — The existing `pytest` session and integration suites pass.
+- [x] **AC12** — After the AC1 capture, the database explorer shows the stream source with its
       sample count and time span, without the session being replayed.
-- [ ] **AC13** — Record a session with one frame-lane and one stream-lane source. Both replay
+- [x] **AC13** — Record a session with one frame-lane and one stream-lane source. Both replay
       at their recorded rates, and a value known to have been captured at a given moment
       reports the same session-relative time in both sources' recorded timestamps.
 

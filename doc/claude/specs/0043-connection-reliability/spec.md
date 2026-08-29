@@ -123,15 +123,15 @@ retryable while dialing. Driver drops additionally never end the session (see R2
 
 ## Acceptance criteria (maintainer-run)
 
-- [ ] AC1: Trial machine, no network: startup shows no dialogs, an open UART/TCP link
+- [x] AC1: Trial machine, no network: startup shows no dialogs, an open UART/TCP link
       survives the failed background trial refresh, no reconnect cycle.
-- [ ] AC2: TCP connect to a dead host: UI stays responsive, button click aborts the dial,
+- [x] AC2: TCP connect to a dead host: UI stays responsive, button click aborts the dial,
       one error box appears after retries/timeout, button reads disconnected.
-- [ ] AC3: Unplug a USB-serial adapter with auto-reconnect on: link drops with one box
+- [x] AC3: Unplug a USB-serial adapter with auto-reconnect on: link drops with one box
       suppressed (resource error), replug reconnects within ~2 s; manual disconnect while
       unplugged never reconnects on replug.
-- [ ] AC4: BLE connect to a powered-off device: error box appears, button recovers.
-- [ ] AC5: NamedPipe writer closes: app reports pipe closed, device reads disconnected.
-- [ ] AC6: Activated license with a legacy variant name: license key visible in License
+- [x] AC4: BLE connect to a powered-off device: error box appears, button recovers.
+- [x] AC5: NamedPipe writer closes: app reports pipe closed, device reads disconnected.
+- [x] AC6: Activated license with a legacy variant name: license key visible in License
       Management, window title not garbled, all Pro features work.
-- [ ] AC7: `--benchmark-hotpath` unchanged (no hotpath TU was touched on the frame path).
+- [x] AC7: `--benchmark-hotpath` unchanged (no hotpath TU was touched on the frame path).

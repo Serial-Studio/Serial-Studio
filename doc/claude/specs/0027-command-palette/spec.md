@@ -123,7 +123,7 @@ drift again.**
       `CommandPalette.qml` has no `Cpp_UI_Dashboard`/`taskBar`/workspace symbols — all data
       flows via the injected `model`; the main-window `PaletteModel` (browse off) is the
       second context. Runtime browse/folder/search behavior on maintainer list.*
-- [ ] **AC2 (R2)** — In BADAQ at root: "WORKSPACES" and "TOOLS" uppercase headers with
+- [x] **AC2 (R2)** — In BADAQ at root: "WORKSPACES" and "TOOLS" uppercase headers with
       separators are visible; Add Workspace cell present.
 - [x] **AC3 (R3)** — On a commercial build (non-runtime mode), palette Tools shows the
       full Start-menu action set; on a GPL build, gated items (Sessions, File
@@ -133,27 +133,27 @@ drift again.**
       `ToolActions.items()`; tier/runtime gating stays in each item's `visible:` with no
       consumer-side filter beyond the query match. Two-build visibility parity on
       maintainer list.*
-- [ ] **AC4 (R4/R5)** — Searching "Channel" in BADAQ yields multiple identically named
+- [x] **AC4 (R4/R5)** — Searching "Channel" in BADAQ yields multiple identically named
       widget entries distinguishable by group-name subtitles; searching a group's name
       yields both its group widget entry and its dataset widget entries.
-- [ ] **AC5 (R6)** — Clicking a searched widget not in any custom workspace opens a new
+- [x] **AC5 (R6)** — Clicking a searched widget not in any custom workspace opens a new
       external window containing only that widget (not its sibling group widgets); the
       main dashboard's active workspace is unchanged and no group-level workspace
       appears in the switcher or taskbar.
-- [ ] **AC6 (R6)** — Clicking a searched widget that is in a custom workspace switches
+- [x] **AC6 (R6)** — Clicking a searched widget that is in a custom workspace switches
       to that workspace and highlights the widget.
-- [ ] **AC7 (R7)** — With the palette open and after mouse-hovering results (focus
+- [x] **AC7 (R7)** — With the palette open and after mouse-hovering results (focus
       anywhere), Escape closes, Enter opens first/highlighted item, arrows move the
       highlight. Same checks pass in the taskbar search popup.
-- [ ] **AC8 (R8)** — Maintainer resizes the main window down to ~800x500: palette stays
+- [x] **AC8 (R8)** — Maintainer resizes the main window down to ~800x500: palette stays
       inside the window, all labels elide instead of clipping, grid reflows, scrolling
       reaches every item.
-- [ ] **AC9 (R9)** — The same query typed in the taskbar search and in the palette
+- [x] **AC9 (R9)** — The same query typed in the taskbar search and in the palette
       returns the same items; activating the same widget entry from either surface has
       the same outcome.
-- [ ] **AC10 (R10)** — Folder drill-in/out, breadcrumb jump, and Add Workspace still
+- [x] **AC10 (R10)** — Folder drill-in/out, breadcrumb jump, and Add Workspace still
       work in the dashboard context after the refactor.
-- [ ] **AC11 (R1/R11)** — The main-window context opens outside the dashboard, lists
+- [x] **AC11 (R1/R11)** — The main-window context opens outside the dashboard, lists
       tools/actions only (no workspace browse), and activates them with the same
       keyboard behavior as the dashboard context.
 

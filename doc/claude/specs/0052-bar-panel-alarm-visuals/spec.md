@@ -111,30 +111,30 @@ Serial Studio's built-in widgets cannot produce this today:
 > pytest suites are written and collect cleanly; the visual and benchmark checks are
 > maintainer-run). The boxes stay unchecked until those runs happen.
 
-- [ ] **AC1** — In the project editor, a group can be assigned the Bar Panel widget; the
+- [x] **AC1** — In the project editor, a group can be assigned the Bar Panel widget; the
       dashboard shows one labeled bar per dataset with live values (maintainer check with
       a multi-dataset test project; API `dashboard.getData` shows the group widget).
-- [ ] **AC2** — Switching the style option Auto/Horizontal/Vertical re-renders accordingly
+- [x] **AC2** — Switching the style option Auto/Horizontal/Vertical re-renders accordingly
       and survives save/reload of the project (maintainer check + project JSON round-trip
       in a pytest integration test).
-- [ ] **AC3** — With a dataset defining OK/warning/critical bands, Bar, Gauge, Meter, and
+- [x] **AC3** — With a dataset defining OK/warning/critical bands, Bar, Gauge, Meter, and
       Bar Panel show all bands as muted zones at all times, and the fill/needle color
       transitions ok→warning→critical as the value crosses band edges (maintainer check
       driving values via API/simulator).
-- [ ] **AC4** — Feeding a value beyond the outermost band renders the indicator in that
+- [x] **AC4** — Feeding a value beyond the outermost band renders the indicator in that
       nearest band's severity color, not a neutral color (maintainer check).
-- [ ] **AC5** — A fresh project with several datasets and no color overrides renders
+- [x] **AC5** — A fresh project with several datasets and no color overrides renders
       non-plot widgets in one accent color while a MultiPlot of the same datasets still
       cycles hues; a dataset with an explicit color override shows that color
       (maintainer check).
-- [ ] **AC6** — Existing projects load with unchanged dataset data; no project-file
+- [x] **AC6** — Existing projects load with unchanged dataset data; no project-file
       schema errors; stored color overrides render as before (pytest project round-trip
       suite stays green).
-- [ ] **AC7** — `--benchmark-hotpath` gates stay green: rendering changes are GUI-side
+- [x] **AC7** — `--benchmark-hotpath` gates stay green: rendering changes are GUI-side
       and add nothing to the frame pipeline.
-- [ ] **AC8** — Both orientations stay legible at small widget sizes (labels elide or
+- [x] **AC8** — Both orientations stay legible at small widget sizes (labels elide or
       drop before overlapping; maintainer visual check in light + dark themes).
-- [ ] **AC9** — With the extreme-hold option enabled, driving a value up then down leaves
+- [x] **AC9** — With the extreme-hold option enabled, driving a value up then down leaves
       the max marker at the excursion peak and the min marker at the lowest point; a data
       reset clears both; with the option off no markers render (maintainer check driving
       values via API/simulator; project JSON round-trip covers persistence).

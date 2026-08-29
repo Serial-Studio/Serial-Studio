@@ -91,10 +91,10 @@ that the separator was the problem.
       channels named from the header and a timeline driven by `time(ms)`, with no
       interval/date-time prompt. *(2026-08-10: verified over the API — 777 rows, six
       data channels + timeline column, no prompt)*
-- [ ] **AC6** — Hotpath: `--benchmark-hotpath` gates stay green (replay row splitting is
+- [x] **AC6** — Hotpath: `--benchmark-hotpath` gates stay green (replay row splitting is
       shared with paths the benchmark exercises). *(pending: maintainer run, or the CI
       per-push benchmark gate)*
-- [ ] **AC7** — Unit scaling: a `time(ms)` fixture reports a wall-clock duration matching
+- [x] **AC7** — Unit scaling: a `time(ms)` fixture reports a wall-clock duration matching
       the data (pytest); pressing play on the real Mazda file visibly advances the
       dashboard in real time, and opening a unitless numeric CSV shows the unit prompt
       with seconds preselected (maintainer observations — the prompt cannot be driven

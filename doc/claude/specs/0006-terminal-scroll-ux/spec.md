@@ -96,26 +96,26 @@ Three console-widget pain points, all observable in the shipping app today:
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — In the running app with >1 viewport of console data: no scrollbar while
+- [x] **AC1** — In the running app with >1 viewport of console data: no scrollbar while
       autoscroll is on; wheel-scrolling up reveals the thumb; dragging it scrubs history;
       clicking above/below it pages; dragging or scrolling to the bottom resumes autoscroll
       and hides the thumb. (Maintainer observation, LTR and RTL.)
-- [ ] **AC2** — The console toolbar's Settings popup and Settings → Console both show a
+- [x] **AC2** — The console toolbar's Settings popup and Settings → Console both show a
       scrollback option; entering 100 and 100,000 is accepted, values outside the range
       are rejected or clamped, and the value is still set after an app restart.
       (Maintainer observation.)
-- [ ] **AC3** — With 5,000+ lines buffered at a 100,000 cap, lowering the cap to 100 in
+- [x] **AC3** — With 5,000+ lines buffered at a 100,000 cap, lowering the cap to 100 in
       Settings immediately drops the buffer to the newest 100 lines with no crash,
       garbled colors, or stuck scroll position — including while data is streaming.
       (Maintainer observation.)
-- [ ] **AC4** — The display-mode combo reads "Display: Text" / "Display: Hex" in English;
+- [x] **AC4** — The display-mode combo reads "Display: Text" / "Display: Hex" in English;
       switching still toggles hexadecimal rendering. (Maintainer observation.)
-- [ ] **AC5** — Running the LLM translation pipeline over the regenerated string catalogs
+- [x] **AC5** — Running the LLM translation pipeline over the regenerated string catalogs
       writes the curated per-language value for source "Hex" in every locale `.ts` file
       (e.g. "Хекс" in ru_RU/uk_UA, "十六进制" in zh_CN, "Hex" in Latin-script locales),
       and the pipeline's own output/logs show the string was pinned, not model-translated.
       (Scriptable check over the `.ts` files after a translation run.)
-- [ ] **AC6** — `--benchmark-hotpath` still passes all gates: the console changes add no
+- [x] **AC6** — `--benchmark-hotpath` still passes all gates: the console changes add no
       measurable per-append regression at the default 1,000-line setting. (CI gate.)
 
 ## Constraints & Invariants

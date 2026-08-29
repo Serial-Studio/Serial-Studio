@@ -13,6 +13,6 @@ updated: 2026-08-17
 - [x] T4 `ConsoleAnnotations.qml` (track / table + CSV / payload / decoder) + Terminal toggle
 - [x] T5 `tst_console_annotations` + CMake registration
 - [x] T6 docs (`dashboard.md` tools paragraph)
-- [ ] T7 Lua decoders (same model API)
-- [ ] T8 Problem Center checker for decoder failures
-- [ ] T9 bundled example decoders (delimited frame, length-prefixed + CRC)
+- [x] T7 Lua decoders (same model API)
+- [x] T8 Problem Center checker for decoder failures
+- [x] T9 bundled example decoders (delimited frame, length-prefixed + CRC)

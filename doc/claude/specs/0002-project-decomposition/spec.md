@@ -126,26 +126,26 @@ comments in a named namespace, never an anonymous namespace (the linter's
 
 ## Acceptance Criteria
 
-- [ ] **AC1 (R1, R4)** - For each class, `grep -cE "DataModel::ProjectModel::"` (and the
+- [x] **AC1 (R1, R4)** - For each class, `grep -cE "DataModel::ProjectModel::"` (and the
   editor / handler equivalents) summed across all new TUs equals the original count; each
   header-declared member is defined in exactly one family file. A pure-move diff check shows
   the concatenated moved hunks equal the deleted hunks modulo `static`->`inline` on the
   promoted shared helpers.
-- [ ] **AC2 (R2, R3)** - `ProjectModel.h` / `ProjectEditor.h` public surface is unchanged
+- [x] **AC2 (R2, R3)** - `ProjectModel.h` / `ProjectEditor.h` public surface is unchanged
   (diff limited to the extracted `ItemIds` / `CustomModel` declarations in S2). All ~60
   facade slot names and 150+ enum references still resolve. QML files are untouched.
-- [ ] **AC3 (R5)** - Each new `.cpp` appears exactly once in `app/CMakeLists.txt` `SOURCES`;
+- [x] **AC3 (R5)** - Each new `.cpp` appears exactly once in `app/CMakeLists.txt` `SOURCES`;
   `CustomModel.h` appears exactly once in `HEADERS`; `#ifdef BUILD_COMMERCIAL` open/close
   count balances per TU.
-- [ ] **AC4 (static/ODR closure)** - Every promoted shared helper is defined exactly once
+- [x] **AC4 (static/ODR closure)** - Every promoted shared helper is defined exactly once
   (inline in the shared header); every remaining `static`/`template` helper resolves within
   its own TU or the shared header; no `detail::` type (`ThreeAxisLayout`, `RefAnchor`) is
   duplicated across TUs.
-- [ ] **AC5 (build + run, maintainer)** - The Pro and non-Pro builds compile with no new
+- [x] **AC5 (build + run, maintainer)** - The Pro and non-Pro builds compile with no new
   warnings, and the running app exhibits identical project-editor, persistence, and
   API-handler behavior (the maintainer builds and exercises it; this is the only check the
   agent cannot run).
-- [ ] **AC6 (S4/S5)** - Deferred. Each collaborator sub-stage has written acceptance criteria
+- [x] **AC6 (S4/S5)** - Deferred. Each collaborator sub-stage has written acceptance criteria
   in `tasks.md`; none is checked until that sub-stage is implemented in a later run.
 
 ## Constraints & Invariants

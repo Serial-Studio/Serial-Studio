@@ -60,14 +60,14 @@ replay too.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — Normal trigger on a 1 Hz pulse: after 12 s the stepper shows 8 segments (N=8),
+- [x] **AC1** — Normal trigger on a 1 Hz pulse: after 12 s the stepper shows 8 segments (N=8),
       the oldest 4 s ago; overlay draws 8 traces with age dimming.
-- [ ] **AC2** — Memory: N clamps automatically on a 4M-slot stream ring so the segment store
+- [x] **AC2** — Memory: N clamps automatically on a 4M-slot stream ring so the segment store
       stays under `kMaxSegmentBytes`, and the UI reflects the clamp.
-- [ ] **AC3** — Pin segment 3, keep triggering: the pinned trace stays while others rotate.
-- [ ] **AC4** — Record a session with 5 retained segments, replay it: the same 5 segments are
+- [x] **AC3** — Pin segment 3, keep triggering: the pinned trace stays while others rotate.
+- [x] **AC4** — Record a session with 5 retained segments, replay it: the same 5 segments are
       available in the stepper.
-- [ ] **AC5** — `--benchmark-hotpath` unchanged (nothing per sample changed).
+- [x] **AC5** — `--benchmark-hotpath` unchanged (nothing per sample changed).
 
 ## Constraints & Invariants
 

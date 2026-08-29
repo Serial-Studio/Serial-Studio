@@ -135,7 +135,7 @@ calls into the catalog; the `app/CMakeLists.txt` entries for `WidgetExtensions.c
   on a representative project. These are the only defensible references for AC8 and AC9.
 - **Verify:** Baseline files checked in; benchmark numbers recorded in the task note.
 - **Deps:** none
-- [ ] done
+- [x] done
 
 ### T2 — Add the `widget` extension type to the extension manager
 
@@ -856,7 +856,7 @@ calls into the catalog; the `app/CMakeLists.txt` entries for `WidgetExtensions.c
 - **Verify:** Every acceptance criterion in `spec.md` checked off or explicitly deferred with
   a reason.
 - **Deps:** T25
-- [ ] done
+- [x] done
 
 ### T27 — Authoring example and user documentation
 
@@ -914,18 +914,18 @@ calls into the catalog; the `app/CMakeLists.txt` entries for `WidgetExtensions.c
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there.
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
+- [x] Every acceptance criterion in `spec.md` is met and checked off there.
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
 - [x] `python scripts/registry-verify.py` passes, including the new widget-manifest rule.
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] `--benchmark-hotpath` compared against the T1 baseline, on a project with no extension
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] `--benchmark-hotpath` compared against the T1 baseline, on a project with no extension
       widget and on one using the converted DataGrid; no regression.
 - [x] The spec-0001 ctor-edge proof re-run and recorded (T7).
 - [x] `pytest tests/scripts/test_widget_manifests.py` green (23 tests); the integration file is
       `tests/integration/test_widget_extensions.py` (20 tests, two tiers — see T25).
 - [x] No documentation, UI string, or comment describes extension widgets as sandboxed,
       isolated, or safe — now lint-enforced by `test_no_spec_0038_file_claims_containment`.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that* — no scope creep, no foreign files touched.
-- [ ] `spec.md` status set to `done`.
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Diff is *what was asked, and only that* — no scope creep, no foreign files touched.
+- [x] `spec.md` status set to `done`.
 </content>

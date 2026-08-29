@@ -113,26 +113,26 @@ widget.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — Capture a session from a synthetic data source (Native and JS parser
+- [x] **AC1** — Capture a session from a synthetic data source (Native and JS parser
   variants), close it, run verification on the same build: verdict is *reproduced*, zero
   divergences. (pytest integration test via the API surface, R1/R2/R3/R9.)
-- [ ] **AC2** — Tamper with one recorded reading in a copy of the archive: verification
+- [x] **AC2** — Tamper with one recorded reading in a copy of the archive: verification
   reports *diverged*, names the dataset, count 1, and the exact recorded/regenerated pair —
   and the fingerprint check attributes it to archive modification. (pytest, R3/R4/R6.)
-- [ ] **AC3** — Alter the archived project configuration copy (e.g. change a transform
+- [x] **AC3** — Alter the archived project configuration copy (e.g. change a transform
   constant): verification reports *diverged* and attributes the divergence to
   interpretation, not archive damage. (pytest, R4/R6.)
-- [ ] **AC4** — Capture a session using a data-table-fed transform: session is marked not
+- [x] **AC4** — Capture a session using a data-table-fed transform: session is marked not
   mechanically verifiable with that reason; verification returns the classification, not
   *reproduced*. (pytest, R5.)
-- [ ] **AC5** — A pre-0044 session file verifies with a qualified legacy verdict and no
+- [x] **AC5** — A pre-0044 session file verifies with a qualified legacy verdict and no
   crash or refusal. (pytest against a checked-in legacy fixture, R8.)
-- [ ] **AC6** — Verification while a live capture is running neither blocks the capture nor
+- [x] **AC6** — Verification while a live capture is running neither blocks the capture nor
   corrupts either database; the maintainer confirms live dashboard behavior is unaffected.
   (maintainer observation + destructive-marked pytest, R1.)
-- [ ] **AC7** — Verdict and divergence summary persist across app restart and re-display in
+- [x] **AC7** — Verdict and divergence summary persist across app restart and re-display in
   the session UI. (maintainer observation, R7.)
-- [ ] **AC8** — `--benchmark-hotpath` gate unchanged: capture-path additions cost nothing
+- [x] **AC8** — `--benchmark-hotpath` gate unchanged: capture-path additions cost nothing
   per-frame on the dashboard path. (CI gate, Constraints.)
 
 ## Constraints & Invariants

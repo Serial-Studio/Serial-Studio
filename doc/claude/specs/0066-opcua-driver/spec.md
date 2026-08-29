@@ -124,33 +124,33 @@ correctly named datasets, without writing a parser or knowing how tags are encod
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — `pytest tests/integration -m opcua` passes against a running Pro build with
+- [x] **AC1** — `pytest tests/integration -m opcua` passes against a running Pro build with
       the simulator up; every R16 flow is a named test (R5, R9, R10, R11, R12, R13, R14, R16).
-- [ ] **AC2** — The same module reports skipped, not failed, when the simulator port is
+- [x] **AC2** — The same module reports skipped, not failed, when the simulator port is
       closed (R16), and the whole driver source is absent from a GPL build (R1, checked by the
       GPL CI leg compiling without the OPC UA Qt module linked).
-- [ ] **AC3** — Maintainer observation: connect to the simulator from the GUI, open the tag
+- [x] **AC3** — Maintainer observation: connect to the simulator from the GUI, open the tag
       browser, tick a folder, generate the project; the dashboard shows every tag with its
       display name and type, strings included, updating at the publishing interval (R2, R6,
       R7, R8, R9).
-- [ ] **AC4** — Maintainer observation: connect with username/password to the simulator;
+- [x] **AC4** — Maintainer observation: connect with username/password to the simulator;
       the unencrypted-credentials warning is visible in the pane and appears once in the
       connection log; a simulator started with only a secured endpoint shows that endpoint
       greyed out and connect stays disabled (R2, R3, R4).
-- [ ] **AC5** — Recording a session and exporting CSV shows per-row timestamps matching the
+- [x] **AC5** — Recording a session and exporting CSV shows per-row timestamps matching the
       simulator's source timestamps within one publishing interval (R10).
-- [ ] **AC6** — Killing the simulator mid-session flips the connection state to disconnected
+- [x] **AC6** — Killing the simulator mid-session flips the connection state to disconnected
       with a reason; restarting the simulator and pressing connect resumes updates with no
       project regeneration (R12).
-- [ ] **AC7** — `--benchmark-hotpath` passes all nine gates unchanged on the Pro build that
+- [x] **AC7** — `--benchmark-hotpath` passes all nine gates unchanged on the Pro build that
       includes the driver (Constraints).
-- [ ] **AC8** — `scripts/code-verify.py --check` reports no new errors; the generated-artifact
+- [x] **AC8** — `scripts/code-verify.py --check` reports no new errors; the generated-artifact
       and registry checks pass (Constraints).
-- [ ] **AC9** — The help page renders in the in-app manual, links from the Drivers index,
+- [x] **AC9** — The help page renders in the in-app manual, links from the Drivers index,
       and `documentation-verify.py` passes (R17).
-- [ ] **AC10** — The example appears in the in-app examples gallery with a screenshot and
+- [x] **AC10** — The example appears in the in-app examples gallery with a screenshot and
       project file, flagged Pro (R15).
-- [ ] **AC11** — CI: the Linux and macOS Pro integration legs run the `opcua` marker with the
+- [x] **AC11** — CI: the Linux and macOS Pro integration legs run the `opcua` marker with the
       simulator running; Windows drops the marker the way it drops `requires_broker` (R18).
 
 ## Constraints & Invariants

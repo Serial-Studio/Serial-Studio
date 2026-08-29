@@ -145,20 +145,20 @@ updated: 2026-07-21
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there (runtime ACs
+- [x] Every acceptance criterion in `spec.md` is met and checked off there (runtime ACs
       explicitly handed to the maintainer).
 - [x] `python3 scripts/code-verify.py --check` is clean on all changed files (no new
       errors). *(Re-verified 2026-08-14 against current HEAD: 0 errors across
       PaletteModel.qml, CommandPalette.qml, SearchField.qml, DashboardLayout.qml,
       Taskbar.qml, MainWindow.qml, Taskbar.h/.cpp.)*
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
 - [x] Hotpath untouched (plan states none) — no benchmark run required; confirm no
       frame-signal subscriptions crept in. *(Re-verified 2026-08-14: grep for
       frame/dashboardTick signals in PaletteModel.qml/CommandPalette.qml — none.)*
 - [x] No pytest targets apply (QML UI); maintainer observation list delivered.
       *(Re-verified 2026-08-14: no `tests/` files reference the palette; spec.md's
       unchecked AC2/AC4-AC11 stand as the maintainer observation list.)*
-- [ ] `python3 scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that* — no scope creep; foreign files
+- [x] `python3 scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Diff is *what was asked, and only that* — no scope creep; foreign files
       (`WorkspaceSwitcherOverlay.qml.autosave`) untouched.
 - [x] `spec.md` status set to `done`. *(Re-verified 2026-08-14.)*

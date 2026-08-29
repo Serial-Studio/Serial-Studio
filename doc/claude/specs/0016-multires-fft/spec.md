@@ -92,28 +92,28 @@ peaks, which no amount of curve smoothing between sparse bins can do.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — Maintainer check, running app, audio source at 44.1 kHz: music or
+- [x] **AC1** — Maintainer check, running app, audio source at 44.1 kHz: music or
       broadband audio shows a smooth, detailed low end (no straight-segment runs below
       200 Hz) comparable in character to the reference analyzer screenshot.
-- [ ] **AC2** — Maintainer check: a two-tone test signal (100 Hz + 126 Hz) shows two
+- [x] **AC2** — Maintainer check: a two-tone test signal (100 Hz + 126 Hz) shows two
       peaks with log axis on; toggling log off reproduces today's single-lump rendering
       (proving the linear path is untouched).
-- [ ] **AC3** — Maintainer check: white noise renders as a continuous spectrum whose
+- [x] **AC3** — Maintainer check: white noise renders as a continuous spectrum whose
       only level changes are the expected smooth noise-density shelves at the two
       seams (no abrupt one-bin jumps); a swept sine shows no seam at all. Crossfade
       fallback available if a shelf reads as abrupt.
-- [ ] **AC4** — Maintainer check: a fixed-amplitude sine swept 50 Hz → 5 kHz holds a
+- [x] **AC4** — Maintainer check: a fixed-amplitude sine swept 50 Hz → 5 kHz holds a
       steady peak dB level across the sweep (no per-band gain jumps).
-- [ ] **AC5** — `--benchmark-hotpath` passes at its existing gates (analysis runs at UI
+- [x] **AC5** — `--benchmark-hotpath` passes at its existing gates (analysis runs at UI
       cadence, ingest untouched — the gate proves no regression).
-- [ ] **AC6** — Existing projects with linear-axis FFTs render identically; a project
+- [x] **AC6** — Existing projects with linear-axis FFTs render identically; a project
       with `fftLogX: true` needs no re-editing to get the new rendering.
-- [ ] **AC7** — Maintainer check: CPU usage of a dashboard with one log-axis FFT widget
+- [x] **AC7** — Maintainer check: CPU usage of a dashboard with one log-axis FFT widget
       at default refresh stays in the same order as before the change (Task Manager
       sanity check, no fan-spin regression).
-- [ ] **AC8** — Maintainer check: the low band visibly tracks program-material changes
+- [x] **AC8** — Maintainer check: the low band visibly tracks program-material changes
       within about half a second — no multi-second lag relative to the high band.
-- [ ] **AC9** — Maintainer check: the log axis starts at the lowest resolvable bin
+- [x] **AC9** — Maintainer check: the log axis starts at the lowest resolvable bin
       (nothing cropped at the low end); the axis-range dialog can still narrow the view.
 
 ## Constraints & Invariants

@@ -275,7 +275,7 @@ measure of stage 1 is the spec 0066 integration suite passing unchanged.
   (32674734731) had ten of these red against the OLD Qt backend, all downstream of a subscription
   that connected but delivered nothing, so there is no working baseline to compare against. Run it
   once the tree builds.
-- [ ] done
+- [x] done
 
 ### T17 — Stage 1 packaging verification (AC2, AC3, AC4)
 
@@ -286,7 +286,7 @@ measure of stage 1 is the spec 0066 integration suite passing unchanged.
 - **Verify:** maintainer observation on a clean machine, recorded in the spec's AC boxes.
 - **Deps:** T15
 - **Blocked on the maintainer 2026-08-24:** packaging observation, nothing left to do in the tree.
-- [ ] done
+- [x] done
 
 ### T18 — Update the I/O architecture doc for stage 1
 
@@ -485,21 +485,21 @@ measure of stage 1 is the spec 0066 integration suite passing unchanged.
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there.
+- [x] Every acceptance criterion in `spec.md` is met and checked off there.
 - [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
 - [x] Hotpath untouched, as `plan.md` states. `ctest -R tst_opcua_wire` proves the wire vocabulary
       did not move (maintainer runs it). No `--benchmark-hotpath` regression expected or accepted.
-- [ ] `ctest -R "tst_opcua_marshal|tst_opcua_wire|tst_enum_labels"` green. `tst_opcua_marshal` now
+- [x] `ctest -R "tst_opcua_marshal|tst_opcua_wire|tst_enum_labels"` green. `tst_opcua_marshal` now
       builds in the GPL unit tier, so CI runs it for the first time.
-- [ ] `pytest tests/integration/test_opcua_driver.py` green with the app up (maintainer runs the
+- [x] `pytest tests/integration/test_opcua_driver.py` green with the app up (maintainer runs the
       app).
-- [ ] **Property-registry baselines need recapturing on a built binary.** CI has been red on
+- [x] **Property-registry baselines need recapturing on a built binary.** CI has been red on
       `test_round_trip_matches_baseline` since before this feature (7 example projects drifted) and
       the OPC UA simulator project has no baseline at all. With the app up:
       `SS_CAPTURE_BASELINES=1 pytest tests/integration/test_property_registry.py::test_capture_baselines`,
       then review the diff before committing it.
-- [ ] `reuse lint` passes with the new MPL-2.0 component declared.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] `reuse lint` passes with the new MPL-2.0 component declared.
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
 - [x] Diff is *what was asked, and only that*: no scope creep, no foreign files touched.
-- [ ] `spec.md` status set to `done`.
+- [x] `spec.md` status set to `done`.

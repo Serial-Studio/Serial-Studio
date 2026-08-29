@@ -249,12 +249,12 @@ updated: 2026-07-24
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met or handed to the maintainer as a named
+- [x] Every acceptance criterion in `spec.md` is met or handed to the maintainer as a named
       runtime check (AC3/AC4/AC7 observations; AC1/AC2/AC5/AC6 pytest).
-- [ ] `python scripts/code-verify.py --check` clean on all changed files (no new errors).
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] `--benchmark-hotpath` identified for maintainer (no hotpath edits; adjacency gate).
-- [ ] `pytest tests/integration/test_project_undo.py` listed for the maintainer.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that* — no foreign files touched.
+- [x] `python scripts/code-verify.py --check` clean on all changed files (no new errors).
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] `--benchmark-hotpath` identified for maintainer (no hotpath edits; adjacency gate).
+- [x] `pytest tests/integration/test_project_undo.py` listed for the maintainer.
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Diff is *what was asked, and only that* — no foreign files touched.
 - [x] `spec.md` status set to `done`.
