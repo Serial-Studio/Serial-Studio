@@ -2344,11 +2344,12 @@ jobs:
 
     #
     # Every dynamically-linked dependency inside the bundle needs the same treatment as the
-    # executable: the arm64 job's Frameworks directory is arm64-only, so without this the DMG
-    # would advertise itself as universal while that library failed to load on Intel. dlopen
-    # failing at runtime is the only symptom: the build, the signature and the notarisation all
-    # pass. No such dependency exists today, so the step no-ops on the missing Frameworks
-    # directory; it stays because the failure it guards against is invisible until a user hits it.
+    # executable: without both slices the DMG would advertise itself as universal while that
+    # library failed to load on Intel. dlopen failing at runtime is the only symptom: the build,
+    # the signature and the notarisation all pass. Qt's own bundled dylibs (the FFmpeg set behind
+    # Qt Multimedia) ship fat from the online installer, so a library already carrying both
+    # slices only needs the assertion; the merge branch exists for a future arm64-only dependency
+    # and expects the intel job to publish a matching slice under intel-frameworks/.
     #
     - name: '🔗 Lipo bundled dynamic libraries'
       run: |
@@ -2361,6 +2362,11 @@ jobs:
         shopt -s nullglob
         for LIB in "$FW"/*.dylib; do
           BASE="$(basename "$LIB")"
+          if lipo -info "$LIB" | grep -q "x86_64" && lipo -info "$LIB" | grep -q "arm64"; then
+            echo "$BASE is already universal; nothing to merge."
+            continue
+          fi
+
           SLICE="intel-frameworks/$BASE"
           if [ ! -f "$SLICE" ]; then
             echo "::error::$BASE has no x86_64 slice; the universal bundle would ship it arm64-only."

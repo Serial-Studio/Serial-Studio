@@ -2,8 +2,8 @@
 
 Two scripts live in this directory:
 
-- `translation_manager.py` — wraps Qt's `lupdate`/`lrelease` and creates new `.ts` files.
-- `llm_translate.py` — fills missing translations across all `.ts` files using an LLM (Anthropic Claude by default; OpenAI optional).
+- `translation_manager.py` wraps Qt's `lupdate`/`lrelease` and creates new `.ts` files.
+- `llm_translate.py` fills missing translations across all `.ts` files using an LLM (Anthropic Claude by default; OpenAI optional).
 
 The `ts/` folder holds source `.ts` files; `qm/` holds the compiled `.qm` files the app loads at runtime.
 
@@ -130,12 +130,12 @@ Scans the English source strings for style violations (Apple-HIG voice: imperati
 
 ### Quality features
 
-- Translation reuse — unfinished entries whose string only moved to a new context are filled from the finished copy that stayed behind, before any LLM batch is formed.
-- Domain glossary in the prompt — disambiguates `Will Topic` (MQTT field), `Holding Register` (Modbus), `Frame` (CAN/serial vs UI), `Dataset` (data series).
-- Translation memory — top-K most similar already-validated translations from the same `.ts` file are injected as few-shot examples per batch.
-- Confidence scoring — the LLM rates each translation 1–5; entries below `--min-score` (default 4) keep `type='unfinished'` so Qt Linguist surfaces them for human review.
-- Source-aware acronym enforcement — only acronyms present in the EN source get force-uppercased in the translation.
-- Language-aware title case — Spanish `Cuadrícula de Datos` (lowercase `de`), French `Grille de Données`, German capitalizes nouns.
+- Translation reuse: unfinished entries whose string only moved to a new context are filled from the finished copy that stayed behind, before any LLM batch is formed.
+- Domain glossary in the prompt: disambiguates `Will Topic` (MQTT field), `Holding Register` (Modbus), `Frame` (CAN/serial vs UI), `Dataset` (data series).
+- Translation memory: top-K most similar already-validated translations from the same `.ts` file are injected as few-shot examples per batch.
+- Confidence scoring: the LLM rates each translation 1–5; entries below `--min-score` (default 4) keep `type='unfinished'` so Qt Linguist surfaces them for human review.
+- Source-aware acronym enforcement: only acronyms present in the EN source get force-uppercased in the translation.
+- Language-aware title case: Spanish `Cuadrícula de Datos` (lowercase `de`), French `Grille de Données`, German capitalizes nouns.
 
 ## Folder structure
 
@@ -154,5 +154,5 @@ app/translations/
 ## Notes
 
 - The source language is `en_US`. `translation_manager.py --new-ts` sets it automatically.
-- `llm_translate.py` never sends `en_US.ts` to the LLM — it only translates the other locales.
+- `llm_translate.py` never sends `en_US.ts` to the LLM; it only translates the other locales.
 - The `lib/` folder needs to sit next to `app/` for `lupdate` to find third-party sources.

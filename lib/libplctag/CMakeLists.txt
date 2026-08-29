@@ -84,7 +84,14 @@ endif()
 
 set(SS_LIBPLCTAG_TARGET ${SS_LIBPLCTAG_TARGET} CACHE INTERNAL "Resolved libplctag static target")
 
-if(MSVC)
+#
+# clang (clang-cl included) promotes incompatible-pointer-types to an error by default, and /w
+# does not demote default-errors; upstream's windows/platform.c trips it (int* into ioctlsocket's
+# u_long*), so the demotion is explicit for clang front ends.
+#
+if(CMAKE_C_COMPILER_ID MATCHES "Clang")
+  target_compile_options(${SS_LIBPLCTAG_TARGET} PRIVATE -w -Wno-error=incompatible-pointer-types)
+elseif(MSVC)
   target_compile_options(${SS_LIBPLCTAG_TARGET} PRIVATE /w)
 else()
   target_compile_options(${SS_LIBPLCTAG_TARGET} PRIVATE -w)

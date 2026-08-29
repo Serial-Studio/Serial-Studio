@@ -1640,6 +1640,7 @@ ss_add_unit_test(tst_replay_seek_engine
   LIBS    Qt6::Core
           Qt6::Gui
           Qt6::Widgets
+          ${SS_PLATFORM_LIBS}
 )
 
 #---------------------------------------------------------------------------------------------------
