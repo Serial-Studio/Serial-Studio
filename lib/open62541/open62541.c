@@ -302796,6 +302796,8 @@ mbedtls_x509write_csrSetSubjectAltName(mbedtls_x509write_csr *ctx, const mbedtls
         return UA_STATUSCODE_GOOD;
 
     size_t buflen = MBEDTLS_SAN_MAX_LEN * sandeep + sandeep;
+    for(const mbedtls_x509_sequence *it = sanlist; it != NULL; it = it->next)
+        buflen += it->buf.len;
     buf = (unsigned char *)mbedtls_calloc(1, buflen);
     if(!buf)
         return UA_STATUSCODE_BADOUTOFMEMORY;
@@ -312332,6 +312334,8 @@ int mbedtls_x509write_crt_set_subject_alt_name(mbedtls_x509write_cert *ctx, cons
         return ret;
 
     buflen = MBEDTLS_SAN_MAX_LEN * sandeep + sandeep;
+    for(const mbedtls_write_san_list *it = sanlist; it != NULL; it = it->next)
+        buflen += it->node.hostlen;
     buf = (unsigned char *)mbedtls_calloc(1, buflen);
     if(!buf)
         return MBEDTLS_ERR_ASN1_ALLOC_FAILED;

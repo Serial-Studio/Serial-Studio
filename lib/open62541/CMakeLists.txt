@@ -32,8 +32,9 @@ cmake_minimum_required(VERSION 3.20)
 # rather than from any library resolved on the target machine. That is the whole point of spec
 # 0067: the OPC UA driver's presence and its capabilities are properties of THIS build.
 #
-# Upstream sources are unmodified. To update: replace both files from the release assets of the
-# new tag and update SS_OPEN62541_VERSION below.
+# Upstream sources carry the local patches recorded in PATCHES.md. To update: replace both files
+# from the release assets of the new tag, re-apply PATCHES.md, and update SS_OPEN62541_VERSION
+# below.
 #
 #---------------------------------------------------------------------------------------------------
 
