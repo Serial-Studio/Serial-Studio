@@ -340,7 +340,7 @@ Window {
               icon.source: widgetRow.alreadyAdded
                            ? "qrc:/icons/buttons/apply.svg"
                            : "qrc:/icons/buttons/plus.svg"
-              icon.color: "transparent"
+              icon.color: widgetRow.textColor
 
               background: Rectangle {
                 border.width: 0

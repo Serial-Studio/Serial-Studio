@@ -586,7 +586,12 @@ Widgets.SmartWindow {
         z: 1
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.topMargin: root.visibility === Window.FullScreen ? -6 : -1
+        Layout.topMargin: {
+          if (root.dashboardVisible && !root.toolbarBarShown)
+            return 0
+
+          return root.visibility === Window.FullScreen ? -6 : -1
+        }
         initialItem: app.runtimeMode ? dashboardLoader : consoleSetupLoader
         Layout.minimumWidth: consoleSetupLoader.item ? consoleSetupLoader.item.contentMinWidth : 0
         Layout.minimumHeight: consoleSetupLoader.item ? consoleSetupLoader.item.contentMinHeight : 0

@@ -57,6 +57,12 @@
 		<color type="primary" scheme_preference="dark">#244263</color>
 	</branding>
 	<releases>
+    <release version="4.1.0" date="2026-08-30">
+      <url>https://github.com/Serial-Studio/Serial-Studio/releases/tag/v4.1.0</url>
+		  <description>
+			  <p>Major update: OPC UA driver with secure channels and tag browser, industrial protocol expansion (Sparkplug B, Siemens S7, EtherNet/IP, IEC 104, J1939/ISO-TP), WebSocket and HTTP network clients, GPU-rendered 3D plot and waterfall, LuaJIT scripting, a dedicated frame-processing thread, replay timeline scrubbing, and a unified command palette.</p>
+		  </description>
+		</release>
     <release version="4.0.3" date="2025-12-27">
       <url>https://github.com/Serial-Studio/Serial-Studio/releases/tag/v4.0.3</url>
 		  <description>

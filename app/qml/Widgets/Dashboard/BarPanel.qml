@@ -142,7 +142,8 @@ Item {
             elide: Text.ElideRight
             visible: root.width >= 220
             text: root.model.titles[barRow.index]
-            font: Cpp_Misc_CommonFonts.widgetFont(0.9, false)
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                   Cpp_Misc_CommonFonts.widgetFont(0.9, false))
             color: Cpp_ThemeManager.colors["widget_text"]
             Layout.minimumWidth: root.labelWidth
             Layout.maximumWidth: root.labelWidth
@@ -283,7 +284,8 @@ Item {
             Layout.preferredWidth: root.valueWidth
             color: (root.rev, root.valueColor(barRow.index))
             text: (root.rev, root.model.valueText(barRow.index))
-            font: Cpp_Misc_CommonFonts.customMonoFont(0.9, true)
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                   Cpp_Misc_CommonFonts.widgetFont(0.9, true))
           }
         }
       }
@@ -326,7 +328,8 @@ Item {
             Layout.preferredWidth: 1
             horizontalAlignment: Text.AlignHCenter
             color: (root.rev, root.valueColor(barColumn.index))
-            font: Cpp_Misc_CommonFonts.customMonoFont(0.9, true)
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                   Cpp_Misc_CommonFonts.widgetFont(0.9, true))
             text: (root.rev, root.model.valueText(barColumn.index))
           }
 
@@ -462,7 +465,8 @@ Item {
             horizontalAlignment: Text.AlignHCenter
             text: root.model.titles[barColumn.index]
             color: Cpp_ThemeManager.colors["widget_text"]
-            font: Cpp_Misc_CommonFonts.widgetFont(0.85, false)
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                   Cpp_Misc_CommonFonts.widgetFont(0.85, false))
           }
         }
       }

@@ -38,7 +38,8 @@ Item {
     var extras = {
       alarm:   Cpp_ThemeManager.colors["alarm"]              || "",
       mid:     Cpp_ThemeManager.colors["mid"]                || "",
-      section: Cpp_ThemeManager.colors["pane_section_label"] || ""
+      section: Cpp_ThemeManager.colors["pane_section_label"] || "",
+      hlText:  Cpp_ThemeManager.colors["highlighted_text"]   || ""
     }
 
     view.runJavaScript(

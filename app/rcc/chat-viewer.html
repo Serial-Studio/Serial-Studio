@@ -34,6 +34,7 @@
       --base:        #f5f5f5;
       --code-bg:     #f6f8fa;
       --highlight:   #3daee9;
+      --hl-text:     #ffffff;
       --alarm:       #c0392b;
       --mid:         #6f7378;
       --section:     #6f7378;
@@ -98,7 +99,7 @@
       padding: 10px 14px;
       border-radius: 14px;
       background: var(--highlight);
-      color: var(--bg);
+      color: var(--hl-text);
       white-space: pre-wrap;
       word-wrap: break-word;
     }
@@ -982,6 +983,7 @@
       root.style.setProperty("--base",      colors.base      || "#f5f5f5");
       root.style.setProperty("--code-bg",   colors.codeBg    || "#f6f8fa");
       root.style.setProperty("--highlight", colors.highlight || "#3daee9");
+      root.style.setProperty("--hl-text",   colors.hlText    || "#ffffff");
       root.style.setProperty("--alarm",     colors.alarm     || "#c0392b");
       root.style.setProperty("--mid",       colors.mid       || "#6f7378");
       root.style.setProperty("--section",   colors.section   ||

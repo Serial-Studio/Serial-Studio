@@ -472,7 +472,7 @@ Widgets.Pane {
                 hoverEnabled: true
                 ToolTip.delay: 400
                 ToolTip.visible: hovered
-                icon.color: "transparent"
+                icon.color: Cpp_ThemeManager.colors["text"]
                 Layout.preferredHeight: 26
                 icon.source: "qrc:/icons/buttons/copy.svg"
                 Layout.preferredWidth: root.colActionWidth / 2
@@ -497,7 +497,7 @@ Widgets.Pane {
                 icon.width: 16
                 icon.height: 16
                 hoverEnabled: true
-                icon.color: "transparent"
+                icon.color: Cpp_ThemeManager.colors["text"]
                 Layout.preferredHeight: 26
                 icon.source: "qrc:/icons/buttons/trash.svg"
                 Layout.preferredWidth: root.colActionWidth / 2

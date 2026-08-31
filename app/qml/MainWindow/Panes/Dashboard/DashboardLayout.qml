@@ -358,9 +358,11 @@ Widgets.Pane {
       // Actions panel
       //
       Rectangle {
+        id: _actionsPanel
+
         z: 1000
         border.width: 1
-        Layout.topMargin: -1
+        Layout.topMargin: (root.headerVisible || operatorTitlebar.visible) ? -1 : 0
         Layout.leftMargin: -1
         Layout.rightMargin: -1
         Layout.fillWidth: true
@@ -412,7 +414,8 @@ Widgets.Pane {
         id: _canvas
 
         z: 1
-        Layout.topMargin: -1
+        Layout.topMargin: (root.headerVisible || operatorTitlebar.visible
+                           || _actionsPanel.visible) ? -1 : 0
         taskBar: root.taskBar
         taskbarView: _taskbar
         Layout.leftMargin: -1

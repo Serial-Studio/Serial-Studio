@@ -2243,7 +2243,7 @@ install(SCRIPT ${deploy_script})
 #   CPACK_MONOLITHIC_INSTALL    - Single package (not component-based)
 #   CPACK_PACKAGE_NAME          - "Serial Studio GPLv3" or "Serial Studio Pro"
 #   CPACK_PACKAGE_VENDOR        - "Alex Spataru"
-#   CPACK_PACKAGE_VERSION       - Semantic version (e.g., 4.0.3)
+#   CPACK_PACKAGE_VERSION       - Semantic version (e.g., 4.1.0)
 #   CPACK_PACKAGE_DESCRIPTION   - README.md content
 #   CPACK_RESOURCE_FILE_LICENSE - GPL-3.0-or-later.txt or Commercial license
 #   CPACK_PACKAGE_HOMEPAGE_URL  - Website for support/downloads

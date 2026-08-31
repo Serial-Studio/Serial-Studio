@@ -319,7 +319,7 @@ Widgets.Pane {
               ToolTip.delay: 400
               hoverEnabled: true
               ToolTip.visible: hovered
-              icon.color: "transparent"
+              icon.color: Cpp_ThemeManager.colors["text"]
               Layout.preferredHeight: 26
               Layout.preferredWidth: root.colActionWidth
               icon.source: "qrc:/icons/buttons/copy.svg"

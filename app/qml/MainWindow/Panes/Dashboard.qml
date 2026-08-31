@@ -410,9 +410,11 @@ Item {
       }
 
       //
-      // Dashboard content
+      // Dashboard content; clipped so the layout's background bleed cannot
+      // paint over the titlebar text above
       //
       Page {
+        clip: true
         anchors.fill: parent
         anchors.topMargin: _extWindow.titlebarHeight
         palette.mid: Cpp_ThemeManager.colors["mid"]

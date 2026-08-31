@@ -429,7 +429,7 @@ Widgets.Pane {
                 implicitHeight: 26
                 anchors.centerIn: parent
                 ToolTip.visible: hovered
-                icon.color: "transparent"
+                icon.color: Cpp_ThemeManager.colors["text"]
                 icon.source: "qrc:/icons/buttons/trash.svg"
                 ToolTip.text: qsTr("Remove widget from workspace")
 
