@@ -6,107 +6,107 @@
   "projects": [
     {
       "path": "examples/BLE Battery/BLE Battery Level.ssproj",
-      "sha256": "eb339d77c0c232c9a7c5b945100a778aae965d5f4fc9ea8df9f4e8544596fb44"
+      "sha256": "b2dffc145bf73d0a10d6406002cbe84d1eb1d4e7fd8593bb8022a5d4dea35390"
     },
     {
       "path": "examples/CAN Bus Example/ecu_simulator.ssproj",
-      "sha256": "682f1d3e0372a9556c1d8bbadbd6f0cc016068629d42071331d9b896290129f9"
+      "sha256": "428a2285cd64e8e149ad1c69d8a06d81ee9e528c6cd86287ddddb7ca8b421a31"
     },
     {
       "path": "examples/Camera Telemetry/Camera Telemetry.ssproj",
-      "sha256": "79a5d73ed763bf0869267acc50073d9bbb72fe94ce619a986105cfc11b7d261e"
+      "sha256": "911672362f38e729b275f5ec84bc53de009748d0abca45a99ce10ff4e71e838d"
     },
     {
       "path": "examples/Dual Drone Telemetry/Dual Drone Telemetry.ssproj",
-      "sha256": "90c3f2d998f9e59a9c3ea067dcbce9c92533b7eca1153518f4326bace02c3f79"
+      "sha256": "9d2e3fe7b19cedd2935f3f219442d35bf5fae07ae9daa9f4677aa9568d4ff6ea"
     },
     {
       "path": "examples/EM Wave Simulator/EMWaveSimulator.ssproj",
-      "sha256": "6694172db32af7e28bd9278ef8635f5d148618c4e0cc98bcb81941093f7f5cf4"
+      "sha256": "9b8e5ec3e52afd5c5423f2fcffb2e94e706d916a4113d6fd1eb89c06705c2f18"
     },
     {
       "path": "examples/EtherNet-IP Example/EtherNet-IP Tags.ssproj",
-      "sha256": "2890cdef2d2dec381cca8e66edad3673c529281be3d1832732405e9623ce33f5"
+      "sha256": "6eb0379cdea447f3601f3469c3ba7e4ef7f0d771d094f02d8603d769677571bb"
     },
     {
       "path": "examples/HexadecimalADC/HexadecimalADC.ssproj",
-      "sha256": "812588cba6b5f08451703a486b28679afb32f6c7202e23c017d6cf58f43ee547"
+      "sha256": "87859a7a367c92a15266d458a5e0b51d6aaf54377d75a5969c1e22b6fa0d0c72"
     },
     {
       "path": "examples/Hydrogen/Hydrogen.ssproj",
-      "sha256": "5312969e73e9dfe94382a828bbdfc4707f176eca4f0db3fa952b31a46943679e"
+      "sha256": "dc4c9d81215b18b1a97cf6f11abfa13dcc556706e1faf4b25b40e002ad9bc7d4"
     },
     {
       "path": "examples/IEC 104 Example/IEC 104 Station.ssproj",
-      "sha256": "bed06cc9256be4f222665afa0580de6d3e9eb3d6d9b175e89102edea63f596f1"
+      "sha256": "24e8365792beb384af4b5efabfd78f1a7a9e3bd9f9e39e76078353937acacbb6"
     },
     {
       "path": "examples/IMU Simulator/imu_batched.ssproj",
-      "sha256": "47f6c82d4245c1717687a889d7860c1606b06a220b3afbad309716cf6c3971c3"
+      "sha256": "4833747c81f40ec66d949ba044b57f99304b38e13efe82ab2873981c2d93b7c1"
     },
     {
       "path": "examples/ISS Tracker/iss-tracker.ssproj",
-      "sha256": "1592962c6e84eab34f3eeea7f563677c7e16a1508de6bbd504237adcadfbd4c3"
+      "sha256": "9ba03660a3d6346869146edfa7a4e3bd40d67cc74e2ed1c3036623ec18acaeef"
     },
     {
       "path": "examples/LTE modem/LTE Modem.ssproj",
-      "sha256": "87a71a57543000f02ff4413e225a2a880c6dcfaeb670374efae481a3f1b6bd18"
+      "sha256": "630c0bad577dd268484609e368e3fa295dca0bdf038f7cdec1edf8d966c71688"
     },
     {
       "path": "examples/LorenzAttractor/LorenzAttractor.ssproj",
-      "sha256": "ab1a42c82b95429dc8a935a8dea716b942977785f759668c91bf38f59b308111"
+      "sha256": "e0acf8acffd924636fb392048056e681d16c6cf07034018190a2545f1ff126f8"
     },
     {
       "path": "examples/MPU6050/MPU6050.ssproj",
-      "sha256": "8c174c7bfe5f514e19675b6584d75cd4e248f1a2ca323f44029bf84822518c7b"
+      "sha256": "dc1dce842c3feb0741674f4e74d0be251ad0bcdf88ac418db0f414916b8427f0"
     },
     {
       "path": "examples/MQTT Subscriber Example/HSL Helsinki Public Transit.ssproj",
-      "sha256": "823beefe85667f782a38b1348037f9e7b687f22720708402c68e55bc500fa756"
+      "sha256": "4ed9b8951a194357e1cf9783654e7015b2f54dea49a99aadfc9a56da062bacf5"
     },
     {
       "path": "examples/Modbus PLC Simulator/Modbus PLC Simulator.ssproj",
-      "sha256": "e11db17bb363ee4753acd71097511fab9239c65a065cefe2094cb338302e840b"
+      "sha256": "1a04d6c4f408b2baadbacf1d3969da2d72a2c2dde2289237546601c39b8ba2ab"
     },
     {
       "path": "examples/OBD-II/OBD-II.ssproj",
-      "sha256": "c428357e5d9401a6939d6614676ab67f1d3df4a483b6a9a72901d1fea6993900"
+      "sha256": "b29a6449d005a370afcab32b6468ce1fac983ac1108d569facb15333ef0634c8"
     },
     {
       "path": "examples/OPC UA PLC Simulator/OPC UA PLC Simulator.ssproj",
-      "sha256": "54e1486c48804f96abfbc24fd7cac6fb4be96e75a88af41832b5d854b1d089d2"
+      "sha256": "f0cea0afeb8912ccdcc79a6ad8242e70b62512f97a19ab2fb49aaae463c65b5d"
     },
     {
       "path": "examples/Protobuf Example/Protobuf Example.ssproj",
-      "sha256": "14894201e04479b3200508c9a5345c02990da85045ca86a25a2bc305ade8126f"
+      "sha256": "e955983649300c0a6974692467c3289cb3b8a6d4cf4eefc7b5c656abcb6ce7d8"
     },
     {
       "path": "examples/RC Plane Simulator/RC Plane Simulator.ssproj",
-      "sha256": "35f90d726b08136d44be33ce27bea95e36d6a1be6cd6699a40718fad43de87fd"
+      "sha256": "791db3a63d98f1b3343c4deeab4538769a5e7ed87cfd50e7a86046ed9a4e73ee"
     },
     {
       "path": "examples/S7 PLC Example/S7 PLC Simulator.ssproj",
-      "sha256": "d3ca15185ff24487c01973c40906bd670356dcbaf3b78aded519b0a336cc22f8"
+      "sha256": "da328b74e8634d0114e671706da461ea2cdf7b911b64126640253373753a0191"
     },
     {
       "path": "examples/Sparkplug Example/Sparkplug Edge Node.ssproj",
-      "sha256": "bbca92e0a091ea91a2af9d26107aac20f35faf092fb5118674c5674f2add0d43"
+      "sha256": "090b49a1b59d9e45462226219425e085db7a58b8ed9124bfdb6b41cb51a9e7a6"
     },
     {
       "path": "examples/System Monitor/system-monitor.ssproj",
-      "sha256": "953afa6e23e4e1f48cca980a70db5c00e7ef5e5117d1f48befff25930ec03c05"
+      "sha256": "4f766c7c317d6f6830fad5fd40d812194cdb8eb48d31385fc37e7b131362cf86"
     },
     {
       "path": "examples/Testo T549i/Testo T549i.ssproj",
-      "sha256": "5f7f2f75763246d9a052fb1357804a40d6011fb8f0cfa8748575b9029c6e9e8d"
+      "sha256": "30de3e2d166670628e6e5e64d8595408512133d41509c9c575967b8776954753"
     },
     {
       "path": "examples/TinyGPS/TinyGPS.ssproj",
-      "sha256": "4464d7dd53aea42b17ab57e4a0b7c14c0152a4a6aae557e3d78c0c7ee4ef3a23"
+      "sha256": "b7e6a641e4864f23d80cfc4d875f3ded3ebd003f83fea648e23db916ed3a862e"
     },
     {
       "path": "examples/Vibration Test Rig/VibrationTestRig.ssproj",
-      "sha256": "6161d45b700340b77456b299fba38fec1f0f2af4d7518cb9d46ed518b4be0da2"
+      "sha256": "9d75912254b2c6b567637162a3a7d851fb5699d5872fcae11cb475863adce7e2"
     }
   ]
 }

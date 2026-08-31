@@ -1,6 +1,9 @@
 {
-    "actions": [],
+    "actions": [
+    ],
+    "changeDrivenTransforms": false,
     "controlScriptCode": "/**\n * Testo T549i BLE Control Loop (handshake only)\n *\n * The BLE source, its FFF0 service, and the FFF2 notify characteristic are\n * configured in the project and wired by the driver before this runs, so\n * setup() only sends the vendor \"enable measurement\" PDUs to FFF1. Readings\n * then arrive on FFF2 and are decoded by the frame parser.\n */\n\nlet CMD_SENT = false;\nconst WRITE_UUID  = \"fff1\";\nconst ENABLE_CMDS = [\"5600030000000C69023E81\", \"200000000000077B\", \"110000000000035A\"];\n\nfunction cmdCfg() {\n  for (var i = 0; i < ENABLE_CMDS.length; ++i) {\n    var r = io.ble.writeCharacteristic(WRITE_UUID, ENABLE_CMDS[i], SerialStudio.Hex);\n    if (!r.ok) {\n      console.error(\"[Testo T549i] enable cmd \" + i + \" failed: \" + r.error);\n      return;\n    }\n    \n    delay(100);\n  }\n  \n  CMD_SENT = true;\n  console.log(\"[Testo T549i] Enable sequence sent; streaming.\");\n}\n\nfunction setup() {\n  cmdCfg();\n}\n\nfunction loop() {\n  if (!CMD_SENT)\n      cmdCfg();\n      \n  delay(1000);\n}\n",
+    "frozen": false,
     "groups": [
         {
             "datasets": [
@@ -13,6 +16,7 @@
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
+                    "fftWindow": 5,
                     "graph": true,
                     "groupId": 0,
                     "index": 1,
@@ -42,6 +46,7 @@
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
+                    "fftWindow": 5,
                     "graph": false,
                     "groupId": 0,
                     "index": 2,
@@ -67,8 +72,19 @@
         }
     ],
     "hexadecimalDelimiters": false,
+    "influxSink": {
+        "bucket": "",
+        "enabled": false,
+        "measurement": "serial_studio",
+        "org": "",
+        "url": ""
+    },
+    "luaFastMode": false,
     "mqttPublisher": {
+        "alpnEnabled": false,
+        "alpnProtocol": "x-amzn-mqtt-ca",
         "cleanSession": true,
+        "clientCertPath": "",
         "customClientId": false,
         "enabled": false,
         "hostname": "127.0.0.1",
@@ -79,11 +95,16 @@
         "peerVerifyDepth": 10,
         "peerVerifyMode": 3,
         "port": 1883,
+        "privateKeyPath": "",
         "publishFrequency": 10,
         "publishNotifications": false,
         "scriptCode": "",
         "scriptLanguage": 0,
         "scriptTopic": "",
+        "sparkplugDeviceId": "",
+        "sparkplugEdgeNodeId": "",
+        "sparkplugEnabled": false,
+        "sparkplugGroupId": "",
         "sslEnabled": false,
         "sslProtocol": 5,
         "topicBase": ""
@@ -182,6 +203,6 @@
             }
         }
     },
-    "writerVersion": "4.0.3",
+    "writerVersion": "4.1.0",
     "writerVersionAtCreation": "4.0.3"
 }

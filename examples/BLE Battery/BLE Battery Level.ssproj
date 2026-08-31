@@ -62,6 +62,14 @@
         }
     ],
     "hexadecimalDelimiters": false,
+    "influxSink": {
+        "bucket": "",
+        "enabled": false,
+        "measurement": "serial_studio",
+        "org": "",
+        "url": ""
+    },
+    "luaFastMode": false,
     "mqttPublisher": {
         "alpnEnabled": false,
         "alpnProtocol": "x-amzn-mqtt-ca",
@@ -83,6 +91,10 @@
         "scriptCode": "",
         "scriptLanguage": 0,
         "scriptTopic": "",
+        "sparkplugDeviceId": "",
+        "sparkplugEdgeNodeId": "",
+        "sparkplugEnabled": false,
+        "sparkplugGroupId": "",
         "sslEnabled": false,
         "sslProtocol": 5,
         "topicBase": ""
@@ -114,12 +126,29 @@
         }
     ],
     "title": "BLE Battery Level",
+    "treeExpansion": {
+        "": false,
+        "BLE Battery Level": true,
+        "BLE Battery Level/ ": false,
+        "BLE Battery Level/Control Loop": false,
+        "BLE Battery Level/Dashboard Widgets": true,
+        "BLE Battery Level/Dashboard Widgets/Group": true,
+        "BLE Battery Level/Dashboard Widgets/Group/Battery Level": false,
+        "BLE Battery Level/Device A": true,
+        "BLE Battery Level/Device A/Frame Parser": false,
+        "BLE Battery Level/InfluxDB Sink": false,
+        "BLE Battery Level/MQTT Publisher": false,
+        "BLE Battery Level/Variables": true,
+        "BLE Battery Level/Variables/Dataset Values": false,
+        "BLE Battery Level/Workspaces": true,
+        "BLE Battery Level/Workspaces/Group": false
+    },
     "widgetSettings": {
         "externalWindows": {
             "data": [
             ]
         }
     },
-    "writerVersion": "4.0.3",
+    "writerVersion": "4.1.0",
     "writerVersionAtCreation": "4.0.3"
 }

@@ -153,6 +153,14 @@
         }
     ],
     "hexadecimalDelimiters": false,
+    "influxSink": {
+        "bucket": "",
+        "enabled": false,
+        "measurement": "serial_studio",
+        "org": "",
+        "url": ""
+    },
+    "luaFastMode": false,
     "mqttPublisher": {
         "alpnEnabled": false,
         "alpnProtocol": "x-amzn-mqtt-ca",
@@ -174,6 +182,10 @@
         "scriptCode": "",
         "scriptLanguage": 0,
         "scriptTopic": "",
+        "sparkplugDeviceId": "",
+        "sparkplugEdgeNodeId": "",
+        "sparkplugEnabled": false,
+        "sparkplugGroupId": "",
         "sslEnabled": false,
         "sslProtocol": 5,
         "topicBase": ""
@@ -206,6 +218,27 @@
         }
     ],
     "title": "HUAWEI K5161H",
-    "writerVersion": "4.0.3",
+    "treeExpansion": {
+        "": false,
+        "HUAWEI K5161H": true,
+        "HUAWEI K5161H/ ": false,
+        "HUAWEI K5161H/Control Loop": false,
+        "HUAWEI K5161H/Dashboard Widgets": true,
+        "HUAWEI K5161H/Dashboard Widgets/Data Grid": true,
+        "HUAWEI K5161H/Dashboard Widgets/Data Grid/Cell id": false,
+        "HUAWEI K5161H/Dashboard Widgets/Data Grid/RSRP": false,
+        "HUAWEI K5161H/Dashboard Widgets/Data Grid/RSRQ": false,
+        "HUAWEI K5161H/Dashboard Widgets/Data Grid/RSSI": false,
+        "HUAWEI K5161H/Dashboard Widgets/Data Grid/SINR": false,
+        "HUAWEI K5161H/Device A": true,
+        "HUAWEI K5161H/Device A/Frame Parser": false,
+        "HUAWEI K5161H/InfluxDB Sink": false,
+        "HUAWEI K5161H/MQTT Publisher": false,
+        "HUAWEI K5161H/Variables": true,
+        "HUAWEI K5161H/Variables/Dataset Values": false,
+        "HUAWEI K5161H/Workspaces": true,
+        "HUAWEI K5161H/Workspaces/Data Grid": false
+    },
+    "writerVersion": "4.1.0",
     "writerVersionAtCreation": "4.0.3"
 }

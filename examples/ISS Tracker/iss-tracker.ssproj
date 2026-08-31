@@ -105,6 +105,13 @@
         }
     ],
     "hexadecimalDelimiters": false,
+    "influxSink": {
+        "bucket": "",
+        "enabled": false,
+        "measurement": "serial_studio",
+        "org": "",
+        "url": ""
+    },
     "luaFastMode": false,
     "mqttPublisher": {
         "alpnEnabled": false,
@@ -127,6 +134,10 @@
         "scriptCode": "",
         "scriptLanguage": 0,
         "scriptTopic": "",
+        "sparkplugDeviceId": "",
+        "sparkplugEdgeNodeId": "",
+        "sparkplugEnabled": false,
+        "sparkplugGroupId": "",
         "sslEnabled": false,
         "sslProtocol": 5,
         "topicBase": ""
@@ -174,6 +185,7 @@
         "ISS Tracker/Dashboard Widgets/ISS Position/Longitude": false,
         "ISS Tracker/Device A": true,
         "ISS Tracker/Device A/Frame Parser": false,
+        "ISS Tracker/InfluxDB Sink": false,
         "ISS Tracker/MQTT Publisher": false,
         "ISS Tracker/Variables": true,
         "ISS Tracker/Variables/Dataset Values": false,
@@ -238,6 +250,6 @@
             }
         }
     },
-    "writerVersion": "4.0.3",
+    "writerVersion": "4.1.0",
     "writerVersionAtCreation": "4.0.3"
 }
