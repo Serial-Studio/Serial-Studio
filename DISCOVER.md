@@ -1,6 +1,6 @@
 # Discover Serial Studio
 
-Serial Studio is a cross-platform dashboard tool for visualizing data from embedded devices in real time. It works with serial ports, Bluetooth LE, MQTT, Modbus, CAN Bus, TCP/UDP, and more.
+Serial Studio is a cross-platform dashboard tool for visualizing data from embedded and industrial devices in real time. It works with serial ports, Bluetooth LE, MQTT, Modbus, CAN Bus, OPC UA, Siemens S7comm, EtherNet/IP, IEC 60870-5-104, TCP/UDP, and more.
 
 Hobbyists, educators, and professional engineers can all use it to go from raw data to a live dashboard without writing code.
 
@@ -10,7 +10,8 @@ Hobbyists, educators, and professional engineers can all use it to go from raw d
 - A real-time telemetry dashboard for rockets, drones, robots, and race cars
 - A data logger that records sensor data to CSV, MDF4, or SQLite
 - A Modbus and CAN bus monitor for industrial equipment and automotive diagnostics
-- An MQTT dashboard for IoT sensor networks
+- A PLC and SCADA monitor that reads Siemens, Allen-Bradley, and Omron controllers directly, with no OPC UA gateway in between
+- An MQTT dashboard for IoT sensor networks, including Sparkplug B deployments
 - An FFT spectrum and waterfall display for audio and vibration analysis
 - A ground station style interface for student and research projects
 

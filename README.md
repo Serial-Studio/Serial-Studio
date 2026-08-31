@@ -9,7 +9,7 @@
 
 Connect an Arduino, ESP32, STM32, Raspberry Pi, Teensy, or anything else that speaks serial, Bluetooth, a network protocol, or an industrial bus. Describe the data format once in a project file. Serial Studio draws the plots, gauges, maps, and 3D views around it. Send commands back with buttons, sliders, and knobs. Record a session, replay it, export it as a PDF.
 
-It replaces the stack of separate tools this work usually requires: a serial monitor and serial plotter for Arduino and ESP32 development, a real-time telemetry dashboard, a data logger that records to CSV or SQLite, and a Modbus, CAN bus, OPC UA, or MQTT monitor for industrial and IoT systems.
+It replaces the stack of separate tools this work usually requires: a serial monitor and serial plotter for Arduino and ESP32 development, a real-time telemetry dashboard, a data logger that records to CSV or SQLite, and a PLC, Modbus, CAN bus, OPC UA, or MQTT monitor for industrial and IoT systems.
 
 Runs on Windows, macOS, Linux, and Raspberry Pi.
 
@@ -19,7 +19,9 @@ Runs on Windows, macOS, Linux, and Raspberry Pi.
 
 ## What you can do with it
 
-**Connect to a device.** Serial/UART, Bluetooth LE, and TCP/UDP in the GPL build. MQTT, Modbus TCP/RTU, CAN Bus, OPC UA, audio input, raw USB (libusb), HID (hidapi), and Process I/O are Pro. Multiple devices in one project is also Pro.
+**Connect to a device.** Serial/UART, Bluetooth LE, and network sockets (TCP, UDP, WebSocket, HTTP) in the GPL build. MQTT, Modbus TCP/RTU, CAN Bus, OPC UA, Siemens S7comm, EtherNet/IP, IEC 60870-5-104, audio input, raw USB (libusb), HID (hidapi), and Process I/O are Pro. Multiple devices in one project is also Pro.
+
+**Read PLCs without a gateway (Pro).** OPC UA covers modern controllers: browse the address space, tick the tags you want, and the project generates itself. Three direct drivers cover the rest of the plant floor, no KEPServer-class gateway in between. S7comm polls absolute addresses (`DB5.DBD20:REAL`, `MW10`) on Siemens S7-300, S7-400, S7-1200, and S7-1500 controllers. EtherNet/IP polls symbolic tag names on Allen-Bradley ControlLogix, CompactLogix, MicroLogix, Micro800, SLC 500, and PLC-5, plus Omron NJ/NX. IEC 60870-5-104 interrogates RTUs and substation gateways and streams their spontaneous reports, generating the project from the station's own database. All three are read-only clients: connecting Serial Studio to a running machine cannot change its state. On the MQTT side, Sparkplug B works in both directions — subscribe as a host application and generate a project from the birth certificates, or publish your dashboard as an edge node.
 
 **Visualize data.** 17 widgets in the GPL build: line plots, gauges, bar charts, meters, GPS maps, FFT spectrum, accelerometer, gyroscope, compass, data grids, LED panels, terminal, multi-channel plots, web view, bar panel, plus a Clock and Stopwatch utility widget pair. Bar, Gauge, Compass, and Meter each render as a two-page swipe view (page 0 is the analog face, page 1 is a large digital readout), so a single tile shows both the trend at a glance and the exact value. Pro adds 3D Plot, XY Plot, Waterfall (spectrogram), Image View (live camera), the Canvas widget, and output widgets (buttons, sliders, knobs, an Output Panel, and a Notification Log). Canvas is a JavaScript `paint(ctx, w, h)` callback with a Canvas2D-style API and 18 templates: oscilloscope, polar plot, artificial horizon, audio VU, dial gauge, heatmap, sparklines, vector field, XY scope, and others.
 
@@ -29,13 +31,13 @@ Runs on Windows, macOS, Linux, and Raspberry Pi.
 
 **Send commands back (Pro).** Buttons, toggles, sliders, knobs, text fields, and freeform output panels run JS templates that emit GCode, SCPI, Modbus, NMEA, CAN, or whatever your device speaks. Actions run on demand or on a timer.
 
-**Record and replay.** CSV export in the GPL build. MDF4 import/export, session recording (frames and raw bytes) into SQLite, PDF session reports, and XMODEM/YMODEM/ZMODEM file transfer are Pro.
+**Record and replay.** CSV export in the GPL build. MDF4 import/export, session recording (frames and raw bytes) into SQLite, PDF session reports, and XMODEM/YMODEM/ZMODEM file transfer are Pro. If the data belongs in your existing time-series stack instead of a local file, a live sink streams every frame into InfluxDB 2.x as line protocol (Pro).
 
 **Automate it.** A TCP API on port 7777 with 360+ commands. A gRPC server on port 8888 mirrors the same command set with protobuf and live frame streaming. An MCP server wraps the same surface for Claude Desktop or any other MCP host.
 
 **AI Assistant for project editing (Pro).** A bring-your-own-key chat panel that edits the project. Eight providers: Anthropic, OpenAI, Google Gemini, DeepSeek, Groq, Mistral, OpenRouter, and local OpenAI-compatible endpoints (Ollama, llama.cpp, LM Studio, vLLM) for offline use. Mutating actions show an Approve/Deny card first. See the [AI Assistant docs](./doc/help/AI-Assistant.md).
 
-**Vendor-document importers (Pro).** Feed the Modbus register-map importer a vendor CSV/XML/JSON and get a project. DBC import decodes CAN signals from the standard automotive files. For OPC UA servers there is nothing to import: browse the server's address space, tick the tags you want, and Serial Studio generates the project from them.
+**Vendor-document importers (Pro).** Feed the Modbus register-map importer a vendor CSV/XML/JSON and get a project. DBC import decodes CAN signals from the standard automotive files, extended multiplexing included, and the CAN driver reassembles multi-packet J1939 and ISO-TP transfers so long PGNs decode the same way 8-byte frames do. For OPC UA servers there is nothing to import: browse the server's address space, tick the tags you want, and Serial Studio generates the project from them.
 
 ## Download
 
@@ -91,7 +93,9 @@ All Linux packages (AppImage, DEB, RPM, x64 and ARM64) bundle their own glibc, s
 
 ### At a glance
 
-- **Protocols:** Serial/UART, Bluetooth LE, and TCP/UDP in the GPL build. MQTT, Modbus TCP/RTU, CAN Bus, OPC UA, Audio, raw USB (libusb), HID (hidapi), and Process I/O are Pro.
+- **Protocols:** Serial/UART, Bluetooth LE, and network sockets (TCP, UDP, WebSocket, HTTP) in the GPL build. MQTT, Modbus TCP/RTU, CAN Bus, OPC UA, Siemens S7comm, EtherNet/IP, IEC 60870-5-104, Audio, raw USB (libusb), HID (hidapi), and Process I/O are Pro.
+- **PLC drivers (Pro):** S7comm for Siemens S7-300/400/1200/1500, EtherNet/IP for Allen-Bradley and Omron NJ/NX, IEC 60870-5-104 for RTUs and substation gateways. Read-only clients, no OPC UA gateway required.
+- **Sparkplug B (Pro):** subscribe to a broker as a host application and generate the project from birth certificates, or publish the dashboard as an edge node.
 - **Visualization:** 23 widgets, including line plots, gauges, bar charts, meters, GPS maps, FFT, waterfall (spectrogram), accelerometer, gyroscope, compass, data grids, 3D views, live camera feed, plus Clock and Stopwatch utility widgets (some Pro). Bar, Gauge, Compass, and Meter each include a swipeable digital readout page alongside the analog face.
 - **Canvas widget (Pro):** scriptable Canvas2D-style canvas driven by a JS `paint(ctx, w, h)` callback. Watchdog-protected QJSEngine, persistent script state across frames, 18 templates (oscilloscope, polar plot, artificial horizon, audio VU meter, dial gauge, heatmap, LED matrix, sparklines, vector field, XY scope, and more).
 - **Output widgets:** buttons, toggles, sliders, knobs, text fields, and freeform panels, with JS templates for GCode, SCPI, Modbus, NMEA, CAN, and more (Pro).
@@ -106,10 +110,13 @@ All Linux packages (AppImage, DEB, RPM, x64 and ARM64) bundle their own glibc, s
 - **File transfer:** XMODEM, YMODEM, and ZMODEM with CRC and crash recovery (Pro).
 - **Modbus register maps:** import CSV, XML, or JSON straight from vendor docs (Pro).
 - **OPC UA tag browser:** browse a server's address space, tick tags, and generate the project (Pro).
-- **CAN DBC import:** decoded signals for automotive and industrial work (Pro).
+- **CAN DBC import:** decoded signals for automotive and industrial work, extended multiplexing included (Pro).
+- **CAN transport protocols:** J1939 TP (BAM and RTS/CTS) and ISO-TP reassembly, so multi-packet PGNs and diagnostic payloads decode like single frames (Pro).
+- **CAN adapters:** Qt's plugin interfaces plus direct backends for candleLight (gs_usb), SLCAN/LAWICEL, and Seeed/Waveshare USB-CAN analyzers (Pro).
+- **InfluxDB sink:** stream live frames into InfluxDB 2.x as line protocol (Pro).
 - **Image view:** live JPEG or PNG camera streams alongside telemetry on the same connection (Pro).
 - **Multi-device:** several devices in one project, each with its own protocol (Pro).
-- **TCP API on port 7777:** 300+ commands for programmatic control (see the [API client example](./examples/API%20Test)).
+- **TCP API on port 7777:** 360+ commands for programmatic control (see the [API client example](./examples/API%20Test)).
 - **gRPC server on port 8888:** the same command set over protobuf, with frame and raw-data streaming (see the [gRPC reference](./doc/help/gRPC-Server.md)).
 - **AI Assistant (Pro):** in-app chat panel that edits the project (sources, datasets, parsers, transforms, output widgets, workspaces) by calling the project-editing API. Bring-your-own-key for Anthropic, OpenAI, Gemini, DeepSeek, Groq, Mistral, OpenRouter, or a local OpenAI-compatible server (Ollama, llama.cpp, LM Studio, vLLM); the local option runs fully offline. Mutating commands require explicit approval; connection control and device writes are blocked by default and only run as Always-confirm actions after the Allow device control toggle is enabled. Hidden in operator deployments.
 - **MCP integration:** external AI clients (Claude Desktop, custom MCP hosts) can call the full TCP API, including connection control and device writes, over the Model Context Protocol (see [MCP Client](./examples/MCP%20Client)).
@@ -181,7 +188,7 @@ First time using it? Start with the [getting started guide](./doc/help/Getting-S
 - **Installation** for Windows, macOS, Linux, and Raspberry Pi.
 - **Quick start:** connect an Arduino or ESP32 and visualize data in five minutes.
 - **Dashboard creation:** build layouts in the Project Editor and split them into workspaces.
-- **Protocol support:** Serial/UART, Bluetooth LE, MQTT, Modbus TCP/RTU, CAN Bus, OPC UA, TCP/UDP, Audio, raw USB, HID, Process I/O.
+- **Protocol support:** Serial/UART, Bluetooth LE, MQTT (with Sparkplug B), Modbus TCP/RTU, CAN Bus, OPC UA, Siemens S7comm, EtherNet/IP, IEC 60870-5-104, TCP/UDP/WebSocket/HTTP, Audio, raw USB, HID, Process I/O.
 - **Frame parsing:** handle binary protocols, checksums, and custom formats with Built-In templates, JavaScript, or Lua (LuaJIT 2.1, 5.1 syntax with compatibility shims).
 - **Per-dataset transforms:** EMA filters, scaling, calibration, and computed datasets via Variables.
 - **Output widgets:** send commands back with buttons, sliders, knobs, toggles, and output panels (Pro).
@@ -236,9 +243,9 @@ On Windows the default generator is Visual Studio, which is multi-config: it ign
 
 You can also open `CMakeLists.txt` in Qt Creator or any CMake-aware IDE without extra setup.
 
-The default build is the GPLv3 edition. It includes the core: UART/TCP/UDP/BLE drivers, the Project Editor, Quick Plot and Console modes, the standard widgets (line plot, gauge, bar, GPS, FFT, accelerometer, gyroscope, compass, data grid, LED panel, terminal, multi-plot), Built-In, JavaScript, and Lua frame parsers, per-dataset transforms, CSV export, and the local TCP/MCP API.
+The default build is the GPLv3 edition. It includes the core: UART, network (TCP/UDP/WebSocket/HTTP), and BLE drivers, the Project Editor, Quick Plot and Console modes, the standard widgets (line plot, gauge, bar, GPS, FFT, accelerometer, gyroscope, compass, data grid, LED panel, terminal, multi-plot), Built-In, JavaScript, and Lua frame parsers, per-dataset transforms, CSV export, and the local TCP/MCP API.
 
-Pro-only modules are not built into the GPL edition: MQTT, Modbus, CAN Bus, OPC UA, Audio, USB, HID, Process I/O, multi-source projects, the 3D Plot, XY Plot, Waterfall, Image View, and Canvas widgets, the output widgets, MDF4 import/export, the Historian, session reports, XMODEM/YMODEM/ZMODEM file transfer, the Modbus register-map and CAN DBC importers, and the AI Assistant. Some of those depend on proprietary Qt modules (Modbus, CAN Bus, MQTT, OPC UA); others are commercial-licensed code in this repository. See [Pro vs Free Features](./doc/help/Pro-vs-Free.md) for the full matrix.
+Pro-only modules are not built into the GPL edition: MQTT (Sparkplug B included), Modbus, CAN Bus, OPC UA, Siemens S7comm, EtherNet/IP, IEC 60870-5-104, the InfluxDB sink, Audio, USB, HID, Process I/O, multi-source projects, the 3D Plot, XY Plot, Waterfall, Image View, and Canvas widgets, the output widgets, MDF4 import/export, the Historian, session reports, XMODEM/YMODEM/ZMODEM file transfer, the Modbus register-map and CAN DBC importers, and the AI Assistant. Some of those depend on proprietary Qt modules (Modbus, CAN Bus, MQTT, OPC UA); others are commercial-licensed code in this repository. See [Pro vs Free Features](./doc/help/Pro-vs-Free.md) for the full matrix.
 
 If you are a Pro user or have a commercial license, [contact the maintainer](mailto:alex@serial-studio.com) for build instructions and activation details.
 
