@@ -163,7 +163,7 @@ It is the wrong choice for anything fast. Each reading costs a full request/resp
 The **Poll Interval** decides the cadence:
 
 - A value in milliseconds repeats the request forever at that rate. The floor is 10 ms; be considerate with public APIs, which frequently rate-limit.
-- **Zero** turns polling off entirely. Serial Studio connects, sends one request, and then stays quiet until *you* send something. This is the mode for a command/response API driven from the console, an [action widget](Widgets-Actions.md), or an output widget: each send issues one request and its response comes back as a frame.
+- **Zero** turns polling off entirely. Serial Studio connects, sends one request, and then stays quiet until *you* send something. This is the mode for a command/response API driven from the console, an [action widget](Actions.md), or an output widget: each send issues one request and its response comes back as a frame.
 
 Only one request is ever in flight. If a response has not arrived by the time the next interval elapses, that tick is skipped rather than queued, because a backlog of requests behind a slow endpoint reports data older than the dashboard already displayed. Skipped ticks are counted and readable through the API.
 
