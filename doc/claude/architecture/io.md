@@ -6,7 +6,7 @@
 
 ## IO Architecture — No Singleton Drivers
 
-- 11 drivers, **public ctors**, no `static instance()`.
+- 14 drivers, **public ctors**, no `static instance()`.
 - `ConnectionManager` (singleton, `Cpp_IO_Manager`) owns one **UI-config** instance per type:
   `instance().uart()`, `.network()`, `.bluetoothLE()`, etc. QML context properties
   (`Cpp_IO_Serial`, etc.) point at these.
@@ -80,7 +80,8 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   settle the wait cursor and to make `toggleConnection()` treat an in-flight request as
   "connected" so the button aborts instead of stacking a second attempt.
 - **Async dials are visible through `HAL_Driver::isConnecting()`** (default `false`).
-  Network (TCP), BluetoothLE, MQTT, Modbus, CANBus and Process override it;
+  Network (true only while a WebSocket/HTTP dial is pending — TCP/UDP settle synchronously),
+  BluetoothLE, MQTT, Modbus, CANBus and Process override it;
   `toggleConnection()` aborts when any device reports an in-flight dial, and
   `ConnectionManager::isConnecting` (NOTIFY `connectingChanged`, published by the same
   idempotent snapshot) drives the toolbar button's "Connecting…" label. Modbus mirrors
@@ -178,8 +179,9 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   survives re-discovery. The ONE verdict is `connected()` → `reportOpenFinished(true)` or the
   `failDial()` funnel (session `connectFailed`, 15 s `m_dialTimer`, discovery failure) →
   `reportOpenFinished(false)`; an established drop queues `disconnectDevice(this)`.
-- **Secure channels are configuration on the session (spec 0067 stage 2).** All five policies are
-  supported; `Basic128Rsa15` and `Basic256` are labelled deprecated and never auto-selected, and
+- **Secure channels are configuration on the session (spec 0067 stage 2).** All six policies are
+  supported (`None` through `Aes256_Sha256_RsaPss`, the `kPolicyUris` table in
+  `OpcUaEndpointSelection.cpp`); `Basic128Rsa15` and `Basic256` are labelled deprecated and never auto-selected, and
   `selectBestEndpoint()` otherwise picks the most secure endpoint the chosen identity can use.
   `OpcUaSecurity` owns the per-INSTALLATION identity and trust store under
   `AppConfigLocation/OpcUa`: the client certificate is generated on first secure use and REUSED
@@ -219,6 +221,46 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   Only the UI-config instance persists (`setPersistent(false)` on the live one); the password lives
   in `MQTT::CredentialVault` under the `opcua` scope. Diagnostics are pulled counters read by
   `io.opcua.getStatus`.
+- **The spec-0073 PLC pollers (S7, EthernetIp) are blocking pollers on a driver-owned
+  QThread.** `open()` starts the thread, runs the dial there over a
+  `Qt::BlockingQueuedConnection` and returns the verdict synchronously — one attempt, no
+  `openFinished` latch, no retry stack (spec 0050). Every protocol exchange blocks until the
+  controller answers, so the socket and the tag handles live on the worker thread only:
+  S7comm speaks ISO-on-TCP through the in-house `S7/IsoTsap` + `S7Pdu` codec; EthernetIp
+  drives vendored libplctag behind a seam (`kEipBackend`) so the TU reads the same with or
+  without the lib, and every `plc_tag_create`/read/destroy happens on the worker. Both are
+  read-only — `write()` returns -1, there is no write path. Worker counters are ATOMIC, a
+  deliberate, header-documented deviation from spec 0033's plain `quint64`, because the poll
+  thread increments while the GUI samples at 1 Hz. A lost link emits `linkLost` and the
+  driver queues `disconnectDevice(this)`.
+- **Iec104 stays GUI-thread like OPC UA and DISCOVERS its point table.** `open()` blocks in
+  `dialStation()` (same one-verdict doctrine), sends STARTDT, then a general interrogation;
+  the station's answer builds the point table — nothing is configured — and
+  `generateProject()` turns it into a project. TESTFR keepalives at t3 hold the link, and a
+  tick publishes changed points. Monitor direction only: no control direction exists,
+  `write()` returns -1. The in-house stack lives in `Iec104/Apci` + `Iec104/Asdu`.
+- **All three industrial pollers publish through the OPC UA wire lane.** Dirty slots encode
+  into `OpcUaWire` delta frames (`wireTypeFor`, `kMaxTags` cap) latched by the same native
+  template family, stamped with the poll's own capture time and clamped monotonic on the GUI
+  side (`qMax(stampNs, m_lastStampNs + 1)`) so a rounded steady clock never hands the
+  pipeline two frames with one timestamp.
+- **Sparkplug B rides the MQTT driver, split by direction (specs 0073/0074).** Inbound:
+  `SparkplugSession` (under `Drivers/MQTT/`) is a Qt-Core-only, QObject-free state machine
+  that turns the `spBv1.0` namespace into a flat table of latched slots for the same OPC UA
+  delta encoder — slot indices NEVER move under a rebirth, counters are polled (spec 0033),
+  no drop is silent. Outbound: `MQTT::SparkplugPublisher` owns the edge-node lifecycle
+  (metric registry, alias table, `bdSeq`/`seq`, birth/data/death payloads) as pure
+  {topic, payload} pairs with no I/O and no QObject, so the ctest tier drives the whole state
+  machine without a broker. Aliases are stable once assigned — a multi-source project must
+  never renumber a live host's learned alias table, and a metric-set change triggers a
+  rebirth instead (spec 0074).
+- **`CanBackends` registers libusb/serial adapters as synthetic CANBus plugins** — GsUsb
+  (candleLight), Seeed/Waveshare USB-CAN Analyzer (CH340 serial), SLCAN/LAWICEL — each a
+  `QCanBusDevice` backend keyed by a plugin key beside Qt's own plugins. `CanReassembly`
+  holds the two fixed-cap reassemblers (J1939-21 TP: TP.CM announcements plus BAM and
+  RTS/CTS sessions; ISO 15765-2: FirstFrame + ConsecutiveFrames) with pulled counters
+  (spec 0033), so >8-byte PGNs and multi-frame diagnostics decode like single frames instead
+  of silently never appearing.
 - **`sessionClosed` means the USER (or an API client / player takeover) ended the session** —
   it fires only from the explicit `disconnectDevice()` path. Driver-initiated drops,
   `rebuildDevices` churn, and failed dials never emit it: `API::ProcessLauncher` reaps every

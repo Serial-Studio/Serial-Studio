@@ -87,7 +87,7 @@
     their already-split cells to `FrameBuilder::replayChannels(sourceId, channels, recordedTs)`
     — no `joinReplayRow` → bytes → re-split. It publishes via the slot pool through
     `publishReplayValues`: dashboard + read-only observers (API/gRPC, only with a client
-    connected) and **never a recording sink** (CSV/MDF4/Sessions export, MQTT) — replay
+    connected) and **never a recording sink** (CSV/MDF4/Sessions export, MQTT, InfluxDB) — replay
     cannot re-record itself. Recorded timestamps ride the frame (players anchor a steady base
     per `anchorSteadyBase` and stamp rows with recorded deltas).
   - **QuickPlot replay keeps the RFC-4180 byte rows**: players synthesize rows with

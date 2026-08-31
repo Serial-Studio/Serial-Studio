@@ -36,7 +36,7 @@ FrameBuilder::stageFrameValues  (spec 0055)
 FrameBuilder::publishBlock
   ├─ PipelineHost block ring (SPSC, 256) ──> Dashboard::onDisplayTick drain
   └─ if m_anyAsyncSink: ONE clone_block_trimmed copy shared by every sink
-       CSV / MDF4 / Sessions / API / gRPC / MQTT / AudioExport
+       CSV / MDF4 / Sessions / API / gRPC / MQTT / AudioExport / InfluxDB
 
 Dense sources (audio, or streamLane=on) — spec 0055 D8
   Driver SampleBlock ──> StreamWorker thread (transforms, FFT ring, latest values)
