@@ -37,7 +37,9 @@ private:
   static void registerResolverCommands();
   static void registerEditCommands();
   static void registerCheckpointCommands();
+#ifdef BUILD_COMMERCIAL
   static void registerMemoryCommands();
+#endif
 
   static CommandResponse snapshot(const QString& id, const QJsonObject& params);
   static CommandResponse datasetResolve(const QString& id, const QJsonObject& params);
@@ -51,7 +53,9 @@ private:
   static CommandResponse checkpoint(const QString& id, const QJsonObject& params);
   static CommandResponse restore(const QString& id, const QJsonObject& params);
   static CommandResponse listCheckpoints(const QString& id, const QJsonObject& params);
+#ifdef BUILD_COMMERCIAL
   static CommandResponse memoryPropose(const QString& id, const QJsonObject& params);
+#endif
 };
 
 }  // namespace Handlers
