@@ -18,6 +18,25 @@ option(ENABLE_TSAN "ThreadSanitizer build (mutually exclusive with DEBUG_SANITIZ
 option(ENABLE_FUZZERS "Build the libFuzzer entry points under app/tests/fuzz (Clang only)" OFF)
 
 #---------------------------------------------------------------------------------------------------
+# Debug-info level for the sanitizer tiers
+#---------------------------------------------------------------------------------------------------
+#
+# Every block below adds its debug flag with add_compile_options(), at directory scope. CMake
+# composes the command line as <DEFINES> <INCLUDES> <FLAGS> <directory options>, so a level passed
+# through CMAKE_CXX_FLAGS or CMAKE_CXX_FLAGS_DEBUG lands AHEAD of it and loses -- the level has to
+# be a knob here or it cannot be lowered at all.
+#
+# Default is -g, which is what a developer wants locally. CI passes -gline-tables-only: linking the
+# instrumented application with full DWARF exceeded the runner's memory and the kernel killed the
+# whole job (2026-09-03, two consecutive runs, both at 'Linking CXX executable app/serial-studio-*').
+# Line tables are what the ASan/TSan symbolizer actually reads, so the reports keep file and line.
+#
+#---------------------------------------------------------------------------------------------------
+
+set(SS_SANITIZER_DEBUG_LEVEL "-g" CACHE STRING
+    "Debug-info flag the sanitizer tiers compile with (-g, -g1, -gline-tables-only)")
+
+#---------------------------------------------------------------------------------------------------
 # Debug sanitizers (AddressSanitizer + UndefinedBehaviorSanitizer)
 #---------------------------------------------------------------------------------------------------
 #
@@ -35,8 +54,8 @@ option(ENABLE_FUZZERS "Build the libFuzzer entry points under app/tests/fuzz (Cl
 #   - Minimal performance impact (~10-20% slowdown)
 #
 # Additional flags:
-#   -g                      - Debug symbols for stack traces
-#   -fno-omit-frame-pointer - Preserve frame pointers for accurate traces
+#   ${SS_SANITIZER_DEBUG_LEVEL} - Debug symbols for stack traces (-g by default)
+#   -fno-omit-frame-pointer     - Preserve frame pointers for accurate traces
 #
 # Usage:
 #   cmake .. -DDEBUG_SANITIZER=ON -DCMAKE_BUILD_TYPE=Debug
@@ -52,7 +71,7 @@ if(DEBUG_SANITIZER)
    add_compile_options(
       -fsanitize=address
       -fsanitize=undefined
-      -g
+      ${SS_SANITIZER_DEBUG_LEVEL}
       -fno-omit-frame-pointer
    )
    add_link_options(
@@ -83,7 +102,7 @@ if(ENABLE_TSAN)
    endif()
    add_compile_options(
       -fsanitize=thread
-      -g
+      ${SS_SANITIZER_DEBUG_LEVEL}
       -fno-omit-frame-pointer
       -O1
    )
@@ -120,7 +139,7 @@ if(ENABLE_FUZZERS)
    endif()
    add_compile_options(
       -fsanitize=fuzzer-no-link
-      -g
+      ${SS_SANITIZER_DEBUG_LEVEL}
       -fno-omit-frame-pointer
    )
    message(STATUS "libFuzzer instrumentation ENABLED (-fsanitize=fuzzer-no-link)")

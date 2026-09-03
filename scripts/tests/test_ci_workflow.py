@@ -6,8 +6,12 @@ Structural gates over the GitHub Actions workflows and the pytest xfail policy.
 The workflows are 3600 lines that nothing reviewed mechanically, and the 2026-09-01 source
 review (spec 0075, findings L2, L3, L6, L7, L12, L14) found publication running before the
 tests, a release republished from every branch, secrets interpolated into shell text, unpinned
-third-party actions holding the Apple signing identity, ctest on one OS, and xfails with no
-tracking reference. Every assertion here pins one of those.
+third-party actions holding the Apple signing identity, a ctest tier nobody ran, and xfails with
+no tracking reference. Every assertion here pins one of those.
+
+The tier's platform spread is a separate question from its existence: it ran on macOS and Windows
+too until 2026-09-03, when both legs were dropped as a second configure and build per platform for
+suites that are toolchain-agnostic. What is pinned here is that it still runs on both Linux arches.
 
 Run: pytest scripts/tests/test_ci_workflow.py
 """
@@ -35,6 +39,15 @@ RETRY_JOBS = (
     "benchmark-retry-macos",
     "benchmark-retry-windows",
 )
+
+# The jobs that configure and run the ctest tier. Both Linux arches, because DSPSimd.h picks its
+# SIMD lane from the target architecture; the macOS and Windows legs were dropped on 2026-09-03
+# (they cost a second configure and build per platform for suites that are toolchain-agnostic).
+CTEST_JOBS = ("build-linux", "build-linux-arm64")
+
+# ASan and TSan cannot coexist in one build, so each sanitizer leg is its own job and they run in
+# parallel; build-gpl3 is the only job left that compiles the GPL application.
+SANITIZER_JOBS = ("sanitize", "sanitize-tsan")
 
 # A tracking reference: a spec finding id ("0075 I1"), a GitHub issue, an upstream bug id, or
 # a URL. "By design, not a finding" is not a reason to xfail -- delete the test instead.
@@ -195,23 +208,57 @@ def test_tests_gate_publication_by_default():
 # --------------------------------------------------------------------------------------------
 
 
-@pytest.mark.parametrize("job", BUILD_JOBS)
-def test_ctest_runs_on_every_build_platform(ci, job):
-    """The tier compiled on Linux only, so 100+ suites never saw MSVC or AppleClang."""
+@pytest.mark.parametrize("job", CTEST_JOBS)
+def test_the_ctest_tier_runs_on_both_linux_arches(ci, job):
+    """DSPSimd.h picks its SIMD lane from the target architecture, so x86_64 alone is half."""
     runs = " ".join(str(step.get("run", "")) for step in _steps(ci[job]))
     assert "ctest --test-dir build/unit-ci" in runs
 
 
-def test_the_sanitizer_job_exists_with_both_legs(ci):
-    """TSan is the only proof of the lock-free SPSC invariants, and nothing ran it."""
-    assert "sanitize" in ci
+def test_the_sanitizer_legs_are_separate_parallel_jobs(ci):
+    """One job compiled the tree twice back to back and was killed mid-link before ctest ran."""
+    for job in SANITIZER_JOBS:
+        assert job in ci, f"missing sanitizer job: {job}"
+        assert "needs" not in ci[job], f"{job} must not serialize behind another job"
+
+
+def test_the_asan_leg_covers_the_fuzz_targets_and_the_pipeline(ci):
     runs = " ".join(str(step.get("run", "")) for step in _steps(ci["sanitize"]))
     assert "-DDEBUG_SANITIZER=ON" in runs
-    assert "-DENABLE_TSAN=ON" in runs
     assert "-DENABLE_FUZZERS=ON" in runs
     assert "ctest --test-dir build/asan" in runs
-    assert "ctest --test-dir build/tsan" in runs
     assert "--benchmark-hotpath --min-fps 1" in runs
+
+
+def test_the_tsan_leg_proves_the_lock_free_invariants(ci):
+    """TSan is the only proof of the lock-free SPSC invariants, and nothing ran it."""
+    runs = " ".join(str(step.get("run", "")) for step in _steps(ci["sanitize-tsan"]))
+    assert "-DENABLE_TSAN=ON" in runs
+    assert "ctest --test-dir build/tsan" in runs
+
+
+@pytest.mark.parametrize("job", SANITIZER_JOBS)
+def test_the_sanitizer_legs_instrument_the_pro_modules(ci, job):
+    """The Pro modules are what customers pay for and no sanitizer ever looked at them."""
+    runs = " ".join(str(step.get("run", "")) for step in _steps(ci[job]))
+    assert "-DBUILD_GPL3=OFF" in runs
+    assert "-DBUILD_COMMERCIAL=ON" in runs
+
+
+@pytest.mark.parametrize("job", SANITIZER_JOBS)
+def test_the_sanitizer_legs_link_within_the_runner_memory(ci, job):
+    """Full DWARF through GNU ld got the runner OOM-killed twice on 2026-09-03."""
+    runs = " ".join(str(step.get("run", "")) for step in _steps(ci[job]))
+    assert "-DSS_SANITIZER_DEBUG_LEVEL=-gline-tables-only" in runs
+    assert "-fuse-ld=lld" in runs
+
+
+def test_the_gpl3_application_still_builds_somewhere(ci):
+    """Both sanitizer legs are Pro now, so this is the only GPL compile left in the workflow."""
+    assert "build-gpl3" in ci
+    runs = " ".join(str(step.get("run", "")) for step in _steps(ci["build-gpl3"]))
+    assert "-DBUILD_GPL3=ON" in runs
+    assert "--selftest-suite qml" in runs
 
 
 def test_the_fuzz_corpora_replay_in_ci(ci):

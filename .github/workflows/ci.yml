@@ -3536,20 +3536,37 @@ jobs:
         python3 scripts/generate-sdk.py --check
 
 #---------------------------------------------------------------------------------------------------
-# Sanitizers and fuzz corpus
+# Sanitizers, fuzz corpus and the GPLv3 build gate
 #---------------------------------------------------------------------------------------------------
 #
 # cmake/Sanitizers.cmake names TSan the only tool that proves the lock-free SPSC hotpath
-# invariants, and until spec 0075 nothing ran it. This job is that proof plus the ASan/UBSan
-# leg, and it is where the fuzz corpora replay under instrumentation. It is deliberately NOT in
-# upload's needs: a sanitizer finding reddens the run without holding the release hostage to a
-# tool that reports on timing.
+# invariants, and until spec 0075 nothing ran it. These jobs are that proof plus the ASan/UBSan
+# leg, and they are where the fuzz corpora replay under instrumentation. They are deliberately
+# NOT in upload's needs: a sanitizer finding reddens the run without holding the release hostage
+# to a tool that reports on timing.
+#
+# Three jobs, not one. ASan and TSan cannot coexist in a build, so a single job compiled the tree
+# twice back to back -- 60+ minutes of wall clock on the critical path, and on 2026-09-03 the
+# runner was killed mid-link twice before ctest ever started. Split, they run in parallel, and
+# each one links with lld against -gline-tables-only objects through a 2-slot link pool, which is
+# what brought the peak link footprint back under the runner's memory.
+#
+# Both sanitizer legs build Pro (BUILD_GPL3=OFF): the Pro modules -- Modbus, CAN, OPC UA, S7comm,
+# EtherNet/IP, IEC 60870-5-104, Sparkplug B, MDF4 -- are the ones customers pay for, and they were
+# the only part of the tree no sanitizer ever looked at. The global BUILD_COMMERCIAL also reaches
+# the unit tier, so every #ifdef BUILD_COMMERCIAL branch in a shared TU is instrumented too. No
+# license is activated here: the tier inspects code, not entitlement, and the five build jobs
+# already hold the concurrent activations this account allows.
+#
+# build-gpl3 is what keeps the GPLv3 half honest. With both sanitizer legs on Pro, nothing else in
+# the workflow compiles the GPL application, and a stray Pro symbol outside its #ifdef would ship
+# a source tarball that does not build.
 #
 #---------------------------------------------------------------------------------------------------
 
   sanitize:
     runs-on: ubuntu-24.04
-    name: '🧫 Sanitizers'
+    name: '🧫 Sanitizers (ASan + UBSan, Pro)'
     permissions:
       contents: read
     env:
@@ -3560,21 +3577,17 @@ jobs:
       #
       ASAN_OPTIONS: detect_leaks=0:abort_on_error=1
       UBSAN_OPTIONS: print_stacktrace=1:halt_on_error=1
-      TSAN_OPTIONS: halt_on_error=1
     steps:
     - name: '🧰 Checkout'
       uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
 
-    #
-    # Same Qt 6 desktop payload as the Linux build job; the instrumented application is built
-    # here too, for the benchmark leg
-    #
     - name: '⚙️ Install dependencies'
       run: |
         sudo apt-get update
         sudo apt-get install -y \
           build-essential \
           clang \
+          lld \
           ninja-build \
           libcups2-dev \
           libnss3 \
@@ -3662,9 +3675,15 @@ jobs:
 
     #
     # Clang because ENABLE_FUZZERS needs libFuzzer; mimalloc off because an allocator override
-    # and ASan cannot both own malloc. SS_INAPP_TESTS is what exposes --benchmark-hotpath
+    # and ASan cannot both own malloc. SS_INAPP_TESTS is what exposes --benchmark-hotpath.
+    # The credentials travel through env: -- CMake reads them with $ENV{} -- and a Pro configure
+    # validates them against Lemon Squeezy before it generates the license guards
     #
-    - name: '🚧 Configure ASan + UBSan tier'
+    - name: '🚧 Configure ASan + UBSan tier (Pro)'
+      env:
+        ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
+        SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
+        SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
         cmake -G Ninja -B build/asan \
           -DCMAKE_C_COMPILER=clang \
@@ -3674,12 +3693,19 @@ jobs:
           -DENABLE_FUZZERS=ON \
           -DSS_BUILD_TESTS=ON \
           -DSS_INAPP_TESTS=ON \
-          -DBUILD_GPL3=ON \
+          -DBUILD_GPL3=OFF \
+          -DBUILD_COMMERCIAL=ON \
           -DENABLE_GRPC=OFF \
           -DWITH_WEBENGINE=OFF \
           -DSS_USE_MIMALLOC=OFF \
           -DUSE_SYSTEM_ZLIB=ON \
-          -DUSE_SYSTEM_EXPAT=ON
+          -DUSE_SYSTEM_EXPAT=ON \
+          -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld \
+          -DCMAKE_SHARED_LINKER_FLAGS=-fuse-ld=lld \
+          -DCMAKE_MODULE_LINKER_FLAGS=-fuse-ld=lld \
+          -DCMAKE_JOB_POOLS=link=2 \
+          -DCMAKE_JOB_POOL_LINK=link \
+          -DSS_SANITIZER_DEBUG_LEVEL=-gline-tables-only
 
     - name: '🚧 Build ASan + UBSan tier'
       run: cmake --build build/asan
@@ -3699,20 +3725,133 @@ jobs:
     # whole parse pipeline under ASan/UBSan, which is what this leg is for
     #
     - name: '🏋️ Hotpath pipeline under ASan + UBSan'
-      run: ./build/asan/app/serial-studio-gpl3 --headless --benchmark-hotpath --min-fps 1
+      run: ./build/asan/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 1
 
     #
-    # The GPL leg of the QML instantiation suite: a Pro-only Cpp_* global reached from a shared
-    # .qml is a ReferenceError here and nowhere else
+    # The Pro file set is a superset of the GPL one, so this instantiates every .qml the product
+    # ships -- Plot3D, Waterfall, ImageView, the output widgets and the Pro driver panes included
     #
-    - name: '🧪 QML instantiation self-test (GPL build)'
-      run: ./build/asan/app/serial-studio-gpl3 --headless --selftest-suite qml
+    - name: '🧪 QML instantiation self-test (Pro build)'
+      run: ./build/asan/app/${{env.UNIXNAME}} --headless --selftest-suite qml
+
+#---------------------------------------------------------------------------------------------------
+# ThreadSanitizer
+#---------------------------------------------------------------------------------------------------
+#
+# TSan is its own build: it cannot coexist with ASan. The unit tier alone, because the
+# SPSC/DirectConnection invariants it proves live in the suites, not the GUI.
+#
+#---------------------------------------------------------------------------------------------------
+
+  sanitize-tsan:
+    runs-on: ubuntu-24.04
+    name: '🧫 Sanitizers (TSan, Pro)'
+    permissions:
+      contents: read
+    env:
+      QT_QPA_PLATFORM: offscreen
+      TSAN_OPTIONS: halt_on_error=1
+    steps:
+    - name: '🧰 Checkout'
+      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+
+    - name: '⚙️ Install dependencies'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential \
+          clang \
+          lld \
+          ninja-build \
+          libcups2-dev \
+          libnss3 \
+          libegl1 \
+          libgl1-mesa-dev \
+          libasound2-dev \
+          libudev-dev \
+          libsecret-1-dev \
+          libzstd-dev \
+          zlib1g-dev \
+          libexpat1-dev \
+          libminizip-dev \
+          libopus-dev \
+          libxcb1 \
+          libxcb-cursor0 \
+          libxcb-cursor-dev \
+          libxcb-glx0 \
+          libxcb-icccm4 \
+          libxcb-image0 \
+          libxcb-image0-dev \
+          libxcb-keysyms1 \
+          libxcb-randr0 \
+          libxcb-render0 \
+          libxcb-render-util0 \
+          libxcb-shape0 \
+          libxcb-shm0 \
+          libxcb-sync1 \
+          libxcb-util0-dev \
+          libxcb-util1 \
+          libxcb-xfixes0 \
+          libxcb-xinerama0 \
+          libxcb-xkb-dev \
+          libxcb-xtest0 \
+          libxkbcommon-dev \
+          libxkbcommon-x11-0 \
+          libxkbcommon-x11-dev \
+          libpulse-dev \
+          libgstreamer1.0-0 \
+          libgstreamer-plugins-base1.0-0
 
     #
-    # TSan is its own build: it cannot coexist with ASan. The unit tier alone, because the
-    # SPSC/DirectConnection invariants it proves live in the suites, not the GUI
+    # Restore-only: build-linux owns the save half of this entry, so two jobs never race to
+    # write it
     #
-    - name: '🚧 Configure TSan tier'
+    - name: '⚙️ Restore Qt Cache'
+      id: qt_cache
+      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+      with:
+        path: |
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
+          ~/.qt-license
+        key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64
+
+    - name: '⚙️ Install Qt (cache miss)'
+      shell: bash
+      if: steps.qt_cache.outputs.cache-hit != 'true'
+      env:
+        QT_VERSION: ${{env.QT_VERSION_LINUX}}
+        QT_ARCH: x64
+        QT_USERNAME: ${{secrets.QT_USERNAME}}
+        QT_PASSWORD: ${{secrets.QT_PASSWORD}}
+        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
+      run: |
+        chmod +x ./scripts/install-qt.sh
+        ./scripts/install-qt.sh
+
+    - name: '⚙️ Add Qt to PATH'
+      shell: bash
+      env:
+        QT_VERSION: ${{env.QT_VERSION_LINUX}}
+        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
+      run: |
+        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/bin"
+        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/libexec"
+        export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/lib/cmake"
+
+        echo "$QT_BIN_PATH" >> $GITHUB_PATH
+        echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
+        echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
+
+    - name: '⚙️ Install CMake'
+      uses: lukka/get-cmake@fffaaafeea488556c2c12dad60690008bc1caacb # v4.4.2
+      with:
+        useLocalCache: true
+
+    - name: '🚧 Configure TSan tier (Pro)'
+      env:
+        ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
+        SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
+        SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
         cmake -G Ninja -B build/tsan \
           -DCMAKE_C_COMPILER=clang \
@@ -3720,18 +3859,169 @@ jobs:
           -DCMAKE_BUILD_TYPE=Debug \
           -DENABLE_TSAN=ON \
           -DSS_BUILD_TESTS=ON \
-          -DBUILD_GPL3=ON \
+          -DBUILD_GPL3=OFF \
+          -DBUILD_COMMERCIAL=ON \
           -DENABLE_GRPC=OFF \
           -DWITH_WEBENGINE=OFF \
           -DSS_USE_MIMALLOC=OFF \
           -DUSE_SYSTEM_ZLIB=ON \
-          -DUSE_SYSTEM_EXPAT=ON
+          -DUSE_SYSTEM_EXPAT=ON \
+          -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld \
+          -DCMAKE_SHARED_LINKER_FLAGS=-fuse-ld=lld \
+          -DCMAKE_MODULE_LINKER_FLAGS=-fuse-ld=lld \
+          -DCMAKE_JOB_POOLS=link=2 \
+          -DCMAKE_JOB_POOL_LINK=link \
+          -DSS_SANITIZER_DEBUG_LEVEL=-gline-tables-only
 
     - name: '🚧 Build TSan tier'
       run: cmake --build build/tsan --target ss_unit_tests
 
     - name: '🧪 Run ctest (TSan)'
       run: ctest --test-dir build/tsan --output-on-failure
+
+#---------------------------------------------------------------------------------------------------
+# GPLv3 build gate
+#---------------------------------------------------------------------------------------------------
+#
+# The only job that compiles the GPL application. Every other build in this workflow is Pro, so
+# without it a Pro symbol referenced outside its #ifdef BUILD_COMMERCIAL guard -- or a QML file
+# added to the shared set but registered only in the commercial resource list -- would reach the
+# published source tarball as a build failure nobody saw.
+#
+# No sanitizers: this is a compile, link and start-up gate, and the instrumented legs above
+# already cover the runtime. Release with the unity build for the same reason the PGO stages use
+# it -- it is the fastest way through ~800 first-party translation units on a 4-core runner. The
+# stock linker on purpose, too: the lld the sanitizer legs need is a memory workaround, and a gate
+# that exists to prove the GPL tarball builds should not build it a way nobody else does.
+#
+#---------------------------------------------------------------------------------------------------
+
+  build-gpl3:
+    runs-on: ubuntu-24.04
+    name: '🐧 GPLv3 Build Gate'
+    permissions:
+      contents: read
+    env:
+      QT_QPA_PLATFORM: offscreen
+    steps:
+    - name: '🧰 Checkout'
+      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+
+    - name: '⚙️ Install dependencies'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential \
+          clang \
+          lld \
+          ninja-build \
+          libcups2-dev \
+          libnss3 \
+          libegl1 \
+          libgl1-mesa-dev \
+          libasound2-dev \
+          libudev-dev \
+          libsecret-1-dev \
+          libzstd-dev \
+          zlib1g-dev \
+          libexpat1-dev \
+          libminizip-dev \
+          libopus-dev \
+          libxcb1 \
+          libxcb-cursor0 \
+          libxcb-cursor-dev \
+          libxcb-glx0 \
+          libxcb-icccm4 \
+          libxcb-image0 \
+          libxcb-image0-dev \
+          libxcb-keysyms1 \
+          libxcb-randr0 \
+          libxcb-render0 \
+          libxcb-render-util0 \
+          libxcb-shape0 \
+          libxcb-shm0 \
+          libxcb-sync1 \
+          libxcb-util0-dev \
+          libxcb-util1 \
+          libxcb-xfixes0 \
+          libxcb-xinerama0 \
+          libxcb-xkb-dev \
+          libxcb-xtest0 \
+          libxkbcommon-dev \
+          libxkbcommon-x11-0 \
+          libxkbcommon-x11-dev \
+          libpulse-dev \
+          libgstreamer1.0-0 \
+          libgstreamer-plugins-base1.0-0
+
+    #
+    # Restore-only: build-linux owns the save half of this entry, so two jobs never race to
+    # write it
+    #
+    - name: '⚙️ Restore Qt Cache'
+      id: qt_cache
+      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+      with:
+        path: |
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
+          ~/.qt-license
+        key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64
+
+    - name: '⚙️ Install Qt (cache miss)'
+      shell: bash
+      if: steps.qt_cache.outputs.cache-hit != 'true'
+      env:
+        QT_VERSION: ${{env.QT_VERSION_LINUX}}
+        QT_ARCH: x64
+        QT_USERNAME: ${{secrets.QT_USERNAME}}
+        QT_PASSWORD: ${{secrets.QT_PASSWORD}}
+        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
+      run: |
+        chmod +x ./scripts/install-qt.sh
+        ./scripts/install-qt.sh
+
+    - name: '⚙️ Add Qt to PATH'
+      shell: bash
+      env:
+        QT_VERSION: ${{env.QT_VERSION_LINUX}}
+        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
+      run: |
+        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/bin"
+        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/libexec"
+        export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/lib/cmake"
+
+        echo "$QT_BIN_PATH" >> $GITHUB_PATH
+        echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
+        echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
+
+    - name: '⚙️ Install CMake'
+      uses: lukka/get-cmake@fffaaafeea488556c2c12dad60690008bc1caacb # v4.4.2
+      with:
+        useLocalCache: true
+
+    - name: '🚧 Configure GPLv3 build'
+      run: |
+        cmake -G Ninja -B build/gpl3 \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DSS_INAPP_TESTS=ON \
+          -DBUILD_GPL3=ON \
+          -DENABLE_GRPC=OFF \
+          -DWITH_WEBENGINE=OFF \
+          -DSS_USE_MIMALLOC=OFF \
+          -DUSE_SYSTEM_ZLIB=ON \
+          -DUSE_SYSTEM_EXPAT=ON \
+          -DSS_UNITY_BUILD=ON \
+          -DSS_UNITY_BATCH_SIZE=${{env.SS_UNITY_BATCH}}
+
+    - name: '🚧 Build GPLv3 application'
+      run: cmake --build build/gpl3
+
+    #
+    # Instantiating every compiled .qml is the cheapest proof that the GPL binary starts and its
+    # QML tree resolves against the globals this build actually registers
+    #
+    - name: '🧪 QML instantiation self-test (GPL build)'
+      run: ./build/gpl3/app/serial-studio-gpl3 --headless --selftest-suite qml
 
 #---------------------------------------------------------------------------------------------------
 # Integration tests
