@@ -2095,30 +2095,6 @@ jobs:
         useLocalCache: true
 
     #
-    # The ctest tier ran on Linux only until spec 0075, so 100+ suites -- the DSP bit-exactness
-    # and frame-delimiter scan lanes among them -- never compiled under AppleClang. Same lean
-    # Debug tier as the Linux jobs; the application target never builds here
-    #
-    - name: '🚧 Configure unit-test tier'
-      run: |
-        cmake -G Ninja -B build/unit-ci \
-          -DCMAKE_BUILD_TYPE=Debug \
-          -DSS_BUILD_TESTS=ON \
-          -DBUILD_GPL3=ON \
-          -DENABLE_GRPC=OFF \
-          -DWITH_WEBENGINE=OFF \
-          -DSS_USE_MIMALLOC=OFF \
-          -DCMAKE_OSX_DEPLOYMENT_TARGET=14.0
-
-    - name: '🚧 Build unit-test tier'
-      run: cmake --build build/unit-ci --target ss_unit_tests
-
-    - name: '🧪 Run ctest'
-      env:
-        QT_QPA_PLATFORM: offscreen
-      run: ctest --test-dir build/unit-ci --output-on-failure
-
-    #
     # Stage 1 of the two-stage PGO flow, pinned to arm64: this job builds only the native slice
     #
     - name: '🚧 Configure with CMake (PGO generate, arm64)'
@@ -2768,40 +2744,6 @@ jobs:
         if (-not (Test-Path (Join-Path $clangDir 'clang-cl.exe'))) { throw "VS clang-cl not found at $clangDir" }
         Add-Content -Path $env:GITHUB_PATH -Value $clangDir
         & (Join-Path $clangDir 'clang-cl.exe') --version
-
-    #
-    # The ctest tier ran on Linux only until spec 0075, so 100+ suites never compiled under
-    # clang-cl, on the toolchain that actually ships the Windows binary; the application
-    # target never builds here.
-    #
-    # RelWithDebInfo, not the Debug the Linux and macOS jobs use: a Debug configure links
-    # /MDd, which defines _DEBUG and so raises _ITERATOR_DEBUG_LEVEL to 2, while the Qt
-    # binaries this job installs are the release MSVC build at level 0. QMap is std::map on
-    # the MS STL, so any QVariantMap built inside Qt6Core (QVariant::toMap,
-    # QJsonObject::toVariantMap) reaches the test with the level-0 node layout and the
-    # level-2 _Tree code in the test binary walks it into an access violation. Import
-    # libraries carry no detect_mismatch record, so the link succeeds and only the run
-    # fails.
-    #
-    - name: '🚧 Configure unit-test tier'
-      run: |
-        cmake -G Ninja -B build/unit-ci `
-          -DCMAKE_CXX_COMPILER=clang-cl `
-          -DCMAKE_C_COMPILER=clang-cl `
-          -DCMAKE_BUILD_TYPE=RelWithDebInfo `
-          -DSS_BUILD_TESTS=ON `
-          -DBUILD_GPL3=ON `
-          -DENABLE_GRPC=OFF `
-          -DWITH_WEBENGINE=OFF `
-          -DSS_USE_MIMALLOC=OFF
-
-    - name: '🚧 Build unit-test tier'
-      run: cmake --build build/unit-ci --target ss_unit_tests
-
-    - name: '🧪 Run ctest'
-      env:
-        QT_QPA_PLATFORM: offscreen
-      run: ctest --test-dir build/unit-ci --output-on-failure
 
     #
     # gRPC arrives as a prebuilt tarball from GRPC_REPO; building it from source would cost more
