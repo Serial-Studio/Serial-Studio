@@ -29,9 +29,6 @@
 #include "DataModel/Editors/EditorFormatting.h"
 #include "DataModel/ProjectEditor.h"
 #include "DataModel/ProjectModel.h"
-#include "Misc/CommonFonts.h"
-#include "Misc/ThemeManager.h"
-#include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -43,30 +40,16 @@
  *        Editor window, which stays instantiated once opened, hence the window-visibility gate.
  */
 DataModel::OutputCodeEditor::OutputCodeEditor(QQuickItem* parent)
-  : QQuickPaintedItem(parent)
+  : EmbeddedCodeEditorItem(EmbeddedCodeEditor::RenderGate::WindowVisible, parent)
   , m_readingCode(false)
-  , m_themeManager(Misc::ThemeManager::instance())
-  , m_timerEvents(Misc::TimerEvents::instance())
   , m_translator(Misc::Translator::instance())
   , m_projectEditor(DataModel::ProjectEditor::instance())
   , m_projectModel(DataModel::ProjectModel::instance())
-  , m_editor(*this,
-             m_themeManager,
-             Misc::CommonFonts::instance(),
-             EmbeddedCodeEditor::RenderGate::WindowVisible)
   , m_templates(QStringLiteral(":/scripts/output/templates.json"),
                 QStringLiteral(":/scripts/output"),
                 QStringLiteral(".js"),
                 "DataModel::OutputCodeEditor")
-  , m_testDialog(nullptr)
 {
-  m_editor.configureHost();
-
-  connect(&m_themeManager,
-          &Misc::ThemeManager::themeChanged,
-          this,
-          &DataModel::OutputCodeEditor::onThemeChanged);
-
   auto& widget = m_editor.widget();
   connect(&widget, &QCodeEditor::textChanged, this, [this] { Q_EMIT modifiedChanged(); });
   connect(&widget, &QCodeEditor::textChanged, this, &DataModel::OutputCodeEditor::textChanged);
@@ -111,21 +94,6 @@ DataModel::OutputCodeEditor::OutputCodeEditor(QQuickItem* parent)
       }
     }
   });
-
-  connect(this, &QQuickPaintedItem::widthChanged, this, &DataModel::OutputCodeEditor::resizeWidget);
-  connect(
-    this, &QQuickPaintedItem::heightChanged, this, &DataModel::OutputCodeEditor::resizeWidget);
-  connect(&widget, &QCodeEditor::textChanged, this, &DataModel::OutputCodeEditor::scheduleRender);
-  connect(
-    &widget, &QCodeEditor::selectionChanged, this, &DataModel::OutputCodeEditor::scheduleRender);
-  connect(&widget,
-          &QCodeEditor::cursorPositionChanged,
-          this,
-          &DataModel::OutputCodeEditor::scheduleRender);
-  connect(&m_timerEvents,
-          &Misc::TimerEvents::uiTimeout,
-          this,
-          &DataModel::OutputCodeEditor::renderWidget);
 
   connect(&m_translator,
           &Misc::Translator::languageChanged,
@@ -317,13 +285,18 @@ void DataModel::OutputCodeEditor::selectTemplate()
 }
 
 /**
- * @brief Opens the transmit test dialog with the current editor code.
+ * @brief Opens the transmit test dialog with the current editor code. The dialog is a top-level
+ *        widget built on first use: held by value it was constructed for every session that ever
+ *        instantiated the Project Editor, whether or not anyone tested a transmit function.
  */
 void DataModel::OutputCodeEditor::testTransmitFunction()
 {
-  m_testDialog.setTransmitCode(text());
-  m_testDialog.clear();
-  m_testDialog.showNormal();
+  if (!m_testDialog)
+    m_testDialog = std::make_unique<TransmitTestDialog>(nullptr);
+
+  m_testDialog->setTransmitCode(text());
+  m_testDialog->clear();
+  m_testDialog->showNormal();
 }
 
 /**
@@ -357,184 +330,4 @@ QString DataModel::OutputCodeEditor::defaultTemplate()
 void DataModel::OutputCodeEditor::loadTemplates()
 {
   m_templates.reload();
-}
-
-//--------------------------------------------------------------------------------------------------
-// Theme
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Applies the current theme to the code editor widget.
- */
-void DataModel::OutputCodeEditor::onThemeChanged()
-{
-  m_editor.applyTheme();
-}
-
-//--------------------------------------------------------------------------------------------------
-// Rendering
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Marks the cached pixmap stale; the next UI tick does the grab, so a burst of edits
- *        costs one widget render instead of one per event.
- */
-void DataModel::OutputCodeEditor::scheduleRender()
-{
-  m_editor.scheduleRender();
-}
-
-/**
- * @brief Grabs the editor widget into a pixmap for QML rendering.
- */
-void DataModel::OutputCodeEditor::renderWidget()
-{
-  m_editor.renderWidget();
-}
-
-/**
- * @brief Resizes the backing QCodeEditor to match the QML item dimensions.
- */
-void DataModel::OutputCodeEditor::resizeWidget()
-{
-  m_editor.resizeWidget();
-}
-
-//--------------------------------------------------------------------------------------------------
-// Event forwarding
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Paints the cached editor pixmap into the QML scene.
- */
-void DataModel::OutputCodeEditor::paint(QPainter* painter)
-{
-  m_editor.paint(painter);
-}
-
-/**
- * @brief Routes ShortcutOverride to the editor widget so editing keys (undo, copy, paste...)
- *        are handled natively instead of being consumed by QML Shortcut bindings.
- */
-bool DataModel::OutputCodeEditor::event(QEvent* event)
-{
-  if (m_editor.handleShortcutOverride(event))
-    return true;
-
-  return QQuickPaintedItem::event(event);
-}
-
-/**
- * @brief Forwards completer navigation/commit keys to the popup when visible; everything else
- *        goes straight to the editor widget so QCompleter's focus check cannot hide the popup.
- */
-void DataModel::OutputCodeEditor::keyPressEvent(QKeyEvent* event)
-{
-  m_editor.handleKeyPress(event);
-}
-
-/**
- * @brief Forwards key-release events to the backing QCodeEditor widget.
- */
-void DataModel::OutputCodeEditor::keyReleaseEvent(QKeyEvent* event)
-{
-  m_editor.forwardToWidget(event);
-}
-
-/**
- * @brief Forwards input-method events (IME composition) to the backing widget.
- */
-void DataModel::OutputCodeEditor::inputMethodEvent(QInputMethodEvent* event)
-{
-  m_editor.forwardToWidget(event);
-  m_editor.scheduleRender();
-}
-
-/**
- * @brief Forwards focus-in events to the backing widget.
- */
-void DataModel::OutputCodeEditor::focusInEvent(QFocusEvent* event)
-{
-  m_editor.forwardToWidget(event);
-}
-
-/**
- * @brief Forwards focus-out events to the backing widget.
- */
-void DataModel::OutputCodeEditor::focusOutEvent(QFocusEvent* event)
-{
-  m_editor.forwardToWidget(event);
-}
-
-/**
- * @brief Forwards mouse-press events to the backing widget, claiming focus for the item.
- */
-void DataModel::OutputCodeEditor::mousePressEvent(QMouseEvent* event)
-{
-  m_editor.handleMouse(event, true);
-}
-
-/**
- * @brief Forwards mouse-move events to the backing widget.
- */
-void DataModel::OutputCodeEditor::mouseMoveEvent(QMouseEvent* event)
-{
-  m_editor.handleMouse(event, false);
-}
-
-/**
- * @brief Forwards mouse-release events to the backing widget.
- */
-void DataModel::OutputCodeEditor::mouseReleaseEvent(QMouseEvent* event)
-{
-  m_editor.handleMouse(event, false);
-}
-
-/**
- * @brief Forwards double-click events to the backing widget.
- */
-void DataModel::OutputCodeEditor::mouseDoubleClickEvent(QMouseEvent* event)
-{
-  m_editor.handleMouse(event, false);
-}
-
-/**
- * @brief Forwards wheel events to the editor viewport.
- */
-void DataModel::OutputCodeEditor::wheelEvent(QWheelEvent* event)
-{
-  m_editor.forwardToViewport(event);
-  m_editor.scheduleRender();
-}
-
-/**
- * @brief Forwards drag-enter events to the editor viewport.
- */
-void DataModel::OutputCodeEditor::dragEnterEvent(QDragEnterEvent* event)
-{
-  m_editor.forwardToViewport(event);
-}
-
-/**
- * @brief Forwards drag-move events to the editor viewport.
- */
-void DataModel::OutputCodeEditor::dragMoveEvent(QDragMoveEvent* event)
-{
-  m_editor.forwardToViewport(event);
-}
-
-/**
- * @brief Forwards drag-leave events to the editor viewport.
- */
-void DataModel::OutputCodeEditor::dragLeaveEvent(QDragLeaveEvent* event)
-{
-  m_editor.forwardToViewport(event);
-}
-
-/**
- * @brief Forwards drop events to the editor viewport.
- */
-void DataModel::OutputCodeEditor::dropEvent(QDropEvent* event)
-{
-  m_editor.forwardToViewport(event);
 }

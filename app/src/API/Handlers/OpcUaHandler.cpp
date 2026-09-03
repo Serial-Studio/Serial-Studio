@@ -28,7 +28,6 @@
 
 #include "API/CommandRegistry.h"
 #include "API/EnumLabels.h"
-#include "API/PathPolicy.h"
 #include "API/SchemaBuilder.h"
 #include "IO/ConnectionManager.h"
 #include "IO/Drivers/OpcUaTagModel.h"
@@ -414,12 +413,6 @@ API::CommandResponse API::Handlers::OpcUaHandler::setUserCertificate(const QStri
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("certificate and key must both exist on disk"));
 
-  if (!API::isPathAllowed(certificate) || !API::isPathAllowed(key))
-    return CommandResponse::makeError(id,
-                                      ErrorCode::InvalidParam,
-                                      QStringLiteral("certificate and key must be inside an "
-                                                     "allowed path"));
-
   auto* driver = opcUaDriver();
   driver->setUserCertificatePath(certificate);
   driver->setUserKeyPath(key);
@@ -478,9 +471,6 @@ API::CommandResponse API::Handlers::OpcUaHandler::exportCertificate(const QStrin
     return missingParam(id, "path");
 
   const auto path = params.value(QStringLiteral("path")).toString();
-  if (!API::isPathAllowed(path, true))
-    return CommandResponse::makeError(
-      id, ErrorCode::InvalidParam, QStringLiteral("path is not allowed"));
 
   if (!opcUaDriver()->exportCertificate(path))
     return CommandResponse::makeError(

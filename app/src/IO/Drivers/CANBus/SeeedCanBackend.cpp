@@ -22,8 +22,7 @@
 
 #include "IO/Drivers/CANBus/SeeedCanBackend.h"
 
-#include <chrono>
-#include <QSerialPort>
+#include <cstdint>
 #include <QSerialPortInfo>
 #include <QVariant>
 
@@ -43,19 +42,9 @@ constexpr std::uint8_t kTypeRtrBit  = 0x10;
 constexpr std::uint8_t kTypeDlcMask = 0x0f;
 
 /**
- * @enum SeeedParse
- * @brief Outcome of decoding one packet from the receive buffer.
- */
-enum class SeeedParse {
-  Frame,
-  Resync,
-  NeedMore,
-};
-
-/**
  * @brief Maps a bitrate in bits/s to the analyzer's configuration code, or 0 when unsupported.
  */
-[[nodiscard]] static std::uint8_t seeedBitrateCode(std::uint32_t bitrate)
+std::uint8_t IO::Drivers::SeeedCanBackend::bitrateCode(quint32 bitrate)
 {
   switch (bitrate) {
     case 1000000:
@@ -82,53 +71,52 @@ enum class SeeedParse {
 }
 
 /**
- * @brief Decodes one variable-length packet at the front of @p buf (which must start with 0xAA).
+ * @brief Decodes one variable-length packet at the front of @p buffer (which must start with 0xAA).
  */
-[[nodiscard]] static SeeedParse decodeSeeedFrame(const QByteArray& buf,
-                                                 QCanBusFrame& out,
-                                                 int& consumed)
+IO::Drivers::SeeedCanBackend::Parse IO::Drivers::SeeedCanBackend::decodePacket(
+  const QByteArray& buffer, QCanBusFrame& out, int& consumed)
 {
-  if (buf.size() < 2)
-    return SeeedParse::NeedMore;
+  if (buffer.size() < 2)
+    return Parse::NeedMore;
 
-  const std::uint8_t typeByte = static_cast<std::uint8_t>(buf.at(1));
+  const std::uint8_t typeByte = static_cast<std::uint8_t>(buffer.at(1));
 
   if (typeByte == kFrameEnd) {
-    if (buf.size() < 20)
-      return SeeedParse::NeedMore;
+    if (buffer.size() < 20)
+      return Parse::NeedMore;
 
     consumed = 20;
-    return SeeedParse::Resync;
+    return Parse::Resync;
   }
 
   const int dlc = typeByte & kTypeDlcMask;
   if ((typeByte & kTypeBase) != kTypeBase || dlc > 8) {
     consumed = 1;
-    return SeeedParse::Resync;
+    return Parse::Resync;
   }
 
   const bool extended = (typeByte & kTypeExtBit) != 0;
   const int idLen     = extended ? 4 : 2;
   const int total     = 2 + idLen + dlc + 1;
-  if (buf.size() < total)
-    return SeeedParse::NeedMore;
+  if (buffer.size() < total)
+    return Parse::NeedMore;
 
-  if (static_cast<std::uint8_t>(buf.at(total - 1)) != kFrameEnd) {
+  if (static_cast<std::uint8_t>(buffer.at(total - 1)) != kFrameEnd) {
     consumed = 1;
-    return SeeedParse::Resync;
+    return Parse::Resync;
   }
 
   std::uint32_t id = 0;
   for (int i = 0; i < idLen; ++i)
-    id |= static_cast<std::uint32_t>(static_cast<std::uint8_t>(buf.at(2 + i))) << (8 * i);
+    id |= static_cast<std::uint32_t>(static_cast<std::uint8_t>(buffer.at(2 + i))) << (8 * i);
 
-  out = QCanBusFrame(id, buf.mid(2 + idLen, dlc));
+  out = QCanBusFrame(id, buffer.mid(2 + idLen, dlc));
   out.setExtendedFrameFormat(extended);
   if (typeByte & kTypeRtrBit)
     out.setFrameType(QCanBusFrame::RemoteRequestFrame);
 
   consumed = total;
-  return SeeedParse::Frame;
+  return Parse::Frame;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -181,7 +169,7 @@ QCanBusDevice* IO::Drivers::SeeedCanBackend::create(const QString& portName)
  * @brief Constructs the backend bound to a serial port name.
  */
 IO::Drivers::SeeedCanBackend::SeeedCanBackend(const QString& portName, QObject* parent)
-  : QCanBusDevice(parent), m_port(nullptr), m_portName(portName)
+  : SerialCanBackendBase(portName, kSeeedBaudRate, parent)
 {}
 
 /**
@@ -198,62 +186,15 @@ IO::Drivers::SeeedCanBackend::~SeeedCanBackend()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Opens the serial port and sends the analyzer initialization frame.
+ * @brief Rejects a bitrate the analyzer has no configuration code for.
  */
-bool IO::Drivers::SeeedCanBackend::open()
+bool IO::Drivers::SeeedCanBackend::validateBitrate(quint32 bitrate, QString& reason) const
 {
-  const auto requested = configurationParameter(QCanBusDevice::BitRateKey).toUInt();
-  if (seeedBitrateCode(requested == 0 ? 500000 : requested) == 0) {
-    setError(tr("The bitrate %1 bps is not supported by the USB-CAN Analyzer.").arg(requested),
-             QCanBusDevice::ConfigurationError);
-    setState(QCanBusDevice::UnconnectedState);
-    return false;
-  }
+  if (bitrateCode(bitrate) != 0)
+    return true;
 
-  m_port = new QSerialPort(m_portName, this);
-  m_port->setBaudRate(kSeeedBaudRate);
-
-  if (!m_port->open(QIODevice::ReadWrite)) {
-    setError(tr("Could not open serial port %1: %2").arg(m_portName, m_port->errorString()),
-             QCanBusDevice::ConnectionError);
-    m_port->deleteLater();
-    m_port = nullptr;
-    setState(QCanBusDevice::UnconnectedState);
-    return false;
-  }
-
-  connect(m_port, &QSerialPort::readyRead, this, &SeeedCanBackend::onReadyRead);
-
-  if (!sendInitFrame(requested == 0 ? 500000 : requested)) {
-    setError(tr("Failed to initialize the USB-CAN Analyzer."), QCanBusDevice::ConnectionError);
-    m_port->close();
-    m_port->deleteLater();
-    m_port = nullptr;
-    setState(QCanBusDevice::UnconnectedState);
-    return false;
-  }
-
-  setState(QCanBusDevice::ConnectedState);
-  return true;
-}
-
-/**
- * @brief Closes the serial port.
- */
-void IO::Drivers::SeeedCanBackend::close()
-{
-  setState(QCanBusDevice::ClosingState);
-
-  if (m_port) {
-    if (m_port->isOpen())
-      m_port->close();
-
-    m_port->deleteLater();
-    m_port = nullptr;
-  }
-
-  m_rxBuffer.clear();
-  setState(QCanBusDevice::UnconnectedState);
+  reason = tr("The bitrate %1 bps is not supported by the USB-CAN Analyzer.").arg(bitrate);
+  return false;
 }
 
 /**
@@ -261,7 +202,7 @@ void IO::Drivers::SeeedCanBackend::close()
  */
 bool IO::Drivers::SeeedCanBackend::writeFrame(const QCanBusFrame& frame)
 {
-  if (!m_port || !m_port->isOpen()) {
+  if (!portIsOpen()) {
     setError(tr("USB-CAN Analyzer is not open for writing."), QCanBusDevice::WriteError);
     return false;
   }
@@ -294,10 +235,9 @@ bool IO::Drivers::SeeedCanBackend::writeFrame(const QCanBusFrame& frame)
   packet.append(payload.left(dlc));
   packet.append(static_cast<char>(kFrameEnd));
 
-  if (m_port->write(packet) != packet.size())
+  if (!writeToPort(packet))
     return false;
 
-  m_port->flush();
   Q_EMIT framesWritten(1);
   return true;
 }
@@ -312,67 +252,56 @@ QString IO::Drivers::SeeedCanBackend::interpretErrorFrame(const QCanBusFrame& fr
 }
 
 //--------------------------------------------------------------------------------------------------
-// Private slots & helpers
+// Protocol hooks
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Reassembles variable-length analyzer packets and enqueues decoded frames.
+ * @brief Reassembles variable-length analyzer packets into frames, consuming what it decoded.
  */
-void IO::Drivers::SeeedCanBackend::onReadyRead()
+void IO::Drivers::SeeedCanBackend::drainBuffer(QByteArray& buffer, QList<QCanBusFrame>& frames)
 {
-  if (!m_port)
-    return;
+  const qint64 arrivalUsec = arrivalMicroseconds();
 
   // code-verify off
   // Driver acquisition path (not the Dashboard draw hotpath): byte accumulation and
   // frame batching allocate by nature, as in every driver read callback. The drain
   // loop is bounded -- each pass consumes >= 1 byte or breaks on NeedMore.
-  m_rxBuffer.append(m_port->readAll());
-
-  const qint64 arrivalUsec = std::chrono::duration_cast<std::chrono::microseconds>(
-                               std::chrono::steady_clock::now().time_since_epoch())
-                               .count();
-
-  QList<QCanBusFrame> received;
   while (true) {
-    const int start = m_rxBuffer.indexOf(static_cast<char>(kFrameStart));
+    const int start = buffer.indexOf(static_cast<char>(kFrameStart));
     if (start < 0) {
-      m_rxBuffer.clear();
+      buffer.clear();
       break;
     }
 
     if (start > 0)
-      m_rxBuffer.remove(0, start);
+      buffer.remove(0, start);
 
     int consumed = 0;
     QCanBusFrame frame;
-    const SeeedParse result = decodeSeeedFrame(m_rxBuffer, frame, consumed);
-    if (result == SeeedParse::NeedMore)
+    const Parse result = decodePacket(buffer, frame, consumed);
+    if (result == Parse::NeedMore)
       break;
 
-    if (result == SeeedParse::Frame) {
+    if (result == Parse::Frame) {
       frame.setTimeStamp(QCanBusFrame::TimeStamp::fromMicroSeconds(arrivalUsec));
-      received.append(frame);
+      frames.append(frame);
     }
 
-    m_rxBuffer.remove(0, consumed);
+    buffer.remove(0, consumed);
   }
   // code-verify on
-
-  if (!received.isEmpty())
-    enqueueReceivedFrames(received);
 }
 
 /**
  * @brief Builds and sends the 20-byte initialization frame for the given bitrate.
  */
-bool IO::Drivers::SeeedCanBackend::sendInitFrame(quint32 bitrate)
+bool IO::Drivers::SeeedCanBackend::sendInit(quint32 bitrate)
 {
   QByteArray frame(20, 0);
   frame[0]  = static_cast<char>(kFrameStart);
   frame[1]  = static_cast<char>(kFrameEnd);
   frame[2]  = 0x12;
-  frame[3]  = static_cast<char>(seeedBitrateCode(bitrate));
+  frame[3]  = static_cast<char>(bitrateCode(bitrate));
   frame[4]  = 0x01;
   frame[13] = 0x00;
   frame[14] = 0x01;
@@ -383,9 +312,5 @@ bool IO::Drivers::SeeedCanBackend::sendInitFrame(quint32 bitrate)
 
   frame[19] = static_cast<char>(checksum & 0xff);
 
-  if (m_port->write(frame) != frame.size())
-    return false;
-
-  m_port->flush();
-  return true;
+  return writeToPort(frame);
 }

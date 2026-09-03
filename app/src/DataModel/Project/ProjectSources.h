@@ -70,6 +70,9 @@ public:
   void updateSourceFrameParserParams(int sourceId, const QJsonObject& params);
   void updateSourceStreamLane(int sourceId, const QString& lane);
   void storeFrameParserCode(int sourceId, const QString& code);
+  void setSourceFrameParserTemplateAndParams(int sourceId,
+                                             const QString& templateId,
+                                             const QJsonObject& params);
 
 private:
   ProjectModel& m_model;

@@ -24,6 +24,7 @@
 #include <QColor>
 #include <QObject>
 #include <QPalette>
+#include <QQmlPropertyMap>
 #include <QSettings>
 
 #include "Misc/ThemeCatalog.h"
@@ -42,6 +43,24 @@ inline QString QSS(const QString& style, const Colors&... colors)
 
 namespace Misc {
 /**
+ * @brief Republishes @p colors into @p map one key at a time, so only the entries that actually
+ *        moved notify their bindings. A key @p colors no longer carries is kept as an invalid
+ *        value rather than removed: a binding reading it must resolve to an empty color, not to
+ *        a property that is not there. Header-inline so the rule is unit-testable on its own.
+ */
+inline void syncColorMap(QQmlPropertyMap& map, const QVariantMap& colors)
+{
+  for (auto it = colors.cbegin(); it != colors.cend(); ++it)
+    if (map.value(it.key()) != it.value())
+      map.insert(it.key(), it.value());
+
+  const auto known = map.keys();
+  for (const auto& key : known)
+    if (!colors.contains(key) && map.value(key).isValid())
+      map.insert(key, QVariant());
+}
+
+/**
  * @brief Manages the application's color themes.
  */
 class ThemeManager : public QObject {
@@ -54,9 +73,9 @@ class ThemeManager : public QObject {
   Q_PROPERTY(QString themeName
              READ themeName
              NOTIFY themeChanged)
-  Q_PROPERTY(QVariantMap colors
-             READ colors
-             NOTIFY themeChanged)
+  Q_PROPERTY(QQmlPropertyMap* colors
+             READ colorMap
+             CONSTANT)
   Q_PROPERTY(QVariantMap parameters
              READ parameters
              NOTIFY themeChanged)
@@ -82,6 +101,7 @@ public:
   [[nodiscard]] int theme() const;
   [[nodiscard]] const QString& themeName() const;
   [[nodiscard]] const QVariantMap& colors() const;
+  [[nodiscard]] QQmlPropertyMap* colorMap();
   [[nodiscard]] const QVariantMap& parameters() const;
   [[nodiscard]] const QVector<QColor>& widgetColors() const;
   [[nodiscard]] const QVector<QPair<QColor, QColor>>& deviceColors() const;
@@ -114,6 +134,9 @@ private:
   QSettings m_settings;
   QVariantMap m_colors;
   QVariantMap m_parameters;
+
+  // Per-key view of m_colors for QML: one read costs one lookup, and a theme switch notifies
+  QQmlPropertyMap* m_colorMap;
 
   ThemeCatalog m_catalog;
 

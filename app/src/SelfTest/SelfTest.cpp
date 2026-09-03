@@ -21,6 +21,7 @@
 
 #include "SelfTest/SelfTest.h"
 
+#include <cstddef>
 #include <cstdlib>
 #include <iterator>
 #include <QCoreApplication>
@@ -51,10 +52,20 @@ static void runSmokeSuite(SuiteResult& result);
 //---------------------------------------------------------------------------------------------------
 
 /**
- * @brief The v1 registry. Suites run in declaration order; each one must be self-contained.
+ * @brief The pre-root registry. Suites run in declaration order; each one must be self-contained
+ *        and must never touch an application singleton.
  */
 static constexpr detail::SuiteEntry kSuites[] = {
   {"smoke", &runSmokeSuite},
+};
+
+/**
+ * @brief The post-root registry: suites that need the composition root and the QML engine, run
+ *        from the hook in CLI::process() after ModuleManager has built the modules. Named
+ *        explicitly with --selftest-suite; a bare --selftest never reaches them.
+ */
+static constexpr detail::SuiteEntry kPostRootSuites[] = {
+  {"qml", &runQmlInstantiationSuite},
 };
 
 //---------------------------------------------------------------------------------------------------
@@ -98,38 +109,43 @@ static void runSmokeSuite(SuiteResult& result)
 //---------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns every registered suite name, in registration order.
+ * @brief Returns the names in one registry, in registration order.
  */
-QStringList Runner::suiteNames()
+static QStringList namesIn(const detail::SuiteEntry* suites, std::size_t count)
 {
-  SS_ASSERT_LOG(std::size(kSuites) > 0);
+  SS_ASSERT(suites != nullptr, return {});
+  SS_ASSERT_LOG(count > 0);
 
   QStringList names;
-  names.reserve(static_cast<qsizetype>(std::size(kSuites)));
-  for (const auto& entry : kSuites) {
-    SS_ASSERT_LOG(entry.name != nullptr);
-    if (entry.name == nullptr)
+  names.reserve(static_cast<qsizetype>(count));
+  for (std::size_t i = 0; i < count; ++i) {
+    SS_ASSERT_LOG(suites[i].name != nullptr);
+    if (suites[i].name == nullptr)
       continue;
 
-    names.append(QString::fromLatin1(entry.name));
+    names.append(QString::fromLatin1(suites[i].name));
   }
 
   return names;
 }
 
 /**
- * @brief Runs every suite, or only the one named by @p suiteFilter, and returns the aggregate exit
- *        status: EXIT_SUCCESS when no check failed, EXIT_FAILURE otherwise.
+ * @brief Runs one registry, honoring @p suiteFilter, and returns EXIT_SUCCESS / EXIT_FAILURE.
  */
-int Runner::runAndReport(const QString& suiteFilter)
+static int runRegistry(const detail::SuiteEntry* suites,
+                       std::size_t count,
+                       const QString& suiteFilter,
+                       const QStringList& available)
 {
-  SS_ASSERT_LOG(std::size(kSuites) > 0);
+  SS_ASSERT(suites != nullptr, return EXIT_FAILURE);
+  SS_ASSERT_LOG(count > 0);
 
   int suitesRun = 0;
   int checks    = 0;
   int failures  = 0;
 
-  for (const auto& entry : kSuites) {
+  for (std::size_t i = 0; i < count; ++i) {
+    const auto& entry = suites[i];
     SS_ASSERT_LOG(entry.run != nullptr);
     if (entry.run == nullptr || entry.name == nullptr)
       continue;
@@ -153,7 +169,7 @@ int Runner::runAndReport(const QString& suiteFilter)
 
   if (suitesRun == 0) {
     qCritical().noquote() << "[selftest] unknown suite:" << suiteFilter
-                          << "| available:" << suiteNames().join(QStringLiteral(", "));
+                          << "| available:" << available.join(QStringLiteral(", "));
     return EXIT_FAILURE;
   }
 
@@ -163,6 +179,40 @@ int Runner::runAndReport(const QString& suiteFilter)
                          .arg(failures);
 
   return failures == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
+}
+
+/**
+ * @brief Returns every registered pre-root suite name, in registration order.
+ */
+QStringList Runner::suiteNames()
+{
+  return namesIn(kSuites, std::size(kSuites));
+}
+
+/**
+ * @brief Returns every registered post-root suite name, in registration order.
+ */
+QStringList Runner::postRootSuiteNames()
+{
+  return namesIn(kPostRootSuites, std::size(kPostRootSuites));
+}
+
+/**
+ * @brief Runs every pre-root suite, or only the one named by @p suiteFilter, and returns the
+ *        aggregate exit status: EXIT_SUCCESS when no check failed, EXIT_FAILURE otherwise.
+ */
+int Runner::runAndReport(const QString& suiteFilter)
+{
+  return runRegistry(kSuites, std::size(kSuites), suiteFilter, suiteNames());
+}
+
+/**
+ * @brief Runs the post-root suite named by @p suiteFilter, after the composition root exists.
+ */
+int Runner::runPostRootAndReport(const QString& suiteFilter)
+{
+  return runRegistry(
+    kPostRootSuites, std::size(kPostRootSuites), suiteFilter, postRootSuiteNames());
 }
 
 }  // namespace SelfTest

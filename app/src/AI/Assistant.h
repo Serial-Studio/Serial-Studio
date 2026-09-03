@@ -174,6 +174,7 @@ public:
   Q_INVOKABLE [[nodiscard]] QString modelDisplayName(int providerIdx, const QString& modelId) const;
   Q_INVOKABLE [[nodiscard]] bool requiresApiKey(int providerIdx) const;
   Q_INVOKABLE [[nodiscard]] QString localBaseUrl() const;
+  Q_INVOKABLE [[nodiscard]] int localContextWindow() const;
   Q_INVOKABLE [[nodiscard]] QVariantList memoryList() const;
   Q_INVOKABLE [[nodiscard]] bool addMemory(const QString& category, const QString& text);
   Q_INVOKABLE [[nodiscard]] bool updateMemory(const QString& id, const QString& text);
@@ -197,6 +198,7 @@ public slots:
   void setModel(int providerIdx, const QString& model);
   void clearKey(int providerIdx);
   void setLocalBaseUrl(const QString& url);
+  void setLocalContextWindow(int tokens);
   void refreshLocalModels();
   void sendMessage(const QString& userText);
   void cancel();

@@ -245,11 +245,15 @@ public slots:
 
 private slots:
   void onSparkplugTick();
+  void onDialTimeout();
   void onStateChanged(QMqttClient::ClientState state);
   void onErrorChanged(QMqttClient::ClientError error);
   void onMessageReceived(const QByteArray& message, const QMqttTopicName& topic);
 
 private:
+  void applyCredentials(const QString& username, const QString& password);
+  void failDial(const QString& reason);
+  void reportDropToManager();
   void loadPersistedSettings();
   void refreshTopicFilterCache();
   [[nodiscard]] QString settingsKey(const char* leaf) const;
@@ -264,8 +268,10 @@ private:
   void flushSparkplugFrame();
   void reportSparkplugDrops();
   void publishSparkplugRebirths();
+  void restoreSparkplugSlots(const QVariant& value);
   void sparkplugStateChanged(const bool connected);
   void appendSparkplugSlot(const SparkplugSession::SlotValue& slot);
+  void appendSparkplugProperties(QList<IO::DriverProperty>& props) const;
   void routeReceivedMessage(const QByteArray& message, const QMqttTopicName& topic);
   [[nodiscard]] SparkplugSession& sparkplugSession();
   [[nodiscard]] const SparkplugSession& sparkplugSession() const;
@@ -324,6 +330,7 @@ private:
   QSettings m_settings;
   ::MQTT::CredentialVault m_vault;
   QMqttClient m_client;
+  QTimer m_dialTimer;
   QTimer m_sparkplugTimer;
   QPointer<MQTT> m_sparkplugPeer;
   SparkplugState m_sparkplugState;

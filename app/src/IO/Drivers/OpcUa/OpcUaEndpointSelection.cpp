@@ -110,8 +110,9 @@ bool IO::Drivers::OpcUaEndpointSelection::endpointAcceptsToken(const OpcUaTypes:
 
 /**
  * @brief Picks the endpoint to dial after a discovery. A URL that was already selected keeps its
- *        place; otherwise the MOST secure usable endpoint wins, and a deprecated policy is only
- *        ever chosen when the user asked for it by name.
+ *        place; otherwise the MOST secure usable endpoint wins. A deprecated policy is never
+ *        scored: a server offering nothing else leaves the choice empty rather than being dialed
+ *        over Basic128Rsa15, which is what "never auto-selected" has to mean to be true.
  */
 IO::Drivers::OpcUaEndpointSelection::EndpointChoice IO::Drivers::OpcUaEndpointSelection::
   selectBestEndpoint(const QList<OpcUaTypes::Endpoint>& endpoints,
@@ -136,11 +137,12 @@ IO::Drivers::OpcUaEndpointSelection::EndpointChoice IO::Drivers::OpcUaEndpointSe
 
     const bool wanted = candidate.securityPolicyUri == preferredPolicy
                      && static_cast<int>(candidate.securityMode) == preferredMode;
+    if (!wanted && policyIsDeprecated(candidate.securityPolicyUri))
+      continue;
+
     const int score = wanted ? kConfiguredScore
-                    : policyIsDeprecated(candidate.securityPolicyUri)
-                      ? 0
-                      : supportedPolicies().indexOf(candidate.securityPolicyUri) * 10
-                          + static_cast<int>(candidate.securityMode);
+                             : supportedPolicies().indexOf(candidate.securityPolicyUri) * 10
+                                 + static_cast<int>(candidate.securityMode);
     if (score <= bestScore)
       continue;
 

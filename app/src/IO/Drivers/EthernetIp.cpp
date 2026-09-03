@@ -31,7 +31,6 @@
 #include <QJsonDocument>
 #include <QMessageBox>
 #include <QSet>
-#include <QTimer>
 
 #include "AppState.h"
 #include "DataModel/ProjectModel.h"
@@ -272,18 +271,7 @@ static void releaseHandles(QList<int>& handles)
  * @brief Builds the worker with no tag handles: they are created on this object's thread inside
  *        connectToPlc(), never in the constructor, which still runs on the GUI thread.
  */
-IO::Drivers::EipPollWorker::EipPollWorker()
-  : m_open(false)
-  , m_reported(false)
-  , m_interval(kEipDefaultIntervalMs)
-  , m_deadTicks(0)
-  , m_frameSlot(0)
-  , m_timer(nullptr)
-  , m_abort(false)
-  , m_readsOk(0)
-  , m_readsFailed(0)
-  , m_framesPublished(0)
-{}
+IO::Drivers::EipPollWorker::EipPollWorker() : m_deadTicks(0) {}
 
 /**
  * @brief Releases every tag handle. The driver joins the thread before destroying the worker, so
@@ -307,22 +295,18 @@ void IO::Drivers::EipPollWorker::configure(const QString& host,
   SS_ASSERT(!tags.isEmpty(), return);
   SS_ASSERT_LOG(interval >= kEipMinIntervalMs);
 
-  m_host     = host;
-  m_path     = path;
-  m_plcType  = plcType;
-  m_interval = interval;
-  m_tags     = std::move(tags);
-  m_values   = QList<QVariant>(m_tags.size());
-  m_dirty    = QList<bool>(m_tags.size(), false);
-  m_handles  = QList<int>(m_tags.size(), -1);
+  m_host    = host;
+  m_path    = path;
+  m_plcType = plcType;
+  m_tags    = std::move(tags);
+  m_handles = QList<int>(m_tags.size(), -1);
 
-  qsizetype bytes = OpcUaWire::kHeaderBytes;
+  QVector<OpcUaWire::Type> types;
+  types.reserve(m_tags.size());
   for (const auto& tag : m_tags)
-    bytes += OpcUaWire::maxEntryBytes(tag.type);
+    types.append(tag.type);
 
-  const auto reserve = qMin<qsizetype>(bytes, OpcUaWire::kMaxFrameBytes);
-  m_frames[0].reserve(reserve);
-  m_frames[1].reserve(reserve);
+  configureChannels(interval, std::move(types));
 }
 
 /**
@@ -350,16 +334,17 @@ QByteArray IO::Drivers::EipPollWorker::attributes(const EipTag& tag) const
 }
 
 /**
- * @brief Creates every tag handle, which is what actually opens the CIP session. The RETURN VALUE
- *        is the driver's single dial verdict (spec 0050): a controller that refuses the first tag
- *        fails the attempt here rather than leaving a half-open link behind a retry timer.
+ * @brief Creates every tag handle, which is what actually opens the CIP session: a controller that
+ *        refuses the first tag fails the attempt here rather than leaving a half-open link behind
+ *        a retry timer.
  */
 bool IO::Drivers::EipPollWorker::connectToPlc()
 {
-  SS_ASSERT(!m_open, return true);
-
-  m_dialError.clear();
+  SS_ASSERT(!sessionOpen(), return true);
   SS_ASSERT(!m_tags.isEmpty(), return false);
+
+  clearAbort();
+  noteDialError(QString());
 
   QElapsedTimer budget;
   budget.start();
@@ -367,46 +352,34 @@ bool IO::Drivers::EipPollWorker::connectToPlc()
     QString reason;
     const int handle = createHandle(attributes(m_tags.at(i)), reason);
     if (handle < 0) {
-      m_dialError = tr("\"%1\": %2").arg(m_tags.at(i).tag, reason);
+      noteDialError(tr("\"%1\": %2").arg(m_tags.at(i).tag, reason));
       shutdown();
       return false;
     }
 
     m_handles[i] = handle;
     if (budget.hasExpired(kEipDialDeadlineMs) && i + 1 < m_tags.size()) {
-      m_dialError = tr("The controller did not open every tag within the connection deadline");
+      noteDialError(tr("The controller did not open every tag within the connection deadline"));
       shutdown();
       return false;
     }
   }
 
-  m_open      = true;
-  m_reported  = false;
   m_deadTicks = 0;
-  m_timer     = new QTimer(this);
-  m_timer->setInterval(m_interval);
-  connect(m_timer, &QTimer::timeout, this, &IO::Drivers::EipPollWorker::onPollTick);
-  m_timer->start();
+  startPolling();
   return true;
 }
 
 /**
- * @brief Stops polling and destroys every tag handle. Idempotent, because both the driver's
- *        teardown and the destructor reach it.
+ * @brief Destroys every tag handle on the thread that created them. Idempotent, because both the
+ *        driver's teardown and the destructor reach it through shutdown().
  */
-void IO::Drivers::EipPollWorker::shutdown()
+void IO::Drivers::EipPollWorker::releaseResources()
 {
-  m_open = false;
-  if (m_timer) {
-    m_timer->stop();
-    delete m_timer;
-    m_timer = nullptr;
-  }
+  SS_ASSERT_LOG(m_handles.size() >= 0);
+  SS_ASSERT_LOG(!sessionOpen());
 
   releaseHandles(m_handles);
-
-  SS_ASSERT_LOG(m_timer == nullptr);
-  SS_ASSERT_LOG(!m_open);
 }
 
 /**
@@ -414,17 +387,14 @@ void IO::Drivers::EipPollWorker::shutdown()
  *        tick where NOTHING answered is counted; libplctag reconnects on its own, so only a run of
  *        fully-dead ticks is treated as a lost link.
  */
-void IO::Drivers::EipPollWorker::onPollTick()
+void IO::Drivers::EipPollWorker::pollTick()
 {
-  if (!m_open || m_abort.load(std::memory_order_relaxed))
-    return;
-
   const auto now       = std::chrono::steady_clock::now().time_since_epoch();
   const qint64 stampNs = std::chrono::duration_cast<std::chrono::nanoseconds>(now).count();
 
   int answered = 0;
   for (int i = 0; i < m_tags.size(); ++i) {
-    if (m_abort.load(std::memory_order_relaxed))
+    if (aborted())
       return;
 
     QVariant value;
@@ -432,11 +402,7 @@ void IO::Drivers::EipPollWorker::onPollTick()
       continue;
 
     ++answered;
-    if (m_values.at(i) == value)
-      continue;
-
-    m_values[i] = value;
-    m_dirty[i]  = true;
+    (void)latchChannel(i, value);
   }
 
   m_deadTicks = answered > 0 ? 0 : m_deadTicks + 1;
@@ -460,110 +426,18 @@ bool IO::Drivers::EipPollWorker::readTag(int index, QVariant& value)
   const int handle = m_handles.at(index);
   SS_ASSERT_LOG(handle >= -1);
   if (handle < 0 || !readHandle(handle)) {
-    m_readsFailed.fetch_add(1, std::memory_order_relaxed);
+    countReadsFailed(1);
     return false;
   }
 
   value = decodeTag(handle, m_tags.at(index).type);
   if (!value.isValid()) {
-    m_readsFailed.fetch_add(1, std::memory_order_relaxed);
+    countReadsFailed(1);
     return false;
   }
 
-  m_readsOk.fetch_add(1, std::memory_order_relaxed);
+  countReadsOk(1);
   return true;
-}
-
-/**
- * @brief Encodes every dirty slot into one OpcUaWire delta frame and hands it to the driver with
- *        the poll's own timestamp. The stamp is captured HERE, before the queued hop, because the
- *        source owns time and a receipt-time stamp on the GUI thread would carry the queue's
- *        latency into every recording.
- */
-void IO::Drivers::EipPollWorker::publishDirtySlots(qint64 stampNs)
-{
-  SS_ASSERT_LOG(m_dirty.size() == m_tags.size());
-  SS_ASSERT_LOG(stampNs > 0);
-
-  QByteArray& frame = m_frames[m_frameSlot];
-  OpcUaWire::beginFrame(frame);
-  for (int i = 0; i < m_tags.size(); ++i) {
-    if (!m_dirty.at(i))
-      continue;
-
-    if (frame.size() + OpcUaWire::maxEntryBytes(m_tags.at(i).type) > OpcUaWire::kMaxFrameBytes)
-      break;
-
-    OpcUaWire::appendEntry(frame, i, m_tags.at(i).type, m_values.at(i));
-    m_dirty[i] = false;
-  }
-
-  if (frame.size() <= OpcUaWire::kHeaderBytes)
-    return;
-
-  m_framesPublished.fetch_add(1, std::memory_order_relaxed);
-  Q_EMIT frameReady(frame, stampNs);
-  m_frameSlot ^= 1;
-}
-
-/**
- * @brief Reports a lost link exactly once and stops polling; the driver turns it into a queued
- *        disconnect so nothing tears the device down from inside this handler.
- */
-void IO::Drivers::EipPollWorker::reportFailure(const QString& reason)
-{
-  SS_ASSERT_LOG(!reason.isEmpty());
-  if (m_reported)
-    return;
-
-  m_reported = true;
-  m_open     = false;
-  if (m_timer)
-    m_timer->stop();
-
-  Q_EMIT linkLost(reason);
-}
-
-/**
- * @brief Signals the in-flight poll to stop reading between tags. Set from the GUI thread before
- *        the blocking teardown invoke so a poll mid-way through N serial reads returns at the next
- *        tag boundary instead of after every remaining read timeout.
- */
-void IO::Drivers::EipPollWorker::requestAbort() noexcept
-{
-  m_abort.store(true, std::memory_order_relaxed);
-}
-
-/**
- * @brief Why the last dial failed, read by the driver after the blocking call returns.
- */
-const QString& IO::Drivers::EipPollWorker::dialError() const noexcept
-{
-  return m_dialError;
-}
-
-/**
- * @brief Successful tag reads since the session opened.
- */
-quint64 IO::Drivers::EipPollWorker::readsOk() const noexcept
-{
-  return m_readsOk.load(std::memory_order_relaxed);
-}
-
-/**
- * @brief Refused or timed-out tag reads since the session opened.
- */
-quint64 IO::Drivers::EipPollWorker::readsFailed() const noexcept
-{
-  return m_readsFailed.load(std::memory_order_relaxed);
-}
-
-/**
- * @brief Delta frames handed to the driver since the session opened.
- */
-quint64 IO::Drivers::EipPollWorker::framesPublished() const noexcept
-{
-  return m_framesPublished.load(std::memory_order_relaxed);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -577,6 +451,7 @@ IO::Drivers::EthernetIp::EthernetIp()
   : m_appState(AppState::instance())
   , m_projectModel(DataModel::ProjectModel::instance())
   , m_open(false)
+  , m_connecting(false)
   , m_persistent(true)
   , m_plcTypeIndex(0)
   , m_pollInterval(kEipDefaultIntervalMs)
@@ -700,13 +575,17 @@ void IO::Drivers::EthernetIp::close()
  */
 void IO::Drivers::EthernetIp::doClose()
 {
-  m_open = false;
+  m_open       = false;
+  m_connecting = false;
   if (!m_worker) {
     SS_ASSERT_LOG(!m_thread->isRunning());
     return;
   }
 
-  disconnect(m_worker, nullptr, this, nullptr);
+  for (const auto& link : std::as_const(m_workerLinks))
+    disconnect(link);
+
+  m_workerLinks.clear();
   if (m_thread->isRunning()) {
     m_worker->requestAbort();
     QMetaObject::invokeMethod(
@@ -738,6 +617,15 @@ void IO::Drivers::EthernetIp::doClose()
 bool IO::Drivers::EthernetIp::isOpen() const noexcept
 {
   return m_open;
+}
+
+/**
+ * @brief Returns true while the worker's dial is in flight; the connect button reads this rather
+ *        than looking like a dead click for the length of the controller's timeout.
+ */
+bool IO::Drivers::EthernetIp::isConnecting() const noexcept
+{
+  return m_connecting;
 }
 
 /**
@@ -801,18 +689,37 @@ bool IO::Drivers::EthernetIp::open(const QIODevice::OpenMode mode)
   m_worker = new EipPollWorker();
   m_worker->configure(m_host.trimmed(), m_cipPath, plcType(), m_pollInterval, m_tags);
   m_worker->moveToThread(m_thread.get());
-  connect(m_worker, &EipPollWorker::frameReady, this, &IO::Drivers::EthernetIp::onFrameReady);
-  connect(m_worker, &EipPollWorker::linkLost, this, &IO::Drivers::EthernetIp::onLinkLost);
+  m_workerLinks = {
+    connect(m_worker, &EipPollWorker::frameReady, this, &IO::Drivers::EthernetIp::onFrameReady),
+    connect(m_worker, &EipPollWorker::linkLost, this, &IO::Drivers::EthernetIp::onLinkLost),
+    connect(m_worker, &EipPollWorker::dialFinished, this, &EthernetIp::onDialFinished),
+  };
 
   m_thread->start();
 
-  bool ok = false;
-  QMetaObject::invokeMethod(
-    m_worker, [this, &ok] { ok = m_worker->connectToPlc(); }, Qt::BlockingQueuedConnection);
+  m_connecting = true;
+  QMetaObject::invokeMethod(m_worker, &EipPollWorker::beginDial, Qt::QueuedConnection);
 
-  m_open = ok;
+  Q_EMIT statusChanged();
+  Q_EMIT configurationChanged();
+  return true;
+}
+
+/**
+ * @brief Settles the worker's dial verdict exactly once. A verdict landing after the user closed
+ *        the session is dropped: doClose() clears the dialing flag, so a late report can neither
+ *        reopen the driver nor report an attempt nobody is waiting for.
+ */
+void IO::Drivers::EthernetIp::onDialFinished(bool ok, const QString& reason)
+{
+  if (!m_connecting)
+    return;
+
+  m_connecting = false;
+  m_open       = ok;
+
   if (!ok) {
-    m_lastError = m_worker->dialError();
+    m_lastError = reason;
     logDriverError(
       tr("EtherNet/IP Connection Failed"),
       tr("\"%1\": %2")
@@ -822,7 +729,7 @@ bool IO::Drivers::EthernetIp::open(const QIODevice::OpenMode mode)
 
   Q_EMIT statusChanged();
   Q_EMIT configurationChanged();
-  return ok;
+  reportOpenFinished(ok, reason);
 }
 
 //--------------------------------------------------------------------------------------------------

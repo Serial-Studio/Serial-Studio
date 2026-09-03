@@ -32,6 +32,8 @@
 #include <vector>
 
 #include "IO/ConnectionManager/ConnectFanOut.h"
+#include "IO/ConnectionManager/DeviceIoRouter.h"
+#include "IO/ConnectionManager/DeviceTableQuery.h"
 #include "IO/ConnectionManager/DriverFactory.h"
 #include "IO/ConnectionManager/DriverUiRegistry.h"
 #include "IO/ConnectionManager/ReplyCapture.h"
@@ -83,18 +85,6 @@ class GRPCServer;
 namespace IO {
 
 class FileTransmission;
-
-/**
- * @brief Link counters summed across every open device, sampled once per second by the problem
- *        center. Readers are recreated on connect/reconfigure, so a decrease means a reset.
- */
-struct LinkStats {
-  quint64 bytesIn;
-  quint64 droppedFrames;
-  quint64 overflowBytes;
-  quint64 checksumErrors;
-  quint64 framesExtracted;
-};
 
 /**
  * @brief Singleton orchestrator that owns all DeviceManager instances and wires
@@ -171,6 +161,16 @@ private:
   ConnectionManager& operator=(const ConnectionManager&) = delete;
 
 public:
+  /**
+   * @brief Whether opening a device resumes a paused session. A user connect resumes; a driver's
+   *        own auto-reconnect keeps the pause, because an adapter blip is not a request to start
+   *        streaming again into a session the user deliberately paused.
+   */
+  enum class ResumePolicy {
+    Resume,
+    KeepPause,
+  };
+
   ~ConnectionManager();
 
   [[nodiscard]] static ConnectionManager& instance();
@@ -273,6 +273,7 @@ private slots:
 private:
   void concludeConnectRequest();
   void notifyConnectedStateChanged();
+  void openDevice(int deviceId, ResumePolicy policy);
   void wireUiDriver(IO::HAL_Driver* driver);
   void buildDeviceForSource(const DataModel::Source& src, bool willRebuildDevice0);
 
@@ -289,10 +290,6 @@ private:
   bool m_writeEnabled;
   bool m_rebuildingDevices;
   SerialStudio::BusType m_busType;
-
-  QByteArray m_startSequence;
-  QByteArray m_finishSequence;
-  QString m_checksumAlgorithm;
 
   QSettings m_settings;
   QTimer m_uiDriverSaveTimer;
@@ -316,6 +313,8 @@ private:
 
   ConnectFanOut m_fanOut;
   ReplyCapture m_replyCapture;
+  DeviceIoRouter m_io;
+  DeviceTableQuery m_query;
   DriverUiRegistry m_uiDrivers;
   DriverFactory m_driverFactory;
   StreamConfigBuilder m_streamConfigs;

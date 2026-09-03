@@ -40,6 +40,7 @@
 #include "API/Server.h"
 #include "Misc/Extensions/ExtensionCatalog.h"
 #include "Misc/JsonValidator.h"
+#include "Misc/ProblemCenter.h"
 #include "Misc/Utilities.h"
 #include "Misc/WorkspaceManager.h"
 #include "UI/Dashboard.h"
@@ -278,7 +279,9 @@ bool Misc::ExtensionManager::isInstalled(const QString& id) const
 }
 
 /**
- * @brief Returns whether a newer version is available for the given addon.
+ * @brief Returns whether a strictly newer version is available. The compare is numeric: string
+ *        inequality offered "1.10.0 -> 1.9.0" as an update, a silent downgrade under automatic
+ *        updates (K12).
  */
 bool Misc::ExtensionManager::hasUpdate(const QString& id) const
 {
@@ -289,7 +292,7 @@ bool Misc::ExtensionManager::hasUpdate(const QString& id) const
   for (const auto& entry : std::as_const(m_allExtensions)) {
     const auto obj = entry.toObject();
     if (obj.value("id").toString() == id)
-      return obj.value("version").toString() != localVer;
+      return ExtensionCatalog::compareVersions(obj.value("version").toString(), localVer) > 0;
   }
 
   return false;
@@ -443,12 +446,20 @@ void Misc::ExtensionManager::refreshRepositories()
 }
 
 /**
- * @brief Adds a new repository URL and persists the list.
+ * @brief Adds a new repository URL and persists the list. Only a local folder or https is
+ *        accepted: a catalog decides what code lands in the extensions directory (K5).
  */
 void Misc::ExtensionManager::addRepository(const QString& url)
 {
   if (url.isEmpty() || m_repositories.contains(url))
     return;
+
+  if (!ExtensionCatalog::isTrustedRepoUrl(url)) {
+    Misc::Utilities::postMessageBox(tr("Repository refused"),
+                                    tr("Repositories must be a local folder or an https:// URL."),
+                                    QMessageBox::Warning);
+    return;
+  }
 
   m_repositories.append(url);
   m_settings.setValue("ExtensionRepositories", m_repositories);
@@ -527,7 +538,9 @@ void Misc::ExtensionManager::browseLocalRepo()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Downloads and installs the currently selected addon.
+ * @brief Downloads and installs the currently selected addon. An update keeps the install folder
+ *        the local package occupies: a remote `type` choosing it would write the new version
+ *        beside the old one, and uninstall (which reads the recorded type) leaves that copy (K12).
  */
 void Misc::ExtensionManager::installExtension()
 {
@@ -537,7 +550,12 @@ void Misc::ExtensionManager::installExtension()
   if (m_selectedIndex < 0 || m_selectedIndex >= m_filteredExtensions.count())
     return;
 
-  (void)m_installer.install(m_filteredExtensions.at(m_selectedIndex).toMap());
+  auto entry       = m_filteredExtensions.at(m_selectedIndex).toMap();
+  const auto local = m_installer.installedInfo(entry.value("id").toString());
+  if (local.contains("type"))
+    entry.insert("type", local.value("type").toString());
+
+  (void)m_installer.install(entry);
 }
 
 /**
@@ -584,14 +602,47 @@ void Misc::ExtensionManager::onExtensionInstalled(const QString& id)
 
 /**
  * @brief Refreshes the catalog at startup so installed extensions are checked for updates; runs
- * only when the application's own update checks are enabled too.
+ * only when the app's own update checks are on. The catalog checker registers either way: an
+ * unverifiable repository is worth reporting on a machine that takes no updates.
  */
 void Misc::ExtensionManager::checkForUpdatesOnStartup(const bool appUpdatesEnabled)
 {
+  static auto& problems = Misc::ProblemCenter::instance();
+  problems.registerChecker(
+    QStringLiteral("extension.catalog"),
+    Misc::ProblemCenter::OnDemand | Misc::ProblemCenter::ProjectChanged,
+    [this](QList<Misc::ProblemCenter::Finding>& findings) { collectCatalogFindings(findings); });
+
   if (!appUpdatesEnabled || !updateCheckEnabled())
     return;
 
   refreshRepositories();
+}
+
+/**
+ * @brief Appends one finding per catalog entry no install could verify, naming the repository it
+ *        came from so the refusal is met here and not at the Install click (K3, K5).
+ */
+void Misc::ExtensionManager::collectCatalogFindings(
+  QList<Misc::ProblemCenter::Finding>& findings) const
+{
+  for (const auto& entry : std::as_const(m_allExtensions)) {
+    const auto obj   = entry.toObject();
+    const auto files = obj.value("files").toArray().toVariantList();
+    if (files.isEmpty() || ExtensionCatalog::hasVerifiableFiles(files))
+      continue;
+
+    Misc::ProblemCenter::Finding finding;
+    finding.severity  = Misc::ProblemCenter::Warning;
+    finding.checkerId = QStringLiteral("extension.catalog");
+    finding.code      = QStringLiteral("extension.catalog.unverifiable");
+    finding.title     = tr("Extension \"%1\" cannot be verified").arg(obj.value("id").toString());
+    finding.remedy =
+      tr("Ask %1 to publish a sha256 for every file.").arg(obj.value("_repoBase").toString());
+    finding.explanation = tr("This entry lists files without digests: an install could not tell "
+                             "a genuine download from a replaced one.");
+    findings.append(finding);
+  }
 }
 
 /**
@@ -1345,8 +1396,9 @@ void Misc::ExtensionManager::stopAllPlugins()
 }
 
 /**
- * @brief Restores plugins that were running in the previous session. Waits for the catalog to
- *        finish loading first, because isInstalled() cannot answer until the manifest is in.
+ * @brief Restores plugins that ran in the previous session, once the catalog has loaded (before
+ *        that isInstalled() cannot answer). The resumed pass is queued: loadingChanged fires
+ *        inside a reply handler, whose stack a launch modal must not run under (K13).
  */
 void Misc::ExtensionManager::restoreRunningPlugins()
 {
@@ -1357,7 +1409,7 @@ void Misc::ExtensionManager::restoreRunningPlugins()
       this,
       [this]() {
         if (!loading())
-          restoreRunningPlugins();
+          QTimer::singleShot(0, this, &ExtensionManager::restoreRunningPlugins);
       },
       Qt::SingleShotConnection);
     return;

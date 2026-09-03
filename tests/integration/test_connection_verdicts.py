@@ -5,6 +5,7 @@ resolve, cycling must leave no residue, and identical-settings re-application mu
 complete no-op. Requires the app up with the API server enabled (see tests/README.md).
 """
 
+import base64
 import functools
 import socket
 import threading
@@ -54,6 +55,17 @@ def _wait_settled(api_client, budget_s: float = VERDICT_BUDGET_S) -> dict:
     pytest.fail(f"linkState stuck at 'connecting' beyond {budget_s:.1f}s")
 
 
+def _connect_and_settle(api_client, budget_s: float = VERDICT_BUDGET_S) -> dict:
+    """Issue io.connect and wait out the dial.
+
+    Since spec 0075 the TCP dial is asynchronous like WebSocket, HTTP, BLE, Modbus and MQTT: the
+    io.connect response says the attempt STARTED, and the verdict arrives through the status. A
+    test that reads the response flag alone is testing the old synchronous dial.
+    """
+    api_client.command("io.connect", timeout=15.0)
+    return _wait_settled(api_client, budget_s)
+
+
 class _FeedServer:
     """Multi-accept local TCP server streaming CSV lines to every client."""
 
@@ -64,6 +76,8 @@ class _FeedServer:
         self._srv.listen(8)
         self.port = self._srv.getsockname()[1]
         self._running = True
+        self._lock = threading.Lock()
+        self._received = bytearray()
         threading.Thread(target=self._accept_loop, daemon=True).start()
 
     def _accept_loop(self):
@@ -76,13 +90,25 @@ class _FeedServer:
 
     def _feed(self, conn):
         n = 0
+        conn.settimeout(0.05)
         try:
             while self._running:
                 conn.sendall(f"{n},{n % 100}\n".encode())
                 n += 1
-                time.sleep(0.05)
+                try:
+                    chunk = conn.recv(4096)
+                    if chunk:
+                        with self._lock:
+                            self._received += chunk
+                except (TimeoutError, BlockingIOError):
+                    pass
         except OSError:
             pass
+
+    def received(self) -> bytes:
+        """Everything the clients have sent us so far."""
+        with self._lock:
+            return bytes(self._received)
 
     def stop(self):
         self._running = False
@@ -108,9 +134,7 @@ def test_network_dead_port_settles_with_one_verdict(api_client, clean_state):
     )
     time.sleep(0.3)
 
-    verdict = api_client.command("io.connect", timeout=15.0)
-    st = _wait_settled(api_client)
-    assert verdict.get("connected") is False
+    st = _connect_and_settle(api_client)
     assert st.get("isConnected") is False
     assert st.get("linkState") == "idle"
 
@@ -144,8 +168,8 @@ def test_network_cycle_20x_leaves_no_residue(api_client, clean_state, feed_serve
 
     fresh = _status(api_client)
     for _ in range(20):
-        verdict = api_client.command("io.connect", timeout=15.0)
-        assert verdict.get("connected") is True
+        st = _connect_and_settle(api_client)
+        assert st.get("isConnected") is True
         api_client.command("io.disconnect")
 
     final = _wait_settled(api_client)
@@ -162,8 +186,8 @@ def test_identical_settings_reapply_is_noop(api_client, clean_state, feed_server
     )
     time.sleep(0.5)
 
-    verdict = api_client.command("io.connect", timeout=15.0)
-    assert verdict.get("connected") is True
+    st = _connect_and_settle(api_client)
+    assert st.get("isConnected") is True
 
     for _ in range(10):
         api_client.configure_network(
@@ -174,4 +198,34 @@ def test_identical_settings_reapply_is_noop(api_client, clean_state, feed_server
     time.sleep(1.0)
     st = _status(api_client)
     assert st.get("isConnected") is True, "identical-settings echo bounced the link"
+    api_client.command("io.disconnect")
+
+
+@pytest.mark.network
+def test_connect_then_write_reaches_the_peer(api_client, clean_state, feed_server):
+    """A script's io.connect() + writeData() sequence still lands on the wire.
+
+    The dial no longer blocks inside open(), so bytes written while it is in flight are held by
+    the driver and flushed the moment the socket connects (spec 0050's promise, kept across the
+    spec-0075 async dial).
+    """
+    api_client.set_operation_mode("quickplot")
+    api_client.configure_network(
+        host="127.0.0.1", port=feed_server.port, socket_type="tcp"
+    )
+    time.sleep(0.3)
+
+    api_client.command("io.connect", timeout=15.0)
+    api_client.command("io.writeData", {"data": base64.b64encode(b"PING\n").decode()})
+
+    st = _wait_settled(api_client)
+    assert st.get("isConnected") is True
+
+    deadline = time.time() + 5.0
+    while time.time() < deadline and b"PING" not in feed_server.received():
+        time.sleep(0.1)
+
+    assert (
+        b"PING" in feed_server.received()
+    ), "the write issued during the dial was lost"
     api_client.command("io.disconnect")

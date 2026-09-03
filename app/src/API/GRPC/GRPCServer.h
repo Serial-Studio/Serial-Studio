@@ -13,7 +13,9 @@
 
 #  include <atomic>
 #  include <chrono>
+#  include <condition_variable>
 #  include <cstddef>
+#  include <functional>
 #  include <grpcpp/grpcpp.h>
 #  include <memory>
 #  include <mutex>
@@ -22,6 +24,7 @@
 #  include <thread>
 #  include <vector>
 
+#  include "API/GRPC/PendingCall.h"
 #  include "DataModel/DataBlock.h"
 #  include "DataModel/Frame.h"
 #  include "IO/HAL_Driver.h"
@@ -104,6 +107,8 @@ public:
   [[nodiscard]] bool grpcAvailable() const noexcept;
   [[nodiscard]] int clientCount() const noexcept;
 
+  [[nodiscard]] bool marshalToGui(const std::function<void()>& fn);
+
 public slots:
   void setEnabled(const bool enabled);
   void ingestBlock(const DataModel::DataBlockPtr& block);
@@ -118,6 +123,7 @@ private slots:
 private:
   void startServer();
   void stopServer();
+  void abandonPendingCalls();
   void writerLoop();
   void broadcastFrameBatch(const serialstudio::FrameBatch& batch);
   void broadcastRawBatch(const serialstudio::RawBatch& batch);
@@ -150,6 +156,13 @@ private:
 
   std::mutex m_rawStreamsMutex;
   std::vector<std::shared_ptr<RawStreamContext>> m_rawStreams;
+
+  // Calls parked on the GUI thread; stopServer() abandons them before Shutdown() waits (I5)
+  std::mutex m_pendingMutex;
+  std::vector<std::shared_ptr<PendingCall>> m_pendingCalls;
+
+  // A handler never parks longer than this, so a wedged GUI cannot hold a gRPC thread forever
+  static constexpr int kMarshalTimeoutMs = 30000;
 };
 
 }  // namespace GRPC

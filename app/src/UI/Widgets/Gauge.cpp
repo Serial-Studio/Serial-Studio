@@ -75,7 +75,8 @@ void Widgets::Gauge::updateData()
       recomputeActiveBand(value);
     }
 
-    if ((valueChanged || extremesChanged) && isEnabled())
+    const bool latched = latchData();
+    if ((valueChanged || extremesChanged || latched) && isEnabled())
       Q_EMIT updated();
   }
 }

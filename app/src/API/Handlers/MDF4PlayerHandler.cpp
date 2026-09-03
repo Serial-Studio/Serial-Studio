@@ -12,7 +12,6 @@
 #include "API/Handlers/MDF4PlayerHandler.h"
 
 #include "API/CommandRegistry.h"
-#include "API/PathPolicy.h"
 #include "MDF4/Player.h"
 #include "SerialStudio.h"
 
@@ -134,11 +133,6 @@ API::CommandResponse API::Handlers::MDF4PlayerHandler::open(const QString& id,
   if (file_path.isEmpty()) {
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("filePath cannot be empty"));
-  }
-
-  if (!API::isPathAllowed(file_path)) {
-    return CommandResponse::makeError(
-      id, ErrorCode::InvalidParam, QStringLiteral("filePath is not allowed"));
   }
 
   static auto& player = MDF4::Player::instance();

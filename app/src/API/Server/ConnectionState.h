@@ -48,6 +48,10 @@ struct ConnectionState {
   bool authenticated = false;
   int authAttempts   = 0;
 
+  // Raw forwarding waits for one valid JSON message; the first chunk is sniffed once (spec 0075 I2)
+  bool handshakeSeen  = false;
+  bool firstBytesSeen = false;
+
   // Mirror state; streamFrames defaults true so an unmodified client sees no change at all
   bool streamFrames     = true;
   bool mirrorSubscribed = false;

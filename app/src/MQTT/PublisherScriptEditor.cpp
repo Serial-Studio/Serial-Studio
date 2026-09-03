@@ -36,6 +36,7 @@ extern "C" {
 #  include "DataModel/Editors/CodeFormatter.h"
 #  include "DataModel/Scripting/LuaCompat.h"
 #  include "DataModel/Scripting/LuaCompatJIT.h"
+#  include "DataModel/Scripting/ScriptDryRun.h"
 #  include "DataModel/Scripting/ScriptTemplates.h"
 #  include "Misc/CommonFonts.h"
 #  include "Misc/ThemeManager.h"
@@ -546,43 +547,31 @@ bool MQTT::PublisherScriptEditor::definesMqttFunction(const QString& code, int l
     return false;
 
   if (language == SerialStudio::Lua) {
-    lua_State* L = luaL_newstate();
-    if (!L)
+    DataModel::ScriptDryRun session(
+      DataModel::ScriptDryRun::Language::Lua, DataModel::kScriptDryRunBudgetMs, "mqtt");
+    if (!session.valid())
       return false;
 
-    static const luaL_Reg kSafeLibs[] = {
-      {    "_G",   luaopen_base},
-      { "table",  luaopen_table},
-      {"string", luaopen_string},
-      {  "math",   luaopen_math},
-      {   "bit",    luaopen_bit},
-      { nullptr,        nullptr}
-    };
-
-    for (const luaL_Reg* lib = kSafeLibs; lib->func; ++lib) {
-      luaL_requiref(L, lib->name, lib->func, 1);
-      lua_pop(L, 1);
-    }
-
+    lua_State* L = session.luaState();
     DataModel::installLuaRestrictedOs(L);
     DataModel::installLuaCompat(L);
 
-    const QByteArray utf8 = code.toUtf8();
-    if (luaL_dostring(L, utf8.constData()) != LUA_OK) {
-      lua_close(L);
+    if (session.runLuaChunk(code, "mqtt") != LUA_OK)
       return false;
-    }
 
     lua_getglobal(L, "mqtt");
-    const bool hasFn = lua_isfunction(L, -1);
-    lua_close(L);
-    return hasFn;
+    return lua_isfunction(L, -1);
   }
 
-  QJSEngine jsEngine;
+  DataModel::ScriptDryRun session(
+    DataModel::ScriptDryRun::Language::JavaScript, DataModel::kScriptDryRunBudgetMs, "mqtt");
+  if (!session.valid())
+    return false;
+
+  QJSEngine& jsEngine = *session.jsEngine();
   jsEngine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
-  const auto evalResult = jsEngine.evaluate(code);
-  if (evalResult.isError())
+  const auto evalResult = session.evaluate(code, QStringLiteral("mqtt.js"));
+  if (session.timedOut() || evalResult.isError())
     return false;
 
   const auto fn = jsEngine.globalObject().property(QStringLiteral("mqtt"));
@@ -623,68 +612,58 @@ QString MQTT::PublisherScriptEditor::runScript(const QString& code,
   }
 
   if (language == SerialStudio::Lua) {
-    lua_State* L = luaL_newstate();
-    if (!L) {
+    DataModel::ScriptDryRun session(
+      DataModel::ScriptDryRun::Language::Lua, DataModel::kScriptDryRunBudgetMs, "mqtt");
+    if (!session.valid()) {
       errorOut = tr("Lua engine error");
       return {};
     }
 
-    static const luaL_Reg kSafeLibs[] = {
-      {    "_G",   luaopen_base},
-      { "table",  luaopen_table},
-      {"string", luaopen_string},
-      {  "math",   luaopen_math},
-      {   "bit",    luaopen_bit},
-      { nullptr,        nullptr}
-    };
-
-    for (const luaL_Reg* lib = kSafeLibs; lib->func; ++lib) {
-      luaL_requiref(L, lib->name, lib->func, 1);
-      lua_pop(L, 1);
-    }
-
+    lua_State* L = session.luaState();
     DataModel::installLuaRestrictedOs(L);
     DataModel::installLuaCompat(L);
 
-    const QByteArray utf8 = code.toUtf8();
-    if (luaL_dostring(L, utf8.constData()) != LUA_OK) {
-      errorOut = tr("Error: %1").arg(QString::fromUtf8(lua_tostring(L, -1)));
-      lua_close(L);
+    if (session.runLuaChunk(code, "mqtt") != LUA_OK) {
+      errorOut = tr("Error: %1").arg(session.luaError());
       return {};
     }
 
     lua_getglobal(L, "mqtt");
     if (!lua_isfunction(L, -1)) {
-      lua_close(L);
       errorOut = tr("mqtt() is not defined");
       return {};
     }
 
     lua_pushlstring(L, frame.constData(), static_cast<size_t>(frame.size()));
-    if (lua_pcall(L, 1, 1, 0) != LUA_OK) {
-      errorOut = tr("Error: %1").arg(QString::fromUtf8(lua_tostring(L, -1)));
-      lua_close(L);
+    if (session.callLua(1, 1) != LUA_OK) {
+      errorOut = tr("Error: %1").arg(session.luaError());
       return {};
     }
 
-    QString out;
     if (lua_isstring(L, -1)) {
       size_t len    = 0;
       const char* d = lua_tolstring(L, -1, &len);
-      out           = QString::fromUtf8(d, static_cast<int>(len));
-    } else if (lua_isnoneornil(L, -1)) {
-      out = tr("(nil -- frame skipped)");
-    } else {
-      out = tr("(non-string return)");
+      return QString::fromUtf8(d, static_cast<int>(len));
     }
 
-    lua_close(L);
-    return out;
+    return lua_isnoneornil(L, -1) ? tr("(nil -- frame skipped)") : tr("(non-string return)");
   }
 
-  QJSEngine jsEngine;
+  DataModel::ScriptDryRun session(
+    DataModel::ScriptDryRun::Language::JavaScript, DataModel::kScriptDryRunBudgetMs, "mqtt");
+  if (!session.valid()) {
+    errorOut = tr("JavaScript engine error");
+    return {};
+  }
+
+  QJSEngine& jsEngine = *session.jsEngine();
   jsEngine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
-  const auto evalResult = jsEngine.evaluate(code);
+  const auto evalResult = session.evaluate(code, QStringLiteral("mqtt.js"));
+  if (session.timedOut()) {
+    errorOut = tr("Error: the script did not finish within %1 ms").arg(session.budgetMs());
+    return {};
+  }
+
   if (evalResult.isError()) {
     errorOut = tr("Error: %1").arg(evalResult.property("message").toString());
     return {};
@@ -698,7 +677,12 @@ QString MQTT::PublisherScriptEditor::runScript(const QString& code,
 
   QJSValueList args;
   args << QJSValue(QString::fromUtf8(frame));
-  const auto result = fn.call(args);
+  const auto result = session.call(fn, args);
+  if (session.timedOut()) {
+    errorOut = tr("Error: mqtt() did not return within %1 ms").arg(session.budgetMs());
+    return {};
+  }
+
   if (result.isError()) {
     errorOut = tr("Error: %1").arg(result.property("message").toString());
     return {};

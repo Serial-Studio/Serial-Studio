@@ -23,54 +23,50 @@
 #pragma once
 
 #include <QByteArray>
-#include <QCanBusDevice>
 #include <QCanBusFrame>
 #include <QString>
 #include <QStringList>
 
 #include "IO/Drivers/CANBus/CanBackends.h"
-
-class QSerialPort;
+#include "IO/Drivers/CANBus/SerialCanBackendBase.h"
 
 namespace IO {
 namespace Drivers {
 
 /**
- * @brief QCanBusDevice backend for slcan / LAWICEL ASCII adapters over a serial port.
+ * @brief QCanBusDevice backend for slcan / LAWICEL ASCII adapters over a serial port. The port,
+ *        the buffer and the unplug handling live in SerialCanBackendBase; what is here is the
+ *        LAWICEL protocol.
  */
-class SlcanBackend : public QCanBusDevice {
+class SlcanBackend : public SerialCanBackendBase {
   Q_OBJECT
 
 public:
   explicit SlcanBackend(const QString& portName, QObject* parent = nullptr);
-  ~SlcanBackend() override;
 
   SlcanBackend(SlcanBackend&&)                 = delete;
   SlcanBackend(const SlcanBackend&)            = delete;
   SlcanBackend& operator=(SlcanBackend&&)      = delete;
   SlcanBackend& operator=(const SlcanBackend&) = delete;
 
+  ~SlcanBackend() override;
+
   [[nodiscard]] static CanBackends::Entry registration();
   [[nodiscard]] static const QString& pluginKey();
   [[nodiscard]] static QStringList availableInterfaces();
   [[nodiscard]] static QCanBusDevice* create(const QString& portName);
+  [[nodiscard]] static int bitrateIndex(quint32 bitrate);
+  [[nodiscard]] static bool parseToken(const QByteArray& token, QCanBusFrame& out);
 
 protected:
-  [[nodiscard]] bool open() override;
-  void close() override;
   [[nodiscard]] bool writeFrame(const QCanBusFrame& frame) override;
   [[nodiscard]] QString interpretErrorFrame(const QCanBusFrame& frame) override;
 
-private slots:
-  void onReadyRead();
-
-private:
-  [[nodiscard]] bool sendCommand(const QByteArray& command);
-
-private:
-  QSerialPort* m_port;
-  QString m_portName;
-  QByteArray m_rxBuffer;
+  [[nodiscard]] bool validateBitrate(quint32 bitrate, QString& reason) const override;
+  [[nodiscard]] bool sendInit(quint32 bitrate) override;
+  [[nodiscard]] bool openReplyIsError(const QByteArray& reply) const override;
+  void drainBuffer(QByteArray& buffer, QList<QCanBusFrame>& frames) override;
+  void sendShutdown() override;
 };
 }  // namespace Drivers
 }  // namespace IO

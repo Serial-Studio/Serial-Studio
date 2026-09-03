@@ -49,6 +49,8 @@ private slots:
   void parserDecodesRegistersAsBigEndianPairs();
   void parserDecodesCoilsAsBits();
   void parserCyclesThroughEveryGroup();
+  void parserIdentifiesGroupsByCodeAndSize();
+  void parserSkipsTheFailedPollPlaceholder();
   void emptyConfigurationStillParses();
 };
 
@@ -240,6 +242,48 @@ void TstModbusGeneration::parserCyclesThroughEveryGroup()
   QVERIFY(code.contains(QStringLiteral("elseif currentGroup == 2 then")));
   QVERIFY(code.contains(QStringLiteral("currentGroup = (currentGroup + 1) % 3")));
   QCOMPARE(code.count(QStringLiteral("elseif currentGroup ==")), 2);
+}
+
+/**
+ * @brief Frame counting alone cannot survive a lost reply, so the parser carries the (function
+ *        code, byte count) pair of every group and resynchronises the counter against it. The
+ *        correction is applied only when exactly one group matches: guessing between two
+ *        identically shaped groups moves readings as surely as the desync it repairs.
+ */
+void TstModbusGeneration::parserIdentifiesGroupsByCodeAndSize()
+{
+  const QVector<ModbusRegisterGroup> groups = {
+    ModbusRegisterGroup(0, 0, 2),
+    ModbusRegisterGroup(3, 0, 9),
+  };
+
+  const auto code = ModbusProjectGenerator(groups).buildFrameParser();
+
+  QVERIFY(code.contains(QStringLiteral("{ fc = 3, bytes = 4 },")));
+  QVERIFY(code.contains(QStringLiteral("{ fc = 2, bytes = 2 },")));
+  QVERIFY(code.contains(QStringLiteral("local function resync(fc, bytes, current)")));
+  QVERIFY(code.contains(QStringLiteral("if matches == 1 then return found end")));
+  QVERIFY(code.contains(QStringLiteral("resync(frame[2], byteCount, currentGroup)")));
+}
+
+/**
+ * @brief A failed poll arrives as the driver's zero-length placeholder. The parser decodes nothing
+ *        for it and still advances the cycle, which is the whole point of publishing it: the group
+ *        every later frame is attributed to stays in step (spec 0075 E3).
+ */
+void TstModbusGeneration::parserSkipsTheFailedPollPlaceholder()
+{
+  const QVector<ModbusRegisterGroup> groups = {
+    ModbusRegisterGroup(0, 0, 1),
+    ModbusRegisterGroup(1, 5, 1),
+  };
+
+  const auto code = ModbusProjectGenerator(groups).buildFrameParser();
+
+  QVERIFY(code.contains(QStringLiteral("local byteCount = frame[3]")));
+  QVERIFY(code.contains(QStringLiteral("if byteCount == 0 then")));
+  QVERIFY(code.contains(QStringLiteral("for i = 4, 3 + byteCount do")));
+  QCOMPARE(code.count(QStringLiteral("currentGroup = (currentGroup + 1) % 2")), 2);
 }
 
 /**

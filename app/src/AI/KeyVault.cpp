@@ -149,14 +149,14 @@ void AI::KeyVault::clearAllKeys()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns a redacted form of the key, safe to log.
+ * @brief Returns a placeholder for a key, safe to log and to show. No part of the secret is
+ *        returned: the first four characters of a provider key are a constant vendor prefix, so
+ *        the old head+tail form leaked four real characters into every request log line (J8).
  */
 QString AI::KeyVault::redact(const QString& key)
 {
-  if (key.size() < 8)
-    return QStringLiteral("***");
-
-  return key.left(4) + QStringLiteral("...") + key.right(4);
+  Q_UNUSED(key);
+  return QStringLiteral("***");
 }
 
 /**

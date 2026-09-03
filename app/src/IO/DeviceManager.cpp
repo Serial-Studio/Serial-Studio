@@ -21,6 +21,8 @@
 
 #include "IO/DeviceManager.h"
 
+#include <QThread>
+
 #include "IO/PipelineHost.h"
 #include "SSAssert.h"
 
@@ -213,22 +215,32 @@ void IO::DeviceManager::startFrameReader(const FrameConfig& config)
   m_frameReader->setOperationMode(config.operationMode);
   m_frameReader->setFrameDetectionMode(config.frameDetection);
 
-  connect(
+  m_readerFeed = connect(
     m_driver.get(), &IO::HAL_Driver::dataReceived, m_frameReader, &IO::FrameReader::processData);
   m_pipeline.registerFrameReader(m_deviceId, m_frameReader);
 }
 
 /**
- * @brief Disconnects and schedules deletion of the current FrameReader.
+ * @brief Drops the driver feed and retires the current FrameReader. The connection is dropped by
+ *        handle rather than by a wildcard slot, and the reader is destroyed outright once the
+ *        pipeline thread has stopped: deleteLater() there posts into a dead event loop, so at
+ *        quit the reader would never be freed at all.
  */
 void IO::DeviceManager::killFrameReader()
 {
+  QObject::disconnect(m_readerFeed);
+  m_readerFeed = QMetaObject::Connection();
+
   if (m_frameReader.isNull())
     return;
 
-  if (m_driver)
-    disconnect(m_driver.get(), &IO::HAL_Driver::dataReceived, m_frameReader, nullptr);
+  QThread* host = m_pipeline.pipelineThread();
+  if (host != nullptr && host->isRunning()) {
+    m_frameReader->deleteLater();
+    m_frameReader.clear();
+    return;
+  }
 
-  m_frameReader->deleteLater();
+  delete m_frameReader;
   m_frameReader.clear();
 }

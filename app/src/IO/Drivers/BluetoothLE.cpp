@@ -332,12 +332,29 @@ bool IO::Drivers::BluetoothLE::isConnecting() const noexcept
  * @brief Handles the controller's disconnected signal. A drop while the dial is still pending
  *        reports the failure verdict BEFORE close() severs the controller's signals (backend
  *        ordering of disconnected vs errorOccurred is platform-dependent); an established-link
- *        drop keeps the historical close-only behavior.
+ *        drop goes through the manager, queued, like every other driver's drop.
  */
 void IO::Drivers::BluetoothLE::onControllerDisconnected()
 {
+  const bool dialing = openReportArmed();
   reportOpenFinished(false, tr("The device disconnected before the connection completed"));
   close();
+
+  if (dialing)
+    return;
+
+  reportDropToManager();
+}
+
+/**
+ * @brief Routes a drop the verdict latch no longer covers to the manager. Queued, because both
+ *        callers run inside the controller's own emission and the manager destroys this driver.
+ */
+void IO::Drivers::BluetoothLE::reportDropToManager()
+{
+  static auto& connectionManager = ConnectionManager::instance();
+  QMetaObject::invokeMethod(
+    this, [this] { connectionManager.disconnectDevice(this); }, Qt::QueuedConnection);
 }
 
 /**
@@ -362,8 +379,7 @@ void IO::Drivers::BluetoothLE::onControllerError(QLowEnergyController::Error con
     return;
   }
 
-  static auto& connectionManager = ConnectionManager::instance();
-  connectionManager.disconnectDevice(this);
+  reportDropToManager();
 }
 
 /**
@@ -976,6 +992,25 @@ void IO::Drivers::BluetoothLE::initializeSharedState()
 }
 
 /**
+ * @brief Whether the shared list already holds this peripheral. Identity is the ADDRESS (the
+ *        device UUID where the platform has no address, as on macOS), never the advertised name:
+ *        deduping by name hid every peripheral after the first of a same-named pair, which is the
+ *        normal case for a fleet of identical sensors.
+ */
+bool IO::Drivers::BluetoothLE::deviceAlreadyKnown(const QBluetoothDeviceInfo& device)
+{
+  for (const auto& known : std::as_const(s_devices)) {
+    if (!device.address().isNull() && known.address() == device.address())
+      return true;
+
+    if (!device.deviceUuid().isNull() && known.deviceUuid() == device.deviceUuid())
+      return true;
+  }
+
+  return false;
+}
+
+/**
  * @brief Static callback -- registers a discovered BLE device in the shared list.
  */
 void IO::Drivers::BluetoothLE::onDeviceDiscovered(const QBluetoothDeviceInfo& device)
@@ -986,7 +1021,7 @@ void IO::Drivers::BluetoothLE::onDeviceDiscovered(const QBluetoothDeviceInfo& de
   if (!device.isValid() || device.name().isEmpty())
     return;
 
-  if (s_devices.contains(device) || s_deviceNames.contains(device.name()))
+  if (deviceAlreadyKnown(device))
     return;
 
   s_devices.append(device);
@@ -1203,8 +1238,12 @@ void IO::Drivers::BluetoothLE::setDriverProperty(const QString& key, const QVari
   }
 
   if (key == QLatin1String("characteristicIndex")) {
-    m_selectedCharacteristic     = value.toInt();
-    m_pendingCharacteristicIndex = value.toInt() + 1;
+    const int index = value.toInt();
+    if (index < -1 || (!m_characteristics.isEmpty() && index >= m_characteristics.count()))
+      return;
+
+    m_selectedCharacteristic     = index;
+    m_pendingCharacteristicIndex = index + 1;
     Q_EMIT characteristicIndexChanged();
   }
 }

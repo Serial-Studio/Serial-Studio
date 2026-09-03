@@ -168,7 +168,10 @@ API::CommandResponse API::CommandHandler::processCommand(const CommandRequest& r
     static auto& server = Server::instance();
     if (!server.authorizeRemoteCommand(request.command)) {
       return CommandResponse::makeError(
-        request.id, ErrorCode::ExecutionError, QStringLiteral("Device write denied by user"));
+        request.id,
+        ErrorCode::ConsentRequired,
+        QStringLiteral(
+          "Device writes need the user's consent; retry after the prompt is answered"));
     }
   }
 

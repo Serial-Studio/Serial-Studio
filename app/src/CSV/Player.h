@@ -36,6 +36,7 @@
 #include "CSV/Player/MultiSourceMap.h"
 #include "CSV/Player/RowCodec.h"
 #include "CSV/PlayerLoaderWorker.h"
+#include "DataModel/ReplayPlaybackEngine.h"
 
 namespace CSV {
 /**
@@ -151,6 +152,7 @@ private:
   [[nodiscard]] std::chrono::steady_clock::time_point rowSteadyTimestamp(int row);
   [[nodiscard]] QByteArrayView rawRow(int row) const;
   [[nodiscard]] bool recomputeMsUntilNext(qint64& msUntilNext);
+  void reanchorOnBackwardsRow();
 
 private:
   int m_framePos;
@@ -166,7 +168,6 @@ private:
   const char* m_mapped;
   qint64 m_mappedSize;
   qint64 m_dataOffset;
-  quint64 m_playbackEpoch;
   QVector<quint64> m_rowOffsets;
   QVector<double> m_rowSeconds;
 
@@ -177,12 +178,7 @@ private:
   QStringList m_headerCells;
 
   QElapsedTimer m_elapsedTimer;
-  QElapsedTimer m_catchUpFillTimer;
-  double m_steadyBaseRowSeconds;
-  std::chrono::steady_clock::time_point m_steadyBase;
-
-  QTimer m_seekTimer;
-  QTimer m_settleTimer;
+  DataModel::ReplayPlaybackEngine m_engine;
   QHash<qint64, int> m_seekColumnByKey;
 
   RowCodec m_rows;

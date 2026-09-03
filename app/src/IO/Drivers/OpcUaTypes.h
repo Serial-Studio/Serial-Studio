@@ -45,6 +45,9 @@ namespace OpcUaTypes {
  */
 using StatusCode = std::uint32_t;
 
+// The IANA-assigned OPC UA port, used wherever a URL omits one
+inline constexpr int kDefaultPort = 4840;
+
 inline constexpr StatusCode kStatusGood          = 0x00000000u;
 inline constexpr StatusCode kStatusBadInternal   = 0x80020000u;
 inline constexpr StatusCode kStatusBadTimeout    = 0x800A0000u;

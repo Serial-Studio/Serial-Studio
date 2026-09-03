@@ -37,6 +37,7 @@
 #include <QUrl>
 #include <QWebSocket>
 
+#include "IO/AsyncTcpDial.h"
 #include "IO/HAL_Driver.h"
 
 namespace IO {
@@ -270,6 +271,7 @@ private slots:
   void onUdpReadyRead();
   void onTcpReadyRead();
   void onTcpStateChanged();
+  void onTcpDialFinished(bool ok, const QString& reason);
   void onPollTimeout();
   void onHttpReplyFinished();
   void onWebSocketConnected();
@@ -310,11 +312,13 @@ private:
   [[nodiscard]] bool tcpConfigured() const;
   [[nodiscard]] bool udpConfigured() const;
   [[nodiscard]] qint64 writeTcp(const QByteArray& data);
+  [[nodiscard]] qint64 queueTcpWrite(const QByteArray& data);
   [[nodiscard]] qint64 writeUdp(const QByteArray& data);
   [[nodiscard]] bool openTcp(const QIODevice::OpenMode mode);
   [[nodiscard]] bool openUdp(const QIODevice::OpenMode mode);
   [[nodiscard]] bool httpOpen() const;
   [[nodiscard]] bool httpConfigured() const;
+  [[nodiscard]] QByteArray readCappedBody(QNetworkReply* reply);
   [[nodiscard]] qint64 writeHttp(const QByteArray& data);
   [[nodiscard]] bool openHttp(const QIODevice::OpenMode mode);
   [[nodiscard]] QNetworkRequest buildHttpRequest(const QUrl& url) const;
@@ -330,7 +334,7 @@ private:
   [[nodiscard]] bool applyAddressProperty(const QString& key, const QVariant& value);
   [[nodiscard]] bool urlForCurrentMode(QUrl& url, QString& reason) const;
   [[nodiscard]] bool applyWebSocketProperty(const QString& key, const QVariant& value);
-  [[nodiscard]] bool dialTcpBlocking(const QString& host, const QIODevice::OpenMode mode);
+  [[nodiscard]] bool dialTcpAsync(const QString& host, const QIODevice::OpenMode mode);
   [[nodiscard]] static QHostAddress preferredAddress(const QList<QHostAddress>& addresses);
 
 private:
@@ -359,18 +363,21 @@ private:
   int m_httpInterval;
   bool m_httpActive;
   bool m_httpFailureLogged;
+  bool m_httpTruncationLogged;
   quint64 m_pollsOk;
   quint64 m_pollsFailed;
   quint64 m_pollsSkipped;
   quint64 m_consecutiveFailures;
 
   QTimer m_pollTimer;
+  AsyncTcpDial m_tcpDial;
   QTcpSocket* m_tcpSocket;
   QUdpSocket* m_udpSocket;
   QWebSocket* m_webSocket;
   QNetworkAccessManager* m_httpManager;
   QPointer<QNetworkReply> m_reply;
   QByteArray m_udpBuffer;
+  QByteArray m_tcpPendingWrites;
 };
 }  // namespace Drivers
 }  // namespace IO

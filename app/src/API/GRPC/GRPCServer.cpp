@@ -23,6 +23,7 @@
 
 #  include "API/GRPC/GRPCServer.h"
 
+#  include <algorithm>
 #  include <grpcpp/grpcpp.h>
 
 #  if defined(_MSC_VER)
@@ -31,6 +32,7 @@
 #  include <QCoreApplication>
 #  include <QFile>
 #  include <QFileDialog>
+#  include <QHostAddress>
 #  include <QJsonDocument>
 #  include <QMetaObject>
 #  include <QTimer>
@@ -43,6 +45,36 @@
 #  include "DataModel/FrameBuilder.h"
 #  include "IO/ConnectionManager.h"
 #  include "Misc/Utilities.h"
+
+//--------------------------------------------------------------------------------------------------
+// Peer classification
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief True when a gRPC peer URI names a loopback address. Parsed rather than substring-matched:
+ *        "ipv4:203.0.113.9:127.0.0.1" and a host whose name merely contains the digits used to
+ *        pass the old check and skip authentication entirely (spec 0075 I8).
+ */
+static bool peerIsLoopback(const std::string& peer)
+{
+  const auto uri = QString::fromStdString(peer);
+  if (uri.startsWith(QLatin1String("unix:")))
+    return true;
+
+  const auto scheme = uri.indexOf(QLatin1Char(':'));
+  if (scheme < 0)
+    return false;
+
+  auto address        = uri.mid(scheme + 1);
+  const auto portMark = address.lastIndexOf(QLatin1Char(':'));
+  if (portMark >= 0)
+    address = address.left(portMark);
+
+  if (address.startsWith(QLatin1Char('[')) && address.endsWith(QLatin1Char(']')))
+    address = address.mid(1, address.size() - 2);
+
+  return QHostAddress(address).isLoopback();
+}
 
 //--------------------------------------------------------------------------------------------------
 // Service implementation
@@ -73,20 +105,20 @@ public:
     const auto command = QString::fromStdString(request->command());
 
     API::CommandResponse result;
-    QMetaObject::invokeMethod(
-      qApp,
-      [&]() {
-        static auto& server = API::Server::instance();
-        if (!server.authorizeRemoteCommand(command)) {
-          result = API::CommandResponse::makeError(
-            id, API::ErrorCode::ExecutionError, QStringLiteral("Device write denied by user"));
-          return;
-        }
+    const bool ran = m_server->marshalToGui([&]() {
+      static auto& server = API::Server::instance();
+      if (!server.authorizeRemoteCommand(command)) {
+        result = API::CommandResponse::makeError(
+          id, API::ErrorCode::WriteDenied, QStringLiteral("Device write denied by user"));
+        return;
+      }
 
-        static auto& commandRegistry = API::CommandRegistry::instance();
-        result                       = commandRegistry.execute(command, id, params);
-      },
-      Qt::BlockingQueuedConnection);
+      static auto& commandRegistry = API::CommandRegistry::instance();
+      result                       = commandRegistry.execute(command, id, params);
+    });
+
+    if (!ran)
+      return unavailable();
 
     response->set_id(request->id());
     response->set_success(result.success);
@@ -218,30 +250,40 @@ public:
       return unauthenticated();
 
     const auto& bytes = request->data();
+    if (bytes.size() > static_cast<std::size_t>(API::Limits::kMaxApiRawBytes)) {
+      response->set_id(request->id());
+      response->set_success(false);
+
+      auto* err = response->mutable_error();
+      err->set_code(API::ErrorCode::ExecutionError);
+      err->set_message("Raw payload exceeds size limit");
+      return grpc::Status::OK;
+    }
+
     QByteArray data(bytes.data(), static_cast<int>(bytes.size()));
 
-    bool denied  = false;
-    bool written = false;
-    QMetaObject::invokeMethod(
-      qApp,
-      [&]() {
-        static auto& server = API::Server::instance();
-        if (!server.authorizeDeviceWrite()) {
-          denied = true;
-          return;
-        }
+    bool denied    = false;
+    bool written   = false;
+    const bool ran = m_server->marshalToGui([&]() {
+      static auto& server = API::Server::instance();
+      if (server.authorizeDeviceWrite() != API::DeviceWriteVerdict::Allowed) {
+        denied = true;
+        return;
+      }
 
-        static auto& connectionManager = IO::ConnectionManager::instance();
-        written                        = connectionManager.writeData(data) == data.size();
-      },
-      Qt::BlockingQueuedConnection);
+      static auto& connectionManager = IO::ConnectionManager::instance();
+      written                        = connectionManager.writeData(data) == data.size();
+    });
+
+    if (!ran)
+      return unavailable();
 
     response->set_id(request->id());
     response->set_success(written);
 
     if (!written) {
       auto* err = response->mutable_error();
-      err->set_code(denied ? "WRITE_DENIED" : "WRITE_FAILED");
+      err->set_code(denied ? API::ErrorCode::WriteDenied : API::ErrorCode::WriteFailed);
       err->set_message(denied ? "Device write denied by user" : "Failed to write data to device");
     }
 
@@ -281,9 +323,7 @@ private:
     if (context == nullptr)
       return true;
 
-    const std::string peer = context->peer();
-    if (peer.find("127.0.0.1") != std::string::npos || peer.find("[::1]") != std::string::npos
-        || peer.rfind("unix:", 0) == 0)
+    if (peerIsLoopback(context->peer()))
       return true;
 
     const auto& md = context->client_metadata();
@@ -302,6 +342,14 @@ private:
   static grpc::Status unauthenticated()
   {
     return grpc::Status(grpc::StatusCode::UNAUTHENTICATED, "Authentication required");
+  }
+
+  /**
+   * @brief Status for a call whose marshal into the GUI was abandoned or timed out.
+   */
+  static grpc::Status unavailable()
+  {
+    return grpc::Status(grpc::StatusCode::UNAVAILABLE, "Serial Studio is not accepting calls");
   }
 
   API::GRPC::GRPCServer* m_server;
@@ -477,6 +525,49 @@ void API::GRPC::GRPCServer::onExternalConnectionsChanged()
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Runs @p fn on the GUI thread and waits for it, abortably. False when the call was
+ *        abandoned by stopServer() or outlived the deadline, in which case the functor either
+ *        already finished or will never run: abandon() blocks behind an in-flight dispatch, so
+ *        by the time this returns nothing can still reference the caller's frame (spec 0075 I5).
+ */
+bool API::GRPC::GRPCServer::marshalToGui(const std::function<void()>& fn)
+{
+  auto call = std::make_shared<PendingCall>(fn);
+
+  {
+    const std::lock_guard<std::mutex> guard(m_pendingMutex);
+    m_pendingCalls.push_back(call);
+  }
+
+  QMetaObject::invokeMethod(qApp, [call] { call->dispatch(); }, Qt::QueuedConnection);
+  const bool ran = call->wait(std::chrono::milliseconds(kMarshalTimeoutMs));
+  call->abandon();
+
+  {
+    const std::lock_guard<std::mutex> guard(m_pendingMutex);
+    m_pendingCalls.erase(std::remove(m_pendingCalls.begin(), m_pendingCalls.end(), call),
+                         m_pendingCalls.end());
+  }
+
+  return ran;
+}
+
+/**
+ * @brief Wakes every parked handler so it can return before the server waits for them.
+ */
+void API::GRPC::GRPCServer::abandonPendingCalls()
+{
+  std::vector<std::shared_ptr<PendingCall>> parked;
+  {
+    const std::lock_guard<std::mutex> guard(m_pendingMutex);
+    parked = m_pendingCalls;
+  }
+
+  for (auto& call : parked)
+    call->abandon();
+}
+
+/**
  * @brief Starts the gRPC server on a background thread.
  */
 void API::GRPC::GRPCServer::startServer()
@@ -509,10 +600,14 @@ void API::GRPC::GRPCServer::startServer()
 }
 
 /**
- * @brief Stops the gRPC server and cancels all active streams.
+ * @brief Stops the gRPC server and cancels all active streams. Parked handler calls are abandoned
+ *        FIRST: this runs on the GUI thread, and Shutdown() waits for the sync handlers, which
+ *        were waiting on the GUI thread -- both sides waited on each other (spec 0075 I5).
  */
 void API::GRPC::GRPCServer::stopServer()
 {
+  abandonPendingCalls();
+
   {
     std::lock_guard<std::mutex> lock(m_frameStreamsMutex);
     for (auto& ctx : m_frameStreams)

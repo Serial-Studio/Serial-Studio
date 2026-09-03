@@ -159,7 +159,8 @@ pointers, not substitutes.
 
 | Document | When to read it |
 |----------|-----------------|
-| [architecture.md](doc/claude/architecture.md) | Before touching any subsystem: the index into `doc/claude/architecture/` — dataflow (hotpath), startup, io, project, scripting, dashboard, kernels, export, mirror, commands-icons. |
+| [architecture.md](doc/claude/architecture.md) | Before touching any subsystem: the index into `doc/claude/architecture/` — dataflow (hotpath), startup, io, project, scripting, dashboard, kernels, export, mirror, ai, commands-icons. |
+| [architecture/ai.md](doc/claude/architecture/ai.md) | Before touching `app/src/AI/`, `app/rcc/ai/` or `app/qml/AI/`: the command safety tiers, checkpoint-not-save semantics, the meta-tool discovery seam, the provider/reply contract, and the `FileSandbox` / `KeyVault` trust boundaries. |
 | [common-mistakes.md](doc/claude/common-mistakes.md) | The silent-breakage lookup: gotchas the linter can't catch (timestamp capture, queued-vs-direct hotpath, `operator[]` inserts, macOS file-dialog reentrancy, the GUI-stall sampling recipe). |
 | [code-style.md](doc/claude/code-style.md) | Full style spec + NASA Power of Ten. The Code Style block below is the inline essentials. |
 | [trust-contract.md](doc/claude/trust-contract.md) | Full text of the Trust Contract above, with the incidents behind each rule. |
@@ -217,13 +218,15 @@ block caps, the time-ring/plot-clock rules, and the kernel macros.
 - **In-pipeline signal hops must be `Qt::DirectConnection`.** Queued between two
   pipeline-thread objects fills the 65536-slot queue at 10+ kHz and drops frames. GUI↔pipeline
   traffic is chunk/command/tick rate only — never a per-frame queued emission.
-- **No allocation on the publish path.** Blocks come from a pool (`claimBlockSlot`,
-  `use_count()==1` probe, aliasing shared_ptr) with columns sized once at bind. The one copy is
-  `clone_block_trimmed` for the async sinks — deliberate and gated on a sink being on.
+- **No allocation on the publish path.** Blocks come from a pool (`use_count()==1` probe,
+  aliasing shared_ptr) with columns sized once at bind — `DataModel::BlockStager` owns it on the
+  frame lane, `StreamProcessor::claimBlockSlot()` on the stream lane. The one copy is
+  `clone_block_trimmed`, made by `DataModel::BlockPublisher` for the async sinks — deliberate and
+  gated on a sink being on.
 - **One publication payload, one ingestion path (spec 0055).** Nothing publishes a
-  `TimestampedFrame` any more: `FrameBuilder` stages parsed rows into a pooled
+  `TimestampedFrame` any more: `FrameBuilder`'s `BlockStager` stages parsed rows into a pooled
   `DataModel::DataBlock` and flushes on the display tick or a sample cap (`kFrameBlockSampleCap`
-  64, `kStreamBlockSampleCap` 4096). Dense sources do per-sample work on their own
+  64, `kStreamBlockSampleCap` 4096); `BlockPublisher` fans the finished block out. Dense sources do per-sample work on their own
   `IO::StreamWorker` thread but emit `blockReady` **queued to the pipeline thread**, the SINGLE
   producer for every sink. Structure travels separately as a `StructureSnapshot`. Never add a
   rate cap or a per-view reduction; an overrun drops whole blocks and counts them.
@@ -235,31 +238,43 @@ block caps, the time-ring/plot-clock rules, and the kernel macros.
   skip — dashboard live, every recording empty. `DataModel::RepublishGate` keeps them apart; any
   lane seeing a change marks the sinks dirty, only an export publish clears it. Never gate an
   export publish on "did THIS pass see a change".
+- **The session boundary is the sink contract (spec 0075).** Recording sinks close on
+  `FrameBuilder::sessionBoundary(connected, paused)` — pause included — and the builder flushes
+  every open block BEFORE emitting, so the tail lands in the file that was open. The export-time
+  tie-break is per source (`monotonicSourceNs`) and a uniform-grid block never takes it.
 - **Time rings are sized from a rate, never a sample count alone**, and a ring's clock never
   rewinds; `m_plotClocks` and `m_plotDisplayTimeSec` are ONE state (`resetPlotClocks()`), never
-  cleared one without the other. Full rules + both 2026-08 incidents:
+  cleared one without the other. Dashboard ingest lives in `UI::DashboardIngest`, which binds
+  both by reference; `resetPlotClocks()` stays in the facade. Full rules + both 2026-08 incidents:
   [doc/claude/architecture/dashboard.md](doc/claude/architecture/dashboard.md) "Time-Ring Sizing".
 - **Native + PlainText parses through the span fast lane** (`trySpanLane` →
   `parseUtf8Spans` → `applyDatasetValuesSpans`): byte views + in-place QString writes,
   zero steady-state allocation. The hotpath reads **cached** flags (`m_operationMode`,
   `m_playerOpen`, `m_anyAsyncSink`, `m_captureLatestFrame`, `m_changeDriven`, Dashboard
   `m_streamAvailable`) — a new input to any of them must wire its change signal to the cache
-  refresh or frames/exports silently stop. Flag mechanics: dataflow.md "Cached Hotpath
+  refresh (`BlockPublisher::refreshSinkFlag` for the sink flag) or frames/exports silently stop. Flag mechanics: dataflow.md "Cached Hotpath
   Flags", read before touching any of them. `streamAvailable()` also reads the spec-0040
   mirror flag (`API::MirrorSession::mirroring()`, a plain module-static bool — never a
   construction).
 - **Source owns time.** Stamp at the driver boundary; never re-stamp in export/report
   workers (use `monotonicFrameNs(...)` as the safety net only).
-- **Driver opens are synchronous calls; several drivers dial asynchronously behind them.**
+- **Driver opens are synchronous calls; most drivers dial asynchronously behind them.**
   `DeviceManager::open()` calls `HAL_Driver::open(mode)` directly — no async-open hook, no task
-  runner. In-flight dials report via `HAL_Driver::isConnecting()`; the async dial verdict has ONE
+  runner. In-flight dials report via `HAL_Driver::isConnecting()` (eleven overrides now, TCP
+  included; only UART, USB, Audio and HID settle inside the call); the async dial verdict has ONE
   owner, `HAL_Driver::openFinished(ok, reason)`, emitted exactly once per attempt — a driver that
-  reports only success wedges the connect button. NO reopen-on-config-edit machinery exists. Full
-  doctrine (probe sockets, drop recovery, the `app/src/Async/` task tree):
+  reports only success wedges the connect button. The TCP resolve/probe/connect sequence lives in
+  `IO::AsyncTcpDial` (`finished` exactly once per `start()`, `cancel()` reports nothing); the old
+  blocking TCP dial is gone, and for TCP `io.connect`'s `connected` flag now means "the attempt
+  started". NO reopen-on-config-edit machinery exists. Full
+  doctrine (probe sockets, drop recovery, `ResumePolicy`, the `app/src/Async/` task tree):
   [doc/claude/architecture/io.md](doc/claude/architecture/io.md) "Opening a Link".
 - **Diagnostics are pulled, never pushed (specs 0033/0035).** `FrameReader` / `FrameBuilder`
   counters are plain `quint64` increments polled on the 1 Hz tick — never signal, allocate,
   or lock per frame. A recreated `FrameReader` zeroes them: consumers work on deltas.
+  `ConnectionManager::linkStats()` forwards to `IO::DeviceTableQuery`, where `IO::LinkStats` now
+  lives; a polled-PLC worker's counters are atomics (a documented deviation: the poll thread
+  writes while the GUI samples).
 - **JS scripts**: always `JsScriptEngine::guardedCall()`, never `parseFunction.call()`.
   `setInterrupted(true)` only in `JsWatchdogThread.cpp`.
 - **256 kHz is a CI gate, not a slogan.** `--benchmark-hotpath` drives the real parse pipeline
@@ -313,7 +328,8 @@ area. The hazard column names what breaks silently — the doc holds the rule.
 | `app/src/Console/Annotations.*`, `ConsoleAnnotations.qml` (spec 0059) | [dashboard.md](doc/claude/architecture/dashboard.md) "Frame annotation layer" | `annotate()` stages, `commitPending()` publishes per tick — reading `count()` right after needs a commit. `reset()` clears the model *before* re-reading the offset. |
 | `app/src/API/Mirror/`, `streamAvailable()` (spec 0040) | [mirror.md](doc/claude/architecture/mirror.md) | Dataset ordering or `wireUniqueId` changes are wire breaks: bump `kWireVersion`, regenerate `tests/fixtures/mirror/`. Viewer frames never reach the export fan-out. |
 | An embedded code editor's render cadence | [scripting.md](doc/claude/architecture/scripting.md) "Embedded Code Editors" | Never give a main-window-embedded editor an unconditional per-tick `grab()` — cost 13% of the GUI thread (2026-08-17). |
-| Locating a god object's concerns (`ProjectModel`, `ProjectHandler`, `FrameBuilder`, `Dashboard`) | [directory-map.md](doc/claude/directory-map.md) | Spec 0070 re-formed the god objects into facades owning real sub-object classes (one class = one .h/.cpp, in a sibling dir named after the facade). Never split one class across TUs; `tu-cutter.py` is retired for class work. |
+| The AI assistant: a tool tier, the checkpoint timer, a provider, the tool surface | [ai.md](doc/claude/architecture/ai.md) | A mutating tool call takes a **checkpoint**, never a save — the API descriptions and `app/rcc/ai/skills/` say so to the model, so a disk-contract change is incomplete until those strings change too. Every command sits in exactly one tier of `command_safety.json`; an unlisted name silently falls through to `Confirm`. |
+| Locating a god object's concerns (`ProjectModel`, `ProjectHandler`, `FrameBuilder`, `Dashboard`) | [directory-map.md](doc/claude/directory-map.md) | Spec 0070 re-formed the god objects into facades owning real sub-object classes (one class = one .h/.cpp, in a sibling dir named after the facade). Never split one class across TUs: decompose into member sub-objects instead. |
 
 ## Code Style — Essentials
 

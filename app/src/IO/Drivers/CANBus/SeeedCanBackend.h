@@ -22,55 +22,61 @@
 
 #pragma once
 
+#include <cstdint>
 #include <QByteArray>
-#include <QCanBusDevice>
 #include <QCanBusFrame>
 #include <QString>
 #include <QStringList>
 
 #include "IO/Drivers/CANBus/CanBackends.h"
-
-class QSerialPort;
+#include "IO/Drivers/CANBus/SerialCanBackendBase.h"
 
 namespace IO {
 namespace Drivers {
 
 /**
- * @brief QCanBusDevice backend for the Seeed/Waveshare USB-CAN Analyzer (CH340 serial).
+ * @brief Backend for the Seeed/Waveshare USB-CAN Analyzer (CH340 serial). The port, the buffer
+ *        and the unplug handling live in SerialCanBackendBase; what is here is the analyzer's
+ *        variable-length packet protocol.
  */
-class SeeedCanBackend : public QCanBusDevice {
+class SeeedCanBackend : public SerialCanBackendBase {
   Q_OBJECT
 
 public:
   explicit SeeedCanBackend(const QString& portName, QObject* parent = nullptr);
-  ~SeeedCanBackend() override;
 
   SeeedCanBackend(SeeedCanBackend&&)                 = delete;
   SeeedCanBackend(const SeeedCanBackend&)            = delete;
   SeeedCanBackend& operator=(SeeedCanBackend&&)      = delete;
   SeeedCanBackend& operator=(const SeeedCanBackend&) = delete;
 
+  ~SeeedCanBackend() override;
+
+  /**
+   * @brief Outcome of decoding one packet from the receive buffer.
+   */
+  enum class Parse {
+    Frame,
+    Resync,
+    NeedMore,
+  };
+
   [[nodiscard]] static CanBackends::Entry registration();
   [[nodiscard]] static const QString& pluginKey();
   [[nodiscard]] static QStringList availableInterfaces();
   [[nodiscard]] static QCanBusDevice* create(const QString& portName);
+  [[nodiscard]] static std::uint8_t bitrateCode(quint32 bitrate);
+  [[nodiscard]] static Parse decodePacket(const QByteArray& buffer,
+                                          QCanBusFrame& out,
+                                          int& consumed);
 
 protected:
-  [[nodiscard]] bool open() override;
-  void close() override;
   [[nodiscard]] bool writeFrame(const QCanBusFrame& frame) override;
   [[nodiscard]] QString interpretErrorFrame(const QCanBusFrame& frame) override;
 
-private slots:
-  void onReadyRead();
-
-private:
-  [[nodiscard]] bool sendInitFrame(quint32 bitrate);
-
-private:
-  QSerialPort* m_port;
-  QString m_portName;
-  QByteArray m_rxBuffer;
+  [[nodiscard]] bool validateBitrate(quint32 bitrate, QString& reason) const override;
+  [[nodiscard]] bool sendInit(quint32 bitrate) override;
+  void drainBuffer(QByteArray& buffer, QList<QCanBusFrame>& frames) override;
 };
 }  // namespace Drivers
 }  // namespace IO

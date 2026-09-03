@@ -49,13 +49,13 @@ Rectangle {
     width: parent.width - 12
 
     Image {
-      visible: (pill.node.icon || "") !== ""
+      smooth: true
       width: 12 * pill.zoom
       height: 12 * pill.zoom
-      anchors.verticalCenter: parent.verticalCenter
-      source: pill.node.icon || ""
       sourceSize: Qt.size(12, 12)
-      smooth: true
+      source: pill.node.icon || ""
+      visible: (pill.node.icon || "") !== ""
+      anchors.verticalCenter: parent.verticalCenter
     }
 
     Text {

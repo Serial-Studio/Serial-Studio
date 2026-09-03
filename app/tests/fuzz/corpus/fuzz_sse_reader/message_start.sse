@@ -1,0 +1,3 @@
+event: message_start
+data: {"message":{"usage":{"cache_read_input_tokens":1}}}
+

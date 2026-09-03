@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://serial-studio.com/schemas/catalog.json",
+  "title": "Serial Studio extension catalog entry (v2)",
+  "description": "The info.json / manifest entry an extension repository publishes (spec 0075, K3/K5). Every installable file carries a SHA-256 digest and a byte size: the installer downloads into a staging directory, verifies each file against its digest, and only then swaps it over the installed version. An entry whose files are bare strings is catalog v1 and is refused -- there is nothing to verify a download against.",
+  "type": "object",
+  "required": ["schemaVersion", "id", "type", "version", "files"],
+  "properties": {
+    "schemaVersion": {
+      "const": 2,
+      "description": "Catalog format version. v1 (files as plain strings, no digests) is refused by the installer."
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$",
+      "description": "Stable package identifier; also one path component of the install directory, so separators and parent references are excluded by the pattern."
+    },
+    "type": {
+      "type": "string",
+      "enum": ["theme", "frame-parser", "project-template", "plugin", "widget"],
+      "description": "Package kind. The install location is chosen from the local package type, never from this field alone."
+    },
+    "title": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "description": { "type": "string", "maxLength": 4096 },
+    "author": { "type": "string", "maxLength": 128 },
+    "license": { "type": "string", "maxLength": 128 },
+    "category": { "type": "string", "maxLength": 64 },
+    "screenshot": { "type": "string", "maxLength": 512 },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+(\\.[0-9]+){0,3}([+-][0-9A-Za-z.-]+)?$",
+      "description": "Compared numerically against the installed version, so a lower remote version is never offered as an update."
+    },
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 512,
+      "items": { "$ref": "#/definitions/catalogFile" }
+    },
+    "platforms": {
+      "type": "object",
+      "description": "Per-platform overrides keyed by \"<os>/<arch>\", \"<os>/*\" or \"*\"; each override may carry its own files array of the same shape.",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "files": {
+            "type": "array",
+            "maxItems": 512,
+            "items": { "$ref": "#/definitions/catalogFile" }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "catalogFile": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "description": "Repository-relative path, also the path inside the install directory. The installer refuses any resolved path that leaves that directory."
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "Lowercase hex SHA-256 of the file's bytes. A download whose digest differs aborts the install and leaves the previously installed version untouched."
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Byte size, checked before the digest so an oversized body is rejected without hashing it."
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

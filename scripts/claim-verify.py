@@ -490,6 +490,160 @@ def check_symbols(
     return out
 
 
+def _out_of_order(placed: list) -> list:
+    """The entries to move: everything outside the longest already-correct run.
+
+    Reporting every entry whose position disagrees with a running maximum turns one displaced
+    block into a finding per entry after it. The complement of the longest increasing
+    subsequence is the minimal set that actually has to move.
+    """
+    if len(placed) < 2:
+        return []
+
+    best = [1] * len(placed)
+    prev = [-1] * len(placed)
+    for i in range(len(placed)):
+        for j in range(i):
+            if placed[j][1] < placed[i][1] and best[j] + 1 > best[i]:
+                best[i] = best[j] + 1
+                prev[i] = j
+
+    end = max(range(len(placed)), key=lambda i: best[i])
+    keep = set()
+    while end != -1:
+        keep.add(end)
+        end = prev[end]
+
+    return [symbol for i, (symbol, _) in enumerate(placed) if i not in keep]
+
+
+def _ordered_doc_index(body: str, symbol: str) -> int:
+    """First offset in `body` where the doc names `symbol`, however it qualifies it.
+
+    The docs write the same entity as `Translator`, `Misc::ProblemCenter` or
+    `IO::PipelineHost` depending on how ambiguous the bare name is, so the match is on the
+    last `::` segment inside a backticked token."""
+    simple = symbol.split("::")[-1]
+    match = re.search(r"`[A-Za-z_:]*\b" + re.escape(simple) + r"`", body)
+    return match.start() if match else -1
+
+
+def _check_ordered_anchor(anchor: dict) -> list[Finding]:
+    """Pin a doc's ORDERED list against the order the code actually uses.
+
+    A `must_contain` anchor proves a name is mentioned somewhere; it cannot prove a sequence.
+    Construction order IS the contract for the composition root -- CLAUDE.md forbids reordering
+    `instantiateCoreModules()` without re-running the ctor-edge proof -- so a doc that lists the
+    same names in a different order is worse than no list: it reads as authoritative. This
+    anchor extracts one capture per entry from the source, in source order, and requires the doc
+    to name them in that same order.
+    """
+    out: list[Finding] = []
+    name = anchor["name"]
+    source = REPO_ROOT / anchor["source"]
+    if not source.is_file():
+        return [
+            Finding(
+                ANCHORS_PATH,
+                1,
+                "anchor-drift",
+                f"{name}: source `{anchor['source']}` does not exist",
+                True,
+            )
+        ]
+
+    text = source.read_text(encoding="utf-8", errors="replace")
+    scope = anchor.get("source_scope")
+    if scope:
+        window = re.search(scope, text)
+        if window is None:
+            return [
+                Finding(
+                    ANCHORS_PATH,
+                    1,
+                    "anchor-drift",
+                    f"{name}: `{anchor['source']}` no longer matches the source scope "
+                    f"/{scope}/ -- the sequence this anchor pins has moved",
+                    True,
+                )
+            ]
+        text = window.group(0)
+
+    symbols = [m.group(1) for m in re.finditer(anchor["source_pattern"], text)]
+    if len(symbols) < 2:
+        return [
+            Finding(
+                ANCHORS_PATH,
+                1,
+                "anchor-drift",
+                f"{name}: `{anchor['source_pattern']}` captured {len(symbols)} entries; "
+                f"an ordered anchor needs at least two",
+                True,
+            )
+        ]
+
+    for doc in anchor.get("docs", []):
+        doc_path = REPO_ROOT / doc["path"]
+        if not doc_path.is_file():
+            out.append(
+                Finding(
+                    ANCHORS_PATH,
+                    1,
+                    "anchor-drift",
+                    f"{name}: doc `{doc['path']}` does not exist",
+                    True,
+                )
+            )
+            continue
+
+        body = doc_path.read_text(encoding="utf-8", errors="replace")
+        doc_scope = doc.get("scope")
+        if doc_scope:
+            window = re.search(doc_scope, body, re.S)
+            if window is None:
+                out.append(
+                    Finding(
+                        doc_path,
+                        1,
+                        "anchor-drift",
+                        f"{name}: the section this anchor pins (/{doc_scope}/) is gone",
+                        True,
+                    )
+                )
+                continue
+            body = window.group(0)
+
+        placed: list[tuple[str, int]] = []
+        for symbol in symbols:
+            index = _ordered_doc_index(body, symbol)
+            if index < 0:
+                out.append(
+                    Finding(
+                        doc_path,
+                        1,
+                        "anchor-drift",
+                        f"{name}: `{symbol}` is in {anchor['source']} but not in this list",
+                        True,
+                    )
+                )
+                continue
+            placed.append((symbol, index))
+
+        for symbol in _out_of_order(placed):
+            out.append(
+                Finding(
+                    doc_path,
+                    1,
+                    "anchor-drift",
+                    f"{name}: `{symbol}` sits in the wrong place in this list -- "
+                    f"{anchor['source']} constructs it somewhere else in the sequence",
+                    True,
+                )
+            )
+
+    return out
+
+
 def check_anchors() -> list[Finding]:
     """Verify the constants the docs quote still read that way in the code.
 
@@ -502,6 +656,10 @@ def check_anchors() -> list[Finding]:
 
     spec = json.loads(ANCHORS_PATH.read_text(encoding="utf-8"))
     for anchor in spec.get("anchors", []):
+        if anchor.get("kind") == "ordered":
+            out.extend(_check_ordered_anchor(anchor))
+            continue
+
         name = anchor["name"]
         source = REPO_ROOT / anchor["source"]
         if not source.is_file():

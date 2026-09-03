@@ -59,7 +59,9 @@ private:
 #endif
 
 private:
+#ifdef BUILD_COMMERCIAL
   DriverUiRegistry& m_uiDrivers;
+#endif
 };
 
 }  // namespace IO

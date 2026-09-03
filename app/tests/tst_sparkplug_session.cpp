@@ -21,9 +21,12 @@
  */
 
 #include <bit>
+#include <QJsonArray>
+#include <QJsonObject>
 #include <QStringList>
 #include <QTest>
 
+#include "DataModel/FrameKeys.h"
 #include "IO/Drivers/MQTT/SparkplugSession.h"
 
 using IO::Drivers::SparkplugSession;
@@ -243,7 +246,10 @@ private slots:
   void malformedPayloadCounted();
   void slotCapRefusesGrowth();
   void schemaGenerationLifecycle();
-  void resetClearsSession();
+  void resetKeepsSlotsAndClearsSession();
+  void reconnectWithReversedBirthsKeepsIndices();
+  void slotTableRoundTripsThroughJson();
+  void aMisplacedRestoreEntryIsRefusedWhole();
 };
 
 /**
@@ -700,10 +706,11 @@ void TstSparkplugSession::schemaGenerationLifecycle()
 }
 
 /**
- * @brief Reset drops the whole session: slot assignments, buffered traffic, rebirth queue and the
- *        pulled counters, so the next birth starts from an empty table and no stale message lands.
+ * @brief Reset drops birth state, buffered traffic, the rebirth queue, every latched value and the
+ *        pulled counters, and KEEPS the slot table: the indices a generated project's datasets bind
+ *        to have to survive a broker drop (spec 0075 E2).
  */
-void TstSparkplugSession::resetClearsSession()
+void TstSparkplugSession::resetKeepsSlotsAndClearsSession()
 {
   SparkplugSession session;
   const QByteArray birth =
@@ -713,25 +720,129 @@ void TstSparkplugSession::resetClearsSession()
   const QByteArray orphan =
     makePayload(-1, 2000, {makeMetric(QByteArray(), 5, code(DataType::Double), realValue(99.0))});
   QVERIFY(session.ingest(topicOf("g1", "NDATA", "edge9"), orphan));
-  QVERIFY(session.slotCount() > 0);
+  QCOMPARE(session.slotCount(), 2);
   QVERIFY(session.hasDirtySlots());
   QCOMPARE(session.counters().preBirthBuffered, quint64(1));
 
   session.reset();
-  QCOMPARE(session.slotCount(), 0);
+  QCOMPARE(session.slotCount(), 2);
   QVERIFY(!session.hasDirtySlots());
-  QVERIFY(session.slotValues().isEmpty());
   QVERIFY(session.takeRebirthTopics().isEmpty());
   QCOMPARE(session.newMetricsSinceGeneration(), quint64(0));
   QCOMPARE(session.counters().preBirthBuffered, quint64(0));
   QCOMPARE(session.counters().rebirthRequests, quint64(0));
   QCOMPARE(session.counters().seqGaps, quint64(0));
+  QCOMPARE(slotNamed(session, "edge1/t").num, 0.0);
+  QCOMPARE(slotNamed(session, "edge1/Online").b, false);
 
   const QByteArray revived =
-    makePayload(0, 3000, {makeMetric("z", 5, code(DataType::Double), realValue(1.0))});
-  QVERIFY(session.ingest(topicOf("g1", "NBIRTH", "edge9"), revived));
+    makePayload(0, 3000, {makeMetric("t", 5, code(DataType::Double), realValue(1.0))});
+  QVERIFY(session.ingest(topicOf("g1", "NBIRTH", "edge1"), revived));
   QCOMPARE(session.slotCount(), 2);
-  QCOMPARE(slotNamed(session, "edge9/z").num, 1.0);
+  QCOMPARE(slotNamed(session, "edge1/t").index, 1);
+  QCOMPARE(slotNamed(session, "edge1/t").num, 1.0);
+}
+
+/**
+ * @brief The E2 regression: after a broker drop the nodes re-birth in whatever order the broker
+ *        delivers them. Every metric has to land back in the index it was assigned, or one node's
+ *        readings render under another node's dataset titles with nothing to say they moved.
+ */
+void TstSparkplugSession::reconnectWithReversedBirthsKeepsIndices()
+{
+  SparkplugSession session;
+  const QByteArray first =
+    makePayload(0, 1000, {makeMetric("a", 1, code(DataType::Double), realValue(1.0))});
+  const QByteArray second =
+    makePayload(0, 1000, {makeMetric("b", 1, code(DataType::Double), realValue(2.0))});
+
+  QVERIFY(session.ingest(topicOf("g1", "NBIRTH", "edge1"), first));
+  QVERIFY(session.ingest(topicOf("g1", "NBIRTH", "edge2"), second));
+  QCOMPARE(session.slotCount(), 4);
+  QCOMPARE(slotNamed(session, "edge1/a").index, 1);
+  QCOMPARE(slotNamed(session, "edge2/b").index, 3);
+
+  session.reset();
+  const QByteArray reborn2 =
+    makePayload(0, 5000, {makeMetric("b", 9, code(DataType::Double), realValue(20.0))});
+  const QByteArray reborn1 =
+    makePayload(0, 5000, {makeMetric("a", 9, code(DataType::Double), realValue(10.0))});
+
+  QVERIFY(session.ingest(topicOf("g1", "NBIRTH", "edge2"), reborn2));
+  QVERIFY(session.ingest(topicOf("g1", "NBIRTH", "edge1"), reborn1));
+  QCOMPARE(session.slotCount(), 4);
+  QCOMPARE(slotNamed(session, "edge1/a").index, 1);
+  QCOMPARE(slotNamed(session, "edge1/a").num, 10.0);
+  QCOMPARE(slotNamed(session, "edge2/b").index, 3);
+  QCOMPARE(slotNamed(session, "edge2/b").num, 20.0);
+  QCOMPARE(session.newMetricsSinceGeneration(), quint64(0));
+}
+
+/**
+ * @brief The persisted table is what carries the indices across a restart, so it has to restore the
+ *        identity of every slot before the first birth and let a node that births first land in the
+ *        index it held last session rather than in index zero.
+ */
+void TstSparkplugSession::slotTableRoundTripsThroughJson()
+{
+  SparkplugSession source;
+  const QByteArray nodeBirth =
+    makePayload(0, 1000, {makeMetric("a", 1, code(DataType::Double), realValue(1.0))});
+  const QByteArray deviceBirth =
+    makePayload(1, 1000, {makeMetric("p", 2, code(DataType::Double), realValue(3.0))});
+
+  QVERIFY(source.ingest(topicOf("g1", "NBIRTH", "edge1"), nodeBirth));
+  QVERIFY(source.ingest(topicOf("g1", "NBIRTH", "edge2"), nodeBirth));
+  QVERIFY(source.ingest(deviceTopic("g1", "DBIRTH", "edge1", "dev1"), deviceBirth));
+
+  const QJsonArray stored = source.slotsJson();
+  QCOMPARE(stored.size(), qsizetype(source.slotCount()));
+
+  SparkplugSession restored;
+  restored.restoreSlots(stored);
+  QCOMPARE(restored.slotCount(), source.slotCount());
+  QCOMPARE(restored.counters().capDrops, quint64(0));
+  for (int i = 0; i < source.slotCount(); ++i)
+    QCOMPARE(restored.slotValues().at(i).displayName, source.slotValues().at(i).displayName);
+
+  const QByteArray reborn =
+    makePayload(0, 7000, {makeMetric("a", 4, code(DataType::Double), realValue(42.0))});
+  QVERIFY(restored.ingest(topicOf("g1", "NBIRTH", "edge2"), reborn));
+  QCOMPARE(restored.slotCount(), source.slotCount());
+  QCOMPARE(slotNamed(restored, "edge2/a").index, slotNamed(source, "edge2/a").index);
+  QCOMPARE(slotNamed(restored, "edge2/a").num, 42.0);
+}
+
+/**
+ * @brief A stored table whose entry does not sit at the index it declares cannot be trusted to name
+ *        the same metrics, so the restore is refused whole and counted; deriving from scratch is
+ *        correct, restoring half of it would repoint every dataset after the bad entry.
+ */
+void TstSparkplugSession::aMisplacedRestoreEntryIsRefusedWhole()
+{
+  SparkplugSession source;
+  const QByteArray birth =
+    makePayload(0, 1000, {makeMetric("a", 1, code(DataType::Double), realValue(1.0))});
+  QVERIFY(source.ingest(topicOf("g1", "NBIRTH", "edge1"), birth));
+
+  QJsonArray stored = source.slotsJson();
+  QVERIFY(stored.size() >= 2);
+
+  QJsonObject broken = stored.at(1).toObject();
+  broken.insert(Keys::Index, 7);
+  stored.replace(1, broken);
+
+  SparkplugSession restored;
+  restored.restoreSlots(stored);
+  QCOMPARE(restored.slotCount(), 0);
+  QCOMPARE(restored.counters().capDrops, quint64(1));
+
+  restored.restoreSlots(source.slotsJson());
+  QCOMPARE(restored.slotCount(), source.slotCount());
+
+  restored.restoreSlots(source.slotsJson());
+  QCOMPARE(restored.slotCount(), source.slotCount());
+  QCOMPARE(restored.counters().capDrops, quint64(1));
 }
 
 QTEST_APPLESS_MAIN(TstSparkplugSession)

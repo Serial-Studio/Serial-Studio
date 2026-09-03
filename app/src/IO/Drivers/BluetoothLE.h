@@ -142,6 +142,8 @@ private:
   void announceGattReady();
   static void initializeSharedState();
   static void onDeviceDiscovered(const QBluetoothDeviceInfo& device);
+  [[nodiscard]] static bool deviceAlreadyKnown(const QBluetoothDeviceInfo& device);
+  void reportDropToManager();
   static void onDiscoveryError(QBluetoothDeviceDiscoveryAgent::Error error);
   static void onHostModeStateChanged(QBluetoothLocalDevice::HostMode state);
 

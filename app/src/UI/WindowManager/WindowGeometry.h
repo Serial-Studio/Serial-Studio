@@ -87,6 +87,7 @@ void showRestorableWindows(const QMap<int, QQuickItem*>& windows);
 
 [[nodiscard]] QRect computeResizedGeometry(
   const QRect& initial, const QPoint& delta, ResizeEdge edge, int minWidth, int minHeight);
+[[nodiscard]] QRect clampResizeToCanvas(QRect geometry, const QSize& canvas);
 [[nodiscard]] QRect constrainGeometry(const QRect& geometry,
                                       const QSize& canvas,
                                       int minWidth,

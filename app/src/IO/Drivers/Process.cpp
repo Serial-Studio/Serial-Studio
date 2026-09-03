@@ -27,9 +27,13 @@
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QStandardPaths>
+#include <QTimer>
 
 #include "IO/ConnectionManager.h"
 #include "Misc/Utilities.h"
+
+// Grace the terminated child gets before it is killed, off the GUI thread
+static constexpr int kProcessTerminateGraceMs = 1000;
 
 #ifdef Q_OS_WIN
 // clang-format off
@@ -56,7 +60,12 @@
  * @brief Constructs the Process driver and restores persisted launch/pipe settings.
  */
 IO::Drivers::Process::Process()
-  : m_mode(Mode::Launch), m_process(nullptr), m_pipeRunning(false), m_pipeConnected(false)
+  : m_mode(Mode::Launch)
+  , m_dropReported(false)
+  , m_process(nullptr)
+  , m_listProbe(nullptr)
+  , m_pipeRunning(false)
+  , m_pipeConnected(false)
 {
   const int saved = m_settings.value("ProcessDriver/mode", 0).toInt();
   m_mode          = (saved == static_cast<int>(Mode::NamedPipe)) ? Mode::NamedPipe : Mode::Launch;
@@ -94,15 +103,7 @@ void IO::Drivers::Process::close()
  */
 void IO::Drivers::Process::doClose()
 {
-  if (m_process) {
-    m_process->disconnect();
-    m_process->terminate();
-    if (!m_process->waitForFinished(2000))
-      m_process->kill();
-
-    m_process->deleteLater();
-    m_process = nullptr;
-  }
+  retireProcess();
 
   m_pipeRunning   = false;
   m_pipeConnected = false;
@@ -110,6 +111,53 @@ void IO::Drivers::Process::doClose()
     m_pipeThread.quit();
     m_pipeThread.wait();
   }
+}
+
+/**
+ * @brief Retires the spawned process without blocking the GUI. The child is asked to terminate and
+ *        killed by a timer if it will not: waiting two seconds here froze the window on every
+ *        disconnect of a process that ignores SIGTERM. The QProcess is parented to this driver, so
+ *        a child still running at teardown is reaped by Qt's own destructor.
+ */
+void IO::Drivers::Process::retireProcess()
+{
+  if (!m_process)
+    return;
+
+  auto* dying = m_process;
+  m_process   = nullptr;
+  dying->disconnect();
+
+  if (dying->state() == QProcess::NotRunning) {
+    dying->deleteLater();
+    return;
+  }
+
+  connect(dying, &QProcess::finished, dying, &QProcess::deleteLater);
+  dying->terminate();
+
+  QTimer::singleShot(kProcessTerminateGraceMs, dying, [dying] {
+    if (dying->state() != QProcess::NotRunning)
+      dying->kill();
+
+    dying->deleteLater();
+  });
+}
+
+/**
+ * @brief Queues the manager teardown at most once per session: a crashing process reports through
+ *        BOTH finished() and errorOccurred(), and each queued a disconnect of its own.
+ */
+void IO::Drivers::Process::reportDropOnce()
+{
+  if (m_dropReported)
+    return;
+
+  m_dropReported = true;
+
+  static auto& connectionManager = IO::ConnectionManager::instance();
+  QMetaObject::invokeMethod(
+    &connectionManager, [this] { connectionManager.disconnectDevice(this); }, Qt::QueuedConnection);
 }
 
 /**
@@ -204,8 +252,9 @@ bool IO::Drivers::Process::open(const QIODevice::OpenMode mode)
 
     const QStringList args = QProcess::splitCommand(m_arguments);
 
-    m_process = new QProcess(this);
-    m_process->setProcessChannelMode(QProcess::MergedChannels);
+    m_dropReported = false;
+    m_process      = new QProcess(this);
+    m_process->setProcessChannelMode(QProcess::SeparateChannels);
 
     auto env                = QProcessEnvironment::systemEnvironment();
     const QStringList extra = extraSearchPaths();
@@ -220,7 +269,8 @@ bool IO::Drivers::Process::open(const QIODevice::OpenMode mode)
       m_process->setProcessEnvironment(env);
     }
 
-    connect(m_process, &QProcess::readyRead, this, &Process::onReadyRead);
+    connect(m_process, &QProcess::readyReadStandardOutput, this, &Process::onReadyRead);
+    connect(m_process, &QProcess::readyReadStandardError, this, &Process::onReadyReadStandardError);
     connect(m_process, &QProcess::started, this, [this] { reportOpenFinished(true); });
     connect(m_process,
             QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
@@ -442,9 +492,8 @@ void IO::Drivers::Process::browsePipePath()
  */
 void IO::Drivers::Process::refreshProcessList()
 {
-  QStringList list;
-
 #ifdef Q_OS_WIN
+  QStringList list;
   HANDLE snap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
   if (snap != INVALID_HANDLE_VALUE) {
     PROCESSENTRY32W entry;
@@ -459,12 +508,48 @@ void IO::Drivers::Process::refreshProcessList()
 
     CloseHandle(snap);
   }
-#else
-  QProcess ps;
-  ps.start("ps", QStringList{"-eo", "pid,comm"});
-  ps.waitForFinished(3000);
 
-  const QString output    = QString::fromUtf8(ps.readAllStandardOutput());
+  list.sort(Qt::CaseInsensitive);
+  publishProcessList(list);
+#else
+  if (m_listProbe)
+    return;
+
+  m_listProbe = new QProcess(this);
+  connect(m_listProbe, &QProcess::finished, this, &Process::onProcessListReady);
+  connect(m_listProbe, &QProcess::errorOccurred, this, &Process::onProcessListReady);
+  m_listProbe->start(QStringLiteral("ps"), QStringList{"-eo", "pid,comm"});
+#endif
+}
+
+/**
+ * @brief Publishes a sorted enumeration when it differs from the one the pane already shows.
+ */
+void IO::Drivers::Process::publishProcessList(const QStringList& list)
+{
+  if (m_runningProcesses == list)
+    return;
+
+  m_runningProcesses = list;
+  Q_EMIT runningProcessesChanged();
+}
+
+/**
+ * @brief Parses the asynchronous "ps" enumeration. The probe runs off the call: waiting three
+ *        seconds for it inside the pane's refresh froze the window on a loaded machine.
+ */
+void IO::Drivers::Process::onProcessListReady()
+{
+  if (!m_listProbe)
+    return;
+
+  auto* probe = m_listProbe;
+  m_listProbe = nullptr;
+  probe->disconnect(this);
+  probe->deleteLater();
+
+  QStringList list;
+  const QString output    = QString::fromUtf8(probe->readAllStandardOutput());
   const QStringList lines = output.split('\n', Qt::SkipEmptyParts);
 
   for (int i = 1; i < lines.size(); ++i) {
@@ -481,14 +566,9 @@ void IO::Drivers::Process::refreshProcessList()
     if (!pid.isEmpty() && !name.isEmpty())
       list.append(name + " [" + pid + "]");
   }
-#endif
 
   list.sort(Qt::CaseInsensitive);
-
-  if (m_runningProcesses != list) {
-    m_runningProcesses = list;
-    Q_EMIT runningProcessesChanged();
-  }
+  publishProcessList(list);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -509,6 +589,20 @@ void IO::Drivers::Process::onReadyRead()
 }
 
 /**
+ * @brief Publishes the process's stderr to the terminal ALONE. Merging it into stdout put log
+ *        lines into the frame stream, where the parser saw them as telemetry.
+ */
+void IO::Drivers::Process::onReadyReadStandardError()
+{
+  if (!m_process)
+    return;
+
+  QByteArray data = m_process->readAllStandardError();
+  if (!data.isEmpty())
+    publishConsoleData(std::move(data));
+}
+
+/**
  * @brief Handles QProcess termination. The teardown is queued before the box so the UI never
  *        claims a dead process is a connected device while the modal is up.
  */
@@ -524,10 +618,7 @@ void IO::Drivers::Process::onProcessFinished(int exitCode, QProcess::ExitStatus 
                                                          : tr("Exit code: %1").arg(exitCode);
 
   reportOpenFinished(false, reason);
-
-  static auto& connectionManager = IO::ConnectionManager::instance();
-  QMetaObject::invokeMethod(
-    &connectionManager, [this] { connectionManager.disconnectDevice(this); }, Qt::QueuedConnection);
+  reportDropOnce();
 
   logDriverError(tr("Process \"%1\" stopped").arg(QFileInfo(m_executable).fileName()), reason);
 }
@@ -545,10 +636,7 @@ void IO::Drivers::Process::onProcessError(QProcess::ProcessError error)
 
   const QString detail = m_process ? m_process->errorString() : tr("Unknown error");
   reportOpenFinished(false, detail);
-
-  static auto& connectionManager = IO::ConnectionManager::instance();
-  QMetaObject::invokeMethod(
-    &connectionManager, [this] { connectionManager.disconnectDevice(this); }, Qt::QueuedConnection);
+  reportDropOnce();
 
   logDriverError(tr("Process Error"), detail);
 }

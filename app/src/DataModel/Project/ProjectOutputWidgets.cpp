@@ -267,13 +267,7 @@ void DataModel::ProjectOutputWidgets::deleteCurrentOutputWidget()
 
   if (widgets.empty()) {
     groups.erase(groups.begin() + gid);
-
-    int id = 0;
-    for (auto g = groups.begin(); g != groups.end(); ++g, ++id) {
-      g->groupId = id;
-      for (auto d = g->datasets.begin(); d != g->datasets.end(); ++d)
-        d->groupId = id;
-    }
+    m_model.m_entities.renumberGroupIds();
 
     if (workspaces.customizeWorkspaces())
       workspaces.shiftWorkspaceRefsAfterGroupDelete(gid, deletedTypeCounts);

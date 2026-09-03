@@ -181,6 +181,7 @@ private slots:
   void onProtocolFinished(bool success, const QString& errorMessage);
   void onProtocolProgress(qint64 sent, qint64 total);
   void onProtocolStatus(const QString& message);
+  void onProtocolError();
   void onProtocolWriteRequested(const QByteArray& data);
   void updateTransferSpeed();
 

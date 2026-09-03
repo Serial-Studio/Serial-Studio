@@ -38,17 +38,15 @@
 
 namespace DataModel {
 
-/**
- * @brief One pending batch-delete item, pinned to stable uniqueIds where they exist.
- */
-struct BatchDeleteEntry {
-  int kind;
-  int id;
-  int parentId;
-  int groupUid;
-  int datasetUid;
-  QString path;
-};
+static_assert(kBatchKindGroup == ProjectEditor::KindGroup);
+static_assert(kBatchKindDataset == ProjectEditor::KindDataset);
+static_assert(kBatchKindWorkspace == ProjectEditor::KindWorkspace);
+static_assert(kBatchKindWorkspaceFolder == ProjectEditor::KindWorkspaceFolder);
+static_assert(kBatchKindAction == ProjectEditor::KindAction);
+static_assert(kBatchKindOutputWidget == ProjectEditor::KindOutputWidget);
+static_assert(kBatchKindGroupFolder == ProjectEditor::KindGroupFolder);
+static_assert(kBatchKindUserTable == ProjectEditor::KindUserTable);
+static_assert(kBatchKindTableFolder == ProjectEditor::KindTableFolder);
 
 /**
  * @brief Returns the uniqueId of the group at positional @p gid, or -1 when out of range.
@@ -203,10 +201,10 @@ void DataModel::ProjectBulkOps::duplicateSelectedItems(const QVariantList& items
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Deletes every item in @p items, children (higher kind) first, descending ids within a
- * kind. Group-referencing entries are pinned to uniqueIds and re-resolved per delete: deleting
- * a group's last dataset/output widget cascades into deleting the group and renumbers every
- * later group, so a stale positional id would delete an unrelated, unselected item.
+ * @brief Deletes every item in @p items, contained items first (batchDeleteRank), descending ids
+ * within a rank. Group-referencing entries are pinned to uniqueIds and re-resolved per delete:
+ * deleting a group's last dataset/output widget cascades into deleting the group and renumbers
+ * every later group, so a stale positional id would delete an unrelated, unselected item.
  */
 void DataModel::ProjectBulkOps::deleteSelectedItems(const QVariantList& items)
 {
@@ -237,16 +235,7 @@ void DataModel::ProjectBulkOps::deleteSelectedItems(const QVariantList& items)
     entries.append(e);
   }
 
-  std::sort(
-    entries.begin(), entries.end(), [](const BatchDeleteEntry& a, const BatchDeleteEntry& b) {
-      if (a.kind != b.kind)
-        return a.kind > b.kind;
-
-      if (a.parentId != b.parentId)
-        return a.parentId > b.parentId;
-
-      return a.id > b.id;
-    });
+  std::sort(entries.begin(), entries.end(), batchDeleteOrderBefore);
 
   for (const auto& e : entries) {
     switch (e.kind) {

@@ -45,6 +45,10 @@ static QAtomicInteger<quintptr> s_nextSessionId{1};
 
 constexpr int kMaxApiClients = 32;
 
+// Bounds of the configurable listening port; anything outside falls back to API_TCP_PORT
+constexpr int kMinApiPort = 1;
+constexpr int kMaxApiPort = 65535;
+
 // Per-subscriber stream backlog before the oldest block is dropped and counted (spec 0051 R24)
 constexpr std::size_t kStreamQueueDepth = 8;
 
@@ -60,6 +64,7 @@ API::Server::Server()
       {.queueCapacity = 2048, .flushThreshold = 512, .timerIntervalMs = 1000})
   , m_auth(m_settings)
   , m_reception(*this)
+  , m_port(API_TCP_PORT)
   , m_clientCount(0)
   , m_enabled(false)
   , m_mirrorLinked(false)
@@ -71,6 +76,10 @@ API::Server::Server()
   m_externalConnections = m_settings.value("API/ExternalConnections", false).toBool();
   if (m_externalConnections)
     m_auth.ensureAuthToken();
+
+  const int stored = m_settings.value("API/Port", API_TCP_PORT).toInt();
+  if (stored >= kMinApiPort && stored <= kMaxApiPort)
+    m_port = stored;
 
   initializeWorker();
 
@@ -90,6 +99,7 @@ API::Server::Server()
     worker, &ServerWorker::streamWriteDone, this, &Server::onStreamWriteDone, Qt::QueuedConnection);
 
   connect(&m_server, &QTcpServer::newConnection, this, &Server::acceptConnection);
+  connect(&m_serverIpv6, &QTcpServer::newConnection, this, &Server::acceptConnection);
 
   static auto& commandHandler = API::CommandHandler::instance();
   (void)commandHandler;
@@ -101,7 +111,7 @@ API::Server::Server()
  */
 API::Server::~Server()
 {
-  m_server.close();
+  stopListening();
 }
 
 /**
@@ -186,6 +196,91 @@ void API::Server::removeConnection()
 }
 
 /**
+ * @brief The port the API server listens on (API/Port, 7777 by default).
+ */
+int API::Server::port() const noexcept
+{
+  return m_port;
+}
+
+/**
+ * @brief Persists a new listening port and rebinds a running server to it.
+ */
+void API::Server::setPort(const int port)
+{
+  if (port < kMinApiPort || port > kMaxApiPort || port == m_port)
+    return;
+
+  m_port = port;
+  m_settings.setValue("API/Port", m_port);
+  Q_EMIT portChanged();
+
+  if (!m_enabled)
+    return;
+
+  dropConnections();
+  if (startListening())
+    return;
+
+  m_enabled = false;
+  Q_EMIT enabledChanged();
+}
+
+/**
+ * @brief Binds the listening sockets: both loopback families when local, one dual-stack Any
+ *        listener when external. A single QTcpServer binds a single address, so a lone
+ *        LocalHost listener refused every ::1 client -- which is what "localhost" resolves to
+ *        first on a modern system (spec 0075 I10). A missing IPv6 stack is not fatal.
+ */
+bool API::Server::startListening()
+{
+  stopListening();
+
+  m_server.setMaxPendingConnections(kMaxApiClients);
+  const auto address = m_externalConnections ? QHostAddress::Any : QHostAddress::LocalHost;
+  if (!m_server.listen(address, static_cast<quint16>(m_port))) {
+    Misc::Utilities::showMessageBox(
+      tr("Unable to start API TCP server"), m_server.errorString(), QMessageBox::Warning);
+    m_server.close();
+    return false;
+  }
+
+  if (m_externalConnections)
+    return true;
+
+  m_serverIpv6.setMaxPendingConnections(kMaxApiClients);
+  if (!m_serverIpv6.listen(QHostAddress::LocalHostIPv6, static_cast<quint16>(m_port)))
+    qWarning() << "[API] IPv6 loopback listener unavailable:" << m_serverIpv6.errorString()
+               << "- IPv4 clients are unaffected";
+
+  return true;
+}
+
+/**
+ * @brief Closes both listening sockets.
+ */
+void API::Server::stopListening()
+{
+  m_server.close();
+  m_serverIpv6.close();
+}
+
+/**
+ * @brief Forgets every connection and tells the worker to drop its sockets.
+ */
+void API::Server::dropConnections()
+{
+  SS_ASSERT(m_worker != nullptr, return);
+
+  m_connections.clear();
+  if (m_mirrorLinked)
+    mirrorPublisher().clearSubscribers();
+
+  auto* worker = static_cast<ServerWorker*>(m_worker);
+  QMetaObject::invokeMethod(worker, "closeResources", Qt::QueuedConnection);
+}
+
+/**
  * @brief Enables or disables the TCP API server.
  */
 void API::Server::setEnabled(const bool enabled)
@@ -196,21 +291,14 @@ void API::Server::setEnabled(const bool enabled)
   bool closeResources   = false;
 
   if (enabled) {
-    if (!m_server.isListening()) {
-      m_server.setMaxPendingConnections(kMaxApiClients);
-      const auto address = m_externalConnections ? QHostAddress::Any : QHostAddress::LocalHost;
-      if (!m_server.listen(address, API_TCP_PORT)) {
-        Misc::Utilities::showMessageBox(
-          tr("Unable to start API TCP server"), m_server.errorString(), QMessageBox::Warning);
-        m_server.close();
-        effectiveEnabled = false;
-        closeResources   = true;
-      }
+    if (!m_server.isListening() && !startListening()) {
+      effectiveEnabled = false;
+      closeResources   = true;
     }
   }
 
   else {
-    m_server.close();
+    stopListening();
     closeResources = true;
 
     if (m_externalConnections) {
@@ -220,14 +308,8 @@ void API::Server::setEnabled(const bool enabled)
     }
   }
 
-  if (closeResources) {
-    m_connections.clear();
-    if (m_mirrorLinked)
-      mirrorPublisher().clearSubscribers();
-
-    auto* worker = static_cast<ServerWorker*>(m_worker);
-    QMetaObject::invokeMethod(worker, "closeResources", Qt::QueuedConnection);
-  }
+  if (closeResources)
+    dropConnections();
 
   if (m_enabled != effectiveEnabled) {
     m_enabled = effectiveEnabled;
@@ -301,23 +383,12 @@ void API::Server::applyExternalConnections(const bool enabled)
   if (!m_enabled)
     return;
 
-  m_server.close();
-  m_connections.clear();
-  if (m_mirrorLinked)
-    mirrorPublisher().clearSubscribers();
+  dropConnections();
+  if (startListening())
+    return;
 
-  auto* worker = static_cast<ServerWorker*>(m_worker);
-  QMetaObject::invokeMethod(worker, "closeResources", Qt::QueuedConnection);
-
-  const auto address = m_externalConnections ? QHostAddress::Any : QHostAddress::LocalHost;
-  m_server.setMaxPendingConnections(kMaxApiClients);
-  if (!m_server.listen(address, API_TCP_PORT)) {
-    Misc::Utilities::showMessageBox(
-      tr("Unable to restart API TCP server"), m_server.errorString(), QMessageBox::Warning);
-    m_server.close();
-    m_enabled = false;
-    Q_EMIT enabledChanged();
-  }
+  m_enabled = false;
+  Q_EMIT enabledChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -358,9 +429,10 @@ bool API::Server::verifyToken(const QByteArray& provided) const
 }
 
 /**
- * @brief Gates API-originated device writes behind the one-time user consent prompt.
+ * @brief Gates API-originated device writes behind the one-time user consent prompt, answering
+ *        without blocking: an unanswered consent posts the prompt and refuses this write.
  */
-bool API::Server::authorizeDeviceWrite()
+API::DeviceWriteVerdict API::Server::authorizeDeviceWrite()
 {
   return m_auth.authorizeDeviceWrite();
 }
@@ -877,19 +949,36 @@ void API::Server::onDataReceived(QTcpSocket* socket,
   if (!enabled() || data.isEmpty() || !socket)
     return;
 
-  const auto it = m_connections.find(socket);
-  if (it == m_connections.end() || it->sessionId != sessionId)
-    return;
-
-  m_reception.consumeBytes(socket, it.value(), data);
+  m_reception.consumeBytes(socket, sessionId, data);
 }
 
 /**
- * @brief Accepts new incoming TCP connections.
+ * @brief Resolves one connection's mutable state, or null once the entry is gone. The reception
+ *        machine calls this instead of holding a reference across a dispatch: a command handler
+ *        can spin an event loop, and the queued disconnect that runs there erases the entry while
+ *        the receive loop is still inside it (spec 0075 I1).
+ */
+API::ConnectionState* API::Server::stateFor(QTcpSocket* socket, const QString& sessionId)
+{
+  SS_ASSERT(socket != nullptr, return nullptr);
+
+  const auto it = m_connections.find(socket);
+  if (it == m_connections.end() || it->sessionId != sessionId)
+    return nullptr;
+
+  return &it.value();
+}
+
+/**
+ * @brief Accepts new incoming TCP connections, from whichever listener signalled: the loopback
+ *        pair are two QTcpServers feeding one connection table.
  */
 void API::Server::acceptConnection()
 {
-  auto* socket = m_server.nextPendingConnection();
+  auto* listener = qobject_cast<QTcpServer*>(sender());
+  SS_ASSERT(listener != nullptr, return);
+
+  auto* socket = listener->nextPendingConnection();
   if (!socket) {
     if (enabled())
       Misc::Utilities::showMessageBox(

@@ -46,9 +46,9 @@ Item {
     // Station address
     //
     Label {
+      enabled: app.ioEnabled
       text: qsTr("Host") + ":"
       opacity: enabled ? 1 : 0.5
-      enabled: app.ioEnabled
     } Widgets.LineField {
       id: _hostField
 
@@ -72,9 +72,9 @@ Item {
     // TCP port (2404 is the port the specification assigns)
     //
     Label {
+      enabled: app.ioEnabled
       text: qsTr("Port") + ":"
       opacity: enabled ? 1 : 0.5
-      enabled: app.ioEnabled
     } Widgets.LineField {
       id: _portField
 
@@ -101,9 +101,9 @@ Item {
     // Common address of ASDU; frames from any other station are ignored
     //
     Label {
-      text: qsTr("Common Address") + ":"
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
+      text: qsTr("Common Address") + ":"
     } Widgets.LineField {
       id: _addressField
 

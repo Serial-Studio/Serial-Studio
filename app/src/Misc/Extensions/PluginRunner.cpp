@@ -22,9 +22,11 @@
 #include "Misc/Extensions/PluginRunner.h"
 
 #include <QDir>
+#include <QElapsedTimer>
 #include <QFile>
 #include <QProcessEnvironment>
 #include <QStandardPaths>
+#include <QTimer>
 
 #include "SSAssert.h"
 #include "UI/Dashboard.h"
@@ -40,6 +42,9 @@ static constexpr int kKeptOutputChars = 32768;
  * @brief Milliseconds a terminating process is given before it is killed.
  */
 static constexpr int kPluginTerminateGraceMs = 3000;
+
+// Total budget the quit path spends waiting for every plugin to exit before it kills them
+static constexpr int kPluginQuitBudgetMs = 1000;
 
 /**
  * @brief Constructs an idle runner holding no processes.
@@ -136,15 +141,11 @@ bool Misc::PluginRunner::start(const QString& id,
   wireProcess(process, id);
   startProcess(process, runtime, entryPath, terminal);
 
-  if (!process->waitForStarted(kPluginTerminateGraceMs)) {
-    appendOutput(id, QStringLiteral("[Error] Failed to start: ") + process->errorString() + "\n");
-    delete process;
-    return false;
-  }
-
   const auto mode = terminal ? QStringLiteral(" (terminal)") : QString();
-  appendOutput(
-    id, QStringLiteral("[Started] PID ") + QString::number(process->processId()) + mode + "\n");
+  connect(process, &QProcess::started, this, [this, id, process, mode] {
+    appendOutput(
+      id, QStringLiteral("[Started] PID ") + QString::number(process->processId()) + mode + "\n");
+  });
 
   if (hasPipDeps && !QDir(pluginDir + "/venv").exists())
     appendOutput(
@@ -179,19 +180,40 @@ void Misc::PluginRunner::stop(const QString& id)
   process->disconnect(this);
   m_processes.erase(it);
 
-  process->terminate();
-  if (!process->waitForFinished(kPluginTerminateGraceMs))
-    process->kill();
-
   const auto remaining = QString::fromUtf8(process->readAll());
   if (!remaining.isEmpty())
     appendOutput(id, remaining);
 
   appendOutput(id, QStringLiteral("[Stopped]\n"));
-  delete process;
+  retireProcess(process);
 
   forget(id);
   Q_EMIT runningChanged();
+}
+
+/**
+ * @brief Ends a plugin process without blocking the GUI thread: it is asked to terminate, killed
+ *        by a timer if it will not, and deleted once it is gone. waitForFinished() here stalled
+ *        the window for up to three seconds per plugin.
+ */
+void Misc::PluginRunner::retireProcess(QProcess* process)
+{
+  SS_ASSERT(process != nullptr, return);
+
+  if (process->state() == QProcess::NotRunning) {
+    process->deleteLater();
+    return;
+  }
+
+  connect(process, &QProcess::finished, process, &QProcess::deleteLater);
+  process->terminate();
+
+  QTimer::singleShot(kPluginTerminateGraceMs, process, [process] {
+    if (process->state() != QProcess::NotRunning)
+      process->kill();
+
+    process->deleteLater();
+  });
 }
 
 /**
@@ -203,6 +225,7 @@ void Misc::PluginRunner::stopAll()
   const auto ids = m_processes.keys();
   m_settings.setValue("RunningPlugins", QStringList(ids));
 
+  QList<QProcess*> dying;
   for (const auto& id : ids) {
     auto* process = m_processes.value(id);
     if (!process)
@@ -210,14 +233,49 @@ void Misc::PluginRunner::stopAll()
 
     process->disconnect(this);
     process->terminate();
-    if (!process->waitForFinished(kPluginTerminateGraceMs))
+    dying.append(process);
+  }
+
+  // code-verify off
+  // The quit path has no event loop left to run a timer on, so the wait stays -- but it is ONE
+  // budget shared by every plugin instead of three seconds each, and whatever is still up is
+  // killed rather than waited for again.
+  QElapsedTimer budget;
+  budget.start();
+  for (auto* process : dying) {
+    const int remaining = kPluginQuitBudgetMs - static_cast<int>(budget.elapsed());
+    if (remaining > 0)
+      (void)process->waitForFinished(remaining);
+
+    if (process->state() != QProcess::NotRunning)
       process->kill();
 
     delete process;
   }
+  // code-verify on
 
   m_processes.clear();
   m_running.clear();
+  Q_EMIT runningChanged();
+}
+
+/**
+ * @brief Forgets a plugin whose process never started. QProcess emits finished() only for a
+ *        process that ran, so without this the entry stayed in the running list forever -- the
+ *        cost of not waiting for the start on the GUI thread is that this path has to exist.
+ */
+void Misc::PluginRunner::dropFailedProcess(const QString& id)
+{
+  auto it = m_processes.find(id);
+  if (it == m_processes.end())
+    return;
+
+  auto* process = it.value();
+  m_processes.erase(it);
+  process->disconnect(this);
+  process->deleteLater();
+
+  forget(id);
   Q_EMIT runningChanged();
 }
 
@@ -283,9 +341,11 @@ void Misc::PluginRunner::wireProcess(QProcess* process, const QString& id)
           this,
           [this, id]() { onFinished(id); });
 
-  connect(process, &QProcess::errorOccurred, this, [this, id](QProcess::ProcessError err) {
-    Q_UNUSED(err)
-    appendOutput(id, QStringLiteral("[Error] Plugin failed to start or crashed.\n"));
+  connect(process, &QProcess::errorOccurred, this, [this, id, process](QProcess::ProcessError err) {
+    appendOutput(id, QStringLiteral("[Error] ") + process->errorString() + QStringLiteral("\n"));
+
+    if (err == QProcess::FailedToStart)
+      dropFailedProcess(id);
   });
 }
 

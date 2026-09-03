@@ -38,6 +38,7 @@ public:
   [[nodiscard]] QString protocolName() const override;
 
   void startTransfer(const QString& filePath) override;
+  void cancelTransfer() override;
   void processInput(const QByteArray& data) override;
 
 private:

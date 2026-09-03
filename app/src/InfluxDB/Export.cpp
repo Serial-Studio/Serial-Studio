@@ -30,6 +30,7 @@
 #  include <QNetworkRequest>
 #  include <QSslError>
 #  include <QUrlQuery>
+#  include <utility>
 
 #  include "DataModel/FrameBuilder.h"
 #  include "DataModel/ProjectModel.h"
@@ -117,6 +118,17 @@ void InfluxDB::ExportWorker::bootstrap()
   m_batch.reserve(kDefaultBatchBytes);
   m_postBuffer.reserve(kDefaultBatchBytes);
 
+  sampleEpochOffset();
+}
+
+/**
+ * @brief Re-reads the distance between the steady clock the driver stamped with and the wall clock
+ *        the wire carries. Sampled once at bootstrap and again whenever the sink re-opens: a
+ *        machine that steps its clock (NTP, a laptop waking in another timezone) would otherwise
+ *        keep writing every later point at the offset that was true when the app started.
+ */
+void InfluxDB::ExportWorker::sampleEpochOffset()
+{
   const auto wall   = std::chrono::system_clock::now().time_since_epoch();
   const auto steady = std::chrono::steady_clock::now().time_since_epoch();
   m_epochOffsetNs   = std::chrono::duration_cast<std::chrono::nanoseconds>(wall).count()
@@ -135,6 +147,8 @@ void InfluxDB::ExportWorker::applyConfig(const InfluxDB::SinkConfig& config)
   rebuildWriteCache();
   if (!endpointMoved)
     return;
+
+  sampleEpochOffset();
 
   const bool wasOpen = m_healthy;
   m_healthy          = false;
@@ -337,6 +351,7 @@ void InfluxDB::ExportWorker::flushBatch()
                     QStringLiteral("text/plain; charset=utf-8"));
   request.setRawHeader(QByteArrayLiteral("Authorization"), m_authHeader);
 
+  m_sslFailure.clear();
   m_inFlightPoints = m_batch.points();
   m_batch.takePayload(m_postBuffer);
   m_reply = m_manager->post(request, m_postBuffer);
@@ -380,13 +395,7 @@ void InfluxDB::ExportWorker::onReplyFinished()
 
   if (!ok) {
     m_pointsDropped->fetch_add(static_cast<quint64>(sent), std::memory_order_relaxed);
-
-    QString message = status > 0 ? tr("Server answered HTTP %1").arg(status) : reply->errorString();
-    const QByteArray body = reply->readAll().left(kInfluxMaxErrorBodyBytes).trimmed();
-    if (!body.isEmpty())
-      message += QStringLiteral(": ") + QString::fromUtf8(body);
-
-    noteHttpFailure(message);
+    noteHttpFailure(failureMessage(*reply, status));
     return;
   }
 
@@ -394,14 +403,34 @@ void InfluxDB::ExportWorker::onReplyFinished()
   if (m_healthy)
     return;
 
+  sampleEpochOffset();
   m_healthy = true;
   Q_EMIT resourceOpenChanged();
 }
 
 /**
- * @brief Surfaces a TLS verification failure through the failure counter without trusting the
- *        peer: ignoreSslErrors() is deliberately never called, so a bad certificate fails closed
- *        and the reason still reaches the UI instead of an opaque transport error.
+ * @brief Why a write failed, in the words the operator can act on. A TLS refusal is recorded by
+ *        the sslErrors handler and reported HERE, once: the handler used to count a failure of its
+ *        own and the finished handler counted a second one, so one bad certificate read as two
+ *        errors on a diagnostics pane that is meant to count attempts.
+ */
+QString InfluxDB::ExportWorker::failureMessage(QNetworkReply& reply, int status)
+{
+  if (!m_sslFailure.isEmpty())
+    return tr("TLS verification failed: %1").arg(std::exchange(m_sslFailure, QString()));
+
+  QString message = status > 0 ? tr("Server answered HTTP %1").arg(status) : reply.errorString();
+  const QByteArray body = reply.readAll().left(kInfluxMaxErrorBodyBytes).trimmed();
+  if (!body.isEmpty())
+    message += QStringLiteral(": ") + QString::fromUtf8(body);
+
+  return message;
+}
+
+/**
+ * @brief Records why the peer was refused, without trusting it: ignoreSslErrors() is deliberately
+ *        never called, so the request fails closed and its finished handler reports this reason
+ *        instead of an opaque transport error. Counting happens THERE, once per failed reply.
  */
 void InfluxDB::ExportWorker::onSslErrors(const QList<QSslError>& errors)
 {
@@ -413,7 +442,7 @@ void InfluxDB::ExportWorker::onSslErrors(const QList<QSslError>& errors)
     reason += error.errorString();
   }
 
-  noteHttpFailure(tr("TLS verification failed: %1").arg(reason));
+  m_sslFailure = reason;
 }
 
 /**

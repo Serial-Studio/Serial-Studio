@@ -171,6 +171,9 @@ private slots:
   void blockTransformApplies();
   void perSampleTransformApplies();
   void safeModeAbortsRunawayTransform();
+  void jsRunawayBlockTransformTimesOut();
+  void jsRunawayPerSampleTransformTimesOut();
+  void outOfRangeChannelClearsItsColumn();
   void fftWindowPublishedWhenFilled();
 };
 
@@ -303,6 +306,106 @@ void TestStreamWorker::safeModeAbortsRunawayTransform()
   QVERIFY(worker.processor()->transformErrorCount() >= 1);
   worker.stop();
   QVERIFY(!worker.abandoned());
+}
+
+/**
+ * @brief JS parity with Safe-mode Lua (A1): a `while(true)` transform_block is interrupted
+ *        off-thread, the block falls back to the source's own samples, and the timeout is counted
+ *        for the 1 Hz diagnostics pull. Before the fix this pinned the worker thread forever.
+ */
+void TestStreamWorker::jsRunawayBlockTransformTimesOut()
+{
+  const QString code = QStringLiteral("function transform_block(samples, info) {\n"
+                                      "  while (true) {}\n"
+                                      "}\n");
+
+  StubDriver driver;
+  StreamWorker worker(&driver, makeConfig(code, SerialStudio::JavaScript));
+  BlockCollector collector(worker);
+
+  driver.feed(makeBlock({5.0f, 6.0f, 7.0f}));
+
+  double latest = 0.0;
+  for (int i = 0; i < 200 && latest == 0.0; ++i) {
+    QTest::qWait(25);
+    latest = collector.latest();
+  }
+
+  QCOMPARE(latest, 7.0);
+  QVERIFY(worker.processor() != nullptr);
+  QVERIFY(worker.processor()->transformTimeoutCount() >= 1);
+  QVERIFY(worker.processor()->transformErrorCount() >= 1);
+  worker.stop();
+  QVERIFY(!worker.abandoned());
+}
+
+/**
+ * @brief The per-sample JS lane is armed once for the whole pass, so a runaway transform(value)
+ *        aborts within one budget rather than per sample, and the block falls back to raw.
+ */
+void TestStreamWorker::jsRunawayPerSampleTransformTimesOut()
+{
+  const QString code = QStringLiteral("function transform(value) {\n"
+                                      "  while (true) {}\n"
+                                      "}\n");
+
+  StubDriver driver;
+  StreamWorker worker(&driver, makeConfig(code, SerialStudio::JavaScript));
+  BlockCollector collector(worker);
+
+  driver.feed(makeBlock({5.0f, 6.0f, 7.0f}));
+
+  double latest = 0.0;
+  for (int i = 0; i < 200 && latest == 0.0; ++i) {
+    QTest::qWait(25);
+    latest = collector.latest();
+  }
+
+  QCOMPARE(latest, 7.0);
+  QVERIFY(worker.processor()->transformTimeoutCount() >= 1);
+  worker.stop();
+  QVERIFY(!worker.abandoned());
+}
+
+/**
+ * @brief A block that does not carry the configured channel clears that column instead of
+ *        republishing the previous block's samples (A12): the widget must go quiet, not freeze on
+ *        a stale value that looks live.
+ */
+void TestStreamWorker::outOfRangeChannelClearsItsColumn()
+{
+  auto config                = makeConfig();
+  config.channels            = 4;
+  config.datasets[0].channel = 3;
+
+  StubDriver driver;
+  StreamWorker worker(&driver, config);
+  BlockCollector collector(worker);
+
+  auto wide      = std::make_shared<SampleBlock>();
+  wide->channels = 4;
+  wide->frames   = 2;
+  wide->samples  = {0.0f, 0.0f, 0.0f, 11.0f, 0.0f, 0.0f, 0.0f, 22.0f};
+  wide->t0       = SampleBlock::SteadyTimePoint(std::chrono::seconds(1));
+  wide->dt       = std::chrono::nanoseconds(1'000'000'000 / 48'000);
+  driver.feed(wide);
+
+  double latest = 0.0;
+  for (int i = 0; i < 100 && latest == 0.0; ++i) {
+    QTest::qWait(20);
+    latest = collector.latest();
+  }
+
+  QCOMPARE(latest, 22.0);
+
+  const std::size_t before = collector.blocks().size();
+  driver.feed(makeBlock({33.0f, 44.0f}));
+  for (int i = 0; i < 100 && collector.blocks().size() == before; ++i)
+    QTest::qWait(20);
+
+  QVERIFY(collector.blocks().size() > before);
+  QCOMPARE(collector.latest(), 0.0);
+  worker.stop();
 }
 
 /**

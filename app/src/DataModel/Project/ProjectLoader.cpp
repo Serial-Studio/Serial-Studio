@@ -221,7 +221,9 @@ static bool transformBodyReferencesValue(const QString& code, int language)
 /**
  * @brief Binds the loader to @p model.
  */
-DataModel::ProjectLoader::ProjectLoader(ProjectModel& model) : m_model(model) {}
+DataModel::ProjectLoader::ProjectLoader(ProjectModel& model)
+  : m_model(model), m_lastOpenReloaded(false)
+{}
 
 //--------------------------------------------------------------------------------------------------
 // Unique-id repair
@@ -502,7 +504,9 @@ void DataModel::ProjectLoader::openJsonFile()
 }
 
 /**
- * @brief Loads a project from the given .ssproj/.json path.
+ * @brief Loads a project from the given .ssproj/.json path. Re-opening the path already loaded
+ *        does nothing and reports success: a reload would discard unsaved edits. Callers that
+ *        need to know whether the document was re-applied read lastOpenReloaded().
  */
 bool DataModel::ProjectLoader::openJsonFile(const QString& path)
 {
@@ -517,8 +521,11 @@ bool DataModel::ProjectLoader::openJsonFile(const QString& path)
       resolved = remapped;
   }
 
-  if (m_model.m_filePath == resolved && !m_model.m_groups.empty())
+  m_lastOpenReloaded = true;
+  if (m_model.m_filePath == resolved && !m_model.m_groups.empty()) {
+    m_lastOpenReloaded = false;
     return true;
+  }
 
   static auto& appState = AppState::instance();
   appState.setOperationMode(SerialStudio::ProjectFile);

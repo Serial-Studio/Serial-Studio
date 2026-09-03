@@ -77,6 +77,7 @@ ColumnLayout {
       text: qsTr("Request Type") + ":"
     } Widgets.LineField {
       id: typeField
+
       text: "0x41"
       Layout.fillWidth: true
       placeholderText: "0x41"
@@ -87,6 +88,7 @@ ColumnLayout {
       text: qsTr("Request") + ":"
     } Widgets.LineField {
       id: requestField
+
       Layout.fillWidth: true
       placeholderText: "0x00"
       font: Cpp_Misc_CommonFonts.customMonoFont(1, false)
@@ -96,6 +98,7 @@ ColumnLayout {
       text: qsTr("wValue") + ":"
     } Widgets.LineField {
       id: valueField
+
       text: "0x0000"
       Layout.fillWidth: true
       placeholderText: "0x0000"
@@ -106,6 +109,7 @@ ColumnLayout {
       text: qsTr("wIndex") + ":"
     } Widgets.LineField {
       id: indexField
+
       text: "0x0000"
       Layout.fillWidth: true
       placeholderText: "0x0000"
@@ -121,10 +125,11 @@ ColumnLayout {
     }
 
     Label {
-      text: qsTr("Data") + ":"
       visible: !root.isIn
+      text: qsTr("Data") + ":"
     } Widgets.LineField {
       id: payloadField
+
       visible: !root.isIn
       Layout.fillWidth: true
       placeholderText: "EF BE 00 00"
@@ -132,10 +137,11 @@ ColumnLayout {
     }
 
     Label {
-      text: qsTr("Read Length") + ":"
       visible: root.isIn
+      text: qsTr("Read Length") + ":"
     } SpinBox {
       id: lengthSpin
+
       from: 0
       to: 4096
       value: 64

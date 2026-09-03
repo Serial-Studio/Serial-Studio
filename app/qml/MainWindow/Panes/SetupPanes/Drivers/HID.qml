@@ -46,9 +46,9 @@ Item {
     // Device selector
     //
     Label {
+      enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
       text: qsTr("HID Device") + ":"
-      enabled: app.ioEnabled
     } Widgets.Combo {
       id: deviceCombo
 

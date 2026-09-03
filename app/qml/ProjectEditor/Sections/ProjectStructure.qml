@@ -767,8 +767,8 @@ Widgets.Pane {
           Image {
             id: icon
 
-            source: model.treeViewIcon ?? ""
             sourceSize: Qt.size(12, 12)
+            source: model.treeViewIcon ?? ""
             Layout.alignment: Qt.AlignVCenter
           }
 

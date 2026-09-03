@@ -91,10 +91,17 @@ private slots:
   void onServerReply(QNetworkReply* reply);
 
 private:
+  void invalidateDaysCache();
+
+private:
   bool m_busy;
   bool m_silentFetch;
   bool m_trialEnabled;
   bool m_deviceRegistered;
+
+  // Day-keyed cache of daysRemaining(), a QML-bound property that floors the monotonic clock
+  mutable int m_daysRemaining;
+  mutable QDate m_daysCachedOn;
 
   SimpleCrypt m_crypt;
   QSettings m_settings;

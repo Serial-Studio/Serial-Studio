@@ -22,6 +22,7 @@
 
 #include "IO/Drivers/MQTT/SparkplugSession.h"
 
+#include "DataModel/FrameKeys.h"
 #include "SSAssert.h"
 
 namespace SpLimits  = IO::Drivers::SparkplugLimits;
@@ -149,26 +150,149 @@ IO::Drivers::SparkplugSession::SparkplugSession()
 }
 
 /**
- * @brief Drops the whole session, slot assignments included, for a connection drop or a group
- *        change. A reconnect re-births every node, so an old slot table would let a metric that
- *        returned under a different name or alias publish into the previous session's index.
- *        Counters restart with it; the pulled diagnostics are read as deltas (spec 0033).
+ * @brief Drops the birth state, the buffered traffic and every latched value for a connection drop
+ *        or a group change, and KEEPS the slot table: a reconnect re-births every node in whatever
+ *        order the broker delivers, and a slot index a dataset is already bound to must survive
+ *        that. Counters restart with it; the pulled diagnostics are read as deltas (spec 0033).
  */
 void IO::Drivers::SparkplugSession::reset()
 {
   m_nodes.clear();
-  m_slots.clear();
-  m_slotIndex.clear();
   m_preBirth.clear();
   m_rebirthTopics.clear();
+
+  for (qsizetype i = 0; i < m_slots.size(); ++i) {
+    SlotValue& slot  = m_slots[i];
+    slot.kind        = Sparkplug::ValueKind::None;
+    slot.timestampMs = 0;
+    slot.num         = 0.0;
+    slot.b           = false;
+    slot.dirty       = false;
+    slot.str.clear();
+  }
 
   m_counters   = Counters();
   m_newMetrics = 0;
   m_dirtyCount = 0;
   m_flushing   = false;
 
-  SS_ASSERT_LOG(m_slots.isEmpty());
+  SS_ASSERT_LOG(m_slotIndex.size() == m_slots.size());
   SS_ASSERT_LOG(m_nodes.isEmpty());
+}
+
+/**
+ * @brief The slot table as JSON, one entry per wire index in index order. It rides in the MQTT
+ *        driver's connection block, so a generated project pins the indices its datasets bind to
+ *        and a later session restores them before the first birth certificate arrives.
+ */
+QJsonArray IO::Drivers::SparkplugSession::slotsJson() const
+{
+  SS_ASSERT_LOG(m_slots.size() <= SpLimits::kMaxSlots);
+  SS_ASSERT_LOG(m_slotIndex.size() == m_slots.size());
+
+  QJsonArray array;
+  for (const auto& slot : m_slots) {
+    QJsonObject entry;
+    entry.insert(Keys::Index, slot.index);
+    entry.insert(Keys::SparkplugGroup, slot.group);
+    entry.insert(Keys::SparkplugNode, slot.node);
+    entry.insert(Keys::SparkplugDevice, slot.device);
+    entry.insert(Keys::SparkplugMetric, slot.name);
+    array.append(entry);
+  }
+
+  return array;
+}
+
+/**
+ * @brief Restores a persisted slot table before the first birth certificate. Refused WHOLE, never
+ *        in part: a session that already assigned slots keeps them, and one malformed or misplaced
+ *        entry abandons the restore and counts, because dropping an entry would shift every later
+ *        index by one and repoint the datasets the table exists to hold still.
+ */
+void IO::Drivers::SparkplugSession::restoreSlots(const QJsonArray& stored)
+{
+  SS_ASSERT_LOG(m_slots.size() <= SpLimits::kMaxSlots);
+  SS_ASSERT_LOG(m_slotIndex.size() == m_slots.size());
+
+  if (stored.isEmpty() || !m_slots.isEmpty())
+    return;
+
+  QHash<QString, int> index;
+  QVector<SlotValue> table;
+  if (!buildRestoredTable(stored, table, index)) {
+    ++m_counters.capDrops;
+    return;
+  }
+
+  m_slots.swap(table);
+  m_slotIndex.swap(index);
+  m_newMetrics = 0;
+}
+
+/**
+ * @brief Builds the restored table out of @p stored, returning false the moment an entry is
+ *        malformed, duplicated or past the slot cap. Nothing is written into the session here, so
+ *        a refusal leaves the caller's own state untouched.
+ */
+bool IO::Drivers::SparkplugSession::buildRestoredTable(const QJsonArray& stored,
+                                                       QVector<SlotValue>& table,
+                                                       QHash<QString, int>& index) const
+{
+  SS_ASSERT(table.isEmpty() && index.isEmpty(), return false);
+  SS_ASSERT_LOG(!stored.isEmpty());
+
+  if (stored.size() > SpLimits::kMaxSlots)
+    return false;
+
+  for (const auto& item : stored) {
+    SlotValue slot;
+    if (!readSlotEntry(item.toObject(), static_cast<int>(table.size()), slot))
+      return false;
+
+    const QString key = slotKey(slot.group, slot.node, slot.device, slot.name);
+    if (index.contains(key))
+      return false;
+
+    index.insert(key, slot.index);
+    table.append(slot);
+  }
+
+  return true;
+}
+
+/**
+ * @brief Reads one persisted entry into @p out, refusing an entry whose stored index does not name
+ *        @p position: the array order IS the wire layout, so an entry that disagrees with it comes
+ *        from a truncated or hand-edited table and cannot be trusted to name the same metric.
+ */
+bool IO::Drivers::SparkplugSession::readSlotEntry(const QJsonObject& entry,
+                                                  int position,
+                                                  SlotValue& out) const
+{
+  SS_ASSERT(position >= 0 && position < SpLimits::kMaxSlots, return false);
+  SS_ASSERT_LOG(out.index < 0);
+
+  const auto node   = entry.value(Keys::SparkplugNode).toString();
+  const auto group  = entry.value(Keys::SparkplugGroup).toString();
+  const auto device = entry.value(Keys::SparkplugDevice).toString();
+  const auto metric = entry.value(Keys::SparkplugMetric).toString();
+  if (node.isEmpty() || metric.isEmpty() || entry.value(Keys::Index).toInt(-1) != position)
+    return false;
+
+  const bool oversized =
+    node.size() > Sparkplug::kMaxIdentityBytes || device.size() > Sparkplug::kMaxIdentityBytes
+    || metric.size() > Sparkplug::kMaxIdentityBytes || group.size() > Sparkplug::kMaxIdentityBytes;
+  if (oversized)
+    return false;
+
+  out.index       = position;
+  out.name        = metric;
+  out.node        = node;
+  out.group       = group;
+  out.device      = device;
+  out.displayName = slotLabel(node, device, metric);
+  return true;
 }
 
 /**
@@ -185,7 +309,9 @@ void IO::Drivers::SparkplugSession::markGenerated()
 
 /**
  * @brief Restricts the session to one Sparkplug group; an empty filter accepts every group. A real
- *        change resets the session because slot identity is scoped to the traffic that created it.
+ *        change resets the session, and the slot table survives it: a slot key carries its own
+ *        group, so a slot the previous filter created can never collide with one the new filter
+ * does.
  */
 void IO::Drivers::SparkplugSession::setGroupFilter(const QString& group)
 {

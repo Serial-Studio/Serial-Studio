@@ -74,8 +74,10 @@ static void installOfflineToken(const Licensing::CertificateFields& fields, int 
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Constructs the handler, wires activation-signal forwarding, then restores
- * any stored certificate so a startup token install re-triggers device rebuilds.
+ * @brief Constructs the handler, wires activation-signal forwarding, then restores any stored
+ * certificate so a startup token install re-triggers device rebuilds. The forward goes through
+ * notifyEntitlementMaybeChanged, not straight into activatedChanged: that latch is what stops a
+ * redundant emission from looping the device rebuild it drives (K9).
  */
 Licensing::OfflineLicense::OfflineLicense() : m_activated(false)
 {
@@ -90,7 +92,10 @@ Licensing::OfflineLicense::OfflineLicense() : m_activated(false)
           this,
           &OfflineLicense::onOnlineActivationChanged);
 
-  connect(this, &OfflineLicense::activatedChanged, &lemonSqueezy, &LemonSqueezy::activatedChanged);
+  connect(this,
+          &OfflineLicense::activatedChanged,
+          &lemonSqueezy,
+          &LemonSqueezy::notifyEntitlementMaybeChanged);
   connect(
     this, &OfflineLicense::activatedChanged, &lemonSqueezy, &LemonSqueezy::licenseDataChanged);
 

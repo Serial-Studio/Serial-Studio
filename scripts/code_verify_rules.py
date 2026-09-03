@@ -1579,9 +1579,7 @@ def _cpp_rules(src: bytes, path: Path, fence_mask: list[bool]) -> list[Finding]:
     # disconnect(<conn>, nullptr) -- the 2-arg form where nullptr is in
     # the slot slot. CLAUDE.md flags this because it disconnects every
     # slot the connection was paired with. The 4-arg wildcard form
-    # `disconnect(sender, nullptr, receiver, nullptr)` is idiomatic Qt
-    # ("disconnect every signal-slot pair between sender and receiver")
-    # and explicitly NOT what the rule cares about.
+    # is handled separately by _disconnect_wildcard_findings below.
     for i, raw in enumerate(lines, start=1):
         if fenced(i):
             continue
@@ -4323,6 +4321,80 @@ def _raw_memory_findings(
 # ---------------------------------------------------------------------------
 
 
+# ---------------------------------------------------------------------------
+# Wildcard disconnect (spec 0075, findings C9 / E8)
+# ---------------------------------------------------------------------------
+#
+# `disconnect(sender, nullptr, receiver, nullptr)` tears down EVERY connection between the two
+# objects, including ones a different owner installed, and it silently keeps "working" after a
+# connection it was meant to drop has been renamed or moved. CLAUDE.md's "never disconnect(nullptr)
+# as the slot -- capture the Connection" covers this form; the linter only caught the two-argument
+# one, which is how the driver teardown paths accumulated it.
+#
+# The pre-existing call sites are baselined BY COUNT PER FILE, not by line number: a count survives
+# edits above the call, so the ratchet keeps working while WP-C and WP-I clear the entries. A new
+# wildcard anywhere -- including a second one in a file already listed -- is an error; a package
+# that removes one lowers that file's number, and a file that reaches zero leaves the table.
+
+_DISCONNECT_WILDCARD_RE = re.compile(
+    r"\bdisconnect\s*\(\s*[^,()]+(?:\([^()]*\))?[^,()]*,\s*[^,()]+,\s*[^,()]+,\s*nullptr\s*\)"
+)
+
+_DISCONNECT_WILDCARD_BASELINE = {
+    "app/src/CSV/Player/FileIndexer.cpp": 1,
+    "app/src/IO/ConnectionManager.cpp": 3,
+    "app/src/IO/ConnectionManager/DriverUiRegistry.cpp": 1,
+    "app/src/IO/Drivers/BluetoothLE.cpp": 1,
+    "app/src/IO/Drivers/CANBus.cpp": 1,
+    "app/src/IO/Drivers/HID.cpp": 1,
+    "app/src/IO/Drivers/Modbus.cpp": 2,
+    "app/src/IO/Drivers/OpcUa.cpp": 1,
+    "app/src/IO/Drivers/OpcUa/OpcUaBrowser.cpp": 1,
+    "app/src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp": 1,
+    "app/src/IO/Drivers/OpcUaTagModel.cpp": 1,
+    "app/src/Platform/NativeWindow_CSD.cpp": 1,
+}
+
+
+def _disconnect_wildcard_findings(
+    src_text: str, path: Path, fence_mask: list[bool]
+) -> list[Finding]:
+    """Flag wildcard `disconnect(sender, ..., receiver, nullptr)` beyond a file's baseline."""
+    if path.suffix.lower() not in (".cpp", ".cc", ".cxx", ".mm", ".h", ".hpp", ".hxx"):
+        return []
+    if _is_vendored_path(path):
+        return []
+
+    hits: list[int] = []
+    for i, raw in enumerate(src_text.split("\n"), start=1):
+        if i - 1 < len(fence_mask) and fence_mask[i - 1]:
+            continue
+        if _DISCONNECT_WILDCARD_RE.search(_strip_strings_and_line_comments(raw)):
+            hits.append(i)
+
+    if not hits:
+        return []
+
+    posix = path.resolve().as_posix()
+    allowed = 0
+    for key, count in _DISCONNECT_WILDCARD_BASELINE.items():
+        if posix.endswith("/" + key):
+            allowed = count
+            break
+
+    return [
+        Finding(
+            line,
+            "qt-disconnect-wildcard",
+            "`disconnect(sender, nullptr, receiver, nullptr)` drops EVERY connection "
+            "between the two objects, including ones another owner installed, and it keeps "
+            "compiling after the connection it was meant to drop is renamed. Capture the "
+            "`QMetaObject::Connection` and disconnect that one",
+        )
+        for line in hits[allowed:]
+    ]
+
+
 def analyze(path: Path, src_text: str, fence_mask: list[bool]) -> list[Finding]:
     """Run every applicable rule against `src_text` for `path`. The driver
     in code-verify.py wraps each Finding as a Violation."""
@@ -4343,6 +4415,7 @@ def analyze(path: Path, src_text: str, fence_mask: list[bool]) -> list[Finding]:
         out.extend(_session_context_bypass_findings(src_text, path, fence_mask))
         out.extend(_context_ctor_findings(src_text, path, fence_mask))
         out.extend(_session_adopt_site_findings(src_text, path, fence_mask))
+        out.extend(_disconnect_wildcard_findings(src_text, path, fence_mask))
         out.extend(_member_pointer_findings(src_text, path, fence_mask))
         out.extend(_ownership_findings(src_text, path, fence_mask))
         out.extend(_raw_memory_findings(src_text, path, fence_mask))

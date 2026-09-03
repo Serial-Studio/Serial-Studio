@@ -122,7 +122,10 @@ void DataModel::ProjectEntities::renumberGroupIds()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Replaces the group at groupId and emits groupsChanged.
+ * @brief Replaces the group at groupId and emits groupsChanged. Dataset::sourceId is derived
+ *        state that must equal its group's (finalize_frame re-derives it on every published
+ *        frame), so it is normalised here rather than only at load: the editor and the API
+ *        group.update path both change a group's source through this one entry point.
  */
 void DataModel::ProjectEntities::updateGroup(const int groupId,
                                              const DataModel::Group& group,
@@ -132,7 +135,10 @@ void DataModel::ProjectEntities::updateGroup(const int groupId,
   if (groupId < 0 || static_cast<size_t>(groupId) >= m_model.m_groups.size())
     return;
 
-  m_model.m_groups[groupId] = group;
+  auto& stored = m_model.m_groups[groupId];
+  stored       = group;
+  for (auto& dataset : stored.datasets)
+    dataset.sourceId = stored.sourceId;
 
   if (rebuildTree)
     Q_EMIT m_model.groupsChanged();
@@ -184,7 +190,10 @@ void DataModel::ProjectEntities::updateDataset(const int groupId,
 }
 
 /**
- * @brief Replaces the action at actionId and emits actionsChanged.
+ * @brief Replaces the action at actionId. actionsChanged stays gated on @p rebuildTree (the
+ *        editor commits per keystroke and updates the tree item in place), so the dirty flag,
+ *        the runtime resync and the always-emitted actionDataChanged are what carry a payload or
+ *        timer edit to the autosave and to the dashboard's action timers.
  */
 void DataModel::ProjectEntities::updateAction(const int actionId,
                                               const DataModel::Action& action,
@@ -199,7 +208,10 @@ void DataModel::ProjectEntities::updateAction(const int actionId,
   if (rebuildTree)
     Q_EMIT m_model.actionsChanged();
 
+  Q_EMIT m_model.actionDataChanged(actionId);
+  m_model.m_persistence.setRuntimeDirty(true);
   m_model.setModified(true);
+  m_model.m_persistence.scheduleAutoSave();
 }
 
 /**
@@ -723,13 +735,26 @@ void DataModel::ProjectEntities::ensurePainterDatasets(int groupId, const QVaria
 }
 
 /**
- * @brief Toggles a dataset option flag on the currently selected dataset.
+ * @brief Toggles a dataset option flag on the currently selected dataset. The selection is
+ *        range-checked before the toggle: a stale selection used to be mutated anyway, leaving
+ *        m_selectedDataset carrying a flag no dataset in the document has.
  */
 void DataModel::ProjectEntities::changeDatasetOption(const SerialStudio::DatasetOption option,
                                                      const bool checked)
 {
   const ProjectUndoScope undo_scope{m_model, ProjectModel::tr("Change Dataset Option")};
+  auto& groups   = m_model.m_groups;
   auto& selected = m_model.m_selectedDataset;
+
+  const auto groupId   = selected.groupId;
+  const auto datasetId = selected.datasetId;
+
+  if (groupId < 0 || static_cast<size_t>(groupId) >= groups.size())
+    return;
+
+  if (datasetId < 0 || static_cast<size_t>(datasetId) >= groups[groupId].datasets.size())
+    return;
+
   switch (option) {
     case SerialStudio::DatasetPlot:
       selected.plt = checked;
@@ -758,16 +783,6 @@ void DataModel::ProjectEntities::changeDatasetOption(const SerialStudio::Dataset
     default:
       break;
   }
-
-  auto& groups         = m_model.m_groups;
-  const auto groupId   = selected.groupId;
-  const auto datasetId = selected.datasetId;
-
-  if (groupId < 0 || static_cast<size_t>(groupId) >= groups.size())
-    return;
-
-  if (datasetId < 0 || static_cast<size_t>(datasetId) >= groups[groupId].datasets.size())
-    return;
 
   groups[groupId].datasets[datasetId] = selected;
 
@@ -864,8 +879,6 @@ bool DataModel::ProjectEntities::setGroupWidget(const int group,
   for (auto& d : grp.datasets)
     if (d.uniqueId < 0)
       d.uniqueId = m_model.allocateUniqueId();
-
-  groups[group] = grp;
 
   Q_EMIT m_model.groupsChanged();
   m_model.setModified(true);

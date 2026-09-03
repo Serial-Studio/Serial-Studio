@@ -66,6 +66,7 @@ from __future__ import annotations
 
 import argparse
 import difflib
+import hashlib
 import importlib.util
 import json
 import os
@@ -116,6 +117,11 @@ _SIMPLE_PROP = re.compile(
 _HANDLER = re.compile(r"^\s*on[A-Z]\w*\s*:\s*")
 _ID_LINE = re.compile(r"^\s*id\s*:\s*(\w+)\s*$")
 
+# `} Foo {` / `} Foo.Bar {` — the sibling-pairing idiom that closes one object
+# body and opens the next on a single physical line. Net brace delta is zero,
+# so the block walk needs this to tell the two bodies apart.
+_CLOSE_THEN_OPEN = re.compile(r"^\s*\}\s*[A-Za-z_][\w.]*\s*\{$")
+
 # A continuation of the previous physical line — starts with an operator
 # that cannot begin a new statement.
 _CONTINUATION_PREFIX = re.compile(
@@ -162,10 +168,12 @@ _TRAILING_OPERATOR_INNER = re.compile(
 )
 
 
-def _strip_strings_and_comments(line: str) -> str:
-    """Return `line` with string literals and `//` comments blanked out, so
-    bracket-counting on the result ignores brackets that live inside strings
-    or end-of-line comments."""
+def _strip_strings_and_comments(line: str, fill: str = " ") -> str:
+    """Return `line` with string literals and `//` comments replaced by `fill`,
+    one character per source character so column positions survive, letting
+    bracket-counting ignore brackets that live inside strings or end-of-line
+    comments. A caller asking whether the line *ends* on an operator passes a
+    non-blank `fill`: blanked out, `+ ":"` reads as a dangling `+`."""
     result: list[str] = []
     i = 0
     n = len(line)
@@ -178,35 +186,35 @@ def _strip_strings_and_comments(line: str) -> str:
 
         # Double-quoted string
         if ch == '"':
-            result.append(" ")
+            result.append(fill)
             i += 1
             while i < n:
                 if line[i] == "\\" and i + 1 < n:
                     i += 2
-                    result.append("  ")
+                    result.append(fill * 2)
                     continue
                 if line[i] == '"':
-                    result.append(" ")
+                    result.append(fill)
                     i += 1
                     break
-                result.append(" ")
+                result.append(fill)
                 i += 1
             continue
 
         # Single-quoted string (JS string literal)
         if ch == "'":
-            result.append(" ")
+            result.append(fill)
             i += 1
             while i < n:
                 if line[i] == "\\" and i + 1 < n:
                     i += 2
-                    result.append("  ")
+                    result.append(fill * 2)
                     continue
                 if line[i] == "'":
-                    result.append(" ")
+                    result.append(fill)
                     i += 1
                     break
-                result.append(" ")
+                result.append(fill)
                 i += 1
             continue
 
@@ -244,7 +252,7 @@ def _has_trailing_operator(line: str, is_inner: bool) -> bool:
     `?`: if the sanitized text has more `?` than `:` after the prop
     separator, a trailing `:` must be completing a ternary and we absorb.
     """
-    sanitized = _strip_strings_and_comments(line).rstrip()
+    sanitized = _strip_strings_and_comments(line, fill="0").rstrip()
     if not sanitized:
         return False
 
@@ -461,6 +469,14 @@ def _brace_delta(line: LogicalLine) -> int:
         opens += raw.count("{")
         closes += raw.count("}")
     return opens - closes
+
+
+def closes_then_opens(line: LogicalLine) -> bool:
+    """True for a single physical line of the form `} Foo {`, which ends one
+    object body and starts the next sibling's."""
+    if line.kind in ("comment", "blank") or len(line.raws) != 1:
+        return False
+    return bool(_CLOSE_THEN_OPEN.match(line.raws[0].rstrip()))
 
 
 # ---------------------------------------------------------------------------
@@ -795,6 +811,13 @@ def check_id_placement(
             body_stack.append(i + 1)
             continue
 
+        if closes_then_opens(line):
+            if body_stack:
+                start = body_stack.pop()
+                _check_shallow_id(lines, start, i, path, violations, blanks_after)
+            body_stack.append(i + 1)
+            continue
+
         delta = _brace_delta(line)
         if delta < 0 and body_stack:
             start = body_stack.pop()
@@ -823,13 +846,13 @@ def _check_shallow_id(
         if inner_depth == 0:
             if line.kind in ("blank", "comment"):
                 continue
-            if first_content_idx is None:
-                first_content_idx = i
             if line.kind == "id":
                 shallow_id_idx = i
                 break
-            # A non-id content line before the id (or no id) — stop looking at shallow depth
-            break
+            if first_content_idx is None:
+                first_content_idx = i
+            # Keep walking at shallow depth: an `id:` further down is exactly the
+            # misplacement this rule exists to catch, so stopping here made it dead
         # Move through nested block content
         if line.kind == "close" and inner_depth > 0:
             inner_depth += _brace_delta(line)
@@ -841,7 +864,7 @@ def _check_shallow_id(
 
     # If the first content line wasn't the id, flag it (no auto-fix — moving
     # arbitrary content above the id would risk reordering side effects).
-    if first_content_idx != shallow_id_idx:
+    if first_content_idx is not None:
         violations.append(
             Violation(
                 path,
@@ -1934,6 +1957,9 @@ _HOTPATH_ASSERT_ALLOWED = (
     "app/src/DataModel/DataBlock.h",
     "app/src/DataModel/FrameBuilder.h",
     "app/src/DataModel/FrameBuilder.cpp",
+    "app/src/DataModel/FrameBuilder/BlockPublisher.cpp",
+    "app/src/DataModel/FrameBuilder/BlockStager.cpp",
+    "app/src/DataModel/FrameBuilder/ReplayIngest.cpp",
     "app/src/IO/CircularBuffer.h",
     "app/src/IO/CircularBuffer.cpp",
     "app/src/IO/FrameReader.h",
@@ -2188,7 +2214,8 @@ def process_file(path: Path, fix: bool) -> tuple[list[Violation], str | None]:
                     1,
                     "cxx-tu-too-long",
                     f"{tu_lines} lines (limit {_TU_CENSUS_THRESHOLD}); split with "
-                    "scripts/tu-cutter.py -- the aggregate ratchet is "
+                    "a real sub-object in a sibling directory (one class = one .h/.cpp "
+                    "pair) -- the aggregate ratchet is "
                     "code-verify.py --tu-census --check",
                 )
             )
@@ -2293,6 +2320,19 @@ _TRACKED_SUFFIXES = _BRACE_FREE_SUFFIXES + (
 
 _SKIP_DIRS = {"build", "_deps", "ThirdParty", ".git", "node_modules", "qm"}
 
+# The linter's own test corpus: every `bad.*` sample there is deliberately malformed, so
+# scanning it would report the fixtures as findings and --fix would repair them, deleting the
+# coverage. Only an explicitly-named path reaches them (which is how the tests run).
+_SKIP_PATH_SUFFIXES = ("scripts/tests/fixtures", "app/tests/fuzz/corpus")
+
+
+def _is_skipped_tree(path: Path) -> bool:
+    posix = path.as_posix()
+    return any(
+        f"/{tail}/" in posix or posix.startswith(f"{tail}/")
+        for tail in _SKIP_PATH_SUFFIXES
+    )
+
 
 def iter_source_files(targets: list[Path]) -> Iterable[Path]:
     """Yield tracked-suffix files under each target (recursive for dirs).
@@ -2305,6 +2345,9 @@ def iter_source_files(targets: list[Path]) -> Iterable[Path]:
             continue
         for root, dirs, files in os.walk(target):
             dirs[:] = [d for d in dirs if d not in _SKIP_DIRS]
+            if _is_skipped_tree(Path(root)):
+                dirs[:] = []
+                continue
             for name in files:
                 if name.endswith(_TRACKED_SUFFIXES):
                     yield Path(root) / name
@@ -2411,6 +2454,15 @@ _ADVISORY_KINDS = frozenset(
         "comment-dash-substitute",
         "multi-line-comment",
         "qml-inline-comment",
+        # `id:` not the first content line in a QML object body. The rule's walk stopped at the
+        # first content line, so this half never fired at all (spec 0075, coordinator item 8);
+        # fixing the walk surfaced ~150 existing sites, which are the cleanup checklist.
+        # `id-blank-line`, the auto-fixable half, stays blocking.
+        "id-placement",
+        # Clone families. Reported by --dup-census (a per-file pass cannot see a pair) and
+        # ratcheted against scripts/dup-census.json; advisory because the existing families
+        # are the cleanup checklist.
+        "cxx-duplicate-window",
         # SDK staleness is best-effort: it cannot see C++-registered commands
         # until api-schema.json is re-dumped, so a clean run does not prove the
         # SDK is current -- only that prelude/generator edits were regenerated.
@@ -2688,7 +2740,7 @@ the kinds below are short labels.
   aggregate ratchet: `--tu-census --check` sums each file's excess over
   the threshold and fails when that pool grows, so a split into pieces
   that are individually smaller always passes even when it raises the
-  file count. Split with `scripts/tu-cutter.py`.
+  file count. Split by extracting a concern into an owned sub-object.
 - `cxx-nesting-too-deep` — control-flow nesting > 3 levels (CLAUDE.md).
 - `cxx-anonymous-namespace` — helpers/types/variables defined inside
   `namespace { ... }`. See "Anonymous-namespace helpers" below for why
@@ -3797,8 +3849,8 @@ def _run_tu_census(repo_root: Path, check: bool, accept: bool) -> int:
 
         print(
             "\nExtract instead of appending: move the new concern into its own "
-            "TU (scripts/tu-cutter.py cuts whole blocks and refuses a cut that "
-            "does not reconstruct the original). If the growth is deliberate, "
+            "TU, as a real member sub-object (one class = one .h/.cpp pair in a "
+            "sibling directory named after the facade). If the growth is deliberate, "
             "re-baseline with python scripts/code-verify.py --tu-census --accept",
             file=sys.stderr,
         )
@@ -3817,6 +3869,175 @@ def _run_tu_census(repo_root: Path, check: bool, accept: bool) -> int:
     return 0
 
 
+# ---------------------------------------------------------------------------
+# Duplicate-window census (spec 0075, finding L8 / the clone families in R12)
+# ---------------------------------------------------------------------------
+#
+# The review found ~70% clones between whole driver pairs (S7/EtherNet-IP), the Gauge/Meter
+# widget pair, and a 190-line delta between two 1700-line CI jobs. None of it is visible to a
+# per-file linter: every file passes on its own. This census works on file PAIRS.
+#
+# Method: normalize each line (drop comments, collapse whitespace), slide a 10-line window over
+# the result, and hash each window. Two files share a window when the same hash appears in both.
+# A pair with more than 40 shared windows is a clone family, not an accident. Normalizing
+# whitespace and comments is what lets a copy that was reformatted or re-commented still match;
+# identifiers are deliberately NOT normalized, so two files that merely have the same shape
+# (every Qt class has a ctor and a dtor) do not register.
+#
+# The gate is the SUM of shared windows over all reported pairs, ratcheted against
+# scripts/dup-census.json: extracting a clone lowers it, copy-pasting raises it.
+
+_DUP_CENSUS_BASELINE = Path(__file__).with_name("dup-census.json")
+_DUP_CENSUS_SUFFIXES = (".cpp", ".h", ".qml")
+_DUP_CENSUS_TREES = ("app/src", "app/qml")
+_DUP_WINDOW_LINES = 10
+_DUP_PAIR_THRESHOLD = 40
+
+_DUP_COMMENT_RE = re.compile(r"//.*$")
+_DUP_WS_RE = re.compile(r"\s+")
+
+
+def _dup_normalized_lines(text: str) -> list[str]:
+    """Comment-free, whitespace-collapsed, non-blank lines: the unit a window is built from."""
+    out: list[str] = []
+    for raw in text.split("\n"):
+        line = _DUP_WS_RE.sub(" ", _DUP_COMMENT_RE.sub("", raw)).strip()
+        if line and line not in ("{", "}", "};"):
+            out.append(line)
+    return out
+
+
+def _dup_window_hashes(text: str) -> set[str]:
+    """Every distinct 10-line window in a file, as digests."""
+    lines = _dup_normalized_lines(text)
+    if len(lines) < _DUP_WINDOW_LINES:
+        return set()
+    return {
+        hashlib.sha1(
+            "\n".join(lines[i : i + _DUP_WINDOW_LINES]).encode("utf-8")
+        ).hexdigest()[:16]
+        for i in range(len(lines) - _DUP_WINDOW_LINES + 1)
+    }
+
+
+def _collect_dup_census(repo_root: Path) -> dict:
+    """Count shared 10-line windows for every first-party file pair over the threshold."""
+    windows: dict[str, set[str]] = {}
+    trees = [repo_root / tree for tree in _DUP_CENSUS_TREES]
+    for path in sorted(iter_source_files([t for t in trees if t.exists()])):
+        if path.suffix not in _DUP_CENSUS_SUFFIXES or not _is_first_party(path):
+            continue
+        try:
+            text = path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        hashes = _dup_window_hashes(text)
+        if hashes:
+            windows[path.resolve().relative_to(repo_root).as_posix()] = hashes
+
+    # Invert to an index so the pair walk touches only files that actually share a window,
+    # instead of the full O(n^2) product over ~1200 files.
+    owners: dict[str, list[str]] = {}
+    for rel, hashes in windows.items():
+        for digest in hashes:
+            owners.setdefault(digest, []).append(rel)
+
+    counts: dict[tuple[str, str], int] = {}
+    for sharers in owners.values():
+        if len(sharers) < 2 or len(sharers) > 16:
+            continue
+        for i, left in enumerate(sharers):
+            for right in sharers[i + 1 :]:
+                key = (left, right) if left < right else (right, left)
+                counts[key] = counts.get(key, 0) + 1
+
+    pairs = {
+        f"{left} | {right}": count
+        for (left, right), count in counts.items()
+        if count > _DUP_PAIR_THRESHOLD
+    }
+    return {
+        "rule": "cxx-duplicate-window",
+        "regenerate": "python scripts/code-verify.py --dup-census --accept",
+        "window_lines": _DUP_WINDOW_LINES,
+        "pair_threshold": _DUP_PAIR_THRESHOLD,
+        "shared": sum(pairs.values()),
+        "pairs": dict(sorted(pairs.items(), key=lambda row: (-row[1], row[0]))),
+    }
+
+
+def _print_dup_census(census: dict) -> None:
+    """Print the clone families, worst first."""
+    print(
+        f"duplicate-window census: {census['shared']} shared windows over "
+        f"{len(census['pairs'])} file pairs "
+        f"({census['window_lines']} normalized lines per window, "
+        f"pair threshold {census['pair_threshold']})"
+    )
+    for pair, count in census["pairs"].items():
+        print(f"  advisory: cxx-duplicate-window: {count} shared windows: {pair}")
+
+
+def _run_dup_census(repo_root: Path, check: bool, accept: bool) -> int:
+    """Report the duplicate-window census, gate it, or re-baseline it."""
+    census = _collect_dup_census(repo_root)
+
+    if accept:
+        _DUP_CENSUS_BASELINE.write_text(
+            json.dumps(census, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+            newline="\n",
+        )
+        _print_dup_census(census)
+        print(f"\nbaseline written to {_DUP_CENSUS_BASELINE}")
+        return 0
+
+    if not check:
+        _print_dup_census(census)
+        return 0
+
+    if not _DUP_CENSUS_BASELINE.is_file():
+        print(
+            f"no baseline at {_DUP_CENSUS_BASELINE}; seed it with "
+            "--dup-census --accept",
+            file=sys.stderr,
+        )
+        return 2
+
+    base = json.loads(_DUP_CENSUS_BASELINE.read_text(encoding="utf-8"))
+    base_pairs = base.get("pairs", {})
+    delta = census["shared"] - base.get("shared", 0)
+
+    if delta > 0:
+        print(
+            f"duplicate-window census grew: {base.get('shared', 0)} -> "
+            f"{census['shared']} shared windows",
+            file=sys.stderr,
+        )
+        for pair, count in census["pairs"].items():
+            before = base_pairs.get(pair, 0)
+            if count > before:
+                print(f"  {pair}: {before} -> {count}", file=sys.stderr)
+        print(
+            "\nExtract the shared block into one owner instead of copying it. If the "
+            "growth is deliberate, re-baseline with "
+            "python scripts/code-verify.py --dup-census --accept",
+            file=sys.stderr,
+        )
+        return 1
+
+    print(
+        f"duplicate-window census: {census['shared']} shared windows "
+        f"(baseline {base.get('shared', 0)}) over {len(census['pairs'])} pairs"
+    )
+    if delta < 0:
+        print(
+            "the clone surface shrank; re-baseline with "
+            "python scripts/code-verify.py --dup-census --accept"
+        )
+    return 0
+
+
 def main(argv: list[str]) -> int:
     # Windows defaults stdout/stderr to cp1252; violation messages can carry
     # non-ASCII (em-dashes, smart quotes, U+2713) lifted from user source and
@@ -3828,12 +4049,12 @@ def main(argv: list[str]) -> int:
 
     parser = argparse.ArgumentParser(
         description=__doc__.splitlines()[0],
-        epilog="With no arguments, runs --fix on the repo's default trees.",
+        epilog="With no arguments, runs --check on the repo's default trees.",
     )
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--check", action="store_true", help="report only, no writes")
     group.add_argument(
-        "--fix", action="store_true", help="rewrite files in place (default)"
+        "--fix", action="store_true", help="rewrite files in place (explicit only)"
     )
     parser.add_argument(
         "--diff", action="store_true", help="show unified diff of proposed changes"
@@ -3854,9 +4075,15 @@ def main(argv: list[str]) -> int:
         help="measure first-party translation units over the size threshold",
     )
     parser.add_argument(
+        "--dup-census",
+        action="store_true",
+        help="measure duplicated 10-line windows across first-party file pairs",
+    )
+    parser.add_argument(
         "--accept",
         action="store_true",
-        help="re-baseline the census JSON (with --singleton-census / --tu-census)",
+        help="re-baseline the census JSON (with --singleton-census / --tu-census / "
+        "--dup-census)",
     )
     parser.add_argument(
         "paths",
@@ -3875,9 +4102,16 @@ def main(argv: list[str]) -> int:
         root = Path(__file__).resolve().parent.parent
         return _run_tu_census(root, check=args.check, accept=args.accept)
 
-    # Default to --fix when neither mode was explicitly requested
+    if args.dup_census:
+        root = Path(__file__).resolve().parent.parent
+        return _run_dup_census(root, check=args.check, accept=args.accept)
+
+    # Default to --check when neither mode was requested. This tool rewrites
+    # sources in place; a bare invocation that silently reformats hundreds of
+    # files leaves `git diff` as the only guard against a rule regression, so
+    # writing is opt-in. sanitize-commit.py passes --fix explicitly.
     if not args.check and not args.fix:
-        args.fix = True
+        args.check = True
 
     # Default to the configured repo trees when no paths were supplied
     if not args.paths:

@@ -39,6 +39,7 @@
 
 #include "DataModel/Frame.h"
 #include "IO/Drivers/OpcUaWire.h"
+#include "IO/Drivers/PolledPlcWorkerBase.h"
 #include "IO/HAL_Driver.h"
 
 class QTimer;
@@ -72,16 +73,12 @@ struct EipTag {
  *        BLOCK until the controller answers or the timeout expires, so they run here on the
  *        driver's own QThread. Every tag handle is created, read and destroyed on this thread.
  */
-class EipPollWorker : public QObject {
+class EipPollWorker : public PolledPlcWorkerBase {
   Q_OBJECT
-
-signals:
-  void frameReady(const QByteArray& frame, qint64 stampNs);
-  void linkLost(const QString& reason);
 
 public:
   explicit EipPollWorker();
-  ~EipPollWorker();
+  ~EipPollWorker() override;
 
   EipPollWorker(EipPollWorker&&)                 = delete;
   EipPollWorker(const EipPollWorker&)            = delete;
@@ -94,52 +91,19 @@ public:
                  int interval,
                  QVector<EipTag> tags);
 
-  void requestAbort() noexcept;
-
-  [[nodiscard]] quint64 readsOk() const noexcept;
-  [[nodiscard]] quint64 readsFailed() const noexcept;
-  [[nodiscard]] quint64 framesPublished() const noexcept;
-  [[nodiscard]] const QString& dialError() const noexcept;
-
-public slots:
-  [[nodiscard]] bool connectToPlc();
-  void shutdown();
-
-private slots:
-  void onPollTick();
-
 private:
   [[nodiscard]] QByteArray attributes(const EipTag& tag) const;
   [[nodiscard]] bool readTag(int index, QVariant& value);
-  void publishDirtySlots(qint64 stampNs);
-  void reportFailure(const QString& reason);
+  [[nodiscard]] bool connectToPlc() override;
+  void pollTick() override;
+  void releaseResources() override;
 
-  bool m_open;
-  bool m_reported;
-  int m_interval;
   int m_deadTicks;
-  int m_frameSlot;
   QString m_host;
   QString m_path;
   QString m_plcType;
-  QString m_dialError;
-  QTimer* m_timer;
-  QByteArray m_frames[2];
   QVector<EipTag> m_tags;
   QList<int> m_handles;
-  QList<QVariant> m_values;
-  QList<bool> m_dirty;
-  std::atomic<bool> m_abort;
-  // code-verify off
-  // Counters are pulled from the GUI thread while the poll thread increments them, so they are
-  // atomic rather than the plain quint64 of spec 0033. They are DELIBERATELY packed: one poll
-  // thread writes all three at poll rate and one reader samples them at 1 Hz, so there is no
-  // cross-core write contention to pad against and three cache lines of padding would cost more
-  // than the sharing.
-  std::atomic<quint64> m_readsOk;
-  std::atomic<quint64> m_readsFailed;
-  std::atomic<quint64> m_framesPublished;
-  // code-verify on
 };
 
 /**
@@ -209,6 +173,7 @@ public:
   void setSessionPeer(EthernetIp* peer);
 
   [[nodiscard]] bool isOpen() const noexcept override;
+  [[nodiscard]] bool isConnecting() const noexcept override;
   [[nodiscard]] bool isReadable() const noexcept override;
   [[nodiscard]] bool isWritable() const noexcept override;
   [[nodiscard]] bool configurationOk() const noexcept override;
@@ -253,6 +218,7 @@ public slots:
 private slots:
   void onFrameReady(const QByteArray& frame, qint64 stampNs);
   void onLinkLost(const QString& reason);
+  void onDialFinished(bool ok, const QString& reason);
 
 private:
   void doClose();
@@ -266,6 +232,7 @@ private:
   DataModel::ProjectModel& m_projectModel;
 
   bool m_open;
+  bool m_connecting;
   bool m_persistent;
   int m_plcTypeIndex;
   int m_pollInterval;
@@ -278,6 +245,7 @@ private:
   EipPollWorker* m_worker;
   QPointer<EthernetIp> m_sessionPeer;
   QVector<EipTag> m_tags;
+  QList<QMetaObject::Connection> m_workerLinks;
   QSettings m_settings;
 };
 

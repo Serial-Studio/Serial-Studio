@@ -101,45 +101,6 @@ def test_no_authentication(tester):
         print(f"    Authentication may be required: {e}")
 
 
-@pytest.mark.xfail(
-    reason="On POSIX, connect() to 0.0.0.0 is routed to loopback regardless of the "
-    "server's bind address, so this cannot distinguish a LocalHost-bound server "
-    "(the default) from an all-interfaces one; it is a false positive, not a finding.",
-    strict=False,
-)
-def test_network_binding(tester):
-    """Test network binding restrictions"""
-    print("\n[*] Testing network binding...")
-
-    # Test 1: Check if bound to localhost only
-    print("  - Checking bind address...")
-    try:
-        # Try to connect from localhost
-        with SerialStudioClient("127.0.0.1", 7777) as client:
-            client.command("api.getCommands")
-            print("    Accessible from 127.0.0.1 (localhost)")
-
-        # Try to connect from 0.0.0.0 (would work if bound to all interfaces)
-        exposed = False
-        try:
-            with SerialStudioClient("0.0.0.0", 7777) as client:
-                client.command("api.getCommands")
-                tester.log_weakness(
-                    "CRITICAL",
-                    "Network Exposure",
-                    "API accessible from all network interfaces (0.0.0.0)",
-                )
-                exposed = True
-        except:
-            print("    Not accessible from 0.0.0.0 (GOOD)")
-
-        if exposed:
-            pytest.fail("API accessible from all network interfaces (0.0.0.0)")
-
-    except Exception as e:
-        print(f"    Error: {e}")
-
-
 def test_origin_validation(tester):
     """Test origin/referrer validation"""
     print("\n[*] Testing origin validation...")
@@ -263,73 +224,6 @@ def test_data_injection(tester):
         print(f"    Data injection blocked or failed: {e}")
 
 
-@pytest.mark.xfail(
-    reason="The API server is localhost-only and unauthenticated by design; "
-    "controlling the dashboard and frame parser is its purpose, not a finding.",
-    strict=False,
-)
-def test_configuration_tampering(tester):
-    """Test configuration tampering"""
-    print("\n[*] Testing configuration tampering...")
-
-    # Test 1: Modify dashboard settings
-    print("  - Testing dashboard configuration modification...")
-
-    try:
-        with SerialStudioClient() as client:
-            # Get current FPS
-            status = client.get_dashboard_status()
-            original_fps = status.get("fps", 24)
-
-            # Try to modify
-            client.set_dashboard_fps(1)
-
-            # Verify modification
-            new_status = client.get_dashboard_status()
-            new_fps = new_status.get("fps", 24)
-
-            if new_fps == 1:
-                tester.log_weakness(
-                    "MEDIUM",
-                    "Configuration Tampering",
-                    "Unauthenticated modification of dashboard settings",
-                )
-                print("    Successfully modified dashboard FPS")
-
-                # Restore original
-                client.set_dashboard_fps(original_fps)
-
-                pytest.fail(
-                    "Unauthenticated modification of dashboard settings succeeded"
-                )
-
-    except Exception as e:
-        print(f"    Configuration tampering blocked: {e}")
-
-    # Test 2: Modify frame parser settings
-    print("  - Testing frame parser modification...")
-
-    try:
-        with SerialStudioClient() as client:
-            # Try to modify critical parsing settings
-            result = client.configure_frame_parser(
-                start_sequence="TAMPERED", end_sequence="OWNED", operation_mode=1
-            )
-
-            tester.log_weakness(
-                "HIGH",
-                "Configuration Tampering",
-                "Unauthenticated modification of frame parser settings",
-            )
-            print("    Successfully modified frame parser")
-            pytest.fail(
-                "Unauthenticated modification of frame parser settings succeeded"
-            )
-
-    except Exception as e:
-        print(f"    Frame parser modification blocked: {e}")
-
-
 def test_project_manipulation(tester):
     """Test project file manipulation"""
     print("\n[*] Testing project manipulation...")
@@ -448,53 +342,6 @@ def test_information_disclosure(tester):
         print(f"    Error message test error: {e}")
 
 
-@pytest.mark.xfail(
-    reason="Serial Studio is a single-instance app with one global dashboard/"
-    "project state; localhost API clients intentionally share it (no per-client "
-    "session model).",
-    strict=False,
-)
-def test_cross_client_interference(tester):
-    """Test cross-client interference"""
-    print("\n[*] Testing cross-client interference...")
-
-    # Test 1: Check if one client can affect another
-    print("  - Testing client isolation...")
-
-    try:
-        client1 = SerialStudioClient()
-        client2 = SerialStudioClient()
-
-        client1.connect()
-        client2.connect()
-
-        # Client 1 sets configuration
-        client1.set_dashboard_fps(10)
-
-        # Client 2 tries to read it
-        status = client2.get_dashboard_status()
-        fps = status.get("fps", 0)
-
-        if fps == 10:
-            tester.log_weakness(
-                "MEDIUM",
-                "Client Isolation",
-                "No client isolation - shared global state",
-            )
-            print("    Clients share global state (no isolation)")
-        else:
-            print("    Clients appear to be isolated (GOOD)")
-
-        client1.disconnect()
-        client2.disconnect()
-
-        if fps == 10:
-            pytest.fail("No client isolation - shared global state")
-
-    except Exception as e:
-        print(f"    Client isolation test error: {e}")
-
-
 def main():
     """Run authentication and authorization tests"""
     print("=" * 80)
@@ -512,14 +359,11 @@ def main():
 
         # Run authentication tests
         test_no_authentication(tester)
-        test_network_binding(tester)
         test_origin_validation(tester)
         test_command_authorization(tester)
         test_data_injection(tester)
-        test_configuration_tampering(tester)
         test_project_manipulation(tester)
         test_information_disclosure(tester)
-        test_cross_client_interference(tester)
 
     except ConnectionError as e:
         print(f"[ERROR] Cannot connect to Serial Studio API: {e}")

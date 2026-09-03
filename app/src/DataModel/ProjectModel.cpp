@@ -69,6 +69,7 @@ DataModel::ProjectModel::ProjectModel()
   , m_modified(false)
   , m_initialized(false)
   , m_silentReload(false)
+  , m_workspaceRegenPending(false)
   , m_filePath("")
   , m_suppressMessageBoxes(false)
   , m_passwordHash("")
@@ -124,12 +125,7 @@ DataModel::ProjectModel::ProjectModel()
 
   connect(this, &ProjectModel::widgetSettingsChanged, this, &ProjectModel::scheduleAutoSave);
   connect(this, &ProjectModel::widgetDisplayChanged, this, &ProjectModel::scheduleAutoSave);
-  connect(this, &ProjectModel::sourceChanged, this, &ProjectModel::scheduleAutoSave);
-  connect(this, &ProjectModel::sourcesChanged, this, &ProjectModel::scheduleAutoSave);
-  connect(this, &ProjectModel::sourceFrameParserCodeChanged, this, &ProjectModel::scheduleAutoSave);
-  connect(this, &ProjectModel::frameDetectionChanged, this, &ProjectModel::scheduleAutoSave);
   connect(this, &ProjectModel::editorWorkspacesChanged, this, &ProjectModel::scheduleAutoSave);
-  connect(this, &ProjectModel::tablesChanged, this, &ProjectModel::scheduleAutoSave);
   connect(this, &ProjectModel::titleChanged, this, &ProjectModel::scheduleAutoSave);
 
   // code-verify off
@@ -139,23 +135,7 @@ DataModel::ProjectModel::ProjectModel()
   newJsonFile();
   // code-verify on
 
-  connect(this, &ProjectModel::groupsChanged, this, [this] {
-    static auto& appState = AppState::instance();
-    if (appState.operationMode() != SerialStudio::ProjectFile)
-      return;
-
-    if (m_workspaces.customizeWorkspaces()) {
-      if (m_workspaces.mergeAutoWorkspaceUpdates()) {
-        Q_EMIT editorWorkspacesChanged();
-        Q_EMIT activeWorkspacesChanged();
-      }
-      return;
-    }
-
-    m_workspaces.regenerateAutoWorkspacesUnnotified();
-    Q_EMIT editorWorkspacesChanged();
-    Q_EMIT activeWorkspacesChanged();
-  });
+  connect(this, &ProjectModel::groupsChanged, this, &ProjectModel::scheduleWorkspaceRegen);
 
   m_initialized = true;
   m_history.setEnabled(true);
@@ -626,20 +606,10 @@ void DataModel::ProjectModel::emitSinkConfigResets(bool hadMqttPublisher, bool h
 void DataModel::ProjectModel::setupExternalConnections()
 {
   connect(&UI::Dashboard::instance(), &UI::Dashboard::pointsChanged, this, [this]() {
-    const auto opMode = AppState::instance().operationMode();
-    if (opMode != SerialStudio::ProjectFile || m_filePath.isEmpty())
+    if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
       return;
 
-    const int points = UI::Dashboard::instance().points();
-    if (m_pointCount == points)
-      return;
-
-    m_pointCount = points;
-
-    if (!m_persistence.writeProjectFile(m_filePath))
-      return;
-
-    Q_EMIT pointCountChanged();
+    setPointCount(UI::Dashboard::instance().points());
   });
 
   connect(&UI::Dashboard::instance(), &UI::Dashboard::widgetCountChanged, this, [this] {
@@ -790,6 +760,50 @@ void DataModel::ProjectModel::newJsonFile()
   m_history.clear();
   Q_EMIT projectHistoryChanged();
   setModified(false);
+}
+
+/**
+ * @brief Queues one auto-workspace regeneration for the end of the current event-loop turn: a
+ *        bulk delete emits groupsChanged per removed group and each pass rebuilt the whole
+ *        workspace list. groupsChanged itself stays synchronous, so the mutation epoch, the
+ *        dirty flag and the queued tree rebuild keep their ordering.
+ */
+void DataModel::ProjectModel::scheduleWorkspaceRegen()
+{
+  if (m_workspaceRegenPending)
+    return;
+
+  m_workspaceRegenPending = true;
+  QTimer::singleShot(0, this, &ProjectModel::flushWorkspaceRegen);
+}
+
+/**
+ * @brief Runs a queued auto-workspace regeneration now. Every disk write calls this first, so a
+ *        save can never serialize the workspace list the queued pass was about to replace.
+ */
+void DataModel::ProjectModel::flushWorkspaceRegen()
+{
+  if (!m_workspaceRegenPending)
+    return;
+
+  m_workspaceRegenPending = false;
+
+  static auto& appState = AppState::instance();
+  if (appState.operationMode() != SerialStudio::ProjectFile)
+    return;
+
+  if (m_workspaces.customizeWorkspaces()) {
+    if (m_workspaces.mergeAutoWorkspaceUpdates()) {
+      Q_EMIT editorWorkspacesChanged();
+      Q_EMIT activeWorkspacesChanged();
+    }
+
+    return;
+  }
+
+  m_workspaces.regenerateAutoWorkspacesUnnotified();
+  Q_EMIT editorWorkspacesChanged();
+  Q_EMIT activeWorkspacesChanged();
 }
 
 /**

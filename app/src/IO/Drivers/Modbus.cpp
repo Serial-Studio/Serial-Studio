@@ -23,7 +23,6 @@
 #include "IO/Drivers/Modbus.h"
 
 #include <QDebug>
-#include <QElapsedTimer>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -32,22 +31,21 @@
 #include <QModbusTcpClient>
 #include <QSerialPort>
 #include <QSerialPortInfo>
-#include <QTcpSocket>
-#include <QThread>
 #include <QTimer>
 #include <stdexcept>
 
-static constexpr int kDialPaceMs     = 250;
 static constexpr int kDialDeadlineMs = 5000;
 
 #include "AppState.h"
 #include "DataModel/ProjectModel.h"
 #include "IO/Drivers/Modbus/ModbusProjectGenerator.h"
+#include "IO/Drivers/Modbus/ModbusRtuCodec.h"
 #include "IO/Drivers/SerialPortIdentity.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
+#include "SSAssert.h"
 
 /**
  * @brief Maps the UI parity index to the corresponding QSerialPort::Parity enum.
@@ -146,6 +144,7 @@ IO::Drivers::Modbus::Modbus()
   connect(m_pollTimer, &QTimer::timeout, this, &IO::Drivers::Modbus::pollRegisters);
 
   wireConfigurationSignals();
+  connect(&m_probe, &IO::AsyncTcpDial::finished, this, &IO::Drivers::Modbus::onProbeFinished);
 }
 
 /**
@@ -195,6 +194,7 @@ IO::Drivers::Modbus::~Modbus()
 void IO::Drivers::Modbus::close()
 {
   m_connecting = false;
+  m_probe.cancel();
   doClose();
 
   Q_EMIT configurationChanged();
@@ -408,48 +408,49 @@ bool IO::Drivers::Modbus::finalizeAndConnect(const QString& target)
   m_dialTarget = target;
   m_connecting = true;
 
-  if (m_protocolIndex == 1 && !waitForModbusTcpEndpoint(m_host, m_port)) {
-    failDial(tr("Nothing is listening at %1").arg(target));
-    return false;
+  if (m_protocolIndex == 1) {
+    m_probe.setDeadline(kDialDeadlineMs);
+    m_probe.startProbe(m_host, m_port);
+    Q_EMIT configurationChanged();
+    return m_connecting || isOpen();
   }
 
-  if (!m_device->connectDevice()) {
-    failDial(m_device->errorString());
-    return false;
-  }
+  connectClient();
 
   Q_EMIT configurationChanged();
   return m_connecting || isOpen();
 }
 
 /**
- * @brief Waits inside the deadline for the Modbus TCP endpoint to accept, re-pacing refused
- *        attempts with a throwaway probe socket (a script-launched simulator needs a moment to
- *        bind). QModbusClient cannot block, so the wait happens here and connectDevice() dials
+ * @brief Consumes the endpoint pre-probe's verdict. QModbusClient cannot block, so the wait for a
+ *        server still binding happens on the probe's throwaway sockets and connectDevice() dials
  *        once; timer-churned connectDevice() crashed the run loop and wedged "connecting".
  */
-bool IO::Drivers::Modbus::waitForModbusTcpEndpoint(const QString& host, quint16 port)
+void IO::Drivers::Modbus::onProbeFinished(bool ok, const QString& reason)
 {
-  QElapsedTimer deadline;
-  deadline.start();
+  Q_UNUSED(reason)
 
-  while (deadline.elapsed() < kDialDeadlineMs) {
-    QTcpSocket probe;
-    probe.connectToHost(host, port);
-    const bool up = probe.waitForConnected(kDialDeadlineMs - int(deadline.elapsed()));
-    const QAbstractSocket::SocketError err = probe.error();
-    probe.abort();
+  if (!m_connecting)
+    return;
 
-    if (up)
-      return true;
-
-    if (err != QAbstractSocket::ConnectionRefusedError)
-      return false;
-
-    QThread::msleep(kDialPaceMs);
+  if (!ok) {
+    failDial(tr("Nothing is listening at %1").arg(m_dialTarget));
+    return;
   }
 
-  return false;
+  connectClient();
+}
+
+/**
+ * @brief Dials the Modbus client once. A refused dial reports its verdict through failDial(); the
+ *        established verdict arrives on the client's ConnectedState transition.
+ */
+void IO::Drivers::Modbus::connectClient()
+{
+  SS_ASSERT(m_device != nullptr, return failDial(tr("The Modbus client is gone")));
+
+  if (!m_device->connectDevice())
+    failDial(m_device->errorString());
 }
 
 /**
@@ -1004,9 +1005,12 @@ void IO::Drivers::Modbus::pollNextGroup()
 }
 
 /**
- * @brief Encodes a Modbus reply payload as an RTU-format byte stream for downstream parsing.
+ * @brief Encodes a Modbus reply payload as an RTU-format byte stream for downstream parsing. The
+ *        unit id is the one the RESPONDING server put on the wire, not the one this poll asked
+ *        for: a gateway answers on behalf of the addressed slave, and echoing the request would
+ *        label every frame with an address the reply never carried.
  */
-QByteArray IO::Drivers::Modbus::buildRtuFrame(const QModbusDataUnit& unit) const
+QByteArray IO::Drivers::Modbus::buildRtuFrame(const QModbusDataUnit& unit, int serverAddress) const
 {
   quint8 functionCode = 0x03;
   bool isRegisterType = true;
@@ -1029,10 +1033,13 @@ QByteArray IO::Drivers::Modbus::buildRtuFrame(const QModbusDataUnit& unit) const
       break;
   }
 
+  const auto unitId =
+    static_cast<char>(serverAddress >= 0 ? (serverAddress & 0xFF) : int(m_slaveAddress));
+
   QByteArray data;
   if (isRegisterType) {
-    data.reserve(3 + unit.valueCount() * 2);
-    data.append(static_cast<char>(m_slaveAddress));
+    data.reserve(5 + unit.valueCount() * 2);
+    data.append(unitId);
     data.append(static_cast<char>(functionCode));
     data.append(static_cast<char>(unit.valueCount() * 2));
 
@@ -1042,12 +1049,13 @@ QByteArray IO::Drivers::Modbus::buildRtuFrame(const QModbusDataUnit& unit) const
       data.append(static_cast<char>(value & 0xFF));
     }
 
+    ModbusRtu::appendCrc(data);
     return data;
   }
 
   const int byteCount = (unit.valueCount() + 7) / 8;
-  data.reserve(3 + byteCount);
-  data.append(static_cast<char>(m_slaveAddress));
+  data.reserve(5 + byteCount);
+  data.append(unitId);
   data.append(static_cast<char>(functionCode));
   data.append(static_cast<char>(byteCount));
 
@@ -1060,7 +1068,33 @@ QByteArray IO::Drivers::Modbus::buildRtuFrame(const QModbusDataUnit& unit) const
     data.append(static_cast<char>(byte));
   }
 
+  ModbusRtu::appendCrc(data);
   return data;
+}
+
+/**
+ * @brief Publishes the zero-length placeholder frame [unit, fc, 0] for the group whose poll failed,
+ *        then steps to the next group. The generated parser infers the register group by COUNTING
+ *        frames, so a silently skipped reply attributes every later frame to the wrong group for
+ *        the rest of the session; the placeholder keeps that cursor in step and carries no data.
+ */
+void IO::Drivers::Modbus::advanceAfterFailedPoll()
+{
+  if (m_currentGroupIndex >= 0 && m_currentGroupIndex < m_registerGroups.count()) {
+    const auto& group = m_registerGroups.at(m_currentGroupIndex);
+
+    QByteArray placeholder;
+    placeholder.reserve(5);
+    placeholder.append(static_cast<char>(m_slaveAddress));
+    placeholder.append(static_cast<char>(ModbusRtu::functionCodeForType(group.registerType)));
+    placeholder.append(static_cast<char>(0));
+    ModbusRtu::appendCrc(placeholder);
+    publishReceivedData(placeholder);
+  }
+
+  ++m_currentGroupIndex;
+  if (m_currentGroupIndex < m_registerGroups.count())
+    pollNextGroup();
 }
 
 /**
@@ -1083,21 +1117,19 @@ void IO::Drivers::Modbus::onReadReady()
 
   if (reply->error() != QModbusDevice::NoError) {
     reply->deleteLater();
-    ++m_currentGroupIndex;
-    if (m_currentGroupIndex < m_registerGroups.count())
-      pollNextGroup();
-
+    advanceAfterFailedPoll();
     return;
   }
 
   const QModbusDataUnit unit = reply->result();
   if (!unit.isValid() || unit.valueCount() == 0) {
     reply->deleteLater();
+    advanceAfterFailedPoll();
     return;
   }
 
   try {
-    publishReceivedData(buildRtuFrame(unit));
+    publishReceivedData(buildRtuFrame(unit, reply->serverAddress()));
   } catch (const std::exception& e) {
     qWarning() << "Modbus frame build failed:" << e.what();
   } catch (...) {
@@ -1286,7 +1318,7 @@ QList<IO::DriverProperty> IO::Drivers::Modbus::driverProperties() const
   poll.label = tr("Poll Interval (ms)");
   poll.type  = IO::DriverProperty::IntField;
   poll.value = m_pollInterval;
-  poll.min   = 10;
+  poll.min   = 50;
   poll.max   = 60000;
   props.append(poll);
 

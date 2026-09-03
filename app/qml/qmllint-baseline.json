@@ -1,0 +1,12 @@
+{
+  "purpose": "Accepted qmllint findings. CI builds the ss_qmllint target, normalizes each finding to '<path> :: <message>' (line numbers are dropped: they churn on every edit above the warning) and fails on anything not listed here. Spec 0075, findings G12 / M7 -- the repo had no QML tier at all, so binding loops and unqualified access were caught only by someone noticing a runtime warning.",
+  "seeded": false,
+  "seed_instructions": [
+    "The list below is empty because it has to be produced by a machine with Qt's qmllint, which the agent that added this gate could not run.",
+    "To arm the gate: configure any tree (e.g. cmake -G Ninja -B build/dev -DCMAKE_BUILD_TYPE=Debug),",
+    "run 'cmake --build build/dev --target ss_qmllint 2>&1 | tee qmllint.txt',",
+    "paste the normalized findings the CI step prints into 'accepted', and set 'seeded' to true.",
+    "Until 'seeded' is true the CI step reports the findings and does not fail, so an unseeded baseline cannot redden a build over warnings nobody has read yet."
+  ],
+  "accepted": []
+}

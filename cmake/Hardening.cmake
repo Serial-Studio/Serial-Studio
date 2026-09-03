@@ -114,6 +114,9 @@ if(ENABLE_HARDENING)
          add_compile_options(-fstack-clash-protection)
       endif()
 
+      # The directory-level floor, inherited by every target including lib/. Targets that call
+      # serial_studio_harden() append their own ordered pair after this one and win, so a target
+      # opting in is never left on the floor level; see _ss_apply_fortify below.
       if(PRODUCTION_OPTIMIZATION OR CMAKE_BUILD_TYPE STREQUAL "Release")
          add_compile_options(-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2)
       elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
@@ -121,6 +124,29 @@ if(ENABLE_HARDENING)
       else()
          message(WARNING "FORTIFY_SOURCE disabled: requires optimization flags (-O1 or higher)")
       endif()
+
+      # _FORTIFY_SOURCE=3 needs __builtin_dynamic_object_size: GCC 12+ or Clang 12+ AND glibc
+      # 2.34+. An older pair silently degrades to level 2 semantics, so the level is probed at
+      # configure time rather than assumed from the compiler version alone.
+      set(SS_FORTIFY3_SUPPORTED OFF)
+      if(NOT APPLE
+         AND ((CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
+               AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 12)
+              OR (CMAKE_CXX_COMPILER_ID STREQUAL "Clang"
+                  AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 12)))
+         include(CheckCXXSourceCompiles)
+         check_cxx_source_compiles("
+#include <features.h>
+#if !defined(__GLIBC__) || __GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ < 34)
+#error glibc too old for _FORTIFY_SOURCE=3
+#endif
+int main() { return 0; }
+" SS_GLIBC_HAS_FORTIFY3)
+         if(SS_GLIBC_HAS_FORTIFY3)
+            set(SS_FORTIFY3_SUPPORTED ON)
+         endif()
+      endif()
+      message(STATUS "_FORTIFY_SOURCE=3 supported: ${SS_FORTIFY3_SUPPORTED}")
 
       set(_hardening_arches "${CMAKE_SYSTEM_PROCESSOR}")
       if(APPLE AND CMAKE_OSX_ARCHITECTURES)
@@ -207,6 +233,35 @@ function(_ss_add_auto_var_init _tgt)
 endfunction()
 
 #---------------------------------------------------------------------------------------------------
+# _ss_apply_fortify(<target>) — the FORTIFY level as ONE ordered pair on the compile line
+#---------------------------------------------------------------------------------------------------
+#
+# CMake composes the command line as <DEFINES> <INCLUDES> <FLAGS>. A level passed through
+# target_compile_definitions therefore lands in DEFINES, ahead of every -U_FORTIFY_SOURCE in
+# FLAGS, and is cancelled by it -- which is how shipped Linux packages carried no FORTIFY at all
+# despite ENABLE_HARDENING=ON. The level must travel as a compile OPTION immediately after its
+# own -U, and target options are appended after the directory-level ones, so this pair is the
+# last FORTIFY token the compiler sees.
+#
+#---------------------------------------------------------------------------------------------------
+
+function(_ss_apply_fortify _tgt)
+  if(NOT (PRODUCTION_OPTIMIZATION
+          OR CMAKE_BUILD_TYPE STREQUAL "Release"
+          OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo"))
+    return()
+  endif()
+
+  set(_level 2)
+  if(SS_FORTIFY3_SUPPORTED)
+    set(_level 3)
+  endif()
+
+  target_compile_options(${_tgt} PRIVATE -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=${_level})
+  message(STATUS "${_tgt}: _FORTIFY_SOURCE=${_level}")
+endfunction()
+
+#---------------------------------------------------------------------------------------------------
 # serial_studio_harden(<target>) — per-target hardening deltas missing from the block above
 #---------------------------------------------------------------------------------------------------
 #
@@ -251,12 +306,7 @@ function(serial_studio_harden _tgt)
     _ss_add_auto_var_init(${_tgt})
 
   else()
-    if(PRODUCTION_OPTIMIZATION
-       OR CMAKE_BUILD_TYPE STREQUAL "Release"
-       OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
-      target_compile_options(${_tgt} PRIVATE -U_FORTIFY_SOURCE)
-      target_compile_definitions(${_tgt} PRIVATE _FORTIFY_SOURCE=3)
-    endif()
+    _ss_apply_fortify(${_tgt})
     target_compile_definitions(${_tgt} PRIVATE _GLIBCXX_ASSERTIONS)
     _ss_add_auto_var_init(${_tgt})
   endif()

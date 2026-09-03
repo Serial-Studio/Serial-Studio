@@ -68,9 +68,6 @@ private:
   void routeContentChunk(const QString& chunk);
   void publishThinkChunks(const std::vector<ThinkChunk>& chunks);
   void emitPendingToolCalls();
-  [[nodiscard]] bool streamBudgetBreached(qsizetype bytes);
-  void finishOk();
-  void finishWithError(const QString& message);
 
 private:
   void issueRequest();
@@ -89,7 +86,6 @@ private:
   int m_transferTimeoutMs;
   bool m_parseThinkTags;
   ThinkTagSplitter m_thinkSplitter;
-  bool m_finished;
 };
 
 }  // namespace AI

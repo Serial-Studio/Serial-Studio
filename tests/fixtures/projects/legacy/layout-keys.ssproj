@@ -1,0 +1,36 @@
+{
+  "title": "Legacy Layout Keys",
+  "frameStart": "$",
+  "frameEnd": ";",
+  "groups": [
+    {
+      "title": "Sensors",
+      "widget": "datagrid",
+      "datasets": [
+        {
+          "title": "Temperature",
+          "index": 1,
+          "graph": true,
+          "widget": "",
+          "units": "",
+          "min": 0,
+          "max": 100,
+          "alarm": 0,
+          "led": false,
+          "log": false,
+          "fft": false
+        }
+      ]
+    }
+  ],
+  "actions": [],
+  "widgetSettings": {
+    "__layout__:0__": {
+      "data": {
+        "pattern": "grid",
+        "ratio": 50
+      },
+      "stale": "dropped"
+    }
+  }
+}

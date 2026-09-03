@@ -45,9 +45,9 @@ project(app LANGUAGES C CXX VERSION ${PROJECT_VERSION})
 #   CMAKE_AUTOUIC=ON  - Auto-compile .ui files to ui_*.h headers
 #   CMAKE_AUTORCC=ON  - Auto-compile .qrc resource files to C++ code
 #
-# C++ standard:
-#   CMAKE_CXX_STANDARD=20 - Use C++20 features (modules, concepts, ranges)
-#   CMAKE_CXX_STANDARD_REQUIRED=ON - Hard requirement (no fallback to C++17)
+# C++ standard: set once in the root CMakeLists.txt (CMAKE_CXX_STANDARD=20,
+# CMAKE_CXX_STANDARD_REQUIRED=ON) and inherited here. Re-setting it in this file made two
+# places able to disagree about the language the app compiles as.
 #
 # C++20 features used in Serial Studio:
 #   - std::span, std::format (pending), concepts
@@ -59,8 +59,6 @@ project(app LANGUAGES C CXX VERSION ${PROJECT_VERSION})
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 #---------------------------------------------------------------------------------------------------
 # Qt 6 module dependencies
@@ -111,6 +109,7 @@ set(QT_MODULES
   Widgets
   Network
   Bluetooth
+  GuiPrivate
   SerialPort
   WebSockets
   Core5Compat
@@ -118,11 +117,17 @@ set(QT_MODULES
   QuickControls2
 )
 
+# Qt6::GuiPrivate carries <rhi/qrhi.h>, which the waterfall's persistent ring texture needs to
+# upload one scanline instead of a whole image per tick (spec 0075, R15.1). QRhi is semi-public:
+# source-compatible within a Qt minor series only, so a Qt upgrade re-checks WaterfallRingTexture.
+# The version-tie warning it prints is the acknowledged cost of that, so silence it.
+set(QT_NO_PRIVATE_MODULE_WARNING ON)
 set(QT_LIBS
   Qt6::Core
   Qt6::Svg
   Qt6::Sql
   Qt6::Gui
+  Qt6::GuiPrivate
   Qt6::Qml
   Qt6::Quick
   Qt6::Graphs
@@ -213,6 +218,7 @@ set(SOURCES
   src/Misc/ThemeCatalog.cpp
   src/Misc/LanguageTable.cpp
   src/Misc/CommonFonts.cpp
+  src/Misc/ContextRegistry.cpp
   src/Misc/Utilities.cpp
   src/Misc/PasswordHash.cpp
   src/Misc/Translator.cpp
@@ -249,6 +255,7 @@ set(SOURCES
   src/Misc/CLI/CliIndustrialConfig.cpp
   src/Misc/CLI/CliSpecParsers.cpp
   src/SelfTest/SelfTest.cpp
+  src/SelfTest/QmlInstantiationSuite.cpp
   src/SSAssert.cpp
   src/Benchmark/HotpathBenchmark.cpp
   src/Benchmark/BenchmarkRunner.cpp
@@ -257,6 +264,7 @@ set(SOURCES
   src/UI/DashboardWidget.cpp
   src/UI/Dashboard.cpp
   src/UI/Dashboard/DashboardTools.cpp
+  src/UI/Dashboard/DashboardIngest.cpp
   src/UI/Dashboard/PlotControlBank.cpp
   src/UI/Dashboard/ReplaySeekEngine.cpp
   src/UI/Dashboard/DashboardViewState.cpp
@@ -283,6 +291,7 @@ set(SOURCES
   src/UI/Widgets/LEDPanel.cpp
   src/UI/Widgets/Gauge.cpp
   src/UI/Widgets/Plot.cpp
+  src/UI/Widgets/PlotBase.cpp
   src/UI/Widgets/PlotAreaFill.cpp
   src/UI/Widgets/GpuStroke.cpp
   src/UI/Widgets/PlotCurve.cpp
@@ -370,18 +379,20 @@ set(SOURCES
   src/Console/Annotations.cpp
   src/Console/Handler.cpp
   src/Console/TextFormat.cpp
-  src/IO/FrameConfig.h
   src/IO/DeviceManager.cpp
   src/IO/ConnectionManager.cpp
   src/IO/ConnectionManager/DriverUiRegistry.cpp
   src/IO/ConnectionManager/ConnectFanOut.cpp
   src/IO/ConnectionManager/ReplyCapture.cpp
+  src/IO/ConnectionManager/DeviceIoRouter.cpp
+  src/IO/ConnectionManager/DeviceTableQuery.cpp
   src/IO/ConnectionManager/DriverFactory.cpp
   src/IO/ConnectionManager/StreamConfigBuilder.cpp
   src/IO/ConnectionManager/StreamWorkerPool.cpp
   src/IO/ConnectionManager/UiDriverSync.cpp
   src/IO/PipelineHost.cpp
   src/IO/StreamWorker.cpp
+  src/IO/AsyncTcpDial.cpp
   src/Async/TaskTree.cpp
   src/Async/RetryPolicy.cpp
   src/Console/Export.cpp
@@ -406,6 +417,8 @@ set(SOURCES
   src/DataModel/Scripting/LuaScriptEngine.cpp
   src/DataModel/Scripting/LuaCompat.cpp
   src/DataModel/Scripting/LuaMigration.cpp
+  src/DataModel/Scripting/LuaDeadlineHook.cpp
+  src/DataModel/Scripting/ScriptDryRun.cpp
   src/DataModel/Scripting/ExpressionTransform.cpp
   src/DataModel/Scripting/DashboardApi.cpp
   src/DataModel/Scripting/DeviceWriteApi.cpp
@@ -446,6 +459,7 @@ set(SOURCES
   src/DataModel/Scripting/NativeTemplates/MultiFrameTimeSeries2d.cpp
   src/DataModel/Editors/JsCodeEditor.cpp
   src/DataModel/Editors/EmbeddedCodeEditor.cpp
+  src/DataModel/Editors/EmbeddedCodeEditorItem.cpp
   src/DataModel/Editors/EditorFormatting.cpp
   src/DataModel/Editors/ScriptTemplateCatalog.cpp
   src/DataModel/Editors/ControlScriptEditor.cpp
@@ -487,7 +501,12 @@ set(SOURCES
   src/DataModel/Importers/ProtoImporter.cpp
   src/DataModel/Importers/ProtoLexer.cpp
   src/DataModel/Importers/ProtoParser.cpp
+  src/DataModel/ExportStructure.cpp
   src/DataModel/FrameBuilder.cpp
+  src/DataModel/ReplayPlaybackEngine.cpp
+  src/DataModel/FrameBuilder/BlockPublisher.cpp
+  src/DataModel/FrameBuilder/BlockStager.cpp
+  src/DataModel/FrameBuilder/ReplayIngest.cpp
   src/DataModel/FrameBuilder/LatestFrameTap.cpp
   src/DataModel/FrameBuilder/QuickPlotBuilder.cpp
   src/DataModel/FrameBuilder/TableSnapshotChannel.cpp
@@ -523,6 +542,7 @@ set(HEADERS
   src/Misc/Utilities.h
   src/Misc/PasswordHash.h
   src/Misc/CommonFonts.h
+  src/Misc/ContextRegistry.h
   src/Misc/JsonValidator.h
   src/Misc/ThemeManager.h
   src/Misc/ThemeCatalog.h
@@ -558,6 +578,7 @@ set(HEADERS
   src/Misc/BackupManager.h
   src/UI/Dashboard.h
   src/UI/Dashboard/DashboardTools.h
+  src/UI/Dashboard/DashboardIngest.h
   src/UI/Dashboard/PlotControlBank.h
   src/UI/Dashboard/ReplaySeekEngine.h
   src/UI/Dashboard/DashboardViewState.h
@@ -585,6 +606,7 @@ set(HEADERS
   src/UI/Widgets/WebView.h
   src/UI/Widgets/Gauge.h
   src/UI/Widgets/Plot.h
+  src/UI/Widgets/PlotBase.h
   src/UI/Widgets/PlotAreaFill.h
   src/UI/Widgets/GpuStroke.h
   src/UI/Widgets/PlotCurve.h
@@ -612,6 +634,7 @@ set(HEADERS
   src/API/Server/ServerAuth.h
   src/API/Server/ClientReception.h
   src/API/Server/ConnectionState.h
+  src/API/Server/DeviceWriteVerdict.h
   src/API/Server/MirrorCommands.h
   src/API/CommandProtocol.h
   src/API/MCPProtocol.h
@@ -627,7 +650,6 @@ set(HEADERS
   src/API/Handlers/NetworkHandler.h
   src/API/Handlers/BluetoothLEHandler.h
   src/API/Handlers/CSVExportHandler.h
-  src/API/Handlers/ProjectApiSupport.h
   src/API/Handlers/ProblemsHandler.h
   src/API/Handlers/DiagnosticsHandler.h
   src/API/Handlers/MirrorHandler.h
@@ -678,6 +700,7 @@ set(HEADERS
   src/Console/TextFormat.h
   src/Console/Export.h
   src/IO/Drivers/UART.h
+  src/IO/Drivers/UART/UartPolicy.h
   src/IO/Drivers/Network.h
   src/IO/Drivers/BluetoothLE.h
   src/IO/FrameConfig.h
@@ -686,12 +709,15 @@ set(HEADERS
   src/IO/ConnectionManager/DriverUiRegistry.h
   src/IO/ConnectionManager/ConnectFanOut.h
   src/IO/ConnectionManager/ReplyCapture.h
+  src/IO/ConnectionManager/DeviceIoRouter.h
+  src/IO/ConnectionManager/DeviceTableQuery.h
   src/IO/ConnectionManager/DriverFactory.h
   src/IO/ConnectionManager/StreamConfigBuilder.h
   src/IO/ConnectionManager/StreamWorkerPool.h
   src/IO/ConnectionManager/UiDriverSync.h
   src/IO/PipelineHost.h
   src/IO/StreamWorker.h
+  src/IO/AsyncTcpDial.h
   src/Async/TaskTree.h
   src/Async/RetryPolicy.h
   src/Async/AsyncClock.h
@@ -723,6 +749,8 @@ set(HEADERS
   src/DataModel/Scripting/LuaScriptEngine.h
   src/DataModel/Scripting/LuaCompat.h
   src/DataModel/Scripting/LuaMigration.h
+  src/DataModel/Scripting/LuaDeadlineHook.h
+  src/DataModel/Scripting/ScriptDryRun.h
   src/DataModel/Scripting/ExpressionTransform.h
   src/DataModel/Scripting/DashboardApi.h
   src/DataModel/Scripting/DeviceWriteApi.h
@@ -758,6 +786,7 @@ set(HEADERS
   src/DataModel/Scripting/NativeTemplates/MultiFrameTimeSeries2d.h
   src/DataModel/Editors/JsCodeEditor.h
   src/DataModel/Editors/EmbeddedCodeEditor.h
+  src/DataModel/Editors/EmbeddedCodeEditorItem.h
   src/DataModel/Editors/EditorFormatting.h
   src/DataModel/Editors/ScriptTemplateCatalog.h
   src/DataModel/Editors/ControlScriptEditor.h
@@ -797,6 +826,9 @@ set(HEADERS
   src/IO/Drivers/BluetoothLE/BleUuids.h
   src/IO/Drivers/SerialPortIdentity.h
   src/DataModel/FrameBuilder.h
+  src/DataModel/FrameBuilder/BlockPublisher.h
+  src/DataModel/FrameBuilder/BlockStager.h
+  src/DataModel/FrameBuilder/ReplayIngest.h
   src/DataModel/FrameBuilder/LatestFrameTap.h
   src/DataModel/FrameBuilder/QuickPlotBuilder.h
   src/DataModel/FrameBuilder/TableSnapshotChannel.h
@@ -807,6 +839,8 @@ set(HEADERS
   src/DataModel/DataTable.h
   src/DataModel/RowFilterProxy.h
   src/DataModel/ExportSchema.h
+  src/DataModel/ExportStructure.h
+  src/DataModel/ReplayPlaybackEngine.h
   src/DataModel/Editors/DatasetTransformEditor.h
   src/DataModel/NotificationCenter.h
   src/DataModel/Dialogs/TransmitTestDialog.h
@@ -879,6 +913,9 @@ set(QML_SOURCES
   qml/Dialogs/Welcome.qml
   qml/Dialogs/WorkspaceDialog.qml
   qml/Dialogs/ExtensionManager.qml
+  qml/Dialogs/ExtensionManager/GridPage.qml
+  qml/Dialogs/ExtensionManager/DetailPage.qml
+  qml/Dialogs/ExtensionManager/ReposPage.qml
   qml/Dialogs/ExamplesBrowser.qml
   qml/Dialogs/HelpCenter.qml
   qml/Dialogs/ProblemCenter.qml
@@ -930,6 +967,7 @@ set(QML_SOURCES
   qml/ProjectEditor/Views/ProjectView.qml
   qml/ProjectEditor/Views/SourceView.qml
   qml/ProjectEditor/Views/SourceFrameParserView.qml
+  qml/ProjectEditor/Views/CodeEditorMenu.qml
   qml/ProjectEditor/Views/ControlScriptView.qml
   qml/ProjectEditor/Views/TableDelegate.qml
   qml/ProjectEditor/Views/EditorSearchBand.qml
@@ -953,7 +991,9 @@ set(QML_SOURCES
   qml/Widgets/Dashboard/ExtensionWidgetSettings.qml
   qml/Widgets/Dashboard/FFTPlot.qml
   qml/Widgets/Dashboard/Gauge.qml
+  qml/Widgets/Dashboard/InstrumentBase.qml
   qml/Widgets/Dashboard/Meter.qml
+  qml/Widgets/Dashboard/SwipePages.qml
   qml/Widgets/Dashboard/GPS.qml
   qml/Widgets/Dashboard/WebView.qml
   qml/Widgets/Dashboard/Gyroscope.qml
@@ -1050,6 +1090,7 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/Audio.h
     src/IO/Drivers/Audio/AudioDeviceCatalog.h
     src/IO/Drivers/Audio/AudioPcm.h
+    src/IO/Drivers/Audio/PlaybackRing.h
     src/Misc/Diagnostics/AudioChecks.h
     src/IO/Drivers/CANBus.h
     src/IO/Drivers/CANBus/CanBackends.h
@@ -1058,9 +1099,11 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/CANBus/GsUsbProtocol.h
     src/IO/Drivers/CANBus/SlcanBackend.h
     src/IO/Drivers/CANBus/SeeedCanBackend.h
+    src/IO/Drivers/CANBus/SerialCanBackendBase.h
     src/IO/Drivers/Modbus.h
     src/IO/Drivers/Modbus/ModbusRegisterGroups.h
     src/IO/Drivers/Modbus/ModbusProjectGenerator.h
+    src/IO/Drivers/Modbus/ModbusRtuCodec.h
     src/IO/Drivers/HID.h
     src/IO/Drivers/USB.h
     src/IO/Drivers/USB/UsbHex.h
@@ -1083,6 +1126,7 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/OpcUaSession.h
     src/IO/Drivers/OpcUaSecurity.h
     src/IO/Drivers/OpcUaTagModel.h
+    src/IO/Drivers/PolledPlcWorkerBase.h
     src/IO/Drivers/S7.h
     src/IO/Drivers/S7Address.h
     src/IO/Drivers/S7/IsoTsap.h
@@ -1091,7 +1135,8 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/Iec104.h
     src/IO/Drivers/Iec104/Apci.h
     src/IO/Drivers/Iec104/Asdu.h
-    src/UI/Widgets/Plot3D.h
+  src/UI/Widgets/Plot3D.h
+  src/UI/Widgets/Plot3D/Plot3DNodes.h
   src/UI/Widgets/Plot3D/Plot3DOverlay.h
   src/UI/Widgets/Plot3D/Plot3DStereo.h
   src/UI/Widgets/Plot3D/Plot3DEyeMaterial.h
@@ -1100,6 +1145,10 @@ if(BUILD_COMMERCIAL)
     src/UI/Widgets/AudioExport.h
     src/UI/Widgets/Waterfall.h
   src/UI/Widgets/Waterfall/WaterfallMath.h
+  src/UI/Widgets/Waterfall/WaterfallColorMap.h
+  src/UI/Widgets/Waterfall/WaterfallTiles.h
+  src/UI/Widgets/Waterfall/WaterfallRingTexture.h
+  src/UI/Widgets/Waterfall/WaterfallSpectrogramNodes.h
     src/UI/Widgets/Painter.h
     src/UI/Widgets/PainterContext.h
     src/UI/Widgets/Painter/PainterGradient.h
@@ -1127,6 +1176,7 @@ if(BUILD_COMMERCIAL)
     src/Licensing/OfflineLicense.h
     src/Licensing/OfflineSelfTest.h
     src/Licensing/GuardSelfTest.h
+    src/Sessions/BlockFingerprint.h
     src/Sessions/DatabaseManager.h
     src/Sessions/DatabaseManager/DatabaseSchema.h
     src/Sessions/DatabaseManager/SessionExporter.h
@@ -1135,6 +1185,7 @@ if(BUILD_COMMERCIAL)
     src/Sessions/Export.h
     src/Sessions/HtmlReport.h
     src/Sessions/Player.h
+    src/Sessions/ReportOptionsModel.h
     src/Sessions/Player/ReplayAlignment.h
     src/Sessions/Player/ReplayClock.h
     src/Sessions/Player/ReplayFrameValues.h
@@ -1178,11 +1229,13 @@ if(BUILD_COMMERCIAL)
     src/AI/SseEventReader.h
     src/AI/ContextBuilder.h
     src/AI/Conversation.h
+    src/AI/Conversation/AsyncToolRunner.h
     src/AI/Conversation/AutoVerifier.h
     src/AI/Conversation/ChatDigest.h
     src/AI/Conversation/HelpFetcher.h
     src/AI/Conversation/MetaToolRunner.h
     src/AI/Conversation/ToolCallStatus.h
+    src/AI/Conversation/ToolTurnRunner.h
     src/AI/Conversation/HistorySurgery.h
     src/AI/Conversation/MetaToolCatalog.h
     src/AI/Conversation/ReplyAssembly.h
@@ -1197,14 +1250,11 @@ if(BUILD_COMMERCIAL)
     src/AI/Providers/ImmediateErrorReply.h
     src/AI/Providers/AnthropicProvider.h
     src/AI/Providers/AnthropicReply.h
+    src/AI/Providers/OpenAICompatibleProvider.h
     src/AI/Providers/OpenAIProvider.h
     src/AI/Providers/OpenAIReply.h
     src/AI/Providers/GeminiProvider.h
     src/AI/Providers/GeminiReply.h
-    src/AI/Providers/DeepSeekProvider.h
-    src/AI/Providers/OpenRouterProvider.h
-    src/AI/Providers/GroqProvider.h
-    src/AI/Providers/MistralProvider.h
     src/AI/Providers/LocalProvider.h
   )
   set(SOURCES
@@ -1247,9 +1297,11 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/CANBus/GsUsbCanBackend.cpp
     src/IO/Drivers/CANBus/SlcanBackend.cpp
     src/IO/Drivers/CANBus/SeeedCanBackend.cpp
+    src/IO/Drivers/CANBus/SerialCanBackendBase.cpp
     src/IO/Drivers/Modbus.cpp
     src/IO/Drivers/Modbus/ModbusRegisterGroups.cpp
     src/IO/Drivers/Modbus/ModbusProjectGenerator.cpp
+    src/IO/Drivers/Modbus/ModbusRtuCodec.cpp
     src/IO/Drivers/HID.cpp
     src/IO/Drivers/USB.cpp
     src/IO/Drivers/USB/UsbHex.cpp
@@ -1271,6 +1323,7 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/OpcUaSession.cpp
     src/IO/Drivers/OpcUaSecurity.cpp
     src/IO/Drivers/OpcUaTagModel.cpp
+    src/IO/Drivers/PolledPlcWorkerBase.cpp
     src/IO/Drivers/S7.cpp
     src/IO/Drivers/S7Address.cpp
     src/IO/Drivers/S7/IsoTsap.cpp
@@ -1279,7 +1332,7 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/Iec104.cpp
     src/IO/Drivers/Iec104/Apci.cpp
     src/IO/Drivers/Iec104/Asdu.cpp
-    src/UI/Widgets/Plot3D.cpp
+  src/UI/Widgets/Plot3D.cpp
   src/UI/Widgets/Plot3D/Plot3DNodes.cpp
   src/UI/Widgets/Plot3D/Plot3DOverlay.cpp
   src/UI/Widgets/Plot3D/Plot3DStereo.cpp
@@ -1289,8 +1342,12 @@ if(BUILD_COMMERCIAL)
     src/UI/Widgets/AudioExport.cpp
     src/UI/Widgets/Waterfall.cpp
   src/UI/Widgets/Waterfall/WaterfallTicks.cpp
+  src/UI/Widgets/Waterfall/WaterfallColorMap.cpp
+  src/UI/Widgets/Waterfall/WaterfallTiles.cpp
   src/UI/Widgets/Waterfall/WaterfallViewState.cpp
   src/UI/Widgets/Waterfall/WaterfallOverlay.cpp
+  src/UI/Widgets/Waterfall/WaterfallRingTexture.cpp
+  src/UI/Widgets/Waterfall/WaterfallSpectrogramNodes.cpp
     src/UI/Widgets/Painter.cpp
     src/UI/Widgets/PainterContext.cpp
   src/UI/Widgets/Painter/PainterGradient.cpp
@@ -1306,6 +1363,7 @@ if(BUILD_COMMERCIAL)
     src/DataModel/Importers/ModbusMapImporter.cpp
     src/Licensing/Trial.cpp
     src/Licensing/CommercialToken.cpp
+    src/Sessions/BlockFingerprint.cpp
     src/Sessions/DatabaseManager.cpp
   src/Sessions/DatabaseManager/DatabaseSchema.cpp
     src/Sessions/DatabaseManager/SessionExporter.cpp
@@ -1314,6 +1372,7 @@ if(BUILD_COMMERCIAL)
     src/Sessions/Export.cpp
     src/Sessions/HtmlReport.cpp
     src/Sessions/Player.cpp
+    src/Sessions/ReportOptionsModel.cpp
     src/Sessions/Player/ReplayAlignment.cpp
     src/Sessions/Player/ReplayClock.cpp
     src/Sessions/Player/ReplayFrameValues.cpp
@@ -1363,10 +1422,12 @@ if(BUILD_COMMERCIAL)
     src/AI/SseEventReader.cpp
     src/AI/ContextBuilder.cpp
     src/AI/Conversation.cpp
+    src/AI/Conversation/AsyncToolRunner.cpp
     src/AI/Conversation/AutoVerifier.cpp
     src/AI/Conversation/ChatDigest.cpp
     src/AI/Conversation/HelpFetcher.cpp
     src/AI/Conversation/MetaToolRunner.cpp
+    src/AI/Conversation/ToolTurnRunner.cpp
     src/AI/Conversation/HistorySurgery.cpp
     src/AI/Conversation/MetaToolCatalog.cpp
     src/AI/Conversation/ReplyAssembly.cpp
@@ -1375,18 +1436,16 @@ if(BUILD_COMMERCIAL)
     src/AI/SentinelProbe.cpp
     src/AI/MemoryStore.cpp
     src/AI/SkillRouter.cpp
+    src/AI/Providers/Provider.cpp
     src/AI/Providers/ProviderJson.cpp
     src/AI/Providers/ThinkTagSplitter.cpp
     src/AI/Providers/AnthropicProvider.cpp
     src/AI/Providers/AnthropicReply.cpp
+    src/AI/Providers/OpenAICompatibleProvider.cpp
     src/AI/Providers/OpenAIProvider.cpp
     src/AI/Providers/OpenAIReply.cpp
     src/AI/Providers/GeminiProvider.cpp
     src/AI/Providers/GeminiReply.cpp
-    src/AI/Providers/DeepSeekProvider.cpp
-    src/AI/Providers/OpenRouterProvider.cpp
-    src/AI/Providers/GroqProvider.cpp
-    src/AI/Providers/MistralProvider.cpp
     src/AI/Providers/LocalProvider.cpp
   )
 
@@ -1418,7 +1477,8 @@ if(BUILD_COMMERCIAL)
     qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml
-    qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml
+    qml/MainWindow/Panes/SetupPanes/Drivers/DriverTagPickerDialog.qml
+  qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml
     qml/ProjectEditor/Views/MqttPublisherView.qml
     qml/ProjectEditor/Views/InfluxSinkView.qml
@@ -1438,6 +1498,9 @@ if(BUILD_COMMERCIAL)
     qml/Widgets/Dashboard/Output/DashboardTextField.qml
     qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml
     qml/AI/AssistantPanel.qml
+    qml/AI/AssistantPanel/AssistantTopBar.qml
+    qml/AI/AssistantPanel/AssistantConversation.qml
+    qml/AI/AssistantPanel/AssistantComposer.qml
     qml/AI/ChatSidebar.qml
     qml/AI/KeyManagerDialog.qml
     qml/AI/MemoryManagerDialog.qml
@@ -1527,6 +1590,7 @@ if(ENABLE_GRPC)
   set(HEADERS
     ${HEADERS}
     src/API/GRPC/GRPCServer.h
+    src/API/GRPC/PendingCall.h
     src/API/GRPC/ProtoGenerator.h
     src/API/GRPC/ConversionUtils.h
     ${PROTO_GENERATED_HDRS}
@@ -1753,13 +1817,6 @@ if(ENABLE_GRPC)
     protobuf::libprotobuf
   )
   target_compile_definitions(${PROJECT_EXECUTABLE} PRIVATE ENABLE_GRPC)
-  if(WIN32)
-    target_compile_definitions(${PROJECT_EXECUTABLE} PRIVATE
-      WIN32_LEAN_AND_MEAN
-      NOMINMAX
-      _WINSOCKAPI_
-    )
-  endif()
 endif()
 
 #---------------------------------------------------------------------------------------------------
@@ -1869,6 +1926,25 @@ qt_add_qml_module(
   QML_FILES ${QML_SOURCES}
   RESOURCE_PREFIX /serial-studio.com/
 )
+
+#---------------------------------------------------------------------------------------------------
+# QML lint target
+#---------------------------------------------------------------------------------------------------
+#
+# qt_add_qml_module() already generates <target>_qmllint when Qt's qmllint is installed, but its
+# name depends on the build flavour (serial-studio-pro vs serial-studio-gpl3). `ss_qmllint` is
+# the stable name CI builds, so the workflow does not have to know which flavour it configured.
+# Nothing ran qmllint before spec 0075 (finding G12 / M7): unqualified property access and
+# binding loops were caught only by a human noticing the runtime warning.
+#
+#---------------------------------------------------------------------------------------------------
+
+if(TARGET ${PROJECT_EXECUTABLE}_qmllint)
+  add_custom_target(ss_qmllint)
+  add_dependencies(ss_qmllint ${PROJECT_EXECUTABLE}_qmllint)
+else()
+  message(STATUS "qmllint not available; ss_qmllint target not created")
+endif()
 
 #---------------------------------------------------------------------------------------------------
 # MiniAudio audio input library configuration (Pro only)
@@ -2089,7 +2165,6 @@ elseif(APPLE)
     MACOSX_BUNDLE_INFO_PLIST ${INFO_MACOSX}
   )
 elseif(UNIX)
-  install(TARGETS ${PROJECT_EXECUTABLE} RUNTIME DESTINATION bin)
   install(
     FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/${PROJECT_EXECUTABLE}.svg
     DESTINATION share/pixmaps
@@ -2184,6 +2259,10 @@ endif()
 #---------------------------------------------------------------------------------------------------
 
 qt_finalize_executable(${PROJECT_EXECUTABLE})
+
+# Every DESTINATION below reads CMAKE_INSTALL_BINDIR, which was only ever defined because a
+# vendored lib/ subdirectory includes GNUInstallDirs before app/ is processed. Say it here.
+include(GNUInstallDirs)
 
 install(
   TARGETS ${PROJECT_EXECUTABLE}

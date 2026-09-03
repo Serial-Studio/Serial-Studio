@@ -170,20 +170,77 @@ bool Sessions::PlayerLoaderWorker::loadTimestampIndex(QSqlDatabase& db,
 }
 
 /**
- * @brief Spec-0055 twin of loadTimestampIndex. Frame-lane blocks contribute every sample instant;
- *        a dense block contributes only its start (48 kHz would otherwise materialise ~29 M
- *        timestamps per 10 minutes) and joins the stream-block index instead (R11), so playback
- *        replays it whole through the sink-masked block lane, never one sample per step.
+ * @brief Collects the dense (uniform-grid) blocks of a session: one stream-block entry per dataset
+ *        row, and each block's start instant ONCE. A dense block contributes only its start (48 kHz
+ *        would otherwise materialise ~29 M timestamps per 10 minutes) and joins the stream-block
+ *        index instead (R11), so playback replays it whole through the sink-masked block lane.
  */
-bool Sessions::PlayerLoaderWorker::loadBlockTimestampIndex(QSqlDatabase& db,
-                                                           int sessionId,
-                                                           PlayerSessionPayload& payload,
-                                                           QString& errorOut)
+[[nodiscard]] static bool loadDenseBlocks(QSqlDatabase& db,
+                                          int sessionId,
+                                          Sessions::PlayerSessionPayload& payload,
+                                          const std::atomic<bool>& cancelled,
+                                          QString& errorOut)
 {
   QSqlQuery q(db);
   q.setForwardOnly(true);
-  q.prepare("SELECT block_id, source_id, unique_id, t0_ns, dt_ns, frames, times FROM blocks "
-            "WHERE session_id = ? ORDER BY t0_ns ASC, block_id ASC");
+  q.prepare("SELECT block_id, source_id, unique_id, t0_ns, dt_ns, frames FROM blocks "
+            "WHERE session_id = ? AND dt_ns != 0 ORDER BY t0_ns ASC, block_id ASC");
+  q.bindValue(0, sessionId);
+  if (!q.exec()) {
+    errorOut = q.lastError().text();
+    return false;
+  }
+
+  qint64 row = 0;
+  while (q.next()) {
+    if ((row & 0xFF) == 0 && cancelled.load(std::memory_order_acquire)) {
+      errorOut = QObject::tr("Cancelled");
+      return false;
+    }
+
+    ++row;
+    const qint64 t0Ns = q.value(3).toLongLong();
+    if (payload.timestampsNs.empty() || payload.timestampsNs.back() != t0Ns)
+      payload.timestampsNs.push_back(t0Ns);
+
+    const qint64 frames = q.value(5).toLongLong();
+    if (frames <= 0 || frames > Sessions::kMaxBlockFrames) {
+      qWarning() << "[Sessions::PlayerLoader] skipping dense block" << q.value(0).toLongLong()
+                 << "with invalid frame count" << frames;
+      continue;
+    }
+
+    Sessions::PlayerStreamBlockIndex entry;
+    entry.rowId      = q.value(0).toLongLong();
+    entry.sourceId   = q.value(1).toInt();
+    entry.uniqueId   = q.value(2).toInt();
+    entry.t0Ns       = t0Ns;
+    entry.dtNs       = q.value(4).toLongLong();
+    entry.frames     = frames;
+    entry.fromBlocks = true;
+    payload.streamBlocks.push_back(entry);
+  }
+
+  return true;
+}
+
+/**
+ * @brief Expands the irregular blocks' per-sample instants ONCE PER BLOCK. The `blocks` table
+ *        holds one row per dataset per block, all repeating the same times blob, so expanding per
+ *        row cost 635 copies of every instant in a 635-dataset project -- 1.8 GB transient for an
+ *        hour at 100 Hz (B7). (source_id, block_number) is the block's identity.
+ */
+[[nodiscard]] static bool loadIrregularBlockTimes(QSqlDatabase& db,
+                                                  int sessionId,
+                                                  Sessions::PlayerSessionPayload& payload,
+                                                  const std::atomic<bool>& cancelled,
+                                                  QString& errorOut)
+{
+  QSqlQuery q(db);
+  q.setForwardOnly(true);
+  q.prepare("SELECT t0_ns, dt_ns, frames, times FROM blocks "
+            "WHERE session_id = ? AND dt_ns = 0 "
+            "GROUP BY source_id, block_number ORDER BY t0_ns ASC");
   q.bindValue(0, sessionId);
   if (!q.exec()) {
     errorOut = q.lastError().text();
@@ -193,49 +250,43 @@ bool Sessions::PlayerLoaderWorker::loadBlockTimestampIndex(QSqlDatabase& db,
   std::vector<qint64> stamps;
   qint64 row = 0;
   while (q.next()) {
-    if ((row & 0xFF) == 0 && m_cancelRequested.load(std::memory_order_acquire)) {
-      errorOut = tr("Cancelled");
+    if ((row & 0xFF) == 0 && cancelled.load(std::memory_order_acquire)) {
+      errorOut = QObject::tr("Cancelled");
       return false;
     }
 
-    const qint64 t0Ns = q.value(3).toLongLong();
-    const qint64 dtNs = q.value(4).toLongLong();
-
-    if (dtNs != 0) {
-      payload.timestampsNs.push_back(t0Ns);
-      ++row;
-
-      const qint64 frames = q.value(5).toLongLong();
-      if (frames <= 0 || frames > kMaxBlockFrames) {
-        qWarning() << "[Sessions::PlayerLoader] skipping dense block" << q.value(0).toLongLong()
-                   << "with invalid frame count" << frames;
-        continue;
-      }
-
-      PlayerStreamBlockIndex entry;
-      entry.rowId      = q.value(0).toLongLong();
-      entry.sourceId   = q.value(1).toInt();
-      entry.uniqueId   = q.value(2).toInt();
-      entry.t0Ns       = t0Ns;
-      entry.dtNs       = dtNs;
-      entry.frames     = frames;
-      entry.fromBlocks = true;
-      payload.streamBlocks.push_back(entry);
-      continue;
-    }
-
+    ++row;
     stamps.clear();
-    if (!Sessions::expandBlockTimes(
-          t0Ns, dtNs, q.value(5).toLongLong(), q.value(6).toByteArray(), stamps)) {
-      errorOut = tr("Corrupt block timing in session %1").arg(sessionId);
+    if (!Sessions::expandBlockTimes(q.value(0).toLongLong(),
+                                    q.value(1).toLongLong(),
+                                    q.value(2).toLongLong(),
+                                    q.value(3).toByteArray(),
+                                    stamps)) {
+      errorOut = QObject::tr("Corrupt block timing in session %1").arg(sessionId);
       return false;
     }
 
     for (const qint64 stamp : stamps)
       payload.timestampsNs.push_back(stamp);
-
-    ++row;
   }
+
+  return true;
+}
+
+/**
+ * @brief Spec-0055 twin of loadTimestampIndex: the dense blocks' starts plus every irregular
+ *        block's sample instants, de-duplicated into one ascending index.
+ */
+bool Sessions::PlayerLoaderWorker::loadBlockTimestampIndex(QSqlDatabase& db,
+                                                           int sessionId,
+                                                           PlayerSessionPayload& payload,
+                                                           QString& errorOut)
+{
+  if (!loadDenseBlocks(db, sessionId, payload, m_cancelRequested, errorOut))
+    return false;
+
+  if (!loadIrregularBlockTimes(db, sessionId, payload, m_cancelRequested, errorOut))
+    return false;
 
   std::sort(payload.timestampsNs.begin(), payload.timestampsNs.end());
   payload.timestampsNs.erase(std::unique(payload.timestampsNs.begin(), payload.timestampsNs.end()),
@@ -245,16 +296,19 @@ bool Sessions::PlayerLoaderWorker::loadBlockTimestampIndex(QSqlDatabase& db,
 }
 
 /**
- * @brief Loads the stream-block index for the session: metadata only, ordered by time. The
- *        samples blobs deliberately stay on disk -- materializing them would scale replay
- *        memory with recording length (~23 MB/minute/channel), so playback fetches one block
- *        at a time instead (spec 0054).
+ * @brief Loads the stream-block index for the session: metadata only, ordered by time. The blobs
+ *        stay on disk -- materializing them would scale replay memory with recording length
+ *        (~23 MB/minute/channel), so playback fetches one block at a time (spec 0054). An archive
+ *        predating the table indexes empty rather than failing to open.
  */
 bool Sessions::PlayerLoaderWorker::loadStreamBlockIndex(QSqlDatabase& db,
                                                         int sessionId,
                                                         PlayerSessionPayload& payload,
                                                         QString& errorOut)
 {
+  if (!Sessions::archiveHasTable(db, QStringLiteral("stream_blocks")))
+    return true;
+
   QSqlQuery q(db);
   q.setForwardOnly(true);
   q.prepare("SELECT stream_block_id, source_id, unique_id, t0_ns, dt_ns, frames "
@@ -288,6 +342,25 @@ bool Sessions::PlayerLoaderWorker::loadStreamBlockIndex(QSqlDatabase& db,
 }
 
 /**
+ * @brief Opens an archive for the index load. Read-only by connect option and with no journal
+ *        pragma: the load never writes, and journal_mode=WAL IS a write, which made an archive on
+ *        read-only media (a mounted image, a locked share, a burned copy) unloadable (B15).
+ */
+[[nodiscard]] static QSqlDatabase openArchiveReadOnly(const QString& connectionName,
+                                                      const QString& filePath)
+{
+  QSqlDatabase db = QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"), connectionName);
+  db.setDatabaseName(filePath);
+  db.setConnectOptions(QStringLiteral("QSQLITE_OPEN_READONLY"));
+  if (!db.open())
+    return db;
+
+  QSqlQuery pragma(db);
+  pragma.exec(QStringLiteral("PRAGMA busy_timeout=5000"));
+  return db;
+}
+
+/**
  * @brief Opens the file, fetches column order + project JSON + timestamp index, ships it back.
  */
 void Sessions::PlayerLoaderWorker::openAndLoad(const QString& filePath, int sessionId)
@@ -317,18 +390,12 @@ void Sessions::PlayerLoaderWorker::openAndLoad(const QString& filePath, int sess
     Q_EMIT loaded(payload);
   };
 
-  QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", connName);
-  db.setDatabaseName(filePath);
-
-  if (!db.open()) {
+  QSqlDatabase db = openArchiveReadOnly(connName, filePath);
+  if (!db.isOpen()) {
     payload->error = db.lastError().text();
     closeAndEmit(db);
     return;
   }
-
-  QSqlQuery pragma(db);
-  pragma.exec("PRAGMA journal_mode=WAL");
-  pragma.exec("PRAGMA busy_timeout=5000");
 
   if (!resolveSessionId(db, sessionId, payload->error)) {
     closeAndEmit(db);

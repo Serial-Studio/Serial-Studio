@@ -239,7 +239,10 @@ QString MQTT::PublisherWorker::describeMqttError(QMqttClient::ClientError error)
 //==================================================================================================
 
 /**
- * @brief Drains both the frame queue and the raw-bytes queue.
+ * @brief Drains both the frame queue and the raw-bytes queue. The Sparkplug lane also re-declares
+ *        a registry that grew since the birth from HERE and not only from the data path: a project
+ *        edit dirties the registry on a structure signal, and a source that is momentarily idle
+ *        would otherwise leave the host holding aliases that no longer describe the node.
  */
 void MQTT::PublisherWorker::processData()
 {
@@ -253,6 +256,9 @@ void MQTT::PublisherWorker::processData()
 
   if (sparkplugActive()) {
     discardSuppressedPayloads();
+    if (m_sparkplug.needsRebirth())
+      publishSparkplugBirth();
+
     return;
   }
 

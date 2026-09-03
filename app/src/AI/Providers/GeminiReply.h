@@ -44,9 +44,6 @@ private:
   void onReplyFinished();
 
   void processChunk(const QJsonObject& chunk);
-  [[nodiscard]] bool streamBudgetBreached(qsizetype bytes);
-  void finishOk();
-  void finishWithError(const QString& message);
   void handleHttpError(int status);
 
 private:
@@ -55,7 +52,6 @@ private:
   QByteArray m_requestBody;
   QNetworkReply* m_reply;
   SseEventReader* m_sse;
-  bool m_finished;
 };
 
 }  // namespace AI

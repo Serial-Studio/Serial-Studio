@@ -93,8 +93,8 @@ if(SS_MIMALLOC_PLATFORM)
   FetchContent_Declare(
     mimalloc
     GIT_REPOSITORY https://github.com/microsoft/mimalloc.git
-    GIT_TAG        v3.4.5
-    GIT_SHALLOW    TRUE
+    # A tag is mutable; the commit it named when this pin was written is not.
+    GIT_TAG        acf2fdd329f9dc2a7ffe3f12a133fe7175e39378 # v3.4.5
   )
   FetchContent_MakeAvailable(mimalloc)
 

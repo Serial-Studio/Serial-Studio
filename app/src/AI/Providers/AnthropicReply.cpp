@@ -41,7 +41,6 @@ AI::AnthropicReply::AnthropicReply(QNetworkAccessManager& nam,
   , m_requestBody(requestBody)
   , m_reply(nullptr)
   , m_sse(new SseEventReader(this))
-  , m_finished(false)
 {
   connect(m_sse, &SseEventReader::frameReceived, this, &AnthropicReply::onSseEvent);
   connect(m_sse, &SseEventReader::parseError, this, &AnthropicReply::onSseError);
@@ -52,6 +51,7 @@ AI::AnthropicReply::AnthropicReply(QNetworkAccessManager& nam,
   req.setRawHeader("anthropic-version", "2023-06-01");
   req.setRawHeader("accept", "text/event-stream");
   req.setTransferTimeout(kInitialResponseTimeoutMs);
+  applyStreamPolicy(req);
 
   qCDebug(serialStudioAI) << "POST anthropic key=" << KeyVault::redact(apiKey)
                           << "body_bytes=" << requestBody.size();
@@ -86,7 +86,7 @@ void AI::AnthropicReply::abort()
  */
 void AI::AnthropicReply::onSseEvent(const QString& name, const QJsonObject& data)
 {
-  if (m_finished)
+  if (isFinished())
     return;
 
   if (name == QStringLiteral("message_start")) {
@@ -265,12 +265,18 @@ void AI::AnthropicReply::emitToolUseFromBlock(const BlockState& bs)
 }
 
 /**
- * @brief Logs and ends the stream when the SSE parser rejects a frame.
+ * @brief Skips malformed frames but ends the turn on unrecoverable stream-state loss, the same
+ *        rule the other backends follow: one bad frame is not worth the whole turn, and a buffer
+ *        reset must not ship a silently truncated reply as success.
  */
 void AI::AnthropicReply::onSseError(const QString& reason)
 {
   qCWarning(serialStudioAI) << "SSE parse error:" << reason;
+  if (!endsTurnOnParseError(reason))
+    return;
+
   finishWithError(tr("Stream parse error: %1").arg(reason));
+  abort();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -282,7 +288,7 @@ void AI::AnthropicReply::onSseError(const QString& reason)
  */
 void AI::AnthropicReply::onReplyReadyRead()
 {
-  if (!m_reply || m_finished)
+  if (!m_reply || isFinished())
     return;
 
   const auto status = m_reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
@@ -297,7 +303,7 @@ void AI::AnthropicReply::onReplyReadyRead()
  */
 void AI::AnthropicReply::onReplyFinished()
 {
-  if (m_finished)
+  if (isFinished())
     return;
 
   const auto status = m_reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
@@ -332,52 +338,8 @@ void AI::AnthropicReply::onReplyFinished()
  */
 void AI::AnthropicReply::onReplyError()
 {
-  if (!m_reply || m_finished)
+  if (!m_reply || isFinished())
     return;
 
   qCWarning(serialStudioAI) << "QNetworkReply error:" << m_reply->errorString();
-}
-
-//--------------------------------------------------------------------------------------------------
-// Finalization
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Charges bytes against the shared per-reply budget; on breach, ends the turn with a
- *        visible error and aborts the transport so Qt stops buffering the runaway stream.
- */
-bool AI::AnthropicReply::streamBudgetBreached(qsizetype bytes)
-{
-  if (!chargeStreamBudget(bytes))
-    return false;
-
-  finishWithError(
-    tr("Reply exceeded the %1 MB stream limit").arg(kMaxStreamedReplyBytes / (1024 * 1024)));
-  abort();
-  return true;
-}
-
-/**
- * @brief Marks the stream finished, emits @ref finished.
- */
-void AI::AnthropicReply::finishOk()
-{
-  if (m_finished)
-    return;
-
-  m_finished = true;
-  Q_EMIT finished();
-}
-
-/**
- * @brief Marks the stream finished with an error message.
- */
-void AI::AnthropicReply::finishWithError(const QString& message)
-{
-  if (m_finished)
-    return;
-
-  m_finished = true;
-  Q_EMIT errorOccurred(message);
-  Q_EMIT finished();
 }

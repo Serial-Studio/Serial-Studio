@@ -28,6 +28,7 @@
 #include <QSGVertexColorMaterial>
 
 #include "SSAssert.h"
+#include "UI/Widgets/GpuStroke.h"
 
 // Alpha ramp for the fill gradient (strong at the data extreme, visible at the baseline)
 constexpr double kMinAlpha = 0.12;
@@ -499,11 +500,11 @@ QSGNode* Widgets::PlotAreaFill::updatePaintNode(QSGNode* oldNode, UpdatePaintNod
   const int vertexCount = 8 * filled - 2;
   auto* geometry        = node->geometry();
   SS_ASSERT(geometry != nullptr, return node);
-  if (geometry->vertexCount() != vertexCount)
-    geometry->allocate(vertexCount);
+  (void)GpuStroke::reserveGeometry(geometry, vertexCount, 0);
 
   emitColumns(geometry->vertexDataAsColoredPoint2D(), vertexCount, w, h, refPositive, refNegative);
 
+  GpuStroke::padGeometryTail(geometry, vertexCount, 0);
   node->markDirty(QSGNode::DirtyGeometry);
   return node;
 }

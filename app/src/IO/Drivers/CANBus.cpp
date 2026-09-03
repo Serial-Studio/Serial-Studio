@@ -28,6 +28,7 @@
 #include <stdexcept>
 #include <utility>
 
+#include "IO/ConnectionManager.h"
 #include "IO/Drivers/CANBus/CanBackends.h"
 #include "IO/Drivers/CANBus/GsUsbCanBackend.h"
 #include "Misc/TimerEvents.h"
@@ -39,6 +40,9 @@ static constexpr quint32 kDefaultDataBitrate = 2000000;
 
 // DLC byte marking a reassembled long frame (a bus frame never exceeds 64)
 static constexpr quint8 kLongFrameDlcMarker = 0xFF;
+
+// Bus frames published in one chunk before the batch is flushed for latency
+static constexpr qsizetype kMaxBatchedFrames = 256;
 
 //--------------------------------------------------------------------------------------------------
 // Synthetic (libusb/serial) CAN backend plugin helpers
@@ -122,6 +126,7 @@ IO::Drivers::CANBus::CANBus()
   , m_dataBitrate(kDefaultDataBitrate)
   , m_hwStampAnchored(false)
   , m_hwStampOffset(CapturedData::SteadyClock::duration::zero())
+  , m_batchedFrames(0)
 {
   m_pluginList = enumerateCanPlugins();
 
@@ -833,8 +838,18 @@ void IO::Drivers::CANBus::onFramesReceived()
       if (m_tpReassembly && routeReassembly(can_id, extended, payload, stamp))
         continue;
 
-      publishReceivedData(serializeCanFrame(can_id, extended, payload), stamp);
+      if (m_batchedFrames == 0)
+        m_batchFirstStamp = stamp;
+
+      m_batchLastStamp = stamp;
+      m_frameBatch.append(serializeCanFrame(can_id, extended, payload));
+      ++m_batchedFrames;
+
+      if (m_batchedFrames >= kMaxBatchedFrames)
+        flushFrameBatch();
     }
+
+    flushFrameBatch();
   } catch (const std::exception& e) {
     qWarning() << "CAN frame read failed:" << e.what();
   } catch (...) {
@@ -893,6 +908,8 @@ void IO::Drivers::CANBus::publishReassembled(const quint32 can_id,
   SS_ASSERT(!payload.isEmpty(), return);
   SS_ASSERT_LOG(can_id <= 0x1FFFFFFFu);
 
+  flushFrameBatch();
+
   QByteArray data;
   data.reserve(payload.size() + 5);
   data.append(static_cast<char>(0x80 | ((can_id >> 24) & 0x1F)));
@@ -906,16 +923,61 @@ void IO::Drivers::CANBus::publishReassembled(const quint32 can_id,
 }
 
 /**
- * @brief Handles CAN bus device state changes by emitting configurationChanged().
+ * @brief Publishes one burst of bus frames as a single chunk carrying its frame count and spacing.
+ *        One CapturedData per frame put up to 8k queued emissions per second on the GUI thread;
+ *        the logicalFramesHint/frameStep pair is what lets the batch keep per-frame times.
+ */
+void IO::Drivers::CANBus::flushFrameBatch()
+{
+  if (m_batchedFrames == 0)
+    return;
+
+  auto step = std::chrono::nanoseconds(1);
+  if (m_batchedFrames > 1) {
+    const auto span =
+      std::chrono::duration_cast<std::chrono::nanoseconds>(m_batchLastStamp - m_batchFirstStamp);
+    step = std::max(std::chrono::nanoseconds(1), span / (m_batchedFrames - 1));
+  }
+
+  const qsizetype frames = m_batchedFrames;
+  m_batchedFrames        = 0;
+
+  publishReceivedData(std::move(m_frameBatch), m_batchFirstStamp, step, frames);
+  m_frameBatch = QByteArray();
+}
+
+/**
+ * @brief Handles CAN bus device state changes. An UNCONNECTED transition on an established link is
+ *        a drop, not a dial verdict: it goes through the manager like every other driver's drop,
+ *        queued, because this runs inside QCanBusDevice's own emission.
  */
 void IO::Drivers::CANBus::onStateChanged(QCanBusDevice::CanBusDeviceState state)
 {
   if (state == QCanBusDevice::ConnectedState)
     reportOpenFinished(true);
-  else if (state == QCanBusDevice::UnconnectedState)
+
+  const bool dropped = (state == QCanBusDevice::UnconnectedState) && !openReportArmed();
+  if (state == QCanBusDevice::UnconnectedState)
     reportOpenFinished(false, m_device ? m_device->errorString() : QString());
 
   Q_EMIT configurationChanged();
+
+  if (!dropped)
+    return;
+
+  reportDropToManager();
+}
+
+/**
+ * @brief Routes a bus that went Unconnected on an established link to the manager, which closes
+ *        the device and republishes the state. Queued: this runs inside QCanBusDevice's own
+ *        emission, and the manager destroys this driver.
+ */
+void IO::Drivers::CANBus::reportDropToManager()
+{
+  static auto& connectionManager = ConnectionManager::instance();
+  QMetaObject::invokeMethod(
+    this, [this] { connectionManager.disconnectDevice(this); }, Qt::QueuedConnection);
 }
 
 /**

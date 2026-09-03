@@ -248,6 +248,8 @@ Widgets::ExtensionData::ExtensionData(const QString& extensionId,
 
   static auto& projectModel = DataModel::ProjectModel::instance();
   connect(&m_dashboard, &UI::Dashboard::updated, this, &Widgets::ExtensionData::updateData);
+  connect(
+    &m_dashboard, &UI::Dashboard::widgetCountChanged, this, &Widgets::ExtensionData::rebuildRows);
   connect(&projectModel,
           &DataModel::ProjectModel::widgetSettingsChanged,
           this,
@@ -500,15 +502,20 @@ void Widgets::ExtensionData::updateData()
   if (m_paused || !valid())
     return;
 
-  const auto rows = collectRows();
-  if (rows.count() != m_lastRowCount) [[unlikely]] {
+  const int count = sourceDatasetCount();
+  if (count != m_lastRowCount) [[unlikely]] {
     rebuildRows();
     return;
   }
 
   bool changed = false;
-  for (int i = 0; i < rows.count(); ++i)
-    changed |= m_rowsModel->updateRow(i, rows.at(i));
+  ExtensionRow lead;
+  for (int i = 0; i < count; ++i) {
+    const ExtensionRow row  = buildVolatileRow(datasetAt(i));
+    changed                |= m_rowsModel->updateRow(i, row);
+    if (i == 0)
+      lead = row;
+  }
 
   const auto title = currentTitle();
   if (m_title != title) {
@@ -516,7 +523,7 @@ void Widgets::ExtensionData::updateData()
     changed = true;
   }
 
-  changed |= refreshLead(rows.isEmpty() ? ExtensionRow() : rows.first());
+  changed |= refreshLead(lead);
 
   if (changed)
     Q_EMIT updated();
@@ -611,9 +618,46 @@ QVector<Widgets::ExtensionRow> Widgets::ExtensionData::collectRows() const
 }
 
 /**
- * @brief Builds one row from a dashboard dataset copy.
+ * @brief Number of datasets the widget currently exposes, read from the dashboard rather than
+ *        from the model, so a structure change is visible before the model is reseeded.
  */
-Widgets::ExtensionRow Widgets::ExtensionData::buildRow(const DataModel::Dataset& dataset) const
+int Widgets::ExtensionData::sourceDatasetCount() const
+{
+  if (!valid())
+    return 0;
+
+  if (!m_groupScope)
+    return 1;
+
+  return static_cast<int>(GET_GROUP(m_type, m_bucketIndex).datasets.size());
+}
+
+/**
+ * @brief The dashboard's copy of dataset @p index of this widget.
+ */
+const DataModel::Dataset& Widgets::ExtensionData::datasetAt(const int index) const
+{
+  static const DataModel::Dataset empty;
+  if (!valid() || index < 0)
+    return empty;
+
+  if (!m_groupScope)
+    return index == 0 ? GET_DATASET(m_type, m_bucketIndex) : empty;
+
+  const auto& group = GET_GROUP(m_type, m_bucketIndex);
+  if (static_cast<std::size_t>(index) >= group.datasets.size())
+    return empty;
+
+  return group.datasets[static_cast<std::size_t>(index)];
+}
+
+/**
+ * @brief Builds the fields a tick can change. The jump-button list is deliberately absent: it
+ *        walks the whole widget map per dataset, and only a structure change can move it, so a
+ *        rebuild owns it and the per-tick pass never pays for it (F6).
+ */
+Widgets::ExtensionRow Widgets::ExtensionData::buildVolatileRow(
+  const DataModel::Dataset& dataset) const
 {
   ExtensionRow row;
   row.index         = dataset.index;
@@ -630,7 +674,16 @@ Widgets::ExtensionRow Widgets::ExtensionData::buildRow(const DataModel::Dataset&
   row.alarmsDefined = !dataset.alarmBands.empty();
   row.alarmSeverity = activeAlarmSeverity(dataset);
   row.text          = formatDatasetValue(dataset);
-  row.widgets       = datasetWidgets(dataset);
+  return row;
+}
+
+/**
+ * @brief Builds one row from a dashboard dataset copy.
+ */
+Widgets::ExtensionRow Widgets::ExtensionData::buildRow(const DataModel::Dataset& dataset) const
+{
+  ExtensionRow row = buildVolatileRow(dataset);
+  row.widgets      = datasetWidgets(dataset);
   return row;
 }
 

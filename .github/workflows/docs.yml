@@ -47,27 +47,30 @@ jobs:
   docs:
     runs-on: ubuntu-24.04
     name: '🔬 Docs'
+    permissions:
+      contents: read
     steps:
     #
     # No submodules: the verifiers only read first-party sources and docs
     #
     - name: '🧰 Checkout'
-      uses: actions/checkout@v5
+      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
 
     #
     # 3.11 with pip caching: every gate in this job is a Python script
     #
     - name: '🐍 Set up Python'
-      uses: actions/setup-python@v6
+      uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
       with:
         python-version: '3.11'
         cache: 'pip'
 
     #
-    # tests/requirements.txt is the single dependency manifest for the repo's Python tooling
+    # requirements.lock is the hash-pinned resolution of tests/requirements.txt; --require-hashes
+    # is what makes a CI run reproducible instead of a function of the day it ran
     #
     - name: '🐍 Install Python dependencies'
-      run: pip install -r tests/requirements.txt
+      run: pip install --require-hashes -r tests/requirements.lock
 
     #
     # The AI-facing docs are the tier that rots silently; this checks their paths, symbols and

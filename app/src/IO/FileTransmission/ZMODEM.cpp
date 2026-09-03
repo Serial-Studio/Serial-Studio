@@ -45,6 +45,7 @@ IO::Protocols::ZMODEM::ZMODEM(QObject* parent)
   , m_timeoutMs(15000)
   , m_maxRetries(10)
   , m_retryCount(0)
+  , m_chunkGeneration(0)
   , m_headerBytesExpected(0)
   , m_zdleEscape(false)
 {
@@ -447,16 +448,24 @@ void IO::Protocols::ZMODEM::sendZFILE()
 }
 
 /**
- * @brief Initiates async file data streaming as ZDATA subpackets.
+ * @brief Initiates async file data streaming as ZDATA subpackets. Each run gets its own
+ *        generation, so the queued continuation of a previous run (a ZRPOS mid-stream restarts
+ *        this) retires instead of interleaving two chains over one file position.
  */
 void IO::Protocols::ZMODEM::sendDataSubpackets()
 {
   SS_ASSERT_LOG(m_file.isOpen());
   SS_ASSERT_LOG(m_fileSize > 0);
 
+  ++m_chunkGeneration;
   m_state = State::SendingData;
 
   if (!m_file.seek(m_fileOffset)) [[unlikely]] {
+    m_state = State::Idle;
+    m_timeoutTimer.stop();
+    if (m_file.isOpen())
+      m_file.close();
+
     Q_EMIT finished(false, tr("Failed to seek to offset %1").arg(m_fileOffset));
     return;
   }
@@ -501,8 +510,14 @@ void IO::Protocols::ZMODEM::sendNextDataChunk()
       Q_EMIT writeRequested(buildSubpacket(chunk, kZCRCG));
   }
 
-  if (!m_file.atEnd() && m_state == State::SendingData)
-    QTimer::singleShot(0, this, &ZMODEM::sendNextDataChunk);
+  if (!m_file.atEnd() && m_state == State::SendingData) {
+    const auto generation = m_chunkGeneration;
+    QTimer::singleShot(0, this, [this, generation] {
+      if (generation == m_chunkGeneration)
+        sendNextDataChunk();
+    });
+  }
+
   else if (m_state == State::SendingData)
     sendZEOF();
 }
@@ -596,11 +611,13 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
         if (m_file.isOpen())
           m_file.close();
 
+        Q_EMIT protocolError();
         Q_EMIT statusMessage(tr("Too many errors, transfer aborted"));
         Q_EMIT finished(false, tr("Maximum retries exceeded"));
         return;
       }
 
+      Q_EMIT protocolError();
       Q_EMIT statusMessage(tr("NAK received, retrying (%1/%2)…")
                              .arg(QString::number(m_retryCount), QString::number(m_maxRetries)));
 
@@ -827,6 +844,7 @@ void IO::Protocols::ZMODEM::handleTimeout()
     return;
   }
 
+  Q_EMIT protocolError();
   Q_EMIT statusMessage(tr("Timeout, retrying (%1/%2)…")
                          .arg(QString::number(m_retryCount), QString::number(m_maxRetries)));
 

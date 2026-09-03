@@ -26,6 +26,7 @@
 #include <QTimer>
 #include <QVariantMap>
 
+#include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
 #include "Misc/IconEngine.h"
 
@@ -86,16 +87,23 @@ static void applyTimerMode(QTimer* timer,
  */
 UI::DashboardTools::DashboardTools(QSettings& settings,
                                    IO::ConnectionManager& ioManager,
+                                   DataModel::ProjectModel& projectModel,
                                    QObject* parent)
   : QObject(parent)
   , m_settings(settings)
   , m_ioManager(ioManager)
+  , m_projectModel(projectModel)
   , m_persistSettings(true)
   , m_clockEnabled(false)
   , m_stopwatchEnabled(false)
   , m_terminalEnabled(false)
   , m_notificationLogEnabled(false)
-{}
+{
+  connect(&m_projectModel,
+          &DataModel::ProjectModel::actionDataChanged,
+          this,
+          &UI::DashboardTools::refreshActionsFromProject);
+}
 
 //--------------------------------------------------------------------------------------------------
 // Dashboard tools (terminal, notification log, clock, stopwatch)
@@ -329,6 +337,32 @@ void UI::DashboardTools::configureActions(const DataModel::Frame& frame)
   if (frame.groups.size() <= 0)
     return;
 
+  QVector<DataModel::Action> actions;
+  for (const auto& action : frame.actions)
+    actions.append(action);
+
+  rebuildActions(actions);
+}
+
+/**
+ * @brief Rebuilds the action list from the project document. The template frame only refreshes
+ *        on a pipeline resync, so a payload or interval edit would otherwise not reach the
+ *        dashboard until the next auto-save (spec 0075 H4).
+ */
+void UI::DashboardTools::refreshActionsFromProject()
+{
+  QVector<DataModel::Action> actions;
+  for (const auto& action : m_projectModel.actions())
+    actions.append(action);
+
+  rebuildActions(actions);
+}
+
+/**
+ * @brief Replaces the action list and its timers with @p actions.
+ */
+void UI::DashboardTools::rebuildActions(const QVector<DataModel::Action>& actions)
+{
   m_actions.clear();
   m_actions.squeeze();
 
@@ -343,7 +377,7 @@ void UI::DashboardTools::configureActions(const DataModel::Frame& frame)
   m_timers.clear();
   m_repeatCounters.clear();
 
-  for (const auto& action : frame.actions)
+  for (const auto& action : actions)
     m_actions.append(action);
 
   if (!m_ioManager.isConnected()) {

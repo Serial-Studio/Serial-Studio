@@ -28,6 +28,7 @@
 #include <QString>
 #include <QTimer>
 
+#include "IO/AsyncTcpDial.h"
 #include "IO/Drivers/OpcUaTypes.h"
 
 struct UA_Client;
@@ -70,8 +71,9 @@ public:
     QString certificatePath;
     QString privateKeyPath;
     int mode;
+    bool allowPlaintextPassword;
 
-    Identity() : mode(0) {}
+    Identity() : mode(0), allowPlaintextPassword(false) {}
   };
 
   explicit OpcUaSession(QObject* parent = nullptr);
@@ -126,6 +128,7 @@ public:
 
 private slots:
   void pump();
+  void onResolveFinished(bool ok, const QString& reason);
 
 private:
   /**
@@ -174,6 +177,9 @@ private:
 
   void teardown();
   void startPump();
+  void applyPumpCadence();
+  void startResolution();
+  [[nodiscard]] QString dialUrl() const;
   [[nodiscard]] bool ensureClient(const OpcUaTypes::Endpoint& endpoint, const Identity& identity);
   void requestEndpoints();
   void failDial(const QString& reason);
@@ -199,6 +205,7 @@ private:
   QString m_endpointUrl;
   QString m_lastReason;
   QTimer* m_pump;
+  AsyncTcpDial m_resolver;
   UA_Client* m_client;
   OpcUaTypes::SecurityMode m_securityMode;
   OpcUaTypes::TrustFailure m_trustFailure;

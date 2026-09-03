@@ -40,6 +40,7 @@
 #include "UI/Dashboard.h"
 #include "UI/Widgets/AudioExport.h"
 #include "UI/Widgets/FFTWindow.h"
+#include "UI/Widgets/Waterfall/WaterfallRingTexture.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constants
@@ -52,98 +53,6 @@ static constexpr float kEpsSquared     = 1e-24f;
 static constexpr int kSmoothingWindow  = 3;
 static constexpr int kHalfSmoothWindow = kSmoothingWindow / 2;
 static constexpr double kLn10          = 2.302585092994046;
-
-//--------------------------------------------------------------------------------------------------
-// Static helpers
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Linearly interpolates a color from per-channel LUT arrays of length n.
- */
-QRgb Widgets::Waterfall::interpolateLut(
-  const double* r, const double* g, const double* b, int n, double t)
-{
-  const double f = t * (n - 1);
-  const int i    = qBound(0, static_cast<int>(f), n - 2);
-  const double s = f - i;
-  const int rr   = static_cast<int>((r[i] + (r[i + 1] - r[i]) * s) * 255.0);
-  const int gg   = static_cast<int>((g[i] + (g[i + 1] - g[i]) * s) * 255.0);
-  const int bb   = static_cast<int>((b[i] + (b[i + 1] - b[i]) * s) * 255.0);
-
-  return qRgb(qBound(0, rr, 255), qBound(0, gg, 255), qBound(0, bb, 255));
-}
-
-/**
- * @brief Returns the RGB color for a given color map and normalized magnitude.
- */
-QRgb Widgets::Waterfall::sampleColorMap(int map, double t)
-{
-  t = qBound(0.0, t, 1.0);
-
-  switch (map) {
-    case Viridis: {
-      static constexpr double r[] = {
-        0.267, 0.282, 0.253, 0.207, 0.164, 0.135, 0.135, 0.267, 0.478, 0.741, 0.993};
-      static constexpr double g[] = {
-        0.005, 0.100, 0.265, 0.371, 0.471, 0.567, 0.659, 0.749, 0.821, 0.873, 0.906};
-      static constexpr double b[] = {
-        0.329, 0.529, 0.529, 0.553, 0.557, 0.553, 0.518, 0.440, 0.318, 0.150, 0.144};
-      return interpolateLut(r, g, b, 11, t);
-    }
-
-    case Inferno: {
-      static constexpr double r[] = {0.001, 0.099, 0.301, 0.527, 0.733, 0.882, 0.973, 0.988};
-      static constexpr double g[] = {0.000, 0.034, 0.064, 0.117, 0.214, 0.388, 0.626, 0.998};
-      static constexpr double b[] = {0.014, 0.299, 0.434, 0.395, 0.276, 0.118, 0.034, 0.645};
-      return interpolateLut(r, g, b, 8, t);
-    }
-
-    case Magma: {
-      static constexpr double r[] = {0.001, 0.146, 0.421, 0.715, 0.928, 0.987, 0.987};
-      static constexpr double g[] = {0.000, 0.060, 0.139, 0.215, 0.473, 0.749, 0.991};
-      static constexpr double b[] = {0.014, 0.347, 0.516, 0.475, 0.502, 0.622, 0.749};
-      return interpolateLut(r, g, b, 7, t);
-    }
-
-    case Plasma: {
-      static constexpr double r[] = {0.050, 0.286, 0.530, 0.741, 0.892, 0.969, 0.940};
-      static constexpr double g[] = {0.030, 0.010, 0.140, 0.347, 0.560, 0.789, 0.975};
-      static constexpr double b[] = {0.527, 0.629, 0.586, 0.415, 0.227, 0.105, 0.131};
-      return interpolateLut(r, g, b, 7, t);
-    }
-
-    case Turbo: {
-      static constexpr double r[] = {0.190, 0.275, 0.247, 0.085, 0.152, 0.617, 0.964, 0.974, 0.479};
-      static constexpr double g[] = {0.072, 0.366, 0.703, 0.916, 0.988, 0.983, 0.787, 0.317, 0.016};
-      static constexpr double b[] = {0.232, 0.804, 0.964, 0.757, 0.357, 0.141, 0.180, 0.108, 0.011};
-      return interpolateLut(r, g, b, 9, t);
-    }
-
-    case Jet: {
-      const double v = t;
-      const double r = qBound(0.0, qMin(4.0 * v - 1.5, 4.5 - 4.0 * v), 1.0);
-      const double g = qBound(0.0, qMin(4.0 * v - 0.5, 3.5 - 4.0 * v), 1.0);
-      const double b = qBound(0.0, qMin(4.0 * v + 0.5, 2.5 - 4.0 * v), 1.0);
-      return qRgb(
-        static_cast<int>(r * 255.0), static_cast<int>(g * 255.0), static_cast<int>(b * 255.0));
-    }
-
-    case Hot: {
-      const double v = t;
-      const double r = qBound(0.0, 3.0 * v, 1.0);
-      const double g = qBound(0.0, 3.0 * v - 1.0, 1.0);
-      const double b = qBound(0.0, 3.0 * v - 2.0, 1.0);
-      return qRgb(
-        static_cast<int>(r * 255.0), static_cast<int>(g * 255.0), static_cast<int>(b * 255.0));
-    }
-
-    case Grayscale:
-    default: {
-      const int v = static_cast<int>(t * 255.0);
-      return qRgb(v, v, v);
-    }
-  }
-}
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & destructor
@@ -166,11 +75,10 @@ Widgets::Waterfall::Waterfall(const int index, QQuickItem* parent)
   , m_halfRange(1.0)
   , m_scaleIsValid(false)
   , m_dragging(false)
-  , m_textureDirty(true)
+  , m_releaseRenderResources(false)
+  , m_imageReleased(false)
   , m_outerBgNode(nullptr)
   , m_innerBgNode(nullptr)
-  , m_specNodeA(nullptr)
-  , m_specNodeB(nullptr)
   , m_overlayNode(nullptr)
   , m_campbellMode(false)
   , m_yDatasetUniqueId(0)
@@ -193,6 +101,7 @@ Widgets::Waterfall::Waterfall(const int index, QQuickItem* parent)
   setFlag(ItemHasContents, true);
   setAcceptedMouseButtons(Qt::LeftButton);
   setAcceptHoverEvents(true);
+  rebuildColorLut();
 
   if (VALIDATE_WIDGET(SerialStudio::DashboardWaterfall, m_index)) {
     const auto& dataset = GET_DATASET(SerialStudio::DashboardWaterfall, m_index);
@@ -401,7 +310,7 @@ QString Widgets::Waterfall::colorMapName(int index) const
  */
 QColor Widgets::Waterfall::colorAt(double normalized) const
 {
-  return QColor(sampleColorMap(m_view.colorMap(), normalized));
+  return QColor(WaterfallColorMap::sample(m_view.colorMap(), normalized));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -425,12 +334,24 @@ void Widgets::Waterfall::setColorMap(const int map)
   if (!m_view.setColorMap(map))
     return;
 
+  rebuildColorLut();
   if (!m_image.isNull() && !m_filledOnce && m_writeRow == 0)
-    m_image.fill(sampleColorMap(m_view.colorMap(), 0.0));
+    m_image.fill(m_colorLut[0]);
 
-  m_textureDirty = true;
+  m_spectrogram.markAll();
   Q_EMIT colorMapChanged();
   update();
+}
+
+/**
+ * @brief Bakes the active color map into the 256-entry table the row colorizer indexes.
+ */
+void Widgets::Waterfall::rebuildColorLut()
+{
+  m_colorLut = WaterfallColorMap::buildLut(m_view.colorMap());
+  SS_ASSERT(
+    m_colorLut.size() == static_cast<std::size_t>(WaterfallColorMap::kLutSize),
+    m_colorLut.assign(static_cast<std::size_t>(WaterfallColorMap::kLutSize), qRgb(0, 0, 0)));
 }
 
 /**
@@ -539,8 +460,8 @@ void Widgets::Waterfall::clearHistory()
   m_writeRow   = 0;
   m_filledOnce = false;
   if (!m_image.isNull()) {
-    m_image.fill(sampleColorMap(m_view.colorMap(), 0.0));
-    m_textureDirty = true;
+    m_image.fill(m_colorLut[0]);
+    m_spectrogram.markAll();
   }
 
   update();
@@ -658,17 +579,38 @@ void Widgets::Waterfall::rebuildHistoryImage()
   const int width  = qMax(1, m_size / 2);
   const int height = qMax(1, m_historySize);
   m_image          = QImage(width, height, QImage::Format_RGB32);
-  m_image.fill(sampleColorMap(m_view.colorMap(), 0.0));
-  m_textureDirty = true;
-  m_topRow       = 0;
-  m_writeRow     = 0;
-  m_filledOnce   = false;
+  m_image.fill(m_colorLut[0]);
+  m_topRow        = 0;
+  m_writeRow      = 0;
+  m_filledOnce    = false;
+  m_imageReleased = false;
+
+  m_lastRow.clear();
+  m_spectrogram.reset(height);
 }
 
 /**
- * @brief Writes a new spectrum row into the ring: the newest row's physical position is
- *        m_topRow and paint() recomposes the logical order, so a row insert costs O(width)
- *        instead of the old O(width x height) full-image memmove.
+ * @brief Drops the spectrogram image and the row bookkeeping when the widget goes off screen. A
+ *        hidden waterfall stops receiving rows anyway (updateData early-returns), so holding the
+ *        image only pinned megabytes per widget; the next show rebuilds it from the floor color.
+ */
+void Widgets::Waterfall::releaseHistoryImage()
+{
+  m_image = QImage();
+  m_lastRow.clear();
+  m_lastRow.shrink_to_fit();
+  m_spectrogram.release();
+
+  m_topRow        = 0;
+  m_writeRow      = 0;
+  m_filledOnce    = false;
+  m_imageReleased = true;
+}
+
+/**
+ * @brief Writes a new spectrum row into the ring: the newest row's physical position is m_topRow
+ *        and the quads recompose the logical order, so a row insert costs O(width) instead of the
+ *        old O(width x height) full-image memmove.
  */
 void Widgets::Waterfall::writeRow(const float* dbValues, int bins)
 {
@@ -713,22 +655,22 @@ void Widgets::Waterfall::paintRowInto(int physicalRow, const float* dbValues, in
   SS_ASSERT(dbValues != nullptr, return);
   SS_ASSERT(physicalRow >= 0 && physicalRow < m_image.height(), return);
 
-  const int map          = m_view.colorMap();
   const int imageWidth   = m_image.width();
   const float minDb      = static_cast<float>(m_view.minDb());
   const float invDbRange = m_view.invDbRange();
   const int writableBins = qMin(bins, imageWidth);
-  m_textureDirty         = true;
+  const int lastEntry    = WaterfallColorMap::kLutSize - 1;
+  const QRgb* lut        = m_colorLut.data();
   QRgb* scan             = reinterpret_cast<QRgb*>(m_image.scanLine(physicalRow));
+  m_spectrogram.markRow(physicalRow);
 
   for (int x = 0; x < writableBins; ++x) {
-    const float v  = (dbValues[x] - minDb) * invDbRange;
-    const double t = qBound(0.0, static_cast<double>(v), 1.0);
-    scan[x]        = sampleColorMap(map, t);
+    const float v = (dbValues[x] - minDb) * invDbRange;
+    scan[x]       = lut[qBound(0, static_cast<int>(v * lastEntry + 0.5f), lastEntry)];
   }
 
   if (writableBins < imageWidth) {
-    const QRgb floor = sampleColorMap(map, 0.0);
+    const QRgb floor = lut[0];
     for (int x = writableBins; x < imageWidth; ++x)
       scan[x] = floor;
   }
@@ -784,9 +726,10 @@ void Widgets::Waterfall::computeSmoothedRow(int spectrumSize)
 }
 
 /**
- * @brief Pulls the latest time-domain samples, runs FFT, pushes a new row. The plan and history
- *        image are sized from the ring's capacity, never its fill level, so a filling ring cannot
- *        thrash the plan or wipe the spectrogram; the unfilled tail is zero-padded instead.
+ * @brief Pulls the latest time-domain samples, runs FFT, pushes a new row. Plan and image size
+ *        from the ring's capacity, never its fill level. A spectrum identical to the previous
+ *        tick's writes no row at all -- an idle source's row is bit-identical (R15.1); Campbell
+ *        mode is exempt, another dataset's value places its rows.
  */
 void Widgets::Waterfall::updateData()
 {
@@ -807,7 +750,8 @@ void Widgets::Waterfall::updateData()
   if (newSize != m_size) {
     allocateFftPlan(newSize);
     rebuildHistoryImage();
-    Q_EMIT historySizeChanged();
+  } else if (m_imageReleased) {
+    rebuildHistoryImage();
   }
 
   if (!m_plan)
@@ -839,12 +783,25 @@ void Widgets::Waterfall::updateData()
   const int spectrumSize = m_size / 2;
   computeSmoothedRow(spectrumSize);
 
+  bool overlay_changed = false;
   if (m_overlay.hasMarkers() && spectrumSize > 0)
-    m_overlay.updateMarkerStates(m_smoothed.data(), spectrumSize);
+    overlay_changed =
+      m_overlay.updateMarkerStates(m_smoothed.data(), spectrumSize) && m_view.markersVisible();
 
   const float* row_data = imageRow(m_smoothed.data(), spectrumSize);
   if (!row_data)
     return;
+
+  const bool row_changed =
+    WaterfallRingTexture::captureRowIfChanged(row_data, spectrumSize, m_lastRow);
+  const bool write_row = row_changed || m_campbellMode;
+  if (!write_row && !overlay_changed)
+    return;
+
+  if (!write_row) {
+    markAxisDirty();
+    return;
+  }
 
   if (m_campbellMode && m_image.height() > 0) {
     const auto& datasets = m_dashboard.datasets();
@@ -864,7 +821,10 @@ void Widgets::Waterfall::updateData()
     writeRow(row_data, spectrumSize);
   }
 
-  markAxisDirty();
+  if (overlay_changed)
+    markAxisDirty();
+  else
+    update();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -881,32 +841,23 @@ QSGNode* Widgets::Waterfall::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeDa
   Q_UNUSED(data)
 
   const QRectF outerRect(0, 0, width(), height());
-  if (outerRect.isEmpty() || !window()) {
+  if (outerRect.isEmpty() || !window() || m_releaseRenderResources) {
     delete oldNode;
-    m_outerBgNode = nullptr;
-    m_innerBgNode = nullptr;
-    m_specNodeA   = nullptr;
-    m_specNodeB   = nullptr;
-    m_overlayNode = nullptr;
+    releaseRenderResources();
     return nullptr;
   }
 
   auto* root = oldNode;
   if (!root) {
-    root           = new QSGNode;
-    m_outerBgNode  = nullptr;
-    m_innerBgNode  = nullptr;
-    m_specNodeA    = nullptr;
-    m_specNodeB    = nullptr;
-    m_overlayNode  = nullptr;
-    m_textureDirty = true;
+    root = new QSGNode;
+    releaseRenderResources();
   }
 
   SS_ASSERT(root != nullptr, return nullptr);
 
   root->removeAllChildNodes();
   syncBackgroundNodes(root, m_overlay.plotRect());
-  syncSpectrogramNodes(root, m_overlay.plotRect());
+  m_spectrogram.sync(root, window(), m_image, computeSourceRect(), m_overlay.plotRect(), m_topRow);
   syncOverlayNode(root);
 
   return root;
@@ -948,96 +899,17 @@ void Widgets::Waterfall::syncBackgroundNodes(QSGNode* root, const QRectF& plotRe
 }
 
 /**
- * @brief Appends one spectrogram quad. The caller owns node creation and texture assignment,
- *        so a quad can never reach the graph carrying a texture pointer freed by its partner.
+ * @brief Forgets every cached scene-graph pointer after the tree they belonged to was destroyed,
+ *        and re-arms a full upload. Never deletes: the nodes are the root's children, so the root
+ *        already took them with it.
  */
-void Widgets::Waterfall::appendSpectrogramQuad(QSGSimpleTextureNode*& slot,
-                                               QSGNode* root,
-                                               const QRectF& dstRect,
-                                               const QRectF& srcRect)
+void Widgets::Waterfall::releaseRenderResources()
 {
-  SS_ASSERT(root != nullptr, return);
-  SS_ASSERT(slot != nullptr, return);
-  SS_ASSERT(slot->texture() != nullptr, return);
-
-  slot->setRect(dstRect);
-  slot->setSourceRect(srcRect);
-  root->appendChildNode(slot);
-}
-
-/**
- * @brief Draws the ring-ordered history as textured quads, so the GPU samples the spectrogram
- *        instead of the CPU rescaling it every tick. The wrap split reuses the arithmetic the
- *        painter path used, so the seam lands on the same row.
- */
-void Widgets::Waterfall::syncSpectrogramNodes(QSGNode* root, const QRectF& plotRect)
-{
-  SS_ASSERT(root != nullptr, return);
-
-  const QRectF src = computeSourceRect();
-  if (m_image.isNull() || plotRect.isEmpty() || src.isEmpty()) {
-    delete m_specNodeB;
-    delete m_specNodeA;
-    m_specNodeB = nullptr;
-    m_specNodeA = nullptr;
-    return;
-  }
-
-  if (!m_specNodeA) {
-    m_specNodeA = new QSGSimpleTextureNode;
-    m_specNodeA->setOwnsTexture(true);
-    m_specNodeA->setFiltering(QSGTexture::Linear);
-    m_textureDirty = true;
-  }
-
-  if (m_textureDirty) {
-    m_specNodeA->setTexture(window()->createTextureFromImage(m_image));
-    if (m_specNodeB)
-      m_specNodeB->setTexture(m_specNodeA->texture());
-
-    m_textureDirty = false;
-  }
-
-  const double h     = m_image.height();
-  const double wrapY = h - m_topRow;
-
-  QRectF srcTop = src;
-  bool split    = false;
-  if (m_topRow != 0 && src.bottom() <= wrapY)
-    srcTop = src.translated(0.0, m_topRow);
-  else if (m_topRow != 0 && src.top() >= wrapY)
-    srcTop = src.translated(0.0, m_topRow - h);
-  else if (m_topRow != 0)
-    split = true;
-
-  if (!split) {
-    appendSpectrogramQuad(m_specNodeA, root, plotRect, srcTop);
-    delete m_specNodeB;
-    m_specNodeB = nullptr;
-    return;
-  }
-
-  const double fracTop = (wrapY - src.top()) / src.height();
-  const double splitY  = plotRect.top() + plotRect.height() * fracTop;
-  const QRectF dstTop(plotRect.left(), plotRect.top(), plotRect.width(), splitY - plotRect.top());
-  const QRectF dstBottom(plotRect.left(), splitY, plotRect.width(), plotRect.bottom() - splitY);
-  const QRectF topRect(src.left(), src.top() + m_topRow, src.width(), wrapY - src.top());
-  const QRectF bottomRect(src.left(), 0.0, src.width(), src.bottom() - wrapY);
-
-  appendSpectrogramQuad(m_specNodeA, root, dstTop, topRect);
-
-  if (!m_specNodeB) {
-    // code-verify off
-    // Owned by the root once appended. This node aliases node A's texture and must never own
-    // it, or the shared QSGTexture would be freed twice.
-    m_specNodeB = new QSGSimpleTextureNode;
-    // code-verify on
-    m_specNodeB->setOwnsTexture(false);
-    m_specNodeB->setFiltering(QSGTexture::Linear);
-  }
-
-  m_specNodeB->setTexture(m_specNodeA->texture());
-  appendSpectrogramQuad(m_specNodeB, root, dstBottom, bottomRect);
+  m_outerBgNode = nullptr;
+  m_innerBgNode = nullptr;
+  m_overlayNode = nullptr;
+  m_spectrogram.forgetNodes();
+  m_releaseRenderResources = false;
 }
 
 /**
@@ -1429,6 +1301,27 @@ void Widgets::Waterfall::geometryChange(const QRectF& newGeom, const QRectF& old
   QQuickItem::geometryChange(newGeom, oldGeom);
   if (newGeom.size() != oldGeom.size())
     markAxisDirty();
+}
+
+/**
+ * @brief Releases the spectrogram image and every GPU resource when the widget leaves the screen,
+ *        rebuilding both lazily when it returns (R15.1). A hidden waterfall already skipped its
+ *        FFT but kept a multi-megabyte image and a live texture; the scene graph frees the texture
+ *        on the render thread at the updatePaintNode this update() schedules.
+ */
+void Widgets::Waterfall::itemChange(ItemChange change, const ItemChangeData& value)
+{
+  QQuickItem::itemChange(change, value);
+
+  if (change != ItemVisibleHasChanged)
+    return;
+
+  if (!value.boolValue) {
+    releaseHistoryImage();
+    m_releaseRenderResources = true;
+  }
+
+  update();
 }
 
 /**

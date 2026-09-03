@@ -74,6 +74,37 @@
   return (type < names.count()) ? names[type] : QStringLiteral("Unknown");
 }
 
+/**
+ * @brief Modbus function code a register-type index reads with; the driver stamps the same code
+ *        into every published frame, so the generated parser can match on it.
+ */
+[[nodiscard]] static int functionCodeLabel(const quint8 type)
+{
+  if (type == 1)
+    return 0x04;
+
+  if (type == 2)
+    return 0x01;
+
+  if (type == 3)
+    return 0x02;
+
+  return 0x03;
+}
+
+/**
+ * @brief Byte count one group's reply carries: two octets per register, one bit per coil packed
+ *        eight to the octet. It is the second half of the (function code, byte count) pair the
+ *        generated parser resynchronises on.
+ */
+[[nodiscard]] static int replyByteCount(const IO::Drivers::ModbusRegisterGroup& group)
+{
+  if (group.registerType <= 1)
+    return group.count * 2;
+
+  return (group.count + 7) / 8;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Construction
 //--------------------------------------------------------------------------------------------------
@@ -178,6 +209,53 @@ QJsonObject IO::Drivers::ModbusProjectGenerator::buildProject(
 }
 
 /**
+ * @brief Emits the Lua table naming each group's function code and reply byte count, in poll order.
+ *        It is the only thing a frame carries that can identify its group, so the resync helper
+ *        matches against it rather than trusting the frame counter alone.
+ */
+QString IO::Drivers::ModbusProjectGenerator::buildGroupTable() const
+{
+  QString code;
+  code += QStringLiteral("local groups = {\n");
+  for (const auto& group : std::as_const(m_groups))
+    code += QStringLiteral("  { fc = %1, bytes = %2 },\n")
+              .arg(QString::number(functionCodeLabel(group.registerType)),
+                   QString::number(replyByteCount(group)));
+
+  code += QStringLiteral("}\n\n");
+  return code;
+}
+
+/**
+ * @brief Emits the resync helper. It corrects the frame counter when the arriving frame's function
+ *        code and byte count name exactly ONE other group: an ambiguous pair leaves the counter
+ *        alone, because guessing between two identically shaped groups would move readings onto the
+ *        wrong datasets as surely as the desync it is trying to repair.
+ */
+QString IO::Drivers::ModbusProjectGenerator::buildResyncHelper() const
+{
+  QString code;
+  code += QStringLiteral("local function resync(fc, bytes, current)\n");
+  code += QStringLiteral("  local expected = groups[current + 1]\n");
+  code += QStringLiteral("  if expected ~= nil and expected.fc == fc "
+                         "and expected.bytes == bytes then\n");
+  code += QStringLiteral("    return current\n");
+  code += QStringLiteral("  end\n\n");
+  code += QStringLiteral("  local matches = 0\n");
+  code += QStringLiteral("  local found = current\n");
+  code += QStringLiteral("  for i = 1, #groups do\n");
+  code += QStringLiteral("    if groups[i].fc == fc and groups[i].bytes == bytes then\n");
+  code += QStringLiteral("      matches = matches + 1\n");
+  code += QStringLiteral("      found = i - 1\n");
+  code += QStringLiteral("    end\n");
+  code += QStringLiteral("  end\n\n");
+  code += QStringLiteral("  if matches == 1 then return found end\n");
+  code += QStringLiteral("  return current\n");
+  code += QStringLiteral("end\n\n");
+  return code;
+}
+
+/**
  * @brief Generates the Lua frame parser for the configured groups. The groups are polled in turn
  *        and every reply carries the same header, so the parser tracks the poll cycle itself. The
  *        cycle's modulo is appended rather than formatted: QString::arg() does not collapse "%%",
@@ -198,17 +276,31 @@ QString IO::Drivers::ModbusProjectGenerator::buildFrameParser() const
   code += QStringLiteral("--\n");
   code += QStringLiteral("-- Frame format: {slaveAddr, funcCode, byteCount, ...data}\n");
   code += QStringLiteral("-- Groups are polled sequentially; this parser tracks the cycle.\n");
+  code +=
+    QStringLiteral("-- A failed poll arrives as a zero-length frame: it advances the cycle\n");
+  code += QStringLiteral("-- and decodes nothing, so later frames keep their group.\n");
   code += QStringLiteral("--\n\n");
+
+  code += buildGroupTable();
 
   code += QStringLiteral("local values = {}\n");
   code += QStringLiteral("for i = 1, %1 do values[i] = 0 end\n").arg(totalDatasets());
   code += QStringLiteral("local currentGroup = 0\n\n");
 
+  code += buildResyncHelper();
+
   code += QStringLiteral("function parse(frame)\n");
   code += QStringLiteral("  if #frame < 3 then return values end\n\n");
+  code += QStringLiteral("  local byteCount = frame[3]\n");
+  code += QStringLiteral("  if byteCount == 0 then\n");
+  code += QStringLiteral("    currentGroup = (currentGroup + 1) % ");
+  code += QString::number(qMax(1, group_count));
+  code += QStringLiteral("\n    return values\n");
+  code += QStringLiteral("  end\n\n");
+  code += QStringLiteral("  currentGroup = resync(frame[2], byteCount, currentGroup)\n\n");
   code += QStringLiteral("  -- Extract data payload (skip slave addr, func code, byte count)\n");
   code += QStringLiteral("  local data = {}\n");
-  code += QStringLiteral("  for i = 4, #frame do data[#data + 1] = frame[i] end\n\n");
+  code += QStringLiteral("  for i = 4, 3 + byteCount do data[#data + 1] = frame[i] or 0 end\n\n");
 
   int dataset_offset = 0;
   for (int g = 0; g < group_count; ++g) {

@@ -96,7 +96,11 @@ template<typename Driver>
  * @brief Binds the factory to the UI-config registry whose instances the live listen-only
  *        drivers publish their status through.
  */
-IO::DriverFactory::DriverFactory(DriverUiRegistry& uiDrivers) : m_uiDrivers(uiDrivers) {}
+IO::DriverFactory::DriverFactory([[maybe_unused]] DriverUiRegistry& uiDrivers)
+#ifdef BUILD_COMMERCIAL
+  : m_uiDrivers(uiDrivers)
+#endif
+{}
 
 //--------------------------------------------------------------------------------------------------
 // Driver construction

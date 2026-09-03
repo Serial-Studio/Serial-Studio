@@ -28,12 +28,12 @@ FrameBuilder parse  (pipeline thread — moveToThread as the LAST composition-ro
   │ Native + PlainText takes the span fast lane (trySpanLane), unchanged by spec 0055:
   │ the pooled Frame is now a STAGING BUFFER, not the published object
   ▼
-FrameBuilder::stageFrameValues  (spec 0055)
+BlockStager::stage  (spec 0055; FrameBuilder's m_stager)
   │ appends one row into the per-source open DataBlock (pooled slot, pre-sized
   │ columns — plain stores, no allocation); flushes at kFrameBlockSampleCap or
   │ when the display tick moved PipelineHost's flush epoch
   ▼
-FrameBuilder::publishBlock
+BlockPublisher::publish  (FrameBuilder's m_publisher)
   ├─ PipelineHost block ring (SPSC, 256) ──> Dashboard::onDisplayTick drain
   └─ if m_anyAsyncSink: ONE clone_block_trimmed copy shared by every sink
        CSV / MDF4 / Sessions / API / gRPC / MQTT / AudioExport / InfluxDB
@@ -42,7 +42,7 @@ Dense sources (audio, or streamLane=on) — spec 0055 D8
   Driver SampleBlock ──> StreamWorker thread (transforms, FFT ring, latest values)
     │ blockReady(DataBlockPtr)   QUEUED to FrameBuilder::ingestStreamBlock
     ▼ (pipeline thread)
-  the SAME publishBlock tail as above
+  the SAME BlockPublisher::publish tail as above
 
 Structure travels separately
   FrameBuilder::publishStructureSnapshot on pool-generation bump only
@@ -79,6 +79,61 @@ timebase that is either a uniform grid (`dt != 0`) or explicit per-sample offset
 - **Consumers that still publish frames** (API wire, gRPC, MQTT) keep one `DataModel::FrameTemplate`
   per source and stamp block values onto it via `apply_block_sample()`, so the wire is unchanged
   (D5) while the storage underneath is not.
+
+### FrameBuilder's Lane Sub-objects (specs 0070, 0075)
+
+`FrameBuilder` is a facade over member sub-objects, one class per `.h/.cpp` pair under
+`app/src/DataModel/FrameBuilder/`. Three of them sit on the publish path, so a change to the lane
+usually belongs in one of them rather than in the facade:
+
+- **`DataModel::BlockStager` (`m_stager`)** owns everything between a parsed row and a finished
+  block: the pooled block slots (`kBlockPoolSlots` 64), the per-source open-block map, the
+  `kFrameBlockSampleCap` (64) and flush-epoch rules, and `flushAll()`. It reaches the facade only
+  through the four-hook `BlockStagerHost` interface (`noteStagingPoolExhausted`,
+  `publishStagedBlock`, `announceStructure`, `stagingFlushEpoch`) — which is what lets
+  `tst_frame_builder_staging` drive it against a stub host with none of FrameBuilder's link set.
+  Every method is pipeline-thread only; that is what makes the pool's `use_count()==1` free probe
+  exact and why none of this state carries a mutex or an atomic.
+- **`DataModel::BlockPublisher` (`m_publisher`)** owns the fan-out: the dashboard hop through
+  `PipelineHost::publishBlockToDashboard`, the cached `m_anyAsyncSink` flag
+  (`refreshSinkFlag()`), and the ONE `clone_block_trimmed` copy every async sink shares. The sinks
+  arrive as an injected `BlockPublisher::Sinks` struct resolved once in
+  `FrameBuilder::setupExternalConnections()`, so the publisher reaches no singleton of its own; it
+  binds `FrameBuilder::m_maskSinks` by `const bool&`, the same bool `BlockStager` binds, so the
+  two can never disagree about whether the sinks are masked.
+- **`DataModel::ReplayIngest`** owns the replay column map and both replay cell writers with
+  their shared value tail. Its writers are non-virtual on purpose: they run per dataset per
+  replayed row, so the `BlockStagerHost` pattern's vtable hop would land in that loop; it takes
+  the three facade members it needs by reference instead.
+
+The **frame** slot pool (`m_framePool` / `DataModel::FramePoolPolicy`) is a separate, older thing
+and it still exists: it is the per-source flat-table staging cache the span lane writes into
+before `BlockStager::stage` copies the row out. `claimPoolSlot` still returns `kInvalidSlotIdx`
+under saturation and the `notePoolExhausted()` + `make_shared<TimestampedFrame>` heap fallback is
+still the path a flat-out producer with a slow consumer takes. What is gone (spec 0075 A6) is the
+memory-budget machinery around it:
+<!-- claim-verify off -->
+`kFramePoolBudgetBytes` and `refreshFramePoolBudget` no longer exist, and
+`FramePoolPolicy::applyMemoryBudget` has no production caller. `FrameBuilder` no longer has a
+`frameChanged` signal either.
+<!-- claim-verify on -->
+
+### The Session Boundary (spec 0075 A2)
+
+Recording sinks close on **`FrameBuilder::sessionBoundary(bool connected, bool paused)`**, not on
+`connectedChanged` / `pausedChanged`. `emitSessionBoundary()` runs `m_stager.flushAll()` and
+*then* emits, and the order is the contract: the flush's SPSC enqueues happen-before the queued
+signal, so each sink's `close()` drains the samples staged while its file was open instead of
+finding the file gone and opening a second one for the tail. Both edges route through it —
+`onConnectedChanged` and the new `onPausedChanged` (which reads `PipelineHost::paused()`, the
+pipeline's own mirror, never ConnectionManager, which the GUI thread owns). It is session-edge
+rate, never per frame. `CSV::Export`, `MDF4::Export` and `Sessions::Export` all subscribe to it.
+
+A related bracket: a `syncFromProjectModel` that arrives while the pipeline is **parked** (an
+apiCall from a parser or transform script) is held in `m_deferredProjectSnapshot` and applied when
+`PipelineHost::parkedOnGuiChanged(false)` closes the bracket — **posted, never inline**, because
+applying it inline would run inside the script call that parked the pipeline, mid-frame, where
+`applyProjectSnapshot` clears `m_frame` under a live dataset pass.
 
 ### Cross-thread marshal protocol (spec 0051 M3)
 
@@ -172,6 +227,13 @@ export or report workers.
 - Export workers use `FrameConsumerWorkerBase::monotonicFrameNs(frame->timestamp, baseline)`
   as a strictly-increasing safety net against same-ns collisions on coarse clocks (Windows
   `steady_clock` ~15 ms). Not the source of truth.
+- **The tie-break is PER SOURCE** (`FrameConsumerWorkerBase::monotonicSourceNs(sourceId, ns)`,
+  backed by an `std::unordered_map<int, qint64>` cleared by `resetMonotonicClock()`). One global
+  last-offset let a fast source ratchet a slow one's timestamps forward, so two sources recorded
+  into one file no longer shared a clock (spec 0075 B1). A **uniform-grid** block never takes the
+  tie-break at all: its offsets are exactly derived (`t0 + i * dt`), and bumping them would
+  falsify the grid. Only an irregular block's `t0 + times[i]` passes through
+  `monotonicSourceNs`. `tst_csv_export_times` pins all four cases.
 - Debug order when timing looks wrong: driver stamp → `CapturedData` propagation → FrameReader
   split → FrameBuilder fan-out → export/report. Never patch PDF/Chart.js first.
 
@@ -184,7 +246,7 @@ export or report workers.
 | `CircularBuffer` | **SPSC only.** Producer/consumer are both the pipeline thread (processData appends and scans). Never MPMC. |
 | `FrameBuilder` / `FrameParser` | **Pipeline thread** after the composition root's final `relocateProcessingObjects()` step. All external mutators self-marshal; the parse path is plain same-thread calls. Ownership moves only through `PipelineHost::moveProcessingObjectsTo()`, which releases every script engine on the outgoing thread and rebuilds them via `readCode()` on the new one — a `lua_State` / `QJSEngine` used off its creating thread corrupts the QV4 heap (crashed the in-app benchmark's JS phase, 2026-08-12). |
 | `Dashboard` | **GUI thread only.** Ingests pooled `TimestampedFramePtr`s from the PipelineHost ring on the display tick (`onDisplayTick`). |
-| Export workers | Lock-free enqueue from the pipeline thread (single producer); batch on worker thread. Consume a detached `make_shared` copy of the frame (NOT the pooled slot), so a slow worker's backlog can't pin the pool. |
+| Export workers | Lock-free enqueue from the pipeline thread (single producer); batch on worker thread. Consume a detached `make_shared` copy of the frame (NOT the pooled slot), so a slow worker's backlog can't pin the pool. The threshold trigger is coalesced: `markFlushPosted()` / `clearFlushPost()` (an `std::atomic<bool>` on `FrameConsumerWorkerBase`, cleared at `processData` entry) means ONE pending `processData` event per drain cycle instead of one `QMetaCallEvent` allocation per enqueue past the threshold, and a consumer with a second SPSC lane shares that trigger through `noteSecondaryEnqueued(pending)`. |
 
 **In-pipeline signal hops must be `Qt::DirectConnection`.** A queued connection between two
 pipeline-thread objects costs a `QMetaCallEvent` alloc + event-queue insertion per emit; at
@@ -202,8 +264,10 @@ never per-frame signals. Known frame-path sites:
 The hotpath reads **cached** flags, never live getters: `m_operationMode`, `m_playerOpen`,
 `m_anyAsyncSink`, `m_captureLatestFrame`, `m_changeDriven`, and Dashboard
 `m_streamAvailable`. A new input to any of them must wire its change signal to the matching
-cache refresh (`updateStreamAvailable` / `refreshAnyAsyncSink` / the player lambdas) or
-frames/exports silently stop. **Two-thread refresh rule (spec 0051 M3):** FrameBuilder's
+cache refresh (`updateStreamAvailable` / `BlockPublisher::refreshSinkFlag` / the player lambdas) or
+frames/exports silently stop. `m_playerOpen` is the cache the two per-frame
+`isFinalValuePlayerOpen()` calls became (spec 0075 A5); the two getters are byte-identical
+implementations, which is what makes that substitution exact rather than approximate. **Two-thread refresh rule (spec 0051 M3):** FrameBuilder's
 refresh slots are pipeline-affine, so their connections auto-queue from GUI emitters —
 that is correct and cannot be "fixed" back to Direct: refreshes are FIFO in the pipeline's
 event queue, so they can lag in-flight frames by queued hops but can never be torn or
@@ -245,10 +309,14 @@ increments; nothing on it emits, allocates, locks, or calls into `Misc::ProblemC
   dataset differs from the last recorded one**, so a dataset that throws every frame allocates
   the message once rather than per frame (`noteTransformError`, `SS_COLD`).
 - **Reading them.** `DeviceManager::frameReader()` exposes the reader; `ConnectionManager::
-  linkStats()` sums the per-device counters into an `IO::LinkStats` POD. It is called from the
-  1 Hz tick only — no caching, no signal, no call site on the frame path. Script health comes
-  from `FrameParser::scriptStats()` (per-source engine counters) and `FrameBuilder::
-  parsedFrameCount()`.
+  linkStats()` forwards to `IO::DeviceTableQuery::linkStats()`, which sums the per-device counters
+  into an `IO::LinkStats` POD — the struct now lives in
+  `app/src/IO/ConnectionManager/DeviceTableQuery.h`, not in `ConnectionManager.h`. It is called
+  from the 1 Hz tick only — no caching, no signal, no call site on the frame path. Script health
+  comes from `FrameParser::scriptStats()` (per-source engine counters) and `FrameBuilder::
+  parsedFrameCount()`. The stream lane's own timeout counter (`StreamWorker::
+  transformTimeoutCount()`) is pulled the same way: a JS transform that overruns its budget
+  restores the raw samples and increments, it never signals.
 
 **A `FrameReader` is recreated, not reused** (`resetFrameReader()` / `DeviceManager::
 reconfigure()`), so the counters restart at zero on every connect and config change. The link
@@ -290,28 +358,29 @@ a debounced settle pass replays the exact trailing window through `replayChannel
 256 kHz is a CI gate, not a slogan. `--benchmark-hotpath` (`Benchmark::HotpathBenchmark`) drives the
 real parse pipeline in-process — `FrameReader` extraction → `FrameBuilder` → frame parser →
 per-dataset transforms → Dashboard — against a project loaded programmatically via
-`ProjectModel::loadFromJsonDocument`. Seven runs are gated, all tiered off `--min-fps` (default
+`ProjectModel::loadFromJsonDocument`. **Nine runs are gated**, all tiered off `--min-fps` (default
 256000) so a `--min-fps 1` PGO training run stays effectively ungated: **data-pipeline** at 4x
 (1.024 MHz; `runDataPipeline` — `FrameReader` extraction only, no parse; `HOTPATH_DATA_FPS`),
 **Native numeric** at 4x (1.024 MHz; `CFrameParser` delimited template,
 `HOTPATH_NATIVE_FPS`), **Native mixed** at 2x (512 kHz),
 **Lua numeric** at `min-fps` (256 kHz), **JS numeric** at half (128 kHz), **Lua mixed**
-(numeric + string columns) at half (128 kHz), **JS mixed** at a quarter (64 kHz).
-Numeric runs drop both the 3 string chunk columns and the string datagrid group from the project;
-mixed runs keep them. The synthetic chunk is built once *before* the timed loop (string columns
-included), so chunk/string construction never contaminates the measurement. The exit code (and
-`HOTPATH_PASS`) is nonzero if *any* gated run misses its tier. It then runs an ungated **Lua +
-all exporters live** pipeline (CSV/MDF4/Sessions/API/gRPC, mixed workload — the
-exporter-slowdown readout compares against the Lua-mixed baseline) for PGO
-training, and an ungated **Lua + dashboard** pipeline that loads an all-widget-types project, sets
+(numeric + string columns) at half (128 kHz), **JS mixed** at a quarter (64 kHz), and two
+**consumer-path floors** at half: **`lua+exporters`** and **`lua+dashboard`**. The seven parser
+tiers disable the `FrameBuilder` parse-budget guard (the spec-0051 fair-share governor, which a
+100%-duty benchmark would engage) via `setParseBudgetEnabled(false)` and run **no** exporters or
+dashboard, so they measure pure parse capacity. The two floors deliberately do not: they exist so
+a consumer-path collapse cannot ship silently, and they are set at 0.5x rather than at a tier
+because their consumers cannot drain faster than a flat-out producer, so the slot pool saturates
+into the heap-fallback path by design. Numeric runs drop both the 3 string chunk columns and the
+string datagrid group from the project; mixed runs keep them. The synthetic chunk is built once
+*before* the timed loop (string columns included), so chunk/string construction never contaminates
+the measurement. The exit code (and `HOTPATH_PASS`) is nonzero if *any* gated run misses its tier.
+Everything after those nine is ungated and exists for PGO training and code-path coverage: the
+`lua+dashboard(off)` isolation row that produces `HOTPATH_DASHBOARD_INGEST_COST`, an
+engine x {numeric,mixed} x {exporters,dashboard} coverage matrix, and the stream-lane phase
+(`HOTPATH_STREAM_*`). The dashboard rows load an all-widget-types project and set
 `HotpathBenchmark::active()` (which `Dashboard::streamAvailable()` honors so headless frames are
-accepted with no live device), arms every plot/FFT/multiplot/waterfall/GPS/3D widget, and trains
-the per-frame dashboard sub-hotpaths + a dashboard-slowdown readout. The gated runs disable the
-`FrameBuilder` parse-budget guard (the spec-0051 fair-share governor, which a 100%-duty benchmark
-would engage) via `setParseBudgetEnabled(false)` and run **no** exporters or dashboard,
-so the gate measures pure parse capacity; the exporter and dashboard phases are deliberately *not*
-gated (their consumers can't drain faster than a flat-out producer, so the 8192-slot pool exhausts
-into the heap-fallback path — that penalty is the point of the readout). Each run lasts until both
+accepted with no live device). Each run lasts until both
 the `--benchmark-frames` floor (default 1M) and the `--benchmark-seconds` window (default 10) are
 met. Throughput = `FrameBuilder::parsedFrameCount()` / elapsed; `--benchmark-output FILE` mirrors
 the report to a file (default: stdout only). `ci.yml` (the only workflow) runs it per push/PR

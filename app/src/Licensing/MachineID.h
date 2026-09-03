@@ -54,6 +54,7 @@ public:
   [[nodiscard]] const QString& machineId() const noexcept;
   [[nodiscard]] const QString& appVerMachineId() const noexcept;
   [[nodiscard]] quint64 machineSpecificKey() const noexcept;
+  [[nodiscard]] bool usedStoredFingerprint() const noexcept;
 
 private:
   void readInformation();
@@ -61,6 +62,7 @@ private:
   void saveLastGoodRawId(const QString& rawId, const QString& os);
 
 private:
+  bool m_usedStoredFingerprint;
   QSettings m_settings;
   QString m_machineId;
   QString m_appVerMachineId;

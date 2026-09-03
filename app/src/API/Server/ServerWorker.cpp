@@ -27,6 +27,7 @@
 #include <QThread>
 #include <utility>
 
+#include "API/CommandProtocol.h"
 #include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -48,6 +49,7 @@ API::ServerWorker::ServerWorker(moodycamel::ReaderWriterQueue<DataModel::DataBlo
                                 std::atomic<size_t>* queueSize)
   : DataModel::FrameConsumerWorker<DataModel::DataBlockPtr>(queue, enabled, queueSize)
   , m_droppedBroadcasts(0)
+  , m_backlogDisconnects(0)
 {}
 
 /**
@@ -60,6 +62,61 @@ API::ServerWorker::~ServerWorker() = default;
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief The per-socket outbound backlog every lane is measured against.
+ */
+qint64 API::ServerWorker::maxPendingWriteBytes() noexcept
+{
+  return kMaxApiPendingWriteBytes;
+}
+
+/**
+ * @brief The one cap decision every outbound lane goes through.
+ */
+bool API::ServerWorker::exceedsWriteCap(qint64 pendingBytes) noexcept
+{
+  return pendingBytes > kMaxApiPendingWriteBytes;
+}
+
+/**
+ * @brief Broadcasts skipped because their client stopped reading.
+ */
+quint64 API::ServerWorker::droppedBroadcasts() const noexcept
+{
+  return m_droppedBroadcasts;
+}
+
+/**
+ * @brief Clients dropped for an unbounded response backlog.
+ */
+quint64 API::ServerWorker::backlogDisconnects() const noexcept
+{
+  return m_backlogDisconnects;
+}
+
+/**
+ * @brief Drops a client whose response backlog passed the cap, and says so. Unlike a broadcast,
+ *        a command response answers something the client asked for: skipping it would leave that
+ *        client waiting forever, and keeping it queued grows the socket buffer without bound
+ *        because the client keeps asking (spec 0075 I6). True when the client was dropped.
+ */
+bool API::ServerWorker::dropBackloggedClient(QTcpSocket* socket, const QString& sessionId)
+{
+  SS_ASSERT(socket != nullptr, return true);
+
+  if (!exceedsWriteCap(socket->bytesToWrite())) [[likely]]
+    return false;
+
+  ++m_backlogDisconnects;
+  qWarning() << "[API] Client" << socket->peerAddress().toString() << ":" << socket->peerPort()
+             << "is not reading its responses;" << ErrorCode::WriteBacklog << "- backlog"
+             << socket->bytesToWrite() << "bytes exceeds" << kMaxApiPendingWriteBytes
+             << "- Disconnecting client";
+
+  disconnectSocket(socket, sessionId);
+  return true;
+}
+
+/**
  * @brief True while @p socket has room for another broadcast; an over-cap socket is skipped and
  *        counted, warned once per socket so a wedged client is visible without per-batch log spam
  *        and a second client's stall is not swallowed by the first one's warning. Skipping is
@@ -69,7 +126,7 @@ bool API::ServerWorker::underWriteCap(QTcpSocket* socket)
 {
   SS_ASSERT(socket != nullptr, return false);
 
-  if (socket->bytesToWrite() <= kMaxApiPendingWriteBytes) [[likely]]
+  if (!exceedsWriteCap(socket->bytesToWrite())) [[likely]]
     return true;
 
   ++m_droppedBroadcasts;
@@ -184,7 +241,8 @@ void API::ServerWorker::writeRawData(const QByteArray& data)
 }
 
 /**
- * @brief Broadcasts a lifecycle event JSON object to all connected API clients.
+ * @brief Broadcasts a lifecycle event JSON object to all connected API clients. Producer-paced
+ *        like every other broadcast, so an over-cap socket is skipped rather than grown (I6).
  */
 void API::ServerWorker::broadcastEvent(const QJsonObject& event)
 {
@@ -198,7 +256,7 @@ void API::ServerWorker::broadcastEvent(const QJsonObject& event)
 
   for (auto it = m_sockets.keyBegin(); it != m_sockets.keyEnd(); ++it) {
     auto* socket = *it;
-    if (socket && socket->isWritable())
+    if (socket && socket->isWritable() && underWriteCap(socket))
       socket->write(json);
   }
 }
@@ -216,7 +274,9 @@ void API::ServerWorker::onSocketReadyRead()
 
 /**
  * @brief Writes data to a specific socket (worker thread); dropped when the session id no
- *        longer matches, which means the target connection is gone.
+ *        longer matches, which means the target connection is gone. A client whose response
+ *        backlog passed the cap is dropped instead: this lane is the one a non-reading client
+ *        can grow without bound by issuing commands it never reads the answers to (I6).
  */
 void API::ServerWorker::writeToSocket(QTcpSocket* socket,
                                       const QString& sessionId,
@@ -224,8 +284,13 @@ void API::ServerWorker::writeToSocket(QTcpSocket* socket,
 {
   SS_ASSERT(!data.isEmpty(), return);
 
-  if (socket && m_sockets.value(socket) == sessionId && socket->isWritable())
-    socket->write(data);
+  if (!socket || m_sockets.value(socket) != sessionId || !socket->isWritable())
+    return;
+
+  if (dropBackloggedClient(socket, sessionId)) [[unlikely]]
+    return;
+
+  socket->write(data);
 }
 
 /**

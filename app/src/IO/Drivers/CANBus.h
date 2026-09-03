@@ -185,6 +185,8 @@ private:
   [[nodiscard]] CapturedData::SteadyTimePoint rebaseFrameTimestamp(
     qint64 stampUsec, CapturedData::SteadyTimePoint now) noexcept;
 
+  void flushFrameBatch();
+  void reportDropToManager();
   void publishReassembled(quint32 can_id,
                           const QByteArray& payload,
                           CapturedData::SteadyTimePoint stamp);
@@ -209,6 +211,11 @@ private:
 
   bool m_hwStampAnchored;
   CapturedData::SteadyClock::duration m_hwStampOffset;
+
+  qsizetype m_batchedFrames;
+  QByteArray m_frameBatch;
+  CapturedData::SteadyTimePoint m_batchFirstStamp;
+  CapturedData::SteadyTimePoint m_batchLastStamp;
 
   IsoTpReassembler m_isoTp;
   J1939TransportReassembler m_j1939;

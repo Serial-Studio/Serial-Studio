@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <QList>
 #include <QObject>
 
 namespace UI {
@@ -54,8 +55,8 @@ signals:
 private:
   explicit UISessionRegistry(QObject* parent = nullptr);
 
-  Taskbar* m_primaryTaskbar;
-  WindowManager* m_primaryWindowManager;
+  QList<Taskbar*> m_taskbars;
+  QList<WindowManager*> m_windowManagers;
 };
 
 }  // namespace UI

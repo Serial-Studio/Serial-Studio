@@ -356,56 +356,11 @@ Widgets.Pane {
       //
       // Context menu for code editor
       //
-      Menu {
+      CodeEditorMenu {
         id: contextMenu
 
-        MenuItem {
-          text: qsTr("Undo")
-          enabled: outputEditor.undoAvailable
-          onTriggered: outputEditor.undo()
-        }
-
-        MenuItem {
-          text: qsTr("Redo")
-          enabled: outputEditor.redoAvailable
-          onTriggered: outputEditor.redo()
-        }
-
-        MenuSeparator {}
-
-        MenuItem {
-          text: qsTr("Cut")
-          onTriggered: outputEditor.cut()
-        }
-
-        MenuItem {
-          text: qsTr("Copy")
-          onTriggered: outputEditor.copy()
-        }
-
-        MenuItem {
-          text: qsTr("Paste")
-          onTriggered: outputEditor.paste()
-        }
-
-        MenuSeparator {}
-
-        MenuItem {
-          text: qsTr("Select All")
-          onTriggered: outputEditor.selectAll()
-        }
-
-        MenuSeparator {}
-
-        MenuItem {
-          text: qsTr("Format Document")
-          onTriggered: outputEditor.formatDocument()
-        }
-
-        MenuItem {
-          text: qsTr("Format Selection")
-          onTriggered: outputEditor.formatSelection()
-        }
+        restoreFocus: false
+        codeEditor: outputEditor
       }
     }
   }

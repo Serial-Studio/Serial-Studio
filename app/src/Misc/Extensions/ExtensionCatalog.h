@@ -22,9 +22,11 @@
 #pragma once
 
 #include <QJsonObject>
+#include <QList>
 #include <QString>
 #include <QStringList>
 #include <QUrl>
+#include <QVariantList>
 #include <QVariantMap>
 
 /**
@@ -47,6 +49,16 @@ struct CatalogFilter {
 };
 
 /**
+ * @brief One installable file of a catalog v2 entry: where it goes, the digest an install
+ *        verifies the downloaded bytes against, and the size checked before hashing them.
+ */
+struct CatalogFile {
+  QString path;
+  QString sha256;
+  qint64 size = 0;
+};
+
+/**
  * @brief The install-state facts the catalog cannot derive from a manifest entry on its own; the
  *        facade supplies them per entry.
  */
@@ -61,6 +73,12 @@ struct EntryState {
 [[nodiscard]] QString currentPlatformKey();
 [[nodiscard]] int typeSortRank(const QString& type);
 [[nodiscard]] bool isLocalRepo(const QString& url);
+[[nodiscard]] bool isTrustedRepoUrl(const QString& url);
+[[nodiscard]] bool hasVerifiableFiles(const QVariantList& files);
+[[nodiscard]] bool digestMatches(const QByteArray& payload, const CatalogFile& file);
+[[nodiscard]] int compareVersions(const QString& remote, const QString& local);
+
+[[nodiscard]] QList<CatalogFile> parseFileList(const QVariantList& files, QString* rejectReason);
 [[nodiscard]] bool isSafePathComponent(const QString& component);
 [[nodiscard]] bool isPathSafe(const QString& filePath, const QString& baseDir);
 [[nodiscard]] QUrl resolveFileUrl(const QString& repoBaseUrl, const QString& relativePath);

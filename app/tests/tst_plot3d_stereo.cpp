@@ -29,7 +29,7 @@
 using namespace Widgets;
 
 /**
- * @brief One theme's Plot3D-relevant palette, as read from app/rcc/themes/*.json.
+ * @brief One theme's Plot3D-relevant palette, as read from the JSON files in app/rcc/themes.
  */
 struct ThemePalette {
   const char* name;

@@ -26,6 +26,7 @@
 #include "DataModel/Scripting/FrameParser.h"
 #include "IO/ConnectionManager.h"
 #include "IO/FrameReader.h"
+#include "Platform/AppPlatform.h"
 #include "SessionContext.h"
 #include "SSAssert.h"
 
@@ -199,6 +200,25 @@ void IO::PipelineHost::registerFrameReader(int deviceId, FrameReader* reader)
     reader,
     [this, deviceId, reader] { routeFrames(deviceId, reader); },
     Qt::DirectConnection);
+}
+
+/**
+ * @brief Asks the processing thread to claim the real-time scheduling band (spec 0075, N2). The
+ *        band is per thread and never inherited, so one queued startup post runs the registration
+ *        inside the thread, through an object that already lives there. Nothing is posted while
+ *        the pipeline still runs on the GUI thread -- boosting it is the defect being fixed.
+ */
+void IO::PipelineHost::registerIngestThread()
+{
+  SS_ASSERT(m_thread != nullptr, return);
+
+  if (!m_frameBuilder || m_frameBuilder->thread() != m_thread.get())
+    return;
+
+  QMetaObject::invokeMethod(
+    m_frameBuilder,
+    [] { Platform::AppPlatform::registerIngestThreadWithMmcss(); },
+    Qt::QueuedConnection);
 }
 
 /**
@@ -384,11 +404,19 @@ bool IO::PipelineHost::pipelineParkedOnGui() noexcept
 }
 
 /**
- * @brief Brackets the pipeline thread's blocking apiCall dispatch (set by ScriptApiCall only).
+ * @brief Brackets the pipeline thread's blocking apiCall dispatch (set by ScriptApiCall only) and
+ *        announces the edge on the pipeline thread. The bracket is the only moment a GUI-side
+ *        marshal that ran inline against the parked pipeline can be handed back to it (A3), so a
+ *        listener that deferred work while parked learns here that the pipeline is its own again.
  */
-void IO::PipelineHost::setPipelineParkedOnGui(bool parked) noexcept
+void IO::PipelineHost::setPipelineParkedOnGui(bool parked)
 {
   s_pipelineParkedOnGui.store(parked, std::memory_order_release);
+
+  if (tearingDown()) [[unlikely]]
+    return;
+
+  Q_EMIT instance().parkedOnGuiChanged(parked);
 }
 
 /**

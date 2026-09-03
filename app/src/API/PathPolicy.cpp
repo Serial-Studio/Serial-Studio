@@ -23,11 +23,55 @@
 
 #include <QDir>
 #include <QFileInfo>
+#include <QHash>
 #include <QStringList>
 
 #ifdef Q_OS_WIN
 #  include <windows.h>
 #endif
+
+//--------------------------------------------------------------------------------------------------
+// Declared path parameters
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Every command parameter the allowlist guards, in one place. The registry reads this at
+ *        registration time and enforces it once in execute(), so a handler never re-checks and a
+ *        new path-taking command cannot ship ungated (spec 0075 I3/I7). system.exec is absent on
+ *        purpose: it is control-script only and its program name is resolved from PATH, which no
+ *        allowlist root can contain.
+ */
+static const QHash<QString, QVector<API::PathParamPolicy>>& pathParamTable()
+{
+  // clang-format off
+  static const QHash<QString, QVector<API::PathParamPolicy>> kPathParamTable = {
+    {"project.open",                {{QStringLiteral("filePath"), false}}},
+    {"project.save",                {{QStringLiteral("filePath"), true}}},
+    {"csvPlayer.open",              {{QStringLiteral("filePath"), false}}},
+    {"mdf4Player.open",             {{QStringLiteral("filePath"), false}}},
+    {"sessions.openDatabase",       {{QStringLiteral("filePath"), true}}},
+    {"sessions.regress",            {{QStringLiteral("projectPath"), false}}},
+    {"licensing.activateOffline",   {{QStringLiteral("path"), false}}},
+    {"assistant.restore",           {{QStringLiteral("path"), false}}},
+    {"io.opcua.exportCertificate",  {{QStringLiteral("path"), true}}},
+    {"io.opcua.setUserCertificate", {{QStringLiteral("certificate"), false},
+                                     {QStringLiteral("key"), false}}},
+    {"io.process.setExecutable",    {{QStringLiteral("executable"), false}}},
+    {"io.process.setWorkingDir",    {{QStringLiteral("workingDir"), true}}},
+    {"io.process.setPipePath",      {{QStringLiteral("pipePath"), true}}},
+  };
+  // clang-format on
+
+  return kPathParamTable;
+}
+
+/**
+ * @brief The path parameters declared for one command; empty for a command that takes none.
+ */
+QVector<API::PathParamPolicy> API::declaredPathParams(const QString& command)
+{
+  return pathParamTable().value(command);
+}
 
 //--------------------------------------------------------------------------------------------------
 // Path validation

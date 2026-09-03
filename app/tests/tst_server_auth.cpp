@@ -45,9 +45,21 @@ class StubHost : public API::ReceptionHost {
 public:
   bool deviceConnected() const override { return connected; }
 
-  bool authorizeDeviceWrite() override { return consent; }
+  API::DeviceWriteVerdict authorizeDeviceWrite() override
+  {
+    return consent ? API::DeviceWriteVerdict::Allowed : API::DeviceWriteVerdict::Denied;
+  }
 
   bool verifyToken(const QByteArray& provided) const override { return provided == expectedToken; }
+
+  API::ConnectionState* stateFor(QTcpSocket* socket, const QString& sessionId) override
+  {
+    Q_UNUSED(socket);
+    if (!lastState || lastState->sessionId != sessionId)
+      return nullptr;
+
+    return lastState;
+  }
 
   qint64 writeToDevice(const QByteArray& data) override
   {
@@ -102,9 +114,10 @@ public:
     disconnectCodes.append(errorCode);
   }
 
-  bool consent   = true;
-  bool connected = true;
-  int closes     = 0;
+  bool consent                    = true;
+  bool connected                  = true;
+  int closes                      = 0;
+  API::ConnectionState* lastState = nullptr;
   QByteArray expectedToken;
   QList<QByteArray> responses;
   QList<QByteArray> deviceWrites;
@@ -159,10 +172,12 @@ private:
 API::ConnectionState TstServerAuth::authenticatedState()
 {
   API::ConnectionState state;
-  state.sessionId     = QStringLiteral("7");
-  state.peerAddress   = QStringLiteral("127.0.0.1");
-  state.peerPort      = 55000;
-  state.authenticated = true;
+  state.sessionId      = QStringLiteral("7");
+  state.peerAddress    = QStringLiteral("127.0.0.1");
+  state.peerPort       = 55000;
+  state.authenticated  = true;
+  state.handshakeSeen  = true;
+  state.firstBytesSeen = true;
   return state;
 }
 
@@ -315,10 +330,11 @@ void TstServerAuth::authHandshakeRejectsBadToken()
   API::ClientReception reception(host);
   auto state          = authenticatedState();
   state.authenticated = false;
+  host.lastState      = &state;
 
   const QByteArray attempt = QByteArrayLiteral("{\"type\":\"auth\",\"token\":\"bad\"}\n");
   for (int i = 0; i < kMaxAuthAttempts; ++i)
-    reception.consumeBytes(&socket, state, attempt);
+    reception.consumeBytes(&socket, state.sessionId, attempt);
 
   QVERIFY(!state.authenticated);
   QCOMPARE(state.authAttempts, kMaxAuthAttempts);
@@ -340,10 +356,11 @@ void TstServerAuth::authHandshakeAcceptsAndReplaysPipeline()
   API::ClientReception reception(host);
   auto state          = authenticatedState();
   state.authenticated = false;
+  host.lastState      = &state;
 
   reception.consumeBytes(
     &socket,
-    state,
+    state.sessionId,
     QByteArrayLiteral("{\"type\":\"auth\",\"token\":\"goodtoken\"}\n"
                       "{\"type\":\"command\",\"command\":\"api.getCommands\"}\n"));
 
@@ -376,7 +393,8 @@ void TstServerAuth::jsonMessageSizeLimit()
   QTcpSocket socket;
   StubHost host;
   API::ClientReception reception(host);
-  auto state = authenticatedState();
+  auto state     = authenticatedState();
+  host.lastState = &state;
 
   QByteArray oversized(kMaxApiMessageBytes + 1, 'x');
   QVERIFY(!reception.validateJsonMessage(&socket, state, oversized));
@@ -401,7 +419,8 @@ void TstServerAuth::jsonMessageDepthLimit()
   QTcpSocket socket;
   StubHost host;
   API::ClientReception reception(host);
-  auto state = authenticatedState();
+  auto state     = authenticatedState();
+  host.lastState = &state;
 
   const QByteArray shallow = QByteArray(kMaxApiJsonDepth, '[') + QByteArray(kMaxApiJsonDepth, ']');
   QVERIFY(reception.validateJsonMessage(&socket, state, shallow));
@@ -424,7 +443,8 @@ void TstServerAuth::jsonMessageRateLimit()
   QTcpSocket socket;
   StubHost host;
   API::ClientReception reception(host);
-  auto state = authenticatedState();
+  auto state     = authenticatedState();
+  host.lastState = &state;
 
   const QByteArray message = QByteArrayLiteral("{\"type\":\"command\",\"command\":\"api.ping\"}");
   for (int i = 0; i < kMaxApiMessagesPerWindow; ++i)
@@ -448,7 +468,8 @@ void TstServerAuth::rateLimitsByteWindow()
   QTcpSocket socket;
   StubHost host;
   API::ClientReception reception(host);
-  auto state = authenticatedState();
+  auto state     = authenticatedState();
+  host.lastState = &state;
 
   state.window.start();
   state.byteCount = kMaxApiBytesPerWindow - 1;
@@ -468,7 +489,8 @@ void TstServerAuth::rateLimitsBufferCap()
   QTcpSocket socket;
   StubHost host;
   API::ClientReception reception(host);
-  auto state = authenticatedState();
+  auto state     = authenticatedState();
+  host.lastState = &state;
 
   state.window.start();
   state.buffer = QByteArray(kMaxApiBufferBytes, 'x');
@@ -490,14 +512,15 @@ void TstServerAuth::noNewlineRawBufferReachesDevice()
   QTcpSocket socket;
   StubHost host;
   API::ClientReception reception(host);
-  auto state = authenticatedState();
+  auto state     = authenticatedState();
+  host.lastState = &state;
 
-  reception.consumeBytes(&socket, state, QByteArrayLiteral("AT+RESET"));
+  reception.consumeBytes(&socket, state.sessionId, QByteArrayLiteral("AT+RESET"));
   QCOMPARE(host.deviceWrites, QList<QByteArray>{QByteArrayLiteral("AT+RESET")});
   QVERIFY(state.buffer.isEmpty());
 
   host.consent = false;
-  reception.consumeBytes(&socket, state, QByteArrayLiteral("AT+AGAIN"));
+  reception.consumeBytes(&socket, state.sessionId, QByteArrayLiteral("AT+AGAIN"));
   QCOMPARE(host.deviceWrites.size(), qsizetype(1));
   QVERIFY(state.buffer.isEmpty());
 }
@@ -511,14 +534,15 @@ void TstServerAuth::rawLineOversizeClosesSocket()
   QTcpSocket socket;
   StubHost host;
   API::ClientReception reception(host);
-  auto state = authenticatedState();
+  auto state     = authenticatedState();
+  host.lastState = &state;
 
-  reception.consumeBytes(&socket, state, QByteArray(kMaxApiRawBytes + 1, 'x') + '\n');
+  reception.consumeBytes(&socket, state.sessionId, QByteArray(kMaxApiRawBytes + 1, 'x') + '\n');
   QCOMPARE(host.closes, 1);
   QCOMPARE(host.responses.size(), qsizetype(1));
   QVERIFY(host.deviceWrites.isEmpty());
 
-  reception.consumeBytes(&socket, state, QByteArrayLiteral("short\n"));
+  reception.consumeBytes(&socket, state.sessionId, QByteArrayLiteral("short\n"));
   QCOMPARE(host.deviceWrites, QList<QByteArray>{QByteArrayLiteral("short")});
 }
 

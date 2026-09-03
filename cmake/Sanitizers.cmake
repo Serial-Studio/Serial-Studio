@@ -15,6 +15,7 @@
 include_guard(GLOBAL)
 
 option(ENABLE_TSAN "ThreadSanitizer build (mutually exclusive with DEBUG_SANITIZER)" OFF)
+option(ENABLE_FUZZERS "Build the libFuzzer entry points under app/tests/fuzz (Clang only)" OFF)
 
 #---------------------------------------------------------------------------------------------------
 # Debug sanitizers (AddressSanitizer + UndefinedBehaviorSanitizer)
@@ -90,4 +91,37 @@ if(ENABLE_TSAN)
       -fsanitize=thread
    )
    message(STATUS "ThreadSanitizer ENABLED")
+endif()
+
+#---------------------------------------------------------------------------------------------------
+# libFuzzer instrumentation
+#---------------------------------------------------------------------------------------------------
+#
+# Coverage instrumentation for the fuzz entry points under app/tests/fuzz. -no-link is the
+# whole-project half: every translation unit is instrumented, and only the fuzz targets
+# themselves add -fsanitize=fuzzer at link time to pull in the driver's main().
+#
+# It composes with DEBUG_SANITIZER (ASan+UBSan) and that is how the sanitize CI job runs it. When
+# this option is OFF -- the default everywhere, including every ctest tier -- ss_add_fuzz_target()
+# still compiles the same entry points and replays the checked-in corpus through them under
+# QTest, so the seeds keep running on toolchains that have no libFuzzer.
+#
+# Usage:
+#   cmake .. -DENABLE_FUZZERS=ON -DDEBUG_SANITIZER=ON -DSS_BUILD_TESTS=ON \
+#            -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Debug
+#
+#---------------------------------------------------------------------------------------------------
+
+if(ENABLE_FUZZERS)
+   if(NOT CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+      message(FATAL_ERROR
+         "ENABLE_FUZZERS requires Clang (libFuzzer ships with it). "
+         "Configure with -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++.")
+   endif()
+   add_compile_options(
+      -fsanitize=fuzzer-no-link
+      -g
+      -fno-omit-frame-pointer
+   )
+   message(STATUS "libFuzzer instrumentation ENABLED (-fsanitize=fuzzer-no-link)")
 endif()

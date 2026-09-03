@@ -34,7 +34,6 @@ If the remote version is newer, the user is prompted to download and install the
 Add QSimpleUpdater as a subdirectory in your `CMakeLists.txt`:
 
 ```cmake
-# Disable tutorial/tests if you don't need them
 set(QSIMPLE_UPDATER_BUILD_TUTORIAL OFF CACHE BOOL "" FORCE)
 set(QSIMPLE_UPDATER_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 
@@ -46,8 +45,6 @@ Available CMake options:
 
 | Option                           | Default | Description                                      |
 |----------------------------------|---------|--------------------------------------------------|
-| `QSIMPLE_UPDATER_BUILD_TUTORIAL` | `OFF`   | Build the example/tutorial application.          |
-| `QSIMPLE_UPDATER_BUILD_TESTS`    | `ON`    | Build the unit tests.                            |
 | `QSIMPLE_UPDATER_BUILD_SHARED`   | `OFF`   | Build as a shared library instead of static.     |
 | `QSIMPLE_UPDATER_INSTALL`        | (auto)  | Generate install rules. `ON` when built top-level, `OFF` when embedded via `add_subdirectory()`. |
 | `QSU_QT_VERSION_MAJOR`           | (auto)  | Set to `5` or `6` to skip Qt auto-detection.     |
@@ -56,7 +53,7 @@ Available CMake options:
 
 1. Copy the QSimpleUpdater folder in your "3rd-party" folder.
 2. Include the QSimpleUpdater project include (*.pri*) file using the `include()` function.
-3. That's all! Check the [tutorial project](/tutorial) as a reference for your project.
+3. That's all! The [upstream tutorial project](https://github.com/alex-spataru/QSimpleUpdater/tree/master/tutorial) is a reference for your project.
 
 ## Building & Running Tests
 

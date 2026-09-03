@@ -22,6 +22,7 @@
 #include "MDF4/PlayerLoaderWorker.h"
 
 #include <algorithm>
+#include <deque>
 #include <map>
 #include <mdf/ichannel.h>
 #include <mdf/ichannelgroup.h>
@@ -52,6 +53,21 @@ static bool isStringChannel(const mdf::IChannel* channel)
 }
 
 /**
+ * @brief Returns true when @p channel is this file's time master. Serial Studio wrote masters with
+ *        no sync type until 4.1.0, which ASAM MDF 4.1 does not allow, so both the conforming Time
+ *        sync and that legacy zero are accepted and every 4.1.0 archive keeps replaying (B10). A
+ *        master synced to angle, distance or sample index is not a clock and is left as data.
+ */
+[[nodiscard]] static bool isTimeMaster(const mdf::IChannel* channel)
+{
+  if (!channel || channel->Type() != mdf::ChannelType::Master)
+    return false;
+
+  const auto sync = channel->Sync();
+  return sync == mdf::ChannelSyncType::Time || sync == mdf::ChannelSyncType::None;
+}
+
+/**
  * @brief Returns true when the channel name ends with the " (raw)" suffix.
  */
 static bool hasRawSuffix(const std::string& chName)
@@ -74,7 +90,7 @@ static void scanChannelGroup(mdf::IChannelGroup* cg,
     if (!ch)
       continue;
 
-    if (isSerialStudioFile && ch->Type() == mdf::ChannelType::Master) {
+    if (isSerialStudioFile && isTimeMaster(ch)) {
       groupMaster = ch;
       ++masterChannelCount;
       continue;
@@ -167,141 +183,115 @@ static std::vector<CgInfo> buildCgInfos(
 }
 
 /**
- * @brief Observer that caches channel values during MDF4 data reading; the ns-quantized
- *        cache key is the multi-channel-group frame-merge contract (bit-identical to the
- *        legacy in-player observer). Returns false from OnSample on cancel to abort ReadData.
+ * @brief One channel group's decode, stored the way it is read: its own instants plus one
+ *        contiguous vector per channel it carries. This is what bounds the loader's memory to
+ *        samples x channels-IN-THE-GROUP. The previous keyed cache stored a vector over ALL
+ *        channels per distinct instant, which for a ten-minute 48 kHz stream recording is ~29 M
+ *        instants and several gigabytes before the columnar copy was even allocated (B6).
  */
-class SampleCacheObserver : public mdf::ISampleObserver {
+struct GroupColumns {
+  bool hasClock = false;                     ///< Group carried a time master
+  std::vector<uint64_t> keys;                ///< Merge key per row (ns instant, or sample index)
+  std::vector<double> timestamps;            ///< Seconds per row; empty unless the group is clocked
+  std::vector<uint32_t> order;               ///< Row order; empty when keys are already ascending
+  std::vector<std::size_t> channelIndex;     ///< Global channel index per local column
+  std::vector<bool> isString;                ///< Per local column
+  std::vector<std::vector<double>> numeric;  ///< Per local column (empty for string columns)
+  std::vector<std::vector<QString>> text;    ///< Per local column (empty for numeric columns)
+};
+
+/**
+ * @brief Appends one row per sample into a channel group's columns. Row-aligned by construction:
+ *        every local column is pushed exactly once per accepted record.
+ */
+class GroupColumnObserver : public mdf::ISampleObserver {
 public:
   /**
-   * @brief Constructs the observer and indexes per-group channels for fast lookup.
+   * @brief Constructs the observer bound to one channel group's data channels and record id.
    */
-  SampleCacheObserver(const mdf::IDataGroup& dataGroup,
+  GroupColumnObserver(const mdf::IDataGroup& dataGroup,
                       MDF4::PlayerLoaderWorker* worker,
-                      std::map<uint64_t, std::vector<double>>& cache,
-                      std::map<uint64_t, std::vector<QString>>& stringCache,
-                      std::map<uint64_t, double>& timestampCache,
-                      std::map<uint64_t, std::vector<bool>>& activeChannels,
-                      const std::vector<mdf::IChannel*>& allChannels,
+                      GroupColumns& out,
                       const std::vector<mdf::IChannel*>& groupChannels,
                       mdf::IChannel* groupTimeChannel,
                       uint64_t recordId)
     : mdf::ISampleObserver(dataGroup)
     , m_worker(worker)
-    , m_cache(cache)
-    , m_stringCache(stringCache)
-    , m_timestampCache(timestampCache)
-    , m_activeChannels(activeChannels)
-    , m_allChannels(allChannels)
+    , m_out(out)
     , m_groupChannels(groupChannels)
     , m_groupTimeChannel(groupTimeChannel)
     , m_recordId(recordId)
-    , m_hasStringChannels(false)
   {
-    for (size_t i = 0; i < m_allChannels.size(); ++i) {
-      for (auto* ch : m_groupChannels) {
-        if (m_allChannels[i] == ch) {
-          m_channelIndexMap[ch] = i;
-          break;
-        }
-      }
-    }
-
-    for (auto* ch : m_groupChannels)
-      m_hasStringChannels = m_hasStringChannels || isStringChannel(ch);
+    SS_ASSERT_LOG(worker != nullptr);
+    SS_ASSERT_LOG(m_out.numeric.size() == m_groupChannels.size());
   }
 
   /**
-   * @brief Caches per-channel sample values keyed by timestamp (or sample index as fallback).
+   * @brief Appends this record's instant and one value per channel of the group.
    */
   bool OnSample(uint64_t sample, uint64_t record_id, const std::vector<uint8_t>& record) override
   {
     if (record_id != m_recordId)
       return true;
 
-    uint64_t cacheKey = sample;
+    uint64_t key = sample;
     if (m_groupTimeChannel) {
-      double ts          = 0.0;
-      const bool success = GetEngValue(*m_groupTimeChannel, record_id, record, ts);
-      if (!success)
-        GetChannelValue(*m_groupTimeChannel, record_id, record, ts);
+      double ts = 0.0;
+      if (!GetEngValue(*m_groupTimeChannel, record_id, record, ts))
+        (void)GetChannelValue(*m_groupTimeChannel, record_id, record, ts);
 
-      cacheKey                   = static_cast<uint64_t>(ts * 1'000'000'000.0);
-      m_timestampCache[cacheKey] = ts;
+      key = static_cast<uint64_t>(ts * 1'000'000'000.0);
+      m_out.timestamps.push_back(ts);
     }
 
-    auto cacheIt = m_cache.find(cacheKey);
-    if (cacheIt == m_cache.end())
-      cacheIt = m_cache.emplace(cacheKey, std::vector<double>(m_allChannels.size(), 0.0)).first;
+    m_out.keys.push_back(key);
 
-    auto activeIt = m_activeChannels.find(cacheKey);
-    if (activeIt == m_activeChannels.end())
-      activeIt =
-        m_activeChannels.emplace(cacheKey, std::vector<bool>(m_allChannels.size(), false)).first;
-
-    auto& values = cacheIt->second;
-    auto& active = activeIt->second;
-
-    std::vector<QString>* strings = nullptr;
-    if (m_hasStringChannels) {
-      auto strIt = m_stringCache.find(cacheKey);
-      if (strIt == m_stringCache.end())
-        strIt = m_stringCache.emplace(cacheKey, std::vector<QString>(m_allChannels.size())).first;
-
-      strings = &strIt->second;
-    }
-
-    for (auto* channel : m_groupChannels) {
-      if (!channel)
-        continue;
-
-      auto it = m_channelIndexMap.find(channel);
-      if (it == m_channelIndexMap.end())
-        continue;
-
-      if (strings && isStringChannel(channel)) {
-        std::string text;
-        const bool success = GetEngValue(*channel, record_id, record, text);
-        if (!success)
-          (void)GetChannelValue(*channel, record_id, record, text);
-
-        (*strings)[it->second] = QString::fromStdString(text);
-        active[it->second]     = true;
-        continue;
-      }
-
-      double value       = 0.0;
-      const bool success = GetEngValue(*channel, record_id, record, value);
-
-      if (!success) {
-        const bool channelSuccess = GetChannelValue(*channel, record_id, record, value);
-        if (!channelSuccess)
-          value = 0.0;
-      }
-
-      values[it->second] = value;
-      active[it->second] = true;
-    }
+    for (std::size_t c = 0; c < m_groupChannels.size(); ++c)
+      appendChannel(c, record_id, record);
 
     return m_worker->recordTick();
   }
 
 private:
+  /**
+   * @brief Appends local column @p c's value for this record, always exactly one entry so the
+   *        group's columns stay row-aligned even for a channel the file cannot decode.
+   */
+  void appendChannel(std::size_t c, uint64_t record_id, const std::vector<uint8_t>& record)
+  {
+    auto* channel = m_groupChannels[c];
+
+    if (m_out.isString[c]) {
+      std::string text;
+      if (channel) {
+        if (!GetEngValue(*channel, record_id, record, text))
+          (void)GetChannelValue(*channel, record_id, record, text);
+      }
+
+      m_out.text[c].push_back(QString::fromStdString(text));
+      return;
+    }
+
+    double value = 0.0;
+    if (channel) {
+      if (!GetEngValue(*channel, record_id, record, value))
+        if (!GetChannelValue(*channel, record_id, record, value))
+          value = 0.0;
+    }
+
+    m_out.numeric[c].push_back(value);
+  }
+
+private:
   MDF4::PlayerLoaderWorker* m_worker;
-  std::map<uint64_t, std::vector<double>>& m_cache;
-  std::map<uint64_t, std::vector<QString>>& m_stringCache;
-  std::map<uint64_t, double>& m_timestampCache;
-  std::map<uint64_t, std::vector<bool>>& m_activeChannels;
-  const std::vector<mdf::IChannel*>& m_allChannels;
+  GroupColumns& m_out;
   const std::vector<mdf::IChannel*>& m_groupChannels;
   mdf::IChannel* m_groupTimeChannel;
   uint64_t m_recordId;
-  std::map<mdf::IChannel*, size_t> m_channelIndexMap;
-  bool m_hasStringChannels;
 };
 
 /**
- * @brief Reads timestamp values from a single legacy master time channel.
+ * @brief Reads timestamp values from a single legacy master time channel into a per-sample vector.
  */
 class LegacyTimestampObserver : public mdf::ISampleObserver {
 public:
@@ -310,44 +300,39 @@ public:
    */
   LegacyTimestampObserver(const mdf::IDataGroup& dataGroup,
                           MDF4::PlayerLoaderWorker* worker,
-                          std::map<uint64_t, double>& timestampCache,
+                          std::vector<double>& timestamps,
                           mdf::IChannel* masterTimeChannel,
                           uint64_t recordId)
     : mdf::ISampleObserver(dataGroup)
     , m_worker(worker)
-    , m_timestampCache(timestampCache)
+    , m_timestamps(timestamps)
     , m_masterTimeChannel(masterTimeChannel)
     , m_recordId(recordId)
   {}
 
   /**
-   * @brief Records the master-channel timestamp for the given sample index.
+   * @brief Records the master-channel timestamp at the sample index it belongs to.
    */
   bool OnSample(uint64_t sample, uint64_t record_id, const std::vector<uint8_t>& record) override
   {
-    if (record_id != m_recordId)
+    if (record_id != m_recordId || !m_masterTimeChannel)
       return true;
 
-    if (!m_masterTimeChannel || m_timestampCache.find(sample) != m_timestampCache.end())
-      return true;
-
-    double timestamp   = 0.0;
-    const bool success = GetEngValue(*m_masterTimeChannel, record_id, record, timestamp);
-
-    if (!success) {
-      const bool channelSuccess =
-        GetChannelValue(*m_masterTimeChannel, record_id, record, timestamp);
-      if (!channelSuccess)
+    double timestamp = 0.0;
+    if (!GetEngValue(*m_masterTimeChannel, record_id, record, timestamp))
+      if (!GetChannelValue(*m_masterTimeChannel, record_id, record, timestamp))
         timestamp = 0.0;
-    }
 
-    m_timestampCache[sample] = timestamp;
+    if (sample >= m_timestamps.size())
+      m_timestamps.resize(static_cast<std::size_t>(sample) + 1, 0.0);
+
+    m_timestamps[static_cast<std::size_t>(sample)] = timestamp;
     return m_worker->recordTick();
   }
 
 private:
   MDF4::PlayerLoaderWorker* m_worker;
-  std::map<uint64_t, double>& m_timestampCache;
+  std::vector<double>& m_timestamps;
   mdf::IChannel* m_masterTimeChannel;
   uint64_t m_recordId;
 };
@@ -400,13 +385,16 @@ bool MDF4::PlayerLoaderWorker::recordTick()
 }
 
 /**
- * @brief Keyed accumulation maps shared by the observers (the ns-key merge state).
+ * @brief Decode state for one file: one column set per channel group, plus the single-master
+ *        timestamp vector the legacy (pre per-group master) layout needs.
  */
-struct DecodeCaches {
-  std::map<uint64_t, std::vector<double>> samples;
-  std::map<uint64_t, std::vector<QString>> strings;
-  std::map<uint64_t, double> timestamps;
-  std::map<uint64_t, std::vector<bool>> active;
+struct DecodeState {
+  // code-verify off
+  // A deque, not a vector: each observer holds a reference to its group's columns for the whole
+  // read, and a vector's growth would move them under the observers still appending rows.
+  // code-verify on
+  std::deque<GroupColumns> groups;
+  std::vector<double> legacyTimestamps;
 };
 
 /**
@@ -420,80 +408,206 @@ struct TimeConfig {
 };
 
 /**
- * @brief Converts one keyed frame's values into the columnar payload at @p sampleIndex.
+ * @brief Builds the ascending row order for a group whose keys are not already non-decreasing.
+ *        Returns an empty vector for the ordinary case, so the merge indexes rows directly and a
+ *        conforming recording never pays for the permutation.
  */
-static void appendFrameColumns(MDF4::PlayerDecodePayload& payload,
-                               const DecodeCaches& caches,
-                               uint64_t key,
-                               const std::vector<double>& values,
-                               uint64_t sampleIndex)
+[[nodiscard]] static std::vector<uint32_t> ascendingOrder(const std::vector<uint64_t>& keys)
 {
-  const auto strIt = caches.strings.find(key);
-  const auto actIt = caches.active.find(key);
+  if (std::is_sorted(keys.begin(), keys.end()))
+    return {};
 
-  const size_t channelCount = payload.channelIsString.size();
-  for (size_t c = 0; c < channelCount && c < values.size(); ++c) {
-    if (!payload.channelIsString[c])
-      payload.numeric[c][sampleIndex] = values[c];
-    else if (strIt != caches.strings.end() && c < strIt->second.size())
-      payload.text[c][sampleIndex] = strIt->second[c];
+  std::vector<uint32_t> order(keys.size());
+  for (std::size_t i = 0; i < order.size(); ++i)
+    order[i] = static_cast<uint32_t>(i);
 
-    if (actIt != caches.active.end() && c < actIt->second.size()) {
-      payload.active[c][sampleIndex] = actIt->second[c];
-      if (actIt->second[c] && static_cast<qsizetype>(c) < payload.channelSourceBit.size())
-        payload.rowSourceBits[static_cast<qsizetype>(sampleIndex)] |=
-          payload.channelSourceBit.at(static_cast<qsizetype>(c));
+  std::stable_sort(order.begin(), order.end(), [&keys](uint32_t lhs, uint32_t rhs) {
+    return keys[lhs] < keys[rhs];
+  });
+
+  return order;
+}
+
+/**
+ * @brief Row index of @p cursor inside @p group, honouring a permutation when one was needed.
+ */
+[[nodiscard]] static std::size_t groupRow(const GroupColumns& group, std::size_t cursor)
+{
+  return group.order.empty() ? cursor : static_cast<std::size_t>(group.order[cursor]);
+}
+
+/**
+ * @brief Writes one group's row into the merged payload row @p row: its values, its activity bits
+ *        and its contribution to the row's source mask. Channels of other groups keep the zero and
+ *        inactive state the payload was sized with, exactly as the keyed merge left them.
+ */
+static void writeGroupRow(MDF4::PlayerDecodePayload& payload,
+                          const GroupColumns& group,
+                          std::size_t sourceRow,
+                          std::size_t row)
+{
+  const std::size_t channelCount = payload.channelIsString.size();
+  for (std::size_t lc = 0; lc < group.channelIndex.size(); ++lc) {
+    const std::size_t gc = group.channelIndex[lc];
+    if (gc >= channelCount) [[unlikely]]
+      continue;
+
+    if (group.isString[lc]) {
+      if (sourceRow < group.text[lc].size())
+        payload.text[gc][row] = group.text[lc][sourceRow];
+    } else if (sourceRow < group.numeric[lc].size()) {
+      payload.numeric[gc][row] = group.numeric[lc][sourceRow];
     }
+
+    payload.active[gc][row] = true;
+    if (static_cast<qsizetype>(gc) < payload.channelSourceBit.size())
+      payload.rowSourceBits[static_cast<qsizetype>(row)] |=
+        payload.channelSourceBit.at(static_cast<qsizetype>(gc));
   }
 }
 
 /**
- * @brief Finalizes the keyed caches into the payload's columnar vectors, consuming the maps
- *        frame by frame so the keyed and columnar copies never coexist in full (bounds the
- *        load-time memory peak). Iteration order is key-ascending, matching the legacy
- *        recordIndex sort exactly.
+ * @brief Sizes the payload's columns for the merge's upper bound (every group's rows distinct).
  */
-static void convertToColumnar(MDF4::PlayerDecodePayload& payload, DecodeCaches& caches)
+static void sizePayloadColumns(MDF4::PlayerDecodePayload& payload, std::size_t rows)
 {
-  const size_t channelCount = payload.channelIsString.size();
-  const size_t frameCount   = caches.samples.size();
-  const bool useTimestamps  = payload.isSerialStudioFile && !caches.timestamps.empty();
-
-  payload.timestamps.reserve(frameCount);
+  const std::size_t channelCount = payload.channelIsString.size();
+  payload.timestamps.reserve(rows);
   payload.numeric.resize(channelCount);
   payload.text.resize(channelCount);
   payload.active.resize(channelCount);
-  for (size_t c = 0; c < channelCount; ++c) {
-    if (payload.channelIsString[c])
-      payload.text[c].resize(frameCount);
-    else
-      payload.numeric[c].resize(frameCount, 0.0);
 
-    payload.active[c].resize(frameCount, false);
+  for (std::size_t c = 0; c < channelCount; ++c) {
+    if (payload.channelIsString[c])
+      payload.text[c].resize(rows);
+    else
+      payload.numeric[c].resize(rows, 0.0);
+
+    payload.active[c].resize(rows, false);
   }
 
-  payload.rowSourceBits.resize(static_cast<qsizetype>(frameCount), 0);
+  payload.rowSourceBits.resize(static_cast<qsizetype>(rows), 0);
+}
 
-  for (uint64_t sampleIndex = 0; sampleIndex < frameCount && !caches.samples.empty();
-       ++sampleIndex) {
-    const auto it      = caches.samples.begin();
-    const uint64_t key = it->first;
+/**
+ * @brief Trims the payload's columns to the rows the merge actually produced.
+ */
+static void trimPayloadColumns(MDF4::PlayerDecodePayload& payload, std::size_t rows)
+{
+  for (auto& column : payload.numeric)
+    column.resize(rows);
 
-    double ts = static_cast<double>(sampleIndex) * 0.001;
-    if (useTimestamps) {
-      const auto timeIt = caches.timestamps.find(key);
-      if (timeIt != caches.timestamps.end())
-        ts = timeIt->second;
+  for (auto& column : payload.text)
+    column.resize(rows);
+
+  for (auto& column : payload.active)
+    column.resize(rows);
+
+  payload.rowSourceBits.resize(static_cast<qsizetype>(rows));
+}
+
+/**
+ * @brief One merged output row in flight: which payload row it is, the instant it merges on, and
+ *        the seconds the row will carry once a clocked group has contributed.
+ */
+struct MergeRow {
+  std::size_t row    = 0;
+  uint64_t key       = 0;
+  bool useTimestamps = false;
+  bool stamped       = false;
+  double seconds     = 0.0;
+};
+
+/**
+ * @brief Smallest key still pending across the groups; false when every group is drained.
+ */
+[[nodiscard]] static bool leastPendingKey(const std::deque<GroupColumns>& groups,
+                                          const std::vector<std::size_t>& cursors,
+                                          uint64_t& least)
+{
+  bool found = false;
+  for (std::size_t g = 0; g < groups.size(); ++g) {
+    if (cursors[g] >= groups[g].keys.size())
+      continue;
+
+    const uint64_t key = groups[g].keys[groupRow(groups[g], cursors[g])];
+    if (!found || key < least) {
+      least = key;
+      found = true;
+    }
+  }
+
+  return found;
+}
+
+/**
+ * @brief Writes every row of @p group sitting on @p out's key into the merged row and returns the
+ *        group's new cursor. Samples of ONE group that quantize to the same instant collapse into
+ *        that row, last value winning, exactly as the keyed cache did: coalescing is only correct
+ *        within a source, never across two.
+ */
+[[nodiscard]] static std::size_t consumeGroupRows(MDF4::PlayerDecodePayload& payload,
+                                                  const GroupColumns& group,
+                                                  std::size_t cursor,
+                                                  MergeRow& out)
+{
+  for (std::size_t k = cursor; k < group.keys.size(); ++k) {
+    const std::size_t sourceRow = groupRow(group, k);
+    if (group.keys[sourceRow] != out.key)
+      break;
+
+    if (out.useTimestamps && group.hasClock && sourceRow < group.timestamps.size()) {
+      out.seconds = group.timestamps[sourceRow];
+      out.stamped = true;
     }
 
-    payload.timestamps.push_back(ts);
-    appendFrameColumns(payload, caches, key, it->second, sampleIndex);
-
-    caches.samples.erase(it);
-    caches.strings.erase(key);
-    caches.active.erase(key);
-    caches.timestamps.erase(key);
+    writeGroupRow(payload, group, sourceRow, out.row);
+    cursor = k + 1;
   }
+
+  return cursor;
+}
+
+/**
+ * @brief Merges every group's columns into the payload by ascending key, one payload row per
+ *        distinct instant -- the same rows, in the same order, the keyed cache produced, without
+ *        ever materialising a per-instant vector over all channels (B6).
+ */
+static void mergeGroups(MDF4::PlayerDecodePayload& payload, DecodeState& state)
+{
+  bool anyClock          = false;
+  std::size_t upperBound = 0;
+  for (auto& group : state.groups) {
+    group.order  = ascendingOrder(group.keys);
+    upperBound  += group.keys.size();
+    anyClock     = anyClock || group.hasClock;
+  }
+
+  MergeRow merge;
+  merge.useTimestamps = payload.isSerialStudioFile && (anyClock || !state.legacyTimestamps.empty());
+
+  sizePayloadColumns(payload, upperBound);
+
+  std::vector<std::size_t> cursors(state.groups.size(), 0);
+  std::size_t row = 0;
+  for (; row < upperBound; ++row) {
+    if (!leastPendingKey(state.groups, cursors, merge.key))
+      break;
+
+    merge.row     = row;
+    merge.stamped = false;
+    merge.seconds = static_cast<double>(row) * 0.001;
+
+    for (std::size_t g = 0; g < state.groups.size(); ++g)
+      cursors[g] = consumeGroupRows(payload, state.groups[g], cursors[g], merge);
+
+    if (merge.useTimestamps && !merge.stamped && merge.key < state.legacyTimestamps.size())
+      merge.seconds = state.legacyTimestamps[static_cast<std::size_t>(merge.key)];
+
+    payload.timestamps.push_back(merge.seconds);
+  }
+
+  trimPayloadColumns(payload, row);
 }
 
 /**
@@ -523,15 +637,42 @@ static std::unique_ptr<mdf::MdfReader> openStructure(const QString& filePath,
 }
 
 /**
- * @brief Runs the observer decode over every data group into the keyed caches; returns false
+ * @brief Prepares one channel group's column set: its local channel list resolved to global
+ *        indexes once, and one empty vector per local column for the observer to append into.
+ */
+[[nodiscard]] static GroupColumns prepareGroupColumns(
+  const CgInfo& info,
+  const std::map<mdf::IChannel*, std::size_t>& channelIndex,
+  const std::vector<bool>& channelIsString)
+{
+  GroupColumns columns;
+  columns.hasClock = info.timeCh != nullptr;
+  columns.channelIndex.reserve(info.dataChs.size());
+  columns.isString.reserve(info.dataChs.size());
+  columns.numeric.resize(info.dataChs.size());
+  columns.text.resize(info.dataChs.size());
+
+  for (auto* ch : info.dataChs) {
+    const auto it            = channelIndex.find(ch);
+    const std::size_t global = (it != channelIndex.end()) ? it->second : channelIsString.size();
+    columns.channelIndex.push_back(global);
+    columns.isString.push_back(global < channelIsString.size() ? channelIsString[global] : false);
+  }
+
+  return columns;
+}
+
+/**
+ * @brief Runs the observer decode over every data group into per-group columns; returns false
  *        when any ReadData call reported failure (truncated/corrupt data section).
  */
 static bool readAllGroups(MDF4::PlayerLoaderWorker* worker,
                           mdf::MdfReader& reader,
                           const std::vector<mdf::IDataGroup*>& dataGroups,
-                          const std::vector<mdf::IChannel*>& allChannels,
+                          const std::map<mdf::IChannel*, std::size_t>& channelIndex,
+                          const std::vector<bool>& channelIsString,
                           const TimeConfig& timeConfig,
-                          DecodeCaches& caches)
+                          DecodeState& state)
 {
   bool read_ok = true;
   for (auto* dg : dataGroups) {
@@ -539,19 +680,12 @@ static bool readAllGroups(MDF4::PlayerLoaderWorker* worker,
       continue;
 
     auto cgInfos = buildCgInfos(dg, timeConfig.perGroupTime, timeConfig.groupTimeChannels);
-    std::vector<std::unique_ptr<SampleCacheObserver>> observers;
+    std::vector<std::unique_ptr<GroupColumnObserver>> observers;
     observers.reserve(cgInfos.size());
     for (auto& ci : cgInfos) {
-      auto obs = std::make_unique<SampleCacheObserver>(*dg,
-                                                       worker,
-                                                       caches.samples,
-                                                       caches.strings,
-                                                       caches.timestamps,
-                                                       caches.active,
-                                                       allChannels,
-                                                       ci.dataChs,
-                                                       ci.timeCh,
-                                                       ci.cg->RecordId());
+      state.groups.push_back(prepareGroupColumns(ci, channelIndex, channelIsString));
+      auto obs = std::make_unique<GroupColumnObserver>(
+        *dg, worker, state.groups.back(), ci.dataChs, ci.timeCh, ci.cg->RecordId());
       obs->AttachObserver();
       observers.push_back(std::move(obs));
     }
@@ -571,7 +705,7 @@ static bool readAllGroups(MDF4::PlayerLoaderWorker* worker,
 
       LegacyTimestampObserver tsObs(*dg,
                                     worker,
-                                    caches.timestamps,
+                                    state.legacyTimestamps,
                                     timeConfig.legacyMasterTimeChannel,
                                     timeConfig.legacyTimeRecId);
       tsObs.AttachObserver();
@@ -643,13 +777,18 @@ void MDF4::PlayerLoaderWorker::decodeFile(const QString& filePath,
 
   payload->channelNames.reserve(static_cast<qsizetype>(allChannels.size()));
   payload->channelIsString.reserve(allChannels.size());
-  for (const auto* ch : allChannels) {
+  std::map<mdf::IChannel*, std::size_t> channelIndex;
+  for (std::size_t i = 0; i < allChannels.size(); ++i) {
+    auto* ch = allChannels[i];
     payload->channelNames.append(ch ? QString::fromStdString(ch->Name()) : QString());
     payload->channelIsString.push_back(isStringChannel(ch));
+    if (ch)
+      channelIndex.emplace(ch, i);
   }
 
-  DecodeCaches caches;
-  const bool read_ok = readAllGroups(this, *reader, dataGroups, allChannels, timeConfig, caches);
+  DecodeState state;
+  const bool read_ok = readAllGroups(
+    this, *reader, dataGroups, channelIndex, payload->channelIsString, timeConfig, state);
 
   if (m_cancelRequested.load(std::memory_order_relaxed)) {
     payload->cancelled = true;
@@ -657,7 +796,7 @@ void MDF4::PlayerLoaderWorker::decodeFile(const QString& filePath,
     return;
   }
 
-  convertToColumnar(*payload, caches);
+  mergeGroups(*payload, state);
   payload->ok          = true;
   payload->partialData = !read_ok;
   Q_EMIT finished(payload);

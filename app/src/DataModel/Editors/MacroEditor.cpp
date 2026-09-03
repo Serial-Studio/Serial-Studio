@@ -21,9 +21,6 @@
 
 #include "DataModel/Editors/MacroEditor.h"
 
-#include "Misc/CommonFonts.h"
-#include "Misc/ThemeManager.h"
-#include "Misc/TimerEvents.h"
 #include "SerialStudio.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -35,34 +32,11 @@
  *        live inside the main window, so the item-visibility gate is enough here.
  */
 DataModel::MacroEditor::MacroEditor(QQuickItem* parent)
-  : QQuickPaintedItem(parent)
-  , m_language(0)
-  , m_themeManager(Misc::ThemeManager::instance())
-  , m_timerEvents(Misc::TimerEvents::instance())
-  , m_editor(*this,
-             m_themeManager,
-             Misc::CommonFonts::instance(),
-             EmbeddedCodeEditor::RenderGate::ItemVisible)
+  : EmbeddedCodeEditorItem(EmbeddedCodeEditor::RenderGate::ItemVisible, parent), m_language(0)
 {
-  m_editor.configureHost();
-
-  connect(&m_themeManager,
-          &Misc::ThemeManager::themeChanged,
-          this,
-          &DataModel::MacroEditor::onThemeChanged);
-
   auto& widget = m_editor.widget();
   connect(&widget, &QCodeEditor::textChanged, this, [this] { Q_EMIT modifiedChanged(); });
   connect(&widget, &QCodeEditor::textChanged, this, &DataModel::MacroEditor::textChanged);
-  connect(&widget, &QCodeEditor::textChanged, this, &DataModel::MacroEditor::scheduleRender);
-  connect(&widget, &QCodeEditor::selectionChanged, this, &DataModel::MacroEditor::scheduleRender);
-  connect(
-    &widget, &QCodeEditor::cursorPositionChanged, this, &DataModel::MacroEditor::scheduleRender);
-
-  connect(this, &QQuickPaintedItem::widthChanged, this, &DataModel::MacroEditor::resizeWidget);
-  connect(this, &QQuickPaintedItem::heightChanged, this, &DataModel::MacroEditor::resizeWidget);
-  connect(
-    &m_timerEvents, &Misc::TimerEvents::uiTimeout, this, &DataModel::MacroEditor::renderWidget);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -188,187 +162,4 @@ void DataModel::MacroEditor::markSaved()
 {
   m_editor.markSaved();
   Q_EMIT modifiedChanged();
-}
-
-//--------------------------------------------------------------------------------------------------
-// Theme
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Applies the current theme to the code editor widget.
- */
-void DataModel::MacroEditor::onThemeChanged()
-{
-  m_editor.applyTheme();
-}
-
-//--------------------------------------------------------------------------------------------------
-// Rendering
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Marks the cached pixmap stale; the next UI tick does the grab, so a burst of edits
- *        costs one widget render instead of one per event.
- */
-void DataModel::MacroEditor::scheduleRender()
-{
-  m_editor.scheduleRender();
-}
-
-/**
- * @brief Grabs the editor widget into a pixmap for QML rendering, at most once per UI tick and
- *        only when something changed; a focused editor always regrabs so the caret keeps blinking.
- */
-void DataModel::MacroEditor::renderWidget()
-{
-  m_editor.renderWidget();
-}
-
-/**
- * @brief Resizes the backing QCodeEditor to match the QML item dimensions.
- */
-void DataModel::MacroEditor::resizeWidget()
-{
-  m_editor.resizeWidget();
-}
-
-//--------------------------------------------------------------------------------------------------
-// Event forwarding
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Paints the cached editor pixmap into the QML scene.
- */
-void DataModel::MacroEditor::paint(QPainter* painter)
-{
-  m_editor.paint(painter);
-}
-
-/**
- * @brief Routes ShortcutOverride to the editor widget so editing keys (undo, copy, paste...)
- *        are handled natively instead of being consumed by QML Shortcut bindings.
- */
-bool DataModel::MacroEditor::event(QEvent* event)
-{
-  if (m_editor.handleShortcutOverride(event))
-    return true;
-
-  return QQuickPaintedItem::event(event);
-}
-
-/**
- * @brief Forwards completer navigation/commit keys to the popup when visible; everything else
- *        goes straight to the editor widget so QCompleter's focus check cannot hide the popup.
- */
-void DataModel::MacroEditor::keyPressEvent(QKeyEvent* event)
-{
-  m_editor.handleKeyPress(event);
-}
-
-/**
- * @brief Forwards key-release events to the backing QCodeEditor widget.
- */
-void DataModel::MacroEditor::keyReleaseEvent(QKeyEvent* event)
-{
-  m_editor.forwardToWidget(event);
-}
-
-/**
- * @brief Forwards input-method events (IME composition) to the backing widget.
- */
-void DataModel::MacroEditor::inputMethodEvent(QInputMethodEvent* event)
-{
-  m_editor.forwardToWidget(event);
-  m_editor.scheduleRender();
-}
-
-/**
- * @brief Forwards focus-in events to the backing widget.
- */
-void DataModel::MacroEditor::focusInEvent(QFocusEvent* event)
-{
-  m_editor.forwardToWidget(event);
-  m_editor.scheduleRender();
-}
-
-/**
- * @brief Forwards focus-out events to the backing widget.
- */
-void DataModel::MacroEditor::focusOutEvent(QFocusEvent* event)
-{
-  m_editor.forwardToWidget(event);
-  m_editor.scheduleRender();
-}
-
-/**
- * @brief Forwards mouse-press events to the backing widget, claiming focus for the item.
- */
-void DataModel::MacroEditor::mousePressEvent(QMouseEvent* event)
-{
-  m_editor.handleMouse(event, true);
-}
-
-/**
- * @brief Forwards mouse-move events to the backing widget.
- */
-void DataModel::MacroEditor::mouseMoveEvent(QMouseEvent* event)
-{
-  m_editor.handleMouse(event, false);
-}
-
-/**
- * @brief Forwards mouse-release events to the backing widget.
- */
-void DataModel::MacroEditor::mouseReleaseEvent(QMouseEvent* event)
-{
-  m_editor.handleMouse(event, false);
-}
-
-/**
- * @brief Forwards double-click events to the backing widget.
- */
-void DataModel::MacroEditor::mouseDoubleClickEvent(QMouseEvent* event)
-{
-  m_editor.handleMouse(event, false);
-}
-
-/**
- * @brief Forwards wheel events to the editor viewport.
- */
-void DataModel::MacroEditor::wheelEvent(QWheelEvent* event)
-{
-  m_editor.forwardToViewport(event);
-  m_editor.scheduleRender();
-}
-
-/**
- * @brief Forwards drag-enter events to the editor viewport.
- */
-void DataModel::MacroEditor::dragEnterEvent(QDragEnterEvent* event)
-{
-  m_editor.forwardToViewport(event);
-}
-
-/**
- * @brief Forwards drag-move events to the editor viewport.
- */
-void DataModel::MacroEditor::dragMoveEvent(QDragMoveEvent* event)
-{
-  m_editor.forwardToViewport(event);
-}
-
-/**
- * @brief Forwards drag-leave events to the editor viewport.
- */
-void DataModel::MacroEditor::dragLeaveEvent(QDragLeaveEvent* event)
-{
-  m_editor.forwardToViewport(event);
-}
-
-/**
- * @brief Forwards drop events to the editor viewport.
- */
-void DataModel::MacroEditor::dropEvent(QDropEvent* event)
-{
-  m_editor.forwardToViewport(event);
 }

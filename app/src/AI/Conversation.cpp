@@ -34,10 +34,10 @@
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Creates an idle conversation; provider and dispatcher are wired later. The command
- *        registry and the project model are captured here because both already exist when
- *        the Assistant builds this object; the Assistant itself is resolved lazily instead,
- *        since this constructor runs inside its own.
+ * @brief Creates an idle conversation; provider and dispatcher are wired later. The Assistant is
+ *        resolved lazily because this constructor runs inside its own. The debounced timer
+ *        checkpoints the project through assistant.checkpoint instead of saving it: the .ssproj
+ *        on disk changes only on a user save or the Confirm-tier project.save (J2).
  */
 AI::Conversation::Conversation(QObject* parent)
   : QObject(parent)
@@ -48,7 +48,6 @@ AI::Conversation::Conversation(QObject* parent)
   , m_project(DataModel::ProjectModel::instance())
   , m_assistantIndex(-1)
   , m_thinkingIsSynthetic(false)
-  , m_outstandingToolResults(0)
   , m_toolCallCount(0)
   , m_retryCount(0)
   , m_turnGeneration(0)
@@ -56,6 +55,7 @@ AI::Conversation::Conversation(QObject* parent)
   , m_summaryForced(false)
   , m_busy(false)
   , m_lastAwaitingFlag(false)
+  , m_tools(m_uiMessages, m_assistantIndex, m_commands)
   , m_metaTools(*this, m_helpFetcher)
   , m_autoVerify(m_commands)
   , m_streamFlushTimer(new QTimer(this))
@@ -67,24 +67,21 @@ AI::Conversation::Conversation(QObject* parent)
   m_streamFlushTimer->setSingleShot(false);
   connect(m_streamFlushTimer, &QTimer::timeout, this, &Conversation::flushPendingStreamUpdate);
 
+  connect(&m_asyncTools, &AsyncToolRunner::toolFinished, this, &Conversation::onAsyncToolFinished);
+
   connect(&m_helpFetcher, &HelpFetcher::fetchFinished, this, &Conversation::onHelpFetchFinished);
 
   m_autoSaveTimer->setInterval(kAutoSaveDebounceMs);
   m_autoSaveTimer->setSingleShot(true);
   connect(m_autoSaveTimer, &QTimer::timeout, this, [this] {
-    if (!m_project.modified())
+    if (!m_dispatcher || !m_project.modified())
       return;
 
-    if (m_project.jsonFilePath().isEmpty())
-      return;
-
-    m_project.setSuppressMessageBoxes(true);
-    const bool ok = m_project.saveJsonFile(false);
-    m_project.setSuppressMessageBoxes(false);
-    if (!ok)
-      qCWarning(serialStudioAI) << "AI auto-save failed";
-    else
-      qCDebug(serialStudioAI) << "AI auto-save:" << m_project.jsonFilePath();
+    QJsonObject args;
+    args[QStringLiteral("label")] = QStringLiteral("assistant");
+    const auto reply = m_dispatcher->executeCommand(QStringLiteral("assistant.checkpoint"), args);
+    if (!reply.value(QStringLiteral("ok")).toBool())
+      qCWarning(serialStudioAI) << "AI checkpoint failed";
   });
 }
 
@@ -155,7 +152,7 @@ bool AI::Conversation::busy() const noexcept
  */
 bool AI::Conversation::awaitingConfirmation() const noexcept
 {
-  return !m_awaitingConfirm.isEmpty();
+  return m_tools.hasPending();
 }
 
 /**
@@ -208,7 +205,7 @@ void AI::Conversation::start(const QString& userText)
   m_pendingThinkingBlocks   = QJsonArray();
   m_pendingToolUseBlocks    = QJsonArray();
   m_pendingToolResultBlocks = QJsonArray();
-  m_outstandingToolResults  = 0;
+  m_tools.resetOutstanding();
 
   const bool was_degraded = m_probe.degraded();
   m_probe.ensureKey(probeComplianceKey());
@@ -367,42 +364,51 @@ void AI::Conversation::cancel()
   if (m_reply)
     m_reply->abort();
 
-  if (!m_awaitingConfirm.isEmpty()) {
-    for (auto it = m_awaitingConfirm.constBegin(); it != m_awaitingConfirm.constEnd(); ++it)
-      updateToolCallCard(it.key(), CallStatus::Denied);
+  if (m_tools.hasPending()) {
+    for (const auto& id : m_tools.pendingIds())
+      updateToolCallCard(id, CallStatus::Denied);
 
-    m_awaitingConfirm.clear();
+    m_tools.clearPending();
     setAwaitingConfirmation(false);
   }
 
   m_pendingThinkingBlocks   = QJsonArray();
   m_pendingToolUseBlocks    = QJsonArray();
   m_pendingToolResultBlocks = QJsonArray();
-  m_outstandingToolResults  = 0;
+  m_tools.resetOutstanding();
 
   setBusy(false);
 }
 
 /**
- * @brief Approves a pending Confirm-tagged tool call by id.
+ * @brief Approves a pending Confirm-tagged tool call by id. The batch resumes only through the
+ *        shared tri-condition: a click that lands while the model is still streaming (Gemini
+ *        emits tool calls mid-stream) would otherwise issue a second live reply against the
+ *        same turn state, and onReplyFinished() resumes it instead once the stream closes.
  */
 void AI::Conversation::approveToolCall(const QString& callId)
 {
-  const auto it = m_awaitingConfirm.constFind(callId);
-  if (it == m_awaitingConfirm.constEnd())
+  const auto pending = m_tools.takePending(callId);
+  if (!pending)
     return;
 
-  const auto pending = it.value();
-  m_awaitingConfirm.erase(it);
-  setAwaitingConfirmation(!m_awaitingConfirm.isEmpty());
+  setAwaitingConfirmation(m_tools.hasPending());
 
-  runToolCall(callId, pending.name, pending.arguments);
+  runToolCall(callId, pending->name, pending->arguments);
+  maybeResumeAfterToolBatch();
+}
 
-  if (m_outstandingToolResults == 0 && !m_awaitingConfirm.isEmpty())
+/**
+ * @brief Resumes the turn when nothing is outstanding: no tool result pending, no confirmation
+ *        waiting, and no reply still streaming. The three conditions are one rule, so every
+ *        completion path (approve, deny, async tool, help fetch) shares this entry point.
+ */
+void AI::Conversation::maybeResumeAfterToolBatch()
+{
+  if (!m_tools.batchComplete(m_reply != nullptr))
     return;
 
-  if (m_outstandingToolResults == 0)
-    resumeAfterToolBatch();
+  resumeAfterToolBatch();
 }
 
 /**
@@ -410,23 +416,20 @@ void AI::Conversation::approveToolCall(const QString& callId)
  */
 void AI::Conversation::denyToolCall(const QString& callId)
 {
-  const auto it = m_awaitingConfirm.constFind(callId);
-  if (it == m_awaitingConfirm.constEnd())
+  const auto pending = m_tools.takePending(callId);
+  if (!pending)
     return;
 
-  const auto pending = it.value();
-  m_awaitingConfirm.erase(it);
-  setAwaitingConfirmation(!m_awaitingConfirm.isEmpty());
+  setAwaitingConfirmation(m_tools.hasPending());
 
   QJsonObject denial;
   denial[QStringLiteral("ok")]    = false;
   denial[QStringLiteral("error")] = QStringLiteral("user_denied");
-  recordToolResult(callId, pending.name, denial);
+  recordToolResult(callId, pending->name, denial);
   updateToolCallCard(callId, CallStatus::Denied);
 
   releaseOutstandingToolResult();
-  if (m_outstandingToolResults == 0 && m_awaitingConfirm.isEmpty())
-    resumeAfterToolBatch();
+  maybeResumeAfterToolBatch();
 }
 
 /**
@@ -434,15 +437,7 @@ void AI::Conversation::denyToolCall(const QString& callId)
  */
 void AI::Conversation::approveToolCallGroup(const QString& family)
 {
-  if (family.isEmpty())
-    return;
-
-  QStringList ids;
-  for (auto it = m_awaitingConfirm.constBegin(); it != m_awaitingConfirm.constEnd(); ++it)
-    if (it.value().name.startsWith(family + QLatin1Char('.')) || it.value().name == family)
-      ids.append(it.key());
-
-  for (const auto& id : ids)
+  for (const auto& id : m_tools.pendingInFamily(family))
     approveToolCall(id);
 }
 
@@ -451,15 +446,7 @@ void AI::Conversation::approveToolCallGroup(const QString& family)
  */
 void AI::Conversation::denyToolCallGroup(const QString& family)
 {
-  if (family.isEmpty())
-    return;
-
-  QStringList ids;
-  for (auto it = m_awaitingConfirm.constBegin(); it != m_awaitingConfirm.constEnd(); ++it)
-    if (it.value().name.startsWith(family + QLatin1Char('.')) || it.value().name == family)
-      ids.append(it.key());
-
-  for (const auto& id : ids)
+  for (const auto& id : m_tools.pendingInFamily(family))
     denyToolCall(id);
 }
 
@@ -484,8 +471,8 @@ void AI::Conversation::clear()
   m_pendingThinkingBlocks   = QJsonArray();
   m_pendingToolUseBlocks    = QJsonArray();
   m_pendingToolResultBlocks = QJsonArray();
-  m_outstandingToolResults  = 0;
-  m_awaitingConfirm.clear();
+  m_tools.resetOutstanding();
+  m_tools.clearPending();
   setLastError(QString());
 
   Q_EMIT messagesChanged();
@@ -616,7 +603,7 @@ void AI::Conversation::onToolCallRequested(const QString& callId,
 
   m_pendingToolUseBlocks.append(ReplyAssembly::makeToolUseBlock(callId, name, arguments, extras));
 
-  ++m_outstandingToolResults;
+  m_tools.noteOutstandingResult();
 
   if (m_metaTools.dispatch(callId, name, arguments))
     return;
@@ -658,10 +645,7 @@ void AI::Conversation::dispatchByCallSafety(const QString& callId,
     }
 
     appendToolCallCard(callId, name, arguments, CallStatus::AwaitingConfirm);
-    PendingCall pending;
-    pending.name      = name;
-    pending.arguments = arguments;
-    m_awaitingConfirm.insert(callId, pending);
+    m_tools.awaitConfirmation(callId, name, arguments);
     setAwaitingConfirmation(true);
     return;
   }
@@ -722,10 +706,10 @@ void AI::Conversation::onReplyFinished()
 
   teardownReply();
 
-  if (!m_awaitingConfirm.isEmpty())
+  if (m_tools.hasPending())
     return;
 
-  if (m_outstandingToolResults > 0)
+  if (m_tools.outstandingResults() > 0)
     return;
 
   if (!m_pendingToolResultBlocks.isEmpty()) {
@@ -777,11 +761,11 @@ void AI::Conversation::onReplyError(const QString& message)
   Q_EMIT messagesChanged();
   Q_EMIT messageCountChanged();
 
-  if (!m_awaitingConfirm.isEmpty()) {
-    for (auto it = m_awaitingConfirm.constBegin(); it != m_awaitingConfirm.constEnd(); ++it)
-      updateToolCallCard(it.key(), CallStatus::Error);
+  if (m_tools.hasPending()) {
+    for (const auto& id : m_tools.pendingIds())
+      updateToolCallCard(id, CallStatus::Error);
 
-    m_awaitingConfirm.clear();
+    m_tools.clearPending();
     setAwaitingConfirmation(false);
   }
 
@@ -791,7 +775,7 @@ void AI::Conversation::onReplyError(const QString& message)
   m_pendingThinkingBlocks   = QJsonArray();
   m_pendingToolUseBlocks    = QJsonArray();
   m_pendingToolResultBlocks = QJsonArray();
-  m_outstandingToolResults  = 0;
+  m_tools.resetOutstanding();
   teardownReply();
   setBusy(false);
 }
@@ -960,9 +944,7 @@ void AI::Conversation::onHelpFetchFinished(const QString& callId, const QJsonObj
   recordToolResult(callId, QString::fromLatin1(HelpFetcher::kToolName), result);
   updateToolCallCard(callId, ok ? CallStatus::Done : CallStatus::Error, result);
   releaseOutstandingToolResult();
-
-  if (m_outstandingToolResults == 0 && m_awaitingConfirm.isEmpty() && !m_reply)
-    resumeAfterToolBatch();
+  maybeResumeAfterToolBatch();
 }
 
 /**
@@ -1008,20 +990,6 @@ void AI::Conversation::beginAssistantMessage()
 }
 
 /**
- * @brief Returns "discovery" for read-only / meta calls, "execution" otherwise.
- */
-static QString toolCallCategory(const AI::CommandRegistry& commands, const QString& name)
-{
-  if (name.startsWith(QStringLiteral("meta.")))
-    return QStringLiteral("discovery");
-
-  if (commands.safetyOf(name) == AI::Safety::Safe)
-    return QStringLiteral("discovery");
-
-  return QStringLiteral("execution");
-}
-
-/**
  * @brief Adds a ToolCallCard payload to the active assistant message.
  */
 void AI::Conversation::appendToolCallCard(const QString& callId,
@@ -1029,30 +997,8 @@ void AI::Conversation::appendToolCallCard(const QString& callId,
                                           const QJsonObject& arguments,
                                           CallStatus status)
 {
-  if (m_assistantIndex < 0 || m_assistantIndex >= m_uiMessages.size())
-    return;
-
-  auto map   = m_uiMessages.at(m_assistantIndex).toMap();
-  auto calls = map.value(QStringLiteral("toolCalls")).toList();
-
-  QString family    = name;
-  const int lastDot = family.lastIndexOf(QLatin1Char('.'));
-  if (lastDot > 0)
-    family.truncate(lastDot);
-
-  QVariantMap card;
-  card[QStringLiteral("callId")]   = callId;
-  card[QStringLiteral("name")]     = name;
-  card[QStringLiteral("family")]   = family;
-  card[QStringLiteral("category")] = toolCallCategory(m_commands, name);
-  card[QStringLiteral("args")]     = QJsonDocument(arguments).toJson(QJsonDocument::Indented);
-  card[QStringLiteral("status")]   = static_cast<int>(status);
-  card[QStringLiteral("result")]   = QString();
-
-  calls.append(card);
-  map.insert(QStringLiteral("toolCalls"), calls);
-  m_uiMessages[m_assistantIndex] = map;
-  scheduleUiFlush();
+  if (m_tools.appendCard(callId, name, arguments, status))
+    scheduleUiFlush();
 }
 
 /**
@@ -1063,38 +1009,13 @@ void AI::Conversation::updateToolCallCard(const QString& callId,
                                           const QJsonObject& result,
                                           const QJsonObject& verification)
 {
-  for (int i = m_uiMessages.size() - 1; i >= 0; --i) {
-    auto map     = m_uiMessages.at(i).toMap();
-    auto calls   = map.value(QStringLiteral("toolCalls")).toList();
-    bool changed = false;
-    for (int c = 0; c < calls.size(); ++c) {
-      auto card = calls.at(c).toMap();
-      if (card.value(QStringLiteral("callId")).toString() != callId)
-        continue;
-
-      card.insert(QStringLiteral("status"), static_cast<int>(status));
-      if (!result.isEmpty())
-        card.insert(QStringLiteral("result"),
-                    QString::fromUtf8(QJsonDocument(result).toJson(QJsonDocument::Indented)));
-
-      if (!verification.isEmpty())
-        card.insert(QStringLiteral("verification"), verification.toVariantMap());
-
-      calls[c] = card;
-      changed  = true;
-      break;
-    }
-    if (changed) {
-      map.insert(QStringLiteral("toolCalls"), calls);
-      m_uiMessages[i] = map;
-      scheduleUiFlush();
-      return;
-    }
-  }
+  if (m_tools.updateCard(callId, status, result, verification))
+    scheduleUiFlush();
 }
 
 /**
- * @brief Executes a single tool call and feeds its result back.
+ * @brief Executes a single tool call and feeds its result back. Read-only filesystem tools take
+ *        the worker lane instead, so a large workspace scan cannot stall the display tick.
  */
 void AI::Conversation::runToolCall(const QString& callId,
                                    const QString& name,
@@ -1115,8 +1036,56 @@ void AI::Conversation::runToolCall(const QString& callId,
   else
     updateToolCallCard(callId, CallStatus::Running);
 
-  const auto reply = m_dispatcher->executeCommand(name, arguments);
-  const bool ok    = reply.value(QStringLiteral("ok")).toBool();
+  if (runToolCallAsync(callId, name, arguments))
+    return;
+
+  finishToolCall(callId, name, arguments, m_dispatcher->executeCommand(name, arguments));
+}
+
+/**
+ * @brief Hands the read-only filesystem tools to the worker lane and returns true when it took
+ *        the call, so the display tick keeps running through a large workspace scan (J3).
+ */
+bool AI::Conversation::runToolCallAsync(const QString& callId,
+                                        const QString& name,
+                                        const QJsonObject& arguments)
+{
+  if (!AsyncToolRunner::handles(name))
+    return false;
+
+  m_asyncTools.run(callId, name, arguments, m_turnGeneration);
+  return true;
+}
+
+/**
+ * @brief Feeds a worker-completed tool result back into the turn. A result whose turn was
+ *        cancelled or superseded is dropped: recordToolResult() would otherwise attach it to a
+ *        newer request whose tool_use block never asked for it.
+ */
+void AI::Conversation::onAsyncToolFinished(const QString& callId,
+                                           const QString& name,
+                                           const QJsonObject& arguments,
+                                           const QJsonObject& reply,
+                                           quint64 generation)
+{
+  if (generation != m_turnGeneration || m_cancelled)
+    return;
+
+  finishToolCall(callId, name, arguments, reply);
+  maybeResumeAfterToolBatch();
+}
+
+/**
+ * @brief Records one finished tool call: verification, transcript block, card status, the
+ *        outstanding-result ledger and the checkpoint timer. Shared by the inline and the
+ *        worker lanes so both reach the model through the same bookkeeping.
+ */
+void AI::Conversation::finishToolCall(const QString& callId,
+                                      const QString& name,
+                                      const QJsonObject& arguments,
+                                      const QJsonObject& reply)
+{
+  const bool ok = reply.value(QStringLiteral("ok")).toBool();
   qCDebug(serialStudioAI) << "Tool" << name << "result_ok=" << ok;
 
   auto effective = reply;
@@ -1187,8 +1156,7 @@ void AI::Conversation::recordToolResult(const QString& callId,
  */
 void AI::Conversation::releaseOutstandingToolResult()
 {
-  if (m_outstandingToolResults > 0)
-    --m_outstandingToolResults;
+  m_tools.releaseOutstandingResult();
 }
 
 /**
@@ -1244,8 +1212,8 @@ void AI::Conversation::resumeAfterToolBatch()
   m_history.append(userMsg);
 
   m_pendingToolResultBlocks = QJsonArray();
-  m_outstandingToolResults  = 0;
-  m_retryCount              = 0;
+  m_tools.resetOutstanding();
+  m_retryCount = 0;
 
   issueRequest();
 }
@@ -1409,8 +1377,8 @@ void AI::Conversation::loadSnapshot(const QJsonObject& doc)
   m_pendingThinkingBlocks   = QJsonArray();
   m_pendingToolUseBlocks    = QJsonArray();
   m_pendingToolResultBlocks = QJsonArray();
-  m_outstandingToolResults  = 0;
-  m_awaitingConfirm.clear();
+  m_tools.resetOutstanding();
+  m_tools.clearPending();
   setLastError(QString());
 
   ChatDigest::downgradeStaleToolCards(m_uiMessages);
@@ -1497,9 +1465,10 @@ QString AI::Conversation::probeDetail() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the longest recent suffix of history that fits the provider context window,
- *        cut only at fresh user-turn boundaries so tool_use/tool_result pairs stay intact.
- *        Without a provider there is no window to fit, so the history is sent whole.
+ * @brief Returns the longest recent suffix of history that fits the provider context window, cut
+ *        only at fresh user-turn boundaries so tool_use/tool_result pairs stay intact; without a
+ *        provider the history is sent whole. The reservations are capped against the window, or
+ *        an 8k local model budgets negative and lets the server truncate the system prompt (J1).
  */
 QJsonArray AI::Conversation::budgetedHistory(const QJsonArray& tools) const
 {
@@ -1507,7 +1476,8 @@ QJsonArray AI::Conversation::budgetedHistory(const QJsonArray& tools) const
     return m_history;
 
   const auto caps = m_provider->capabilities();
-  const TokenBudget::Window window{
-    caps.contextWindowTokens, caps.maxOutputTokens, kSystemReserveTokens};
+  const TokenBudget::Window window{caps.contextWindowTokens,
+                                   caps.budgetedOutputTokens(),
+                                   caps.budgetedSystemReserve(kSystemReserveTokens)};
   return TokenBudget::budgetedHistory(m_history, TokenBudget::historyBudget(window, tools));
 }

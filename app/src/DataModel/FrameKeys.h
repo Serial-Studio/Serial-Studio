@@ -228,6 +228,13 @@ inline constexpr KeyView MqttPublisher("mqttPublisher");
 // Per-project InfluxDB sink configuration (Pro); absent means disabled, token lives in the vault.
 inline constexpr KeyView InfluxSink("influxSink");
 
+// Sparkplug B slot table in the MQTT connection block; absent means derive on the first birth.
+inline constexpr KeyView SparkplugSlots("sparkplugSlots");
+inline constexpr KeyView SparkplugNode("node");
+inline constexpr KeyView SparkplugGroup("group");
+inline constexpr KeyView SparkplugDevice("device");
+inline constexpr KeyView SparkplugMetric("metric");
+
 inline QString layoutKey(int groupId)
 {
   return QStringLiteral("layout:") + QString::number(groupId);

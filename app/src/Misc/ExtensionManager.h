@@ -34,6 +34,7 @@
 #include "Misc/Extensions/ExtensionAutoUpdater.h"
 #include "Misc/Extensions/ExtensionInstaller.h"
 #include "Misc/Extensions/PluginRunner.h"
+#include "Misc/ProblemCenter.h"
 
 class QNetworkReply;
 
@@ -189,6 +190,7 @@ private slots:
 
 private:
   void parseManifest(QNetworkReply* reply);
+  void collectCatalogFindings(QList<ProblemCenter::Finding>& findings) const;
   [[nodiscard]] QVariantMap loadPluginMetadata(const QString& iid);
 
   [[nodiscard]] QString catalogName(const QString& id) const;

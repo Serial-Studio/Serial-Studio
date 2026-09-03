@@ -240,7 +240,8 @@ void IO::Drivers::Network::onWebSocketBinaryMessage(const QByteArray& message)
 }
 
 /**
- * @brief Appends the WebSocket rows of the driver property model.
+ * @brief Appends the WebSocket rows of the driver property model. The shared TLS row is appended
+ *        by the facade, which emits every transport's rows in one list.
  */
 void IO::Drivers::Network::appendWebSocketProperties(QList<IO::DriverProperty>& props) const
 {
@@ -259,8 +260,6 @@ void IO::Drivers::Network::appendWebSocketProperties(QList<IO::DriverProperty>& 
   format.value   = m_webSocketFormat;
   format.options = webSocketFormats();
   props.append(format);
-
-  appendTlsProperty(props);
 }
 
 /**

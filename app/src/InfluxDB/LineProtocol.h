@@ -45,17 +45,17 @@ namespace InfluxDB {
  *
  * One line is <tt>measurement[,tag=value...] field=value[,...] timestamp</tt>, where the escape
  * set differs per position (v2 spec): a measurement escapes comma and space, a tag key, a tag
- * value and a field key escape comma, equals and space, and a string field value escapes the
- * double quote and the backslash. Timestamps are nanoseconds, which is what the sink asks the
- * server for with <tt>precision=ns</tt>.
+ * value and a field key escape comma, equals and space, a string field value escapes the double
+ * quote, and the backslash escapes itself everywhere. Timestamps are nanoseconds, which is what
+ * the sink asks the server for with <tt>precision=ns</tt>.
  */
 
 // A batch is considered full at this size; well under InfluxDB's documented per-write ceiling
 inline constexpr qsizetype kDefaultBatchBytes = 512 * 1024;
 
-// Escape sets, one per line-protocol position
-inline constexpr QByteArrayView kMeasurementSpecials = ", ";
-inline constexpr QByteArrayView kKeySpecials         = ",= ";
+// Escape sets per position; the backslash escapes itself everywhere (E7)
+inline constexpr QByteArrayView kMeasurementSpecials = ", \\";
+inline constexpr QByteArrayView kKeySpecials         = ",= \\";
 inline constexpr QByteArrayView kStringSpecials      = "\"\\";
 
 /**

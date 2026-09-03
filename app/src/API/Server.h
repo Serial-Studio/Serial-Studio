@@ -71,9 +71,14 @@ class Server
   Q_PROPERTY(QString authToken
              READ authToken
              NOTIFY authTokenChanged)
+  Q_PROPERTY(int port
+             READ port
+             WRITE setPort
+             NOTIFY portChanged)
   // clang-format on
 
 signals:
+  void portChanged();
   void enabledChanged();
   void authTokenChanged();
   void clientCountChanged();
@@ -95,8 +100,9 @@ public:
   [[nodiscard]] bool enabled() const noexcept;
   [[nodiscard]] bool hasStreamSubscribers() const noexcept;
   [[nodiscard]] int clientCount() const noexcept;
+  [[nodiscard]] int port() const noexcept;
   [[nodiscard]] QString authToken() const;
-  [[nodiscard]] bool authorizeDeviceWrite() override;
+  [[nodiscard]] DeviceWriteVerdict authorizeDeviceWrite() override;
   [[nodiscard]] bool externalConnections() const noexcept;
   [[nodiscard]] bool setAuthToken(const QString& token);
   [[nodiscard]] bool verifyToken(const QByteArray& provided) const override;
@@ -106,17 +112,12 @@ public slots:
   void removeConnection();
   void regenerateAuthToken();
   void allowExternalConnections();
+  void setPort(const int port);
   void setEnabled(const bool enabled);
   void setExternalConnections(const bool enabled);
   void hotpathTxData(const QByteArray& data);
   void setupExternalConnections();
   void ingestBlock(const DataModel::DataBlockPtr& block);
-
-private:
-  void pushStreamBlock(const DataModel::DataBlockPtr& block);
-  void refreshStreamSubscriberFlag() noexcept;
-
-public slots:
   void broadcastLifecycleEvent(const QString& eventName);
 
 protected:
@@ -133,6 +134,12 @@ private slots:
 
 private:
   void applyExternalConnections(const bool enabled);
+  void pushStreamBlock(const DataModel::DataBlockPtr& block);
+  void refreshStreamSubscriberFlag() noexcept;
+
+  [[nodiscard]] bool startListening();
+  void stopListening();
+  void dropConnections();
 
   [[nodiscard]] bool deviceConnected() const override;
   [[nodiscard]] qint64 writeToDevice(const QByteArray& data) override;
@@ -142,6 +149,7 @@ private:
   [[nodiscard]] bool routeConnectionCommand(QTcpSocket* socket,
                                             ConnectionState& state,
                                             const QJsonObject& json) override;
+  [[nodiscard]] ConnectionState* stateFor(QTcpSocket* socket, const QString& sessionId) override;
 
   void sendResponse(QTcpSocket* socket, const QByteArray& response) override;
   void closeSocket(QTcpSocket* socket, const ConnectionState& state) override;
@@ -166,11 +174,16 @@ private:
   QSettings m_settings;
   ServerAuth m_auth;
   ClientReception m_reception;
+  int m_port;
   int m_clientCount;
   bool m_enabled;
   bool m_mirrorLinked;
   bool m_externalConnections;
   QTcpServer m_server;
+
+  // Second loopback listener: one QTcpServer binds one address, and ::1 clients were refused
+  QTcpServer m_serverIpv6;
+
   QHash<QTcpSocket*, ConnectionState> m_connections;
   alignas(64) std::atomic<bool> m_anyStreamSubscriber;
 };

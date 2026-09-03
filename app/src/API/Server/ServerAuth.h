@@ -26,6 +26,8 @@
 #include <QSettings>
 #include <QString>
 
+#include "API/Server/DeviceWriteVerdict.h"
+
 namespace API {
 
 /**
@@ -53,12 +55,13 @@ public:
   [[nodiscard]] QString authToken() const;
   [[nodiscard]] bool setAuthToken(const QString& token);
   [[nodiscard]] bool verifyToken(const QByteArray& provided) const;
-  [[nodiscard]] bool authorizeDeviceWrite();
+  [[nodiscard]] DeviceWriteVerdict authorizeDeviceWrite();
   [[nodiscard]] bool authorizeRemoteCommand(const QString& command);
 
 public slots:
   void ensureAuthToken();
   void regenerateAuthToken();
+  void showDeviceWriteConsentPrompt();
 
 private:
   /**
@@ -72,6 +75,7 @@ private:
 
   QSettings& m_settings;
   QString m_authToken;
+  bool m_consentPromptPosted;
   DeviceWriteConsent m_deviceWriteConsent;
 };
 

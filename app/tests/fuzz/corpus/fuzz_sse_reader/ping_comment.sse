@@ -1,0 +1,4 @@
+: keep-alive
+event: ping
+data: {}
+

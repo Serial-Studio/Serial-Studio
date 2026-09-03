@@ -53,6 +53,11 @@ public:
                             QMessageBox::StandardButtons bt = QMessageBox::Ok,
                             QMessageBox::StandardButton defaultButton = QMessageBox::NoButton,
                             const ButtonTextMap& buttonTexts = ButtonTextMap());
+
+  static void postMessageBox(const QString& text,
+                             const QString& informativeText = "",
+                             QMessageBox::Icon icon = QMessageBox::Information,
+                             const QString& windowTitle = "");
   // clang-format on
 
 public slots:

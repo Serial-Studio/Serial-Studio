@@ -771,9 +771,9 @@ Widgets.SmartDialog {
                   }
 
                   Label {
+                    Layout.fillWidth: true
                     font: Cpp_Misc_CommonFonts.uiFont
                     text: Cpp_Examples.selectedExample.difficulty || ""
-                    Layout.fillWidth: true
                     color: {
                       var d = Cpp_Examples.selectedExample.difficulty || ""
                       return d === "Advanced" ? "#e74c3c"

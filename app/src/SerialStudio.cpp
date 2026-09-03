@@ -405,50 +405,50 @@ SerialStudio::DashboardWidget SerialStudio::getDashboardWidget(const DataModel::
 
   const auto& widget = group.widget;
 
-  if (widget == "accelerometer")
+  if (widget == QStringLiteral("accelerometer"))
     return DashboardAccelerometer;
 
-  if (widget == "datagrid")
+  if (widget == QStringLiteral("datagrid"))
     return DashboardDataGrid;
 
-  if (widget == "gyro" || widget == "gyroscope")
+  if (widget == QStringLiteral("gyro") || widget == QStringLiteral("gyroscope"))
     return DashboardGyroscope;
 
-  if (widget == "gps" || widget == "map")
+  if (widget == QStringLiteral("gps") || widget == QStringLiteral("map"))
     return DashboardGPS;
 
-  if (widget == "multiplot")
+  if (widget == QStringLiteral("multiplot"))
     return DashboardMultiPlot;
 
-  if (widget == "plot3d")
+  if (widget == QStringLiteral("plot3d"))
     return DashboardPlot3D;
 
-  if (widget == "terminal")
+  if (widget == QStringLiteral("terminal"))
     return DashboardTerminal;
 
-  if (widget == "clock")
+  if (widget == QStringLiteral("clock"))
     return DashboardClock;
 
-  if (widget == "stopwatch")
+  if (widget == QStringLiteral("stopwatch"))
     return DashboardStopwatch;
 
-  if (widget == "webview")
+  if (widget == QStringLiteral("webview"))
     return DashboardWebView;
 
-  if (widget == "barpanel")
+  if (widget == QStringLiteral("barpanel"))
     return DashboardBarPanel;
 
 #ifdef BUILD_COMMERCIAL
-  if (widget == "image")
+  if (widget == QStringLiteral("image"))
     return DashboardImageView;
 
-  if (widget == "notification-log")
+  if (widget == QStringLiteral("notification-log"))
     return DashboardNotificationLog;
 
-  if (widget == "painter")
+  if (widget == QStringLiteral("painter"))
     return DashboardPainter;
 #else
-  if (widget == "painter")
+  if (widget == QStringLiteral("painter"))
     return DashboardDataGrid;
 #endif
 

@@ -43,6 +43,7 @@
 #include "IO/Drivers/OpcUa/OpcUaEndpointSelection.h"
 #include "IO/Drivers/OpcUa/OpcUaSubscriptions.h"
 #include "IO/Drivers/OpcUa/OpcUaTag.h"
+#include "IO/Drivers/OpcUaSecurity.h"
 #include "IO/Drivers/OpcUaSession.h"
 #include "IO/Drivers/OpcUaTypes.h"
 #include "IO/Drivers/OpcUaWire.h"
@@ -164,6 +165,10 @@ class OpcUa
   Q_PROPERTY(bool credentialsExposed
              READ credentialsExposed
              NOTIFY securityChanged)
+  Q_PROPERTY(bool allowPlaintextPassword
+             READ allowPlaintextPassword
+             WRITE setAllowPlaintextPassword
+             NOTIFY securityChanged)
   Q_PROPERTY(QObject* tagModel
              READ tagModelObject
              CONSTANT)
@@ -215,7 +220,7 @@ public:
   [[nodiscard]] qint64 write(const QByteArray& data) override
   {
     Q_UNUSED(data)
-    return 0;
+    return -1;
   }
 
   [[nodiscard]] QJsonArray endpointsJson() const;
@@ -286,6 +291,16 @@ public:
 
   [[nodiscard]] bool credentialsExposed() const { return credentialsAreExposed(); }
 
+  /**
+   * @brief Whether the user has accepted that a password may cross an unencrypted channel. The
+   *        answer is per-INSTALLATION (it lives beside the trust store, never in a project), so
+   *        opening someone else's project can never grant it.
+   */
+  [[nodiscard]] bool allowPlaintextPassword() const
+  {
+    return OpcUaSecurity::plaintextPasswordAllowed();
+  }
+
   [[nodiscard]] QJsonArray trustedJson() const { return m_certificates.trustedJson(); }
 
   [[nodiscard]] QJsonObject certificateJson() const { return m_certificates.certificateJson(); }
@@ -312,6 +327,20 @@ public slots:
   void startBrowse() { m_browser.start(); }
 
   void stopBrowse() { m_browser.stop(); }
+
+  /**
+   * @brief Records the user's answer to the plaintext-password prompt. Never reachable from a
+   *        project or the driver property model: a security acknowledgement that travelled with a
+   *        file would be granted by opening it, which is the opposite of asking.
+   */
+  void setAllowPlaintextPassword(const bool allowed)
+  {
+    if (allowPlaintextPassword() == allowed)
+      return;
+
+    OpcUaSecurity::setPlaintextPasswordAllowed(allowed);
+    Q_EMIT securityChanged();
+  }
 
   void cancelBrowse();
   void generateProject();

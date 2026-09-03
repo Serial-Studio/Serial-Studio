@@ -32,6 +32,7 @@
 #include "CSV/SparseRowMerger.h"
 #include "DataModel/DataBlock.h"
 #include "DataModel/ExportSchema.h"
+#include "DataModel/ExportStructure.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FrameConsumer.h"
 
@@ -74,7 +75,7 @@ private:
   int m_snapshotIntervalMs;
   QTimer* m_snapshotTimer;
 
-  DataModel::Frame m_templateFrame;
+  DataModel::ExportStructure m_structure;
   QFile m_csvFile;
   QByteArray m_rowBuffer;
   DataModel::ExportSchema m_schema;

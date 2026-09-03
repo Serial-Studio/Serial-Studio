@@ -12,7 +12,10 @@ oversized SVG and is flagged (spec 0028: request px must match render size). Spe
 0038 adds the widget-extension gate: the bundled packages validate against
 `widget-manifest.json`, the reserved builtin-id list agrees across the schema, the
 C++ catalog and the widget-string mappers, the packages stay in sync with rcc.qrc,
-and `WidgetExtensions::hostContextNames()` still mirrors ModuleManager. The
+and `WidgetExtensions::hostContextNames()` still mirrors ModuleManager. Spec 0075
+adds the extension catalog v2 gate: `catalog.json` requires a per-file SHA-256, a
+v1 entry is rejected by the schema, and the installer still routes every file
+through the digest parser and the staged swap. The
 alias report counts live
 source references to each old path -- task T21 drops the alias block only when
 `--require-no-alias-refs` passes. Exit code 0 = clean, 1 = violations.
@@ -1095,30 +1098,104 @@ def check_property_manifests(errors: list[str]) -> None:
 # ---------------------------------------------------------------------------------------------------
 
 EXTENSIONS = RCC / "extensions"
+CATALOG_SCHEMA = EXTENSIONS / "schema" / "catalog.json"
+EXTENSION_CATALOG_CPP = (
+    ROOT / "app" / "src" / "Misc" / "Extensions" / "ExtensionCatalog.cpp"
+)
+EXTENSION_INSTALLER_CPP = (
+    ROOT / "app" / "src" / "Misc" / "Extensions" / "ExtensionInstaller.cpp"
+)
 WIDGET_SCHEMA = EXTENSIONS / "schema" / "widget-manifest.json"
 BUNDLED_WIDGETS = EXTENSIONS / "widget"
 WIDGET_CATALOG_CPP = ROOT / "app" / "src" / "UI" / "WidgetExtensions.cpp"
 SERIALSTUDIO_CPP = ROOT / "app" / "src" / "SerialStudio.cpp"
 MODULE_MANAGER_CPP = ROOT / "app" / "src" / "Misc" / "ModuleManager.cpp"
+CONTEXT_REGISTRY_CPP = ROOT / "app" / "src" / "Misc" / "ContextRegistry.cpp"
 
 # Context properties that carry a build constant or a plain value rather than a host object.
 # Shadowing them in an extension's context would narrow nothing, so hostContextNames() omits them
 # on purpose and the drift lint must not demand them.
-VALUE_CONTEXT_PROPERTIES = {
-    "Cpp_AppName",
-    "Cpp_AppOrganization",
-    "Cpp_AppOrganizationDomain",
-    "Cpp_AppUpdaterUrl",
-    "Cpp_AppVersion",
-    "Cpp_BuildDate",
-    "Cpp_BuildTime",
-    "Cpp_CommercialBuild",
-    "Cpp_GrpcAvailable",
-    "Cpp_HasWebEngine",
-    "Cpp_PrimaryScreen",
-    "Cpp_ScreenList",
-    "Cpp_UpdaterEnabled",
-}
+
+
+def check_extension_catalog(errors: list[str]) -> None:
+    """Gate the spec-0075 catalog v2 contract: digests declared, and the installer enforcing them.
+
+    The catalog decides what code lands in the extensions directory, so the digest is the only
+    thing standing between a compromised repo (or transport) and unattended code execution. Two
+    halves have to stay in step: the published schema, and the C++ that refuses an entry without
+    digests. A schema that stopped requiring `sha256`, or an installer that stopped calling the
+    parser, would each leave the other looking correct.
+    """
+    if not CATALOG_SCHEMA.is_file():
+        fail(errors, f"missing extension catalog schema {CATALOG_SCHEMA}")
+        return
+
+    try:
+        schema = json.loads(CATALOG_SCHEMA.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        fail(errors, f"catalog.json is not valid JSON: {exc}")
+        return
+
+    if schema.get("properties", {}).get("schemaVersion", {}).get("const") != 2:
+        fail(errors, "catalog.json must pin schemaVersion to the const 2")
+
+    if "files" not in schema.get("required", []):
+        fail(errors, "catalog.json must require a files array")
+
+    entry = schema.get("definitions", {}).get("catalogFile", {})
+    if sorted(entry.get("required", [])) != ["path", "sha256"]:
+        fail(errors, "catalog.json catalogFile must require both path and sha256")
+
+    digest = entry.get("properties", {}).get("sha256", {}).get("pattern", "")
+    if digest != "^[0-9a-f]{64}$":
+        fail(errors, "catalog.json sha256 must be pinned to lowercase 64-hex")
+
+    validate = jsonschema_validator(schema)
+    if validate is None:
+        print(
+            "registry-verify: jsonschema is not installed -- catalog.json seeds skipped "
+            "(the shape checks above and the C++ gate below still run)"
+        )
+    else:
+        v2 = {
+            "schemaVersion": 2,
+            "id": "com.acme.widget",
+            "type": "widget",
+            "version": "1.2.0",
+            "files": [{"path": "Widget.qml", "sha256": "a" * 64, "size": 10}],
+        }
+        if validate(v2):
+            fail(
+                errors,
+                "catalog.json rejects a well-formed v2 entry: "
+                + "; ".join(validate(v2)),
+            )
+
+        v1 = dict(v2, files=["Widget.qml"], schemaVersion=1)
+        if not validate(v1):
+            fail(errors, "catalog.json accepts a v1 entry whose files carry no digests")
+
+    catalog_cpp = EXTENSION_CATALOG_CPP.read_text(encoding="utf-8")
+    if "parseFileList" not in catalog_cpp or "digestMatches" not in catalog_cpp:
+        fail(
+            errors,
+            "ExtensionCatalog.cpp no longer implements parseFileList/digestMatches; the "
+            "catalog v2 digest gate is what makes an install verifiable (spec 0075 K3/K5)",
+        )
+
+    installer_cpp = EXTENSION_INSTALLER_CPP.read_text(encoding="utf-8")
+    for symbol in (
+        "parseFileList",
+        "digestMatches",
+        "commitStagedInstall",
+        "abortInstall",
+    ):
+        if symbol not in installer_cpp:
+            fail(
+                errors,
+                f"ExtensionInstaller.cpp no longer calls {symbol}; a partial or unverified "
+                "download must never replace the installed version (spec 0075 K3)",
+            )
 
 
 def widget_schema() -> dict | None:
@@ -1365,48 +1442,71 @@ def check_widget_manifests(errors: list[str]) -> None:
         check_widget_package(errors, path, schema, seen)
 
 
-def check_host_context_names(errors: list[str]) -> None:
-    """Every host context property must be shadowed in an extension's QML context.
-
-    Qt cannot enumerate a context's properties, so WidgetExtensions::hostContextNames() is a
-    hand-kept mirror of ModuleManager's registrations; a name that drifts out of it stays
-    reachable by name from package QML. That is a leaked name, not a breached boundary -- the
-    shadowing is a speed bump either way -- but it is the kind of drift a lint closes for free.
-    """
-    if not MODULE_MANAGER_CPP.is_file() or not WIDGET_CATALOG_CPP.is_file():
-        fail(
-            errors,
-            "context-name drift lint skipped: ModuleManager.cpp or WidgetExtensions.cpp",
+def context_registry_tables() -> tuple[set[str], set[str]]:
+    """Returns (object names, value names) from Misc::ContextRegistry's two tables."""
+    text = CONTEXT_REGISTRY_CPP.read_text(encoding="utf-8")
+    tables = {}
+    for kind in ("buildObjectNames", "buildValueNames"):
+        block = re.search(rf"{kind}\(\)\s*\{{(.*?)\n\}}", text, re.DOTALL)
+        tables[kind] = (
+            set(re.findall(r'QStringLiteral\("(Cpp_\w+)"\)', block.group(1)))
+            if block
+            else set()
         )
-        return
+
+    return tables["buildObjectNames"], tables["buildValueNames"]
+
+
+def check_host_context_names(errors: list[str]) -> None:
+    """Misc::ContextRegistry's tables are the ONE source of truth for the QML globals.
+
+    Every name the composition root registers has to be in a table, every table entry has to be
+    registered, and WidgetExtensions::hostContextNames() has to read the object table rather than
+    keeping a second hand-written copy: a name that drifts out of the shadow list stays reachable
+    by name from package QML (spec 0038 T17, spec 0075 G4).
+    """
+    for path, label in (
+        (MODULE_MANAGER_CPP, "ModuleManager.cpp"),
+        (CONTEXT_REGISTRY_CPP, "ContextRegistry.cpp"),
+        (WIDGET_CATALOG_CPP, "WidgetExtensions.cpp"),
+    ):
+        if not path.is_file():
+            fail(errors, f"context-name drift lint skipped: missing {label}")
+            return
 
     registered = set(
         re.findall(
-            r'setContextProperty\(\s*"(Cpp_\w+)"',
+            r'registry\.add\(\s*"(Cpp_\w+)"',
             MODULE_MANAGER_CPP.read_text(encoding="utf-8"),
         )
     )
-    text = WIDGET_CATALOG_CPP.read_text(encoding="utf-8")
-    block = re.search(r"hostContextNames\(\)\s*\{(.*?)\n\}", text, re.DOTALL)
-    if not block:
-        fail(
-            errors,
-            "could not parse hostContextNames() from app/src/UI/WidgetExtensions.cpp",
-        )
+    objects, values = context_registry_tables()
+    tabled = objects | values
+
+    if not objects or not values:
+        fail(errors, "could not parse the ContextRegistry name tables")
         return
 
-    shadowed = set(re.findall(r"\bCpp_\w+", block.group(1)))
-    for missing in sorted(registered - shadowed - VALUE_CONTEXT_PROPERTIES):
+    for missing in sorted(registered - tabled):
         fail(
             errors,
-            f"context property '{missing}' is registered in ModuleManager but is not shadowed "
-            "by WidgetExtensions::hostContextNames(); add it there (spec 0038 T17)",
+            f"context property '{missing}' is registered in ModuleManager but is not in a "
+            "Misc::ContextRegistry table; add it there (spec 0075 G4)",
         )
-    for stale in sorted(shadowed - registered):
+    for stale in sorted(tabled - registered):
         fail(
             errors,
-            f"WidgetExtensions::hostContextNames() shadows '{stale}', which ModuleManager no "
-            "longer registers; drop it",
+            f"Misc::ContextRegistry lists '{stale}', which ModuleManager no longer registers; "
+            "drop it from the table",
+        )
+
+    shadow = WIDGET_CATALOG_CPP.read_text(encoding="utf-8")
+    block = re.search(r"hostContextNames\(\)\s*\{(.*?)\n\}", shadow, re.DOTALL)
+    if not block or "ContextRegistry::objectNames()" not in block.group(1):
+        fail(
+            errors,
+            "WidgetExtensions::hostContextNames() must return "
+            "Misc::ContextRegistry::objectNames(), not a second hand-written list (spec 0075 G4)",
         )
 
 
@@ -1423,10 +1523,118 @@ def alias_reference_counts(aliases: dict[str, str]) -> dict[str, int]:
     return counts
 
 
+# ---------------------------------------------------------------------------------------------------
+# Spec 0040/0075: mirror wire version
+# ---------------------------------------------------------------------------------------------------
+
+MIRROR_PROTOCOL = ROOT / "app" / "src" / "API" / "Mirror" / "MirrorProtocol.h"
+MIRROR_PUBLISHER = ROOT / "app" / "src" / "API" / "Mirror" / "MirrorPublisher.cpp"
+MIRROR_BASELINE = ROOT / "scripts" / "mirror-wire.json"
+
+# The publisher functions that decide dataset identity and ordering on the wire
+MIRROR_FUNCTIONS = ("wireUniqueId", "rebuildStructure")
+
+
+def function_body(text: str, name: str) -> str | None:
+    """Return one C++ function definition, located by name and matched on braces."""
+    match = re.search(
+        rf"^[\w:<>,\s*&]*\b{re.escape(name)}\s*\([^;]*?\)\s*\{{", text, re.M
+    )
+    if match is None:
+        return None
+
+    depth = 0
+    for index in range(match.end() - 1, len(text)):
+        if text[index] == "{":
+            depth += 1
+        elif text[index] == "}":
+            depth -= 1
+            if depth == 0:
+                return text[match.start() : index + 1]
+
+    return None
+
+
+def mirror_wire_digest(errors: list[str]) -> tuple[str, int] | None:
+    """Digest the sources that define the mirror wire, plus the version they announce."""
+    if not MIRROR_PROTOCOL.is_file() or not MIRROR_PUBLISHER.is_file():
+        fail(errors, "mirror wire check skipped: the mirror sources are missing")
+        return None
+
+    protocol = MIRROR_PROTOCOL.read_text(encoding="utf-8")
+    publisher = MIRROR_PUBLISHER.read_text(encoding="utf-8")
+
+    version_match = re.search(r"kWireVersion\s*=\s*(\d+)", protocol)
+    if version_match is None:
+        fail(
+            errors,
+            "mirror wire check: kWireVersion is not declared in MirrorProtocol.h",
+        )
+        return None
+
+    parts = [protocol]
+    for name in MIRROR_FUNCTIONS:
+        body = function_body(publisher, name)
+        if body is None:
+            fail(
+                errors,
+                f"mirror wire check: MirrorPublisher.cpp no longer defines {name}(); renaming or "
+                "removing it is itself a wire change -- bump kWireVersion, regenerate "
+                "tests/fixtures/mirror/, then re-seed with --accept-mirror-wire",
+            )
+            return None
+
+        parts.append(body)
+
+    digest = hashlib.sha256("\n".join(parts).encode("utf-8")).hexdigest()
+    return digest, int(version_match.group(1))
+
+
+def check_mirror_wire(errors: list[str], accept: bool) -> None:
+    """Fail a dataset-ordering or wireUniqueId edit that ships without a kWireVersion bump.
+
+    Positional snapshots are only safe while both ends agree on the identity list, so a change
+    to how it is built or ordered is a wire break (spec 0040). The discipline was doc-only
+    until spec 0075 I13: this pins it to a checked-in digest.
+    """
+    current = mirror_wire_digest(errors)
+    if current is None:
+        return
+
+    digest, version = current
+    if accept:
+        MIRROR_BASELINE.write_text(
+            json.dumps({"wireVersion": version, "digest": digest}, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        print(
+            f"registry-verify: mirror wire baseline re-seeded (v{version}, {digest[:12]})"
+        )
+        return
+
+    if not MIRROR_BASELINE.is_file():
+        fail(errors, f"mirror wire baseline {MIRROR_BASELINE.name} is missing")
+        return
+
+    baseline = json.loads(MIRROR_BASELINE.read_text(encoding="utf-8"))
+    if baseline.get("digest") == digest and baseline.get("wireVersion") == version:
+        return
+
+    fail(
+        errors,
+        f"the mirror wire changed (kWireVersion {version}, digest {digest[:12]}, baseline "
+        f"v{baseline.get('wireVersion')} {str(baseline.get('digest'))[:12]}): dataset ordering, "
+        "wireUniqueId or the codec moved. Bump kWireVersion in MirrorProtocol.h, regenerate "
+        "tests/fixtures/mirror/, then re-seed with "
+        "'python3 scripts/registry-verify.py --accept-mirror-wire'",
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--alias-report", action="store_true")
     parser.add_argument("--require-no-alias-refs", action="store_true")
+    parser.add_argument("--accept-mirror-wire", action="store_true")
     args = parser.parse_args()
 
     if not ICONS.is_dir():
@@ -1441,9 +1649,11 @@ def main() -> int:
     check_icon_render_sizes(errors)
     check_property_manifests(errors)
     check_widget_manifests(errors)
+    check_extension_catalog(errors)
     check_host_context_names(errors)
     check_api_snapshot(errors)
     check_corpus_field_refs(errors)
+    check_mirror_wire(errors, args.accept_mirror_wire)
 
     referenced = 0
     if aliases and (args.alias_report or args.require_no_alias_refs):

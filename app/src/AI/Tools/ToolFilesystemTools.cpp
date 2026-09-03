@@ -33,7 +33,10 @@ QJsonObject fsToolDescription(const QString& name)
 }
 
 /**
- * @brief Routes an fs.* tool call to the bounded FileSandbox primitive, inline on the caller.
+ * @brief Routes an fs.* tool call to the bounded FileSandbox primitive on the calling thread.
+ *        The conversation runs fs.read and fs.search on a worker (spec 0075, J3), so nothing
+ *        added here may touch a GUI-owned object: the sandbox guards its own state and every
+ *        primitive returns a value rather than mutating session state.
  */
 QJsonObject executeFsTool(const QString& name, const QJsonObject& args)
 {

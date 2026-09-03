@@ -21,17 +21,14 @@
 
 #pragma once
 
-#include <QPainter>
-#include <QQuickPaintedItem>
+#include <memory>
 
 #include "DataModel/Dialogs/TransmitTestDialog.h"
-#include "DataModel/Editors/EmbeddedCodeEditor.h"
+#include "DataModel/Editors/EmbeddedCodeEditorItem.h"
 #include "DataModel/Editors/ScriptTemplateCatalog.h"
 #include "DataModel/Frame.h"
 
 namespace Misc {
-class ThemeManager;
-class TimerEvents;
 class Translator;
 }  // namespace Misc
 
@@ -43,7 +40,7 @@ class ProjectModel;
 /**
  * @brief QML-embeddable code editor for output-widget transmit scripts.
  */
-class OutputCodeEditor : public QQuickPaintedItem {
+class OutputCodeEditor : public EmbeddedCodeEditorItem {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(bool isModified
@@ -87,30 +84,6 @@ public slots:
   void testTransmitFunction();
   void reload(bool guiTrigger = false);
 
-private slots:
-  void onThemeChanged();
-  void renderWidget();
-  void resizeWidget();
-  void scheduleRender();
-
-private:
-  bool event(QEvent* event) override;
-  void paint(QPainter* painter) override;
-  void keyPressEvent(QKeyEvent* event) override;
-  void keyReleaseEvent(QKeyEvent* event) override;
-  void inputMethodEvent(QInputMethodEvent* event) override;
-  void focusInEvent(QFocusEvent* event) override;
-  void focusOutEvent(QFocusEvent* event) override;
-  void mousePressEvent(QMouseEvent* event) override;
-  void mouseMoveEvent(QMouseEvent* event) override;
-  void mouseReleaseEvent(QMouseEvent* event) override;
-  void mouseDoubleClickEvent(QMouseEvent* event) override;
-  void wheelEvent(QWheelEvent* event) override;
-  void dragEnterEvent(QDragEnterEvent* event) override;
-  void dragMoveEvent(QDragMoveEvent* event) override;
-  void dragLeaveEvent(QDragLeaveEvent* event) override;
-  void dropEvent(QDropEvent* event) override;
-
 public:
   [[nodiscard]] static QString defaultTemplate();
 
@@ -119,14 +92,11 @@ private:
 
 private:
   bool m_readingCode;
-  Misc::ThemeManager& m_themeManager;
-  Misc::TimerEvents& m_timerEvents;
   Misc::Translator& m_translator;
   DataModel::ProjectEditor& m_projectEditor;
   DataModel::ProjectModel& m_projectModel;
-  EmbeddedCodeEditor m_editor;
   ScriptTemplateCatalog m_templates;
-  TransmitTestDialog m_testDialog;
+  std::unique_ptr<TransmitTestDialog> m_testDialog;
 };
 
 }  // namespace DataModel

@@ -33,9 +33,7 @@ Widgets.SmartDialog {
   // Dialog state
   //
   property int sessionId: -1
-  property int visibleRowCount: 0
   property string datasetSearch: ""
-  property int selectedDatasetCount: 0
 
   //
   // Persisted branding + layout preferences
@@ -58,9 +56,10 @@ Widgets.SmartDialog {
   }
 
   //
-  // Per-session dataset selection model (flattened group headers + dataset rows)
+  // Per-session dataset selection model (flattened group headers + dataset rows). The tree
+  // walks, the search filter and the tri-state propagation live in C++ (spec 0075 G6).
   //
-  ListModel {
+  ReportOptionsModel {
     id: _datasetModel
   }
 
@@ -84,7 +83,7 @@ Widgets.SmartDialog {
 
     function onSessionDatasetsReady(sessionId, datasets) {
       if (sessionId === root.sessionId)
-        root.buildDatasetModel(datasets)
+        _datasetModel.build(datasets, Cpp_JSON_ProjectEditor.groupFolderPaths())
     }
   }
 
@@ -115,8 +114,7 @@ Widgets.SmartDialog {
     root.sessionId = id
     _datasetModel.clear()
     _datasetSearch.text = ""
-    root.selectedDatasetCount = 0
-    Cpp_Sessions_Manager.requestSessionDatasets(id)
+        Cpp_Sessions_Manager.requestSessionDatasets(id)
 
     const meta = Cpp_Sessions_Manager.sessionMetadata(id)
     if (meta && meta.project_title)
@@ -179,339 +177,12 @@ Widgets.SmartDialog {
       "lineWidth":           _lineWidthSpin.value / 10,
       "lineStyle":           root.lineStyles[_lineStyleCombo.currentIndex].value,
       "includeStatsOverlay": _annotateStatsCheck.checked,
-      "selectedUniqueIds":   root.collectSelectedUniqueIds(),
+      "selectedUniqueIds":   _datasetModel.selectedUniqueIds(),
       "outputFormat":        outputFormat
     }
 
     const id = root.sessionId
     Qt.callLater(() => Cpp_Sessions_Manager.exportSessionToPdf(id, options))
-  }
-
-  //
-  // Build the collapsible folder/group/dataset tree, emitted depth-first.
-  //
-  function buildDatasetModel(datasets) {
-    _datasetModel.clear()
-
-    const sourcesPerGroup = {}
-    for (let i = 0; i < datasets.length; ++i) {
-      const g = datasets[i].group
-      if (!sourcesPerGroup[g])
-        sourcesPerGroup[g] = {}
-
-      sourcesPerGroup[g][datasets[i].sourceTitle] = true
-    }
-
-    const folderByGroup = Cpp_JSON_ProjectEditor.groupFolderPaths()
-
-    const order = []
-    const byKey = {}
-    for (let i = 0; i < datasets.length; ++i) {
-      const d = datasets[i]
-      const key = d.sourceTitle.length + ":" + d.sourceTitle + d.group
-      if (!byKey[key]) {
-        const distinct = Object.keys(sourcesPerGroup[d.group] || {}).length
-        byKey[key] = {
-          group: d.group,
-          sourceTitle: d.sourceTitle,
-          showSource: distinct > 1 && d.sourceTitle.length > 0,
-          folderPath: (folderByGroup[d.group] !== undefined) ? folderByGroup[d.group] : "",
-          items: []
-        }
-        order.push(key)
-      }
-      byKey[key].items.push(d)
-    }
-
-    const rootNode = { fullPath: "", children: {}, childOrder: [], groups: [] }
-    for (let k = 0; k < order.length; ++k) {
-      const path = byKey[order[k]].folderPath
-      const segs = (path.length > 0) ? path.split("/") : []
-      let node = rootNode
-      for (let s = 0; s < segs.length; ++s) {
-        const seg = segs[s]
-        if (node.children[seg] === undefined) {
-          node.children[seg] = {
-            fullPath: (node.fullPath.length > 0) ? (node.fullPath + "/" + seg) : seg,
-            children: {},
-            childOrder: [],
-            groups: []
-          }
-          node.childOrder.push(seg)
-        }
-        node = node.children[seg]
-      }
-      node.groups.push(order[k])
-    }
-
-    root.emitFolderNode(rootNode, 0, byKey)
-    root.recomputeVisibility()
-    root.refreshSelectedCount()
-  }
-
-  //
-  // Depth-first emit of one folder node: nested subfolders first (recursively),
-  // then the groups it holds, then each group's datasets.
-  //
-  function emitFolderNode(node, depth, byKey) {
-    const parentId = (node.fullPath.length > 0) ? ("F:" + node.fullPath) : ""
-    for (let c = 0; c < node.childOrder.length; ++c) {
-      const seg = node.childOrder[c]
-      const child = node.children[seg]
-      _datasetModel.append({
-        "kind": "folder",
-        "nodeId": "F:" + child.fullPath,
-        "parentId": parentId,
-        "depth": depth,
-        "expanded": false,
-        "hasChildren": child.childOrder.length > 0 || child.groups.length > 0,
-        "rowVisible": depth === 0,
-        "label": seg,
-        "sourceLabel": "",
-        "checkState": Qt.Checked,
-        "uniqueId": -1,
-        "checked": true
-      })
-      root.emitFolderNode(child, depth + 1, byKey)
-    }
-
-    for (let g = 0; g < node.groups.length; ++g) {
-      const grp = byKey[node.groups[g]]
-      _datasetModel.append({
-        "kind": "group",
-        "nodeId": "G:" + node.groups[g],
-        "parentId": parentId,
-        "depth": depth,
-        "expanded": false,
-        "hasChildren": grp.items.length > 0,
-        "rowVisible": depth === 0,
-        "label": grp.group,
-        "sourceLabel": grp.showSource ? grp.sourceTitle : "",
-        "checkState": Qt.Checked,
-        "uniqueId": -1,
-        "checked": true
-      })
-      for (let j = 0; j < grp.items.length; ++j) {
-        const it = grp.items[j]
-        const lbl = (it.units && it.units.length > 0)
-                    ? it.title + " (" + it.units + ")"
-                    : it.title
-        _datasetModel.append({
-          "kind": "dataset",
-          "nodeId": "D:" + it.uniqueId,
-          "parentId": "G:" + node.groups[g],
-          "depth": depth + 1,
-          "expanded": false,
-          "hasChildren": false,
-          "rowVisible": false,
-          "label": lbl,
-          "sourceLabel": "",
-          "checkState": Qt.Unchecked,
-          "uniqueId": it.uniqueId,
-          "checked": true
-        })
-      }
-    }
-  }
-
-  //
-  // Recompute row visibility, either from the expansion state or the search
-  // filter when a query is active.
-  //
-  function recomputeVisibility() {
-    if (root.datasetSearch.length === 0)
-      root.recomputeCollapsedVisibility()
-    else
-      root.recomputeSearchVisibility()
-  }
-
-  //
-  // Collapsed view: a row shows only when every ancestor is expanded.
-  //
-  function recomputeCollapsedVisibility() {
-    let shownCount = 0
-    const shown = {}
-    for (let i = 0; i < _datasetModel.count; ++i) {
-      const row = _datasetModel.get(i)
-      const visible = (row.parentId.length === 0) ? true : (shown[row.parentId] === true)
-      if (row.rowVisible !== visible)
-        _datasetModel.setProperty(i, "rowVisible", visible)
-
-      shown[row.nodeId] = visible && (row.expanded === true)
-      if (visible)
-        ++shownCount
-    }
-
-    root.visibleRowCount = shownCount
-  }
-
-  //
-  // Search view: show every row that matches the query, plus its ancestors.
-  //
-  function recomputeSearchVisibility() {
-    const q = root.datasetSearch
-    const visible = new Array(_datasetModel.count)
-    for (let i = 0; i < _datasetModel.count; ++i)
-      visible[i] = false
-
-    for (let i = 0; i < _datasetModel.count; ++i) {
-      const row = _datasetModel.get(i)
-      if (row.label.toLowerCase().indexOf(q) < 0)
-        continue
-
-      visible[i] = true
-      root.markAncestorsVisible(row.parentId, visible)
-    }
-
-    let shownCount = 0
-    for (let i = 0; i < _datasetModel.count; ++i) {
-      if (_datasetModel.get(i).rowVisible !== visible[i])
-        _datasetModel.setProperty(i, "rowVisible", visible[i])
-
-      if (visible[i])
-        ++shownCount
-    }
-
-    root.visibleRowCount = shownCount
-  }
-
-  //
-  // Flag every ancestor of a matched row as visible.
-  //
-  function markAncestorsVisible(parentId, visible) {
-    let pid = parentId
-    for (let guard = 0; guard < _datasetModel.count && pid.length > 0; ++guard) {
-      const idx = root.indexOfNode(pid)
-      if (idx < 0)
-        break
-
-      visible[idx] = true
-      pid = _datasetModel.get(idx).parentId
-    }
-  }
-
-  //
-  // Toggle the expansion of a folder or group row.
-  //
-  function toggleExpanded(index) {
-    const row = _datasetModel.get(index)
-    if (!row.hasChildren)
-      return
-
-    _datasetModel.setProperty(index, "expanded", !row.expanded)
-    root.recomputeVisibility()
-  }
-
-  //
-  // Expand or collapse every folder/group node at once.
-  //
-  function setAllExpanded(expanded) {
-    for (let i = 0; i < _datasetModel.count; ++i) {
-      const row = _datasetModel.get(i)
-      if (row.hasChildren && row.expanded !== expanded)
-        _datasetModel.setProperty(i, "expanded", expanded)
-    }
-
-    root.recomputeVisibility()
-  }
-
-  //
-  // Linear lookup of a row by its stable node id.
-  //
-  function indexOfNode(nodeId) {
-    for (let i = 0; i < _datasetModel.count; ++i)
-      if (_datasetModel.get(i).nodeId === nodeId)
-        return i
-
-    return -1
-  }
-
-  //
-  // Check or uncheck a node and its whole subtree (contiguous rows of greater
-  // depth), then refresh every ancestor's tri-state.
-  //
-  function setSubtreeChecked(index, checked) {
-    const base = _datasetModel.get(index)
-    root.applyRowChecked(index, checked)
-    for (let i = index + 1; i < _datasetModel.count; ++i) {
-      if (_datasetModel.get(i).depth <= base.depth)
-        break
-
-      root.applyRowChecked(i, checked)
-    }
-
-    root.recomputeAncestors(base.parentId)
-    root.refreshSelectedCount()
-  }
-
-  //
-  // Write the checked state onto one row, respecting its kind.
-  //
-  function applyRowChecked(index, checked) {
-    if (_datasetModel.get(index).kind === "dataset")
-      _datasetModel.setProperty(index, "checked", checked)
-    else
-      _datasetModel.setProperty(index, "checkState", checked ? Qt.Checked : Qt.Unchecked)
-  }
-
-  //
-  // Walk up the parent chain, recomputing each container's tri-state.
-  //
-  function recomputeAncestors(parentId) {
-    let pid = parentId
-    for (let guard = 0; guard < _datasetModel.count && pid.length > 0; ++guard) {
-      const idx = root.indexOfNode(pid)
-      if (idx < 0)
-        break
-
-      root.recomputeNode(idx)
-      pid = _datasetModel.get(idx).parentId
-    }
-  }
-
-  //
-  // Recompute a folder/group header tri-state from the leaf datasets it holds.
-  //
-  function recomputeNode(headerIndex) {
-    const base = _datasetModel.get(headerIndex)
-    if (base.kind === "dataset")
-      return
-
-    let total = 0
-    let checked = 0
-    for (let i = headerIndex + 1; i < _datasetModel.count; ++i) {
-      const row = _datasetModel.get(i)
-      if (row.depth <= base.depth)
-        break
-
-      if (row.kind !== "dataset")
-        continue
-
-      ++total
-      if (row.checked)
-        ++checked
-    }
-
-    if (total === 0)
-      return
-
-    const state = (checked === 0) ? Qt.Unchecked
-                : ((checked === total) ? Qt.Checked : Qt.PartiallyChecked)
-    _datasetModel.setProperty(headerIndex, "checkState", state)
-  }
-
-  //
-  // Refresh the count of selected datasets (drives the export guard).
-  //
-  function refreshSelectedCount() {
-    let n = 0
-    for (let i = 0; i < _datasetModel.count; ++i) {
-      const row = _datasetModel.get(i)
-      if (row.kind === "dataset" && row.checked)
-        ++n
-    }
-
-    root.selectedDatasetCount = n
   }
 
   //
@@ -525,20 +196,6 @@ Widgets.SmartDialog {
       return Cpp_Misc_IconRegistry.icon("widgets", "group", 16)
 
     return Cpp_Misc_IconRegistry.icon("editor", "dataset", 16)
-  }
-
-  //
-  // Collect the unique ids of every checked dataset for the export options.
-  //
-  function collectSelectedUniqueIds() {
-    const ids = []
-    for (let i = 0; i < _datasetModel.count; ++i) {
-      const row = _datasetModel.get(i)
-      if (row.kind === "dataset" && row.checked)
-        ids.push(row.uniqueId)
-    }
-
-    return ids
   }
 
   //
@@ -764,6 +421,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
           } Widgets.Combo {
             id: _pageSizeCombo
+
             Layout.fillWidth: true
             model: root.pageSizes.map(p => p.label)
           }
@@ -825,6 +483,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
           } Widgets.Combo {
             id: _lineStyleCombo
+
             Layout.fillWidth: true
             model: root.lineStyles.map(s => s.label)
           }
@@ -879,15 +538,19 @@ Widgets.SmartDialog {
             text: qsTr("Cover page (logo, document title, test subtitle)")
           } CheckBox {
             id: _metadataCheck
+
             text: qsTr("Test information (project, timestamps, classification and notes)")
           } CheckBox {
             id: _statsCheck
+
             text: qsTr("Measurement summary (min, max, mean, std. deviation per parameter)")
           } CheckBox {
             id: _chartsCheck
+
             text: qsTr("Parameter trends (time-series chart per numeric parameter)")
           } CheckBox {
             id: _annotateStatsCheck
+
             text: qsTr("Annotate min, max, and mean values on plots")
           }
 
@@ -941,7 +604,7 @@ Widgets.SmartDialog {
               text: qsTr("Expand All")
               enabled: _datasetModel.count > 0
               font: Cpp_Misc_CommonFonts.uiFont
-              onClicked: root.setAllExpanded(true)
+              onClicked: _datasetModel.setAllExpanded(true)
             }
 
             Button {
@@ -950,7 +613,7 @@ Widgets.SmartDialog {
               text: qsTr("Collapse All")
               enabled: _datasetModel.count > 0
               font: Cpp_Misc_CommonFonts.uiFont
-              onClicked: root.setAllExpanded(false)
+              onClicked: _datasetModel.setAllExpanded(false)
             }
           }
 
@@ -963,7 +626,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["window"]
             onTextChanged: {
               root.datasetSearch = text.trim().toLowerCase()
-              root.recomputeVisibility()
+              _datasetModel.setSearch(root.datasetSearch)
             }
           }
 
@@ -1017,7 +680,7 @@ Widgets.SmartDialog {
                   MouseArea {
                     anchors.fill: parent
                     enabled: model.hasChildren
-                    onClicked: root.toggleExpanded(index)
+                    onClicked: _datasetModel.toggleExpanded(index)
                   }
                 }
 
@@ -1030,9 +693,9 @@ Widgets.SmartDialog {
                   nextCheckState: function() { return checkState }
                   onClicked: {
                     if (model.kind === "dataset")
-                      root.setSubtreeChecked(index, !model.checked)
+                      _datasetModel.setSubtreeChecked(index, !model.checked)
                     else
-                      root.setSubtreeChecked(index, model.checkState !== Qt.Checked)
+                      _datasetModel.setSubtreeChecked(index, model.checkState !== Qt.Checked)
                   }
                 }
 
@@ -1061,7 +724,7 @@ Widgets.SmartDialog {
                   MouseArea {
                     anchors.fill: parent
                     enabled: model.hasChildren
-                    onClicked: root.toggleExpanded(index)
+                    onClicked: _datasetModel.toggleExpanded(index)
                   }
                 }
 
@@ -1082,7 +745,7 @@ Widgets.SmartDialog {
               color: Cpp_ThemeManager.colors["text"]
               font: Cpp_Misc_CommonFonts.uiFont
               visible: _datasetModel.count === 0
-                       || (root.datasetSearch.length > 0 && root.visibleRowCount === 0)
+                       || (root.datasetSearch.length > 0 && _datasetModel.visibleRowCount === 0)
               text: _datasetModel.count === 0
                     ? qsTr("Loading datasets...")
                     : qsTr("No datasets match your search.")
@@ -1104,7 +767,7 @@ Widgets.SmartDialog {
         Layout.alignment: Qt.AlignVCenter
         font: Cpp_Misc_CommonFonts.uiFont
         color: Cpp_ThemeManager.colors["text"]
-        visible: _datasetModel.count > 0 && root.selectedDatasetCount === 0
+        visible: _datasetModel.count > 0 && _datasetModel.selectedDatasetCount === 0
         text: qsTr("Select at least one dataset to include.")
       }
 
@@ -1129,7 +792,7 @@ Widgets.SmartDialog {
                   || _metadataCheck.checked
                   || _statsCheck.checked
                   || _chartsCheck.checked)
-                 && root.selectedDatasetCount > 0
+                 && _datasetModel.selectedDatasetCount > 0
         onClicked: {
           root.persistPreferences()
           root.close()

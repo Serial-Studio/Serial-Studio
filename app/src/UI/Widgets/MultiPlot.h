@@ -28,6 +28,7 @@
 #include "Misc/ThemeManager.h"
 #include "SerialStudio.h"
 #include "UI/Dashboard.h"
+#include "UI/Widgets/PlotBase.h"
 
 namespace Widgets {
 /**
@@ -199,8 +200,6 @@ private:
   void pushSweepConfig();
   void syncStringCurves();
   void applyLogYToCurve(QList<QPointF>& curve);
-  void buildLogXScratch(const DSP::AxisData& x, const double floor);
-  void clampToVisibleX(double& lo, double& hi) const;
   [[nodiscard]] bool computeRangeFromDatasets();
   void scanCurvesForRange();
   void padDerivedRange();
@@ -215,30 +214,20 @@ private:
   double m_maxX;
   double m_minY;
   double m_maxY;
-  double m_visLoX;
-  double m_visHiX;
   bool m_timeAxis;
   bool m_logX;
   bool m_logY;
-  DSP::AxisData m_logXScratch;
   QString m_yLabel;
   QString m_xLabel;
   QStringList m_colors;
   QStringList m_labels;
-  QList<int> m_drawOrders;
   QList<bool> m_stringCurves;
   QList<bool> m_visibleCurves;
   QList<QList<QPointF>> m_data;
   QList<QPointF> m_renderData;
-  SerialStudio::InterpolationMode m_interpolationMode;
 
-  bool m_sweepEnabled;
-  double m_triggerLevel;
-  double m_holdoffMs;
-  double m_timebaseMs;
   int m_triggerSource;
-  SerialStudio::SweepMode m_sweepMode;
-  SerialStudio::TriggerEdge m_triggerEdge;
+  PlotBase m_base;
 
   UI::Dashboard& m_dashboard;
   Misc::ThemeManager& m_themeManager;

@@ -218,8 +218,11 @@ private:
   [[nodiscard]] bool valid() const;
   [[nodiscard]] QString widgetId() const;
   [[nodiscard]] QString currentTitle() const;
+  [[nodiscard]] int sourceDatasetCount() const;
+  [[nodiscard]] const DataModel::Dataset& datasetAt(int index) const;
   [[nodiscard]] QVector<ExtensionRow> collectRows() const;
   [[nodiscard]] ExtensionRow buildRow(const DataModel::Dataset& dataset) const;
+  [[nodiscard]] ExtensionRow buildVolatileRow(const DataModel::Dataset& dataset) const;
   [[nodiscard]] QVariantList datasetWidgets(const DataModel::Dataset& dataset) const;
   [[nodiscard]] bool refreshLead(const ExtensionRow& row);
   void rebuildRows();

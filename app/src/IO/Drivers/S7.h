@@ -38,6 +38,7 @@
 
 #include "DataModel/Frame.h"
 #include "IO/Drivers/OpcUaWire.h"
+#include "IO/Drivers/PolledPlcWorkerBase.h"
 #include "IO/Drivers/S7/IsoTsap.h"
 #include "IO/Drivers/S7/S7Pdu.h"
 #include "IO/Drivers/S7Address.h"
@@ -82,16 +83,12 @@ struct S7ReadItem {
  *        and never on the GUI thread. It is created, used and destroyed on this thread, which is
  *        what lets the driver tear it down by quitting the event loop.
  */
-class S7PollWorker : public QObject {
+class S7PollWorker : public PolledPlcWorkerBase {
   Q_OBJECT
-
-signals:
-  void frameReady(const QByteArray& frame, qint64 stampNs);
-  void linkLost(const QString& reason);
 
 public:
   explicit S7PollWorker();
-  ~S7PollWorker();
+  ~S7PollWorker() override;
 
   S7PollWorker(S7PollWorker&&)                 = delete;
   S7PollWorker(const S7PollWorker&)            = delete;
@@ -99,21 +96,9 @@ public:
   S7PollWorker& operator=(const S7PollWorker&) = delete;
 
   void configure(const QString& host, int rack, int slot, int interval, QVector<S7ReadItem> items);
-  void requestAbort() noexcept;
 
-  [[nodiscard]] quint64 readsOk() const noexcept;
   [[nodiscard]] quint64 lastFault() const noexcept;
   [[nodiscard]] quint64 itemErrors() const noexcept;
-  [[nodiscard]] quint64 readsFailed() const noexcept;
-  [[nodiscard]] quint64 framesPublished() const noexcept;
-  [[nodiscard]] const QString& dialError() const noexcept;
-
-public slots:
-  [[nodiscard]] bool connectToPlc();
-  void shutdown();
-
-private slots:
-  void onPollTick();
 
 private:
   [[nodiscard]] bool dial();
@@ -122,23 +107,16 @@ private:
   [[nodiscard]] bool pollChunk(const S7Comm::Chunk& chunk);
   [[nodiscard]] bool readTpdu(QByteArray& tpdu, int timeoutMs);
   [[nodiscard]] bool exchange(const QByteArray& request, QByteArray& response);
+  [[nodiscard]] bool connectToPlc() override;
+  void pollTick() override;
+  void releaseResources() override;
   void applyResult(int index, const S7Comm::ReadResult& result, QByteArrayView pdu);
-  void publishDirtySlots(qint64 stampNs);
-  void reportFailure(const QString& reason);
 
-  bool m_open;
-  bool m_reported;
-  std::atomic<bool> m_abort;
   int m_rack;
   int m_slot;
-  int m_interval;
-  int m_frameSlot;
   QString m_host;
-  QString m_dialError;
-  QTimer* m_timer;
   QTcpSocket* m_socket;
   QByteArray m_rx;
-  QByteArray m_frames[2];
   QByteArray m_response;
   S7Comm::PduCodec m_codec;
   S7Comm::Transport m_transport;
@@ -146,21 +124,13 @@ private:
   QList<S7Comm::Chunk> m_chunks;
   QList<S7Comm::ReadItem> m_reads;
   QList<S7Comm::ReadResult> m_results;
-  QList<QVariant> m_values;
-  QList<bool> m_dirty;
   // code-verify off
-  // Counters are pulled from the GUI thread while the poll thread increments them, so they are
-  // atomic rather than the plain quint64 of spec 0033. They are DELIBERATELY packed: one poll
-  // thread writes all five at poll rate and one reader samples them at 1 Hz, so there is no
-  // cross-core write contention to pad against and five cache lines of padding would cost more
-  // than the sharing. m_lastFault packs the offending variable's index and its return code into
-  // one word ((index + 1) << 8 | code, zero for none) so the GUI can name the variable without
-  // reading a QString the poll thread is writing.
-  std::atomic<quint64> m_readsOk;
+  // Both counters are pulled from the GUI thread while the poll thread increments them, so they
+  // are atomic rather than the plain quint64 of spec 0033. m_lastFault packs the offending
+  // variable's index and its return code into one word ((index + 1) << 8 | code, zero for none)
+  // so the GUI can name the variable without reading a QString the poll thread is writing.
   std::atomic<quint64> m_lastFault;
   std::atomic<quint64> m_itemErrors;
-  std::atomic<quint64> m_readsFailed;
-  std::atomic<quint64> m_framesPublished;
   // code-verify on
 };
 
@@ -221,6 +191,7 @@ public:
   void setSessionPeer(S7* peer);
 
   [[nodiscard]] bool isOpen() const noexcept override;
+  [[nodiscard]] bool isConnecting() const noexcept override;
   [[nodiscard]] bool isReadable() const noexcept override;
   [[nodiscard]] bool isWritable() const noexcept override;
   [[nodiscard]] bool configurationOk() const noexcept override;
@@ -261,6 +232,7 @@ public slots:
 private slots:
   void onFrameReady(const QByteArray& frame, qint64 stampNs);
   void onLinkLost(const QString& reason);
+  void onDialFinished(bool ok, const QString& reason);
 
 private:
   void doClose();
@@ -279,6 +251,7 @@ private:
   DataModel::ProjectModel& m_projectModel;
 
   bool m_open;
+  bool m_connecting;
   bool m_persistent;
   int m_rack;
   int m_slot;
@@ -292,6 +265,7 @@ private:
   QPointer<S7> m_sessionPeer;
   QVector<S7Variable> m_variables;
   QVector<S7ReadItem> m_items;
+  QList<QMetaObject::Connection> m_workerLinks;
   QSettings m_settings;
 };
 

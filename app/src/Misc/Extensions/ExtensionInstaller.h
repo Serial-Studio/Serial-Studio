@@ -24,13 +24,14 @@
 #include <QJsonObject>
 #include <QList>
 #include <QObject>
-#include <QPair>
 #include <QSet>
 #include <QString>
 #include <QStringList>
 #include <QUrl>
 #include <QVariantList>
 #include <QVariantMap>
+
+#include "Misc/Extensions/ExtensionCatalog.h"
 
 class QNetworkReply;
 class QNetworkAccessManager;
@@ -51,6 +52,7 @@ signals:
   void busyChanged();
   void progressChanged();
   void installed(const QString& id);
+  void installFailed(const QString& id, const QString& reason);
 
 public:
   explicit ExtensionInstaller(QNetworkAccessManager& network,
@@ -63,6 +65,7 @@ public:
   [[nodiscard]] QStringList installedIds() const;
   [[nodiscard]] QString extensionsPath() const;
   [[nodiscard]] QString installedVersion(const QString& id) const;
+  [[nodiscard]] QString lastError() const;
   [[nodiscard]] QJsonObject installedInfo(const QString& id) const;
 
   [[nodiscard]] bool install(const QVariantMap& entry);
@@ -77,16 +80,21 @@ private slots:
 
 private:
   void finishInstall();
+  void abortInstall(const QString& reason);
   void loadInstalledManifest();
   void saveInstalledManifest();
-  void writeExtensionFile(QNetworkReply* reply);
-  void startDownloads(const QVariantMap& entry, const QVariantList& files);
-  void copyLocalFiles(const QVariantList& files, const QString& base, const QString& installDir);
+  [[nodiscard]] bool writeStagedFile(QNetworkReply* reply);
+  [[nodiscard]] bool commitStagedInstall();
+  void startDownloads(const QVariantMap& entry, const QList<ExtensionCatalog::CatalogFile>& files);
+  [[nodiscard]] bool copyLocalFiles(const QList<ExtensionCatalog::CatalogFile>& files,
+                                    const QString& base,
+                                    const QString& stagingDir);
 
   [[nodiscard]] QString installedManifestPath() const;
+  [[nodiscard]] QString installDirFor(const QString& type, const QString& id) const;
+  [[nodiscard]] QJsonObject buildInstalledRecord() const;
   [[nodiscard]] bool installLocal(const QVariantMap& entry,
-                                  const QVariantList& files,
-                                  const QString& installDir);
+                                  const QList<ExtensionCatalog::CatalogFile>& files);
 
 private:
   bool m_busy;
@@ -94,11 +102,15 @@ private:
   int m_pendingDownloads;
   int m_totalDownloads;
 
+  QString m_lastError;
   QString m_currentInstallId;
   QString m_currentInstallRepoBase;
+  QString m_currentStagingDir;
+  QString m_currentInstallDir;
   QVariantMap m_currentInstallMeta;
   QJsonObject m_installedExtensions;
-  QList<QPair<QString, QUrl>> m_downloadQueue;
+  QList<ExtensionCatalog::CatalogFile> m_currentFiles;
+  QList<ExtensionCatalog::CatalogFile> m_downloadQueue;
   QSet<QNetworkReply*> m_replies;
 
   QNetworkAccessManager& m_network;

@@ -90,10 +90,14 @@ class USB : public HAL_Driver {
   Q_PROPERTY(bool isoModeEnabled
              READ  isoModeEnabled
              NOTIFY transferModeChanged)
+  Q_PROPERTY(bool advancedTransferConsent
+             READ  advancedTransferConsent
+             NOTIFY advancedTransferConsentChanged)
   // clang-format on
 
 signals:
   void transferModeChanged();
+  void advancedTransferConsentChanged();
   void deviceListChanged();
   void deviceIndexChanged();
   void endpointListChanged();
@@ -147,11 +151,13 @@ public:
   [[nodiscard]] int outEndpointIndex() const;
 
   [[nodiscard]] int isoPacketSize() const;
+  [[nodiscard]] bool advancedTransferConsent() const;
 
 public slots:
   void setDriverProperty(const QString& key, const QVariant& value) override;
   void setDeviceIndex(const int index);
   void setTransferMode(const int mode);
+  void grantAdvancedTransferConsent();
   void setInEndpointIndex(const int index);
   void setOutEndpointIndex(const int index);
   void setIsoPacketSize(const int size);
@@ -210,6 +216,8 @@ private:
   libusb_hotplug_callback_handle m_hotplugHandle;
 
   UsbTransferPump m_pump;
+
+  bool m_advancedConsent;
 
   int m_deviceIndex;
   int m_inEndpointIndex;

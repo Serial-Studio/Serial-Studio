@@ -31,7 +31,6 @@
 #include <QSet>
 #include <QStringList>
 #include <QTcpSocket>
-#include <QTimer>
 
 #include "AppState.h"
 #include "DataModel/ProjectModel.h"
@@ -63,20 +62,7 @@ static constexpr int kS7JoinTimeoutMs     = 5000;
  *        connectToPlc(), never in the constructor, which still runs on the GUI thread.
  */
 IO::Drivers::S7PollWorker::S7PollWorker()
-  : m_open(false)
-  , m_reported(false)
-  , m_abort(false)
-  , m_rack(0)
-  , m_slot(kS7DefaultSlot)
-  , m_interval(kS7DefaultIntervalMs)
-  , m_frameSlot(0)
-  , m_timer(nullptr)
-  , m_socket(nullptr)
-  , m_readsOk(0)
-  , m_lastFault(0)
-  , m_itemErrors(0)
-  , m_readsFailed(0)
-  , m_framesPublished(0)
+  : m_rack(0), m_slot(kS7DefaultSlot), m_socket(nullptr), m_lastFault(0), m_itemErrors(0)
 {}
 
 /**
@@ -98,61 +84,42 @@ void IO::Drivers::S7PollWorker::configure(
   SS_ASSERT(!items.isEmpty(), return);
   SS_ASSERT_LOG(interval >= kS7MinIntervalMs);
 
-  m_host     = host;
-  m_rack     = rack;
-  m_slot     = slot;
-  m_interval = interval;
-  m_items    = std::move(items);
-  m_values   = QList<QVariant>(m_items.size());
-  m_dirty    = QList<bool>(m_items.size(), false);
+  m_host  = host;
+  m_rack  = rack;
+  m_slot  = slot;
+  m_items = std::move(items);
 
   m_reads.clear();
   m_reads.reserve(m_items.size());
-  for (const auto& item : m_items)
+
+  QVector<OpcUaWire::Type> types;
+  types.reserve(m_items.size());
+  for (const auto& item : m_items) {
     m_reads.append(S7Comm::itemForAddress(item.address));
+    types.append(item.wireType);
+  }
 
-  qsizetype bytes = OpcUaWire::kHeaderBytes;
-  for (const auto& item : m_items)
-    bytes += OpcUaWire::maxEntryBytes(item.wireType);
-
-  const auto reserve = qMin<qsizetype>(bytes, OpcUaWire::kMaxFrameBytes);
-  m_frames[0].reserve(reserve);
-  m_frames[1].reserve(reserve);
-}
-
-/**
- * @brief Latches a teardown request from the GUI thread so an in-flight poll unwinds promptly. The
- *        flag is atomic and set BEFORE the blocking shutdown invoke, which is what lets the poll
- *        loop return between chunks instead of freezing the GUI for a full reply deadline.
- */
-void IO::Drivers::S7PollWorker::requestAbort() noexcept
-{
-  m_abort.store(true, std::memory_order_relaxed);
+  configureChannels(interval, std::move(types));
 }
 
 /**
  * @brief Opens the S7comm session. This blocks for as long as the controller takes to answer,
- *        which is exactly why it runs here: the RETURN VALUE is the driver's single dial verdict
- *        (spec 0050), so there is no latch to mis-emit and no watchdog to bounce a healthy link.
+ *        which is exactly why it runs on the worker thread; the return value is the verdict
+ *        beginDial() reports.
  */
 bool IO::Drivers::S7PollWorker::connectToPlc()
 {
-  SS_ASSERT(!m_open, return true);
+  SS_ASSERT(!sessionOpen(), return true);
   SS_ASSERT(!m_reads.isEmpty(), return false);
 
-  m_abort.store(false, std::memory_order_relaxed);
-  m_dialError.clear();
+  clearAbort();
+  noteDialError(QString());
   if (!dial()) {
     shutdown();
     return false;
   }
 
-  m_open     = true;
-  m_reported = false;
-  m_timer    = new QTimer(this);
-  m_timer->setInterval(m_interval);
-  connect(m_timer, &QTimer::timeout, this, &IO::Drivers::S7PollWorker::onPollTick);
-  m_timer->start();
+  startPolling();
   return true;
 }
 
@@ -174,19 +141,19 @@ bool IO::Drivers::S7PollWorker::dial()
   m_socket = new QTcpSocket(this);
   m_socket->connectToHost(m_host, S7Comm::kIsoTsapPort);
   if (!m_socket->waitForConnected(kS7DialDeadlineMs)) {
-    m_dialError = m_socket->errorString();
+    noteDialError(m_socket->errorString());
     return false;
   }
 
   const auto request = m_transport.buildConnectRequest(m_rack, m_slot);
   if (request.isEmpty() || m_socket->write(request) != request.size()) {
-    m_dialError = tr("The ISO connection request could not be sent");
+    noteDialError(tr("The ISO connection request could not be sent"));
     return false;
   }
 
   QByteArray tpdu;
   if (!readTpdu(tpdu, kS7DialDeadlineMs) || !m_transport.parseConnectConfirm(tpdu)) {
-    m_dialError = tr("The controller refused the ISO connection: check the rack and slot numbers");
+    noteDialError(tr("The controller refused the ISO connection: check the rack and slot numbers"));
     return false;
   }
 
@@ -205,29 +172,19 @@ bool IO::Drivers::S7PollWorker::negotiate()
 
   const auto request = m_codec.buildSetupRequest(m_codec.nextReference());
   if (request.isEmpty() || !exchange(request, m_response)) {
-    m_dialError = tr("The controller did not answer the S7comm setup request");
+    noteDialError(tr("The controller did not answer the S7comm setup request"));
     return false;
   }
 
   if (m_codec.parseSetupResponse(m_response) != S7Comm::PduResult::Ok) {
     const auto reason = m_codec.lastError();
-    m_dialError       = reason.isEmpty() ? tr("The controller refused the S7comm session") : reason;
+    noteDialError(reason.isEmpty() ? tr("The controller refused the S7comm session") : reason);
     return false;
   }
 
   m_chunks = m_codec.planChunks(m_reads);
   SS_ASSERT_LOG(!m_chunks.isEmpty());
   return !m_chunks.isEmpty();
-}
-
-/**
- * @brief Why the last dial failed, read by the driver after the blocking call returns. Not a
- *        signal: the verdict already travels through connectToPlc()'s return value, and a second
- *        channel for the same event is how a driver ends up reporting an attempt twice.
- */
-const QString& IO::Drivers::S7PollWorker::dialError() const noexcept
-{
-  return m_dialError;
 }
 
 /**
@@ -260,7 +217,7 @@ bool IO::Drivers::S7PollWorker::readTpdu(QByteArray& tpdu, int timeoutMs)
   QElapsedTimer clock;
   clock.start();
   for (int round = 0; round < kS7MaxReadRounds; ++round) {
-    if (m_abort.load(std::memory_order_relaxed))
+    if (aborted())
       return false;
 
     m_rx.append(m_socket->readAll());
@@ -299,7 +256,7 @@ bool IO::Drivers::S7PollWorker::exchange(const QByteArray& request, QByteArray& 
     return false;
 
   for (int part = 0; part < kS7MaxTpdusPerReply; ++part) {
-    if (m_abort.load(std::memory_order_relaxed))
+    if (aborted())
       return false;
 
     QByteArray tpdu;
@@ -318,18 +275,11 @@ bool IO::Drivers::S7PollWorker::exchange(const QByteArray& request, QByteArray& 
 }
 
 /**
- * @brief Stops polling and closes the socket on the thread that owns it. Idempotent, because both
- *        the driver's teardown and the destructor reach it.
+ * @brief Closes the socket and drops the poll plan on the thread that owns them. Idempotent,
+ *        because both the driver's teardown and the destructor reach it through shutdown().
  */
-void IO::Drivers::S7PollWorker::shutdown()
+void IO::Drivers::S7PollWorker::releaseResources()
 {
-  m_open = false;
-  if (m_timer) {
-    m_timer->stop();
-    delete m_timer;
-    m_timer = nullptr;
-  }
-
   if (m_socket) {
     m_socket->abort();
     m_socket->close();
@@ -339,8 +289,8 @@ void IO::Drivers::S7PollWorker::shutdown()
 
   m_rx.clear();
   m_chunks.clear();
-  SS_ASSERT_LOG(m_timer == nullptr);
   SS_ASSERT_LOG(m_socket == nullptr);
+  SS_ASSERT_LOG(m_chunks.isEmpty());
 }
 
 /**
@@ -349,23 +299,20 @@ void IO::Drivers::S7PollWorker::shutdown()
  *        that stopped answering looks healthy while publishing nothing. A refused ITEM does not:
  *        a bad address is a configuration error the other variables should survive.
  */
-void IO::Drivers::S7PollWorker::onPollTick()
+void IO::Drivers::S7PollWorker::pollTick()
 {
-  if (!m_open)
-    return;
-
   const auto now       = std::chrono::steady_clock::now().time_since_epoch();
   const qint64 stampNs = std::chrono::duration_cast<std::chrono::nanoseconds>(now).count();
 
   SS_ASSERT_LOG(!m_chunks.isEmpty());
   for (const auto& chunk : m_chunks) {
-    if (m_abort.load(std::memory_order_relaxed))
+    if (aborted())
       return;
 
     if (pollChunk(chunk))
       continue;
 
-    if (m_abort.load(std::memory_order_relaxed))
+    if (aborted())
       return;
 
     reportFailure(tr("The controller closed the S7comm session"));
@@ -392,7 +339,7 @@ bool IO::Drivers::S7PollWorker::pollChunk(const S7Comm::Chunk& chunk)
   m_results.clear();
   const auto parsed = m_codec.parseReadResponse(m_response, chunk.count, m_results);
   if (parsed == S7Comm::PduResult::Refused) {
-    m_readsFailed.fetch_add(chunk.count, std::memory_order_relaxed);
+    countReadsFailed(chunk.count);
     m_itemErrors.fetch_add(chunk.count, std::memory_order_relaxed);
     return true;
   }
@@ -407,9 +354,10 @@ bool IO::Drivers::S7PollWorker::pollChunk(const S7Comm::Chunk& chunk)
 }
 
 /**
- * @brief Decodes one answered item and latches it when its value moved. A non-success return code
- *        leaves the previous value in place and records which variable was refused and why, so the
- *        pane can name it without the poll thread writing a string the GUI thread reads.
+ * @brief Decodes one answered item and latches it when its value moved. A refused item records only
+ *        an index and a code, so the pane assembles the string instead of the poll thread. A
+ *        SUCCESS item whose payload does not decode (a controller-declared length of zero) counts
+ *        as an item error too. Both keep the previous value; neither asserts on wire input.
  */
 void IO::Drivers::S7PollWorker::applyResult(int index,
                                             const S7Comm::ReadResult& result,
@@ -420,78 +368,22 @@ void IO::Drivers::S7PollWorker::applyResult(int index,
 
   if (result.returnCode != S7Comm::kReturnSuccess) {
     const auto fault = (static_cast<quint64>(index) + 1) << kS7FaultIndexShift;
-    m_readsFailed.fetch_add(1, std::memory_order_relaxed);
+    countReadsFailed(1);
     m_itemErrors.fetch_add(1, std::memory_order_relaxed);
     m_lastFault.store(fault | result.returnCode, std::memory_order_relaxed);
     return;
   }
 
-  m_readsOk.fetch_add(1, std::memory_order_relaxed);
   const auto& address = m_items.at(index).address;
   const auto value    = S7Comm::decodeValue(address, pdu.sliced(result.offset, result.size));
-  if (!value.isValid() || m_values.at(index) == value)
+  if (!value.isValid()) {
+    countReadsFailed(1);
+    m_itemErrors.fetch_add(1, std::memory_order_relaxed);
     return;
-
-  m_values[index] = value;
-  m_dirty[index]  = true;
-}
-
-/**
- * @brief Encodes every dirty slot into one OpcUaWire delta frame and hands it to the driver with
- *        the poll's own timestamp. The stamp is captured HERE, before the queued hop, because the
- *        source owns time and a receipt-time stamp on the GUI thread would carry the queue's
- *        latency into every recording.
- */
-void IO::Drivers::S7PollWorker::publishDirtySlots(qint64 stampNs)
-{
-  SS_ASSERT_LOG(m_dirty.size() == m_items.size());
-  SS_ASSERT_LOG(stampNs > 0);
-
-  QByteArray& frame = m_frames[m_frameSlot];
-  OpcUaWire::beginFrame(frame);
-  for (int i = 0; i < m_items.size(); ++i) {
-    if (!m_dirty.at(i))
-      continue;
-
-    if (frame.size() + OpcUaWire::maxEntryBytes(m_items.at(i).wireType) > OpcUaWire::kMaxFrameBytes)
-      break;
-
-    OpcUaWire::appendEntry(frame, i, m_items.at(i).wireType, m_values.at(i));
-    m_dirty[i] = false;
   }
 
-  if (frame.size() <= OpcUaWire::kHeaderBytes)
-    return;
-
-  m_framesPublished.fetch_add(1, std::memory_order_relaxed);
-  Q_EMIT frameReady(frame, stampNs);
-  m_frameSlot ^= 1;
-}
-
-/**
- * @brief Reports a lost link exactly once and stops polling; the driver turns it into a queued
- *        disconnect so nothing tears the device down from inside this handler.
- */
-void IO::Drivers::S7PollWorker::reportFailure(const QString& reason)
-{
-  SS_ASSERT_LOG(!reason.isEmpty());
-  if (m_reported)
-    return;
-
-  m_reported = true;
-  m_open     = false;
-  if (m_timer)
-    m_timer->stop();
-
-  Q_EMIT linkLost(reason);
-}
-
-/**
- * @brief Successful reads since the session opened.
- */
-quint64 IO::Drivers::S7PollWorker::readsOk() const noexcept
-{
-  return m_readsOk.load(std::memory_order_relaxed);
+  countReadsOk(1);
+  (void)latchChannel(index, value);
 }
 
 /**
@@ -511,22 +403,6 @@ quint64 IO::Drivers::S7PollWorker::itemErrors() const noexcept
   return m_itemErrors.load(std::memory_order_relaxed);
 }
 
-/**
- * @brief Refused or timed-out reads since the session opened.
- */
-quint64 IO::Drivers::S7PollWorker::readsFailed() const noexcept
-{
-  return m_readsFailed.load(std::memory_order_relaxed);
-}
-
-/**
- * @brief Delta frames handed to the driver since the session opened.
- */
-quint64 IO::Drivers::S7PollWorker::framesPublished() const noexcept
-{
-  return m_framesPublished.load(std::memory_order_relaxed);
-}
-
 //--------------------------------------------------------------------------------------------------
 // Driver construction and teardown
 //--------------------------------------------------------------------------------------------------
@@ -538,6 +414,7 @@ IO::Drivers::S7::S7()
   : m_appState(AppState::instance())
   , m_projectModel(DataModel::ProjectModel::instance())
   , m_open(false)
+  , m_connecting(false)
   , m_persistent(true)
   , m_rack(0)
   , m_slot(kS7DefaultSlot)
@@ -682,13 +559,17 @@ void IO::Drivers::S7::close()
  */
 void IO::Drivers::S7::doClose()
 {
-  m_open = false;
+  m_open       = false;
+  m_connecting = false;
   if (!m_worker) {
     SS_ASSERT_LOG(!m_thread->isRunning());
     return;
   }
 
-  disconnect(m_worker, nullptr, this, nullptr);
+  for (const auto& link : std::as_const(m_workerLinks))
+    disconnect(link);
+
+  m_workerLinks.clear();
   if (m_thread->isRunning()) {
     m_worker->requestAbort();
     QMetaObject::invokeMethod(
@@ -720,6 +601,15 @@ void IO::Drivers::S7::doClose()
 bool IO::Drivers::S7::isOpen() const noexcept
 {
   return m_open;
+}
+
+/**
+ * @brief Returns true while the worker's dial is in flight; the connect button reads this rather
+ *        than looking like a dead click for the length of the controller's timeout.
+ */
+bool IO::Drivers::S7::isConnecting() const noexcept
+{
+  return m_connecting;
 }
 
 /**
@@ -781,18 +671,37 @@ bool IO::Drivers::S7::open(const QIODevice::OpenMode mode)
   m_worker = new S7PollWorker();
   m_worker->configure(m_host.trimmed(), m_rack, m_slot, m_pollInterval, m_items);
   m_worker->moveToThread(m_thread.get());
-  connect(m_worker, &S7PollWorker::frameReady, this, &IO::Drivers::S7::onFrameReady);
-  connect(m_worker, &S7PollWorker::linkLost, this, &IO::Drivers::S7::onLinkLost);
+  m_workerLinks = {
+    connect(m_worker, &S7PollWorker::frameReady, this, &IO::Drivers::S7::onFrameReady),
+    connect(m_worker, &S7PollWorker::linkLost, this, &IO::Drivers::S7::onLinkLost),
+    connect(m_worker, &S7PollWorker::dialFinished, this, &IO::Drivers::S7::onDialFinished),
+  };
 
   m_thread->start();
 
-  bool ok = false;
-  QMetaObject::invokeMethod(
-    m_worker, [this, &ok] { ok = m_worker->connectToPlc(); }, Qt::BlockingQueuedConnection);
+  m_connecting = true;
+  QMetaObject::invokeMethod(m_worker, &S7PollWorker::beginDial, Qt::QueuedConnection);
 
-  m_open = ok;
+  Q_EMIT statusChanged();
+  Q_EMIT configurationChanged();
+  return true;
+}
+
+/**
+ * @brief Settles the worker's dial verdict exactly once. A verdict landing after the user closed
+ *        the session is dropped: doClose() clears the dialing flag, so a late report can neither
+ *        reopen the driver nor report an attempt nobody is waiting for.
+ */
+void IO::Drivers::S7::onDialFinished(bool ok, const QString& reason)
+{
+  if (!m_connecting)
+    return;
+
+  m_connecting = false;
+  m_open       = ok;
+
   if (!ok) {
-    m_lastError = m_worker->dialError();
+    m_lastError = reason;
     logDriverError(
       tr("S7 Connection Failed"),
       tr("\"%1\" (rack %2, slot %3): %4")
@@ -805,7 +714,7 @@ bool IO::Drivers::S7::open(const QIODevice::OpenMode mode)
 
   Q_EMIT statusChanged();
   Q_EMIT configurationChanged();
-  return ok;
+  reportOpenFinished(ok, reason);
 }
 
 //--------------------------------------------------------------------------------------------------

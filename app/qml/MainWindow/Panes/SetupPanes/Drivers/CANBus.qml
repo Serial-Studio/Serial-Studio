@@ -221,8 +221,8 @@ Item {
       //
       Label {
         text: qsTr("Flexible Data-Rate") + ":"
-        opacity: Cpp_IO_CANBus.interfaceSupportsFD ? 1 : 0.5
         visible: Cpp_IO_CANBus.interfaceList.length > 0
+        opacity: Cpp_IO_CANBus.interfaceSupportsFD ? 1 : 0.5
       } CheckBox {
         id: _canFDCheck
 

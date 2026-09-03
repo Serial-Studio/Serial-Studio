@@ -329,6 +329,28 @@ QRect UI::WindowGeometry::computeResizedGeometry(const QRect& initial,
 }
 
 /**
+ * @brief Pulls a resize candidate back inside the canvas: the origin cannot go negative and the
+ *        far edge cannot pass the last pixel. The clamped rectangle is what a gesture applies --
+ *        discarding it instead froze the window the moment an edge touched the canvas (F19).
+ */
+QRect UI::WindowGeometry::clampResizeToCanvas(QRect geometry, const QSize& canvas)
+{
+  SS_ASSERT(canvas.width() > 0, return geometry);
+  SS_ASSERT(canvas.height() > 0, return geometry);
+
+  geometry.setX(qMax(0, geometry.x()));
+  geometry.setY(qMax(0, geometry.y()));
+
+  if (geometry.right() > canvas.width() - 1)
+    geometry.setWidth(canvas.width() - geometry.x());
+
+  if (geometry.bottom() > canvas.height() - 1)
+    geometry.setHeight(canvas.height() - geometry.y());
+
+  return geometry;
+}
+
+/**
  * @brief Fits one window inside the canvas: the size floor loses to the canvas, the canvas wins
  *        over the position, and a rect equal to the input means nothing had to move.
  */

@@ -63,17 +63,47 @@ function formatTickValue(model, val) {
 }
 
 //
+// Padding reference cache: the widths of the formatted range ends depend on the range alone,
+// so they are resolved once per range instead of twice per sample. Not a `.pragma library`,
+// so each importing component owns its own table; the cap keeps a range animated by a script
+// from growing it without bound.
+//
+var _referenceWidths = ({})
+var _referenceCount = 0
+
+//
+// Width of the longer formatted range end, memoized per (min, max) pair.
+//
+function referenceWidth(min, max) {
+  const key = min + "/" + max
+  var width = _referenceWidths[key]
+  if (width === undefined) {
+    if (_referenceCount >= 64) {
+      _referenceWidths = ({})
+      _referenceCount = 0
+    }
+
+    const a = Cpp_UI_Dashboard.formatValue(min, min, max)
+    const b = Cpp_UI_Dashboard.formatValue(max, min, max)
+    width = Math.max(a.length, b.length)
+    _referenceWidths[key] = width
+    _referenceCount += 1
+  }
+
+  return width
+}
+
+//
 // Left-padded for stable digital-box width (matches VisualRange). A dataset decimalPoints
-// >= 0 forces fixed places; otherwise precision is range-driven.
+// >= 0 forces fixed places; otherwise precision is range-driven. One formatValue round-trip
+// per sample: the two range ends come from the memo above.
 //
 function getPaddedText(model, val) {
   if (model.decimalPoints >= 0)
     return getPaddedFormattedText(model, val)
 
-  const a = Cpp_UI_Dashboard.formatValue(model.minValue, model.minValue, model.maxValue)
-  const b = Cpp_UI_Dashboard.formatValue(model.maxValue, model.minValue, model.maxValue)
-  const v = Cpp_UI_Dashboard.formatValue(val,            model.minValue, model.maxValue)
-  const refLen = Math.max(a.length, b.length, v.length)
+  const v = Cpp_UI_Dashboard.formatValue(val, model.minValue, model.maxValue)
+  const refLen = Math.max(referenceWidth(model.minValue, model.maxValue), v.length)
   const pad = " ".repeat(Math.max(0, refLen - v.length))
   const units = model.units.length > 0 ? " " + model.units : ""
   return pad + v + units

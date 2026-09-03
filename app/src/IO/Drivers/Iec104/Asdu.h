@@ -129,6 +129,17 @@ enum class DecodeResult : std::uint8_t {
   Malformed   = 3,
 };
 
+/**
+ * @brief Identity of one monitored object. IEC 60870-5-104 qualifies an information-object address
+ *        by the type identifier that carries it, so the SAME address legitimately names a
+ *        single-point input and a measurand; a slot table keyed on the address alone latches the
+ *        second into the first one's slot and encodes it with the first one's wire type.
+ */
+[[nodiscard]] inline constexpr quint64 slotKey(quint32 ioa, std::uint8_t typeId) noexcept
+{
+  return (static_cast<quint64>(typeId) << 32) | static_cast<quint64>(ioa);
+}
+
 [[nodiscard]] bool isMonitorType(std::uint8_t typeId) noexcept;
 [[nodiscard]] bool isRecognizedType(std::uint8_t typeId) noexcept;
 [[nodiscard]] bool typeCarriesTime(std::uint8_t typeId) noexcept;

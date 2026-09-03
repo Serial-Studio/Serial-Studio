@@ -23,11 +23,12 @@ invariants hold it together:
   `setupCrossModuleConnections()` and before `registerImageProvidersAndLoadQml` (`m_engine.load`),
   so QML never binds a half-wired object.
 - **`qInstallMessageHandler(MessageHandler)` runs only after `Console::Handler` and
-  `NotificationCenter` exist.** `MessageHandler` (ModuleManager.cpp:141) constructs both on the
-  first warning **from any thread**, and `Console::Handler`'s ctor pulls `CommonFonts` (which
-  touches the font database, GUI-thread-only). Installing the handler after
-  `setupCrossModuleConnections` forces both onto the GUI thread first, so no worker-thread warning
-  triggers their first construction off-thread.
+  `NotificationCenter` exist.** `MessageHandler` reaches both on the first warning **from any
+  thread**, and since spec 0039 neither `instance()` constructs anything: they forward to
+  `SessionContext::current()`, whose accessors `qFatal` with the slot's name when the module has
+  not been adopted yet. So a warning emitted before the composition root reached those two slots
+  is not a late off-thread construction any more, it is an immediate named abort. Installing the
+  handler after `setupCrossModuleConnections` is what keeps that impossible.
 
 - **`SessionContext::current()` is first reached as the opening statement of
   `instantiateCoreModules()` (spec 0039 M2)** — the composition root takes `auto& ctx =
@@ -43,11 +44,11 @@ leaves), but it means a ctor init-list capture inside ThemeManager/NativeWindow 
 the pinned order; treat those files as pre-root code.
 
 **Pinned instantiation order** (the topological order the modules must construct in, verbatim from
-`instantiateCoreModules()`): `Translator`, `TimerEvents`, `CommonFonts`, `WorkspaceManager`,
+`instantiateCoreModules()`): `Translator`, [`MachineID`, `LemonSqueezy`, `OfflineLicense`,
+`Trial`, commercial], `TimerEvents`, `CommonFonts`, `WorkspaceManager`,
 `NotificationCenter`, `Misc::ProblemCenter`, `Misc::ConnectionDiagnostics`, `ThemeManager`,
-`ExtensionManager`, `ControlScript`, **`ProjectModel` before `AppState`**, [`MachineID`,
-`LemonSqueezy`, `OfflineLicense`, `Trial`, commercial], `FrameBuilder`, `IO::PipelineHost`,
-`IO::ConnectionManager`,
+`ExtensionManager`, `ControlScript`, **`ProjectModel` before `AppState`**, `FrameBuilder`,
+`IO::PipelineHost`, `IO::ConnectionManager`,
 `Console::Handler`, `API::Server`, `CSV::Player`, `MDF4::Player`, [`Sessions::Player`,
 `Sessions::Export`, `Sessions::DatabaseManager`, `MQTT::Publisher`, commercial], `CSV::Export`,
 `MDF4::Export`, `Console::Export`, `FrameParser`, `UI::WidgetExtensions`, and `UI::Dashboard`
@@ -60,7 +61,8 @@ Two entries in that list carry their own reason to sit where they do:
   reach), so it is safe this early. `ConnectionDiagnostics` (spec 0035) follows it for the same
   reason and because the diagnostics runner reports through the problem center. Both get their
   wiring later, in the `setupExternalConnections()` block.
-- **`OfflineLicense` and `Trial` are pinned ahead of `restoreLastProject()`**: their ctors install
+- **The commercial licensing block is the FIRST thing built after `Translator`** (spec 0042), and
+  `OfflineLicense` and `Trial` are therefore also ahead of `restoreLastProject()`: their ctors install
   the `CommercialToken`, and anything that bakes `SerialStudio::activated()` into derived state at load
   time (auto workspaces, driver lists, dashboard layout) reads a fallback value if the token
   arrives late. Late or async activation still needs a `LemonSqueezy::activatedChanged` hook — the
@@ -69,6 +71,15 @@ Two entries in that list carry their own reason to sit where they do:
   (`LemonSqueezy::notifyEntitlementMaybeChanged()`, 2026-08-04) — redundant emissions used to loop
   live-device rebuilds. Consumer inventory:
   [../specs/0042-license-token-hardening/consumers.md](../specs/0042-license-token-hardening/consumers.md).
+  Three shapes of that block are worth naming because a QML binding reads them at paint rate:
+  **`Licensing::MonotonicClock::now()` persists its anti-rewind floor at most once a minute**
+  (`kPersistIntervalMs`, 60000; in between, the cached floor still catches a rewind, so the
+  guarantee is unchanged while a property read costs no `QSettings` access at all);
+  `Trial::daysRemaining()` is cached against the current date and invalidated on every expiry
+  move; and `LemonSqueezy::requestFinished(ok, reason)` is emitted exactly once per
+  activate/deactivate on every path, including the pre-flight refusals, so `--activate` /
+  `--deactivate` can wait on a verdict instead of a timeout. A **refused** deactivation no longer
+  clears the local cache: only `deactivated == true` does.
 
 **The `ProjectModel`-before-`AppState` rule kills a live hazard.** `AppState`'s ctor calls
 `deriveFrameConfig()`, whose ProjectFile branch calls `ProjectModel::instance()` (AppState.cpp), so
@@ -77,6 +88,15 @@ AppState's ctor; on a QuickPlot machine it is constructed later. `ProjectModel`'
 `newJsonFile()`, which emits `groupsChanged` while AppState is still mid-init (the fenced comment at
 ProjectModel.cpp:162 exists for exactly this reason). Constructing ProjectModel first makes the
 settings-conditional edge impossible.
+
+**The list above is machine-checked.** `scripts/doc-anchors.json` carries an `ordered` anchor,
+`composition-root-order`, that extracts every construction site out of `instantiateCoreModules()`
+and requires this paragraph to name them in the same sequence; `claim-verify.py` fails on a
+reorder. The seven singletons whose last namespace segment is `Player` or `Export` are excluded
+from the ordered capture because the doc-side match keys on that last segment alone and cannot
+tell `CSV::Export` from `Console::Export`; the two companion anchors
+(`composition-root-players`, `composition-root-exports`) pin their presence instead. Keep the
+whole list inside one paragraph: the anchor's doc scope ends at the first blank line.
 
 `ModuleManager::instantiateCoreModules()` (called first inside `setupCrossModuleConnections`)
 enforces this order directly in code: it force-constructs every core singleton in the pinned
@@ -107,6 +127,31 @@ are unaffected. The contract: register only via
 (ModuleManager) so the targeted filter eats the warning, and never start a QThread expecting it
 to inherit the boosted band.
 
+**The band is per thread, so each acquisition thread registers itself (spec 0075 N2).** A
+`QThread` never inherits the characteristic, and a process-wide "already registered" guard would
+let the first caller silence every later one, so `AppPlatform`'s latch is `thread_local` and
+`AppPlatform::mmcssRegisteredOnCurrentThread()` reports it. The composition root no longer calls
+the registration itself: `ModuleManager` calls `IO::PipelineHost::registerIngestThread()`, still
+immediately after `qInstallMessageHandler`, which posts the registration onto the pipeline thread
+with a plain `Qt::QueuedConnection` (never a blocking GUI-to-pipeline wait, never a per-frame
+hop), and each `IO::StreamWorker` posts the same call onto its own event loop next to
+`compileEngines`. `PipelineHost` itself lives on the GUI thread, so the post goes through
+`m_frameBuilder` and is skipped entirely while `m_frameBuilder->thread()` is not the pipeline
+thread: the headless and benchmark bootstraps never call `relocateProcessingObjects()`, so they
+register nothing and the benchmark keeps its own direct call on the thread it drives.
+
+**Two roles, two profiles, one latch.** `registerIngestThreadWithMmcss()` claims "Pro Audio" for a
+thread whose missed deadline is a dropped measurement (the pipeline, the stream workers);
+`registerRenderThreadWithMmcss()` claims "Games" for the GUI thread, so another process cannot cost
+the user frames, and `ModuleManager` calls it on the GUI thread beside the pipeline post. The
+renderer gets "Games" rather than "Pro Audio" on purpose: a 60 Hz repaint in the audio band starves
+every other process on a small machine, including our own acquisition. Both go through the one
+`thread_local` latch, so a thread cannot change profile underneath itself. On macOS the equivalent
+already exists and is unrelated to MMCSS: Performance Mode pins the main thread to
+`QOS_CLASS_USER_INTERACTIVE`. `tst_mmcss_registration` pins the per-thread latch and the two-role
+contract (it runs on every platform: the latch is recorded everywhere, only the Windows API behind
+it is skipped).
+
 ## Session Context (spec 0039)
 
 `SessionContext` (`app/src/SessionContext.h`) is the session/application ownership split: a
@@ -120,7 +165,10 @@ ctors with `friend class ::SessionContext`; the composition root constructs them
   re-enters the `current()` Meyers guard from that module's own ctor and aborts
   (`__cxa_guard_acquire` recursive init). Construction lives in `instantiateCoreModules()` only.
 - **INV-4: adopted addresses never change.** ~60 QML context properties hold raw pointers to
-  the owned modules; a slot, once filled, keeps its address for the session.
+  the owned modules; a slot, once filled, keeps its address for the session. The tree-wide
+  `static auto& x = X::instance();` cache and every `m_x(X::instance())` ctor capture rest on
+  exactly this, and on there being one session per process: a second session would leave both
+  pointing at the dead one, so neither idiom may outlive INV-4 (spec 0075, K7).
 - **INV-5: the only exit from a filled slot is `shutdown()`.** `adopt*()` asserts the slot is
   empty and the pointer non-null; there is no re-adopt.
 - **INV-6: `shutdown()` runs while `qApp` is alive, after the QML engine dies** (`main.cpp`,

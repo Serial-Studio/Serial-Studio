@@ -37,6 +37,7 @@
 #include <vector>
 
 #include "DataModel/FrameBuilder.h"
+#include "DataModel/ReplayPlaybackEngine.h"
 #include "MDF4/PlayerLoaderWorker.h"
 
 namespace MDF4 {
@@ -143,7 +144,6 @@ private:
     int index, QVarLengthArray<DataModel::FrameBuilder::ReplayCell, 128>& cells) const;
   [[nodiscard]] QByteArray getFrame(const int index);
   [[nodiscard]] std::chrono::steady_clock::time_point rowSteadyTimestamp(int frameIndex) const;
-  [[nodiscard]] QString formatTimestamp(double timestamp) const;
   [[nodiscard]] bool channelActive(int channel, int frameIndex) const;
 
 protected:
@@ -161,21 +161,17 @@ private:
   QString m_filePath;
   QString m_timestamp;
   double m_startTimestamp;
-  double m_steadyBaseRowSeconds;
-  std::chrono::steady_clock::time_point m_steadyBase;
   QElapsedTimer m_elapsedTimer;
-  QElapsedTimer m_catchUpFillTimer;
-  QTimer m_seekTimer;
-  QTimer m_settleTimer;
+  DataModel::ReplayPlaybackEngine m_engine;
   QHash<qint64, int> m_seekColumnByKey;
   QVector<quint8> m_rowSourceBits;
   QVector<int> m_bitSourceIds;
   QVector<int> m_lastSourceRow;
 
-  quint64 m_playbackEpoch;
   quint64 m_decodeGeneration;
   QThread* m_loaderThread;
   PlayerLoaderWorker* m_loader;
+  QList<QMetaObject::Connection> m_loaderLinks;
   QVarLengthArray<DataModel::FrameBuilder::ReplayCell, 128> m_typedCells;
 
   QStringList m_channelNames;

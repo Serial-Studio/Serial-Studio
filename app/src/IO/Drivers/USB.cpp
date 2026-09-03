@@ -24,10 +24,10 @@
 
 #include <QApplication>
 #include <QJsonObject>
-#include <QMessageBox>
 #include <QMetaObject>
 #include <QTimer>
 
+#include "DataModel/NotificationCenter.h"
 #include "IO/ConnectionManager.h"
 #include "IO/Drivers/USB/UsbHex.h"
 #include "Misc/Utilities.h"
@@ -68,6 +68,7 @@ IO::Drivers::USB::USB()
   , m_handle(nullptr)
   , m_hotplugHandle(0)
   , m_pump(m_ctx, m_handle, this)
+  , m_advancedConsent(false)
   , m_deviceIndex(0)
   , m_inEndpointIndex(0)
   , m_outEndpointIndex(0)
@@ -91,6 +92,7 @@ IO::Drivers::USB::USB()
   m_outEndpointIndex = m_settings.value("USB/outEndpointIndex", 0).toInt();
   m_isoPacketSize    = m_settings.value("USB/isoPacketSize", kDefaultIsoPacketSize).toInt();
   m_transferMode     = static_cast<TransferMode>(m_settings.value("USB/transferMode", 0).toInt());
+  m_advancedConsent  = m_settings.value("USB/advancedTransferConsent", false).toBool();
 
   enumerateDevices();
 
@@ -324,6 +326,29 @@ int IO::Drivers::USB::transferMode() const
 }
 
 /**
+ * @brief Returns whether the user has enabled advanced control transfers for this installation.
+ */
+bool IO::Drivers::USB::advancedTransferConsent() const
+{
+  return m_advancedConsent;
+}
+
+/**
+ * @brief Records the consent the setup pane asked for and switches to advanced mode. The ONLY
+ *        path into AdvancedControl: everything else refuses until this ran.
+ */
+void IO::Drivers::USB::grantAdvancedTransferConsent()
+{
+  if (!m_advancedConsent) {
+    m_advancedConsent = true;
+    m_settings.setValue("USB/advancedTransferConsent", true);
+    Q_EMIT advancedTransferConsentChanged();
+  }
+
+  setTransferMode(static_cast<int>(TransferMode::AdvancedControl));
+}
+
+/**
  * @brief Returns true when Advanced (Bulk + Control) mode is active.
  */
 bool IO::Drivers::USB::advancedModeEnabled() const
@@ -447,28 +472,35 @@ void IO::Drivers::USB::setDeviceIndex(const int index)
 }
 
 /**
- * @brief Sets the transfer mode, prompting for confirmation on AdvancedControl.
+ * @brief Sets the transfer mode. Advanced control transfers need consent RECORDED first: this
+ *        setter is reached from a project load and from the API, where a modal blocked a
+ *        non-interactive caller and asked a question nobody was there to answer (spec 0056). The
+ *        request is refused and reported instead; the setup pane asks, once, and records it.
  */
 void IO::Drivers::USB::setTransferMode(const int mode)
 {
   const auto requested = static_cast<TransferMode>(mode);
+  if (requested == m_transferMode)
+    return;
 
-  if (requested == TransferMode::AdvancedControl
-      && m_transferMode != TransferMode::AdvancedControl) {
-    const int choice = Misc::Utilities::showMessageBox(
-      tr("Enable Advanced USB Control Transfers?"),
-      tr("This enables control transfers in addition to bulk transfers. "
-         "Sending incorrect control requests can crash or damage connected "
-         "hardware. Only enable this if you know what you are doing."),
-      QMessageBox::Warning,
-      tr("Advanced USB Mode"),
-      QMessageBox::Yes | QMessageBox::No,
-      QMessageBox::No);
+  if (requested == TransferMode::AdvancedControl && !m_advancedConsent) {
+    logDriverError(tr("Advanced USB mode refused"),
+                   tr("Advanced control transfers stay off until they are enabled from the USB "
+                      "setup pane: an incorrect control request can damage connected hardware."));
 
-    if (choice != QMessageBox::Yes) {
-      Q_EMIT transferModeChanged();
-      return;
-    }
+    static auto& notifications = DataModel::NotificationCenter::instance();
+    QMetaObject::invokeMethod(
+      &notifications,
+      "postWarning",
+      Qt::QueuedConnection,
+      Q_ARG(QString, QStringLiteral("USB")),
+      Q_ARG(QString, tr("Advanced USB mode refused")),
+      Q_ARG(QString,
+            tr("This project asked for advanced control transfers. Enable them from the USB "
+               "setup pane if that is what you want.")));
+
+    Q_EMIT transferModeChanged();
+    return;
   }
 
   m_transferMode     = requested;

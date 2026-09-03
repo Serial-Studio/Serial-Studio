@@ -36,7 +36,9 @@
  *        for headless runs (CI included), which cannot answer the consent prompt at all.
  */
 API::ServerAuth::ServerAuth(QSettings& settings)
-  : m_settings(settings), m_deviceWriteConsent(DeviceWriteConsent::Unset)
+  : m_settings(settings)
+  , m_consentPromptPosted(false)
+  , m_deviceWriteConsent(DeviceWriteConsent::Unset)
 {
   m_authToken = m_settings.value("API/AuthToken").toString();
 
@@ -115,23 +117,43 @@ bool API::ServerAuth::verifyToken(const QByteArray& provided) const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Gates API-originated device writes behind a one-time user consent prompt. Headless
- *        runs cannot show the prompt, so consent must be pre-granted there via the
- *        SERIAL_STUDIO_API_AUTO_CONSENT env var or the persisted setting (used by CI).
+ * @brief Answers whether an API device write may proceed, never blocking: an unanswered consent
+ *        posts the prompt and refuses with ConsentRequired, because the modal used to run inside
+ *        the receive loop whose connection state it could outlive (spec 0075 I1). Headless runs
+ *        cannot prompt, so consent is pre-granted through SERIAL_STUDIO_API_AUTO_CONSENT.
  */
-bool API::ServerAuth::authorizeDeviceWrite()
+API::DeviceWriteVerdict API::ServerAuth::authorizeDeviceWrite()
 {
   if (m_deviceWriteConsent == DeviceWriteConsent::Granted)
-    return true;
+    return DeviceWriteVerdict::Allowed;
 
   if (m_deviceWriteConsent == DeviceWriteConsent::Denied)
-    return false;
+    return DeviceWriteVerdict::Denied;
 
   if (qApp->platformName() == QLatin1String("offscreen")) {
     m_deviceWriteConsent = DeviceWriteConsent::Denied;
     qWarning() << "[API] Device write denied: no GUI to prompt for consent. Set "
                   "SERIAL_STUDIO_API_AUTO_CONSENT=1 to allow API device writes in headless mode.";
-    return false;
+    return DeviceWriteVerdict::Denied;
+  }
+
+  if (!m_consentPromptPosted) {
+    m_consentPromptPosted = true;
+    QMetaObject::invokeMethod(this, "showDeviceWriteConsentPrompt", Qt::QueuedConnection);
+  }
+
+  return DeviceWriteVerdict::ConsentRequired;
+}
+
+/**
+ * @brief Asks the user, from the event loop rather than from the receive path, and records the
+ *        answer for every later write. A second prompt is refused: the first one already decided.
+ */
+void API::ServerAuth::showDeviceWriteConsentPrompt()
+{
+  if (m_deviceWriteConsent != DeviceWriteConsent::Unset) {
+    m_consentPromptPosted = false;
+    return;
   }
 
   const auto answer = Misc::Utilities::showMessageBox(
@@ -146,17 +168,19 @@ bool API::ServerAuth::authorizeDeviceWrite()
   if (answer == QMessageBox::Yes) {
     m_deviceWriteConsent = DeviceWriteConsent::Granted;
     m_settings.setValue("API/DeviceWriteConsent", true);
-    return true;
+    m_consentPromptPosted = false;
+    return;
   }
 
-  m_deviceWriteConsent = DeviceWriteConsent::Denied;
-  return false;
+  m_deviceWriteConsent  = DeviceWriteConsent::Denied;
+  m_consentPromptPosted = false;
 }
 
 /**
  * @brief Gates remote-origin device-write commands behind the consent prompt; commands that
  *        never touch the hardware always pass. Keeps the command path consistent with the
- *        raw byte paths, which run the same gate.
+ *        raw byte paths, which run the same gate: an unanswered consent refuses this command
+ *        and the client retries once the posted prompt is answered.
  */
 bool API::ServerAuth::authorizeRemoteCommand(const QString& command)
 {
@@ -166,5 +190,5 @@ bool API::ServerAuth::authorizeRemoteCommand(const QString& command)
   if (!API::Auth::commandWritesToDevice(command))
     return true;
 
-  return authorizeDeviceWrite();
+  return authorizeDeviceWrite() == DeviceWriteVerdict::Allowed;
 }

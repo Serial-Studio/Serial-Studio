@@ -16,13 +16,10 @@
 #include "AI/FileSandbox.h"
 #include "AI/Logging.h"
 #include "AI/Providers/AnthropicProvider.h"
-#include "AI/Providers/DeepSeekProvider.h"
 #include "AI/Providers/GeminiProvider.h"
-#include "AI/Providers/GroqProvider.h"
 #include "AI/Providers/LocalProvider.h"
-#include "AI/Providers/MistralProvider.h"
+#include "AI/Providers/OpenAICompatibleProvider.h"
 #include "AI/Providers/OpenAIProvider.h"
-#include "AI/Providers/OpenRouterProvider.h"
 #include "AI/ToolDispatcher.h"
 #include "DataModel/ProjectModel.h"
 #include "Licensing/CommercialToken.h"
@@ -64,6 +61,10 @@ AI::Assistant::Assistant()
   , m_skillRoutingEnabled(true)
   , m_autoVerifyEnabled(true)
 {
+  // code-verify off
+  // Single ownership: the unique_ptr members are destroyed before ~QObject runs, so each child
+  // is deleted exactly once and the parent pointer only carries thread affinity (J7).
+  // code-verify on
   m_nam          = std::make_unique<QNetworkAccessManager>(this);
   m_dispatcher   = std::make_unique<ToolDispatcher>(this);
   m_conversation = std::make_unique<Conversation>(this);
@@ -505,8 +506,10 @@ bool AI::Assistant::hasKey(int providerIdx) const
  */
 QString AI::Assistant::redactedKey(int providerIdx) const
 {
-  const auto k = m_vault.key(static_cast<ProviderId>(providerIdx));
-  return KeyVault::redact(k);
+  if (!m_vault.hasKey(static_cast<ProviderId>(providerIdx)))
+    return {};
+
+  return KeyVault::redact(QString());
 }
 
 /**
@@ -653,7 +656,7 @@ void AI::Assistant::requestProviderSwitch(int idx)
 }
 
 /**
- * @brief Stores an API key for the given provider, encrypted at rest.
+ * @brief Stores an API key for the given provider, obfuscated in this machine's settings.
  */
 void AI::Assistant::setKey(int providerIdx, const QString& plaintext)
 {
@@ -902,14 +905,20 @@ void AI::Assistant::rebuildProviders()
     std::make_unique<OpenAIProvider>(*m_nam, [this]() { return m_vault.key(ProviderId::OpenAI); });
   m_gemini =
     std::make_unique<GeminiProvider>(*m_nam, [this]() { return m_vault.key(ProviderId::Gemini); });
-  m_deepseek = std::make_unique<DeepSeekProvider>(
-    *m_nam, [this]() { return m_vault.key(ProviderId::DeepSeek); });
-  m_openrouter = std::make_unique<OpenRouterProvider>(
-    *m_nam, [this]() { return m_vault.key(ProviderId::OpenRouter); });
-  m_groq =
-    std::make_unique<GroqProvider>(*m_nam, [this]() { return m_vault.key(ProviderId::Groq); });
-  m_mistral = std::make_unique<MistralProvider>(
-    *m_nam, [this]() { return m_vault.key(ProviderId::Mistral); });
+  m_deepseek = std::make_unique<OpenAICompatibleProvider>(
+    *m_nam,
+    [this]() { return m_vault.key(ProviderId::DeepSeek); },
+    OpenAICompatibleProvider::deepSeek());
+  m_openrouter = std::make_unique<OpenAICompatibleProvider>(
+    *m_nam,
+    [this]() { return m_vault.key(ProviderId::OpenRouter); },
+    OpenAICompatibleProvider::openRouter());
+  m_groq = std::make_unique<OpenAICompatibleProvider>(
+    *m_nam, [this]() { return m_vault.key(ProviderId::Groq); }, OpenAICompatibleProvider::groq());
+  m_mistral = std::make_unique<OpenAICompatibleProvider>(
+    *m_nam,
+    [this]() { return m_vault.key(ProviderId::Mistral); },
+    OpenAICompatibleProvider::mistral());
 
   auto* local = new LocalProvider(*m_nam);
   connect(local, &LocalProvider::modelsChanged, this, []() {
@@ -1098,6 +1107,28 @@ void AI::Assistant::refreshLocalModels()
 {
   if (auto* lp = dynamic_cast<LocalProvider*>(m_local.get()))
     lp->refreshModels();
+}
+
+/**
+ * @brief Returns the configured context window of the local model provider, in tokens.
+ */
+int AI::Assistant::localContextWindow() const
+{
+  if (auto* lp = dynamic_cast<LocalProvider*>(m_local.get()))
+    return lp->contextWindowTokens();
+
+  return LocalProvider::kDefaultContextWindow;
+}
+
+/**
+ * @brief Applies the user's context-window setting; history is trimmed to it from the next turn.
+ */
+void AI::Assistant::setLocalContextWindow(int tokens)
+{
+  if (auto* lp = dynamic_cast<LocalProvider*>(m_local.get())) {
+    lp->setContextWindowTokens(tokens);
+    Q_EMIT keysChanged();
+  }
 }
 
 // code-verify on

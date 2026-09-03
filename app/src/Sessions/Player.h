@@ -25,6 +25,7 @@
 #  include <QVector>
 #  include <vector>
 
+#  include "DataModel/ReplayPlaybackEngine.h"
 #  include "SerialStudio.h"
 #  include "Sessions/Player/PreSessionState.h"
 #  include "Sessions/Player/ReplaySynthesis.h"
@@ -146,7 +147,6 @@ private:
                        QHash<qint64, QVector<double>>& series);
 
   void updateTimestampDisplay();
-  [[nodiscard]] QString formatTimestamp(double seconds) const;
 
 private:
   QThread* m_workerThread;
@@ -155,14 +155,14 @@ private:
   bool m_loading;
   bool m_playing;
   int m_framePos;
+
   int m_pendingSessionId;
   QString m_filePath;
   QString m_timestamp;
   double m_startTimestampSeconds;
 
   QElapsedTimer m_elapsedTimer;
-  QTimer m_seekTimer;
-  QTimer m_settleTimer;
+  DataModel::ReplayPlaybackEngine m_engine;
 
   std::vector<qint64> m_timestampsNs;
 

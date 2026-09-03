@@ -30,6 +30,7 @@
 
 #include "DataModel/DataBlock.h"
 #include "DataModel/ExportSchema.h"
+#include "DataModel/ExportStructure.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FrameConsumer.h"
 
@@ -110,7 +111,7 @@ private:
   [[nodiscard]] bool initWriterAndHeader(const QString& frameName, const QDateTime& dateTime);
 
 private:
-  DataModel::Frame m_templateFrame;
+  DataModel::ExportStructure m_structure;
   bool m_fileOpen;
   QString m_filePath;
   std::unique_ptr<mdf::MdfWriter> m_writer;

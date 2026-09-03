@@ -712,9 +712,9 @@ Item {
       visible: root.width > implicitWidth
 
       Widgets.IconButton {
-        iconSize: 16
         id: ftButton
 
+        iconSize: 16
         implicitHeight: 24
         Layout.maximumWidth: 24
         visible: !app.runtimeMode
@@ -917,9 +917,9 @@ Item {
       }
 
       Widgets.IconButton {
-        iconSize: 16
         id: sendBt
 
+        iconSize: 16
         implicitHeight: 24
         Layout.maximumWidth: 32
         opacity: enabled ? 1 : 0.5

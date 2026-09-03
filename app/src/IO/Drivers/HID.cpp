@@ -39,6 +39,27 @@ constexpr int kReadBufSize    = 65;
 constexpr int kReadTimeoutMs  = 100;
 constexpr int kEnumIntervalMs = 2000;
 
+// Refcount over process-global hidapi: a live instance's hid_exit() tore down the UI instance's
+static int s_hidRefCount = 0;
+
+/**
+ * @brief Initializes hidapi for the first instance that needs it.
+ */
+static void hidAcquire()
+{
+  if (s_hidRefCount++ == 0)
+    hid_init();
+}
+
+/**
+ * @brief Releases hidapi once the last instance is gone.
+ */
+static void hidRelease()
+{
+  if (s_hidRefCount > 0 && --s_hidRefCount == 0)
+    hid_exit();
+}
+
 //--------------------------------------------------------------------------------------------------
 // Constructor / destructor / singleton
 //--------------------------------------------------------------------------------------------------
@@ -53,7 +74,7 @@ IO::Drivers::HID::HID()
   , m_running(false)
   , m_deviceIndex(0)
 {
-  hid_init();
+  hidAcquire();
   m_deviceIndex = m_settings.value("HID/deviceIndex", 0).toInt();
   enumerateDevices();
 
@@ -98,7 +119,7 @@ IO::Drivers::HID::~HID()
   hid_free_enumeration(m_deviceInfoList);
   m_deviceInfoList = nullptr;
 
-  hid_exit();
+  hidRelease();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -170,6 +191,8 @@ bool IO::Drivers::HID::open(const QIODevice::OpenMode mode)
 
   if (!configurationOk())
     return false;
+
+  cleanupDevice();
 
   const QString path = m_devicePaths.at(m_deviceIndex);
 

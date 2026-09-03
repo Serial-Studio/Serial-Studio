@@ -565,11 +565,18 @@ API::CommandResponse API::Handlers::ModbusHandler::addRegisterGroup(const QStrin
       QStringLiteral("Invalid startAddress: %1. Valid range: 0-65535").arg(startAddress));
   }
 
-  if (count < 1 || count > 125) {
-    return CommandResponse::makeError(
-      id,
-      ErrorCode::InvalidParam,
-      QStringLiteral("Invalid count: %1. Valid range: 1-125").arg(count));
+  constexpr int kMaxBitCount      = 2000;
+  constexpr int kMaxRegisterCount = 125;
+  constexpr int kCoilType         = 2;
+  constexpr int kDiscreteType     = 3;
+
+  const int maxCount =
+    (type == kCoilType || type == kDiscreteType) ? kMaxBitCount : kMaxRegisterCount;
+  if (count < 1 || count > maxCount) {
+    return CommandResponse::makeError(id,
+                                      ErrorCode::InvalidParam,
+                                      QStringLiteral("Invalid count: %1. Valid range: 1-%2")
+                                        .arg(QString::number(count), QString::number(maxCount)));
   }
 
   modbus->addRegisterGroup(

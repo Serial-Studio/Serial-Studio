@@ -29,7 +29,7 @@ import SerialStudio
 import "../"
 import "ValueFormat.js" as ValueFormat
 
-Item {
+InstrumentBase {
   id: root
 
   //
@@ -76,17 +76,6 @@ Item {
   //
   // Helper properties
   //
-
-  //
-  // Theme-aware chrome stops that adapt lighten/darken amounts to widget_base luminance
-  //
-  readonly property bool darkBg: {
-    const c = Cpp_ThemeManager.colors["widget_base"]
-    return (0.299 * c.r + 0.587 * c.g + 0.114 * c.b) < 0.5
-  }
-  readonly property color chromeTop: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], darkBg ? 2.0 : 1.30)
-  readonly property color chromeMid: Cpp_ThemeManager.colors["widget_base"]
-  readonly property color chromeBot: Qt.darker(Cpp_ThemeManager.colors["widget_base"], darkBg ? 1.05 : 1.18)
 
   //
   // Gauge parameters
@@ -158,38 +147,6 @@ Item {
       }
       return longest
     }
-  }
-
-  function evenTickValues(minV, maxV, n) {
-    if (n < 2 || minV >= maxV) return [minV, maxV]
-    const ticks = []
-    const step = (maxV - minV) / (n - 1)
-    for (let i = 0; i < n; i++)
-      ticks.push(minV + step * i)
-
-    return ticks
-  }
-
-  function niceTickValues(minV, maxV, target) {
-    if (minV >= maxV || target < 2) return [minV, maxV]
-    const range = maxV - minV
-    const roughStep = range / Math.max(1, target - 1)
-    const mag = Math.pow(10, Math.floor(Math.log10(roughStep)))
-    const norm = roughStep / mag
-    let niceStep
-    if (norm < 1.5) niceStep = 1 * mag
-    else if (norm < 3) niceStep = 2 * mag
-    else if (norm < 7) niceStep = 5 * mag
-    else niceStep = 10 * mag
-    const ticks = []
-    const startNice = Math.ceil(minV / niceStep) * niceStep
-    const endNice = Math.floor(maxV / niceStep) * niceStep
-    for (let v = startNice; v <= endNice + 0.0001 * niceStep; v += niceStep) {
-      if (v >= minV - 0.0001 && v <= maxV + 0.0001) {
-        ticks.push(Math.round(v * 1e6) / 1e6)
-      }
-    }
-    return ticks.length > 0 ? ticks : [minV, maxV]
   }
 
   //
@@ -703,7 +660,7 @@ Item {
 
                 SequentialAnimation {
                   loops: Animation.Infinite
-                  running: model.alarmTriggered
+                  running: model.alarmTriggered && model.hasData
                   PropertyAction { target: valueBox; property: "alarmFlashOn"; value: true }
                   PauseAnimation { duration: 450 }
                   PropertyAction { target: valueBox; property: "alarmFlashOn"; value: false }
@@ -942,12 +899,13 @@ Item {
         Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
 
         property bool alarmFlashOn: false
-        readonly property color targetColor: root.model.alarmTriggered && digitalBox.alarmFlashOn
+        readonly property color targetColor: root.model.alarmTriggered && root.model.hasData
+                                              && digitalBox.alarmFlashOn
                                               ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity)
                                               : Cpp_ThemeManager.colors["console_base"]
         SequentialAnimation {
           loops: Animation.Infinite
-          running: root.model.alarmTriggered
+          running: root.model.alarmTriggered && root.model.hasData
           PropertyAction { target: digitalBox; property: "alarmFlashOn"; value: true }
           PauseAnimation { duration: 450 }
           PropertyAction { target: digitalBox; property: "alarmFlashOn"; value: false }
@@ -1029,30 +987,8 @@ Item {
     }
   }
 
-  //
-  // Suppresses the page auto-save while restore assigns the persisted index
-  //
-  property bool restoringPage: false
-
-  //
-  // Restore per-widget page from project settings, then persist on change.
-  //
-  Component.onCompleted: {
-    root.restoringPage = true
-    const s = Cpp_JSON_ProjectModel.widgetSettings(root.widgetId)
-    if (s["page"] !== undefined)
-      swipeView.currentIndex = parseInt(s["page"])
-
-    root.restoringPage = false
-  }
-  Connections {
-    target: swipeView
-    function onCurrentIndexChanged() {
-      if (root.restoringPage)
-        return
-
-      Cpp_JSON_ProjectModel.saveWidgetSetting(
-            root.widgetId, "page", swipeView.currentIndex)
-    }
+  SwipePages {
+    view: swipeView
+    widgetId: root.widgetId
   }
 }

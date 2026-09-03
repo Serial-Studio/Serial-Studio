@@ -21,9 +21,12 @@
 
 #include "Misc/Extensions/ExtensionCatalog.h"
 
+#include <QCryptographicHash>
 #include <QFileInfo>
 #include <QMap>
+#include <QRegularExpression>
 #include <QSysInfo>
+#include <QVersionNumber>
 
 //--------------------------------------------------------------------------------------------------
 // Catalog vocabulary
@@ -66,6 +69,111 @@ int Misc::ExtensionCatalog::typeSortRank(const QString& type)
 bool Misc::ExtensionCatalog::isLocalRepo(const QString& url)
 {
   return url.startsWith('/') || url.startsWith("file://");
+}
+
+/**
+ * @brief Whether a repository may be added: a local folder the user picked, or https. Plain http
+ *        is refused because the catalog decides what code lands in the extensions directory, and
+ *        a cleartext fetch lets anyone on the path choose it (K5).
+ */
+bool Misc::ExtensionCatalog::isTrustedRepoUrl(const QString& url)
+{
+  const auto trimmed = url.trimmed();
+  if (trimmed.isEmpty())
+    return false;
+
+  if (isLocalRepo(trimmed))
+    return true;
+
+  return QUrl(trimmed, QUrl::StrictMode)
+           .scheme()
+           .compare(QStringLiteral("https"), Qt::CaseInsensitive)
+      == 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Catalog v2 file list
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Parses a catalog v2 file list. Every entry must carry a path and a lowercase hex
+ *        SHA-256; a bare string is catalog v1, which an install cannot verify anything against,
+ *        so the whole entry is refused with a reason rather than installed unchecked (K3, K5).
+ */
+QList<Misc::ExtensionCatalog::CatalogFile> Misc::ExtensionCatalog::parseFileList(
+  const QVariantList& files, QString* rejectReason)
+{
+  static const QRegularExpression kDigest(QStringLiteral("^[0-9a-f]{64}$"));
+
+  QList<CatalogFile> parsed;
+  for (const auto& value : files) {
+    if (value.typeId() != QMetaType::QVariantMap) {
+      if (rejectReason)
+        *rejectReason = QStringLiteral("catalog v1 entry: files carry no sha256 digest");
+
+      return {};
+    }
+
+    const auto map = value.toMap();
+    CatalogFile file;
+    file.path   = map.value(QStringLiteral("path")).toString();
+    file.sha256 = map.value(QStringLiteral("sha256")).toString().toLower();
+    file.size   = map.value(QStringLiteral("size")).toLongLong();
+
+    if (file.path.isEmpty()) {
+      if (rejectReason)
+        *rejectReason = QStringLiteral("catalog entry: a file has no path");
+
+      return {};
+    }
+
+    if (!kDigest.match(file.sha256).hasMatch()) {
+      if (rejectReason)
+        *rejectReason =
+          QStringLiteral("catalog entry: file '%1' has no valid sha256").arg(file.path);
+
+      return {};
+    }
+
+    parsed.append(file);
+  }
+
+  return parsed;
+}
+
+/**
+ * @brief Whether a file list is installable at all: non-empty and parseable as catalog v2.
+ */
+bool Misc::ExtensionCatalog::hasVerifiableFiles(const QVariantList& files)
+{
+  return !files.isEmpty() && !parseFileList(files, nullptr).isEmpty();
+}
+
+/**
+ * @brief Whether downloaded bytes are the file the catalog described. The size is checked first
+ *        so an oversized body is rejected without hashing it.
+ */
+bool Misc::ExtensionCatalog::digestMatches(const QByteArray& payload, const CatalogFile& file)
+{
+  if (file.size > 0 && payload.size() != file.size)
+    return false;
+
+  const auto actual = QCryptographicHash::hash(payload, QCryptographicHash::Sha256).toHex();
+  return QString::fromLatin1(actual) == file.sha256;
+}
+
+/**
+ * @brief Compares two version strings numerically: > 0 when remote is newer. String inequality
+ *        used to offer "1.10.0 -> 1.9.0" as an update, which is a silent downgrade (K12).
+ */
+int Misc::ExtensionCatalog::compareVersions(const QString& remote, const QString& local)
+{
+  const auto lhs = QVersionNumber::fromString(remote.trimmed());
+  const auto rhs = QVersionNumber::fromString(local.trimmed());
+  if (lhs.isNull() || rhs.isNull())
+    return remote == local ? 0 : 1;
+
+  return QVersionNumber::compare(lhs, rhs);
 }
 
 //--------------------------------------------------------------------------------------------------

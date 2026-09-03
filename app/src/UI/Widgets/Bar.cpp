@@ -40,6 +40,7 @@ Widgets::Bar::Bar(const int index, QQuickItem* parent, bool autoInitFromBarDatas
   , m_index(index)
   , m_displayTickCount(5)
   , m_decimalPoints(-1)
+  , m_hasData(false)
   , m_value(0.0)
   , m_minValue(0.0)
   , m_maxValue(0.0)
@@ -64,6 +65,8 @@ Widgets::Bar::Bar(const int index, QQuickItem* parent, bool autoInitFromBarDatas
 
     connect(&m_dashboard, &UI::Dashboard::updated, this, &Bar::updateData);
   }
+
+  connect(&m_dashboard, &UI::Dashboard::dataReset, this, &Bar::resetData);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -124,6 +127,16 @@ bool Widgets::Bar::alarmsDefined() const noexcept
 }
 
 /**
+ * @brief True once the widget has seen a finite sample. Until then the displayed 0.0 is a
+ *        placeholder, not a measurement, and the band lookup's nearest-band clamp would resolve it
+ *        to whatever band sits closest -- critical, on most projects (spec 0075, N3).
+ */
+bool Widgets::Bar::hasData() const noexcept
+{
+  return m_hasData;
+}
+
+/**
  * @brief True when the current value sits in a band with Warning severity or worse.
  */
 bool Widgets::Bar::alarmTriggered() const noexcept
@@ -132,22 +145,20 @@ bool Widgets::Bar::alarmTriggered() const noexcept
 }
 
 /**
- * @brief Returns the severity (0..3) of the band the value sits in, or -1 if none.
+ * @brief Returns the severity (0..3) of the band the value sits in, -1 if none or if no sample
+ *        has arrived yet.
  */
 int Widgets::Bar::activeBandSeverity() const noexcept
 {
-  if (m_activeBandIndex < 0 || m_activeBandIndex >= m_bands.size())
-    return -1;
-
-  return m_bands[m_activeBandIndex].severity;
+  return Bands::reportedSeverity(m_bands, m_activeBandIndex, m_hasData);
 }
 
 /**
- * @brief Returns the label of the active band; empty when no band is active.
+ * @brief Returns the label of the active band; empty when no band is active or no sample arrived.
  */
 const QString& Widgets::Bar::activeBandLabel() const noexcept
 {
-  if (m_activeBandIndex < 0 || m_activeBandIndex >= m_bands.size())
+  if (!m_hasData || m_activeBandIndex < 0 || m_activeBandIndex >= m_bands.size())
     return m_emptyLabel;
 
   return m_bands[m_activeBandIndex].label;
@@ -317,6 +328,37 @@ bool Widgets::Bar::refreshExtremes(const DataModel::Dataset& dataset)
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Latches the first finite sample and reports whether that latch just closed, so a first
+ *        sample equal to the placeholder 0.0 still publishes the transition out of "no data".
+ */
+bool Widgets::Bar::latchData()
+{
+  if (m_hasData)
+    return false;
+
+  m_hasData = true;
+  recomputeActiveBand(m_value);
+  return true;
+}
+
+/**
+ * @brief Reopens the no-data latch when the dashboard drops its data, so a widget left on screen
+ *        across a reconnect stops reporting the band its last sample resolved to.
+ */
+void Widgets::Bar::resetData()
+{
+  m_hasData         = false;
+  m_value           = 0.0;
+  m_extremesValid   = false;
+  m_minSeen         = 0.0;
+  m_maxSeen         = 0.0;
+  m_activeBandIndex = -1;
+  m_lastBandHint    = -1;
+
+  Q_EMIT updated();
+}
+
+/**
  * @brief Updates the current dataset value from the dashboard source.
  */
 void Widgets::Bar::updateData()
@@ -337,7 +379,8 @@ void Widgets::Bar::updateData()
       recomputeActiveBand(value);
     }
 
-    if ((valueChanged || extremesChanged) && isEnabled())
+    const bool latched = latchData();
+    if ((valueChanged || extremesChanged || latched) && isEnabled())
       Q_EMIT updated();
   }
 }

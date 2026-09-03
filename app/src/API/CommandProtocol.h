@@ -34,6 +34,11 @@ constexpr const char* Raw      = "raw";
 constexpr const char* Response = "response";
 }  // namespace MessageType
 
+namespace Limits {
+// Largest raw device payload one API message may carry, the same on every transport
+constexpr int kMaxApiRawBytes = 1024 * 1024;
+}  // namespace Limits
+
 namespace ErrorCode {
 constexpr const char* InvalidJson        = "INVALID_JSON";
 constexpr const char* InvalidParam       = "INVALID_PARAM";
@@ -42,6 +47,13 @@ constexpr const char* UnknownCommand     = "UNKNOWN_COMMAND";
 constexpr const char* ExecutionError     = "EXECUTION_ERROR";
 constexpr const char* OperationFailed    = "OPERATION_FAILED";
 constexpr const char* InvalidMessageType = "INVALID_MESSAGE_TYPE";
+constexpr const char* ConsentRequired    = "CONSENT_REQUIRED";
+constexpr const char* PathNotAllowed     = "PATH_NOT_ALLOWED";
+constexpr const char* WriteBacklog       = "WRITE_BACKLOG";
+constexpr const char* WriteDenied        = "WRITE_DENIED";
+constexpr const char* WriteFailed        = "WRITE_FAILED";
+constexpr const char* ScriptTimeout      = "SCRIPT_TIMEOUT";
+constexpr const char* SessionLive        = "SESSION_LIVE";
 
 }  // namespace ErrorCode
 

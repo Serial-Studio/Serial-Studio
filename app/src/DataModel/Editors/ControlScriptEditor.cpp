@@ -29,9 +29,7 @@
 #include "DataModel/Editors/EditorFormatting.h"
 #include "DataModel/ProjectEditor.h"
 #include "DataModel/ProjectModel.h"
-#include "Misc/CommonFonts.h"
-#include "Misc/ThemeManager.h"
-#include "Misc/TimerEvents.h"
+#include "DataModel/Scripting/ScriptDryRun.h"
 #include "Misc/Utilities.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -59,25 +57,12 @@ static QString defaultControlScript()
  *        window that stays instantiated once opened, hence the window-visibility render gate.
  */
 DataModel::ControlScriptEditor::ControlScriptEditor(QQuickItem* parent)
-  : QQuickPaintedItem(parent)
+  : EmbeddedCodeEditorItem(EmbeddedCodeEditor::RenderGate::WindowVisible, parent)
   , m_readingCode(false)
   , m_initialLoad(true)
-  , m_themeManager(Misc::ThemeManager::instance())
-  , m_timerEvents(Misc::TimerEvents::instance())
   , m_projectEditor(DataModel::ProjectEditor::instance())
   , m_projectModel(DataModel::ProjectModel::instance())
-  , m_editor(*this,
-             m_themeManager,
-             Misc::CommonFonts::instance(),
-             EmbeddedCodeEditor::RenderGate::WindowVisible)
 {
-  m_editor.configureHost();
-
-  connect(&m_themeManager,
-          &Misc::ThemeManager::themeChanged,
-          this,
-          &DataModel::ControlScriptEditor::onThemeChanged);
-
   auto& widget = m_editor.widget();
   connect(&widget, &QCodeEditor::textChanged, this, [this] { Q_EMIT modifiedChanged(); });
   connect(&widget, &QCodeEditor::textChanged, this, &DataModel::ControlScriptEditor::textChanged);
@@ -102,23 +87,6 @@ DataModel::ControlScriptEditor::ControlScriptEditor(QQuickItem* parent)
           &DataModel::ProjectModel::controlScriptChanged,
           this,
           &DataModel::ControlScriptEditor::readCode);
-
-  connect(
-    this, &QQuickPaintedItem::widthChanged, this, &DataModel::ControlScriptEditor::resizeWidget);
-  connect(
-    this, &QQuickPaintedItem::heightChanged, this, &DataModel::ControlScriptEditor::resizeWidget);
-  connect(
-    &widget, &QCodeEditor::textChanged, this, &DataModel::ControlScriptEditor::scheduleRender);
-  connect(
-    &widget, &QCodeEditor::selectionChanged, this, &DataModel::ControlScriptEditor::scheduleRender);
-  connect(&widget,
-          &QCodeEditor::cursorPositionChanged,
-          this,
-          &DataModel::ControlScriptEditor::scheduleRender);
-  connect(&m_timerEvents,
-          &Misc::TimerEvents::uiTimeout,
-          this,
-          &DataModel::ControlScriptEditor::renderWidget);
 
   readCode();
 }
@@ -279,12 +247,32 @@ void DataModel::ControlScriptEditor::reload()
 }
 
 /**
- * @brief Compiles the script (without running it) and reports syntax errors.
+ * @brief Compiles the script (without running it) and reports syntax errors. Top-level code does
+ *        run during a compile, so the evaluation is deadline-guarded: a runaway loop reports a
+ *        timeout instead of freezing the editor.
  */
 void DataModel::ControlScriptEditor::evaluate()
 {
-  QJSEngine engine;
-  const auto result = engine.evaluate(text(), QStringLiteral("control-script.js"));
+  ScriptDryRun session(
+    ScriptDryRun::Language::JavaScript, kScriptDryRunBudgetMs, "controlScript.validate");
+  if (!session.valid()) {
+    Misc::Utilities::showMessageBox(tr("Code Validation Failed"),
+                                    tr("Failed to create the validation engine."),
+                                    QMessageBox::Warning);
+    return;
+  }
+
+  const auto result = session.evaluate(text(), QStringLiteral("control-script.js"));
+  if (session.timedOut()) {
+    Misc::Utilities::showMessageBox(
+      tr("Code Validation Failed"),
+      tr("The script did not finish evaluating within %1 ms. Check for an infinite loop at the "
+         "top level.")
+        .arg(session.budgetMs()),
+      QMessageBox::Warning);
+    return;
+  }
+
   if (result.isError()) {
     Misc::Utilities::showMessageBox(tr("Code Validation Failed"),
                                     tr("Line %1: %2")
@@ -294,8 +282,9 @@ void DataModel::ControlScriptEditor::evaluate()
     return;
   }
 
-  const bool hasSetup = engine.globalObject().property(QStringLiteral("setup")).isCallable();
-  const bool hasLoop  = engine.globalObject().property(QStringLiteral("loop")).isCallable();
+  const auto globals  = session.jsEngine()->globalObject();
+  const bool hasSetup = globals.property(QStringLiteral("setup")).isCallable();
+  const bool hasLoop  = globals.property(QStringLiteral("loop")).isCallable();
   if (!hasSetup && !hasLoop) {
     Misc::Utilities::showMessageBox(tr("Code Validation Failed"),
                                     tr("The script must define a setup() and/or loop() function."),
@@ -306,184 +295,4 @@ void DataModel::ControlScriptEditor::evaluate()
   Misc::Utilities::showMessageBox(tr("Code Validation Successful"),
                                   tr("No syntax errors detected in the control loop."),
                                   QMessageBox::Information);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Theme
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Applies the current theme to the code editor widget.
- */
-void DataModel::ControlScriptEditor::onThemeChanged()
-{
-  m_editor.applyTheme();
-}
-
-//--------------------------------------------------------------------------------------------------
-// Rendering
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Marks the cached pixmap stale; the next UI tick does the grab, so a burst of edits
- *        costs one widget render instead of one per event.
- */
-void DataModel::ControlScriptEditor::scheduleRender()
-{
-  m_editor.scheduleRender();
-}
-
-/**
- * @brief Grabs the editor widget into a pixmap for QML rendering.
- */
-void DataModel::ControlScriptEditor::renderWidget()
-{
-  m_editor.renderWidget();
-}
-
-/**
- * @brief Resizes the backing QCodeEditor to match the QML item dimensions.
- */
-void DataModel::ControlScriptEditor::resizeWidget()
-{
-  m_editor.resizeWidget();
-}
-
-//--------------------------------------------------------------------------------------------------
-// Event forwarding
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Paints the cached editor pixmap into the QML scene.
- */
-void DataModel::ControlScriptEditor::paint(QPainter* painter)
-{
-  m_editor.paint(painter);
-}
-
-/**
- * @brief Routes ShortcutOverride to the editor widget so editing keys (undo, copy, paste...)
- *        are handled natively instead of being consumed by QML Shortcut bindings.
- */
-bool DataModel::ControlScriptEditor::event(QEvent* event)
-{
-  if (m_editor.handleShortcutOverride(event))
-    return true;
-
-  return QQuickPaintedItem::event(event);
-}
-
-/**
- * @brief Forwards completer navigation/commit keys to the popup when visible; everything else
- *        goes straight to the editor widget so QCompleter's focus check cannot hide the popup.
- */
-void DataModel::ControlScriptEditor::keyPressEvent(QKeyEvent* event)
-{
-  m_editor.handleKeyPress(event);
-}
-
-/**
- * @brief Forwards key-release events to the backing QCodeEditor widget.
- */
-void DataModel::ControlScriptEditor::keyReleaseEvent(QKeyEvent* event)
-{
-  m_editor.forwardToWidget(event);
-}
-
-/**
- * @brief Forwards input-method events (IME composition) to the backing widget.
- */
-void DataModel::ControlScriptEditor::inputMethodEvent(QInputMethodEvent* event)
-{
-  m_editor.forwardToWidget(event);
-  m_editor.scheduleRender();
-}
-
-/**
- * @brief Forwards focus-in events to the backing widget.
- */
-void DataModel::ControlScriptEditor::focusInEvent(QFocusEvent* event)
-{
-  m_editor.forwardToWidget(event);
-}
-
-/**
- * @brief Forwards focus-out events to the backing widget.
- */
-void DataModel::ControlScriptEditor::focusOutEvent(QFocusEvent* event)
-{
-  m_editor.forwardToWidget(event);
-}
-
-/**
- * @brief Forwards mouse-press events to the backing widget, claiming focus for the item.
- */
-void DataModel::ControlScriptEditor::mousePressEvent(QMouseEvent* event)
-{
-  m_editor.handleMouse(event, true);
-}
-
-/**
- * @brief Forwards mouse-move events to the backing widget.
- */
-void DataModel::ControlScriptEditor::mouseMoveEvent(QMouseEvent* event)
-{
-  m_editor.handleMouse(event, false);
-}
-
-/**
- * @brief Forwards mouse-release events to the backing widget.
- */
-void DataModel::ControlScriptEditor::mouseReleaseEvent(QMouseEvent* event)
-{
-  m_editor.handleMouse(event, false);
-}
-
-/**
- * @brief Forwards double-click events to the backing widget.
- */
-void DataModel::ControlScriptEditor::mouseDoubleClickEvent(QMouseEvent* event)
-{
-  m_editor.handleMouse(event, false);
-}
-
-/**
- * @brief Forwards wheel events to the editor viewport.
- */
-void DataModel::ControlScriptEditor::wheelEvent(QWheelEvent* event)
-{
-  m_editor.forwardToViewport(event);
-  m_editor.scheduleRender();
-}
-
-/**
- * @brief Forwards drag-enter events to the editor viewport.
- */
-void DataModel::ControlScriptEditor::dragEnterEvent(QDragEnterEvent* event)
-{
-  m_editor.forwardToViewport(event);
-}
-
-/**
- * @brief Forwards drag-move events to the editor viewport.
- */
-void DataModel::ControlScriptEditor::dragMoveEvent(QDragMoveEvent* event)
-{
-  m_editor.forwardToViewport(event);
-}
-
-/**
- * @brief Forwards drag-leave events to the editor viewport.
- */
-void DataModel::ControlScriptEditor::dragLeaveEvent(QDragLeaveEvent* event)
-{
-  m_editor.forwardToViewport(event);
-}
-
-/**
- * @brief Forwards drop events to the editor viewport.
- */
-void DataModel::ControlScriptEditor::dropEvent(QDropEvent* event)
-{
-  m_editor.forwardToViewport(event);
 }

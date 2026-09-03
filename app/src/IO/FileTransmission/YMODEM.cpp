@@ -50,6 +50,16 @@ QString IO::Protocols::YMODEM::protocolName() const
 }
 
 /**
+ * @brief Cancels the batch. The base class clears its own state; the batch state has to be reset
+ *        here too, or bytes arriving after the cancel resume the batch machine on a closed file.
+ */
+void IO::Protocols::YMODEM::cancelTransfer()
+{
+  m_yState = YState::Idle;
+  XMODEM::cancelTransfer();
+}
+
+/**
  * @brief Starts a YMODEM file transfer.
  */
 void IO::Protocols::YMODEM::startTransfer(const QString& filePath)
@@ -155,6 +165,7 @@ bool IO::Protocols::YMODEM::handleDataAckByte(quint8 ch)
       return false;
     }
 
+    Q_EMIT protocolError();
     Q_EMIT statusMessage(tr("NAK received, retrying block %1").arg(m_blockNumber));
 
     m_bytesSent = qMax<qint64>(0, m_bytesSent - m_lastBlockBytes);
@@ -369,6 +380,7 @@ void IO::Protocols::YMODEM::handleTimeout()
     return;
   }
 
+  Q_EMIT protocolError();
   Q_EMIT statusMessage(tr("Timeout, retrying (%1/%2)…")
                          .arg(QString::number(m_retryCount), QString::number(m_maxRetries)));
 

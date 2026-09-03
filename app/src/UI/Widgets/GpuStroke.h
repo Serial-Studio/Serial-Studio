@@ -43,6 +43,17 @@ inline constexpr qsizetype kMaxGeometry = 1 << 24;
  */
 using MaterialFactory = QSGMaterial* (*)();
 
+/**
+ * @brief Headroom a grown geometry buffer keeps, so a curve whose join-fan count wobbles by a few
+ *        vertices per frame reuses the same allocation instead of trading one for another.
+ */
+inline constexpr int kGeometryHeadroomNumerator   = 3;
+inline constexpr int kGeometryHeadroomDenominator = 2;
+
+[[nodiscard]] bool reserveGeometry(QSGGeometry* geometry, const int vertices, const int indices);
+
+void padGeometryTail(QSGGeometry* geometry, const int vertices, const int indices);
+
 [[nodiscard]] qsizetype runLength(const QPointF* pts, const qsizetype count, qsizetype& start);
 
 void dashPolyline(const QPointF* px,

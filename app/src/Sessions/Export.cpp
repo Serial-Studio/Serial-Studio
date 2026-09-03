@@ -53,101 +53,6 @@
 static constexpr int kViewStateDebounceMs = 1500;
 
 //--------------------------------------------------------------------------------------------------
-// Fingerprint canonical serialization (spec 0044, shared with Sessions::Verifier)
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Appends a little-endian 64-bit integer to the hash.
- */
-static void hashLe64(QCryptographicHash& hash, quint64 value)
-{
-  char buffer[sizeof(quint64)];
-  qToLittleEndian(value, buffer);
-  hash.addData(QByteArrayView(buffer, sizeof(buffer)));
-}
-
-/**
- * @brief Appends an IEEE-754 double as its little-endian bit pattern to the hash. NaN folds to
- *        0.0 because SQLite stores NaN as NULL and the verifier reads NULL back as 0.0: the
- *        digest must cover the value the archive actually round-trips.
- */
-static void hashDouble(QCryptographicHash& hash, double value)
-{
-  const double canonical = std::isnan(value) ? 0.0 : value;
-  hashLe64(hash, std::bit_cast<quint64>(canonical));
-}
-
-/**
- * @brief Appends a length-prefixed UTF-8 string to the hash.
- */
-static void hashString(QCryptographicHash& hash, const QString& value)
-{
-  const QByteArray utf8 = value.toUtf8();
-  hashLe64(hash, static_cast<quint64>(utf8.size()));
-  hash.addData(utf8);
-}
-
-/**
- * @brief Feeds one raw_bytes row into a fingerprint hash using the spec-0044 canonical layout.
- */
-void Sessions::hashRawChunk(QCryptographicHash& hash,
-                            qint64 ns,
-                            int deviceId,
-                            const QByteArray& data)
-{
-  hashLe64(hash, static_cast<quint64>(ns));
-  hashLe64(hash, static_cast<quint64>(deviceId));
-  hashLe64(hash, static_cast<quint64>(data.size()));
-  hash.addData(data);
-}
-
-/**
- * @brief Feeds one readings row into a fingerprint hash using the spec-0044 canonical layout.
- */
-void Sessions::hashReadingRow(QCryptographicHash& hash,
-                              qint64 ns,
-                              qint64 uniqueId,
-                              double rawNumeric,
-                              const QString& rawString,
-                              double finalNumeric,
-                              const QString& finalString,
-                              bool isNumeric)
-{
-  hashLe64(hash, static_cast<quint64>(ns));
-  hashLe64(hash, static_cast<quint64>(uniqueId));
-  hashDouble(hash, rawNumeric);
-  hashString(hash, rawString);
-  hashDouble(hash, finalNumeric);
-  hashString(hash, finalString);
-  hashLe64(hash, isNumeric ? 1 : 0);
-}
-
-/**
- * @brief Feeds one `blocks` row into a fingerprint hash (spec 0055). Both blobs are canonical
- *        little-endian already, so the digest is machine-independent.
- */
-void Sessions::hashBlockRow(QCryptographicHash& hash,
-                            qint64 uniqueId,
-                            qint64 t0Ns,
-                            qint64 dtNs,
-                            qint64 frames,
-                            const QByteArray& values,
-                            const QByteArray& rawValues,
-                            const QByteArray& texts)
-{
-  hashLe64(hash, static_cast<quint64>(uniqueId));
-  hashLe64(hash, static_cast<quint64>(t0Ns));
-  hashLe64(hash, static_cast<quint64>(dtNs));
-  hashLe64(hash, static_cast<quint64>(frames));
-  hashLe64(hash, static_cast<quint64>(values.size()));
-  hash.addData(values);
-  hashLe64(hash, static_cast<quint64>(rawValues.size()));
-  hash.addData(rawValues);
-  hashLe64(hash, static_cast<quint64>(texts.size()));
-  hash.addData(texts);
-}
-
-//--------------------------------------------------------------------------------------------------
 // ExportWorker implementation
 //--------------------------------------------------------------------------------------------------
 
@@ -160,14 +65,15 @@ Sessions::ExportWorker::ExportWorker(
   std::atomic<size_t>* queueSize,
   moodycamel::ReaderWriterQueue<TimestampedRawBytes>* rawQueue,
   moodycamel::ReaderWriterQueue<TableSnapshotEntry>* snapshotQueue,
-  std::atomic<int>* operationMode,
   QMutex* projectSnapshotMutex,
   const QByteArray* projectSnapshot,
   const QByteArray* viewStateSnapshot,
   const std::atomic<bool>* controlScriptSeen,
   const std::atomic<quint64>* linkDroppedFrames,
   const std::atomic<quint64>* linkOverflowBytes,
-  const std::atomic<bool>* pinBaselineToInjectionEpoch)
+  const std::atomic<bool>* pinBaselineToInjectionEpoch,
+  std::atomic<bool>* writeFailure,
+  std::atomic<quint64>* droppedBlocks)
   : DataModel::FrameConsumerWorker<DataModel::DataBlockPtr>(blockQueue, enabled, queueSize)
   , m_dbOpen(false)
   , m_sessionId(-1)
@@ -176,7 +82,6 @@ Sessions::ExportWorker::ExportWorker(
   , m_blocksHash(QCryptographicHash::Sha256)
   , m_rawQueue(rawQueue)
   , m_snapshotQueue(snapshotQueue)
-  , m_operationMode(operationMode)
   , m_projectSnapshotMutex(projectSnapshotMutex)
   , m_projectSnapshot(projectSnapshot)
   , m_viewStateSnapshot(viewStateSnapshot)
@@ -184,11 +89,12 @@ Sessions::ExportWorker::ExportWorker(
   , m_linkDroppedFrames(linkDroppedFrames)
   , m_linkOverflowBytes(linkOverflowBytes)
   , m_pinBaselineToInjectionEpoch(pinBaselineToInjectionEpoch)
+  , m_writeFailure(writeFailure)
+  , m_droppedBlocks(droppedBlocks)
 {
   SS_ASSERT_LOG(rawQueue != nullptr);
   SS_ASSERT_LOG(snapshotQueue != nullptr);
   SS_ASSERT_LOG(blockQueue != nullptr);
-  SS_ASSERT_LOG(operationMode != nullptr);
   SS_ASSERT_LOG(projectSnapshotMutex != nullptr);
   SS_ASSERT_LOG(projectSnapshot != nullptr);
   SS_ASSERT_LOG(viewStateSnapshot != nullptr);
@@ -196,6 +102,8 @@ Sessions::ExportWorker::ExportWorker(
   SS_ASSERT_LOG(linkDroppedFrames != nullptr);
   SS_ASSERT_LOG(linkOverflowBytes != nullptr);
   SS_ASSERT_LOG(pinBaselineToInjectionEpoch != nullptr);
+  SS_ASSERT_LOG(writeFailure != nullptr);
+  SS_ASSERT_LOG(droppedBlocks != nullptr);
 }
 
 /**
@@ -257,27 +165,11 @@ void Sessions::ExportWorker::processData()
 {
   DataModel::FrameConsumerWorker<DataModel::DataBlockPtr>::processData();
 
-  if (!consumerEnabled())
+  if (!consumerEnabled() || !m_dbOpen)
     return;
 
-  if (!m_dbOpen
-      && m_operationMode->load(std::memory_order_relaxed)
-           == static_cast<int>(SerialStudio::ConsoleOnly)) {
-    if (const auto* head = m_rawQueue->peek()) {
-      DataModel::Frame emptyFrame;
-      emptyFrame.title = QStringLiteral("ConsoleOnly");
-      createDatabase(emptyFrame);
-      if (m_dbOpen) {
-        m_steadyBaseline = head->data->timestamp;
-        Q_EMIT resourceOpenChanged();
-      }
-    }
-  }
-
-  if (m_dbOpen) {
-    writeRawBytes();
-    writeTableSnapshots();
-  }
+  writeRawBytes();
+  writeTableSnapshots();
 }
 
 /**
@@ -374,7 +266,7 @@ void Sessions::ExportWorker::insertBlockRow(const DataModel::DataBlock& block,
   m_blockQuery->bindValue(17, dtNs == 0 ? timesBlob : QVariant());
 
   if (!m_blockQuery->exec()) [[unlikely]] {
-    qWarning() << "[SQLite] Insert block failed:" << m_blockQuery->lastError().text();
+    noteWriteFailure(1, QStringLiteral("insert block: %1").arg(m_blockQuery->lastError().text()));
     return;
   }
 
@@ -391,7 +283,7 @@ void Sessions::ExportWorker::processItems(const std::vector<DataModel::DataBlock
     return;
 
   if (!m_dbOpen) {
-    createDatabase(m_templateFrame);
+    createDatabase(m_structure.templateFrame());
 
     if (!m_dbOpen)
       return;
@@ -399,46 +291,51 @@ void Sessions::ExportWorker::processItems(const std::vector<DataModel::DataBlock
     m_steadyBaseline = m_pinBaselineToInjectionEpoch->load(std::memory_order_relaxed)
                        ? DataModel::TimestampedFrame::SteadyTimePoint{}
                        : items.front()->t0;
+
+    // code-verify off
+    // Raw chunks captured before the first block are older than it, and a baseline taken from the
+    // block alone clamped every one of them to ns 0 and then +1, +2 -- a fabricated raw-timeline
+    // head (B18). The queue is FIFO, so its head is the oldest capture in the session.
+    // code-verify on
+    if (const auto* head = m_rawQueue->peek())
+      if (head->data && head->data->timestamp < m_steadyBaseline
+          && !m_pinBaselineToInjectionEpoch->load(std::memory_order_relaxed))
+        m_steadyBaseline = head->data->timestamp;
+
     resetMonotonicClock();
   }
 
-  m_db->transaction();
+  if (!m_db->transaction()) [[unlikely]] {
+    noteWriteFailure(static_cast<qint64>(items.size()), QStringLiteral("transaction"));
+    return;
+  }
+
   for (const auto& block : items)
     if (block && block->samples > 0)
       writeBlocks(block);
 
   if (!m_db->commit()) [[unlikely]] {
-    qWarning() << "[Sessions::Export] commit() failed:" << m_db->lastError().text();
     m_db->rollback();
+    noteWriteFailure(static_cast<qint64>(items.size()), QStringLiteral("commit"));
   }
 }
 
 /**
  * @brief Stores the schema template frame; must run on the worker thread (queued invoke) so the
- *        assignment never races processItems() or closeResources(). An empty frame is ignored:
- *        structure arrives asynchronously and QuickPlot has none until its first frame, so an
- *        empty payload landing second would wipe an adopted template and no file would be made.
+ *        assignment never races processItems() or closeResources().
  */
 void Sessions::ExportWorker::setTemplateFrame(const DataModel::Frame& frame)
 {
-  if (frame.groups.empty())
-    return;
-
-  m_templateFrame = frame;
+  m_structure.setTemplateFrame(frame);
 }
 
 /**
- * @brief Adopts the structure the pipeline publishes when the connect-time fetch came back empty.
- *        QuickPlot derives its datasets from the first frame, so at connect there is nothing to
- *        fetch; blocks carry values only, so without this the file is never created. Ignored once
- *        a file exists -- an open file's schema is fixed for its lifetime.
+ * @brief Adopts the structure the pipeline publishes when the connect-time fetch came back empty
+ *        (QuickPlot derives its datasets from the first frame, so at connect there is none).
  */
 void Sessions::ExportWorker::applyPublishedStructure(const DataModel::Frame& frame)
 {
-  if (isResourceOpen() || !m_templateFrame.groups.empty())
-    return;
-
-  m_templateFrame = frame;
+  m_structure.applyPublishedStructure(frame, isResourceOpen());
 }
 
 /**
@@ -672,14 +569,6 @@ QJsonObject Sessions::ExportWorker::buildReplayProjectJson(const DataModel::Fram
     }
   }
 
-  static auto& appState = AppState::instance();
-  if (appState.operationMode() == SerialStudio::ConsoleOnly) {
-    QJsonObject json;
-    json.insert(QStringLiteral("title"), frame.title);
-    json.insert(QStringLiteral("operationMode"), QStringLiteral("ConsoleOnly"));
-    return json;
-  }
-
   QJsonObject json;
   json.insert(Keys::Title, frame.title);
 
@@ -745,7 +634,9 @@ void Sessions::ExportWorker::prepareHotpathQueries()
 }
 
 /**
- * @brief Drains the raw bytes queue and writes entries to the database.
+ * @brief Drains the raw bytes queue and writes entries to the database. The per-drain bound matches
+ *        the block lane's: at 1000 the lane fell permanently behind ~5000 chunks/s and the queue
+ *        silently truncated (B2).
  */
 void Sessions::ExportWorker::writeRawBytes()
 {
@@ -754,11 +645,15 @@ void Sessions::ExportWorker::writeRawBytes()
   if (!m_db || !m_rawBytesQuery) [[unlikely]]
     return;
 
-  constexpr size_t kMaxRawBatch = 1000;
+  constexpr size_t kMaxRawBatch = 10000;
   TimestampedRawBytes entry;
   size_t count = 0;
 
-  m_db->transaction();
+  if (!m_db->transaction()) [[unlikely]] {
+    noteWriteFailure(0, QStringLiteral("raw transaction"));
+    return;
+  }
+
   while (count < kMaxRawBatch && m_rawQueue->try_dequeue(entry)) {
     if (!entry.data) [[unlikely]]
       continue;
@@ -788,7 +683,11 @@ void Sessions::ExportWorker::writeRawBytes()
 
     hashRawChunk(m_rawHash, ns, entry.deviceId, chunk);
   }
-  m_db->commit();
+
+  if (!m_db->commit()) [[unlikely]] {
+    m_db->rollback();
+    noteWriteFailure(0, QStringLiteral("raw commit"));
+  }
 }
 
 /**
@@ -843,13 +742,24 @@ void Sessions::ExportWorker::finalizeSession()
 
   storeViewState();
 
+  // code-verify off
+  // A fingerprint is a claim that the archive contains exactly these rows. After a failed write it
+  // would be a claim over rows the database never took, so the digest columns stay NULL and the
+  // session reads as a legacy (unverifiable) capture instead of a false "reproduced" (B3).
+  // code-verify on
+  const bool lostRows = m_writeFailure->load(std::memory_order_relaxed);
+
   QSqlQuery q(*m_db);
   q.prepare("UPDATE sessions SET ended_at = ?, raw_sha256 = ?, readings_sha256 = ?, "
             "stream_sha256 = ?, app_version = ?, capture_format = ?, repro_class = ?, "
             "frames_dropped = ?, overflow_bytes = ? WHERE session_id = ?");
   q.bindValue(0, QDateTime::currentDateTime().toString(Qt::ISODate));
-  q.bindValue(1, QString::fromLatin1(m_rawHash.result().toHex()));
-  q.bindValue(2, QString::fromLatin1(m_blocksHash.result().toHex()));
+  q.bindValue(1,
+              lostRows ? QVariant(QMetaType(QMetaType::QString))
+                       : QVariant(QString::fromLatin1(m_rawHash.result().toHex())));
+  q.bindValue(2,
+              lostRows ? QVariant(QMetaType(QMetaType::QString))
+                       : QVariant(QString::fromLatin1(m_blocksHash.result().toHex())));
   q.bindValue(3, QVariant(QMetaType(QMetaType::QString)));
   q.bindValue(4, QStringLiteral(APP_VERSION));
   q.bindValue(5, DatabaseManager::kCaptureFormatVersion);
@@ -868,6 +778,27 @@ void Sessions::ExportWorker::finalizeSession()
   fallback.bindValue(1, m_sessionId);
   if (!fallback.exec())
     qWarning() << "[SQLite] Session ended_at fallback failed:" << fallback.lastError().text();
+}
+
+/**
+ * @brief Latches a database write failure: counts the rows the archive did not take, warns once,
+ *        and tells the controller so the UI stops claiming to record. A disk that fills mid-session
+ *        otherwise discarded every later batch behind a "recording" indicator (B3).
+ */
+SS_COLD void Sessions::ExportWorker::noteWriteFailure(qint64 droppedBlocks, const QString& what)
+{
+  SS_ASSERT(m_droppedBlocks != nullptr, return);
+  SS_ASSERT(m_writeFailure != nullptr, return);
+
+  if (droppedBlocks > 0)
+    m_droppedBlocks->fetch_add(static_cast<quint64>(droppedBlocks), std::memory_order_relaxed);
+
+  const QString reason = m_db ? m_db->lastError().text() : QStringLiteral("no database");
+  if (m_writeFailure->exchange(true, std::memory_order_release))
+    return;
+
+  qWarning() << "[Sessions::Export] write failed (" << what << "):" << reason;
+  Q_EMIT writeFailed();
 }
 
 /**
@@ -938,8 +869,10 @@ Sessions::Export::Export()
   , m_persistSettings(true)
   , m_rawBytesQueue(8192)
   , m_tableSnapshotQueue(1024)
-  , m_operationMode(static_cast<int>(AppState::instance().operationMode()))
   , m_controlScriptSeen(false)
+  , m_writeFailure(false)
+  , m_rawOverruns(0)
+  , m_droppedBlocks(0)
   , m_pinBaselineToInjectionEpoch(false)
   , m_linkDroppedFrames(0)
   , m_linkOverflowBytes(0)
@@ -977,11 +910,48 @@ Sessions::Export& Sessions::Export::instance()
 }
 
 /**
- * @brief Returns whether the database is currently open.
+ * @brief Returns whether a session is being recorded. A latched write failure reads as NOT
+ *        recording even while the file handle survives: the UI must never keep claiming to record
+ *        over batches the database refused (B3).
  */
 bool Sessions::Export::isOpen() const
 {
-  return m_isOpen.load(std::memory_order_relaxed);
+  return m_isOpen.load(std::memory_order_relaxed)
+      && !m_writeFailure.load(std::memory_order_relaxed);
+}
+
+/**
+ * @brief Returns whether this session hit a database write failure.
+ */
+bool Sessions::Export::writeFailed() const
+{
+  return m_writeFailure.load(std::memory_order_relaxed);
+}
+
+/**
+ * @brief Raw chunks the capture queue could not accept this session (pulled diagnostic).
+ */
+quint64 Sessions::Export::rawOverruns() const
+{
+  return m_rawOverruns.load(std::memory_order_relaxed);
+}
+
+/**
+ * @brief Published blocks the database did not take this session (pulled diagnostic).
+ */
+quint64 Sessions::Export::droppedBlocks() const
+{
+  return m_droppedBlocks.load(std::memory_order_relaxed);
+}
+
+/**
+ * @brief Row id of the session being recorded right now, or -1. Static so callers that must refuse
+ *        to touch the live archive (the explorer's delete and edit verbs) can ask without owning a
+ *        reference to the exporter.
+ */
+int Sessions::Export::currentSessionIdOrNone()
+{
+  return instance().currentSessionId();
 }
 
 /**
@@ -1040,8 +1010,6 @@ void Sessions::Export::setupExternalConnections()
 
   connect(&AppState::instance(), &AppState::operationModeChanged, this, [this] {
     const auto mode = AppState::instance().operationMode();
-    m_operationMode.store(static_cast<int>(mode), std::memory_order_relaxed);
-
     if (isOpen())
       closeFile();
 
@@ -1057,10 +1025,10 @@ void Sessions::Export::setupExternalConnections()
             refreshTemplateFrame();
           });
 
-  connect(m_connectionManager, &IO::ConnectionManager::connectedChanged, this, [this] {
-    if (!m_connectionManager->isConnected())
-      closeFile();
-  });
+  connect(m_frameBuilder,
+          &DataModel::FrameBuilder::sessionBoundary,
+          this,
+          &Sessions::Export::onSessionBoundary);
 
   connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [this] {
     if (CSV::Player::instance().isOpen())
@@ -1122,6 +1090,18 @@ void Sessions::Export::setupExternalConnections()
 
   const bool persisted = m_settings.value("SQLiteExport/Enabled", false).toBool();
   setExportEnabled(persisted);
+}
+
+/**
+ * @brief Closes the recording on a session edge. Closing here rather than on connectedChanged is
+ *        what keeps the last display tick (A2): the builder flushes its open blocks into this
+ *        sink's queue before emitting, and close() drains that queue before the session is
+ *        finalized. A pause closes too, so a paused recording is finalized over the rows it holds.
+ */
+void Sessions::Export::onSessionBoundary(bool connected, bool paused)
+{
+  if (!connected || paused)
+    closeFile();
 }
 
 /**
@@ -1249,6 +1229,10 @@ void Sessions::Export::resetSessionHealthBaseline()
 {
   SS_ASSERT(m_controlScript != nullptr, return);
   SS_ASSERT(m_connectionManager != nullptr, return);
+
+  m_writeFailure.store(false, std::memory_order_relaxed);
+  m_rawOverruns.store(0, std::memory_order_relaxed);
+  m_droppedBlocks.store(0, std::memory_order_relaxed);
 
   const auto stats         = m_connectionManager->linkStats();
   m_lastLinkDroppedSample  = stats.droppedFrames;
@@ -1379,7 +1363,9 @@ void Sessions::Export::refreshTemplateFrame()
 }
 
 /**
- * @brief Enqueues raw console bytes for the raw_bytes table.
+ * @brief Enqueues raw console bytes for the raw_bytes table. The lane shares the block lane's
+ *        threshold trigger, so a burst is drained at once instead of waiting for the 1 Hz timer and
+ *        silently truncating above ~1000 chunks/s; a full queue is counted, never ignored (B2).
  */
 void Sessions::Export::hotpathTxRawBytes(int deviceId, const IO::CapturedDataPtr& data)
 {
@@ -1389,7 +1375,12 @@ void Sessions::Export::hotpathTxRawBytes(int deviceId, const IO::CapturedDataPtr
   TimestampedRawBytes entry;
   entry.deviceId = deviceId;
   entry.data     = data;
-  m_rawBytesQueue.try_enqueue(std::move(entry));
+  if (!m_rawBytesQueue.try_enqueue(std::move(entry))) [[unlikely]] {
+    m_rawOverruns.fetch_add(1, std::memory_order_relaxed);
+    return;
+  }
+
+  noteSecondaryEnqueued(m_rawBytesQueue.size_approx());
 }
 
 /**
@@ -1402,18 +1393,20 @@ DataModel::FrameConsumerWorkerBase* Sessions::Export::createWorker()
                              &m_queueSize,
                              &m_rawBytesQueue,
                              &m_tableSnapshotQueue,
-                             &m_operationMode,
                              &m_projectSnapshotMutex,
                              &m_projectSnapshot,
                              &m_viewStateSnapshot,
                              &m_controlScriptSeen,
                              &m_linkDroppedFrames,
                              &m_linkOverflowBytes,
-                             &m_pinBaselineToInjectionEpoch);
+                             &m_pinBaselineToInjectionEpoch,
+                             &m_writeFailure,
+                             &m_droppedBlocks);
   connect(w,
           &DataModel::FrameConsumerWorkerBase::resourceOpenChanged,
           this,
           &Export::onWorkerOpenChanged);
+  connect(w, &ExportWorker::writeFailed, this, &Export::onWorkerWriteFailed, Qt::QueuedConnection);
   connect(w,
           &ExportWorker::sessionIdAssigned,
           this,
@@ -1429,6 +1422,16 @@ void Sessions::Export::onWorkerSessionIdAssigned(int sessionId)
 {
   if (m_currentSessionId.exchange(sessionId, std::memory_order_relaxed) != sessionId)
     Q_EMIT currentSessionIdChanged();
+}
+
+/**
+ * @brief Surfaces a worker-side write failure to the UI: isOpen() already reads false, so both
+ *        notifications go out together and the recording indicator drops within one tick (R1.3).
+ */
+void Sessions::Export::onWorkerWriteFailed()
+{
+  Q_EMIT writeErrorChanged();
+  Q_EMIT openChanged();
 }
 
 /**

@@ -314,11 +314,13 @@ def test_dropping_the_pairing_rule_from_the_schema_fails(verifier, schema):
     assert any("plot3d" in message for message in errors)
 
 
-def test_an_unshadowed_context_property_fails(verifier, tmp_path):
+def test_an_untabled_context_property_fails(verifier, tmp_path):
+    """A global the composition root registers but Misc::ContextRegistry does not list is a name
+    that reaches QML without an extension's context shadowing it (spec 0075 G4)."""
     seeded = tmp_path / "ModuleManager.cpp"
     source = verifier.MODULE_MANAGER_CPP.read_text(encoding="utf-8")
     seeded.write_text(
-        source + '\n  ctx->setContextProperty("Cpp_Unshadowed_Module", nullptr);\n',
+        source + '\n  registry.add("Cpp_Unshadowed_Module", nullptr);\n',
         encoding="utf-8",
     )
 
@@ -331,6 +333,51 @@ def test_an_unshadowed_context_property_fails(verifier, tmp_path):
         verifier.MODULE_MANAGER_CPP = original
 
     assert any("Cpp_Unshadowed_Module" in message for message in errors)
+
+
+def test_a_stale_registry_table_entry_fails(verifier, tmp_path):
+    """The drift is caught in both directions: a table entry nothing registers any more would
+    keep an extension's context shadowing a name that no longer exists."""
+    seeded = tmp_path / "ContextRegistry.cpp"
+    source = verifier.CONTEXT_REGISTRY_CPP.read_text(encoding="utf-8")
+    seeded.write_text(
+        source.replace(
+            'QStringLiteral("Cpp_AppState"),',
+            'QStringLiteral("Cpp_AppState"),\n    QStringLiteral("Cpp_Retired_Module"),',
+            1,
+        ),
+        encoding="utf-8",
+    )
+
+    original = verifier.CONTEXT_REGISTRY_CPP
+    verifier.CONTEXT_REGISTRY_CPP = seeded
+    try:
+        errors: list[str] = []
+        verifier.check_host_context_names(errors)
+    finally:
+        verifier.CONTEXT_REGISTRY_CPP = original
+
+    assert any("Cpp_Retired_Module" in message for message in errors)
+
+
+def test_host_context_names_must_read_the_registry(verifier, tmp_path):
+    """hostContextNames() keeping a second hand-written list is the drift the table replaced."""
+    seeded = tmp_path / "WidgetExtensions.cpp"
+    source = verifier.WIDGET_CATALOG_CPP.read_text(encoding="utf-8")
+    seeded.write_text(
+        source.replace("Misc::ContextRegistry::objectNames()", "QStringList()", 1),
+        encoding="utf-8",
+    )
+
+    original = verifier.WIDGET_CATALOG_CPP
+    verifier.WIDGET_CATALOG_CPP = seeded
+    try:
+        errors: list[str] = []
+        verifier.check_host_context_names(errors)
+    finally:
+        verifier.WIDGET_CATALOG_CPP = original
+
+    assert any("hostContextNames" in message for message in errors)
 
 
 # --------------------------------------------------------------------------------------------------

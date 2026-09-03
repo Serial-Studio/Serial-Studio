@@ -1,0 +1,29 @@
+{
+  "rule": "cxx-duplicate-window",
+  "regenerate": "python scripts/code-verify.py --dup-census --accept",
+  "window_lines": 10,
+  "pair_threshold": 40,
+  "shared": 1642,
+  "pairs": {
+    "app/qml/Widgets/Dashboard/MultiPlot.qml | app/qml/Widgets/Dashboard/Plot.qml": 138,
+    "app/qml/Widgets/Dashboard/Gauge.qml | app/qml/Widgets/Dashboard/Meter.qml": 137,
+    "app/qml/Widgets/Dashboard/Bar.qml | app/qml/Widgets/Dashboard/Meter.qml": 133,
+    "app/qml/Widgets/Dashboard/Clock.qml | app/qml/Widgets/Dashboard/Compass.qml": 126,
+    "app/qml/Widgets/Dashboard/Compass.qml | app/qml/Widgets/Dashboard/Gauge.qml": 115,
+    "app/qml/Widgets/Dashboard/Clock.qml | app/qml/Widgets/Dashboard/Gauge.qml": 113,
+    "app/qml/Widgets/Dashboard/Bar.qml | app/qml/Widgets/Dashboard/Gauge.qml": 84,
+    "app/qml/ProjectEditor/Views/TableFolderView.qml | app/qml/ProjectEditor/Views/WorkspaceFolderView.qml": 82,
+    "app/qml/ProjectEditor/Views/GroupFolderView.qml | app/qml/ProjectEditor/Views/WorkspaceFolderView.qml": 79,
+    "app/qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml | app/qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml": 76,
+    "app/qml/ProjectEditor/Views/GroupFolderView.qml | app/qml/ProjectEditor/Views/TableFolderView.qml": 74,
+    "app/qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml | app/qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml": 69,
+    "app/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml | app/qml/MainWindow/Panes/Setup.qml": 58,
+    "app/qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml | app/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml": 57,
+    "app/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml | app/qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml": 57,
+    "app/qml/ProjectEditor/Views/GroupFolderView.qml | app/qml/ProjectEditor/Views/GroupsView.qml": 54,
+    "app/qml/Widgets/Dashboard/FFTPlot.qml | app/qml/Widgets/Dashboard/Plot.qml": 52,
+    "app/qml/ProjectEditor/Views/GroupsView.qml | app/qml/ProjectEditor/Views/WorkspacesView.qml": 49,
+    "app/qml/ProjectEditor/Views/WorkspaceFolderView.qml | app/qml/ProjectEditor/Views/WorkspacesView.qml": 47,
+    "app/qml/Widgets/Dashboard/Compass.qml | app/qml/Widgets/Dashboard/Meter.qml": 42
+  }
+}

@@ -33,9 +33,10 @@ struct Credentials {
 };
 
 /**
- * @brief Per-machine encrypted storage for broker/server credentials keyed by host:port. The
- *        scope names the settings group ("mqtt" by default) so another driver can share the
- *        vault without its entries colliding with the MQTT ones.
+ * @brief Per-machine OBFUSCATED storage for broker/server credentials keyed by host:port. The
+ *        cipher is SimpleCrypt under a machine-derived key, which keeps a credential out of the
+ *        settings file as plain text and is not encryption: no user-facing string may call it
+ *        that. The scope names the settings group ("mqtt") so another driver can share the vault.
  */
 class CredentialVault {
 public:

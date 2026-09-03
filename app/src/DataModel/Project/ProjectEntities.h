@@ -46,6 +46,8 @@ public:
   ProjectEntities& operator=(ProjectEntities&&)      = delete;
   ProjectEntities& operator=(const ProjectEntities&) = delete;
 
+  void renumberGroupIds();
+
   void updateGroup(const int groupId, const Group& group, const bool rebuildTree);
   void updateDataset(const int groupId,
                      const int datasetId,
@@ -92,7 +94,6 @@ public:
   void promptRenameAction(int actionId);
 
 private:
-  void renumberGroupIds();
   void remapGroupIdsAfterReorder(const std::vector<int>& oldToNewGid);
   [[nodiscard]] bool confirmGroupWidgetChange(Group& grp, SerialStudio::GroupWidget widget);
   [[nodiscard]] bool applyGroupWidget(Group& grp, SerialStudio::GroupWidget widget);

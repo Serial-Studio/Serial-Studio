@@ -35,6 +35,10 @@ namespace IO {
 class ConnectionManager;
 }  // namespace IO
 
+namespace DataModel {
+class ProjectModel;
+}  // namespace DataModel
+
 namespace UI {
 
 /**
@@ -54,7 +58,10 @@ signals:
   void notificationLogEnabledChanged();
 
 public:
-  DashboardTools(QSettings& settings, IO::ConnectionManager& ioManager, QObject* parent = nullptr);
+  DashboardTools(QSettings& settings,
+                 IO::ConnectionManager& ioManager,
+                 DataModel::ProjectModel& projectModel,
+                 QObject* parent = nullptr);
   DashboardTools(DashboardTools&&)                 = delete;
   DashboardTools(const DashboardTools&)            = delete;
   DashboardTools& operator=(DashboardTools&&)      = delete;
@@ -73,6 +80,7 @@ public:
   void restorePersistedSettings();
   void setSettingsPersistent(const bool persistent);
   void configureActions(const DataModel::Frame& frame);
+  void refreshActionsFromProject();
   void activateAction(const int index, const bool guiTrigger);
 
   void setClockEnabled(const bool enabled);
@@ -81,8 +89,12 @@ public:
   void setNotificationLogEnabled(const bool enabled);
 
 private:
+  void rebuildActions(const QVector<DataModel::Action>& actions);
+
+private:
   QSettings& m_settings;
   IO::ConnectionManager& m_ioManager;
+  DataModel::ProjectModel& m_projectModel;
 
   bool m_persistSettings;
   bool m_clockEnabled;

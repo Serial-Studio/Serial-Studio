@@ -51,11 +51,14 @@ legacy CSV text path, so the branch inside `Audio::processInputBuffer` is delibe
   used to exist. Blocks are pooled (`kBlockPoolSlots`); pool or ring exhaustion drops a whole block
   and counts it, which is the only backpressure -- the worker never strides or caps a source's rate.
 
-## Opening a Link — Synchronous, Per-Driver
+## Opening a Link — One Synchronous Call, Several Async Dials Behind It
 
 `DeviceManager::open(mode)` starts the `FrameReader` if it is null and then calls
 `m_driver->open(mode)` directly. There is no orchestration layer: `DeviceManager` owns no
 task runner, and nothing sits between `ConnectionManager::connectDevice()` and the driver.
+What *has* changed (spec 0075) is how many drivers finish inside that call: most now return
+"attempt started" and settle later through the `openFinished` latch. The call is still
+synchronous; the verdict often is not.
 <!-- claim-verify off -->
 The spec-0034 `IO::ConnectionFlows` layer and the hook family it drove (`supportsAsyncOpen`,
 `beginOpen`, `abortOpen`, `openTimeoutMsec`, `linkDropped`) were removed 2026-07-30; spec
@@ -79,10 +82,16 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   member) and `concludeConnectRequest()` survives only to
   settle the wait cursor and to make `toggleConnection()` treat an in-flight request as
   "connected" so the button aborts instead of stacking a second attempt.
-- **Async dials are visible through `HAL_Driver::isConnecting()`** (default `false`).
-  Network (true only while a WebSocket/HTTP dial is pending — TCP/UDP settle synchronously),
-  BluetoothLE, MQTT, Modbus, CANBus and Process override it;
-  `toggleConnection()` aborts when any device reports an in-flight dial, and
+- **Async dials are visible through `HAL_Driver::isConnecting()`** (default `false`). Eleven
+  classes override it: `Network` (`m_dialPending`, now true for TCP as well as WebSocket and
+  HTTP; only UDP settles synchronously), `Iec104` (`m_dial.active()`), `Modbus`, `MQTT`,
+  `OpcUa`, `S7`, `EthernetIp`, `CANBus`, `BluetoothLE`, `Process`, and the ctest double
+  <!-- claim-verify off -->
+  `Test::FakeDriver` (`app/tests/support/`).
+  <!-- claim-verify on -->
+  UART, USB, Audio and HID do not override it: their opens settle inside the
+  call. (`OpcUaSession::isConnecting()` exists too but is not an override — the session is not a
+  `HAL_Driver`.) `toggleConnection()` aborts when any device reports an in-flight dial, and
   `ConnectionManager::isConnecting` (NOTIFY `connectingChanged`, published by the same
   idempotent snapshot) drives the toolbar button's "Connecting…" label. Modbus mirrors
   Network's timer-driven dial (10 refusal retries at 300 ms, 15 s timeout, `close()`
@@ -94,26 +103,57 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   silence, and `closeDevice()` disarms it before `ma_device_uninit` so teardown's own stop
   never re-enters. `linkState()` reports `connected`, `connecting` or `idle` (connected
   wins when a live session and a dialing device coexist); `io.getStatus` mirrors it.
-- **Spec-0050 dial doctrine (2026-08-10).** Network TCP connects synchronously: `open()`
-  blocks in `dialTcpBlocking()` under the connect fan-out's wait cursor and the return value
-  is the final verdict — no `isConnecting()` override, no dial timers, no pending-dial
-  verdicts. The endpoint wait uses a THROWAWAY probe socket per attempt (5 s deadline,
-  250 ms pace on refusal, covering a control-script helper's bind window); the driver's own
-  socket then connects exactly once, and its readyRead/errorOccurred handlers are wired only
-  on success. **Never abort-and-redial a long-lived run-loop-registered socket**: stale
-  CFSocket sources fire into the freed engine and crash `readFromSocket` on macOS (observed
-  2026-08-10; same family as the 2026-06 socket ABA race). Modbus TCP cannot block
-  (QModbusClient limitation) but runs the same throwaway pre-probe inside `open()`, then
-  `connectDevice()` dials once; a dial setback fails once for both protocols. **Every async
-  dial failure must reach `ConnectionManager::disconnectDevice(this)`** — BLE
-  (`onControllerError`), Modbus (`failDial`), MQTT (dial-window `onErrorChanged`) all do —
+- **The dial doctrine (spec 0050, rebuilt in spec 0075).** The doctrine is unchanged: a
+  THROWAWAY probe socket per attempt (5 s deadline, 250 ms pace on refusal, covering a
+  control-script helper's bind window), then the driver's own socket connects exactly once, with
+  its readyRead/errorOccurred handlers wired only on success. **Never abort-and-redial a
+  long-lived run-loop-registered socket**: stale CFSocket sources fire into the freed engine and
+  crash on macOS (observed 2026-08-10; same family as the 2026-06 socket ABA race). What changed
+  is that none of it blocks the GUI thread any more. It lives in **`IO::AsyncTcpDial`**
+  (`app/src/IO/AsyncTcpDial.{h,cpp}`), a GUI-thread QObject that sequences one dial:
+  `QHostInfo::lookupHost` (skipped when the host is already an address literal), addresses
+  reordered **IPv4 first** (a `localhost` resolving `::1` ahead of an IPv4-only listener used to
+  cost a whole attempt), an optional QTimer-paced refusal probe on throwaway sockets, then one
+  `connectToHost()` on the caller's socket **to the resolved literal**, so `connectToHost` never
+  runs its own synchronous resolver. `finished(bool ok, const QString& reason)` is emitted
+  **exactly once per `start()`** under a single deadline covering resolution, probing and
+  connect; `report()` tears its own state down *before* emitting, so a caller that restarts a
+  dial from its own handler runs against an idle object; `cancel()` ends an attempt with **no**
+  verdict (a user cancel is not an open failure) and the destructor cancels. `active()` is what
+  the drivers publish as `isConnecting()`. Three entry points, because not every caller owns the
+  socket: `start()` (full sequence, Network TCP), `startProbe()` (probe only, for stacks that own
+  their own connect: Modbus TCP), and `startResolve()` (resolution only, `resolvedAddress()`
+  carries the literal: `OpcUaSession`). `Iec104` calls `start()` with
+  `setProbeEnabled(false)` — a strict 104 station permits ONE client and would count the probe
+  socket as it. **MQTT does not use the helper**: it keeps a plain 15 s `QTimer` dial deadline
+  that funnels into `failDial()`.
+  <!-- claim-verify off -->
+  `dialTcpBlocking()` no longer exists.
+  <!-- claim-verify on -->
+  `tst_async_tcp_dial` pins success, refusal, unresolvable host and cancel-emits-nothing.
+- **A write issued during a dial is held, not lost.** The spec-0050 promise that a control
+  script's `io.connect()` + `writeData()` sequence just works used to hold because
+  `connectToHost()` had already been called and QTcpSocket buffered. With probe-then-connect
+  nothing is connected yet, so `Network::write()` routes a TCP write made while `m_dialPending`
+  into `queueTcpWrite()` (capped at 1 MiB; an over-cap write is refused whole) and flushes the
+  buffer once on a successful verdict, clearing it on failure and on `closeTcp()`.
+- **`io.connect`'s response flag is a public contract, and TCP changed meaning.**
+  `IOManagerHandler::connect()` answers `connected: manager.isConnected()` immediately, so for an
+  async bus that flag means "the attempt started", not "the link is up" — which is now also true
+  for TCP. Read the verdict from `io.getStatus` / `linkState()` instead. Any future
+  sync-to-async conversion owes the same correction to the docs, the AI corpus and
+  `tests/integration/test_connection_verdicts.py`.
+- **Every async dial failure must still reach `ConnectionManager::disconnectDevice(this)`** —
+  BLE (`onControllerError`), Modbus (`failDial`), MQTT (dial-window `onErrorChanged`) all do —
   so a pending verdict settles and "connecting" always resolves; the earlier design stranded
   those verdicts and wedged the connect button. The prior async retry/watchdog stack
   (10x300 ms + 15 s + peerPort validation) bounced healthy links and earned a telehack.com
   IP ban; do not reintroduce it. An ESTABLISHED link that errors reports once and stays
-  down — post-drop auto-recovery exists only as UART's opt-in auto-reconnect checkbox.
-  A control script's `io.connect()` + `writeData()` sequence just works: `open()` returns
-  with the link established. **There is no reopen-on-config-edit machinery** (removed
+  down — post-drop auto-recovery exists only as UART's opt-in auto-reconnect checkbox, and an
+  auto-reconnect **keeps the session pause**: `ConnectionManager::ResumePolicy` is `Resume` for a
+  user connect and `KeepPause` for a driver's own recovery, because an adapter blip is not a
+  request to start streaming again into a session the user deliberately paused.
+  **There is no reopen-on-config-edit machinery** (removed
   2026-08-10): connection settings are UI-locked while connected or dialing
   (`SetupPanes/Hardware.qml` StackLayout gate; BLE's post-connect pickers exempt), and
   `ProjectModel::setSource0ConnectionSettings` no-ops on identical settings so persistence
@@ -127,9 +167,11 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   append-only. Two dispatchers do NOT branch on the current type: `close()` tears down
   every transport (a type changed while a link is up would otherwise strand the open socket) and
   `setDriverProperty()` offers each key to every transport (`applyConnectionSettings()` replays all
-  stored keys on project load, so gating on the active type silently drops settings). TCP and UDP
-  keep their synchronous verdicts; **WebSocket and HTTP dial async**, so `isConnecting()` is
-  overridden and returns `m_dialPending`, true only for those two. Their verdict funnels are
+  stored keys on project load, so gating on the active type silently drops settings). For the same
+  reason `driverProperties()` emits **every** transport's rows unconditionally, so a project saved
+  while on TCP keeps its WebSocket, HTTP and TLS settings. Only UDP still settles synchronously;
+  **TCP, WebSocket and HTTP dial async**, so `isConnecting()` returns `m_dialPending` for those
+  three. Their verdict funnels are
   `succeedDial()` / `failDial()`, and `failDial()` only REPORTS, because `onDriverOpenFinished`
   already closes the device on `ok == false` and tearing down there too double-closes. HTTP's opening
   request IS the connect verdict (no separate HEAD probe: many REST endpoints answer 405, and a
@@ -137,14 +179,26 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   poll. Only ONE reply is ever in flight; an overlapping poll tick increments a skip counter and
   returns. A post-connect poll failure keeps the link UP, logs once per failure run, and counts
   (`pollsOk`/`pollsFailed`/`pollsSkipped`/`consecutiveFailures`, pulled by `io.network.getStatus`,
-  never pushed). `urlForCurrentMode()` is the SINGLE validation rule shared by `configurationOk()`
-  and `open()`.
+  never pushed). An HTTP response body is capped at **8 MiB** (`readCappedBody`), the first
+  truncation of a run logged once. `urlForCurrentMode()` is the SINGLE validation rule shared by
+  `configurationOk()` and `open()`. UDP reads check `readDatagram()`'s return: a failed read ends
+  the pass instead of republishing whatever the reused buffer still held from the previous
+  datagram, and a single pass is bounded at 256 datagrams.
 - **OPC UA (specs 0066/0067) owns its stack, discovers before it dials, and publishes delta
   frames on a tick.** The protocol stack is `lib/open62541` (1.5.7 amalgamation) over
   `lib/mbedtls` (3.6 LTS), both vendored and statically linked; **`Qt6::OpcUa` is not used and
   not linked**, so the shipped package carries no Qt OPC UA module and no backend plugin, and the
   driver's capabilities are a property of THIS build rather than of the machine it runs on.
   `SS_ENABLE_OPCUA=OFF` (or a GPL build) hides the bus entirely.
+- **`OpcUaSession` resolves the host itself before it hands open62541 a URL.**
+  `UA_Client_connectAsync()` resolves inside itself with a synchronous getaddrinfo (upstream's own
+  "TODO: Make this non-blocking"), so an unresolvable host froze the window for the resolver's
+  timeout, which no dial deadline of ours could shorten (E5). `startResolution()` runs
+  `AsyncTcpDial::startResolve()` first and `dialUrl()` substitutes the resolved literal, while
+  `m_endpointUrl` keeps the typed hostname because that is what the certificate hostname check has
+  to see. The pump cadence is adaptive: 10 ms while something is outstanding (dialing, a read in
+  flight, a live subscription, queued reads or browses), 100 ms idle — three idle sessions used to
+  cost 300 wake-ups per second between them.
 - **`OpcUaSession` is the only object that sees a `UA_` type.** It is a plain `QObject` affine to
   the driver's (GUI) thread: a `QTimer` calls `UA_Client_run_iterate()`, open62541 dispatches its C
   callbacks from inside that call, and static trampolines recover the session from
@@ -181,7 +235,12 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   `reportOpenFinished(false)`; an established drop queues `disconnectDevice(this)`.
 - **Secure channels are configuration on the session (spec 0067 stage 2).** All six policies are
   supported (`None` through `Aes256_Sha256_RsaPss`, the `kPolicyUris` table in
-  `OpcUaEndpointSelection.cpp`); `Basic128Rsa15` and `Basic256` are labelled deprecated and never auto-selected, and
+  `OpcUaEndpointSelection.cpp`); `Basic128Rsa15` and `Basic256` are labelled deprecated and never
+  auto-selected. **"Never auto-selected" is enforced by not scoring them at all**: a deprecated
+  candidate the user did not explicitly configure is `continue`d past, so a server offering
+  nothing else leaves the choice empty rather than being dialed over Basic128Rsa15. Scoring one
+  at 0 against an initial best of -1 is what made a deprecated-only server auto-dial (E10);
+  `tst_opcua_endpoint_selection` now carries that case.
   `selectBestEndpoint()` otherwise picks the most secure endpoint the chosen identity can use.
   `OpcUaSecurity` owns the per-INSTALLATION identity and trust store under
   `AppConfigLocation/OpcUa`: the client certificate is generated on first secure use and REUSED
@@ -191,9 +250,16 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   own `verifyCertificate` hook, and keeps the four refusal causes apart (untrusted, expired, not
   yet valid, hostname mismatch) because they have four different fixes. A refusal is still ONE
   verdict through `failDial()`; the trust prompt is emitted QUEUED and accepting only RECORDS the
-  decision, so the reconnect is a new attempt with its own verdict. Identity is anonymous,
-  username/password (`allowNonePolicyPassword` is what lets a password cross an unencrypted
-  channel at all) or an X.509 token. Nothing secret enters the project file:
+  decision, so the reconnect is a new attempt with its own verdict. **TRUST is read before the
+  hostname check**, so an accepted self-signed certificate dialed by IP is no longer refused for a
+  hostname mismatch (E11). Identity is anonymous, username/password or an X.509 token.
+  A password crosses an unencrypted channel only when the user has granted
+  `OpcUaSecurity::plaintextPasswordAllowed()` — a per-INSTALLATION acknowledgement beside the
+  trust store, **default off**, replacing the unconditional `allowNonePolicyPassword = true` that
+  shipped every None-policy login's password in the clear without asking. It is deliberately NOT
+  a driver property: `applyConnectionSettings` replays every key of a project's `connection`
+  object through `setDriverProperty`, so anything exposed there would be granted by opening
+  someone else's project. Nothing secret enters the project file:
   `DriverProperty::Password` keeps the password out, and only the PATHS of a user certificate and
   key are persisted.
 - **On Connected the driver subscribes every tag at once.** Refused tags go to `m_polledTags`
@@ -222,23 +288,43 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   in `MQTT::CredentialVault` under the `opcua` scope. Diagnostics are pulled counters read by
   `io.opcua.getStatus`.
 - **The spec-0073 PLC pollers (S7, EthernetIp) are blocking pollers on a driver-owned
-  QThread.** `open()` starts the thread, runs the dial there over a
-  `Qt::BlockingQueuedConnection` and returns the verdict synchronously — one attempt, no
-  `openFinished` latch, no retry stack (spec 0050). Every protocol exchange blocks until the
-  controller answers, so the socket and the tag handles live on the worker thread only:
-  S7comm speaks ISO-on-TCP through the in-house `S7/IsoTsap` + `S7Pdu` codec; EthernetIp
-  drives vendored libplctag behind a seam (`kEipBackend`) so the TU reads the same with or
-  without the lib, and every `plc_tag_create`/read/destroy happens on the worker. Both are
-  read-only — `write()` returns -1, there is no write path. Worker counters are ATOMIC, a
-  deliberate, header-documented deviation from spec 0033's plain `quint64`, because the poll
-  thread increments while the GUI samples at 1 Hz. A lost link emits `linkLost` and the
+  QThread, dialed asynchronously.** `open()` posts `beginDial` to the worker
+  (`Qt::QueuedConnection`) and returns immediately with `isConnecting()` true; the worker reports
+  `dialFinished(ok, reason)` exactly once and the driver forwards it through `openFinished`. The
+  GUI thread no longer blocks for the 10-13 s a dead controller costs. A verdict landing after
+  the user closed the session is dropped by the `m_connecting` guard. Every protocol exchange
+  still blocks until the controller answers, so the socket and the tag handles live on the worker
+  thread only.
+  **Both workers derive from `IO::Drivers::PolledPlcWorkerBase`**
+  (`app/src/IO/Drivers/PolledPlcWorkerBase.{h,cpp}`, spec 0075 E8), which owns the
+  protocol-independent half: the `std::atomic<bool>` abort latch, the poll timer, the
+  change-latch table (`latchChannel` — an unchanged value costs no wire entry), the `OpcUaWire`
+  delta encoder (`publishDirtySlots`, double-buffered frames, dirty marks consumed by the
+  publish), the report-once link loss, the one-shot dial verdict, and the three pulled counters
+  `readsOk` / `readsFailed` / `framesPublished`. Subclasses implement exactly three hooks:
+  `connectToPlc()`, `pollTick()`, `releaseResources()`. What stays per driver is the protocol:
+  `S7PollWorker` keeps the ISO-on-TCP handshake through the in-house `S7/IsoTsap` + `S7Pdu`
+  codec, its chunk plan, and its own two extra atomics `m_lastFault` / `m_itemErrors`;
+  `EipPollWorker` keeps the vendored-libplctag seam (`kEipBackend`, so the TU reads the same with
+  or without the lib; every `plc_tag_create`/read/destroy happens on the worker) and its
+  dead-tick watchdog. `kEipBackend` is a label, not an injectable seam, which is why the worker
+  suite (`tst_ethernetip_worker`) drives `PolledPlcWorkerBase` through a scripted stub instead.
+  Both drivers are read-only — `write()` returns -1, there is no write path. Worker counters are
+  ATOMIC, a deliberate, header-documented deviation from spec 0033's plain `quint64`, because the
+  poll thread increments while the GUI samples at 1 Hz. A lost link emits `linkLost` and the
   driver queues `disconnectDevice(this)`.
-- **Iec104 stays GUI-thread like OPC UA and DISCOVERS its point table.** `open()` blocks in
-  `dialStation()` (same one-verdict doctrine), sends STARTDT, then a general interrogation;
+- **Iec104 stays GUI-thread like OPC UA and DISCOVERS its point table.** `dialStation()` runs
+  through `AsyncTcpDial` with the probe disabled (same one-verdict doctrine, reported through
+  `openFinished`; `doClose()` cancels the dial so a cancelled attempt reports nothing), then
+  sends STARTDT and a general interrogation;
   the station's answer builds the point table — nothing is configured — and
   `generateProject()` turns it into a project. TESTFR keepalives at t3 hold the link, and a
-  tick publishes changed points. Monitor direction only: no control direction exists,
-  `write()` returns -1. The in-house stack lives in `Iec104/Apci` + `Iec104/Asdu`.
+  tick publishes changed points. **Slot identity is `(ioa, typeId)`, not the IOA alone**
+  (`Iec104Proto::slotKey()`, `m_slotForKey`): one address reported under two type ids is two
+  slots, and a report's live `kind` overwrites a restored one, so a measured value and a
+  single-point indication on the same address can no longer overwrite each other. Monitor
+  direction only: no control direction exists, `write()` returns -1. The in-house stack lives in
+  `Iec104/Apci` + `Iec104/Asdu`.
 - **All three industrial pollers publish through the OPC UA wire lane.** Dirty slots encode
   into `OpcUaWire` delta frames (`wireTypeFor`, `kMaxTags` cap) latched by the same native
   template family, stamped with the poll's own capture time and clamped monotonic on the GUI
@@ -248,7 +334,16 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   `SparkplugSession` (under `Drivers/MQTT/`) is a Qt-Core-only, QObject-free state machine
   that turns the `spBv1.0` namespace into a flat table of latched slots for the same OPC UA
   delta encoder — slot indices NEVER move under a rebirth, counters are polled (spec 0033),
-  no drop is silent. Outbound: `MQTT::SparkplugPublisher` owns the edge-node lifecycle
+  no drop is silent. **`reset()` keeps the slot table** and clears only birth state, buffered
+  traffic, values and counters: clearing it on a reconnect renumbered every slot, and
+  `sparkplugStateChanged(connected)` sets the group filter on every connect (E2). A filter change
+  is safe for the same reason a slot key carries its own group, so an old-group slot can never
+  collide with a new one. The table survives the app too: `Keys::SparkplugSlots` persists it in
+  the MQTT connection block (`slotsJson()` / `restoreSlots()`), and because `QJsonObject`
+  iterates in sorted key order, `applyConnectionSettings` applies `sparkplugEnabled` <
+  `sparkplugGroupId` < `sparkplugSlots`, so the table is restored after the filter is set. A
+  restore is refused whole once the session already holds slots of its own, so the UI instance
+  can never clobber a live table. Outbound: `MQTT::SparkplugPublisher` owns the edge-node lifecycle
   (metric registry, alias table, `bdSeq`/`seq`, birth/data/death payloads) as pure
   {topic, payload} pairs with no I/O and no QObject, so the ctest tier drives the whole state
   machine without a broker. Aliases are stable once assigned — a multi-source project must
@@ -256,13 +351,24 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   rebirth instead (spec 0074).
 - **`CanBackends` registers libusb/serial adapters as synthetic CANBus plugins** — GsUsb
   (candleLight), Seeed/Waveshare USB-CAN Analyzer (CH340 serial), SLCAN/LAWICEL — each a
-  `QCanBusDevice` backend keyed by a plugin key beside Qt's own plugins. `CanReassembly`
+  `QCanBusDevice` backend keyed by a plugin key beside Qt's own plugins. The two **serial**
+  adapters share `IO::Drivers::SerialCanBackendBase`
+  (`app/src/IO/Drivers/CANBus/SerialCanBackendBase.{h,cpp}`), which owns everything that is not
+  the wire protocol: the `QSerialPort`, the open/close sequences with their open-ack timeout, the
+  bounded receive buffer (`kMaxRxBufferSize` 65536; over-cap clears the buffer and counts a drop)
+  and the fatal-versus-ignorable `errorOccurred` classification, so a dead adapter reports the
+  same way whichever one is speaking. Subclasses supply only `validateBitrate`, `sendInit`,
+  `drainBuffer` and optionally `openReplyIsError` / `sendShutdown`: `SlcanBackend` keeps the
+  LAWICEL ASCII grammar (with the id and DLC parse flags now separated, D8, and the open verdict
+  read from the adapter's BEL reply, D19), `SeeedCanBackend` the analyzer's variable-length
+  packets. `GsUsbCanBackend` is NOT a subclass — it is USB, not serial. `CanReassembly`
   holds the two fixed-cap reassemblers (J1939-21 TP: TP.CM announcements plus BAM and
   RTS/CTS sessions; ISO 15765-2: FirstFrame + ConsecutiveFrames) with pulled counters
   (spec 0033), so >8-byte PGNs and multi-frame diagnostics decode like single frames instead
   of silently never appearing.
-- **`sessionClosed` means the USER (or an API client / player takeover) ended the session** —
-  it fires only from the explicit `disconnectDevice()` path. Driver-initiated drops,
+- **`sessionClosed` means the USER (or an API client / player takeover) ended a session that
+  existed** — it fires only from the explicit no-argument `disconnectDevice()` path, and only
+  when a session was actually open (C13). Driver-initiated drops, a cancelled dial,
   `rebuildDevices` churn, and failed dials never emit it: `API::ProcessLauncher` reaps every
   script-launched helper on this signal, and those helpers usually serve the very link that
   is dropping or retrying (the dual-drone example died to a source-0 drop reaping the helper
@@ -305,6 +411,64 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   project structure/operation-mode signals. It coalesces reentrant triggers into one queued
   follow-up, and the connect/disconnect fan-outs iterate id snapshots because a close can spin
   the event loop into another rebuild.
+
+## ConnectionManager's Sub-objects
+
+The facade owns its concerns as member sub-objects under `app/src/IO/ConnectionManager/`, one
+class per `.h/.cpp` pair (`ConnectFanOut`, `DeviceIoRouter`, `DeviceTableQuery`, `DriverFactory`,
+`DriverUiRegistry`, `ReplyCapture`, `StreamConfigBuilder`, `StreamWorkerPool`, `UiDriverSync`).
+The four that matter on the connect path:
+What stays in `ConnectionManager.cpp` is connect/disconnect orchestration, because
+it needs `QObject::sender()` (`onDriverOpenFinished` resolves which driver reported), `Q_EMIT`,
+`connect(...)` with `this` as context, and the facade's own Q_INVOKABLE per-bus QML accessors.
+
+- **`ConnectFanOut` (`m_fanOut`)** — the connect-request bookkeeping: request lifecycle, pending
+  dial ids (`notePendingDial` / `takePendingDial`), the latched connected/connecting snapshots and
+  the wait cursor. It queries no device and emits nothing.
+- **`DeviceIoRouter` (`m_io`)** — what crosses the device link and how it is framed: the
+  delimiters and checksum the readers are rebuilt from, the inbound payload fan-in to the console
+  and the API/session/MQTT/gRPC taps, and the outbound write path with its reply capture.
+  ConnectionManager's byte path is this class.
+- **`DeviceTableQuery` (`m_query`)** — every read over the live device table: open counts,
+  `linkState()`, the 1 Hz `linkStats()` sample, the configuration verdict and the id lookups the
+  connect fan-outs iterate. Read-only by construction, so nothing here can mutate a device or emit
+  a signal. **`IO::LinkStats` is declared in `DeviceTableQuery.h`**, not in `ConnectionManager.h`;
+  `ConnectionManager::linkStats()` forwards.
+- **`StreamWorkerPool`** — the per-source `IO::StreamWorker` lifecycle joined first in
+  `ModuleManager::stopFrameConsumerWorkers()`.
+
+Other IO invariants worth naming at the point of action:
+
+- **UART's two error decisions are pure and extracted.** `IO::Drivers::UartPolicy`
+  (`UART/UartPolicy.h`, header-only) holds `isFatalPortError(error, customPath)` and
+  `shouldAutoReconnect(error, enabled)`. A custom device path is exempt from
+  `UnsupportedOperationError` **only** — never from `ResourceError`, whose exemption left the port
+  "open" after an unplug with `write()` still returning byte counts (D5). `tst_uart_policy` pins
+  both without a real port.
+- **USB advanced transfers are consent-gated.** `setTransferMode(AdvancedControl)` refuses
+  without a recorded `USB/advancedTransferConsent`, reporting through the log plus a **queued**
+  NotificationCenter warning rather than a modal: a modal blocked a non-interactive caller and
+  asked a question nobody was there to answer (D4, same class as R5.5).
+- **Audio playback goes through an SPSC ring.** `Audio/PlaybackRing.h` is a fixed-capacity byte
+  ring between the GUI writer and the real-time callback: a write that does not fit is refused
+  whole and counted, a short read zero-fills and counts an underrun, and both counters are pulled
+  (spec 0033). No allocation, no lock, no blocking on the callback side. A capture-only session no
+  longer fails because the machine has no output device (D2).
+- **hidapi init/exit is refcounted.** `hid_init`/`hid_exit` sit behind an internal refcount, because
+  a live instance's destructor used to tear down the UI instance's IOHIDManager (D11); `open()`
+  closes first.
+- **Process closes asynchronously.** `doClose()` terminates and kills on a timer instead of
+  blocking two seconds on a child that ignores SIGTERM, `ps` enumeration is asynchronous, and the
+  crash double-drop is guarded because a crashing process reports through BOTH `finished()` and
+  `errorOccurred()`.
+- **Modbus RTU framing is its own Qt-Core-only unit.** `Modbus/ModbusRtuCodec.{h,cpp}` holds
+  exactly two free functions, `functionCodeForType()` and `appendCrc()` (CRC-16/Modbus, low octet
+  first), so what a consumer validates is testable without a device. **The request cap is
+  type-aware**: `ModbusRegisterGroups::maxCountForType()` gives FC01/FC02 their own 2000-bit
+  ceiling against FC03/FC04's 125 registers, enforced at both `add()` and `restore()`; sharing the
+  register ceiling refused four fifths of a legal coil read (E12). A failed poll publishes a
+  `[unit, fc, 0]` placeholder and steps the cursor from BOTH failure exits, so a dropped reply
+  cannot put two frames of the same group back to back (E3).
 
 ## The Async Task-Tree Engine (`app/src/Async/`)
 

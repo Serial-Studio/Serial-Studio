@@ -23,7 +23,6 @@
 #  include <QTemporaryFile>
 
 #  include "API/CommandRegistry.h"
-#  include "API/PathPolicy.h"
 #  include "DataModel/ProjectModel.h"
 #  include "Sessions/DatabaseManager.h"
 #  include "Sessions/Export.h"
@@ -366,8 +365,12 @@ API::CommandResponse API::Handlers::SessionsHandler::getStatus(const QString& id
   static auto& exp = Sessions::Export::instance();
 
   QJsonObject result;
-  result[QStringLiteral("exportEnabled")] = exp.exportEnabled();
-  result[QStringLiteral("isOpen")]        = exp.isOpen();
+  result[QStringLiteral("exportEnabled")]    = exp.exportEnabled();
+  result[QStringLiteral("isOpen")]           = exp.isOpen();
+  result[QStringLiteral("writeFailed")]      = exp.writeFailed();
+  result[QStringLiteral("rawOverruns")]      = static_cast<qint64>(exp.rawOverruns());
+  result[QStringLiteral("droppedBlocks")]    = static_cast<qint64>(exp.droppedBlocks());
+  result[QStringLiteral("currentSessionId")] = exp.currentSessionId();
   return CommandResponse::makeSuccess(id, result);
 }
 
@@ -522,6 +525,12 @@ API::CommandResponse API::Handlers::SessionsHandler::deleteSession(const QString
       id,
       ErrorCode::ExecutionError,
       QStringLiteral("No database open. Call sessions.openDatabase first."));
+
+  if (sessionId >= 0 && sessionId == Sessions::Export::currentSessionIdOrNone())
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::SessionLive,
+      QStringLiteral("This session is being recorded; stop the recording first."));
 
   db.confirmDeleteSession(sessionId);
 
@@ -716,10 +725,6 @@ API::CommandResponse API::Handlers::SessionsHandler::regress(const QString& id,
       id,
       ErrorCode::InvalidParam,
       QStringLiteral("Pass at most one of 'projectPath' or 'projectJson'."));
-
-  if (!candidate.isEmpty() && !API::isPathAllowed(candidate))
-    return CommandResponse::makeError(
-      id, ErrorCode::InvalidParam, QStringLiteral("projectPath is not allowed"));
 
   if (candidate.isEmpty() && params.contains(QStringLiteral("projectJson"))) {
     const QByteArray json = params.value(QStringLiteral("projectJson")).toString().toUtf8();

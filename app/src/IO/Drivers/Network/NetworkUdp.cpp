@@ -135,7 +135,8 @@ bool IO::Drivers::Network::udpConfigured() const
 /**
  * @brief Drains pending datagrams, publishing each separately so the message boundaries UDP
  *        preserves survive into the frame reader. The per-pass cap keeps a flood from starving
- *        the event loop.
+ *        the event loop; a failed read ends the pass rather than publishing whatever the buffer
+ *        happened to hold from the previous datagram.
  */
 void IO::Drivers::Network::onUdpReadyRead()
 {
@@ -143,7 +144,12 @@ void IO::Drivers::Network::onUdpReadyRead()
   for (int n = 0; n < kMaxDatagramsPerRead && m_udpSocket->hasPendingDatagrams(); ++n) {
     const qint64 size = m_udpSocket->pendingDatagramSize();
     m_udpBuffer.resize(size);
-    m_udpSocket->readDatagram(m_udpBuffer.data(), m_udpBuffer.size());
+
+    const qint64 read = m_udpSocket->readDatagram(m_udpBuffer.data(), m_udpBuffer.size());
+    if (read < 0)
+      break;
+
+    m_udpBuffer.truncate(static_cast<qsizetype>(read));
     publishReceivedData(m_udpBuffer);
   }
 }
@@ -161,12 +167,11 @@ void IO::Drivers::Network::onUdpError(const QAbstractSocket::SocketError socketE
 }
 
 /**
- * @brief Appends the UDP rows of the driver property model.
+ * @brief Appends the UDP rows of the driver property model. The shared address row is appended by
+ *        the facade, which emits every transport's rows in one list.
  */
 void IO::Drivers::Network::appendUdpProperties(QList<IO::DriverProperty>& props) const
 {
-  appendAddressProperty(props);
-
   IO::DriverProperty udpLocal;
   udpLocal.key   = QStringLiteral("udpLocalPort");
   udpLocal.label = tr("UDP Local Port");

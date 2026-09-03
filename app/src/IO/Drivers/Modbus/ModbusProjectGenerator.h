@@ -45,6 +45,9 @@ public:
   [[nodiscard]] QJsonObject buildProject(const QJsonObject& connectionSettings) const;
 
 private:
+  [[nodiscard]] QString buildGroupTable() const;
+  [[nodiscard]] QString buildResyncHelper() const;
+
   QVector<ModbusRegisterGroup> m_groups;
 };
 }  // namespace Drivers

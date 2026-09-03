@@ -1,0 +1,102 @@
+{
+  "purpose": "Upstream provenance for every tree under lib/. Finding L11 of spec 0075: the vendored copies carried no machine-readable ref, so 'is this current, and what did we patch?' could only be answered by reading each tree. Each entry names the upstream project, the release or commit the copy tracks, and where that ref is asserted inside the tree so a bump that forgets one half is visible. A null ref is an honest unknown, not an omission.",
+  "regenerate": "By hand, when a vendored tree is bumped. Update the tree's own version marker in the same commit.",
+  "trees": [
+    {
+      "path": "lib/hidapi",
+      "upstream": "libusb/hidapi",
+      "url": "https://github.com/libusb/hidapi",
+      "version": "0.14.0",
+      "ref": null,
+      "asserted_in": "lib/hidapi/VERSION",
+      "vendored": "full source tree"
+    },
+    {
+      "path": "lib/KissFFT",
+      "upstream": "mborgerding/kissfft",
+      "url": "https://github.com/mborgerding/kissfft",
+      "version": "131.1.0",
+      "ref": null,
+      "asserted_in": "lib/KissFFT/Makefile (KFVER_MAJOR/MINOR/PATCH)",
+      "vendored": "full source tree",
+      "note": "CHANGELOG stops at 1.3.0 (2012); the Makefile version is the current one. tst_real_fft pins the bin equivalence the FFT widgets rely on."
+    },
+    {
+      "path": "lib/libplctag",
+      "upstream": "libplctag/libplctag",
+      "url": "https://github.com/libplctag/libplctag",
+      "version": "2.6.0",
+      "ref": "v2.6.0",
+      "asserted_in": "lib/libplctag/CMakeLists.txt (SS_LIBPLCTAG_GIT_TAG)",
+      "vendored": "FetchContent at configure time, not a checked-in tree"
+    },
+    {
+      "path": "lib/luajit",
+      "upstream": "LuaJIT/LuaJIT",
+      "url": "https://github.com/LuaJIT/LuaJIT",
+      "version": "2.1 (rolling)",
+      "ref": "1edc3e52b67eaf6ce5f809be8e17d6862594b8bc",
+      "asserted_in": "lib/luajit/.relver (1785763465, the commit's committer epoch)",
+      "vendored": "full source tree; CMakeLists.txt is a Serial Studio port of src/Makefile + msvcbuild.bat",
+      "note": "LuaJIT 2.1 has no releases; .relver is a rolling counter, so the commit it corresponds to is recorded here. Spec 0051 covers the Lua 5.4 -> LuaJIT swap."
+    },
+    {
+      "path": "lib/mbedtls",
+      "upstream": "Mbed-TLS/mbedtls",
+      "url": "https://github.com/Mbed-TLS/mbedtls",
+      "version": "3.6.7",
+      "ref": "v3.6.7",
+      "asserted_in": "lib/mbedtls/CMakeLists.txt (project VERSION) and lib/mbedtls/ChangeLog",
+      "vendored": "full source tree",
+      "note": "Backs the six OPC UA security policies (spec 0067)."
+    },
+    {
+      "path": "lib/mdflib",
+      "upstream": "ihedvall/mdflib",
+      "url": "https://github.com/ihedvall/mdflib",
+      "version": "2.3",
+      "ref": null,
+      "asserted_in": "lib/mdflib/CMakeLists.txt (project VERSION)",
+      "vendored": "full source tree"
+    },
+    {
+      "path": "lib/open62541",
+      "upstream": "open62541/open62541",
+      "url": "https://github.com/open62541/open62541",
+      "version": "1.5.7",
+      "ref": "v1.5.7",
+      "asserted_in": "lib/open62541/open62541.h (UA_OPEN62541_VERSION)",
+      "vendored": "single-file amalgamation (open62541.c/.h) as published with the release",
+      "patches": "lib/open62541/PATCHES.md"
+    },
+    {
+      "path": "lib/OpenSSL",
+      "upstream": "alex-spataru/OpenSSL-Builder",
+      "url": "https://github.com/alex-spataru/OpenSSL-Builder",
+      "version": "4.0.1",
+      "ref": "4.0.1",
+      "asserted_in": "lib/OpenSSL/CMakeLists.txt (VERSION plus a per-asset ASSET_SHA256)",
+      "vendored": "prebuilt archive fetched at configure time; every asset is hash-checked",
+      "note": "Skipped entirely when ENABLE_GRPC=ON: gRPC's bundled BoringSSL supplies the crypto."
+    },
+    {
+      "path": "lib/QCodeEditor",
+      "upstream": "Megaxela/QCodeEditor",
+      "url": "https://github.com/Megaxela/QCodeEditor",
+      "version": null,
+      "ref": null,
+      "asserted_in": null,
+      "vendored": "forked source tree, adapted to Qt 6",
+      "note": "The fork predates this file and carries no upstream ref; a bump would have to re-derive one by diffing against upstream."
+    },
+    {
+      "path": "lib/QSimpleUpdater",
+      "upstream": "alex-spataru/QSimpleUpdater",
+      "url": "https://github.com/alex-spataru/QSimpleUpdater",
+      "version": "1.0.0",
+      "ref": null,
+      "asserted_in": "lib/QSimpleUpdater/CMakeLists.txt (project VERSION)",
+      "vendored": "full source tree, same author as this repository"
+    }
+  ]
+}

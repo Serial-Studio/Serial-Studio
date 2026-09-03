@@ -1,0 +1,41 @@
+{
+  "title": "Legacy X Axis",
+  "frameStart": "$",
+  "frameEnd": ";",
+  "groups": [
+    {
+      "title": "Plot",
+      "widget": "datagrid",
+      "datasets": [
+        {
+          "title": "Time Base",
+          "index": 1,
+          "graph": true,
+          "widget": "",
+          "units": "",
+          "min": 0,
+          "max": 100,
+          "alarm": 0,
+          "led": false,
+          "log": false,
+          "fft": false
+        },
+        {
+          "title": "Signal",
+          "index": 2,
+          "graph": true,
+          "widget": "",
+          "units": "",
+          "min": 0,
+          "max": 100,
+          "alarm": 0,
+          "led": false,
+          "log": false,
+          "fft": false,
+          "xAxis": 1
+        }
+      ]
+    }
+  ],
+  "actions": []
+}

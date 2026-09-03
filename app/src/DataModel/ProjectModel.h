@@ -207,6 +207,7 @@ signals:
   void datasetAdded(int groupId, int datasetId);
   void datasetDeleted(int survivingGroupId);
   void actionAdded(int actionId);
+  void actionDataChanged(int actionId);
   void actionDeleted();
   void sourceAdded(int sourceId);
   void sourceChanged(int sourceId);
@@ -556,6 +557,8 @@ public slots:
 
   bool openJsonFile(const QString& path) { return m_loader.openJsonFile(path); }
 
+  [[nodiscard]] bool lastOpenReloaded() const noexcept { return m_loader.lastOpenReloaded(); }
+
   bool loadFromJsonDocument(const QJsonDocument& document, const QString& sourcePath = {})
   {
     return m_loader.loadFromJsonDocument(document, sourcePath);
@@ -825,6 +828,13 @@ public slots:
   void updateSourceStreamLane(int sourceId, const QString& lane)
   {
     m_sourceOps.updateSourceStreamLane(sourceId, lane);
+  }
+
+  void setSourceFrameParserTemplateAndParams(int sourceId,
+                                             const QString& templateId,
+                                             const QJsonObject& params)
+  {
+    m_sourceOps.setSourceFrameParserTemplateAndParams(sourceId, templateId, params);
   }
 
   void setActiveGroupId(const int groupId) { m_presentation.setActiveGroupId(groupId); }
@@ -1160,8 +1170,10 @@ public:
   void setAutoSaveSuspended(bool suspend) { m_persistence.setAutoSaveSuspended(suspend); }
 
 private:
-  void emitSinkConfigResets(bool hadMqttPublisher, bool hadInfluxSink);
   void clearTransientState();
+  void scheduleWorkspaceRegen();
+  void flushWorkspaceRegen();
+  void emitSinkConfigResets(bool hadMqttPublisher, bool hadInfluxSink);
 
   [[nodiscard]] int nextDatasetIndex();
 
@@ -1187,6 +1199,7 @@ private:
   bool m_modified;
   bool m_initialized;
   bool m_silentReload;
+  bool m_workspaceRegenPending;
   QString m_filePath;
   bool m_suppressMessageBoxes;
   QString m_controlScriptCode;

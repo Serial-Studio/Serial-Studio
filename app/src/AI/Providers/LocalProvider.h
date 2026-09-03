@@ -35,6 +35,10 @@ class LocalProvider
   Q_OBJECT
 
 public:
+  static constexpr int kDefaultContextWindow = 8192;
+  static constexpr int kMinContextWindow     = 2048;
+  static constexpr int kMaxContextWindow     = 1000000;
+
   explicit LocalProvider(QNetworkAccessManager& nam);
 
   [[nodiscard]] QString displayName() const override;
@@ -54,6 +58,9 @@ public:
   void setBaseUrl(const QString& url);
   void refreshModels();
 
+  [[nodiscard]] int contextWindowTokens() const noexcept;
+  void setContextWindowTokens(int tokens);
+
   static QString defaultBaseUrl();
 
 signals:
@@ -70,6 +77,7 @@ private:
   mutable QSettings m_settings;
   QString m_baseUrl;
   QStringList m_models;
+  int m_contextWindowTokens;
 };
 
 }  // namespace AI

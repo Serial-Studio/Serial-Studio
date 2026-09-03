@@ -25,7 +25,6 @@
 #include <QJsonArray>
 
 #include "API/CommandRegistry.h"
-#include "API/PathPolicy.h"
 #include "CSV/Player.h"
 #include "SerialStudio.h"
 
@@ -176,11 +175,6 @@ API::CommandResponse API::Handlers::CSVPlayerHandler::open(const QString& id,
   if (file_path.isEmpty()) {
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("filePath cannot be empty"));
-  }
-
-  if (!API::isPathAllowed(file_path)) {
-    return CommandResponse::makeError(
-      id, ErrorCode::InvalidParam, QStringLiteral("filePath is not allowed"));
   }
 
   static auto& player = CSV::Player::instance();

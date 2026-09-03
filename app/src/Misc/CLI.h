@@ -55,8 +55,15 @@ struct CliOptions {
     "not encrypted: use it on a trusted network or through a tunnel only"};
   QCommandLineOption apiTokenOpt{
     "api-token",
-    "Set the API authentication token external clients must present (>= 32 hex characters)",
+    "Set the API authentication token external clients must present (>= 32 hex characters). "
+    "Prefer --api-token-file or SS_API_TOKEN: an argv token is visible to every process",
     "hex"};
+  QCommandLineOption apiTokenFileOpt{
+    "api-token-file",
+    "Read the API authentication token from a file instead of the command line",
+    "path"};
+  QCommandLineOption apiPortOpt{
+    "api-port", QObject::tr("Listen for API clients on <port> instead of 7777."), "port"};
   QCommandLineOption dumpApiSchemaOpt{
     "dump-api-schema",
     "Write the API command registry to a JSON file and exit (SDK generator input)",
@@ -272,6 +279,8 @@ public:
   static bool isBenchmarkRequested(int argc, char** argv);
 
   ProcessResult process(QApplication& app);
+  [[nodiscard]] bool postRootSelfTestRequested() const;
+  [[nodiscard]] ProcessResult runPostRootSelfTests();
 
   [[nodiscard]] bool fullscreen() const noexcept;
   [[nodiscard]] bool runtimeMode() const noexcept;
@@ -295,8 +304,10 @@ public:
 
 private:
   void registerOptions();
+  void registerCommercialOptions();
   void applyApiServerOptions();
   void scheduleExitAfter(QApplication& app);
+  [[nodiscard]] QString resolveApiToken() const;
 
   ProcessResult runHotpathBenchmark();
   ProcessResult dumpApiSchema(const QString& path);

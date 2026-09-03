@@ -82,7 +82,7 @@
     },
     {
       "path": "examples/RC Plane Simulator/RC Plane Simulator.ssproj",
-      "sha256": "791db3a63d98f1b3343c4deeab4538769a5e7ed87cfd50e7a86046ed9a4e73ee"
+      "sha256": "f45d205b1c57cf3a5e32698e4ffedd59d5d67c20a9dbe6cf1720bb80f2416616"
     },
     {
       "path": "examples/S7 PLC Example/S7 PLC Simulator.ssproj",

@@ -51,20 +51,10 @@ Widgets::Plot::Plot(const int index, QQuickItem* parent)
   , m_maxY(0)
   , m_dataMinY(0)
   , m_dataMaxY(0)
-  , m_visLoX(std::numeric_limits<double>::quiet_NaN())
-  , m_visHiX(std::numeric_limits<double>::quiet_NaN())
   , m_monotonicData(true)
   , m_timeAxis(false)
   , m_logX(false)
   , m_logY(false)
-  , m_logXScratch(1)
-  , m_interpolationMode(SerialStudio::InterpolationLinear)
-  , m_sweepEnabled(false)
-  , m_triggerLevel(0)
-  , m_holdoffMs(0)
-  , m_timebaseMs(0)
-  , m_sweepMode(SerialStudio::SweepAuto)
-  , m_triggerEdge(SerialStudio::TriggerRising)
   , m_sweepRetention(0)
   , m_lastSegmentCount(0)
 {
@@ -220,7 +210,7 @@ bool Widgets::Plot::running() const noexcept
  */
 SerialStudio::InterpolationMode Widgets::Plot::interpolationMode() const noexcept
 {
-  return m_interpolationMode;
+  return m_base.interpolationMode();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -284,7 +274,7 @@ bool Widgets::Plot::logY() const noexcept
  */
 bool Widgets::Plot::sweepEnabled() const noexcept
 {
-  return m_sweepEnabled;
+  return m_base.sweepEnabled();
 }
 
 /**
@@ -292,7 +282,7 @@ bool Widgets::Plot::sweepEnabled() const noexcept
  */
 double Widgets::Plot::triggerLevel() const noexcept
 {
-  return m_triggerLevel;
+  return m_base.triggerLevel();
 }
 
 /**
@@ -300,7 +290,7 @@ double Widgets::Plot::triggerLevel() const noexcept
  */
 double Widgets::Plot::holdoff() const noexcept
 {
-  return m_holdoffMs;
+  return m_base.holdoffMs();
 }
 
 /**
@@ -308,7 +298,7 @@ double Widgets::Plot::holdoff() const noexcept
  */
 double Widgets::Plot::sweepTimebase() const noexcept
 {
-  return m_timebaseMs;
+  return m_base.timebaseMs();
 }
 
 /**
@@ -316,7 +306,7 @@ double Widgets::Plot::sweepTimebase() const noexcept
  */
 SerialStudio::SweepMode Widgets::Plot::sweepMode() const noexcept
 {
-  return m_sweepMode;
+  return m_base.sweepMode();
 }
 
 /**
@@ -324,7 +314,7 @@ SerialStudio::SweepMode Widgets::Plot::sweepMode() const noexcept
  */
 SerialStudio::TriggerEdge Widgets::Plot::triggerEdge() const noexcept
 {
-  return m_triggerEdge;
+  return m_base.triggerEdge();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -387,7 +377,7 @@ void Widgets::Plot::drawSegment(QXYSeries* series, const int index)
 
   double xLo = m_minX;
   double xHi = m_maxX;
-  clampToVisibleX(xLo, xHi);
+  m_base.clampToVisibleX(xLo, xHi, m_dataW);
   const auto& ring = segment->curves.front();
   (void)DSP::downsampleWindowAbsolute(
     ring.time, ring.value, xLo, xHi, m_dataW, m_dataH, m_segmentScratch, &ws);
@@ -416,8 +406,8 @@ void Widgets::Plot::draw(QXYSeries* series)
 
     const auto* data = &m_data;
     if (m_monotonicData
-        && (m_interpolationMode == SerialStudio::InterpolationZoh
-            || m_interpolationMode == SerialStudio::InterpolationStem)) {
+        && (m_base.interpolationMode() == SerialStudio::InterpolationZoh
+            || m_base.interpolationMode() == SerialStudio::InterpolationStem)) {
       updateInterpolatedData();
       data = &m_renderData;
     }
@@ -473,8 +463,7 @@ void Widgets::Plot::setRunning(const bool enabled)
  */
 void Widgets::Plot::setVisibleXWindow(const double lo, const double hi)
 {
-  m_visLoX = lo;
-  m_visHiX = hi;
+  m_base.setVisibleXWindow(lo, hi);
 }
 
 /**
@@ -482,23 +471,9 @@ void Widgets::Plot::setVisibleXWindow(const double lo, const double hi)
  */
 void Widgets::Plot::setInterpolationMode(SerialStudio::InterpolationMode mode)
 {
-  SerialStudio::InterpolationMode resolved;
-  switch (mode) {
-    case SerialStudio::InterpolationNone:
-    case SerialStudio::InterpolationLinear:
-    case SerialStudio::InterpolationZoh:
-    case SerialStudio::InterpolationStem:
-      resolved = mode;
-      break;
-    default:
-      resolved = SerialStudio::InterpolationLinear;
-      break;
-  }
-
-  if (m_interpolationMode == resolved)
+  if (!m_base.setInterpolationMode(mode))
     return;
 
-  m_interpolationMode = resolved;
   Q_EMIT interpolationModeChanged();
 }
 
@@ -511,10 +486,9 @@ void Widgets::Plot::setInterpolationMode(SerialStudio::InterpolationMode mode)
  */
 void Widgets::Plot::setSweepEnabled(const bool enabled)
 {
-  if (m_sweepEnabled == enabled)
+  if (!m_base.setSweepEnabled(enabled))
     return;
 
-  m_sweepEnabled = enabled;
   pushSweepConfig();
   updateRange();
   Q_EMIT sweepChanged();
@@ -525,10 +499,9 @@ void Widgets::Plot::setSweepEnabled(const bool enabled)
  */
 void Widgets::Plot::setTriggerLevel(const double level)
 {
-  if (qFuzzyCompare(m_triggerLevel, level))
+  if (!m_base.setTriggerLevel(level))
     return;
 
-  m_triggerLevel = level;
   pushSweepConfig();
   Q_EMIT sweepChanged();
 }
@@ -538,11 +511,9 @@ void Widgets::Plot::setTriggerLevel(const double level)
  */
 void Widgets::Plot::setHoldoff(const double milliseconds)
 {
-  const double clamped = milliseconds < 0 ? 0 : milliseconds;
-  if (qFuzzyCompare(m_holdoffMs, clamped))
+  if (!m_base.setHoldoff(milliseconds))
     return;
 
-  m_holdoffMs = clamped;
   pushSweepConfig();
   Q_EMIT sweepChanged();
 }
@@ -552,11 +523,9 @@ void Widgets::Plot::setHoldoff(const double milliseconds)
  */
 void Widgets::Plot::setSweepTimebase(const double milliseconds)
 {
-  const double clamped = milliseconds < 0 ? 0 : milliseconds;
-  if (qFuzzyCompare(m_timebaseMs, clamped))
+  if (!m_base.setSweepTimebase(milliseconds))
     return;
 
-  m_timebaseMs = clamped;
   pushSweepConfig();
   updateRange();
   Q_EMIT sweepChanged();
@@ -567,10 +536,9 @@ void Widgets::Plot::setSweepTimebase(const double milliseconds)
  */
 void Widgets::Plot::setSweepMode(const SerialStudio::SweepMode mode)
 {
-  if (m_sweepMode == mode)
+  if (!m_base.setSweepMode(mode))
     return;
 
-  m_sweepMode = mode;
   pushSweepConfig();
   Q_EMIT sweepChanged();
 }
@@ -580,10 +548,9 @@ void Widgets::Plot::setSweepMode(const SerialStudio::SweepMode mode)
  */
 void Widgets::Plot::setTriggerEdge(const SerialStudio::TriggerEdge edge)
 {
-  if (m_triggerEdge == edge)
+  if (!m_base.setTriggerEdge(edge))
     return;
 
-  m_triggerEdge = edge;
   pushSweepConfig();
   Q_EMIT sweepChanged();
 }
@@ -602,12 +569,12 @@ void Widgets::Plot::armSweep()
 void Widgets::Plot::pushSweepConfig()
 {
   m_dashboard.setPlotSweep(m_index,
-                           m_sweepEnabled,
-                           m_triggerLevel,
-                           static_cast<int>(m_triggerEdge),
-                           static_cast<int>(m_sweepMode),
-                           m_holdoffMs * 0.001,
-                           m_timebaseMs * 0.001);
+                           m_base.sweepEnabled(),
+                           m_base.triggerLevel(),
+                           static_cast<int>(m_base.triggerEdge()),
+                           static_cast<int>(m_base.sweepMode()),
+                           m_base.holdoffMs() * 0.001,
+                           m_base.timebaseMs() * 0.001);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -627,10 +594,10 @@ void Widgets::Plot::updateData()
   if (!VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index))
     return;
 
-  if (m_timeAxis && m_sweepEnabled) {
+  if (m_timeAxis && m_base.sweepEnabled()) {
     double xLo = m_minX;
     double xHi = m_maxX;
-    clampToVisibleX(xLo, xHi);
+    m_base.clampToVisibleX(xLo, xHi, m_dataW);
     const auto& engine = m_dashboard.plotSweep(m_index);
     const auto& ring   = engine.display(0);
     (void)DSP::downsampleWindowAbsolute(
@@ -649,7 +616,7 @@ void Widgets::Plot::updateData()
   if (m_timeAxis) {
     double xLo = m_minX;
     double xHi = m_maxX;
-    clampToVisibleX(xLo, xHi);
+    m_base.clampToVisibleX(xLo, xHi, m_dataW);
     const auto& ring = m_dashboard.plotTimeRing(m_index);
     (void)DSP::downsampleTimeWindow(ring, xLo, xHi, m_dataW, m_dataH, m_data, &ws);
     applyLogYToRender();
@@ -660,8 +627,9 @@ void Widgets::Plot::updateData()
 
   if (m_monotonicData) {
     if (m_logX) {
-      buildLogXScratch(*plotData.x, LogScale::kSampleFloor);
-      (void)DSP::downsampleMonotonic(m_logXScratch, *plotData.y, m_dataW, m_dataH, m_data, &ws);
+      m_base.buildLogXScratch(*plotData.x, LogScale::kSampleFloor);
+      (void)DSP::downsampleMonotonic(
+        m_base.logXScratch(), *plotData.y, m_dataW, m_dataH, m_data, &ws);
     }
 
     else
@@ -719,52 +687,6 @@ void Widgets::Plot::applyLogYToRender()
 }
 
 /**
- * @brief Copies a shared (immutable) X ring into the widget-owned scratch ring in log10
- *        space so the downsampler buckets uniformly in log pixel columns. The
- *        capacity+size early-out is valid only for the static fillRange index ring;
- *        a per-frame X source would need a content generation key.
- */
-void Widgets::Plot::buildLogXScratch(const DSP::AxisData& x, const double floor)
-{
-  if (m_logXScratch.capacity() == x.capacity() && m_logXScratch.size() == x.size())
-    return;
-
-  if (m_logXScratch.capacity() != x.capacity())
-    m_logXScratch.resize(x.capacity());
-
-  SS_ASSERT(x.raw() != nullptr, return);
-  SS_ASSERT(x.size() <= m_logXScratch.capacity(), return);
-
-  m_logXScratch.clear();
-
-  const auto* data       = x.raw();
-  const std::size_t mask = x.storageMask();
-  std::size_t idx        = x.frontIndex();
-  const std::size_t n    = x.size();
-  for (std::size_t i = 0; i < n; ++i) {
-    m_logXScratch.push(LogScale::clampedLog10(data[idx], floor));
-    idx = (idx + 1) & mask;
-  }
-}
-
-/**
- * @brief Intersects [lo, hi] with the view-pushed visible X window when it is valid.
- *        The window grows by two render columns per side so edge-crossing segments
- *        survive the cut and the curve runs through the viewport edges.
- */
-void Widgets::Plot::clampToVisibleX(double& lo, double& hi) const
-{
-  SS_ASSERT(lo <= hi, std::swap(lo, hi));
-
-  if (!std::isfinite(m_visLoX) || !std::isfinite(m_visHiX) || !(m_visLoX < m_visHiX))
-    return;
-
-  const double margin = (m_visHiX - m_visLoX) * (2.0 / std::max(2, m_dataW));
-  lo                  = std::max(lo, m_visLoX - margin);
-  hi                  = std::min(hi, m_visHiX + margin);
-}
-
-/**
  * @brief Rebuilds the render data for ZOH or stem interpolation modes. Stems anchor at
  *        the same zero-clamped baseline as the area fill, so a one-signed signal never
  *        drops its stems across the zero line.
@@ -773,7 +695,7 @@ void Widgets::Plot::updateInterpolatedData()
 {
   const int n = m_data.size();
 
-  if (m_interpolationMode == SerialStudio::InterpolationZoh) {
+  if (m_base.interpolationMode() == SerialStudio::InterpolationZoh) {
     if (n < 2) {
       m_renderData.resize(n);
       if (n == 1)
@@ -793,7 +715,7 @@ void Widgets::Plot::updateInterpolatedData()
     return;
   }
 
-  if (m_interpolationMode == SerialStudio::InterpolationStem) {
+  if (m_base.interpolationMode() == SerialStudio::InterpolationStem) {
     constexpr double kNan = std::numeric_limits<double>::quiet_NaN();
 
     double base = 0.0;
@@ -825,10 +747,10 @@ void Widgets::Plot::updateRange()
 
   if (m_timeAxis) {
     const double range    = m_dashboard.plotTimeRange();
-    const double timebase = m_timebaseMs * 0.001;
+    const double timebase = m_base.timebaseMs() * 0.001;
     const double window   = (timebase > 0 && timebase < range) ? timebase : range;
-    m_minX                = m_sweepEnabled ? 0 : -range;
-    m_maxX                = m_sweepEnabled ? window : 0;
+    m_minX                = m_base.sweepEnabled() ? 0 : -range;
+    m_maxX                = m_base.sweepEnabled() ? window : 0;
     Q_EMIT rangeChanged();
     return;
   }

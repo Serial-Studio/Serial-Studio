@@ -301,9 +301,9 @@ Item {
             }
 
             Widgets.IconButton {
-              iconSize: 16
               id: textSendBtn
 
+              iconSize: 16
               text: qsTr("Send")
               icon.source: "qrc:/icons/buttons/send.svg"
               font: Cpp_Misc_CommonFonts.customUiFont(0.8, false)

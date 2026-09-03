@@ -126,6 +126,18 @@ ColumnLayout {
           }
 
           Component.onCompleted: requestPaint()
+
+          //
+          // The glyph is painted with a theme color, so it has to be repainted when the theme
+          // changes; without this it kept the previous palette's separator color
+          //
+          Connections {
+            target: Cpp_ThemeManager
+
+            function onThemeChanged() {
+              requestPaint()
+            }
+          }
         }
       }
 
@@ -1058,10 +1070,10 @@ ColumnLayout {
           sourceComponent: Button {
             id: _btn
 
-            text: buttonLoader.modelPlaceholder ?? ""
             enabled: buttonLoader.modelActive
-            opacity: buttonLoader.modelActive ? 1 : 0.5
             font: Cpp_Misc_CommonFonts.boldUiFont
+            text: buttonLoader.modelPlaceholder ?? ""
+            opacity: buttonLoader.modelActive ? 1 : 0.5
 
             onClicked: {
               // Monotonic stamp forces the dispatcher to fire even on repeat presses.

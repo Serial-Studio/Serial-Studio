@@ -25,6 +25,8 @@
 #include <QByteArray>
 #include <QByteArrayView>
 #include <QHash>
+#include <QJsonArray>
+#include <QJsonObject>
 #include <QList>
 #include <QString>
 #include <QStringView>
@@ -135,8 +137,10 @@ public:
   void reset();
   void markGenerated();
   void setGroupFilter(const QString& group);
+  void restoreSlots(const QJsonArray& stored);
 
   [[nodiscard]] int slotCount() const noexcept;
+  [[nodiscard]] QJsonArray slotsJson() const;
   [[nodiscard]] bool hasDirtySlots() const noexcept;
   [[nodiscard]] const Counters& counters() const noexcept;
   [[nodiscard]] const QString& groupFilter() const noexcept;
@@ -256,6 +260,10 @@ private:
   [[nodiscard]] int slotForMetric(const TopicInfo& info,
                                   QHash<quint64, int>& aliases,
                                   const SparkplugB::Metric& metric);
+  [[nodiscard]] bool readSlotEntry(const QJsonObject& entry, int position, SlotValue& out) const;
+  [[nodiscard]] bool buildRestoredTable(const QJsonArray& stored,
+                                        QVector<SlotValue>& table,
+                                        QHash<QString, int>& index) const;
 
   void markDirty(SlotValue& slot);
   void flushPreBirth(const TopicInfo& info);

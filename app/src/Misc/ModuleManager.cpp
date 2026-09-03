@@ -77,6 +77,7 @@
 #include "Misc/BackupManager.h"
 #include "Misc/CommonFonts.h"
 #include "Misc/ConnectionDiagnostics.h"
+#include "Misc/ContextRegistry.h"
 #include "Misc/CrashTracker.h"
 #include "Misc/Examples.h"
 #include "Misc/ExtensionManager.h"
@@ -136,6 +137,7 @@
 #  include "Sessions/DatabaseManager.h"
 #  include "Sessions/Export.h"
 #  include "Sessions/Player.h"
+#  include "Sessions/ReportOptionsModel.h"
 #  include "UI/ImageProvider.h"
 #  include "UI/Widgets/AudioExport.h"
 #  include "UI/Widgets/ImageExport.h"
@@ -602,6 +604,7 @@ void Misc::ModuleManager::registerQmlTypes()
   qmlRegisterType<Widgets::Waterfall>("SerialStudio", 1, 0, "WaterfallModel");
   qmlRegisterType<Widgets::Painter>("SerialStudio", 1, 0, "PainterWidget");
   qmlRegisterType<DataModel::PainterCodeEditor>("SerialStudio", 1, 0, "PainterCodeEditor");
+  qmlRegisterType<Sessions::ReportOptionsModel>("SerialStudio", 1, 0, "ReportOptionsModel");
 #endif
 
   qmlRegisterType<DataModel::JsCodeEditor>("SerialStudio", 1, 0, "JsCodeEditor");
@@ -650,7 +653,8 @@ void Misc::ModuleManager::initializeQmlInterface()
   qInstallMessageHandler(MessageHandler);
   qAddPostRoutine([]() { qInstallMessageHandler(nullptr); });
 
-  Platform::AppPlatform::registerIngestThreadWithMmcss();
+  Platform::AppPlatform::registerRenderThreadWithMmcss();
+  IO::PipelineHost::instance().registerIngestThread();
 
   const auto c = m_engine.rootContext();
   registerCoreContextProperties(c);
@@ -901,52 +905,54 @@ void Misc::ModuleManager::registerCoreContextProperties(QQmlContext* ctx)
 {
   auto* ioManager = &IO::ConnectionManager::instance();
 
-  ctx->setContextProperty("Cpp_AppState", &AppState::instance());
-  ctx->setContextProperty("Cpp_Updater", m_headless ? nullptr : QSimpleUpdater::getInstance());
-  ctx->setContextProperty("Cpp_IO_Serial", ioManager->uart());
-  ctx->setContextProperty("Cpp_CSV_Export", &CSV::Export::instance());
-  ctx->setContextProperty("Cpp_CSV_Player", &CSV::Player::instance());
-  ctx->setContextProperty("Cpp_IO_Manager", ioManager);
-  ctx->setContextProperty("Cpp_IO_Network", ioManager->network());
-  ctx->setContextProperty("Cpp_MDF4_Export", &MDF4::Export::instance());
-  ctx->setContextProperty("Cpp_MDF4_Player", &MDF4::Player::instance());
-  ctx->setContextProperty("Cpp_Misc_ModuleManager", this);
-  ctx->setContextProperty("Cpp_UI_Dashboard", &UI::Dashboard::instance());
-  ctx->setContextProperty("Cpp_UI_TaskbarSettings", &UI::TaskbarSettings::instance());
-  ctx->setContextProperty("Cpp_Console_Export", &Console::Export::instance());
-  ctx->setContextProperty("Cpp_NativeWindow", &m_nativeWindow);
-  ctx->setContextProperty("Cpp_API_Server", &API::Server::instance());
-  ctx->setContextProperty("Cpp_API_Mirror", &API::MirrorSession::instance());
-  ctx->setContextProperty("Cpp_Misc_Utilities", &Misc::Utilities::instance());
-  ctx->setContextProperty("Cpp_IO_Bluetooth_LE", ioManager->bluetoothLE());
-  ctx->setContextProperty("Cpp_ThemeManager", &Misc::ThemeManager::instance());
-  ctx->setContextProperty("Cpp_Console_Handler", &Console::Handler::instance());
-  ctx->setContextProperty("Cpp_Misc_Translator", &Misc::Translator::instance());
-  ctx->setContextProperty("Cpp_JSON_ProjectModel", &DataModel::ProjectModel::instance());
-  ctx->setContextProperty("Cpp_JSON_ProjectEditor", &DataModel::ProjectEditor::instance());
-  ctx->setContextProperty("Cpp_ControlScript", &DataModel::ControlScript::instance());
-  ctx->setContextProperty("Cpp_JSON_ProtoImporter", &DataModel::ProtoImporter::instance());
-  ctx->setContextProperty("Cpp_JSON_FrameBuilder", &DataModel::FrameBuilder::instance());
-  ctx->setContextProperty("Cpp_Notifications", &DataModel::NotificationCenter::instance());
-  ctx->setContextProperty("Cpp_Misc_TimerEvents", &Misc::TimerEvents::instance());
-  ctx->setContextProperty("Cpp_Misc_CommonFonts", &Misc::CommonFonts::instance());
-  ctx->setContextProperty("Cpp_IO_FileTransmission", &IO::FileTransmission::instance());
-  ctx->setContextProperty("Cpp_Misc_WorkspaceManager", &Misc::WorkspaceManager::instance());
-  ctx->setContextProperty("Cpp_Examples", &Misc::Examples::instance());
-  ctx->setContextProperty("Cpp_HelpCenter", &Misc::HelpCenter::instance());
-  ctx->setContextProperty("Cpp_ExtensionManager", &Misc::ExtensionManager::instance());
-  ctx->setContextProperty("Cpp_Misc_IconEngine", &Misc::IconEngine::instance());
-  ctx->setContextProperty("Cpp_Misc_IconRegistry", &Misc::IconRegistry::instance());
-  ctx->setContextProperty("Cpp_Misc_ProblemCenter", &Misc::ProblemCenter::instance());
-  ctx->setContextProperty("Cpp_Misc_ConnectionDiagnostics",
-                          &Misc::ConnectionDiagnostics::instance());
-  ctx->setContextProperty("Cpp_UI_CommandRegistry", &UI::CommandRegistry::instance());
-  ctx->setContextProperty("Cpp_UI_WidgetExtensions", &UI::WidgetExtensions::instance());
-  ctx->setContextProperty("Cpp_Misc_GraphicsBackend", &Misc::GraphicsBackend::instance());
-  ctx->setContextProperty("Cpp_Misc_HighDpiScaling", &Misc::HighDpiScaling::instance());
-  ctx->setContextProperty("Cpp_Misc_CrashTracker", &Misc::CrashTracker::instance());
-  ctx->setContextProperty("Cpp_Misc_BackupManager", &Misc::BackupManager::instance());
-  ctx->setContextProperty("Cpp_Benchmark_Runner", &Benchmark::BenchmarkRunner::instance());
+  Misc::ContextRegistry registry;
+  registry.add("Cpp_AppState", &AppState::instance());
+  registry.add("Cpp_Updater", m_headless ? nullptr : QSimpleUpdater::getInstance());
+  registry.add("Cpp_IO_Serial", ioManager->uart());
+  registry.add("Cpp_CSV_Export", &CSV::Export::instance());
+  registry.add("Cpp_CSV_Player", &CSV::Player::instance());
+  registry.add("Cpp_IO_Manager", ioManager);
+  registry.add("Cpp_IO_Network", ioManager->network());
+  registry.add("Cpp_MDF4_Export", &MDF4::Export::instance());
+  registry.add("Cpp_MDF4_Player", &MDF4::Player::instance());
+  registry.add("Cpp_Misc_ModuleManager", this);
+  registry.add("Cpp_UI_Dashboard", &UI::Dashboard::instance());
+  registry.add("Cpp_UI_TaskbarSettings", &UI::TaskbarSettings::instance());
+  registry.add("Cpp_Console_Export", &Console::Export::instance());
+  registry.add("Cpp_NativeWindow", &m_nativeWindow);
+  registry.add("Cpp_API_Server", &API::Server::instance());
+  registry.add("Cpp_API_Mirror", &API::MirrorSession::instance());
+  registry.add("Cpp_Misc_Utilities", &Misc::Utilities::instance());
+  registry.add("Cpp_IO_Bluetooth_LE", ioManager->bluetoothLE());
+  registry.add("Cpp_ThemeManager", &Misc::ThemeManager::instance());
+  registry.add("Cpp_Console_Handler", &Console::Handler::instance());
+  registry.add("Cpp_Misc_Translator", &Misc::Translator::instance());
+  registry.add("Cpp_JSON_ProjectModel", &DataModel::ProjectModel::instance());
+  registry.add("Cpp_JSON_ProjectEditor", &DataModel::ProjectEditor::instance());
+  registry.add("Cpp_ControlScript", &DataModel::ControlScript::instance());
+  registry.add("Cpp_JSON_ProtoImporter", &DataModel::ProtoImporter::instance());
+  registry.add("Cpp_JSON_FrameBuilder", &DataModel::FrameBuilder::instance());
+  registry.add("Cpp_Notifications", &DataModel::NotificationCenter::instance());
+  registry.add("Cpp_Misc_TimerEvents", &Misc::TimerEvents::instance());
+  registry.add("Cpp_Misc_CommonFonts", &Misc::CommonFonts::instance());
+  registry.add("Cpp_IO_FileTransmission", &IO::FileTransmission::instance());
+  registry.add("Cpp_Misc_WorkspaceManager", &Misc::WorkspaceManager::instance());
+  registry.add("Cpp_Examples", &Misc::Examples::instance());
+  registry.add("Cpp_HelpCenter", &Misc::HelpCenter::instance());
+  registry.add("Cpp_ExtensionManager", &Misc::ExtensionManager::instance());
+  registry.add("Cpp_Misc_IconEngine", &Misc::IconEngine::instance());
+  registry.add("Cpp_Misc_IconRegistry", &Misc::IconRegistry::instance());
+  registry.add("Cpp_Misc_ProblemCenter", &Misc::ProblemCenter::instance());
+  registry.add("Cpp_Misc_ConnectionDiagnostics", &Misc::ConnectionDiagnostics::instance());
+  registry.add("Cpp_UI_CommandRegistry", &UI::CommandRegistry::instance());
+  registry.add("Cpp_UI_WidgetExtensions", &UI::WidgetExtensions::instance());
+  registry.add("Cpp_Misc_GraphicsBackend", &Misc::GraphicsBackend::instance());
+  registry.add("Cpp_Misc_HighDpiScaling", &Misc::HighDpiScaling::instance());
+  registry.add("Cpp_Misc_CrashTracker", &Misc::CrashTracker::instance());
+  registry.add("Cpp_Misc_BackupManager", &Misc::BackupManager::instance());
+  registry.add("Cpp_Benchmark_Runner", &Benchmark::BenchmarkRunner::instance());
+
+  registry.apply(ctx);
 }
 
 #ifdef BUILD_COMMERCIAL
@@ -957,29 +963,32 @@ void Misc::ModuleManager::registerCommercialContextProperties(QQmlContext* ctx)
 {
   auto* ioManager = &IO::ConnectionManager::instance();
 
-  ctx->setContextProperty("Cpp_IO_Audio", ioManager->audio());
-  ctx->setContextProperty("Cpp_IO_CANBus", ioManager->canBus());
-  ctx->setContextProperty("Cpp_IO_Modbus", ioManager->modbus());
-  ctx->setContextProperty("Cpp_IO_OpcUa", ioManager->opcUa());
-  ctx->setContextProperty("Cpp_IO_S7", ioManager->s7());
-  ctx->setContextProperty("Cpp_IO_Eip", ioManager->ethernetIp());
-  ctx->setContextProperty("Cpp_IO_Iec104", ioManager->iec104());
-  ctx->setContextProperty("Cpp_IO_USB", ioManager->usb());
-  ctx->setContextProperty("Cpp_IO_HID", ioManager->hid());
-  ctx->setContextProperty("Cpp_IO_Process", ioManager->process());
-  ctx->setContextProperty("Cpp_IO_Mqtt", ioManager->mqtt());
-  ctx->setContextProperty("Cpp_MQTT_Publisher", &MQTT::Publisher::instance());
-  ctx->setContextProperty("Cpp_JSON_DBCImporter", &DataModel::DBCImporter::instance());
-  ctx->setContextProperty("Cpp_JSON_ModbusMapImporter", &DataModel::ModbusMapImporter::instance());
-  ctx->setContextProperty("Cpp_Licensing_Trial", &Licensing::Trial::instance());
-  ctx->setContextProperty("Cpp_Licensing_LemonSqueezy", &Licensing::LemonSqueezy::instance());
-  ctx->setContextProperty("Cpp_Licensing_OfflineLicense", &Licensing::OfflineLicense::instance());
-  ctx->setContextProperty("Cpp_Sessions_Export", &Sessions::Export::instance());
-  ctx->setContextProperty("Cpp_InfluxDB_Export", &InfluxDB::Export::instance());
-  ctx->setContextProperty("Cpp_Sessions_Player", &Sessions::Player::instance());
-  ctx->setContextProperty("Cpp_Sessions_Manager", &Sessions::DatabaseManager::instance());
-  ctx->setContextProperty("Cpp_ShortcutGenerator", &Misc::ShortcutGenerator::instance());
-  ctx->setContextProperty("Cpp_AI_Assistant", &AI::Assistant::instance());
+  Misc::ContextRegistry registry;
+  registry.add("Cpp_IO_Audio", ioManager->audio());
+  registry.add("Cpp_IO_CANBus", ioManager->canBus());
+  registry.add("Cpp_IO_Modbus", ioManager->modbus());
+  registry.add("Cpp_IO_OpcUa", ioManager->opcUa());
+  registry.add("Cpp_IO_S7", ioManager->s7());
+  registry.add("Cpp_IO_Eip", ioManager->ethernetIp());
+  registry.add("Cpp_IO_Iec104", ioManager->iec104());
+  registry.add("Cpp_IO_USB", ioManager->usb());
+  registry.add("Cpp_IO_HID", ioManager->hid());
+  registry.add("Cpp_IO_Process", ioManager->process());
+  registry.add("Cpp_IO_Mqtt", ioManager->mqtt());
+  registry.add("Cpp_MQTT_Publisher", &MQTT::Publisher::instance());
+  registry.add("Cpp_JSON_DBCImporter", &DataModel::DBCImporter::instance());
+  registry.add("Cpp_JSON_ModbusMapImporter", &DataModel::ModbusMapImporter::instance());
+  registry.add("Cpp_Licensing_Trial", &Licensing::Trial::instance());
+  registry.add("Cpp_Licensing_LemonSqueezy", &Licensing::LemonSqueezy::instance());
+  registry.add("Cpp_Licensing_OfflineLicense", &Licensing::OfflineLicense::instance());
+  registry.add("Cpp_Sessions_Export", &Sessions::Export::instance());
+  registry.add("Cpp_InfluxDB_Export", &InfluxDB::Export::instance());
+  registry.add("Cpp_Sessions_Player", &Sessions::Player::instance());
+  registry.add("Cpp_Sessions_Manager", &Sessions::DatabaseManager::instance());
+  registry.add("Cpp_ShortcutGenerator", &Misc::ShortcutGenerator::instance());
+  registry.add("Cpp_AI_Assistant", &AI::Assistant::instance());
+
+  registry.apply(ctx);
 }
 #endif
 
@@ -1014,23 +1023,23 @@ void Misc::ModuleManager::registerAppMetadataProperties(QQmlContext* ctx, bool g
   const bool webEngineAvailable = false;
 #endif
 
-  ctx->setContextProperty("Cpp_AppName", APP_NAME);
-  ctx->setContextProperty("Cpp_BuildDate", QStringLiteral(__DATE__));
-  ctx->setContextProperty("Cpp_BuildTime", QStringLiteral(__TIME__));
-  ctx->setContextProperty("Cpp_ScreenList", screenList);
-  ctx->setContextProperty("Cpp_AppVersion", APP_VERSION);
-  ctx->setContextProperty("Cpp_PrimaryScreen", primaryScreen);
-  ctx->setContextProperty("Cpp_AppUpdaterUrl", APP_UPDATER_URL);
-  ctx->setContextProperty("Cpp_AppOrganization", APP_DEVELOPER);
-  ctx->setContextProperty("Cpp_UpdaterEnabled", autoUpdaterEnabled());
-  ctx->setContextProperty("Cpp_CommercialBuild", qtCommercialAvailable);
-  ctx->setContextProperty("Cpp_GrpcAvailable", grpcAvailable);
-  ctx->setContextProperty("Cpp_HasWebEngine", webEngineAvailable);
-  ctx->setContextProperty("Cpp_AppOrganizationDomain", APP_SUPPORT_URL);
+  Misc::ContextRegistry registry;
+  registry.add("Cpp_AppName", QVariant(QStringLiteral(APP_NAME)));
+  registry.add("Cpp_ScreenList", QVariant(screenList));
+  registry.add("Cpp_AppVersion", QVariant(QStringLiteral(APP_VERSION)));
+  registry.add("Cpp_PrimaryScreen", QVariant(primaryScreen));
+  registry.add("Cpp_AppUpdaterUrl", QVariant(QStringLiteral(APP_UPDATER_URL)));
+  registry.add("Cpp_AppOrganization", QVariant(QStringLiteral(APP_DEVELOPER)));
+  registry.add("Cpp_UpdaterEnabled", QVariant(autoUpdaterEnabled()));
+  registry.add("Cpp_CommercialBuild", QVariant(qtCommercialAvailable));
+  registry.add("Cpp_GrpcAvailable", QVariant(grpcAvailable));
+  registry.add("Cpp_HasWebEngine", QVariant(webEngineAvailable));
 
 #ifdef ENABLE_GRPC
-  ctx->setContextProperty("Cpp_GRPC_Server", &API::GRPC::GRPCServer::instance());
+  registry.add("Cpp_GRPC_Server", &API::GRPC::GRPCServer::instance());
 #endif
+
+  registry.apply(ctx);
 }
 
 /**
@@ -1047,11 +1056,12 @@ void Misc::ModuleManager::registerImageProvidersAndLoadQml()
 
   auto* imageExport = &Widgets::ImageExport::instance();
   imageExport->setupExternalConnections();
-  m_engine.rootContext()->setContextProperty("Cpp_Image_Export", imageExport);
 
-  auto* audioExport = &Widgets::AudioExport::instance();
-  audioExport->setupExternalConnections();
-  m_engine.rootContext()->setContextProperty("Cpp_Audio_Export", audioExport);
+  Misc::ContextRegistry registry;
+  registry.add("Cpp_Image_Export", imageExport);
+  registry.apply(m_engine.rootContext());
+
+  Widgets::AudioExport::instance().setupExternalConnections();
 #endif
 
   m_engine.load(QUrl("qrc:/serial-studio.com/gui/qml/main.qml"));

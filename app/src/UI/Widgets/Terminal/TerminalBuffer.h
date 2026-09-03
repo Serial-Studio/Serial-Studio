@@ -103,6 +103,7 @@ public:
   void removeFromCursor(AnsiEraseDirection direction, int length);
 
   [[nodiscard]] static bool hasTimestampPrefix(QStringView line);
+  [[nodiscard]] static QPoint clampPoint(const QPoint& point, const QStringList& lines);
 
   /**
    * @brief Returns true when @p line contains any RTL-direction character.

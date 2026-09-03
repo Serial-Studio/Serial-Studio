@@ -1,0 +1,1 @@
+{"type":"command","id":"4","command":"project.open","params":{"filePath":"/etc/passwd"}}

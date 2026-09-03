@@ -28,6 +28,7 @@
 #include "DataModel/Frame.h"
 #include "DSP.h"
 #include "SerialStudio.h"
+#include "UI/Widgets/PlotBase.h"
 
 namespace UI {
 class Dashboard;
@@ -204,8 +205,6 @@ private:
   void updateInterpolatedData();
   void applyLogYToRender();
   void applyDatasetXRange(const DataModel::Dataset& dx);
-  void buildLogXScratch(const DSP::AxisData& x, const double floor);
-  void clampToVisibleX(double& lo, double& hi) const;
   void resolveXAxis(const DataModel::Dataset& yDataset);
 
   template<int kLane>
@@ -231,8 +230,6 @@ private:
   double m_maxY;
   double m_dataMinY;
   double m_dataMaxY;
-  double m_visLoX;
-  double m_visHiX;
   QString m_yLabel;
   QString m_xLabel;
 
@@ -240,17 +237,10 @@ private:
   bool m_timeAxis;
   bool m_logX;
   bool m_logY;
-  DSP::AxisData m_logXScratch;
   QList<QPointF> m_data;
   QList<QPointF> m_renderData;
-  SerialStudio::InterpolationMode m_interpolationMode;
 
-  bool m_sweepEnabled;
-  double m_triggerLevel;
-  double m_holdoffMs;
-  double m_timebaseMs;
-  SerialStudio::SweepMode m_sweepMode;
-  SerialStudio::TriggerEdge m_triggerEdge;
+  PlotBase m_base;
 
   int m_sweepRetention;
   int m_lastSegmentCount;

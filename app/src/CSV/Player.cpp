@@ -29,6 +29,7 @@
 #include <QDeadlineTimer>
 #include <QElapsedTimer>
 #include <QFileDialog>
+#include <QGuiApplication>
 #include <QInputDialog>
 #include <QMap>
 #include <QScopedValueRollback>
@@ -51,7 +52,6 @@
 #include "UI/Dashboard.h"
 
 static constexpr double kCsvInvMs       = 1.0 / 1000.0;
-static constexpr int kMaxSeekWindowRows = 262144;
 static constexpr int kDefaultIntervalMs = 1000;
 
 //--------------------------------------------------------------------------------------------------
@@ -66,24 +66,6 @@ static constexpr int kDefaultIntervalMs = 1000;
 static bool nonInteractive()
 {
   return !qApp || qApp->platformName() == QLatin1String("offscreen");
-}
-
-/**
- * @brief Formats fractional seconds as HH:MM:SS.mmm.
- */
-[[nodiscard]] static QString formatTimestamp(double seconds)
-{
-  constexpr double kInvHour = 1.0 / 3600.0;
-  constexpr double kInvMin  = 1.0 / 60.0;
-
-  int hours   = static_cast<int>(seconds * kInvHour);
-  int minutes = static_cast<int>((seconds - hours * 3600.0) * kInvMin);
-  double secs = seconds - hours * 3600.0 - minutes * 60.0;
-
-  return QString("%1:%2:%3")
-    .arg(hours, 2, 10, QChar('0'))
-    .arg(minutes, 2, 10, QChar('0'))
-    .arg(secs, 6, 'f', 3, QChar('0'));
 }
 
 /**
@@ -139,25 +121,19 @@ CSV::Player::Player()
   , m_mapped(nullptr)
   , m_mappedSize(0)
   , m_dataOffset(0)
-  , m_playbackEpoch(0)
   , m_timeScale(1.0)
   , m_intervalSeconds(0.0)
   , m_anchorMs(0)
   , m_startSeconds(-1.0)
-  , m_steadyBaseRowSeconds(0.0)
 {
   qApp->installEventFilter(this);
   qRegisterMetaType<CSV::PlayerIndexRequestPtr>();
   qRegisterMetaType<CSV::PlayerIndexBatchPtr>();
 
-  constexpr int kSeekTickMs   = 33;
-  constexpr int kSeekSettleMs = 250;
-  m_seekTimer.setSingleShot(true);
-  m_seekTimer.setInterval(kSeekTickMs);
-  m_settleTimer.setSingleShot(true);
-  m_settleTimer.setInterval(kSeekSettleMs);
-  connect(&m_seekTimer, &QTimer::timeout, this, &CSV::Player::performSeekTick);
-  connect(&m_settleTimer, &QTimer::timeout, this, &CSV::Player::performSeekSettle);
+  connect(
+    &m_engine, &DataModel::ReplayPlaybackEngine::seekTick, this, &CSV::Player::performSeekTick);
+  connect(
+    &m_engine, &DataModel::ReplayPlaybackEngine::seekSettle, this, &CSV::Player::performSeekSettle);
   connect(&m_indexer, &CSV::FileIndexer::batchReady, this, &CSV::Player::onIndexBatch);
   connect(&m_indexer, &CSV::FileIndexer::finished, this, &CSV::Player::onIndexFinished);
 }
@@ -289,12 +265,10 @@ void CSV::Player::play()
     m_framePos = 0;
 
   m_pausedAtFrontier = false;
-  ++m_playbackEpoch;
+  (void)m_engine.nextEpoch();
   m_startSeconds = rowSecondsSinceStart(m_framePos);
   m_elapsedTimer.start();
-
-  m_seekTimer.stop();
-  m_settleTimer.stop();
+  m_engine.stopSeek();
 
   anchorSteadyBase(m_framePos);
   m_playing = true;
@@ -309,7 +283,7 @@ void CSV::Player::pause()
 {
   SS_ASSERT(isOpen(), return);
 
-  ++m_playbackEpoch;
+  (void)m_engine.nextEpoch();
   m_playing = false;
   Q_EMIT playerStateChanged();
 }
@@ -370,8 +344,8 @@ void CSV::Player::openFile()
 void CSV::Player::closeFile()
 {
   // code-verify off
-  // A close dispatched inside injectRow's nested event loop would unmap the file while the
-  // builder still reads its byte views. Re-queue; the inject returns within one marshal.
+  // A close reaching this while an inject is on the stack would unmap the file under the byte
+  // views the builder still reads. Re-queue; the inject returns within one marshal.
   // code-verify on
   if (m_injecting) {
     QMetaObject::invokeMethod(this, [this] { closeFile(); }, Qt::QueuedConnection);
@@ -383,8 +357,7 @@ void CSV::Player::closeFile()
 
   m_playing  = false;
   m_framePos = 0;
-  m_seekTimer.stop();
-  m_settleTimer.stop();
+  m_engine.stopSeek();
 
   const bool joined = stopIndexing();
 
@@ -757,16 +730,12 @@ void CSV::Player::setProgress(const double progress)
 
   m_framePos = newFramePos;
   updateTimestampDisplay();
-
-  if (!m_seekTimer.isActive())
-    m_seekTimer.start();
-
-  m_settleTimer.start();
+  m_engine.armSeek();
 }
 
 /**
  * @brief First row of the scrub window ending at @p target: walks back until the plot time
- *        range is covered (never fewer than points() rows), capped at kMaxSeekWindowRows so
+ *        range is covered (never fewer than points() rows), capped by the engine so
  *        dense recordings bound the per-tick cost.
  */
 int CSV::Player::seekWindowStartRow(int target)
@@ -775,22 +744,10 @@ int CSV::Player::seekWindowStartRow(int target)
   SS_ASSERT(target < frameCount(), return qMax(0, frameCount() - 1));
 
   static auto& dashboard = UI::Dashboard::instance();
-  const double range     = dashboard.plotTimeRange();
-  const double targetSec = rowSecondsSinceStart(target);
-
-  const int minStart = qMax(0, target - qMax(1, dashboard.points()) + 1);
-  const int capStart = qMax(0, target - kMaxSeekWindowRows + 1);
-
-  int start = minStart;
-  for (int i = 0; i < kMaxSeekWindowRows && targetSec >= 0.0 && start > capStart; ++i) {
-    const double sec = rowSecondsSinceStart(start - 1);
-    if (sec < 0.0 || targetSec - sec > range)
-      break;
-
-    --start;
-  }
-
-  return start;
+  return DataModel::ReplayPlaybackEngine::seekWindowStartRow(
+    target, dashboard.points(), dashboard.plotTimeRange(), [this](int row) {
+      return rowSecondsSinceStart(row);
+    });
 }
 
 /**
@@ -939,9 +896,10 @@ void CSV::Player::updateTimestampDisplay()
 
   if (sec >= 0.0) {
     if (m_rows.timestampMode() == PlayerTimestampMode::Numeric)
-      m_timestamp = formatTimestamp(sec);
+      m_timestamp = DataModel::ReplayPlaybackEngine::formatTimestamp(sec);
     else
-      m_timestamp = formatTimestamp(sec - ((m_startSeconds >= 0.0) ? m_startSeconds : 0.0));
+      m_timestamp = DataModel::ReplayPlaybackEngine::formatTimestamp(
+        sec - ((m_startSeconds >= 0.0) ? m_startSeconds : 0.0));
   }
 
   else {
@@ -965,8 +923,9 @@ int CSV::Player::catchUpTargetRow(double target) const
 {
   constexpr int kCatchUpScanMax = 262144;
 
-  int row        = m_framePos;
-  const int last = frameCount() - 1;
+  int row         = m_framePos;
+  const int last  = frameCount() - 1;
+  double previous = rowSecondsSinceStart(row);
   for (int i = 0; i < kCatchUpScanMax && row < last; ++i) {
     const double sec = rowSecondsSinceStart(row + 1);
     if (m_rows.timestampMode() != PlayerTimestampMode::Numeric && sec < 0.0)
@@ -975,6 +934,10 @@ int CSV::Player::catchUpTargetRow(double target) const
     if (sec >= 0.0 && sec > target)
       break;
 
+    if (sec >= 0.0 && previous >= 0.0 && sec < previous)
+      break;
+
+    previous = sec;
     ++row;
   }
 
@@ -1067,26 +1030,24 @@ void CSV::Player::updateData()
 
     backfillSparseSources();
 
-    constexpr qint64 kCatchUpFillMs = 250;
-    if (stride > 2 && !m_seekColumnByKey.isEmpty()
-        && (!m_catchUpFillTimer.isValid() || m_catchUpFillTimer.elapsed() >= kCatchUpFillMs)) {
+    if (stride > 2 && !m_seekColumnByKey.isEmpty() && m_engine.catchUpFillDue()) {
       static auto& dashboard = UI::Dashboard::instance();
       QVector<double> times;
       QHash<qint64, QVector<double>> series;
       buildSeekWindow(seekWindowStartRow(m_framePos), m_framePos, times, series);
       dashboard.bulkLoadPlotWindow(times, series);
-      m_catchUpFillTimer.restart();
     }
 
     updateTimestampDisplay();
+    reanchorOnBackwardsRow();
 
     if (!recomputeMsUntilNext(msUntilNext))
       return;
 
     if (m_framePos < frameCount() - 1) {
-      const quint64 epoch = m_playbackEpoch;
+      const quint64 epoch = m_engine.epoch();
       QTimer::singleShot(qMax(0LL, msUntilNext), Qt::PreciseTimer, this, [this, epoch] {
-        if (isOpen() && isPlaying() && epoch == m_playbackEpoch) {
+        if (isOpen() && isPlaying() && m_engine.isCurrentEpoch(epoch)) {
           ++m_framePos;
           updateData();
         }
@@ -1096,15 +1057,35 @@ void CSV::Player::updateData()
   }
 
   else {
-    const quint64 epoch = m_playbackEpoch;
+    const quint64 epoch = m_engine.epoch();
     QTimer::singleShot(msUntilNext, Qt::PreciseTimer, this, [this, epoch] {
-      if (!isOpen() || !isPlaying() || epoch != m_playbackEpoch)
+      if (!isOpen() || !isPlaying() || !m_engine.isCurrentEpoch(epoch))
         return;
 
       ++m_framePos;
       updateData();
     });
   }
+}
+
+/**
+ * @brief Restarts the playback clock on the next row when the file's timestamps step BACKWARDS --
+ *        a millis wrap or two logs concatenated. Without it every later row reads as "already due"
+ *        and catch-up fast-forwards the whole file to EOF at 512 injects per 20 ms (B9).
+ */
+void CSV::Player::reanchorOnBackwardsRow()
+{
+  if (m_framePos < 0 || m_framePos >= frameCount() - 1)
+    return;
+
+  const double current = rowSecondsSinceStart(m_framePos);
+  const double next    = rowSecondsSinceStart(m_framePos + 1);
+  if (current < 0.0 || next < 0.0 || next >= current)
+    return;
+
+  m_startSeconds = next;
+  m_elapsedTimer.start();
+  anchorSteadyBase(m_framePos);
 }
 
 /**
@@ -1407,9 +1388,7 @@ void CSV::Player::anchorSteadyBase(int row)
 {
   SS_ASSERT_LOG(row >= 0);
 
-  m_steadyBase           = std::chrono::steady_clock::now();
-  const double seconds   = rowSecondsSinceStart(row);
-  m_steadyBaseRowSeconds = (seconds >= 0.0) ? seconds : 0.0;
+  m_engine.anchorSteadyBase(rowSecondsSinceStart(row));
 }
 
 /**
@@ -1425,8 +1404,7 @@ std::chrono::steady_clock::time_point CSV::Player::rowSteadyTimestamp(int row)
   if (seconds < 0.0) [[unlikely]]
     return std::chrono::steady_clock::now();
 
-  const auto delta = std::chrono::duration<double>(seconds - m_steadyBaseRowSeconds);
-  return m_steadyBase + std::chrono::duration_cast<std::chrono::steady_clock::duration>(delta);
+  return m_engine.steadyTimestampFor(seconds);
 }
 
 /**
@@ -1440,9 +1418,9 @@ void CSV::Player::injectRow(int row)
   SS_ASSERT(row < frameCount(), return);
 
   // code-verify off
-  // replayChannelSpans() marshals blocking and pumps this thread's event loop, so a queued
-  // updateData() or close click can re-enter here and tear state down under the byte views the
-  // outer call already handed to the builder.
+  // The replay marshal is a plain BlockingQueuedConnection: it does NOT run this thread's event
+  // loop (dataflow.md). The latch is still what makes closeFile() re-queue instead of unmapping
+  // the file under byte views the builder is reading, so it is a state flag, not a loop guard.
   // code-verify on
   if (m_injecting)
     return;
@@ -1545,7 +1523,8 @@ bool CSV::Player::eventFilter(QObject* obj, QEvent* event)
 {
   if (isOpen() && event->type() == QEvent::KeyPress) {
     auto* keyEvent = static_cast<QKeyEvent*>(event);
-    return handleKeyPress(keyEvent);
+    if (!DataModel::ReplayPlaybackEngine::playbackKeyIsClaimed(keyEvent->key()))
+      return handleKeyPress(keyEvent);
   }
 
   return QObject::eventFilter(obj, event);

@@ -34,7 +34,9 @@
 #include "Misc/TimerEvents.h"
 #include "SerialStudio.h"
 #include "UI/Dashboard.h"
+#include "UI/Widgets/Waterfall/WaterfallColorMap.h"
 #include "UI/Widgets/Waterfall/WaterfallOverlay.h"
+#include "UI/Widgets/Waterfall/WaterfallSpectrogramNodes.h"
 #include "UI/Widgets/Waterfall/WaterfallViewState.h"
 
 QT_FORWARD_DECLARE_CLASS(QSGSimpleRectNode)
@@ -190,6 +192,7 @@ protected:
   void hoverMoveEvent(QHoverEvent* event) override;
   void hoverLeaveEvent(QHoverEvent* event) override;
   void geometryChange(const QRectF& newGeom, const QRectF& oldGeom) override;
+  void itemChange(ItemChange change, const ItemChangeData& value) override;
 
 public slots:
   void zoomBy(double factor, double anchorX, double anchorY);
@@ -222,20 +225,16 @@ private:
   void allocateFftPlan(int size);
   void releaseFftPlan();
   void rebuildHistoryImage();
+  void rebuildColorLut();
   void writeRow(const float* dbValues, int bins);
   void writeRowAt(int row, const float* dbValues, int bins);
   void paintRowInto(int physicalRow, const float* dbValues, int bins);
   void syncBackgroundNodes(QSGNode* root, const QRectF& plotRect);
-  void syncSpectrogramNodes(QSGNode* root, const QRectF& plotRect);
   void syncOverlayNode(QSGNode* root);
-  void appendSpectrogramQuad(QSGSimpleTextureNode*& slot,
-                             QSGNode* root,
-                             const QRectF& dstRect,
-                             const QRectF& srcRect);
+  void releaseRenderResources();
+  void releaseHistoryImage();
   void markAxisDirty();
   [[nodiscard]] QRectF computeSourceRect() const;
-  static QRgb sampleColorMap(int map, double t);
-  static QRgb interpolateLut(const double* r, const double* g, const double* b, int n, double t);
 
   int m_index;
   int m_size;
@@ -254,13 +253,15 @@ private:
   bool m_dragging;
   QPointF m_lastMousePos;
 
-  bool m_textureDirty;
+  bool m_releaseRenderResources;
+  bool m_imageReleased;
 
   QSGSimpleRectNode* m_outerBgNode;
   QSGSimpleRectNode* m_innerBgNode;
-  QSGSimpleTextureNode* m_specNodeA;
-  QSGSimpleTextureNode* m_specNodeB;
   QSGSimpleTextureNode* m_overlayNode;
+
+  std::vector<QRgb> m_colorLut;
+  std::vector<float> m_lastRow;
 
   bool m_campbellMode;
   int m_yDatasetUniqueId;
@@ -293,6 +294,7 @@ private:
 
   WaterfallViewState m_view;
   WaterfallOverlay m_overlay;
+  WaterfallSpectrogramNodes m_spectrogram;
 
   bool m_audioRecordingEnabled;
 };

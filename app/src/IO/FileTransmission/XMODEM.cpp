@@ -141,6 +141,7 @@ bool IO::Protocols::XMODEM::handleAckByte(quint8 ch)
       return false;
     }
 
+    Q_EMIT protocolError();
     Q_EMIT statusMessage(tr("NAK received, retrying block %1 (%2/%3)")
                            .arg(m_blockNumber)
                            .arg(m_retryCount)
@@ -152,6 +153,8 @@ bool IO::Protocols::XMODEM::handleAckByte(quint8 ch)
       Q_EMIT finished(false, tr("Failed to seek in file"));
       return false;
     }
+
+    m_state = State::SendingBlocks;
     sendBlock();
     return true;
   }
@@ -376,6 +379,7 @@ void IO::Protocols::XMODEM::handleTimeout()
     return;
   }
 
+  Q_EMIT protocolError();
   Q_EMIT statusMessage(tr("Timeout, retrying (%1/%2)…")
                          .arg(QString::number(m_retryCount), QString::number(m_maxRetries)));
 
@@ -388,6 +392,8 @@ void IO::Protocols::XMODEM::handleTimeout()
       Q_EMIT finished(false, tr("Failed to seek in file"));
       return;
     }
+
+    m_state = State::SendingBlocks;
     sendBlock();
   } else if (m_state == State::WaitingForStart) {
     m_timeoutTimer.start(m_timeoutMs);

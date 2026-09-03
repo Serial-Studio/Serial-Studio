@@ -21,15 +21,7 @@
 
 #pragma once
 
-#include <QPainter>
-#include <QQuickPaintedItem>
-
-#include "DataModel/Editors/EmbeddedCodeEditor.h"
-
-namespace Misc {
-class ThemeManager;
-class TimerEvents;
-}  // namespace Misc
+#include "DataModel/Editors/EmbeddedCodeEditorItem.h"
 
 namespace DataModel {
 
@@ -37,7 +29,7 @@ namespace DataModel {
  * @brief QML-embeddable code editor for API Terminal macros: project-independent sibling of
  *        ControlScriptEditor with a switchable JS/Lua highlighter (spec 0046).
  */
-class MacroEditor : public QQuickPaintedItem {
+class MacroEditor : public EmbeddedCodeEditorItem {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(int language
@@ -77,35 +69,8 @@ public slots:
   void setText(const QString& text);
   void markSaved();
 
-private slots:
-  void renderWidget();
-  void onThemeChanged();
-  void resizeWidget();
-  void scheduleRender();
-
-private:
-  bool event(QEvent* event) override;
-  void paint(QPainter* painter) override;
-  void keyPressEvent(QKeyEvent* event) override;
-  void keyReleaseEvent(QKeyEvent* event) override;
-  void inputMethodEvent(QInputMethodEvent* event) override;
-  void focusInEvent(QFocusEvent* event) override;
-  void focusOutEvent(QFocusEvent* event) override;
-  void mousePressEvent(QMouseEvent* event) override;
-  void mouseMoveEvent(QMouseEvent* event) override;
-  void mouseReleaseEvent(QMouseEvent* event) override;
-  void mouseDoubleClickEvent(QMouseEvent* event) override;
-  void wheelEvent(QWheelEvent* event) override;
-  void dragEnterEvent(QDragEnterEvent* event) override;
-  void dragMoveEvent(QDragMoveEvent* event) override;
-  void dragLeaveEvent(QDragLeaveEvent* event) override;
-  void dropEvent(QDropEvent* event) override;
-
 private:
   int m_language;
-  Misc::ThemeManager& m_themeManager;
-  Misc::TimerEvents& m_timerEvents;
-  EmbeddedCodeEditor m_editor;
 };
 
 }  // namespace DataModel

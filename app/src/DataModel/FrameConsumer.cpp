@@ -29,13 +29,34 @@
  * @brief Constructs the base export worker with the monotonic clock unset.
  */
 DataModel::FrameConsumerWorkerBase::FrameConsumerWorkerBase(QObject* parent)
-  : QObject(parent), m_lastFrameNs(-1)
+  : QObject(parent), m_lastFrameNs(-1), m_flushPosted(false)
 {}
 
 /**
  * @brief Default destructor.
  */
 DataModel::FrameConsumerWorkerBase::~FrameConsumerWorkerBase() = default;
+
+//--------------------------------------------------------------------------------------------------
+// Flush-post coalescing
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Claims the pending-flush latch; true means a processData post is already in flight, so
+ *        the producer must not post another. Single-producer by contract, like the queue it gates.
+ */
+bool DataModel::FrameConsumerWorkerBase::markFlushPosted() noexcept
+{
+  return m_flushPosted.exchange(true, std::memory_order_acq_rel);
+}
+
+/**
+ * @brief Releases the latch at the head of a drain, so work enqueued during it re-arms the trigger.
+ */
+void DataModel::FrameConsumerWorkerBase::clearFlushPost() noexcept
+{
+  m_flushPosted.store(false, std::memory_order_release);
+}
 
 //--------------------------------------------------------------------------------------------------
 // Monotonic clock tracker: shared by every export worker
@@ -56,9 +77,29 @@ qint64 DataModel::FrameConsumerWorkerBase::monotonicFrameNs(
 }
 
 /**
- * @brief Resets the monotonic frame clock back to its initial state.
+ * @brief Strictly-increasing offset for ONE source: @p ns is the instant the source itself stamped
+ *        and is returned unchanged unless it collides with that source's previous sample, where it
+ *        is bumped by 1 ns. Keyed per source because the worker-wide clock rewrote a second
+ *        source's instants into a nanosecond staircase behind the first source's tail (B1).
+ */
+qint64 DataModel::FrameConsumerWorkerBase::monotonicSourceNs(int sourceId, qint64 ns)
+{
+  const auto [it, inserted] = m_lastSourceNs.try_emplace(sourceId, ns);
+  if (inserted)
+    return ns;
+
+  if (ns <= it->second)
+    ns = it->second + 1;
+
+  it->second = ns;
+  return ns;
+}
+
+/**
+ * @brief Resets both monotonic clocks back to their initial state.
  */
 void DataModel::FrameConsumerWorkerBase::resetMonotonicClock()
 {
   m_lastFrameNs = -1;
+  m_lastSourceNs.clear();
 }

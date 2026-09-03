@@ -32,6 +32,7 @@
 #include <QString>
 #include <QTimer>
 
+#include "IO/AsyncTcpDial.h"
 #include "IO/Drivers/Modbus/ModbusRegisterGroups.h"
 #include "IO/HAL_Driver.h"
 
@@ -201,17 +202,19 @@ private slots:
   void refreshSerialPorts();
   void onStateChanged(QModbusDevice::State state);
   void onErrorOccurred(QModbusDevice::Error error);
+  void onProbeFinished(bool ok, const QString& reason);
 
 private:
   void doClose();
+  void connectClient();
   void handleDialSetback();
   void wireConfigurationSignals();
+  void advanceAfterFailedPoll();
   void failDial(const QString& error);
-  [[nodiscard]] static bool waitForModbusTcpEndpoint(const QString& host, quint16 port);
   [[nodiscard]] bool configureTcpClient(QString& target);
   [[nodiscard]] bool configureRtuClient(QString& target);
   [[nodiscard]] bool finalizeAndConnect(const QString& target);
-  [[nodiscard]] QByteArray buildRtuFrame(const QModbusDataUnit& unit) const;
+  [[nodiscard]] QByteArray buildRtuFrame(const QModbusDataUnit& unit, int serverAddress) const;
   void appendTcpProperties(QList<IO::DriverProperty>& props) const;
   void appendRtuProperties(QList<IO::DriverProperty>& props) const;
 
@@ -220,6 +223,7 @@ private:
 
   bool m_connecting;
   QString m_dialTarget;
+  AsyncTcpDial m_probe;
   QTimer* m_pollTimer;
   QModbusClient* m_device;
   QModbusReply* m_lastReply;

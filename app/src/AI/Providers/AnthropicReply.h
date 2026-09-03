@@ -62,10 +62,6 @@ private:
   void handleContentBlockStop(const QJsonObject& data);
   void emitToolUseFromBlock(const BlockState& bs);
 
-  [[nodiscard]] bool streamBudgetBreached(qsizetype bytes);
-  void finishOk();
-  void finishWithError(const QString& message);
-
 private:
   QNetworkAccessManager& m_nam;
   QString m_apiKey;
@@ -73,7 +69,6 @@ private:
   QNetworkReply* m_reply;
   SseEventReader* m_sse;
   QHash<int, BlockState> m_blocks;
-  bool m_finished;
 };
 
 }  // namespace AI

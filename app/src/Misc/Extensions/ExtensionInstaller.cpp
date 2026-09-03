@@ -21,6 +21,7 @@
 
 #include "Misc/Extensions/ExtensionInstaller.h"
 
+#include <algorithm>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -122,14 +123,31 @@ QString Misc::ExtensionInstaller::installedManifestPath() const
   return extensionsPath() + "/installed.json";
 }
 
+/**
+ * @brief Returns the directory an extension of this type and id is installed into.
+ */
+QString Misc::ExtensionInstaller::installDirFor(const QString& type, const QString& id) const
+{
+  return extensionsPath() + "/" + type + "/" + id;
+}
+
+/**
+ * @brief Returns the reason the last install was refused or aborted, or empty.
+ */
+QString Misc::ExtensionInstaller::lastError() const
+{
+  return m_lastError;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Install & uninstall
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Installs the extension described by @p entry, copying it from a local repository or
- *        starting the download queue for a remote one. Returns false when the entry names no
- *        files, or when its identity would escape the extensions directory.
+ * @brief Installs the extension described by @p entry. Files land in a sibling `<id>.staging`
+ *        directory, each verified against its catalog digest, and only a complete verified set
+ *        replaces the installed version. An entry whose files carry no digests is catalog v1 and
+ *        is refused: there is nothing to verify a download against (K3, K5).
  */
 bool Misc::ExtensionInstaller::install(const QVariantMap& entry)
 {
@@ -147,44 +165,64 @@ bool Misc::ExtensionInstaller::install(const QVariantMap& entry)
     if (!files.contains(f))
       files.append(f);
 
+  m_lastError.clear();
   if (id.isEmpty() || files.isEmpty())
     return false;
 
-  if (!ExtensionCatalog::isSafePathComponent(id))
+  if (!ExtensionCatalog::isSafePathComponent(id) || !ExtensionCatalog::isSafePathComponent(type)) {
+    m_lastError = tr("Extension id or type is not a safe path component.");
+    Q_EMIT installFailed(id, m_lastError);
     return false;
+  }
 
-  if (!ExtensionCatalog::isSafePathComponent(type))
+  QString reason;
+  const auto parsed = ExtensionCatalog::parseFileList(files, &reason);
+  if (parsed.isEmpty()) {
+    m_lastError = reason.isEmpty() ? tr("Catalog entry lists no verifiable files.") : reason;
+    qWarning() << "[ExtensionInstaller] refusing" << id << ":" << m_lastError;
+    Q_EMIT installFailed(id, m_lastError);
     return false;
-
-  const auto installDir = extensionsPath() + "/" + type + "/" + id;
-  QDir().mkpath(installDir);
+  }
 
   if (isLocal)
-    return installLocal(entry, files, installDir);
+    return installLocal(entry, parsed);
 
-  startDownloads(entry, files);
+  startDownloads(entry, parsed);
   return true;
 }
 
 /**
- * @brief Copies a local repository's files into the install directory and records the install.
+ * @brief Stages a local repository's files, verifies them, and swaps them over the installed
+ *        version. A local folder is still verified: the digests are what say the folder holds
+ *        the package the catalog described.
  */
 bool Misc::ExtensionInstaller::installLocal(const QVariantMap& entry,
-                                            const QVariantList& files,
-                                            const QString& installDir)
+                                            const QList<ExtensionCatalog::CatalogFile>& files)
 {
   const auto id   = entry.value("id").toString();
   const auto type = entry.value("type").toString();
   const auto base = entry.value("_repoBase").toString();
   SS_ASSERT(!id.isEmpty(), return false);
 
-  copyLocalFiles(files, base, installDir);
+  m_currentInstallId       = id;
+  m_currentInstallRepoBase = base;
+  m_currentInstallMeta     = entry;
+  m_currentFiles           = files;
+  m_currentInstallDir      = installDirFor(type, id);
+  m_currentStagingDir      = m_currentInstallDir + ".staging";
 
-  QJsonObject info;
-  info.insert("version", entry.value("version").toString());
-  info.insert("type", type);
-  info.insert("repoBase", base);
-  m_installedExtensions.insert(id, info);
+  QDir(m_currentStagingDir).removeRecursively();
+  if (!copyLocalFiles(files, base, m_currentStagingDir)) {
+    abortInstall(tr("A file of this extension is missing or does not match its digest."));
+    return false;
+  }
+
+  if (!commitStagedInstall()) {
+    abortInstall(tr("The verified files could not replace the installed version."));
+    return false;
+  }
+
+  m_installedExtensions.insert(id, buildInstalledRecord());
   saveInstalledManifest();
 
   Q_EMIT installed(id);
@@ -192,46 +230,66 @@ bool Misc::ExtensionInstaller::installLocal(const QVariantMap& entry,
 }
 
 /**
- * @brief Copies each declared file into the install directory, skipping any whose resolved path
- *        would leave it.
+ * @brief Copies each declared file into the staging directory, refusing a path that would leave
+ *        it and a file whose bytes do not match its digest. Returns false on the first failure,
+ *        so a partial copy never reaches the install directory.
  */
-void Misc::ExtensionInstaller::copyLocalFiles(const QVariantList& files,
+bool Misc::ExtensionInstaller::copyLocalFiles(const QList<ExtensionCatalog::CatalogFile>& files,
                                               const QString& base,
-                                              const QString& installDir)
+                                              const QString& stagingDir)
 {
-  for (const auto& f : files) {
-    const auto localName = f.toString();
-    const auto dst       = installDir + "/" + localName;
+  for (const auto& file : files) {
+    const auto dst = stagingDir + "/" + file.path;
+    if (!ExtensionCatalog::isPathSafe(dst, stagingDir))
+      return false;
 
-    if (!ExtensionCatalog::isPathSafe(dst, installDir))
-      continue;
+    QFile source(base + file.path);
+    if (!source.open(QIODevice::ReadOnly))
+      return false;
 
-    const auto src = base + localName;
+    const auto payload = source.readAll();
+    source.close();
+    if (!ExtensionCatalog::digestMatches(payload, file))
+      return false;
+
     QDir().mkpath(QFileInfo(dst).absolutePath());
-    QFile::copy(src, dst);
+    QFile target(dst);
+    if (!target.open(QIODevice::WriteOnly))
+      return false;
+
+    if (target.write(payload) != payload.size())
+      return false;
+
+    target.close();
   }
+
+  return true;
 }
 
 /**
- * @brief Queues every file of a remote install and starts the first download.
+ * @brief Queues every file of a remote install into a fresh staging directory and starts the
+ *        first download.
  */
-void Misc::ExtensionInstaller::startDownloads(const QVariantMap& entry, const QVariantList& files)
+void Misc::ExtensionInstaller::startDownloads(const QVariantMap& entry,
+                                              const QList<ExtensionCatalog::CatalogFile>& files)
 {
   const auto base = entry.value("_repoBase").toString();
-
-  m_downloadQueue.clear();
-  for (const auto& f : files) {
-    const auto localName = f.toString();
-    m_downloadQueue.append({localName, ExtensionCatalog::resolveFileUrl(base, localName)});
-  }
 
   m_currentInstallId       = entry.value("id").toString();
   m_currentInstallRepoBase = base;
   m_currentInstallMeta     = entry;
-  m_busy                   = true;
-  m_progress               = 0;
-  m_totalDownloads         = m_downloadQueue.count();
-  m_pendingDownloads       = m_totalDownloads;
+  m_currentFiles           = files;
+  m_currentInstallDir      = installDirFor(entry.value("type").toString(), m_currentInstallId);
+  m_currentStagingDir      = m_currentInstallDir + ".staging";
+  m_downloadQueue          = files;
+
+  QDir(m_currentStagingDir).removeRecursively();
+  QDir().mkpath(m_currentStagingDir);
+
+  m_busy             = true;
+  m_progress         = 0;
+  m_totalDownloads   = m_downloadQueue.count();
+  m_pendingDownloads = m_totalDownloads;
   Q_EMIT busyChanged();
   Q_EMIT progressChanged();
 
@@ -294,17 +352,20 @@ void Misc::ExtensionInstaller::downloadNextFile()
   if (m_downloadQueue.isEmpty())
     return;
 
-  const auto [localName, url] = m_downloadQueue.takeFirst();
-  auto* reply                 = m_network.get(QNetworkRequest(url));
+  const auto file = m_downloadQueue.takeFirst();
+  auto* reply     = m_network.get(
+    QNetworkRequest(ExtensionCatalog::resolveFileUrl(m_currentInstallRepoBase, file.path)));
   SS_ASSERT(reply != nullptr, return);
 
-  reply->setProperty("localName", localName);
+  reply->setProperty("localName", file.path);
   m_replies.insert(reply);
   connect(reply, &QNetworkReply::finished, this, &ExtensionInstaller::onFileDownloadReply);
 }
 
 /**
- * @brief Handles individual file download completion during an install.
+ * @brief Handles one file's completion. A transport failure or a digest mismatch aborts the whole
+ *        install: recording a partial download as installed is what left plugins with missing
+ *        files and no repair path but uninstall (K3).
  */
 void Misc::ExtensionInstaller::onFileDownloadReply()
 {
@@ -315,8 +376,18 @@ void Misc::ExtensionInstaller::onFileDownloadReply()
   m_replies.remove(reply);
   reply->deleteLater();
 
-  if (reply->error() == QNetworkReply::NoError)
-    writeExtensionFile(reply);
+  if (!m_busy)
+    return;
+
+  if (reply->error() != QNetworkReply::NoError) {
+    abortInstall(tr("Download failed: %1").arg(reply->errorString()));
+    return;
+  }
+
+  if (!writeStagedFile(reply)) {
+    abortInstall(tr("A downloaded file did not match the digest published for it."));
+    return;
+  }
 
   --m_pendingDownloads;
   m_progress = (m_totalDownloads > 0) ? static_cast<float>(m_totalDownloads - m_pendingDownloads)
@@ -333,22 +404,18 @@ void Misc::ExtensionInstaller::onFileDownloadReply()
 }
 
 /**
- * @brief Records the finished install and announces it; the file list is stored so a later
- *        uninstall knows what the install brought in.
+ * @brief Swaps the verified staging directory over the installed version and records the install.
+ *        installed.json is written last, so a crash between the swap and the record leaves files
+ *        on disk the next launch does not know about, never a record without its files.
  */
 void Misc::ExtensionInstaller::finishInstall()
 {
-  QJsonObject info;
-  info.insert("version", m_currentInstallMeta.value("version").toString());
-  info.insert("type", m_currentInstallMeta.value("type").toString());
-  info.insert("repoBase", m_currentInstallRepoBase);
+  if (!commitStagedInstall()) {
+    abortInstall(tr("The verified files could not replace the installed version."));
+    return;
+  }
 
-  QJsonArray fileList;
-  for (const auto& f : m_currentInstallMeta.value("files").toList())
-    fileList.append(f.toString());
-
-  info.insert("files", fileList);
-  m_installedExtensions.insert(m_currentInstallId, info);
+  m_installedExtensions.insert(m_currentInstallId, buildInstalledRecord());
   saveInstalledManifest();
 
   m_busy = false;
@@ -356,33 +423,124 @@ void Misc::ExtensionInstaller::finishInstall()
   Q_EMIT installed(m_currentInstallId);
 }
 
+/**
+ * @brief Drops the staging directory and ends the install; the previously installed version and
+ *        its installed.json record are left exactly as they were.
+ */
+void Misc::ExtensionInstaller::abortInstall(const QString& reason)
+{
+  m_lastError = reason;
+  qWarning() << "[ExtensionInstaller] install of" << m_currentInstallId << "aborted:" << reason;
+
+  for (auto* reply : std::as_const(m_replies)) {
+    if (!reply)
+      continue;
+
+    reply->disconnect(this);
+    reply->abort();
+    reply->deleteLater();
+  }
+
+  m_replies.clear();
+  m_downloadQueue.clear();
+  if (!m_currentStagingDir.isEmpty())
+    QDir(m_currentStagingDir).removeRecursively();
+
+  m_busy     = false;
+  m_progress = 0;
+  Q_EMIT busyChanged();
+  Q_EMIT progressChanged();
+  Q_EMIT installFailed(m_currentInstallId, reason);
+}
+
+/**
+ * @brief Moves the staged directory into place: the previous version is kept under `.previous`
+ *        until the new one is in, and is restored when the second rename fails, so a failed swap
+ *        can never leave the extension half-installed.
+ */
+bool Misc::ExtensionInstaller::commitStagedInstall()
+{
+  const auto previousDir = m_currentInstallDir + ".previous";
+  QDir(previousDir).removeRecursively();
+
+  const bool hadPrevious = QFileInfo::exists(m_currentInstallDir);
+  if (hadPrevious && !QDir().rename(m_currentInstallDir, previousDir))
+    return false;
+
+  QDir().mkpath(QFileInfo(m_currentInstallDir).absolutePath());
+  if (!QDir().rename(m_currentStagingDir, m_currentInstallDir)) {
+    if (hadPrevious)
+      (void)QDir().rename(previousDir, m_currentInstallDir);
+
+    return false;
+  }
+
+  QDir(previousDir).removeRecursively();
+  return true;
+}
+
+/**
+ * @brief Builds the installed.json record: version, type, repository and the verified file list
+ *        with its digests, which is what a later repair check compares against.
+ */
+QJsonObject Misc::ExtensionInstaller::buildInstalledRecord() const
+{
+  QJsonArray fileList;
+  for (const auto& file : m_currentFiles) {
+    QJsonObject row;
+    row.insert("path", file.path);
+    row.insert("sha256", file.sha256);
+    if (file.size > 0)
+      row.insert("size", static_cast<double>(file.size));
+
+    fileList.append(row);
+  }
+
+  QJsonObject info;
+  info.insert("version", m_currentInstallMeta.value("version").toString());
+  info.insert("type", m_currentInstallMeta.value("type").toString());
+  info.insert("repoBase", m_currentInstallRepoBase);
+  info.insert("files", fileList);
+  return info;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Manifest & file I/O
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Writes a downloaded extension file to the install directory, refusing any path that
- *        would leave it.
+ * @brief Writes one downloaded file into the staging directory after checking its digest and its
+ *        resolved path. Returns false on any refusal, which aborts the install.
  */
-void Misc::ExtensionInstaller::writeExtensionFile(QNetworkReply* reply)
+bool Misc::ExtensionInstaller::writeStagedFile(QNetworkReply* reply)
 {
-  SS_ASSERT(reply != nullptr, return);
+  SS_ASSERT(reply != nullptr, return false);
 
-  const auto localName  = reply->property("localName").toString();
-  const auto type       = m_currentInstallMeta.value("type").toString();
-  const auto installDir = extensionsPath() + "/" + type + "/" + m_currentInstallId;
-  const auto filePath   = installDir + "/" + localName;
+  const auto localName = reply->property("localName").toString();
+  const auto match     = std::find_if(
+    m_currentFiles.constBegin(),
+    m_currentFiles.constEnd(),
+    [&localName](const ExtensionCatalog::CatalogFile& file) { return file.path == localName; });
+  if (match == m_currentFiles.constEnd())
+    return false;
 
-  if (!ExtensionCatalog::isPathSafe(filePath, installDir))
-    return;
+  const auto filePath = m_currentStagingDir + "/" + localName;
+  if (!ExtensionCatalog::isPathSafe(filePath, m_currentStagingDir))
+    return false;
+
+  const auto payload = reply->readAll();
+  if (!ExtensionCatalog::digestMatches(payload, *match))
+    return false;
 
   QDir().mkpath(QFileInfo(filePath).absolutePath());
 
   QFile file(filePath);
-  if (file.open(QIODevice::WriteOnly)) {
-    file.write(reply->readAll());
-    file.close();
-  }
+  if (!file.open(QIODevice::WriteOnly))
+    return false;
+
+  const bool written = file.write(payload) == payload.size();
+  file.close();
+  return written;
 }
 
 /**

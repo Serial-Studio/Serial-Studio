@@ -5,6 +5,38 @@
 
 ## Export Architecture & Sessions DB (Pro)
 
+### What every sink shares
+
+- **The session boundary.** All three recording sinks close on
+  `FrameBuilder::sessionBoundary(bool connected, bool paused)` — connect, disconnect **and
+  pause/resume** — never on `connectedChanged` / `pausedChanged` directly. The builder flushes
+  every open block *before* emitting, so a sink's `close()` drains the samples staged while its
+  file was open rather than finding the file gone and opening a second file for the tail. That
+  ordering is the contract; see [dataflow.md](dataflow.md) "The Session Boundary".
+- **Per-source time.** The monotonic tie-break is per source
+  (`FrameConsumerWorkerBase::monotonicSourceNs`), and a uniform-grid block never takes it at all:
+  its offsets are exactly derived, so bumping them would falsify the grid. Two sources recorded
+  into one file therefore keep their own clocks.
+- **`DataModel::ExportStructure`** (`app/src/DataModel/ExportStructure.{h,cpp}`) is the schema
+  half every worker owns by value: the template frame a file's columns are created from, the two
+  ways it is adopted (`setTemplateFrame` from the pipeline, `applyPublishedStructure` from a
+  structure snapshot, which only fills an **empty** slot so an open file keeps its schema and an
+  empty frame never wipes an adopted template), plus the two static path rules
+  `sanitizeTitle(title, fallback)` and `sessionDir(workspaceKey, title, fallback)` — a title can
+  neither escape the workspace nor scrub away to nothing. The fallback is a parameter because the
+  three lanes disagree: CSV and Sessions fall back to `"Untitled"`, MDF4 to `"SerialStudio"`, so
+  no lane's folder name changed when the three copies collapsed into one.
+- **A write failure is not silent.** `Sessions::Export` checks every
+  `transaction()` / `commit()` / `exec()` result into `noteWriteFailure`: a latched
+  `writeFailed` flag, a `droppedBlocks` count, a queued `writeErrorChanged` to the GUI, `isOpen()`
+  reading false afterwards (it is the recording indicator, so the latch folds into it rather than
+  into a new property), and `finalizeSession` storing NULL digests instead of a fingerprint over
+  lost rows. `sessions.getStatus` exposes `writeFailed`, `rawOverruns`, `droppedBlocks` and
+  `currentSessionId`; CSV's interval mode closes and reports the same way its sparse path does.
+- **The live session cannot be edited out from under itself.** `sessions.delete` and the
+  DatabaseManager's delete / notes / tag-assign verbs refuse
+  `Sessions::Export::currentSessionIdOrNone()` with `SESSION_LIVE`, reported as a
+  NotificationCenter warning rather than a modal.
 - `DataModel::ExportSchema` (`ExportSchema.h`): shared column layout. `buildExportSchema(frame)`
   produces sorted columns + `uniqueIdToColumnIndex` map. CSV and MDF4 export raw + transformed.
 - **CSV logging cadence (`CSVExportInterval` setting, spec 0023)**: `CSV::Export` holds an
@@ -29,14 +61,23 @@
     the workspace manager or a session) and buffers **blocks, not rows** -- at 48 kHz a 250 ms
     reorder window is ~12k rows, which as cells would be hundreds of thousands of live QStrings.
     A uniform-grid block keeps its exactly-derived offsets; an irregular one takes
-    `monotonicFrameNs`, because without that bump two frames landing on the same coarse-clock
-    nanosecond would coalesce into one row and one of them would be lost. Coalescing is only
-    correct ACROSS sources. `CSVExportInterval` still switches to dense forward-filled rows and
-    still defaults to disabled (D4).
+    `monotonicSourceNs`, because without that bump two frames landing on the same coarse-clock
+    nanosecond would coalesce into one row and one of them would be lost. The bump is **per
+    source** for the same reason coalescing is only correct ACROSS sources: one global last-offset
+    let a fast source ratchet a slow one's timestamps forward. `CSVExportInterval` still switches
+    to dense forward-filled rows and still defaults to disabled (D4).
   - **MDF4 writes one `.mf4`** with a channel group per project group *and* per stream source,
     each on its own master time channel -- which is what lets one file hold sources at different
     rates. `buildColumnMap()` resolves uniqueId -> (channel group, slot) once at file creation,
-    since a block carries dataset identities but no group structure.
+    since a block carries dataset identities but no group structure. **`createTimeChannel` sets
+    `Sync(Time)`** and the absolute-epoch write into the master is gone (B10): the master is a
+    relative time base, and stamping it with a wall-clock epoch made every group's time axis
+    disagree with the others. The reader accepts sync `Time` or the legacy `None`
+    (`isTimeMaster()`), so archives written by older builds still load. Text channels declare
+    UTF-8. `MDF4::PlayerLoaderWorker` decodes **per channel group** into time-major columnar
+    arrays (one timestamp vector per group plus one value vector per channel, appended in
+    `OnSample` order) and merges them k-way by key, so the memory bound is samples x
+    channels-in-group rather than the old dense per-instant map.
 - **Sessions store one unified `blocks` table (spec 0055, schema `user_version` 3)**: one row per
   dataset per published block, for both lanes. `values_blob` + `raw_values` are little-endian
   float64, `texts`/`raw_texts` length-prefixed UTF-8 (a recorded value may contain commas, quotes
@@ -60,17 +101,33 @@
     are deleted, along with the float32 interleave round trip they required. Because no worker sits
     in front of a replay any more there is no precomputed FFT window, so `applyBlockColumn` falls
     back to feeding the FFT and waterfall series from the samples -- what the frame lane always did.
-- **Session DB lives in `app/src/Sessions/`** (NOT `app/src/Sessions/`):
+- **The Historian lives in `app/src/Sessions/`** (`namespace Sessions` for all three classes):
   - `Sessions::DatabaseManager` — singleton owning the open `.db`; backs `app/qml/DatabaseExplorer/`.
   - `Sessions::Export` (`Sessions/Export.h/.cpp`): `FrameConsumer`-based; tables
-    `sessions/columns/readings/raw_bytes/table_snapshots`; second lock-free queue for raw
-    bytes via `ConnectionManager::onRawDataReceived`. WAL mode, batch transactions.
+    `sessions` / `columns` / `blocks` / `raw_bytes` / `table_snapshots` (`readings` and
+    `stream_blocks` are read-only legacy, see below); a second lock-free queue carries raw bytes
+    from `ConnectionManager::onRawDataReceived` and shares the block lane's flush trigger through
+    `noteSecondaryEnqueued`, counting `rawOverruns` when it cannot keep up. WAL mode, batch
+    transactions. Recording is refused outside a data mode: `setExportEnabled` returns false in
+    ConsoleOnly, so there is no console-only raw-DB recording branch.
   - `Sessions::Player`: replays a stored session through the FrameBuilder pipeline using the
     **final** (post-transform) reading columns, with a uid->cell replay column map installed via
     `FrameBuilder::setReplayColumnMap` (same mechanism as MDF4). **All three players count as
     final-value players** (`SerialStudio::isFinalValuePlayerOpen`), so per-dataset transforms
     never re-run during playback — they read live inputs (data tables) that don't exist then.
     Raw columns are only a fallback for pre-final-column session files.
+  - **The three players share `DataModel::ReplayPlaybackEngine`** (`ReplayPlaybackEngine.{h,cpp}`,
+    held by value as `m_engine` in each): the scrub timer chain (`kSeekTickMs` 33 +
+    `kSeekSettleMs` 250), the **playback epoch** that retires a superseded `play()`'s timer chain
+    (a stale chain used to keep advancing a paused player), the steady-clock anchor that makes the
+    **recording** own replay time (`anchorSteadyBase` / `steadyTimestampFor`), the catch-up fill
+    gate (`kCatchUpBudgetMs` 20, wall-clock budgeted rather than a fixed row batch), the trailing
+    `seekWindowStartRow` walk and `formatTimestamp`. It is **composed, not inherited**, because
+    the players differ in storage, not in mechanics. Two deltas from folding three copies into
+    one: `formatTimestamp` now clamps at zero everywhere (MDF4's copy did, the other two did
+    not — identical output for the non-negative offsets they actually produce), and MDF4's
+    `setProgress` rounding is deliberately **not** unified, since each player's clamp moves the
+    seek cursor by a row.
   - **CSV/MDF4 players stream instead of materializing (spec 0022)**: the CSV player maps the
     file (`QFile::map`) and a `CSV::PlayerLoaderWorker` thread builds only row offsets +
     per-row seconds (`indexing`/`indexProgress` properties; playback clamps to the growing

@@ -26,7 +26,7 @@ import QtQuick.Controls
 
 import SerialStudio
 
-Item {
+InstrumentBase {
   id: root
 
   //
@@ -69,15 +69,6 @@ Item {
   //
   // Theme-aware chrome stops that adapt lighten/darken amounts to widget_base luminance
   //
-  readonly property bool darkBg: {
-    const c = Cpp_ThemeManager.colors["widget_base"]
-    return (0.299 * c.r + 0.587 * c.g + 0.114 * c.b) < 0.5
-  }
-  readonly property color chromeTop: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], darkBg ? 2.0 : 1.30)
-  readonly property color chromeMid: Cpp_ThemeManager.colors["widget_base"]
-  readonly property color chromeBot: Qt.darker(Cpp_ThemeManager.colors["widget_base"], darkBg ? 1.05 : 1.18)
-
-  //
   // Compass parameters: full 360 deg rose with fixed N at top
   //
   readonly property bool showLabels: width >= 130 && height >= 130
@@ -88,8 +79,14 @@ Item {
   readonly property var cardinalLabels: ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
 
   //
-  // Left-padded for stable digital-box width (matches VisualRange). A dataset decimalPoints
-  // >= 0 forces fixed places; otherwise precision is range-driven.
+  // Formatted width of the fixed 0..360 range ends, resolved once instead of twice per sample
+  //
+  readonly property int headingReferenceWidth:
+    Math.max(Cpp_UI_Dashboard.formatValue(0, 0, 360).length,
+             Cpp_UI_Dashboard.formatValue(360, 0, 360).length)
+
+  //
+  // Left-padded for stable digital-box width (matches VisualRange), one round-trip per sample
   //
   function getPaddedText(val) {
     if (root.model.decimalPoints >= 0) {
@@ -101,10 +98,8 @@ Item {
       return " ".repeat(Math.max(0, len - fixed.length)) + fixed
     }
 
-    const a = Cpp_UI_Dashboard.formatValue(0,   0, 360)
-    const b = Cpp_UI_Dashboard.formatValue(360, 0, 360)
     const v = Cpp_UI_Dashboard.formatValue(val, 0, 360)
-    const refLen = Math.max(a.length, b.length, v.length)
+    const refLen = Math.max(root.headingReferenceWidth, v.length)
     const pad = " ".repeat(Math.max(0, refLen - v.length))
     return pad + v
   }
@@ -549,8 +544,8 @@ Item {
 
         font.bold: true
         font.pixelSize: 100
-        text: Cpp_UI_Dashboard.formatValue(360, 0, 360) + " NE"
         font.family: Cpp_Misc_CommonFonts.monoFont.family
+        text: Cpp_UI_Dashboard.formatValue(360, 0, 360) + " NE"
       }
 
       readonly property real availableW: Math.max(0, width  - 32)
@@ -639,31 +634,8 @@ Item {
     }
   }
 
-  //
-  // Suppresses the page auto-save while restore assigns the persisted index
-  //
-  property bool restoringPage: false
-
-  //
-  // Restore per-widget page from project settings, then persist on change.
-  //
-  Component.onCompleted: {
-    root.restoringPage = true
-    const s = Cpp_JSON_ProjectModel.widgetSettings(root.widgetId)
-    if (s["page"] !== undefined)
-      swipeView.currentIndex = parseInt(s["page"])
-
-    root.restoringPage = false
-  }
-
-  Connections {
-    target: swipeView
-    function onCurrentIndexChanged() {
-      if (root.restoringPage)
-        return
-
-      Cpp_JSON_ProjectModel.saveWidgetSetting(
-            root.widgetId, "page", swipeView.currentIndex)
-    }
+  SwipePages {
+    view: swipeView
+    widgetId: root.widgetId
   }
 }

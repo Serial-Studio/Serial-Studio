@@ -58,6 +58,9 @@ namespace OpcUaSecurity {
 [[nodiscard]] bool trustCertificate(const QByteArray& certificate);
 [[nodiscard]] bool revokeTrust(const QString& fingerprint);
 
+[[nodiscard]] bool plaintextPasswordAllowed();
+void setPlaintextPasswordAllowed(bool allowed);
+
 [[nodiscard]] OpcUaTypes::CertInfo inspect(const QByteArray& certificate, const QString& host);
 [[nodiscard]] QByteArray readCertificateFile(const QString& path);
 

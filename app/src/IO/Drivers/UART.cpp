@@ -27,8 +27,10 @@
 #  include <windows.h>
 #endif
 
+#include "DataModel/NotificationCenter.h"
 #include "IO/ConnectionManager.h"
 #include "IO/Drivers/SerialPortIdentity.h"
+#include "IO/Drivers/UART/UartPolicy.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
 #include "Misc/Utilities.h"
@@ -291,9 +293,8 @@ bool IO::Drivers::UART::open(const QIODevice::OpenMode mode)
     port()->setFlowControl(flowControl());
     port()->setReadBufferSize(idealSerialBufferSize(baudRate()));
 
-    connect(port(), &QSerialPort::errorOccurred, this, &IO::Drivers::UART::handleError);
-
     if (port()->open(mode)) {
+      connect(port(), &QSerialPort::errorOccurred, this, &IO::Drivers::UART::handleError);
       connect(port(), &QIODevice::readyRead, this, &IO::Drivers::UART::onReadyRead);
       port()->setDataTerminalReady(dtrEnabled());
 #ifdef Q_OS_WIN
@@ -572,7 +573,9 @@ void IO::Drivers::UART::setDtrEnabled(const bool enabled)
 }
 
 /**
- * @brief Changes the port index value, later used by openSerialPort().
+ * @brief Changes the port index value, later used by openSerialPort(). Selecting the placeholder
+ *        CLEARS the persisted selection: leaving it behind let the 1 Hz rescan re-select the old
+ *        port within a second of the user choosing "Select Port".
  */
 void IO::Drivers::UART::setPortIndex(const quint8 portIndex)
 {
@@ -589,29 +592,44 @@ void IO::Drivers::UART::setPortIndex(const quint8 portIndex)
   if (!name.isEmpty() && m_portIndex > 0)
     m_settings.setValue("IO_Serial_SelectedDevice", name);
 
+  else if (m_portIndex == 0)
+    m_settings.remove("IO_Serial_SelectedDevice");
+
   Q_EMIT portIndexChanged();
 }
 
 /**
- * @brief Registers a custom serial device by path.
+ * @brief Registers a custom serial device by path. A bad path is reported through the console and
+ *        a queued notification, never a modal: this is reachable from a project load and from the
+ *        API, where a dialog would block a non-interactive caller (spec 0056).
  */
 void IO::Drivers::UART::registerDevice(const QString& device)
 {
   const auto trimmedPath = device.simplified();
 
   QFile path(trimmedPath);
-  if (path.exists()) {
-    if (!m_customDevices.contains(trimmedPath)) {
-      m_customDevices.append(trimmedPath);
-      Q_EMIT availablePortsChanged();
-    }
+  if (!path.exists()) {
+    logDriverError(tr("\"%1\" is not a valid path").arg(trimmedPath),
+                   tr("Please type another path to register a custom serial device"));
+
+    static auto& notifications = DataModel::NotificationCenter::instance();
+    QMetaObject::invokeMethod(&notifications,
+                              "postWarning",
+                              Qt::QueuedConnection,
+                              Q_ARG(QString, QStringLiteral("UART")),
+                              Q_ARG(QString, tr("Serial device not registered")),
+                              Q_ARG(QString,
+                                    tr("\"%1\" is not a valid path; type another path to register "
+                                       "a custom serial device.")
+                                      .arg(trimmedPath)));
+    return;
   }
 
-  else
-    Misc::Utilities::showMessageBox(
-      tr("\"%1\" is not a valid path").arg(trimmedPath),
-      tr("Please type another path to register a custom serial device"),
-      QMessageBox::Warning);
+  if (m_customDevices.contains(trimmedPath))
+    return;
+
+  m_customDevices.append(trimmedPath);
+  Q_EMIT availablePortsChanged();
 }
 
 /**
@@ -795,24 +813,26 @@ void IO::Drivers::UART::refreshSerialDevices()
     }
   }
 
-  if (m_deviceNames != names) {
-    m_deviceNames     = names;
-    m_deviceLocations = locations;
+  if (m_deviceNames == names)
+    return;
 
-    const bool indexChanged = relocateOpenPortIndex(validPortList);
+  m_deviceNames     = names;
+  m_deviceLocations = locations;
 
-    Q_EMIT availablePortsChanged();
+  const bool indexChanged = relocateOpenPortIndex(validPortList);
 
-    if (indexChanged)
-      Q_EMIT portIndexChanged();
-  }
+  Q_EMIT availablePortsChanged();
 
-  if (m_portIndex == 0) {
-    const auto ports = portList();
-    auto lastPort    = m_settings.value("IO_Serial_SelectedDevice", "").toString();
-    if (!lastPort.isEmpty() && ports.contains(lastPort))
-      setPortIndex(ports.indexOf(lastPort));
-  }
+  if (indexChanged)
+    Q_EMIT portIndexChanged();
+
+  if (m_portIndex != 0)
+    return;
+
+  const auto ports    = portList();
+  const auto lastPort = m_settings.value("IO_Serial_SelectedDevice", "").toString();
+  if (!lastPort.isEmpty() && ports.contains(lastPort))
+    setPortIndex(static_cast<quint8>(ports.indexOf(lastPort)));
 }
 
 /**
@@ -840,12 +860,12 @@ void IO::Drivers::UART::pollAutoReconnect()
 }
 
 /**
- * @brief Handles a serial port error by disconnecting and showing a message box.
+ * @brief Ends the link on a fatal port error and hands the recovery to the driver's own opt-in
+ *        auto-reconnect when it owns it. A custom device path no longer swallows ResourceError:
+ *        an unplugged by-id node or pty left the port "open" for the rest of the session.
  */
 void IO::Drivers::UART::handleError(QSerialPort::SerialPortError error)
 {
-  QMutexLocker locker(&m_errorHandlerMutex);
-
   auto serialPort = port();
   if (serialPort && !serialPort->isOpen())
     return;
@@ -853,26 +873,21 @@ void IO::Drivers::UART::handleError(QSerialPort::SerialPortError error)
   if (!isOpen())
     return;
 
-  if (error != QSerialPort::NoError) {
-    if (m_usingCustomSerialPort) {
-      if (error == QSerialPort::UnsupportedOperationError || error == QSerialPort::ResourceError)
-        return;
-    }
+  if (!UartPolicy::isFatalPortError(error, m_usingCustomSerialPort))
+    return;
 
-    static auto& connectionManager = ConnectionManager::instance();
-    connectionManager.disconnectDevice(this);
+  static auto& connectionManager = ConnectionManager::instance();
+  connectionManager.disconnectDevice(this);
 
-    if (!m_autoReconnect || error != QSerialPort::ResourceError) {
-      const auto name = serialPort ? serialPort->portName() : tr("Unknown");
-      logDriverError(tr("Critical error on serial port \"%1\"").arg(name),
-                     m_errorDescriptions.value(error, tr("Unknown error")));
-    }
-
-    else {
-      m_pendingReconnect = true;
-      m_reconnectTimer.start();
-    }
+  if (!UartPolicy::shouldAutoReconnect(error, m_autoReconnect)) {
+    const auto name = serialPort ? serialPort->portName() : tr("Unknown");
+    logDriverError(tr("Critical error on serial port \"%1\"").arg(name),
+                   m_errorDescriptions.value(error, tr("Unknown error")));
+    return;
   }
+
+  m_pendingReconnect = true;
+  m_reconnectTimer.start();
 }
 
 /**

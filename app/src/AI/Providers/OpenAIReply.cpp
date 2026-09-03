@@ -15,6 +15,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QTimer>
 #include <QUrl>
 #include <QUuid>
 
@@ -76,7 +77,6 @@ AI::OpenAIReply::OpenAIReply(QNetworkAccessManager& nam,
   , m_transferTimeoutMs(transferTimeoutMs > 0 ? transferTimeoutMs : kOpenAIInitialResponseTimeoutMs)
   , m_parseThinkTags(parseThinkTags)
   , m_thinkSplitter()
-  , m_finished(false)
 {
   connect(m_sse, &SseEventReader::frameReceived, this, &OpenAIReply::onSseEvent);
   connect(m_sse, &SseEventReader::parseError, this, &OpenAIReply::onSseError);
@@ -85,17 +85,28 @@ AI::OpenAIReply::OpenAIReply(QNetworkAccessManager& nam,
 }
 
 /**
- * @brief Builds the request, sets headers, and connects QNetworkReply slots.
+ * @brief Builds the request, sets headers, and connects QNetworkReply slots. The endpoint is
+ *        user-supplied for local servers, so a cleartext URL to anything but this machine is
+ *        refused before the key is attached rather than after it left the host.
  */
 void AI::OpenAIReply::issueRequest()
 {
-  QNetworkRequest req((QUrl(m_endpointUrl)));
+  const QUrl endpoint(m_endpointUrl);
+  if (!isTransportAllowed(endpoint)) {
+    const auto message =
+      tr("%1 endpoint refused: use https, or plain http only to this machine").arg(m_providerLabel);
+    QTimer::singleShot(0, this, [this, message] { finishWithError(message); });
+    return;
+  }
+
+  QNetworkRequest req(endpoint);
   req.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("application/json"));
   if (!m_authHeader.isEmpty() && !m_apiKey.isEmpty())
     req.setRawHeader(m_authHeader.toUtf8(), QStringLiteral("Bearer %1").arg(m_apiKey).toUtf8());
 
   req.setRawHeader("accept", "text/event-stream");
   req.setTransferTimeout(m_transferTimeoutMs);
+  applyStreamPolicy(req);
 
   qCDebug(serialStudioAI) << "POST" << m_providerLabel << m_endpointUrl
                           << "key=" << KeyVault::redact(m_apiKey)
@@ -132,7 +143,7 @@ void AI::OpenAIReply::onSseEvent(const QString& name, const QJsonObject& data)
 {
   Q_UNUSED(name);
 
-  if (m_finished)
+  if (isFinished())
     return;
 
   const auto choices = data.value(QStringLiteral("choices")).toArray();
@@ -154,7 +165,7 @@ void AI::OpenAIReply::onSseEvent(const QString& name, const QJsonObject& data)
 void AI::OpenAIReply::onSseError(const QString& reason)
 {
   qCWarning(serialStudioAI) << m_providerLabel << "SSE parse error:" << reason;
-  if (!SseEventReader::fatalReason(reason))
+  if (!endsTurnOnParseError(reason))
     return;
 
   finishWithError(tr("Stream parse error: %1").arg(reason));
@@ -184,7 +195,7 @@ void AI::OpenAIReply::processChoiceDelta(const QJsonObject& choice)
       Q_EMIT partialThinking(chunk);
   }
 
-  if (m_finished)
+  if (isFinished())
     return;
 
   const auto contentValue = delta.value(QStringLiteral("content"));
@@ -194,7 +205,7 @@ void AI::OpenAIReply::processChoiceDelta(const QJsonObject& choice)
       routeContentChunk(chunk);
   }
 
-  if (m_finished)
+  if (isFinished())
     return;
 
   const auto toolCallsValue = delta.value(QStringLiteral("tool_calls"));
@@ -307,7 +318,7 @@ void AI::OpenAIReply::emitPendingToolCalls()
  */
 void AI::OpenAIReply::onReplyReadyRead()
 {
-  if (!m_reply || m_finished)
+  if (!m_reply || isFinished())
     return;
 
   const auto status = m_reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
@@ -322,7 +333,7 @@ void AI::OpenAIReply::onReplyReadyRead()
  */
 void AI::OpenAIReply::onReplyFinished()
 {
-  if (m_finished)
+  if (isFinished())
     return;
 
   const auto status = m_reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
@@ -361,48 +372,4 @@ void AI::OpenAIReply::onReplyFinished()
   }
 
   finishOk();
-}
-
-//--------------------------------------------------------------------------------------------------
-// Finalization
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Charges bytes against the shared per-reply budget; on breach, ends the turn with a
- *        visible error and aborts the transport so Qt stops buffering the runaway stream.
- */
-bool AI::OpenAIReply::streamBudgetBreached(qsizetype bytes)
-{
-  if (!chargeStreamBudget(bytes))
-    return false;
-
-  finishWithError(
-    tr("Reply exceeded the %1 MB stream limit").arg(kMaxStreamedReplyBytes / (1024 * 1024)));
-  abort();
-  return true;
-}
-
-/**
- * @brief Marks the stream finished, emits @ref finished.
- */
-void AI::OpenAIReply::finishOk()
-{
-  if (m_finished)
-    return;
-
-  m_finished = true;
-  Q_EMIT finished();
-}
-
-/**
- * @brief Marks the stream finished with an error message.
- */
-void AI::OpenAIReply::finishWithError(const QString& message)
-{
-  if (m_finished)
-    return;
-
-  m_finished = true;
-  Q_EMIT errorOccurred(message);
-  Q_EMIT finished();
 }

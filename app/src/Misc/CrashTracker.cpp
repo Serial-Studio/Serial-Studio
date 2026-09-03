@@ -22,6 +22,7 @@
 #include "Misc/CrashTracker.h"
 
 #include <QDateTime>
+#include <QVariantMap>
 
 //--------------------------------------------------------------------------------------------------
 // Singleton
@@ -152,6 +153,31 @@ void Misc::CrashTracker::acknowledge()
 }
 
 /**
+ * @brief Clears a settings store to defaults while keeping the licensing and trial groups. Both
+ *        the crash-recovery action and the CLI's --reset go through here: a reset that also wiped
+ *        the license would cost the user their activation to fix an unrelated preference (K2).
+ */
+void Misc::CrashTracker::resetSettingsPreservingLicense(QSettings& settings)
+{
+  QVariantMap preserved;
+  const QStringList groups{QStringLiteral("licensing"), QStringLiteral("trial")};
+  for (const QString& group : groups) {
+    settings.beginGroup(group);
+    const QStringList keys = settings.allKeys();
+    for (const QString& key : keys)
+      preserved.insert(group + QLatin1Char('/') + key, settings.value(key));
+
+    settings.endGroup();
+  }
+
+  settings.clear();
+  for (auto it = preserved.constBegin(); it != preserved.constEnd(); ++it)
+    settings.setValue(it.key(), it.value());
+
+  settings.sync();
+}
+
+/**
  * @brief Applies one of the recovery actions; the user is expected to restart afterwards.
  */
 void Misc::CrashTracker::applyRecovery(int action)
@@ -164,24 +190,9 @@ void Misc::CrashTracker::applyRecovery(int action)
     case SkipLastProject:
       m_settings.remove(QStringLiteral("project_file_path"));
       break;
-    case ResetAllPreferences: {
-      QVariantMap preserved;
-      const QStringList groups{QStringLiteral("licensing"), QStringLiteral("trial")};
-      for (const QString& group : groups) {
-        m_settings.beginGroup(group);
-        const QStringList keys = m_settings.allKeys();
-        for (const QString& key : keys)
-          preserved.insert(group + QLatin1Char('/') + key, m_settings.value(key));
-
-        m_settings.endGroup();
-      }
-
-      m_settings.clear();
-      for (auto it = preserved.constBegin(); it != preserved.constEnd(); ++it)
-        m_settings.setValue(it.key(), it.value());
-
+    case ResetAllPreferences:
+      resetSettingsPreservingLicense(m_settings);
       break;
-    }
     default:
       break;
   }

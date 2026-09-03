@@ -94,10 +94,10 @@ ListView {
     width: root.width
     role: modelData.role
     text: modelData.text
+    expansionStore: root
+    toolCalls: modelData.toolCalls
     thinking: modelData.thinking || ""
     streaming: modelData.streaming === true
-    toolCalls: modelData.toolCalls
-    expansionStore: root
     maxWidth: Math.min(root.width - 48, 640)
   }
 }

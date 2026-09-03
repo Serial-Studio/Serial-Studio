@@ -14,7 +14,6 @@
 #include <QJsonArray>
 
 #include "API/CommandRegistry.h"
-#include "API/PathPolicy.h"
 #include "API/SchemaBuilder.h"
 #include "IO/ConnectionManager.h"
 
@@ -134,10 +133,6 @@ API::CommandResponse API::Handlers::ProcessHandler::setExecutable(const QString&
 
   const QString path = params.value(QStringLiteral("executable")).toString();
 
-  if (!API::isPathAllowed(path))
-    return CommandResponse::makeError(
-      id, ErrorCode::InvalidParam, QStringLiteral("Path is not allowed: ") + path);
-
   static auto& connectionManager = IO::ConnectionManager::instance();
   connectionManager.process()->setExecutable(path);
 
@@ -179,10 +174,6 @@ API::CommandResponse API::Handlers::ProcessHandler::setWorkingDir(const QString&
 
   const QString dir = params.value(QStringLiteral("workingDir")).toString();
 
-  if (!API::isPathAllowed(dir, true))
-    return CommandResponse::makeError(
-      id, ErrorCode::InvalidParam, QStringLiteral("Path is not allowed: ") + dir);
-
   static auto& connectionManager = IO::ConnectionManager::instance();
   connectionManager.process()->setWorkingDir(dir);
 
@@ -203,10 +194,6 @@ API::CommandResponse API::Handlers::ProcessHandler::setPipePath(const QString& i
   }
 
   const QString path = params.value(QStringLiteral("pipePath")).toString();
-
-  if (!API::isPathAllowed(path, true))
-    return CommandResponse::makeError(
-      id, ErrorCode::InvalidParam, QStringLiteral("Path is not allowed: ") + path);
 
   static auto& connectionManager = IO::ConnectionManager::instance();
   connectionManager.process()->setPipePath(path);

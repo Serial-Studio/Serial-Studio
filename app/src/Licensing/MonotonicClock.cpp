@@ -22,10 +22,14 @@
 
 #include "Licensing/MonotonicClock.h"
 
+#include <QElapsedTimer>
 #include <QSettings>
 
 #include "Licensing/MachineID.h"
 #include "Licensing/SimpleCrypt.h"
+
+// Shortest interval between two persisted floors: the getters reading it are QML-bound (K10)
+static constexpr qint64 kPersistIntervalMs = 60000;
 
 /**
  * @brief Core flooring over an explicit settings store and cipher (for testing).
@@ -42,6 +46,9 @@ QDateTime Licensing::MonotonicClock::nowFloored(QSettings& settings, SimpleCrypt
     const auto seen = QDateTime::fromString(crypt.decryptToString(stored), Qt::RFC2822Date);
     if (seen.isValid() && seen > effective)
       effective = seen;
+
+    if (seen.isValid() && seen <= effective && seen.msecsTo(effective) < kPersistIntervalMs)
+      return effective;
   }
 
   const auto encoded = crypt.encryptToString(effective.toString(Qt::RFC2822Date));
@@ -53,13 +60,32 @@ QDateTime Licensing::MonotonicClock::nowFloored(QSettings& settings, SimpleCrypt
 }
 
 /**
- * @brief Returns now floored at the highest wall-clock ever observed (anti clock-rewind).
+ * @brief Returns now floored at the highest wall-clock ever observed (anti clock-rewind). The
+ *        stored floor is re-read and re-written at most once a minute; in between, the floor
+ *        cached from that pass still catches a rewind, so the anti-rewind guarantee is unchanged
+ *        while a property read costs no settings access at all.
  */
 QDateTime Licensing::MonotonicClock::now()
 {
-  QSettings settings;
-  static auto& machineId = MachineID::instance();
-  SimpleCrypt crypt(machineId.machineSpecificKey());
-  crypt.setIntegrityProtectionMode(SimpleCrypt::ProtectionHash);
-  return nowFloored(settings, crypt);
+  static bool primed = false;
+  static QDateTime floored;
+  static QElapsedTimer sincePersist;
+
+  const auto wall = QDateTime::currentDateTime();
+  if (!primed || sincePersist.hasExpired(kPersistIntervalMs)) {
+    QSettings settings;
+    static auto& machineId = MachineID::instance();
+    SimpleCrypt crypt(machineId.machineSpecificKey());
+    crypt.setIntegrityProtectionMode(SimpleCrypt::ProtectionHash);
+
+    floored = nowFloored(settings, crypt);
+    sincePersist.restart();
+    primed = true;
+    return floored;
+  }
+
+  if (floored.isValid() && floored > wall)
+    return floored;
+
+  return wall;
 }

@@ -34,10 +34,8 @@
 #include "Misc/TimerEvents.h"
 #include "UI/Dashboard.h"
 #include "UI/Widgets/GpuStroke.h"
+#include "UI/Widgets/Plot3D/Plot3DNodes.h"
 #include "UI/Widgets/Plot3D/Plot3DStereo.h"
-
-QT_FORWARD_DECLARE_CLASS(QSGGeometryNode)
-QT_FORWARD_DECLARE_CLASS(QSGSimpleTextureNode)
 
 namespace Widgets {
 /**
@@ -195,25 +193,12 @@ private:
                       const QColor& color,
                       const int slot);
   [[nodiscard]] QColor eyeColor(const QColor& color, const EyeMask mask) const;
-  [[nodiscard]] GpuStroke::MaterialFactory eyeFactory(const int slot) const;
   void applyCameraTransform(QMatrix4x4& matrix) const;
   void buildGridPolylines(const QMatrix4x4& matrix, const EyeMask mask);
   void buildTracePolyline(const QMatrix4x4& matrix,
                           const DSP::LineSeries3D& data,
                           const EyeMask mask);
-  void syncBackgroundNode(QSGNode* root, const QRectF& rect);
   void drawGridLabel();
-  void syncTraceNode();
-  void syncTileNode(QSGSimpleTextureNode*& slot,
-                    const QImage& tile,
-                    const QPointF& topLeft,
-                    bool& needsUpload);
-  void appendSceneNodes(QSGNode* root);
-  void releaseStrokeNodes();
-  void syncStrokeNodes(EyeArray<QSGGeometryNode*>& nodes,
-                       const EyeArray<std::vector<QPointF>>& px,
-                       const EyeArray<std::vector<QColor>>& colors,
-                       const double halfWidth);
 
 private:
   [[nodiscard]] qreal displayPixelRatio() const;
@@ -248,7 +233,6 @@ private:
   bool m_anaglyph;
   bool m_autoScale;
   bool m_channelIsolation;
-  bool m_nodesStereo;
   bool m_autoCenter;
   bool m_interpolate;
   bool m_orbitNavigation;
@@ -281,9 +265,6 @@ private:
   QString m_gridStepLabel;
   QPointF m_labelPos;
   bool m_dirtyLabel;
-  bool m_bgUpload;
-  bool m_labelUpload;
-  bool m_indicatorUpload;
 
   std::vector<QPointF> m_linePx;
   std::vector<QColor> m_lineColors;
@@ -297,12 +278,7 @@ private:
   EyeArray<std::vector<QPointF>> m_tracePx;
   EyeArray<std::vector<QColor>> m_traceColors;
 
-  QSGSimpleTextureNode* m_bgNode;
-  EyeArray<QSGGeometryNode*> m_gridNodes;
-  EyeArray<QSGGeometryNode*> m_axisNodes;
-  EyeArray<QSGGeometryNode*> m_traceNodes;
-  QSGSimpleTextureNode* m_labelNode;
-  QSGSimpleTextureNode* m_indicatorNode;
+  Plot3DNodes m_nodes;
 
   double m_orbitOffsetX;
   double m_orbitOffsetY;

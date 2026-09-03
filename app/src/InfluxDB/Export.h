@@ -125,9 +125,11 @@ private:
   void dropBatch();
   void noteHttpFailure(const QString& message);
   void rebuildWriteCache();
+  void sampleEpochOffset();
 
   static void buildRenderFields(RenderTemplate& tpl);
 
+  [[nodiscard]] QString failureMessage(QNetworkReply& reply, int status);
   [[nodiscard]] bool configured() const;
   [[nodiscard]] QUrl writeUrl() const;
   [[nodiscard]] qint64 epochNs(const DataModel::DataBlock& block, qsizetype index) const;
@@ -138,6 +140,7 @@ private:
   QNetworkAccessManager* m_manager;
   QPointer<QNetworkReply> m_reply;
   QUrl m_writeUrl;
+  QString m_sslFailure;
   QByteArray m_authHeader;
   QByteArray m_postBuffer;
   qsizetype m_inFlightPoints;

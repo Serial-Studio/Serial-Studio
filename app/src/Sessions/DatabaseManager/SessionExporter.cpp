@@ -20,6 +20,7 @@
 #  include <QFileDialog>
 #  include <QVariantList>
 
+#  include "DataModel/ExportStructure.h"
 #  include "Misc/Utilities.h"
 #  include "Misc/WorkspaceManager.h"
 #  include "SerialStudio.h"
@@ -35,34 +36,7 @@
  */
 QString Sessions::sanitiseTitleForPath(const QString& title)
 {
-  QString safe = title;
-  safe.remove(QChar('/'));
-  safe.remove(QChar('\\'));
-  safe.remove(QChar(':'));
-  safe.remove(QChar('*'));
-  safe.remove(QChar('?'));
-  safe.remove(QChar('"'));
-  safe.remove(QChar('<'));
-  safe.remove(QChar('>'));
-  safe.remove(QChar('|'));
-  safe.remove(QChar('\0'));
-  safe.remove(QStringLiteral(".."));
-  safe = safe.simplified();
-
-  int keep = 0;
-  for (int i = safe.size(); i > 0; --i) {
-    const QChar c = safe.at(i - 1);
-    if (c != QChar('.') && c != QChar(' ')) {
-      keep = i;
-      break;
-    }
-  }
-  safe.truncate(keep);
-
-  if (safe.isEmpty())
-    safe = QStringLiteral("Untitled");
-
-  return safe;
+  return DataModel::ExportStructure::sanitizeTitle(title, QStringLiteral("Untitled"));
 }
 
 //--------------------------------------------------------------------------------------------------

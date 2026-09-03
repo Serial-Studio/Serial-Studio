@@ -30,6 +30,7 @@
 #include <QStandardPaths>
 
 #include "AppState.h"
+#include "DataModel/FrameKeys.h"
 #include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
 #include "Licensing/CommercialToken.h"
@@ -37,6 +38,8 @@
 #include "SSAssert.h"
 
 Q_LOGGING_CATEGORY(lcMqttSub, "serialstudio.mqtt.subscriber", QtCriticalMsg)
+
+static constexpr int kMqttDialDeadlineMs = 15000;
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & destructor
@@ -85,6 +88,10 @@ IO::Drivers::MQTT::MQTT()
   connect(&m_client, &QMqttClient::errorChanged, this, &MQTT::onErrorChanged);
   connect(&m_client, &QMqttClient::messageReceived, this, &MQTT::onMessageReceived);
 
+  m_dialTimer.setSingleShot(true);
+  m_dialTimer.setInterval(kMqttDialDeadlineMs);
+  connect(&m_dialTimer, &QTimer::timeout, this, &MQTT::onDialTimeout);
+
   loadPersistedSettings();
   if (m_clientId.isEmpty())
     regenerateClientId();
@@ -116,9 +123,55 @@ IO::Drivers::MQTT::~MQTT()
 void IO::Drivers::MQTT::close()
 {
   m_userWantsOpen = false;
+  m_dialTimer.stop();
 
   if (m_client.state() != QMqttClient::Disconnected)
     m_client.disconnectFromHost();
+}
+
+/**
+ * @brief Settles a dial that cannot succeed: reports the verdict when the latch is still armed,
+ *        and otherwise routes the failure through the manager so a mid-session re-dial that never
+ *        completes still resolves instead of leaving the source half-open.
+ */
+void IO::Drivers::MQTT::failDial(const QString& reason)
+{
+  m_dialTimer.stop();
+  m_userWantsOpen    = false;
+  m_reconnectPending = false;
+
+  logDriverError(tr("MQTT Connection Failed"), reason);
+
+  if (m_client.state() != QMqttClient::Disconnected)
+    m_client.disconnectFromHost();
+
+  if (openReportArmed()) {
+    reportOpenFinished(false, reason);
+    return;
+  }
+
+  reportDropToManager();
+}
+
+/**
+ * @brief Routes a drop the verdict latch no longer covers to the manager, which closes the device
+ *        and republishes the connected state. The single reach for the manager in this driver.
+ */
+void IO::Drivers::MQTT::reportDropToManager()
+{
+  static auto& connectionManager = ConnectionManager::instance();
+  connectionManager.disconnectDevice(this);
+}
+
+/**
+ * @brief Fails the attempt when the broker answers neither Connected nor an error in time.
+ */
+void IO::Drivers::MQTT::onDialTimeout()
+{
+  if (isOpen())
+    return;
+
+  failDial(tr("The broker did not answer within %1 seconds").arg(kMqttDialDeadlineMs / 1000));
 }
 
 /**
@@ -209,6 +262,7 @@ bool IO::Drivers::MQTT::open(const QIODevice::OpenMode mode)
   if (m_client.state() != QMqttClient::Disconnected) {
     qCInfo(lcMqttSub) << "open() while teardown/dial in flight -- re-arming reconnect";
     m_userWantsOpen = true;
+    m_dialTimer.start(kMqttDialDeadlineMs);
     scheduleReconnectIfActive();
     return true;
   }
@@ -222,6 +276,8 @@ bool IO::Drivers::MQTT::open(const QIODevice::OpenMode mode)
   qCInfo(lcMqttSub).nospace() << "Connecting to " << (m_sslEnabled ? "mqtts://" : "mqtt://")
                               << m_hostname << ":" << m_port << " clientId=" << m_clientId
                               << " topic=" << m_topicFilter;
+
+  m_dialTimer.start(kMqttDialDeadlineMs);
 
   if (m_sslEnabled)
     m_client.connectToHostEncrypted(m_sslConfiguration);
@@ -691,6 +747,22 @@ void IO::Drivers::MQTT::setUsername(const QString& username)
 }
 
 /**
+ * @brief Adopts both credentials with ONE vault write: setting them one at a time stores a
+ *        half-empty pair in between and the first write removes the password key (spec 0075 E13).
+ */
+void IO::Drivers::MQTT::applyCredentials(const QString& username, const QString& password)
+{
+  if (m_username == username && m_password == password)
+    return;
+
+  m_username = username;
+  m_password = password;
+  m_vault.setCredentials(m_hostname, m_port, m_username, m_password);
+  scheduleReconnectIfActive();
+  Q_EMIT mqttConfigurationChanged();
+}
+
+/**
  * @brief Sets the broker authentication password.
  */
 void IO::Drivers::MQTT::setPassword(const QString& password)
@@ -790,19 +862,7 @@ QList<IO::DriverProperty> IO::Drivers::MQTT::driverProperties() const
   topic.value = m_topicFilter;
   props.append(topic);
 
-  IO::DriverProperty spark;
-  spark.key   = QStringLiteral("sparkplugEnabled");
-  spark.label = tr("Sparkplug");
-  spark.type  = IO::DriverProperty::CheckBox;
-  spark.value = m_sparkplugEnabled;
-  props.append(spark);
-
-  IO::DriverProperty group;
-  group.key   = QStringLiteral("sparkplugGroupId");
-  group.label = tr("Sparkplug Group ID");
-  group.type  = IO::DriverProperty::Text;
-  group.value = m_sparkplugGroupId;
-  props.append(group);
+  appendSparkplugProperties(props);
 
   IO::DriverProperty cid;
   cid.key   = QStringLiteral("clientId");
@@ -934,6 +994,8 @@ void IO::Drivers::MQTT::appendMqttSslProperties(QList<IO::DriverProperty>& props
 
 /**
  * @brief Applies a Sparkplug key, true when consumed; split out to keep setDriverProperty short.
+ *        The slot table is restored here rather than derived, so an already-generated project keeps
+ *        the wire indices its datasets bind to no matter which node births first this session.
  */
 bool IO::Drivers::MQTT::applySparkplugProperty(const QString& key, const QVariant& value)
 {
@@ -944,6 +1006,11 @@ bool IO::Drivers::MQTT::applySparkplugProperty(const QString& key, const QVarian
 
   if (key == QLatin1String("sparkplugGroupId")) {
     setSparkplugGroupId(value.toString());
+    return true;
+  }
+
+  if (key == Keys::SparkplugSlots) {
+    restoreSparkplugSlots(value);
     return true;
   }
 
@@ -1066,16 +1133,20 @@ void IO::Drivers::MQTT::onStateChanged(QMqttClient::ClientState state)
   Q_EMIT connectedChanged();
   sparkplugStateChanged(state == QMqttClient::Connected);
 
-  if (state == QMqttClient::Connected)
+  if (state == QMqttClient::Connected) {
+    m_dialTimer.stop();
     reportOpenFinished(true);
+  }
 
-  if (state == QMqttClient::Disconnected && !m_reconnectPending)
+  if (state == QMqttClient::Disconnected && !m_reconnectPending) {
+    m_dialTimer.stop();
     reportOpenFinished(false, tr("The broker closed the connection during the attempt"));
+  }
 
   if (state == QMqttClient::Disconnected && m_reconnectPending) {
     m_reconnectPending = false;
-    if (m_userWantsOpen)
-      (void)open(QIODevice::ReadOnly);
+    if (m_userWantsOpen && !open(QIODevice::ReadOnly))
+      failDial(tr("The connection could not be re-established"));
 
     return;
   }
@@ -1156,14 +1227,13 @@ void IO::Drivers::MQTT::onErrorChanged(QMqttClient::ClientError error)
   }
 
   if (isConnecting()) {
+    m_dialTimer.stop();
     m_userWantsOpen    = false;
     m_reconnectPending = false;
     if (openReportArmed())
       reportOpenFinished(false, message);
-    else {
-      static auto& connectionManager = ConnectionManager::instance();
-      connectionManager.disconnectDevice(this);
-    }
+    else
+      reportDropToManager();
   }
 
   logDriverError(title, message);
@@ -1433,8 +1503,7 @@ void IO::Drivers::MQTT::loadPersistedSettings()
   setHostname(host);
   setPort(port16);
   setClientId(cid);
-  setUsername(creds.username);
-  setPassword(creds.password);
+  applyCredentials(creds.username, creds.password);
   setTopicFilter(top);
   setSparkplugEnabled(spark);
   setSparkplugGroupId(grp);

@@ -112,6 +112,7 @@ IO::Drivers::Iec104::Iec104()
 
   m_timer->setInterval(kIec104ProtocolTickMs);
   connect(m_timer, &QTimer::timeout, this, &IO::Drivers::Iec104::onProtocolTick);
+  connect(&m_dial, &IO::AsyncTcpDial::finished, this, &IO::Drivers::Iec104::onDialFinished);
 
   static constexpr void (Iec104::* kConfigSignals[])() = {&Iec104::hostChanged,
                                                           &Iec104::portChanged,
@@ -271,9 +272,9 @@ void IO::Drivers::Iec104::adoptDiscoveredPoints()
     return;
 
   m_points = peer->m_points;
-  m_slotForIoa.clear();
+  m_slotForKey.clear();
   for (int i = 0; i < m_points.size(); ++i)
-    m_slotForIoa.insert(m_points.at(i).ioa, i);
+    m_slotForKey.insert(slotKey(m_points.at(i).ioa, m_points.at(i).typeId), i);
 
   m_values     = QList<QVariant>(m_points.size());
   m_stamps     = QList<qint64>(m_points.size(), -1);
@@ -305,6 +306,7 @@ void IO::Drivers::Iec104::doClose()
   m_open    = false;
   m_started = false;
 
+  m_dial.cancel();
   m_timer->stop();
   disconnect(m_socket, &QTcpSocket::readyRead, this, &IO::Drivers::Iec104::onReadyRead);
   disconnect(m_socket, &QTcpSocket::errorOccurred, this, &IO::Drivers::Iec104::onSocketError);
@@ -329,6 +331,15 @@ void IO::Drivers::Iec104::doClose()
 bool IO::Drivers::Iec104::isOpen() const noexcept
 {
   return m_open;
+}
+
+/**
+ * @brief Returns true while the dial started by open() has neither connected nor failed; the
+ *        connect button reads "Connecting" from this instead of looking like a dead click.
+ */
+bool IO::Drivers::Iec104::isConnecting() const noexcept
+{
+  return m_dial.active();
 }
 
 /**
@@ -366,9 +377,9 @@ qint64 IO::Drivers::Iec104::write(const QByteArray& data)
 }
 
 /**
- * @brief Opens the link. A throwaway probe absorbs the retry churn, the driver's own socket then
- *        connects exactly ONCE, and this function's RETURN VALUE is the whole verdict: no
- *        openFinished latch, no dial timer, no retry stack (spec 0050).
+ * @brief Starts the dial. The attempt runs asynchronously and settles through openFinished()
+ *        exactly once (spec 0050): a blocking waitForConnected() here froze the window on every
+ *        unreachable station, resolver included.
  */
 bool IO::Drivers::Iec104::open(const QIODevice::OpenMode mode)
 {
@@ -381,11 +392,56 @@ bool IO::Drivers::Iec104::open(const QIODevice::OpenMode mode)
     return false;
   }
 
-  if (!dialStation()) {
+  dialStation();
+
+  Q_EMIT statusChanged();
+  Q_EMIT configurationChanged();
+  return m_dial.active() || isOpen();
+}
+
+/**
+ * @brief Dials the station with the driver's own socket, exactly once and with no refusal probe:
+ *        strict 104 stations permit a single client and would count a probe socket as a second
+ *        one. The handlers are wired only once the dial reports success.
+ */
+void IO::Drivers::Iec104::dialStation()
+{
+  SS_ASSERT(m_port > 0, return);
+  SS_ASSERT_LOG(m_socket->state() == QAbstractSocket::UnconnectedState);
+
+  m_dial.setProbeEnabled(false);
+  m_dial.setDeadline(kIec104DialDeadlineMs);
+  m_dial.start(m_host.trimmed(), static_cast<quint16>(m_port), m_socket, QIODevice::ReadWrite);
+}
+
+/**
+ * @brief Settles the dial verdict exactly once: a failure reports through openFinished() and
+ *        leaves the link down, a success wires the handlers and starts the session.
+ */
+void IO::Drivers::Iec104::onDialFinished(bool ok, const QString& reason)
+{
+  if (!ok) {
+    m_lastError = reason;
+    m_socket->abort();
+    logDriverError(
+      tr("IEC 104 Connection Failed"),
+      tr("Cannot connect to %1:%2 (%3)").arg(m_host.trimmed(), QString::number(m_port), reason));
+
     Q_EMIT statusChanged();
-    return false;
+    reportOpenFinished(false, reason);
+    return;
   }
 
+  beginSession();
+  reportOpenFinished(true);
+}
+
+/**
+ * @brief Wires the socket handlers and sends STARTDT once the link is up. Split out of open() so
+ *        the sequence runs at the same point whether the dial settled early or late.
+ */
+void IO::Drivers::Iec104::beginSession()
+{
   connect(m_socket,
           &QTcpSocket::readyRead,
           this,
@@ -408,32 +464,6 @@ bool IO::Drivers::Iec104::open(const QIODevice::OpenMode mode)
 
   Q_EMIT statusChanged();
   Q_EMIT configurationChanged();
-  return true;
-}
-
-/**
- * @brief Dials the station with the driver's own socket, exactly once: strict 104 stations permit
- *        a single client and would count a probe socket as a second one, and the run-loop hazard
- *        a probe guards against elsewhere cannot arise here because the handlers are wired only
- *        after this returns true (spec 0050). Leaves @c m_lastError set on refusal.
- */
-bool IO::Drivers::Iec104::dialStation()
-{
-  SS_ASSERT(m_port > 0, return false);
-  SS_ASSERT_LOG(m_socket->state() == QAbstractSocket::UnconnectedState);
-
-  const auto host = m_host.trimmed();
-  const auto port = static_cast<quint16>(m_port);
-
-  m_socket->connectToHost(host, port);
-  if (m_socket->waitForConnected(kIec104DialDeadlineMs))
-    return true;
-
-  m_lastError = m_socket->errorString();
-  m_socket->abort();
-  logDriverError(tr("IEC 104 Connection Failed"),
-                 tr("Cannot connect to %1:%2 (%3)").arg(host, QString::number(port), m_lastError));
-  return false;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -609,15 +639,20 @@ void IO::Drivers::Iec104::ingestPoint(const Iec104Proto::Point& point)
 
 /**
  * @brief Resolves the wire slot of a point, appending it the first time the station reports it.
- *        Slots are only ever appended: renumbering would repoint every dataset of an already
- *        generated project. The discovery signal is raised by the caller once the whole buffer is
- *        drained -- a synchronous emission mid-walk lets a handler re-enter the buffer.
+ *        Slots are only ever appended: renumbering repoints every dataset of a generated project.
+ *        The identity is (address, type id), and the LIVE kind wins over the restored one, because
+ *        the station is the authority on what it is sending.
  */
 int IO::Drivers::Iec104::slotForPoint(const Iec104Proto::Point& point)
 {
-  const auto known = m_slotForIoa.constFind(point.ioa);
-  if (known != m_slotForIoa.constEnd())
-    return known.value();
+  const auto known = m_slotForKey.constFind(slotKey(point.ioa, point.typeId));
+  if (known != m_slotForKey.constEnd()) {
+    const int slot = known.value();
+    if (slot >= 0 && slot < m_points.size())
+      m_points[slot].kind = point.kind;
+
+    return slot;
+  }
 
   if (m_points.size() >= OpcUaWire::kMaxTags)
     return -1;
@@ -629,7 +664,7 @@ int IO::Drivers::Iec104::slotForPoint(const Iec104Proto::Point& point)
 
   const int slot = static_cast<int>(m_points.size());
   m_points.append(discovered);
-  m_slotForIoa.insert(point.ioa, slot);
+  m_slotForKey.insert(slotKey(point.ioa, point.typeId), slot);
   m_values.append(QVariant());
   m_stamps.append(-1);
   m_dirty.append(false);
@@ -1105,19 +1140,20 @@ void IO::Drivers::Iec104::setTimeoutT3(const int ms)
 void IO::Drivers::Iec104::setPoints(const QJsonArray& points)
 {
   QVector<Iec104Point> table;
-  QHash<quint32, int> index;
+  QHash<quint64, int> index;
   for (const auto& item : points) {
     const auto obj    = item.toObject();
     const auto ioa    = static_cast<quint32>(obj.value(QStringLiteral("ioa")).toInteger(-1));
-    const auto typeId = obj.value(QStringLiteral("typeId")).toInt(0);
-    if (ioa > kMaxIoa || index.contains(ioa) || table.size() >= OpcUaWire::kMaxTags)
+    const auto typeId = static_cast<std::uint8_t>(obj.value(QStringLiteral("typeId")).toInt(0));
+    const auto key    = slotKey(ioa, typeId);
+    if (ioa > kMaxIoa || index.contains(key) || table.size() >= OpcUaWire::kMaxTags)
       continue;
 
     Iec104Point point;
     point.ioa    = ioa;
-    point.typeId = static_cast<std::uint8_t>(typeId);
+    point.typeId = typeId;
     point.kind   = kindForType(point.typeId);
-    index.insert(ioa, static_cast<int>(table.size()));
+    index.insert(key, static_cast<int>(table.size()));
     table.append(point);
   }
 
@@ -1125,7 +1161,7 @@ void IO::Drivers::Iec104::setPoints(const QJsonArray& points)
     return;
 
   m_points     = table;
-  m_slotForIoa = index;
+  m_slotForKey = index;
   m_values     = QList<QVariant>(m_points.size());
   m_stamps     = QList<qint64>(m_points.size(), -1);
   m_dirty      = QList<bool>(m_points.size(), false);
@@ -1143,7 +1179,7 @@ void IO::Drivers::Iec104::clearPoints()
     return;
 
   m_points.clear();
-  m_slotForIoa.clear();
+  m_slotForKey.clear();
   m_values.clear();
   m_stamps.clear();
   m_dirty.clear();

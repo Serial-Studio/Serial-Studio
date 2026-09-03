@@ -447,6 +447,21 @@ void Widgets::TerminalBuffer::removeFromCursor(AnsiEraseDirection direction, int
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Returns @p point pulled inside the rows and columns @p lines still holds, or a null
+ *        point when there are none. Every row removal has to run its selection endpoints through
+ *        this: an endpoint left past the last row indexes the line list out of bounds the next
+ *        time the widget copies or highlights (F2).
+ */
+QPoint Widgets::TerminalBuffer::clampPoint(const QPoint& point, const QStringList& lines)
+{
+  if (lines.isEmpty())
+    return QPoint();
+
+  const int row = qBound(0, point.y(), static_cast<int>(lines.size()) - 1);
+  return QPoint(qBound(0, point.x(), static_cast<int>(lines.at(row).size())), row);
+}
+
+/**
  * @brief Returns true when @p line starts with a well-formed "HH:mm:ss.zzz -> " stamp.
  */
 bool Widgets::TerminalBuffer::hasTimestampPrefix(QStringView line)
@@ -523,34 +538,44 @@ bool Widgets::TerminalBuffer::collapseCompletedLine()
 
 /**
  * @brief Drops every row below @p row, keeping the color rows and repeat counts in lockstep so
- *        the paint pass never reads a misaligned row.
+ *        the paint pass never reads a misaligned row, and pulling the cursor back inside the
+ *        rows that survived.
  */
 void Widgets::TerminalBuffer::eraseRowsAfter(int row)
 {
+  row = qBound(-1, row, static_cast<int>(m_data.size()));
   if (row + 1 >= m_data.size())
     return;
 
   m_data.erase(m_data.begin() + row + 1, m_data.end());
-  if (m_ansiColors && row + 1 < m_colorData.size())
+
+  // code-verify off
+  // Trim the color rows in lockstep regardless of the ansiColors() toggle: rows recorded while
+  // colors were on must not survive as a stale, misaligned tail (the trimFront() rule).
+  if (row + 1 < m_colorData.size())
     m_colorData.erase(m_colorData.begin() + row + 1, m_colorData.end());
+  // code-verify on
 
   if (row + 1 < m_repeatCounts.size())
     m_repeatCounts.erase(m_repeatCounts.begin() + row + 1, m_repeatCounts.end());
+
+  if (m_cursor.y() >= m_data.size()) {
+    m_cursor.setY(qMax<int>(0, static_cast<int>(m_data.size()) - 1));
+    m_cursorMoved = true;
+  }
 }
 
 /**
- * @brief Drops every row above @p row, keeping the color rows and repeat counts in lockstep.
+ * @brief Drops every row above @p row. A front erase shifts every row index, so it goes through
+ *        the same trim the scrollback cap uses: the color rows, the repeat counts and the cursor
+ *        move with it, and the dropped count reaches the facade, which is what rebases the
+ *        selection and the scroll offset.
  */
 void Widgets::TerminalBuffer::eraseRowsBefore(int row)
 {
-  if (row <= 0)
+  const int drop = qMin(row, static_cast<int>(m_data.size()));
+  if (drop <= 0)
     return;
 
-  m_data.erase(m_data.begin(), m_data.begin() + row);
-  if (m_ansiColors && row < m_colorData.size())
-    m_colorData.erase(m_colorData.begin(), m_colorData.begin() + row);
-
-  const auto countDrop = qMin<qsizetype>(row, m_repeatCounts.size());
-  if (countDrop > 0)
-    m_repeatCounts.erase(m_repeatCounts.begin(), m_repeatCounts.begin() + countDrop);
+  trimFront(drop);
 }

@@ -42,6 +42,7 @@
 #include "IO/ConnectionManager.h"
 #include "IO/FileTransmission.h"
 #include "Misc/CLI/CliBusConfig.h"
+#include "Misc/CrashTracker.h"
 #include "Misc/ModuleManager.h"
 #include "Misc/TimerEvents.h"
 #include "SerialStudio.h"
@@ -103,6 +104,8 @@ void CLI::registerOptions()
   m_parser.addOption(m_opts.apiServerOpt);
   m_parser.addOption(m_opts.apiExternalOpt);
   m_parser.addOption(m_opts.apiTokenOpt);
+  m_parser.addOption(m_opts.apiTokenFileOpt);
+  m_parser.addOption(m_opts.apiPortOpt);
   m_parser.addOption(m_opts.dumpApiSchemaOpt);
   m_parser.addOption(m_opts.projectOpt);
   m_parser.addOption(m_opts.quickPlotOpt);
@@ -130,6 +133,15 @@ void CLI::registerOptions()
   m_parser.addOption(m_opts.selftestOpt);
   m_parser.addOption(m_opts.selftestSuiteOpt);
 #endif
+  registerCommercialOptions();
+}
+
+/**
+ * @brief Registers the Pro-only options. Split from registerOptions() to keep both bodies inside
+ *        the function-length cap, not because the two sets are wired differently.
+ */
+void CLI::registerCommercialOptions()
+{
 #ifdef BUILD_COMMERCIAL
   m_parser.addOption(m_opts.noToolbarOpt);
   m_parser.addOption(m_opts.runtimeOpt);
@@ -280,7 +292,8 @@ CLI::ProcessResult CLI::process(QApplication& app)
   }
 
   if (m_parser.isSet(m_opts.resetOpt)) {
-    QSettings(APP_SUPPORT_URL, APP_NAME).clear();
+    QSettings settings;
+    Misc::CrashTracker::resetSettingsPreservingLicense(settings);
     qDebug() << APP_NAME << "settings cleared!";
     return ProcessResult::ExitSuccess;
   }
@@ -293,7 +306,8 @@ CLI::ProcessResult CLI::process(QApplication& app)
     return dumpApiSchema(m_parser.value(m_opts.dumpApiSchemaOpt));
 
 #ifdef SS_INAPP_TESTS
-  if (m_parser.isSet(m_opts.selftestOpt) || m_parser.isSet(m_opts.selftestSuiteOpt))
+  if ((m_parser.isSet(m_opts.selftestOpt) || m_parser.isSet(m_opts.selftestSuiteOpt))
+      && !postRootSelfTestRequested())
     return runSelfTests();
 #endif
 
@@ -520,6 +534,18 @@ CLI::ProcessResult CLI::dumpApiSchema(const QString& path)
                  def.inputSchema.value(QStringLiteral("properties")).toObject());
     entry.insert(QStringLiteral("required"),
                  def.inputSchema.value(QStringLiteral("required")).toArray());
+    if (!def.pathParams.isEmpty()) {
+      QJsonArray pathParams;
+      for (const auto& policy : def.pathParams) {
+        QJsonObject item;
+        item.insert(QStringLiteral("name"), policy.name);
+        item.insert(QStringLiteral("allowMissing"), policy.allowMissing);
+        pathParams.append(item);
+      }
+
+      entry.insert(QStringLiteral("x-pathParams"), pathParams);
+    }
+
     array.append(entry);
   }
 
@@ -665,6 +691,33 @@ void CLI::applyProjectAndAutoConnect(QApplication& app)
 }
 
 /**
+ * @brief Returns the API token the operator supplied, from the least exposed source available:
+ *        a file, then the environment, then argv. A token on the command line is readable by
+ *        every process on the machine for the lifetime of the run (K14).
+ */
+QString CLI::resolveApiToken() const
+{
+  if (m_parser.isSet(m_opts.apiTokenFileOpt)) {
+    const auto path = m_parser.value(m_opts.apiTokenFileOpt);
+    QFile file(path);
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+      qWarning() << "[CLI] --api-token-file could not be read:" << path;
+      return {};
+    }
+
+    return QString::fromUtf8(file.readAll()).trimmed();
+  }
+
+  if (qEnvironmentVariableIsSet("SS_API_TOKEN"))
+    return qEnvironmentVariable("SS_API_TOKEN").trimmed();
+
+  if (m_parser.isSet(m_opts.apiTokenOpt))
+    return m_parser.value(m_opts.apiTokenOpt);
+
+  return {};
+}
+
+/**
  * @brief Applies the API-server flags. The token is pinned before external connections are
  *        opened so a headless machine is provisioned with the operator's credential rather than
  *        a freshly generated one; each flag acts only when it was passed, so an omitted flag
@@ -672,20 +725,58 @@ void CLI::applyProjectAndAutoConnect(QApplication& app)
  */
 void CLI::applyApiServerOptions()
 {
-  if (!apiServerEnabled() && !apiExternalEnabled() && !m_parser.isSet(m_opts.apiTokenOpt))
+  const auto token = resolveApiToken();
+  if (!apiServerEnabled() && !apiExternalEnabled() && token.isEmpty())
     return;
 
   static auto& apiServer = API::Server::instance();
 
-  if (m_parser.isSet(m_opts.apiTokenOpt)
-      && !apiServer.setAuthToken(m_parser.value(m_opts.apiTokenOpt)))
-    qWarning() << "[CLI] --api-token ignored: expected at least 32 hexadecimal characters";
+  if (!token.isEmpty() && !apiServer.setAuthToken(token))
+    qWarning() << "[CLI] API token ignored: expected at least 32 hexadecimal characters";
 
   if (apiExternalEnabled())
     apiServer.allowExternalConnections();
 
   if (apiServerEnabled())
     apiServer.setEnabled(true);
+
+  if (m_parser.isSet(m_opts.apiPortOpt)) {
+    bool ok        = false;
+    const int port = m_parser.value(m_opts.apiPortOpt).toInt(&ok);
+    if (!ok || port < 1 || port > 65535)
+      qWarning() << "[CLI] --api-port needs a port between 1 and 65535; ignoring"
+                 << m_parser.value(m_opts.apiPortOpt);
+    else
+      apiServer.setPort(port);
+  }
+}
+
+/**
+ * @brief True when --selftest-suite names a suite that needs the composition root; main() runs
+ *        those after ModuleManager has built the modules, because CLI::process() is too early.
+ */
+bool CLI::postRootSelfTestRequested() const
+{
+#ifdef SS_INAPP_TESTS
+  const QString suite = m_parser.value(m_opts.selftestSuiteOpt).trimmed();
+  return !suite.isEmpty() && SelfTest::Runner::postRootSuiteNames().contains(suite);
+#else
+  return false;
+#endif
+}
+
+/**
+ * @brief Runs the post-root suite named by --selftest-suite.
+ */
+CLI::ProcessResult CLI::runPostRootSelfTests()
+{
+#ifdef SS_INAPP_TESTS
+  const QString suite = m_parser.value(m_opts.selftestSuiteOpt).trimmed();
+  const int rc        = SelfTest::Runner::runPostRootAndReport(suite);
+  return rc == EXIT_SUCCESS ? ProcessResult::ExitSuccess : ProcessResult::ExitFailure;
+#else
+  return ProcessResult::ExitFailure;
+#endif
 }
 
 /**
@@ -898,9 +989,10 @@ void CLI::applyExportToggles()
 //---------------------------------------------------------------------------------------------------
 
 /**
- * @brief Activates a license key against the Lemon Squeezy API and exits. Quit is deferred to
- *        the next loop pass: activatedChanged fires inside the network reply's finished handler,
- *        and a synchronous quit() would tear the manager down under that reply's stack frame.
+ * @brief Activates a license key against the Lemon Squeezy API and exits. The wait is on
+ *        requestFinished, not activatedChanged: that signal fires only on a real entitlement
+ *        flip, so a rejected key left the command hanging until its own timeout (K1). Quit is
+ *        deferred a loop pass because the verdict arrives inside the reply's handler.
  */
 int CLI::activateLicense(QApplication& app, const QString& licenseKey)
 {
@@ -918,15 +1010,17 @@ int CLI::activateLicense(QApplication& app, const QString& licenseKey)
   timeout.setSingleShot(true);
   timeout.setInterval(30'000);
 
-  QObject::connect(&ls, &Licensing::LemonSqueezy::activatedChanged, &app, [&] {
-    result = ls.isActivated() ? EXIT_SUCCESS : EXIT_FAILURE;
-    if (ls.isActivated())
-      qInfo() << "License activated successfully.";
-    else
-      qCritical() << "License activation failed.";
+  QObject::connect(
+    &ls, &Licensing::LemonSqueezy::requestFinished, &app, [&](bool ok, const QString& reason) {
+      result = (ok && ls.isActivated()) ? EXIT_SUCCESS : EXIT_FAILURE;
+      if (result == EXIT_SUCCESS)
+        qInfo() << "License activated successfully.";
+      else
+        qCritical().noquote() << "License activation failed:"
+                              << (reason.isEmpty() ? QStringLiteral("unknown error") : reason);
 
-    QTimer::singleShot(0, &app, &QCoreApplication::quit);
-  });
+      QTimer::singleShot(0, &app, &QCoreApplication::quit);
+    });
 
   QObject::connect(&timeout, &QTimer::timeout, &app, [&] {
     qCritical() << "License activation timed out.";
@@ -941,8 +1035,9 @@ int CLI::activateLicense(QApplication& app, const QString& licenseKey)
 }
 
 /**
- * @brief Deactivates the stored license instance on this machine and exits. Quit is deferred
- *        to the next loop pass for the same reply-stack reason as activateLicense().
+ * @brief Deactivates the stored license instance on this machine and exits. Success is the
+ *        server's word: the seat is only free when the deactivation was confirmed, so the exit
+ *        code follows requestFinished rather than the local activation flag (K1).
  */
 int CLI::deactivateLicense(QApplication& app)
 {
@@ -959,15 +1054,17 @@ int CLI::deactivateLicense(QApplication& app)
   timeout.setSingleShot(true);
   timeout.setInterval(30'000);
 
-  QObject::connect(&ls, &Licensing::LemonSqueezy::activatedChanged, &app, [&] {
-    result = !ls.isActivated() ? EXIT_SUCCESS : EXIT_FAILURE;
-    if (!ls.isActivated())
-      qInfo() << "License deactivated successfully.";
-    else
-      qCritical() << "License deactivation failed.";
+  QObject::connect(
+    &ls, &Licensing::LemonSqueezy::requestFinished, &app, [&](bool ok, const QString& reason) {
+      result = (ok && !ls.isActivated()) ? EXIT_SUCCESS : EXIT_FAILURE;
+      if (result == EXIT_SUCCESS)
+        qInfo() << "License deactivated successfully.";
+      else
+        qCritical().noquote() << "License deactivation failed:"
+                              << (reason.isEmpty() ? QStringLiteral("unknown error") : reason);
 
-    QTimer::singleShot(0, &app, &QCoreApplication::quit);
-  });
+      QTimer::singleShot(0, &app, &QCoreApplication::quit);
+    });
 
   QObject::connect(&timeout, &QTimer::timeout, &app, [&] {
     qCritical() << "License deactivation timed out.";

@@ -65,9 +65,9 @@ Item {
     // Mode selector
     //
     Label {
-      opacity: enabled ? 1 : 0.5
-      text: qsTr("Mode") + ":"
       enabled: app.ioEnabled
+      text: qsTr("Mode") + ":"
+      opacity: enabled ? 1 : 0.5
     } Widgets.Combo {
       id: modeCombo
 
@@ -97,10 +97,10 @@ Item {
     // Executable
     //
     Label {
+      enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
       text: qsTr("Executable") + ":"
       visible: modeCombo.currentIndex === 0
-      enabled: app.ioEnabled
     } RowLayout {
       spacing: 4
       Layout.fillWidth: true
@@ -145,10 +145,10 @@ Item {
     // Arguments
     //
     Label {
+      enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
       text: qsTr("Arguments") + ":"
       visible: modeCombo.currentIndex === 0
-      enabled: app.ioEnabled
     } Widgets.LineField {
       id: argsField
 
@@ -181,10 +181,10 @@ Item {
     // Working directory (optional)
     //
     Label {
+      enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
       text: qsTr("Working Dir") + ":"
       visible: modeCombo.currentIndex === 0
-      enabled: app.ioEnabled
     } RowLayout {
       spacing: 4
       Layout.fillWidth: true
@@ -231,10 +231,10 @@ Item {
     // Pipe path
     //
     Label {
+      enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
       text: qsTr("Pipe Path") + ":"
       visible: modeCombo.currentIndex === 1
-      enabled: app.ioEnabled
     } RowLayout {
       spacing: 4
       Layout.fillWidth: true

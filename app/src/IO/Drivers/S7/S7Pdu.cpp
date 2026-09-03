@@ -240,13 +240,16 @@ QString IO::Drivers::S7Comm::returnCodeText(std::uint8_t returnCode)
 
 /**
  * @brief Renders the big-endian octets an area returns as the value the address declares. A bit
- *        read answers with one octet whose low bit is the bit itself, and an S7 STRING answers
- *        with its two-octet maximum/current header ahead of the characters.
+ *        read answers one octet whose low bit is the bit; an S7 STRING answers its two-octet
+ *        maximum/current header ahead of the characters. An EMPTY payload is a controller-chosen
+ *        length, so it returns invalid for the caller to count rather than asserting on wire input.
  */
 QVariant IO::Drivers::S7Comm::decodeValue(const S7Address::Address& address, QByteArrayView raw)
 {
-  SS_ASSERT(!raw.isEmpty(), return {});
   SS_ASSERT(address.size > 0, return {});
+
+  if (raw.isEmpty())
+    return {};
 
   if (address.type == S7Address::Type::Bool)
     return QVariant((s7PduOctet(raw, 0) & 0x01U) != 0);

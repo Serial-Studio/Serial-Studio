@@ -28,13 +28,13 @@
 #include "API/SchemaBuilder.h"
 #include "DataModel/ProjectModel.h"
 #include "DataModel/Scripting/ControlScript.h"
-#include "DataModel/Scripting/JsWatchdog.h"
+#include "DataModel/Scripting/ScriptDryRun.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constants
 //--------------------------------------------------------------------------------------------------
 
-static constexpr int kDryRunWatchdogMs = 2000;
+static constexpr int kDryRunWatchdogMs = DataModel::kScriptDryRunBudgetMs;
 
 //--------------------------------------------------------------------------------------------------
 // Command registration
@@ -174,26 +174,28 @@ API::CommandResponse API::Handlers::ControlScriptHandler::dryRun(const QString& 
     return CommandResponse::makeSuccess(id, result);
   }
 
-  QJSEngine engine;
-  engine.installExtensions(QJSEngine::ConsoleExtension);
-  DataModel::JsWatchdog watchdog(
-    &engine, kDryRunWatchdogMs, QStringLiteral("controlScript.dryRun"));
+  DataModel::ScriptDryRun session(
+    DataModel::ScriptDryRun::Language::JavaScript, kDryRunWatchdogMs, "controlScript.dryRun");
+  if (!session.valid())
+    return CommandResponse::makeError(
+      id, ErrorCode::ExecutionError, QStringLiteral("Failed to create the dry-run engine"));
 
-  engine.evaluate(
+  auto& engine = *session.jsEngine();
+  engine.installExtensions(QJSEngine::ConsoleExtension);
+
+  (void)session.evaluate(
     QStringLiteral("var __ss_bridge = { call: function() { return { ok: false, error: 'dryRun' "
                    "}; }, listCommands: function() { return []; }, delay: function() {} };\n"
-                   "var __ss_control = true;"));
+                   "var __ss_control = true;"),
+    QStringLiteral("bridge-stub.js"));
 
   QFile sdkFile(QStringLiteral(":/api/SerialStudio.js"));
   if (sdkFile.open(QFile::ReadOnly))
-    engine.evaluate(QString::fromUtf8(sdkFile.readAll()));
+    (void)session.evaluate(QString::fromUtf8(sdkFile.readAll()), QStringLiteral("SerialStudio.js"));
 
-  watchdog.arm();
-  const auto evalResult = engine.evaluate(code, QStringLiteral("control-script.js"));
-  watchdog.disarm();
+  const auto evalResult = session.evaluate(code, QStringLiteral("control-script.js"));
 
-  if (engine.isInterrupted()) {
-    engine.setInterrupted(false);
+  if (session.timedOut()) {
     result[QStringLiteral("valid")] = false;
     result[QStringLiteral("error")] =
       QStringLiteral("Script did not finish evaluating within %1 ms (infinite loop at the top "

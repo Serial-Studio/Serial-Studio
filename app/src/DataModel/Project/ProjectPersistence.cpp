@@ -430,6 +430,8 @@ bool DataModel::ProjectPersistence::writeProjectFile(const QString& path)
 {
   SS_ASSERT(!path.isEmpty(), return false);
 
+  m_model.flushWorkspaceRegen();
+
   QSaveFile file(path);
   if (!file.open(QFile::WriteOnly)) {
     qWarning() << "[ProjectModel] File open error:" << file.errorString();
@@ -680,5 +682,32 @@ void DataModel::ProjectPersistence::promptDiskFileReload()
   const auto path = m_model.m_filePath;
   m_model.m_filePath.clear();
   if (!m_model.openJsonFile(path))
-    qWarning() << "[ProjectModel] Reload after on-disk change failed:" << path;
+    restoreDetachedDocument(path);
+}
+
+/**
+ * @brief Re-attaches the document to @p path after a reload attempt failed. The reload clears
+ *        the path so the loader cannot short-circuit on "same file"; a loader that then refuses
+ *        the document (unreadable or invalid JSON) mutates nothing, so the in-memory project is
+ *        intact but path-less: without this it would lose auto-save, the watcher and Save.
+ */
+void DataModel::ProjectPersistence::restoreDetachedDocument(const QString& path)
+{
+  qWarning() << "[ProjectModel] Reload after on-disk change failed:" << path;
+
+  m_model.m_filePath = path;
+  watchProjectFile();
+
+  const bool wasModified = m_model.m_modified;
+  m_model.m_modified     = true;
+  if (!wasModified)
+    Q_EMIT m_model.modifiedChanged();
+
+  static auto& nc = DataModel::NotificationCenter::instance();
+  nc.postWarning(QStringLiteral("ProjectModel"),
+                 ProjectModel::tr("Project file could not be reloaded"),
+                 ProjectModel::tr("%1 could not be read back: it is unreadable or no longer "
+                                  "valid JSON. Your in-memory project was kept; save it to "
+                                  "overwrite the file on disk.")
+                   .arg(m_model.jsonFileName()));
 }

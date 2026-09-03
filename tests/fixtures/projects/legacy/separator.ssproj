@@ -1,0 +1,43 @@
+{
+  "title": "Legacy Separator",
+  "separator": ",",
+  "frameStart": "$",
+  "frameEnd": ";",
+  "decoder": 0,
+  "frameParserCode": "function parse(frame, separator) {\n    return frame.split(separator);\n}",
+  "groups": [
+    {
+      "title": "Sensors",
+      "widget": "datagrid",
+      "datasets": [
+        {
+          "title": "Temperature",
+          "index": 1,
+          "graph": true,
+          "widget": "",
+          "units": "",
+          "min": 0,
+          "max": 100,
+          "alarm": 0,
+          "led": false,
+          "log": false,
+          "fft": false
+        },
+        {
+          "title": "Humidity",
+          "index": 2,
+          "graph": true,
+          "widget": "",
+          "units": "",
+          "min": 0,
+          "max": 100,
+          "alarm": 0,
+          "led": false,
+          "log": false,
+          "fft": false
+        }
+      ]
+    }
+  ],
+  "actions": []
+}

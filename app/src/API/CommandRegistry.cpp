@@ -112,6 +112,7 @@ void API::CommandRegistry::registerCommand(const QString& name,
   CommandDefinition def;
   def.name        = name;
   def.description = description;
+  def.pathParams  = declaredPathParams(name);
   def.handler     = std::move(handler);
   m_commands.insert(name, def);
 }
@@ -128,6 +129,7 @@ void API::CommandRegistry::registerCommand(const QString& name,
   def.name        = name;
   def.description = description;
   def.inputSchema = inputSchema;
+  def.pathParams  = declaredPathParams(name);
   def.handler     = std::move(handler);
   m_commands.insert(name, def);
 }
@@ -178,47 +180,27 @@ static const QSet<QString>& destructiveCommandSet()
 }
 
 /**
- * @brief Commands whose filePath parameter must be rejected before any expensive
- *        pre-command side effects such as project snapshots.
+ * @brief Rejects any declared path parameter outside the allowlist, before the command runs and
+ *        before the pre-mutation snapshot it might trigger. The ONE place the policy is applied:
+ *        handlers declare their parameters in PathPolicy.cpp and check nothing themselves, so a
+ *        path-taking command cannot ship ungated (spec 0075 I3/I7).
  */
-static bool commandAllowsMissingTargetPath(const QString& name)
+static std::optional<API::CommandResponse> rejectDisallowedPaths(
+  const QVector<API::PathParamPolicy>& pathParams, const QString& id, const QJsonObject& params)
 {
-  return name == QStringLiteral("project.save");
-}
+  for (const auto& policy : pathParams) {
+    if (!params.contains(policy.name))
+      continue;
 
-/**
- * @brief Commands which need to use the file path security policy.
- */
-static bool commandUsesFilePathPolicy(const QString& name)
-{
-  static const QSet<QString> kSet = {
-    QStringLiteral("project.open"),
-    QStringLiteral("project.save"),
-    QStringLiteral("csvPlayer.open"),
-    QStringLiteral("mdf4Player.open"),
-  };
-  return kSet.contains(name);
-}
+    const QString value = params.value(policy.name).toString();
+    if (value.isEmpty() || API::isPathAllowed(value, policy.allowMissing))
+      continue;
 
-/**
- * @brief Filters allowed file paths before executing a file path command.
- */
-static std::optional<API::CommandResponse> rejectDisallowedFilePath(const QString& name,
-                                                                    const QString& id,
-                                                                    const QJsonObject& params)
-{
-  if (!commandUsesFilePathPolicy(name) || !params.contains(QStringLiteral("filePath")))
-    return std::nullopt;
+    return API::CommandResponse::makeError(
+      id, API::ErrorCode::PathNotAllowed, QStringLiteral("%1 is not allowed").arg(policy.name));
+  }
 
-  const QString filePath = params.value(QStringLiteral("filePath")).toString();
-  if (filePath.isEmpty())
-    return std::nullopt;
-
-  if (API::isPathAllowed(filePath, commandAllowsMissingTargetPath(name)))
-    return std::nullopt;
-
-  return API::CommandResponse::makeError(
-    id, API::ErrorCode::InvalidParam, QStringLiteral("filePath is not allowed"));
+  return std::nullopt;
 }
 
 /**
@@ -280,7 +262,7 @@ API::CommandResponse API::CommandRegistry::execute(const QString& name,
   if (!hasCommand(name))
     return buildUnknownCommandResponse(name, id);
 
-  if (const auto rejected = rejectDisallowedFilePath(name, id, params))
+  if (const auto rejected = rejectDisallowedPaths(m_commands[name].pathParams, id, params))
     return *rejected;
 
   const bool isDryRun = params.value(QStringLiteral("dryRun")).toBool(false);

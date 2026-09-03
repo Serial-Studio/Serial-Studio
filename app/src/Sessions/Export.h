@@ -29,9 +29,12 @@
 #include "DataModel/DataBlock.h"
 #include "DataModel/DataTable.h"
 #include "DataModel/ExportSchema.h"
+#include "DataModel/ExportStructure.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FrameConsumer.h"
 #include "IO/ConnectionManager.h"
+#include "Sessions/BlockFingerprint.h"
+#include "SSAssert.h"
 
 class AppState;
 
@@ -49,36 +52,6 @@ class Dashboard;
 
 namespace Sessions {
 class Export;
-
-/**
- * @brief Feeds one raw_bytes row into a fingerprint hash using the spec-0044 canonical layout.
- */
-void hashRawChunk(QCryptographicHash& hash, qint64 ns, int deviceId, const QByteArray& data);
-
-/**
- * @brief Feeds one readings row into a fingerprint hash using the spec-0044 canonical layout.
- */
-void hashReadingRow(QCryptographicHash& hash,
-                    qint64 ns,
-                    qint64 uniqueId,
-                    double rawNumeric,
-                    const QString& rawString,
-                    double finalNumeric,
-                    const QString& finalString,
-                    bool isNumeric);
-
-/**
- * @brief Feeds one `blocks` row into a fingerprint hash (spec 0055). Both blobs are already
- *        canonical little-endian, so the digest is machine-independent.
- */
-void hashBlockRow(QCryptographicHash& hash,
-                  qint64 uniqueId,
-                  qint64 t0Ns,
-                  qint64 dtNs,
-                  qint64 frames,
-                  const QByteArray& values,
-                  const QByteArray& rawValues,
-                  const QByteArray& texts);
 
 /**
  * @brief Raw driver bytes paired with device id and capture timestamp.
@@ -106,6 +79,7 @@ class ExportWorker : public DataModel::FrameConsumerWorker<DataModel::DataBlockP
 
 signals:
   void sessionIdAssigned(int sessionId);
+  void writeFailed();
 
 public:
   ExportWorker(moodycamel::ReaderWriterQueue<DataModel::DataBlockPtr>* blockQueue,
@@ -113,14 +87,15 @@ public:
                std::atomic<size_t>* queueSize,
                moodycamel::ReaderWriterQueue<TimestampedRawBytes>* rawQueue,
                moodycamel::ReaderWriterQueue<TableSnapshotEntry>* snapshotQueue,
-               std::atomic<int>* operationMode,
                QMutex* projectSnapshotMutex,
                const QByteArray* projectSnapshot,
                const QByteArray* viewStateSnapshot,
                const std::atomic<bool>* controlScriptSeen,
                const std::atomic<quint64>* linkDroppedFrames,
                const std::atomic<quint64>* linkOverflowBytes,
-               const std::atomic<bool>* pinBaselineToInjectionEpoch);
+               const std::atomic<bool>* pinBaselineToInjectionEpoch,
+               std::atomic<bool>* writeFailure,
+               std::atomic<quint64>* droppedBlocks);
   ~ExportWorker() override;
 
   void closeResources() override;
@@ -150,6 +125,7 @@ private:
                       qint64 t0Ns,
                       qint64 dtNs);
   void finalizeSession();
+  SS_COLD void noteWriteFailure(qint64 droppedBlocks, const QString& what);
 
   [[nodiscard]] QJsonObject buildReplayProjectJson(const DataModel::Frame& frame) const;
   [[nodiscard]] QString buildReproClassJson() const;
@@ -157,7 +133,7 @@ private:
 private:
   bool m_dbOpen;
   int m_sessionId;
-  DataModel::Frame m_templateFrame;
+  DataModel::ExportStructure m_structure;
   std::optional<QSqlDatabase> m_db;
   DataModel::ExportSchema m_schema;
   DataModel::TimestampedFrame::SteadyTimePoint m_steadyBaseline;
@@ -171,7 +147,6 @@ private:
 
   moodycamel::ReaderWriterQueue<TimestampedRawBytes>* m_rawQueue;
   moodycamel::ReaderWriterQueue<TableSnapshotEntry>* m_snapshotQueue;
-  std::atomic<int>* m_operationMode;
   QMutex* m_projectSnapshotMutex;
   const QByteArray* m_projectSnapshot;
   const QByteArray* m_viewStateSnapshot;
@@ -179,6 +154,8 @@ private:
   const std::atomic<quint64>* m_linkDroppedFrames;
   const std::atomic<quint64>* m_linkOverflowBytes;
   const std::atomic<bool>* m_pinBaselineToInjectionEpoch;
+  std::atomic<bool>* m_writeFailure;
+  std::atomic<quint64>* m_droppedBlocks;
 };
 
 /**
@@ -197,11 +174,15 @@ class Export : public DataModel::FrameConsumer<DataModel::DataBlockPtr> {
   Q_PROPERTY(int currentSessionId
              READ currentSessionId
              NOTIFY currentSessionIdChanged)
+  Q_PROPERTY(bool writeFailed
+             READ writeFailed
+             NOTIFY writeErrorChanged)
   // clang-format on
 
 signals:
   void openChanged();
   void enabledChanged();
+  void writeErrorChanged();
   void currentSessionIdChanged();
 
 private:
@@ -217,8 +198,13 @@ public:
   [[nodiscard]] static Export& instance();
 
   [[nodiscard]] bool isOpen() const;
+  [[nodiscard]] bool writeFailed() const;
   [[nodiscard]] bool exportEnabled() const;
   [[nodiscard]] int currentSessionId() const;
+  [[nodiscard]] quint64 rawOverruns() const;
+  [[nodiscard]] quint64 droppedBlocks() const;
+
+  [[nodiscard]] static int currentSessionIdOrNone();
 
 public slots:
   void closeFile();
@@ -234,6 +220,8 @@ protected:
 
 private slots:
   void onWorkerOpenChanged();
+  void onWorkerWriteFailed();
+  void onSessionBoundary(bool connected, bool paused);
   void captureTableSnapshots();
   void onWorkerSessionIdAssigned(int sessionId);
   void refreshViewStateSnapshot();
@@ -257,7 +245,6 @@ private:
 
   moodycamel::ReaderWriterQueue<TimestampedRawBytes> m_rawBytesQueue;
   moodycamel::ReaderWriterQueue<TableSnapshotEntry> m_tableSnapshotQueue;
-  alignas(kCacheLine) std::atomic<int> m_operationMode;
 
   QMap<QString, QMap<QString, DataModel::RegisterValue>> m_lastTableSnapshot;
 
@@ -267,6 +254,9 @@ private:
   QTimer m_viewStateDebounce;
 
   alignas(kCacheLine) std::atomic<bool> m_controlScriptSeen;
+  alignas(kCacheLine) std::atomic<bool> m_writeFailure;
+  alignas(kCacheLine) std::atomic<quint64> m_rawOverruns;
+  alignas(kCacheLine) std::atomic<quint64> m_droppedBlocks;
   alignas(kCacheLine) std::atomic<bool> m_pinBaselineToInjectionEpoch;
   alignas(kCacheLine) std::atomic<quint64> m_linkDroppedFrames;
   alignas(kCacheLine) std::atomic<quint64> m_linkOverflowBytes;

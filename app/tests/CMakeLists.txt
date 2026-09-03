@@ -34,14 +34,13 @@
 # and the directory-level sanitizer/optimization options. That inheritance is why the tests live
 # here instead of under the repo-root tests/ tree (which sanitize-commit.py would never format).
 #
-# All five suites are registered up front, ahead of the source files landing, so parallel follow-up
-# tasks (T3-T9) add a .cpp without contending on this file. ss_add_unit_test() skips any suite whose
-# sources are not on disk yet and says so, so the tier configures and runs at every intermediate
-# state.
+# A registration and its sources land together: ss_add_unit_test() fails the configure on a source
+# that is not on disk, because the earlier "skip and carry on" behaviour let a whole suite vanish
+# from ctest silently.
 #
 #---------------------------------------------------------------------------------------------------
 
-find_package(Qt6 REQUIRED COMPONENTS Test)
+find_package(Qt6 REQUIRED COMPONENTS Test GuiPrivate)
 
 set(SS_APP_SRC "${CMAKE_CURRENT_SOURCE_DIR}/../src")
 set(SS_UNIT_TEST_TARGETS "")
@@ -79,8 +78,10 @@ function(ss_add_unit_test NAME)
     endif()
 
     if(NOT EXISTS "${resolved}")
-      message(STATUS "Unit tests: skipping ${NAME}, ${source} lands in a follow-up task")
-      return()
+      message(FATAL_ERROR
+        "ss_add_unit_test(${NAME}): source '${source}' does not exist.\n"
+        "A silent skip is how a suite drops out of ctest without anyone noticing (the tier "
+        "rotted once already); add the file, fix the spelling, or delete the registration.")
     endif()
 
     list(APPEND resolved_sources "${resolved}")
@@ -89,6 +90,73 @@ function(ss_add_unit_test NAME)
   add_executable(${NAME} ${resolved_sources})
   target_link_libraries(${NAME} PRIVATE Qt6::Test ${SS_TEST_LIBS})
   add_test(NAME ${NAME} COMMAND ${NAME})
+
+  list(APPEND SS_UNIT_TEST_TARGETS ${NAME})
+  set(SS_UNIT_TEST_TARGETS "${SS_UNIT_TEST_TARGETS}" PARENT_SCOPE)
+endfunction()
+
+#---------------------------------------------------------------------------------------------------
+# Fuzz-target registration helper
+#---------------------------------------------------------------------------------------------------
+#
+# ss_add_fuzz_target(<name> SOURCES <files...> LIBS <targets...>)
+#
+# <name> is fuzz_<subject>. Each SOURCES file defines
+#
+#   extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
+#
+# and app/tests/fuzz/corpus/<name>/ holds the seeds -- at minimum the input of every crash the
+# target has ever found, which is what turns a fuzz target into a regression test.
+#
+# ENABLE_FUZZERS=ON  -> a real libFuzzer binary; ctest replays the corpus through it (-runs=0).
+# ENABLE_FUZZERS=OFF -> the same entry point plus fuzz/CorpusReplayMain.cpp, a QTest that feeds
+#                       every seed through it. The default configure therefore still compiles and
+#                       exercises the target, on toolchains that have no libFuzzer at all.
+#
+# Either way the target joins ss_unit_tests and ctest, so `ctest -R '^fuzz_'` is the corpus tier.
+#
+#---------------------------------------------------------------------------------------------------
+
+function(ss_add_fuzz_target NAME)
+  cmake_parse_arguments(SS_FUZZ "" "" "SOURCES;LIBS" ${ARGN})
+
+  set(resolved_sources "")
+  foreach(source IN LISTS SS_FUZZ_SOURCES)
+    if(IS_ABSOLUTE "${source}")
+      set(resolved "${source}")
+    else()
+      set(resolved "${CMAKE_CURRENT_SOURCE_DIR}/${source}")
+    endif()
+
+    if(NOT EXISTS "${resolved}")
+      message(FATAL_ERROR "ss_add_fuzz_target(${NAME}): source '${source}' does not exist.")
+    endif()
+
+    list(APPEND resolved_sources "${resolved}")
+  endforeach()
+
+  set(corpus_dir "${CMAKE_CURRENT_SOURCE_DIR}/fuzz/corpus/${NAME}")
+  if(NOT IS_DIRECTORY "${corpus_dir}")
+    message(FATAL_ERROR
+      "ss_add_fuzz_target(${NAME}): corpus directory ${corpus_dir} is missing.\n"
+      "Create it and check in at least one seed input; see app/tests/fuzz/README.md.")
+  endif()
+
+  if(ENABLE_FUZZERS)
+    add_executable(${NAME} ${resolved_sources})
+    target_link_libraries(${NAME} PRIVATE ${SS_FUZZ_LIBS})
+    target_compile_options(${NAME} PRIVATE -fsanitize=fuzzer)
+    target_link_options(${NAME} PRIVATE -fsanitize=fuzzer)
+    add_test(NAME ${NAME} COMMAND ${NAME} -runs=0 "${corpus_dir}")
+  else()
+    add_executable(${NAME}
+      ${resolved_sources}
+      ${CMAKE_CURRENT_SOURCE_DIR}/fuzz/CorpusReplayMain.cpp
+    )
+    target_link_libraries(${NAME} PRIVATE Qt6::Test ${SS_FUZZ_LIBS})
+    target_compile_definitions(${NAME} PRIVATE SS_FUZZ_CORPUS_DIR="${corpus_dir}")
+    add_test(NAME ${NAME} COMMAND ${NAME})
+  endif()
 
   list(APPEND SS_UNIT_TEST_TARGETS ${NAME})
   set(SS_UNIT_TEST_TARGETS "${SS_UNIT_TEST_TARGETS}" PARENT_SCOPE)
@@ -129,6 +197,16 @@ ss_add_unit_test(tst_checksums
 #
 ss_add_unit_test(tst_bar_bands
   SOURCES tst_bar_bands.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# The no-data severity gate the instrument widgets apply on top of that lookup (spec 0075, N3):
+# the nearest-band clamp stays, but a widget that never received a sample reports nothing, so a
+# placeholder 0.0 cannot alarm. Header-only, same seconds-long link as the lookup above.
+#
+ss_add_unit_test(tst_value_widget_hasdata
+  SOURCES tst_value_widget_hasdata.cpp
   LIBS    Qt6::Core
 )
 
@@ -669,6 +747,59 @@ ss_add_unit_test(tst_s7comm_pdu
 )
 
 #
+# ExportStructure.{h,cpp} (spec 0075 B11) is the schema half the CSV, MDF4 and Sessions export
+# workers share: how a template frame is adopted (and when it must NOT be), plus the title scrub
+# every export path names its folder with -- a path-traversal boundary that existed in three
+# drifting copies. WorkspaceManager comes in for sessionDir()'s workspace root and pulls QtWidgets
+# with it; Qt6::Gui is Frame.h's QColor fallout.
+#
+ss_add_unit_test(tst_export_structure
+  SOURCES tst_export_structure.cpp
+          ${SS_APP_SRC}/DataModel/ExportStructure.cpp
+          ${SS_APP_SRC}/DataModel/Frame.cpp
+          ${SS_APP_SRC}/DataModel/Generated/DatasetSerialization.cpp
+          ${SS_APP_SRC}/DataModel/Project/PropertyValidators.cpp
+          ${SS_APP_SRC}/Misc/WorkspaceManager.cpp
+          ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Core5Compat
+          Qt6::Gui
+          Qt6::Widgets
+)
+
+#
+# ReplayPlaybackEngine.{h,cpp} (spec 0075 B11) is the playback mechanics the CSV, MDF4 and Sessions
+# players compose: the trailing seek-window walk, the epoch that retires a superseded timer chain,
+# the steady-clock anchor that makes the RECORDING own replay time, the catch-up fill gate and the
+# two-timer scrub chain. It owns no file format and no dashboard, so the suite drives it with plain
+# lambdas and a guiless event loop.
+#
+ss_add_unit_test(tst_replay_playback_engine
+  SOURCES tst_replay_playback_engine.cpp
+          ${SS_APP_SRC}/DataModel/ReplayPlaybackEngine.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+)
+
+#
+# PolledPlcWorkerBase.{h,cpp} (spec 0075 E8) is the half of a polled-PLC worker S7 and EtherNet/IP
+# now share: the change latch that keeps an unchanged value off the wire, the OpcUaWire delta
+# encoder, the three pulled counters, the report-once link-loss edge and the dial verdict the
+# spec-0050 latch needs emitted exactly once per attempt. The suite drives it through a stub whose
+# protocol half is scripted, so it links no socket and no libplctag; Qt6::Gui is headers-only
+# fallout from OpcUaWire.h reaching SerialStudio.h (QColor).
+#
+ss_add_unit_test(tst_ethernetip_worker
+  SOURCES tst_ethernetip_worker.cpp
+          ${SS_APP_SRC}/IO/Drivers/PolledPlcWorkerBase.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+)
+
+#
 # Apci.{h,cpp} (spec 0073) is the IEC 60870-5-104 transport layer: the I/S/U frame formats, the
 # 15-bit sequence counters, the k/w windows and the t1/t2/t3 deadlines. It owns no QTimer and no
 # socket -- every deadline is a query against a caller-supplied millisecond clock -- so the whole
@@ -689,6 +820,19 @@ ss_add_unit_test(tst_iec104_apci
 #
 ss_add_unit_test(tst_iec104_asdu
   SOURCES tst_iec104_asdu.cpp
+          ${SS_APP_SRC}/IO/Drivers/Iec104/Asdu.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# Slot identity for the same application layer: a station qualifies an information-object address
+# by the type identifier that carries it, so the address alone is not an identity. Keying the
+# driver's point table on it published a measurand through a single-point input's slot and wire
+# type (spec 0075 E16). Header-only vocabulary plus the decoder's type table, no driver.
+#
+ss_add_unit_test(tst_iec104_slots
+  SOURCES tst_iec104_slots.cpp
           ${SS_APP_SRC}/IO/Drivers/Iec104/Asdu.cpp
           ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
@@ -799,6 +943,52 @@ if(TARGET open62541)
   if(TARGET tst_opcua_marshal)
     target_compile_definitions(tst_opcua_marshal PRIVATE BUILD_COMMERCIAL)
   endif()
+
+  #
+  # OpcUaSecurity owns the per-installation identity and trust store (spec 0067 stage 2). The suite
+  # generates a real self-signed certificate and drives the answers a trust prompt is built on:
+  # what the certificate names, whether the dialed host is one of those names, and whether the user
+  # accepted it. Trust is keyed on the SHA-256 fingerprint and is INDEPENDENT of the name and the
+  # clock, which is what spec 0075 E11 made the session read first. Needs no server; the sandboxed
+  # config location comes from QStandardPaths test mode inside the suite.
+  #
+  ss_add_unit_test(tst_opcua_security
+    SOURCES tst_opcua_security.cpp
+            ${SS_APP_SRC}/IO/Drivers/OpcUaSecurity.cpp
+            ${SS_APP_SRC}/SSAssert.cpp
+    LIBS    Qt6::Core
+            Qt6::Network
+            open62541
+  )
+  if(TARGET tst_opcua_security)
+    target_compile_definitions(tst_opcua_security PRIVATE BUILD_COMMERCIAL)
+  endif()
+
+  #
+  # The subscription state machine (spec 0066 R7/R8/R11). Every tick is gated on a live session, so
+  # a stub host holding an UNOPENED OpcUaSession drives exactly the paths that must survive a server
+  # answering nothing: an individual monitored-item refusal that must not drag its neighbours into
+  # polling, an all-refused verdict that must, and what a reset forgets. The session is linked
+  # because the engine listens to its signals; nothing here dials, but the session owns an
+# AsyncTcpDial member, so that TU comes along for its ctor/dtor and meta-object.
+  #
+  ss_add_unit_test(tst_opcua_subscriptions
+    SOURCES tst_opcua_subscriptions.cpp
+            ${SS_APP_SRC}/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp
+            ${SS_APP_SRC}/IO/Drivers/OpcUa/OpcUaFrameAssembler.cpp
+            ${SS_APP_SRC}/IO/Drivers/OpcUaSession.cpp
+            ${SS_APP_SRC}/IO/Drivers/OpcUaMarshal.cpp
+            ${SS_APP_SRC}/IO/Drivers/OpcUaSecurity.cpp
+            ${SS_APP_SRC}/IO/AsyncTcpDial.cpp
+            ${SS_APP_SRC}/SSAssert.cpp
+    LIBS    Qt6::Core
+            Qt6::Gui
+            Qt6::Network
+            open62541
+  )
+  if(TARGET tst_opcua_subscriptions)
+    target_compile_definitions(tst_opcua_subscriptions PRIVATE BUILD_COMMERCIAL)
+  endif()
 endif()
 
 #
@@ -835,19 +1025,28 @@ ss_add_unit_test(tst_js_watchdog
 # include that StreamWorker.cpp pulls in through FrameBuilder.h -> ... -> SerialStudio.h; the two
 # FrameBuilder table-API injectors it references are stubbed inside tst_stream_worker.cpp so the
 # suite links without the FrameBuilder dependency web. ExpressionTransform.cpp backs the
-# expression-mode channels (spec 0060) that StreamProcessor compiles and evaluates.
+# expression-mode channels (spec 0060) that StreamProcessor compiles and evaluates, and the two
+# JsWatchdog TUs back the stream lane's JS timeout (spec 0075 A1) -- the interrupt is delivered by
+# that thread, so a suite that only linked the engine could never observe a runaway abort.
+# AppPlatform.cpp backs the MMCSS registration the worker runs on its own thread, and brings the
+# QtWidgets/platform link set every other AppPlatform consumer here carries.
 #
 ss_add_unit_test(tst_stream_worker
   SOURCES tst_stream_worker.cpp
           ${SS_APP_SRC}/IO/HAL_Driver.h
           ${SS_APP_SRC}/IO/StreamWorker.cpp
           ${SS_APP_SRC}/DataModel/Scripting/ExpressionTransform.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/JsWatchdog.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/JsWatchdogThread.cpp
           ${SS_APP_SRC}/DataModel/Scripting/LuaCompat.cpp
+          ${SS_APP_SRC}/Platform/AppPlatform.cpp
           ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
           Qt6::Gui
           Qt6::Qml
+          Qt6::Widgets
           luajit
+          ${SS_PLATFORM_LIBS}
 )
 
 #
@@ -1226,6 +1425,65 @@ ss_add_unit_test(tst_server_auth
 )
 
 #
+# The reception machine against a connection table that mutates under it (spec 0075 I1): the
+# entry erased mid-dispatch, the table rehashed mid-dispatch, the HTTP sniff, the raw-forwarding
+# handshake gate and the non-blocking consent refusal. Same link set as tst_server_auth minus
+# the auth primitives; run it under ASan to make a surviving reference a hard failure.
+#
+ss_add_unit_test(tst_client_reception
+  SOURCES tst_client_reception.cpp
+          ${SS_APP_SRC}/API/Server/ClientReception.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Network
+)
+
+#
+# The path policy as command metadata (spec 0075 I3/I7). The suite links only PathPolicy.cpp and
+# sweeps the committed API snapshot, so a new command taking a path-shaped parameter fails here
+# without linking the registry or a single handler.
+#
+ss_add_unit_test(tst_path_policy_registry
+  SOURCES tst_path_policy_registry.cpp
+          ${SS_APP_SRC}/API/PathPolicy.cpp
+  LIBS    Qt6::Core
+)
+if(TARGET tst_path_policy_registry)
+  target_compile_definitions(tst_path_policy_registry
+    PRIVATE SS_API_SCHEMA_PATH="${CMAKE_CURRENT_SOURCE_DIR}/../rcc/api/api-schema.json")
+endif()
+
+#
+# The gRPC handler's abortable marshal into the GUI thread (spec 0075 I5). PendingCall is
+# header-only and pulls in no gRPC symbol, so the suite builds in a tier configured without
+# ENABLE_GRPC and needs no production TU at all.
+#
+ss_add_unit_test(tst_grpc_pending_call
+  SOURCES tst_grpc_pending_call.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# The API worker's outbound lanes against a client that never reads (spec 0075 I6). Real loopback
+# sockets, no event loop, so bytesToWrite() measures exactly what each lane queued. Frame.cpp and
+# its generated serialization TU come along because ServerWorker serializes frames.
+#
+ss_add_unit_test(tst_server_worker_caps
+  SOURCES tst_server_worker_caps.cpp
+          ${SS_APP_SRC}/API/Server/ServerWorker.cpp
+          ${SS_APP_SRC}/DataModel/FrameConsumer.cpp
+          ${SS_APP_SRC}/DataModel/Frame.cpp
+          ${SS_APP_SRC}/DataModel/Generated/DatasetSerialization.cpp
+          ${SS_APP_SRC}/DataModel/Project/PropertyValidators.cpp
+          ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Core5Compat
+          Qt6::Gui
+          Qt6::Network
+)
+
+#
 # Modbus project generation (spec 0070): the register-group -> project/parser builder that used
 # to live inside the driver. Link set mirrors tst_frame_serialization; BusType::ModBus is a
 # commercial bus enum, so the target defines the macro (like tst_opcua_project_builder).
@@ -1245,6 +1503,20 @@ ss_add_unit_test(tst_modbus_generation
 if(TARGET tst_modbus_generation)
   target_compile_definitions(tst_modbus_generation PRIVATE BUILD_COMMERCIAL)
 endif()
+
+#
+# The poll list a Modbus session is planned from, plus the RTU framing its replies are published
+# as. A group the list refuses never reaches the wire and a frame without a checksum is not an RTU
+# frame at all, so both are decided here rather than by whatever a live PLC tolerates (spec 0075
+# E12). QSettings-backed, driven inside QStandardPaths test mode.
+#
+ss_add_unit_test(tst_modbus_register_groups
+  SOURCES tst_modbus_register_groups.cpp
+          ${SS_APP_SRC}/IO/Drivers/Modbus/ModbusRegisterGroups.cpp
+          ${SS_APP_SRC}/IO/Drivers/Modbus/ModbusRtuCodec.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
 
 #
 # Serial-port identity scoring shared by UART and Modbus (spec 0070): the 100/50/10/5 ladder
@@ -1612,6 +1884,23 @@ ss_add_unit_test(tst_terminal_buffer
 # OPC UA project generation (spec 0070): tag-list -> project-JSON translation. Pure, same
 # link tier as tst_modbus_generation; commercial bus enum, so the target defines the macro.
 #
+#
+# The OPC UA value cache and delta encoder behind the publishing tick. Qt-Core-only: OpcUaWire.h
+# and OpcUaTypes.h are the transport-neutral vocabulary, so the suite links no OPC UA stack even
+# though it drives the encoder the driver ships. Frame splitting is the case that only shows up on
+# a large tag set, where restarting the cursor every tick starves every index past the cap.
+#
+ss_add_unit_test(tst_opcua_frame_assembler
+  SOURCES tst_opcua_frame_assembler.cpp
+          ${SS_APP_SRC}/IO/Drivers/OpcUa/OpcUaFrameAssembler.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+)
+if(TARGET tst_opcua_frame_assembler)
+  target_compile_definitions(tst_opcua_frame_assembler PRIVATE BUILD_COMMERCIAL)
+endif()
+
 ss_add_unit_test(tst_opcua_project_builder
   SOURCES tst_opcua_project_builder.cpp
           ${SS_APP_SRC}/IO/Drivers/OpcUa/OpcUaProjectBuilder.cpp
@@ -1643,12 +1932,702 @@ ss_add_unit_test(tst_replay_seek_engine
           ${SS_PLATFORM_LIBS}
 )
 
+#
+# The shared test doubles (spec 0075 WP0-T21). Every suite that pins a connect verdict, an
+# assistant turn or an extension download links these, so they get their own smoke suite: a
+# double that quietly stops behaving is a whole tier of green tests proving nothing.
+#
+# HAL_Driver.h and Provider.h are header-only Q_OBJECTs, so AUTOMOC's same-basename rule never
+# reaches them; listing the headers as sources is what generates their meta-objects here.
+#
+ss_add_unit_test(tst_test_doubles
+  SOURCES tst_test_doubles.cpp
+          support/FakeDriver.cpp
+          support/FakeProvider.cpp
+          support/FakeTransport.cpp
+          ${SS_APP_SRC}/IO/HAL_Driver.h
+          ${SS_APP_SRC}/AI/Providers/Provider.h
+  LIBS    Qt6::Core
+          Qt6::Gui
+          Qt6::Network
+)
+
+# The Lua execution deadline (spec 0075): a runaway chunk becomes a Lua error inside the budget,
+# a bounded one is untouched, and the verdict latches on disarm. luajit is the whole production
+# link set -- the hook TU depends on nothing else.
+#
+ss_add_unit_test(tst_lua_deadline_hook
+  SOURCES tst_lua_deadline_hook.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/LuaDeadlineHook.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          luajit
+)
+
+#
+# The guarded dry-run session (spec 0075) both editors and the API dry-runs go through: runaway
+# JavaScript and Lua both come back as errors inside the budget. Qt6::Qml supplies QJSEngine and
+# luajit the interpreter; the session TU deliberately reaches no singleton, which is what keeps
+# this link set to the two watchdog TUs.
+#
+ss_add_unit_test(tst_script_dryrun
+  SOURCES tst_script_dryrun.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/ScriptDryRun.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/LuaDeadlineHook.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/JsWatchdog.cpp
+          ${SS_APP_SRC}/DataModel/Scripting/JsWatchdogThread.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Qml
+          luajit
+)
+
+#---------------------------------------------------------------------------------------------------
+# Spec 0075 -- assistant, extensions, CLI and licensing (WP-H)
+#---------------------------------------------------------------------------------------------------
+#
+# Same rule as everything above: each suite links the production TUs it exercises and no more. The
+# turn loop itself is not here -- AI::Conversation reaches ProjectModel, the API registry and the
+# Assistant singleton, so the minimal link set that resolves is the application (the wall
+# tst_proto_importer documents). What is pinned instead is every seam the loop is built out of.
+#
+#---------------------------------------------------------------------------------------------------
+
+#
+# The provider stream parser (M10). Untrusted bytes arrive here from the model endpoint, so the
+# frame splitting, the CRLF carry-over and the two overflow reasons are checked byte by byte.
+# JsonValidator is header-only, so SSAssert.cpp plus the AI logging category is the whole link set.
+#
+ss_add_unit_test(tst_sse_event_reader
+  SOURCES tst_sse_event_reader.cpp
+          ${SS_APP_SRC}/AI/SseEventReader.cpp
+          ${SS_APP_SRC}/AI/Logging.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# The secret scrubber every tool result passes through before it enters the model context (M10).
+# Redactor.cpp is pattern matching over QString and nothing else.
+#
+ss_add_unit_test(tst_redactor
+  SOURCES tst_redactor.cpp
+          ${SS_APP_SRC}/AI/Redactor.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# The context-health probe (M10): classification, the display strip, and the compliance state
+# machine that keeps a non-compliant model from raising a permanent false alarm. QSettings-backed,
+# so the suite points the settings store at its own organization.
+#
+ss_add_unit_test(tst_sentinel_probe
+  SOURCES tst_sentinel_probe.cpp
+          ${SS_APP_SRC}/AI/SentinelProbe.cpp
+          ${SS_APP_SRC}/AI/Logging.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# The assistant's filesystem trust boundary plus the worker lane the two read tools run on
+# (J3, M10). WorkspaceManager::setTemporaryPath is what lets the suite redirect the sandbox at a
+# QTemporaryDir; it pulls QtWidgets for the folder picker it also owns.
+#
+ss_add_unit_test(tst_file_sandbox
+  SOURCES tst_file_sandbox.cpp
+          ${SS_APP_SRC}/AI/FileSandbox.cpp
+          ${SS_APP_SRC}/AI/Conversation/AsyncToolRunner.cpp
+          ${SS_APP_SRC}/AI/Tools/ToolFilesystemTools.cpp
+          ${SS_APP_SRC}/AI/Tools/ToolSchemas.cpp
+          ${SS_APP_SRC}/AI/Logging.cpp
+          ${SS_APP_SRC}/Misc/WorkspaceManager.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+          Qt6::Widgets
+)
+
+#
+# The three streaming reply state machines against canned HTTP responses (J5/J6/J8). KeyVault.cpp
+# comes in for the log placeholder the replies print; it reaches MachineID/SimpleCrypt at link time
+# only -- no vault is constructed, so no fingerprint helper ever runs. QtWidgets is MachineID's
+# QApplication include.
+#
+ss_add_unit_test(tst_reply_state_machine
+  SOURCES tst_reply_state_machine.cpp
+          support/FakeTransport.cpp
+          ${SS_APP_SRC}/AI/Providers/Provider.cpp
+          ${SS_APP_SRC}/AI/Providers/AnthropicReply.cpp
+          ${SS_APP_SRC}/AI/Providers/OpenAIReply.cpp
+          ${SS_APP_SRC}/AI/Providers/GeminiReply.cpp
+          ${SS_APP_SRC}/AI/Providers/ProviderJson.cpp
+          ${SS_APP_SRC}/AI/Providers/ThinkTagSplitter.cpp
+          ${SS_APP_SRC}/AI/SseEventReader.cpp
+          ${SS_APP_SRC}/AI/KeyVault.cpp
+          ${SS_APP_SRC}/AI/Logging.cpp
+          ${SS_APP_SRC}/Licensing/MachineID.cpp
+          ${SS_APP_SRC}/Licensing/SimpleCrypt.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+          Qt6::Network
+          Qt6::Widgets
+)
+
+#
+# The extension install trust boundary (K3/K5/K12): the digest gate, the staged swap and the
+# rollback that keeps the installed version when a download does not verify. WorkspaceManager
+# redirects the install tree at a QTemporaryDir, and FakeTransport stands in for the network the
+# local-install lane never touches.
+#
+ss_add_unit_test(tst_extension_installer
+  SOURCES tst_extension_installer.cpp
+          support/FakeTransport.cpp
+          ${SS_APP_SRC}/Misc/Extensions/ExtensionInstaller.cpp
+          ${SS_APP_SRC}/Misc/Extensions/ExtensionCatalog.cpp
+          ${SS_APP_SRC}/Misc/WorkspaceManager.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+          Qt6::Network
+          Qt6::Widgets
+)
+
+#
+# The window-to-budget rule a turn is built with (J1) and the scripted-provider contract the turn
+# loop consumes. ProviderCapabilities is header-inline, but FakeReply derives from AI::Reply, so
+# Provider.cpp comes along for that base's meta-object and vtable, and SseEventReader.cpp for the
+# one static Provider.cpp calls.
+#
+ss_add_unit_test(tst_conversation_turn
+  SOURCES tst_conversation_turn.cpp
+          support/FakeProvider.cpp
+          ${SS_APP_SRC}/AI/Conversation/TokenBudget.cpp
+          ${SS_APP_SRC}/AI/Conversation/HistorySurgery.cpp
+          ${SS_APP_SRC}/AI/Providers/Provider.cpp
+          ${SS_APP_SRC}/AI/SseEventReader.cpp
+          ${SS_APP_SRC}/AI/Logging.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Network
+)
+
+#
+# The obfuscation every stored credential and license blob sits under (M11). Characterisation,
+# not a security claim: SimpleCrypt.cpp is QtCore-only, so the whole round-trip and tamper matrix
+# checks without the licensing web around it.
+#
+ss_add_unit_test(tst_simplecrypt
+  SOURCES tst_simplecrypt.cpp
+          ${SS_APP_SRC}/Licensing/SimpleCrypt.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# The anti-rewind clock behind the grace period and the offline expiry (M11), driven through its
+# injected settings/cipher seam -- which is also what pins the once-a-minute write rate the trial
+# getters depend on (K10). MachineID.cpp comes in for the seamless now() overload the TU also
+# defines; QtWidgets is its QApplication include.
+#
+ss_add_unit_test(tst_monotonic_clock
+  SOURCES tst_monotonic_clock.cpp
+          ${SS_APP_SRC}/Licensing/MonotonicClock.cpp
+          ${SS_APP_SRC}/Licensing/MachineID.cpp
+          ${SS_APP_SRC}/Licensing/SimpleCrypt.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+          Qt6::Widgets
+)
+
+#
+# The capability token every Pro gate reads (M11): sealed-over-its-own-fields integrity, and the
+# process slot the entitlement latch watches. The suite supplies its own build salt, so the tier
+# stays independent of how the application was configured (tst_opcua_wire precedent).
+#
+ss_add_unit_test(tst_commercial_token
+  SOURCES tst_commercial_token.cpp
+          ${SS_APP_SRC}/Licensing/CommercialToken.cpp
+  LIBS    Qt6::Core
+)
+if(TARGET tst_commercial_token)
+  target_compile_definitions(tst_commercial_token PRIVATE COMMERCIAL_BUILD_SALT=0x5350454330303735ULL)
+endif()
+
+#
+# The machine fingerprint every stored secret is keyed by (M11): stable within a process, shaped
+# like a digest, and never zero. The platform read itself is not stubbed -- WP-C owns that seam --
+# so the suite asserts the derived contract only.
+#
+ss_add_unit_test(tst_machine_id_identity
+  SOURCES tst_machine_id_identity.cpp
+          ${SS_APP_SRC}/Licensing/MachineID.cpp
+          ${SS_APP_SRC}/Licensing/SimpleCrypt.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+          Qt6::Widgets
+)
+
+# The dashboard's uniform-grid block ingest (spec 0075): the sample-ring, GPS and multiplot feeds a
+# stream source depends on, the ring-capacity bound on the per-sample walk, the plot clock's
+# block-span continuation and the two block-gating paths (stale generation, column mismatch). The
+# sub-object binds plain containers and calls the facade through UI::IngestHost, so the suite stands
+# up a layout by hand and never links UI::Dashboard. Frame.cpp and its serialization/validator pair
+# come along for the Dataset/Group value types; AppPlatform.cpp is the DSP.h carve-out.
+#
+ss_add_unit_test(tst_dashboard_ingest
+  SOURCES tst_dashboard_ingest.cpp
+          ${SS_APP_SRC}/UI/Dashboard/DashboardIngest.cpp
+          ${SS_APP_SRC}/DataModel/Frame.cpp
+          ${SS_APP_SRC}/DataModel/Generated/DatasetSerialization.cpp
+          ${SS_APP_SRC}/DataModel/Project/PropertyValidators.cpp
+          ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
+          ${SS_APP_SRC}/Platform/AppPlatform.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Core5Compat
+          Qt6::Gui
+          Qt6::Widgets
+          ${SS_PLATFORM_LIBS}
+)
+
+#
+# The waterfall's baked color maps (spec 0075, F5): the LUT must be a bake of the continuous map,
+# not an approximation, because the spectrogram now indexes it per pixel. Pure QtGui value types.
+#
+ss_add_unit_test(tst_colormap_lut
+  SOURCES tst_colormap_lut.cpp
+          ${SS_APP_SRC}/UI/Widgets/Waterfall/WaterfallColorMap.cpp
+  LIBS    Qt6::Gui
+)
+
+#
+# The spectrogram's band decomposition (spec 0075, F1): the quads must tile the plot exactly
+# across the ring seam and the band boundaries, since a fractional drift draws a scan-line seam.
+# Pure geometry over QRectF, same link tier as tst_waterfall_ticks.
+#
+ss_add_unit_test(tst_waterfall_tiles
+  SOURCES tst_waterfall_tiles.cpp
+          ${SS_APP_SRC}/UI/Widgets/Waterfall/WaterfallTiles.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# The spectrogram's persistent ring texture (spec 0075, R15.1): which scanlines a tick stages,
+# where each one lands, when the staging escalates to a full upload, and the idle gate that keeps
+# an unchanged spectrum from writing a row at all. The GPU half needs a QRhi device and a window,
+# so it is not reachable from the unit tier; what is covered is the bookkeeping around it.
+#
+ss_add_unit_test(tst_waterfall_ring_texture
+  SOURCES tst_waterfall_ring_texture.cpp
+          ${SS_APP_SRC}/UI/Widgets/Waterfall/WaterfallRingTexture.cpp
+          ${SS_APP_SRC}/UI/Widgets/Waterfall/WaterfallTiles.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core Qt6::Gui Qt6::GuiPrivate Qt6::Quick
+)
+
+#
+# The MMCSS registration guard (spec 0075, N2): per thread, never process-wide. The Windows API
+# behind it is unreachable headless, but the latch that decides WHICH thread gets the real-time
+# band is recorded on every platform, so the regression is pinned everywhere.
+#
+ss_add_unit_test(tst_mmcss_registration
+  SOURCES tst_mmcss_registration.cpp
+          ${SS_APP_SRC}/Platform/AppPlatform.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+          Qt6::Widgets
+          ${SS_PLATFORM_LIBS}
+)
+
+#
+# Grow-only plot geometry (spec 0075, N4): a QSGGeometry has one pair of counts over one buffer,
+# so the old exact-fit allocate() freed and malloc'd hundreds of KB per curve per frame once the
+# round-join fan count started moving. reserveGeometry() answers whether it reallocated, which is
+# the seam this suite counts across a hundred frames of a stationary curve.
+#
+ss_add_unit_test(tst_plot_curve_geometry
+  SOURCES tst_plot_curve_geometry.cpp
+          ${SS_APP_SRC}/UI/Widgets/GpuStroke.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core Qt6::Gui Qt6::Quick
+)
+
+#
+# Terminal row removal and the selection it strands (spec 0075, F2/F17): the endpoint clamp, the
+# front erase reporting its dropped rows, and both erases trimming the colour rows in lockstep
+# with the text rows whether or not ANSI colours are on. Same link tier as tst_terminal_buffer.
+#
+ss_add_unit_test(tst_terminal_selection
+  SOURCES tst_terminal_selection.cpp
+          ${SS_APP_SRC}/UI/Widgets/Terminal/TerminalBuffer.cpp
+          ${SS_APP_SRC}/UI/Widgets/Terminal/AnsiPalette.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Gui
+)
+
+#
+# The theme color map QML binds to (spec 0075, G2): the shipped key set survives a republish, an
+# unchanged theme notifies nothing, a switch notifies only the keys that moved, and a dropped key
+# empties instead of vanishing. The rule is header-inline, so the suite compiles the header and
+# links no ThemeManager (its constructor reaches the translator, the extension manager and qApp).
+#
+ss_add_unit_test(tst_theme_property_map
+  SOURCES tst_theme_property_map.cpp
+  LIBS    Qt6::Gui
+          Qt6::Qml
+)
+if(TARGET tst_theme_property_map)
+  target_compile_definitions(tst_theme_property_map
+    PRIVATE SS_THEME_DEFAULT_JSON="${CMAKE_CURRENT_SOURCE_DIR}/../rcc/themes/default.json")
+endif()
+# Bulk-delete ordering (spec 0075 H3): the rule a tree multi-selection drains its queue with.
+# ProjectBulkOps.cpp cannot be linked here -- ProjectModel drags the application, exactly as the
+# two commented importer suites above document -- so the ordering lives in ProjectBulkOps.h and
+# the .cpp static_asserts its kind constants against ProjectEditor::ItemKind. QtCore only.
+#
+ss_add_unit_test(tst_project_bulk_ops
+  SOURCES tst_project_bulk_ops.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# Undo/redo history (spec 0031, re-checked by spec 0075): scope/commit pairing, the 1 s coalesce
+# window, the 100-step and 64 MiB bounds, save-point unreachability and redo-tail truncation.
+# ProjectHistory.cpp also carries the two RAII wrappers, whose bodies reach ProjectModel; the
+# suite supplies those two symbols as link-only stubs (session_context_stub.cpp precedent) rather
+# than linking the model.
+#
+ss_add_unit_test(tst_project_history
+  SOURCES tst_project_history.cpp
+          ${SS_APP_SRC}/DataModel/Project/ProjectHistory.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+)
+
+#
+# tst_project_workspace_refs (spec 0075 M8) is NOT registered, for the reason the two importer
+# suites above document. WorkspaceRefs is pure over the vectors it is handed, but its anchor and
+# tally passes classify widgets through SerialStudio::getDashboardWidget(s),
+# group/datasetWidgetEligibleForWorkspace and activated() -- all defined in SerialStudio.cpp, not
+# in the SerialStudioFrameSupport.cpp carve-out -- so linking the TU pulls the icon registry, the
+# theme manager and the player singletons. Stubbing those six statics would leave the anchor and
+# dataset-delete passes testing the stubs rather than the shipped classification, so the coverage
+# runs one level up instead: tests/integration/test_project_integrity.py drives group and dataset
+# deletes against a live project and asserts the workspace refs still resolve to the same widgets.
+#
+
+#---------------------------------------------------------------------------------------------------
+# Spec 0075 suites (WP-A: acquisition hotpath and sinks)
+#---------------------------------------------------------------------------------------------------
+
+#
+# Frame-lane block staging: cap/epoch flushes, the mask split, the disconnect/pause tail, the
+# structureGeneration stamp and the pool's use_count()==1 probe. BlockStager reaches its facade
+# only through BlockStagerHost, so the suite substitutes a stub host and never links FrameBuilder's
+# dependency web; the link set matches tst_frame_consumer's because DataBlock.h pulls in Frame.h.
+#
+ss_add_unit_test(tst_frame_builder_staging
+  SOURCES tst_frame_builder_staging.cpp
+          ${SS_APP_SRC}/DataModel/FrameBuilder/BlockStager.cpp
+          ${SS_APP_SRC}/DataModel/Frame.cpp
+          ${SS_APP_SRC}/DataModel/Generated/DatasetSerialization.cpp
+          ${SS_APP_SRC}/DataModel/Project/PropertyValidators.cpp
+          ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Core5Compat
+          Qt6::Gui
+)
+
+#
+# The spec-0044 capture fingerprints the session exporter writes. BlockFingerprint.{h,cpp} was split
+# out of Sessions/Export.cpp precisely so the layout can be pinned without the exporter's link set
+# (DatabaseManager, ProjectModel, FrameBuilder, Dashboard, licensing) -- QtCore is the whole tier.
+#
+ss_add_unit_test(tst_sessions_export_worker
+  SOURCES tst_sessions_export_worker.cpp
+          ${SS_APP_SRC}/Sessions/BlockFingerprint.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# Per-source export time (spec 0075 B1). The fix lives in FrameConsumerWorkerBase, shared by the CSV
+# and MDF4 workers, so the link set is the same one tst_frame_consumer uses; writing the rows needs
+# QFile and mdflib and is covered by the integration tier instead.
+#
+ss_add_unit_test(tst_csv_export_times
+  SOURCES tst_csv_export_times.cpp
+          ${SS_APP_SRC}/DataModel/FrameConsumer.cpp
+          ${SS_APP_SRC}/DataModel/Frame.cpp
+          ${SS_APP_SRC}/DataModel/Generated/DatasetSerialization.cpp
+          ${SS_APP_SRC}/DataModel/Project/PropertyValidators.cpp
+          ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Core5Compat
+          Qt6::Gui
+)
+
+#
+# The session player's index load (spec 0075 B7, B15) against archives the suite writes itself:
+# one index entry per instant regardless of dataset count, and a read-only archive still loads.
+# PlayerLoaderWorker.cpp reaches nothing but QtSql and the header-only BlockReader/StreamBlockCodec,
+# which is what keeps this a seconds-long link instead of an application one.
+#
+ss_add_unit_test(tst_sessions_loader_index
+  SOURCES tst_sessions_loader_index.cpp
+          ${SS_APP_SRC}/Sessions/PlayerLoaderWorker.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+          Qt6::Sql
+)
+
+if(TARGET tst_sessions_loader_index)
+  target_compile_definitions(tst_sessions_loader_index PRIVATE BUILD_COMMERCIAL)
+endif()
+
+# spec 0075 fuzz targets
+#
+# Untrusted-bytes harnesses (R14.3). ss_add_fuzz_target() lands with WP0: it builds a libFuzzer
+# binary when ENABLE_FUZZERS is on and otherwise a QTest-driven corpus replay, so the seeds under
+# fuzz/corpus/<name>/ run in the ordinary ctest tier either way. Each entry links only what its
+# decoder needs -- the block codec and BlockReader are header-only, the CSV row scanners are one
+# TU, and the MDF4 reader is the loader worker plus mdflib.
+#
+if(COMMAND ss_add_fuzz_target)
+  ss_add_fuzz_target(fuzz_block_codec
+    SOURCES fuzz/fuzz_block_codec.cpp
+            ${SS_APP_SRC}/SSAssert.cpp
+    LIBS    Qt6::Core Qt6::Gui Qt6::Sql
+  )
+
+  ss_add_fuzz_target(fuzz_csv_row
+    SOURCES fuzz/fuzz_csv_row.cpp
+            ${SS_APP_SRC}/CSV/Player/RowSyntax.cpp
+            ${SS_APP_SRC}/SSAssert.cpp
+    LIBS    Qt6::Core
+  )
+
+  ss_add_fuzz_target(fuzz_mdf4_reader
+    SOURCES fuzz/fuzz_mdf4_reader.cpp
+            ${SS_APP_SRC}/MDF4/PlayerLoaderWorker.cpp
+            ${SS_APP_SRC}/SSAssert.cpp
+    LIBS    Qt6::Core mdf
+  )
+else()
+  message(STATUS "Unit tests: skipping the spec-0075 fuzz targets, ss_add_fuzz_target lands in WP0")
+endif()
+
+#---------------------------------------------------------------------------------------------------
+# Connection verdict tier (spec 0075 WP-C)
+#---------------------------------------------------------------------------------------------------
+
+#
+# IO::AsyncTcpDial (spec 0075): the one-verdict-per-attempt contract of the non-blocking dial --
+# resolution, the paced refusal probe and the single connectToHost() on the caller's socket, all
+# under one deadline. The class owns no driver and no manager, so QtNetwork plus SSAssert.cpp is
+# the whole link set and the suite runs against a loopback listener it binds itself.
+#
+ss_add_unit_test(tst_async_tcp_dial
+  SOURCES tst_async_tcp_dial.cpp
+          ${SS_APP_SRC}/IO/AsyncTcpDial.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Network
+)
+
+#
+# IO::ConnectFanOut: the connect-request bookkeeping the manager publishes its state from. The
+# class queries no device and emits nothing, so ConnectFanOut.cpp plus SSAssert.cpp is the whole
+# link set; QtWidgets comes with the wait cursor, which is QApplication state.
+#
+ss_add_unit_test(tst_connect_fanout
+  SOURCES tst_connect_fanout.cpp
+          ${SS_APP_SRC}/IO/ConnectionManager/ConnectFanOut.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+          Qt6::Widgets
+)
+
+#
+# The spec-0050 verdict matrix, driven through Test::FakeDriver and the same ConnectFanOut the
+# manager uses. IO::ConnectionManager itself is deliberately absent: its link set is the whole
+# application, so the suite reproduces the five lines of connectDevice() that decide a verdict
+# instead. HAL_Driver.h is listed as a source because it is a header-only Q_OBJECT, and AUTOMOC's
+# same-basename rule never reaches a header that is not a target source; FakeDriver has a real TU,
+# which carries its own moc and the out-of-line members the matrix drives it through.
+#
+ss_add_unit_test(tst_connection_verdicts
+  SOURCES tst_connection_verdicts.cpp
+          support/FakeDriver.cpp
+          ${SS_APP_SRC}/IO/HAL_Driver.h
+          ${SS_APP_SRC}/IO/ConnectionManager/ConnectFanOut.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+          Qt6::Widgets
+)
+
+#
+# Licensing::MachineID's startup contract (spec 0075): a machine that already has a persisted
+# fingerprint must answer from it instead of spawning ioreg/reg/powershell inside the composition
+# root. SimpleCrypt.cpp comes with it because the store is encrypted; QtWidgets because
+# MachineID.cpp reaches qApp through <QApplication>.
+#
+ss_add_unit_test(tst_machine_id
+  SOURCES tst_machine_id.cpp
+          ${SS_APP_SRC}/Licensing/MachineID.cpp
+          ${SS_APP_SRC}/Licensing/SimpleCrypt.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+          Qt6::Widgets
+)
+
+#
+# The audio playback ring (spec 0075): the SPSC seam between the GUI thread and the real-time
+# callback. Header-only, so SSAssert.cpp is the whole production link set and the wrap, underrun
+# and overflow rules are pinned without a sound card.
+#
+ss_add_unit_test(tst_playback_ring
+  SOURCES tst_playback_ring.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# The UART driver's error policy (spec 0075): what ends the link and what the opt-in
+# auto-reconnect owns. UartPolicy.h is header-only and pure, so QtSerialPort is the whole link
+# set and no port has to exist for the suite to run.
+#
+ss_add_unit_test(tst_uart_policy
+  SOURCES tst_uart_policy.cpp
+  LIBS    Qt6::Core
+          Qt6::SerialPort
+)
+
+#
+# The two serial CAN adapter protocols and the policies of the base they now share: the LAWICEL
+# and analyzer decoders, the bitrate tables, the fatal-error classification behind the unplug
+# path, and the bounded receive buffer. Qt6::SerialBus exists only on a commercial configure, so
+# the suite registers behind the same guard the driver does.
+#
+if(TARGET Qt6::SerialBus)
+  ss_add_unit_test(tst_serial_can_backend
+    SOURCES tst_serial_can_backend.cpp
+            ${SS_APP_SRC}/IO/Drivers/CANBus/SlcanBackend.cpp
+            ${SS_APP_SRC}/IO/Drivers/CANBus/SeeedCanBackend.cpp
+            ${SS_APP_SRC}/IO/Drivers/CANBus/SerialCanBackendBase.cpp
+    LIBS    Qt6::Core
+            Qt6::SerialBus
+            Qt6::SerialPort
+  )
+endif()
+
+#---------------------------------------------------------------------------------------------------
+# spec 0075 fuzz targets
+#---------------------------------------------------------------------------------------------------
+#
+# ss_add_fuzz_target() is defined by the fuzz tier (WP0); the guard keeps this file configurable in
+# a tree where that tier is off. Seeds live in fuzz/corpus/<name>/ and the sanitizer job replays
+# them, so a crash found here reproduces from a checked-in file.
+# ss_add_fuzz_target(<name> SOURCES <files...> LIBS <targets...>) is provided by WP0: it builds the
+# libFuzzer entry point when ENABLE_FUZZERS is on, and otherwise a corpus-replay runner that feeds
+# every seed under fuzz/corpus/<name>/ through LLVMFuzzerTestOneInput so the target still builds and
+# runs under ctest on a plain configure. The guard keeps this file configurable before WP0 lands.
+#
+# Everything below parses bytes a CONTROLLER, BROKER or STATION chose. The rule these targets pin is
+# the one the review broke (spec 0075 E1): a wire parser answers a hostile length with an error and
+# a counter, never with an assertion.
+#
+#---------------------------------------------------------------------------------------------------
+
+if(COMMAND ss_add_fuzz_target)
+  #
+  # The API socket's reception machine: newline framing, the size/depth/rate guards, the token
+  # handshake, the HTTP sniff and the raw-forwarding gate. No handler runs -- the stub host answers
+  # every dispatch -- so a finding here is in the parser, not in a command.
+  #
+  ss_add_fuzz_target(fuzz_api_json
+    SOURCES fuzz/fuzz_api_json.cpp
+            ${SS_APP_SRC}/API/Server/ClientReception.cpp
+            ${SS_APP_SRC}/SSAssert.cpp
+    LIBS    Qt6::Core
+            Qt6::Network
+  )
+  ss_add_fuzz_target(fuzz_s7_pdu
+    SOURCES fuzz/fuzz_s7_pdu.cpp
+            ${SS_APP_SRC}/IO/Drivers/S7/S7Pdu.cpp
+            ${SS_APP_SRC}/IO/Drivers/S7Address.cpp
+            ${SS_APP_SRC}/SSAssert.cpp
+    LIBS    Qt6::Core
+  )
+
+  ss_add_fuzz_target(fuzz_isotsap
+    SOURCES fuzz/fuzz_isotsap.cpp
+            ${SS_APP_SRC}/IO/Drivers/S7/IsoTsap.cpp
+            ${SS_APP_SRC}/SSAssert.cpp
+    LIBS    Qt6::Core
+  )
+
+  ss_add_fuzz_target(fuzz_iec104_apci
+    SOURCES fuzz/fuzz_iec104_apci.cpp
+            ${SS_APP_SRC}/IO/Drivers/Iec104/Apci.cpp
+            ${SS_APP_SRC}/SSAssert.cpp
+    LIBS    Qt6::Core
+  )
+
+  ss_add_fuzz_target(fuzz_iec104_asdu
+    SOURCES fuzz/fuzz_iec104_asdu.cpp
+            ${SS_APP_SRC}/IO/Drivers/Iec104/Asdu.cpp
+            ${SS_APP_SRC}/SSAssert.cpp
+    LIBS    Qt6::Core
+  )
+
+  ss_add_fuzz_target(fuzz_sparkplug_payload
+    SOURCES fuzz/fuzz_sparkplug_payload.cpp
+            ${SS_APP_SRC}/IO/Drivers/MQTT/SparkplugPayload.cpp
+            ${SS_APP_SRC}/SSAssert.cpp
+    LIBS    Qt6::Core
+  )
+
+  ss_add_fuzz_target(fuzz_opcua_wire
+    SOURCES fuzz/fuzz_opcua_wire.cpp
+            ${SS_APP_SRC}/SSAssert.cpp
+    LIBS    Qt6::Core
+            Qt6::Gui
+  )
+else()
+  message(STATUS "Fuzz targets skipped: ss_add_fuzz_target() lands with the WP0 harness")
+endif()
+# One entry point per parser of untrusted bytes (R14.3). ss_add_fuzz_target() builds a libFuzzer
+# binary when fuzzing is configured and a corpus-replay ctest case otherwise, so the seeds under
+# corpus/<name>/ are exercised on every build either way.
+#
+#---------------------------------------------------------------------------------------------------
+
+#
+# The provider SSE stream: whatever the model endpoint returns, including a hostile or truncated
+# one. Split feeds are driven inside the entry point, so the carry-over state is fuzzed too.
+#
+ss_add_fuzz_target(fuzz_sse_reader
+  SOURCES fuzz/fuzz_sse_reader.cpp
+          ${SS_APP_SRC}/AI/SseEventReader.cpp
+          ${SS_APP_SRC}/AI/Logging.cpp
+          ${SS_APP_SRC}/SSAssert.cpp
+  LIBS    Qt6::Core
+)
+
 #---------------------------------------------------------------------------------------------------
 # Aggregate target
 #---------------------------------------------------------------------------------------------------
 #
 # `cmake --build <dir> --target ss_unit_tests` builds every suite and nothing else, so CI can run
-# the tier without ever building the application.
+# the tier without ever building the application. It stays LAST in this file: a suite registered
+# after it joins ctest but not the aggregate, so `--target ss_unit_tests` leaves it unbuilt.
 #
 #---------------------------------------------------------------------------------------------------
 

@@ -268,14 +268,15 @@ void Widgets::Terminal::renderAnsiSegment(QPainter* painter,
       ++j;
     }
 
-    const auto runText = QStringView(segment).mid(runStart, j - runStart);
-    const int runWidth = fm.horizontalAdvance(runText.toString());
+    m_runScratch.resize(0);
+    m_runScratch.append(QStringView(segment).mid(runStart, j - runStart));
+    const int runWidth = fm.horizontalAdvance(m_runScratch);
 
     if (runBg.isValid())
       painter->fillRect(xPos, y, runWidth, m_cHeight, runBg);
 
     painter->setPen(runFg);
-    painter->drawText(xPos, y, runWidth, m_cHeight, Qt::AlignVCenter, runText.toString());
+    painter->drawText(xPos, y, runWidth, m_cHeight, Qt::AlignVCenter, m_runScratch);
     xPos += runWidth;
   }
 }
@@ -619,14 +620,18 @@ void Widgets::Terminal::paintTextContent(QPainter* painter,
 
     int start = 0;
     while (start < line.length()) {
-      const int end         = qMin<int>(start + maxCharsPerLine(), line.length());
-      const QString segment = line.mid(start, end - start);
-      const int x           = rtlMode ? rightEdge - fm.horizontalAdvance(segment) : m_borderX;
+      const int end = qMin<int>(start + maxCharsPerLine(), line.length());
+      m_segmentScratch.resize(0);
+      m_segmentScratch.append(QStringView(line).mid(start, end - start));
 
-      paintSegment(painter, segment, start, colorLine, defaultTextColor, x, y, ascent, rtlMode);
+      const int segmentWidth = fm.horizontalAdvance(m_segmentScratch);
+      const int x            = rtlMode ? rightEdge - segmentWidth : m_borderX;
+
+      paintSegment(
+        painter, m_segmentScratch, start, colorLine, defaultTextColor, x, y, ascent, rtlMode);
 
       if (end == line.length() && i < repeats.size() && repeats[i] > 1)
-        drawRepeatBadge(painter, repeats[i], fm.horizontalAdvance(segment), y, rtlMode);
+        drawRepeatBadge(painter, repeats[i], segmentWidth, y, rtlMode);
 
       y     += lineHeight;
       start  = end;
@@ -1054,6 +1059,29 @@ QPoint Widgets::Terminal::positionToCursor(const QPoint& pos) const
 }
 
 /**
+ * @brief Re-anchors the selection after rows left the buffer. A shrink that leaves an endpoint
+ *        past the last row is what let a copy after a clear index off the end of the line list.
+ */
+void Widgets::Terminal::clampSelectionToBuffer()
+{
+  if (m_selectionStart.isNull() && m_selectionEnd.isNull())
+    return;
+
+  const QStringList& data = m_buffer.lines();
+  const QPoint start      = m_selectionStart;
+  const QPoint end        = m_selectionEnd;
+
+  m_selectionStart       = TerminalBuffer::clampPoint(m_selectionStart, data);
+  m_selectionEnd         = TerminalBuffer::clampPoint(m_selectionEnd, data);
+  m_selectionStartCursor = TerminalBuffer::clampPoint(m_selectionStartCursor, data);
+
+  if (start != m_selectionStart || end != m_selectionEnd) {
+    m_stateChanged = true;
+    Q_EMIT selectionChanged();
+  }
+}
+
+/**
  * @brief Copies the currently selected text to the system clipboard.
  */
 void Widgets::Terminal::copy()
@@ -1063,11 +1091,17 @@ void Widgets::Terminal::copy()
 
   QString copiedText;
   const QStringList& data = m_buffer.lines();
-  QPoint start            = m_selectionStart;
-  QPoint end              = m_selectionEnd;
+  if (data.isEmpty())
+    return;
+
+  QPoint start = m_selectionStart;
+  QPoint end   = m_selectionEnd;
 
   if (start.y() > end.y() || (start.y() == end.y() && start.x() > end.x()))
     std::swap(start, end);
+
+  start = TerminalBuffer::clampPoint(start, data);
+  end   = TerminalBuffer::clampPoint(end, data);
 
   for (int lineIndex = start.y(); lineIndex <= end.y(); ++lineIndex) {
     const QString& line = data[lineIndex];
@@ -1082,6 +1116,9 @@ void Widgets::Terminal::copy()
       startX = 0;
       endX   = line.size();
     }
+
+    startX = qBound(0, startX, static_cast<int>(line.size()));
+    endX   = qBound(0, endX, static_cast<int>(line.size()));
 
     if (startX < endX)
       copiedText.append(line.mid(startX, endX - startX));
@@ -1099,10 +1136,19 @@ void Widgets::Terminal::copy()
  */
 void Widgets::Terminal::clear()
 {
+  const bool had_selection = !m_selectionStart.isNull() || !m_selectionEnd.isNull();
+
   initBuffer();
   setCursorPosition(0, 0);
   setAutoscroll(true);
-  m_stateChanged = true;
+
+  m_selectionStart       = QPoint();
+  m_selectionEnd         = QPoint();
+  m_selectionStartCursor = QPoint();
+  m_stateChanged         = true;
+
+  if (had_selection)
+    Q_EMIT selectionChanged();
 }
 
 /**
@@ -1663,6 +1709,8 @@ void Widgets::Terminal::eraseRowsAfter(int row)
 {
   m_buffer.eraseRowsAfter(row);
   m_search.markDirty();
+  drainBufferEvents();
+  clampSelectionToBuffer();
 }
 
 /**
@@ -1673,6 +1721,8 @@ void Widgets::Terminal::eraseRowsBefore(int row)
 {
   m_buffer.eraseRowsBefore(row);
   m_search.markDirty();
+  drainBufferEvents();
+  clampSelectionToBuffer();
 }
 
 /**

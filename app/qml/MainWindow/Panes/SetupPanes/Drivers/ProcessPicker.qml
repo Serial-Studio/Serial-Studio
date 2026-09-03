@@ -28,15 +28,8 @@ import QtQuick.Controls
 
 import "../../../../Widgets" as Widgets
 
-Window {
+DriverTagPickerDialog {
   id: root
-
-  Widgets.WindowMirror {}
-
-  //
-  // Custom properties
-  //
-  property int titlebarHeight: 0
 
   //
   // Keep the PID column on its trailing edge when mirrored for RTL

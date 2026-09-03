@@ -31,6 +31,7 @@
 
 #include "DSP.h"
 #include "SerialStudio.h"
+#include "UI/Widgets/PlotBase.h"
 
 namespace UI {
 class Dashboard;
@@ -152,7 +153,7 @@ private:
   bool rebuildFftPlan(int newSize);
   void loadMarkers();
   void rebuildMarkerBins();
-  void updateMarkerValues(const int spectrumSize);
+  [[nodiscard]] bool updateMarkerValues(const int spectrumSize);
   void applyLogFrequencyBounds();
   void rebuildLogBinTable();
   void computeBinSpectrum(int spectrumSize);
@@ -196,7 +197,7 @@ private:
   std::vector<float> m_window;
   SerialStudio::FFTWindow m_windowType;
 
-  SerialStudio::InterpolationMode m_interpolationMode;
+  PlotBase m_base;
 
   kiss_fftr_cfg m_plan;
   std::vector<kiss_fft_scalar> m_samples;

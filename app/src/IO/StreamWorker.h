@@ -39,7 +39,9 @@ extern "C" {
 #include <vector>
 
 #include "DataModel/DataBlock.h"
+#include "DataModel/HotpathOptimization.h"
 #include "DataModel/Scripting/ExpressionTransform.h"
+#include "DataModel/Scripting/JsWatchdog.h"
 #include "IO/HAL_Driver.h"
 #include "ThirdParty/readerwriterqueue.h"
 
@@ -137,6 +139,8 @@ public:
 
   [[nodiscard]] quint64 displayDropCount() const noexcept { return m_displayDrops; }
 
+  [[nodiscard]] quint64 transformTimeoutCount() const noexcept { return m_transformTimeouts; }
+
 public slots:
   void onSampleBlock(const IO::SampleBlockPtr& block);
   void compileEngines();
@@ -173,6 +177,8 @@ private:
   [[nodiscard]] bool runLuaBlockTransform(ChannelState& state, quint64 blockNumber, double t0Ms);
   [[nodiscard]] bool runJsBlockTransform(ChannelState& state, quint64 blockNumber, double t0Ms);
   void runSampleTransform(ChannelState& state);
+  SS_COLD void noteTransformTimeout(const ChannelState& state);
+  void restoreRawSamples(const IO::SampleBlock& block, int index);
   void publishChannel(ChannelState& state, DataModel::BlockColumn& column);
   static void appendFftRing(ChannelState& state, const double* samples, std::size_t count);
   [[nodiscard]] std::shared_ptr<DataModel::DataBlock> claimBlockSlot();
@@ -191,13 +197,16 @@ private:
 
   lua_State* m_lua;
   QJSEngine* m_js;
+  std::unique_ptr<DataModel::JsWatchdog> m_jsWatchdog;
   QDeadlineTimer m_luaDeadline;
   bool m_inBlock;
+  bool m_jsTimedOut;
 
   int m_observedChannels;
   quint64 m_samplesProcessed;
   quint64 m_blocksProcessed;
   quint64 m_transformErrors;
+  quint64 m_transformTimeouts;
   quint64 m_displayDrops;
 
   std::vector<double> m_scratch;

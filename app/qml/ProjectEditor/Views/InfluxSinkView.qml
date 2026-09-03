@@ -197,8 +197,8 @@ Widgets.Pane {
             text: qsTr("Organization") + ":"
           } Widgets.BoundField {
             Layout.fillWidth: true
-            externalValue: Cpp_InfluxDB_Export.organization
             placeholderText: qsTr("e.g. my-org")
+            externalValue: Cpp_InfluxDB_Export.organization
             onEdited: text => Cpp_InfluxDB_Export.organization = text
           }
 
@@ -209,8 +209,8 @@ Widgets.Pane {
             text: qsTr("Bucket") + ":"
           } Widgets.BoundField {
             Layout.fillWidth: true
-            externalValue: Cpp_InfluxDB_Export.bucket
             placeholderText: qsTr("e.g. telemetry")
+            externalValue: Cpp_InfluxDB_Export.bucket
             onEdited: text => Cpp_InfluxDB_Export.bucket = text
           }
 
@@ -221,8 +221,8 @@ Widgets.Pane {
             text: qsTr("Measurement") + ":"
           } Widgets.BoundField {
             Layout.fillWidth: true
-            externalValue: Cpp_InfluxDB_Export.measurement
             placeholderText: qsTr("e.g. serial_studio")
+            externalValue: Cpp_InfluxDB_Export.measurement
             onEdited: text => Cpp_InfluxDB_Export.measurement = text
           }
 
@@ -256,7 +256,7 @@ Widgets.Pane {
             Layout.fillWidth: true
             wrapMode: Label.WordWrap
             color: Cpp_ThemeManager.colors["placeholder_text"]
-            text: qsTr("Points are written to the InfluxDB 2.x HTTP API with nanosecond precision. The token is stored encrypted on this machine and never saved into the project file.")
+            text: qsTr("Points are written to the InfluxDB 2.x HTTP API with nanosecond precision. The token is stored obfuscated in this machine's settings and never saved into the project file.")
           }
 
           Item {

@@ -90,12 +90,12 @@ Rectangle {
 
           IconImage {
             color: root.iconColor
-            source: _segment.modelData.icon ?? ""
             Layout.alignment: Qt.AlignVCenter
             Layout.preferredWidth: root.iconSize
+            source: _segment.modelData.icon ?? ""
             Layout.preferredHeight: root.iconSize
-            sourceSize: Qt.size(root.iconSize, root.iconSize)
             visible: (_segment.modelData.icon ?? "") !== ""
+            sourceSize: Qt.size(root.iconSize, root.iconSize)
           }
 
           Label {

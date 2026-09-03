@@ -135,7 +135,8 @@ void MDF4::ExportWorker::resolveBlockColumns(const DataModel::DataBlock& block)
 /**
  * @brief Writes sample @p index of @p block into its channels and saves every channel group the
  *        block touched. Each group keeps its own master time channel, which is what lets one file
- *        hold sources at different rates (spec 0055 R5). Targets come from resolveBlockColumns().
+ *        hold sources at different rates (spec 0055 R5), so the same-instant tie-break is per
+ *        source too -- a worker-wide one rewrote a second source's masters into a staircase (B1).
  */
 void MDF4::ExportWorker::writeBlockSample(const DataModel::DataBlock& block,
                                           qsizetype index,
@@ -168,21 +169,22 @@ void MDF4::ExportWorker::writeBlockSample(const DataModel::DataBlock& block,
   }
 
   const auto stamp = DataModel::sample_time(block, index);
-  const qint64 offsetNs =
-    DataModel::uniform_grid(block)
-      ? std::chrono::duration_cast<std::chrono::nanoseconds>(stamp - m_steadyBaseline).count()
-      : monotonicFrameNs(stamp, m_steadyBaseline);
+  qint64 offsetNs =
+    std::chrono::duration_cast<std::chrono::nanoseconds>(stamp - m_steadyBaseline).count();
+  if (!DataModel::uniform_grid(block))
+    offsetNs = monotonicSourceNs(block.sourceId, offsetNs);
 
   const qint64 timestampNs = systemEpochNs + offsetNs;
-  const double timestampS  = static_cast<double>(timestampNs) / 1'000'000'000.0;
 
+  // code-verify off
+  // The master is written by SaveSample from the timestamp argument. Assigning absolute epoch
+  // seconds to the time channel first was dead and misleading: mdflib overwrote it with the
+  // group's own relative time (B10).
+  // code-verify on
   for (const int groupId : m_touchedGroups) {
     auto group = m_groupMap.find(groupId);
     if (group == m_groupMap.end())
       continue;
-
-    if (group->second.timeChannel)
-      group->second.timeChannel->SetChannelValue(timestampS);
 
     m_writer->SaveSample(*group->second.channelGroup, static_cast<uint64_t>(timestampNs));
   }
@@ -203,11 +205,11 @@ void MDF4::ExportWorker::processItems(const std::vector<DataModel::DataBlockPtr>
     if (!pipeline.pipelineConnected())
       return;
 
-    if (m_templateFrame.groups.empty())
+    if (!m_structure.hasStructure())
       return;
 
-    createFile(m_templateFrame);
-    buildColumnMap(m_templateFrame);
+    createFile(m_structure.templateFrame());
+    buildColumnMap(m_structure.templateFrame());
     m_steadyBaseline = items.front()->t0;
     m_systemBaseline = std::chrono::system_clock::now();
     resetMonotonicClock();
@@ -257,98 +259,32 @@ void MDF4::ExportWorker::closeResources()
     m_writer.reset();
     m_groupMap.clear();
     m_columnMap.clear();
-    DataModel::clear_frame(m_templateFrame);
+    m_structure.clear();
   }
 }
 
 /**
  * @brief Stores the schema template frame; must run on the worker thread (queued invoke) so the
- *        assignment never races processItems() or closeResources(). An empty frame is ignored:
- *        structure arrives asynchronously and QuickPlot has none until its first frame, so an
- *        empty payload landing second would wipe an adopted template and no file would be made.
+ *        assignment never races processItems() or closeResources().
  */
 void MDF4::ExportWorker::setTemplateFrame(const DataModel::Frame& frame)
 {
-  if (frame.groups.empty())
-    return;
-
-  m_templateFrame = frame;
+  m_structure.setTemplateFrame(frame);
 }
 
 /**
- * @brief Adopts the structure the pipeline publishes when the connect-time fetch came back empty.
- *        QuickPlot derives its datasets from the first frame, so at connect there is nothing to
- *        fetch; blocks carry values only, so without this the file is never created. Ignored once
- *        a file exists -- an open file's schema is fixed for its lifetime.
+ * @brief Adopts the structure the pipeline publishes when the connect-time fetch came back empty
+ *        (QuickPlot derives its datasets from the first frame, so at connect there is none).
  */
 void MDF4::ExportWorker::applyPublishedStructure(const DataModel::Frame& frame)
 {
-  if (isResourceOpen() || !m_templateFrame.groups.empty())
-    return;
-
-  m_templateFrame = frame;
+  m_structure.applyPublishedStructure(frame, isResourceOpen());
 }
 
 /**
- * @brief Sanitizes a frame title for use as a directory name.
- */
-static QString sanitizeFrameTitle(const QString& title)
-{
-  QString frameName = title;
-  frameName.remove(QChar('/'));
-  frameName.remove(QChar('\\'));
-  frameName.remove(QChar(':'));
-  frameName.remove(QChar('*'));
-  frameName.remove(QChar('?'));
-  frameName.remove(QChar('"'));
-  frameName.remove(QChar('<'));
-  frameName.remove(QChar('>'));
-  frameName.remove(QChar('|'));
-  frameName.remove(QChar('\0'));
-  frameName.remove(QStringLiteral(".."));
-  frameName = frameName.simplified();
-
-  int keep = 0;
-  for (int i = frameName.size(); i > 0; --i) {
-    const QChar c = frameName.at(i - 1);
-    if (c != QChar('.') && c != QChar(' ')) {
-      keep = i;
-      break;
-    }
-  }
-  frameName.truncate(keep);
-
-  if (frameName.isEmpty())
-    frameName = QStringLiteral("SerialStudio");
-
-  return frameName;
-}
-
-/**
- * @brief Returns (creating it) the session directory the export writes into:
- *        <workspace MDF4>/<sanitized name>. A directory that cannot be created or entered comes
- *        back non-existent, so the caller must check exists() as the CSV lane does.
- */
-[[nodiscard]] static QDir mdf4SessionDir(const QString& sanitizedName)
-{
-  static auto& workspaceManager = Misc::WorkspaceManager::instance();
-  QDir dir(workspaceManager.path(QStringLiteral("MDF4")));
-
-  if (!dir.exists(sanitizedName) && !dir.mkpath(sanitizedName)) {
-    qWarning() << "[MDF4] failed to create export directory:" << dir.filePath(sanitizedName);
-    return QDir(dir.filePath(sanitizedName));
-  }
-
-  if (!dir.cd(sanitizedName)) {
-    qWarning() << "[MDF4] cannot enter export directory:" << dir.filePath(sanitizedName);
-    return QDir(dir.filePath(sanitizedName));
-  }
-
-  return dir;
-}
-
-/**
- * @brief Configures an mdflib data channel as either numeric (FloatLe/8) or string (Ascii/256).
+ * @brief Configures an mdflib data channel as either numeric (FloatLe/8) or string (UTF-8/256).
+ *        The strings fed to it are toStdString() of a QString, i.e. UTF-8, so declaring ISO-8859-1
+ *        mislabelled every non-ASCII value in the file (B16).
  */
 static void configureChannelType(mdf::IChannel* channel, bool isNum)
 {
@@ -359,12 +295,14 @@ static void configureChannelType(mdf::IChannel* channel, bool isNum)
     return;
   }
 
-  channel->DataType(mdf::ChannelDataType::StringAscii);
+  channel->DataType(mdf::ChannelDataType::StringUTF8);
   channel->DataBytes(256);
 }
 
 /**
- * @brief Creates a configured master time channel on the given channel group.
+ * @brief Creates a configured master time channel on the given channel group. ASAM MDF 4.1 requires
+ *        a master to declare its sync type (1..4); leaving it at 0 made the file non-conforming
+ *        and readable only through mdflib's MDF3 fallback (B10).
  */
 static mdf::IChannel* createTimeChannel(mdf::IChannelGroup* channelGroup)
 {
@@ -375,6 +313,7 @@ static mdf::IChannel* createTimeChannel(mdf::IChannelGroup* channelGroup)
   timeChannel->Name("Time");
   timeChannel->Unit("s");
   timeChannel->Type(mdf::ChannelType::Master);
+  timeChannel->Sync(mdf::ChannelSyncType::Time);
   timeChannel->DataType(mdf::ChannelDataType::FloatLe);
   timeChannel->DataBytes(8);
   return timeChannel;
@@ -463,11 +402,11 @@ void MDF4::ExportWorker::buildChannelGroupForGroup(
 void MDF4::ExportWorker::buildChannelGroups(mdf::IDataGroup* dataGroup,
                                             const DataModel::Frame& frame)
 {
-  const bool usingTemplate = !m_templateFrame.groups.empty();
-  const auto& allGroups    = usingTemplate ? m_templateFrame.groups : frame.groups;
+  const bool usingTemplate = m_structure.hasStructure();
+  const auto& allGroups    = usingTemplate ? m_structure.templateFrame().groups : frame.groups;
 
   QMap<int, QString> sourceTitles;
-  const auto& srcRefs = usingTemplate ? m_templateFrame.sources : frame.sources;
+  const auto& srcRefs = usingTemplate ? m_structure.templateFrame().sources : frame.sources;
   for (const auto& s : srcRefs)
     sourceTitles.insert(s.sourceId, s.title);
 
@@ -522,9 +461,11 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
   const auto dateTime = QDateTime::currentDateTime();
   const auto fileName =
     dateTime.toString(QStringLiteral("yyyy-MM-dd_HH-mm-ss")) + QStringLiteral(".mf4");
-  const QString frameName = sanitizeFrameTitle(frame.title);
+  const QString frameName =
+    DataModel::ExportStructure::sanitizeTitle(frame.title, QStringLiteral("SerialStudio"));
 
-  const QDir dir = mdf4SessionDir(frameName);
+  const QDir dir = DataModel::ExportStructure::sessionDir(
+    QStringLiteral("MDF4"), frame.title, QStringLiteral("SerialStudio"));
   if (!dir.exists())
     return;
 
@@ -695,17 +636,23 @@ void MDF4::Export::setupExternalConnections()
             m_sessionStructure = frame;
             refreshTemplateFrame();
           });
-  connect(
-    &IO::ConnectionManager::instance(), &IO::ConnectionManager::connectedChanged, this, [this] {
-      if (!IO::ConnectionManager::instance().isConnected())
-        closeFile();
-    });
-  connect(&IO::ConnectionManager::instance(), &IO::ConnectionManager::pausedChanged, this, [this] {
-    if (IO::ConnectionManager::instance().paused())
-      closeFile();
-    else if (IO::ConnectionManager::instance().isConnected())
-      refreshTemplateFrame();
-  });
+  // code-verify off
+  // Closing on the builder's session boundary rather than on connectedChanged/pausedChanged is
+  // what keeps the last display tick (A2): the builder flushes its open blocks into this sink's
+  // queue before emitting, and close() drains that queue before closing the file. closeResources()
+  // clears the worker's template, so a boundary that leaves the link live re-pushes it.
+  // code-verify on
+  connect(&DataModel::FrameBuilder::instance(),
+          &DataModel::FrameBuilder::sessionBoundary,
+          this,
+          [this](bool connected, bool paused) {
+            if (!connected || paused) {
+              closeFile();
+              return;
+            }
+
+            refreshTemplateFrame();
+          });
 
   connect(&AppState::instance(), &AppState::operationModeChanged, this, [this] {
     if (AppState::instance().operationMode() == SerialStudio::ConsoleOnly && exportEnabled())
@@ -763,7 +710,7 @@ void MDF4::Export::setExportEnabled(const bool enabled)
   if (enabled)
     Misc::Utilities::showMessageBox(
       tr("MDF4 Export is a Pro feature."),
-      tr("This feature requires a license. Please purchase one to enable MDF4 export."));
+      tr("Activate Serial Studio Pro or start the free trial to enable MDF4 export."));
 }
 
 /**

@@ -706,10 +706,10 @@ MQTT::SparkplugPublisher::Message MQTT::SparkplugPublisher::beginConnection(quin
 }
 
 /**
- * @brief Builds the birth certificate: an NBIRTH with bdSeq and the rebirth control, plus every
- *        metric's name, alias and datatype, and a DBIRTH when a device is configured (R40).
- *        Building does not mark the node born: only commitBirth does, once the caller confirms
- *        every message on the wire, so a lost birth cannot strand data on aliases never received.
+ * @brief Builds the birth certificate: an NBIRTH with bdSeq, the rebirth control and every metric's
+ *        identity, plus a DBIRTH when a device is configured (R40). Only commitBirth marks the node
+ *        born. The sequence restarts at ZERO here, not in beginConnection: a rebirth is an NBIRTH
+ *        too, and every NBIRTH carries seq 0 (Sparkplug B 3.0 tck-id-payloads-sequence-num-zero).
  */
 QVector<MQTT::SparkplugPublisher::Message> MQTT::SparkplugPublisher::birthMessages(
   quint64 timestampMs)
@@ -717,6 +717,7 @@ QVector<MQTT::SparkplugPublisher::Message> MQTT::SparkplugPublisher::birthMessag
   SS_ASSERT(valid(), return QVector<Message>());
   SS_ASSERT_LOG(m_metrics.size() <= SpPubLimits::kMaxMetrics);
 
+  m_seq             = 0;
   const bool device = !m_config.deviceId.isEmpty();
   QVector<Message> out;
   out.reserve(2);

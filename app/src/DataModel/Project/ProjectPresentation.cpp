@@ -373,15 +373,15 @@ QJsonObject DataModel::ProjectPresentation::pluginState(const QString& pluginId)
 void DataModel::ProjectPresentation::savePluginState(const QString& pluginId,
                                                      const QJsonObject& state)
 {
+  if (!widget_settings_active())
+    return;
+
   const auto key = QStringLiteral("plugin:") + pluginId;
   if (m_widgetSettings.value(key).toObject() == state)
     return;
 
   m_widgetSettings.insert(key, state);
-  static auto& appState = AppState::instance();
-  if (appState.operationMode() == SerialStudio::ProjectFile)
-    m_model.setModified(true);
-
+  m_model.setModified(true);
   Q_EMIT m_model.widgetSettingsChanged();
 }
 

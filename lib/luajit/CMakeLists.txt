@@ -1,5 +1,6 @@
 #
-# LuaJIT 2.1 (rolling, pinned commit recorded in ../.relver + doc/claude/specs/0051) —
+# LuaJIT 2.1 (rolling; .relver holds the commit's epoch, and lib/VERSIONS.json resolves it
+# to the commit SHA — see also doc/claude/specs/0051) —
 # embedded as a static library replacing Lua 5.4 for every scripting surface (spec 0051 M2).
 #
 # LuaJIT cannot reuse the lua54 "compile as C++" recipe: it is C-only, ships a two-stage

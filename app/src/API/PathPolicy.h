@@ -22,7 +22,20 @@
 #pragma once
 
 #include <QString>
+#include <QVector>
 
 namespace API {
-bool isPathAllowed(const QString& filePath, bool allowNonexistent = false);
+
+/**
+ * @brief One command parameter that names a file-system path, and whether the target may be
+ *        missing (a save destination) or has to exist already (an input file).
+ */
+struct PathParamPolicy {
+  QString name;
+  bool allowMissing;
+};
+
+[[nodiscard]] bool isPathAllowed(const QString& filePath, bool allowNonexistent = false);
+[[nodiscard]] QVector<PathParamPolicy> declaredPathParams(const QString& command);
+
 }  // namespace API

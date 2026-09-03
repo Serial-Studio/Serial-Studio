@@ -35,6 +35,79 @@ constexpr double kFeatherPx = 1.0;
 constexpr double kFanStep = 0.39269908;
 constexpr int kFanMax     = 8;
 
+//--------------------------------------------------------------------------------------------------
+// Grow-only geometry buffers
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Capacity to request for @p needed elements given @p held, never below either, never over
+ *        the geometry ceiling.
+ */
+static int grownCapacity(const int needed, const int held)
+{
+  SS_ASSERT(needed >= 0, return held);
+  SS_ASSERT(held >= 0, return needed);
+
+  const qsizetype grown = static_cast<qsizetype>(needed)
+                        * Widgets::GpuStroke::kGeometryHeadroomNumerator
+                        / Widgets::GpuStroke::kGeometryHeadroomDenominator;
+  const qsizetype capped =
+    std::min(std::max(grown, static_cast<qsizetype>(needed)), Widgets::GpuStroke::kMaxGeometry);
+  return static_cast<int>(std::max(capped, static_cast<qsizetype>(held)));
+}
+
+/**
+ * @brief Grows @p geometry to hold at least @p vertices and @p indices, reusing the allocation
+ *        whenever it already does, and answers whether it reallocated. Qt 6.11's qsggeometry.h
+ *        carries ONE pair of counts over one buffer and no separate capacity, so any count change
+ *        re-lays it out -- hundreds of KB per curve per frame once join fans move it (N4).
+ */
+bool Widgets::GpuStroke::reserveGeometry(QSGGeometry* geometry,
+                                         const int vertices,
+                                         const int indices)
+{
+  SS_ASSERT(geometry != nullptr, return false);
+  SS_ASSERT(vertices > 0, return false);
+
+  const int heldVertices = geometry->vertexCount();
+  const int heldIndices  = geometry->indexCount();
+  if (heldVertices >= vertices && heldIndices >= indices && heldVertices > 0)
+    return false;
+
+  int indexCapacity = grownCapacity(indices, heldIndices);
+  if (indexCapacity > 0)
+    indexCapacity += (3 - indexCapacity % 3) % 3;
+
+  geometry->allocate(grownCapacity(vertices, heldVertices), indexCapacity);
+  return true;
+}
+
+/**
+ * @brief Makes everything past @p vertices / @p indices draw nothing: the spare index slots become
+ *        zero-area triangles and the spare vertices repeat the last real one, which also keeps the
+ *        renderer's batch bounds inside the curve instead of over uninitialised memory.
+ */
+void Widgets::GpuStroke::padGeometryTail(QSGGeometry* geometry,
+                                         const int vertices,
+                                         const int indices)
+{
+  SS_ASSERT(geometry != nullptr, return);
+  SS_ASSERT(vertices > 0 && geometry->vertexCount() >= vertices, return);
+
+  auto* vertexData         = geometry->vertexDataAsColoredPoint2D();
+  const int vertexCapacity = geometry->vertexCount();
+  for (int i = vertices; i < vertexCapacity; ++i)
+    vertexData[i] = vertexData[vertices - 1];
+
+  const int indexCapacity = geometry->indexCount();
+  if (indexCapacity <= indices)
+    return;
+
+  quint32* indexData = geometry->indexDataAsUInt();
+  for (int i = indices; i < indexCapacity; ++i)
+    indexData[i] = 0;
+}
+
 /**
  * @brief Encodes a premultiplied vertex color for QSGVertexColorMaterial.
  */
@@ -579,8 +652,7 @@ QSGGeometryNode* Widgets::GpuStroke::buildStrokeNode(QSGGeometryNode* node,
 
   auto* geometry = node->geometry();
   SS_ASSERT(geometry != nullptr, return node);
-  if (geometry->vertexCount() != vertices || geometry->indexCount() != idxs)
-    geometry->allocate(vertices, idxs);
+  (void)reserveGeometry(geometry, vertices, idxs);
 
   int v   = 0;
   int idx = 0;
@@ -602,6 +674,7 @@ QSGGeometryNode* Widgets::GpuStroke::buildStrokeNode(QSGGeometryNode* node,
     start += len;
   }
 
+  padGeometryTail(geometry, vertices, idxs);
   node->markDirty(QSGNode::DirtyGeometry);
   return node;
 }
@@ -658,8 +731,7 @@ QSGGeometryNode* Widgets::GpuStroke::buildPointNode(QSGGeometryNode* node,
 
   auto* geometry = node->geometry();
   SS_ASSERT(geometry != nullptr, return node);
-  if (geometry->vertexCount() != vertices || geometry->indexCount() != idxs)
-    geometry->allocate(vertices, idxs);
+  (void)reserveGeometry(geometry, vertices, idxs);
 
   auto* vertexData = geometry->vertexDataAsColoredPoint2D();
   auto* indexData  = geometry->indexDataAsUInt();
@@ -673,6 +745,7 @@ QSGGeometryNode* Widgets::GpuStroke::buildPointNode(QSGGeometryNode* node,
     emitPointQuad(vertexData, indexData, v, idx, px[i], halfSize, colors[i]);
   }
 
+  padGeometryTail(geometry, vertices, idxs);
   node->markDirty(QSGNode::DirtyGeometry);
   return node;
 }

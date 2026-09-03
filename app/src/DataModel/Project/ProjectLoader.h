@@ -55,6 +55,9 @@ public:
 
   void openJsonFile();
   [[nodiscard]] bool openJsonFile(const QString& path);
+
+  [[nodiscard]] bool lastOpenReloaded() const noexcept { return m_lastOpenReloaded; }
+
   [[nodiscard]] bool loadFromJsonDocument(const QJsonDocument& document, const QString& sourcePath);
   void importProjectFromJson(const QJsonObject& project, const QString& suggestedFileName);
 
@@ -94,6 +97,7 @@ private:
 
 private:
   ProjectModel& m_model;
+  bool m_lastOpenReloaded;
 };
 
 }  // namespace DataModel

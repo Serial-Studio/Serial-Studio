@@ -97,8 +97,8 @@ Widgets.SmartDialog {
       wrapMode: Text.WordWrap
       font: Cpp_Misc_CommonFonts.uiFont
       color: Cpp_ThemeManager.colors["text"]
-      text: qsTr("Bring your own API keys. They are encrypted at rest with "
-              + "a per-machine key and never leave your computer except to "
+      text: qsTr("Bring your own API keys. They are stored obfuscated in this "
+              + "machine's settings and never leave your computer except to "
               + "communicate with the provider you select.")
     }
 
@@ -312,6 +312,36 @@ Widgets.SmartDialog {
               icon.color: Cpp_ThemeManager.colors["text"]
               icon.source: "qrc:/icons/buttons/refresh.svg"
               onClicked: Cpp_AI_Assistant.refreshLocalModels()
+            }
+          }
+
+          //
+          // Context-window row: a local model that advertises less than the 128k default must be
+          // told, or the server silently truncates the system prompt out of every request
+          //
+          RowLayout {
+            spacing: 6
+            Layout.fillWidth: true
+            visible: !Cpp_AI_Assistant.requiresApiKey(root.providerIdx)
+
+            Label {
+              font: Cpp_Misc_CommonFonts.uiFont
+              color: Cpp_ThemeManager.colors["text"]
+              text: qsTr("Context window") + ":"
+            }
+
+            Widgets.LineField {
+              id: contextField
+
+              Layout.fillWidth: true
+              font: Cpp_Misc_CommonFonts.monoFont
+              text: String(Cpp_AI_Assistant.localContextWindow())
+              placeholderText: qsTr("Tokens the model accepts, e.g. 8192")
+              validator: IntValidator { bottom: 1024; top: 1048576 }
+              onEditingFinished: {
+                if (acceptableInput)
+                  Cpp_AI_Assistant.setLocalContextWindow(parseInt(text))
+              }
             }
           }
         }

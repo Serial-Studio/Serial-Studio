@@ -623,8 +623,8 @@ Popup {
       id: _export
 
       expandable: true
-      text: node !== null ? node.title : ""
       Layout.fillWidth: true
+      text: node !== null ? node.title : ""
       visible: root.anyChildVisible(childItems)
       icon.source: node !== null ? Cpp_Misc_IconRegistry.iconById(node.icon, 32) : ""
 
@@ -696,8 +696,8 @@ Popup {
       id: _tools
 
       expandable: true
-      text: node !== null ? node.title : ""
       Layout.fillWidth: true
+      text: node !== null ? node.title : ""
       visible: root.anyChildVisible(childItems)
       icon.source: node !== null ? Cpp_Misc_IconRegistry.iconById(node.icon, 32) : ""
 

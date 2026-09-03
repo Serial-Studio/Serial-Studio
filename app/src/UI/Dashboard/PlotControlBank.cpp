@@ -173,6 +173,7 @@ void UI::PlotControlBank::setPlotSweep(const int index,
   const auto& tk = Licensing::CommercialToken::current();
   const bool ok  = enabled && tk.isValid() && SS_LICENSE_GUARD();
 #else
+  Q_UNUSED(enabled)
   const bool ok = false;
 #endif
 
@@ -205,6 +206,7 @@ void UI::PlotControlBank::setMultiplotSweep(const int index,
   const auto& tk = Licensing::CommercialToken::current();
   const bool ok  = enabled && tk.isValid() && SS_LICENSE_GUARD();
 #else
+  Q_UNUSED(enabled)
   const bool ok = false;
 #endif
 

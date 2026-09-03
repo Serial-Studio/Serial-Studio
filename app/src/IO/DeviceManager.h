@@ -79,6 +79,7 @@ private:
   FrameConfig m_frameConfig;
   std::unique_ptr<HAL_Driver> m_driver;
   QPointer<FrameReader> m_frameReader;
+  QMetaObject::Connection m_readerFeed;
 };
 
 }  // namespace IO

@@ -27,6 +27,7 @@
 #include <QMessageBox>
 
 #include "DataModel/FrameBuilder.h"
+#include "DataModel/Scripting/ScriptDryRun.h"
 #include "Misc/CommonFonts.h"
 #include "Misc/ThemeManager.h"
 #include "Misc/Translator.h"
@@ -173,7 +174,14 @@ void DataModel::TransmitTestDialog::evaluate()
 
   m_frameBuilder.refreshTableStoreFromProjectModel();
 
-  QJSEngine engine;
+  ScriptDryRun session(
+    ScriptDryRun::Language::JavaScript, kScriptDryRunBudgetMs, "outputWidget.transmitTest");
+  if (!session.valid()) {
+    displayOutput({}, tr("Failed to create the test engine."));
+    return;
+  }
+
+  QJSEngine& engine = *session.jsEngine();
 #ifdef BUILD_COMMERCIAL
   Widgets::Output::Base::installProtocolHelpers(engine);
 #endif
@@ -181,7 +189,13 @@ void DataModel::TransmitTestDialog::evaluate()
 
   const auto wrapped =
     QStringLiteral("(function() { %1; return transmit; })()").arg(m_transmitCode);
-  auto transmitFn = engine.evaluate(wrapped);
+  auto transmitFn = session.evaluate(wrapped, QStringLiteral("transmit_test.js"));
+  if (session.timedOut()) {
+    displayOutput(
+      {}, tr("The transmit code did not finish evaluating within %1 ms.").arg(session.budgetMs()));
+    return;
+  }
+
   if (!transmitFn.isCallable()) {
     const auto msg =
       transmitFn.isError() ? transmitFn.toString() : tr("transmit function is not callable");
@@ -202,7 +216,12 @@ void DataModel::TransmitTestDialog::evaluate()
       jsValue = engine.toScriptValue(input);
   }
 
-  auto result = transmitFn.call(QJSValueList{jsValue});
+  auto result = session.call(transmitFn, QJSValueList{jsValue});
+  if (session.timedOut()) {
+    displayOutput({}, tr("transmit() did not return within %1 ms.").arg(session.budgetMs()));
+    return;
+  }
+
   if (result.isError()) {
     displayOutput({}, result.toString());
     return;

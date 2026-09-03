@@ -67,6 +67,9 @@ MQTT::Publisher::Publisher()
   , m_hostname(QStringLiteral("127.0.0.1"))
   , m_rawBytesQueue(8192)
   , m_rawFramesQueue(8192)
+  , m_hotEnabled(false)
+  , m_hotSparkplug(false)
+  , m_hotHasTopic(false)
   , m_workerMode(static_cast<int>(Mode::RawRxData))
   , m_workerScriptLanguage(0)
   , m_isConnected(false)
@@ -339,7 +342,7 @@ QString MQTT::Publisher::privateKeyPath() const
 }
 
 /**
- * @brief Returns the private-key passphrase (kept in the encrypted vault, never in projects).
+ * @brief Returns the private-key passphrase (kept obfuscated in the vault, never in projects).
  */
 QString MQTT::Publisher::keyPassphrase() const
 {
@@ -803,6 +806,7 @@ void MQTT::Publisher::setEnabled(const bool enabled)
     return;
 
   m_enabled = enabled;
+  m_hotEnabled.store(enabled, std::memory_order_relaxed);
   setConsumerEnabled(enabled);
 
   if (enabled) {
@@ -1120,6 +1124,7 @@ void MQTT::Publisher::setTopicBase(const QString& topic)
     return;
 
   m_topicBase = topic;
+  m_hotHasTopic.store(!topic.isEmpty(), std::memory_order_relaxed);
   markConfigChanged();
 }
 
@@ -1181,6 +1186,7 @@ void MQTT::Publisher::setSparkplugEnabled(const bool enabled)
     return;
 
   m_sparkplugEnabled = enabled;
+  m_hotSparkplug.store(enabled, std::memory_order_relaxed);
   markConfigChanged();
 }
 
@@ -1231,14 +1237,16 @@ void MQTT::Publisher::setSparkplugEdgeNodeId(const QString& edgeNodeId)
  */
 void MQTT::Publisher::ingestBlock(const DataModel::DataBlockPtr& block)
 {
-  if (!m_enabled || !licenseValid()) [[likely]]
+  if (!m_hotEnabled.load(std::memory_order_relaxed) || !licenseValid()) [[likely]]
     return;
 
-  if (!m_sparkplugEnabled && m_mode != static_cast<int>(Mode::DashboardDataJson)
-      && m_mode != static_cast<int>(Mode::DashboardDataCsv))
+  const bool sparkplug = m_hotSparkplug.load(std::memory_order_relaxed);
+  const int mode       = m_workerMode.load(std::memory_order_relaxed);
+  if (!sparkplug && mode != static_cast<int>(Mode::DashboardDataJson)
+      && mode != static_cast<int>(Mode::DashboardDataCsv))
     return;
 
-  if (!block || (!m_sparkplugEnabled && m_topicBase.isEmpty()))
+  if (!block || (!sparkplug && !m_hotHasTopic.load(std::memory_order_relaxed)))
     return;
 
   enqueueData(block);
@@ -1251,13 +1259,14 @@ void MQTT::Publisher::ingestBlock(const DataModel::DataBlockPtr& block)
  */
 void MQTT::Publisher::hotpathTxRawBytes(int deviceId, const IO::CapturedDataPtr& data)
 {
-  if (!m_enabled || !licenseValid()) [[likely]]
+  if (!m_hotEnabled.load(std::memory_order_relaxed) || !licenseValid()) [[likely]]
     return;
 
-  if (m_sparkplugEnabled || m_mode != static_cast<int>(Mode::RawRxData))
+  if (m_hotSparkplug.load(std::memory_order_relaxed)
+      || m_workerMode.load(std::memory_order_relaxed) != static_cast<int>(Mode::RawRxData))
     return;
 
-  if (!data || data->data.isEmpty() || m_topicBase.isEmpty())
+  if (!data || data->data.isEmpty() || !m_hotHasTopic.load(std::memory_order_relaxed))
     return;
 
   TimestampedRawBytes item{deviceId, data};
@@ -1270,13 +1279,14 @@ void MQTT::Publisher::hotpathTxRawBytes(int deviceId, const IO::CapturedDataPtr&
  */
 void MQTT::Publisher::hotpathTxRawFrame(int deviceId, const IO::CapturedDataPtr& data)
 {
-  if (!m_enabled || !licenseValid()) [[likely]]
+  if (!m_hotEnabled.load(std::memory_order_relaxed) || !licenseValid()) [[likely]]
     return;
 
-  if (m_sparkplugEnabled || m_mode != static_cast<int>(Mode::ScriptDriven))
+  if (m_hotSparkplug.load(std::memory_order_relaxed)
+      || m_workerMode.load(std::memory_order_relaxed) != static_cast<int>(Mode::ScriptDriven))
     return;
 
-  if (!data || data->data.isEmpty() || m_topicBase.isEmpty())
+  if (!data || data->data.isEmpty() || !m_hotHasTopic.load(std::memory_order_relaxed))
     return;
 
   TimestampedRawBytes item{deviceId, data};

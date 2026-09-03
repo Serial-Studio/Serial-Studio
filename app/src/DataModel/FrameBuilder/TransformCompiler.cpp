@@ -43,6 +43,7 @@ extern "C" {
 #include "DataModel/Scripting/DeviceWriteApi.h"
 #include "DataModel/Scripting/LuaCompat.h"
 #include "DataModel/Scripting/LuaCompatJIT.h"
+#include "DataModel/Scripting/LuaDeadlineHook.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
 #include "SerialStudio.h"
 #include "SSAssert.h"
@@ -50,9 +51,6 @@ extern "C" {
 //--------------------------------------------------------------------------------------------------
 // Constants & file-local helpers
 //--------------------------------------------------------------------------------------------------
-
-// Instruction count between watchdog hook runs while the JIT is off (Safe execution mode)
-static constexpr int kTransformHookInstrCount = 10000;
 
 /**
  * @brief Opens the safe Lua libraries needed by transforms and strips dangerous globals, including
@@ -113,25 +111,6 @@ static void openSafeLibsForTransform(lua_State* L)
   lua_pushnil(L);
   lua_setglobal(L, "debug");
   return accepts;
-}
-
-/**
- * @brief Lua LUA_MASKCOUNT hook that aborts runaway transforms via luaL_error() when the per-engine
- * deadline expires.
- */
-static void transformLuaWatchdogHook(lua_State* L, lua_Debug* ar)
-{
-  Q_UNUSED(ar)
-
-  lua_getfield(L, LUA_REGISTRYINDEX, "__ss_transform__");
-  auto* engine = static_cast<DataModel::TransformEngine*>(lua_touserdata(L, -1));
-  lua_pop(L, 1);
-
-  if (!engine) [[unlikely]]
-    return;
-
-  if (engine->luaDeadline.hasExpired()) [[unlikely]]
-    luaL_error(L, "transform timed out after %d ms", DataModel::kTransformWatchdogMs);
 }
 
 /**
@@ -326,8 +305,8 @@ void DataModel::TransformCompiler::compileLua(TransformEngine& engine,
     DataModel::ScriptApiCall::installLua(state, ctx->sourceId);
     DataModel::NotificationCenter::installScriptApi(state);
 
-    lua_pushlightuserdata(state, ctx->engine);
-    lua_setfield(state, LUA_REGISTRYINDEX, "__ss_transform__");
+    DataModel::LuaDeadlineHook::bind(
+      state, &ctx->engine->luaDeadline, DataModel::kTransformWatchdogMs, "transform");
     return 0;
   };
 
@@ -346,7 +325,7 @@ void DataModel::TransformCompiler::compileLua(TransformEngine& engine,
     luaJIT_setmode(L, 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_ON);
   } else {
     luaJIT_setmode(L, 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_OFF);
-    lua_sethook(L, &transformLuaWatchdogHook, LUA_MASKCOUNT, kTransformHookInstrCount);
+    LuaDeadlineHook::enable(L);
   }
 
   engine.luaDeadline.setRemainingTime(kTransformWatchdogMs);

@@ -96,7 +96,11 @@ static QVector<QPair<QColor, QColor>> extractDeviceColors(const QJsonObject& col
 /**
  * @brief Constructs the ThemeManager object and initializes theme loading.
  */
-Misc::ThemeManager::ThemeManager() : m_theme(0), m_applyingTheme(false), m_persistSettings(true)
+Misc::ThemeManager::ThemeManager()
+  : m_theme(0)
+  , m_colorMap(QQmlPropertyMap::create(this))
+  , m_applyingTheme(false)
+  , m_persistSettings(true)
 {
   m_catalog.loadBuiltInThemes();
   loadUserThemes();
@@ -163,6 +167,17 @@ const QString& Misc::ThemeManager::themeName() const
 const QVariantMap& Misc::ThemeManager::colors() const
 {
   return m_colors;
+}
+
+/**
+ * @brief Returns the per-key color map QML binds to. Reading one color through it costs one
+ *        property lookup and re-evaluates on that key alone; the QVariantMap property it
+ *        replaced converted all 118 entries on every read, for every one of the ~2700 bindings
+ *        that read a color (G2).
+ */
+QQmlPropertyMap* Misc::ThemeManager::colorMap()
+{
+  return m_colorMap;
 }
 
 /**
@@ -255,6 +270,7 @@ void Misc::ThemeManager::setTheme(const int index)
   m_widgetColors = extractWidgetColors(data.value("colors").toObject());
   m_deviceColors = extractDeviceColors(data.value("colors").toObject());
   m_parameters   = jsonObjectToVariantMap(data.value("parameters").toObject());
+  Misc::syncColorMap(*m_colorMap, m_colors);
 
   m_palette.setColor(QPalette::Mid, getColor("mid"));
   m_palette.setColor(QPalette::Dark, getColor("dark"));
@@ -334,6 +350,7 @@ void Misc::ThemeManager::loadSystemTheme()
   m_widgetColors = extractWidgetColors(data.value("colors").toObject());
   m_deviceColors = extractDeviceColors(data.value("colors").toObject());
   m_parameters   = jsonObjectToVariantMap(data.value("parameters").toObject());
+  Misc::syncColorMap(*m_colorMap, m_colors);
 
   Q_EMIT themeChanged();
 

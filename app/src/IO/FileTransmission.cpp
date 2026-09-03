@@ -586,7 +586,8 @@ void IO::FileTransmission::setRuntimeAccessAllowed(bool allowed)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Sends the next line from the file (plain text mode).
+ * @brief Sends the next line from the file (plain text mode). A BLANK line is sent too: dropping
+ *        it broke every protocol that ends a message with an empty line.
  */
 void IO::FileTransmission::sendLine()
 {
@@ -600,16 +601,16 @@ void IO::FileTransmission::sendLine()
 
   if (m_stream && !m_stream->atEnd()) {
     auto line = m_stream->readLine();
-    if (!line.isEmpty()) {
-      if (!line.endsWith("\n"))
-        line.append("\n");
+    if (!line.endsWith("\n"))
+      line.append("\n");
 
-      auto data = line.toUtf8();
-      (void)m_connectionManager->writeData(data);
-      m_bytesSent = m_stream->pos();
-      Q_EMIT progressChanged();
-    }
-  } else {
+    auto data = line.toUtf8();
+    (void)m_connectionManager->writeData(data);
+    m_bytesSent = m_stream->pos();
+    Q_EMIT progressChanged();
+  }
+
+  else {
     stopTransmission();
     m_statusText = tr("Transmission complete");
     Q_EMIT statusTextChanged();
@@ -688,12 +689,16 @@ void IO::FileTransmission::onProtocolStatus(const QString& message)
   m_statusText = message;
   Q_EMIT statusTextChanged();
   appendLog(message);
+}
 
-  if (message.contains("NAK") || message.contains("retry", Qt::CaseInsensitive)
-      || message.contains("Timeout")) {
-    ++m_errorCount;
-    Q_EMIT errorCountChanged();
-  }
+/**
+ * @brief Counts one recoverable protocol error. The protocols report these typed, so the count is
+ *        the same in every language and covers the errors whose text never said "NAK".
+ */
+void IO::FileTransmission::onProtocolError()
+{
+  ++m_errorCount;
+  Q_EMIT errorCountChanged();
 }
 
 /**
@@ -788,6 +793,8 @@ void IO::FileTransmission::connectProtocol(IO::Protocols::Protocol* protocol)
           &FileTransmission::onProtocolProgress);
   connect(
     protocol, &IO::Protocols::Protocol::statusMessage, this, &FileTransmission::onProtocolStatus);
+  connect(
+    protocol, &IO::Protocols::Protocol::protocolError, this, &FileTransmission::onProtocolError);
   connect(protocol,
           &IO::Protocols::Protocol::writeRequested,
           this,

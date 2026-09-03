@@ -155,6 +155,7 @@ private slots:
   void nakResendsTheSameBlock();
   void nakBeyondMaxRetriesCancelsTheTransfer();
   void ackResetsTheRetryCounter();
+  void recoverableErrorsAreReportedTyped();
 
   void receiverCanAbortsTheTransfer();
   void cancelTransferOnIdleProtocolIsSilent();
@@ -177,7 +178,7 @@ private slots:
   void ymodemRunsTheFullBatchHandshake();
   void ymodemEndOfBatchBlockIsAllZeroes();
   void ymodemNakResendsTheSameDataBlock();
-  void ymodemCancelLeavesTheBatchStateStale();
+  void ymodemCancelResetsTheBatchState();
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -509,11 +510,10 @@ void TstXyModem::blockNumberWrapsAtTheByteBoundary()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief A NAK must seek back and resend the identical packet: same block number, same payload,
- *        same CRC. It does not. XMODEM::handleAckByte() leaves m_state at WaitingForAck across its
- *        NAK branch, so sendBlock()'s `m_state == SendingBlocks` assertion rejects the resend --
- *        an abort in debug builds, a dropped block in release. The rollback bookkeeping in front of
- *        it (progress rewound, file seeked) does run, so only the packet goes missing.
+ * @brief A NAK seeks back and resends the identical packet: same block number, same payload, same
+ *        CRC. The NAK branch returns the state to SendingBlocks first, which is what sendBlock()
+ *        asserts on: resending from WaitingForAck aborted debug builds and dropped the block in
+ *        release (spec 0075, C1).
  */
 void TstXyModem::nakResendsTheSameBlock()
 {
@@ -531,19 +531,18 @@ void TstXyModem::nakResendsTheSameBlock()
   sender.processInput(byteOf(kCrcStart));
   sender.processInput(byteOf(kNak));
 
-  QCOMPARE(progress.size(), qsizetype(2));
+  QCOMPARE(progress.size(), qsizetype(3));
   QCOMPARE(progress.at(1).at(0).toLongLong(), qint64(128));
+  QCOMPARE(progress.at(2).at(0).toLongLong(), qint64(128));
   QVERIFY(sender.isActive());
 
-  QEXPECT_FAIL(
-    "", "XMODEM.cpp:155 resends from WaitingForAck, so sendBlock() drops the block", Abort);
   QCOMPARE(writes.size(), qsizetype(2));
   QCOMPARE(writeAt(writes, 1), writeAt(writes, 0));
 }
 
 /**
  * @brief The retry budget is inclusive: with maxRetries 2 the second NAK aborts, cancelling the
- *        receiver with the five-CAN sequence before reporting the failure. Only the abort arm
+ *        receiver with the five-CAN sequence before reporting the failure. The first NAK's arm
  *        works today -- the resend the first NAK should have produced is the dropped one above.
  */
 void TstXyModem::nakBeyondMaxRetriesCancelsTheTransfer()
@@ -569,14 +568,14 @@ void TstXyModem::nakBeyondMaxRetriesCancelsTheTransfer()
   QVERIFY(done.at(0).at(1).toString().contains(QStringLiteral("Maximum retries")));
   QVERIFY(!sender.isActive());
 
-  QEXPECT_FAIL("", "the first NAK should have put a resent block between the two writes", Continue);
   QCOMPARE(writes.size(), qsizetype(3));
 }
 
 /**
  * @brief A successful ACK clears the retry counter, so a noisy link that recovers between blocks
- *        never accumulates its way into a spurious abort. The counter reset is observable even
- *        though the two resends are dropped: a second NAK at budget 2 does not abort the transfer.
+ *        never accumulates its way into a spurious abort: a second NAK at budget 2 resends rather
+ *        than aborting the transfer. The four writes are block 1, its resend, block 2 and its
+ *        resend, so the ACK's advance to block 2 shows at index 2.
  */
 void TstXyModem::ackResetsTheRetryCounter()
 {
@@ -598,10 +597,41 @@ void TstXyModem::ackResetsTheRetryCounter()
 
   QCOMPARE(done.size(), qsizetype(0));
   QVERIFY(sender.isActive());
-  QCOMPARE(static_cast<quint8>(writeAt(writes, 1).at(1)), quint8(0x02));
-
-  QEXPECT_FAIL("", "both NAKs should have resent their block", Continue);
   QCOMPARE(writes.size(), qsizetype(4));
+  QCOMPARE(static_cast<quint8>(writeAt(writes, 2).at(1)), quint8(0x02));
+  QCOMPARE(writeAt(writes, 3), writeAt(writes, 2));
+
+  sender.cancelTransfer();
+}
+
+/**
+ * @brief Every recoverable error reports itself through protocolError(), which is what the
+ *        controller counts. Matching the English words of the status text counted nothing in any
+ *        other locale, and missed the errors whose text never said "NAK" (spec 0075, C3).
+ */
+void TstXyModem::recoverableErrorsAreReportedTyped()
+{
+  QTemporaryDir dir;
+  QVERIFY(dir.isValid());
+  const QString path = writePayload(dir, QStringLiteral("payload.bin"), patternPayload(400));
+  QVERIFY(!path.isEmpty());
+
+  IO::Protocols::XMODEM sender;
+  sender.setMaxRetries(5);
+  QSignalSpy errors(&sender, &IO::Protocols::Protocol::protocolError);
+
+  sender.startTransfer(path);
+  sender.processInput(byteOf(kCrcStart));
+  QCOMPARE(errors.size(), qsizetype(0));
+
+  sender.processInput(byteOf(kNak));
+  QCOMPARE(errors.size(), qsizetype(1));
+
+  sender.processInput(byteOf(kNak));
+  QCOMPARE(errors.size(), qsizetype(2));
+
+  sender.processInput(byteOf(kAck));
+  QCOMPARE(errors.size(), qsizetype(2));
 
   sender.cancelTransfer();
 }
@@ -896,11 +926,9 @@ void TstXyModem::timeoutWithoutRetriesLeftAbortsTheTransfer()
 }
 
 /**
- * @brief With retries left, a timeout mid-transfer must either put a block back on the wire or
- *        report a failure. It does neither: handleTimeout() resends from WaitingForAck through the
- *        same rejected sendBlock() path as the NAK branch, and because only sendBlock() rearms the
- *        timer, the one-shot timer is never restarted. The transfer stalls forever with no
- *        finished() -- the UI keeps showing an in-progress transfer that has stopped.
+ * @brief With retries left, a timeout mid-transfer puts the block back on the wire, and sendBlock()
+ *        rearms the one-shot timer as it goes. Resending from WaitingForAck used to be rejected,
+ *        which left the transfer stalled with no finished() and a UI still showing progress.
  */
 void TstXyModem::timeoutMidTransferRearmsOrReports()
 {
@@ -923,8 +951,6 @@ void TstXyModem::timeoutMidTransferRearmsOrReports()
   QCOMPARE(done.size(), qsizetype(0));
   QVERIFY(sender.isActive());
 
-  QEXPECT_FAIL(
-    "", "XMODEM.cpp:391 resends from WaitingForAck and nothing rearms the timer", Continue);
   QVERIFY(writes.size() > 1);
 
   sender.cancelTransfer();
@@ -1149,12 +1175,10 @@ void TstXyModem::ymodemNakResendsTheSameDataBlock()
 }
 
 /**
- * @brief cancelTransfer() is inherited unchanged from XMODEM, so it clears the base state but not
- *        YMODEM's own m_yState. Bytes that arrive after the cancel therefore resume the batch state
- *        machine on a closed file. FileTransmission::onRawDataReceived() currently hides this by
- *        gating on active(); the expected failure below marks the leak, it does not bless it.
+ * @brief cancelTransfer() resets the batch state as well as the base state, so bytes arriving
+ *        after a cancel cannot resume the batch machine on a closed file.
  */
-void TstXyModem::ymodemCancelLeavesTheBatchStateStale()
+void TstXyModem::ymodemCancelResetsTheBatchState()
 {
   QTemporaryDir dir;
   QVERIFY(dir.isValid());
@@ -1174,7 +1198,6 @@ void TstXyModem::ymodemCancelLeavesTheBatchStateStale()
   const qsizetype settled = writes.size();
   sender.processInput(byteOf(kAck));
 
-  QEXPECT_FAIL("", "YMODEM::cancelTransfer() does not reset m_yState", Continue);
   QCOMPARE(writes.size(), settled);
 }
 

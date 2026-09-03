@@ -21,6 +21,9 @@
 #include <QString>
 #include <QStringList>
 
+class QUrl;
+class QNetworkRequest;
+
 namespace AI {
 
 /**
@@ -38,10 +41,32 @@ struct ProviderCapabilities {
   int toolResultByteBudget    = 4096;
   int contextWindowTokens     = 128000;
   int maxOutputTokens         = 8192;
+
+  /**
+   * @brief Output reservation for one request, capped at a quarter of the context window: an
+   *        8k local model would otherwise reserve its entire window for output, the history
+   *        budget would go negative, and the budgeter's "do not trim" fallback would hand the
+   *        server a prompt it truncates from the front -- dropping the system prompt (J1).
+   */
+  [[nodiscard]] int budgetedOutputTokens() const noexcept
+  {
+    return qMin(maxOutputTokens, qMax(1, contextWindowTokens / 4));
+  }
+
+  /**
+   * @brief System-prompt reservation, capped against the window for the same reason, so a small
+   *        window still yields a positive history budget to cut against.
+   */
+  [[nodiscard]] int budgetedSystemReserve(int desiredTokens) const noexcept
+  {
+    return qMin(desiredTokens, qMax(1, contextWindowTokens / 4));
+  }
 };
 
 /**
- * @brief Streamed reply handle returned by Provider::sendMessage.
+ * @brief Streamed reply handle returned by Provider::sendMessage. The finalization latch, the
+ *        stream budget and the transport policy live here rather than in each backend: three
+ *        verbatim copies drifted apart once already (J5, J6).
  */
 class Reply : public QObject {
   Q_OBJECT
@@ -50,7 +75,7 @@ public:
   static constexpr qint64 kMaxStreamedReplyBytes = 8 * 1024 * 1024;
 
   explicit Reply(QObject* parent = nullptr)
-    : QObject(parent), m_transientError(false), m_streamedBytes(0)
+    : QObject(parent), m_transientError(false), m_finished(false), m_streamedBytes(0)
   {}
 
   ~Reply() override = default;
@@ -58,6 +83,10 @@ public:
   virtual void abort() = 0;
 
   [[nodiscard]] bool transientError() const noexcept { return m_transientError; }
+
+  [[nodiscard]] static bool isTransportAllowed(const QUrl& url);
+  [[nodiscard]] static bool endsTurnOnParseError(const QString& reason);
+  static void applyStreamPolicy(QNetworkRequest& request);
 
 signals:
   void partialText(const QString& chunk);
@@ -74,6 +103,12 @@ signals:
 protected:
   void setTransientError(bool transient) noexcept { m_transientError = transient; }
 
+  [[nodiscard]] bool isFinished() const noexcept { return m_finished; }
+
+  void finishOk();
+  void finishWithError(const QString& message);
+  [[nodiscard]] bool streamBudgetBreached(qsizetype bytes);
+
   /**
    * @brief Charges streamed bytes against the per-reply budget; a true return means the
    *        cumulative cap is breached and the reply must abort with an error. Transfer
@@ -87,6 +122,7 @@ protected:
 
 private:
   bool m_transientError;
+  bool m_finished;
   qint64 m_streamedBytes;
 };
 

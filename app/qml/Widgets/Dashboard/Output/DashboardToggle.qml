@@ -28,10 +28,10 @@ Item {
     Item { Layout.fillHeight: true }
 
     Label {
-      text: root.model ? root.model.title : ""
       color: root.color
-      font: Cpp_Misc_CommonFonts.boldUiFont
       Layout.alignment: Qt.AlignHCenter
+      font: Cpp_Misc_CommonFonts.boldUiFont
+      text: root.model ? root.model.title : ""
     }
 
     Switch {

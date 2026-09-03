@@ -82,6 +82,7 @@ private:
   void serializePresentationAndSinks(QJsonObject& json) const;
 
   void promptDiskFileReload();
+  void restoreDetachedDocument(const QString& path);
   [[nodiscard]] static QByteArray hashProjectFile(const QString& path);
 
 private:

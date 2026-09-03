@@ -26,6 +26,7 @@
 #include <QString>
 
 #include "API/Server/ConnectionState.h"
+#include "API/Server/DeviceWriteVerdict.h"
 
 class QTcpSocket;
 
@@ -47,7 +48,7 @@ public:
   virtual ~ReceptionHost()                       = default;
 
   [[nodiscard]] virtual bool deviceConnected() const                            = 0;
-  [[nodiscard]] virtual bool authorizeDeviceWrite()                             = 0;
+  [[nodiscard]] virtual DeviceWriteVerdict authorizeDeviceWrite()               = 0;
   [[nodiscard]] virtual bool verifyToken(const QByteArray& provided) const      = 0;
   [[nodiscard]] virtual qint64 writeToDevice(const QByteArray& data)            = 0;
   [[nodiscard]] virtual QByteArray dispatchCommand(const QByteArray& jsonBytes) = 0;
@@ -56,6 +57,9 @@ public:
   [[nodiscard]] virtual bool routeConnectionCommand(QTcpSocket* socket,
                                                     ConnectionState& state,
                                                     const QJsonObject& json)    = 0;
+
+  // Re-resolves one connection by (socket, sessionId); null once the entry is gone (spec 0075 I1)
+  [[nodiscard]] virtual ConnectionState* stateFor(QTcpSocket* socket, const QString& sessionId) = 0;
 
   virtual void sendResponse(QTcpSocket* socket, const QByteArray& response)  = 0;
   virtual void closeSocket(QTcpSocket* socket, const ConnectionState& state) = 0;
@@ -79,7 +83,7 @@ public:
   ClientReception& operator=(ClientReception&&)      = delete;
   ClientReception& operator=(const ClientReception&) = delete;
 
-  void consumeBytes(QTcpSocket* socket, ConnectionState& state, const QByteArray& data);
+  void consumeBytes(QTcpSocket* socket, const QString& sessionId, const QByteArray& data);
 
   [[nodiscard]] bool validateRateLimits(QTcpSocket* socket,
                                         ConnectionState& state,
@@ -87,14 +91,21 @@ public:
   [[nodiscard]] bool validateJsonMessage(QTcpSocket* socket,
                                          ConnectionState& state,
                                          const QByteArray& jsonBytes);
+  [[nodiscard]] static bool looksLikeHttpRequest(const QByteArray& data);
 
 private:
-  void handleAuthHandshake(QTcpSocket* socket, ConnectionState& state, const QByteArray& data);
-  void handleJsonMessage(QTcpSocket* socket, ConnectionState& state, const QByteArray& jsonBytes);
+  [[nodiscard]] bool rejectHttpPreamble(QTcpSocket* socket,
+                                        ConnectionState& state,
+                                        const QByteArray& data);
+  [[nodiscard]] bool handleAuthHandshake(QTcpSocket* socket, ConnectionState& state);
+  [[nodiscard]] bool authorizeRawWrite(QTcpSocket* socket, ConnectionState& state);
+
+  void drainBuffer(QTcpSocket* socket, const QString& sessionId);
+  void reportBufferFlood(QTcpSocket* socket, const QString& sessionId);
+  void handleJsonMessage(QTcpSocket* socket, const QString& sessionId, const QByteArray& jsonBytes);
   void processRawJsonCommand(QTcpSocket* socket, ConnectionState& state, const QJsonObject& json);
-  void processNoNewlineBuffer(QTcpSocket* socket, ConnectionState& state);
-  void processBufferedJson(QTcpSocket* socket, ConnectionState& state, const QByteArray& trimmed);
-  void processJsonLine(QTcpSocket* socket, ConnectionState& state, const QByteArray& trimmedLine);
+  void processNoNewlineBuffer(QTcpSocket* socket, const QString& sessionId);
+  void processBufferedJson(QTcpSocket* socket, const QString& sessionId, const QByteArray& trimmed);
   void processRawLine(QTcpSocket* socket, ConnectionState& state, const QByteArray& line);
 
   ReceptionHost& m_host;

@@ -28,6 +28,7 @@
 #include <QDeadlineTimer>
 #include <QFileDialog>
 #include <QFileInfo>
+#include <QGuiApplication>
 #include <QMessageBox>
 #include <QScopedValueRollback>
 #include <QTimer>
@@ -46,8 +47,6 @@
 #  include "Licensing/CommercialToken.h"
 #endif
 
-static constexpr int kMdf4MaxSeekWindowRows = 262144;
-
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access
 //--------------------------------------------------------------------------------------------------
@@ -65,8 +64,6 @@ MDF4::Player::Player()
   , m_decodeProgress(0.0)
   , m_timestamp("")
   , m_startTimestamp(0.0)
-  , m_steadyBaseRowSeconds(0.0)
-  , m_playbackEpoch(0)
   , m_decodeGeneration(0)
   , m_loaderThread(nullptr)
   , m_loader(nullptr)
@@ -75,14 +72,12 @@ MDF4::Player::Player()
   qRegisterMetaType<MDF4::PlayerDecodePayloadPtr>();
   connect(this, &MDF4::Player::playerStateChanged, this, &MDF4::Player::updateData);
 
-  constexpr int kSeekTickMs   = 33;
-  constexpr int kSeekSettleMs = 250;
-  m_seekTimer.setSingleShot(true);
-  m_seekTimer.setInterval(kSeekTickMs);
-  m_settleTimer.setSingleShot(true);
-  m_settleTimer.setInterval(kSeekSettleMs);
-  connect(&m_seekTimer, &QTimer::timeout, this, &MDF4::Player::performSeekTick);
-  connect(&m_settleTimer, &QTimer::timeout, this, &MDF4::Player::performSeekSettle);
+  connect(
+    &m_engine, &DataModel::ReplayPlaybackEngine::seekTick, this, &MDF4::Player::performSeekTick);
+  connect(&m_engine,
+          &DataModel::ReplayPlaybackEngine::seekSettle,
+          this,
+          &MDF4::Player::performSeekSettle);
 }
 
 /**
@@ -201,12 +196,10 @@ void MDF4::Player::play()
   if (m_framePos >= frameCount() - 1)
     m_framePos = 0;
 
-  ++m_playbackEpoch;
+  (void)m_engine.nextEpoch();
   m_startTimestamp = m_timestamps[m_framePos];
   m_elapsedTimer.start();
-
-  m_seekTimer.stop();
-  m_settleTimer.stop();
+  m_engine.stopSeek();
 
   anchorSteadyBase(m_framePos);
   m_playing = true;
@@ -218,7 +211,7 @@ void MDF4::Player::play()
  */
 void MDF4::Player::pause()
 {
-  ++m_playbackEpoch;
+  (void)m_engine.nextEpoch();
   m_playing = false;
   Q_EMIT playerStateChanged();
 }
@@ -279,7 +272,7 @@ void MDF4::Player::openFile(const QString& filePath)
   if (!licensed) {
     Misc::Utilities::showMessageBox(
       tr("MDF4 Playback is a Pro feature."),
-      tr("This feature requires a license. Please purchase one to enable MDF4 playback."));
+      tr("Activate Serial Studio Pro or start the free trial to enable MDF4 playback."));
     return;
   }
 
@@ -309,8 +302,8 @@ void MDF4::Player::openFile(const QString& filePath)
 void MDF4::Player::closeFile()
 {
   // code-verify off
-  // A close dispatched inside injectRow's nested event loop would free m_text while the borrowed
-  // cell pointers handed to the builder are still live. Re-queue instead.
+  // A close reaching this while an inject is on the stack would free m_text under the borrowed
+  // cell pointers already handed to the builder. Re-queue instead.
   // code-verify on
   if (m_injecting) {
     QMetaObject::invokeMethod(this, [this] { closeFile(); }, Qt::QueuedConnection);
@@ -324,8 +317,7 @@ void MDF4::Player::closeFile()
 
   m_playing  = false;
   m_framePos = 0;
-  m_seekTimer.stop();
-  m_settleTimer.stop();
+  m_engine.stopSeek();
 
   ++m_decodeGeneration;
   stopDecoding();
@@ -380,16 +372,18 @@ void MDF4::Player::startDecoding(const QString& filePath)
   m_loader = new PlayerLoaderWorker();
   m_loader->moveToThread(m_loaderThread);
 
-  connect(m_loader,
-          &PlayerLoaderWorker::progressUpdate,
-          this,
-          &MDF4::Player::onDecodeProgress,
-          Qt::QueuedConnection);
-  connect(m_loader,
-          &PlayerLoaderWorker::finished,
-          this,
-          &MDF4::Player::onDecodeFinished,
-          Qt::QueuedConnection);
+  m_loaderLinks = {
+    connect(m_loader,
+            &PlayerLoaderWorker::progressUpdate,
+            this,
+            &MDF4::Player::onDecodeProgress,
+            Qt::QueuedConnection),
+    connect(m_loader,
+            &PlayerLoaderWorker::finished,
+            this,
+            &MDF4::Player::onDecodeFinished,
+            Qt::QueuedConnection),
+  };
 
   m_loaderThread->start();
 
@@ -428,12 +422,15 @@ void MDF4::Player::stopDecoding()
     delete m_loaderThread;
   } else {
     qWarning() << "[MDF4::Player] Decode thread did not stop in time; detaching it.";
-    disconnect(m_loader, nullptr, this, nullptr);
+    for (const auto& link : std::as_const(m_loaderLinks))
+      disconnect(link);
+
     m_loaderThread->setParent(nullptr);
     connect(m_loaderThread, &QThread::finished, m_loader, &QObject::deleteLater);
     connect(m_loaderThread, &QThread::finished, m_loaderThread, &QObject::deleteLater);
   }
 
+  m_loaderLinks.clear();
   m_loader       = nullptr;
   m_loaderThread = nullptr;
   m_decoding     = false;
@@ -585,19 +582,16 @@ void MDF4::Player::setProgress(const double progress)
 
   m_framePos = newFramePos;
   if (m_framePos < frameCount()) {
-    m_timestamp = formatTimestamp(m_timestamps[m_framePos]);
+    m_timestamp = DataModel::ReplayPlaybackEngine::formatTimestamp(m_timestamps[m_framePos]);
     Q_EMIT timestampChanged();
   }
 
-  if (!m_seekTimer.isActive())
-    m_seekTimer.start();
-
-  m_settleTimer.start();
+  m_engine.armSeek();
 }
 
 /**
  * @brief First row of the scrub window ending at @p target: walks back until the plot time
- *        range is covered (never fewer than points() rows), capped at kMdf4MaxSeekWindowRows so
+ *        range is covered (never fewer than points() rows), capped by the engine so
  *        dense recordings bound the per-tick cost.
  */
 int MDF4::Player::seekWindowStartRow(int target) const
@@ -606,22 +600,10 @@ int MDF4::Player::seekWindowStartRow(int target) const
   SS_ASSERT(target < frameCount(), return qMax(0, frameCount() - 1));
 
   static auto& dashboard = UI::Dashboard::instance();
-  const double range     = dashboard.plotTimeRange();
-  const double targetSec = m_timestamps[static_cast<size_t>(target)];
-
-  const int minStart = qMax(0, target - qMax(1, dashboard.points()) + 1);
-  const int capStart = qMax(0, target - kMdf4MaxSeekWindowRows + 1);
-
-  int start = minStart;
-  for (int i = 0; i < kMdf4MaxSeekWindowRows && start > capStart; ++i) {
-    const double sec = m_timestamps[static_cast<size_t>(start - 1)];
-    if (targetSec - sec > range)
-      break;
-
-    --start;
-  }
-
-  return start;
+  return DataModel::ReplayPlaybackEngine::seekWindowStartRow(
+    target, dashboard.points(), dashboard.plotTimeRange(), [this](int row) {
+      return m_timestamps[static_cast<size_t>(row)];
+    });
 }
 
 /**
@@ -769,10 +751,9 @@ void MDF4::Player::buildSeekWindow(int startRow,
  */
 void MDF4::Player::catchUpToTarget(double targetTime)
 {
-  constexpr qint64 kCatchUpBudgetMs = 20;
-  constexpr int kCatchUpMaxInjects  = 512;
-  constexpr int kCatchUpScanMax     = 262144;
-  const QDeadlineTimer budget(kCatchUpBudgetMs);
+  constexpr int kCatchUpMaxInjects = 512;
+  constexpr int kCatchUpScanMax    = DataModel::ReplayPlaybackEngine::kCatchUpScanMax;
+  const QDeadlineTimer budget(DataModel::ReplayPlaybackEngine::kCatchUpBudgetMs);
 
   int targetRow  = m_framePos;
   const int last = frameCount() - 1;
@@ -796,19 +777,17 @@ void MDF4::Player::catchUpToTarget(double targetTime)
 
   backfillSparseSources();
 
-  constexpr qint64 kCatchUpFillMs = 250;
-  if (stride > 2 && !m_seekColumnByKey.isEmpty()
-      && (!m_catchUpFillTimer.isValid() || m_catchUpFillTimer.elapsed() >= kCatchUpFillMs)) {
+  if (stride > 2 && !m_seekColumnByKey.isEmpty() && m_engine.catchUpFillDue()) {
     static auto& dashboard = UI::Dashboard::instance();
     QVector<double> times;
     QHash<qint64, QVector<double>> series;
     buildSeekWindow(seekWindowStartRow(m_framePos), m_framePos, times, series);
     dashboard.bulkLoadPlotWindow(times, series);
-    m_catchUpFillTimer.restart();
   }
 
   if (isOpen() && m_framePos < frameCount()) {
-    m_timestamp = formatTimestamp(m_timestamps[static_cast<size_t>(m_framePos)]);
+    m_timestamp = DataModel::ReplayPlaybackEngine::formatTimestamp(
+      m_timestamps[static_cast<size_t>(m_framePos)]);
     Q_EMIT timestampChanged();
   }
 
@@ -828,9 +807,9 @@ void MDF4::Player::catchUpToTarget(double targetTime)
   const double deltaMs         = (nextTime - nowTarget) * 1000.0;
   const qint64 delayMs =
     std::isfinite(deltaMs) ? static_cast<qint64>(std::clamp(deltaMs, 0.0, kMaxDelayMs)) : 0;
-  const quint64 epoch = m_playbackEpoch;
+  const quint64 epoch = m_engine.epoch();
   QTimer::singleShot(delayMs, Qt::PreciseTimer, this, [this, epoch]() {
-    if (isOpen() && isPlaying() && epoch == m_playbackEpoch) {
+    if (isOpen() && isPlaying() && m_engine.isCurrentEpoch(epoch)) {
       ++m_framePos;
       updateData();
     }
@@ -846,7 +825,8 @@ void MDF4::Player::updateData()
     return;
 
   if (m_framePos >= 0 && m_framePos < frameCount()) {
-    m_timestamp = formatTimestamp(m_timestamps[static_cast<size_t>(m_framePos)]);
+    m_timestamp = DataModel::ReplayPlaybackEngine::formatTimestamp(
+      m_timestamps[static_cast<size_t>(m_framePos)]);
     Q_EMIT timestampChanged();
   }
 
@@ -874,9 +854,9 @@ void MDF4::Player::updateData()
   const double deltaMs = (nextTime - targetTime) * 1000.0;
   const qint64 delayMs =
     std::isfinite(deltaMs) ? static_cast<qint64>(std::clamp(deltaMs, 0.0, kMaxDelayMs)) : 0;
-  const quint64 epoch = m_playbackEpoch;
+  const quint64 epoch = m_engine.epoch();
   QTimer::singleShot(delayMs, Qt::PreciseTimer, this, [this, epoch]() {
-    if (isOpen() && isPlaying() && epoch == m_playbackEpoch) {
+    if (isOpen() && isPlaying() && m_engine.isCurrentEpoch(epoch)) {
       ++m_framePos;
       updateData();
     }
@@ -951,23 +931,6 @@ void MDF4::Player::sendHeaderFrame()
 //--------------------------------------------------------------------------------------------------
 // Date/time operations
 //--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Formats a timestamp value as HH:MM:SS.mmm
- */
-QString MDF4::Player::formatTimestamp(double timestamp) const
-{
-  constexpr double kInvHour = 1.0 / 3600.0;
-  constexpr double kInvMin  = 1.0 / 60.0;
-  int hours                 = static_cast<int>(timestamp * kInvHour);
-  int minutes               = static_cast<int>((timestamp - hours * 3600.0) * kInvMin);
-  double seconds            = timestamp - hours * 3600.0 - minutes * 60.0;
-
-  return QString("%1:%2:%3")
-    .arg(qMax(hours, 0), 2, 10, QChar('0'))
-    .arg(qMax(minutes, 0), 2, 10, QChar('0'))
-    .arg(qMax(seconds, 0.0), 6, 'f', 3, QChar('0'));
-}
 
 //--------------------------------------------------------------------------------------------------
 // Frame building
@@ -1069,9 +1032,8 @@ void MDF4::Player::anchorSteadyBase(int frameIndex)
 {
   SS_ASSERT(frameIndex >= 0, frameIndex = 0);
 
-  m_steadyBase = std::chrono::steady_clock::now();
-  m_steadyBaseRowSeconds =
-    (frameIndex < frameCount()) ? m_timestamps[static_cast<size_t>(frameIndex)] : 0.0;
+  m_engine.anchorSteadyBase(
+    (frameIndex < frameCount()) ? m_timestamps[static_cast<size_t>(frameIndex)] : 0.0);
 }
 
 /**
@@ -1081,11 +1043,9 @@ void MDF4::Player::anchorSteadyBase(int frameIndex)
 std::chrono::steady_clock::time_point MDF4::Player::rowSteadyTimestamp(int frameIndex) const
 {
   if (frameIndex < 0 || frameIndex >= frameCount())
-    return m_steadyBase;
+    return m_engine.steadyBase();
 
-  const auto delta = std::chrono::duration<double>(m_timestamps[static_cast<size_t>(frameIndex)]
-                                                   - m_steadyBaseRowSeconds);
-  return m_steadyBase + std::chrono::duration_cast<std::chrono::steady_clock::duration>(delta);
+  return m_engine.steadyTimestampFor(m_timestamps[static_cast<size_t>(frameIndex)]);
 }
 
 /**
@@ -1204,9 +1164,9 @@ void MDF4::Player::injectRow(int frameIndex)
   SS_ASSERT(frameIndex < frameCount(), return);
 
   // code-verify off
-  // replayChannelsTyped() marshals blocking and pumps this thread's event loop; a queued
-  // updateData() or close can re-enter here, refill the shared m_typedCells and rebuild
-  // m_sourceChannelsByIndex under the outer iteration. Crashed in the wild (seek-settle).
+  // The replay marshal is a plain BlockingQueuedConnection: it does NOT run this thread's event
+  // loop (dataflow.md). The latch is what makes closeFile() re-queue instead of freeing m_text
+  // and m_sourceChannelsByIndex under an inject already on the stack.
   // code-verify on
   if (m_injecting)
     return;
@@ -1232,8 +1192,8 @@ void MDF4::Player::injectRow(int frameIndex)
   }
 
   // code-verify off
-  // Iterate a copy: the blocking marshal below pumps this thread's event loop, so a queued close
-  // can clear m_sourceChannelsByIndex mid-loop. Implicitly shared, one refcount per source.
+  // Iterate a copy: a close re-queued by the latch above still runs before this loop's next
+  // iteration on a later turn. Implicitly shared, so the copy costs one refcount.
   // code-verify on
   const auto sourceChannels = m_sourceChannelsByIndex;
   for (auto it = sourceChannels.constBegin(); it != sourceChannels.constEnd(); ++it) {
@@ -1396,11 +1356,16 @@ bool MDF4::Player::handleKeyPress(QKeyEvent* keyEvent)
 /**
  * @brief Event filter for capturing keyboard events
  */
+
+/**
+ * @brief Captures key events and routes playback shortcuts to handleKeyPress.
+ */
 bool MDF4::Player::eventFilter(QObject* obj, QEvent* event)
 {
-  if (event->type() == QEvent::KeyPress) {
+  if (isOpen() && event->type() == QEvent::KeyPress) {
     auto* keyEvent = static_cast<QKeyEvent*>(event);
-    return handleKeyPress(keyEvent);
+    if (!DataModel::ReplayPlaybackEngine::playbackKeyIsClaimed(keyEvent->key()))
+      return handleKeyPress(keyEvent);
   }
 
   return QObject::eventFilter(obj, event);

@@ -31,6 +31,7 @@
 #include <QThread>
 #include <QTimer>
 #include <stdexcept>
+#include <unordered_map>
 #include <vector>
 
 #include "ThirdParty/readerwriterqueue.h"
@@ -62,7 +63,12 @@ public:
   qint64 monotonicFrameNs(std::chrono::steady_clock::time_point now,
                           std::chrono::steady_clock::time_point baseline);
 
+  [[nodiscard]] qint64 monotonicSourceNs(int sourceId, qint64 ns);
+
   void resetMonotonicClock();
+
+  [[nodiscard]] bool markFlushPosted() noexcept;
+  void clearFlushPost() noexcept;
 
 public slots:
   virtual void processData() = 0;
@@ -71,6 +77,12 @@ public slots:
 
 private:
   qint64 m_lastFrameNs;
+
+  // Per-source last offset: the tie-break is per source, or one source rewrites another's time
+  std::unordered_map<int, qint64> m_lastSourceNs;
+
+  // Coalesces the producer's threshold posts: one pending processData event, not one per enqueue
+  std::atomic<bool> m_flushPosted;
 };
 
 /**
@@ -98,6 +110,13 @@ public:
    */
   void processData() override
   {
+    // code-verify off
+    // Cleared BEFORE the drain, so an item enqueued while this batch is being written re-arms the
+    // trigger instead of waiting for the 1 Hz timer; a redundant post is harmless, a missed one
+    // stalls the lane.
+    // code-verify on
+    clearFlushPost();
+
     if (!m_enabled->load(std::memory_order_relaxed))
       return;
 
@@ -350,15 +369,46 @@ protected:
     if (!m_consumerEnabled.load(std::memory_order_relaxed))
       return;
 
-    if (m_pendingQueue.try_enqueue(item)) {
-      const auto size = m_queueSize.fetch_add(1, std::memory_order_relaxed) + 1;
-      if (size >= m_config.flushThreshold) {
-        QMetaObject::invokeMethod(
-          m_worker, &FrameConsumerWorkerBase::processData, Qt::QueuedConnection);
-      }
-    }
+    if (!m_pendingQueue.try_enqueue(item))
+      return;
+
+    const auto size = m_queueSize.fetch_add(1, std::memory_order_relaxed) + 1;
+    if (size >= m_config.flushThreshold)
+      requestFlush();
   }
 
+  /**
+   * @brief Threshold trigger for a consumer's SECOND producer lane (the historian's raw-byte
+   *        queue): its backlog shares this facade's flush post instead of waiting for the 1 Hz
+   *        timer, which is what let the raw lane truncate above ~1000 chunks/s (B2).
+   */
+  void noteSecondaryEnqueued(std::size_t pending)
+  {
+    if (pending < m_config.flushThreshold)
+      return;
+
+    requestFlush();
+  }
+
+private:
+  /**
+   * @brief Posts one processData wake-up per drain cycle. Past the threshold EVERY enqueue used to
+   *        post a QMetaCallEvent from the pipeline thread -- a heap allocation on the publish path
+   *        and an unbounded worker event queue while the worker was fsync-bound (B8).
+   */
+  void requestFlush()
+  {
+    if (!m_worker) [[unlikely]]
+      return;
+
+    if (m_worker->markFlushPosted())
+      return;
+
+    QMetaObject::invokeMethod(
+      m_worker, &FrameConsumerWorkerBase::processData, Qt::QueuedConnection);
+  }
+
+protected:
   static constexpr std::size_t kCacheLine = 64;
 
   FrameConsumerConfig m_config;

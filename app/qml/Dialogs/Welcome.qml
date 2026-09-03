@@ -105,8 +105,9 @@ Window {
     palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
     ColumnLayout {
-      spacing: 0
       id: layout
+
+      spacing: 0
       anchors.centerIn: parent
 
       //

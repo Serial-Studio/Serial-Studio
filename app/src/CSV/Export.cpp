@@ -83,52 +83,6 @@ static QString escapeCsvField(const QString& s)
 }
 
 /**
- * @brief Returns (creating it) the session directory both export lanes write into:
- *        <workspace CSV>/<sanitized title>. Routing the frame and stream lanes through one
- *        helper is what keeps their files side by side. A title that sanitizes away becomes
- *        "Untitled"; a directory that cannot be created comes back non-existent.
- */
-[[nodiscard]] static QDir csvSessionDir(const QString& title)
-{
-  static auto& workspaceManager = Misc::WorkspaceManager::instance();
-  const auto subdir             = workspaceManager.path(QStringLiteral("CSV"));
-
-  QString safeTitle = title;
-  safeTitle.remove(QChar('/'));
-  safeTitle.remove(QChar('\\'));
-  safeTitle.remove(QChar(':'));
-  safeTitle.remove(QChar('*'));
-  safeTitle.remove(QChar('?'));
-  safeTitle.remove(QChar('"'));
-  safeTitle.remove(QChar('<'));
-  safeTitle.remove(QChar('>'));
-  safeTitle.remove(QChar('|'));
-  safeTitle.remove(QChar('\0'));
-  safeTitle.remove(QStringLiteral(".."));
-  safeTitle = safeTitle.simplified();
-
-  int keep = 0;
-  for (int i = safeTitle.size(); i > 0; --i) {
-    const QChar c = safeTitle.at(i - 1);
-    if (c != QChar('.') && c != QChar(' ')) {
-      keep = i;
-      break;
-    }
-  }
-
-  safeTitle.truncate(keep);
-  if (safeTitle.isEmpty())
-    safeTitle = QStringLiteral("Untitled");
-
-  const QString path = QStringLiteral("%1/%2/").arg(subdir, safeTitle);
-  QDir dir(path);
-  if (!dir.exists() && !dir.mkpath(QStringLiteral(".")))
-    qWarning() << "[CSV] failed to create export directory:" << path;
-
-  return dir;
-}
-
-/**
  * @brief Appends @p value to @p dst byte-identically to QString::number(value, fmt, precision),
  *        without the per-cell QString allocation: both are C-locale %f / %g. Apple ships float
  *        std::to_chars only from macOS 13.3, so older targets use snprintf_l with the NULL (C)
@@ -248,35 +202,25 @@ void CSV::ExportWorker::closeResources()
   m_merger.clear();
   m_rowBuffer.clear();
   m_lastFinalValues.clear();
-  DataModel::clear_frame(m_templateFrame);
+  m_structure.clear();
 }
 
 /**
  * @brief Stores the schema template frame; must run on the worker thread (queued invoke) so the
- *        assignment never races processItems() or closeResources(). An empty frame is ignored:
- *        structure arrives asynchronously and QuickPlot has none until its first frame, so an
- *        empty payload landing second would wipe an adopted template and no file would be made.
+ *        assignment never races processItems() or closeResources().
  */
 void CSV::ExportWorker::setTemplateFrame(const DataModel::Frame& frame)
 {
-  if (frame.groups.empty())
-    return;
-
-  m_templateFrame = frame;
+  m_structure.setTemplateFrame(frame);
 }
 
 /**
- * @brief Adopts the structure the pipeline publishes when the connect-time fetch came back empty.
- *        QuickPlot derives its datasets from the first frame, so at connect there is nothing to
- *        fetch; blocks carry values only, so without this the file is never created. Ignored once
- *        a file exists -- an open file's schema is fixed for its lifetime.
+ * @brief Adopts the structure the pipeline publishes when the connect-time fetch came back empty
+ *        (QuickPlot derives its datasets from the first frame, so at connect there is none).
  */
 void CSV::ExportWorker::applyPublishedStructure(const DataModel::Frame& frame)
 {
-  if (isResourceOpen() || !m_templateFrame.groups.empty())
-    return;
-
-  m_templateFrame = frame;
+  m_structure.applyPublishedStructure(frame, isResourceOpen());
 }
 
 /**
@@ -290,8 +234,8 @@ void CSV::ExportWorker::processItems(const std::vector<DataModel::DataBlockPtr>&
     return;
 
   if (!m_csvFile.isOpen()) {
-    if (!m_templateFrame.groups.empty())
-      createCsvFile(m_templateFrame);
+    if (m_structure.hasStructure())
+      createCsvFile(m_structure.templateFrame());
 
     if (m_schema.columns.empty())
       return;
@@ -332,8 +276,9 @@ void CSV::ExportWorker::processItems(const std::vector<DataModel::DataBlockPtr>&
 
 /**
  * @brief Buffers one block for the merge, resolving its schema columns and per-sample times once.
- *        An irregular block takes the monotonic bump so two frames landing on the same coarse-clock
- *        nanosecond stay distinct rows; a uniform grid keeps its derived times exactly.
+ *        Every sample keeps the instant its own source stamped; an irregular block only takes the
+ *        per-source tie-break, so two frames landing on the same coarse-clock nanosecond stay
+ *        distinct rows without a second source's samples being rewritten behind the first (B1).
  */
 void CSV::ExportWorker::bufferBlock(const DataModel::DataBlockPtr& block)
 {
@@ -343,10 +288,11 @@ void CSV::ExportWorker::bufferBlock(const DataModel::DataBlockPtr& block)
   times.reserve(static_cast<std::size_t>(block->samples));
   for (qsizetype i = 0; i < block->samples; ++i) {
     const auto stamp = DataModel::sample_time(*block, i);
-    const qint64 offset =
-      uniform
-        ? std::chrono::duration_cast<std::chrono::nanoseconds>(stamp - m_referenceTimestamp).count()
-        : monotonicFrameNs(stamp, m_referenceTimestamp);
+    qint64 offset =
+      std::chrono::duration_cast<std::chrono::nanoseconds>(stamp - m_referenceTimestamp).count();
+    if (!uniform)
+      offset = monotonicSourceNs(block->sourceId, offset);
+
     times.push_back(std::max<qint64>(0, offset));
   }
 
@@ -375,7 +321,9 @@ void CSV::ExportWorker::flushReadyRows(qint64 cutoffNs)
 }
 
 /**
- * @brief Writes one dense forward-filled row across the full schema (interval mode).
+ * @brief Writes one dense forward-filled row across the full schema (interval mode). A failed write
+ *        closes the export exactly as the sparse path does: leaving the file "open" dropped every
+ *        later row in silence (B14).
  */
 void CSV::ExportWorker::writeSnapshotRowNow(
   const DataModel::TimestampedFrame::SteadyTimePoint& timestamp)
@@ -393,7 +341,13 @@ void CSV::ExportWorker::writeSnapshotRowNow(
 
   m_rowBuffer          += '\n';
   const qint64 written  = m_csvFile.write(m_rowBuffer);
-  SS_ASSERT(written >= m_rowBuffer.size(), return);
+  if (written < m_rowBuffer.size()) [[unlikely]] {
+    qWarning() << "[CSV] snapshot row write failed, closing export:" << m_csvFile.fileName();
+    closeResources();
+    Q_EMIT resourceOpenChanged();
+    return;
+  }
+
   (void)m_csvFile.flush();
 }
 
@@ -405,7 +359,8 @@ void CSV::ExportWorker::createCsvFile(const DataModel::Frame& frame)
   const auto dt       = QDateTime::currentDateTime();
   const auto fileName = dt.toString("yyyy-MM-dd_HH-mm-ss") + ".csv";
 
-  const QDir dir = csvSessionDir(frame.title);
+  const QDir dir = DataModel::ExportStructure::sessionDir(
+    QStringLiteral("CSV"), frame.title, QStringLiteral("Untitled"));
   if (!dir.exists())
     return;
 
@@ -564,15 +519,18 @@ void CSV::Export::setupExternalConnections()
             QMetaObject::invokeMethod(
               worker, [worker, frame] { worker->setTemplateFrame(frame); }, Qt::QueuedConnection);
           });
-  connect(
-    &IO::ConnectionManager::instance(), &IO::ConnectionManager::connectedChanged, this, [this] {
-      if (!IO::ConnectionManager::instance().isConnected())
-        closeFile();
-    });
-  connect(&IO::ConnectionManager::instance(), &IO::ConnectionManager::pausedChanged, this, [this] {
-    if (IO::ConnectionManager::instance().paused())
-      closeFile();
-  });
+  // code-verify off
+  // Closing on the builder's session boundary rather than on connectedChanged/pausedChanged is
+  // what keeps the last display tick (A2): the builder flushes its open blocks into this sink's
+  // queue before emitting, and close() drains that queue before closing the file.
+  // code-verify on
+  connect(&DataModel::FrameBuilder::instance(),
+          &DataModel::FrameBuilder::sessionBoundary,
+          this,
+          [this](bool connected, bool paused) {
+            if (!connected || paused)
+              closeFile();
+          });
 
   connect(&AppState::instance(), &AppState::operationModeChanged, this, [this] {
     if (AppState::instance().operationMode() == SerialStudio::ConsoleOnly && exportEnabled())

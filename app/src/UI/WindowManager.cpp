@@ -1153,7 +1153,9 @@ void UI::WindowManager::handleDragMove(QMouseEvent* event, const QPoint& delta)
 }
 
 /**
- * @brief Applies a resize delta to the focused window, clamped to canvas bounds.
+ * @brief Applies a resize delta to the focused window, clamped to canvas bounds. The clamped
+ *        rectangle is what lands: discarding the whole gesture the moment an edge reached the
+ *        canvas made the window stop following the pointer entirely (F19).
  */
 void UI::WindowManager::handleResizeMove(QMouseEvent* event, const QPoint& delta)
 {
@@ -1186,20 +1188,11 @@ void UI::WindowManager::handleResizeMove(QMouseEvent* event, const QPoint& delta
     m_snapOverlay.publishFractionPreview(geometry, canvasSize(), m_dashboard.showAlignmentGuides());
   }
 
-  const QRect unclamped = geometry;
-  geometry.setX(qMax(0, geometry.x()));
-  geometry.setY(qMax(0, geometry.y()));
-  if (geometry.right() > int(width()) - 1)
-    geometry.setWidth(int(width()) - geometry.x());
+  geometry = WindowGeometry::clampResizeToCanvas(geometry, canvasSize());
 
-  if (geometry.bottom() > int(height()) - 1)
-    geometry.setHeight(int(height()) - geometry.y());
-
-  if (geometry == unclamped) {
-    WindowGeometry::placeWindow(m_resizeWindow, geometry);
-    m_snapOverlay.publishManualGesture(geometry);
-    event->accept();
-  }
+  WindowGeometry::placeWindow(m_resizeWindow, geometry);
+  m_snapOverlay.publishManualGesture(geometry);
+  event->accept();
 }
 
 /**

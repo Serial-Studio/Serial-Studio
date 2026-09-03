@@ -69,7 +69,6 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem* parent)
   , m_halfRange(1)
   , m_scaleIsValid(false)
   , m_windowType(SerialStudio::FFTWindowBlackmanHarris)
-  , m_interpolationMode(SerialStudio::InterpolationLinear)
   , m_plan(nullptr)
 #ifdef BUILD_COMMERCIAL
   , m_audioExport(Widgets::AudioExport::instance())
@@ -242,7 +241,7 @@ bool Widgets::FFTPlot::running() const noexcept
  */
 SerialStudio::InterpolationMode Widgets::FFTPlot::interpolationMode() const noexcept
 {
-  return m_interpolationMode;
+  return m_base.interpolationMode();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -349,19 +348,24 @@ void Widgets::FFTPlot::rebuildMarkerBins()
 }
 
 /**
- * @brief Refreshes each marker's live peak (from the ballistics-processed display spectrum,
- *        so what is judged matches what is drawn) and its normal/warning/alarm state.
+ * @brief Refreshes each marker's live peak (from the ballistics-processed display spectrum, so
+ *        what is judged matches what is drawn) and its state. Returns whether the readout the
+ *        chips render moved: the signal used to fire on every tick regardless (F15).
  */
-void Widgets::FFTPlot::updateMarkerValues(const int spectrumSize)
+bool Widgets::FFTPlot::updateMarkerValues(const int spectrumSize)
 {
-  SS_ASSERT(spectrumSize > 0, return);
-  SS_ASSERT(m_binDb.size() >= static_cast<std::size_t>(spectrumSize), return);
+  SS_ASSERT(spectrumSize > 0, return false);
+  SS_ASSERT(m_binDb.size() >= static_cast<std::size_t>(spectrumSize), return false);
 
+  bool changed = false;
   for (auto& rt : m_markerRt) {
     const int hi = qMin(rt.binHi, spectrumSize - 1);
     float peak   = kSpectrumFloorDb;
     for (int i = qMin(rt.binLo, hi); i <= hi; ++i)
       peak = std::max(peak, m_binDb[static_cast<std::size_t>(i)]);
+
+    const int previous_state = rt.state;
+    const int previous_label = qRound(rt.peakDb * 10.0f);
 
     rt.peakDb = peak;
     if (std::isfinite(rt.alarmDb) && peak >= rt.alarmDb)
@@ -370,7 +374,11 @@ void Widgets::FFTPlot::updateMarkerValues(const int spectrumSize)
       rt.state = 1;
     else
       rt.state = 0;
+
+    changed |= rt.state != previous_state || qRound(rt.peakDb * 10.0f) != previous_label;
   }
+
+  return changed;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -385,8 +393,8 @@ void Widgets::FFTPlot::draw(QXYSeries* series)
   if (series) {
     updateData();
     const auto* data = &m_data;
-    if (m_interpolationMode == SerialStudio::InterpolationZoh
-        || m_interpolationMode == SerialStudio::InterpolationStem) {
+    if (m_base.interpolationMode() == SerialStudio::InterpolationZoh
+        || m_base.interpolationMode() == SerialStudio::InterpolationStem) {
       updateInterpolatedData();
       data = &m_renderData;
     }
@@ -440,23 +448,9 @@ void Widgets::FFTPlot::setRunning(const bool enabled)
  */
 void Widgets::FFTPlot::setInterpolationMode(SerialStudio::InterpolationMode mode)
 {
-  SerialStudio::InterpolationMode resolved;
-  switch (mode) {
-    case SerialStudio::InterpolationNone:
-    case SerialStudio::InterpolationLinear:
-    case SerialStudio::InterpolationZoh:
-    case SerialStudio::InterpolationStem:
-      resolved = mode;
-      break;
-    default:
-      resolved = SerialStudio::InterpolationLinear;
-      break;
-  }
-
-  if (m_interpolationMode == resolved)
+  if (!m_base.setInterpolationMode(mode))
     return;
 
-  m_interpolationMode = resolved;
   Q_EMIT interpolationModeChanged();
 }
 
@@ -842,10 +836,8 @@ void Widgets::FFTPlot::updateData()
   else
     emitLinearSpectrum(spectrumSize);
 
-  if (!m_markerRt.empty() && spectrumSize > 0) {
-    updateMarkerValues(spectrumSize);
+  if (!m_markerRt.empty() && spectrumSize > 0 && updateMarkerValues(spectrumSize))
     Q_EMIT markerValuesChanged();
-  }
 
   DSP::downsampleMonotonic(m_xData, m_yData, m_dataW, m_dataH, m_data, &ws);
 }
@@ -857,7 +849,7 @@ void Widgets::FFTPlot::updateInterpolatedData()
 {
   const int n = m_data.size();
 
-  if (m_interpolationMode == SerialStudio::InterpolationZoh) {
+  if (m_base.interpolationMode() == SerialStudio::InterpolationZoh) {
     if (n < 2) {
       m_renderData.resize(n);
       if (n == 1)
@@ -877,7 +869,7 @@ void Widgets::FFTPlot::updateInterpolatedData()
     return;
   }
 
-  if (m_interpolationMode == SerialStudio::InterpolationStem) {
+  if (m_base.interpolationMode() == SerialStudio::InterpolationStem) {
     constexpr double kNan = std::numeric_limits<double>::quiet_NaN();
     const double base     = m_minY;
 

@@ -91,6 +91,25 @@ extern "C" {
 }
 
 /**
+ * @brief Returns whether every dataset of @p frame is table-fed (Computed: no frame index, so the
+ *        parse path never carries a value for it). Only such a source may feed the sinks from a
+ *        synthetic refresh: one with parsed channels is already recorded on arrival, and would
+ *        otherwise duplicate every channel at UI-tick rate under a now() stamp (A11).
+ */
+[[nodiscard]] bool frameIsTableFed(const DataModel::Frame& frame)
+{
+  if (frame.groups.empty())
+    return false;
+
+  for (const auto& group : frame.groups)
+    for (const auto& dataset : group.datasets)
+      if (!dataset.virtual_)
+        return false;
+
+  return true;
+}
+
+/**
  * @brief Builds the runtime group list from the project, dropping disabled groups and the
  *        disabled datasets of the survivors so frame building never sees them. The editor keeps
  *        the full set; surviving datasets retain their explicit frame index, so no sibling shifts.
@@ -130,8 +149,8 @@ DataModel::FrameBuilder::FrameBuilder()
   : m_quickPlotChannels(-1)
   , m_parseBudgetEnabled(true)
   , m_lastConnectedState(false)
+  , m_lastPausedState(false)
   , m_playerOpen(false)
-  , m_anyAsyncSink(false)
   , m_captureDatasetValues(false)
   , m_captureFlagsDirty(true)
   , m_externalTableApiUsers(false)
@@ -149,6 +168,7 @@ DataModel::FrameBuilder::FrameBuilder()
   , m_quickPlot(m_operationMode)
   , m_tableApi(*this, m_tableStore, m_tableChannel.guiSnapshot())
   , m_transforms(m_frame, m_tableStore, [this](lua_State* L) { injectTableApiLua(L); })
+  , m_replay(m_captureDatasetValues, m_tableStore, m_exprEngineForSource)
   , m_streamValuesDirty(false)
   , m_latestFrameSourceId(-1)
   , m_latestFrameSeq(0)
@@ -161,17 +181,14 @@ DataModel::FrameBuilder::FrameBuilder()
   , m_compilePending(false)
   , m_poolPolicy(kFramePoolSize)
   , m_framePoolGeneration(1)
-  , m_blockPoolHint(0)
-  , m_blockSlotsUsable(kBlockPoolSlots)
   , m_maskSinks(false)
+  , m_stager(*this, m_framePoolGeneration, m_maskSinks)
+  , m_publisher(m_maskSinks)
+  , m_deferredProjectSnapshot(std::nullopt)
 {
   m_framePool.reserve(kFramePoolSize);
   for (int i = 0; i < kFramePoolSize; ++i)
     m_framePool.emplace_back(std::make_shared<PooledFrameSlot>());
-
-  m_blockPool.reserve(kBlockPoolSlots);
-  for (int i = 0; i < kBlockPoolSlots; ++i)
-    m_blockPool.emplace_back(std::make_shared<PooledBlockSlot>());
 
 #ifdef BUILD_COMMERCIAL
   static auto& lemonSqueezy = Licensing::LemonSqueezy::instance();
@@ -217,13 +234,6 @@ DataModel::FrameBuilder& DataModel::FrameBuilder::instance()
 DataModel::FrameBuilder::PooledFrameSlot::PooledFrameSlot() : generation(0), matchedSrc(nullptr) {}
 
 /**
- * @brief Default-constructs a block slot with no generation or source binding.
- */
-DataModel::FrameBuilder::PooledBlockSlot::PooledBlockSlot()
-  : generation(0), flushEpoch(0), sourceId(-1)
-{}
-
-/**
  * @brief Bumps the pool generation after a template rebuild so stale slots full-assign on reuse,
  *        and clears slot ownership so the next claims re-partition the pool. Structure is not
  *        republished here: the snapshot goes out lazily just before the first block of the new
@@ -234,77 +244,9 @@ void DataModel::FrameBuilder::invalidateFramePool() noexcept
   ++m_framePoolGeneration;
   m_publishedStructureGeneration.clear();
   m_poolPolicy.releaseOwnership();
-  refreshBlockPoolBudget(m_frame.groups.empty() && !m_sourceFrames.isEmpty()
+  m_stager.refreshBudget(m_frame.groups.empty() && !m_sourceFrames.isEmpty()
                            ? m_sourceFrames.constBegin().value()
                            : m_frame);
-  refreshFramePoolBudget(m_frame.groups.empty() && !m_sourceFrames.isEmpty()
-                           ? m_sourceFrames.constBegin().value()
-                           : m_frame);
-}
-
-/**
- * @brief Caps how many block slots may be materialised so a wide project cannot blow past
- *        kBlockPoolBudgetBytes: a slot's storage scales with the dataset count, and 64 of them
- *        is a lot of memory once a project carries hundreds of datasets. Never drops below the
- *        dashboard ring plus headroom, since starving staging is worse than exceeding the budget.
- */
-void DataModel::FrameBuilder::refreshBlockPoolBudget(const DataModel::Frame& src) noexcept
-{
-  std::size_t datasets = 0;
-  for (const auto& group : src.groups)
-    datasets += group.datasets.size();
-
-  constexpr std::size_t kFloor = IO::PipelineHost::kBlockRingSize + 8;
-  if (datasets == 0) {
-    m_blockSlotsUsable = kBlockPoolSlots;
-    return;
-  }
-
-  const std::size_t perSample = 2 * sizeof(double) + 2 * sizeof(QString) + 1 + sizeof(qint64);
-  const std::size_t perSlot = datasets * static_cast<std::size_t>(kFrameBlockSampleCap) * perSample;
-  const std::size_t affordable = perSlot > 0 ? kBlockPoolBudgetBytes / perSlot : kBlockPoolSlots;
-
-  m_blockSlotsUsable =
-    static_cast<int>(std::clamp<std::size_t>(affordable, kFloor, kBlockPoolSlots));
-}
-
-/**
- * @brief Probes for a free block slot, preferring one already laid out for @p sourceId at the
- *        current generation so openBlockFor() can skip the rebind and keep the slot's column
- *        storage. use_count()==1 is exact here for the same reason it is on the frame pool: every
- *        alias lives on this thread, and the builder holds its own reference while a block is open.
- */
-std::shared_ptr<DataModel::FrameBuilder::PooledBlockSlot> DataModel::FrameBuilder::claimBlockSlot(
-  int sourceId) noexcept
-{
-  static_assert(IO::PipelineHost::kBlockRingSize < kBlockPoolSlots - 8,
-                "block pool must outsize the dashboard ring or staging starves");
-
-  SS_ASSERT(!m_blockPool.empty(), return nullptr);
-
-  const std::size_t n = std::min(m_blockPool.size(), static_cast<std::size_t>(m_blockSlotsUsable));
-  std::size_t freeIdx = n;
-
-  for (std::size_t k = 0; k < n; ++k) {
-    const std::size_t idx = (m_blockPoolHint + k) % n;
-    const auto& slot      = m_blockPool[idx];
-    if (slot.use_count() != 1)
-      continue;
-
-    if (slot->generation == m_framePoolGeneration && slot->sourceId == sourceId) {
-      m_blockPoolHint = (idx + 1) % n;
-      return m_blockPool[idx];
-    }
-
-    if (freeIdx == n)
-      freeIdx = idx;
-  }
-
-  if (freeIdx == n)
-    return nullptr;
-
-  m_blockPoolHint = (freeIdx + 1) % n;
-  return m_blockPool[freeIdx];
 }
 
 /**
@@ -362,159 +304,13 @@ void DataModel::FrameBuilder::ensureStructurePublished(int sourceId, const DataM
 }
 
 /**
- * @brief Binds a claimed slot's block to @p src's dataset layout and sizes its storage once. Runs
- *        on structural change only; every later frame of that generation is a plain store into the
- *        storage laid out here.
- */
-void DataModel::FrameBuilder::bindBlockToFrame(PooledBlockSlot& slot,
-                                               const DataModel::Frame& src,
-                                               bool uniform)
-{
-  auto& block               = slot.block;
-  block.sourceId            = src.sourceId;
-  block.structureGeneration = m_framePoolGeneration;
-  block.dt                  = std::chrono::nanoseconds(0);
-
-  block.columns.clear();
-  for (const auto& group : src.groups)
-    for (const auto& dataset : group.datasets) {
-      DataModel::BlockColumn column;
-      column.uniqueId = dataset.uniqueId;
-      column.hasText  = true;
-      column.hasRaw   = true;
-      block.columns.push_back(std::move(column));
-    }
-
-  DataModel::size_block_storage(block, kFrameBlockSampleCap, !uniform);
-  slot.generation = m_framePoolGeneration;
-  slot.sourceId   = src.sourceId;
-}
-
-/**
- * @brief Returns @p sourceId's open block, opening one when none is held and flushing first when
- *        the held block was staged under an older layout -- a block must never straddle a
- *        structural change. Null when every pool slot is still referenced by a consumer.
- */
-DataModel::FrameBuilder::PooledBlockSlot* DataModel::FrameBuilder::openBlockFor(
-  int sourceId, const DataModel::Frame& src)
-{
-  static auto& pipeline = IO::PipelineHost::instance();
-
-  const auto it = m_openBlocks.find(sourceId);
-  if (it != m_openBlocks.end()) [[likely]] {
-    const bool reusable =
-      it->second->generation == m_framePoolGeneration && it->second->block.masked == m_maskSinks;
-    if (reusable) [[likely]]
-      return it->second.get();
-
-    flushBlock(sourceId);
-  }
-
-  auto slot = claimBlockSlot(sourceId);
-  if (!slot) [[unlikely]] {
-    notePoolExhausted();
-    return nullptr;
-  }
-
-  if (slot->generation != m_framePoolGeneration || slot->sourceId != src.sourceId)
-    bindBlockToFrame(*slot, src, false);
-
-  slot->flushEpoch = pipeline.flushEpoch();
-  DataModel::reset_block(slot->block);
-  slot->block.structureGeneration = m_framePoolGeneration;
-  slot->block.masked              = m_maskSinks;
-
-  const auto inserted = m_openBlocks.emplace(sourceId, std::move(slot));
-  return inserted.first->second.get();
-}
-
-/**
- * @brief Appends one parsed frame's dataset values to @p sourceId's open block, flushing when the
- *        block is full or the display tick moved the flush epoch on (spec 0055 D1). Every write is
- *        a store into storage sized at bind time, so the steady state allocates nothing.
- */
-SS_HOT void DataModel::FrameBuilder::stageFrameValues(
-  int sourceId, const DataModel::Frame& src, const DataModel::TimestampedFrame::SteadyTimePoint& ts)
-{
-  SS_ASSERT_HOTPATH(sourceId >= 0);
-
-  static auto& pipeline = IO::PipelineHost::instance();
-
-  ensureStructurePublished(sourceId, src);
-
-  auto* slot = openBlockFor(sourceId, src);
-  if (!slot) [[unlikely]]
-    return;
-
-  auto& block           = slot->block;
-  const qsizetype index = block.samples;
-  if (index == 0)
-    block.t0 = ts;
-
-  std::size_t column = 0;
-  for (const auto& group : src.groups) {
-    SS_NO_UNROLL
-    for (const auto& dataset : group.datasets) {
-      if (column >= block.columns.size()) [[unlikely]]
-        break;
-
-      SS_ASSERT_HOTPATH(block.columns[column].uniqueId == dataset.uniqueId);
-      DataModel::write_block_sample(
-        block.columns[column], index, dataset.numericValue, dataset.value, dataset.isNumeric);
-      DataModel::write_block_raw(
-        block.columns[column], index, dataset.rawNumericValue, dataset.rawValue);
-      ++column;
-    }
-  }
-
-  DataModel::write_block_time(
-    block, index, std::chrono::duration_cast<std::chrono::nanoseconds>(ts - block.t0).count());
-
-  block.samples = index + 1;
-
-  const quint64 epoch = pipeline.flushEpoch();
-  if (block.samples >= kFrameBlockSampleCap || epoch != slot->flushEpoch) [[unlikely]]
-    flushBlock(sourceId);
-}
-
-/**
- * @brief Publishes @p sourceId's open block and releases the builder's reference to its slot. The
- *        hand-out is an aliasing shared_ptr over the pool slot, so there is no per-block control
- *        block and the slot frees itself once every consumer has drained it.
- */
-void DataModel::FrameBuilder::flushBlock(int sourceId)
-{
-  const auto it = m_openBlocks.find(sourceId);
-  if (it == m_openBlocks.end())
-    return;
-
-  auto slot = it->second;
-  m_openBlocks.erase(it);
-
-  if (slot->block.samples == 0)
-    return;
-
-  slot->block.blockNumber = ++m_blockNumbers[sourceId];
-  publishBlock(DataModel::DataBlockPtr(slot, &slot->block));
-}
-
-/**
  * @brief Flushes every open block regardless of fill (queued from the GUI display tick, spec 0055
  *        D1). A source that has gone quiet would otherwise hold its partial block indefinitely,
  *        because the cap and the epoch check are only reached while frames keep arriving.
  */
 void DataModel::FrameBuilder::flushOpenBlocks()
 {
-  if (m_openBlocks.empty()) [[likely]]
-    return;
-
-  std::vector<int> sources;
-  sources.reserve(m_openBlocks.size());
-  for (const auto& [sourceId, slot] : m_openBlocks)
-    sources.push_back(sourceId);
-
-  for (const int sourceId : sources)
-    flushBlock(sourceId);
+  m_stager.flushAll();
 }
 
 /**
@@ -543,7 +339,7 @@ SS_COLD void DataModel::FrameBuilder::notePoolExhausted()
   static bool warned = false;
   if (!warned) [[unlikely]] {
     warned = true;
-    qWarning() << "[FrameBuilder] Block pool exhausted (" << kBlockPoolSlots
+    qWarning() << "[FrameBuilder] Block pool exhausted (" << DataModel::BlockStager::kBlockPoolSlots
                << " slots), consumers are not draining; dropping blocks.";
     static auto& nc = NotificationCenter::instance();
     QMetaObject::invokeMethod(
@@ -558,6 +354,41 @@ SS_COLD void DataModel::FrameBuilder::notePoolExhausted()
                "display and from any active recording. Disable a heavy consumer or reduce "
                "the data rate.")));
   }
+}
+
+/**
+ * @brief BlockStagerHost hook: forwards the stager's pool-exhaustion note to the shared warning.
+ */
+void DataModel::FrameBuilder::noteStagingPoolExhausted()
+{
+  notePoolExhausted();
+}
+
+/**
+ * @brief BlockStagerHost hook: publishes a flushed block through the one sink fan-out.
+ */
+void DataModel::FrameBuilder::publishStagedBlock(const DataModel::DataBlockPtr& block)
+{
+  m_publisher.publish(block);
+}
+
+/**
+ * @brief BlockStagerHost hook: announces @p sourceId's structure ahead of its first block.
+ */
+void DataModel::FrameBuilder::announceStructure(int sourceId, const DataModel::Frame& src)
+{
+  ensureStructurePublished(sourceId, src);
+}
+
+/**
+ * @brief BlockStagerHost hook: the display tick's flush epoch, read per staged frame so a
+ *        producing source closes its block on its next frame instead of waiting for the queued
+ *        flushOpenBlocks() nudge.
+ */
+quint64 DataModel::FrameBuilder::stagingFlushEpoch() const
+{
+  static auto& pipeline = IO::PipelineHost::instance();
+  return pipeline.flushEpoch();
 }
 
 /**
@@ -608,23 +439,6 @@ bool DataModel::FrameBuilder::preparePooledSlot(PooledFrameSlot* slot, const Dat
   slot->generation = m_framePoolGeneration;
   bindSlotTemplate(slot, src);
   return false;
-}
-
-/**
- * @brief Re-derives the pool's slot ceiling from the current frame's footprint, so the pool is
- *        bounded by memory rather than by a slot count tuned for the small frames the 256 kHz
- *        frame lane produces. Runs on structural change only, never per frame.
- */
-void DataModel::FrameBuilder::refreshFramePoolBudget(const DataModel::Frame& src) noexcept
-{
-  std::size_t datasets = 0;
-  for (const auto& group : src.groups)
-    datasets += group.datasets.size();
-
-  const std::size_t bytes = sizeof(DataModel::Frame) + src.groups.size() * sizeof(DataModel::Group)
-                          + datasets * sizeof(DataModel::Dataset);
-
-  m_poolPolicy.applyMemoryBudget(bytes, kFramePoolBudgetBytes);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -759,6 +573,17 @@ void DataModel::FrameBuilder::setupExternalConnections()
           this,
           &DataModel::FrameBuilder::onConnectedChanged);
 
+  connect(&IO::ConnectionManager::instance(),
+          &IO::ConnectionManager::pausedChanged,
+          this,
+          &DataModel::FrameBuilder::onPausedChanged);
+
+  connect(&IO::PipelineHost::instance(),
+          &IO::PipelineHost::parkedOnGuiChanged,
+          this,
+          &DataModel::FrameBuilder::onPipelineParkedChanged,
+          Qt::DirectConnection);
+
   connect(&AppState::instance(),
           &AppState::operationModeChanged,
           this,
@@ -803,52 +628,87 @@ void DataModel::FrameBuilder::setupExternalConnections()
   connect(&Sessions::Player::instance(), &Sessions::Player::openChanged, this, onPlayer);
 #endif
 
-  connect(&CSV::Export::instance(), &CSV::Export::enabledChanged, this, [this] {
-    refreshAnyAsyncSink();
-  });
-  connect(&MDF4::Export::instance(), &MDF4::Export::enabledChanged, this, [this] {
-    refreshAnyAsyncSink();
-  });
-  connect(&API::Server::instance(), &API::Server::enabledChanged, this, [this] {
-    refreshAnyAsyncSink();
-    refreshLatestFrameCapture();
-  });
-  connect(&API::Server::instance(), &API::Server::clientCountChanged, this, [this] {
-    refreshAnyAsyncSink();
-  });
-  connect(&DataModel::ControlScript::instance(),
-          &DataModel::ControlScript::runningChanged,
-          this,
-          [this] { refreshLatestFrameCapture(); });
+  AsyncSinks sinks;
+  sinks.csv    = &CSV::Export::instance();
+  sinks.mdf4   = &MDF4::Export::instance();
+  sinks.server = &API::Server::instance();
+  sinks.script = &DataModel::ControlScript::instance();
 #ifdef BUILD_COMMERCIAL
-  connect(&Sessions::Export::instance(), &Sessions::Export::enabledChanged, this, [this] {
-    refreshAnyAsyncSink();
-  });
-  connect(&MQTT::Publisher::instance(), &MQTT::Publisher::configurationChanged, this, [this] {
-    refreshAnyAsyncSink();
-  });
-  connect(&Widgets::AudioExport::instance(),
-          &Widgets::AudioExport::activeSessionsChanged,
-          this,
-          [this] { refreshAnyAsyncSink(); });
-  connect(&InfluxDB::Export::instance(), &InfluxDB::Export::enabledChanged, this, [this] {
-    refreshAnyAsyncSink();
-  });
+  sinks.sessions = &Sessions::Export::instance();
+  sinks.mqtt     = &MQTT::Publisher::instance();
+  sinks.audio    = &Widgets::AudioExport::instance();
+  sinks.influx   = &InfluxDB::Export::instance();
 #endif
 #ifdef ENABLE_GRPC
-  connect(&API::GRPC::GRPCServer::instance(), &API::GRPC::GRPCServer::enabledChanged, this, [this] {
-    refreshAnyAsyncSink();
-  });
-  connect(&API::GRPC::GRPCServer::instance(),
-          &API::GRPC::GRPCServer::clientCountChanged,
-          this,
-          [this] { refreshAnyAsyncSink(); });
+  sinks.grpc = &API::GRPC::GRPCServer::instance();
 #endif
+  m_publisher.bind(resolveBlockSinks(sinks, IO::PipelineHost::instance()));
+  wireAsyncSinkHooks(sinks);
 
   m_operationMode = AppState::instance().operationMode();
   m_playerOpen    = SerialStudio::isAnyPlayerOpen();
-  refreshAnyAsyncSink();
   refreshLatestFrameCapture();
+}
+
+/**
+ * @brief Projects the wiring sink list onto the publisher's, adding the pipeline the dashboard
+ *        hop goes through. Both are resolved in this one composition-root body, so the publish
+ *        path itself reaches through no singleton.
+ */
+DataModel::BlockPublisher::Sinks DataModel::FrameBuilder::resolveBlockSinks(const AsyncSinks& s,
+                                                                            IO::PipelineHost& host)
+{
+  BlockPublisher::Sinks sinks;
+  sinks.pipeline = &host;
+  sinks.server   = s.server;
+  sinks.csv      = s.csv;
+  sinks.mdf4     = s.mdf4;
+#ifdef BUILD_COMMERCIAL
+  sinks.sessions = s.sessions;
+  sinks.mqtt     = s.mqtt;
+  sinks.audio    = s.audio;
+  sinks.influx   = s.influx;
+#endif
+#ifdef ENABLE_GRPC
+  sinks.grpc = s.grpc;
+#endif
+
+  return sinks;
+}
+
+/**
+ * @brief Wires every input of the cached any-async-sink and latest-frame-capture flags. A sink
+ *        missing from here leaves the flag stale, and the recording then produces a valid-looking
+ *        empty file, so this list is the flags' contract rather than a convenience.
+ */
+void DataModel::FrameBuilder::wireAsyncSinkHooks(const AsyncSinks& sinks)
+{
+  SS_ASSERT(sinks.csv && sinks.mdf4, return);
+  SS_ASSERT(sinks.server && sinks.script, return);
+
+  const auto refresh = [this] {
+    m_publisher.refreshSinkFlag();
+  };
+  connect(sinks.csv, &CSV::Export::enabledChanged, this, refresh);
+  connect(sinks.mdf4, &MDF4::Export::enabledChanged, this, refresh);
+  connect(sinks.server, &API::Server::enabledChanged, this, [this] {
+    m_publisher.refreshSinkFlag();
+    refreshLatestFrameCapture();
+  });
+  connect(sinks.server, &API::Server::clientCountChanged, this, refresh);
+  connect(sinks.script, &DataModel::ControlScript::runningChanged, this, [this] {
+    refreshLatestFrameCapture();
+  });
+#ifdef BUILD_COMMERCIAL
+  connect(sinks.sessions, &Sessions::Export::enabledChanged, this, refresh);
+  connect(sinks.mqtt, &MQTT::Publisher::configurationChanged, this, refresh);
+  connect(sinks.audio, &Widgets::AudioExport::activeSessionsChanged, this, refresh);
+  connect(sinks.influx, &InfluxDB::Export::enabledChanged, this, refresh);
+#endif
+#ifdef ENABLE_GRPC
+  connect(sinks.grpc, &API::GRPC::GRPCServer::enabledChanged, this, refresh);
+  connect(sinks.grpc, &API::GRPC::GRPCServer::clientCountChanged, this, refresh);
+#endif
 }
 
 /**
@@ -887,7 +747,7 @@ void DataModel::FrameBuilder::refreshAsyncSinks()
     return;
   }
 
-  refreshAnyAsyncSink();
+  m_publisher.refreshSinkFlag();
 }
 
 /**
@@ -931,14 +791,7 @@ void DataModel::FrameBuilder::releaseReplayPoolStorage()
 {
   SS_ASSERT_LOG(QThread::currentThread() == thread());
 
-  for (auto& slot : m_blockPool) {
-    if (slot.use_count() != 1)
-      continue;
-
-    slot->block      = DataModel::DataBlock();
-    slot->generation = 0;
-    slot->sourceId   = -1;
-  }
+  m_stager.releaseIdleStorage();
 
   for (auto& slot : m_framePool) {
     if (slot.use_count() != 1)
@@ -951,34 +804,6 @@ void DataModel::FrameBuilder::releaseReplayPoolStorage()
   }
 
   m_poolPolicy.releaseOwnership();
-}
-
-/**
- * @brief Recomputes the cached any-async-consumer flag from every export/output module. The
- *        TCP and gRPC servers only count while a client is connected: with zero clients their
- *        workers drop every frame, so the per-frame detached copy would be pure waste.
- */
-void DataModel::FrameBuilder::refreshAnyAsyncSink()
-{
-  static auto& server     = API::Server::instance();
-  static auto& csvExport  = CSV::Export::instance();
-  static auto& mdf4Export = MDF4::Export::instance();
-  bool any                = csvExport.exportEnabled() || mdf4Export.exportEnabled()
-          || (server.enabled() && server.clientCount() > 0);
-#ifdef BUILD_COMMERCIAL
-  static auto& sessionsExport = Sessions::Export::instance();
-  static auto& mqttPublisher  = MQTT::Publisher::instance();
-  static auto& audioExport    = Widgets::AudioExport::instance();
-  static auto& influxExport   = InfluxDB::Export::instance();
-  any                         = any || sessionsExport.exportEnabled() || mqttPublisher.enabled()
-     || audioExport.hasActiveSessions() || influxExport.exportEnabled();
-#endif
-#ifdef ENABLE_GRPC
-  static auto& grpc = API::GRPC::GRPCServer::instance();
-  any               = any || (grpc.enabled() && grpc.clientCount() > 0);
-#endif
-
-  m_anyAsyncSink = any;
 }
 
 /**
@@ -1014,10 +839,10 @@ void DataModel::FrameBuilder::clearLatestFrames()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Rebuilds m_frame from ProjectModel's in-memory state (no file I/O). A GUI-thread caller
- *        collects the project data here and carries it across, so the builder never blocks back on
- *        the GUI: that round trip made the GUI's event-loop-backed wait re-enter this function and
- *        nest loops without bound. The in-flight latch stops a re-entrant call regardless.
+ * @brief Rebuilds m_frame from ProjectModel's in-memory state (no file I/O). The GUI-thread
+ *        caller carries the data across, so the builder never blocks back on the GUI: that round
+ *        trip re-entered this function and nested loops without bound. A sync arriving while the
+ *        pipeline is parked runs INLINE there, where the thread assert drops it (A3), so it waits.
  */
 void DataModel::FrameBuilder::syncFromProjectModel()
 {
@@ -1026,6 +851,12 @@ void DataModel::FrameBuilder::syncFromProjectModel()
       return;
 
     auto snapshot = collectProjectSnapshot();
+    if (IO::PipelineHost::pipelineParkedOnGui()) [[unlikely]] {
+      m_deferredProjectSnapshot = std::move(snapshot);
+      m_projectSyncInFlight.store(false, std::memory_order_release);
+      return;
+    }
+
     invokeOnBuilderThreadBlocking([this, snapshot = std::move(snapshot)]() mutable {
       applyProjectSnapshot(std::move(snapshot));
     });
@@ -1053,6 +884,39 @@ DataModel::FrameBuilder::ProjectSnapshot DataModel::FrameBuilder::collectProject
   snapshot.sources = pm.sources();
   snapshot.decoder = pm.decoderMethod();
   return snapshot;
+}
+
+/**
+ * @brief Hands a snapshot deferred by the parked path back to the builder thread. The apply is
+ *        POSTED, never run here: the bracket closes inside the script call that parked the
+ *        pipeline, i.e. mid-frame, and applyProjectSnapshot clears m_frame -- which the running
+ *        dataset pass still holds references into. The event-loop turn is what makes it safe.
+ */
+void DataModel::FrameBuilder::onPipelineParkedChanged(bool parked)
+{
+  if (parked || m_shuttingDown)
+    return;
+
+  if (!m_deferredProjectSnapshot.has_value()) [[likely]]
+    return;
+
+  QMetaObject::invokeMethod(this, [this] { applyDeferredProjectSnapshot(); }, Qt::QueuedConnection);
+}
+
+/**
+ * @brief Applies the snapshot the parked path held, on the builder thread and outside any parse
+ *        pass. Idempotent: a wake with nothing held is a no-op.
+ */
+void DataModel::FrameBuilder::applyDeferredProjectSnapshot()
+{
+  SS_ASSERT(QThread::currentThread() == thread(), return);
+
+  if (!m_deferredProjectSnapshot.has_value())
+    return;
+
+  auto snapshot = std::move(*m_deferredProjectSnapshot);
+  m_deferredProjectSnapshot.reset();
+  applyProjectSnapshot(std::move(snapshot));
 }
 
 /**
@@ -1362,7 +1226,7 @@ void DataModel::FrameBuilder::ingestStreamBlock(const DataModel::DataBlockPtr& b
   if (block->samples <= 0) [[unlikely]]
     return;
 
-  publishBlock(block);
+  m_publisher.publish(block);
 }
 
 /**
@@ -1399,33 +1263,28 @@ void DataModel::FrameBuilder::refreshStreamDrivenFrames()
 }
 
 /**
- * @brief Stages and immediately flushes one republished frame as a single-sample block, so a
- *        synthetic refresh reaches the display within the tick that asked for it. Any block
- *        already open is flushed FIRST and unmasked: it holds real captured samples, and
- *        closing it under the mask would drop them from every recording sink.
+ * @brief Stages and flushes one republished frame as a single-sample block, so a synthetic
+ *        refresh reaches the display within the tick that asked for it. An open block is flushed
+ *        FIRST and unmasked: it holds real captured samples. Only a fully table-fed source
+ *        reaches the sinks; one with parsed channels renders masked, already recorded (A11).
  */
 bool DataModel::FrameBuilder::emitRepublishedFrame(const DataModel::Frame& frame,
                                                    int key,
                                                    bool feedExports)
 {
   const int sourceId = frame.sourceId;
-  flushBlock(sourceId);
+  m_stager.flush(sourceId);
 
-  const auto published_count = [this, sourceId] {
-    const auto it = m_blockNumbers.find(sourceId);
-    return it != m_blockNumbers.end() ? it->second : quint64(0);
-  };
-
-  const quint64 before    = published_count();
+  const quint64 before    = m_stager.blockNumber(sourceId);
   const bool previousMask = m_maskSinks;
-  m_maskSinks             = m_maskSinks || !feedExports;
+  m_maskSinks             = m_maskSinks || !feedExports || !frameIsTableFed(frame);
 
-  stageFrameValues(sourceId, frame, DataModel::TimestampedFrame::SteadyClock::now());
-  flushBlock(sourceId);
+  m_stager.stage(sourceId, frame, DataModel::TimestampedFrame::SteadyClock::now());
+  m_stager.flush(sourceId);
 
   m_maskSinks = previousMask;
 
-  if (published_count() == before)
+  if (m_stager.blockNumber(sourceId) == before)
     return false;
 
   m_republishGate.notePublished(key, feedExports);
@@ -1569,6 +1428,41 @@ const DataModel::TableApiContext& DataModel::FrameBuilder::guiTableApiContext()
 }
 
 /**
+ * @brief Publishes every open block and then announces the session edge to the recording sinks.
+ *        Order is the contract (A2): the flush's SPSC enqueues happen-before the queued signal, so
+ *        each sink's close() drains the samples staged while its file was open instead of finding
+ *        the file gone and opening a second one for the tail. Edge rate only, never per frame.
+ */
+void DataModel::FrameBuilder::emitSessionBoundary()
+{
+  SS_ASSERT_LOG(QThread::currentThread() == thread());
+  SS_ASSERT(!m_shuttingDown, return);
+
+  m_stager.flushAll();
+
+  Q_EMIT sessionBoundary(m_lastConnectedState, m_lastPausedState);
+}
+
+/**
+ * @brief Announces a pause/resume edge as a session boundary, so a paused recording closes over the
+ *        samples already parsed instead of losing the tick that straddled the pause. Reads the
+ *        pipeline's paused mirror rather than ConnectionManager, which the GUI thread owns.
+ */
+void DataModel::FrameBuilder::onPausedChanged()
+{
+  if (m_shuttingDown) [[unlikely]]
+    return;
+
+  static auto& pipeline = IO::PipelineHost::instance();
+  const bool nowPaused  = pipeline.paused();
+  if (nowPaused == m_lastPausedState)
+    return;
+
+  m_lastPausedState = nowPaused;
+  emitSessionBoundary();
+}
+
+/**
  * @brief Handles connection transitions: recompiles transforms, reloads parser, fires
  *        auto-actions. The latest-frame store clears on both edges so io.getLatestFrame can
  *        never serve a previous connection's frame. No-op after aboutToQuit: a connection
@@ -1590,6 +1484,8 @@ void DataModel::FrameBuilder::onConnectedChanged()
 
   m_lastConnectedState = nowConnected;
   m_quickPlotChannels  = -1;
+
+  emitSessionBoundary();
 
   invalidateFramePool();
 
@@ -1661,62 +1557,13 @@ void DataModel::FrameBuilder::onConnectedChanged()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Parses a project frame using the configured decoding method.
+ * @brief Parses one project frame: the span fast lane first, then the decode-and-apply path for
+ *        every logical frame the chunk carried. @p perSource selects the per-source frame and the
+ *        per-source decoder override; source 0 without it is the single-source lane.
  */
-void DataModel::FrameBuilder::parseProjectFrame(const IO::CapturedDataPtr& data)
-{
-  SS_ASSERT_HOTPATH(data);
-  SS_ASSERT_HOTPATH(!data->data.isEmpty());
-
-  if (m_frame.groups.empty()) [[unlikely]]
-    return;
-
-  if (parseBudgetSkipFrame(0)) [[unlikely]]
-    return;
-
-  const auto t0 = m_parseBudgetEnabled ? BudgetClock::now() : BudgetClock::time_point{};
-
-  const int published = trySpanLane(0, false, m_frame, data);
-  if (published >= 0) {
-    m_parsedFrameCount += static_cast<quint64>(published);
-    parseBudgetAccount(0, t0);
-    return;
-  }
-
-  QList<QStringList> multiChannels;
-  decodeProjectChannels(0, false, data, multiChannels);
-
-  const auto step = capturedFrameStep(data);
-  for (int i = 0; i < multiChannels.size(); ++i) {
-    const auto& channels = multiChannels.at(i);
-    if (channels.isEmpty()) [[unlikely]]
-      continue;
-
-    const auto frameTs = data->timestamp + step * i;
-    TransformFrameInfo info;
-    info.sourceId = 0;
-
-    if (!m_transforms.empty()) {
-      info.frameNumber = ++m_sourceFrameCounters[0];
-      info.timestampMs =
-        std::chrono::duration_cast<std::chrono::milliseconds>(frameTs.time_since_epoch()).count();
-    }
-
-    if (m_captureLatestFrame) [[unlikely]]
-      captureLatestChannels(0, channels);
-
-    applyDatasetValues(m_frame, channels, info);
-    stageFrameValues(0, m_frame, frameTs);
-    ++m_parsedFrameCount;
-  }
-
-  parseBudgetAccount(0, t0);
-}
-
-/**
- * @brief Source-aware variant of parseProjectFrame.
- */
-void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::CapturedDataPtr& data)
+void DataModel::FrameBuilder::parseProjectFrameFor(int sourceId,
+                                                   bool perSource,
+                                                   const IO::CapturedDataPtr& data)
 {
   SS_ASSERT_HOTPATH(sourceId >= 0);
   SS_ASSERT_HOTPATH(data);
@@ -1730,7 +1577,8 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::Captured
 
   const auto t0 = m_parseBudgetEnabled ? BudgetClock::now() : BudgetClock::time_point{};
 
-  const int published = trySpanLane(sourceId, true, ensureSourceFrame(sourceId), data);
+  DataModel::Frame& laneFrame = perSource ? ensureSourceFrame(sourceId) : m_frame;
+  const int published         = trySpanLane(sourceId, perSource, laneFrame, data);
   if (published >= 0) {
     m_parsedFrameCount += static_cast<quint64>(published);
     parseBudgetAccount(sourceId, t0);
@@ -1738,7 +1586,7 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::Captured
   }
 
   QList<QStringList> multiChannels;
-  decodeProjectChannels(sourceId, true, data, multiChannels);
+  decodeProjectChannels(sourceId, perSource, data, multiChannels);
 
   const auto step = capturedFrameStep(data);
   for (int i = 0; i < multiChannels.size(); ++i) {
@@ -1746,7 +1594,7 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::Captured
     if (channels.isEmpty()) [[unlikely]]
       continue;
 
-    DataModel::Frame& srcFrame = ensureSourceFrame(sourceId);
+    DataModel::Frame& srcFrame = perSource ? ensureSourceFrame(sourceId) : m_frame;
     const auto frameTs         = data->timestamp + step * i;
     TransformFrameInfo info;
     info.sourceId = sourceId;
@@ -1761,11 +1609,27 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::Captured
       captureLatestChannels(sourceId, channels);
 
     applyDatasetValues(srcFrame, channels, info);
-    stageFrameValues(sourceId, srcFrame, frameTs);
+    m_stager.stage(sourceId, srcFrame, frameTs);
     ++m_parsedFrameCount;
   }
 
   parseBudgetAccount(sourceId, t0);
+}
+
+/**
+ * @brief Single-source lane: parses into the project frame itself.
+ */
+void DataModel::FrameBuilder::parseProjectFrame(const IO::CapturedDataPtr& data)
+{
+  parseProjectFrameFor(0, false, data);
+}
+
+/**
+ * @brief Source-aware variant of parseProjectFrame.
+ */
+void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::CapturedDataPtr& data)
+{
+  parseProjectFrameFor(sourceId, true, data);
 }
 
 /**
@@ -1807,163 +1671,6 @@ void DataModel::FrameBuilder::replayChannels(
 }
 
 /**
- * @brief Formats a double exactly like QString::number(v, 'g', 10) but locale-independent and
- *        in place (C-locale %g semantics): the typed replay lane's display string. Apple ships
- *        float std::to_chars only from macOS 13.3, so older targets use snprintf_l with the
- *        NULL (C) locale. The debug parity assert is temporary scaffolding for spec 0022.
- */
-static void assignFormattedDouble(QString& dst, double value)
-{
-  char buf[32];
-#ifdef SS_APPLE_NO_FLOAT_TO_CHARS
-  const int len = snprintf_l(buf, sizeof(buf), nullptr, "%.10g", value);
-  SS_ASSERT_HOTPATH(len > 0 && static_cast<size_t>(len) < sizeof(buf));
-  DataModel::assign_utf8_in_place(dst, QByteArrayView(buf, static_cast<qsizetype>(len)));
-#else
-  const auto res = std::to_chars(buf, buf + sizeof(buf), value, std::chars_format::general, 10);
-  SS_ASSERT_HOTPATH(res.ec == std::errc());
-  DataModel::assign_utf8_in_place(dst, QByteArrayView(buf, static_cast<qsizetype>(res.ptr - buf)));
-#endif
-  // code-verify off
-  // Debug-only parity scaffolding (spec 0022): QString::number allocates, so this can never
-  // become a per-cell runtime check.
-  Q_ASSERT(dst == QString::number(value, 'g', 10));
-  // code-verify on
-}
-
-/**
- * @brief Returns the installed uniqueId->column replay map for @p sourceId, or nullptr when the
- *        player registered none (index-based fallback applies).
- */
-const std::unordered_map<int, int>* DataModel::FrameBuilder::replayColumnsFor(int sourceId) const
-{
-  SS_ASSERT_HOTPATH(sourceId >= 0);
-  SS_ASSERT_HOTPATH(SerialStudio::isFinalValuePlayerOpen());
-
-  const auto it = m_replayColumnMap.find(sourceId);
-  return (it != m_replayColumnMap.end()) ? &it->second : nullptr;
-}
-
-/**
- * @brief Replay twin of applyDatasetValue for UTF-8 view cells: identical final-value branch
- *        order (column map, virtual zeros, index fallback), in-place string writes, one parse
- *        per cell, and no transform run -- replay keeps engines torn down.
- */
-void DataModel::FrameBuilder::applyReplaySpanValue(Dataset& dataset,
-                                                   const QByteArrayView* cells,
-                                                   qsizetype count,
-                                                   const std::unordered_map<int, int>* columns)
-{
-  SS_ASSERT_HOTPATH(cells != nullptr);
-  SS_ASSERT_HOTPATH(count > 0);
-
-  if (columns) [[likely]] {
-    const auto it       = columns->find(dataset.uniqueId);
-    const qsizetype col = (it != columns->end()) ? it->second : -1;
-    if (col >= 0 && col < count) {
-      DataModel::assign_utf8_in_place(dataset.value, cells[col]);
-      dataset.numericValue = SerialStudio::toDouble(cells[col], &dataset.isNumeric);
-    } else {
-      dataset.numericValue = 0.0;
-      dataset.value.clear();
-      dataset.isNumeric = true;
-    }
-  } else if (dataset.virtual_) {
-    dataset.numericValue = 0.0;
-    dataset.value.clear();
-    dataset.isNumeric = true;
-  } else {
-    const qsizetype idx = dataset.index;
-    if (idx <= 0 || idx > count) [[unlikely]]
-      return;
-
-    DataModel::assign_utf8_in_place(dataset.value, cells[idx - 1]);
-    dataset.numericValue = SerialStudio::toDouble(cells[idx - 1], &dataset.isNumeric);
-  }
-
-  dataset.rawNumericValue = dataset.numericValue;
-  DataModel::assign_string_in_place(dataset.rawValue, dataset.value);
-
-  if (m_captureDatasetValues)
-    m_tableStore.setDatasetRaw(
-      dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
-
-  if (!dataset.isNumeric)
-    dataset.numericValue = (dataset.wgtMax > dataset.wgtMin) ? dataset.wgtMin : 0.0;
-
-  if (m_exprEngineForSource) [[unlikely]]
-    m_exprEngineForSource->exprSlots->publish(dataset.uniqueId, dataset.numericValue);
-
-  if (m_captureDatasetValues)
-    m_tableStore.setDatasetFinal(
-      dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
-}
-
-/**
- * @brief Replay twin of applyDatasetValue for typed cells: numeric cells keep the native double
- *        (spec 0022's R7 -- no format/parse round trip) while the display string is written in
- *        place with the same 'g'/10 rendering as before; text cells parse once like today.
- */
-void DataModel::FrameBuilder::applyReplayTypedValue(Dataset& dataset,
-                                                    const ReplayCell* cells,
-                                                    qsizetype count,
-                                                    const std::unordered_map<int, int>* columns)
-{
-  SS_ASSERT_HOTPATH(cells != nullptr);
-  SS_ASSERT_HOTPATH(count > 0);
-
-  const auto applyCell = [&](const ReplayCell& cell) {
-    if (cell.text) {
-      DataModel::assign_string_in_place(dataset.value, *cell.text);
-      dataset.numericValue = SerialStudio::toDouble(dataset.value, &dataset.isNumeric);
-    } else {
-      assignFormattedDouble(dataset.value, cell.number);
-      dataset.numericValue = cell.number;
-      dataset.isNumeric    = true;
-    }
-  };
-
-  if (columns) [[likely]] {
-    const auto it       = columns->find(dataset.uniqueId);
-    const qsizetype col = (it != columns->end()) ? it->second : -1;
-    if (col >= 0 && col < count) {
-      applyCell(cells[col]);
-    } else {
-      dataset.numericValue = 0.0;
-      dataset.value.clear();
-      dataset.isNumeric = true;
-    }
-  } else if (dataset.virtual_) {
-    dataset.numericValue = 0.0;
-    dataset.value.clear();
-    dataset.isNumeric = true;
-  } else {
-    const qsizetype idx = dataset.index;
-    if (idx <= 0 || idx > count) [[unlikely]]
-      return;
-
-    applyCell(cells[idx - 1]);
-  }
-
-  dataset.rawNumericValue = dataset.numericValue;
-  DataModel::assign_string_in_place(dataset.rawValue, dataset.value);
-
-  if (m_captureDatasetValues)
-    m_tableStore.setDatasetRaw(
-      dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
-
-  if (!dataset.isNumeric)
-    dataset.numericValue = (dataset.wgtMax > dataset.wgtMin) ? dataset.wgtMin : 0.0;
-
-  if (m_exprEngineForSource) [[unlikely]]
-    m_exprEngineForSource->exprSlots->publish(dataset.uniqueId, dataset.numericValue);
-
-  if (m_captureDatasetValues)
-    m_tableStore.setDatasetFinal(
-      dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
-}
-
-/**
  * @brief Span-cell replay lane (spec 0022): UTF-8 view cells from the CSV player's mapped rows
  *        go straight into the per-source frame with zero intermediate QString lists, then
  *        publish through the same pooled-slot replay fan-out as replayChannels.
@@ -2002,7 +1709,7 @@ void DataModel::FrameBuilder::replayChannelSpans(
   if (srcFrame.groups.empty() || srcFrame.title.isEmpty()) [[unlikely]]
     return;
 
-  const auto* columns = replayColumnsFor(sourceId);
+  const auto* columns = m_replay.columnsFor(sourceId);
 
   TransformFrameInfo info;
   info.sourceId = sourceId;
@@ -2011,7 +1718,7 @@ void DataModel::FrameBuilder::replayChannelSpans(
   for (auto& group : srcFrame.groups) {
     SS_NO_UNROLL
     for (auto& dataset : group.datasets)
-      applyReplaySpanValue(dataset, cells, count, columns);
+      m_replay.applySpanValue(dataset, cells, count, columns);
   }
 
   endDatasetPass(armedWatchdog);
@@ -2053,7 +1760,7 @@ void DataModel::FrameBuilder::replayChannelsTyped(
   if (srcFrame.groups.empty() || srcFrame.title.isEmpty()) [[unlikely]]
     return;
 
-  const auto* columns = replayColumnsFor(sourceId);
+  const auto* columns = m_replay.columnsFor(sourceId);
 
   TransformFrameInfo info;
   info.sourceId = sourceId;
@@ -2062,7 +1769,7 @@ void DataModel::FrameBuilder::replayChannelsTyped(
   for (auto& group : srcFrame.groups) {
     SS_NO_UNROLL
     for (auto& dataset : group.datasets)
-      applyReplayTypedValue(dataset, cells, count, columns);
+      m_replay.applyTypedValue(dataset, cells, count, columns);
   }
 
   endDatasetPass(armedWatchdog);
@@ -2120,7 +1827,7 @@ int DataModel::FrameBuilder::trySpanLane(int sourceId,
     auto heap                 = std::make_shared<TimestampedFrame>(frame, data->timestamp);
     heap->structureGeneration = m_framePoolGeneration;
     applyDatasetValuesSpans(heap->data, m_spanScratch.data(), tokens, info);
-    stageFrameValues(sourceId, heap->data, data->timestamp);
+    m_stager.stage(sourceId, heap->data, data->timestamp);
     return 1;
   }
 
@@ -2136,7 +1843,7 @@ int DataModel::FrameBuilder::trySpanLane(int sourceId,
 
   slotRaw->frame.timestamp           = data->timestamp;
   slotRaw->frame.structureGeneration = m_framePoolGeneration;
-  stageFrameValues(sourceId, slotRaw->frame.data, data->timestamp);
+  m_stager.stage(sourceId, slotRaw->frame.data, data->timestamp);
   return 1;
 }
 
@@ -2692,13 +2399,10 @@ void DataModel::FrameBuilder::applyDatasetValues(DataModel::Frame& frame,
   const auto* channelData = channels.data();
   const int channelCount  = channels.size();
 
-  const bool finalValueReplay                       = SerialStudio::isFinalValuePlayerOpen();
+  const bool finalValueReplay                       = m_playerOpen;
   const std::unordered_map<int, int>* replayColumns = nullptr;
-  if (finalValueReplay) [[unlikely]] {
-    const auto it = m_replayColumnMap.find(info.sourceId);
-    if (it != m_replayColumnMap.end())
-      replayColumns = &it->second;
-  }
+  if (finalValueReplay) [[unlikely]]
+    replayColumns = m_replay.columnsFor(info.sourceId);
 
   const bool armedWatchdog = beginDatasetPass(info);
 
@@ -2771,10 +2475,8 @@ void DataModel::FrameBuilder::parseQuickPlotFrame(const IO::CapturedDataPtr& dat
   else
     DataModel::splitQuickPlotChannels(data->data, splitRows);
 
-  auto& channels = m_channelScratch;
-  channels.clear();
-  if (!splitRows.isEmpty())
-    channels = splitRows.first();
+  static const QStringList kNoChannels;
+  const QStringList& channels = splitRows.isEmpty() ? kNoChannels : splitRows.constFirst();
 
   const int channelCount = channels.size();
   if (channelCount <= 0)
@@ -2825,78 +2527,12 @@ void DataModel::FrameBuilder::parseQuickPlotFrame(const IO::CapturedDataPtr& dat
     }
   }
 
-  stageFrameValues(quickPlotFrame.sourceId, quickPlotFrame, data->timestamp);
+  m_stager.stage(quickPlotFrame.sourceId, quickPlotFrame, data->timestamp);
 }
 
 //--------------------------------------------------------------------------------------------------
 // Hotpath data publishing functions
 //--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Publishes one finished block: the dashboard gets the pooled slot, async sinks get ONE
- *        trimmed values-only copy between them -- a queued sink must never hold a pool slot or a
- *        backlog would starve staging. While the sink mask is set only the read-only observers
- *        see it, so a replay or a synthetic refresh can never re-record itself.
- */
-void DataModel::FrameBuilder::publishBlock(const DataModel::DataBlockPtr& block)
-{
-  SS_ASSERT_HOTPATH(block);
-  SS_ASSERT_HOTPATH(block->samples > 0);
-
-  static auto& pipeline = IO::PipelineHost::instance();
-  pipeline.publishBlockToDashboard(block);
-
-  static auto& pluginsServer = API::Server::instance();
-#ifdef ENABLE_GRPC
-  static auto& grpcServer = API::GRPC::GRPCServer::instance();
-#endif
-
-  if (block->masked || m_maskSinks) [[unlikely]] {
-    const bool observed = (pluginsServer.enabled() && pluginsServer.clientCount() > 0)
-#ifdef ENABLE_GRPC
-                       || (grpcServer.enabled() && grpcServer.clientCount() > 0)
-#endif
-      ;
-    if (!observed)
-      return;
-
-    const DataModel::DataBlockPtr replayed = DataModel::clone_block_trimmed(*block);
-    if (pluginsServer.enabled() && pluginsServer.clientCount() > 0)
-      pluginsServer.ingestBlock(replayed);
-#ifdef ENABLE_GRPC
-    if (grpcServer.enabled() && grpcServer.clientCount() > 0)
-      grpcServer.ingestBlock(replayed);
-#endif
-    return;
-  }
-
-  if (!m_anyAsyncSink)
-    return;
-
-  const DataModel::DataBlockPtr detached = DataModel::clone_block_trimmed(*block);
-
-  static auto& csvExport  = CSV::Export::instance();
-  static auto& mdf4Export = MDF4::Export::instance();
-#ifdef BUILD_COMMERCIAL
-  static auto& sqliteExport  = Sessions::Export::instance();
-  static auto& mqttPublisher = MQTT::Publisher::instance();
-  static auto& audioExport   = Widgets::AudioExport::instance();
-  static auto& influxExport  = InfluxDB::Export::instance();
-#endif
-
-  csvExport.ingestBlock(detached);
-  mdf4Export.ingestBlock(detached);
-  pluginsServer.ingestBlock(detached);
-#ifdef BUILD_COMMERCIAL
-  sqliteExport.ingestBlock(detached);
-  mqttPublisher.ingestBlock(detached);
-  audioExport.ingestBlock(detached);
-  influxExport.ingestBlock(detached);
-#endif
-#ifdef ENABLE_GRPC
-  grpcServer.ingestBlock(detached);
-#endif
-}
 
 /**
  * @brief Publishes an already-decoded replay block with the recording sinks masked, announcing
@@ -2926,7 +2562,7 @@ void DataModel::FrameBuilder::replayBlock(const DataModel::DataBlockPtr& block)
   const bool previousMask = m_maskSinks;
   m_maskSinks             = true;
 
-  publishBlock(block);
+  m_publisher.publish(block);
 
   m_maskSinks = previousMask;
 }
@@ -2951,7 +2587,7 @@ void DataModel::FrameBuilder::publishReplayValues(
   // sources' -- CAN gauges froze while audio moved. The mask rides on the block, so the display
   // tick's flushOpenBlocks() publishing this batch later cannot leak it into a recording sink.
   // code-verify on
-  stageFrameValues(sourceId, src, ts);
+  m_stager.stage(sourceId, src, ts);
 
   m_maskSinks = previousMask;
 }
@@ -2987,11 +2623,11 @@ void DataModel::FrameBuilder::setReplayColumnMap(
   std::unordered_map<int, std::unordered_map<int, int>> map)
 {
   if (QThread::currentThread() != thread()) {
-    invokeOnBuilderThreadBlocking([this, &map] { m_replayColumnMap = std::move(map); });
+    invokeOnBuilderThreadBlocking([this, &map] { m_replay.setColumnMap(std::move(map)); });
     return;
   }
 
-  m_replayColumnMap = std::move(map);
+  m_replay.setColumnMap(std::move(map));
 }
 
 /**

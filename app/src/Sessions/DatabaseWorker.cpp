@@ -32,6 +32,7 @@
 #  include "SerialStudio.h"
 #  include "Sessions/BlockReader.h"
 #  include "Sessions/DatabaseManager.h"
+#  include "Sessions/Export.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constants
@@ -39,6 +40,29 @@
 
 // Caps the CSV reorder buffer; a degenerate archive never advances its drain watermark
 static constexpr std::size_t kMaxBufferedInstants = 1 << 16;
+
+//--------------------------------------------------------------------------------------------------
+// File-local helpers
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief True when @p filePath is an SQLite database or does not exist yet (a session file the
+ *        schema pass will create). SQLite happily "opens" any path, so a JPEG or a text file
+ *        reached the schema exec, which was unchecked, and the explorer reported an open database
+ *        with an empty session list and no error at all (B17).
+ */
+[[nodiscard]] static bool looksLikeSqlite(const QString& filePath)
+{
+  QFile file(filePath);
+  if (!file.exists() || file.size() == 0)
+    return true;
+
+  if (!file.open(QIODevice::ReadOnly))
+    return false;
+
+  const QByteArray head = file.read(16);
+  return head.startsWith("SQLite format 3");
+}
 
 //--------------------------------------------------------------------------------------------------
 // Construction & destruction
@@ -85,6 +109,11 @@ void Sessions::DatabaseWorker::openDatabase(const QString& filePath)
 
   if (filePath.isEmpty()) {
     Q_EMIT openFailed(filePath, tr("Empty file path"));
+    return;
+  }
+
+  if (!looksLikeSqlite(filePath)) {
+    Q_EMIT openFailed(filePath, tr("This file is not a Serial Studio session database."));
     return;
   }
 
@@ -179,6 +208,15 @@ void Sessions::DatabaseWorker::deleteSession(int sessionId, quint64 token)
 {
   if (!m_db.isOpen()) {
     Q_EMIT mutationFinished(token, false, tr("Database not open"));
+    return;
+  }
+
+  // code-verify off
+  // Last line of defense behind the explorer's own refusal: this is the thread that would run the
+  // DELETE, and the exporter is inserting into the same rows (B4). The live id is an atomic.
+  // code-verify on
+  if (sessionId >= 0 && sessionId == Sessions::Export::currentSessionIdOrNone()) {
+    Q_EMIT mutationFinished(token, false, tr("This session is being recorded"));
     return;
   }
 

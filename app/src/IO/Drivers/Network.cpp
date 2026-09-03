@@ -45,6 +45,7 @@ IO::Drivers::Network::Network()
   , m_httpInterval(defaultHttpInterval())
   , m_httpActive(false)
   , m_httpFailureLogged(false)
+  , m_httpTruncationLogged(false)
   , m_pollsOk(0)
   , m_pollsFailed(0)
   , m_pollsSkipped(0)
@@ -103,6 +104,8 @@ IO::Drivers::Network::Network()
 
   m_pollTimer.setSingleShot(false);
   connect(&m_pollTimer, &QTimer::timeout, this, &IO::Drivers::Network::onPollTimeout);
+
+  connect(&m_tcpDial, &IO::AsyncTcpDial::finished, this, &IO::Drivers::Network::onTcpDialFinished);
 
   connect(
     m_tcpSocket, &QAbstractSocket::stateChanged, this, &IO::Drivers::Network::onTcpStateChanged);
@@ -168,8 +171,9 @@ bool IO::Drivers::Network::isOpen() const noexcept
 }
 
 /**
- * @brief Returns true while an asynchronous dial is in flight. TCP and UDP never report one:
- *        both settle inside open(), and the return value is their whole verdict.
+ * @brief Returns true while an asynchronous dial is in flight. TCP, WebSocket and HTTP all dial
+ *        asynchronously and report through openFinished(); UDP alone settles inside open(), where
+ *        the return value is its whole verdict.
  */
 bool IO::Drivers::Network::isConnecting() const noexcept
 {
@@ -237,10 +241,15 @@ bool IO::Drivers::Network::configurationOk() const noexcept
 }
 
 /**
- * @brief Writes data to the network socket.
+ * @brief Writes data to the network socket. A TCP write issued while the dial is still in flight
+ *        is held rather than dropped: a control script's io.connect() + writeData() sequence must
+ *        keep working now that the dial no longer blocks inside open() (spec 0050).
  */
 qint64 IO::Drivers::Network::write(const QByteArray& data)
 {
+  if (socketType() == SocketType::Tcp && m_dialPending)
+    return queueTcpWrite(data);
+
   if (!isWritable())
     return 0;
 
@@ -260,8 +269,8 @@ qint64 IO::Drivers::Network::write(const QByteArray& data)
 }
 
 /**
- * @brief Opens a network connection with the specified mode. Both TCP and UDP finish
- *        synchronously: the return value is the final verdict, nothing happens after.
+ * @brief Opens a network connection with the specified mode. Only UDP finishes synchronously; the
+ *        other three return "attempt started" and settle through openFinished().
  */
 bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
 {
@@ -834,8 +843,9 @@ QHostAddress IO::Drivers::Network::preferredAddress(const QList<QHostAddress>& a
 
 /**
  * @brief Handles an error on an established link: report once, tear down, stay down. Dial
- *        failures never reach here, because dialTcpBlocking() owns them; the teardown is queued
- *        on the connection manager because it destroys this driver.
+ *        failures never reach here, because the dial's own verdict owns them and the error
+ *        handler is wired only after it succeeds; the teardown is queued on the connection
+ *        manager because it destroys this driver.
  */
 void IO::Drivers::Network::reportLinkError(const QString& error)
 {
@@ -849,27 +859,21 @@ void IO::Drivers::Network::reportLinkError(const QString& error)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the Network configuration as a flat list of editable properties.
+ * @brief Returns the Network configuration as a flat list of editable properties: every
+ *        transport's rows, not just the active one's. The list IS what a project persists, and
+ *        setDriverProperty() already offers every key to every transport, so gating the rows on
+ *        the current type silently dropped the other three transports' settings on save.
  */
 QList<IO::DriverProperty> IO::Drivers::Network::driverProperties() const
 {
   QList<IO::DriverProperty> props;
   appendSocketTypeProperty(props);
-
-  switch (socketType()) {
-    case SocketType::Tcp:
-      appendTcpProperties(props);
-      break;
-    case SocketType::Udp:
-      appendUdpProperties(props);
-      break;
-    case SocketType::WebSocket:
-      appendWebSocketProperties(props);
-      break;
-    case SocketType::Http:
-      appendHttpProperties(props);
-      break;
-  }
+  appendAddressProperty(props);
+  appendTcpProperties(props);
+  appendUdpProperties(props);
+  appendWebSocketProperties(props);
+  appendHttpProperties(props);
+  appendTlsProperty(props);
 
   return props;
 }

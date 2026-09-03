@@ -70,6 +70,8 @@ void unlockMemoryResident(const void* ptr, size_t len);
 [[nodiscard]] quint64 peakResidentBytes();
 
 void registerIngestThreadWithMmcss();
+void registerRenderThreadWithMmcss();
+[[nodiscard]] bool mmcssRegisteredOnCurrentThread() noexcept;
 }  // namespace AppPlatform
 
 }  // namespace Platform

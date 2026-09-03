@@ -44,12 +44,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #-------------------------------------------------------------------------------
 # Options
 #
-# When consumed as a subdirectory (e.g. Serial Studio), turn off tutorial/tests
-# and set QSU_QT_VERSION_MAJOR externally if needed.
+# The upstream tutorial application and unit tests are not vendored here: this
+# copy exists to be consumed as a subdirectory, and a sibling project's own test
+# tier only added a second, unrunnable one. Set QSU_QT_VERSION_MAJOR externally
+# if needed.
 #-------------------------------------------------------------------------------
 
-option(QSIMPLE_UPDATER_BUILD_TUTORIAL "Build the tutorial application" OFF)
-option(QSIMPLE_UPDATER_BUILD_TESTS "Build the unit tests" ON)
 option(QSIMPLE_UPDATER_BUILD_SHARED "Build as a shared library instead of static" OFF)
 
 # Install rules only apply when QSimpleUpdater is the top-level project;
@@ -74,10 +74,6 @@ if(NOT DEFINED QSU_QT_VERSION_MAJOR)
 endif()
 
 find_package(Qt${QSU_QT_VERSION_MAJOR} CONFIG REQUIRED COMPONENTS Core Gui Network Widgets)
-
-if(QSIMPLE_UPDATER_BUILD_TESTS)
-    find_package(Qt${QSU_QT_VERSION_MAJOR} CONFIG REQUIRED COMPONENTS Test)
-endif()
 
 #-------------------------------------------------------------------------------
 # Fix linking errors when using .pri include approach
@@ -230,32 +226,4 @@ install(FILES
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/QSimpleUpdater
 )
 
-endif()
-
-#-------------------------------------------------------------------------------
-# Tutorial
-#-------------------------------------------------------------------------------
-
-if(QSIMPLE_UPDATER_BUILD_TUTORIAL)
-    add_subdirectory(tutorial)
-endif()
-
-#-------------------------------------------------------------------------------
-# Unit tests
-#-------------------------------------------------------------------------------
-
-if(QSIMPLE_UPDATER_BUILD_TESTS)
-    enable_testing()
-    add_executable(UnitTests
-        tests/main.cpp
-        tests/Test_Versioning.h
-        tests/Test_Updater.h
-        tests/Test_QSimpleUpdater.h
-        tests/Test_Downloader.h
-    )
-    target_link_libraries(UnitTests PRIVATE
-        Qt${QSU_QT_VERSION_MAJOR}::Test
-        QSimpleUpdater
-    )
-    add_test(NAME UnitTests COMMAND UnitTests)
 endif()

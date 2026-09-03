@@ -7,6 +7,29 @@
 
 ## Dashboard Ingest — Pre-resolved Push Tables
 
+**The ingest lives in `UI::DashboardIngest`** (`app/src/UI/Dashboard/DashboardIngest.{h,cpp}`,
+spec 0075 F1), a member sub-object of the `UI::Dashboard` facade. It owns `applyBlock`, the
+`applyBlockValues` / `applyBlockColumn` split, the `feed*` helpers, `advancePlotClock`,
+`foldExtremes`, the `update*Series` family and **every push table**. Two seams hold it to the
+facade:
+
+- **`UI::IngestBindings`** binds facade state by reference (the widget map, the axis and series
+  containers, the time rings, the sweep engines, the dataset and extreme tables, the push-table
+  vectors, `m_layoutValid`, `m_updateRequired`, `m_plotClocks`, `m_plotDisplayTimeSec`, ...).
+  Every entry stays owned by `UI::Dashboard`: the push tables hold raw pointers **into** these
+  containers, so handing the ingest its own copies would move what they address.
+- **`UI::IngestHost`** is the callback interface the facade implements: the series allocators the
+  ingest cannot own because they size the buffers the push tables then point at
+  (`configureLineSeries`, `configureMultiLineSeries`, `configureFftSeries`, `configureGpsSeries`,
+  and the commercial 3D/waterfall pair), `handleMissingDataset()` for the layout-repair hand-off,
+  and three const queries.
+
+**`resetPlotClocks()` stayed in the facade on purpose.** `m_plotClocks` and
+`m_plotDisplayTimeSec` are ONE state; the ingest binds both by reference and writes them only
+through `advancePlotClock`, so the single clear path is still `Dashboard::resetPlotClocks()`.
+Note also that the `PlotClock&` `advancePlotClock` resolves must not outlive the call —
+`reconfigureDashboard` move-assigns `m_plotClocks`.
+
 `Dashboard::hotpathRxFrame` does no per-frame container lookups; everything is resolved at
 reconfigure and the per-frame walk is pointer-only.
 
@@ -49,15 +72,27 @@ the GUI thread, and it runs in this order:
    pending `DataBlock` through `applyBlock` (spec 0055: one ring, one drain, both lanes).
 3. **One coalesced `updated()`** if anything set `m_updateRequired`.
 
-`applyBlock` is O(pixels + fftSize + datasets) per block, never O(samples): latest
-values into the widget dataset copies via `m_datasetReferences`, envelope pairs
-`appendDecimated` into the plot/multiplot time rings, the FFT window memcpy'd into the FFT
-series. Both lanes share `advancePlotClock(sourceId, t0)` — the per-source clock is advanced
+**`applyBlock` splits into per-block and per-sample work, and the per-sample half is bounded
+twice.** Per **block**: `applyBlockValues` writes the widget dataset copies once, from the
+block's last sample (writing them per column was redundant — `ValuePush::targets` is built from
+`m_datasetReferences`, so both writes hit the same set); GPS, 3D and waterfall series advance
+once after the column loop (GPS is three columns of one block, so feeding it per column tripled
+its fix rate); and one `advancePlotClock`. Per **sample**, inside `applyBlockColumn`: the extreme
+fold, `appendDecimated` into each plot and multiplot time ring, `sweep.advance()` for a stream-fed
+sweep, the FFT/waterfall `push()`, and `feedSampleRings` for the Samples-axis, dataset-X and
+Samples-mode multiplot lanes. That loop allocates nothing (plain stores into pre-sized
+`DSP::FixedQueue`s) and is bounded by the block's own cap (`kStreamBlockSampleCap`, 4096) and
+again by `push_ring_tail`'s ring-capacity clamp, which pushes only the newest `capacity` samples
+— so a 4096-sample block into a 1000-point plot costs 1000 stores, not 4096. Never add a rate cap
+or a per-view reduction on top; the reduction is `appendDecimated`'s and the ring's.
+
+Both lanes share `advancePlotClock(sourceId, t0, blockSpanSec)` — the per-source clock is advanced
 from the block timestamp and **never cleared** (the `bulkLoadPlotWindow` clear/re-anchor
 semantics are deliberately not reused). Stream widget targets resolve through a lazy
 `uniqueId → StreamTargets` cache holding **indexes only** (a layout rebuild reallocates the
-ring nodes, so cached pointers would dangle); it is cleared with the push tables in
-`clearPushTables()`.
+ring nodes, so cached pointers would dangle): `plotIndexes`, `multiplotCurves`, `fftIndexes`,
+`yLinePushIndexes`, `xLinePushIndexes`, `multiSampleIndexes` and the commercial
+`waterfallIndexes`. It is cleared with the push tables in `clearPushTables()`.
 
 ## Alarm Bands — Central Tracking in `UI::AlarmMonitor`
 
@@ -72,6 +107,19 @@ so cached pointers would dangle. Consequences:
 - `Bar` / `Gauge` / `Meter` / `LEDPanel` are display-only band consumers; do not re-add
   per-widget `NotificationCenter` posts (that double-fires when a dataset is both a band
   widget and `led: true`).
+- **A band consumer reports nothing until its first finite sample (spec 0075 N3).**
+  `Widgets::Bar` (which `Gauge` and `Meter` derive from) latches `hasData` on the first finite
+  value through `latchData()` and clears it only on `Dashboard::dataReset`, which also drops the
+  extreme hold so a reconnect cannot keep the previous session's min/max. While unlatched
+  `activeBandSeverity()` is **-1** and `activeBandLabel()` is **empty**, both through the shared
+  pure gate `Widgets::Bands::reportedSeverity(bands, activeIndex, hasData)` in `UI/WidgetBands.h`
+  — the nearest-band clamp above it is right for overrange data and wrong for the placeholder
+  0.0 a widget shows before its first byte, which used to alarm forever on any project whose
+  bands sit above zero. QML gates on the pair: both infinite blink animations and the digital
+  box's `targetColor` read `alarmTriggered && hasData` in `Bar.qml`, `Gauge.qml` and `Meter.qml`.
+  `latchData()` returns whether the latch just closed, because `updateData` early-returns unless
+  the value *changed* and a first sample numerically equal to 0.0 would otherwise never publish
+  the transition. `UI::AlarmMonitor` is unchanged and stays dataset-level.
 - The value is clamped to the dataset's widget range before band lookup (mirrors analog-widget
   semantics); 3 s per-dataset, per-severity-tier cooldown.
 - `AlarmBand.blink` (`Keys::Blink`, JSON `blink`, default false) is rendering-only: LED panels
@@ -242,9 +290,11 @@ stay honest; bin 0 clamps onto bin 1's log position (DC has none) and the axis s
 the first bin. `rebuildLogBinTable` caches the per-bin log-x table + buffers at ctor and
 plan rebuild; per tick the pipeline is `computeBinSpectrum` (dB + 3-bin boxcar +
 optional ballistics per bin) then `emitLinearSpectrum` or `buildLogRenderCurve`.
-`configureFftSeries` clamps `fftSamples` to `[1, kMaxFftRingSamples]` — untrusted
-project input; an unclamped negative reaches the ring allocator as a wrapped size_t
-(the same latent hole still exists on the Waterfall ring, flagged, out of lane).
+`configureFftSeries` normalizes `fftSamples` through `Widgets::normalizedFftSize()`
+(`UI/Widgets/FFTWindow.h`) — untrusted project input; an unclamped negative would reach the ring
+allocator as a wrapped `size_t`. `configureWaterfallSeries` runs the same function under the
+waterfall's own lower ceiling, `kMaxWaterfallFftSize` (65536), so both rings are clamped from one
+shared transform-size contract.
 Optional per-dataset **display ballistics** (`fftBallistics`/`fftBallisticsRelease`,
 spec 0017, off by default): instant attack, wall-clock exponential release (default
 300 ms) applied per FFT bin in `computeBinSpectrum`, upstream of both emit paths —
@@ -299,7 +349,23 @@ CPU every update, which stalled on audio-rate curves. The `LineSeries` objects r
 `GraphsView` (interpolation None + axis anchoring). `PlotCurve` items live in
 `PlotWidget.curveLayer` (a clipped item tracking the plot area, above `PlotAreaFill`, below the
 crosshair overlay) and map world coordinates with the same visible-window transform as the
-cursors. Offscreen stretches are culled by per-segment X-interval overlap, so zoomed series cost
+cursors.
+
+**Geometry buffers are grow-only with a padded degenerate tail (spec 0075 N4).** `QSGGeometry`
+carries ONE pair of counts over one buffer and no separate capacity, so any count change re-lays
+it out, hundreds of KB per curve per frame once the per-segment join fans move the count by a
+few. `Widgets::GpuStroke::reserveGeometry(geometry, vertices, indices)` therefore reallocates
+only when what is held is too small, at 1.5x headroom (`kGeometryHeadroomNumerator` /
+`kGeometryHeadroomDenominator`, capped at `kMaxGeometry`, index capacity rounded up to whole
+triangles), and returns **whether it reallocated**. `padGeometryTail()` then makes the unused
+tail harmless: every spare vertex repeats the last real vertex and every spare index is 0, so the
+extra triangles are degenerate and draw nothing. The padding must be real coordinates, never left
+uninitialised, because the batch renderer computes bounds over the *whole* vertex buffer and
+garbage there corrupts batching and clipping even though no index references it. `PlotCurve.cpp`
+and `PlotAreaFill.cpp` both call the pair in place of an exact-fit `allocate()`. The trade is
+real and named: roughly 1.5x more uploaded bytes per frame in exchange for zero per-frame
+malloc/free. `tst_plot_curve_geometry` pins that `reserveGeometry` returns false in the steady
+state across 100 frames of both a stationary and a wobbling count. Offscreen stretches are culled by per-segment X-interval overlap, so zoomed series cost
 the visible slice; NaNs break the ribbon into runs (true gaps). MultiPlot instantiates one
 `PlotCurve` per curve with an inline carrier (`source: LineSeries {}`), and its `onUiTimeout`
 loop draws the carriers from the `_curves` Instantiator (graph `seriesList` now only holds
@@ -317,10 +383,16 @@ QSettings only outside ProjectFile. Both UI controls are an oscilloscope-style *
 SpinBox snapping typed input to a 1 ms..300 s ladder. **API**: `dashboard.setTimeRange{seconds}` /
 `dashboard.getTimeRange` (alias `project.dashboard.setTimeRange`); the old
 <!-- claim-verify off -->
-`setPoints`/`getPoints`
+`dashboard.setPoints`/`dashboard.getPoints`
 commands were removed with the rename.
-<!-- claim-verify on --> The legacy `points` (`kDefaultPlotPoints = 1000`) still
-sizes the raw rings for dataset-X / FFT / GPS / 3D; the "Points" controls were removed from the UI.
+<!-- claim-verify on --> The point count itself did NOT go away: `Dashboard::points` is still a
+writable `Q_PROPERTY`, the control-script SDK still exposes `setPlotPoints`
+(`DataModel::DashboardBridge`, plus the Lua global, both over one `coreSetPlotPoints`), and the
+legacy `points` (`kDefaultPlotPoints = 1000`) still sizes the raw rings for dataset-X / FFT /
+GPS / 3D. Only the "Points" controls were removed from the UI. A point-count change goes through
+`rebuildLineSeriesPreservingState()`, which snapshots and restores what a bare reconfigure would
+drop: the retained time rings, the sweep configuration with its captured segments, and each
+widget's run/pause flag (F4). `setPlotTimeRange` shares it.
 
 ## Waterfall Follows the Time Range (Pro)
 
@@ -526,8 +598,15 @@ gated by `registry-verify.py` + `tests/scripts/test_widget_manifests.py`.
 - **Trust model: no sandbox, and nothing may claim otherwise.** Package QML shares the app's QML
   engine and privileges. `canInstantiate()` is default-deny (`qmlUrl()` returns empty without
   consent, recorded per id *and version*); the `Cpp_*` shadowing in `createExtensionItem()` is a
-  speed bump, exempted for bundled packages so the two conversions stay verbatim copies, and
-  `hostContextNames()` is a hand-kept mirror of ModuleManager that `registry-verify.py` lints.
+  speed bump, exempted for bundled packages so the two conversions stay verbatim copies.
+  `UI::WidgetExtensions::hostContextNames()` is no longer a hand-kept mirror: it returns
+  `Misc::ContextRegistry::objectNames()`, the same table the composition root registers through.
+  `Misc::ContextRegistry` (`app/src/Misc/ContextRegistry.{h,cpp}`, spec 0075 G4) is the
+  collect-then-apply helper `ModuleManager` fills with `registry.add(name, object)` and flushes
+  once with `registry.apply(ctx)` — twice per session, once for the common globals and once for
+  the commercial ones. `registry-verify.py` compares that table against the `registry.add` call
+  sites in both directions and asserts the forwarding, so a name can no longer drift out of one
+  side.
 - Every load-time rejection is a `Misc::ProblemCenter` finding through the `extension.widget`
   checker (`widget-manifest-invalid`, `widget-id-reserved`, `widget-replaces-forbidden`,
   `widget-api-version`, `widget-host-incompatible`, `widget-qml-missing`,
@@ -544,10 +623,52 @@ in memory + `setModified(true)`; no autosave.
 ## Waterfall / Spectrogram (Pro)
 
 `UI/Widgets/Waterfall.h/.cpp`: per-dataset Pro widget
-reusing the dataset's FFT settings. Class IS the painted item (`QQuickPaintedItem`).
-Toggle via `DatasetWaterfall = 0b01000000`; persists as `Keys::Waterfall` (omit when false).
-`Keys::WaterfallYAxis` non-zero → **Campbell mode**: rows placed by another dataset's
-value (e.g. RPM) instead of time. `commercialCfg()` flags any project using waterfall.
+reusing the dataset's FFT settings. **`Waterfall` is a `QQuickItem` with `updatePaintNode`**, not
+a `QQuickPaintedItem`. Toggle via `DatasetWaterfall = 0b01000000`; persists as `Keys::Waterfall`
+(omit when false). `Keys::WaterfallYAxis` non-zero → **Campbell mode**: rows placed by another
+dataset's value (e.g. RPM) instead of time. `commercialCfg()` flags any project using waterfall.
+
+The widget composes four sub-objects under `UI/Widgets/Waterfall/`: `WaterfallColorMap` (the
+eight maps plus a 256-entry LUT bake, so the spectrogram indexes a table instead of evaluating a
+map per pixel), `WaterfallOverlay` (the cached raster of border, axes, markers and hover cursor,
+re-rendered only when a drawn readout actually moved), `WaterfallTiles` (the pure decomposition
+of the visible span into per-band quads across the ring seam) and `WaterfallSpectrogramNodes`
+(the scene-graph half: dirty-row/dirty-band bookkeeping and both draw paths).
+
+**Two draw paths, one preferred and one fallback.**
+
+- **Ring texture (preferred).** `WaterfallRingTexture` is a `QSGTexture` over one persistent
+  `QRhiTexture` sized once for the widget's life. At **sync** — inside `updatePaintNode`, GUI
+  thread blocked — changed scanlines are staged: `stageRow()` memcpy's one scanline into a
+  preallocated `QByteArray` slot (`kStagedRowSlots`, 8; one row is the steady state and the spare
+  slots absorb a Campbell burst or a missed tick), and past the slots it escalates to a full
+  `stageImage()` rather than growing. At **prepare**, on the render thread,
+  `commitTextureOperations(QRhi*, QRhiResourceUpdateBatch*)` uploads either one full image or one
+  sub-rect per staged row. **That method runs with the GUI thread already released**, unlike
+  `updatePaintNode`, which is the whole reason the staging buffers exist: the texture may not
+  read the widget's live `QImage` at upload time, only memory it owns. The scroll stays a
+  source-rect offset; `m_topRow`/`m_writeRow`/`m_filledOnce` remain one ring state and no pixel
+  is ever moved. `WaterfallTiles::decompose` is reused with `tileRows == imageHeight`, so both
+  paths share the seam math and `tst_waterfall_tiles` still pins it.
+- **64-row tiles (fallback).** `WaterfallRingTexture::supported()` returns false on a big-endian
+  target (`QImage::Format_RGB32` is `0xffRRGGBB`, whose little-endian byte order is exactly
+  BGRA8, and no per-tick format conversion exists on either path), when `QQuickWindow::rhi()` is
+  null (the software renderer), when the format is unsupported, or when the size exceeds
+  `QRhi::TextureSizeMax`. A texture that fails to create latches `m_ringUnavailable` for the
+  widget's life. `WaterfallSpectrogramNodes::sync()` then draws the history as 64-row textured
+  bands with per-band dirty flags. This path is fully correct, just more upload bytes.
+
+**Two behaviours that surprise people.** The **idle gate**:
+`WaterfallRingTexture::captureRowIfChanged()` memcmp's the smoothed row against the previous
+tick's, and an identical row writes no scanline and schedules no frame — so a disconnected or
+silent source sits still, and a *perfectly* constant live signal also stops scrolling (visually
+indistinguishable once the history is uniform, distinguishable during the first fill).
+**Campbell mode is exempt**, because its row position is driven by another dataset's value and
+moves independently of the spectrum. The **hidden release**: `itemChange(ItemVisibleHasChanged,
+false)` calls `releaseHistoryImage()` and requests a GPU teardown, so **a hidden waterfall loses
+its history** — becoming visible again rebuilds the image at the floor color and it refills from
+live data. Switching workspace tabs is where a user sees it. That is what "a hidden widget
+releases its image and textures" costs.
 
 ## Time-Ring Sizing & the Plot Clocks — Non-Negotiable
 

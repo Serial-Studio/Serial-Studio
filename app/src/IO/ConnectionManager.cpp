@@ -22,6 +22,7 @@
 #include "IO/ConnectionManager.h"
 
 #include <QApplication>
+#include <QThread>
 
 #include "API/Server.h"
 #include "AppState.h"
@@ -73,8 +74,6 @@ IO::ConnectionManager::ConnectionManager()
   , m_writeEnabled(true)
   , m_rebuildingDevices(false)
   , m_busType(SerialStudio::BusType::UART)
-  , m_startSequence("/*")
-  , m_finishSequence("*/")
   , m_appState(AppState::instance())
   , m_frameBuilder(DataModel::FrameBuilder::instance())
   , m_projectModel(DataModel::ProjectModel::instance())
@@ -88,6 +87,25 @@ IO::ConnectionManager::ConnectionManager()
 #ifdef ENABLE_GRPC
   , m_grpcServer(nullptr)
 #endif
+  , m_io(m_appState,
+         m_frameBuilder,
+         m_replyCapture,
+         m_devices,
+         m_paused,
+         m_console,
+         m_apiServer,
+         m_fileTransmission
+#ifdef BUILD_COMMERCIAL
+         ,
+         m_sessionExport,
+         m_mqttPublisher
+#endif
+#ifdef ENABLE_GRPC
+         ,
+         m_grpcServer
+#endif
+         )
+  , m_query(m_devices, m_projectModel)
   , m_driverFactory(m_uiDrivers)
   , m_streamConfigs(m_appState, m_projectModel)
   , m_streamPool(m_frameBuilder, m_appState, m_streamConfigs)
@@ -154,16 +172,10 @@ bool IO::ConnectionManager::readWrite() const
  */
 bool IO::ConnectionManager::isConnected() const
 {
-  if (m_appState.operationMode() == SerialStudio::ProjectFile) {
-    for (const auto& [id, dm] : m_devices)
-      if (dm && dm->isOpen())
-        return true;
+  if (m_appState.operationMode() == SerialStudio::ProjectFile)
+    return m_query.anyOpen();
 
-    return false;
-  }
-
-  auto it = m_devices.find(0);
-  return it != m_devices.end() && it->second && it->second->isOpen();
+  return m_query.primaryOpen();
 }
 
 /**
@@ -171,8 +183,7 @@ bool IO::ConnectionManager::isConnected() const
  */
 bool IO::ConnectionManager::isDeviceConnected(int deviceId) const
 {
-  auto it = m_devices.find(deviceId);
-  return it != m_devices.end() && it->second && it->second->isOpen();
+  return m_query.isDeviceConnected(deviceId);
 }
 
 /**
@@ -180,12 +191,7 @@ bool IO::ConnectionManager::isDeviceConnected(int deviceId) const
  */
 int IO::ConnectionManager::connectedDeviceCount() const
 {
-  int count = 0;
-  for (const auto& [id, dm] : m_devices)
-    if (dm && dm->isOpen())
-      ++count;
-
-  return count;
+  return m_query.connectedDeviceCount();
 }
 
 /**
@@ -194,13 +200,7 @@ int IO::ConnectionManager::connectedDeviceCount() const
  */
 QString IO::ConnectionManager::linkState() const
 {
-  if (isConnected())
-    return QStringLiteral("connected");
-
-  if (anyDeviceConnecting())
-    return QStringLiteral("connecting");
-
-  return QStringLiteral("idle");
+  return DeviceTableQuery::linkState(isConnected(), anyDeviceConnecting());
 }
 
 /**
@@ -209,20 +209,7 @@ QString IO::ConnectionManager::linkState() const
  */
 IO::LinkStats IO::ConnectionManager::linkStats() const
 {
-  LinkStats stats{};
-  for (const auto& [id, dm] : m_devices) {
-    const auto* reader = dm ? dm->frameReader() : nullptr;
-    if (!reader)
-      continue;
-
-    stats.bytesIn         += reader->bytesReceived();
-    stats.droppedFrames   += reader->droppedFrameCount();
-    stats.overflowBytes   += reader->overflowBytes();
-    stats.checksumErrors  += reader->checksumErrorCount();
-    stats.framesExtracted += reader->framesExtracted();
-  }
-
-  return stats;
+  return m_query.linkStats();
 }
 
 /**
@@ -253,7 +240,7 @@ SerialStudio::BusType IO::ConnectionManager::busType() const noexcept
  */
 const QByteArray& IO::ConnectionManager::startSequence() const noexcept
 {
-  return m_startSequence;
+  return m_io.startSequence();
 }
 
 /**
@@ -261,7 +248,7 @@ const QByteArray& IO::ConnectionManager::startSequence() const noexcept
  */
 const QByteArray& IO::ConnectionManager::finishSequence() const noexcept
 {
-  return m_finishSequence;
+  return m_io.finishSequence();
 }
 
 /**
@@ -269,7 +256,7 @@ const QByteArray& IO::ConnectionManager::finishSequence() const noexcept
  */
 const QString& IO::ConnectionManager::checksumAlgorithm() const noexcept
 {
-  return m_checksumAlgorithm;
+  return m_io.checksumAlgorithm();
 }
 
 /**
@@ -481,35 +468,11 @@ void IO::ConnectionManager::setUiDriverProperty(const QString& key, const QVaria
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Feeds a pre-built payload into the frame pipeline. The builder call marshals to the
- *        pipeline thread (queued; command-rate, never per frame) while the console/API taps
- *        stay on this thread.
+ * @brief Feeds a pre-built payload into the frame pipeline.
  */
 void IO::ConnectionManager::processPayload(const QByteArray& payload)
 {
-  if (payload.isEmpty())
-    return;
-
-  SS_ASSERT(m_console != nullptr && m_apiServer != nullptr, return);
-
-  auto* frameBuilder = &m_frameBuilder;
-
-  const auto captured = makeCapturedData(payload);
-  m_apiServer->hotpathTxData(captured->data);
-  m_console->hotpathRxData(captured->data);
-
-  const bool projectMode = (m_appState.operationMode() == SerialStudio::ProjectFile);
-  frameBuilder->invokeOnBuilderThread([frameBuilder, captured, projectMode] {
-    if (projectMode)
-      frameBuilder->hotpathRxSourceFrame(0, captured);
-    else
-      frameBuilder->hotpathRxFrame(captured);
-  });
-
-#ifdef ENABLE_GRPC
-  if (m_grpcServer)
-    m_grpcServer->hotpathTxData(captured->data);
-#endif
+  m_io.processPayload(payload);
 }
 
 /**
@@ -518,31 +481,7 @@ void IO::ConnectionManager::processPayload(const QByteArray& payload)
 void IO::ConnectionManager::processMultiSourcePayload(const QByteArray& fullPayload,
                                                       const QMap<int, QByteArray>& sourcePayloads)
 {
-  SS_ASSERT_LOG(!sourcePayloads.isEmpty());
-
-  if (fullPayload.isEmpty())
-    return;
-
-  SS_ASSERT(m_console != nullptr && m_apiServer != nullptr, return);
-
-  auto* frameBuilder = &m_frameBuilder;
-
-  const auto captured = makeCapturedData(fullPayload);
-  m_apiServer->hotpathTxData(captured->data);
-  m_console->hotpathRxData(captured->data);
-
-  for (auto it = sourcePayloads.constBegin(); it != sourcePayloads.constEnd(); ++it) {
-    const int sourceId  = it.key();
-    const auto srcChunk = makeCapturedData(it.value(), captured->timestamp);
-    frameBuilder->invokeOnBuilderThread([frameBuilder, sourceId, srcChunk] {
-      frameBuilder->hotpathRxSourceFrame(sourceId, srcChunk);
-    });
-  }
-
-#ifdef ENABLE_GRPC
-  if (m_grpcServer)
-    m_grpcServer->hotpathTxData(captured->data);
-#endif
+  m_io.processMultiSourcePayload(fullPayload, sourcePayloads);
 }
 
 /**
@@ -553,7 +492,7 @@ qint64 IO::ConnectionManager::writeData(const QByteArray& data)
   SS_ASSERT(!data.isEmpty(), return -1);
   SS_ASSERT_LOG(m_devices.find(0) != m_devices.end());
 
-  return writeDataToDevice(0, data);
+  return m_io.writeToDevice(0, data);
 }
 
 /**
@@ -561,38 +500,15 @@ qint64 IO::ConnectionManager::writeData(const QByteArray& data)
  */
 qint64 IO::ConnectionManager::writeDataToDevice(int deviceId, const QByteArray& data)
 {
-  SS_ASSERT(deviceId >= 0, return -1);
-  SS_ASSERT(!data.isEmpty(), return -1);
-
-  auto it = m_devices.find(deviceId);
-  if (it == m_devices.end() || !it->second)
-    return -1;
-
-  const qint64 bytes = it->second->write(data);
-  if (bytes > 0) {
-    auto writtenData          = data;
-    const qint64 boundedBytes = qMin<qint64>(bytes, writtenData.size());
-    writtenData.chop(writtenData.length() - boundedBytes);
-    if (m_console)
-      m_console->displaySentData(deviceId, writtenData);
-  }
-
-  return bytes;
+  return m_io.writeToDevice(deviceId, data);
 }
 
 /**
- * @brief Arms reply capture for @p deviceId then writes @p data, atomically on this thread so
- *        no inbound bytes can slip in between the arm and the write. Backs deviceWriteAndWait():
- *        a control-script worker marshals here, then polls pollReplyBuffer() until satisfied.
+ * @brief Arms reply capture for @p deviceId then writes @p data, atomically on this thread.
  */
 qint64 IO::ConnectionManager::writeAndArmReply(int deviceId, const QByteArray& data)
 {
-  SS_ASSERT(deviceId >= 0, return -1);
-  SS_ASSERT(!data.isEmpty(), return -1);
-
-  m_replyCapture.arm(deviceId);
-
-  return writeDataToDevice(deviceId, data);
+  return m_io.writeAndArmReply(deviceId, data);
 }
 
 /**
@@ -600,9 +516,7 @@ qint64 IO::ConnectionManager::writeAndArmReply(int deviceId, const QByteArray& d
  */
 QByteArray IO::ConnectionManager::pollReplyBuffer(int deviceId) const
 {
-  SS_ASSERT(deviceId >= 0, return {});
-
-  return m_replyCapture.poll(deviceId);
+  return m_io.pollReplyBuffer(deviceId);
 }
 
 /**
@@ -610,9 +524,7 @@ QByteArray IO::ConnectionManager::pollReplyBuffer(int deviceId) const
  */
 void IO::ConnectionManager::disarmReplyCapture(int deviceId)
 {
-  SS_ASSERT(deviceId >= 0, return);
-
-  m_replyCapture.disarm(deviceId);
+  m_io.disarmReplyCapture(deviceId);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -626,6 +538,8 @@ void IO::ConnectionManager::disarmReplyCapture(int deviceId)
  */
 void IO::ConnectionManager::toggleConnection()
 {
+  SS_ASSERT_LOG(thread() == QThread::currentThread());
+
   if (isConnected() || m_fanOut.requestPending() || anyDeviceConnecting())
     disconnectDevice();
   else
@@ -646,17 +560,13 @@ bool IO::ConnectionManager::isConnecting() const
  */
 bool IO::ConnectionManager::anyDeviceConnecting() const
 {
-  for (const auto& [id, dm] : m_devices)
-    if (dm && dm->driver() && dm->driver()->isConnecting())
-      return true;
-
-  return false;
+  return m_query.anyDeviceConnecting();
 }
 
 /**
  * @brief Connects device 0 and, in ProjectFile mode, all other sources. The request concludes
- *        when the last device stops opening: before the fan-out returns for a synchronous driver,
- *        when its flow reports for an orchestrated one. Stream workers rebuild at this edge so
+ *        when the last device stops opening: before the fan-out returns for a driver that opens
+ *        synchronously, on its openFinished verdict for one that dials. Stream workers rebuild so
  *        their config captures the settings the session opens with, not the last bus switch's.
  */
 void IO::ConnectionManager::connectDevice()
@@ -750,11 +660,16 @@ void IO::ConnectionManager::onDriverOpenFinished(bool ok, const QString& reason)
 
 /**
  * @brief Disconnects the primary device and any other project sources, settling a connect request
- *        the user gave up on. The id list is snapshotted first: a close can spin the event loop
- *        (error boxes), and a rebuild landing there would invalidate a live m_devices iterator.
+ *        the user gave up on. The id list is snapshotted first: a close can spin the event loop.
+ *        sessionClosed() is emitted only when a session existed: cancelling a dial ends none, and
+ *        ProcessLauncher reaps the helpers the next attempt needs on that signal.
  */
 void IO::ConnectionManager::disconnectDevice()
 {
+  SS_ASSERT_LOG(thread() == QThread::currentThread());
+
+  const bool hadSession = isConnected();
+
   m_fanOut.beginWaitCursor();
 
   disconnectDevice(0);
@@ -771,7 +686,8 @@ void IO::ConnectionManager::disconnectDevice()
   Q_EMIT driverChanged();
   notifyConnectedStateChanged();
 
-  Q_EMIT sessionClosed();
+  if (hadSession)
+    Q_EMIT sessionClosed();
 }
 
 /**
@@ -952,6 +868,17 @@ void IO::ConnectionManager::shutdownDrivers()
  */
 void IO::ConnectionManager::connectDevice(int deviceId)
 {
+  openDevice(deviceId, ResumePolicy::Resume);
+}
+
+/**
+ * @brief Opens @p deviceId under an explicit resume policy: the verdict handling is identical for
+ *        both, only a user-initiated connect lifts the session pause.
+ */
+void IO::ConnectionManager::openDevice(int deviceId, ResumePolicy policy)
+{
+  SS_ASSERT(deviceId >= 0, return);
+
   auto it = m_devices.find(deviceId);
   if (it == m_devices.end() || !it->second)
     return;
@@ -962,7 +889,8 @@ void IO::ConnectionManager::connectDevice(int deviceId)
 
   const QIODevice::OpenMode mode = m_writeEnabled ? QIODevice::ReadWrite : QIODevice::ReadOnly;
   const bool ok                  = it->second->open(mode);
-  setPaused(false);
+  if (policy == ResumePolicy::Resume)
+    setPaused(false);
 
   if (ok && halDriver && halDriver->isConnecting()) {
     m_fanOut.notePendingDial(deviceId);
@@ -985,6 +913,8 @@ void IO::ConnectionManager::connectDevice(int deviceId)
  */
 void IO::ConnectionManager::disconnectDevice(int deviceId)
 {
+  SS_ASSERT(deviceId >= 0, return);
+
   (void)m_fanOut.takePendingDial(deviceId);
 
   HAL_Driver* halDriver = driver(deviceId);
@@ -1003,13 +933,13 @@ void IO::ConnectionManager::disconnectDevice(int deviceId)
  * @brief Reopens only the device @p driver backs. The counterpart of disconnectDevice(driver), and
  *        what a driver's own recovery must use: the argument-less connectDevice() is the user's
  *        whole-session fan-out, which would redial every other device and re-run the control
- *        script's onConnect on a single link's reappearance.
+ *        script's onConnect on a single link's reappearance, and it keeps the session pause.
  */
 void IO::ConnectionManager::connectDevice(HAL_Driver* driver)
 {
   const int deviceId = deviceIdForDriver(driver);
   if (deviceId >= 0)
-    connectDevice(deviceId);
+    openDevice(deviceId, ResumePolicy::KeepPause);
 }
 
 /**
@@ -1069,11 +999,9 @@ void IO::ConnectionManager::setWriteEnabled(bool enabled)
  */
 void IO::ConnectionManager::setStartSequence(const QByteArray& sequence)
 {
-  const auto effective = sequence.isEmpty() ? QByteArray("/*") : sequence;
-  if (m_startSequence == effective)
+  if (!m_io.setStartSequence(sequence))
     return;
 
-  m_startSequence = effective;
   resetFrameReader();
   Q_EMIT startSequenceChanged();
 }
@@ -1083,11 +1011,9 @@ void IO::ConnectionManager::setStartSequence(const QByteArray& sequence)
  */
 void IO::ConnectionManager::setFinishSequence(const QByteArray& sequence)
 {
-  const auto effective = sequence.isEmpty() ? QByteArray("*/") : sequence;
-  if (m_finishSequence == effective)
+  if (!m_io.setFinishSequence(sequence))
     return;
 
-  m_finishSequence = effective;
   resetFrameReader();
   Q_EMIT finishSequenceChanged();
 }
@@ -1097,19 +1023,24 @@ void IO::ConnectionManager::setFinishSequence(const QByteArray& sequence)
  */
 void IO::ConnectionManager::setChecksumAlgorithm(const QString& algorithm)
 {
-  if (m_checksumAlgorithm == algorithm)
+  if (!m_io.setChecksumAlgorithm(algorithm))
     return;
 
-  m_checksumAlgorithm = algorithm;
   resetFrameReader();
   Q_EMIT checksumAlgorithmChanged();
 }
 
 /**
- * @brief Changes the bus type for the primary device, disconnecting first.
+ * @brief Changes the bus type for the primary device, disconnecting first. The replaced device
+ *        manager is released and deleteLater()'d rather than destroyed here: a driver error box
+ *        pumps the event loop, so the swap can land mid socket notification, where freeing the
+ *        driver leaves the run loop calling into a dead socket.
  */
 void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
 {
+  SS_ASSERT(static_cast<int>(type) >= 0, return);
+  SS_ASSERT_LOG(thread() == QThread::currentThread());
+
   auto& model = m_projectModel;
 
   if (m_busType == type && m_devices.find(0) != m_devices.end()) {
@@ -1173,8 +1104,13 @@ void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
     wireDevice(dm.get());
 
     auto existing = m_devices.find(0);
-    if (existing != m_devices.end() && existing->second)
+    if (existing != m_devices.end() && existing->second) {
       disconnect(existing->second.get(), nullptr, this, nullptr);
+
+      auto* retired = existing->second.release();
+      if (retired)
+        retired->deleteLater();
+    }
 
     m_devices[0] = std::move(dm);
   } else {
@@ -1303,9 +1239,9 @@ void IO::ConnectionManager::onDeviceOpenFinished(int deviceId, bool ok, const QS
 }
 
 /**
- * @brief Reports a connected-state transition a live driver reached on its own; BLE waits out
- *        GATT discovery and TCP/CAN dial asynchronously, so their open lands after the request
- *        settled. Queued because a driver reporting mid-open is still inside its own open().
+ * @brief Reports a connected-state transition a live driver reached on its own; BLE, TCP, CAN,
+ *        S7 and EtherNet/IP dial asynchronously, so their open lands after the request settled.
+ *        Queued because a driver reporting mid-open is still inside its own open().
  */
 void IO::ConnectionManager::refreshConnectedState()
 {
@@ -1471,13 +1407,15 @@ const std::vector<std::unique_ptr<IO::StreamWorker>>& IO::ConnectionManager::str
 }
 
 /**
- * @brief Rebuilds DeviceManagers when the source list changes; reentrant triggers coalesce into one
- *        queued rebuild, none emits sessionClosed. Retired devices leave the map at once but die
- *        via deleteLater(): a modal driver error box pumps events, so a rebuild can land mid socket
- *        notification, where freeing the driver leaves the run loop calling a dead socket.
+ * @brief Rebuilds DeviceManagers when the source list changes; reentrant triggers coalesce into
+ *        one queued rebuild, none emits sessionClosed. Retired devices die via deleteLater(): an
+ *        error box pumps events mid socket notification. Outside ProjectFile mode device 0 is
+ *        KEPT, because nothing in this pass rebuilds it (the queued setBusType() does, later).
  */
 void IO::ConnectionManager::rebuildDevices()
 {
+  SS_ASSERT_LOG(thread() == QThread::currentThread());
+
   if (m_rebuildingDevices) {
     QMetaObject::invokeMethod(this, &IO::ConnectionManager::rebuildDevices, Qt::QueuedConnection);
     return;
@@ -1488,7 +1426,7 @@ void IO::ConnectionManager::rebuildDevices()
   const auto opMode       = m_appState.operationMode();
   const bool wasConnected = isConnected();
 
-  bool willRebuildDevice0 = (opMode != SerialStudio::ProjectFile);
+  bool willRebuildDevice0 = false;
   bool didChangeBusType   = false;
   if (opMode == SerialStudio::ProjectFile) {
     const auto& srcs = m_projectModel.sources();
@@ -1564,8 +1502,13 @@ void IO::ConnectionManager::rebuildDevices()
       this, [this, restored] { setBusType(restored); }, Qt::QueuedConnection);
   }
 
+  const auto reconnectIfDropped = [this] {
+    if (!isConnected())
+      connectDevice();
+  };
+
   if (wasConnected)
-    QMetaObject::invokeMethod(this, [this] { connectDevice(); }, Qt::QueuedConnection);
+    QMetaObject::invokeMethod(this, reconnectIfDropped, Qt::QueuedConnection);
 
   m_rebuildingDevices = false;
 }
@@ -1591,20 +1534,7 @@ void IO::ConnectionManager::onProjectSourceChanged(int sourceId)
  */
 bool IO::ConnectionManager::projectConfigurationOk() const
 {
-  const auto& sources = m_projectModel.sources();
-  if (sources.empty())
-    return false;
-
-  for (const auto& src : sources) {
-    auto it = m_devices.find(src.sourceId);
-    if (it == m_devices.end() || !it->second || !it->second->driver())
-      return false;
-
-    if (!it->second->driver()->configurationOk())
-      return false;
-  }
-
-  return true;
+  return m_query.projectConfigurationOk();
 }
 
 /**
@@ -1612,33 +1542,7 @@ bool IO::ConnectionManager::projectConfigurationOk() const
  */
 void IO::ConnectionManager::onRawDataReceived(int deviceId, const IO::CapturedDataPtr& data)
 {
-  SS_ASSERT(data != nullptr, return);
-  SS_ASSERT_LOG(!data->data.isEmpty());
-  SS_ASSERT_LOG(deviceId >= 0);
-
-  if (m_paused)
-    return;
-
-  if (m_replyCapture.armed()) [[unlikely]]
-    m_replyCapture.record(deviceId, data->data);
-
-  SS_ASSERT(m_console != nullptr && m_apiServer != nullptr && m_fileTransmission != nullptr,
-            return);
-
-  m_apiServer->hotpathTxData(data->data);
-  m_console->hotpathRxDeviceData(deviceId, data->data);
-
-  if (m_fileTransmission->active()) [[unlikely]]
-    m_fileTransmission->onRawDataReceived(data->data);
-
-#ifdef BUILD_COMMERCIAL
-  m_sessionExport->hotpathTxRawBytes(deviceId, data);
-  m_mqttPublisher->hotpathTxRawBytes(deviceId, data);
-#endif
-
-#ifdef ENABLE_GRPC
-  m_grpcServer->hotpathTxData(data->data);
-#endif
+  m_io.onRawDataReceived(deviceId, data);
 }
 
 /**
@@ -1648,15 +1552,7 @@ void IO::ConnectionManager::onRawDataReceived(int deviceId, const IO::CapturedDa
  */
 void IO::ConnectionManager::onConsoleDataReceived(int deviceId, const IO::CapturedDataPtr& data)
 {
-  SS_ASSERT(data != nullptr, return);
-  SS_ASSERT_LOG(deviceId >= 0);
-
-  if (m_paused)
-    return;
-
-  SS_ASSERT(m_console != nullptr, return);
-
-  m_console->hotpathRxDeviceData(deviceId, data->data);
+  m_io.onConsoleDataReceived(deviceId, data);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1669,14 +1565,7 @@ void IO::ConnectionManager::onConsoleDataReceived(int deviceId, const IO::Captur
  */
 int IO::ConnectionManager::deviceIdForDriver(const HAL_Driver* driver) const
 {
-  if (driver == nullptr)
-    return -1;
-
-  for (const auto& [id, dm] : m_devices)
-    if (dm && dm->driver() == driver)
-      return id;
-
-  return -1;
+  return m_query.deviceIdForDriver(driver);
 }
 
 /**
@@ -1686,13 +1575,7 @@ int IO::ConnectionManager::deviceIdForDriver(const HAL_Driver* driver) const
  */
 std::vector<int> IO::ConnectionManager::deviceIdSnapshot(bool projectSourcesOnly) const
 {
-  std::vector<int> ids;
-  ids.reserve(m_devices.size());
-  for (const auto& [id, dm] : m_devices)
-    if (id > 0 || !projectSourcesOnly)
-      ids.push_back(id);
-
-  return ids;
+  return m_query.deviceIdSnapshot(projectSourcesOnly);
 }
 
 /**

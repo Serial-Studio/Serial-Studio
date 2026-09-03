@@ -46,9 +46,9 @@ Item {
     // Device selector
     //
     Label {
+      enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
       text: qsTr("USB Device") + ":"
-      enabled: app.ioEnabled
     } Widgets.Combo {
       id: deviceCombo
 
@@ -93,7 +93,19 @@ Item {
       currentIndex: Cpp_IO_USB.transferMode
 
       onActivated: (index) => {
-        if (enabled && Cpp_IO_USB.transferMode !== index)
+        if (!enabled)
+          return
+
+        //
+        // Advanced control transfers are consent-gated: the driver refuses them until the user
+        // said yes here, so a project or an API client cannot turn them on behind their back.
+        //
+        if (index === 1 && !Cpp_IO_USB.advancedTransferConsent) {
+          _advancedConsentDialog.open()
+          return
+        }
+
+        if (Cpp_IO_USB.transferMode !== index)
           Cpp_IO_USB.transferMode = index
       }
 
@@ -103,6 +115,27 @@ Item {
           if (modeCombo.currentIndex !== Cpp_IO_USB.transferMode)
             modeCombo.currentIndex = Cpp_IO_USB.transferMode
         }
+      }
+
+      Dialog {
+        id: _advancedConsentDialog
+
+        modal: true
+        parent: Overlay.overlay
+        anchors.centerIn: Overlay.overlay
+        standardButtons: Dialog.Yes | Dialog.No
+        title: qsTr("Enable Advanced USB Control Transfers?")
+
+        Label {
+          width: 360
+          wrapMode: Text.WordWrap
+          text: qsTr("This enables control transfers in addition to bulk transfers. Sending " +
+                     "incorrect control requests can crash or damage connected hardware. Only " +
+                     "enable this if you know what you are doing.")
+        }
+
+        onAccepted: Cpp_IO_USB.grantAdvancedTransferConsent()
+        onRejected: modeCombo.currentIndex = Cpp_IO_USB.transferMode
       }
     }
 

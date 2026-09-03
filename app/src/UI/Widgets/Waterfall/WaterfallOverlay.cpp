@@ -168,15 +168,18 @@ bool Widgets::WaterfallOverlay::toggleSpotlight(const int markerIndex) noexcept
 }
 
 /**
- * @brief Refreshes each marker's peak and normal/warning/alarm state from the freshly smoothed
- *        spectrum row; point markers use a +/- 2 bin neighborhood. Bin math clamps in the double
- *        domain BEFORE the int cast: casting an unrepresentable double is UB.
+ * @brief Refreshes each marker's peak and state from the freshly smoothed spectrum row; point
+ *        markers use a +/- 2 bin neighborhood. Bin math clamps in the double domain BEFORE the
+ *        int cast: casting an unrepresentable double is UB. Returns whether the drawn readout
+ *        changed -- chips render one decimal, and a smaller move must not re-rasterize (F7).
  */
-void Widgets::WaterfallOverlay::updateMarkerStates(const float* smoothed, const int spectrumSize)
+bool Widgets::WaterfallOverlay::updateMarkerStates(const float* smoothed, const int spectrumSize)
 {
   constexpr double pointHalfWindow = 2.0;
-  SS_ASSERT(smoothed != nullptr, return);
-  SS_ASSERT(spectrumSize > 0, return);
+  SS_ASSERT(smoothed != nullptr, return false);
+  SS_ASSERT(spectrumSize > 0, return false);
+
+  bool changed = false;
 
   const double freqStep = static_cast<double>(m_axis.samplingRate) / qMax(1, m_axis.fftSize);
   const double lastBin  = qMax(0, spectrumSize - 1);
@@ -199,6 +202,9 @@ void Widgets::WaterfallOverlay::updateMarkerStates(const float* smoothed, const 
     for (int i = lo; i <= hi; ++i)
       peak = std::max(peak, smoothed[i]);
 
+    const int previousState = m.state;
+    const int previousLabel = qRound(m.peakDb * 10.0f);
+
     m.peakDb = peak;
     if (std::isfinite(m.alarmDb) && peak >= m.alarmDb)
       m.state = 2;
@@ -206,7 +212,11 @@ void Widgets::WaterfallOverlay::updateMarkerStates(const float* smoothed, const 
       m.state = 1;
     else
       m.state = 0;
+
+    changed |= m.state != previousState || qRound(m.peakDb * 10.0f) != previousLabel;
   }
+
+  return changed;
 }
 
 //--------------------------------------------------------------------------------------------------

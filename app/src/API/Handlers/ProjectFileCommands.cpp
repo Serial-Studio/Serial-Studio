@@ -32,7 +32,6 @@
 
 #include "API/EnumLabels.h"
 #include "API/Handlers/ProjectApiSupport.h"
-#include "API/PathPolicy.h"
 #include "API/SchemaBuilder.h"
 #include "AppState.h"
 #include "DataModel/Frame.h"
@@ -180,8 +179,8 @@ void API::Handlers::ProjectFileCommands::registerLifecycleCommands()
   registry.registerCommand(
     QStringLiteral("project.setTitle"),
     QStringLiteral("Rename the project (only the in-app title). Does not move or rename "
-                   "the .ssproj file on disk; auto-save still writes to the existing "
-                   "file path. To save to a different file, use project.save{filePath}."),
+                   "the .ssproj file on disk; the title reaches disk on the next save. "
+                   "To save to a different file, use project.save{filePath}."),
     makeSchema({
       {QStringLiteral("title"), QStringLiteral("string"), QStringLiteral("Project title")}
   }),
@@ -192,7 +191,9 @@ void API::Handlers::ProjectFileCommands::registerLifecycleCommands()
     QStringLiteral("Open a .ssproj or .json project file. Replaces the current project. "
                    "Auto-switches operationMode to ProjectFile if it was QuickPlot or "
                    "ConsoleOnly. Path must be absolute. Pass dryRun:true to read the "
-                   "file and return wouldDiscard + wouldApply summaries without loading."),
+                   "file and return wouldDiscard + wouldApply summaries without loading. "
+                   "Re-opening the project that is already loaded is a no-op that keeps unsaved "
+                   "edits: the reply reports reloaded:false for it."),
     makeSchema(
       {
         {QStringLiteral("filePath"),
@@ -207,12 +208,10 @@ void API::Handlers::ProjectFileCommands::registerLifecycleCommands()
 
   registry.registerCommand(
     QStringLiteral("project.save"),
-    QStringLiteral("Write the current project to disk. Note: the AI runtime auto-saves "
-                   "after every successful mutating tool call within ~1 second, so you "
-                   "do NOT need to call this explicitly when editing. Call it ONLY "
-                   "when the user explicitly says \"save\" or wants a different file "
-                   "path -- in which case pass {filePath: \"/abs/path\"} for headless "
-                   "save-as."),
+    QStringLiteral("Write the current project to disk. The AI runtime does NOT write the "
+                   "project file: a successful mutating tool call takes a checkpoint, not a "
+                   "save. Call this when the user asks to save, or pass {filePath: \"/abs/path\"} "
+                   "for a headless save-as."),
     makeSchema(
       {
   },
@@ -545,11 +544,6 @@ API::CommandResponse API::Handlers::ProjectFileCommands::fileOpen(const QString&
       id, ErrorCode::InvalidParam, QStringLiteral("filePath cannot be empty"));
   }
 
-  if (!API::isPathAllowed(file_path)) {
-    return CommandResponse::makeError(
-      id, ErrorCode::InvalidParam, QStringLiteral("filePath is not allowed"));
-  }
-
   const bool isDryRun = params.value(QStringLiteral("dryRun")).toBool(false);
 
   if (isDryRun) {
@@ -599,6 +593,7 @@ API::CommandResponse API::Handlers::ProjectFileCommands::fileOpen(const QString&
   QJsonObject result;
   result[QStringLiteral("filePath")] = projectModel.jsonFilePath();
   result[QStringLiteral("title")]    = projectModel.title();
+  result[QStringLiteral("reloaded")] = projectModel.lastOpenReloaded();
   return CommandResponse::makeSuccess(id, result);
 }
 
@@ -614,12 +609,6 @@ API::CommandResponse API::Handlers::ProjectFileCommands::fileSave(const QString&
   projectModel.setSuppressMessageBoxes(true);
   bool success = false;
   if (!explicit_path.isEmpty()) {
-    if (!API::isPathAllowed(explicit_path, true)) {
-      projectModel.setSuppressMessageBoxes(false);
-      return CommandResponse::makeError(
-        id, ErrorCode::InvalidParam, QStringLiteral("filePath is not allowed"));
-    }
-
     success = projectModel.apiSaveJsonFile(explicit_path);
   } else {
     const bool ask_path = params.value(QStringLiteral("askPath")).toBool(false);

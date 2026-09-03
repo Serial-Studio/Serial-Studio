@@ -248,6 +248,7 @@ private:
                     int ascent,
                     bool rtlMode);
 
+  void clampSelectionToBuffer();
   void paintSelectionHighlights(QPainter* painter, int firstLine, int lastVLine, int lineHeight);
   void paintSearchHighlights(QPainter* painter, int firstLine, int lastVLine, int lineHeight);
   void drawSegmentMatch(QPainter* painter,
@@ -325,5 +326,9 @@ private:
 
   QFont m_badgeFont;
   QFontMetrics m_badgeMetrics;
+
+  // Reused per-paint text buffers; QPainter takes QString, so a view still has to be realized
+  QString m_runScratch;
+  QString m_segmentScratch;
 };
 }  // namespace Widgets

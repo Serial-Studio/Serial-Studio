@@ -120,7 +120,6 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem* parent)
   , m_anaglyph(false)
   , m_autoScale(true)
   , m_channelIsolation(Plot3DStereo::shadersPresent())
-  , m_nodesStereo(false)
   , m_autoCenter(false)
   , m_interpolate(true)
   , m_orbitNavigation(true)
@@ -131,15 +130,6 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem* parent)
   , m_dirtyCameraIndicator(true)
   , m_dataUpdated(true)
   , m_dirtyLabel(true)
-  , m_bgUpload(true)
-  , m_labelUpload(false)
-  , m_indicatorUpload(false)
-  , m_bgNode(nullptr)
-  , m_gridNodes{}
-  , m_axisNodes{}
-  , m_traceNodes{}
-  , m_labelNode(nullptr)
-  , m_indicatorNode(nullptr)
   , m_orbitOffsetX(0)
   , m_orbitOffsetY(0)
   , m_targetWorldScale(1.0)
@@ -201,27 +191,15 @@ QSGNode* Widgets::Plot3D::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData*
   const QRectF rect = boundingRect();
   if (rect.isEmpty() || !window()) {
     delete oldNode;
-    m_bgNode        = nullptr;
-    m_labelNode     = nullptr;
-    m_indicatorNode = nullptr;
-    m_gridNodes.fill(nullptr);
-    m_axisNodes.fill(nullptr);
-    m_traceNodes.fill(nullptr);
+    m_nodes.forget();
     return nullptr;
   }
 
   auto* root = oldNode;
   if (!root) {
-    root              = new QSGNode;
-    m_bgNode          = nullptr;
-    m_labelNode       = nullptr;
-    m_indicatorNode   = nullptr;
-    m_labelUpload     = true;
-    m_indicatorUpload = true;
-    m_bgUpload        = true;
-    m_gridNodes.fill(nullptr);
-    m_axisNodes.fill(nullptr);
-    m_traceNodes.fill(nullptr);
+    root = new QSGNode;
+    m_nodes.forget();
+    m_nodes.requireUploads();
   }
 
   SS_ASSERT(root != nullptr, return nullptr);
@@ -234,24 +212,17 @@ QSGNode* Widgets::Plot3D::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData*
     m_dirtyData        = true;
   }
 
-  const bool stereoNodes = m_anaglyph && m_channelIsolation;
-  if (stereoNodes != m_nodesStereo) {
-    releaseStrokeNodes();
-    m_nodesStereo = stereoNodes;
-  }
+  m_nodes.setStereo(m_anaglyph && m_channelIsolation);
+  m_nodes.syncBackground(window(), root, m_bgTile, rect);
+  m_nodes.syncGrid(m_gridPx, m_gridColors);
+  m_nodes.syncAxis(m_axisPx, m_axisColors);
+  m_nodes.syncTrace(m_tracePx, m_traceColors, m_interpolate);
+  m_nodes.syncLabel(window(), m_labelTile, m_labelPos);
+  m_nodes.syncIndicator(window(),
+                        m_indicatorTile,
+                        QPointF(50.0 - kIndicatorTileSize * 0.5, 50.0 - kIndicatorTileSize * 0.5));
 
-  syncBackgroundNode(root, rect);
-  syncStrokeNodes(m_gridNodes, m_gridPx, m_gridColors, 0.5);
-  syncStrokeNodes(m_axisNodes, m_axisPx, m_axisColors, 0.75);
-  syncTraceNode();
-
-  syncTileNode(m_labelNode, m_labelTile, m_labelPos, m_labelUpload);
-  syncTileNode(m_indicatorNode,
-               m_indicatorTile,
-               QPointF(50.0 - kIndicatorTileSize * 0.5, 50.0 - kIndicatorTileSize * 0.5),
-               m_indicatorUpload);
-
-  appendSceneNodes(root);
+  m_nodes.append(root, m_cameraAngleX <= 270.0 && m_cameraAngleX > 90.0);
 
   return root;
 }
@@ -677,7 +648,7 @@ void Widgets::Plot3D::updatePolish()
     m_bgTile = UI::Widgets::Plot3DDetail::buildBackgroundTile(
       boundingRect().size().toSize(), m_innerBackgroundColor, m_outerBackgroundColor);
     m_dirtyBackground = false;
-    m_bgUpload        = true;
+    m_nodes.markBackgroundDirty();
   }
 
   if (m_dirtyGrid)
@@ -1040,7 +1011,7 @@ void Widgets::Plot3D::drawCameraIndicator()
 
   m_indicatorTile = UI::Widgets::Plot3DDetail::buildCameraIndicatorTile(
     kIndicatorTileSize, displayPixelRatio(), matrix, m_commonFonts.customMonoFont(0.8), colors);
-  m_indicatorUpload = true;
+  m_nodes.markIndicatorDirty();
 }
 
 /**
@@ -1053,8 +1024,8 @@ void Widgets::Plot3D::drawGridLabel()
   const QFont font = m_commonFonts.monoFont();
   m_labelTile      = UI::Widgets::Plot3DDetail::buildTextTile(
     m_gridStepLabel, font, m_textColor, displayPixelRatio());
-  m_labelPos    = QPointF(7.0, height() - 8.0 - QFontMetrics(font).ascent() - 1.0);
-  m_labelUpload = true;
+  m_labelPos = QPointF(7.0, height() - 8.0 - QFontMetrics(font).ascent() - 1.0);
+  m_nodes.markLabelDirty();
 }
 
 //--------------------------------------------------------------------------------------------------

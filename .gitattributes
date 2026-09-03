@@ -36,3 +36,4 @@ examples/*  linguist-vendored
 licenses/*  linguist-vendored
 scripts/*   linguist-vendored
 .github/*   linguist-vendored
+app/tests/fuzz/corpus/** binary

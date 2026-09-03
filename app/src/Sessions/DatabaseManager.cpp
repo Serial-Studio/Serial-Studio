@@ -32,6 +32,7 @@
 #  include <QTimer>
 
 #  include "AppState.h"
+#  include "DataModel/NotificationCenter.h"
 #  include "DataModel/ProjectModel.h"
 #  include "Misc/PasswordHash.h"
 #  include "Misc/Utilities.h"
@@ -47,6 +48,34 @@
 //--------------------------------------------------------------------------------------------------
 
 static QString s_dbPathOverride;
+
+/**
+ * @brief True when @p sessionId is the session the historian is recording into right now. The
+ *        explorer opens the same WAL database while a capture runs, so deleting or editing that
+ *        row drops data the worker is still inserting and leaves finalizeSession updating nothing
+ *        (B4).
+ */
+[[nodiscard]] static bool sessionIsLive(int sessionId)
+{
+  return sessionId >= 0 && sessionId == Sessions::Export::currentSessionIdOrNone();
+}
+
+/**
+ * @brief Refuses a mutation of the live session and says why; true when the caller must stop.
+ */
+[[nodiscard]] static bool refuseLiveSession(int sessionId)
+{
+  if (!sessionIsLive(sessionId))
+    return false;
+
+  static auto& notifications = DataModel::NotificationCenter::instance();
+  notifications.postWarning(
+    QStringLiteral("Historian"),
+    QObject::tr("This session is being recorded"),
+    QObject::tr("Stop the recording before deleting or editing this session; its rows are still "
+                "being written."));
+  return true;
+}
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton
@@ -770,6 +799,9 @@ void Sessions::DatabaseManager::setSelectedSessionNotes(const QString& notes)
   if (selectedSessionNotes() == notes)
     return;
 
+  if (refuseLiveSession(m_selectedSessionId))
+    return;
+
   for (auto& v : m_sessionList) {
     auto m = v.toMap();
     if (m.value("session_id").toInt() == m_selectedSessionId) {
@@ -801,6 +833,9 @@ void Sessions::DatabaseManager::deleteSession(int sessionId)
   if (!isOpen() || m_locked)
     return;
 
+  if (refuseLiveSession(sessionId))
+    return;
+
   setBusy(true);
   QMetaObject::invokeMethod(m_worker,
                             "deleteSession",
@@ -819,6 +854,9 @@ void Sessions::DatabaseManager::deleteSession(int sessionId)
  */
 void Sessions::DatabaseManager::confirmDeleteSession(int sessionId)
 {
+  if (refuseLiveSession(sessionId))
+    return;
+
   if (m_locked) {
     Misc::Utilities::showMessageBox(
       tr("Session file locked"),
@@ -880,6 +918,9 @@ void Sessions::DatabaseManager::addTagAndAssign(int sessionId, const QString& la
   if (!isOpen() || label.trimmed().isEmpty())
     return;
 
+  if (refuseLiveSession(sessionId))
+    return;
+
   setBusy(true);
   QMetaObject::invokeMethod(m_worker,
                             "addTagAndAssign",
@@ -927,6 +968,9 @@ void Sessions::DatabaseManager::assignTagToSession(int sessionId, int tagId)
   if (!isOpen())
     return;
 
+  if (refuseLiveSession(sessionId))
+    return;
+
   setBusy(true);
   QMetaObject::invokeMethod(m_worker,
                             "assignTag",
@@ -942,6 +986,9 @@ void Sessions::DatabaseManager::assignTagToSession(int sessionId, int tagId)
 void Sessions::DatabaseManager::removeTagFromSession(int sessionId, int tagId)
 {
   if (!isOpen())
+    return;
+
+  if (refuseLiveSession(sessionId))
     return;
 
   setBusy(true);

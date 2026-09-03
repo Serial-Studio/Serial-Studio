@@ -14,6 +14,7 @@ import QtQuick.Controls
 import SerialStudio
 
 import "."
+import "../Views" as Views
 import "../../Widgets" as Widgets
 
 Window {
@@ -185,18 +186,9 @@ Window {
     }
   }
 
-  Menu {
+  Views.CodeEditorMenu {
     id: contextMenu
 
-    MenuItem { text: qsTr("Cut");        onTriggered: editor.cut() }
-    MenuItem { text: qsTr("Copy");       onTriggered: editor.copy() }
-    MenuItem { text: qsTr("Paste");      onTriggered: editor.paste() }
-    MenuItem { text: qsTr("Select All"); onTriggered: editor.selectAll() }
-    MenuSeparator {}
-    MenuItem { text: qsTr("Undo");       onTriggered: editor.undo() }
-    MenuItem { text: qsTr("Redo");       onTriggered: editor.redo() }
-    MenuSeparator {}
-    MenuItem { text: qsTr("Format Document");  onTriggered: editor.formatDocument() }
-    MenuItem { text: qsTr("Format Selection"); onTriggered: editor.formatSelection() }
+    codeEditor: editor
   }
 }

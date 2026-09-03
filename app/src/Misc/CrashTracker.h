@@ -71,6 +71,8 @@ private:
 public:
   [[nodiscard]] static CrashTracker& instance();
 
+  static void resetSettingsPreservingLicense(QSettings& settings);
+
   [[nodiscard]] bool previousRunCrashed() const noexcept;
   [[nodiscard]] int consecutiveCrashes() const noexcept;
   [[nodiscard]] const QString& lastCheckpoint() const noexcept;

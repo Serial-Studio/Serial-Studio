@@ -27,9 +27,6 @@
 #  include "DataModel/Editors/EditorFormatting.h"
 #  include "DataModel/ProjectEditor.h"
 #  include "DataModel/ProjectModel.h"
-#  include "Misc/CommonFonts.h"
-#  include "Misc/ThemeManager.h"
-#  include "Misc/TimerEvents.h"
 #  include "Misc/Translator.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -41,29 +38,16 @@
  *        window, which stays instantiated once opened, hence the window-visibility render gate.
  */
 DataModel::PainterCodeEditor::PainterCodeEditor(QQuickItem* parent)
-  : QQuickPaintedItem(parent)
+  : EmbeddedCodeEditorItem(EmbeddedCodeEditor::RenderGate::WindowVisible, parent)
   , m_readingCode(false)
-  , m_themeManager(Misc::ThemeManager::instance())
-  , m_timerEvents(Misc::TimerEvents::instance())
   , m_translator(Misc::Translator::instance())
   , m_projectEditor(DataModel::ProjectEditor::instance())
   , m_projectModel(DataModel::ProjectModel::instance())
-  , m_editor(*this,
-             m_themeManager,
-             Misc::CommonFonts::instance(),
-             EmbeddedCodeEditor::RenderGate::WindowVisible)
   , m_templates(QStringLiteral(":/scripts/painter/templates.json"),
                 QStringLiteral(":/scripts/painter"),
                 QStringLiteral(".js"),
                 "DataModel::PainterCodeEditor")
 {
-  m_editor.configureHost();
-
-  connect(&m_themeManager,
-          &Misc::ThemeManager::themeChanged,
-          this,
-          &DataModel::PainterCodeEditor::onThemeChanged);
-
   auto& widget = m_editor.widget();
   connect(&widget, &QCodeEditor::textChanged, this, [this] { Q_EMIT modifiedChanged(); });
   connect(&widget, &QCodeEditor::textChanged, this, &DataModel::PainterCodeEditor::textChanged);
@@ -77,22 +61,6 @@ DataModel::PainterCodeEditor::PainterCodeEditor(QQuickItem* parent)
 
     m_projectEditor.setCurrentGroupPainterCode(text());
   });
-
-  connect(
-    this, &QQuickPaintedItem::widthChanged, this, &DataModel::PainterCodeEditor::resizeWidget);
-  connect(
-    this, &QQuickPaintedItem::heightChanged, this, &DataModel::PainterCodeEditor::resizeWidget);
-  connect(&widget, &QCodeEditor::textChanged, this, &DataModel::PainterCodeEditor::scheduleRender);
-  connect(
-    &widget, &QCodeEditor::selectionChanged, this, &DataModel::PainterCodeEditor::scheduleRender);
-  connect(&widget,
-          &QCodeEditor::cursorPositionChanged,
-          this,
-          &DataModel::PainterCodeEditor::scheduleRender);
-  connect(&m_timerEvents,
-          &Misc::TimerEvents::uiTimeout,
-          this,
-          &DataModel::PainterCodeEditor::renderWidget);
 
   connect(&m_translator,
           &Misc::Translator::languageChanged,
@@ -408,180 +376,4 @@ void DataModel::PainterCodeEditor::loadTemplates()
   m_templates.reload();
 }
 
-//--------------------------------------------------------------------------------------------------
-// Theme + rendering
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Applies the current theme to the code editor widget.
- */
-void DataModel::PainterCodeEditor::onThemeChanged()
-{
-  m_editor.applyTheme();
-}
-
-/**
- * @brief Marks the cached pixmap stale; the next UI tick does the grab, so a burst of edits
- *        costs one widget render instead of one per event.
- */
-void DataModel::PainterCodeEditor::scheduleRender()
-{
-  m_editor.scheduleRender();
-}
-
-/**
- * @brief Grabs the editor widget into a pixmap for QML rendering.
- */
-void DataModel::PainterCodeEditor::renderWidget()
-{
-  m_editor.renderWidget();
-}
-
-/**
- * @brief Resizes the backing QCodeEditor to match the QML item.
- */
-void DataModel::PainterCodeEditor::resizeWidget()
-{
-  m_editor.resizeWidget();
-}
-
-//--------------------------------------------------------------------------------------------------
-// Event forwarding
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Paints the cached editor pixmap into the QML scene.
- */
-void DataModel::PainterCodeEditor::paint(QPainter* painter)
-{
-  m_editor.paint(painter);
-}
-
-/**
- * @brief Routes ShortcutOverride to the editor widget so editing keys (undo, copy, paste...)
- *        are handled natively instead of being consumed by QML Shortcut bindings.
- */
-bool DataModel::PainterCodeEditor::event(QEvent* event)
-{
-  if (m_editor.handleShortcutOverride(event))
-    return true;
-
-  return QQuickPaintedItem::event(event);
-}
-
-/**
- * @brief Forwards completer navigation/commit keys to the popup when visible; everything else
- *        goes straight to the editor widget so QCompleter's focus check cannot hide the popup.
- */
-void DataModel::PainterCodeEditor::keyPressEvent(QKeyEvent* event)
-{
-  m_editor.handleKeyPress(event);
-}
-
-/**
- * @brief Forwards key-release events to the backing widget.
- */
-void DataModel::PainterCodeEditor::keyReleaseEvent(QKeyEvent* event)
-{
-  m_editor.forwardToWidget(event);
-}
-
-/**
- * @brief Forwards input-method events to the backing widget.
- */
-void DataModel::PainterCodeEditor::inputMethodEvent(QInputMethodEvent* event)
-{
-  m_editor.forwardToWidget(event);
-  m_editor.scheduleRender();
-}
-
-/**
- * @brief Forwards focus-in events to the backing widget.
- */
-void DataModel::PainterCodeEditor::focusInEvent(QFocusEvent* event)
-{
-  m_editor.forwardToWidget(event);
-}
-
-/**
- * @brief Forwards focus-out events to the backing widget.
- */
-void DataModel::PainterCodeEditor::focusOutEvent(QFocusEvent* event)
-{
-  m_editor.forwardToWidget(event);
-}
-
-/**
- * @brief Forwards mouse-press events to the backing widget, claiming focus for the item.
- */
-void DataModel::PainterCodeEditor::mousePressEvent(QMouseEvent* event)
-{
-  m_editor.handleMouse(event, true);
-}
-
-/**
- * @brief Forwards mouse-move events to the backing widget viewport.
- */
-void DataModel::PainterCodeEditor::mouseMoveEvent(QMouseEvent* event)
-{
-  m_editor.handleMouse(event, false);
-}
-
-/**
- * @brief Forwards mouse-release events to the backing widget viewport.
- */
-void DataModel::PainterCodeEditor::mouseReleaseEvent(QMouseEvent* event)
-{
-  m_editor.handleMouse(event, false);
-}
-
-/**
- * @brief Forwards double-click events to the backing widget viewport.
- */
-void DataModel::PainterCodeEditor::mouseDoubleClickEvent(QMouseEvent* event)
-{
-  m_editor.handleMouse(event, false);
-}
-
-/**
- * @brief Forwards wheel events to the editor viewport.
- */
-void DataModel::PainterCodeEditor::wheelEvent(QWheelEvent* event)
-{
-  m_editor.forwardToViewport(event);
-  m_editor.scheduleRender();
-}
-
-/**
- * @brief Forwards drag-enter events to the editor viewport.
- */
-void DataModel::PainterCodeEditor::dragEnterEvent(QDragEnterEvent* event)
-{
-  m_editor.forwardToViewport(event);
-}
-
-/**
- * @brief Forwards drag-move events to the editor viewport.
- */
-void DataModel::PainterCodeEditor::dragMoveEvent(QDragMoveEvent* event)
-{
-  m_editor.forwardToViewport(event);
-}
-
-/**
- * @brief Forwards drag-leave events to the editor viewport.
- */
-void DataModel::PainterCodeEditor::dragLeaveEvent(QDragLeaveEvent* event)
-{
-  m_editor.forwardToViewport(event);
-}
-
-/**
- * @brief Forwards drop events to the editor viewport.
- */
-void DataModel::PainterCodeEditor::dropEvent(QDropEvent* event)
-{
-  m_editor.forwardToViewport(event);
-}
-
-#endif  // BUILD_COMMERCIAL
+#endif

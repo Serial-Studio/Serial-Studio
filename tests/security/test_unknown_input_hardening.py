@@ -941,11 +941,6 @@ class TestUseAfterFree:
     but rapid recreation could expose timing windows.
     """
 
-    @pytest.mark.xfail(
-        reason="Server crashes under 10-thread × 200-command stress "
-        "(rate limiter overwhelmed or rapid setOperationMode cycling)",
-        strict=False,
-    )
     def test_rapid_framereader_recreation(self, check_server_alive):
         """
         Rapidly change frame parser settings to force FrameReader

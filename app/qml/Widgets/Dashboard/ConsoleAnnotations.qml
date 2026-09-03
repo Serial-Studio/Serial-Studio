@@ -273,10 +273,11 @@ Item {
           property real windowEnd: 1
           property real windowStart: 0
           property var classColors: []
+          property string laneStamp: ""
 
           //
-          // Right edge follows the newest committed label, never the raw byte counter: a narrow
-          // window anchored on the counter sits past the newest bar and reads as empty
+          // Right edge follows the newest committed label, never the raw byte counter, and lanes
+          // are reassigned only when the window, the geometry or the class set moved
           //
           function refresh() {
             if (!root.model)
@@ -285,16 +286,23 @@ Item {
             const end = root.annotationCount > 0 ? root.model.labelledEnd + 1
                                                  : root.model.retainedEnd
             const start = Math.max(root.model.retainedStart, end - _windowSpin.value)
-            windowStart = start
-            windowEnd = Math.max(start + 1, end)
-
             const pixels = Math.max(1, _track.width - 96)
-            const perPixel = Math.max(1, Math.floor((windowEnd - windowStart) / pixels))
+            const span = Math.max(start + 1, end)
+            const perPixel = Math.max(1, Math.floor((span - start) / pixels))
 
             const colors = []
             const classes = root.model.classes
             for (let c = 0; c < classes.length; ++c)
               colors.push(classes[c].color)
+
+            const stamp = start + "/" + span + "/" + pixels + "/" + root.trackRows + "/"
+                        + colors.join(",")
+            if (stamp === laneStamp)
+              return
+
+            windowStart = start
+            windowEnd = span
+            laneStamp = stamp
 
             const next = []
             for (let r = 0; r < root.trackRows; ++r)

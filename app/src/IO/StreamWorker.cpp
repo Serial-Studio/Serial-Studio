@@ -42,6 +42,7 @@ extern "C" {
 #include "DataModel/Scripting/LuaCompat.h"
 #include "DataModel/Scripting/LuaCompatJIT.h"
 #include "DSPSimd.h"
+#include "Platform/AppPlatform.h"
 #include "SerialStudio.h"
 #include "SSAssert.h"
 
@@ -99,12 +100,15 @@ IO::StreamProcessor::StreamProcessor(const StreamConfig& config,
   , m_frameBuilder(frameBuilder)
   , m_lua(nullptr)
   , m_js(nullptr)
+  , m_jsWatchdog(nullptr)
   , m_luaDeadline(QDeadlineTimer::Forever)
   , m_inBlock(false)
+  , m_jsTimedOut(false)
   , m_observedChannels(0)
   , m_samplesProcessed(0)
   , m_blocksProcessed(0)
   , m_transformErrors(0)
+  , m_transformTimeouts(0)
   , m_displayDrops(0)
   , m_exprSlots()
   , m_hasExpressions(false)
@@ -204,13 +208,16 @@ void IO::StreamProcessor::setupLuaState()
 }
 
 /**
- * @brief Creates the worker-owned QJSEngine for JavaScript stream transforms. The __ss table-API
- *        bridge is installed for parity with frame-lane transforms, and the friendly globals are
- *        defined over it exactly as the SDK prelude (app/rcc/api/prelude.js) does.
+ * @brief Creates the worker-owned QJSEngine plus its watchdog: a QTimer on this thread could never
+ *        fire while a script runs, so the interrupt is delivered off-thread exactly as on the frame
+ *        lane (A1). The __ss table-API bridge and the friendly globals mirror the SDK prelude.
  */
 void IO::StreamProcessor::setupJsEngine()
 {
   m_js = new QJSEngine();
+  m_jsWatchdog =
+    std::make_unique<DataModel::JsWatchdog>(m_js, kWatchdogMs, QStringLiteral("stream transform"));
+
   if (!m_frameBuilder)
     return;
 
@@ -399,6 +406,8 @@ void IO::StreamProcessor::teardownEngines()
     m_lua = nullptr;
   }
 
+  m_jsWatchdog.reset();
+
   delete m_js;
   m_js = nullptr;
 }
@@ -492,8 +501,8 @@ void IO::StreamProcessor::bindBlockColumns(DataModel::DataBlock& block) const
 
 /**
  * @brief Runs one dataset's transform for the block, then fills its display payload and export
- *        column. A null @p channel means the display slot pool was exhausted: the transform and
- *        the export still run, only this block's trace points are lost.
+ *        column. A channel the source does not carry clears the column instead of republishing the
+ *        previous block's samples (A12), and a watchdog timeout falls the block back to raw.
  */
 void IO::StreamProcessor::processChannel(ChannelState& state,
                                          const IO::SampleBlock& block,
@@ -505,12 +514,19 @@ void IO::StreamProcessor::processChannel(ChannelState& state,
   column->uniqueId = state.config.uniqueId;
   column->fftWindow.clear();
 
-  const int index    = state.config.channel;
-  const int channels = std::max(1, block.channels);
-  if (index < 0 || index >= channels) [[unlikely]]
-    return;
-
+  const int index        = state.config.channel;
+  const int channels     = std::max(1, block.channels);
   const qsizetype frames = block.frames;
+  if (index < 0 || index >= channels) [[unlikely]] {
+    const auto count = static_cast<std::size_t>(frames);
+    if (column->values.size() < count)
+      column->values.resize(count);
+
+    std::fill_n(column->values.data(), count, 0.0);
+    state.latest = 0.0;
+    return;
+  }
+
   m_scratch.resize(static_cast<std::size_t>(frames));
 
   DSP::simdDeinterleaveToF64(
@@ -520,12 +536,18 @@ void IO::StreamProcessor::processChannel(ChannelState& state,
                         block.t0.time_since_epoch())
                         .count();
 
+  m_jsTimedOut            = false;
   const bool hasBlockForm = (state.luaBlockRef >= 0) || state.jsBlockValid;
   if (hasBlockForm) {
     if (!runBlockTransform(state, blockNumber, t0Ms))
       ++m_transformErrors;
   } else if (state.luaRef >= 0 || state.jsValid) {
     runSampleTransform(state);
+  }
+
+  if (m_jsTimedOut) [[unlikely]] {
+    restoreRawSamples(block, index);
+    noteTransformTimeout(state);
   }
 
   state.firstSampleIndex += static_cast<quint64>(frames);
@@ -629,7 +651,9 @@ bool IO::StreamProcessor::runLuaBlockTransform(ChannelState& state,
 }
 
 /**
- * @brief JS half of the block dispatch: array + info object through the worker-owned QJSEngine.
+ * @brief JS half of the block dispatch: array + info object through the worker-owned QJSEngine,
+ *        under the watchdog. A runaway script is interrupted off-thread and the block falls back
+ *        to raw samples instead of pinning this worker forever (A1).
  */
 bool IO::StreamProcessor::runJsBlockTransform(ChannelState& state, quint64 blockNumber, double t0Ms)
 {
@@ -647,7 +671,13 @@ bool IO::StreamProcessor::runJsBlockTransform(ChannelState& state, quint64 block
   info.setProperty(QStringLiteral("count"), static_cast<double>(count));
   info.setProperty(QStringLiteral("firstSampleIndex"), static_cast<double>(state.firstSampleIndex));
 
-  const QJSValue result = state.jsBlockFn.call({samples, info});
+  const QJSValue result = m_jsWatchdog ? m_jsWatchdog->call(state.jsBlockFn, {samples, info})
+                                       : state.jsBlockFn.call({samples, info});
+  if (m_jsWatchdog && m_jsWatchdog->lastCallTimedOut()) [[unlikely]] {
+    m_jsTimedOut = true;
+    return false;
+  }
+
   if (result.isError()) [[unlikely]] {
     qWarning() << "[StreamWorker] JS transform_block failed for dataset" << state.config.uniqueId
                << ":" << result.toString();
@@ -666,7 +696,8 @@ bool IO::StreamProcessor::runJsBlockTransform(ChannelState& state, quint64 block
 
 /**
  * @brief Per-sample fallback: transform(value) applied to every scratch sample at full rate on
- *        this thread (the existing per-sample contract, R9).
+ *        this thread (the existing per-sample contract, R9). The JS watchdog is armed ONCE for the
+ *        whole pass, exactly as the frame lane arms once per dataset pass rather than per call.
  */
 void IO::StreamProcessor::runSampleTransform(ChannelState& state)
 {
@@ -700,19 +731,64 @@ void IO::StreamProcessor::runSampleTransform(ChannelState& state)
     return;
   }
 
-  if (state.jsValid) {
-    SS_NO_UNROLL
-    for (std::size_t i = 0; i < count; ++i) {
-      const QJSValue result = state.jsFn.call({QJSValue(m_scratch[i])});
-      if (result.isError()) [[unlikely]] {
-        ++m_transformErrors;
-        break;
-      }
+  if (!state.jsValid)
+    return;
 
-      if (result.isNumber())
-        m_scratch[i] = result.toNumber();
+  if (m_jsWatchdog)
+    m_jsWatchdog->arm();
+
+  SS_NO_UNROLL
+  for (std::size_t i = 0; i < count; ++i) {
+    const QJSValue result = state.jsFn.call({QJSValue(m_scratch[i])});
+    if (m_js && m_js->isInterrupted()) [[unlikely]] {
+      m_jsTimedOut = true;
+      m_js->setInterrupted(false);
+      break;
     }
+
+    if (result.isError()) [[unlikely]] {
+      ++m_transformErrors;
+      break;
+    }
+
+    if (result.isNumber())
+      m_scratch[i] = result.toNumber();
   }
+
+  if (m_jsWatchdog)
+    m_jsWatchdog->disarm();
+}
+
+/**
+ * @brief Re-deinterleaves this block's raw samples into the scratch, the fallback a timed-out
+ *        transform leaves behind: the block publishes the source's own values rather than the
+ *        half-transformed mixture the abort produced (R2.2).
+ */
+void IO::StreamProcessor::restoreRawSamples(const IO::SampleBlock& block, int index)
+{
+  const auto frames  = static_cast<std::size_t>(block.frames);
+  const int channels = std::max(1, block.channels);
+  SS_ASSERT(index >= 0 && index < channels, return);
+  SS_ASSERT(m_scratch.size() >= frames, return);
+
+  DSP::simdDeinterleaveToF64(block.samples.data(), frames, channels, index, m_scratch.data());
+}
+
+/**
+ * @brief Counts a stream-lane transform timeout and logs it once per worker. Diagnostics are
+ *        PULLED (spec 0033): the 1 Hz problem-center poll reads transformTimeoutCount(), so this
+ *        path never pushes a signal, allocates, or locks at block rate.
+ */
+SS_COLD void IO::StreamProcessor::noteTransformTimeout(const ChannelState& state)
+{
+  ++m_transformTimeouts;
+  ++m_transformErrors;
+
+  if (m_transformTimeouts > 1)
+    return;
+
+  qWarning() << "[StreamWorker] JS transform for dataset" << state.config.uniqueId << "exceeded"
+             << kWatchdogMs << "ms -- falling back to raw samples";
 }
 
 /**
@@ -918,14 +994,27 @@ IO::StreamWorker::StreamWorker(HAL_Driver* driver,
   m_processor->moveToThread(m_thread.get());
   m_thread->start();
 
+  // code-verify off
+  // The real-time band is per thread and never inherited, so the worker claims it from inside its
+  // own event loop rather than the caller doing it here (spec 0075, N2).
+  // code-verify on
+  QMetaObject::invokeMethod(
+    m_processor,
+    [] { Platform::AppPlatform::registerIngestThreadWithMmcss(); },
+    Qt::QueuedConnection);
+
+  // code-verify off
+  // Compilation is posted BEFORE the feed is connected: both land in the worker's event queue, so
+  // wiring the feed first lets the blocks that arrive in between run untransformed (A12).
+  // code-verify on
+  QMetaObject::invokeMethod(
+    m_processor, &IO::StreamProcessor::compileEngines, Qt::QueuedConnection);
+
   m_feed = connect(driver,
                    &IO::HAL_Driver::sampleBlockReceived,
                    m_processor,
                    &IO::StreamProcessor::onSampleBlock,
                    Qt::QueuedConnection);
-
-  QMetaObject::invokeMethod(
-    m_processor, &IO::StreamProcessor::compileEngines, Qt::QueuedConnection);
 }
 
 /**

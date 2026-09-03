@@ -23,7 +23,9 @@ Q_LOGGING_CATEGORY(lcMqttVault, "serialstudio.mqtt.vault", QtCriticalMsg)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Configures SimpleCrypt with the per-machine key and HMAC integrity.
+ * @brief Configures SimpleCrypt with the per-machine key and its integrity hash. The key is
+ *        derived on this machine from data the binary can reproduce, so the result is obfuscation
+ *        with a tamper check, not encryption; the OS keychain is a shelved decision.
  */
 MQTT::CredentialVault::CredentialVault(const QString& scope)
   : m_group(scope + QStringLiteral("/credentials"))
@@ -38,7 +40,8 @@ MQTT::CredentialVault::CredentialVault(const QString& scope)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns decrypted credentials for host:port, or empty strings on miss / decrypt failure.
+ * @brief Returns the stored credentials for host:port, or empty strings on a miss or a failed
+ *        unscramble (a settings file copied from another machine reads as a miss).
  */
 MQTT::Credentials MQTT::CredentialVault::credentials(const QString& host, quint16 port) const
 {
@@ -119,7 +122,7 @@ QString MQTT::CredentialVault::keyPassphrase(const QString& host, quint16 port) 
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Encrypts and writes user/pass for host:port; empty inputs clear their respective slot.
+ * @brief Obfuscates and writes user/pass for host:port; empty inputs clear their respective slot.
  */
 void MQTT::CredentialVault::setCredentials(const QString& host,
                                            quint16 port,
@@ -149,7 +152,7 @@ void MQTT::CredentialVault::setCredentials(const QString& host,
 }
 
 /**
- * @brief Encrypts and writes the private-key passphrase for host:port; empty removes the slot.
+ * @brief Obfuscates and writes the private-key passphrase for host:port; empty removes the slot.
  */
 void MQTT::CredentialVault::setKeyPassphrase(const QString& host,
                                              quint16 port,

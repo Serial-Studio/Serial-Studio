@@ -39,6 +39,10 @@ numpy>=1.24.0
 psutil>=5.9.0
 memory-profiler>=0.61.0
 
-# Static-analysis backend for scripts/code-format.py (semantic Qt/C++ rules)
+# Static-analysis backend for scripts/code_verify_rules.py (semantic Qt/C++ rules)
 tree-sitter>=0.23,<0.25
 tree-sitter-cpp>=0.23,<0.24
+
+# Workflow and licensing gates run by scripts/tests/ and the CI lint job
+PyYAML>=6.0
+reuse>=5.0

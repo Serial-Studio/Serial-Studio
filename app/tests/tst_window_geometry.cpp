@@ -61,6 +61,9 @@ private slots:
   void mergedEdgeMasks_apart();
 
   void cascadeGeometry_steps();
+
+  void clampResizeToCanvas_insideIsUntouched();
+  void clampResizeToCanvas_appliesTheClampedRect();
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -325,6 +328,38 @@ void TstWindowGeometry::cascadeGeometry_steps()
   QCOMPARE(first, QRect(229, 165, 541, 470));
   QCOMPARE(second, QRect(255, 191, 541, 470));
   QCOMPARE(second.size(), first.size());
+}
+
+//--------------------------------------------------------------------------------------------------
+// clampResizeToCanvas (spec 0075, F19)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief A candidate already inside the canvas comes back unchanged.
+ */
+void TstWindowGeometry::clampResizeToCanvas_insideIsUntouched()
+{
+  const QRect inside(10, 20, 300, 200);
+  QCOMPARE(UI::WindowGeometry::clampResizeToCanvas(inside, QSize(1000, 800)), inside);
+}
+
+/**
+ * @brief A candidate that runs past an edge comes back clamped, not rejected: the gesture used
+ *        to be discarded whole, so the window stopped following the pointer at the canvas edge.
+ */
+void TstWindowGeometry::clampResizeToCanvas_appliesTheClampedRect()
+{
+  const QSize canvas(1000, 800);
+
+  const QRect right = UI::WindowGeometry::clampResizeToCanvas(QRect(900, 10, 300, 100), canvas);
+  QCOMPARE(right, QRect(900, 10, 100, 100));
+
+  const QRect bottom = UI::WindowGeometry::clampResizeToCanvas(QRect(10, 700, 100, 300), canvas);
+  QCOMPARE(bottom, QRect(10, 700, 100, 100));
+
+  const QRect origin = UI::WindowGeometry::clampResizeToCanvas(QRect(-40, -30, 200, 150), canvas);
+  QCOMPARE(origin.x(), 0);
+  QCOMPARE(origin.y(), 0);
 }
 
 QTEST_APPLESS_MAIN(TstWindowGeometry)

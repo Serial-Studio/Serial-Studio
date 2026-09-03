@@ -78,11 +78,42 @@ path runs under a protected bootstrap so `lua_atpanic` is unreachable.
   can never fire — the event loop is blocked while the script runs (this was a real,
   shipped no-op against `while(true){}`). `JsWatchdogThread` (a dedicated `QThread` polling
   armed `JsWatchdog`s every 20 ms) flips `setInterrupted(true)` from off-thread, which Qt
-  documents as thread-safe. Lua uses an in-engine `LUA_MASKCOUNT` hook + `QDeadlineTimer`
-  instead. Every JS engine (parser, transform, Painter, Output, MQTT) holds a `JsWatchdog`
-  that registers with the thread; `arm()`/`disarm()` are lock-free atomic-deadline stores
-  safe on the hotpath. **`setInterrupted(true)` may appear only in `JsWatchdogThread.cpp`**
+  documents as thread-safe. Every JS engine (parser, transform, Painter, Output, MQTT) holds a
+  `JsWatchdog` that registers with the thread; `arm()`/`disarm()` are lock-free atomic-deadline
+  stores safe on the hotpath. **`setInterrupted(true)` may appear only in `JsWatchdogThread.cpp`**
   — `code-verify.py:js-interrupt-off-thread` blocks it anywhere else.
+- **Lua's counterpart is `DataModel::LuaDeadlineHook`**
+  (`Scripting/LuaDeadlineHook.{h,cpp}`): a `LUA_MASKCOUNT` hook at
+  `kLuaHookInstructionCount` (10000) instructions over a `QDeadlineTimer`, raising
+  `"<label> timed out after <n> ms"`. Two forms, because not every owner owns the timer: the
+  owning object (`install` / `arm` / `disarm` / `timedOut`), and the static
+  `bind(L, QDeadlineTimer*, budget, label)` + `enable(L)` pair for a caller whose deadline lives
+  elsewhere — the frame lane's shape, where `FrameBuilder` arms `TransformEngine::luaDeadline`
+  and `TransformCompiler` only installs the hook. Rules: `bind()` allocates a registry userdata
+  and must therefore run **inside** the caller's protected bootstrap (LuaJIT reaches
+  `lua_atpanic` on allocation failure), `enable()` is allocation-free and runs after it, and
+  **Fast mode installs neither** — hooks never fire inside JIT-compiled traces, which is why
+  Safe/Fast is one mode switch and not two flags. A finished call is never reported as a
+  timeout: `hasExpired()` alone means "the budget elapsed", so a timeout is only latched when the
+  `pcall` also failed. Adoption is partial: `ScriptDryRun` and `TransformCompiler` use it;
+  `LuaScriptEngine`, `MacroRunner`, `MQTT/PublisherScript` and `IO::StreamWorker` still carry
+  their own `lua_sethook` with a private copy of the same 10000-instruction constant, and
+  consolidating them is a known follow-up (it moves each bind into a protected bootstrap and
+  changes the error text).
+- **One GUI-thread entry point for throwaway evaluations: `DataModel::ScriptDryRun`**
+  (`Scripting/ScriptDryRun.{h,cpp}`). It is a deadline-guarded throwaway session — a `QJSEngine`
+  behind a `JsWatchdog`, or a sandboxed `lua_State` behind a `LuaDeadlineHook` — under
+  `kScriptDryRunBudgetMs` (2000). The caller installs whatever API surface it needs on the
+  exposed engine or state; the session owns both. Every validate/test/preview path goes through
+  it: `controlScript.dryRun`, `project.painter.dryRun`, `project.outputWidget.dryRun` (including
+  the sample `transmit()` run, which reports `sampleRun.timedOut`), `ControlScriptEditor`'s
+  Validate, `DatasetTransformEditor`'s validate and test in both languages,
+  `TransmitTestDialog`, the macro verifier, and the MQTT publisher-script editor. A top-level
+  timeout answers `ErrorCode::ScriptTimeout` (`SCRIPT_TIMEOUT`). Two deltas worth knowing:
+  dry-run Lua now runs with the **JIT off**, because a count hook never fires inside a compiled
+  trace and an uninterruptible validation is the bug being fixed; and the dry-run sandbox does
+  not strip `load`/`dofile`/`string.dump`, matching what the editors did before, while the
+  runtime transform sandbox does.
 - Per-source `frameParserLanguage` (0 = JS, 1 = Lua, 2 = Native) picks the engine in
   `FrameParser::engineForSource()`. JS/Lua templates in `app/rcc/scripts/parser/{js,lua}/`
   + `templates.json`; native templates are compiled in (`nativeTemplates()` registry,
@@ -109,7 +140,21 @@ reference patterns; both importers shipped this bug in 2026-06.
 ## Embedded Code Editors — Hidden-Widget Plumbing
 
 The QML-embedded code editors (`JsCodeEditor` & siblings) are an offscreen `QCodeEditor`
-grabbed into a `QQuickPaintedItem`, so three invariants hold them together:
+grabbed into a `QQuickPaintedItem`, so three invariants hold them together.
+
+**All five hosts now derive from one base (spec 0075 H12).**
+`DataModel::EmbeddedCodeEditorItem` (`Editors/EmbeddedCodeEditorItem.{h,cpp}`) is the
+`QQuickPaintedItem` that owns the `EmbeddedCodeEditor`, the theme hook, the gated per-tick grab,
+the resize forward, the render marks and the sixteen event overrides;
+`ControlScriptEditor`, `JsCodeEditor`, `MacroEditor`, `OutputCodeEditor` and `PainterCodeEditor`
+derive from it and keep only their own document wiring. Each host's render gate is a constructor
+argument, carried across unchanged: `RenderGate::ItemVisible` for `MacroEditor`,
+`RenderGate::WindowVisible` for the four Project-Editor hosts. The three invariants below were
+never in the hosts to begin with — they live inside `EmbeddedCodeEditor`
+(`syncWidgetPosition()`, `handleShortcutOverride()`, `handleKeyPress()`), and the hosts only
+forwarded into them; the base forwards into exactly the same three. The five copies were
+byte-identical except that `MacroEditor` also repainted on focus in/out, and the base adopts that
+superset, so the four Project-Editor editors now repaint on focus change too.
 
 - `renderWidget()` first calls `syncWidgetPosition()` (moves the hidden top-level to the
   item's screen position — completer popups and drag auto-scroll resolve global coordinates
@@ -129,11 +174,11 @@ On top of that **`QQuickItem::isVisible()` stays true for an item inside a close
 visibility tracks the item's own chain, not whether the window is on screen. A user who once
 opened the Control Script tab and closed the editor therefore paid a full `QCodeEditor::grab()`
 (software text shaping through HarfBuzz) 60 times a second for the rest of the session. Measured
-with `sample` on a live app with the editor **not open**: `ControlScriptEditor::renderWidget` 40%,
+with `sample` on a live app with the editor **not open**: the host's `renderWidget` 40%,
 `QLineNumberArea::paintEvent` 11%, `QCodeEditor::getFirstVisibleBlock` 5% — **56% of the GUI
-thread**, 4x the 2026-08-17 incident. `ControlScriptEditor`, `JsCodeEditor`, `OutputCodeEditor` and
-`PainterCodeEditor` now carry `MacroEditor`'s gate plus a `renderable()` helper that also requires
-`window() && window()->isVisible()`.
+thread**, 4x the 2026-08-17 incident. The gate is `EmbeddedCodeEditor`'s `renderable()` helper,
+selected by the `RenderGate` each host passes: `WindowVisible` additionally requires
+`window() && window()->isVisible()`, which is what the four Project-Editor hosts need.
 
 **`MacroEditor` is the pattern all of them follow (2026-08-17).** It is embedded in the main
 window (Macros dialog, and the console annotations decoder tab), where an unconditional
@@ -177,6 +222,21 @@ unconditionally — check with a sample first if you think you need to, and neve
   `timestampMs`, `sampleRate`, `count`, `firstSampleIndex` (frozen at ship). A dataset that
   only defines `transform(value)` still works — it is called per sample on the worker, at full
   rate. A failing or watchdog-aborted block falls back to raw samples and counts an error.
+- **The stream lane's JS engine now carries its own watchdog (spec 0075 A8).** A `QTimer` on the
+  worker thread could no more fire during `QJSValue::call()` than one on the GUI thread could, so
+  `StreamProcessor` owns a `JsWatchdog` per engine at `kWatchdogMs` (100). The **block**
+  transform runs through `JsWatchdog::call` (one arm/disarm per call); the **per-sample** pass
+  arms ONCE for the whole pass and checks `isInterrupted()` per iteration, exactly as the frame
+  lane arms once per dataset pass rather than per call. On timeout the block's raw samples are
+  re-deinterleaved and published (`restoreRawSamples`) — the source's own values, not the
+  half-transformed mixture the abort produced — and `transformTimeoutCount()` increments, logged
+  once per worker. That counter is **pulled** on the 1 Hz tick like every other worker counter
+  (spec 0033); the lane never signals a timeout. The Lua side is separate and keeps its own
+  `QDeadlineTimer` + count hook, and a Lua timeout surfaces as a `pcall` failure counted as a
+  transform *error*, not as a timeout, so it does not take the `restoreRawSamples` path. **Fast
+  mode installs no hook at all**, by design.
+- **An out-of-range channel clears its column** instead of leaving the previous block's samples
+  in place, which used to republish stale values as if they were fresh (A12).
 - **Editor**: `DatasetTransformEditor` prefills a multiline-comment placeholder when the
   dataset has no transform; `onApply` runs `validateTransform(code, language, error)` which
   returns a `TransformStatus` (`Ok` / `SyntaxError` / `NoFunction`). `SyntaxError` and
@@ -279,7 +339,7 @@ the sink fan-out so a synthetic refresh never re-records samples already
 exported on arrival; `dashboardTick()` (`dashboard.tick` → `FrameBuilder::dashboardTick`,
 `feedExports` true) runs **synchronously**: the call seeds the source frames (from the project
 template when none has arrived yet, so it works from the very first `loop()`) and runs one
-`republishFrames(true)` immediately, publishing *through* `publishBlock` so a table-driven
+`republishFrames(true)` immediately, publishing *through* `BlockPublisher::publish` so a table-driven
 control-script simulation both renders and feeds the CSV/MDF4/session/MQTT/API exports (still
 gated on `m_anyAsyncSink`). Every tick renders its own frame, so a per-frame control-script
 curve (a Lorenz attractor, for example) is not decimated. The `dashboard.tick` response

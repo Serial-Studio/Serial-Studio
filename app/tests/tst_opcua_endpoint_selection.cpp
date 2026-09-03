@@ -77,6 +77,7 @@ private slots:
   void selectBestEndpoint_prefersConfiguredPolicy();
   void selectBestEndpoint_prefersStrongerPolicy();
   void selectBestEndpoint_avoidsDeprecatedPolicy();
+  void selectBestEndpoint_deprecatedOnlyServerIsNotDialed();
   void selectBestEndpoint_skipsTokenMismatch();
   void selectBestEndpoint_noneUsable();
 };
@@ -326,8 +327,8 @@ void TstOpcUaEndpointSelection::selectBestEndpoint_prefersStrongerPolicy()
 }
 
 /**
- * @brief A deprecated policy scores zero, so it loses even to the unencrypted None endpoint and is
- *        only ever dialed when the user asked for it by name.
+ * @brief A deprecated policy is never scored, so it loses even to the unencrypted None endpoint
+ *        and is only ever dialed when the user asked for it by name.
  */
 void TstOpcUaEndpointSelection::selectBestEndpoint_avoidsDeprecatedPolicy()
 {
@@ -357,6 +358,33 @@ void TstOpcUaEndpointSelection::selectBestEndpoint_avoidsDeprecatedPolicy()
                        static_cast<int>(OpcUaTypes::SecurityMode::SignAndEncrypt),
                        QString());
   QCOMPARE(asked.index, 1);
+}
+
+/**
+ * @brief A server that offers deprecated policies ONLY leaves the choice empty. Scoring them zero
+ *        beat the initial -1, so such a server was auto-dialed over Basic128Rsa15 while the docs
+ *        promised it never would be (spec 0075, E10).
+ */
+void TstOpcUaEndpointSelection::selectBestEndpoint_deprecatedOnlyServerIsNotDialed()
+{
+  const QList<OpcUaTypes::Endpoint> endpoints = {
+    makeEndpoint(QStringLiteral("opc.tcp://a:4840"),
+                 QStringLiteral("Basic128Rsa15"),
+                 OpcUaTypes::SecurityMode::SignAndEncrypt),
+    makeEndpoint(QStringLiteral("opc.tcp://b:4840"),
+                 QStringLiteral("Basic256"),
+                 OpcUaTypes::SecurityMode::Sign),
+  };
+
+  const auto choice =
+    selectBestEndpoint(endpoints,
+                       0,
+                       QStringLiteral("http://opcfoundation.org/UA/SecurityPolicy#Nothing"),
+                       3,
+                       QString());
+
+  QCOMPARE(choice.index, -1);
+  QVERIFY(!choice.keptPrevious);
 }
 
 /**

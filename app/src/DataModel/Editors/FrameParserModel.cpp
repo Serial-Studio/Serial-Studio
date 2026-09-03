@@ -342,8 +342,8 @@ void DataModel::FrameParserModel::setTemplateIndex(int index)
   SS_ASSERT(tmpl != nullptr, return);
 
   m_applying = true;
-  m_projectModel.updateSourceFrameParserParams(m_sourceId, nativeTemplateDefaults(*tmpl));
-  m_projectModel.updateSourceFrameParserTemplate(m_sourceId, tmpl->id());
+  m_projectModel.setSourceFrameParserTemplateAndParams(
+    m_sourceId, tmpl->id(), nativeTemplateDefaults(*tmpl));
   m_applying = false;
 
   setParamError(QString());

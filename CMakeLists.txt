@@ -367,10 +367,20 @@ message(STATUS "CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR}")
 #---------------------------------------------------------------------------------------------------
 
 if (UNIX AND NOT APPLE)
-   set(CMAKE_C_COMPILER_AR "/usr/bin/ar")
-   set(CMAKE_CXX_COMPILER_AR "/usr/bin/ar")
-   set(CMAKE_C_COMPILER_RANLIB "/usr/bin/ranlib")
-   set(CMAKE_CXX_COMPILER_RANLIB "/usr/bin/ranlib")
+   # Located rather than hardcoded: /usr/bin is not where every distribution (or a Nix / Guix /
+   # container toolchain) keeps binutils, and a path that does not exist turns global LTO into a
+   # link failure with no useful message. Plain ar/ranlib on purpose -- the gcc-ar wrappers are
+   # what this block exists to avoid.
+   find_program(SS_AR NAMES ar)
+   find_program(SS_RANLIB NAMES ranlib)
+   if(SS_AR AND SS_RANLIB)
+      set(CMAKE_C_COMPILER_AR "${SS_AR}")
+      set(CMAKE_CXX_COMPILER_AR "${SS_AR}")
+      set(CMAKE_C_COMPILER_RANLIB "${SS_RANLIB}")
+      set(CMAKE_CXX_COMPILER_RANLIB "${SS_RANLIB}")
+   else()
+      message(WARNING "ar/ranlib not found on PATH; leaving CMake's defaults in place")
+   endif()
 endif()
 
 #---------------------------------------------------------------------------------------------------

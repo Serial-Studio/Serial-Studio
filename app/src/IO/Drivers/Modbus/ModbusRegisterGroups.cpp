@@ -28,10 +28,22 @@
 #include "SSAssert.h"
 
 static constexpr quint16 kMaxRegisterCount = 125;
+static constexpr quint16 kMaxBitCount      = 2000;
 
 static const auto kSettingsArray = QStringLiteral("ModbusDriver/registerGroups");
 
 static const IO::Drivers::ModbusRegisterGroup kInvalidGroup;
+
+/**
+ * @brief Largest count one read of @p type can carry. FC03/FC04 answer at most 125 sixteen-bit
+ *        registers, FC01/FC02 at most 2000 bits: both ceilings are what a single-octet byte count
+ *        leaves room for, and sharing the register ceiling refused four fifths of a legal coil
+ * read.
+ */
+[[nodiscard]] static quint16 maxCountForType(const quint8 type) noexcept
+{
+  return (type == 2 || type == 3) ? kMaxBitCount : kMaxRegisterCount;
+}
 
 //--------------------------------------------------------------------------------------------------
 // Construction
@@ -48,8 +60,8 @@ IO::Drivers::ModbusRegisterGroups::ModbusRegisterGroups(QSettings& settings) : m
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Reloads the groups from the settings array, dropping any entry whose register count is
- *        outside the range a single Modbus read can carry.
+ * @brief Reloads the groups from the settings array, dropping any entry whose count is outside the
+ *        range a single Modbus read of that register type can carry.
  */
 void IO::Drivers::ModbusRegisterGroups::restore()
 {
@@ -64,7 +76,7 @@ void IO::Drivers::ModbusRegisterGroups::restore()
     group.startAddress = static_cast<quint16>(m_settings.value("start", 0).toUInt());
     group.count        = static_cast<quint16>(m_settings.value("count", 0).toUInt());
 
-    if (group.count > 0 && group.count <= kMaxRegisterCount)
+    if (group.count > 0 && group.count <= maxCountForType(group.registerType))
       m_groups.append(group);
   }
 
@@ -102,7 +114,7 @@ bool IO::Drivers::ModbusRegisterGroups::add(const quint8 type,
                                             const quint16 start,
                                             const quint16 count)
 {
-  if (count == 0 || count > kMaxRegisterCount)
+  if (count == 0 || count > maxCountForType(type))
     return false;
 
   for (const auto& group : std::as_const(m_groups))

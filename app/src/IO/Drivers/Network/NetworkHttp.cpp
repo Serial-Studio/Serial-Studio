@@ -20,10 +20,12 @@
  */
 
 #include "IO/Drivers/Network.h"
+#include "SSAssert.h"
 
-static constexpr int kHttpMaxRedirects      = 3;
-static constexpr int kHttpTransferTimeoutMs = 30000;
-static constexpr int kHttpMethodGet         = 0;
+static constexpr int kHttpMaxRedirects        = 3;
+static constexpr int kHttpTransferTimeoutMs   = 30000;
+static constexpr int kHttpMethodGet           = 0;
+static constexpr qint64 kHttpMaxResponseBytes = 8 * 1024 * 1024;
 
 /**
  * @brief Maps a method index onto its HTTP verb.
@@ -60,6 +62,29 @@ static constexpr int kHttpMethodGet         = 0;
 }
 
 /**
+ * @brief Reads at most the response cap out of @p reply, logging the first truncation of a run.
+ *        A REST endpoint answering with a multi-gigabyte body would otherwise be published whole
+ *        into the frame pipeline on every poll.
+ */
+QByteArray IO::Drivers::Network::readCappedBody(QNetworkReply* reply)
+{
+  SS_ASSERT(reply != nullptr, return {});
+
+  QByteArray body = reply->read(kHttpMaxResponseBytes);
+  if (reply->bytesAvailable() <= 0)
+    return body;
+
+  if (!m_httpTruncationLogged) {
+    m_httpTruncationLogged = true;
+    logDriverError(tr("HTTP response truncated"),
+                   tr("%1 answered with more than %2 bytes")
+                     .arg(m_httpUrl, QString::number(kHttpMaxResponseBytes)));
+  }
+
+  return body;
+}
+
+/**
  * @brief Opens the HTTP source by issuing the configured request once. That request IS the connect
  *        verdict: a separate HEAD probe is answered with 405 by plenty of healthy endpoints, and a
  *        POST source would fire two side-effecting requests per session. A request that never left
@@ -76,11 +101,12 @@ bool IO::Drivers::Network::openHttp(const QIODevice::OpenMode mode)
     return false;
   }
 
-  m_pollsOk             = 0;
-  m_pollsFailed         = 0;
-  m_pollsSkipped        = 0;
-  m_consecutiveFailures = 0;
-  m_httpFailureLogged   = false;
+  m_pollsOk              = 0;
+  m_pollsFailed          = 0;
+  m_pollsSkipped         = 0;
+  m_consecutiveFailures  = 0;
+  m_httpFailureLogged    = false;
+  m_httpTruncationLogged = false;
 
   connect(m_httpManager,
           &QNetworkAccessManager::sslErrors,
@@ -244,7 +270,7 @@ void IO::Drivers::Network::onHttpReplyFinished()
   const int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
   const bool ok    = reply->error() == QNetworkReply::NoError && status >= 200 && status < 300;
   if (ok)
-    publishReceivedData(reply->readAll(), timestamp);
+    publishReceivedData(readCappedBody(reply), timestamp);
 
   if (m_dialPending) {
     if (!ok) {
@@ -301,7 +327,8 @@ void IO::Drivers::Network::onHttpSslErrors(QNetworkReply* reply, const QList<QSs
 }
 
 /**
- * @brief Appends the HTTP rows of the driver property model.
+ * @brief Appends the HTTP rows of the driver property model. The shared TLS row is appended by
+ *        the facade, which emits every transport's rows in one list.
  */
 void IO::Drivers::Network::appendHttpProperties(QList<IO::DriverProperty>& props) const
 {
@@ -345,8 +372,6 @@ void IO::Drivers::Network::appendHttpProperties(QList<IO::DriverProperty>& props
   headers.type        = IO::DriverProperty::Text;
   headers.value       = m_httpHeaders;
   props.append(headers);
-
-  appendTlsProperty(props);
 }
 
 /**

@@ -161,6 +161,7 @@
         <file>api/SerialStudio.lua</file>
         <file>chartjs/chart.umd.min.js</file>
         <file>chartjs/LICENSE.md</file>
+        <file>extensions/schema/catalog.json</file>
         <file>extensions/schema/widget-manifest.json</file>
         <file>extensions/widget/compass/Compass.qml</file>
         <file>extensions/widget/compass/info.json</file>

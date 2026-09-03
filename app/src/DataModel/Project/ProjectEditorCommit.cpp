@@ -620,12 +620,10 @@ void DataModel::ProjectEditor::onProjectItemChanged(QStandardItem* item)
     case kProjectView_Title:
       pm.setNextUndoHint(tr("Rename Project"), QStringLiteral("project-title"));
       pm.setTitle(value.toString());
-      break;
+      return;
     default:
       break;
   }
-
-  pm.setModified(true);
 }
 
 /**

@@ -77,45 +77,44 @@
         <translation>Anthropic 错误</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="273"/>
+        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="278"/>
         <source>Stream parse error: %1</source>
         <translation>流解析错误：%1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="314"/>
+        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="320"/>
         <source>HTTP %1</source>
         <translation>HTTP %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="317"/>
+        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="323"/>
         <source>Invalid API key (%1)</source>
         <translation>无效的 API 密钥（%1）</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="319"/>
+        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="325"/>
         <source>Rate limited: %1</source>
         <translation>速率受限：%1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="321"/>
+        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="327"/>
         <source>Anthropic %1: %2</source>
         <translation>Anthropic %1：%2</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="355"/>
         <source>Reply exceeded the %1 MB stream limit</source>
-        <translation>回复超出 %1 MB 流限制</translation>
+        <translation type="vanished">回复超出 %1 MB 流限制</translation>
     </message>
 </context>
 <context>
     <name>AI::Assistant</name>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="234"/>
+        <location filename="../../src/AI/Assistant.cpp" line="235"/>
         <source>Allow AI Device Control?</source>
         <translation>允许 AI 设备控制?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="235"/>
+        <location filename="../../src/AI/Assistant.cpp" line="236"/>
         <source>This lets the AI assistant configure devices, open and close connections, and send data to your hardware.
 
 Every device action still requires your explicit per-call approval in the chat, even when auto-approve is enabled. Only enable this if you trust the configured AI provider with hardware access.</source>
@@ -124,22 +123,22 @@ Every device action still requires your explicit per-call approval in the chat, 
 即使启用自动批准，每个设备操作仍需要您在聊天中逐次明确批准。仅在您信任所配置的 AI 提供商进行硬件访问时启用此功能。</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="638"/>
+        <location filename="../../src/AI/Assistant.cpp" line="641"/>
         <source>Switch AI provider?</source>
         <translation>切换 AI 提供商？</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="639"/>
+        <location filename="../../src/AI/Assistant.cpp" line="642"/>
         <source>Switching to a different provider clears the current conversation. Do you want to continue?</source>
         <translation>切换到其他提供商将清除当前对话。是否继续？</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="642"/>
+        <location filename="../../src/AI/Assistant.cpp" line="645"/>
         <source>Assistant</source>
         <translation>助手</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="679"/>
+        <location filename="../../src/AI/Assistant.cpp" line="682"/>
         <source>AI Assistant is not available in this build</source>
         <translation>此版本不支持 AI 助手</translation>
     </message>
@@ -148,7 +147,7 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation type="vanished">AI 助手需要 Pro 许可证</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="684"/>
+        <location filename="../../src/AI/Assistant.cpp" line="687"/>
         <source>Set an API key first</source>
         <translation>请先设置 API 密钥</translation>
     </message>
@@ -183,28 +182,28 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation type="vanished">AI 助手需要 Pro 许可证</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="183"/>
+        <location filename="../../src/AI/Conversation.cpp" line="180"/>
         <source>AI Assistant is not available in this build</source>
         <translation>此版本不支持 AI 助手</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="189"/>
-        <location filename="../../src/AI/Conversation.cpp" line="859"/>
+        <location filename="../../src/AI/Conversation.cpp" line="186"/>
+        <location filename="../../src/AI/Conversation.cpp" line="843"/>
         <source>AI subsystem not initialized</source>
         <translation>AI 子系统未初始化</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="195"/>
+        <location filename="../../src/AI/Conversation.cpp" line="192"/>
         <source>Already busy with a previous request</source>
         <translation>正在处理先前的请求</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="610"/>
+        <location filename="../../src/AI/Conversation.cpp" line="597"/>
         <source>Tool-call budget reached for this turn; no further tools will run.</source>
         <translation>已达到本轮工具调用预算;不会再运行更多工具。</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="874"/>
+        <location filename="../../src/AI/Conversation.cpp" line="858"/>
         <source>Waiting for %1 to respond. Loading the model and processing the prompt can take a while on local hardware...</source>
         <translation>等待 %1 响应。在本地硬件上加载模型和处理提示可能需要一段时间...</translation>
     </message>
@@ -225,17 +224,17 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation type="vanished">字段未能往返验证:%1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1235"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1203"/>
         <source>You have reached the tool-call budget for this turn. Do not request more tools. Summarize what you found so far, and if the task is incomplete, say which steps remain so the user can tell you to continue.</source>
         <translation>您已达到本轮工具调用预算。请勿请求更多工具。总结目前发现的内容,如果任务未完成,请说明剩余步骤以便用户告知您继续。</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1487"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1455"/>
         <source>The model stopped reproducing its context-integrity line. Long conversations degrade silently; recent replies may be less reliable.</source>
         <translation>模型停止复现其上下文完整性行。长对话会静默降级;最近的回复可能不太可靠。</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1490"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1458"/>
         <source>The model altered its context-integrity line (drifted segment: %1). Long conversations degrade silently; recent replies may be less reliable.</source>
         <translation>模型更改了其上下文完整性行(漂移片段:%1)。长对话会静默降级;最近的回复可能不太可靠。</translation>
     </message>
@@ -244,17 +243,17 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation type="vanished">工具调用预算已超限</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="706"/>
+        <location filename="../../src/AI/Conversation.cpp" line="690"/>
         <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider's safety filters.)</source>
         <translation>(模型返回了空响应。请尝试重新表述、切换到其他模型，或检查请求是否被提供商的安全过滤器拦截。)</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="878"/>
+        <location filename="../../src/AI/Conversation.cpp" line="862"/>
         <source>Sending request to %1...</source>
         <translation>正在向 %1 发送请求…</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="896"/>
+        <location filename="../../src/AI/Conversation.cpp" line="880"/>
         <source>Provider returned no reply</source>
         <translation>提供商未返回回复</translation>
     </message>
@@ -302,42 +301,45 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation>Gemini %1:%2</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="289"/>
         <source>Reply exceeded the %1 MB stream limit</source>
-        <translation>回复超出 %1 MB 流限制</translation>
+        <translation type="vanished">回复超出 %1 MB 流限制</translation>
     </message>
 </context>
 <context>
     <name>AI::OpenAIReply</name>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="160"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="97"/>
+        <source>%1 endpoint refused: use https, or plain http only to this machine</source>
+        <translation>%1 端点拒绝:请使用 https,或仅对本机使用纯 http</translation>
+    </message>
+    <message>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="171"/>
         <source>Stream parse error: %1</source>
         <translation>流解析错误：%1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="339"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="350"/>
         <source>HTTP %1</source>
         <translation>HTTP %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="342"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="353"/>
         <source>Invalid API key (%1)</source>
         <translation>API 密钥无效 (%1)</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="344"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="355"/>
         <source>Rate limited: %1</source>
         <translation>速率受限:%1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="346"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="357"/>
         <source>%1 %2: %3</source>
         <translation>%1 %2: %3</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="380"/>
         <source>Reply exceeded the %1 MB stream limit</source>
-        <translation>回复超出 %1 MB 流限制</translation>
+        <translation type="vanished">回复超出 %1 MB 流限制</translation>
     </message>
     <message>
         <source>OpenAI %1: %2</source>
@@ -345,24 +347,32 @@ Every device action still requires your explicit per-call approval in the chat, 
     </message>
 </context>
 <context>
+    <name>AI::Reply</name>
+    <message>
+        <location filename="../../src/AI/Providers/Provider.cpp" line="110"/>
+        <source>Reply exceeded the %1 MB stream limit</source>
+        <translation>回复超出 %1 MB 流限制</translation>
+    </message>
+</context>
+<context>
     <name>API::GRPC::GRPCServer</name>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="450"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="498"/>
         <source>Export Protobuf File</source>
         <translation>导出 Protobuf 文件</translation>
     </message>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="452"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="500"/>
         <source>Protocol Buffers (*.proto)</source>
         <translation>Protocol Buffers (*.proto)</translation>
     </message>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="499"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="590"/>
         <source>Unable to start gRPC server</source>
         <translation>无法启动 GRPC 服务器</translation>
     </message>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="500"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="591"/>
         <source>Failed to bind to %1</source>
         <translation>绑定到 %1 失败</translation>
     </message>
@@ -441,17 +451,17 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>API::Server</name>
     <message>
-        <location filename="../../src/API/Server.cpp" line="204"/>
+        <location filename="../../src/API/Server.cpp" line="243"/>
         <source>Unable to start API TCP server</source>
         <translation>无法启动 API TCP 服务器</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="251"/>
+        <location filename="../../src/API/Server.cpp" line="333"/>
         <source>Allow External API Connections?</source>
         <translation>允许外部 API 连接？</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="252"/>
+        <location filename="../../src/API/Server.cpp" line="334"/>
         <source>Exposing the API server to external hosts allows other devices on your network to connect to Serial Studio on port 7777.
 
 Only enable this on trusted networks. Untrusted clients may read live data or send commands to your device.</source>
@@ -460,9 +470,8 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 仅在受信任的网络上启用此功能。不受信任的客户端可能读取实时数据或向设备发送命令。</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="316"/>
         <source>Unable to restart API TCP server</source>
-        <translation>无法重启 API TCP 服务器</translation>
+        <translation type="vanished">无法重启 API TCP 服务器</translation>
     </message>
     <message>
         <source>Allow API device control?</source>
@@ -477,12 +486,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="896"/>
+        <location filename="../../src/API/Server.cpp" line="985"/>
         <source>API server</source>
         <translation>API 服务器</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="896"/>
+        <location filename="../../src/API/Server.cpp" line="985"/>
         <source>Invalid pending connection</source>
         <translation>待处理连接无效</translation>
     </message>
@@ -490,17 +499,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>API::ServerAuth</name>
     <message>
-        <location filename="../../src/API/Server/ServerAuth.cpp" line="138"/>
+        <location filename="../../src/API/Server/ServerAuth.cpp" line="160"/>
         <source>Allow API device control?</source>
         <translation>允许 API 设备控制?</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server/ServerAuth.cpp" line="139"/>
+        <location filename="../../src/API/Server/ServerAuth.cpp" line="161"/>
         <source>A program using Serial Studio's local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
         <translation>使用 Serial Studio 本地 API 的程序正在请求向已连接设备发送数据。是否允许 API 客户端写入设备?</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server/ServerAuth.cpp" line="142"/>
+        <location filename="../../src/API/Server/ServerAuth.cpp" line="164"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
@@ -1227,131 +1236,313 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
 </context>
 <context>
-    <name>AssistantPanel</name>
+    <name>AssistantComposer</name>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="31"/>
-        <source>Assistant</source>
-        <translation>助手</translation>
+        <location filename="../../qml/AI/AssistantPanel/AssistantComposer.qml" line="71"/>
+        <source>Ask Serial Studio anything…</source>
+        <translation>向 Serial Studio 提问任何问题…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="79"/>
-        <source>New chat</source>
-        <translation>新建聊天</translation>
+        <location filename="../../qml/AI/AssistantPanel/AssistantComposer.qml" line="91"/>
+        <source>Clear conversation</source>
+        <translation>清除对话</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="125"/>
-        <source>Toggle chat list</source>
-        <translation>切换聊天列表</translation>
+        <location filename="../../qml/AI/AssistantPanel/AssistantComposer.qml" line="135"/>
+        <source>Stop generating</source>
+        <translation>停止生成</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="238"/>
-        <source>Settings</source>
-        <translation>设置</translation>
+        <location filename="../../qml/AI/AssistantPanel/AssistantComposer.qml" line="136"/>
+        <source>Send message (Enter)</source>
+        <translation>发送消息 (Enter)</translation>
     </message>
+</context>
+<context>
+    <name>AssistantConversation</name>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="277"/>
-        <source>Context health check</source>
-        <translation>上下文健康检查</translation>
-    </message>
-    <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="293"/>
-        <source>Assistant memory</source>
-        <translation>助手记忆</translation>
-    </message>
-    <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="309"/>
-        <source>Carry context into new chats</source>
-        <translation>将上下文带入新对话</translation>
-    </message>
-    <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="325"/>
-        <source>Preload skills automatically</source>
-        <translation>自动预加载技能</translation>
-    </message>
-    <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="341"/>
-        <source>Verify edits automatically</source>
-        <translation>自动验证编辑</translation>
-    </message>
-    <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="356"/>
-        <source>Manage memory…</source>
-        <translation>管理记忆…</translation>
-    </message>
-    <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="361"/>
-        <source>Manage API keys…</source>
-        <translation>管理 API 密钥…</translation>
-    </message>
-    <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="427"/>
-        <source>What is the historian, and why would I use it?</source>
-        <translation>什么是历史记录器,为什么要使用它?</translation>
-    </message>
-    <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="428"/>
-        <source>CSV vs MDF4 export - what is the difference?</source>
-        <translation>CSV 与 MDF4 导出 - 有什么区别？</translation>
-    </message>
-    <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="431"/>
-        <source>Plot, Bar, and Gauge - when to use each?</source>
-        <translation>图表、柱状图和仪表 - 何时使用每种类型？</translation>
-    </message>
-    <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="450"/>
-        <source>Add a canvas widget for a custom visualization</source>
-        <translation>添加画布组件以实现自定义可视化</translation>
-    </message>
-    <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="503"/>
-        <source>How can I help with your project?</source>
-        <translation>我能如何帮助您的项目?</translation>
-    </message>
-    <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="504"/>
-        <source>Set up your API key to get started</source>
-        <translation>设置您的 API 密钥以开始使用</translation>
-    </message>
-    <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="516"/>
-        <source>Describe what you would like to build, and I will configure the sources, groups, datasets, frame parsers, and transforms for you.</source>
-        <translation>描述您想要构建的内容,我将为您配置数据源、组、数据集、帧解析器和转换。</translation>
-    </message>
-    <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="519"/>
-        <source>To start chatting, paste an API key for the selected provider. Keys are encrypted on this machine and never leave your computer except to talk to the provider you choose.</source>
-        <translation>要开始对话,请为所选提供商粘贴 API 密钥。密钥在本机加密,除了与您选择的提供商通信外,不会离开您的计算机。</translation>
-    </message>
-    <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="540"/>
-        <source>Open API Key Setup</source>
-        <translation>打开 API 密钥设置</translation>
-    </message>
-    <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="550"/>
-        <source>Get a key from %1</source>
-        <translation>从 %1 获取密钥</translation>
-    </message>
-    <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="424"/>
-        <source>List the sources in this project</source>
-        <translation>列出此项目中的数据源</translation>
-    </message>
-    <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="421"/>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="94"/>
         <source>Help me discover Serial Studio's features</source>
         <translation>帮我了解 Serial Studio 的功能</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="422"/>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="95"/>
         <source>What can this app do for my telemetry?</source>
         <translation>这个应用能为我的遥测做什么？</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="423"/>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="96"/>
         <source>Walk me through what this project already contains</source>
         <translation>带我了解这个项目已包含的内容</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="97"/>
+        <source>List the sources in this project</source>
+        <translation>列出此项目中的数据源</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="100"/>
+        <source>What is the historian, and why would I use it?</source>
+        <translation>什么是历史记录器,为什么要使用它?</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="101"/>
+        <source>CSV vs MDF4 export - what is the difference?</source>
+        <translation>CSV 与 MDF4 导出 - 有什么区别？</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="102"/>
+        <source>What is a frame parser, and when do I need one?</source>
+        <translation>什么是帧解析器，什么时候需要使用？</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="103"/>
+        <source>When should I use Lua vs JavaScript for the parser?</source>
+        <translation>何时应使用 Lua 而非 JavaScript 作为解析器？</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="104"/>
+        <source>Plot, Bar, and Gauge - when to use each?</source>
+        <translation>图表、柱状图和仪表 - 何时使用每种类型？</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="105"/>
+        <source>What is the difference between a transform and a frame parser?</source>
+        <translation>变换与帧解析器之间有什么区别？</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="108"/>
+        <source>Add a UART source for an Arduino</source>
+        <translation>为 Arduino 添加 UART 数据源</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="109"/>
+        <source>Set up an IMU project from scratch</source>
+        <translation>从头开始设置 IMU 项目</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="110"/>
+        <source>Configure an MQTT subscriber</source>
+        <translation>配置 MQTT 订阅者</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="111"/>
+        <source>Add a CAN bus source</source>
+        <translation>添加 CAN 总线数据源</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="112"/>
+        <source>Set up a Modbus poller</source>
+        <translation>设置 Modbus 轮询器</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="113"/>
+        <source>Add a network (TCP/UDP) source</source>
+        <translation>添加网络 (TCP/UDP) 数据源</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="114"/>
+        <source>Write a CSV frame parser for me</source>
+        <translation>为我编写 CSV 帧解析器</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="115"/>
+        <source>Help me parse a JSON frame</source>
+        <translation>帮我解析 JSON 帧</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="116"/>
+        <source>Add an EMA smoothing transform to a dataset</source>
+        <translation>为数据集添加 EMA 平滑变换</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="117"/>
+        <source>Decode hexadecimal frames</source>
+        <translation>解码十六进制帧</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="118"/>
+        <source>Calibrate a sensor with a linear transform</source>
+        <translation>使用线性变换校准传感器</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="121"/>
+        <source>Suggest dashboard widgets for my data</source>
+        <translation>为我的数据推荐仪表板部件</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="122"/>
+        <source>Build an executive overview workspace</source>
+        <translation>构建管理概览工作区</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="123"/>
+        <source>Add a canvas widget for a custom visualization</source>
+        <translation>添加画布组件以实现自定义可视化</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="124"/>
+        <source>Show Plot, FFT, and Waterfall for one dataset</source>
+        <translation>为单个数据集显示绘图、FFT 和瀑布图</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="125"/>
+        <source>Group my datasets into useful workspaces</source>
+        <translation>将我的数据集分组到有用的工作区</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="176"/>
+        <source>How can I help with your project?</source>
+        <translation>我能如何帮助您的项目?</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="177"/>
+        <source>Set up your API key to get started</source>
+        <translation>设置您的 API 密钥以开始使用</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="189"/>
+        <source>Describe what you would like to build, and I will configure the sources, groups, datasets, frame parsers, and transforms for you.</source>
+        <translation>描述您想要构建的内容,我将为您配置数据源、组、数据集、帧解析器和转换。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="192"/>
+        <source>To start chatting, paste an API key for the selected provider. Keys are stored obfuscated in this machine's settings file and never leave your computer except to talk to the provider you choose.</source>
+        <translation>要开始对话,请为所选提供商粘贴 API 密钥。密钥在本机设置文件中混淆存储,除了与您选择的提供商通信外,不会离开您的计算机。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="213"/>
+        <source>Open API Key Setup</source>
+        <translation>打开 API 密钥设置</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="223"/>
+        <source>Get a key from %1</source>
+        <translation>从 %1 获取密钥</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="404"/>
+        <source>Drop files or folders to let the assistant read them</source>
+        <translation>拖放文件或文件夹以供助手读取</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="449"/>
+        <source>Added folder "%1" - readable this session</source>
+        <translation>已添加文件夹"%1"- 本会话可读</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="450"/>
+        <source>Added "%1" - readable this session</source>
+        <translation>已添加"%1"- 本会话可读</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantConversation.qml" line="455"/>
+        <source>Assistant memory updated</source>
+        <translation>助手记忆已更新</translation>
+    </message>
+</context>
+<context>
+    <name>AssistantPanel</name>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="32"/>
+        <source>Assistant</source>
+        <translation>助手</translation>
+    </message>
+    <message>
+        <source>New chat</source>
+        <translation type="vanished">新建聊天</translation>
+    </message>
+    <message>
+        <source>Toggle chat list</source>
+        <translation type="vanished">切换聊天列表</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation type="vanished">设置</translation>
+    </message>
+    <message>
+        <source>Context health check</source>
+        <translation type="vanished">上下文健康检查</translation>
+    </message>
+    <message>
+        <source>Assistant memory</source>
+        <translation type="vanished">助手记忆</translation>
+    </message>
+    <message>
+        <source>Carry context into new chats</source>
+        <translation type="vanished">将上下文带入新对话</translation>
+    </message>
+    <message>
+        <source>Preload skills automatically</source>
+        <translation type="vanished">自动预加载技能</translation>
+    </message>
+    <message>
+        <source>Verify edits automatically</source>
+        <translation type="vanished">自动验证编辑</translation>
+    </message>
+    <message>
+        <source>Manage memory…</source>
+        <translation type="vanished">管理记忆…</translation>
+    </message>
+    <message>
+        <source>Manage API keys…</source>
+        <translation type="vanished">管理 API 密钥…</translation>
+    </message>
+    <message>
+        <source>What is the historian, and why would I use it?</source>
+        <translation type="vanished">什么是历史记录器,为什么要使用它?</translation>
+    </message>
+    <message>
+        <source>CSV vs MDF4 export - what is the difference?</source>
+        <translation type="vanished">CSV 与 MDF4 导出 - 有什么区别？</translation>
+    </message>
+    <message>
+        <source>Plot, Bar, and Gauge - when to use each?</source>
+        <translation type="vanished">图表、柱状图和仪表 - 何时使用每种类型？</translation>
+    </message>
+    <message>
+        <source>Add a canvas widget for a custom visualization</source>
+        <translation type="vanished">添加画布组件以实现自定义可视化</translation>
+    </message>
+    <message>
+        <source>How can I help with your project?</source>
+        <translation type="vanished">我能如何帮助您的项目?</translation>
+    </message>
+    <message>
+        <source>Set up your API key to get started</source>
+        <translation type="vanished">设置您的 API 密钥以开始使用</translation>
+    </message>
+    <message>
+        <source>Describe what you would like to build, and I will configure the sources, groups, datasets, frame parsers, and transforms for you.</source>
+        <translation type="vanished">描述您想要构建的内容,我将为您配置数据源、组、数据集、帧解析器和转换。</translation>
+    </message>
+    <message>
+        <source>To start chatting, paste an API key for the selected provider. Keys are encrypted on this machine and never leave your computer except to talk to the provider you choose.</source>
+        <translation type="vanished">要开始对话,请为所选提供商粘贴 API 密钥。密钥在本机加密,除了与您选择的提供商通信外,不会离开您的计算机。</translation>
+    </message>
+    <message>
+        <source>Open API Key Setup</source>
+        <translation type="vanished">打开 API 密钥设置</translation>
+    </message>
+    <message>
+        <source>Get a key from %1</source>
+        <translation type="vanished">从 %1 获取密钥</translation>
+    </message>
+    <message>
+        <source>List the sources in this project</source>
+        <translation type="vanished">列出此项目中的数据源</translation>
+    </message>
+    <message>
+        <source>Help me discover Serial Studio's features</source>
+        <translation type="vanished">帮我了解 Serial Studio 的功能</translation>
+    </message>
+    <message>
+        <source>What can this app do for my telemetry?</source>
+        <translation type="vanished">这个应用能为我的遥测做什么？</translation>
+    </message>
+    <message>
+        <source>Walk me through what this project already contains</source>
+        <translation type="vanished">带我了解这个项目已包含的内容</translation>
     </message>
     <message>
         <source>What is a session database, and why would I use one?</source>
@@ -1362,200 +1553,170 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">CSV 与 MDF4 导出 — 有什么区别？</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="429"/>
         <source>What is a frame parser, and when do I need one?</source>
-        <translation>什么是帧解析器，什么时候需要使用？</translation>
+        <translation type="vanished">什么是帧解析器，什么时候需要使用？</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="430"/>
         <source>When should I use Lua vs JavaScript for the parser?</source>
-        <translation>何时应使用 Lua 而非 JavaScript 作为解析器？</translation>
+        <translation type="vanished">何时应使用 Lua 而非 JavaScript 作为解析器？</translation>
     </message>
     <message>
         <source>Plot, Bar, and Gauge — when to use each?</source>
         <translation type="vanished">图表、柱状图和仪表 — 何时使用每种类型？</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="432"/>
         <source>What is the difference between a transform and a frame parser?</source>
-        <translation>变换与帧解析器之间有什么区别？</translation>
+        <translation type="vanished">变换与帧解析器之间有什么区别？</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="435"/>
         <source>Add a UART source for an Arduino</source>
-        <translation>为 Arduino 添加 UART 数据源</translation>
+        <translation type="vanished">为 Arduino 添加 UART 数据源</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="436"/>
         <source>Set up an IMU project from scratch</source>
-        <translation>从头开始设置 IMU 项目</translation>
+        <translation type="vanished">从头开始设置 IMU 项目</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="437"/>
         <source>Configure an MQTT subscriber</source>
-        <translation>配置 MQTT 订阅者</translation>
+        <translation type="vanished">配置 MQTT 订阅者</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="438"/>
         <source>Add a CAN bus source</source>
-        <translation>添加 CAN 总线数据源</translation>
+        <translation type="vanished">添加 CAN 总线数据源</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="439"/>
         <source>Set up a Modbus poller</source>
-        <translation>设置 Modbus 轮询器</translation>
+        <translation type="vanished">设置 Modbus 轮询器</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="440"/>
         <source>Add a network (TCP/UDP) source</source>
-        <translation>添加网络 (TCP/UDP) 数据源</translation>
+        <translation type="vanished">添加网络 (TCP/UDP) 数据源</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="441"/>
         <source>Write a CSV frame parser for me</source>
-        <translation>为我编写 CSV 帧解析器</translation>
+        <translation type="vanished">为我编写 CSV 帧解析器</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="442"/>
         <source>Help me parse a JSON frame</source>
-        <translation>帮我解析 JSON 帧</translation>
+        <translation type="vanished">帮我解析 JSON 帧</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="443"/>
         <source>Add an EMA smoothing transform to a dataset</source>
-        <translation>为数据集添加 EMA 平滑变换</translation>
+        <translation type="vanished">为数据集添加 EMA 平滑变换</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="444"/>
         <source>Decode hexadecimal frames</source>
-        <translation>解码十六进制帧</translation>
+        <translation type="vanished">解码十六进制帧</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="445"/>
         <source>Calibrate a sensor with a linear transform</source>
-        <translation>使用线性变换校准传感器</translation>
+        <translation type="vanished">使用线性变换校准传感器</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="448"/>
         <source>Suggest dashboard widgets for my data</source>
-        <translation>为我的数据推荐仪表板部件</translation>
+        <translation type="vanished">为我的数据推荐仪表板部件</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="449"/>
         <source>Build an executive overview workspace</source>
-        <translation>构建管理概览工作区</translation>
+        <translation type="vanished">构建管理概览工作区</translation>
     </message>
     <message>
         <source>Add a painter widget for a custom visualization</source>
         <translation type="vanished">添加绘图器组件以实现自定义可视化</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="451"/>
         <source>Show Plot, FFT, and Waterfall for one dataset</source>
-        <translation>为单个数据集显示绘图、FFT 和瀑布图</translation>
+        <translation type="vanished">为单个数据集显示绘图、FFT 和瀑布图</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="452"/>
         <source>Group my datasets into useful workspaces</source>
-        <translation>将我的数据集分组到有用的工作区</translation>
+        <translation type="vanished">将我的数据集分组到有用的工作区</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="731"/>
         <source>Drop files or folders to let the assistant read them</source>
-        <translation>拖放文件或文件夹以供助手读取</translation>
+        <translation type="vanished">拖放文件或文件夹以供助手读取</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="776"/>
         <source>Added folder "%1" - readable this session</source>
-        <translation>已添加文件夹"%1"- 本会话可读</translation>
+        <translation type="vanished">已添加文件夹"%1"- 本会话可读</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="777"/>
         <source>Added "%1" - readable this session</source>
-        <translation>已添加"%1"- 本会话可读</translation>
+        <translation type="vanished">已添加"%1"- 本会话可读</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="782"/>
         <source>Assistant memory updated</source>
-        <translation>助手记忆已更新</translation>
+        <translation type="vanished">助手记忆已更新</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="822"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="143"/>
         <source>Context may be degraded</source>
         <translation>上下文可能已降级</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="838"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="159"/>
         <source>Start fresh chat</source>
         <translation>开始新聊天</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="889"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="210"/>
         <source>Remember (%1)?</source>
         <translation>记住 (%1)？</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="894"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="215"/>
         <source>Remember</source>
         <translation>记住</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="903"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="224"/>
         <source>Dismiss</source>
         <translation>忽略</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="935"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="256"/>
         <source>Continuing from your previous chat. Its recent context was carried over.</source>
         <translation>从上次聊天继续。已保留其最近的上下文。</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="1014"/>
         <source>Ask Serial Studio anything…</source>
-        <translation>向 Serial Studio 提问任何问题…</translation>
+        <translation type="vanished">向 Serial Studio 提问任何问题…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="1034"/>
         <source>Clear conversation</source>
-        <translation>清除对话</translation>
+        <translation type="vanished">清除对话</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="1078"/>
         <source>Stop generating</source>
-        <translation>停止生成</translation>
+        <translation type="vanished">停止生成</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="1079"/>
         <source>Send message (Enter)</source>
-        <translation>发送消息 (Enter)</translation>
+        <translation type="vanished">发送消息 (Enter)</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="159"/>
         <source>Provider</source>
-        <translation>提供商</translation>
+        <translation type="vanished">提供商</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="192"/>
         <source>Model selection</source>
-        <translation>模型选择</translation>
+        <translation type="vanished">模型选择</translation>
     </message>
     <message>
         <source>Run editing actions without asking each time. Blocked actions stay blocked.</source>
         <translation type="vanished">执行编辑操作时不再逐次询问。已阻止的操作保持阻止状态。</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="250"/>
         <source>Auto-approve edits</source>
-        <translation>自动批准编辑</translation>
+        <translation type="vanished">自动批准编辑</translation>
     </message>
     <message>
         <source>Let the AI configure devices, connect/disconnect and send data. Each action still asks for your approval.</source>
         <translation type="vanished">允许 AI 配置设备、连接/断开连接并发送数据。每个操作仍会请求您的批准。</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="259"/>
         <source>Allow device control</source>
-        <translation>允许设备控制</translation>
+        <translation type="vanished">允许设备控制</translation>
     </message>
     <message>
         <source>Manage API keys</source>
@@ -1576,6 +1737,84 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <source>  •  cache write %1k tok</source>
         <translation type="vanished">缓存写入 %1k 令牌</translation>
+    </message>
+</context>
+<context>
+    <name>AssistantTopBar</name>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantTopBar.qml" line="52"/>
+        <source>New chat</source>
+        <translation>新建聊天</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantTopBar.qml" line="66"/>
+        <source>Toggle chat list</source>
+        <translation>切换聊天列表</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantTopBar.qml" line="100"/>
+        <source>Provider</source>
+        <translation>提供商</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantTopBar.qml" line="133"/>
+        <source>Model selection</source>
+        <translation>模型选择</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantTopBar.qml" line="179"/>
+        <source>Settings</source>
+        <translation>设置</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantTopBar.qml" line="191"/>
+        <source>Auto-approve edits</source>
+        <translation>自动批准编辑</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantTopBar.qml" line="196"/>
+        <source>Reversible project edits run without asking. Edits are checkpointed to your backups folder; the project file on disk changes only when you save.</source>
+        <translation>可逆的项目编辑无需询问即可运行。编辑会检查点保存到备份文件夹;磁盘上的项目文件仅在保存时更改。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantTopBar.qml" line="205"/>
+        <source>Allow device control</source>
+        <translation>允许设备控制</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantTopBar.qml" line="223"/>
+        <source>Context health check</source>
+        <translation>上下文健康检查</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantTopBar.qml" line="239"/>
+        <source>Assistant memory</source>
+        <translation>助手记忆</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantTopBar.qml" line="255"/>
+        <source>Carry context into new chats</source>
+        <translation>将上下文带入新对话</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantTopBar.qml" line="271"/>
+        <source>Preload skills automatically</source>
+        <translation>自动预加载技能</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantTopBar.qml" line="287"/>
+        <source>Verify edits automatically</source>
+        <translation>自动验证编辑</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantTopBar.qml" line="302"/>
+        <source>Manage memory…</source>
+        <translation>管理记忆…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantTopBar.qml" line="307"/>
+        <source>Manage API keys…</source>
+        <translation>管理 API 密钥…</translation>
     </message>
 </context>
 <context>
@@ -2468,144 +2707,144 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>CSV::Player</name>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="349"/>
+        <location filename="../../src/CSV/Player.cpp" line="323"/>
         <source>Select CSV file</source>
         <translation>选择 CSV 文件</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="351"/>
+        <location filename="../../src/CSV/Player.cpp" line="325"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV 文件 (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="480"/>
+        <location filename="../../src/CSV/Player.cpp" line="453"/>
         <source>Device Connection Active</source>
         <translation>设备连接活动</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="481"/>
+        <location filename="../../src/CSV/Player.cpp" line="454"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>要使用此功能,必须断开与设备的连接。是否继续?</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="495"/>
-        <location filename="../../src/CSV/Player.cpp" line="513"/>
+        <location filename="../../src/CSV/Player.cpp" line="468"/>
+        <location filename="../../src/CSV/Player.cpp" line="486"/>
         <source>Check file permissions and location</source>
         <translation>检查文件权限和位置</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="502"/>
-        <location filename="../../src/CSV/Player.cpp" line="585"/>
-        <location filename="../../src/CSV/Player.cpp" line="724"/>
+        <location filename="../../src/CSV/Player.cpp" line="475"/>
+        <location filename="../../src/CSV/Player.cpp" line="558"/>
+        <location filename="../../src/CSV/Player.cpp" line="697"/>
         <source>Insufficient Data in CSV File</source>
         <translation>CSV 文件中数据不足</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="495"/>
-        <location filename="../../src/CSV/Player.cpp" line="513"/>
+        <location filename="../../src/CSV/Player.cpp" line="468"/>
+        <location filename="../../src/CSV/Player.cpp" line="486"/>
         <source>Cannot read CSV file</source>
         <translation>无法读取 CSV 文件</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="503"/>
-        <location filename="../../src/CSV/Player.cpp" line="586"/>
-        <location filename="../../src/CSV/Player.cpp" line="725"/>
+        <location filename="../../src/CSV/Player.cpp" line="476"/>
+        <location filename="../../src/CSV/Player.cpp" line="559"/>
+        <location filename="../../src/CSV/Player.cpp" line="698"/>
         <source>The CSV file must contain at least one data row to proceed. Check the file and try again.</source>
         <translation>CSV 文件必须至少包含一个数据行才能继续。请检查文件并重试。</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="718"/>
+        <location filename="../../src/CSV/Player.cpp" line="691"/>
         <source>CSV Row Limit Reached</source>
         <translation>已达到 CSV 行数限制</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="719"/>
+        <location filename="../../src/CSV/Player.cpp" line="692"/>
         <source>Playback is limited to %L1 rows; the rest of the file was not indexed.</source>
         <translation>回放限制为 %L1 行；文件的其余部分未被索引。</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1177"/>
+        <location filename="../../src/CSV/Player.cpp" line="1158"/>
         <source>Seconds (s)</source>
         <translation>秒 (s)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1177"/>
+        <location filename="../../src/CSV/Player.cpp" line="1158"/>
         <source>Milliseconds (ms)</source>
         <translation>毫秒 (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1177"/>
+        <location filename="../../src/CSV/Player.cpp" line="1158"/>
         <source>Microseconds (us)</source>
         <translation>微秒 (us)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1181"/>
+        <location filename="../../src/CSV/Player.cpp" line="1162"/>
         <source>Timestamp Units</source>
         <translation>时间戳单位</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1182"/>
+        <location filename="../../src/CSV/Player.cpp" line="1163"/>
         <source>The timestamp column does not declare a unit. How should it be interpreted?</source>
         <translation>时间戳列未声明单位。应如何解释？</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1207"/>
+        <location filename="../../src/CSV/Player.cpp" line="1188"/>
         <source>Invalid CSV</source>
         <translation>CSV 无效</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1208"/>
+        <location filename="../../src/CSV/Player.cpp" line="1189"/>
         <source>The CSV file does not contain any data or headers.</source>
         <translation>CSV 文件不包含任何数据或标题。</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1221"/>
+        <location filename="../../src/CSV/Player.cpp" line="1202"/>
         <source>Select a date/time column</source>
         <translation>选择日期/时间列</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1221"/>
-        <location filename="../../src/CSV/Player.cpp" line="1233"/>
+        <location filename="../../src/CSV/Player.cpp" line="1202"/>
+        <location filename="../../src/CSV/Player.cpp" line="1214"/>
         <source>Set interval manually</source>
         <translation>手动设置间隔</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1223"/>
+        <location filename="../../src/CSV/Player.cpp" line="1204"/>
         <source>CSV Date/Time Selection</source>
         <translation>CSV 日期/时间选择</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1224"/>
+        <location filename="../../src/CSV/Player.cpp" line="1205"/>
         <source>Choose how to handle the date/time data:</source>
         <translation>选择如何处理日期/时间数据：</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1236"/>
+        <location filename="../../src/CSV/Player.cpp" line="1217"/>
         <source>Set Interval</source>
         <translation>设置间隔</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1237"/>
+        <location filename="../../src/CSV/Player.cpp" line="1218"/>
         <source>Please enter the interval between rows in milliseconds:</source>
         <translation>请输入行间隔（毫秒）：</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1254"/>
+        <location filename="../../src/CSV/Player.cpp" line="1235"/>
         <source>Select Date/Time Column</source>
         <translation>选择日期/时间列</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1255"/>
+        <location filename="../../src/CSV/Player.cpp" line="1236"/>
         <source>Please select the column that contains the date/time data:</source>
         <translation>请选择包含日期/时间数据的列：</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1265"/>
+        <location filename="../../src/CSV/Player.cpp" line="1246"/>
         <source>Invalid Selection</source>
         <translation>选择无效</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="1265"/>
+        <location filename="../../src/CSV/Player.cpp" line="1246"/>
         <source>The selected column is not valid.</source>
         <translation>所选列无效。</translation>
     </message>
@@ -2657,6 +2896,49 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <location filename="../../qml/AI/ChatSidebar.qml" line="229"/>
         <source>Rename</source>
         <translation>重命名</translation>
+    </message>
+</context>
+<context>
+    <name>CodeEditorMenu</name>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorMenu.qml" line="41"/>
+        <source>Undo</source>
+        <translation>撤销</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorMenu.qml" line="48"/>
+        <source>Redo</source>
+        <translation>重做</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorMenu.qml" line="57"/>
+        <source>Cut</source>
+        <translation>剪切</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorMenu.qml" line="62"/>
+        <source>Copy</source>
+        <translation>复制</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorMenu.qml" line="67"/>
+        <source>Paste</source>
+        <translation>粘贴</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorMenu.qml" line="74"/>
+        <source>Select All</source>
+        <translation>全选</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorMenu.qml" line="84"/>
+        <source>Format Document</source>
+        <translation>格式化文档</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorMenu.qml" line="91"/>
+        <source>Format Selection</source>
+        <translation>格式化选区</translation>
     </message>
 </context>
 <context>
@@ -4729,183 +5011,183 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>解码器</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="316"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="324"/>
         <source>Window</source>
         <translation>窗口</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="333"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="341"/>
         <source>Bytes of history drawn across the lanes</source>
         <translation>在轨道上绘制的历史字节数</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="337"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="345"/>
         <source>bytes</source>
         <translation>字节</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="362"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="370"/>
         <source>paused</source>
         <translation>已暂停</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="373"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="381"/>
         <source>%1 annotations kept</source>
         <translation>保留 %1 个注释</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="389"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="397"/>
         <source>Each bar is a byte range the decoder labelled, one lane per decoder row: oldest on the left, newest on the right.</source>
         <translation>每个条形表示解码器标记的字节范围,每行对应一个解码器行:最旧的在左侧,最新的在右侧。</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="392"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="400"/>
         <source>Labelled bytes %1 to %2, oldest on the left.</source>
         <translation>已标记字节 %1 到 %2,最旧的在左侧。</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="399"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="407"/>
         <source>The store is full at %1 labels, so anything older was dropped: shrink the window to see individual labels.</source>
         <translation>存储已满,共 %1 个标签,因此更旧的标签已被丢弃:缩小窗口以查看单个标签。</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="502"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="510"/>
         <source>nothing labelled in this window</source>
         <translation>此窗口中无标记内容</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="555"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="563"/>
         <source>%1 labels</source>
         <translation>%1 个标签</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="617"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="625"/>
         <source>%1 labels merged (bytes %2 to %3). Shrink the window to separate them.</source>
         <translation>%1 个标签已合并(字节 %2 到 %3)。缩小窗口以分离它们。</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="622"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="630"/>
         <source>%1 (bytes %2 to %3)</source>
         <translation>%1(字节 %2 到 %3)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="685"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="693"/>
         <source>Row</source>
         <translation>行</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="694"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="702"/>
         <source>All rows</source>
         <translation>所有行</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="698"/>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="873"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="706"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="881"/>
         <source>Class</source>
         <translation>类别</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="709"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="717"/>
         <source>All classes</source>
         <translation>所有类别</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="719"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="727"/>
         <source>Export CSV</source>
         <translation>导出 CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="724"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="732"/>
         <source>Save every annotation to a spreadsheet</source>
         <translation>将每条注释保存到电子表格</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="856"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="864"/>
         <source>No annotations decoded yet</source>
         <translation>尚未解码任何注释</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="891"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="899"/>
         <source>Hexadecimal</source>
         <translation>十六进制</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="898"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="906"/>
         <source>Refresh</source>
         <translation>刷新</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="901"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="909"/>
         <source>Re-read the bytes of the selected class</source>
         <translation>重新读取所选类别的字节</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="913"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="921"/>
         <source>%1 characters</source>
         <translation>%1 个字符</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="937"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="945"/>
         <source>Pick a class and press Refresh to extract its bytes</source>
         <translation>选择一个类别并按刷新以提取其字节</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="971"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="979"/>
         <source>Apply</source>
         <translation>应用</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="974"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="982"/>
         <source>Compile the script and start decoding</source>
         <translation>编译脚本并开始解码</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="987"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="995"/>
         <source>Load a decoder for a known protocol</source>
         <translation>为已知协议加载解码器</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="999"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1007"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1004"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1012"/>
         <source>Discard the annotations decoded so far</source>
         <translation>丢弃目前已解码的注释</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1012"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1020"/>
         <source>Pause</source>
         <translation>暂停</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1012"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1020"/>
         <source>Resume</source>
         <translation>恢复</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1017"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1025"/>
         <source>Stop decoding, keep the labels already captured</source>
         <translation>停止解码，保留已捕获的标签</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1018"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1026"/>
         <source>Resume decoding the incoming bytes</source>
         <translation>恢复解码传入的字节</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1083"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1091"/>
         <source>No annotations yet</source>
         <translation>尚无注释</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1096"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1104"/>
         <source>Annotations label ranges of the incoming byte stream: a small script names each range, and this panel draws them as lanes, lists them, and extracts their bytes.</source>
         <translation>注释标记传入字节流的范围：小型脚本为每个范围命名，此面板将其绘制为泳道、列出并提取其字节。</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1104"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1112"/>
         <source>Open Decoder</source>
         <translation>打开解码器</translation>
     </message>
@@ -5167,67 +5449,59 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>控制循环</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="47"/>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="170"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="125"/>
         <source>Undo</source>
         <translation>撤销</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="54"/>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="181"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="136"/>
         <source>Redo</source>
         <translation>重做</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="62"/>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="200"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="155"/>
         <source>Cut</source>
         <translation>剪切</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="63"/>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="210"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="165"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="64"/>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="220"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="175"/>
         <source>Paste</source>
         <translation>粘贴</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="69"/>
         <source>Select All</source>
-        <translation>全选</translation>
+        <translation type="vanished">全选</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="79"/>
         <source>Format Document</source>
-        <translation>格式化文档</translation>
+        <translation type="vanished">格式化文档</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="86"/>
         <source>Format Selection</source>
-        <translation>格式化选区</translation>
+        <translation type="vanished">格式化选区</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="150"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="105"/>
         <source>Reset</source>
         <translation>重置</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="154"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="109"/>
         <source>Reset to the default control loop</source>
         <translation>重置为默认控制循环</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="164"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="119"/>
         <source>Import a control loop file</source>
         <translation>导入控制循环文件</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="243"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="198"/>
         <source>Open the control loop documentation</source>
         <translation>打开控制循环文档</translation>
     </message>
@@ -5236,7 +5510,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">重置为默认控制脚本</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="160"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="115"/>
         <source>Open</source>
         <translation>打开</translation>
     </message>
@@ -5245,32 +5519,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">导入控制脚本文件</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="175"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="130"/>
         <source>Undo the last code edit</source>
         <translation>撤销上次代码编辑</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="186"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="141"/>
         <source>Redo the previously undone edit</source>
         <translation>重做上次撤销的编辑</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="204"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="159"/>
         <source>Cut selected code to clipboard</source>
         <translation>剪切选定代码到剪贴板</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="214"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="169"/>
         <source>Copy selected code to clipboard</source>
         <translation>复制选定代码到剪贴板</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="224"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="179"/>
         <source>Paste code from clipboard</source>
         <translation>从剪贴板粘贴代码</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="238"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="193"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
@@ -5279,12 +5553,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">打开控制脚本文档</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="253"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="208"/>
         <source>Validate</source>
         <translation>验证</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="257"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="212"/>
         <source>Verify that the script compiles correctly</source>
         <translation>验证脚本是否正确编译</translation>
     </message>
@@ -5353,62 +5627,62 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DBCPreviewDialog</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="44"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="37"/>
         <source>DBC File Preview</source>
         <translation>DBC 文件预览</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="169"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="92"/>
         <source>DBC File: %1</source>
         <translation>DBC 文件：%1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="177"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="100"/>
         <source>Review the CAN messages and signals to import into a new Serial Studio project.</source>
         <translation>查看要导入到新 Serial Studio 项目中的 CAN 消息和信号。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="185"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="108"/>
         <source>Messages</source>
         <translation>消息</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="219"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="142"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="229"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="152"/>
         <source>Message Name</source>
         <translation>消息名称</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="235"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="158"/>
         <source>CAN ID</source>
         <translation>CAN ID</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="242"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="165"/>
         <source>Signals</source>
         <translation>信号</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="323"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="246"/>
         <source>No messages found in DBC file.</source>
         <translation>DBC 文件中未找到消息。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="341"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="264"/>
         <source>Total: %1 messages, %2 signals</source>
         <translation>总计：%1 条消息，%2 个信号</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="348"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="271"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="359"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="282"/>
         <source>Create Project</source>
         <translation>创建项目</translation>
     </message>
@@ -5546,7 +5820,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>API 服务器关闭</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="648"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="651"/>
         <source>Command Palette</source>
         <translation>命令面板</translation>
     </message>
@@ -5655,33 +5929,45 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataModel::ControlScriptEditor</name>
     <message>
-        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="236"/>
+        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="204"/>
         <source>Select Javascript file to import</source>
         <translation>选择要导入的 JavaScript 文件</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="259"/>
+        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="268"/>
+        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="277"/>
         <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="289"/>
-        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="300"/>
         <source>Code Validation Failed</source>
         <translation>代码验证失败</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="290"/>
+        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="260"/>
+        <source>Failed to create the validation engine.</source>
+        <translation>无法创建验证引擎。</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="269"/>
+        <source>The script did not finish evaluating within %1 ms. Check for an infinite loop at the top level.</source>
+        <translation>脚本未能在 %1 毫秒内完成评估。请检查脚本顶层是否存在无限循环。</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="278"/>
         <source>Line %1: %2</source>
         <translation>第 %1 行:%2</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="301"/>
+        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="290"/>
         <source>The script must define a setup() and/or loop() function.</source>
         <translation>脚本必须定义 setup() 和/或 loop() 函数。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="306"/>
+        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="295"/>
         <source>Code Validation Successful</source>
         <translation>代码验证成功</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="307"/>
+        <location filename="../../src/DataModel/Editors/ControlScriptEditor.cpp" line="296"/>
         <source>No syntax errors detected in the control loop.</source>
         <translation>控制循环中未检测到语法错误。</translation>
     </message>
@@ -5791,107 +6077,107 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataModel::DatasetTransformEditor</name>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="77"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="78"/>
         <source>Dataset Value Transform</source>
         <translation>数据集数值转换</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="114"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="115"/>
         <source>Lua</source>
         <translation>Lua</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="114"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="115"/>
         <source>JavaScript</source>
         <translation>JavaScript</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="141"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="142"/>
         <source>Language:</source>
         <translation>语言：</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="144"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="145"/>
         <source>Template:</source>
         <translation>模板：</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="123"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="124"/>
         <source>Enter raw value (e.g., 1024)</source>
         <translation>输入原始值（例如 1024）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="128"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="129"/>
         <source>Test</source>
         <translation>测试</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="129"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="130"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="155"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="156"/>
         <source>Input:</source>
         <translation>输入:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="158"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="159"/>
         <source>Output:</source>
         <translation>输出:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="131"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="132"/>
         <source>Apply</source>
         <translation>应用</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="114"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="115"/>
         <source>Expression</source>
         <translation>表达式</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="132"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="133"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="236"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="237"/>
         <source>Transform — %1</source>
         <translation>变换 — %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="316"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="317"/>
         <source>The value transform has a syntax error and was not applied.</source>
         <translation>数值转换存在语法错误，未应用。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="325"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="326"/>
         <source>The value transform must define a transform(value) function.</source>
         <translation>数值转换必须定义 transform(value) 函数。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="326"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="327"/>
         <source>Define a transform(value) function that returns a number, or use Clear to remove the transform.</source>
         <translation>定义一个返回数字的 transform(value) 函数，或使用"清除"移除转换。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="344"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="345"/>
         <source>Enter a value</source>
         <translation>输入一个值</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="351"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="352"/>
         <source>Invalid number</source>
         <translation>无效数字</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="392"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="393"/>
         <source>Format Document	Ctrl+Shift+I</source>
         <translation>格式化文档	Ctrl+Shift+I</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="393"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="394"/>
         <source>Format Selection	Ctrl+I</source>
         <translation>格式化选区	Ctrl+I</translation>
     </message>
@@ -5956,7 +6242,7 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="564"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="565"/>
         <source>--
 -- Define a transform(value) function that receives the live
 -- dataset reading and returns a transformed number. If no
@@ -6015,7 +6301,7 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="592"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="593"/>
         <source>/*
  * Define a transform(value) function that receives the live
  * dataset reading and returns a transformed number. If no
@@ -6072,17 +6358,33 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="733"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="734"/>
         <source>Failed to create the Lua engine.</source>
         <translation>无法创建 Lua 引擎。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="772"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="754"/>
+        <source>Failed to create the JavaScript engine.</source>
+        <translation>无法创建 JavaScript 引擎。</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="761"/>
+        <source>The transform did not finish evaluating within %1 ms.</source>
+        <translation>转换未能在 %1 毫秒内完成评估。</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="766"/>
         <source>Line %1: %2</source>
         <translation>第 %1 行:%2</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="938"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="853"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="866"/>
+        <source>Error: the transform did not finish within %1 ms</source>
+        <translation>错误:转换未能在 %1 毫秒内完成</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="914"/>
         <source>Select Template…</source>
         <translation>选择模板…</translation>
     </message>
@@ -6143,21 +6445,22 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="828"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="822"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="848"/>
         <source>Engine error</source>
         <translation>引擎错误</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="818"/>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="852"/>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="865"/>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="882"/>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="893"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="812"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="830"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="838"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="856"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="869"/>
         <source>Error: %1</source>
         <translation>错误：%1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="530"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="531"/>
         <source>#
 # An arithmetic expression evaluated once per sample. No function,
 # no statements: the value of the expression is the new reading.
@@ -6226,13 +6529,13 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="858"/>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="886"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="834"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="860"/>
         <source>Error: transform() not defined</source>
         <translation>错误：未定义 transform()</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="870"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="841"/>
         <source>Error: transform() must return a number</source>
         <translation>错误：transform() 必须返回数值</translation>
     </message>
@@ -6240,7 +6543,7 @@ v
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="556"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="352"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, historian, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
         <translation>下游消费者(仪表板、CSV/MDF4 导出、历史记录器或 API 订阅者)处理速度不足,导致数据从显示和活动记录中丢弃。请禁用占用资源较多的消费者或降低数据速率。</translation>
     </message>
@@ -6261,7 +6564,7 @@ v
         <translation type="vanished">快速绘图</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="554"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="350"/>
         <source>Block pool exhausted</source>
         <translation>块池已耗尽</translation>
     </message>
@@ -6270,12 +6573,12 @@ v
         <translation type="vanished">下游消费者（仪表板、CSV/MDF4 导出、会话数据库或 API 订阅者）的处理速度不够快，因此数据正在从显示和任何活动记录中丢弃。请禁用占用资源较多的组件或降低数据速率。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2560"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2267"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>JavaScript 转换超出预算</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2561"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="2268"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>某个数据集转换耗时超过 %1 毫秒；该帧中其余数据集已回退为原始值，直到下一个帧。请对转换代码进行分析或简化。</translation>
     </message>
@@ -6547,12 +6850,12 @@ Example (HEX):  48 65 6C 6C 6F</source>
 <context>
     <name>DataModel::JsCodeEditor</name>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="196"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="170"/>
         <source>Change Scripting Language?</source>
         <translation>更改脚本语言?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="197"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="171"/>
         <source>Switching the scripting language replaces the current parser code with the equivalent template in the new language.
 
 Any unsaved changes are lost. Continue?</source>
@@ -6561,32 +6864,32 @@ Any unsaved changes are lost. Continue?</source>
 任何未保存的更改都将丢失。是否继续?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="348"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="322"/>
         <source>Select Javascript file to import</source>
         <translation>选择要导入的 JavaScript 文件</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="348"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="322"/>
         <source>Select Lua file to import</source>
         <translation>选择要导入的 Lua 文件</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="375"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="349"/>
         <source>Code Validation Successful</source>
         <translation>代码验证成功</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="376"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="350"/>
         <source>No syntax errors detected in the parser code.</source>
         <translation>解析器代码中未检测到语法错误。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="447"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="421"/>
         <source>Select Frame Parser Template</source>
         <translation>选择帧解析器模板</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="448"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="422"/>
         <source>Choose a template to load:</source>
         <translation>选择要加载的模板:</translation>
     </message>
@@ -6594,48 +6897,58 @@ Any unsaved changes are lost. Continue?</source>
 <context>
     <name>DataModel::MacroRunner</name>
     <message>
-        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="272"/>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="273"/>
         <source>Failed to queue the macro onto the worker thread</source>
         <translation>无法将宏加入工作线程队列</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="287"/>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="288"/>
         <source>Macro is empty</source>
         <translation>宏为空</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="299"/>
-        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="415"/>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="300"/>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="430"/>
         <source>Failed to create the Lua state</source>
         <translation>无法创建 Lua 状态</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="348"/>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="349"/>
         <source>Unknown Lua error</source>
         <translation>未知 Lua 错误</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="461"/>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="397"/>
+        <source>Failed to create the JavaScript engine</source>
+        <translation>无法创建 JavaScript 引擎</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="406"/>
+        <source>The macro did not finish compiling within %1 ms</source>
+        <translation>宏未能在 %1 毫秒内完成编译</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="476"/>
         <source>Select macro to load</source>
         <translation>选择要加载的宏</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="474"/>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="489"/>
         <source>Cannot open %1</source>
         <translation>无法打开 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="497"/>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="512"/>
         <source>Save macro</source>
         <translation>保存宏</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="513"/>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="528"/>
         <source>Cannot write %1</source>
         <translation>无法写入 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="519"/>
+        <location filename="../../src/DataModel/Scripting/MacroRunner.cpp" line="534"/>
         <source>Failed to save %1: %2</source>
         <translation>保存 %1 失败：%2</translation>
     </message>
@@ -6772,17 +7085,17 @@ Any unsaved changes are lost. Continue?</source>
 <context>
     <name>DataModel::OutputCodeEditor</name>
     <message>
-        <location filename="../../src/DataModel/Editors/OutputCodeEditor.cpp" line="237"/>
+        <location filename="../../src/DataModel/Editors/OutputCodeEditor.cpp" line="218"/>
         <source>Select Javascript file to import</source>
         <translation>选择要导入的 JavaScript 文件</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/OutputCodeEditor.cpp" line="284"/>
+        <location filename="../../src/DataModel/Editors/OutputCodeEditor.cpp" line="265"/>
         <source>Select Output Widget Template</source>
         <translation>选择输出控件模板</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/OutputCodeEditor.cpp" line="285"/>
+        <location filename="../../src/DataModel/Editors/OutputCodeEditor.cpp" line="266"/>
         <source>Choose a template to load:</source>
         <translation>选择要加载的模板:</translation>
     </message>
@@ -6790,7 +7103,7 @@ Any unsaved changes are lost. Continue?</source>
 <context>
     <name>DataModel::PainterCodeEditor</name>
     <message>
-        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="247"/>
+        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="215"/>
         <source>Select Javascript file to import</source>
         <translation>选择要导入的 JavaScript 文件</translation>
     </message>
@@ -6799,22 +7112,22 @@ Any unsaved changes are lost. Continue?</source>
         <translation type="vanished">选择绘图控件模板</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="327"/>
+        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="295"/>
         <source>Select Canvas Widget Template</source>
         <translation>选择画布控件模板</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="328"/>
+        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="296"/>
         <source>Choose a template to load:</source>
         <translation>选择要加载的模板:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="368"/>
+        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="336"/>
         <source>Add datasets for this template?</source>
         <translation>为此模板添加数据集?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="369"/>
+        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="337"/>
         <source>"%1" expects %2 dataset(s); the current group has %3.
 
 Add %4 dataset(s) using the template's defaults?</source>
@@ -8673,52 +8986,52 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>重命名项目</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="668"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="666"/>
         <source>Alias "%1" is already in use</source>
         <translation>别名"%1"已被使用</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="669"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="667"/>
         <source>Dataset aliases must be unique across the project. The change was not applied.</source>
         <translation>数据集别名在项目中必须唯一。更改未应用。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="671"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="669"/>
         <source>Duplicate Alias</source>
         <translation>重复的别名</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="682"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="680"/>
         <source>Alias "%1" contains only digits</source>
         <translation>别名"%1"仅包含数字</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="683"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="681"/>
         <source>Scripts must quote it as a string, e.g. getDataset("%1"); a numeric argument is read as a uniqueId, not this alias.</source>
         <translation>脚本必须将其作为字符串引用，例如 getDataset("%1")；数值参数将被读取为 uniqueId，而非此别名。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="687"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="685"/>
         <source>Numeric Alias</source>
         <translation>数值别名</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="738"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="736"/>
         <source>Edit Alarms</source>
         <translation>编辑报警</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="860"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="858"/>
         <source>Rename Dataset</source>
         <translation>重命名数据集</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="881"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="879"/>
         <source>Edit Dataset</source>
         <translation>编辑数据集</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="1026"/>
+        <location filename="../../src/DataModel/Project/ProjectEditorCommit.cpp" line="1024"/>
         <source>Edit Output Widget</source>
         <translation>编辑输出部件</translation>
     </message>
@@ -8726,53 +9039,53 @@ Add %4 dataset(s) using the template's defaults?</source>
 <context>
     <name>DataModel::ProjectModel</name>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="293"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="302"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="273"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="282"/>
         <source>Lock Project</source>
         <translation>锁定项目</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="294"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="274"/>
         <source>Choose a password to lock the project:</source>
         <translation>选择密码以锁定项目：</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="302"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="282"/>
         <source>Confirm the password:</source>
         <translation>确认密码：</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="307"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="287"/>
         <source>Passwords do not match</source>
         <translation>密码不匹配</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="308"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="288"/>
         <source>The two passwords you entered do not match. The project was not locked.</source>
         <translation>两次输入的密码不匹配。项目未锁定。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="345"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="325"/>
         <source>Unlock Project</source>
         <translation>解锁项目</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="346"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="326"/>
         <source>Enter the project password:</source>
         <translation>输入项目密码：</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="356"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="336"/>
         <source>Incorrect password</source>
         <translation>密码错误</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="357"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="337"/>
         <source>The password you entered does not match the one stored in the project file.</source>
         <translation>输入的密码与项目文件中存储的密码不匹配。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="438"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="418"/>
         <source>New Project</source>
         <translation>新建项目</translation>
     </message>
@@ -8781,12 +9094,12 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">采样</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="580"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="560"/>
         <source>Change MQTT Publisher</source>
         <translation>更改 MQTT 发布者</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="596"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="576"/>
         <source>Change InfluxDB Sink</source>
         <translation>更改 InfluxDB 接收器</translation>
     </message>
@@ -8799,47 +9112,47 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">显示标题(留空则恢复原始标题):</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="853"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="867"/>
         <source>Change Project Title</source>
         <translation>更改项目标题</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="869"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="883"/>
         <source>Edit Control Script</source>
         <translation>编辑控制脚本</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="886"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="900"/>
         <source>Change Point Count</source>
         <translation>更改点数</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="909"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="923"/>
         <source>Change Plot Time Range</source>
         <translation>更改绘图时间范围</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="935"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="949"/>
         <source>Toggle Freeze</source>
         <translation>切换冻结</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="950"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="964"/>
         <source>Toggle Change-Driven Transforms</source>
         <translation>切换变更驱动转换</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="967"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="981"/>
         <source>Toggle Fast Lua Execution</source>
         <translation>切换快速 Lua 执行</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="988"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1002"/>
         <source>Enable Fast Lua Execution?</source>
         <translation>启用快速 Lua 执行?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="989"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1003"/>
         <source>Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x faster), but the runaway-script watchdog cannot operate: a script stuck in an infinite loop will stall its data source until you disconnect.
 
 Enable it only for scripts you trust and have tested in Safe mode first.</source>
@@ -8848,37 +9161,37 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
 仅对您信任且已在安全模式下测试过的脚本启用此功能。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="994"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1008"/>
         <source>Fast Lua Execution</source>
         <translation>快速 Lua 执行</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1023"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1037"/>
         <source>Change Frame Start Sequence</source>
         <translation>更改帧起始序列</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1042"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1056"/>
         <source>Change Frame End Sequence</source>
         <translation>更改帧结束序列</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1061"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1075"/>
         <source>Change Checksum</source>
         <translation>更改校验和</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1080"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1094"/>
         <source>Change Frame Detection</source>
         <translation>更改帧检测</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1099"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1113"/>
         <source>Change Decoder</source>
         <translation>更改解码器</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1118"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1132"/>
         <source>Toggle Hex Delimiters</source>
         <translation>切换十六进制定界符</translation>
     </message>
@@ -8951,54 +9264,54 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">此项目中有未保存的修改!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="187"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="196"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="210"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="167"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="176"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="190"/>
         <source>Project error</source>
         <translation>项目错误</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="187"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="167"/>
         <source>Project title cannot be empty!</source>
         <translation>项目标题不能为空!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="196"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="176"/>
         <source>You need to add at least one group!</source>
         <translation>至少需要添加一个组!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="210"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="190"/>
         <source>You need to add at least one dataset!</source>
         <translation>至少需要添加一个数据集!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="250"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="230"/>
         <source>Your project needs a title</source>
         <translation>项目需要标题</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="252"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="232"/>
         <source>Add a group to get started</source>
         <translation>添加组以开始</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="254"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="234"/>
         <source>Add a dataset to a group</source>
         <translation>向组添加数据集</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="268"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="248"/>
         <source>Open the Project view at the top of the tree and enter a name. You can rename the project at any time.</source>
         <translation>打开树顶部的项目视图并输入名称。可随时重命名项目。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="271"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="251"/>
         <source>Groups organize datasets into dashboard widgets. Use the Group button in the toolbar above to create one, then add datasets to it.</source>
         <translation>组将数据集组织到仪表板小部件中。使用上方工具栏中的"组"按钮创建一个,然后向其添加数据集。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="275"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="255"/>
         <source>Datasets are the values that appear on the dashboard. Select a group in the tree and use the Dataset button in the toolbar to add one.</source>
         <translation>数据集是显示在仪表板上的值。在树中选择一个组，然后使用工具栏中的"数据集"按钮添加数据集。</translation>
     </message>
@@ -9023,12 +9336,12 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">Serial Studio 项目文件 (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="725"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="695"/>
         <source>Untitled Project</source>
         <translation>未命名项目</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="741"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="711"/>
         <source>Device A</source>
         <translation>设备 A</translation>
     </message>
@@ -9377,8 +9690,9 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">重命名表</translation>
     </message>
     <message>
+        <location filename="../../../scripts/tests/fixtures/undo-scope-missing/good.cpp" line="8"/>
         <source>Rename Group</source>
-        <translation type="vanished">重命名组</translation>
+        <translation>重命名组</translation>
     </message>
     <message>
         <source>Rename Dataset</source>
@@ -9736,12 +10050,12 @@ Reload it?</source>
 <context>
     <name>DataModel::TransmitTestDialog</name>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="154"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="165"/>
         <source>Invalid Hex Input</source>
         <translation>十六进制输入无效</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="155"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="166"/>
         <source>Please enter valid hexadecimal bytes.
 
 Valid format: 01 A2 FF 3C</source>
@@ -9750,78 +10064,93 @@ Valid format: 01 A2 FF 3C</source>
 有效格式：01 A2 FF 3C</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="160"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="171"/>
         <source>No transmit function code to evaluate.</source>
         <translation>没有可评估的传输函数代码。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="177"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="180"/>
+        <source>Failed to create the test engine.</source>
+        <translation>无法创建测试引擎。</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="195"/>
+        <source>The transmit code did not finish evaluating within %1 ms.</source>
+        <translation>传输代码未能在 %1 毫秒内完成评估。</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="201"/>
         <source>transmit function is not callable</source>
         <translation>传输函数不可调用</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="241"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="221"/>
+        <source>transmit() did not return within %1 ms.</source>
+        <translation>transmit() 未能在 %1 毫秒内返回。</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="270"/>
         <source>HEX</source>
         <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="242"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="271"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="243"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="272"/>
         <source>Evaluate</source>
         <translation>评估</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="244"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="273"/>
         <source>Input Value</source>
         <translation>输入值</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="245"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="274"/>
         <source>Transmit Function Output</source>
         <translation>传输函数输出</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="246"/>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="270"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="275"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="299"/>
         <source>Enter value to transmit…</source>
         <translation>输入要传输的值…</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="247"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="276"/>
         <source>Raw string output appears here</source>
         <translation>原始字符串输出显示在此处</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="248"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="277"/>
         <source>Hex byte output appears here</source>
         <translation>十六进制字节输出显示在此处</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="251"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="280"/>
         <source>Test Transmit Function</source>
         <translation>测试传输函数</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="264"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="293"/>
         <source>Enter hex bytes (e.g., 01 A2 FF)</source>
         <translation>输入十六进制字节(例如 01 A2 FF)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="368"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="397"/>
         <source>(empty) No data returned</source>
         <translation>(空)未返回数据</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="370"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="399"/>
         <source>0 bytes</source>
         <translation>0 字节</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="409"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="438"/>
         <source>%1 byte(s)</source>
         <translation>%1 字节</translation>
     </message>
@@ -10198,6 +10527,59 @@ Valid format: 01 A2 FF 3C</source>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="393"/>
         <source>Delete this dataset from the group</source>
         <translation>从组中删除此数据集</translation>
+    </message>
+</context>
+<context>
+    <name>DetailPage</name>
+    <message>
+        <location filename="../../qml/Dialogs/ExtensionManager/DetailPage.qml" line="83"/>
+        <source>No description available.</source>
+        <translation>无可用描述。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ExtensionManager/DetailPage.qml" line="125"/>
+        <source>Details</source>
+        <translation>详情</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ExtensionManager/DetailPage.qml" line="146"/>
+        <source>Type:</source>
+        <translation>类型：</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ExtensionManager/DetailPage.qml" line="159"/>
+        <source>Author:</source>
+        <translation>作者：</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ExtensionManager/DetailPage.qml" line="171"/>
+        <source>Version:</source>
+        <translation>版本：</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ExtensionManager/DetailPage.qml" line="183"/>
+        <source>License:</source>
+        <translation>许可证：</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ExtensionManager/DetailPage.qml" line="244"/>
+        <source>No preview</source>
+        <translation>无预览</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ExtensionManager/DetailPage.qml" line="283"/>
+        <source>  PLUGIN OUTPUT</source>
+        <translation>插件输出</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ExtensionManager/DetailPage.qml" line="313"/>
+        <source>No output yet. Run the plugin to see its log here.</source>
+        <translation>尚无输出。运行插件以在此处查看其日志。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ExtensionManager/DetailPage.qml" line="348"/>
+        <source>No preview available</source>
+        <translation>无可用预览</translation>
     </message>
 </context>
 <context>
@@ -10606,104 +10988,104 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>EipTagsDialog</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="44"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="37"/>
         <source>EtherNet/IP Tags</source>
         <translation>EtherNet/IP 标签</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="166"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="89"/>
         <source>Name tags exactly as the controller does, for example MotorSpeed or Program:MainProgram.Counter. Leave the element index empty for a scalar tag.</source>
         <translation>标签名称必须与控制器完全一致，例如 MotorSpeed 或 Program:MainProgram.Counter。标量标签的元素索引留空。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="174"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="97"/>
         <source>Add New Tag</source>
         <translation>添加新标签</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="198"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="121"/>
         <source>Name:</source>
         <translation>名称：</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="205"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="128"/>
         <source>Channel name</source>
         <translation>通道名称</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="209"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="132"/>
         <source>Tag:</source>
         <translation>标签：</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="217"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="140"/>
         <source>Controller tag name</source>
         <translation>控制器标签名称</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="222"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="145"/>
         <source>Type:</source>
         <translation>类型：</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="241"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="164"/>
         <source>Element</source>
         <translation>元素</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="246"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="169"/>
         <source>Add Tag</source>
         <translation>添加标签</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="270"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="193"/>
         <source>Configured Tags</source>
         <translation>已配置标签</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="304"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="227"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="311"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="234"/>
         <source>Tag</source>
         <translation>标签</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="319"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="242"/>
         <source>Action</source>
         <translation>动作</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="366"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="289"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="379"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="302"/>
         <source>No tags configured.
 Add controller tags above to poll them.</source>
         <translation>未配置标签。
 在上方添加控制器标签以轮询它们。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="397"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="320"/>
         <source>Total tags: %1</source>
         <translation>标签总数：%1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="401"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="324"/>
         <source>Generate Project</source>
         <translation>生成项目</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="407"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="330"/>
         <source>Clear All</source>
         <translation>全部清除</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="413"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="336"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -10766,12 +11148,12 @@ Add controller tags above to poll them.</source>
         <translation>未配置标签</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="126"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="125"/>
         <source>The tag attributes are empty</source>
         <translation>标签属性为空</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="229"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="228"/>
         <source>The %1 client is not available in this build</source>
         <translation>此版本不支持 %1 客户端</translation>
     </message>
@@ -10935,192 +11317,172 @@ Add controller tags above to poll them.</source>
 <context>
     <name>ExtensionManager</name>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="31"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="32"/>
         <source>Extension Manager</source>
         <translation>扩展管理器</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="118"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="119"/>
         <source>Refresh</source>
         <translation>刷新</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="132"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="133"/>
         <source>Repos</source>
         <translation>仓库</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="162"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="163"/>
         <source>Repository Settings</source>
         <translation>仓库设置</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="174"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="175"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="215"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="216"/>
         <source>Install</source>
         <translation>安装</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="232"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="233"/>
         <source>Uninstall</source>
         <translation>卸载</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="259"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="260"/>
         <source>Run</source>
         <translation>运行</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="283"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="284"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="317"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="318"/>
         <source>Reset</source>
         <translation>重置</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="77"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="78"/>
         <source>Search extensions…</source>
         <translation>搜索扩展…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="367"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="368"/>
         <source>Fetching extensions…</source>
         <translation>正在获取扩展…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="604"/>
         <source>Running</source>
-        <translation>运行中</translation>
+        <translation type="vanished">运行中</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="626"/>
         <source>Update</source>
-        <translation>更新</translation>
+        <translation type="vanished">更新</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="626"/>
         <source>Installed</source>
-        <translation>已安装</translation>
+        <translation type="vanished">已安装</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="643"/>
         <source>Unavailable</source>
-        <translation>不可用</translation>
+        <translation type="vanished">不可用</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="822"/>
         <source>No description available.</source>
-        <translation>无可用描述。</translation>
+        <translation type="vanished">无可用描述。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="864"/>
         <source>Details</source>
-        <translation>详细信息</translation>
+        <translation type="vanished">详细信息</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="885"/>
         <source>Type:</source>
-        <translation>类型：</translation>
+        <translation type="vanished">类型：</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="898"/>
         <source>Author:</source>
-        <translation>作者：</translation>
+        <translation type="vanished">作者：</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="910"/>
         <source>Version:</source>
-        <translation>版本：</translation>
+        <translation type="vanished">版本：</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="922"/>
         <source>License:</source>
-        <translation>许可证：</translation>
+        <translation type="vanished">许可证：</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="983"/>
         <source>No preview</source>
-        <translation>无预览</translation>
+        <translation type="vanished">无预览</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1022"/>
         <source>  PLUGIN OUTPUT</source>
-        <translation>插件输出</translation>
+        <translation type="vanished">插件输出</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1052"/>
         <source>No output yet. Run the plugin to see its log here.</source>
-        <translation>尚无输出。运行插件以在此处查看其日志。</translation>
+        <translation type="vanished">尚无输出。运行插件以在此处查看其日志。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1087"/>
         <source>No preview available</source>
-        <translation>无可用预览</translation>
+        <translation type="vanished">无可用预览</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1131"/>
         <source>Repositories</source>
-        <translation>仓库</translation>
+        <translation type="vanished">仓库</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1144"/>
         <source>Add URLs to remote repositories or local folder paths.</source>
-        <translation>添加远程仓库的 URL 或本地文件夹路径。</translation>
+        <translation type="vanished">添加远程仓库的 URL 或本地文件夹路径。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1181"/>
         <source>LOCAL</source>
-        <translation>本地</translation>
+        <translation type="vanished">本地</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1238"/>
         <source>URL or local path…</source>
-        <translation>URL 或本地路径…</translation>
+        <translation type="vanished">URL 或本地路径…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1269"/>
         <source>Browse…</source>
-        <translation>浏览…</translation>
+        <translation type="vanished">浏览…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1246"/>
         <source>Add</source>
-        <translation>添加</translation>
+        <translation type="vanished">添加</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1306"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="424"/>
         <source>No Results Found</source>
         <translation>未找到结果</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1317"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="435"/>
         <source>Check the spelling or try a different search term.</source>
         <translation>请检查拼写或尝试其他搜索词。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1341"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="459"/>
         <source>No Extensions Available</source>
         <translation>无可用扩展</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1352"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="470"/>
         <source>Add a repository URL or local path in the Repos settings, then refresh.</source>
         <translation>在仓库设置中添加仓库 URL 或本地路径,然后刷新。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1367"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="485"/>
         <source>%1 extensions</source>
         <translation>%1 个扩展</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1376"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="494"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -12167,6 +12529,29 @@ Add controller tags above to poll them.</source>
     </message>
 </context>
 <context>
+    <name>GridPage</name>
+    <message>
+        <location filename="../../qml/Dialogs/ExtensionManager/GridPage.qml" line="260"/>
+        <source>Running</source>
+        <translation>运行中</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ExtensionManager/GridPage.qml" line="282"/>
+        <source>Update</source>
+        <translation>更新</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ExtensionManager/GridPage.qml" line="282"/>
+        <source>Installed</source>
+        <translation>已安装</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ExtensionManager/GridPage.qml" line="299"/>
+        <source>Unavailable</source>
+        <translation>不可用</translation>
+    </message>
+</context>
+<context>
     <name>GroupFolderView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupFolderView.qml" line="50"/>
@@ -12631,9 +13016,31 @@ Add controller tags above to poll them.</source>
     </message>
 </context>
 <context>
+    <name>IO::AsyncTcpDial</name>
+    <message>
+        <location filename="../../src/IO/AsyncTcpDial.cpp" line="243"/>
+        <location filename="../../src/IO/AsyncTcpDial.cpp" line="257"/>
+        <source>Host not found</source>
+        <translation>未找到主机</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/AsyncTcpDial.cpp" line="298"/>
+        <location filename="../../src/IO/AsyncTcpDial.cpp" line="329"/>
+        <location filename="../../src/IO/AsyncTcpDial.cpp" line="410"/>
+        <location filename="../../src/IO/AsyncTcpDial.cpp" line="411"/>
+        <source>Connection failed</source>
+        <translation>连接失败</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/AsyncTcpDial.cpp" line="435"/>
+        <source>Connection timed out</source>
+        <translation>连接超时</translation>
+    </message>
+</context>
+<context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="280"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="267"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
@@ -12642,92 +13049,92 @@ Add controller tags above to poll them.</source>
         <translation type="vanished">网络套接字</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="280"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="267"/>
         <source>Network</source>
         <translation>网络</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="280"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="267"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="282"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="269"/>
         <source>Audio</source>
         <translation>音频</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="282"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="269"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="282"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="269"/>
         <source>CAN Bus</source>
         <translation>CAN 总线</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="282"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="269"/>
         <source>USB Device</source>
         <translation>USB 设备</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="282"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="269"/>
         <source>HID Device</source>
         <translation>HID 设备</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="283"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="270"/>
         <source>Process</source>
         <translation>进程</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="283"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="270"/>
         <source>MQTT Subscriber</source>
         <translation>MQTT 订阅者</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="283"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="270"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="283"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="270"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="284"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="271"/>
         <source>EtherNet/IP</source>
         <translation>EtherNet/IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="284"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="271"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="670"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="580"/>
         <source>Your trial period has ended.</source>
         <translation>试用期已结束。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="671"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="581"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>要继续使用 Serial Studio，请激活许可证。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="748"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="658"/>
         <source>connection attempt failed</source>
         <translation>连接尝试失败</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1220"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1156"/>
         <source>This connection type requires an active license or trial.</source>
         <translation>此连接类型需要有效的许可证或试用版。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="1221"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="1157"/>
         <source>Activate Serial Studio Pro or start a trial to use this device type.</source>
         <translation>激活 Serial Studio Pro 或开始试用以使用此设备类型。</translation>
     </message>
@@ -12763,87 +13170,123 @@ Add controller tags above to poll them.</source>
 <context>
     <name>IO::Drivers::Audio</name>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="348"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="417"/>
         <source>Audio Device Stopped</source>
         <translation>音频设备已停止</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="349"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="418"/>
         <source>The audio backend stopped the stream. The device may have been unplugged or claimed by another application.</source>
         <translation>音频后端已停止流。设备可能已被拔出或被其他应用程序占用。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="781"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="850"/>
         <source>channels</source>
         <translation>声道</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="781"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="850"/>
         <source> channels</source>
         <translation>声道</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="764"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="833"/>
         <source>Unsigned 8-bit</source>
         <translation>无符号 8 位</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="765"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="244"/>
+        <source>Audio output unavailable</source>
+        <translation>音频输出不可用</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="245"/>
+        <source>No output device is configured for this session.</source>
+        <translation>未为此会话配置输出设备。</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="272"/>
+        <source>Audio channel mismatch</source>
+        <translation>音频通道不匹配</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="273"/>
+        <source>Expected %1 value(s) per frame, got %2.</source>
+        <translation>预期每帧 %1 个值,实际获得 %2 个。</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="346"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="352"/>
+        <source>Audio device error</source>
+        <translation>音频设备错误</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="347"/>
+        <source>The selected audio device could not be initialized.</source>
+        <translation>无法初始化所选音频设备。</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="352"/>
+        <source>The selected audio device could not be started.</source>
+        <translation>无法启动所选音频设备。</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="834"/>
         <source>Signed 16-bit</source>
         <translation>有符号 16 位</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="766"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="835"/>
         <source>Signed 24-bit</source>
         <translation>有符号 24 位</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="767"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="836"/>
         <source>Signed 32-bit</source>
         <translation>有符号 32 位</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="768"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="837"/>
         <source>Float 32-bit</source>
         <translation>浮点 32 位</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="771"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="840"/>
         <source>Mono</source>
         <translation>单声道</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="772"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="841"/>
         <source>Stereo</source>
         <translation>立体声</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1282"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1359"/>
         <source>Input Device</source>
         <translation>输入设备</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1290"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1367"/>
         <source>Sample Rate</source>
         <translation>采样率</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1298"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1375"/>
         <source>Normalization</source>
         <translation>归一化</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1299"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1376"/>
         <source>Publish samples as floats in the -1.0 to 1.0 range</source>
         <translation>将采样发布为 -1.0 到 1.0 范围内的浮点数</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1307"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1384"/>
         <source>Sample Format</source>
         <translation>采样格式</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1316"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1393"/>
         <source>Channels</source>
         <translation>声道</translation>
     </message>
@@ -12856,88 +13299,88 @@ Add controller tags above to poll them.</source>
         <translation>BLE I/O 模块错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="339"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="340"/>
         <source>The device disconnected before the connection completed</source>
         <translation>设备在连接完成前断开</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="355"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="372"/>
         <source>BLE connection error: %1</source>
         <translation>BLE 连接错误:%1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="444"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="460"/>
         <source>Select Device</source>
         <translation>选择设备</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="455"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="471"/>
         <source>Select Service</source>
         <translation>选择服务</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="466"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="482"/>
         <source>Select Characteristic</source>
         <translation>选择特征</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="677"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="693"/>
         <source>Error while configuring BLE service</source>
         <translation>配置 BLE 服务时出错</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="895"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="911"/>
         <source>Operation error</source>
         <translation>操作错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="898"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="914"/>
         <source>Characteristic write error</source>
         <translation>特征写入错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="901"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="917"/>
         <source>Descriptor write error</source>
         <translation>描述符写入错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="354"/>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="904"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="371"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="920"/>
         <source>Unknown error</source>
         <translation>未知错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="909"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="925"/>
         <source>Characteristic read error</source>
         <translation>特征读取错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="912"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="928"/>
         <source>Descriptor read error</source>
         <translation>描述符读取错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="920"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="936"/>
         <source>BLE service error during connect</source>
         <translation>连接期间 BLE 服务错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1153"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1188"/>
         <source>BLE Device</source>
         <translation>BLE 设备</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1161"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1196"/>
         <source>Service</source>
         <translation>服务</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1168"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1203"/>
         <source>Notify Characteristic</source>
         <translation>通知特征</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1175"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1210"/>
         <source>Characteristic</source>
         <translation>特征</translation>
     </message>
@@ -12945,15 +13388,15 @@ Add controller tags above to poll them.</source>
 <context>
     <name>IO::Drivers::CANBus</name>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="411"/>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="416"/>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="421"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="425"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="426"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="430"/>
         <source>CAN Bus Not Available</source>
         <translation>CAN 总线不可用</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="422"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="427"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
@@ -12962,37 +13405,37 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
 macOS 上的 CAN 总线支持有限,可能需要第三方硬件驱动程序。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="426"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="431"/>
         <source>No CAN bus plugins are available on this platform.</source>
         <translation>此平台上没有可用的 CAN 总线插件。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="437"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="442"/>
         <source>Invalid CAN Configuration</source>
         <translation>CAN 配置无效</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="444"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="449"/>
         <source>Invalid Selection</source>
         <translation>选择无效</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="452"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="457"/>
         <source>No Devices Available</source>
         <translation>无可用设备</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="364"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="369"/>
         <source>CAN Device Creation Failed</source>
         <translation>CAN 设备创建失败</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="396"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="401"/>
         <source>CAN Connection Failed</source>
         <translation>CAN 连接失败</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="412"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="417"/>
         <source>No CAN bus plugins found on this system.
 
 On Linux, ensure SocketCAN kernel modules are loaded.</source>
@@ -13001,7 +13444,7 @@ On Linux, ensure SocketCAN kernel modules are loaded.</source>
 在 Linux 上,请确保已加载 SOCKETCAN 内核模块。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="417"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="422"/>
         <source>No CAN bus plugins found on this system.
 
 On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
@@ -13010,27 +13453,27 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
 在 Windows 上,请安装 CAN 硬件驱动程序(PEAK、VECTOR 等)。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="438"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="443"/>
         <source>The CAN bus configuration is incomplete. Select a valid plugin and interface.</source>
         <translation>CAN 总线配置不完整。请选择有效的插件和接口。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="445"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="450"/>
         <source>The selected plugin or interface is no longer available. Refresh the lists and try again.</source>
         <translation>所选插件或接口不再可用。请刷新列表并重试。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="453"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="458"/>
         <source>The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected.</source>
         <translation>插件或接口列表为空。请刷新列表并确保 CAN 硬件已连接。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="366"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="371"/>
         <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
         <translation>无法创建 CAN 总线设备。请检查硬件和驱动程序。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="394"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="399"/>
         <source>Unable to connect to CAN bus device. Check your hardware connection and settings.</source>
         <translation>无法连接到 CAN 总线设备。请检查硬件连接和设置。</translation>
     </message>
@@ -13043,68 +13486,68 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
         <translation type="vanished">发生错误，但 CAN 设备已不可用。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="935"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="997"/>
         <source>Error code: %1</source>
         <translation>错误代码：%1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="943"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1005"/>
         <source>CAN Bus Communication Error</source>
         <translation>CAN 总线通信错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1049"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1111"/>
         <source>No CAN driver selected</source>
         <translation>未选择 CAN 驱动</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="986"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1048"/>
         <source>Load SocketCAN kernel modules first</source>
         <translation>请先加载 SOCKETCAN 内核模块</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="982"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1044"/>
         <source>Connect a %1 adapter, then refresh</source>
         <translation>连接 %1 适配器,然后刷新</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="989"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1051"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>请先设置虚拟 CAN 接口</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="991"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1011"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1053"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1073"/>
         <source>No interfaces found for %1</source>
         <translation>未找到 %1 的接口</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="995"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1057"/>
         <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
         <translation>安装 &lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN 驱动&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="999"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1061"/>
         <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
         <translation>安装 &lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;VECTOR CAN 驱动&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1003"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1065"/>
         <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
         <translation>安装 &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN 驱动程序&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1006"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1068"/>
         <source>Install %1 drivers</source>
         <translation>安装 %1 驱动程序</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1009"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1071"/>
         <source>Install %1 drivers for macOS</source>
         <translation>安装 macOS 版 %1 驱动程序</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1023"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1085"/>
         <source>
 
 If the interface is down, bring it up first:
@@ -13115,42 +13558,42 @@ sudo ip link set %1 up type can bitrate %2
 </translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1159"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1221"/>
         <source>Plugin</source>
         <translation>插件</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1167"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1229"/>
         <source>Interface</source>
         <translation>接口</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1175"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1237"/>
         <source>Bitrate</source>
         <translation>比特率</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1184"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1246"/>
         <source>CAN FD</source>
         <translation>CAN FD</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1191"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1253"/>
         <source>Data Bitrate</source>
         <translation>数据比特率</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1200"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1262"/>
         <source>Loopback</source>
         <translation>环回</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1207"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1269"/>
         <source>Listen-Only</source>
         <translation>仅监听</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1214"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="1276"/>
         <source>Multi-Frame Reassembly</source>
         <translation>多帧重组</translation>
     </message>
@@ -13158,17 +13601,17 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::EipPollWorker</name>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="370"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="355"/>
         <source>"%1": %2</source>
         <translation>"%1":%2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="377"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="362"/>
         <source>The controller did not open every tag within the connection deadline</source>
         <translation>控制器未能在连接期限内打开所有标签</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="444"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="410"/>
         <source>The controller stopped answering tag reads</source>
         <translation>控制器停止响应标签读取</translation>
     </message>
@@ -13176,164 +13619,164 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::EthernetIp</name>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="795"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="683"/>
         <source>The connection is not configured: check the host and the tag list</source>
         <translation>连接未配置:请检查主机和标签列表</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="817"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="724"/>
         <source>EtherNet/IP Connection Failed</source>
         <translation>EtherNet/IP 连接失败</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="818"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="725"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="819"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="726"/>
         <source>the controller did not answer</source>
         <translation>控制器未响应</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="862"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="769"/>
         <source>EtherNet/IP Connection Lost</source>
         <translation>EtherNet/IP 连接丢失</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="943"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="850"/>
         <source>ControlLogix</source>
         <translation>ControlLogix</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="944"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="851"/>
         <source>CompactLogix</source>
         <translation>CompactLogix</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="945"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="852"/>
         <source>MicroLogix</source>
         <translation>MicroLogix</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="946"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="853"/>
         <source>Micro800</source>
         <translation>Micro800</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="947"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="854"/>
         <source>PLC-5</source>
         <translation>PLC-5</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="948"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="855"/>
         <source>SLC 500</source>
         <translation>SLC 500</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="949"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="856"/>
         <source>Logix PCCC</source>
         <translation>Logix PCCC</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="950"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="857"/>
         <source>Omron NJ/NX</source>
         <translation>Omron NJ/NX</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="993"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="900"/>
         <source>Not connected</source>
         <translation>未连接</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="996"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="903"/>
         <source>Polling %1 tags at %2 Hz</source>
         <translation>正在以 %2 Hz 轮询 %1 个标签</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1213"/>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1222"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1120"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1129"/>
         <source>EtherNet/IP Tag</source>
         <translation>EtherNet/IP 标签</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1214"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1121"/>
         <source>The tag name "%1" is too long or contains characters that are not allowed (no '&amp;', '=' or whitespace).</source>
         <translation>标签名称"%1"过长或包含不允许的字符(不能包含"&amp;"、"="或空格)。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1222"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1129"/>
         <source>Unknown tag type "%1".</source>
         <translation>未知标签类型"%1"。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1274"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1181"/>
         <source>Gateway</source>
         <translation>网关</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1281"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1188"/>
         <source>CIP Path</source>
         <translation>CIP 路径</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1288"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1195"/>
         <source>Controller Family</source>
         <translation>控制器系列</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1296"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1203"/>
         <source>Poll Interval (ms)</source>
         <translation>轮询间隔 (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1390"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1297"/>
         <source>EtherNet/IP Project</source>
         <translation>EtherNet/IP 项目</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1395"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1302"/>
         <source>EtherNet/IP</source>
         <translation>EtherNet/IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1424"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1331"/>
         <source>Controller Tags</source>
         <translation>控制器标签</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1455"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1362"/>
         <source>Failed to load generated project</source>
         <translation>加载生成的项目失败</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1456"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1363"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>无法加载生成的项目 JSON。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1470"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1377"/>
         <source>No tags configured</source>
         <translation>未配置标签</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1471"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1378"/>
         <source>Add at least one tag before generating a project.</source>
         <translation>生成项目前请至少添加一个标签。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1473"/>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1494"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1380"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1401"/>
         <source>EtherNet/IP Project Generator</source>
         <translation>EtherNet/IP 项目生成器</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1491"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1398"/>
         <source>Successfully generated project with %1 datasets.</source>
         <translation>已成功生成包含 %1 个数据集的项目。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1492"/>
+        <location filename="../../src/IO/Drivers/EthernetIp.cpp" line="1399"/>
         <source>The project editor is now open for customization.</source>
         <translation>项目编辑器现已打开以供自定义。</translation>
     </message>
@@ -13435,12 +13878,12 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::HID</name>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="180"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="203"/>
         <source>Unknown error</source>
         <translation>未知错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="183"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="206"/>
         <source>
 
 Check that your user is in the 'plugdev' group or that a udev rule grants access to this device.</source>
@@ -13449,27 +13892,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 </translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="186"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="209"/>
         <source>Failed to open "%1"</source>
         <translation>打开"%1"失败</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="291"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="314"/>
         <source>HID Device Error</source>
         <translation>HID 设备错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="292"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="315"/>
         <source>The HID device was disconnected or encountered a fatal read error.</source>
         <translation>HID 设备已断开连接或遇到严重读取错误。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="436"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="459"/>
         <source>Select Device</source>
         <translation>选择设备</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="578"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="601"/>
         <source>HID Device</source>
         <translation>HID 设备</translation>
     </message>
@@ -13477,143 +13920,143 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Iec104</name>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="379"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="390"/>
         <source>The connection is not configured: check the host and the port</source>
         <translation>连接未配置:请检查主机和端口</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="434"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="427"/>
         <source>IEC 104 Connection Failed</source>
         <translation>IEC 104 连接失败</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="435"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="428"/>
         <source>Cannot connect to %1:%2 (%3)</source>
         <translation>无法连接到 %1:%2 (%3)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="473"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="503"/>
         <source>The station sent more than the receive buffer holds</source>
         <translation>站点发送的数据超过接收缓冲区容量</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="511"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="541"/>
         <source>The station sent a frame this link could not decode</source>
         <translation>站点发送了此链路无法解码的帧</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="657"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="692"/>
         <source>The station did not answer within t1</source>
         <translation>站点在 t1 时间内未响应</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="761"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="796"/>
         <source>IEC 104 Connection Lost</source>
         <translation>IEC 104 连接丢失</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="883"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="918"/>
         <source>Not connected</source>
         <translation>未连接</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="886"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="921"/>
         <source>Starting data transfer…</source>
         <translation>正在开始数据传输…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="888"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="923"/>
         <source>Monitoring %1 point(s) from station %2</source>
         <translation>正在监控站点 %2 的 %1 个数据点</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1169"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1205"/>
         <source>Host</source>
         <translation>主机</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1176"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1212"/>
         <source>Port</source>
         <translation>端口</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1185"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1221"/>
         <source>Common Address</source>
         <translation>公共地址</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1197"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1233"/>
         <source>Send Window (k)</source>
         <translation>发送窗口 (k)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1197"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1233"/>
         <source>Ack Window (w)</source>
         <translation>确认窗口 (w)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1210"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1246"/>
         <source>Timeout t%1 (ms)</source>
         <translation>超时 t%1 (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1334"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1370"/>
         <source>IEC 60870-5-104 Project</source>
         <translation>IEC 60870-5-104 项目</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1339"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1375"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1369"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1405"/>
         <source>Status Points</source>
         <translation>状态点</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1370"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1406"/>
         <source>Counters</source>
         <translation>计数器</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1370"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1406"/>
         <source>Measurements</source>
         <translation>测量值</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1402"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1438"/>
         <source>Failed to load generated project</source>
         <translation>加载生成的项目失败</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1403"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1439"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>无法加载生成的项目 JSON。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1419"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1455"/>
         <source>No points discovered</source>
         <translation>未发现数据点</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1420"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1456"/>
         <source>Connect to the station and let the interrogation finish before generating a project.</source>
         <translation>连接到站点并等待查询完成后再生成项目。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1422"/>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1443"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1458"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1479"/>
         <source>IEC 60870-5-104 Project Generator</source>
         <translation>IEC 60870-5-104 项目生成器</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1440"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1476"/>
         <source>Successfully generated project with %1 datasets.</source>
         <translation>已成功生成包含 %1 个数据集的项目。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1441"/>
+        <location filename="../../src/IO/Drivers/Iec104.cpp" line="1477"/>
         <source>The project editor is now open for customization.</source>
         <translation>项目编辑器现已打开以供自定义。</translation>
     </message>
@@ -13621,72 +14064,82 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::MQTT</name>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="64"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="67"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="65"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="68"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="66"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="69"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="68"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="71"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="69"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="72"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="70"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="73"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3 或更高版本</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="71"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="74"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2 或更高版本</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="72"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="75"/>
         <source>Any Protocol</source>
         <translation>任意协议</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="73"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="76"/>
         <source>Secure Protocols Only</source>
         <translation>仅安全协议</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="75"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="78"/>
         <source>None</source>
         <translation>无</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="76"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="79"/>
         <source>Query Peer</source>
         <translation>查询对等方</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="77"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="80"/>
         <source>Verify Peer</source>
         <translation>验证对等方</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="78"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="81"/>
         <source>Auto Verify Peer</source>
         <translation>自动验证对等方</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="187"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="143"/>
+        <source>MQTT Connection Failed</source>
+        <translation>MQTT 连接失败</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="174"/>
+        <source>The broker did not answer within %1 seconds</source>
+        <translation>代理在 %1 秒内未响应</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="240"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>MQTT 功能需要商业许可证</translation>
     </message>
@@ -13695,157 +14148,162 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">订阅 MQTT 代理仅适用于有效的 Serial Studio 商业许可证(Hobbyist 层级或更高)。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="188"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="241"/>
         <source>Subscribing to an MQTT broker is only available with a valid Serial Studio license or an active trial.</source>
         <translation>订阅 MQTT 代理仅在拥有有效的 Serial Studio 许可证或激活的试用期时可用。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="445"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="501"/>
         <source>Use System Database</source>
         <translation>使用系统数据库</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="446"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="502"/>
         <source>Load From Folder…</source>
         <translation>从文件夹加载…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="479"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="535"/>
         <source>Select PEM Certificates Directory</source>
         <translation>选择 PEM 证书目录</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="772"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="844"/>
         <source>Hostname</source>
         <translation>主机名</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="779"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="851"/>
         <source>Port</source>
         <translation>端口</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="788"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="860"/>
         <source>Topic Filter</source>
         <translation>主题过滤器</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="795"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="616"/>
         <source>Sparkplug</source>
         <translation>Sparkplug</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="802"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="623"/>
         <source>Sparkplug Group ID</source>
         <translation>Sparkplug 组 ID</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="809"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="869"/>
         <source>Client ID</source>
         <translation>客户端 ID</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="816"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="876"/>
         <source>Username</source>
         <translation>用户名</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="823"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="883"/>
         <source>Password</source>
         <translation>密码</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="830"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="890"/>
         <source>MQTT Version</source>
         <translation>MQTT 版本</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="838"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="898"/>
         <source>Clean Session</source>
         <translation>清除会话</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="845"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="905"/>
         <source>Keep Alive (s)</source>
         <translation>保持连接 (秒)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="854"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="914"/>
         <source>Auto Keep Alive</source>
         <translation>自动保持连接</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="871"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="931"/>
         <source>SSL/TLS Enabled</source>
         <translation>启用 SSL/TLS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="881"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="941"/>
         <source>SSL Protocol</source>
         <translation>SSL 协议</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="889"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="949"/>
         <source>Peer Verify Mode</source>
         <translation>对等方验证模式</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="897"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="957"/>
         <source>Peer Verify Depth</source>
         <translation>对等方验证深度</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="906"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="966"/>
         <source>Client Certificate (PEM)</source>
         <translation>客户端证书(PEM)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="913"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="973"/>
         <source>Private Key (PEM)</source>
         <translation>私钥(PEM)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="920"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="980"/>
         <source>ALPN (MQTT over port 443)</source>
         <translation>ALPN(通过端口 443 的 MQTT)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="928"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="988"/>
         <source>ALPN Protocol</source>
         <translation>ALPN 协议</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1073"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1143"/>
         <source>The broker closed the connection during the attempt</source>
         <translation>Broker 在尝试期间关闭了连接</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1088"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1149"/>
+        <source>The connection could not be re-established</source>
+        <translation>无法重新建立连接</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1159"/>
         <source>MQTT Subscription Error</source>
         <translation>MQTT 订阅错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1089"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1160"/>
         <source>Failed to subscribe to topic "%1".</source>
         <translation>订阅主题"%1"失败。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1342"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1412"/>
         <source>MQTT Client Certificate Error</source>
         <translation>MQTT 客户端证书错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1359"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1429"/>
         <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
         <translation>PEM 文件 (*.pem *.crt *.cer *.key);;所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1385"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1455"/>
         <source>Select Client Certificate</source>
         <translation>选择客户端证书</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1393"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1463"/>
         <source>Select Private Key</source>
         <translation>选择私钥</translation>
     </message>
@@ -13854,153 +14312,153 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Broker 关闭了连接。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1116"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1187"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>MQTT 协议版本无效</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1117"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1188"/>
         <source>The broker rejected the configured MQTT protocol version.</source>
         <translation>代理服务器拒绝了配置的 MQTT 协议版本。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1120"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1191"/>
         <source>Client ID Rejected</source>
         <translation>客户端 ID 被拒绝</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1121"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1192"/>
         <source>The broker rejected the client ID. Try a different identifier.</source>
         <translation>代理服务器拒绝了客户端 ID。请尝试使用其他标识符。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1124"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1195"/>
         <source>MQTT Server Unavailable</source>
         <translation>MQTT 服务器不可用</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1125"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1196"/>
         <source>The broker is currently unavailable. Retry later.</source>
         <translation>代理服务器当前不可用。请稍后重试。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1128"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1199"/>
         <source>Authentication Error</source>
         <translation>身份验证错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1129"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1200"/>
         <source>The credentials provided were rejected by the broker.</source>
         <translation>代理服务器拒绝了提供的凭据。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1132"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1203"/>
         <source>Authorization Error</source>
         <translation>授权错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1133"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1204"/>
         <source>Account lacks permission for this operation.</source>
         <translation>账户缺少此操作的权限。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1136"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1207"/>
         <source>Network or Transport Error</source>
         <translation>网络或传输错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1137"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1208"/>
         <source>Network/transport layer issue while connecting to the broker.</source>
         <translation>连接代理服务器时发生网络/传输层问题。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1140"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1211"/>
         <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
         <translation>已配置客户端证书:请验证其与私钥匹配并已在代理服务器上激活。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1145"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1216"/>
         <source>MQTT Protocol Violation</source>
         <translation>MQTT 协议违规</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1146"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1217"/>
         <source>The broker reported a protocol violation and closed the connection.</source>
         <translation>代理服务器报告协议违规并关闭了连接。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1149"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1220"/>
         <source>MQTT 5 Error</source>
         <translation>MQTT 5 错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1150"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1221"/>
         <source>An MQTT 5 protocol-level error occurred.</source>
         <translation>发生了 MQTT 5 协议级错误。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1153"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1224"/>
         <source>MQTT Error</source>
         <translation>MQTT 错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1154"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="1225"/>
         <source>An unexpected MQTT error occurred.</source>
         <translation>发生了意外的 MQTT 错误。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="301"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="321"/>
         <source>Invalid Sparkplug Group ID</source>
         <translation>无效的 Sparkplug 组 ID</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="302"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="322"/>
         <source>A group ID cannot contain '+', '#' or '/'; keeping "%1".</source>
         <translation>组 ID 不能包含 '+'、'#' 或 '/'；保留 "%1"。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="597"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="668"/>
         <source>Sparkplug Project</source>
         <translation>Sparkplug 项目</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="602"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="673"/>
         <source>MQTT</source>
         <translation>MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="640"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="711"/>
         <source>No Sparkplug metrics discovered</source>
         <translation>未发现 Sparkplug 指标</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="641"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="712"/>
         <source>Connect to the broker and wait for at least one birth certificate before generating a project.</source>
         <translation>连接到代理并等待至少一个出生证书后再生成项目。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="644"/>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="677"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="715"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="748"/>
         <source>Sparkplug Project Generator</source>
         <translation>Sparkplug 项目生成器</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="653"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="724"/>
         <source>Failed to load generated project</source>
         <translation>加载生成的项目失败</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="654"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="725"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>无法加载生成的项目 JSON。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="672"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="743"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>成功生成包含 %1 个组和 %2 个数据集的项目。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="675"/>
+        <location filename="../../src/IO/Drivers/MQTT/MQTTSparkplug.cpp" line="746"/>
         <source>The project editor is now open for customization.</source>
         <translation>项目编辑器现已打开以供自定义。</translation>
     </message>
@@ -14018,12 +14476,17 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Modbus 初始化失败</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="412"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="437"/>
         <source>Nothing is listening at %1</source>
         <translation>%1 上无任何监听</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="470"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="450"/>
+        <source>The Modbus client is gone</source>
+        <translation>Modbus 客户端已丢失</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="471"/>
         <source>Modbus Connection Failed</source>
         <translation>Modbus 连接失败</translation>
     </message>
@@ -14042,12 +14505,12 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>无法创建 Modbus 设备。请检查系统配置并重试。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="472"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="473"/>
         <source>Unable to connect to "%1". Check your connection settings.</source>
         <translation>无法连接到"%1"。请检查连接设置。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="473"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="474"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
@@ -14056,63 +14519,63 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">连接尝试超时</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="589"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="590"/>
         <source>None</source>
         <translation>无</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="590"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="591"/>
         <source>Even</source>
         <translation>偶</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="591"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="592"/>
         <source>Odd</source>
         <translation>奇</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="592"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="593"/>
         <source>Space</source>
         <translation>空格</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="593"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="594"/>
         <source>Mark</source>
         <translation>标记</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="645"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="646"/>
         <source>Holding Registers (0x03)</source>
         <translation>保持寄存器 (0x03)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="646"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="647"/>
         <source>Input Registers (0x04)</source>
         <translation>输入寄存器 (0x04)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="647"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="648"/>
         <source>Coils (0x01)</source>
         <translation>线圈 (0x01)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="648"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="649"/>
         <source>Discrete Inputs (0x02)</source>
         <translation>离散输入 (0x02)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="805"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="806"/>
         <source>No register groups configured</source>
         <translation>未配置寄存器组</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="806"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="807"/>
         <source>Add at least one register group before generating a project.</source>
         <translation>生成项目前请至少添加一个寄存器组。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="808"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="844"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="809"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="845"/>
         <source>Modbus Project Generator</source>
         <translation>Modbus 项目生成器</translation>
     </message>
@@ -14125,22 +14588,22 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">请检查临时目录的写入权限。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="821"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="822"/>
         <source>Failed to load generated project</source>
         <translation>加载生成的项目失败</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="822"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="823"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>无法加载生成的项目 JSON。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="839"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="840"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>已成功生成包含 %1 个组和 %2 个数据集的项目。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="842"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="843"/>
         <source>The project editor is now open for customization.</source>
         <translation>项目编辑器现已打开以供自定义。</translation>
     </message>
@@ -14185,67 +14648,67 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">离散 %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1165"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1197"/>
         <source>Error code: %1</source>
         <translation>错误代码:%1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1167"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1199"/>
         <source>Modbus Communication Error</source>
         <translation>Modbus 通信错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1179"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1211"/>
         <source>Select Port</source>
         <translation>选择端口</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1269"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1301"/>
         <source>Protocol</source>
         <translation>协议</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1277"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1309"/>
         <source>Slave Address</source>
         <translation>从站地址</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1286"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1318"/>
         <source>Poll Interval (ms)</source>
         <translation>轮询间隔 (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1314"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1346"/>
         <source>Host / IP</source>
         <translation>主机 / IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1321"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1353"/>
         <source>Port</source>
         <translation>端口</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1336"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1368"/>
         <source>Serial Port</source>
         <translation>串口</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1344"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1376"/>
         <source>Baud Rate</source>
         <translation>波特率</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1352"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1384"/>
         <source>Parity</source>
         <translation>校验位</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1360"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1392"/>
         <source>Data Bits</source>
         <translation>数据位</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1368"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1400"/>
         <source>Stop Bits</source>
         <translation>停止位</translation>
     </message>
@@ -14253,10 +14716,9 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Network</name>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="350"/>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="843"/>
-        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="264"/>
-        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="274"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="359"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="853"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="44"/>
         <source>Network socket error</source>
         <translation>网络套接字错误</translation>
     </message>
@@ -14265,162 +14727,176 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">连接到 %1:%2 超时。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="265"/>
-        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="275"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="44"/>
+        <source>Enter a TCP port first</source>
+        <translation>请先输入 TCP 端口</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="64"/>
         <source>Cannot connect to %1:%2 (%3)</source>
         <translation>无法连接到 %1:%2 (%3)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="306"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="315"/>
         <source>This socket type does not use a URL</source>
         <translation>此套接字类型不使用 URL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="312"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="321"/>
         <source>Enter a URL first</source>
         <translation>请先输入 URL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="318"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="327"/>
         <source>"%1" is not a valid URL</source>
         <translation>"%1" 不是有效的 URL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="324"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="333"/>
         <source>"%1" must start with %2://</source>
         <translation>"%1" 必须以 %2:// 开头</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="448"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="457"/>
         <source>Automatic</source>
         <translation>自动</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="449"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="458"/>
         <source>Text</source>
         <translation>文本</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="450"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="459"/>
         <source>Binary</source>
         <translation>二进制</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="884"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="888"/>
         <source>Ignore TLS Errors</source>
         <translation>忽略 TLS 错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="885"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="889"/>
         <source>Accept self-signed or mismatched certificates</source>
         <translation>接受自签名或不匹配的证书</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="910"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="914"/>
         <source>Socket Type</source>
         <translation>套接字类型</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="924"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="928"/>
         <source>Remote Address</source>
         <translation>远程地址</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="393"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="206"/>
         <source>TCP Port</source>
         <translation>TCP 端口</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkUdp.cpp" line="172"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkUdp.cpp" line="177"/>
         <source>UDP Local Port</source>
         <translation>UDP 本地端口</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkUdp.cpp" line="181"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkUdp.cpp" line="186"/>
         <source>UDP Remote Port</source>
         <translation>UDP 远程端口</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkUdp.cpp" line="190"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkUdp.cpp" line="195"/>
         <source>UDP Multicast</source>
         <translation>UDP 组播</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="75"/>
-        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="96"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="79"/>
+        <source>HTTP response truncated</source>
+        <translation>HTTP 响应被截断</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="80"/>
+        <source>%1 answered with more than %2 bytes</source>
+        <translation>%1 响应超过 %2 字节</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="100"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="122"/>
         <source>HTTP error</source>
         <translation>HTTP 错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="96"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="122"/>
         <source>The request could not be sent</source>
         <translation>请求无法发送</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="266"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="292"/>
         <source>HTTP source recovered</source>
         <translation>HTTP 源已恢复</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="266"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="292"/>
         <source>%1 is answering again</source>
         <translation>%1 再次响应</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="277"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="303"/>
         <source>HTTP poll failed</source>
         <translation>HTTP 轮询失败</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="296"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="322"/>
         <location filename="../../src/IO/Drivers/Network/NetworkWebSocket.cpp" line="216"/>
         <source>TLS verification bypassed</source>
         <translation>TLS 验证已绕过</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="297"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="323"/>
         <location filename="../../src/IO/Drivers/Network/NetworkWebSocket.cpp" line="217"/>
         <source>Continuing to %1 despite: %2</source>
         <translation>继续连接 %1，尽管存在：%2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="310"/>
-        <location filename="../../src/IO/Drivers/Network/NetworkWebSocket.cpp" line="249"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="337"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkWebSocket.cpp" line="250"/>
         <source>URL</source>
         <translation>URL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="311"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="338"/>
         <source>REST endpoint, for example %1</source>
         <translation>REST 端点，例如 %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="318"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="345"/>
         <source>Method</source>
         <translation>方法</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="326"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="353"/>
         <source>Poll Interval (ms)</source>
         <translation>轮询间隔 (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="327"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="354"/>
         <source>Use 0 to request only when data is sent</source>
         <translation>使用 0 表示仅在发送数据时请求</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="336"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="363"/>
         <source>Request Body</source>
         <translation>请求正文</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="343"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="370"/>
         <source>Request Headers</source>
         <translation>请求标头</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="344"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="371"/>
         <source>One %1 pair per line</source>
         <translation>每行一个 %1 对</translation>
     </message>
@@ -14440,12 +14916,12 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>远程对等端关闭了连接</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkWebSocket.cpp" line="250"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkWebSocket.cpp" line="251"/>
         <source>WebSocket endpoint, for example %1</source>
         <translation>WebSocket 端点，例如 %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkWebSocket.cpp" line="257"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkWebSocket.cpp" line="258"/>
         <source>Send Format</source>
         <translation>发送格式</translation>
     </message>
@@ -14453,7 +14929,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::OpcUa</name>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="338"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="335"/>
         <source>OPC UA Initialization Failed</source>
         <translation>OPC UA 初始化失败</translation>
     </message>
@@ -14462,29 +14938,29 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">此版本不支持 %1 后端。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="500"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="498"/>
         <source>OPC UA Connection Failed</source>
         <translation>OPC UA 连接失败</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="501"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="499"/>
         <source>Unable to connect to "%1".</source>
         <translation>无法连接到"%1"。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="502"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="648"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1290"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="500"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="646"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1291"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="518"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="516"/>
         <source>OPC UA Connection Lost</source>
         <translation>OPC UA 连接丢失</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="532"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="530"/>
         <source>Timed out after %1 s</source>
         <translation>在 %1 秒后超时</translation>
     </message>
@@ -14493,7 +14969,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">服务器关闭了连接</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="578"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="576"/>
         <source>The server closed the session</source>
         <translation>服务器关闭了会话</translation>
     </message>
@@ -14538,13 +15014,13 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">意外的后端错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="604"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="602"/>
         <source>"%1" is not a valid endpoint URL</source>
         <translation>"%1" 不是有效的端点 URL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="605"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1290"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="603"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1291"/>
         <source>OPC UA Discovery</source>
         <translation>OPC UA 发现</translation>
     </message>
@@ -14553,12 +15029,12 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">此版本不支持 %1 后端</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="647"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="645"/>
         <source>Discovery failed: %1</source>
         <translation>发现失败:%1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="648"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="646"/>
         <source>OPC UA Discovery Failed</source>
         <translation>OPC UA 发现失败</translation>
     </message>
@@ -14567,38 +15043,38 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">无 None 策略端点;此版本不支持安全通道</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="330"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="327"/>
         <source>The connection is not configured: check the endpoint and the tag list</source>
         <translation>连接未配置:请检查端点和标签列表</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="337"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="613"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="334"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="611"/>
         <source>The %1 stack is not available in this build</source>
         <translation>此版本不支持 %1 协议栈</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="376"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="373"/>
         <source>The connection attempt could not be started</source>
         <translation>无法启动连接尝试</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="390"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="387"/>
         <source>OPC UA Certificate</source>
         <translation>OPC UA 证书</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="391"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="388"/>
         <source>The client certificate could not be generated; secure channels will be refused.</source>
         <translation>无法生成客户端证书;安全通道将被拒绝。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="646"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="644"/>
         <source>The server did not answer within %1 s</source>
         <translation>服务器在 %1 秒内未响应</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="678"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="676"/>
         <source>Endpoint discovery failed</source>
         <translation>端点发现失败</translation>
     </message>
@@ -14663,38 +15139,38 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">无法在 %1 上打开浏览会话</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="738"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="736"/>
         <source>Failed to load generated project</source>
         <translation>加载生成的项目失败</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="739"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="737"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>无法加载生成的项目 JSON。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="753"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="751"/>
         <source>No tags selected</source>
         <translation>未选择标签</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="754"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="752"/>
         <source>Browse the server and select at least one tag before generating a project.</source>
         <translation>浏览服务器并至少选择一个标签后再生成项目。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="757"/>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="781"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="755"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="779"/>
         <source>OPC UA Project Generator</source>
         <translation>OPC UA 项目生成器</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="776"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="774"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>已成功生成包含 %1 个组和 %2 个数据集的项目。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="779"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="777"/>
         <source>The project editor is now open for customization.</source>
         <translation>项目编辑器现已打开以供自定义。</translation>
     </message>
@@ -14735,22 +15211,22 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">无效</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1518"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1519"/>
         <source>Security Policy</source>
         <translation>安全策略</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1526"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1527"/>
         <source>Security Mode</source>
         <translation>安全模式</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1534"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1535"/>
         <source>User Certificate</source>
         <translation>用户证书</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1541"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1542"/>
         <source>User Private Key</source>
         <translation>用户私钥</translation>
     </message>
@@ -14759,52 +15235,52 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">签名并加密</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="859"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="857"/>
         <source>Connecting to %1</source>
         <translation>正在连接到 %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="862"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="860"/>
         <source>Not connected</source>
         <translation>未连接</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="870"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="868"/>
         <source>Subscribing, %1 of %2 tags</source>
         <translation>正在订阅，%1/%2 个标签</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="875"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="873"/>
         <source>Subscribed %1 tags, polling %2 refused, %3 Hz</source>
         <translation>已订阅 %1 个标签，轮询 %2 个被拒绝，%3 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="881"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="879"/>
         <source>Polling (server refused subscriptions), %1 tags, %2 Hz</source>
         <translation>轮询中（服务器拒绝订阅），%1 个标签，%2 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="885"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="883"/>
         <source>Subscribed, %1 tags, %2 Hz</source>
         <translation>已订阅，%1 个标签，%2 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="915"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="913"/>
         <source>Anonymous</source>
         <translation>匿名</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="915"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="913"/>
         <source>Username / Password</source>
         <translation>用户名 / 密码</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="915"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="913"/>
         <source>X.509 Certificate</source>
         <translation>X.509 证书</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1289"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1290"/>
         <source>No endpoint this build can open with the selected identity</source>
         <translation>当前构建版本无法使用所选身份打开任何端点</translation>
     </message>
@@ -14829,27 +15305,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">无法解析服务器证书</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1480"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1481"/>
         <source>Endpoint URL</source>
         <translation>端点 URL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1487"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1488"/>
         <source>Authentication</source>
         <translation>身份验证</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1495"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1496"/>
         <source>Username</source>
         <translation>用户名</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1502"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1503"/>
         <source>Password</source>
         <translation>密码</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1509"/>
+        <location filename="../../src/IO/Drivers/OpcUa.cpp" line="1510"/>
         <source>Poll Interval (ms)</source>
         <translation>轮询间隔 (ms)</translation>
     </message>
@@ -14862,37 +15338,37 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>"%1" 不是有效的端点 URL。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="86"/>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="87"/>
         <source>The %1 stack is not available in this build.</source>
         <translation>此版本不支持 %1 协议栈。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="93"/>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="94"/>
         <source>The browse session was closed by the server</source>
         <translation>服务器关闭了浏览会话</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="104"/>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="105"/>
         <source>The browse session could not be started</source>
         <translation>无法启动浏览会话</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="172"/>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="173"/>
         <source>Endpoint discovery failed</source>
         <translation>端点发现失败</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="193"/>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="194"/>
         <source>Browse of %1 failed: %2</source>
         <translation>浏览 %1 失败：%2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="234"/>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="235"/>
         <source>Could not open a browse session on %1</source>
         <translation>无法在 %1 上打开浏览会话</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="255"/>
+        <location filename="../../src/IO/Drivers/OpcUa/OpcUaBrowser.cpp" line="256"/>
         <source>Timed out after %1 s</source>
         <translation>在 %1 秒后超时</translation>
     </message>
@@ -14923,6 +15399,14 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <location filename="../../src/IO/Drivers/OpcUa/OpcUaCertificateStore.cpp" line="246"/>
         <source>The server certificate could not be parsed</source>
         <translation>无法解析服务器证书</translation>
+    </message>
+</context>
+<context>
+    <name>IO::Drivers::OpcUaSession</name>
+    <message>
+        <location filename="../../src/IO/Drivers/OpcUaSession.cpp" line="709"/>
+        <source>Host not found</source>
+        <translation>未找到主机</translation>
     </message>
 </context>
 <context>
@@ -14998,118 +15482,118 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Process</name>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="200"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="248"/>
         <source>Failed to start process</source>
         <translation>启动进程失败</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="201"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="249"/>
         <source>Executable "%1" not found in PATH.</source>
         <translation>在 PATH 中未找到可执行文件"%1"。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="376"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="426"/>
         <source>Select Executable</source>
         <translation>选择可执行文件</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="400"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="450"/>
         <source>Select Working Directory</source>
         <translation>选择工作目录</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="425"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="475"/>
         <source>Select Named Pipe / FIFO</source>
         <translation>选择命名管道 / FIFO</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="523"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="617"/>
         <source>The process crashed.</source>
         <translation>进程已崩溃。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="524"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="618"/>
         <source>Exit code: %1</source>
         <translation>退出代码：%1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="532"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="623"/>
         <source>Process "%1" stopped</source>
         <translation>进程"%1"已停止</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="542"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="633"/>
         <source>Failed to start</source>
         <translation>启动失败</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="546"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="637"/>
         <source>Unknown error</source>
         <translation>未知错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="553"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="641"/>
         <source>Process Error</source>
         <translation>进程错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="567"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="655"/>
         <source>The pipe closed before the peer attached.</source>
         <translation>对端连接前管道已关闭</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="570"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="658"/>
         <source>Pipe Closed</source>
         <translation>管道已关闭</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="571"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="659"/>
         <source>The named pipe "%1" was closed on the other end.</source>
         <translation>命名管道"%1"已在另一端关闭。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="592"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="680"/>
         <source>Pipe Error</source>
         <translation>管道错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="589"/>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="592"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="677"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="680"/>
         <source>Could not open named pipe: %1</source>
         <translation>无法打开命名管道：%1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="833"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="921"/>
         <source>Mode</source>
         <translation>模式</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="836"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="924"/>
         <source>Launch Process</source>
         <translation>启动进程</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="836"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="924"/>
         <source>Named Pipe</source>
         <translation>命名管道</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="841"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="929"/>
         <source>Executable</source>
         <translation>可执行文件</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="848"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="936"/>
         <source>Arguments</source>
         <translation>参数</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="855"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="943"/>
         <source>Working Directory</source>
         <translation>工作目录</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="862"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="950"/>
         <source>Pipe Path</source>
         <translation>管道路径</translation>
     </message>
@@ -15117,128 +15601,128 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::S7</name>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="775"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="665"/>
         <source>The connection is not configured: check the host and the variable list</source>
         <translation>连接未配置：请检查主机和变量列表</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="797"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="706"/>
         <source>S7 Connection Failed</source>
         <translation>S7 连接失败</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="798"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="707"/>
         <source>"%1" (rack %2, slot %3): %4</source>
         <translation>"%1"（机架 %2，插槽 %3）：%4</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="802"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="711"/>
         <source>the controller did not answer</source>
         <translation>控制器未响应</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="845"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="754"/>
         <source>S7 Connection Lost</source>
         <translation>S7 连接丢失</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="916"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="825"/>
         <source>Not connected</source>
         <translation>未连接</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="919"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="828"/>
         <source>Polling %1 variables at %2 Hz</source>
         <translation>正在以 %2 Hz 轮询 %1 个变量</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="935"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="844"/>
         <source>invalid</source>
         <translation>无效</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="953"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="862"/>
         <source>The address could not be parsed.</source>
         <translation>无法解析地址。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1177"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1086"/>
         <source>S7 Address</source>
         <translation>S7 地址</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1228"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1137"/>
         <source>Host</source>
         <translation>主机</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1235"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1144"/>
         <source>Rack</source>
         <translation>机架</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1244"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1153"/>
         <source>Slot</source>
         <translation>插槽</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1253"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1162"/>
         <source>Poll Interval (ms)</source>
         <translation>轮询间隔 (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1373"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1282"/>
         <source>Siemens S7 Project</source>
         <translation>Siemens S7 项目</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1378"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1287"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1407"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1316"/>
         <source>DB%1</source>
         <translation>DB%1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1407"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1316"/>
         <source>Memory</source>
         <translation>存储器</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1438"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1347"/>
         <source>Failed to load generated project</source>
         <translation>加载生成的项目失败</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1439"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1348"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>无法加载生成的项目 JSON。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1453"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1362"/>
         <source>No variables configured</source>
         <translation>未配置变量</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1454"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1363"/>
         <source>Add at least one variable before generating a project.</source>
         <translation>生成项目前请至少添加一个变量。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1456"/>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1477"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1365"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1386"/>
         <source>S7 Project Generator</source>
         <translation>S7 项目生成器</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1474"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1383"/>
         <source>Successfully generated project with %1 datasets.</source>
         <translation>已成功生成包含 %1 个数据集的项目。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="1475"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="1384"/>
         <source>The project editor is now open for customization.</source>
         <translation>项目编辑器现已打开以供自定义。</translation>
     </message>
@@ -15246,27 +15730,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::S7PollWorker</name>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="183"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="150"/>
         <source>The ISO connection request could not be sent</source>
         <translation>无法发送 ISO 连接请求</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="189"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="156"/>
         <source>The controller refused the ISO connection: check the rack and slot numbers</source>
         <translation>控制器拒绝了 ISO 连接：请检查机架和插槽编号</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="208"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="175"/>
         <source>The controller did not answer the S7comm setup request</source>
         <translation>控制器未响应 S7comm 设置请求</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="214"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="181"/>
         <source>The controller refused the S7comm session</source>
         <translation>控制器拒绝了 S7comm 会话</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/S7.cpp" line="371"/>
+        <location filename="../../src/IO/Drivers/S7.cpp" line="318"/>
         <source>The controller closed the S7comm session</source>
         <translation>控制器关闭了 S7comm 会话</translation>
     </message>
@@ -15274,55 +15758,79 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::SeeedCanBackend</name>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="207"/>
+        <location filename="../../src/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="196"/>
         <source>The bitrate %1 bps is not supported by the USB-CAN Analyzer.</source>
         <translation>USB-CAN 分析仪不支持比特率 %1 bps。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="217"/>
         <source>Could not open serial port %1: %2</source>
-        <translation>无法打开串口 %1：%2</translation>
+        <translation type="vanished">无法打开串口 %1：%2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="228"/>
         <source>Failed to initialize the USB-CAN Analyzer.</source>
-        <translation>USB-CAN 分析仪初始化失败。</translation>
+        <translation type="vanished">USB-CAN 分析仪初始化失败。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="265"/>
+        <location filename="../../src/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="206"/>
         <source>USB-CAN Analyzer is not open for writing.</source>
         <translation>USB-CAN 分析仪未打开以进行写入。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="311"/>
+        <location filename="../../src/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="251"/>
         <source>CAN bus error reported by the USB-CAN Analyzer.</source>
         <translation>USB-CAN 分析仪报告 CAN 总线错误。</translation>
     </message>
 </context>
 <context>
-    <name>IO::Drivers::SlcanBackend</name>
+    <name>IO::Drivers::SerialCanBackendBase</name>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/SlcanBackend.cpp" line="167"/>
-        <source>The bitrate %1 bps is not a standard slcan rate.</source>
-        <translation>比特率 %1 bps 不是标准 slcan 速率。</translation>
-    </message>
-    <message>
-        <location filename="../../src/IO/Drivers/CANBus/SlcanBackend.cpp" line="177"/>
+        <location filename="../../src/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="190"/>
         <source>Could not open serial port %1: %2</source>
         <translation>无法打开串口 %1：%2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/SlcanBackend.cpp" line="190"/>
-        <source>Failed to open the slcan channel.</source>
-        <translation>slcan 通道打开失败。</translation>
+        <location filename="../../src/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="201"/>
+        <source>The adapter on %1 did not accept the initialization sequence.</source>
+        <translation>%1 上的适配器未接受初始化序列。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/SlcanBackend.cpp" line="229"/>
+        <location filename="../../src/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="211"/>
+        <source>The adapter on %1 refused the requested configuration.</source>
+        <translation>%1 上的适配器拒绝了请求的配置。</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="272"/>
+        <source>The serial adapter is gone</source>
+        <translation>串行适配器已断开</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="273"/>
+        <source>Lost the adapter on %1: %2</source>
+        <translation>%1 上的适配器丢失：%2</translation>
+    </message>
+</context>
+<context>
+    <name>IO::Drivers::SlcanBackend</name>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus/SlcanBackend.cpp" line="173"/>
+        <source>The bitrate %1 bps is not a standard slcan rate.</source>
+        <translation>比特率 %1 bps 不是标准 slcan 速率。</translation>
+    </message>
+    <message>
+        <source>Could not open serial port %1: %2</source>
+        <translation type="vanished">无法打开串口 %1：%2</translation>
+    </message>
+    <message>
+        <source>Failed to open the slcan channel.</source>
+        <translation type="vanished">slcan 通道打开失败。</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus/SlcanBackend.cpp" line="245"/>
         <source>slcan adapter is not open for writing.</source>
         <translation>slcan 适配器未打开以进行写入。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus/SlcanBackend.cpp" line="267"/>
+        <location filename="../../src/IO/Drivers/CANBus/SlcanBackend.cpp" line="283"/>
         <source>CAN bus error reported by the slcan adapter.</source>
         <translation>slcan 适配器报告 CAN 总线错误。</translation>
     </message>
@@ -15330,46 +15838,46 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::UART</name>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="102"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="103"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="435"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="474"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="104"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="105"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="436"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="475"/>
         <source>None</source>
         <translation>无</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="393"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="783"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="394"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="801"/>
         <source>Select Port</source>
         <translation>选择端口</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="436"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="437"/>
         <source>Even</source>
         <translation>偶校验</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="437"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="438"/>
         <source>Odd</source>
         <translation>奇校验</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="438"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="439"/>
         <source>Space</source>
         <translation>Space</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="439"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="440"/>
         <source>Mark</source>
         <translation>Mark</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="475"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="476"/>
         <source>RTS/CTS</source>
         <translation>RTS/CTS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="476"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="477"/>
         <source>XON/XOFF</source>
         <translation>XON/XOFF</translation>
     </message>
@@ -15384,133 +15892,143 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>请输入其他路径以注册自定义串行设备</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="895"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="910"/>
         <source>The specified device could not be found. Check the connection and try again.</source>
         <translation>找不到指定的设备。请检查连接并重试。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="902"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="917"/>
         <source>An unknown error occurred. Check the device and try again.</source>
         <translation>发生未知错误。请检查设备并重试。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="904"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="919"/>
         <source>The device is not open. Open the device before attempting this operation.</source>
         <translation>设备未打开。请在执行此操作前打开设备。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="306"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="307"/>
         <source>Failed to connect to serial port "%1"</source>
         <translation>连接到串行端口 "%1" 失败</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="285"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="548"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="287"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="549"/>
         <source>Failed to set baud rate</source>
         <translation>设置波特率失败</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="286"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="288"/>
         <source>Baud rate %1 rejected for port "%2": %3</source>
         <translation>端口"%2"拒绝波特率 %1:%3</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="549"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="550"/>
         <source>Baud rate %1 rejected: %2</source>
         <translation>波特率 %1 被拒绝：%2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="866"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="620"/>
+        <source>Serial device not registered</source>
+        <translation>串行设备未注册</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="622"/>
+        <source>"%1" is not a valid path; type another path to register a custom serial device.</source>
+        <translation>"%1" 不是有效路径；请输入其他路径以注册自定义串行设备。</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="883"/>
         <source>Unknown</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="867"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="884"/>
         <source>Critical error on serial port "%1"</source>
         <translation>串口"%1"发生严重错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="868"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="885"/>
         <source>Unknown error</source>
         <translation>未知错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="894"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="909"/>
         <source>No error occurred.</source>
         <translation>未发生错误。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="896"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="911"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
         <translation>权限被拒绝。请确保应用程序具有访问设备的必要权限。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="897"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="912"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
         <translation>打开设备失败。设备可能已被占用或不可用。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="898"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="913"/>
         <source>An error occurred while writing data to the device.</source>
         <translation>向设备写入数据时发生错误。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="899"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="914"/>
         <source>An error occurred while reading data from the device.</source>
         <translation>从设备读取数据时发生错误。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="900"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="915"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
         <translation>发生严重资源错误。设备可能已断开连接或不再可访问。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="901"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="916"/>
         <source>The requested operation is not supported on this device.</source>
         <translation>此设备不支持所请求的操作。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="903"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="918"/>
         <source>The operation timed out. The device may not be responding.</source>
         <translation>操作超时。设备可能未响应。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="992"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1007"/>
         <source>Serial Port</source>
         <translation>串口</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1000"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1015"/>
         <source>Baud Rate</source>
         <translation>波特率</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1008"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1023"/>
         <source>Parity</source>
         <translation>校验位</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1016"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1031"/>
         <source>Data Bits</source>
         <translation>数据位</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1024"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1039"/>
         <source>Stop Bits</source>
         <translation>停止位</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1032"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1047"/>
         <source>Flow Control</source>
         <translation>流控制</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1040"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1055"/>
         <source>DTR</source>
         <translation>DTR</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1047"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1062"/>
         <source>Auto-Reconnect</source>
         <translation>自动重连</translation>
     </message>
@@ -15518,26 +16036,26 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::USB</name>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="164"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="171"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="166"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="173"/>
         <source>USB Error</source>
         <translation>USB 错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="165"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="167"/>
         <source>Failed to initialize the USB subsystem. Check that libusb is available on your system.</source>
         <translation>初始化 USB 子系统失败。请检查系统中是否有 libusb。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="201"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="581"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1005"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1016"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="203"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="613"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1037"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1048"/>
         <source>USB Device Error</source>
         <translation>USB 设备错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="181"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="183"/>
         <source>Could not open the USB device: %1.
 
 On Linux, ensure you have read/write permission on the device node (add a udev rule or run as root). On macOS, the kernel driver may need to be detached first.</source>
@@ -15546,22 +16064,38 @@ On Linux, ensure you have read/write permission on the device node (add a udev r
 在 Linux 上,请确保您对设备节点具有读/写权限(添加 udev 规则或以 root 身份运行)。在 macOS 上,可能需要先分离内核驱动程序。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="171"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="173"/>
         <source>No USB device selected. Select a device and try again.</source>
         <translation>未选择 USB 设备。请选择设备后重试。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="176"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="178"/>
         <source>Unknown Device</source>
         <translation>未知设备</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="180"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="182"/>
         <source>Failed to open "%1"</source>
         <translation>打开"%1"失败</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="818"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="487"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="497"/>
+        <source>Advanced USB mode refused</source>
+        <translation>高级 USB 模式被拒绝</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="488"/>
+        <source>Advanced control transfers stay off until they are enabled from the USB setup pane: an incorrect control request can damage connected hardware.</source>
+        <translation>高级控制传输保持关闭状态，直到从 USB 设置面板启用：不正确的控制请求可能会损坏连接的硬件。</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="499"/>
+        <source>This project asked for advanced control transfers. Enable them from the USB setup pane if that is what you want.</source>
+        <translation>此项目请求了高级控制传输。如果需要，请从 USB 设置面板启用。</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="850"/>
         <source>No isochronous IN endpoint was found on this device, but bulk or interrupt endpoints are available.
 
 Switch the Transfer Mode to "Bulk/Interrupt Stream" and try again.</source>
@@ -15570,7 +16104,7 @@ Switch the Transfer Mode to "Bulk/Interrupt Stream" and try again.</source>
 将传输模式切换为"批量/中断流"并重试。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="823"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="855"/>
         <source>No bulk or interrupt IN endpoint was found on this device, but isochronous endpoints are available.
 
 Switch the Transfer Mode to "Isochronous" and try again.</source>
@@ -15579,7 +16113,7 @@ Switch the Transfer Mode to "Isochronous" and try again.</source>
 将传输模式切换为"同步"并重试。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="827"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="859"/>
         <source>No usable IN endpoint was found on this device.
 
 The device may not expose data endpoints in its active configuration, or it may speak a dedicated protocol. Protocol adapters (e.g. CAN or Modbus interfaces) should be connected through their own driver.</source>
@@ -15588,7 +16122,7 @@ The device may not expose data endpoints in its active configuration, or it may 
 该设备可能未在其活动配置中公开数据端点,或者可能使用专用协议。协议适配器(例如 CAN 或 Modbus 接口)应通过其自己的驱动程序连接。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1006"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1038"/>
         <source>Could not claim interface %1 on the USB device.
 
 Another driver or application may already have it open. On Linux, try unloading the kernel driver (e.g. cdc_acm) or adding a udev rule.</source>
@@ -15597,102 +16131,99 @@ Another driver or application may already have it open. On Linux, try unloading 
 另一个驱动程序或应用程序可能已打开它。在 Linux 上,请尝试卸载内核驱动程序(例如 cdc_acm)或添加 udev 规则。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1017"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1049"/>
         <source>Could not activate alternate setting %1 on interface %2. The selected endpoint is not reachable.</source>
         <translation>无法在接口 %2 上激活备用设置 %1。所选端点不可达。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1047"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1079"/>
         <source>USB Device Warning</source>
         <translation>USB 设备警告</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1048"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1080"/>
         <source>The selected OUT endpoint could not be activated. Continuing in read-only mode.</source>
         <translation>无法激活所选 OUT 端点。将以只读模式继续。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1077"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1109"/>
         <source>No device connected in Advanced Control mode.</source>
         <translation>高级控制模式下未连接设备。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1082"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1114"/>
         <source>A control transfer is already in progress.</source>
         <translation>控制传输正在进行中。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1092"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1124"/>
         <source>Invalid setup field: request type, request, wValue, and wIndex must be hex.</source>
         <translation>设置字段无效：请求类型、请求、wValue 和 wIndex 必须为十六进制。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1102"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1134"/>
         <source>Invalid data payload: expected a sequence of hex bytes.</source>
         <translation>数据负载无效：应为十六进制字节序列。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1108"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1140"/>
         <source>Invalid transfer length (0-%1 bytes).</source>
         <translation>传输长度无效（0-%1 字节）。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1123"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1155"/>
         <source>Could not allocate the control transfer.</source>
         <translation>无法分配控制传输。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1128"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1160"/>
         <source>Failed to submit control transfer: %1.</source>
         <translation>提交控制传输失败：%1。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="606"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="638"/>
         <source>Transfer complete: %1 byte(s).</source>
         <translation>传输完成：%1 字节。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="608"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="640"/>
         <source>Control transfer failed: %1.</source>
         <translation>控制传输失败：%1。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="348"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="373"/>
         <source>Select Device</source>
         <translation>选择设备</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="370"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="395"/>
         <source>No Usable IN Endpoints</source>
         <translation>无可用 IN 端点</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="372"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="397"/>
         <source>Select IN Endpoint</source>
         <translation>选择 IN 端点</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="384"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="409"/>
         <source>None (Read-only)</source>
         <translation>无(只读)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="459"/>
         <source>Enable Advanced USB Control Transfers?</source>
-        <translation>启用高级 USB 控制传输？</translation>
+        <translation type="vanished">启用高级 USB 控制传输？</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="460"/>
         <source>This enables control transfers in addition to bulk transfers. Sending incorrect control requests can crash or damage connected hardware. Only enable this if you know what you are doing.</source>
-        <translation>这将在批量传输之外启用控制传输。发送不正确的控制请求可能会导致连接的硬件崩溃或损坏。仅在了解相关操作的情况下启用此功能。</translation>
+        <translation type="vanished">这将在批量传输之外启用控制传输。发送不正确的控制请求可能会导致连接的硬件崩溃或损坏。仅在了解相关操作的情况下启用此功能。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="464"/>
         <source>Advanced USB Mode</source>
-        <translation>高级 USB 模式</translation>
+        <translation type="vanished">高级 USB 模式</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="582"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="614"/>
         <source>The USB device was disconnected or encountered a fatal read error.</source>
         <translation>USB 设备已断开连接或遇到严重读取错误。</translation>
     </message>
@@ -15721,12 +16252,12 @@ The device may not expose data endpoints in its active configuration, or it may 
 该设备可能未在其活动配置中公开数据端点，或者可能需要特定驱动程序。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1257"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1289"/>
         <source>USB Device</source>
         <translation>USB 设备</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1265"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1297"/>
         <source>Transfer Mode</source>
         <translation>传输模式</translation>
     </message>
@@ -15735,32 +16266,32 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation type="vanished">批量流</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1268"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1300"/>
         <source>Advanced Control</source>
         <translation>高级控制</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1268"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1300"/>
         <source>Isochronous</source>
         <translation>同步</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1268"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1300"/>
         <source>Bulk/Interrupt Stream</source>
         <translation>批量/中断流</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1273"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1305"/>
         <source>IN Endpoint</source>
         <translation>IN 端点</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1281"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1313"/>
         <source>OUT Endpoint</source>
         <translation>OUT 端点</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1289"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1321"/>
         <source>ISO Packet Size</source>
         <translation>ISO 数据包大小</translation>
     </message>
@@ -15823,49 +16354,49 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation>正在开始 %1 传输…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="614"/>
-        <location filename="../../src/IO/FileTransmission.cpp" line="636"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="615"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="637"/>
         <source>Transmission complete</source>
         <translation>传输完成</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="616"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="617"/>
         <source>Plain text transmission complete</source>
         <translation>纯文本传输完成</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="638"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="639"/>
         <source>Raw binary transmission complete (%1 bytes)</source>
         <translation>原始二进制传输完成（%1 字节）</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="662"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="663"/>
         <source>Transfer complete</source>
         <translation>传输完成</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="663"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="664"/>
         <source>Transfer completed successfully (%1 bytes)</source>
         <translation>传输成功完成（%1 字节）</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="665"/>
         <location filename="../../src/IO/FileTransmission.cpp" line="666"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="667"/>
         <source>Transfer failed: %1</source>
         <translation>传输失败：%1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="751"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="756"/>
         <source>%1 B/s</source>
         <translation>%1 B/s</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="753"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="758"/>
         <source>%1 KB/s</source>
         <translation>%1 KB/s</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="755"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="760"/>
         <source>%1 MB/s</source>
         <translation>%1 MB/s</translation>
     </message>
@@ -15906,7 +16437,7 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation>等待接收方…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="204"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="207"/>
         <source>Receiver ready (CRC mode), sending data…</source>
         <translation>接收方就绪（CRC 模式），正在发送数据…</translation>
     </message>
@@ -15921,64 +16452,64 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation>超过最大重试次数</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="144"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="145"/>
         <source>NAK received, retrying block %1 (%2/%3)</source>
         <translation>收到 NAK，正在重试数据块 %1 (%2/%3)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="152"/>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="388"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="153"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="392"/>
         <source>Failed to seek in file</source>
         <translation>文件定位失败</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="162"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="165"/>
         <source>Transfer cancelled by receiver</source>
         <translation>传输已被接收方取消</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="163"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="166"/>
         <source>Receiver cancelled the transfer</source>
         <translation>接收方取消了传输</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="177"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="180"/>
         <source>Transfer complete</source>
         <translation>传输完成</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="288"/>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="300"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="291"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="303"/>
         <source>File read error</source>
         <translation>文件读取错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="309"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="312"/>
         <source>File read returned more data than requested</source>
         <translation>文件读取返回的数据超过请求量</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="323"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="326"/>
         <source>Sending block %1 (%2 bytes)</source>
         <translation>正在发送数据块 %1（%2 字节）</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="336"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="339"/>
         <source>Sending EOT…</source>
         <translation>正在发送 EOT…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="379"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="383"/>
         <source>Timeout, retrying (%1/%2)…</source>
         <translation>超时，正在重试 (%1/%2)…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="374"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="377"/>
         <source>Transfer timed out</source>
         <translation>传输超时</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="375"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="378"/>
         <source>Timeout: no response from receiver</source>
         <translation>超时：接收方无响应</translation>
     </message>
@@ -15986,96 +16517,96 @@ The device may not expose data endpoints in its active configuration, or it may 
 <context>
     <name>IO::Protocols::YMODEM</name>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="62"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="72"/>
         <source>Cannot open file: %1</source>
         <translation>无法打开文件：%1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="97"/>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="176"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="107"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="187"/>
         <source>Transfer cancelled by receiver</source>
         <translation>接收方取消传输</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="98"/>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="177"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="108"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="188"/>
         <source>Receiver cancelled the transfer</source>
         <translation>接收方已取消传输</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="74"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="84"/>
         <source>Waiting for receiver…</source>
         <translation>等待接收方…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="135"/>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="326"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="145"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="337"/>
         <source>Sending first EOT…</source>
         <translation>发送第一个 EOT…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="153"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="163"/>
         <source>Too many retries, transfer aborted</source>
         <translation>重试次数过多，传输已中止</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="154"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="164"/>
         <source>Maximum retries exceeded</source>
         <translation>超出最大重试次数</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="158"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="169"/>
         <source>NAK received, retrying block %1</source>
         <translation>收到 NAK，正在重试数据块 %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="164"/>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="385"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="175"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="397"/>
         <source>Failed to seek in file</source>
         <translation>文件定位失败</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="224"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="235"/>
         <source>Sending second EOT…</source>
         <translation>正在发送第二个 EOT…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="303"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="314"/>
         <source>Sending end-of-batch marker…</source>
         <translation>正在发送批次结束标记…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="367"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="378"/>
         <source>Transfer timed out</source>
         <translation>传输超时</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="368"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="379"/>
         <source>Timeout: no response from receiver</source>
         <translation>超时：接收方无响应</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="372"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="384"/>
         <source>Timeout, retrying (%1/%2)…</source>
         <translation>超时，正在重试 (%1/%2)…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="246"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="257"/>
         <source>Transfer complete</source>
         <translation>传输完成</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="288"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="299"/>
         <source>Sending file header: %1 (%2 bytes)</source>
         <translation>正在发送文件头：%1（%2 字节）</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="321"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="332"/>
         <source>File read error</source>
         <translation>文件读取错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="340"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="351"/>
         <source>Sending block %1 (%2/%3 bytes)</source>
         <translation>正在发送数据块 %1（%2/%3 字节）</translation>
     </message>
@@ -16083,128 +16614,128 @@ The device may not expose data endpoints in its active configuration, or it may 
 <context>
     <name>IO::Protocols::ZMODEM</name>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="87"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="88"/>
         <source>Cannot open file: %1</source>
         <translation>无法打开文件：%1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="104"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="105"/>
         <source>File is too large for ZMODEM (%1 bytes, limit 4 GiB).</source>
         <translation>文件对于 ZMODEM 过大（%1 字节，限制 4 GiB）。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="129"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="130"/>
         <source>Transfer cancelled</source>
         <translation>传输已取消</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="130"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="131"/>
         <source>Transfer cancelled by user</source>
         <translation>用户已取消传输</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="270"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="271"/>
         <source>Hex header CRC mismatch, dropping frame</source>
         <translation>十六进制头 CRC 不匹配，丢弃帧</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="445"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="446"/>
         <source>Sending file info: %1 (%2 bytes)</source>
         <translation>正在发送文件信息：%1（%2 字节）</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="460"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="469"/>
         <source>Failed to seek to offset %1</source>
         <translation>无法定位到偏移量 %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="486"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="495"/>
         <source>File read error: %1</source>
         <translation>文件读取错误：%1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="491"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="500"/>
         <source>File read returned more data than requested</source>
         <translation>文件读取返回的数据超过请求量</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="578"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="593"/>
         <source>Receiver requests data from offset %1</source>
         <translation>接收方请求从偏移量 %1 开始的数据</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="587"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="602"/>
         <source>Receiver skipped the file</source>
         <translation>接收方跳过了该文件</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="599"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="615"/>
         <source>Too many errors, transfer aborted</source>
         <translation>错误过多，传输已中止</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="600"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="616"/>
         <source>Maximum retries exceeded</source>
         <translation>超过最大重试次数</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="421"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="422"/>
         <source>Sending ZRQINIT, waiting for receiver…</source>
         <translation>正在发送 ZRQINIT，等待接收方…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="517"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="532"/>
         <source>File data sent, waiting for confirmation…</source>
         <translation>文件数据已发送，等待确认…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="528"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="543"/>
         <source>Sending ZFIN…</source>
         <translation>正在发送 ZFIN…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="568"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="583"/>
         <source>Receiver ready, sending file info…</source>
         <translation>接收方就绪，正在发送文件信息…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="604"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="621"/>
         <source>NAK received, retrying (%1/%2)…</source>
         <translation>收到 NAK，正在重试 (%1/%2)…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="625"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="642"/>
         <source>Transfer complete</source>
         <translation>传输完成</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="635"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="652"/>
         <source>Transfer cancelled by receiver</source>
         <translation>接收方取消传输</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="636"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="653"/>
         <source>Receiver cancelled the transfer</source>
         <translation>接收方取消了传输</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="644"/>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="645"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="661"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="662"/>
         <source>Receiver reported a file error</source>
         <translation>接收方报告文件错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="825"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="842"/>
         <source>Transfer timed out</source>
         <translation>传输超时</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="826"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="843"/>
         <source>Timeout: no response from receiver</source>
         <translation>超时：接收方无响应</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="830"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="848"/>
         <source>Timeout, retrying (%1/%2)…</source>
         <translation>超时，正在重试 (%1/%2)…</translation>
     </message>
@@ -16406,7 +16937,7 @@ The device may not expose data endpoints in its active configuration, or it may 
 <context>
     <name>InfluxDB::Export</name>
     <message>
-        <location filename="../../src/InfluxDB/Export.cpp" line="752"/>
+        <location filename="../../src/InfluxDB/Export.cpp" line="781"/>
         <source>Refused an insecure InfluxDB URL: use https, or http only for a loopback host</source>
         <translation>拒绝不安全的 InfluxDB URL:请使用 https,或仅对回环主机使用 http</translation>
     </message>
@@ -16414,17 +16945,17 @@ The device may not expose data endpoints in its active configuration, or it may 
 <context>
     <name>InfluxDB::ExportWorker</name>
     <message>
-        <location filename="../../src/InfluxDB/Export.cpp" line="346"/>
+        <location filename="../../src/InfluxDB/Export.cpp" line="361"/>
         <source>The write request could not be sent</source>
         <translation>写入请求无法发送</translation>
     </message>
     <message>
-        <location filename="../../src/InfluxDB/Export.cpp" line="384"/>
+        <location filename="../../src/InfluxDB/Export.cpp" line="422"/>
         <source>Server answered HTTP %1</source>
         <translation>服务器返回 HTTP %1</translation>
     </message>
     <message>
-        <location filename="../../src/InfluxDB/Export.cpp" line="416"/>
+        <location filename="../../src/InfluxDB/Export.cpp" line="420"/>
         <source>TLS verification failed: %1</source>
         <translation>TLS 验证失败:%1</translation>
     </message>
@@ -16513,8 +17044,12 @@ The device may not expose data endpoints in its active configuration, or it may 
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/InfluxSinkView.qml" line="259"/>
+        <source>Points are written to the InfluxDB 2.x HTTP API with nanosecond precision. The token is stored obfuscated in this machine's settings and never saved into the project file.</source>
+        <translation>数据点以纳秒精度写入 InfluxDB 2.x HTTP API。令牌在本机设置中混淆存储，不会保存到项目文件中。</translation>
+    </message>
+    <message>
         <source>Points are written to the InfluxDB 2.x HTTP API with nanosecond precision. The token is stored encrypted on this machine and never saved into the project file.</source>
-        <translation>数据点以纳秒精度写入 InfluxDB 2.x HTTP API。令牌在本机加密存储，不会保存到项目文件中。</translation>
+        <translation type="vanished">数据点以纳秒精度写入 InfluxDB 2.x HTTP API。令牌在本机加密存储，不会保存到项目文件中。</translation>
     </message>
 </context>
 <context>
@@ -16539,9 +17074,8 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation>Google Gemini。默认为 Gemini 2.0 Flash,提供慷慨的免费额度(受速率限制)。也可使用 Gemini 1.5 Pro 和 Gemini 1.5 Flash。</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="100"/>
         <source>Bring your own API keys. They are encrypted at rest with a per-machine key and never leave your computer except to communicate with the provider you select.</source>
-        <translation>使用您自己的 API 密钥。密钥在本地使用每台机器的密钥加密存储,除了与您选择的提供商通信外,不会离开您的计算机。</translation>
+        <translation type="vanished">使用您自己的 API 密钥。密钥在本地使用每台机器的密钥加密存储,除了与您选择的提供商通信外,不会离开您的计算机。</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="166"/>
@@ -16586,6 +17120,11 @@ The device may not expose data endpoints in its active configuration, or it may 
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="78"/>
         <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp's llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
         <translation>本地模型服务器。兼容任何 OpenAI 端点 -- Ollama、llama.cpp 的 llama-server、LM Studio 或 vLLM。数据不离开本机。模型列表从服务器实时查询。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="100"/>
+        <source>Bring your own API keys. They are stored obfuscated in this machine's settings and never leave your computer except to communicate with the provider you select.</source>
+        <translation>使用您自己的 API 密钥。密钥在本机设置中混淆存储，除了与您选择的提供商通信外，不会离开您的计算机。</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="204"/>
@@ -16653,7 +17192,17 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation>重新查询模型列表</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="357"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="330"/>
+        <source>Context window</source>
+        <translation>上下文窗口</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="339"/>
+        <source>Tokens the model accepts, e.g. 8192</source>
+        <translation>模型接受的令牌数，例如 8192</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="387"/>
         <source>No API keys configured yet. Add a key to get started.</source>
         <translation>尚未配置 API 密钥。请添加密钥以开始使用。</translation>
     </message>
@@ -16662,12 +17211,12 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation type="vanished">尚未配置 API 密钥。请在上方至少添加一个以开始使用。</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="360"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="390"/>
         <source>One provider is ready.</source>
         <translation>一个提供商已就绪。</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="362"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="392"/>
         <source>%1 providers are ready.</source>
         <translation>%1 个提供商已就绪。</translation>
     </message>
@@ -16875,129 +17424,214 @@ Yearly is the best value; Monthly and Lifetime plans are also available.</source
 <context>
     <name>Licensing::LemonSqueezy</name>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="559"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="595"/>
         <source>There was an issue validating your license.</source>
         <translation>验证许可证时出现问题。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="577"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="771"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="891"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="614"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="818"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="950"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>您提供的许可证密钥不属于 Serial Studio。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="578"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="615"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>请仔细检查您是否从 Serial Studio 官方商店购买了许可证。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="590"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="781"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="628"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="829"/>
         <source>This license key was activated on a different device.</source>
         <translation>此许可证密钥已在其他设备上激活。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="591"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="782"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="629"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="830"/>
         <source>Deactivate it there first or contact support for help.</source>
         <translation>请先在该设备上停用或联系支持寻求帮助。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="602"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="792"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="641"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="841"/>
         <source>This license is not currently active.</source>
         <translation>此许可证当前未激活。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="603"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="793"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="642"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="842"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>可能已过期或已停用(状态：%1)。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="613"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="653"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="852"/>
         <source>Something went wrong on the server.</source>
         <translation>服务器发生错误。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="614"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="803"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="654"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="853"/>
         <source>No activation ID was returned.</source>
         <translation>未返回激活 ID。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="624"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="665"/>
         <source>Could not validate your license at this time.</source>
         <translation>目前无法验证许可证。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="625"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="812"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="901"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="666"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="863"/>
         <source>Try again later.</source>
         <translation>请稍后重试。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="772"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="892"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="819"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="951"/>
         <source>Double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>请仔细检查您是否从 Serial Studio 官方商店购买了许可证。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="802"/>
         <source>Something went wrong on the server…</source>
-        <translation>服务器出现问题…</translation>
+        <translation type="vanished">服务器出现问题…</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="653"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="695"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="651"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="693"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="708"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="218"/>
+        <source>The license key format is not valid.</source>
+        <translation>许可证密钥格式无效。</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="223"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="346"/>
+        <source>Another licensing request is already running.</source>
+        <translation>另一个许可请求正在运行。</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="335"/>
+        <source>The offline certificate was kept on this device.</source>
+        <translation>离线证书已保留在此设备上。</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="341"/>
+        <source>No online license is active on this device.</source>
+        <translation>此设备上没有激活的在线许可证。</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="568"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="881"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="919"/>
+        <source>The activation server could not be reached.</source>
+        <translation>无法访问激活服务器。</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="620"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="822"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="953"/>
+        <source>This license key does not belong to Serial Studio.</source>
+        <translation>此许可证密钥不属于 Serial Studio。</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="633"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="833"/>
+        <source>This license key is activated on a different device.</source>
+        <translation>此许可证密钥已在其他设备上激活。</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="646"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="846"/>
+        <source>The license is not active (status: %1).</source>
+        <translation>许可证未激活（状态：%1）。</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="658"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="856"/>
+        <source>The server returned no activation ID.</source>
+        <translation>服务器未返回激活 ID。</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="670"/>
+        <source>The server could not validate this license.</source>
+        <translation>服务器无法验证此许可证。</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="751"/>
         <source>Your license has been successfully activated.</source>
         <translation>许可证已成功激活。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="709"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="752"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>感谢您支持 Serial Studio！
 现在可以使用所有高级功能。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="763"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="773"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="890"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="927"/>
+        <source>The server response could not be read.</source>
+        <translation>无法读取服务器响应。</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="779"/>
+        <source>The server returned an empty response.</source>
+        <translation>服务器返回了空响应。</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="809"/>
         <source>There was an issue activating your license.</source>
         <translation>激活许可证时出现问题。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="811"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="862"/>
         <source>Could not activate your license at this time.</source>
         <translation>目前无法激活许可证。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="883"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="866"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="896"/>
+        <source>The server refused to activate this license.</source>
+        <translation>服务器拒绝激活此许可证。</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="942"/>
         <source>There was an issue deactivating your license.</source>
         <translation>停用许可证时出现问题。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="900"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="959"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>当前无法停用您的许可证。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="909"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="960"/>
+        <source>Try again later. Your seat is still in use.</source>
+        <translation>请稍后重试。您的席位仍在使用中。</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="962"/>
+        <source>The server did not release this device's seat.</source>
+        <translation>服务器未释放此设备的席位。</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="969"/>
         <source>Your license has been deactivated.</source>
         <translation>您的许可证已停用。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="910"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="970"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>Pro 功能访问权限已移除。
@@ -17007,7 +17641,7 @@ Thank you again for supporting Serial Studio!</source>
 <context>
     <name>Licensing::OfflineLicense</name>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="188"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="193"/>
         <source>Remove the offline license from this device?</source>
         <translation>从此设备移除离线许可证？</translation>
     </message>
@@ -17020,32 +17654,32 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
 要在其他设备上重新使用此席位，请将您的设备 ID 或 .ssmachine 文件发送至 alex@serial-studio.com，以便手动释放席位。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="189"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="194"/>
         <source>This does not free your license seat, because deactivations cannot be verified on offline devices. You can reactivate this device with the same license file as long as its machine ID does not change.</source>
         <translation>这不会释放您的许可证席位，因为离线设备无法验证停用操作。只要设备的机器 ID 不变，您可以使用相同的许可证文件重新激活此设备。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="193"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="198"/>
         <source>Offline Activation</source>
         <translation>离线激活</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="215"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="220"/>
         <source>Could not open the certificate file.</source>
         <translation>无法打开证书文件。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="222"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="227"/>
         <source>The certificate file is too large to be valid.</source>
         <translation>证书文件过大,无效。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="249"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="254"/>
         <source>Could not write the device file.</source>
         <translation>无法写入设备文件。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/OfflineLicense.cpp" line="287"/>
+        <location filename="../../src/Licensing/OfflineLicense.cpp" line="292"/>
         <source>The stored certificate could not be decrypted on this machine.</source>
         <translation>存储的证书无法在此计算机上解密。</translation>
     </message>
@@ -17053,55 +17687,63 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
 <context>
     <name>MDF4::Export</name>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="765"/>
+        <location filename="../../src/MDF4/Export.cpp" line="712"/>
         <source>MDF4 Export is a Pro feature.</source>
         <translation>MDF4 导出是 Pro 功能。</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="766"/>
+        <location filename="../../src/MDF4/Export.cpp" line="713"/>
+        <source>Activate Serial Studio Pro or start the free trial to enable MDF4 export.</source>
+        <translation>激活 Serial Studio Pro 或开始免费试用以启用 MDF4 导出。</translation>
+    </message>
+    <message>
         <source>This feature requires a license. Please purchase one to enable MDF4 export.</source>
-        <translation>此功能需要许可证。请购买许可证以启用 MDF4 导出。</translation>
+        <translation type="vanished">此功能需要许可证。请购买许可证以启用 MDF4 导出。</translation>
     </message>
 </context>
 <context>
     <name>MDF4::Player</name>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="248"/>
+        <location filename="../../src/MDF4/Player.cpp" line="241"/>
         <source>Select MDF4 file</source>
         <translation>选择 MDF4 文件</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="250"/>
+        <location filename="../../src/MDF4/Player.cpp" line="243"/>
         <source>MDF4 files (*.mf4 *.dat)</source>
         <translation>MDF4 文件 (*.mf4 *.dat)</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="281"/>
+        <location filename="../../src/MDF4/Player.cpp" line="274"/>
         <source>MDF4 Playback is a Pro feature.</source>
         <translation>MDF4 回放是 Pro 功能。</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="282"/>
         <source>This feature requires a license. Please purchase one to enable MDF4 playback.</source>
-        <translation>此功能需要许可证。请购买许可证以启用 MDF4 回放。</translation>
+        <translation type="vanished">此功能需要许可证。请购买许可证以启用 MDF4 回放。</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="289"/>
+        <location filename="../../src/MDF4/Player.cpp" line="275"/>
+        <source>Activate Serial Studio Pro or start the free trial to enable MDF4 playback.</source>
+        <translation>激活 Serial Studio Pro 或开始免费试用以启用 MDF4 回放。</translation>
+    </message>
+    <message>
+        <location filename="../../src/MDF4/Player.cpp" line="282"/>
         <source>Disconnect from device?</source>
         <translation>断开设备连接？</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="290"/>
+        <location filename="../../src/MDF4/Player.cpp" line="283"/>
         <source>You must disconnect from the current device before opening a MDF4 file.</source>
         <translation>打开 MDF4 文件前必须断开当前设备连接。</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="508"/>
+        <location filename="../../src/MDF4/Player.cpp" line="505"/>
         <source>MDF4 data may be incomplete</source>
         <translation>MDF4 数据可能不完整</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="509"/>
+        <location filename="../../src/MDF4/Player.cpp" line="506"/>
         <source>Part of the file's data section could not be read; the recording may be truncated.</source>
         <translation>无法读取文件数据段的部分内容；录制可能已被截断。</translation>
     </message>
@@ -17122,12 +17764,12 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
         <translation type="vanished">读取文件结构失败。文件可能已损坏。</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="480"/>
+        <location filename="../../src/MDF4/Player.cpp" line="477"/>
         <source>No data in file</source>
         <translation>文件中无数据</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="481"/>
+        <location filename="../../src/MDF4/Player.cpp" line="478"/>
         <source>The MDF4 file contains no measurement data.</source>
         <translation>MDF4 文件不包含测量数据。</translation>
     </message>
@@ -17537,149 +18179,149 @@ Please provide the necessary credentials.</source>
 <context>
     <name>MQTT::Publisher</name>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="160"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="163"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="161"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="164"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="162"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="165"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="164"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="167"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="165"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="168"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="166"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="169"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3 或更高版本</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="167"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="170"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2 或更高版本</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="168"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="171"/>
         <source>Any Protocol</source>
         <translation>任意协议</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="169"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="172"/>
         <source>Secure Protocols Only</source>
         <translation>仅安全协议</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="171"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="174"/>
         <source>None</source>
         <translation>无</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="172"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="175"/>
         <source>Query Peer</source>
         <translation>查询对等方</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="173"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="176"/>
         <source>Verify Peer</source>
         <translation>验证对等方</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="174"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="177"/>
         <source>Auto Verify Peer</source>
         <translation>自动验证对等方</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="155"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="158"/>
         <source>Raw RX Data</source>
         <translation>原始 RX 数据</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="156"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="159"/>
         <source>Custom Script</source>
         <translation>自定义脚本</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="157"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="160"/>
         <source>Dashboard Data (CSV)</source>
         <translation>仪表板数据 (CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="158"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="161"/>
         <source>Dashboard Data (JSON)</source>
         <translation>仪表板数据 (JSON)</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="643"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="646"/>
         <source>MQTT publisher unavailable</source>
         <translation>MQTT 发布器不可用</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="644"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="647"/>
         <source>A valid commercial license is required to use MQTT publishing.</source>
         <translation>使用 MQTT 发布功能需要有效的商业许可证。</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="646"/>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1355"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="649"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1365"/>
         <source>MQTT Test Connection</source>
         <translation>MQTT 测试连接</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="667"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="670"/>
         <source>Select PEM Certificates Directory</source>
         <translation>选择 PEM 证书目录</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="704"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="707"/>
         <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
         <translation>PEM 文件 (*.pem *.crt *.cer *.key);;所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="730"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="733"/>
         <source>Select Client Certificate</source>
         <translation>选择客户端证书</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="738"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="741"/>
         <source>Select Private Key</source>
         <translation>选择私钥</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1352"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1362"/>
         <source>MQTT broker reachable</source>
         <translation>MQTT 代理可达</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1352"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1362"/>
         <source>MQTT broker unreachable</source>
         <translation>MQTT 代理不可达</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1366"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1376"/>
         <source>MQTT broker connection failed</source>
         <translation>MQTT 代理连接失败</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1366"/>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1526"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1376"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1536"/>
         <source>MQTT Publisher</source>
         <translation>MQTT 发布者</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1523"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1533"/>
         <source>MQTT Client Certificate Error</source>
         <translation>MQTT 客户端证书错误</translation>
     </message>
@@ -17687,92 +18329,92 @@ Please provide the necessary credentials.</source>
 <context>
     <name>MQTT::PublisherScriptEditor</name>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="55"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="56"/>
         <source>MQTT Publisher Script</source>
         <translation>MQTT 发布者脚本</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="93"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="94"/>
         <source>JavaScript</source>
         <translation>JavaScript</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="93"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="94"/>
         <source>Lua</source>
         <translation>Lua</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="99"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="100"/>
         <source>Sample frame bytes (text or hex)</source>
         <translation>示例帧字节(文本或十六进制)</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="104"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="105"/>
         <source>Hex</source>
         <translation>十六进制</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="105"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="106"/>
         <source>Test</source>
         <translation>测试</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="106"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="107"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="108"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="109"/>
         <source>Apply</source>
         <translation>应用</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="109"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="110"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="118"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="119"/>
         <source>Language:</source>
         <translation>语言：</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="121"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="122"/>
         <source>Template:</source>
         <translation>模板：</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="132"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="133"/>
         <source>Frame:</source>
         <translation>帧：</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="136"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="137"/>
         <source>Output:</source>
         <translation>输出：</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="274"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="275"/>
         <source>Enter a frame</source>
         <translation>输入帧</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="281"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="282"/>
         <source>Invalid hex</source>
         <translation>无效的十六进制</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="364"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="365"/>
         <source>Format Document	Ctrl+Shift+I</source>
         <translation>格式化文档	Ctrl+Shift+I</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="365"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="366"/>
         <source>Format Selection	Ctrl+I</source>
         <translation>格式化选区	Ctrl+I</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="505"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="506"/>
         <source>--
 -- Define a mqtt(frame) function that receives the raw bytes
 -- of one parsed frame and returns the payload to publish to
@@ -17809,7 +18451,7 @@ Please provide the necessary credentials.</source>
 </translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="522"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="523"/>
         <source>/*
  * Define a mqtt(frame) function that receives the raw bytes
  * of one parsed frame and returns the payload to publish to
@@ -17844,46 +18486,61 @@ Please provide the necessary credentials.</source>
 </translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="621"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="610"/>
         <source>Script is empty</source>
         <translation>脚本为空</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="628"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="618"/>
         <source>Lua engine error</source>
         <translation>Lua 引擎错误</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="651"/>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="665"/>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="689"/>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="703"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="627"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="639"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="668"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="687"/>
         <source>Error: %1</source>
         <translation>错误：%1</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="659"/>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="695"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="633"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="674"/>
         <source>mqtt() is not defined</source>
         <translation>mqtt() 未定义</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="676"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="649"/>
         <source>(nil -- frame skipped)</source>
         <translation>(nil -- 已跳过帧)</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="678"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="649"/>
         <source>(non-string return)</source>
         <translation>(非字符串返回)</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="708"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="655"/>
+        <source>JavaScript engine error</source>
+        <translation>JavaScript 引擎错误</translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="663"/>
+        <source>Error: the script did not finish within %1 ms</source>
+        <translation>错误:脚本未在 %1 毫秒内完成</translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="682"/>
+        <source>Error: mqtt() did not return within %1 ms</source>
+        <translation>错误：mqtt() 在 %1 毫秒内未返回</translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="692"/>
         <source>(null -- frame skipped)</source>
         <translation>(null -- 跳过帧)</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="786"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="770"/>
         <source>Select Template…</source>
         <translation>选择模板…</translation>
     </message>
@@ -17891,17 +18548,17 @@ Please provide the necessary credentials.</source>
 <context>
     <name>MQTT::PublisherWorker</name>
     <message>
-        <location filename="../../src/MQTT/PublisherWorker.cpp" line="757"/>
+        <location filename="../../src/MQTT/PublisherWorker.cpp" line="763"/>
         <source>Configure broker hostname and port before testing the connection.</source>
         <translation>测试连接前请先配置代理主机名和端口。</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherWorker.cpp" line="793"/>
+        <location filename="../../src/MQTT/PublisherWorker.cpp" line="799"/>
         <source>Successfully connected to %1:%2.</source>
         <translation>已成功连接到 %1:%2。</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherWorker.cpp" line="804"/>
+        <location filename="../../src/MQTT/PublisherWorker.cpp" line="810"/>
         <source>Timed out after 5 seconds without reaching the broker.</source>
         <translation>5 秒后超时，未能连接到代理。</translation>
     </message>
@@ -18207,17 +18864,17 @@ Please provide the necessary credentials.</source>
         <translation>空项目</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="732"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="737"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="740"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="745"/>
         <source>Waiting for data…</source>
         <translation>等待数据…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="741"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="746"/>
         <source>Connecting to device…</source>
         <translation>正在连接设备…</translation>
     </message>
@@ -18226,7 +18883,7 @@ Please provide the necessary credentials.</source>
         <translation type="vanished">应用程序</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="774"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="779"/>
         <source>Command Palette</source>
         <translation>命令面板</translation>
     </message>
@@ -18460,98 +19117,98 @@ Please provide the necessary credentials.</source>
 <context>
     <name>MessageWebView</name>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="63"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="64"/>
         <source>You</source>
         <translation>您</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="64"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="65"/>
         <source>Assistant</source>
         <translation>助手</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="65"/>
-        <location filename="../../qml/AI/MessageWebView.qml" line="71"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="66"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="72"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="66"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="67"/>
         <source>Discovery</source>
         <translation>发现</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="67"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="68"/>
         <source>Execution</source>
         <translation>执行</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="68"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="69"/>
         <source>Running</source>
         <translation>运行中</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="69"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="70"/>
         <source>Awaiting approval</source>
         <translation>等待批准</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="70"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="71"/>
         <source>Done</source>
         <translation>完成</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="72"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="73"/>
         <source>Denied</source>
         <translation>已拒绝</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="73"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="74"/>
         <source>Blocked</source>
         <translation>已阻止</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="74"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="75"/>
         <source>Approve</source>
         <translation>批准</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="75"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="76"/>
         <source>Deny</source>
         <translation>拒绝</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="76"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="77"/>
         <source>Approve all</source>
         <translation>全部批准</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="77"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="78"/>
         <source>Deny all</source>
         <translation>全部拒绝</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="78"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="79"/>
         <source>Arguments</source>
         <translation>参数</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="79"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="80"/>
         <source>Result</source>
         <translation>结果</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="80"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="81"/>
         <source>Approve {n} actions in {family}?</source>
         <translation>批准 {family} 中的 {n} 个操作?</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="81"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="82"/>
         <source>These calls will run together. Expand each card to inspect arguments.</source>
         <translation>这些调用将一起运行。展开每个卡片以检查参数。</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="82"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="83"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
@@ -18576,59 +19233,118 @@ Please provide the necessary credentials.</source>
     </message>
 </context>
 <context>
+    <name>Misc::ExtensionInstaller</name>
+    <message>
+        <location filename="../../src/Misc/Extensions/ExtensionInstaller.cpp" line="173"/>
+        <source>Extension id or type is not a safe path component.</source>
+        <translation>扩展 ID 或类型不是安全的路径组件。</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/Extensions/ExtensionInstaller.cpp" line="181"/>
+        <source>Catalog entry lists no verifiable files.</source>
+        <translation>目录条目未列出可验证的文件。</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/Extensions/ExtensionInstaller.cpp" line="216"/>
+        <source>A file of this extension is missing or does not match its digest.</source>
+        <translation>此扩展的某个文件缺失或与其摘要不匹配。</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/Extensions/ExtensionInstaller.cpp" line="221"/>
+        <location filename="../../src/Misc/Extensions/ExtensionInstaller.cpp" line="414"/>
+        <source>The verified files could not replace the installed version.</source>
+        <translation>已验证的文件无法替换已安装的版本。</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/Extensions/ExtensionInstaller.cpp" line="383"/>
+        <source>Download failed: %1</source>
+        <translation>下载失败:%1</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/Extensions/ExtensionInstaller.cpp" line="388"/>
+        <source>A downloaded file did not match the digest published for it.</source>
+        <translation>下载的文件与为其发布的摘要不匹配。</translation>
+    </message>
+</context>
+<context>
     <name>Misc::ExtensionManager</name>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="252"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="253"/>
         <source>Theme</source>
         <translation>主题</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="255"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="256"/>
         <source>Frame Parser</source>
         <translation>帧解析器</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="258"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="259"/>
         <source>Project Template</source>
         <translation>项目模板</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="261"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="262"/>
         <source>Plugin</source>
         <translation>插件</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="264"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="265"/>
         <source>Widget</source>
         <translation>控件</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="267"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="268"/>
         <source>All Types</source>
         <translation>所有类型</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="479"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="458"/>
+        <source>Repository refused</source>
+        <translation>仓库已拒绝</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="459"/>
+        <source>Repositories must be a local folder or an https:// URL.</source>
+        <translation>仓库必须是本地文件夹或 https:// URL。</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="490"/>
         <source>Reset Extensions</source>
         <translation>重置扩展</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="480"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="491"/>
         <source>This uninstalls all extensions, removes all custom repositories, and restores the default settings. Continue?</source>
         <translation>此操作将卸载所有扩展、移除所有自定义仓库并恢复默认设置。是否继续？</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="509"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="520"/>
         <source>Select Extension Repository Folder</source>
         <translation>选择扩展仓库文件夹</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="659"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="639"/>
+        <source>Extension "%1" cannot be verified</source>
+        <translation>扩展"%1"无法验证</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="641"/>
+        <source>Ask %1 to publish a sha256 for every file.</source>
+        <translation>请要求 %1 为每个文件发布 sha256。</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="642"/>
+        <source>This entry lists files without digests: an install could not tell a genuine download from a replaced one.</source>
+        <translation>此条目列出的文件缺少摘要：安装时无法区分真实下载与被替换的文件。</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="710"/>
         <source>Extension updates available</source>
         <translation>扩展更新可用</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="660"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="711"/>
         <source>Newer versions are available for: %1.
 
 Do you want to update them now?</source>
@@ -18637,50 +19353,50 @@ Do you want to update them now?</source>
 是否立即更新?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="667"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="718"/>
         <source>Always update</source>
         <translation>始终更新</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="953"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1004"/>
         <source>Installed (repository no longer available)</source>
         <translation>已安装（仓库不再可用）</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1153"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1162"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1183"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1207"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1250"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1260"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1268"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1204"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1213"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1234"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1258"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1301"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1311"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1319"/>
         <source>Plugin Error</source>
         <translation>插件错误</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1153"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1204"/>
         <source>Plugin "%1" is not installed.</source>
         <translation>插件"%1"未安装。</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1163"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1214"/>
         <source>Extension "%1" is not a plugin (type: %2).</source>
         <translation>扩展"%1"不是插件（类型：%2）。</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1184"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1235"/>
         <source>Cannot read plugin metadata file:
 %1/info.json</source>
         <translation>无法读取插件元数据文件：
 %1/info.json</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1208"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1259"/>
         <source>Plugin "%1" requires gRPC but this build does not include gRPC support.</source>
         <translation>插件"%1"需要 GRPC 支持，但当前构建版本不包含 GRPC 支持。</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1218"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1269"/>
         <source>This plugin uses gRPC for high-performance data streaming. The API server needs to be enabled.
 
 Would you like to enable it now?</source>
@@ -18689,34 +19405,34 @@ Would you like to enable it now?</source>
 是否立即启用?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1224"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1275"/>
         <source>API Server Required</source>
         <translation>需要 API 服务器</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1251"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1302"/>
         <source>Plugin "%1" has no 'entry' field in info.json.</source>
         <translation>插件"%1"的 info.json 中没有"entry"字段。</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1261"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1312"/>
         <source>Entry point not found:
 %1</source>
         <translation>未找到入口点:
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1269"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1320"/>
         <source>Plugin "%1" has an invalid entry point path.</source>
         <translation>插件"%1"的入口点路径无效。</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1312"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1363"/>
         <source>Missing Dependency</source>
         <translation>缺少依赖项</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1313"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1364"/>
         <source>This plugin requires "%1" but it was not found on your system.
 
 Would you like to open the download page?</source>
@@ -18725,7 +19441,7 @@ Would you like to open the download page?</source>
 是否打开下载页面?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1221"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1272"/>
         <source>Plugins need the API server to communicate with Serial Studio. Would you like to enable it now?</source>
         <translation>插件需要 API 服务器才能与 Serial Studio 通信。是否立即启用?</translation>
     </message>
@@ -18960,92 +19676,92 @@ Would you like to open the download page?</source>
         <translation type="vanished">%1 是否自动检查更新?您始终可以从"关于"对话框手动检查更新</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="190"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="209"/>
         <source>Ok</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="192"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="211"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="194"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="213"/>
         <source>Save all</source>
         <translation>全部保存</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="196"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="215"/>
         <source>Open</source>
         <translation>打开</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="198"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="217"/>
         <source>Yes</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="200"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="219"/>
         <source>Yes to all</source>
         <translation>全部选是</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="202"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="221"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="204"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="223"/>
         <source>No to all</source>
         <translation>全部否</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="206"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="225"/>
         <source>Abort</source>
         <translation>中止</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="208"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="227"/>
         <source>Retry</source>
         <translation>重试</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="210"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="229"/>
         <source>Ignore</source>
         <translation>忽略</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="212"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="231"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="214"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="233"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="216"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="235"/>
         <source>Discard</source>
         <translation>放弃</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="218"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="237"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="220"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="239"/>
         <source>Apply</source>
         <translation>应用</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="222"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="241"/>
         <source>Reset</source>
         <translation>重置</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="224"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="243"/>
         <source>Restore defaults</source>
         <translation>恢复默认值</translation>
     </message>
@@ -19154,109 +19870,109 @@ Would you like to open the download page?</source>
 <context>
     <name>ModbusGroupsDialog</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="45"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="38"/>
         <source>Modbus Register Groups</source>
         <translation>Modbus 寄存器组</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="166"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="89"/>
         <source>Configure multiple register groups to poll different register types in sequence.</source>
         <translation>配置多个寄存器组以按顺序轮询不同的寄存器类型。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="174"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="97"/>
         <source>Add New Group</source>
         <translation>添加新组</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="198"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="121"/>
         <source>Register Type:</source>
         <translation>寄存器类型：</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="210"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="133"/>
         <source>Start Address:</source>
         <translation>起始地址：</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="217"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="140"/>
         <source>0-65535</source>
         <translation>0-65535</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="223"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="146"/>
         <source>Register Count:</source>
         <translation>寄存器数量：</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="234"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="157"/>
         <source>1-125</source>
         <translation>1-125</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="239"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="162"/>
         <source>Add Group</source>
         <translation>添加组</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="262"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="185"/>
         <source>Configured Groups</source>
         <translation>已配置的组</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="296"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="219"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="303"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="226"/>
         <source>Type</source>
         <translation>类型</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="311"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="234"/>
         <source>Start</source>
         <translation>起始地址</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="318"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="241"/>
         <source>Count</source>
         <translation>数量</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="325"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="248"/>
         <source>Action</source>
         <translation>操作</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="400"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="323"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="412"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="335"/>
         <source>No groups configured.
 Add groups above to poll multiple register types.</source>
         <translation>未配置组。
 在上方添加组以轮询多种寄存器类型。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="430"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="353"/>
         <source>Total groups: %1</source>
         <translation>总组数：%1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="434"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="357"/>
         <source>Generate Project</source>
         <translation>生成项目</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="440"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="363"/>
         <source>Clear All</source>
         <translation>全部清除</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="446"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="369"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -19264,72 +19980,72 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>ModbusPreviewDialog</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="33"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="26"/>
         <source>Modbus Register Map Preview</source>
         <translation>Modbus 寄存器映射预览</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="155"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="78"/>
         <source>File: %1</source>
         <translation>文件:%1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="163"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="86"/>
         <source>Review the registers to import into a new Serial Studio project.</source>
         <translation>查看要导入到新 Serial Studio 项目中的寄存器。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="171"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="94"/>
         <source>Registers</source>
         <translation>寄存器</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="205"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="128"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="212"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="135"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="221"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="144"/>
         <source>Address</source>
         <translation>地址</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="227"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="150"/>
         <source>Type</source>
         <translation>类型</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="235"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="158"/>
         <source>Data Type</source>
         <translation>数据类型</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="242"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="165"/>
         <source>Units</source>
         <translation>单位</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="343"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="266"/>
         <source>No registers found in file.</source>
         <translation>文件中未找到寄存器。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="361"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="284"/>
         <source>Total: %1 registers in %2 groups</source>
         <translation>总计：%2 个组中的 %1 个寄存器</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="367"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="290"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="379"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="302"/>
         <source>Create Project</source>
         <translation>创建项目</translation>
     </message>
@@ -20369,59 +21085,64 @@ Add groups above to poll multiple register types.</source>
         <translation>凭据在此通道上以明文传输。请选择 None 以外的策略并启用签名并加密以保护凭据。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="327"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="334"/>
+        <source>Send the password anyway on this unencrypted channel</source>
+        <translation>仍在此未加密通道上发送密码</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="341"/>
         <source>Identity</source>
         <translation>标识</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="344"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="358"/>
         <source>Generated on the first secure connection</source>
         <translation>在首次安全连接时生成</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="352"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="366"/>
         <source>Export…</source>
         <translation>导出…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="358"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="372"/>
         <source>Replace</source>
         <translation>替换</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="439"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="453"/>
         <source>Export Client Certificate</source>
         <translation>导出客户端证书</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="440"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="454"/>
         <source>Certificate (*.der)</source>
         <translation>证书 (*.der)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="440"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="448"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="456"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="454"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="462"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="470"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="447"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="461"/>
         <source>Select User Certificate</source>
         <translation>选择用户证书</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="448"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="462"/>
         <source>Certificate (*.der *.pem *.crt)</source>
         <translation>证书 (*.der *.pem *.crt)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="455"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="469"/>
         <source>Select Private Key</source>
         <translation>选择私钥</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="456"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="470"/>
         <source>Private key (*.der *.pem *.key)</source>
         <translation>私钥 (*.der *.pem *.key)</translation>
     </message>
@@ -20449,22 +21170,22 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">凭据以未加密方式发送：此版本仅打开 None 策略通道。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="384"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="398"/>
         <source>Browse Tags…</source>
         <translation>浏览标签…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="395"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="409"/>
         <source>Generate Project</source>
         <translation>生成项目</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="413"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="427"/>
         <source>%1 tag(s) selected</source>
         <translation>已选择 %1 个标签</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="414"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="428"/>
         <source>No tags selected</source>
         <translation>未选择标签</translation>
     </message>
@@ -20688,44 +21409,36 @@ Add groups above to poll multiple register types.</source>
         <translation>使用示例输入测试传输函数</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="363"/>
         <source>Undo</source>
-        <translation>撤销</translation>
+        <translation type="vanished">撤销</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="369"/>
         <source>Redo</source>
-        <translation>重做</translation>
+        <translation type="vanished">重做</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="377"/>
         <source>Cut</source>
-        <translation>剪切</translation>
+        <translation type="vanished">剪切</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="382"/>
         <source>Copy</source>
-        <translation>复制</translation>
+        <translation type="vanished">复制</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="387"/>
         <source>Paste</source>
-        <translation>粘贴</translation>
+        <translation type="vanished">粘贴</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="394"/>
         <source>Select All</source>
-        <translation>全选</translation>
+        <translation type="vanished">全选</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="401"/>
         <source>Format Document</source>
-        <translation>格式化文档</translation>
+        <translation type="vanished">格式化文档</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="406"/>
         <source>Format Selection</source>
-        <translation>格式化选区</translation>
+        <translation type="vanished">格式化选区</translation>
     </message>
 </context>
 <context>
@@ -20747,12 +21460,12 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">绘图器组件代码编辑器</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="76"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="77"/>
         <source>paint(ctx, w, h)</source>
         <translation>paint(ctx, w, h)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="86"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="87"/>
         <source>Import</source>
         <translation>导入</translation>
     </message>
@@ -20761,7 +21474,7 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">从 .js 文件导入绘图器代码</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="99"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="100"/>
         <source>Template</source>
         <translation>模板</translation>
     </message>
@@ -20770,7 +21483,7 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">选择内置绘图模板</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="108"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="109"/>
         <source>Format</source>
         <translation>格式化</translation>
     </message>
@@ -20779,84 +21492,76 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">重新格式化绘图代码</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="30"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="31"/>
         <source>Canvas Widget Code Editor</source>
         <translation>画布组件代码编辑器</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="91"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="92"/>
         <source>Import canvas code from a .js file</source>
         <translation>从 .js 文件导入画布代码</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="102"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="103"/>
         <source>Select a built-in canvas template</source>
         <translation>选择内置画布模板</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="113"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="114"/>
         <source>Reformat the canvas code</source>
         <translation>重新格式化画布代码</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="119"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="120"/>
         <source>Test</source>
         <translation>测试</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="124"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="125"/>
         <source>Open a live preview with simulated dataset values</source>
         <translation>使用模拟数据集值打开实时预览</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="127"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="128"/>
         <source>Preview</source>
         <translation>预览</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="182"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="183"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="191"/>
         <source>Cut</source>
-        <translation>剪切</translation>
+        <translation type="vanished">剪切</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="192"/>
         <source>Copy</source>
-        <translation>复制</translation>
+        <translation type="vanished">复制</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="193"/>
         <source>Paste</source>
-        <translation>粘贴</translation>
+        <translation type="vanished">粘贴</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="194"/>
         <source>Select All</source>
-        <translation>全选</translation>
+        <translation type="vanished">全选</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="196"/>
         <source>Undo</source>
-        <translation>撤销</translation>
+        <translation type="vanished">撤销</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="197"/>
         <source>Redo</source>
-        <translation>重做</translation>
+        <translation type="vanished">重做</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="199"/>
         <source>Format Document</source>
-        <translation>格式化文档</translation>
+        <translation type="vanished">格式化文档</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="200"/>
         <source>Format Selection</source>
-        <translation>格式化选区</translation>
+        <translation type="vanished">格式化选区</translation>
     </message>
 </context>
 <context>
@@ -21528,69 +22233,69 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>ProcessPicker</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="60"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="53"/>
         <source>Select Running Process</source>
         <translation>选择运行中的进程</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="211"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="204"/>
         <source>Select a running process to derive a named-pipe path suggestion.</source>
         <translation>选择一个运行中的进程以派生命名管道路径建议。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="217"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="210"/>
         <source>Filter Processes</source>
         <translation>筛选进程</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="231"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="224"/>
         <source>Type to filter by name…</source>
         <translation>按名称筛选…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="235"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="228"/>
         <source>Refresh</source>
         <translation>刷新</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="243"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="236"/>
         <source>Running Processes</source>
         <translation>运行中的进程</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="281"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="274"/>
         <source>Process</source>
         <translation>进程</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="288"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="281"/>
         <source>PID</source>
         <translation>PID</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="383"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="376"/>
         <source>No processes match the filter.</source>
         <translation>没有进程匹配筛选条件。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="384"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="377"/>
         <source>No running processes found.
 Click Refresh to update the list.</source>
         <translation>未找到运行中的进程。
 点击刷新以更新列表。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="400"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="393"/>
         <source>%1 process(es)</source>
         <translation>%1 个进程</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="404"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="397"/>
         <source>Select</source>
         <translation>选择</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="410"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="403"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -22030,22 +22735,22 @@ Click Refresh to update the list.</source>
 <context>
     <name>ProjectModel</name>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="135"/>
+        <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="133"/>
         <source>Duplicate Selection</source>
         <translation>复制选择</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="213"/>
+        <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="211"/>
         <source>Delete Selection</source>
         <translation>删除选择</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="311"/>
+        <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="300"/>
         <source>Delete %1 selected items?</source>
         <translation>删除 %1 个选定项？</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="312"/>
+        <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="301"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="494"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="521"/>
         <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="791"/>
@@ -22053,99 +22758,99 @@ Click Refresh to update the list.</source>
         <translation>此操作无法撤销。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="314"/>
+        <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="303"/>
         <source>Delete Items</source>
         <translation>删除项</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="335"/>
+        <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="324"/>
         <source>Move Selection</source>
         <translation>移动选择</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="400"/>
+        <location filename="../../src/DataModel/Project/ProjectBulkOps.cpp" line="389"/>
         <source>Toggle Selection</source>
         <translation>切换选择</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="451"/>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="453"/>
         <source>Legacy frame parser function updated</source>
         <translation>旧版帧解析器函数已更新</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="452"/>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="454"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>您的项目使用了带有"separator"参数的旧版帧解析器函数。已自动迁移到新格式。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="486"/>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="488"/>
         <source>Select Project File</source>
         <translation>选择项目文件</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="488"/>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="490"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>项目文件 (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="535"/>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="542"/>
         <source>JSON validation error</source>
         <translation>JSON 验证错误</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="588"/>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="595"/>
         <source>Project upgraded from an earlier file format</source>
         <translation>项目已从早期文件格式升级</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="590"/>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="597"/>
         <source>This project was saved with schema version %1; the current version is %2. Defaults have been applied to any new fields. Save the project to lock in the upgrade.</source>
         <translation>此项目保存时的架构版本为 %1；当前版本为 %2。所有新字段已应用默认值。请保存项目以锁定升级。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="706"/>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="713"/>
         <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="343"/>
         <source>Untitled Project</source>
         <translation>未命名项目</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="713"/>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="720"/>
         <source>Save Imported Project</source>
         <translation>保存导入的项目</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="715"/>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="722"/>
         <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="322"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Serial Studio 项目文件 (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="750"/>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="757"/>
         <source>File open error</source>
         <translation>文件打开错误</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="869"/>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="876"/>
         <source>Device A</source>
         <translation>设备 A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="922"/>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="929"/>
         <source>Multi-source projects require a Pro license</source>
         <translation>多源项目需要 Pro 许可证</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="923"/>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="930"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
         <translation>此项目包含多个数据源。仅加载了第一个源。使用多源项目需要 Serial Studio Pro 许可证。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="1033"/>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="1040"/>
         <source>Workspace IDs remapped on load</source>
         <translation>工作区 ID 已在加载时重新映射</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="1034"/>
+        <location filename="../../src/DataModel/Project/ProjectLoader.cpp" line="1041"/>
         <source>%1 custom workspace ID(s) overlapped the new reserved auto range and were moved into the user range. Save the project to make the remap permanent.</source>
         <translation>%1 个自定义工作区 ID 与新的保留自动范围重叠，已移动到用户范围。保存项目以使重新映射生效。</translation>
     </message>
@@ -22170,28 +22875,28 @@ Click Refresh to update the list.</source>
         <translation>文件保存错误</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="621"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="623"/>
         <source>Project file removed from disk</source>
         <translation>项目文件已从磁盘中移除</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="622"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="624"/>
         <source>%1 was deleted or renamed by another program. Save the project to recreate it.</source>
         <translation>%1 已被其他程序删除或重命名。保存项目以重新创建。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="645"/>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="667"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="647"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="669"/>
         <source>Project file changed on disk</source>
         <translation>磁盘上的项目文件已更改</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="646"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="648"/>
         <source>%1 was modified by another program. The in-memory project was kept; reopen the file to load the external changes.</source>
         <translation>%1 已被其他程序修改。内存中的项目已保留;重新打开文件以加载外部更改。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="664"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="666"/>
         <source>The project file was modified by another program.
 
 Reload it and discard your unsaved changes?</source>
@@ -22200,13 +22905,23 @@ Reload it and discard your unsaved changes?</source>
 重新加载并放弃未保存的更改?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="666"/>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="668"/>
         <source>The project file was modified by another program.
 
 Reload it?</source>
         <translation>项目文件已被其他程序修改。
 
 重新加载?</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="708"/>
+        <source>Project file could not be reloaded</source>
+        <translation>无法重新加载项目文件</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Project/ProjectPersistence.cpp" line="709"/>
+        <source>%1 could not be read back: it is unreadable or no longer valid JSON. Your in-memory project was kept; save it to overwrite the file on disk.</source>
+        <translation>无法读取 %1：文件不可读或不再是有效的 JSON。已保留内存中的项目；保存以覆盖磁盘上的文件。</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="55"/>
@@ -22271,9 +22986,9 @@ Reload it?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="240"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="301"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="343"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="378"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="313"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="355"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="390"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>此操作无法撤销。是否继续？</translation>
     </message>
@@ -22283,13 +22998,13 @@ Reload it?</source>
         <translation>删除输出组件</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="303"/>
-        <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="376"/>
+        <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="297"/>
+        <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="370"/>
         <source>Duplicate Output Widget</source>
         <translation>复制输出组件</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="404"/>
+        <location filename="../../src/DataModel/Project/ProjectOutputWidgets.cpp" line="398"/>
         <source>Move Output Widget</source>
         <translation>移动输出组件</translation>
     </message>
@@ -22315,181 +23030,181 @@ Reload it?</source>
         <translation>采样</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="131"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="134"/>
         <source>Edit Group</source>
         <translation>编辑组</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="153"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="159"/>
         <source>Edit Dataset</source>
         <translation>编辑数据集</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="193"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="202"/>
         <source>Edit Action</source>
         <translation>编辑动作</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="211"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="223"/>
         <source>Seed Dataset Aliases</source>
         <translation>填充数据集别名</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="248"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="260"/>
         <source>Toggle Group</source>
         <translation>切换组</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="271"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="283"/>
         <source>Toggle Dataset</source>
         <translation>切换数据集</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="300"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="312"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>是否删除组"%1"？</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="314"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="326"/>
         <source>Delete Group</source>
         <translation>删除组</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="342"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="354"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>是否删除操作"%1"？</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="356"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="368"/>
         <source>Delete Action</source>
         <translation>删除动作</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="376"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="388"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>是否删除数据集"%1"？</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="397"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="409"/>
         <source>Delete Dataset</source>
         <translation>删除数据集</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="454"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1147"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="466"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1160"/>
         <source>Duplicate Group</source>
         <translation>复制组</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="497"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1265"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="509"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1278"/>
         <source>Duplicate Action</source>
         <translation>复制动作</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="531"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1208"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="543"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1221"/>
         <source>Duplicate Dataset</source>
         <translation>复制数据集</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="568"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="813"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="580"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="828"/>
         <source>Add Group</source>
         <translation>添加组</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="604"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="616"/>
         <source>Group</source>
         <translation>组</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="613"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="625"/>
         <source>Add Dataset</source>
         <translation>添加数据集</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="625"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="637"/>
         <source>New Dataset</source>
         <translation>新建数据集</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="628"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="640"/>
         <source>New Plot</source>
         <translation>新建绘图</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="632"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="644"/>
         <source>New FFT Plot</source>
         <translation>新建 FFT 绘图</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="636"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="648"/>
         <source>New Level Indicator</source>
         <translation>新建电平指示器</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="640"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="652"/>
         <source>New Gauge</source>
         <translation>新建仪表</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="644"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="656"/>
         <source>New Compass</source>
         <translation>新建罗盘</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="650"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="662"/>
         <source>New Meter</source>
         <translation>新建仪表</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="654"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="666"/>
         <source>New LED Indicator</source>
         <translation>新建 LED 指示器</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="658"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="670"/>
         <source>New Waterfall</source>
         <translation>新建瀑布图</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="689"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="701"/>
         <source>Edit Canvas Datasets</source>
         <translation>编辑画布数据集</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="710"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="722"/>
         <source>Channel %1</source>
         <translation>通道 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="731"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="745"/>
         <source>Change Dataset Option</source>
         <translation>更改数据集选项</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="783"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="798"/>
         <source>Add Action</source>
         <translation>添加动作</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="792"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="807"/>
         <source>New Action</source>
         <translation>新建操作</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="851"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="866"/>
         <source>Change Group Widget</source>
         <translation>更改组部件</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="901"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="914"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>确定要更改组级别部件吗？</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="902"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="915"/>
         <source>Existing datasets for this group are deleted</source>
         <translation>此组的现有数据集将被删除</translation>
     </message>
@@ -22541,35 +23256,35 @@ Reload it?</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="973"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="986"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="672"/>
         <source>Move Group</source>
         <translation>移动组</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1030"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1043"/>
         <source>Move Dataset</source>
         <translation>移动数据集</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1072"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1085"/>
         <source>Move Action</source>
         <translation>移动动作</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1295"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1308"/>
         <source>Rename Group</source>
         <translation>重命名组</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1296"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1325"/>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1351"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1309"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1338"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1364"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="382"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="411"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="434"/>
         <location filename="../../src/DataModel/Project/ProjectTables.cpp" line="457"/>
-        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="277"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="280"/>
         <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="742"/>
         <location filename="../../src/DataModel/Project/ProjectWorkspaces.cpp" line="769"/>
         <location filename="../../src/DataModel/Project/ProjectFolders.cpp" line="498"/>
@@ -22584,12 +23299,12 @@ Reload it?</source>
         <translation>名称:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1324"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1337"/>
         <source>Rename Dataset</source>
         <translation>重命名数据集</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1350"/>
+        <location filename="../../src/DataModel/Project/ProjectEntities.cpp" line="1363"/>
         <source>Rename Action</source>
         <translation>重命名操作</translation>
     </message>
@@ -22723,61 +23438,61 @@ Reload it?</source>
         <translation>删除设备</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="165"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="168"/>
         <source>Duplicate Device</source>
         <translation>复制设备</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="200"/>
-        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="299"/>
-        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="331"/>
-        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="358"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="203"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="312"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="362"/>
         <source>Edit Device</source>
         <translation>编辑设备</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="232"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="235"/>
         <source>Rename Device</source>
         <translation>重命名设备</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="248"/>
-        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="372"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="251"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="376"/>
         <source>Change Bus Type</source>
         <translation>更改总线类型</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="276"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="279"/>
         <source>Rename Data Source</source>
         <translation>重命名数据源</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="391"/>
-        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="451"/>
-        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="574"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="395"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="455"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="593"/>
         <source>Edit Frame Parser</source>
         <translation>编辑帧解析器</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="403"/>
-        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="465"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="407"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="469"/>
         <source>Change Parser Language</source>
         <translation>更改解析器语言</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="419"/>
-        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="492"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="423"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="496"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="548"/>
         <source>Change Parser Template</source>
         <translation>更改解析器模板</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="431"/>
-        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="516"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="435"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="520"/>
         <source>Change Parser Parameters</source>
         <translation>更改解析器参数</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="545"/>
+        <location filename="../../src/DataModel/Project/ProjectSources.cpp" line="564"/>
         <source>Change Stream Lane</source>
         <translation>更改流通道</translation>
     </message>
@@ -23553,7 +24268,7 @@ Reload it?</source>
         <translation>未指定的 MQTT 错误（代码 %1）。</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherWorker.cpp" line="842"/>
+        <location filename="../../src/MQTT/PublisherWorker.cpp" line="848"/>
         <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
         <translation>已配置客户端证书:请验证其与私钥匹配且已在 Broker 上激活。</translation>
     </message>
@@ -23566,34 +24281,34 @@ Reload it?</source>
         <translation>加载欢迎文本失败 :(</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="290"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="311"/>
         <source>Network error</source>
         <translation>网络错误</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="293"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="310"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="330"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="314"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="331"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="351"/>
         <source>Trial Activation Error</source>
         <translation>试用激活错误</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="307"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="328"/>
         <source>Invalid server response</source>
         <translation>无效的服务器响应</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="308"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="329"/>
         <source>The server returned malformed data: %1</source>
         <translation>服务器返回格式错误的数据：%1</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="327"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="348"/>
         <source>Unexpected server response</source>
         <translation>意外的服务器响应</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="328"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="349"/>
         <source>The server response is missing required fields.</source>
         <translation>服务器响应缺少必需字段。</translation>
     </message>
@@ -23608,22 +24323,22 @@ Reload it?</source>
         <translation>无法打开文件进行写入！</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1023"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1058"/>
         <source>Invalid Bluetooth adapter!</source>
         <translation>蓝牙适配器无效！</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1026"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1061"/>
         <source>Unsuported platform or operating system</source>
         <translation>不支持的平台或操作系统</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1029"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1064"/>
         <source>Unsupported discovery method</source>
         <translation>不支持的发现方法</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1032"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="1067"/>
         <source>General I/O error</source>
         <translation>常规 I/O 错误</translation>
     </message>
@@ -23888,22 +24603,22 @@ function parse(%1) { ... }
 不再需要分隔符参数。</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="228"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="230"/>
         <source>Critical</source>
         <translation>严重</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="228"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="230"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="749"/>
+        <location filename="../../src/Misc/CLI.cpp" line="840"/>
         <source>Project file not found</source>
         <translation>未找到项目文件</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="750"/>
+        <location filename="../../src/Misc/CLI.cpp" line="841"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -23912,37 +24627,37 @@ function parse(%1) { ... }
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="753"/>
+        <location filename="../../src/Misc/CLI.cpp" line="844"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>是否删除此快捷方式？</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="757"/>
+        <location filename="../../src/Misc/CLI.cpp" line="848"/>
         <source>Delete Shortcut</source>
         <translation>删除快捷方式</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="759"/>
+        <location filename="../../src/Misc/CLI.cpp" line="850"/>
         <source>Quit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall/WaterfallOverlay.cpp" line="507"/>
+        <location filename="../../src/UI/Widgets/Waterfall/WaterfallOverlay.cpp" line="517"/>
         <source>Time (s)</source>
         <translation>时间 (s)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall/WaterfallOverlay.cpp" line="591"/>
+        <location filename="../../src/UI/Widgets/Waterfall/WaterfallOverlay.cpp" line="601"/>
         <source>%1  %2 dB</source>
         <translation>%1  %2 dB</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall/WaterfallOverlay.cpp" line="706"/>
+        <location filename="../../src/UI/Widgets/Waterfall/WaterfallOverlay.cpp" line="716"/>
         <source>Freq: %1</source>
         <translation>频率:%1</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall/WaterfallOverlay.cpp" line="710"/>
+        <location filename="../../src/UI/Widgets/Waterfall/WaterfallOverlay.cpp" line="720"/>
         <source>Time: −%1</source>
         <translation>时间:−%1</translation>
     </message>
@@ -23962,29 +24677,25 @@ function parse(%1) { ... }
         <translation>未设置 Gemini API 密钥。打开管理密钥以添加。</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/LocalProvider.cpp" line="320"/>
+        <location filename="../../src/AI/Providers/LocalProvider.cpp" line="352"/>
         <source>No local model server URL configured. Open Manage Keys to set one.</source>
         <translation>未配置本地模型服务器 URL。请打开"管理密钥"进行设置。</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/DeepSeekProvider.cpp" line="116"/>
         <source>No DeepSeek API key set. Open Manage Keys to add one.</source>
-        <translation>未设置 DeepSeek API 密钥。请打开"管理密钥"进行添加。</translation>
+        <translation type="vanished">未设置 DeepSeek API 密钥。请打开"管理密钥"进行添加。</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/MistralProvider.cpp" line="138"/>
         <source>No Mistral API key set. Open Manage Keys to add one.</source>
-        <translation>未设置 Mistral API 密钥。打开管理密钥以添加。</translation>
+        <translation type="vanished">未设置 Mistral API 密钥。打开管理密钥以添加。</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenRouterProvider.cpp" line="151"/>
         <source>No OpenRouter API key set. Open Manage Keys to add one.</source>
-        <translation>未设置 OpenRouter API 密钥。打开管理密钥以添加。</translation>
+        <translation type="vanished">未设置 OpenRouter API 密钥。打开管理密钥以添加。</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/GroqProvider.cpp" line="122"/>
         <source>No Groq API key set. Open Manage Keys to add one.</source>
-        <translation>未设置 Groq API 密钥。打开管理密钥以添加。</translation>
+        <translation type="vanished">未设置 Groq API 密钥。打开管理密钥以添加。</translation>
     </message>
     <message>
         <source>The frame parser is using more than %1% of CPU time.</source>
@@ -24201,39 +24912,36 @@ function parse(%1) { ... }
         <translation>自定义…</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/PlayerLoaderWorker.cpp" line="508"/>
+        <location filename="../../src/MDF4/PlayerLoaderWorker.cpp" line="622"/>
         <source>Cannot open MDF4 file</source>
         <translation>无法打开 MDF4 文件</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/PlayerLoaderWorker.cpp" line="509"/>
+        <location filename="../../src/MDF4/PlayerLoaderWorker.cpp" line="623"/>
         <source>The file may be corrupted or in an unsupported format.</source>
         <translation>文件可能已损坏或格式不受支持。</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/PlayerLoaderWorker.cpp" line="514"/>
+        <location filename="../../src/MDF4/PlayerLoaderWorker.cpp" line="628"/>
         <source>Invalid MDF4 file</source>
         <translation>无效的 MDF4 文件</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/PlayerLoaderWorker.cpp" line="515"/>
+        <location filename="../../src/MDF4/PlayerLoaderWorker.cpp" line="629"/>
         <source>Failed to read file structure. The file may be corrupted.</source>
         <translation>读取文件结构失败。文件可能已损坏。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="205"/>
         <source>Host not found</source>
-        <translation>未找到主机</translation>
+        <translation type="vanished">未找到主机</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="229"/>
         <source>Connection failed</source>
-        <translation>连接失败</translation>
+        <translation type="vanished">连接失败</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkTcp.cpp" line="237"/>
         <source>Connection timed out</source>
-        <translation>连接超时</translation>
+        <translation type="vanished">连接超时</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/Scripting/ExpressionTransform.cpp" line="332"/>
@@ -24337,14 +25045,45 @@ function parse(%1) { ... }
         <translation>表达式格式错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="57"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="59"/>
         <source>Server answered HTTP %1</source>
         <translation>服务器返回 HTTP %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="59"/>
+        <location filename="../../src/IO/Drivers/Network/NetworkHttp.cpp" line="61"/>
         <source>The server sent no response</source>
         <translation>服务器未发送响应</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/CLI.h" line="66"/>
+        <source>Listen for API clients on &lt;port&gt; instead of 7777.</source>
+        <translation>在端口 &lt;port&gt; 而非 7777 上侦听 API 客户端。</translation>
+    </message>
+    <message>
+        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="197"/>
+        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="254"/>
+        <source>Cancelled</source>
+        <translation>已取消</translation>
+    </message>
+    <message>
+        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="265"/>
+        <source>Corrupt block timing in session %1</source>
+        <translation>会话 %1 中的数据块时序已损坏</translation>
+    </message>
+    <message>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="74"/>
+        <source>This session is being recorded</source>
+        <translation>此会话正在录制</translation>
+    </message>
+    <message>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="75"/>
+        <source>Stop the recording before deleting or editing this session; its rows are still being written.</source>
+        <translation>删除或编辑此会话前请停止录制；其数据行仍在写入。</translation>
+    </message>
+    <message>
+        <location filename="../../src/AI/Providers/OpenAICompatibleProvider.cpp" line="247"/>
+        <source>No %1 API key set. Open Manage Keys to add one.</source>
+        <translation>未设置 %1 API 密钥。打开管理密钥以添加。</translation>
     </message>
 </context>
 <context>
@@ -24493,278 +25232,278 @@ function parse(%1) { ... }
         <translation>生成报告</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="71"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="70"/>
         <source>Solid</source>
         <translation>实线</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="72"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="71"/>
         <source>Dashed</source>
         <translation>虚线</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="73"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="72"/>
         <source>Dotted</source>
         <translation>点线</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="95"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="94"/>
         <source>A4 (210 × 297 mm)</source>
         <translation>A4 (210 × 297 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="96"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="95"/>
         <source>A3 (297 × 420 mm)</source>
         <translation>A3 (297 × 420 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="97"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="96"/>
         <source>A2 (420 × 594 mm)</source>
         <translation>A2 (420 × 594 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="98"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="97"/>
         <source>A1 (594 × 841 mm)</source>
         <translation>A1 (594 × 841 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="98"/>
         <source>A0 (841 × 1189 mm)</source>
         <translation>A0 (841 × 1189 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
         <source>A5 (148 × 210 mm)</source>
         <translation>A5 (148 × 210 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
         <source>A6 (105 × 148 mm)</source>
         <translation>A6 (105 × 148 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
         <source>B4 (250 × 353 mm)</source>
         <translation>B4 (250 × 353 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
         <source>B5 (176 × 250 mm)</source>
         <translation>B5 (176 × 250 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
         <source>Letter (8.5 × 11 in)</source>
         <translation>Letter (8.5 × 11 英寸)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
         <source>Legal (8.5 × 14 in)</source>
         <translation>Legal (8.5 × 14 英寸)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
         <source>Executive (7.25 × 10.5 in)</source>
         <translation>Executive (7.25 × 10.5 英寸)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="107"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
         <source>Tabloid (11 × 17 in)</source>
         <translation>Tabloid (11 × 17 英寸)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="108"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="107"/>
         <source>Ledger (17 × 11 in)</source>
         <translation>Ledger (17 × 11 英寸)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="123"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="121"/>
         <source>%1 — Session Report</source>
         <translation>%1 — 会话报告</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="125"/>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="661"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="123"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="318"/>
         <source>Session Report</source>
         <translation>会话报告</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="563"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="220"/>
         <source>Branding</source>
         <translation>品牌标识</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="569"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="226"/>
         <source>Page</source>
         <translation>页面</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="575"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="232"/>
         <source>Sections</source>
         <translation>部分</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="581"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="238"/>
         <source>Datasets</source>
         <translation>数据集</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="629"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="286"/>
         <source>Identity</source>
         <translation>标识</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="643"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="300"/>
         <source>Company</source>
         <translation>公司</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="650"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="307"/>
         <source>e.g. Acme Test Systems</source>
         <translation>例如 Acme Test Systems</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="654"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="311"/>
         <source>Document title</source>
         <translation>文档标题</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="665"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="322"/>
         <source>Author</source>
         <translation>作者</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="672"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="329"/>
         <source>Prepared by (optional)</source>
         <translation>制作者（可选）</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="681"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="338"/>
         <source>Logo</source>
         <translation>徽标</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="694"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="351"/>
         <source>File</source>
         <translation>文件</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="705"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="362"/>
         <source>PNG, JPG or SVG (optional)</source>
         <translation>PNG、JPG 或 SVG（可选）</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="707"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="364"/>
         <source>Browse…</source>
         <translation>浏览…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="710"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="367"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="751"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="408"/>
         <source>Paper</source>
         <translation>纸张</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="763"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="420"/>
         <source>Page size</source>
         <translation>页面大小</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="891"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="548"/>
         <source>Annotate min, max, and mean values on plots</source>
         <translation>在图表上标注最小值、最大值和平均值</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="927"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="584"/>
         <source>Include datasets</source>
         <translation>包含数据集</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="941"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="598"/>
         <source>Expand All</source>
         <translation>全部展开</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="950"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="607"/>
         <source>Collapse All</source>
         <translation>全部折叠</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="962"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="619"/>
         <source>Search datasets</source>
         <translation>搜索数据集</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1087"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="744"/>
         <source>Loading datasets...</source>
         <translation>正在加载数据集...</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1088"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="745"/>
         <source>No datasets match your search.</source>
         <translation>没有数据集匹配您的搜索。</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1108"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="765"/>
         <source>Select at least one dataset to include.</source>
         <translation>请至少选择一个要包含的数据集。</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1125"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="782"/>
         <source>Export HTML</source>
         <translation>导出 HTML</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="879"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="536"/>
         <source>Cover page (logo, document title, test subtitle)</source>
         <translation>封面页（徽标、文档标题、测试副标题）</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="882"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="539"/>
         <source>Test information (project, timestamps, classification and notes)</source>
         <translation>测试信息(项目、时间戳、分类和备注)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="885"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="542"/>
         <source>Measurement summary (min, max, mean, std. deviation per parameter)</source>
         <translation>测量摘要(每个参数的最小值、最大值、平均值、标准差)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="888"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="545"/>
         <source>Parameter trends (time-series chart per numeric parameter)</source>
         <translation>参数趋势(每个数值参数的时间序列图表)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="778"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="435"/>
         <source>Plot appearance</source>
         <translation>绘图外观</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="792"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="449"/>
         <source>Line width</source>
         <translation>线宽</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="824"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="481"/>
         <source>Line style</source>
         <translation>线型</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="864"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="521"/>
         <source>Include</source>
         <translation>包含</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1117"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="774"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="1125"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="782"/>
         <source>Export PDF</source>
         <translation>导出 PDF</translation>
     </message>
@@ -24785,6 +25524,39 @@ function parse(%1) { ... }
         <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="86"/>
         <source>This can take a few seconds for sessions with many parameters. The window closes automatically when the report is ready.</source>
         <translation>对于包含大量参数的会话,此操作可能需要几秒钟。报告准备就绪后窗口将自动关闭。</translation>
+    </message>
+</context>
+<context>
+    <name>ReposPage</name>
+    <message>
+        <location filename="../../qml/Dialogs/ExtensionManager/ReposPage.qml" line="65"/>
+        <source>Repositories</source>
+        <translation>仓库</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ExtensionManager/ReposPage.qml" line="78"/>
+        <source>Add URLs to remote repositories or local folder paths.</source>
+        <translation>添加远程仓库的 URL 或本地文件夹路径。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ExtensionManager/ReposPage.qml" line="115"/>
+        <source>LOCAL</source>
+        <translation>本地</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ExtensionManager/ReposPage.qml" line="172"/>
+        <source>URL or local path…</source>
+        <translation>URL 或本地路径…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ExtensionManager/ReposPage.qml" line="180"/>
+        <source>Add</source>
+        <translation>添加</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ExtensionManager/ReposPage.qml" line="203"/>
+        <source>Browse…</source>
+        <translation>浏览…</translation>
     </message>
 </context>
 <context>
@@ -24926,94 +25698,94 @@ function parse(%1) { ... }
 <context>
     <name>S7VariablesDialog</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="45"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="38"/>
         <source>Siemens S7 Variables</source>
         <translation>Siemens S7 变量</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="166"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="89"/>
         <source>Address absolute memory directly: DB5.DBD20:REAL, DB1.DBX0.3, MW10:INT, IB0, QW4.</source>
         <translation>直接访问绝对内存地址:DB5.DBD20:REAL、DB1.DBX0.3、MW10:INT、IB0、QW4。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="174"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="97"/>
         <source>Add New Variable</source>
         <translation>添加新变量</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="198"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="121"/>
         <source>Name:</source>
         <translation>名称:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="206"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="129"/>
         <source>Channel name</source>
         <translation>通道名称</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="211"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="134"/>
         <source>Address:</source>
         <translation>地址:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="223"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="146"/>
         <source>DB5.DBD20:REAL</source>
         <translation>DB5.DBD20:REAL</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="227"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="150"/>
         <source>Add Variable</source>
         <translation>添加变量</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="262"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="185"/>
         <source>Configured Variables</source>
         <translation>已配置变量</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="296"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="219"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="304"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="227"/>
         <source>Variable</source>
         <translation>变量</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="311"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="234"/>
         <source>Action</source>
         <translation>动作</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="358"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="281"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="372"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="295"/>
         <source>No variables configured.
 Add absolute addresses above to poll the controller.</source>
         <translation>未配置变量。
 在上方添加绝对地址以轮询控制器。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="390"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="313"/>
         <source>Total variables: %1</source>
         <translation>变量总数：%1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="394"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="317"/>
         <source>Generate Project</source>
         <translation>生成项目</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="400"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="323"/>
         <source>Clear All</source>
         <translation>全部清除</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="407"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="330"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -25576,93 +26348,93 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">图像 (*.png *.jpg *.jpeg *.svg)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="607"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="636"/>
         <source>Open Session File</source>
         <translation>打开会话文件</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="609"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="638"/>
         <source>Session files (*.db)</source>
         <translation>会话文件 (*.db)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1230"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1277"/>
         <source>Cannot open session file</source>
         <translation>无法打开会话文件</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="834"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="872"/>
         <source>Delete session from %1?</source>
         <translation>删除来自 %1 的会话？</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="837"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="875"/>
         <source>Delete Session</source>
         <translation>删除会话</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1090"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1137"/>
         <source>No project data</source>
         <translation>无项目数据</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="835"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="873"/>
         <source>All readings and raw data for this session are permanently removed.</source>
         <translation>此会话的所有读数和原始数据将被永久删除。</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="665"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="674"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="694"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="703"/>
         <source>Lock Session File</source>
         <translation>锁定会话文件</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="666"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="695"/>
         <source>Choose a password to lock the session file:</source>
         <translation>选择密码以锁定会话文件：</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="675"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="704"/>
         <source>Confirm the password:</source>
         <translation>确认密码：</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="683"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="712"/>
         <source>Passwords do not match</source>
         <translation>密码不匹配</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="684"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="713"/>
         <source>The two passwords you entered do not match. The session file was not locked.</source>
         <translation>两次输入的密码不匹配。会话文件未锁定。</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="720"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="749"/>
         <source>Unlock Session File</source>
         <translation>解锁会话文件</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="721"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="750"/>
         <source>Enter the session file password:</source>
         <translation>输入会话文件密码：</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="731"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="760"/>
         <source>Incorrect password</source>
         <translation>密码错误</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="732"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="761"/>
         <source>The password you entered does not match the one stored in the session file.</source>
         <translation>输入的密码与会话文件中存储的密码不匹配。</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="824"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="862"/>
         <source>Session file locked</source>
         <translation>会话文件已锁定</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="825"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="863"/>
         <source>Unlock the session file before deleting recorded sessions.</source>
         <translation>删除已记录会话前需先解锁会话文件。</translation>
     </message>
@@ -25733,37 +26505,37 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">无法生成报告。</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1091"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1138"/>
         <source>This session file does not contain an embedded project.</source>
         <translation>此会话文件不包含嵌入的项目。</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1100"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1147"/>
         <source>Invalid project data</source>
         <translation>无效的项目数据</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1101"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1148"/>
         <source>The embedded project JSON is malformed and cannot be restored.</source>
         <translation>嵌入的项目 JSON 格式错误，无法恢复。</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1111"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1158"/>
         <source>Restore Project</source>
         <translation>恢复项目</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1111"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1158"/>
         <source>Serial Studio projects (*.ssproj *.json)</source>
         <translation>Serial Studio 项目 (*.ssproj *.json)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1119"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1166"/>
         <source>Cannot write file</source>
         <translation>无法写入文件</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1119"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1166"/>
         <source>Check file permissions and try again.</source>
         <translation>检查文件权限并重试。</translation>
     </message>
@@ -25771,42 +26543,52 @@ Add absolute addresses above to poll the controller.</source>
 <context>
     <name>Sessions::DatabaseWorker</name>
     <message>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="87"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="111"/>
         <source>Empty file path</source>
         <translation>文件路径为空</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="181"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="238"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="355"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="426"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="451"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="479"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="519"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="799"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="873"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="116"/>
+        <source>This file is not a Serial Studio session database.</source>
+        <translation>此文件不是 Serial Studio 会话数据库。</translation>
+    </message>
+    <message>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="210"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="276"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="393"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="464"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="489"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="517"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="557"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="837"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="911"/>
         <source>Database not open</source>
         <translation>数据库未打开</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="275"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="298"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="219"/>
+        <source>This session is being recorded</source>
+        <translation>此会话正在录制</translation>
+    </message>
+    <message>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="313"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="336"/>
         <source>Database not open or empty label</source>
         <translation>数据库未打开或标签为空</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="400"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="438"/>
         <source>Invalid label</source>
         <translation>无效标签</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="667"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="759"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="705"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="797"/>
         <source>Cancelled</source>
         <translation>已取消</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="885"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="923"/>
         <source>Could not load session data</source>
         <translation>无法加载会话数据</translation>
     </message>
@@ -26051,63 +26833,63 @@ Add absolute addresses above to poll the controller.</source>
 <context>
     <name>Sessions::Player</name>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="314"/>
+        <location filename="../../src/Sessions/Player.cpp" line="313"/>
         <source>Open Session File</source>
         <translation>打开会话文件</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="316"/>
+        <location filename="../../src/Sessions/Player.cpp" line="315"/>
         <source>Session files (*.db)</source>
         <translation>会话文件 (*.db)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="398"/>
+        <location filename="../../src/Sessions/Player.cpp" line="396"/>
         <source>Device Connection Active</source>
         <translation>设备连接活动</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="399"/>
+        <location filename="../../src/Sessions/Player.cpp" line="397"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>要使用此功能,必须断开与设备的连接。是否继续?</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="447"/>
-        <location filename="../../src/Sessions/Player.cpp" line="471"/>
+        <location filename="../../src/Sessions/Player.cpp" line="445"/>
+        <location filename="../../src/Sessions/Player.cpp" line="469"/>
         <source>Cannot open session file</source>
         <translation>无法打开会话文件</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="448"/>
+        <location filename="../../src/Sessions/Player.cpp" line="446"/>
         <source>Unknown error</source>
         <translation>未知错误</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="464"/>
+        <location filename="../../src/Sessions/Player.cpp" line="462"/>
         <source>No project data</source>
         <translation>无项目数据</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="465"/>
+        <location filename="../../src/Sessions/Player.cpp" line="463"/>
         <source>This session does not contain an embedded project file — the dashboard falls back to a quick-plot layout.</source>
         <translation>此会话不包含嵌入的项目文件 — 仪表板回退到快速绘图布局。</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="472"/>
+        <location filename="../../src/Sessions/Player.cpp" line="470"/>
         <source>Check file permissions and try again.</source>
         <translation>检查文件权限并重试。</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="623"/>
+        <location filename="../../src/Sessions/Player.cpp" line="621"/>
         <source>Sessions</source>
         <translation>会话</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="624"/>
+        <location filename="../../src/Sessions/Player.cpp" line="622"/>
         <source>Recording uses an older copy of the project</source>
         <translation>录制使用的是项目的旧版本</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="625"/>
+        <location filename="../../src/Sessions/Player.cpp" line="623"/>
         <source>The dashboard shown is the one embedded in the recording; the project on disk has changed since. Close the session to return to the current project.</source>
         <translation>显示的仪表板是录制中嵌入的版本；磁盘上的项目在此之后已更改。关闭会话以返回当前项目。</translation>
     </message>
@@ -26139,7 +26921,7 @@ Add absolute addresses above to poll the controller.</source>
 <context>
     <name>Sessions::PlayerLoaderWorker</name>
     <message>
-        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="303"/>
+        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="376"/>
         <source>Empty file path</source>
         <translation>文件路径为空</translation>
     </message>
@@ -26150,25 +26932,23 @@ Add absolute addresses above to poll the controller.</source>
     </message>
     <message>
         <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="161"/>
-        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="197"/>
-        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="271"/>
-        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="340"/>
-        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="359"/>
+        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="325"/>
+        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="407"/>
+        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="426"/>
         <source>Cancelled</source>
         <translation>已取消</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="230"/>
         <source>Corrupt block timing in session %1</source>
-        <translation>会话 %1 中的数据块时序已损坏</translation>
+        <translation type="vanished">会话 %1 中的数据块时序已损坏</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="353"/>
+        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="420"/>
         <source>The selected session is missing its column definitions.</source>
         <translation>所选会话缺少列定义。</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="386"/>
+        <location filename="../../src/Sessions/PlayerLoaderWorker.cpp" line="453"/>
         <source>The selected session does not contain any frames.</source>
         <translation>所选会话不包含任何帧。</translation>
     </message>
@@ -26176,70 +26956,70 @@ Add absolute addresses above to poll the controller.</source>
 <context>
     <name>Sessions::SessionExporter</name>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="169"/>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="143"/>
         <source>Export Session to CSV</source>
         <translation>将会话导出为 CSV</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="169"/>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="143"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV 文件 (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="281"/>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="255"/>
         <source>Loading session data…</source>
         <translation>正在加载会话数据…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="309"/>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="283"/>
         <source>Save PDF Report</source>
         <translation>保存 PDF 报告</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="309"/>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="283"/>
         <source>Save HTML Report</source>
         <translation>保存 HTML 报告</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="310"/>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="284"/>
         <source>PDF files (*.pdf)</source>
         <translation>PDF 文件 (*.PDF)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="310"/>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="284"/>
         <source>HTML files (*.html)</source>
         <translation>HTML 文件 (*.HTML)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="379"/>
-        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="413"/>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="353"/>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="387"/>
         <source>Failed</source>
         <translation>失败</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="384"/>
-        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="422"/>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="358"/>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="396"/>
         <source>Report Failed</source>
         <translation>报告失败</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="385"/>
-        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="423"/>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="359"/>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="397"/>
         <source>Could not generate the report.</source>
         <translation>无法生成报告。</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="413"/>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="387"/>
         <source>Done</source>
         <translation>完成</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="441"/>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="415"/>
         <source>Select logo image</source>
         <translation>选择徽标图像</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="443"/>
+        <location filename="../../src/Sessions/DatabaseManager/SessionExporter.cpp" line="417"/>
         <source>Images (*.png *.jpg *.jpeg *.svg)</source>
         <translation>图像 (*.png *.jpg *.jpeg *.svg)</translation>
     </message>
@@ -26826,26 +27606,35 @@ Add absolute addresses above to poll the controller.</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="230"/>
-        <source>Enable API Server (Port 7777)</source>
-        <translation>启用 API 服务器（端口 7777）</translation>
+        <source>Enable API Server</source>
+        <translation>启用 API 服务器</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="255"/>
+        <source>API Server Port</source>
+        <translation>API 服务器端口</translation>
+    </message>
+    <message>
+        <source>Enable API Server (Port 7777)</source>
+        <translation type="vanished">启用 API 服务器（端口 7777）</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="280"/>
         <source>Allow External API Connections</source>
         <translation>允许外部 API 连接</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="280"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="305"/>
         <source>API Access Token</source>
         <translation>API 访问令牌</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="310"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="335"/>
         <source>Export Protobuf File</source>
         <translation>导出 Protobuf 文件</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="312"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="337"/>
         <source>Export…</source>
         <translation>导出…</translation>
     </message>
@@ -27543,62 +28332,54 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>SourceFrameParserView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="82"/>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="319"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="263"/>
         <source>Undo</source>
         <translation>撤销</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="89"/>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="330"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="274"/>
         <source>Redo</source>
         <translation>重做</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="98"/>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="349"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="293"/>
         <source>Cut</source>
         <translation>剪切</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="103"/>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="359"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="303"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="108"/>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="369"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="313"/>
         <source>Paste</source>
         <translation>粘贴</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="115"/>
         <source>Select All</source>
-        <translation>全选</translation>
+        <translation type="vanished">全选</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="125"/>
         <source>Format Document</source>
-        <translation>格式化文档</translation>
+        <translation type="vanished">格式化文档</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="132"/>
         <source>Format Selection</source>
-        <translation>格式化选区</translation>
+        <translation type="vanished">格式化选区</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="299"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="243"/>
         <source>Reset</source>
         <translation>重置</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="384"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="328"/>
         <source>Validate</source>
         <translation>验证</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="388"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="332"/>
         <source>Verify that the script compiles correctly</source>
         <translation>验证脚本是否正确编译</translation>
     </message>
@@ -27607,17 +28388,17 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">将模板参数重置为默认值</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="303"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="247"/>
         <source>Reset to the default parsing script</source>
         <translation>重置为默认解析脚本</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="309"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="253"/>
         <source>Open</source>
         <translation>打开</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="314"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="258"/>
         <source>Import a script file for data parsing</source>
         <translation>导入用于数据解析的脚本文件</translation>
     </message>
@@ -27634,47 +28415,47 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">原生</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="224"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="168"/>
         <source>Select Template…</source>
         <translation>选择模板…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="324"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="268"/>
         <source>Undo the last code edit</source>
         <translation>撤销上次代码编辑</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="335"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="279"/>
         <source>Redo the previously undone edit</source>
         <translation>重做上次撤销的编辑</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="353"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="297"/>
         <source>Cut selected code to clipboard</source>
         <translation>剪切选定代码到剪贴板</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="363"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="307"/>
         <source>Copy selected code to clipboard</source>
         <translation>复制选中的代码到剪贴板</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="373"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="317"/>
         <source>Paste code from clipboard</source>
         <translation>从剪贴板粘贴代码</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="249"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="193"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="198"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="142"/>
         <source>Platform:</source>
         <translation>平台:</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="206"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="150"/>
         <source>Built-In</source>
         <translation>内置</translation>
     </message>
@@ -27683,7 +28464,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">模板：</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="240"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="184"/>
         <source>Test With Sample Data</source>
         <translation>使用示例数据测试</translation>
     </message>
@@ -28041,48 +28822,48 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">搜索…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="143"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="155"/>
         <source>Parameter</source>
         <translation>参数</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="164"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="176"/>
         <source>Value</source>
         <translation>值</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="564"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="576"/>
         <source>(Custom Icon)</source>
         <translation>（自定义图标）</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="649"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="661"/>
         <source>Choose Dataset Color</source>
         <translation>选择数据集颜色</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="669"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="681"/>
         <source>Automatic</source>
         <translation>自动</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="832"/>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="838"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="844"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="850"/>
         <source>Auto</source>
         <translation>自动</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1024"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1036"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1024"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1036"/>
         <source>Yes</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1226"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1238"/>
         <source>No options match your search.</source>
         <translation>没有选项匹配您的搜索。</translation>
     </message>
@@ -29277,22 +30058,22 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1913"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1446"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1921"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1454"/>
         <source>Notifications</source>
         <translation>通知</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1929"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1462"/>
         <source>Clock</source>
         <translation>时钟</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1936"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1469"/>
         <source>Stopwatch</source>
         <translation>秒表</translation>
     </message>
@@ -29373,17 +30154,17 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>同步</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="253"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="286"/>
         <source>Connect to USB devices using bulk, control, or isochronous transfers. Suitable for data loggers, custom firmware devices, and USB instruments.</source>
         <translation>使用批量、控制或同步传输连接到 USB 设备。适用于数据记录器、自定义固件设备和 USB 仪器。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="262"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="295"/>
         <source>USB specifications (USB.org)</source>
         <translation>USB 规范 (USB.org)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="114"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="147"/>
         <source>IN Endpoint</source>
         <translation>IN 端点</translation>
     </message>
@@ -29393,37 +30174,47 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>批量/中断流</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="150"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="127"/>
+        <source>Enable Advanced USB Control Transfers?</source>
+        <translation>启用高级 USB 控制传输？</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="132"/>
+        <source>This enables control transfers in addition to bulk transfers. Sending incorrect control requests can crash or damage connected hardware. Only enable this if you know what you are doing.</source>
+        <translation>这将在批量传输之外启用控制传输。发送不正确的控制请求可能会导致连接的硬件崩溃或损坏。仅在了解相关操作的情况下启用此功能。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="183"/>
         <source>OUT Endpoint</source>
         <translation>OUT 端点</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="186"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="219"/>
         <source>Max Packet Size</source>
         <translation>最大数据包大小</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="296"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="329"/>
         <source>No compatible data endpoints were found for this transfer mode. Try another transfer mode. Devices that speak a dedicated protocol (e.g. CAN or Modbus adapters) should be connected through their own driver instead.</source>
         <translation>未找到与此传输模式兼容的数据端点。请尝试其他传输模式。使用专用协议的设备(例如 CAN 或 Modbus 适配器)应通过其自身的驱动程序连接。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="337"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="370"/>
         <source>Control Transfers Enabled</source>
         <translation>已启用控制传输</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="346"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="379"/>
         <source>Sending incorrect control requests may crash or damage connected hardware. Use with caution.</source>
         <translation>发送不正确的控制请求可能会导致连接的硬件崩溃或损坏。请谨慎使用。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="353"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="386"/>
         <source>Learn about USB control transfers</source>
         <translation>了解 USB 控制传输</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="387"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="420"/>
         <source>Packet size should match the maximum transfer size reported by the endpoint. Typical values: 192 B (FS audio), 1024 B (HS).</source>
         <translation>数据包大小应与端点报告的最大传输大小匹配。典型值：192 B（FS 音频）、1024 B（HS）。</translation>
     </message>
@@ -30223,12 +31014,12 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::MultiPlot</name>
     <message>
-        <location filename="../../src/UI/Widgets/MultiPlot.cpp" line="115"/>
+        <location filename="../../src/UI/Widgets/MultiPlot.cpp" line="104"/>
         <source>Time (s)</source>
         <translation>时间 (s)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/MultiPlot.cpp" line="115"/>
+        <location filename="../../src/UI/Widgets/MultiPlot.cpp" line="104"/>
         <source>Samples</source>
         <translation>采样</translation>
     </message>
@@ -30249,12 +31040,12 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Plot</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot.cpp" line="101"/>
+        <location filename="../../src/UI/Widgets/Plot.cpp" line="91"/>
         <source>Time (s)</source>
         <translation>时间 (s)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Plot.cpp" line="119"/>
+        <location filename="../../src/UI/Widgets/Plot.cpp" line="109"/>
         <source>Samples</source>
         <translation>采样</translation>
     </message>
@@ -30262,7 +31053,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Plot3D</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1254"/>
+        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1226"/>
         <source>Grid Interval: %1 unit(s)</source>
         <translation>网格间隔:%1 单位</translation>
     </message>
@@ -30274,7 +31065,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation type="vanished">提示:在任意位置按 %1 打开命令面板。</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Terminal.cpp" line="1416"/>
+        <location filename="../../src/UI/Widgets/Terminal.cpp" line="1462"/>
         <source>Tip: Press %1 anywhere to open the command palette.</source>
         <translation>提示:在任意位置按 %1 打开命令面板。</translation>
     </message>
@@ -30282,47 +31073,47 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Waterfall</name>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="379"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="288"/>
         <source>Viridis</source>
         <translation>Viridis</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="381"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="290"/>
         <source>Inferno</source>
         <translation>Inferno</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="383"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="292"/>
         <source>Magma</source>
         <translation>Magma</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="385"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="294"/>
         <source>Plasma</source>
         <translation>Plasma</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="387"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="296"/>
         <source>Turbo</source>
         <translation>Turbo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="389"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="298"/>
         <source>Jet</source>
         <translation>Jet</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="391"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="300"/>
         <source>Hot</source>
         <translation>Hot</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="393"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="302"/>
         <source>Grayscale</source>
         <translation>灰度</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="395"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="304"/>
         <source>Unknown</source>
         <translation>未知</translation>
     </message>

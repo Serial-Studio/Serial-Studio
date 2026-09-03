@@ -1,0 +1,64 @@
+{
+  "title": "Legacy Schema",
+  "frameStart": "$",
+  "frameEnd": ";",
+  "groups": [
+    {
+      "title": "Sensors",
+      "widget": "datagrid",
+      "datasets": [
+        {
+          "title": "Temperature",
+          "index": 1,
+          "graph": true,
+          "widget": "",
+          "units": "",
+          "min": 0,
+          "max": 100,
+          "alarm": 0,
+          "led": false,
+          "log": false,
+          "fft": false
+        },
+        {
+          "title": "Humidity",
+          "index": 2,
+          "graph": true,
+          "widget": "",
+          "units": "",
+          "min": 0,
+          "max": 100,
+          "alarm": 0,
+          "led": false,
+          "log": false,
+          "fft": false
+        }
+      ]
+    },
+    {
+      "title": "Motion",
+      "widget": "datagrid",
+      "datasets": [
+        {
+          "title": "Accel X",
+          "index": 3,
+          "graph": true,
+          "widget": "",
+          "units": "",
+          "min": 0,
+          "max": 100,
+          "alarm": 0,
+          "led": false,
+          "log": false,
+          "fft": false
+        }
+      ]
+    }
+  ],
+  "actions": [],
+  "dashboardLayout": {
+    "pattern": "rows",
+    "ratio": 40
+  },
+  "activeGroupId": 1
+}

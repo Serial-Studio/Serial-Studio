@@ -91,6 +91,7 @@ public:
   [[nodiscard]] bool enumerate(Enumeration& probe) const;
   [[nodiscard]] bool inputSelectionPresent(const Enumeration& probe) const;
   [[nodiscard]] bool outputSelectionPresent(const Enumeration& probe) const;
+  [[nodiscard]] bool outputDeviceSelected() const;
   [[nodiscard]] bool replaceInputDevices(const Enumeration& probe, const bool force);
   [[nodiscard]] bool replaceOutputDevices(const Enumeration& probe, const bool force);
   [[nodiscard]] bool applySavedSelection(const QJsonObject& settings,

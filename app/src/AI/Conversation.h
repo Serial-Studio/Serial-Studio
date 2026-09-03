@@ -21,9 +21,11 @@
 #include <QVariantList>
 #include <QVariantMap>
 
+#include "AI/Conversation/AsyncToolRunner.h"
 #include "AI/Conversation/AutoVerifier.h"
 #include "AI/Conversation/HelpFetcher.h"
 #include "AI/Conversation/MetaToolRunner.h"
+#include "AI/Conversation/ToolTurnRunner.h"
 #include "AI/SentinelProbe.h"
 
 namespace DataModel {
@@ -130,6 +132,11 @@ private slots:
   void onReplyFinished();
   void onReplyError(const QString& message);
   void onHelpFetchFinished(const QString& callId, const QJsonObject& result);
+  void onAsyncToolFinished(const QString& callId,
+                           const QString& name,
+                           const QJsonObject& arguments,
+                           const QJsonObject& reply,
+                           quint64 generation);
 
 private:
   void issueRequest();
@@ -151,6 +158,14 @@ private:
                           const QJsonObject& result       = {},
                           const QJsonObject& verification = {}) override;
   void runToolCall(const QString& callId, const QString& name, const QJsonObject& arguments);
+  [[nodiscard]] bool runToolCallAsync(const QString& callId,
+                                      const QString& name,
+                                      const QJsonObject& arguments);
+  void finishToolCall(const QString& callId,
+                      const QString& name,
+                      const QJsonObject& arguments,
+                      const QJsonObject& reply);
+  void maybeResumeAfterToolBatch();
   void recordToolResult(const QString& callId,
                         const QString& name,
                         const QJsonObject& payload) override;
@@ -174,14 +189,6 @@ private:
   [[nodiscard]] QJsonArray dispatcherTools() const;
   [[nodiscard]] QJsonArray budgetedHistory(const QJsonArray& tools) const;
 
-  /**
-   * @brief Captured Confirm-state info pending user approval.
-   */
-  struct PendingCall {
-    QString name;
-    QJsonObject arguments;
-  };
-
 private:
   Provider* m_provider;
   ToolDispatcher* m_dispatcher;
@@ -200,7 +207,6 @@ private:
   QJsonArray m_pendingThinkingBlocks;
   QJsonArray m_pendingToolUseBlocks;
   QJsonArray m_pendingToolResultBlocks;
-  int m_outstandingToolResults;
   int m_toolCallCount;
   int m_retryCount;
   quint64 m_turnGeneration;
@@ -209,9 +215,9 @@ private:
   bool m_busy;
   QString m_lastError;
 
-  QHash<QString, PendingCall> m_awaitingConfirm;
   bool m_lastAwaitingFlag;
 
+  ToolTurnRunner m_tools;
   HelpFetcher m_helpFetcher;
   MetaToolRunner m_metaTools;
   AutoVerifier m_autoVerify;
@@ -225,6 +231,8 @@ private:
   QString m_handoffSeed;
   QSet<QString> m_loadedSkills;
   SentinelProbe m_probe;
+
+  AsyncToolRunner m_asyncTools;
 };
 
 }  // namespace AI

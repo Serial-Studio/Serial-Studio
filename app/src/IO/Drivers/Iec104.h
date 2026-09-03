@@ -35,6 +35,7 @@
 #include <QVector>
 
 #include "DataModel/Frame.h"
+#include "IO/AsyncTcpDial.h"
 #include "IO/Drivers/Iec104/Apci.h"
 #include "IO/Drivers/Iec104/Asdu.h"
 #include "IO/Drivers/OpcUaWire.h"
@@ -138,6 +139,7 @@ public:
   void setSessionPeer(Iec104* peer);
 
   [[nodiscard]] bool isOpen() const noexcept override;
+  [[nodiscard]] bool isConnecting() const noexcept override;
   [[nodiscard]] bool isReadable() const noexcept override;
   [[nodiscard]] bool isWritable() const noexcept override;
   [[nodiscard]] bool configurationOk() const noexcept override;
@@ -183,9 +185,11 @@ private slots:
   void onReadyRead();
   void onSocketError();
   void onProtocolTick();
+  void onDialFinished(bool ok, const QString& reason);
 
 private:
   void doClose();
+  void beginSession();
   void loadSettings();
   void savePoints();
   void reserveFrame();
@@ -198,8 +202,7 @@ private:
   void publishDeltaFrame();
   void reportLinkLost(const QString& reason);
   void sendApdu(const QByteArray& apdu);
-
-  [[nodiscard]] bool dialStation();
+  void dialStation();
 
   [[nodiscard]] int slotForPoint(const Iec104Proto::Point& point);
   [[nodiscard]] const Iec104* sessionPeer() const;
@@ -241,11 +244,12 @@ private:
   QString m_lastError;
   QTimer* m_timer;
   QTcpSocket* m_socket;
+  AsyncTcpDial m_dial;
   QByteArray m_rx;
   QByteArray m_frame;
   QPointer<Iec104> m_sessionPeer;
   Iec104Proto::Connection m_link;
-  QHash<quint32, int> m_slotForIoa;
+  QHash<quint64, int> m_slotForKey;
   QVector<Iec104Point> m_points;
   QList<QVariant> m_values;
   QList<qint64> m_stamps;

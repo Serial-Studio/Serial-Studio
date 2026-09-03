@@ -102,9 +102,9 @@ Item {
       // Socket type
       //
       Label {
+        enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
         text: qsTr("Socket Type") + ":"
-        enabled: app.ioEnabled
       } Widgets.Combo {
         id: _typeCombo
 
@@ -123,10 +123,10 @@ Item {
       // UDP port
       //
       Label {
+        visible: root.isUdp
+        enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
         text: qsTr("Local Port") + ":"
-        enabled: app.ioEnabled
-        visible: root.isUdp
       } Widgets.LineField {
         id: _udpLocalPort
 
@@ -160,8 +160,8 @@ Item {
       // Address
       //
       Label {
-        opacity: enabled ? 1 : 0.5
         enabled: app.ioEnabled
+        opacity: enabled ? 1 : 0.5
         visible: root.isTcp || root.isUdp
         text: qsTr("Remote Address") + ":"
       } Widgets.LineField {
@@ -190,10 +190,10 @@ Item {
       // TCP port
       //
       Label {
-        opacity: enabled ? 1 : 0.5
-        enabled: app.ioEnabled
-        text: qsTr("Remote Port") + ":"
         visible: root.isTcp
+        enabled: app.ioEnabled
+        opacity: enabled ? 1 : 0.5
+        text: qsTr("Remote Port") + ":"
       } Widgets.LineField {
         id: _tcpPort
 
@@ -228,8 +228,8 @@ Item {
       // Output port
       //
       Label {
-        opacity: enabled ? 1 : 0.5
         enabled: app.ioEnabled
+        opacity: enabled ? 1 : 0.5
         text: qsTr("Remote Port") + ":"
         visible: root.isUdp && !_udpMulticast.checked
       } Widgets.LineField {
@@ -265,9 +265,9 @@ Item {
       // UDP multicast checkbox
       //
       Label {
+        visible: root.isUdp
         text: qsTr("Multicast") + ":"
         opacity: _udpMulticast.enabled ? 1 : 0.5
-        visible: root.isUdp
       } CheckBox {
         id: _udpMulticast
 
@@ -288,10 +288,10 @@ Item {
       // WebSocket URL
       //
       Label {
-        opacity: enabled ? 1 : 0.5
         enabled: app.ioEnabled
-        visible: root.isWebSocket
         text: qsTr("URL") + ":"
+        visible: root.isWebSocket
+        opacity: enabled ? 1 : 0.5
       } Widgets.LineField {
         id: _wsUrl
 
@@ -317,9 +317,9 @@ Item {
       // WebSocket send format
       //
       Label {
-        opacity: enabled ? 1 : 0.5
         enabled: app.ioEnabled
         visible: root.isWebSocket
+        opacity: enabled ? 1 : 0.5
         text: qsTr("Send Format") + ":"
       } Widgets.Combo {
         id: _wsFormat
@@ -340,10 +340,10 @@ Item {
       // HTTP URL
       //
       Label {
-        opacity: enabled ? 1 : 0.5
-        enabled: app.ioEnabled
         visible: root.isHttp
+        enabled: app.ioEnabled
         text: qsTr("URL") + ":"
+        opacity: enabled ? 1 : 0.5
       } Widgets.LineField {
         id: _httpUrl
 
@@ -369,9 +369,9 @@ Item {
       // HTTP method
       //
       Label {
-        opacity: enabled ? 1 : 0.5
-        enabled: app.ioEnabled
         visible: root.isHttp
+        enabled: app.ioEnabled
+        opacity: enabled ? 1 : 0.5
         text: qsTr("Method") + ":"
       } Widgets.Combo {
         id: _httpMethod
@@ -392,9 +392,9 @@ Item {
       // HTTP poll interval
       //
       Label {
-        opacity: enabled ? 1 : 0.5
-        enabled: app.ioEnabled
         visible: root.isHttp
+        enabled: app.ioEnabled
+        opacity: enabled ? 1 : 0.5
         text: qsTr("Poll Interval") + ":"
       } Widgets.LineField {
         id: _httpInterval
@@ -425,9 +425,9 @@ Item {
       // HTTP request body
       //
       Label {
-        opacity: enabled ? 1 : 0.5
-        enabled: app.ioEnabled
         visible: root.isHttp
+        enabled: app.ioEnabled
+        opacity: enabled ? 1 : 0.5
         text: qsTr("Request Body") + ":"
       } Widgets.LineField {
         id: _httpBody
@@ -452,9 +452,9 @@ Item {
       // HTTP request headers
       //
       Label {
-        opacity: enabled ? 1 : 0.5
-        enabled: app.ioEnabled
         visible: root.isHttp
+        enabled: app.ioEnabled
+        opacity: enabled ? 1 : 0.5
         Layout.alignment: Qt.AlignTop
         text: qsTr("Request Headers") + ":"
       } Rectangle {
@@ -491,8 +491,8 @@ Item {
       // TLS bypass, shared by the URL transports
       //
       Label {
-        opacity: _ignoreTls.enabled ? 1 : 0.5
         visible: root.isUrlTransport
+        opacity: _ignoreTls.enabled ? 1 : 0.5
         text: qsTr("Ignore TLS Errors") + ":"
       } CheckBox {
         id: _ignoreTls

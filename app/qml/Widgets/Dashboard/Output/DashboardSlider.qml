@@ -28,10 +28,10 @@ Item {
     Item { Layout.fillHeight: true }
 
     Label {
-      text: root.model ? root.model.title : ""
       color: root.color
-      font: Cpp_Misc_CommonFonts.boldUiFont
       Layout.alignment: Qt.AlignHCenter
+      font: Cpp_Misc_CommonFonts.boldUiFont
+      text: root.model ? root.model.title : ""
     }
 
     RowLayout {
@@ -40,9 +40,9 @@ Item {
       Layout.alignment: Qt.AlignHCenter
 
       Label {
-        text: root.model ? root.model.minValue.toFixed(1) : "0"
         color: root.color
         font: Cpp_Misc_CommonFonts.uiFont
+        text: root.model ? root.model.minValue.toFixed(1) : "0"
       }
 
       Slider {
@@ -63,9 +63,9 @@ Item {
       }
 
       Label {
-        text: root.model ? root.model.maxValue.toFixed(1) : "100"
         color: root.color
         font: Cpp_Misc_CommonFonts.uiFont
+        text: root.model ? root.model.maxValue.toFixed(1) : "100"
       }
     }
 

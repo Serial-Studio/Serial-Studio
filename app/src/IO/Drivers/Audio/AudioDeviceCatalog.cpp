@@ -256,6 +256,16 @@ bool IO::Drivers::AudioDeviceCatalog::outputSelectionPresent(const Enumeration& 
 }
 
 /**
+ * @brief True when an output device is selected at all. Kept apart from outputSelectionPresent(),
+ *        which answers false for BOTH "nothing selected" and "the selection vanished" -- one
+ *        meaning a capture-only session, the other a device that really is gone.
+ */
+bool IO::Drivers::AudioDeviceCatalog::outputDeviceSelected() const
+{
+  return m_selectedOutputDevice >= 0 && m_selectedOutputDevice < m_outputDevices.size();
+}
+
+/**
  * @brief Adopts the enumerated input devices when they differ (or when @p force demands it);
  *        returns true when the list was replaced.
  */

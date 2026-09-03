@@ -19,9 +19,9 @@
 # SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 #
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Workflow configuration
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 name: CI
 
@@ -34,9 +34,9 @@ on:
     paths-ignore:   
     - '**.md'         
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Workflow environment
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 env:
 
@@ -81,13 +81,16 @@ env:
   # every configure site: both PGO stages must see the identical value or the
   # unity TU layout diverges and profile data is silently dropped.
   #
-  SS_UNITY_BATCH: 32
+  # Note: setting batch size to 0 results in a single TU with all sources
+  #
+  SS_UNITY_BATCH: 0
 
   #
-  # Test gating: tagged releases always block on the live pytest suite; this
-  # flag only controls whether continuous (untagged) builds block as well.
+  # Test gating: every publication blocks on the live pytest suite. Setting this
+  # to false lets a continuous (untagged) build publish with a red suite, which
+  # is how master stayed green over failing tests until spec 0075.
   #
-  REQUIRE_TESTS_TO_PUBLISH: false
+  REQUIRE_TESTS_TO_PUBLISH: true
   
   #
   # Excluded AppImage libraries
@@ -95,28 +98,29 @@ env:
   LINUXDEPLOY_EXCLUDED_LIBRARIES: "libmysqlclient.so*;libqsqlmimer.so;libqsqlmysql.so;libqsqlodbc.so;libqsqlpsql.so;libqsqloci.so;libqsqldb2.so;libqsqlibase.so"
 
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Workflow jobs
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 jobs:
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # GNU/Linux build (x86_64)
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
   build-linux:
     runs-on: ubuntu-24.04
     name: '🐧 Linux Build (x86_64)'
     permissions:
       contents: read
-      security-events: write
+    outputs:
+      benchmark: ${{ steps.benchmark.outcome }}
     steps:
     #
     # This repo has no submodules; 'submodules: recursive' is a no-op kept for future deps.
     #
     - name: '🧰 Checkout'
-      uses: actions/checkout@v5
+      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
       with:
         submodules: 'recursive'
 
@@ -207,11 +211,11 @@ jobs:
     #
     - name: '⚙️ Restore Qt Cache'
       id: qt_cache
-      uses: actions/cache/restore@v5
+      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
-          ${{env.USERPROFILE}}/.qt-license
+          ~/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64
 
     #
@@ -236,11 +240,11 @@ jobs:
     #
     - name: '⚙️ Save Qt Cache'
       if: steps.qt_cache.outputs.cache-hit != 'true'
-      uses: actions/cache/save@v5
+      uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
-          ${{env.USERPROFILE}}/.qt-license
+          ~/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64
 
     #
@@ -299,6 +303,68 @@ jobs:
       env:
         QT_QPA_PLATFORM: offscreen
       run: ctest --test-dir build/unit-ci --output-on-failure
+    #
+    # Findings G12 / M7: the repo had no QML tier, so unqualified property access and binding
+    # loops were caught only by somebody noticing a runtime warning. The gate lives here rather
+    # than in `lint` because qmllint needs Qt and a configured tree, and this job has both.
+    # Findings are normalized without line numbers (they churn on every edit above the warning)
+    # and compared against app/qml/qmllint-baseline.json
+    #
+    - name: '🔬 QML lint'
+      run: |
+        set -uo pipefail
+        cmake --build build/unit-ci --target ss_qmllint > qmllint.txt 2>&1 || true
+        python3 - <<'PY'
+        import json, os, re, sys
+
+        BASELINE = "app/qml/qmllint-baseline.json"
+        text = open("qmllint.txt", encoding="utf-8", errors="replace").read()
+        if "No rule to make target" in text or "unknown target" in text:
+            sys.exit("::error::the ss_qmllint target does not exist; is Qt's qmllint installed?")
+
+        pattern = re.compile(r"^(?:Warning|Error|Info):\s+(\S+?):\d+:\d+:\s+(.*)$")
+        found = set()
+        for line in text.split("\n"):
+            match = pattern.match(line.strip())
+            if not match:
+                continue
+            # qmllint prints absolute paths; key on the repo-relative part so the baseline
+            # does not depend on where the workspace happened to be checked out.
+            path = match.group(1).replace(os.sep, "/")
+            marker = path.find("app/qml/")
+            path = path[marker:] if marker >= 0 else os.path.relpath(path, os.getcwd())
+            found.add(f"{path} :: {match.group(2).strip()}")
+
+        baseline = json.load(open(BASELINE, encoding="utf-8"))
+        accepted = set(baseline.get("accepted", []))
+        new = sorted(found - accepted)
+
+        print(f"{len(found)} qmllint finding(s), {len(accepted)} accepted, {len(new)} new")
+        for entry in new:
+            print(f"  {entry}")
+
+        if not baseline.get("seeded"):
+            print("::warning::qmllint baseline is unseeded; paste the list above into "
+                  f"{BASELINE} and set seeded=true to arm the gate")
+            sys.exit(0)
+
+        if new:
+            sys.exit(f"::error::{len(new)} qmllint finding(s) not in {BASELINE}")
+
+        gone = sorted(accepted - found)
+        if gone:
+            print("::warning::baseline entries no longer reported; prune them: "
+                  + ", ".join(gone))
+        PY
+
+    - name: '📤 Upload artifact: qmllint output'
+      if: always()
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      with:
+        name: qmllint-Linux-x64
+        path: qmllint.txt
+        if-no-files-found: ignore
+
 
     #
     # Stage 1 of the two-stage PGO flow: an instrumented Release build whose only job is to emit
@@ -321,10 +387,56 @@ jobs:
           -DUSE_SYSTEM_ZLIB=ON \
           -DUSE_SYSTEM_EXPAT=ON \
           -DSS_INAPP_TESTS=ON \
+          -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
           -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_PREFIX_PATH="${{github.workspace}}/grpc-prefix;${CMAKE_PREFIX_PATH}" \
           -DBUILD_COMMERCIAL=ON \
           -DBUILD_GPL3=OFF
+
+    #
+    # Finding L1: CMake composes the command line as <DEFINES> <INCLUDES> <FLAGS>, so a FORTIFY
+    # level passed as a compile DEFINITION lands ahead of every -U_FORTIFY_SOURCE in FLAGS and is
+    # cancelled by it -- which is how hardened Linux packages shipped with no FORTIFY at all.
+    # Reading the real compile line is the only way to know which token wins, so this step derives
+    # the level Hardening.cmake should have chosen and asserts the compile line agrees
+    #
+    - name: '🛡 Assert FORTIFY survives the compile line'
+      run: |
+        set -euo pipefail
+        GCC_MAJOR=$(cc -dumpversion | cut -d. -f1)
+        GLIBC=$(getconf GNU_LIBC_VERSION | awk '{print $2}')
+        GLIBC_MAJOR=${GLIBC%%.*}
+        GLIBC_MINOR=${GLIBC#*.}
+        GLIBC_MINOR=${GLIBC_MINOR%%.*}
+        EXPECT=2
+        if [ "$GCC_MAJOR" -ge 12 ] && [ "$GLIBC_MAJOR" -ge 2 ] && [ "$GLIBC_MINOR" -ge 34 ]; then
+          EXPECT=3
+        fi
+        echo "cc major $GCC_MAJOR, glibc $GLIBC -> expecting -D_FORTIFY_SOURCE=$EXPECT"
+        LAST=$(python3 - <<'PY'
+        import json, sys
+        db = json.load(open("build/compile_commands.json"))
+        rows = [e for e in db
+                if "app/CMakeFiles" in (e.get("output") or "") + " " + (e.get("file") or "")]
+        if not rows:
+            sys.exit("no compile_commands.json entry for the application target")
+        seen = set()
+        for e in rows:
+            cmd = e.get("command") or " ".join(e.get("arguments", []))
+            tokens = [t for t in cmd.split() if "_FORTIFY_SOURCE" in t]
+            if not tokens:
+                sys.exit("no FORTIFY token on an application compile line")
+            seen.add(tokens[-1])
+        if len(seen) != 1:
+            sys.exit("application TUs disagree on the FORTIFY level: %s" % sorted(seen))
+        print(seen.pop())
+        PY
+        )
+        echo "last FORTIFY token on the application compile line: $LAST"
+        if [ "$LAST" != "-D_FORTIFY_SOURCE=$EXPECT" ]; then
+          echo "::error::FORTIFY cancelled or wrong level: got '$LAST', expected -D_FORTIFY_SOURCE=$EXPECT"
+          exit 1
+        fi
 
     #
     # Builds the instrumented binary the two training runs profile
@@ -333,16 +445,18 @@ jobs:
       run: cmake --build build --config Release
 
     #
-    # Pro widgets are license-gated, so an unactivated training run profiles the wrong code;
-    # failure is tolerated because an unlicensed profile still beats no profile
+    # Pro widgets are license-gated, so an unactivated training run profiles the GPL subset and
+    # the shipped binary is optimized for code no Pro user runs. A failed activation is therefore
+    # a failed build, not a warning
     #
     - name: '🔑 Activate Serial Studio license (Pro hotpath training)'
       env:
         QT_QPA_PLATFORM: offscreen
+        SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
         LD_LIBRARY_PATH: >-
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
       run: |
-        ./build/app/${{env.UNIXNAME}} --activate "${{secrets.SERIAL_STUDIO_LICENSE_KEY}}" || true
+        ./build/app/${{env.UNIXNAME}} --activate "$SERIAL_STUDIO_LICENSE_KEY"
 
     #
     # --min-fps 1 turns the benchmark into a profile generator: the real gate runs later, against
@@ -401,15 +515,41 @@ jobs:
       run: cmake --build build --config Release
 
     #
-    # The CI throughput gate: nine tiers scaled off --min-fps, hard failure on any of them
+    # Findings G12 / M7: instantiates every compiled .qml against stubbed Cpp_* globals and
+    # fails on a ReferenceError -- the GPL-build-hits-a-Pro-global class of bug. This is the
+    # commercial leg; the sanitize job runs the same suite on a GPL build
+    #
+    - name: '🧪 QML instantiation self-test'
+      env:
+        QT_QPA_PLATFORM: offscreen
+        LD_LIBRARY_PATH: >-
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
+      run: ./build/app/${{env.UNIXNAME}} --headless --selftest-suite qml
+
+    #
+    # The CI throughput gate: nine tiers scaled off --min-fps. continue-on-error is NOT a
+    # softening -- benchmark-retry-linux reruns this gate against the packaged binary when it
+    # fails here, and 'upload' publishes only if one of the two attempts passed. A shared runner
+    # with a noisy neighbour no longer fails an unrelated PR on the first sample
     #
     - name: '🚦 Hotpath throughput gate (256 kHz)'
+      id: benchmark
+      continue-on-error: true
       env:
         QT_QPA_PLATFORM: offscreen
         LD_LIBRARY_PATH: >-
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
       run: |
-        ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 256000
+        ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 256000 \
+          --benchmark-output benchmark.txt
+
+    - name: '📤 Upload artifact: benchmark report (Linux x64)'
+      if: always()
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      with:
+        name: benchmark-Linux-x64
+        path: benchmark.txt
+        if-no-files-found: ignore
 
     #
     # Replays the big_db_test load against the optimized binary; catches the teardown crashes the
@@ -943,7 +1083,7 @@ jobs:
     # 0065) runs on everything from Debian 10 / RHEL 8 up, so it is the only one shipped
     #
     - name: '📤 Upload artifact: AppImage'
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage
@@ -952,7 +1092,7 @@ jobs:
     # Release artifact: Debian package
     #
     - name: '📤 Upload artifact: .deb (x64)'
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.deb
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.deb
@@ -961,7 +1101,7 @@ jobs:
     # Release artifact: RPM package
     #
     - name: '📤 Upload artifact: .rpm (x64)'
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.rpm
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.rpm
@@ -971,7 +1111,7 @@ jobs:
     # trusting the release page; ignored when signing was skipped
     #
     - name: '📤 Upload artifact: signatures + signed binary (x64)'
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64-signed
         if-no-files-found: ignore
@@ -983,22 +1123,23 @@ jobs:
           ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.asc
           signing-public-key.asc
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # GNU/Linux build (aarch64)
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
   build-linux-arm64:
     runs-on: ubuntu-24.04-arm
     name: '🐧 Linux Build (arm64)'
     permissions:
       contents: read
-      security-events: write
+    outputs:
+      benchmark: ${{ steps.benchmark.outcome }}
     steps:
     #
     # This repo has no submodules; 'submodules: recursive' is a no-op kept for future deps.
     #
     - name: '🧰 Checkout'
-      uses: actions/checkout@v5
+      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
       with:
         submodules: 'recursive'
 
@@ -1089,7 +1230,7 @@ jobs:
     #
     - name: '⚙️ Restore Qt Cache'
       id: qt_cache
-      uses: actions/cache/restore@v5
+      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
@@ -1116,7 +1257,7 @@ jobs:
     # Writes the entry the restore step looks for, keyed by OS + Qt version + arch
     #
     - name: '⚙️ Save Qt Cache'
-      uses: actions/cache/save@v5
+      uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
       if: steps.qt_cache.outputs.cache-hit != 'true'
       with:
         path: |
@@ -1213,16 +1354,18 @@ jobs:
       run: cmake --build build --config Release
 
     #
-    # Pro widgets are license-gated, so an unactivated training run profiles the wrong code;
-    # failure is tolerated because an unlicensed profile still beats no profile
+    # Pro widgets are license-gated, so an unactivated training run profiles the GPL subset and
+    # the shipped binary is optimized for code no Pro user runs. A failed activation is therefore
+    # a failed build, not a warning
     #
     - name: '🔑 Activate Serial Studio license (Pro hotpath training)'
       env:
         QT_QPA_PLATFORM: offscreen
+        SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
         LD_LIBRARY_PATH: >-
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/lib
       run: |
-        ./build/app/${{env.UNIXNAME}} --activate "${{secrets.SERIAL_STUDIO_LICENSE_KEY}}" || true
+        ./build/app/${{env.UNIXNAME}} --activate "$SERIAL_STUDIO_LICENSE_KEY"
 
     #
     # --min-fps 1 turns the benchmark into a profile generator: the real gate runs later, against
@@ -1281,15 +1424,28 @@ jobs:
       run: cmake --build build --config Release
 
     #
-    # The CI throughput gate: nine tiers scaled off --min-fps, hard failure on any of them
+    # The CI throughput gate: nine tiers scaled off --min-fps. continue-on-error is NOT a
+    # softening -- benchmark-retry-linux-arm64 reruns this gate against the packaged binary when
+    # it fails here, and 'upload' publishes only if one of the two attempts passed
     #
     - name: '🚦 Hotpath throughput gate (256 kHz)'
+      id: benchmark
+      continue-on-error: true
       env:
         QT_QPA_PLATFORM: offscreen
         LD_LIBRARY_PATH: >-
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/lib
       run: |
-        ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 256000
+        ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 256000 \
+          --benchmark-output benchmark.txt
+
+    - name: '📤 Upload artifact: benchmark report (Linux arm64)'
+      if: always()
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      with:
+        name: benchmark-Linux-arm64
+        path: benchmark.txt
+        if-no-files-found: ignore
 
     #
     # Replays the big_db_test load against the optimized binary; catches the teardown crashes the
@@ -1797,7 +1953,7 @@ jobs:
     # 0065) runs on everything from Debian 10 / RHEL 8 up, so it is the only one shipped
     #
     - name: '📤 Upload artifact: AppImage'
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage
@@ -1806,7 +1962,7 @@ jobs:
     # Release artifact: Debian package
     #
     - name: '📤 Upload artifact: .deb (arm64)'
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.deb
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.deb
@@ -1815,7 +1971,7 @@ jobs:
     # Release artifact: RPM package
     #
     - name: '📤 Upload artifact: .rpm (arm64)'
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.rpm
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.rpm
@@ -1825,7 +1981,7 @@ jobs:
     # trusting the release page; ignored when signing was skipped
     #
     - name: '📤 Upload artifact: signatures + signed binary (arm64)'
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64-signed
         if-no-files-found: ignore
@@ -1837,21 +1993,23 @@ jobs:
           ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.asc
           signing-public-key.asc
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # macOS arm64 slice
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
   build-macos-arm64:
     runs-on: macos-latest
     name: '🍎 macOS Build (arm64)'
     permissions:
       contents: read
+    outputs:
+      benchmark: ${{ steps.benchmark.outcome }}
     steps:
     #
     # This repo has no submodules; 'submodules: recursive' is a no-op kept for future deps.
     #
     - name: '🧰 Checkout'
-      uses: actions/checkout@v5
+      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
       with:
         submodules: 'recursive'
 
@@ -1874,11 +2032,11 @@ jobs:
     #
     - name: '⚙️ Restore Qt Cache'
       id: qt_cache
-      uses: actions/cache/restore@v5
+      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
-          ${{env.USERPROFILE}}/.qt-license
+          ~/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-arm64
 
     #
@@ -1903,11 +2061,11 @@ jobs:
     #
     - name: '⚙️ Save Qt Cache'
       if: steps.qt_cache.outputs.cache-hit != 'true'
-      uses: actions/cache/save@v5
+      uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
-          ${{env.USERPROFILE}}/.qt-license
+          ~/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-arm64
 
     #
@@ -1935,6 +2093,30 @@ jobs:
       uses: lukka/get-cmake@fffaaafeea488556c2c12dad60690008bc1caacb # v4.4.2
       with:
         useLocalCache: true
+
+    #
+    # The ctest tier ran on Linux only until spec 0075, so 100+ suites -- the DSP bit-exactness
+    # and frame-delimiter scan lanes among them -- never compiled under AppleClang. Same lean
+    # Debug tier as the Linux jobs; the application target never builds here
+    #
+    - name: '🚧 Configure unit-test tier'
+      run: |
+        cmake -G Ninja -B build/unit-ci \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DSS_BUILD_TESTS=ON \
+          -DBUILD_GPL3=ON \
+          -DENABLE_GRPC=OFF \
+          -DWITH_WEBENGINE=OFF \
+          -DSS_USE_MIMALLOC=OFF \
+          -DCMAKE_OSX_DEPLOYMENT_TARGET=14.0
+
+    - name: '🚧 Build unit-test tier'
+      run: cmake --build build/unit-ci --target ss_unit_tests
+
+    - name: '🧪 Run ctest'
+      env:
+        QT_QPA_PLATFORM: offscreen
+      run: ctest --test-dir build/unit-ci --output-on-failure
 
     #
     # Stage 1 of the two-stage PGO flow, pinned to arm64: this job builds only the native slice
@@ -1967,15 +2149,17 @@ jobs:
       run: cmake --build build --config Release
 
     #
-    # Pro widgets are license-gated, so an unactivated training run profiles the wrong code;
-    # failure is tolerated because an unlicensed profile still beats no profile
+    # Pro widgets are license-gated, so an unactivated training run profiles the GPL subset and
+    # the shipped binary is optimized for code no Pro user runs. A failed activation is therefore
+    # a failed build, not a warning
     #
     - name: '🔑 Activate Serial Studio license (Pro hotpath training)'
       env:
         QT_QPA_PLATFORM: offscreen
+        SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
         DYLD_FRAMEWORK_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64/${{env.QT_VERSION_MACOS}}/macos/lib
       run: |
-        ./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --activate "${{secrets.SERIAL_STUDIO_LICENSE_KEY}}" || true
+        ./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --activate "$SERIAL_STUDIO_LICENSE_KEY"
 
     #
     # --min-fps 1 turns the benchmark into a profile generator: the real gate runs later, against
@@ -2032,14 +2216,28 @@ jobs:
       run: cmake --build build --config Release
 
     #
-    # The CI throughput gate: nine tiers scaled off --min-fps, hard failure on any of them
+    # The CI throughput gate: nine tiers scaled off --min-fps. continue-on-error is NOT a
+    # softening -- benchmark-retry-macos reruns this gate against the packaged binary when it
+    # fails here, and 'upload' publishes only if one of the two attempts passed. macos-latest is
+    # a shared VM, the noisiest of the four runners
     #
     - name: '🚦 Hotpath throughput gate (256 kHz)'
+      id: benchmark
+      continue-on-error: true
       env:
         QT_QPA_PLATFORM: offscreen
         DYLD_FRAMEWORK_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64/${{env.QT_VERSION_MACOS}}/macos/lib
       run: |
-        ./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --headless --benchmark-hotpath --min-fps 256000
+        ./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} \
+          --headless --benchmark-hotpath --min-fps 256000 --benchmark-output benchmark.txt
+
+    - name: '📤 Upload artifact: benchmark report (macOS arm64)'
+      if: always()
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      with:
+        name: benchmark-macOS-arm64
+        path: benchmark.txt
+        if-no-files-found: ignore
 
     #
     # Replays the big_db_test load against the optimized binary; catches the teardown crashes the
@@ -2108,15 +2306,15 @@ jobs:
     # artifact
     #
     - name: '📤 Upload artifact: arm64 deployed .app'
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
         name: macos-arm64-app
         path: macos-arm64-app.tar.gz
         retention-days: 1
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # macOS x86_64
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
   build-macos-intel:
     runs-on: macos-latest
@@ -2128,7 +2326,7 @@ jobs:
     # This repo has no submodules; 'submodules: recursive' is a no-op kept for future deps.
     #
     - name: '🧰 Checkout'
-      uses: actions/checkout@v5
+      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
       with:
         submodules: 'recursive'
 
@@ -2151,11 +2349,11 @@ jobs:
     #
     - name: '⚙️ Restore Qt Cache'
       id: qt_cache
-      uses: actions/cache/restore@v5
+      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
-          ${{env.USERPROFILE}}/.qt-license
+          ~/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x86_64
 
     #
@@ -2180,11 +2378,11 @@ jobs:
     #
     - name: '⚙️ Save Qt Cache'
       if: steps.qt_cache.outputs.cache-hit != 'true'
-      uses: actions/cache/save@v5
+      uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
-          ${{env.USERPROFILE}}/.qt-license
+          ~/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x86_64
 
     #
@@ -2270,15 +2468,15 @@ jobs:
     # retention-days: 1, an intermediate consumed by the universal merge job
     #
     - name: '📤 Upload artifact: x86_64 slice'
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
         name: macos-intel-exe
         path: ${{env.EXECUTABLE}}-x86_64
         retention-days: 1
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # macOS universal merge + sign + notarize.
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
   build-macos:
     runs-on: macos-latest
@@ -2288,19 +2486,18 @@ jobs:
       - build-macos-intel
     permissions:
       contents: read
-      security-events: write
     steps:
     #
     # No submodules: this job merges, signs and notarizes prebuilt artifacts and never compiles
     #
     - name: '🧰 Checkout'
-      uses: actions/checkout@v5
+      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
 
     #
     # create-dmg is an npm package
     #
     - name: '⚙️ Install Node'
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
       with:
         node-version: 22
 
@@ -2308,7 +2505,7 @@ jobs:
     # The deployed arm64 bundle produced by build-macos-arm64
     #
     - name: '📥 Download arm64 deployed .app'
-      uses: actions/download-artifact@v5
+      uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
       with:
         name: macos-arm64-app
         path: .
@@ -2317,7 +2514,7 @@ jobs:
     # The bare x86_64 executable produced by build-macos-intel
     #
     - name: '📥 Download x86_64 slice'
-      uses: actions/download-artifact@v5
+      uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
       with:
         name: macos-intel-exe
         path: ./intel-slice
@@ -2393,7 +2590,7 @@ jobs:
     # Loads the Developer ID identity from the p12 secret into the runner keychain
     #
     - name: '🪪 Import Certificates'
-      uses: apple-actions/import-codesign-certs@v6
+      uses: apple-actions/import-codesign-certs@fe74d46e82474f87e1ba79832ad28a4013d0e33a # v6.1.0
       with:
         p12-file-base64: ${{secrets.APPLE_CERTIFICATES_P12}}
         p12-password: ${{secrets.APPLE_CERTIFICATES_P12_PASSWORD}}
@@ -2403,10 +2600,12 @@ jobs:
     # app/deploy/macOS
     #
     - name: '✍🏻 Sign Application with Entitlements'
+      env:
+        APPLE_APPID_TEAM_ID: ${{secrets.APPLE_APPID_TEAM_ID}}
       run: |
         codesign --force --deep --options runtime \
           --entitlements "${GITHUB_WORKSPACE}/app/deploy/macOS/Serial-Studio.entitlements" \
-          --sign "${{secrets.APPLE_APPID_TEAM_ID}}" \
+          --sign "$APPLE_APPID_TEAM_ID" \
           "${{env.APPLICATION}}.app"
 
     #
@@ -2453,21 +2652,22 @@ jobs:
     # Release artifact: the signed, notarized, stapled universal DMG
     #
     - name: '📤 Upload artifact: DMG'
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Windows build (MSVC 2022 x86_64)
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
   build-windows:
     runs-on: windows-latest
     name: '🧊 Windows Build (x86_64)'
     permissions:
       contents: read
-      security-events: write
+    outputs:
+      benchmark: ${{ steps.benchmark.outcome }}
     steps:
     #
     # core.autocrlf=input keeps the checkout LF-only, which is what code-verify and clang-format
@@ -2478,7 +2678,7 @@ jobs:
     # This repo has no submodules; 'submodules: recursive' is a no-op kept for future deps.
     #
     - name: '🧰 Checkout'
-      uses: actions/checkout@v5
+      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
       with:
         submodules: 'recursive'
 
@@ -2488,11 +2688,11 @@ jobs:
     #
     - name: '⚙️ Restore Qt Cache'
       id: qt_cache
-      uses: actions/cache/restore@v5
+      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64
-          ${{env.USERPROFILE}}/.qt-license
+          ~/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-msvc2022_64
 
     #
@@ -2516,11 +2716,11 @@ jobs:
     #
     - name: '⚙️ Save Qt Cache'
       if: steps.qt_cache.outputs.cache-hit != 'true'
-      uses: actions/cache/save@v5
+      uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64
-          ${{env.USERPROFILE}}/.qt-license
+          ~/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-msvc2022_64
 
     #
@@ -2554,7 +2754,7 @@ jobs:
     # Sets the x64 MSVC environment that the Ninja generator and clang-cl inherit
     #
     - name: '🛠 Setup MSVC Development Environment'
-      uses: TheMrMilchmann/setup-msvc-dev@v4
+      uses: TheMrMilchmann/setup-msvc-dev@368ef7d1ee4d1171b31d4a7f67f4d954f903f5a9 # v4.1.0
       with:
         arch: x64
 
@@ -2568,6 +2768,31 @@ jobs:
         if (-not (Test-Path (Join-Path $clangDir 'clang-cl.exe'))) { throw "VS clang-cl not found at $clangDir" }
         Add-Content -Path $env:GITHUB_PATH -Value $clangDir
         & (Join-Path $clangDir 'clang-cl.exe') --version
+
+    #
+    # The ctest tier ran on Linux only until spec 0075, so 100+ suites never compiled under
+    # clang-cl. Same lean Debug tier as the Linux jobs, on the toolchain that actually ships
+    # the Windows binary; the application target never builds here
+    #
+    - name: '🚧 Configure unit-test tier'
+      run: |
+        cmake -G Ninja -B build/unit-ci `
+          -DCMAKE_CXX_COMPILER=clang-cl `
+          -DCMAKE_C_COMPILER=clang-cl `
+          -DCMAKE_BUILD_TYPE=Debug `
+          -DSS_BUILD_TESTS=ON `
+          -DBUILD_GPL3=ON `
+          -DENABLE_GRPC=OFF `
+          -DWITH_WEBENGINE=OFF `
+          -DSS_USE_MIMALLOC=OFF
+
+    - name: '🚧 Build unit-test tier'
+      run: cmake --build build/unit-ci --target ss_unit_tests
+
+    - name: '🧪 Run ctest'
+      env:
+        QT_QPA_PLATFORM: offscreen
+      run: ctest --test-dir build/unit-ci --output-on-failure
 
     #
     # gRPC arrives as a prebuilt tarball from GRPC_REPO; building it from source would cost more
@@ -2615,21 +2840,19 @@ jobs:
       run: cmake --build build --config Release
 
     #
-    # Pro widgets are license-gated, so an unactivated training run profiles the wrong code;
-    # wrapped in try/catch and exit 0 because an unlicensed profile still beats no profile
+    # Pro widgets are license-gated, so an unactivated training run profiles the GPL subset and
+    # the shipped binary is optimized for code no Pro user runs. A failed activation is therefore
+    # a failed build, not a warning
     #
     - name: '🔑 Activate Serial Studio license (Pro hotpath training)'
+      env:
+        SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
       run: |
-        try {
-          $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
-            -ArgumentList '--activate',"${{secrets.SERIAL_STUDIO_LICENSE_KEY}}" `
-            -WorkingDirectory $PWD -PassThru -NoNewWindow
-          if (-not $p.WaitForExit(120000)) { $p.Kill() }
-          if ($p.ExitCode -ne 0) { Write-Host "Activation failed (exit $($p.ExitCode)); training without Pro widgets" }
-        } catch {
-          Write-Host "License activation error: $_"
-        }
-        exit 0
+        $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
+          -ArgumentList '--activate',"$env:SERIAL_STUDIO_LICENSE_KEY" `
+          -WorkingDirectory $PWD -PassThru -NoNewWindow
+        if (-not $p.WaitForExit(120000)) { $p.Kill(); throw 'license activation timed out' }
+        if ($p.ExitCode -ne 0) { throw "license activation failed (exit $($p.ExitCode))" }
 
     #
     # --min-fps 1 turns the benchmark into a profile generator: the real gate runs later, against
@@ -2685,15 +2908,27 @@ jobs:
 
     #
     # The throughput gate reads HOTPATH_PASS out of benchmark.txt: Start-Process loses the child's
-    # exit code, so the verdict travels through the file
+    # exit code, so the verdict travels through the file. continue-on-error is NOT a softening --
+    # benchmark-retry-windows reruns this gate against the packaged binary when it fails here,
+    # and 'upload' publishes only if one of the two attempts passed
     #
     - name: '🚦 Hotpath throughput gate (256 kHz)'
+      id: benchmark
+      continue-on-error: true
       run: |
         $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
           -ArgumentList '--headless','--benchmark-hotpath','--min-fps','256000','--benchmark-output','benchmark.txt' `
           -WorkingDirectory $PWD -PassThru -NoNewWindow
         if (-not $p.WaitForExit(300000)) { $p.Kill(); throw 'benchmark timed out' }
         if (Select-String -Path benchmark.txt -Pattern 'HOTPATH_PASS=1' -Quiet) { exit 0 } else { exit 1 }
+
+    - name: '📤 Upload artifact: benchmark report (Windows)'
+      if: always()
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      with:
+        name: benchmark-Windows
+        path: benchmark.txt
+        if-no-files-found: ignore
 
     #
     # continue-on-error, like the training load it mirrors
@@ -2709,7 +2944,7 @@ jobs:
     #
     - name: '📦 Upload big_db_test crash dumps'
       if: always()
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
         name: windows-big-db-test-dumps
         path: tests/benchmarks/big_db_test/dumps/
@@ -2735,7 +2970,7 @@ jobs:
     # msbuild is what the WiX toolchain shells out to
     #
     - name: '⚙️ Add msbuild to PATH'
-      uses: microsoft/setup-msbuild@v3
+      uses: microsoft/setup-msbuild@30375c66a4eea26614e0d39710365f22f8b0af57 # v3.0.0
 
     #
     # WiX is the CPack backend for the MSI
@@ -2921,7 +3156,7 @@ jobs:
     # Release artifact: the MSI installer
     #
     - name: '📤 Upload artifact: MSI installer'
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.msi
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.msi
@@ -2930,7 +3165,7 @@ jobs:
     # Release artifact: the portable ZIP
     #
     - name: '📤 Upload artifact: Portable ZIP'
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable
        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip
@@ -2939,22 +3174,230 @@ jobs:
     # Release artifact: the MSIX package uploaded to the Microsoft Store
     #
     - name: '📤 Upload artifact: MSIX package (Store upload)'
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.msix
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.msix
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
+# Benchmark retries
+#---------------------------------------------------------------------------------------------------
+#
+# The 256 kHz gate is a hard number measured on shared runners, and its history oscillates
+# between "mandatory" and "softened" because a noisy neighbour fails an unrelated PR. These jobs
+# are the third option: one rerun, against the PACKAGED binary (self-contained, so no Qt install
+# and no rebuild), and 'upload' publishes only if the first or the second attempt passed. Each
+# runs only when its build job's in-job attempt failed.
+#
+#---------------------------------------------------------------------------------------------------
+
+  benchmark-retry-linux:
+    name: '🔁 Benchmark retry (Linux x64)'
+    needs: build-linux
+    if: needs.build-linux.outputs.benchmark == 'failure'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+    - name: '📥 Download packaged binary'
+      uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+      with:
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage
+        path: .
+
+    - name: '📦 Prepare binary'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libegl1 libgl1 libopengl0 fontconfig
+        APPIMAGE="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage"
+        chmod +x "$APPIMAGE"
+        ./"$APPIMAGE" --appimage-extract >/dev/null
+
+    - name: '🚦 Hotpath throughput gate (256 kHz, retry)'
+      env:
+        QT_QPA_PLATFORM: offscreen
+      run: |
+        ./squashfs-root/AppRun --headless --benchmark-hotpath --min-fps 256000 \
+          --benchmark-output benchmark-retry.txt
+
+    - name: '📤 Upload artifact: benchmark retry report (Linux x64)'
+      if: always()
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      with:
+        name: benchmark-retry-Linux-x64
+        path: benchmark-retry.txt
+        if-no-files-found: ignore
+
+  benchmark-retry-linux-arm64:
+    name: '🔁 Benchmark retry (Linux arm64)'
+    needs: build-linux-arm64
+    if: needs.build-linux-arm64.outputs.benchmark == 'failure'
+    runs-on: ubuntu-24.04-arm
+    permissions:
+      contents: read
+    steps:
+    - name: '📥 Download packaged binary'
+      uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+      with:
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage
+        path: .
+
+    - name: '📦 Prepare binary'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libegl1 libgl1 libopengl0 fontconfig
+        APPIMAGE="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage"
+        chmod +x "$APPIMAGE"
+        ./"$APPIMAGE" --appimage-extract >/dev/null
+
+    - name: '🚦 Hotpath throughput gate (256 kHz, retry)'
+      env:
+        QT_QPA_PLATFORM: offscreen
+      run: |
+        ./squashfs-root/AppRun --headless --benchmark-hotpath --min-fps 256000 \
+          --benchmark-output benchmark-retry.txt
+
+    - name: '📤 Upload artifact: benchmark retry report (Linux arm64)'
+      if: always()
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      with:
+        name: benchmark-retry-Linux-arm64
+        path: benchmark-retry.txt
+        if-no-files-found: ignore
+
+  #
+  # The gate runs in build-macos-arm64, but the self-contained artifact is the universal DMG that
+  # build-macos assembles, so this job waits on both
+  #
+  benchmark-retry-macos:
+    name: '🔁 Benchmark retry (macOS)'
+    needs:
+      - build-macos-arm64
+      - build-macos
+    if: needs.build-macos-arm64.outputs.benchmark == 'failure'
+    runs-on: macos-latest
+    permissions:
+      contents: read
+    steps:
+    - name: '📥 Download packaged binary'
+      uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+      with:
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg
+        path: .
+
+    - name: '📦 Prepare binary'
+      run: |
+        hdiutil attach "${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg" -nobrowse -mountpoint /tmp/ssdmg
+        cp -R "/tmp/ssdmg/${{env.APPLICATION}}.app" .
+        hdiutil detach /tmp/ssdmg
+
+    - name: '🚦 Hotpath throughput gate (256 kHz, retry)'
+      env:
+        QT_QPA_PLATFORM: offscreen
+      run: |
+        "./${{env.APPLICATION}}.app/Contents/MacOS/${{env.EXECUTABLE}}" \
+          --headless --benchmark-hotpath --min-fps 256000 --benchmark-output benchmark-retry.txt
+
+    - name: '📤 Upload artifact: benchmark retry report (macOS)'
+      if: always()
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      with:
+        name: benchmark-retry-macOS
+        path: benchmark-retry.txt
+        if-no-files-found: ignore
+
+  benchmark-retry-windows:
+    name: '🔁 Benchmark retry (Windows)'
+    needs: build-windows
+    if: needs.build-windows.outputs.benchmark == 'failure'
+    runs-on: windows-latest
+    permissions:
+      contents: read
+    steps:
+    - name: '📥 Download packaged binary'
+      uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+      with:
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable
+        path: .
+
+    #
+    # Start-Process loses the child's exit code, so the verdict travels through benchmark-retry.txt
+    # exactly as it does in the build job
+    #
+    - name: '🚦 Hotpath throughput gate (256 kHz, retry)'
+      run: |
+        7z x "${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip" -oapp_win | Out-Null
+        $exe = Get-ChildItem -Recurse -Filter "${{env.EXECUTABLE}}.exe" app_win | Select-Object -First 1
+        if (-not $exe) { throw 'packaged executable not found in the portable ZIP' }
+        $p = Start-Process -FilePath $exe.FullName `
+          -ArgumentList '--headless','--benchmark-hotpath','--min-fps','256000','--benchmark-output','benchmark-retry.txt' `
+          -WorkingDirectory $PWD -PassThru -NoNewWindow
+        if (-not $p.WaitForExit(300000)) { $p.Kill(); throw 'benchmark timed out' }
+        if (Select-String -Path benchmark-retry.txt -Pattern 'HOTPATH_PASS=1' -Quiet) { exit 0 } else { exit 1 }
+
+    - name: '📤 Upload artifact: benchmark retry report (Windows)'
+      if: always()
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      with:
+        name: benchmark-retry-Windows
+        path: benchmark-retry.txt
+        if-no-files-found: ignore
+
+#---------------------------------------------------------------------------------------------------
 # Create release
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
   upload:
     name: '🗂 Publish (continuous)'
+    #
+    # Naming test and lint gates publication on the whole pyramid: nothing ships that
+    # the suite or the linters rejected. The build and retry jobs are named so the
+    # per-platform throughput verdict below can be read out of them.
+    #
     needs:
-      - build-macos
+      - test
+      - lint
       - build-linux
-      - build-windows
       - build-linux-arm64
+      - build-macos-arm64
+      - build-macos
+      - build-windows
+      - benchmark-retry-linux
+      - benchmark-retry-linux-arm64
+      - benchmark-retry-macos
+      - benchmark-retry-windows
+
+    #
+    # Publication is a side effect on a shared, mutable tag: the step below deletes the
+    # 'continuous' release and recreates it. Without the branch guard every push on every
+    # branch (and every same-repo PR) republished it, and two runs racing each other left the
+    # tag pointing at one build with another's assets.
+    #
+    # always() is required because the retry jobs are skipped on the happy path, and a skipped
+    # dependency would otherwise skip this job too; every dependency's verdict is therefore
+    # checked explicitly. Per platform the throughput gate passes if EITHER the in-job attempt
+    # or its retry passed. The pytest verdict is enforced by the first step, so
+    # REQUIRE_TESTS_TO_PUBLISH stays the one switch that controls it.
+    #
+    if: >-
+      always()
+      && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/'))
+      && needs['lint'].result == 'success'
+      && needs['build-linux'].result == 'success'
+      && needs['build-linux-arm64'].result == 'success'
+      && needs['build-macos'].result == 'success'
+      && needs['build-windows'].result == 'success'
+      && (needs['build-linux'].outputs.benchmark == 'success'
+      || needs['benchmark-retry-linux'].result == 'success')
+      && (needs['build-linux-arm64'].outputs.benchmark == 'success'
+      || needs['benchmark-retry-linux-arm64'].result == 'success')
+      && (needs['build-macos-arm64'].outputs.benchmark == 'success'
+      || needs['benchmark-retry-macos'].result == 'success')
+      && (needs['build-windows'].outputs.benchmark == 'success'
+      || needs['benchmark-retry-windows'].result == 'success')
+    concurrency:
+      group: release-${{ github.ref }}
+      cancel-in-progress: false
 
     permissions:
       contents: write
@@ -2965,16 +3408,30 @@ jobs:
 
     steps:
       #
+      # The pytest verdict, enforced where REQUIRE_TESTS_TO_PUBLISH can still be consulted: the
+      # env context is not available in a job-level if:. Setting the flag to false is the only
+      # way a red suite ships, and it says so in the log
+      #
+      - name: '🚦 Enforce the test gate'
+        if: needs['test'].result != 'success'
+        run: |
+          if [ "${{ env.REQUIRE_TESTS_TO_PUBLISH }}" = "true" ]; then
+            echo "::error::pytest result is '${{ needs['test'].result }}'; refusing to publish"
+            exit 1
+          fi
+          echo "::warning::pytest result is '${{ needs['test'].result }}'; publishing anyway (REQUIRE_TESTS_TO_PUBLISH=false)"
+
+      #
       # No submodules: this job only needs the workflow checkout to run gh
       #
       - name: '🧰 Checkout'
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
 
       #
       # merge-multiple flattens every build job's artifact into one ./artifacts directory
       #
       - name: '📥 Download artifacts'
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
         with:
           path: ./artifacts
           merge-multiple: true
@@ -2999,7 +3456,7 @@ jobs:
       # under its own name
       #
       - name: '🚀 Create Release'
-        uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@339a81892b84b4eeb0f6e744e4574d79d0d9b8dd # v1.21.0
         with:
           tag: ${{ env.RELEASE_TAG }}
           commit: ${{ github.sha }}
@@ -3015,43 +3472,44 @@ jobs:
             artifacts/*.msi
             artifacts/*.zip
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Static analysis (fail-fast, no build)
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
   lint:
     runs-on: ubuntu-24.04
     name: '🔬 Lint'
+    permissions:
+      contents: read
     steps:
     #
     # No submodules: the linters only read first-party sources and scripts
     #
     - name: '🧰 Checkout'
-      uses: actions/checkout@v5
+      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
 
     #
     # 3.11 with pip caching: every gate in this job is a Python script
     #
     - name: '🐍 Set up Python'
-      uses: actions/setup-python@v6
+      uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
       with:
         python-version: '3.11'
         cache: 'pip'
 
     #
-    # tests/requirements.txt is the single dependency manifest for the repo's Python tooling
+    # requirements.lock is the hash-pinned resolution of tests/requirements.txt; --require-hashes
+    # is what makes a CI run reproducible instead of a function of the day it ran
     #
     - name: '🐍 Install Python dependencies'
-      run: pip install -r tests/requirements.txt
+      run: pip install --require-hashes -r tests/requirements.lock
 
     #
     # The repo is REUSE-compliant (REUSE.toml + LICENSES/); a file without an SPDX header fails
     # here
     #
     - name: '⚖️ Verify REUSE licensing compliance'
-      run: |
-        pip install reuse
-        reuse lint
+      run: reuse lint
 
     #
     # scripts/code-verify.py is the style contract: errors block the job, advisories do not
@@ -3069,6 +3527,21 @@ jobs:
 
     - name: '🔒 Ratchet translation-unit size'
       run: python3 scripts/code-verify.py --tu-census --check
+
+    #
+    # Clone families are invisible to a per-file linter: every file passes on its own. This
+    # ratchets the summed count of shared 10-line windows across first-party file pairs
+    #
+    - name: '🔒 Ratchet duplicated code'
+      run: python3 scripts/code-verify.py --dup-census --check
+
+    #
+    # The tooling's own tests: 8000+ lines of source-rewriting Python and a 3600-line workflow
+    # had zero coverage until spec 0075, so a rule regression rewrote files silently and CI
+    # drift was invisible
+    #
+    - name: '🔬 Test the repository tooling'
+      run: python3 -m pytest scripts/tests/ -q
 
     #
     # The AI-facing docs are the tier that rots silently; this checks their paths, symbols and
@@ -3089,7 +3562,7 @@ jobs:
     #
     - name: '📤 Upload code-verify report'
       if: always()
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
         name: code-verify-report
         path: |
@@ -3111,13 +3584,222 @@ jobs:
         python3 scripts/generate-property-registry.py --check-snapshot --strict
         python3 scripts/generate-sdk.py --check
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
+# Sanitizers and fuzz corpus
+#---------------------------------------------------------------------------------------------------
+#
+# cmake/Sanitizers.cmake names TSan the only tool that proves the lock-free SPSC hotpath
+# invariants, and until spec 0075 nothing ran it. This job is that proof plus the ASan/UBSan
+# leg, and it is where the fuzz corpora replay under instrumentation. It is deliberately NOT in
+# upload's needs: a sanitizer finding reddens the run without holding the release hostage to a
+# tool that reports on timing.
+#
+#---------------------------------------------------------------------------------------------------
+
+  sanitize:
+    runs-on: ubuntu-24.04
+    name: '🧫 Sanitizers'
+    permissions:
+      contents: read
+    env:
+      QT_QPA_PLATFORM: offscreen
+      #
+      # detect_leaks=0: Qt's plugin and QML machinery leaks by design at exit, so leak reports
+      # here would be pure noise. The memory-error half is what this job is for.
+      #
+      ASAN_OPTIONS: detect_leaks=0:abort_on_error=1
+      UBSAN_OPTIONS: print_stacktrace=1:halt_on_error=1
+      TSAN_OPTIONS: halt_on_error=1
+    steps:
+    - name: '🧰 Checkout'
+      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+
+    #
+    # Same Qt 6 desktop payload as the Linux build job; the instrumented application is built
+    # here too, for the benchmark leg
+    #
+    - name: '⚙️ Install dependencies'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential \
+          clang \
+          ninja-build \
+          libcups2-dev \
+          libnss3 \
+          libegl1 \
+          libgl1-mesa-dev \
+          libasound2-dev \
+          libudev-dev \
+          libsecret-1-dev \
+          libzstd-dev \
+          zlib1g-dev \
+          libexpat1-dev \
+          libminizip-dev \
+          libopus-dev \
+          libxcb1 \
+          libxcb-cursor0 \
+          libxcb-cursor-dev \
+          libxcb-glx0 \
+          libxcb-icccm4 \
+          libxcb-image0 \
+          libxcb-image0-dev \
+          libxcb-keysyms1 \
+          libxcb-randr0 \
+          libxcb-render0 \
+          libxcb-render-util0 \
+          libxcb-shape0 \
+          libxcb-shm0 \
+          libxcb-sync1 \
+          libxcb-util0-dev \
+          libxcb-util1 \
+          libxcb-xfixes0 \
+          libxcb-xinerama0 \
+          libxcb-xkb-dev \
+          libxcb-xtest0 \
+          libxkbcommon-dev \
+          libxkbcommon-x11-0 \
+          libxkbcommon-x11-dev \
+          libpulse-dev \
+          libgstreamer1.0-0 \
+          libgstreamer-plugins-base1.0-0
+
+    #
+    # Restore-only: build-linux owns the save half of this entry, so two jobs never race to
+    # write it
+    #
+    - name: '⚙️ Restore Qt Cache'
+      id: qt_cache
+      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+      with:
+        path: |
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
+          ~/.qt-license
+        key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64
+
+    - name: '⚙️ Install Qt (cache miss)'
+      shell: bash
+      if: steps.qt_cache.outputs.cache-hit != 'true'
+      env:
+        QT_VERSION: ${{env.QT_VERSION_LINUX}}
+        QT_ARCH: x64
+        QT_USERNAME: ${{secrets.QT_USERNAME}}
+        QT_PASSWORD: ${{secrets.QT_PASSWORD}}
+        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
+      run: |
+        chmod +x ./scripts/install-qt.sh
+        ./scripts/install-qt.sh
+
+    - name: '⚙️ Add Qt to PATH'
+      shell: bash
+      env:
+        QT_VERSION: ${{env.QT_VERSION_LINUX}}
+        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
+      run: |
+        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/bin"
+        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/libexec"
+        export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/lib/cmake"
+
+        echo "$QT_BIN_PATH" >> $GITHUB_PATH
+        echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
+        echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
+
+    - name: '⚙️ Install CMake'
+      uses: lukka/get-cmake@fffaaafeea488556c2c12dad60690008bc1caacb # v4.4.2
+      with:
+        useLocalCache: true
+
+    #
+    # Clang because ENABLE_FUZZERS needs libFuzzer; mimalloc off because an allocator override
+    # and ASan cannot both own malloc. SS_INAPP_TESTS is what exposes --benchmark-hotpath
+    #
+    - name: '🚧 Configure ASan + UBSan tier'
+      run: |
+        cmake -G Ninja -B build/asan \
+          -DCMAKE_C_COMPILER=clang \
+          -DCMAKE_CXX_COMPILER=clang++ \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DDEBUG_SANITIZER=ON \
+          -DENABLE_FUZZERS=ON \
+          -DSS_BUILD_TESTS=ON \
+          -DSS_INAPP_TESTS=ON \
+          -DBUILD_GPL3=ON \
+          -DENABLE_GRPC=OFF \
+          -DWITH_WEBENGINE=OFF \
+          -DSS_USE_MIMALLOC=OFF \
+          -DUSE_SYSTEM_ZLIB=ON \
+          -DUSE_SYSTEM_EXPAT=ON
+
+    - name: '🚧 Build ASan + UBSan tier'
+      run: cmake --build build/asan
+
+    - name: '🧪 Run ctest (ASan + UBSan)'
+      run: ctest --test-dir build/asan --output-on-failure
+
+    #
+    # --no-tests=ignore: the fuzz set is empty until the defect packages land their targets, and
+    # an empty selection is not a failure
+    #
+    - name: '🧬 Replay fuzz corpora'
+      run: ctest --test-dir build/asan -R '^fuzz_' --output-on-failure --no-tests=ignore
+
+    #
+    # --min-fps 1: instrumented throughput is meaningless as a number, but the run exercises the
+    # whole parse pipeline under ASan/UBSan, which is what this leg is for
+    #
+    - name: '🏋️ Hotpath pipeline under ASan + UBSan'
+      run: ./build/asan/app/serial-studio-gpl3 --headless --benchmark-hotpath --min-fps 1
+
+    #
+    # The GPL leg of the QML instantiation suite: a Pro-only Cpp_* global reached from a shared
+    # .qml is a ReferenceError here and nowhere else
+    #
+    - name: '🧪 QML instantiation self-test (GPL build)'
+      run: ./build/asan/app/serial-studio-gpl3 --headless --selftest-suite qml
+
+    #
+    # TSan is its own build: it cannot coexist with ASan. The unit tier alone, because the
+    # SPSC/DirectConnection invariants it proves live in the suites, not the GUI
+    #
+    - name: '🚧 Configure TSan tier'
+      run: |
+        cmake -G Ninja -B build/tsan \
+          -DCMAKE_C_COMPILER=clang \
+          -DCMAKE_CXX_COMPILER=clang++ \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DENABLE_TSAN=ON \
+          -DSS_BUILD_TESTS=ON \
+          -DBUILD_GPL3=ON \
+          -DENABLE_GRPC=OFF \
+          -DWITH_WEBENGINE=OFF \
+          -DSS_USE_MIMALLOC=OFF \
+          -DUSE_SYSTEM_ZLIB=ON \
+          -DUSE_SYSTEM_EXPAT=ON
+
+    - name: '🚧 Build TSan tier'
+      run: cmake --build build/tsan --target ss_unit_tests
+
+    - name: '🧪 Run ctest (TSan)'
+      run: ctest --test-dir build/tsan --output-on-failure
+
+#---------------------------------------------------------------------------------------------------
 # Integration tests
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
   test:
     name: '🧪 Test (${{ matrix.label }})'
-    needs: [upload]
+    #
+    # The suite consumes the build jobs' artifacts directly, so it runs BEFORE
+    # publication and 'upload' can depend on it. Downloading from the Release
+    # instead (the pre-0075 shape) forced test to run after upload, which made a
+    # red suite unable to block a publish and let one run's job pick up another
+    # run's binary.
+    #
+    needs:
+      - build-linux
+      - build-linux-arm64
+      - build-macos
+      - build-windows
     permissions:
       contents: read
     strategy:
@@ -3165,45 +3847,41 @@ jobs:
     # No submodules: this job runs the pytest suite against a downloaded binary
     #
     - name: '🧰 Checkout'
-      uses: actions/checkout@v5
+      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
 
     #
-    # Derives the asset name and release tag that the download step below resolves against
+    # Derives the artifact name the download step below resolves against, and that the
+    # per-OS prepare steps unpack
     #
     - name: '🧮 Resolve artifact name'
       run: |
         echo "ARTIFACT=${{env.EXECUTABLE}}-${{env.VERSION}}-${{matrix.asset}}" >> "$GITHUB_ENV"
-        echo "RELEASE_TAG=${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') && github.ref_name || 'continuous' }}" >> "$GITHUB_ENV"
 
     #
     # 3.11 with pip caching: every gate in this job is a Python script
     #
     - name: '🐍 Set up Python'
-      uses: actions/setup-python@v6
+      uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
       with:
         python-version: '3.11'
         cache: 'pip'
 
     #
-    # tests/requirements.txt is the single dependency manifest for the repo's Python tooling
+    # requirements.lock is the hash-pinned resolution of tests/requirements.txt; --require-hashes
+    # is what makes a CI run reproducible instead of a function of the day it ran
     #
     - name: '🐍 Install Python dependencies'
-      run: pip install -r tests/requirements.txt
+      run: pip install --require-hashes -r tests/requirements.lock
 
     #
-    # The suite runs against the published artifact rather than a local build, so packaging bugs
-    # are in scope
+    # The suite runs against the packaged artifact rather than a local build, so packaging bugs
+    # are in scope; it comes from this run's build job, never from a Release
     #
-    - name: '📥 Download released binary'
-      env:
-        GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      run: |
-        case "${{matrix.os}}" in
-          windows) PATTERN="${ARTIFACT}.zip" ;;
-          *)       PATTERN="$ARTIFACT" ;;
-        esac
-        gh release download "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" \
-          --pattern "$PATTERN" --clobber
+    - name: '📥 Download packaged binary'
+      uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+      with:
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-${{matrix.asset}}
+        path: .
 
     #
     # Extracting the AppImage beats running it (no FUSE needed); the apt payload is the runtime
@@ -3329,7 +4007,8 @@ jobs:
     - name: '🔑 Activate Serial Studio license'
       env:
         QT_QPA_PLATFORM: offscreen
-      run: '"$SS_RUN" --activate "${{secrets.SERIAL_STUDIO_LICENSE_KEY}}"'
+        SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
+      run: '"$SS_RUN" --activate "$SERIAL_STUDIO_LICENSE_KEY"'
 
     #
     # Starts the app with the API server on 7777, waits for the port, and redirects its output to
@@ -3363,15 +4042,15 @@ jobs:
         done
 
     #
-    # Publishing blocks on this suite for tagged builds; continuous builds only report
-    # (REQUIRE_TESTS_TO_PUBLISH). timeout-method=signal (POSIX) fails only the hung test and keeps
+    # Publishing blocks on this suite: 'upload' needs this job, so a failure here stops the
+    # release outright rather than being reported after the fact.
+    # timeout-method=signal (POSIX) fails only the hung test and keeps
     # the suite and its junit XML alive, where the ini default (thread) kills the whole pytest
     # process; Windows has no SIGALRM, so it stays on thread, and timeout-minutes is what bounds a
     # fully wedged app now that a hang no longer fast-fails the run
     #
     - name: '🧪 Run tests'
       id: run_tests
-      continue-on-error: ${{ env.REQUIRE_TESTS_TO_PUBLISH != 'true' && !startsWith(github.ref, 'refs/tags/') }}
       timeout-minutes: 60
       env:
         PYTHONIOENCODING: utf-8
@@ -3567,7 +4246,7 @@ jobs:
     #
     - name: '📤 Upload test results'
       if: always()
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
         name: pytest-results-${{ matrix.label }}
         path: |
@@ -3581,7 +4260,7 @@ jobs:
     #
     - name: '📤 Upload crash reports'
       if: always()
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
         name: crash-reports-${{ matrix.label }}
         path: crash-reports/**

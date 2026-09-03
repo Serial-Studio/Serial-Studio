@@ -367,8 +367,7 @@ QSGNode* Widgets::PlotCurve::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeDa
 
   auto* geometry = node->geometry();
   SS_ASSERT(geometry != nullptr, return node);
-  if (geometry->vertexCount() != vertices || geometry->indexCount() != idxs)
-    geometry->allocate(vertices, idxs);
+  (void)GpuStroke::reserveGeometry(geometry, vertices, idxs);
 
   emitRibbon(geometry->vertexDataAsColoredPoint2D(),
              geometry->indexDataAsUInt(),
@@ -379,6 +378,7 @@ QSGNode* Widgets::PlotCurve::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeDa
              n,
              hw);
 
+  GpuStroke::padGeometryTail(geometry, vertices, idxs);
   node->markDirty(QSGNode::DirtyGeometry);
   return node;
 }

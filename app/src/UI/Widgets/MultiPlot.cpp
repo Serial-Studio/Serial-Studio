@@ -68,20 +68,10 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem* parent)
   , m_maxX(0)
   , m_minY(0)
   , m_maxY(0)
-  , m_visLoX(std::numeric_limits<double>::quiet_NaN())
-  , m_visHiX(std::numeric_limits<double>::quiet_NaN())
   , m_timeAxis(false)
   , m_logX(false)
   , m_logY(false)
-  , m_logXScratch(1)
-  , m_interpolationMode(SerialStudio::InterpolationLinear)
-  , m_sweepEnabled(false)
-  , m_triggerLevel(0)
-  , m_holdoffMs(0)
-  , m_timebaseMs(0)
   , m_triggerSource(0)
-  , m_sweepMode(SerialStudio::SweepAuto)
-  , m_triggerEdge(SerialStudio::TriggerRising)
   , m_dashboard(UI::Dashboard::instance())
   , m_themeManager(Misc::ThemeManager::instance())
 {
@@ -96,7 +86,6 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem* parent)
     const auto& dataset = group.datasets[i];
     const bool isString = !dataset.isNumeric && !dataset.value.isEmpty();
 
-    m_drawOrders.append(i);
     m_stringCurves.append(isString);
     m_visibleCurves.append(!isString);
     m_labels.append(dataset.title);
@@ -212,7 +201,7 @@ bool Widgets::MultiPlot::running() const noexcept
  */
 SerialStudio::InterpolationMode Widgets::MultiPlot::interpolationMode() const noexcept
 {
-  return m_interpolationMode;
+  return m_base.interpolationMode();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -292,7 +281,7 @@ const QList<bool>& Widgets::MultiPlot::visibleCurves() const noexcept
  */
 bool Widgets::MultiPlot::sweepEnabled() const noexcept
 {
-  return m_sweepEnabled;
+  return m_base.sweepEnabled();
 }
 
 /**
@@ -300,7 +289,7 @@ bool Widgets::MultiPlot::sweepEnabled() const noexcept
  */
 double Widgets::MultiPlot::triggerLevel() const noexcept
 {
-  return m_triggerLevel;
+  return m_base.triggerLevel();
 }
 
 /**
@@ -308,7 +297,7 @@ double Widgets::MultiPlot::triggerLevel() const noexcept
  */
 double Widgets::MultiPlot::holdoff() const noexcept
 {
-  return m_holdoffMs;
+  return m_base.holdoffMs();
 }
 
 /**
@@ -316,7 +305,7 @@ double Widgets::MultiPlot::holdoff() const noexcept
  */
 double Widgets::MultiPlot::sweepTimebase() const noexcept
 {
-  return m_timebaseMs;
+  return m_base.timebaseMs();
 }
 
 /**
@@ -332,7 +321,7 @@ int Widgets::MultiPlot::triggerSource() const noexcept
  */
 SerialStudio::SweepMode Widgets::MultiPlot::sweepMode() const noexcept
 {
-  return m_sweepMode;
+  return m_base.sweepMode();
 }
 
 /**
@@ -340,7 +329,7 @@ SerialStudio::SweepMode Widgets::MultiPlot::sweepMode() const noexcept
  */
 SerialStudio::TriggerEdge Widgets::MultiPlot::triggerEdge() const noexcept
 {
-  return m_triggerEdge;
+  return m_base.triggerEdge();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -359,7 +348,7 @@ void Widgets::MultiPlot::draw(QXYSeries* series, const int index)
   const QList<QPointF>* data = &source;
   const int n                = source.size();
 
-  if (m_interpolationMode == SerialStudio::InterpolationZoh && n >= 2) {
+  if (m_base.interpolationMode() == SerialStudio::InterpolationZoh && n >= 2) {
     m_renderData.resize(2 * n - 1);
     QPointF* out      = m_renderData.data();
     const QPointF* in = source.constData();
@@ -371,7 +360,7 @@ void Widgets::MultiPlot::draw(QXYSeries* series, const int index)
     data = &m_renderData;
   }
 
-  else if (m_interpolationMode == SerialStudio::InterpolationStem && n > 0) {
+  else if (m_base.interpolationMode() == SerialStudio::InterpolationStem && n > 0) {
     constexpr double kNan = std::numeric_limits<double>::quiet_NaN();
     const double base     = (m_minY < 0.0 && m_maxY > 0.0) ? 0.0 : m_minY;
 
@@ -436,25 +425,7 @@ void Widgets::MultiPlot::setRunning(const bool enabled)
  */
 void Widgets::MultiPlot::setVisibleXWindow(const double lo, const double hi)
 {
-  m_visLoX = lo;
-  m_visHiX = hi;
-}
-
-/**
- * @brief Intersects [lo, hi] with the view-pushed visible X window when it is valid.
- *        The window grows by two render columns per side so edge-crossing segments
- *        survive the cut and the curve runs through the viewport edges.
- */
-void Widgets::MultiPlot::clampToVisibleX(double& lo, double& hi) const
-{
-  SS_ASSERT(lo <= hi, std::swap(lo, hi));
-
-  if (!std::isfinite(m_visLoX) || !std::isfinite(m_visHiX) || !(m_visLoX < m_visHiX))
-    return;
-
-  const double margin = (m_visHiX - m_visLoX) * (2.0 / std::max(2, m_dataW));
-  lo                  = std::max(lo, m_visLoX - margin);
-  hi                  = std::min(hi, m_visHiX + margin);
+  m_base.setVisibleXWindow(lo, hi);
 }
 
 /**
@@ -462,23 +433,9 @@ void Widgets::MultiPlot::clampToVisibleX(double& lo, double& hi) const
  */
 void Widgets::MultiPlot::setInterpolationMode(SerialStudio::InterpolationMode mode)
 {
-  SerialStudio::InterpolationMode resolved;
-  switch (mode) {
-    case SerialStudio::InterpolationNone:
-    case SerialStudio::InterpolationLinear:
-    case SerialStudio::InterpolationZoh:
-    case SerialStudio::InterpolationStem:
-      resolved = mode;
-      break;
-    default:
-      resolved = SerialStudio::InterpolationLinear;
-      break;
-  }
-
-  if (m_interpolationMode == resolved)
+  if (!m_base.setInterpolationMode(mode))
     return;
 
-  m_interpolationMode = resolved;
   Q_EMIT interpolationModeChanged();
 }
 
@@ -491,10 +448,9 @@ void Widgets::MultiPlot::setInterpolationMode(SerialStudio::InterpolationMode mo
  */
 void Widgets::MultiPlot::setSweepEnabled(const bool enabled)
 {
-  if (m_sweepEnabled == enabled)
+  if (!m_base.setSweepEnabled(enabled))
     return;
 
-  m_sweepEnabled = enabled;
   pushSweepConfig();
   updateRange();
   Q_EMIT sweepChanged();
@@ -505,10 +461,9 @@ void Widgets::MultiPlot::setSweepEnabled(const bool enabled)
  */
 void Widgets::MultiPlot::setTriggerLevel(const double level)
 {
-  if (qFuzzyCompare(m_triggerLevel, level))
+  if (!m_base.setTriggerLevel(level))
     return;
 
-  m_triggerLevel = level;
   pushSweepConfig();
   Q_EMIT sweepChanged();
 }
@@ -518,11 +473,9 @@ void Widgets::MultiPlot::setTriggerLevel(const double level)
  */
 void Widgets::MultiPlot::setHoldoff(const double milliseconds)
 {
-  const double clamped = milliseconds < 0 ? 0 : milliseconds;
-  if (qFuzzyCompare(m_holdoffMs, clamped))
+  if (!m_base.setHoldoff(milliseconds))
     return;
 
-  m_holdoffMs = clamped;
   pushSweepConfig();
   Q_EMIT sweepChanged();
 }
@@ -532,11 +485,9 @@ void Widgets::MultiPlot::setHoldoff(const double milliseconds)
  */
 void Widgets::MultiPlot::setSweepTimebase(const double milliseconds)
 {
-  const double clamped = milliseconds < 0 ? 0 : milliseconds;
-  if (qFuzzyCompare(m_timebaseMs, clamped))
+  if (!m_base.setSweepTimebase(milliseconds))
     return;
 
-  m_timebaseMs = clamped;
   pushSweepConfig();
   updateRange();
   Q_EMIT sweepChanged();
@@ -561,10 +512,9 @@ void Widgets::MultiPlot::setTriggerSource(const int curve)
  */
 void Widgets::MultiPlot::setSweepMode(const SerialStudio::SweepMode mode)
 {
-  if (m_sweepMode == mode)
+  if (!m_base.setSweepMode(mode))
     return;
 
-  m_sweepMode = mode;
   pushSweepConfig();
   Q_EMIT sweepChanged();
 }
@@ -574,10 +524,9 @@ void Widgets::MultiPlot::setSweepMode(const SerialStudio::SweepMode mode)
  */
 void Widgets::MultiPlot::setTriggerEdge(const SerialStudio::TriggerEdge edge)
 {
-  if (m_triggerEdge == edge)
+  if (!m_base.setTriggerEdge(edge))
     return;
 
-  m_triggerEdge = edge;
   pushSweepConfig();
   Q_EMIT sweepChanged();
 }
@@ -596,13 +545,13 @@ void Widgets::MultiPlot::armSweep()
 void Widgets::MultiPlot::pushSweepConfig()
 {
   m_dashboard.setMultiplotSweep(m_index,
-                                m_sweepEnabled,
-                                m_triggerLevel,
-                                static_cast<int>(m_triggerEdge),
-                                static_cast<int>(m_sweepMode),
-                                m_holdoffMs * 0.001,
+                                m_base.sweepEnabled(),
+                                m_base.triggerLevel(),
+                                static_cast<int>(m_base.triggerEdge()),
+                                static_cast<int>(m_base.sweepMode()),
+                                m_base.holdoffMs() * 0.001,
                                 m_triggerSource,
-                                m_timebaseMs * 0.001);
+                                m_base.timebaseMs() * 0.001);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -621,10 +570,10 @@ void Widgets::MultiPlot::updateData()
 
   syncStringCurves();
 
-  if (m_timeAxis && m_sweepEnabled) {
+  if (m_timeAxis && m_base.sweepEnabled()) {
     double xLo = m_minX;
     double xHi = m_maxX;
-    clampToVisibleX(xLo, xHi);
+    m_base.clampToVisibleX(xLo, xHi, m_dataW);
 
     const auto& engine        = m_dashboard.multiplotSweep(m_index);
     const qsizetype plotCount = static_cast<qsizetype>(engine.front.size());
@@ -648,7 +597,7 @@ void Widgets::MultiPlot::updateData()
   if (m_timeAxis) {
     double xLo = m_minX;
     double xHi = m_maxX;
-    clampToVisibleX(xLo, xHi);
+    m_base.clampToVisibleX(xLo, xHi, m_dataW);
 
     const auto& rings         = m_dashboard.multiplotTimeRings(m_index);
     const qsizetype plotCount = static_cast<qsizetype>(rings.size());
@@ -681,14 +630,14 @@ void Widgets::MultiPlot::updateData()
   }
 
   if (m_logX)
-    buildLogXScratch(X, LogScale::kSampleFloor);
+    m_base.buildLogXScratch(X, LogScale::kSampleFloor);
 
   for (qsizetype i = 0; i < plotCount; ++i) {
     if (i >= m_visibleCurves.size() || !m_visibleCurves[i])
       continue;
 
     DSP::downsampleMonotonic(
-      m_logX ? m_logXScratch : X, data.y[i], m_dataW, m_dataH, m_data[i], &ws);
+      m_logX ? m_base.logXScratch() : X, data.y[i], m_dataW, m_dataH, m_data[i], &ws);
     applyLogYToCurve(m_data[i]);
   }
 
@@ -711,35 +660,6 @@ void Widgets::MultiPlot::applyLogYToCurve(QList<QPointF>& curve)
 }
 
 /**
- * @brief Copies the shared (immutable) X ring into the widget-owned scratch ring in
- *        log10 space once per update, so every curve buckets uniformly in log pixel
- *        columns. The capacity+size early-out is valid only for the static fillRange
- *        index ring shared by every curve.
- */
-void Widgets::MultiPlot::buildLogXScratch(const DSP::AxisData& x, const double floor)
-{
-  if (m_logXScratch.capacity() == x.capacity() && m_logXScratch.size() == x.size())
-    return;
-
-  if (m_logXScratch.capacity() != x.capacity())
-    m_logXScratch.resize(x.capacity());
-
-  SS_ASSERT(x.raw() != nullptr, return);
-  SS_ASSERT(x.size() <= m_logXScratch.capacity(), return);
-
-  m_logXScratch.clear();
-
-  const auto* data       = x.raw();
-  const std::size_t mask = x.storageMask();
-  std::size_t idx        = x.frontIndex();
-  const std::size_t n    = x.size();
-  for (std::size_t i = 0; i < n; ++i) {
-    m_logXScratch.push(LogScale::clampedLog10(data[idx], floor));
-    idx = (idx + 1) & mask;
-  }
-}
-
-/**
  * @brief Updates the range of the multiplot.
  */
 void Widgets::MultiPlot::updateRange()
@@ -752,9 +672,9 @@ void Widgets::MultiPlot::updateRange()
   m_data.squeeze();
   m_data.resize(data.y.size());
 
-  if (m_timeAxis && m_sweepEnabled) {
+  if (m_timeAxis && m_base.sweepEnabled()) {
     const double range    = m_dashboard.plotTimeRange();
-    const double timebase = m_timebaseMs * 0.001;
+    const double timebase = m_base.timebaseMs() * 0.001;
     m_minX                = 0;
     m_maxX                = (timebase > 0 && timebase < range) ? timebase : range;
   }
@@ -948,11 +868,6 @@ void Widgets::MultiPlot::modifyCurveVisibility(const int index, const bool visib
 {
   if (index >= 0 && index < m_visibleCurves.count()) {
     m_visibleCurves[index] = visible;
-    if (visible) {
-      m_drawOrders.removeAll(index);
-      m_drawOrders.append(index);
-    }
-
     Q_EMIT curvesChanged();
   }
 }

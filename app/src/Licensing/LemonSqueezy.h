@@ -86,6 +86,7 @@ signals:
   void licenseChanged();
   void activatedChanged();
   void licenseDataChanged();
+  void requestFinished(bool ok, const QString& reason);
 
 private:
   explicit LemonSqueezy();
@@ -128,6 +129,7 @@ private slots:
   void clearLicenseCache(const bool clearLicense = false, const bool persist = true);
 
 private:
+  void finishRequest(bool ok, const QString& reason = QString());
   void readActivationResponse(const QByteArray& data);
   void readDeactivationResponse(const QByteArray& data);
   void readValidationResponse(const QByteArray& data, const bool cachedResponse);
@@ -154,6 +156,7 @@ private:
   QString m_customerEmail;
   bool m_silentValidation;
   bool m_revalidatingCache;
+  bool m_requestPending;
   bool m_lastNotifiedEntitled;
   QDateTime m_activationDate;
 

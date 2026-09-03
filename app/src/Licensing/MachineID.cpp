@@ -185,6 +185,24 @@ static QString readBsdId(bool& complete)
 #endif
 
 /**
+ * @brief The OS label the fingerprint is stored under, without spawning anything.
+ */
+static QString platformName()
+{
+#if defined(Q_OS_LINUX)
+  return QStringLiteral("Linux");
+#elif defined(Q_OS_MAC)
+  return QStringLiteral("macOS");
+#elif defined(Q_OS_WIN)
+  return QStringLiteral("Windows");
+#elif defined(Q_OS_BSD)
+  return QStringLiteral("BSD");
+#else
+  return QStringLiteral("Unknown");
+#endif
+}
+
+/**
  * @brief Gathers the raw, platform-specific machine identifier and OS label.
  */
 static QString readPlatformId(QString& os, bool& complete)
@@ -215,7 +233,7 @@ static QString readPlatformId(QString& os, bool& complete)
 /**
  * @brief Constructs a MachineID instance and initializes system information.
  */
-Licensing::MachineID::MachineID()
+Licensing::MachineID::MachineID() : m_usedStoredFingerprint(false), m_machineSpecificKey(0)
 {
   readInformation();
 }
@@ -247,6 +265,15 @@ const QString& Licensing::MachineID::machineId() const noexcept
 const QString& Licensing::MachineID::appVerMachineId() const noexcept
 {
   return m_appVerMachineId;
+}
+
+/**
+ * @brief Whether this run answered from the persisted fingerprint instead of spawning the
+ *        platform tools, which is the steady state after the first launch.
+ */
+bool Licensing::MachineID::usedStoredFingerprint() const noexcept
+{
+  return m_usedStoredFingerprint;
 }
 
 /**
@@ -312,25 +339,23 @@ void Licensing::MachineID::saveLastGoodRawId(const QString& rawId, const QString
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Collects system data to derive the machine id and encryption key; a
- * healthy platform read refreshes the last-good store, a degraded read reuses
- * the stored fingerprint so a transient tool failure never re-keys the machine.
+ * @brief Derives the machine id and key from the persisted fingerprint, spawning the platform
+ *        tools only when there is none: ioreg/reg/powershell ran on the GUI thread inside the
+ *        composition root on EVERY launch. Their timeouts are deliberately NOT shortened -- a
+ *        truncated first read would be persisted as this machine's identity.
  */
 void Licensing::MachineID::readInformation()
 {
-  QString os;
-  bool complete = false;
-  QString id    = readPlatformId(os, complete);
+  QString os    = platformName();
+  QString id    = loadLastGoodRawId(os);
+  bool complete = !id.isEmpty();
 
-  if (complete)
-    saveLastGoodRawId(id, os);
+  m_usedStoredFingerprint = complete;
 
-  else {
-    const auto stored = loadLastGoodRawId(os);
-    if (!stored.isEmpty()) {
-      qWarning() << "[MachineID] degraded read; reusing last-good fingerprint";
-      id = stored;
-    }
+  if (!complete) {
+    id = readPlatformId(os, complete);
+    if (complete)
+      saveLastGoodRawId(id, os);
 
     else
       qWarning() << "[MachineID] degraded read and no stored fingerprint";

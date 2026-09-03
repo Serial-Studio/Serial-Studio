@@ -95,13 +95,18 @@ bool Sessions::SessionDbReader::open(const QString& filePath, int sessionId)
 
   m_db.emplace(QSqlDatabase::addDatabase("QSQLITE", m_connectionName));
   m_db->setDatabaseName(filePath);
+
+  // code-verify off
+  // Replay never writes, and journal_mode=WAL IS a write: forcing it made an archive on read-only
+  // media (a mounted image, a locked share, a burned copy) unplayable (B15).
+  // code-verify on
+  m_db->setConnectOptions(QStringLiteral("QSQLITE_OPEN_READONLY"));
   if (!m_db->open()) {
     close();
     return false;
   }
 
   QSqlQuery pragma(*m_db);
-  pragma.exec("PRAGMA journal_mode=WAL");
   pragma.exec("PRAGMA busy_timeout=5000");
 
   detectFinalValueColumns();

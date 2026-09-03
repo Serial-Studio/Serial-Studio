@@ -73,66 +73,10 @@ Widgets.Pane {
   //
   // Right-click context menu
   //
-  Menu {
+  CodeEditorMenu {
     id: contextMenu
 
-    onClosed: frameParser.forceActiveFocus()
-
-    MenuItem {
-      text: qsTr("Undo")
-      opacity: enabled ? 1 : 0.5
-      onClicked: frameParser.undo()
-      enabled: frameParser.undoAvailable
-    }
-
-    MenuItem {
-      text: qsTr("Redo")
-      opacity: enabled ? 1 : 0.5
-      onClicked: frameParser.redo()
-      enabled: frameParser.redoAvailable
-    }
-
-    MenuSeparator {}
-
-    MenuItem {
-      text: qsTr("Cut")
-      onClicked: frameParser.cut()
-    }
-
-    MenuItem {
-      text: qsTr("Copy")
-      onClicked: frameParser.copy()
-    }
-
-    MenuItem {
-      text: qsTr("Paste")
-      onClicked: frameParser.paste()
-    }
-
-    MenuSeparator {}
-
-    MenuItem {
-      text: qsTr("Select All")
-      opacity: enabled ? 1 : 0.5
-      onTriggered: frameParser.selectAll()
-      enabled: frameParser.text.length > 0
-    }
-
-    MenuSeparator {}
-
-    MenuItem {
-      opacity: enabled ? 1 : 0.5
-      text: qsTr("Format Document")
-      onTriggered: frameParser.formatDocument()
-      enabled: frameParser.text.length > 0
-    }
-
-    MenuItem {
-      opacity: enabled ? 1 : 0.5
-      text: qsTr("Format Selection")
-      onTriggered: frameParser.formatSelection()
-      enabled: frameParser.text.length > 0
-    }
+    codeEditor: frameParser
   }
 
   //

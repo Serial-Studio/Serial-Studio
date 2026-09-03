@@ -55,6 +55,10 @@ public:
   ~ServerWorker() override;
 
   [[nodiscard]] bool isResourceOpen() const override;
+  [[nodiscard]] quint64 droppedBroadcasts() const noexcept;
+  [[nodiscard]] quint64 backlogDisconnects() const noexcept;
+  [[nodiscard]] static qint64 maxPendingWriteBytes() noexcept;
+  [[nodiscard]] static bool exceedsWriteCap(qint64 pendingBytes) noexcept;
 
 public slots:
   void closeResources() override;
@@ -81,6 +85,7 @@ private slots:
 
 private:
   [[nodiscard]] bool underWriteCap(QTcpSocket* socket);
+  [[nodiscard]] bool dropBackloggedClient(QTcpSocket* socket, const QString& sessionId);
 
 private:
   QHash<QTcpSocket*, QString> m_sockets;
@@ -95,6 +100,7 @@ private:
   static constexpr int kMaxBroadcastSamples = 4096;
 
   quint64 m_droppedBroadcasts;
+  quint64 m_backlogDisconnects;
 };
 
 }  // namespace API

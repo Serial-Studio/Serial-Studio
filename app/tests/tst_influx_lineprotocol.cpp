@@ -78,6 +78,8 @@ void TstInfluxLineProtocol::measurementEscaping_data()
   QTest::newRow("space") << QStringLiteral("a b") << QByteArrayLiteral("a\\ b");
   QTest::newRow("equals-kept") << QStringLiteral("a=b") << QByteArrayLiteral("a=b");
   QTest::newRow("quote-kept") << QStringLiteral("a\"b") << QByteArrayLiteral("a\"b");
+  QTest::newRow("backslash") << QStringLiteral("a\\b") << QByteArrayLiteral("a\\\\b");
+  QTest::newRow("trailing-backslash") << QStringLiteral("Temp\\") << QByteArrayLiteral("Temp\\\\");
   QTest::newRow("newline") << QStringLiteral("a\nb") << QByteArrayLiteral("a\\ b");
   QTest::newRow("utf8") << QString::fromUtf8("°C")
                         << QByteArrayLiteral("\xC2\xB0"
@@ -107,6 +109,10 @@ void TstInfluxLineProtocol::tagEscaping_data()
                           << QByteArrayLiteral("h\\=k=a\\=1");
   QTest::newRow("space") << QStringLiteral("h k") << QStringLiteral("a 1")
                          << QByteArrayLiteral("h\\ k=a\\ 1");
+  QTest::newRow("backslash") << QStringLiteral("h\\k") << QStringLiteral("a\\1")
+                             << QByteArrayLiteral("h\\\\k=a\\\\1");
+  QTest::newRow("trailing-backslash")
+    << QStringLiteral("key") << QStringLiteral("Temp\\") << QByteArrayLiteral("key=Temp\\\\");
 }
 
 void TstInfluxLineProtocol::tagEscaping()

@@ -25,8 +25,10 @@
 #include <QJsonObject>
 #include <QMap>
 #include <QString>
+#include <QVector>
 
 #include "API/CommandProtocol.h"
+#include "API/PathPolicy.h"
 
 namespace API {
 /**
@@ -42,6 +44,7 @@ struct CommandDefinition {
   QString name;
   QString description;
   QJsonObject inputSchema;
+  QVector<PathParamPolicy> pathParams;
   CommandFunction handler;
 };
 

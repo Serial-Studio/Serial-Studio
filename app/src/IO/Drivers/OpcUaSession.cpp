@@ -38,7 +38,9 @@ using namespace IO::Drivers::OpcUaTypes;
 // Tunables
 //--------------------------------------------------------------------------------------------------
 
-static constexpr int kSessionPumpIntervalMs     = 10;
+static constexpr int kSessionPumpBusyMs         = 10;
+static constexpr int kSessionPumpIdleMs         = 100;
+static constexpr int kSessionResolveDeadlineMs  = 5000;
 static constexpr int kSessionRequestTimeoutMs   = 10000;
 static constexpr int kSessionDefaultReadLimit   = 200;
 static constexpr int kSessionMinIntervalMs      = 10;
@@ -118,9 +120,11 @@ IO::Drivers::OpcUaSession::OpcUaSession(QObject* parent)
   , m_trustFailure(OpcUaTypes::TrustFailure::None)
   , m_pollCursor(0)
 {
-  m_pump->setInterval(kSessionPumpIntervalMs);
+  m_pump->setInterval(kSessionPumpBusyMs);
   m_pump->setTimerType(Qt::CoarseTimer);
   connect(m_pump, &QTimer::timeout, this, &IO::Drivers::OpcUaSession::pump);
+  connect(
+    &m_resolver, &IO::AsyncTcpDial::finished, this, &IO::Drivers::OpcUaSession::onResolveFinished);
 }
 
 /**
@@ -140,6 +144,7 @@ IO::Drivers::OpcUaSession::~OpcUaSession()
 void IO::Drivers::OpcUaSession::teardown()
 {
   m_pump->stop();
+  m_resolver.cancel();
 
   if (!m_client) {
     m_open           = false;
@@ -191,6 +196,7 @@ void IO::Drivers::OpcUaSession::close()
 
     auto* pending = m_client;
     m_pump->stop();
+    m_resolver.cancel();
     QMetaObject::invokeMethod(
       this,
       [this, pending] {
@@ -264,6 +270,8 @@ void IO::Drivers::OpcUaSession::pump()
   if (!m_client)
     return;
 
+  applyPumpCadence();
+
   if (status == UA_STATUSCODE_GOOD || !m_open)
     return;
 
@@ -272,10 +280,27 @@ void IO::Drivers::OpcUaSession::pump()
 }
 
 /**
+ * @brief Paces the iterate slice by what the session owes an answer to. A session with nothing
+ *        outstanding needs the socket read often enough to notice a drop, not 100 times a second:
+ *        three idle sessions used to cost 300 wake-ups per second between them.
+ */
+void IO::Drivers::OpcUaSession::applyPumpCadence()
+{
+  const bool busy = m_connecting || m_readInFlight || m_subscriptionId != 0
+                 || !m_readRequests.isEmpty() || !m_browseRequests.isEmpty();
+
+  const int interval = busy ? kSessionPumpBusyMs : kSessionPumpIdleMs;
+  if (m_pump->interval() != interval)
+    m_pump->setInterval(interval);
+}
+
+/**
  * @brief Arms the pump; harmless to call when it is already running.
  */
 void IO::Drivers::OpcUaSession::startPump()
 {
+  applyPumpCadence();
+
   if (!m_pump->isActive())
     m_pump->start();
 }
@@ -416,9 +441,9 @@ bool IO::Drivers::OpcUaSession::applySecurity(const OpcUaTypes::Endpoint& endpoi
 
 /**
  * @brief Installs the user identity token: anonymous, username/password, or an X.509 certificate
- *        the user supplied. `allowNonePolicyPassword` is what lets a password travel over an
- *        unencrypted channel at all; open62541 refuses that by default, and spec 0066's
- *        None-policy username login depends on it.
+ *        the user supplied. `allowNonePolicyPassword` lets a password travel over an unencrypted
+ *        channel at all; open62541 refuses that by default, and the override is the user's own
+ *        per-installation answer, so nothing goes in the clear until someone accepts that it will.
  */
 bool IO::Drivers::OpcUaSession::applyIdentity(const Identity& identity)
 {
@@ -427,7 +452,7 @@ bool IO::Drivers::OpcUaSession::applyIdentity(const Identity& identity)
   SS_ASSERT(config != nullptr, return false);
 
   if (identity.mode == 1) {
-    config->allowNonePolicyPassword = true;
+    config->allowNonePolicyPassword = identity.allowPlaintextPassword;
     applyUsernameIdentity(identity);
     return true;
   }
@@ -450,9 +475,10 @@ bool IO::Drivers::OpcUaSession::applyIdentity(const Identity& identity)
 }
 
 /**
- * @brief Answers the stack's certificate check from the installation's trust store, and records
- *        WHY a certificate was refused. The four causes stay apart because they have four
- *        different fixes: trust it, renew it, wait for it, or dial the name it was issued for.
+ * @brief Answers the stack's certificate check from the installation's trust store, recording WHY
+ *        a certificate was refused: the four causes have four different fixes. TRUST is read
+ *        FIRST, because it pins these exact bytes by SHA-256; checking the name or the clock ahead
+ *        of it made Trust a button that could not accept a self-signed server dialed by IP.
  */
 IO::Drivers::OpcUaTypes::StatusCode IO::Drivers::OpcUaSession::verifyServerCertificate(
   const QByteArray& certificate)
@@ -463,6 +489,11 @@ IO::Drivers::OpcUaTypes::StatusCode IO::Drivers::OpcUaSession::verifyServerCerti
   if (!m_serverCertificate.valid) {
     m_trustFailure = OpcUaTypes::TrustFailure::Unreadable;
     return UA_STATUSCODE_BADCERTIFICATEINVALID;
+  }
+
+  if (m_serverCertificate.trusted) {
+    m_trustFailure = OpcUaTypes::TrustFailure::None;
+    return UA_STATUSCODE_GOOD;
   }
 
   if (m_serverCertificate.expired) {
@@ -480,13 +511,8 @@ IO::Drivers::OpcUaTypes::StatusCode IO::Drivers::OpcUaSession::verifyServerCerti
     return UA_STATUSCODE_BADCERTIFICATEHOSTNAMEINVALID;
   }
 
-  if (!m_serverCertificate.trusted) {
-    m_trustFailure = OpcUaTypes::TrustFailure::Untrusted;
-    return UA_STATUSCODE_BADCERTIFICATEUNTRUSTED;
-  }
-
-  m_trustFailure = OpcUaTypes::TrustFailure::None;
-  return UA_STATUSCODE_GOOD;
+  m_trustFailure = OpcUaTypes::TrustFailure::Untrusted;
+  return UA_STATUSCODE_BADCERTIFICATEUNTRUSTED;
 }
 
 /**
@@ -606,21 +632,97 @@ bool IO::Drivers::OpcUaSession::discoverEndpoints(const QString& url)
   m_endpointUrl = url;
   m_intent      = Intent::Discovering;
 
-  const auto utf8       = url.toUtf8();
-  UA_StatusCode dialing = UA_STATUSCODE_GOOD;
-  {
-    const ClientCallScope scope(m_stackDepth);
-    dialing = UA_Client_connectSecureChannelAsync(m_client, utf8.constData());
+  startResolution();
+  return true;
+}
+
+/**
+ * @brief Resolves the endpoint's host before the stack is asked to dial it. open62541 resolves
+ *        inside UA_Client_connectAsync() with a synchronous getaddrinfo ("TODO: Make this
+ *        non-blocking" upstream), so an unresolvable host froze the window for the resolver's own
+ *        timeout, which no dial deadline of ours could shorten.
+ */
+void IO::Drivers::OpcUaSession::startResolution()
+{
+  const QUrl parsed(m_endpointUrl);
+  const auto port = static_cast<quint16>(parsed.port(OpcUaTypes::kDefaultPort));
+
+  m_resolver.setDeadline(kSessionResolveDeadlineMs);
+  m_resolver.startResolve(parsed.host(), port);
+}
+
+/**
+ * @brief The URL handed to the stack: the resolved literal with the configured port, so the dial
+ *        runs no resolver of its own. m_endpointUrl keeps the hostname the user typed, which is
+ *        what the certificate hostname check has to see.
+ */
+QString IO::Drivers::OpcUaSession::dialUrl() const
+{
+  const auto address = m_resolver.resolvedAddress();
+  if (address.isNull())
+    return m_endpointUrl;
+
+  QUrl numeric(m_endpointUrl);
+  numeric.setHost(address.toString());
+  if (numeric.port() < 0)
+    numeric.setPort(OpcUaTypes::kDefaultPort);
+
+  return numeric.toString();
+}
+
+/**
+ * @brief Continues the attempt once the host resolved, or ends it when it did not. The two
+ *        intents settle through their own funnels: a discovery through handleEndpoints(), a live
+ *        dial through failDial(), so the verdict still has exactly one owner.
+ */
+void IO::Drivers::OpcUaSession::onResolveFinished(bool ok, const QString& reason)
+{
+  if (m_intent == Intent::Discovering) {
+    if (!ok || !m_client) {
+      m_intent     = Intent::Idle;
+      m_lastReason = reason;
+      handleEndpoints({}, OpcUaTypes::kStatusBadInternal);
+      return;
+    }
+
+    const auto utf8       = dialUrl().toUtf8();
+    UA_StatusCode dialing = UA_STATUSCODE_GOOD;
+    {
+      const ClientCallScope scope(m_stackDepth);
+      dialing = UA_Client_connectSecureChannelAsync(m_client, utf8.constData());
+    }
+
+    if (dialing != UA_STATUSCODE_GOOD) {
+      m_intent = Intent::Idle;
+      handleEndpoints({}, OpcUaTypes::kStatusBadInternal);
+      return;
+    }
+
+    startPump();
+    return;
   }
 
-  if (dialing != UA_STATUSCODE_GOOD) {
-    m_intent = Intent::Idle;
-    close();
-    return false;
+  if (m_intent != Intent::Connecting)
+    return;
+
+  if (!ok || !m_client) {
+    failDial(reason.isEmpty() ? tr("Host not found") : reason);
+    return;
+  }
+
+  const auto utf8      = dialUrl().toUtf8();
+  UA_StatusCode status = UA_STATUSCODE_GOOD;
+  {
+    const ClientCallScope scope(m_stackDepth);
+    status = UA_Client_connectAsync(m_client, utf8.constData());
+  }
+
+  if (status != UA_STATUSCODE_GOOD) {
+    failDial(OpcUaMarshal::statusText(status));
+    return;
   }
 
   startPump();
-  return true;
 }
 
 /**
@@ -708,19 +810,7 @@ bool IO::Drivers::OpcUaSession::connectToEndpoint(const OpcUaTypes::Endpoint& en
   m_intent     = Intent::Connecting;
   m_connecting = true;
 
-  const auto utf8      = endpoint.endpointUrl.toUtf8();
-  UA_StatusCode status = UA_STATUSCODE_GOOD;
-  {
-    const ClientCallScope scope(m_stackDepth);
-    status = UA_Client_connectAsync(m_client, utf8.constData());
-  }
-
-  if (status != UA_STATUSCODE_GOOD) {
-    failDial(OpcUaMarshal::statusText(status));
-    return false;
-  }
-
-  startPump();
+  startResolution();
   return true;
 }
 
@@ -1122,6 +1212,7 @@ bool IO::Drivers::OpcUaSession::sendRead(const QList<OpcUaTypes::ReadRow>& rows,
   pending.valueRead    = valueRead;
   pending.token        = token;
   m_readRequests.insert(requestId, pending);
+  applyPumpCadence();
   return true;
 }
 
@@ -1293,6 +1384,7 @@ bool IO::Drivers::OpcUaSession::browse(const QString& nodeId, const OpcUaTypes::
   pending.nodeId = nodeId;
   pending.token  = query.token;
   m_browseRequests.insert(requestId, pending);
+  applyPumpCadence();
   return true;
 }
 

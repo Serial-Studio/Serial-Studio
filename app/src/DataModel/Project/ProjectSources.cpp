@@ -139,6 +139,9 @@ void DataModel::ProjectSources::deleteSource(int sourceId, bool confirm)
 
   for (auto& group : m_model.m_groups) {
     remapSourceId(group.sourceId);
+    for (auto& dataset : group.datasets)
+      dataset.sourceId = group.sourceId;
+
     for (auto& widget : group.outputWidgets)
       remapSourceId(widget.sourceId);
   }
@@ -296,7 +299,6 @@ void DataModel::ProjectSources::promptRenameSource(int sourceId)
  */
 void DataModel::ProjectSources::captureSourceSettings(int sourceId)
 {
-  const ProjectUndoScope undo_scope{m_model, ProjectModel::tr("Edit Device")};
   auto& sources = m_model.m_sources;
   if (sourceId < 0 || sourceId >= static_cast<int>(sources.size()))
     return;
@@ -307,6 +309,7 @@ void DataModel::ProjectSources::captureSourceSettings(int sourceId)
   if (!driver)
     return;
 
+  const ProjectUndoScope undo_scope{m_model, ProjectModel::tr("Edit Device")};
   QJsonObject settings;
   for (const auto& prop : driver->driverProperties()) {
     if (prop.type == IO::DriverProperty::Password)
@@ -324,11 +327,12 @@ void DataModel::ProjectSources::captureSourceSettings(int sourceId)
 }
 
 /**
- * @brief Applies the source's saved connectionSettings to its live driver.
+ * @brief Applies the source's saved connectionSettings to its live driver. Reads the document and
+ *        writes only the driver, so it opens no ProjectUndoScope: capturing a whole-document
+ *        snapshot per call cost a serialization the history could never commit.
  */
 void DataModel::ProjectSources::restoreSourceSettings(int sourceId)
 {
-  const ProjectUndoScope undo_scope{m_model, ProjectModel::tr("Edit Device")};
   const auto& sources = m_model.m_sources;
   if (sourceId < 0 || sourceId >= static_cast<int>(sources.size()))
     return;
@@ -529,6 +533,21 @@ void DataModel::ProjectSources::updateSourceFrameParserParams(int sourceId,
     Q_EMIT m_model.frameParserParamsChanged();
 
   Q_EMIT m_model.sourceFrameParserParamsChanged(sourceId);
+}
+
+/**
+ * @brief Applies a native template and its parameter defaults as ONE document mutation. Picking a
+ *        template writes both fields; two scopes recorded two undo steps, so a single Ctrl+Z left
+ *        the new parameters sitting on the previous template id and the native parser rebuilt
+ *        against a pair that never existed.
+ */
+void DataModel::ProjectSources::setSourceFrameParserTemplateAndParams(int sourceId,
+                                                                      const QString& templateId,
+                                                                      const QJsonObject& params)
+{
+  const ProjectUndoScope undo_scope{m_model, ProjectModel::tr("Change Parser Template")};
+  updateSourceFrameParserParams(sourceId, params);
+  updateSourceFrameParserTemplate(sourceId, templateId);
 }
 
 /**

@@ -222,3 +222,89 @@ def test_audio_loopback_roundtrip(api_client, clean_state, audio_loopback, tmp_p
     assert (
         0.5 * rate < cadence["mean_rate"] < 2.0 * rate
     ), f"mean rate {cadence['mean_rate']:.1f} far from {rate}"
+
+
+@pytest.mark.audio
+def test_capture_survives_without_an_output_device(api_client, clean_state):
+    """A capture-only session must not be dropped because no output is selected.
+
+    outputSelectionPresent() answered false for BOTH "nothing selected" and "the selection
+    vanished", so the 1 Hz device rescan tore down a live microphone capture roughly a second
+    after it opened on any machine with no usable output (finding D2).
+    """
+    api_client.set_operation_mode("quickplot")
+    api_client.set_bus_type("audio")
+    time.sleep(0.3)
+
+    inputs = api_client.command("io.audio.listInputDevices").get("devices", [])
+    if not inputs:
+        pytest.skip("this host exposes no audio capture device")
+
+    api_client.command("io.audio.setInputDevice", {"deviceIndex": 0})
+    time.sleep(0.3)
+
+    api_client.command("io.connect", timeout=15.0)
+    if not api_client.wait_for_connection(timeout=8.0):
+        pytest.skip("the capture device could not be opened on this host")
+
+    # Two device-rescan ticks: the drop this covers happened on the first one.
+    time.sleep(3.0)
+
+    status = api_client.command("io.getStatus")
+    assert status.get("isConnected") is True, "capture-only session was dropped"
+
+    api_client.command("io.disconnect")
+
+
+@pytest.mark.audio
+def test_written_tone_is_accepted_by_the_playback_ring(api_client, clean_state):
+    """Written frames are buffered whole instead of one per output period.
+
+    write() used to enqueue ONE sample frame per call and the RT callback dequeued one per
+    output frame, zero-filling the rest: audible output was isolated clicks (finding D3). The
+    ring accepts a burst, so a tone written as many frames is taken in full.
+    """
+    import base64
+    import math
+
+    api_client.set_operation_mode("quickplot")
+    api_client.set_bus_type("audio")
+    time.sleep(0.3)
+
+    outputs = api_client.command("io.audio.listOutputDevices").get("devices", [])
+    inputs = api_client.command("io.audio.listInputDevices").get("devices", [])
+    if not outputs or not inputs:
+        pytest.skip("this host has no usable audio input/output pair")
+
+    api_client.command("io.audio.setInputDevice", {"deviceIndex": 0})
+    api_client.command("io.audio.setOutputDevice", {"deviceIndex": 0})
+    time.sleep(0.3)
+
+    api_client.command("io.connect", timeout=15.0)
+    if not api_client.wait_for_connection(timeout=8.0):
+        pytest.skip("the audio device could not be opened on this host")
+
+    def tone(channels: int) -> str:
+        rows = []
+        for i in range(512):
+            value = f"{math.sin(2 * math.pi * i / 64):.4f}"
+            rows.append(",".join([value] * channels))
+
+        return "\n".join(rows)
+
+    # The output channel count is a property of the device, and no API command reports it, so the
+    # tone is offered per plausible layout: exactly one of them matches and must be taken WHOLE.
+    accepted = 0
+    for channels in (1, 2, 4, 6, 8):
+        payload = tone(channels)
+        written = api_client.command(
+            "io.writeData", {"data": base64.b64encode(payload.encode()).decode()}
+        )
+        accepted = max(accepted, int(written.get("bytesWritten", 0)))
+
+    assert (
+        accepted > 0
+    ), "no channel layout of the tone was accepted by the playback lane"
+    assert api_client.command("io.getStatus").get("isConnected") is True
+
+    api_client.command("io.disconnect")

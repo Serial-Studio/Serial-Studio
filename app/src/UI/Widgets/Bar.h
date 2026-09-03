@@ -59,6 +59,9 @@ class Bar : public QQuickItem {
   Q_PROPERTY(bool alarmsDefined
              READ alarmsDefined
              CONSTANT)
+  Q_PROPERTY(bool hasData
+             READ hasData
+             NOTIFY updated)
   Q_PROPERTY(bool alarmTriggered
              READ alarmTriggered
              NOTIFY updated)
@@ -124,6 +127,7 @@ public:
                bool autoInitFromBarDataset = true);
 
   [[nodiscard]] bool alarmsDefined() const noexcept;
+  [[nodiscard]] bool hasData() const noexcept;
   [[nodiscard]] bool alarmTriggered() const noexcept;
   [[nodiscard]] int activeBandSeverity() const noexcept;
   [[nodiscard]] const QString& activeBandLabel() const noexcept;
@@ -150,6 +154,7 @@ protected:
 
 protected slots:
   virtual void updateData();
+  void resetData();
 
 private:
   [[nodiscard]] inline double computeFractional(double value) const
@@ -169,6 +174,7 @@ protected:
   void buildBands(const std::vector<DataModel::AlarmBand>& srcBands);
   void recomputeActiveBand(double value);
   bool refreshExtremes(const DataModel::Dataset& dataset);
+  [[nodiscard]] bool latchData();
 
   int m_index;
   int m_displayTickCount;
@@ -177,6 +183,7 @@ protected:
   QString m_units;
   QString m_displayFormat;
 
+  bool m_hasData;
   double m_value;
   double m_minValue;
   double m_maxValue;

@@ -80,13 +80,20 @@ static QStringList fallbackModels()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Loads the persisted base URL + cached model list and kicks off a refresh.
+ * @brief Loads the persisted base URL, context window and cached model list, then kicks off a
+ *        refresh. The window is a user setting because a local server silently truncates a
+ *        prompt that exceeds it, from the front, taking the system prompt with it (J1).
  */
-AI::LocalProvider::LocalProvider(QNetworkAccessManager& nam) : QObject(nullptr), m_nam(nam)
+AI::LocalProvider::LocalProvider(QNetworkAccessManager& nam)
+  : QObject(nullptr), m_nam(nam), m_contextWindowTokens(kDefaultContextWindow)
 {
   m_settings.beginGroup(QStringLiteral("ai/local"));
   m_baseUrl = m_settings.value(QStringLiteral("baseUrl"), defaultBaseUrl()).toString();
   m_settings.endGroup();
+
+  const auto stored =
+    m_settings.value(QStringLiteral("ai/localContextWindow"), kDefaultContextWindow).toInt();
+  m_contextWindowTokens = qBound(kMinContextWindow, stored, kMaxContextWindow);
 
   if (!isSafeBaseUrl(m_baseUrl))
     m_baseUrl = defaultBaseUrl();
@@ -145,7 +152,9 @@ QString AI::LocalProvider::modelDisplayName(const QString& modelId) const
 }
 
 /**
- * @brief Returns conservative capabilities for local OpenAI-compatible servers.
+ * @brief Returns conservative capabilities for local OpenAI-compatible servers. The context
+ *        window is the user's setting, not the 128k default: the budgeter trims history to what
+ *        the local model can actually hold instead of letting the server truncate it.
  */
 AI::ProviderCapabilities AI::LocalProvider::capabilities() const
 {
@@ -153,7 +162,30 @@ AI::ProviderCapabilities AI::LocalProvider::capabilities() const
   caps.needsSmallToolSurface = true;
   caps.toolResultByteBudget  = 3072;
   caps.slowFirstToken        = true;
+  caps.contextWindowTokens   = m_contextWindowTokens;
   return caps;
+}
+
+/**
+ * @brief Returns the configured context window of the local model, in tokens.
+ */
+int AI::LocalProvider::contextWindowTokens() const noexcept
+{
+  return m_contextWindowTokens;
+}
+
+/**
+ * @brief Sets and persists the context window, clamped to a range a chat turn can still fit.
+ */
+void AI::LocalProvider::setContextWindowTokens(int tokens)
+{
+  const int bounded = qBound(kMinContextWindow, tokens, kMaxContextWindow);
+  if (bounded == m_contextWindowTokens)
+    return;
+
+  m_contextWindowTokens = bounded;
+  m_settings.setValue(QStringLiteral("ai/localContextWindow"), m_contextWindowTokens);
+  qCDebug(serialStudioAI) << "Local context window set to" << m_contextWindowTokens;
 }
 
 /**

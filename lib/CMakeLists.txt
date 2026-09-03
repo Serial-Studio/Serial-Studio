@@ -193,8 +193,8 @@ else()
   FetchContent_Declare(
     zlib
     GIT_REPOSITORY https://github.com/madler/zlib.git
-    GIT_TAG        v1.3.2
-    GIT_SHALLOW    TRUE
+    # A tag is mutable; the commit it named when this pin was written is not.
+    GIT_TAG        da607da739fa6047df13e66a2af6b8bec7c2a498 # v1.3.2
     GIT_PROGRESS   FALSE
   )
 
@@ -292,8 +292,8 @@ else()
   FetchContent_Declare(
     expat
     GIT_REPOSITORY https://github.com/libexpat/libexpat.git
-    GIT_TAG        R_2_8_3
-    GIT_SHALLOW    TRUE
+    # A tag is mutable; the commit it named when this pin was written is not.
+    GIT_TAG        92810461043fce37e70079b37ab1f04490a8f039 # R_2_8_3
     GIT_PROGRESS   FALSE
     SOURCE_SUBDIR  expat
   )
@@ -373,8 +373,6 @@ endif()
 #---------------------------------------------------------------------------------------------------
 
 set(QSU_QT_VERSION_MAJOR 6)
-set(QSIMPLE_UPDATER_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(QSIMPLE_UPDATER_BUILD_TUTORIAL OFF CACHE BOOL "" FORCE)
 
 add_subdirectory(luajit)
 add_subdirectory(OpenSSL)
@@ -484,8 +482,8 @@ if(BUILD_COMMERCIAL)
   FetchContent_Declare(
     libusb_cmake
     GIT_REPOSITORY https://github.com/libusb/libusb-cmake.git
-    GIT_TAG        v1.0.30-0
-    GIT_SHALLOW    TRUE
+    # A tag is mutable; the commit it named when this pin was written is not.
+    GIT_TAG        c8477c10ac2ac6b1718d4d498e102b9f18b776f5 # v1.0.30-0
     GIT_PROGRESS   FALSE
   )
 

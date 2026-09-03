@@ -413,6 +413,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
           } Switch {
             id: fullscreen
+
             Layout.rightMargin: -8
             Layout.alignment: Qt.AlignRight
             palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
@@ -423,6 +424,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
           } Switch {
             id: actionsPanel
+
             checked: true
             Layout.rightMargin: -8
             Layout.alignment: Qt.AlignRight
@@ -434,6 +436,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
           } Switch {
             id: fileTransmission
+
             Layout.rightMargin: -8
             Layout.alignment: Qt.AlignRight
             palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
@@ -532,6 +535,7 @@ Widgets.SmartDialog {
             opacity: enabled ? 1 : 0.5
           } Switch {
             id: searchBar
+
             checked: true
             enabled: root.taskbarMode !== "hidden"
             Layout.rightMargin: -8
@@ -589,6 +593,7 @@ Widgets.SmartDialog {
             opacity: enabled ? 1 : 0.5
           } Switch {
             id: pinConsole
+
             checked: false
             enabled: root.taskbarMode !== "hidden"
             Layout.rightMargin: -8
@@ -603,6 +608,7 @@ Widgets.SmartDialog {
             opacity: enabled ? 1 : 0.5
           } Switch {
             id: pinNotifications
+
             checked: true
             enabled: root.taskbarMode !== "hidden"
             Layout.rightMargin: -8
@@ -617,6 +623,7 @@ Widgets.SmartDialog {
             opacity: enabled ? 1 : 0.5
           } Switch {
             id: pinClock
+
             checked: false
             enabled: root.taskbarMode !== "hidden"
             Layout.rightMargin: -8
@@ -631,6 +638,7 @@ Widgets.SmartDialog {
             opacity: enabled ? 1 : 0.5
           } Switch {
             id: pinStopwatch
+
             checked: false
             enabled: root.taskbarMode !== "hidden"
             Layout.rightMargin: -8
@@ -645,6 +653,7 @@ Widgets.SmartDialog {
             opacity: enabled ? 1 : 0.5
           } Switch {
             id: pinPause
+
             checked: true
             enabled: root.taskbarMode !== "hidden"
             Layout.rightMargin: -8
@@ -659,6 +668,7 @@ Widgets.SmartDialog {
             opacity: enabled ? 1 : 0.5
           } Switch {
             id: pinFileTransmission
+
             checked: false
             enabled: root.taskbarMode !== "hidden" && fileTransmission.checked
             Layout.rightMargin: -8
@@ -722,6 +732,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
           } Switch {
             id: csvExport
+
             Layout.rightMargin: -8
             Layout.alignment: Qt.AlignRight
             palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
@@ -732,6 +743,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
           } Switch {
             id: mdfExport
+
             Layout.rightMargin: -8
             Layout.alignment: Qt.AlignRight
             palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
@@ -742,6 +754,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
           } Switch {
             id: sessionExport
+
             Layout.rightMargin: -8
             Layout.alignment: Qt.AlignRight
             palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
@@ -752,6 +765,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
           } Switch {
             id: consoleExport
+
             Layout.rightMargin: -8
             Layout.alignment: Qt.AlignRight
             palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]

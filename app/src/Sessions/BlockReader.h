@@ -148,6 +148,22 @@ inline constexpr auto kBlockColumns = "unique_id, t0_ns, dt_ns, frames, is_numer
 }
 
 /**
+ * @brief Whether @p table exists in the open archive. An archive written by an older build simply
+ *        lacks the tables that build never had, so callers probe instead of assuming the current
+ *        schema and turning an absent table into a read failure.
+ */
+[[nodiscard]] inline bool archiveHasTable(const QSqlDatabase& db, const QString& table)
+{
+  QSqlQuery probe(db);
+  probe.prepare(QStringLiteral("SELECT name FROM sqlite_master WHERE type='table' AND name = ?"));
+  probe.addBindValue(table);
+  if (!probe.exec())
+    return false;
+
+  return probe.next();
+}
+
+/**
  * @brief Whether @p sessionId's samples live in `blocks` (spec 0055) rather than the legacy
  *        `readings` table. Probed per session, not from PRAGMA user_version: opening a v1 archive
  *        with a current build migrates its schema, so the version says nothing about where an
@@ -155,12 +171,7 @@ inline constexpr auto kBlockColumns = "unique_id, t0_ns, dt_ns, frames, is_numer
  */
 [[nodiscard]] inline bool sessionUsesBlocks(const QSqlDatabase& db, int sessionId)
 {
-  QSqlQuery probe(db);
-  if (!probe.exec(QStringLiteral("SELECT name FROM sqlite_master WHERE type='table' AND "
-                                 "name='blocks'")))
-    return false;
-
-  if (!probe.next())
+  if (!archiveHasTable(db, QStringLiteral("blocks")))
     return false;
 
   QSqlQuery rows(db);

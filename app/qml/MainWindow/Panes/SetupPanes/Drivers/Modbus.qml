@@ -46,9 +46,9 @@ Item {
     // Protocol selector
     //
     Label {
-      text: qsTr("Protocol") + ":"
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
+      text: qsTr("Protocol") + ":"
     } Widgets.Combo {
       id: _protocolCombo
 
@@ -67,9 +67,9 @@ Item {
     // Serial Port (only for Modbus RTU)
     //
     Label {
-      text: qsTr("Serial Port") + ":"
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
+      text: qsTr("Serial Port") + ":"
       visible: Cpp_IO_Modbus.protocolIndex === 0
     } Widgets.Combo {
       id: _serialPortCombo
@@ -90,9 +90,9 @@ Item {
     // Baud Rate (only for Modbus RTU)
     //
     Label {
-      text: qsTr("Baud Rate") + ":"
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
+      text: qsTr("Baud Rate") + ":"
       visible: Cpp_IO_Modbus.protocolIndex === 0
     } ComboBox {
       id: _baudRateCombo
@@ -181,9 +181,9 @@ Item {
     // Parity (only for Modbus RTU)
     //
     Label {
+      enabled: app.ioEnabled
       text: qsTr("Parity") + ":"
       opacity: enabled ? 1 : 0.5
-      enabled: app.ioEnabled
       visible: Cpp_IO_Modbus.protocolIndex === 0
     } Widgets.Combo {
       Layout.fillWidth: true
@@ -202,9 +202,9 @@ Item {
     // Data Bits (only for Modbus RTU)
     //
     Label {
-      text: qsTr("Data Bits") + ":"
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
+      text: qsTr("Data Bits") + ":"
       visible: Cpp_IO_Modbus.protocolIndex === 0
     } Widgets.Combo {
       Layout.fillWidth: true
@@ -223,9 +223,9 @@ Item {
     // Stop Bits (only for Modbus RTU)
     //
     Label {
-      text: qsTr("Stop Bits") + ":"
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
+      text: qsTr("Stop Bits") + ":"
       visible: Cpp_IO_Modbus.protocolIndex === 0
     } Widgets.Combo {
       Layout.fillWidth: true
@@ -244,9 +244,9 @@ Item {
     // TCP Host (only for Modbus TCP)
     //
     Label {
+      enabled: app.ioEnabled
       text: qsTr("Host") + ":"
       opacity: enabled ? 1 : 0.5
-      enabled: app.ioEnabled
       visible: Cpp_IO_Modbus.protocolIndex === 1
     } Widgets.LineField {
       id: _hostField
@@ -272,9 +272,9 @@ Item {
     // TCP Port (only for Modbus TCP)
     //
     Label {
+      enabled: app.ioEnabled
       text: qsTr("Port") + ":"
       opacity: enabled ? 1 : 0.5
-      enabled: app.ioEnabled
       visible: Cpp_IO_Modbus.protocolIndex === 1
     } Widgets.LineField {
       id: _portField

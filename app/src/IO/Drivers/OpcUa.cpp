@@ -46,7 +46,6 @@ Q_LOGGING_CATEGORY(lcOpcUa, "serialstudio.io.opcua")
 static constexpr int kOpcUaDialDeadlineMs      = 15000;
 static constexpr int kOpcUaDiscoveryDeadlineMs = 8000;
 static constexpr int kOpcUaDefaultIntervalMs   = 100;
-static constexpr int kOpcUaDefaultPort         = 4840;
 static constexpr const char* kBackendName      = "open62541";
 
 using IO::Drivers::OpcUaEndpointSelection::endpointAcceptsToken;
@@ -60,8 +59,8 @@ using IO::Drivers::OpcUaEndpointSelection::policyIsDeprecated;
 
 /**
  * @brief Constructs the driver, restores persisted settings and wires the configuration signals.
- *        setFilterRules REPLACES the rule set rather than adding to it, so the font and canbus
- *        rules from main.cpp / CANBus.cpp have to ride along here.
+ *        No logging rules are set here: setFilterRules REPLACES the process-wide rule set, so a
+ *        driver constructor doing it silently dropped whatever main.cpp had installed.
  */
 IO::Drivers::OpcUa::OpcUa()
   : m_connecting(false)
@@ -118,9 +117,6 @@ IO::Drivers::OpcUa::OpcUa()
   for (const auto signal : kConfigSignals)
     connect(this, signal, this, &IO::Drivers::OpcUa::configurationChanged);
 
-  QLoggingCategory::setFilterRules(QStringLiteral("*font*=false\n"
-                                                  "qt.canbus*=false"));
-
   Q_EMIT configurationChanged();
 }
 
@@ -174,7 +170,8 @@ void IO::Drivers::OpcUa::loadSettings()
   const QUrl url(m_endpointUrl);
   if (url.isValid() && !url.host().isEmpty())
     m_password =
-      m_vault.credentials(url.host(), static_cast<quint16>(url.port(kOpcUaDefaultPort))).password;
+      m_vault.credentials(url.host(), static_cast<quint16>(url.port(OpcUaTypes::kDefaultPort)))
+        .password;
 
   const auto doc =
     QJsonDocument::fromJson(m_settings.value("OpcUaDriver/tags", QByteArray("[]")).toByteArray());
@@ -435,11 +432,12 @@ bool IO::Drivers::OpcUa::hasSelectedEndpoint() const noexcept
 IO::Drivers::OpcUaSession::Identity IO::Drivers::OpcUa::identity() const
 {
   OpcUaSession::Identity out;
-  out.mode            = m_authMode;
-  out.username        = m_username;
-  out.password        = m_password;
-  out.certificatePath = m_userCertificatePath;
-  out.privateKeyPath  = m_userKeyPath;
+  out.mode                   = m_authMode;
+  out.username               = m_username;
+  out.password               = m_password;
+  out.certificatePath        = m_userCertificatePath;
+  out.privateKeyPath         = m_userKeyPath;
+  out.allowPlaintextPassword = OpcUaSecurity::plaintextPasswordAllowed();
   return out;
 }
 
@@ -479,7 +477,7 @@ IO::Drivers::OpcUaTypes::Endpoint IO::Drivers::OpcUa::dialEndpoint() const
     return endpoint;
 
   advertised.setHost(typed.host());
-  advertised.setPort(typed.port(advertised.port(kOpcUaDefaultPort)));
+  advertised.setPort(typed.port(advertised.port(OpcUaTypes::kDefaultPort)));
   endpoint.endpointUrl = advertised.toString();
   return endpoint;
 }
@@ -1043,7 +1041,8 @@ void IO::Drivers::OpcUa::setEndpointUrl(const QString& url)
   const QUrl parsed(m_endpointUrl);
   if (parsed.isValid() && !parsed.host().isEmpty())
     m_password =
-      m_vault.credentials(parsed.host(), static_cast<quint16>(parsed.port(kOpcUaDefaultPort)))
+      m_vault
+        .credentials(parsed.host(), static_cast<quint16>(parsed.port(OpcUaTypes::kDefaultPort)))
         .password;
 
   Q_EMIT endpointUrlChanged();
@@ -1110,8 +1109,10 @@ void IO::Drivers::OpcUa::setUsername(const QString& username)
   if (m_persistent) {
     m_settings.setValue("OpcUaDriver/username", m_username);
     if (url.isValid() && !url.host().isEmpty())
-      m_vault.setCredentials(
-        url.host(), static_cast<quint16>(url.port(kOpcUaDefaultPort)), m_username, m_password);
+      m_vault.setCredentials(url.host(),
+                             static_cast<quint16>(url.port(OpcUaTypes::kDefaultPort)),
+                             m_username,
+                             m_password);
   }
 
   Q_EMIT usernameChanged();
@@ -1129,7 +1130,7 @@ void IO::Drivers::OpcUa::setPassword(const QString& password)
   const QUrl url(m_endpointUrl);
   if (m_persistent && url.isValid() && !url.host().isEmpty())
     m_vault.setCredentials(
-      url.host(), static_cast<quint16>(url.port(kOpcUaDefaultPort)), m_username, m_password);
+      url.host(), static_cast<quint16>(url.port(OpcUaTypes::kDefaultPort)), m_username, m_password);
 
   Q_EMIT passwordChanged();
 }

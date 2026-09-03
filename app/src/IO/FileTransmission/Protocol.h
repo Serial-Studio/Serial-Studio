@@ -29,12 +29,16 @@ namespace IO {
 namespace Protocols {
 
 /**
- * @brief Abstract base class for file transfer protocols.
+ * @brief Abstract base class for file transfer protocols. protocolError() is emitted once per
+ *        recoverable protocol error (a NAK, a retry, a timeout); the controller counts those
+ *        emissions instead of matching English words in the status text, which counted nothing
+ *        at all in any other language.
  */
 class Protocol : public QObject {
   Q_OBJECT
 
 signals:
+  void protocolError();
   void finished(bool success, const QString& errorMessage);
   void progressChanged(qint64 bytesSent, qint64 bytesTotal);
   void statusMessage(const QString& message);

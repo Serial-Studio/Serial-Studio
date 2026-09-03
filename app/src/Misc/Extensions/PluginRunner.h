@@ -74,6 +74,8 @@ private slots:
 
 private:
   void forget(const QString& id);
+  void retireProcess(QProcess* process);
+  void dropFailedProcess(const QString& id);
   void wireProcess(QProcess* process, const QString& id);
   [[nodiscard]] QProcessEnvironment buildEnvironment() const;
   void startProcess(QProcess* process,

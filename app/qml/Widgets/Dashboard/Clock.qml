@@ -27,7 +27,7 @@ import QtQuick.Controls
 
 import SerialStudio
 
-Item {
+InstrumentBase {
   id: root
 
   implicitWidth: 280
@@ -81,15 +81,6 @@ Item {
   //
   // Theme-aware chrome stops shared between the analog face and the digital
   // pane background so both pages feel like one widget.
-  //
-  readonly property bool darkBg: {
-    const c = Cpp_ThemeManager.colors["widget_base"]
-    return (0.299 * c.r + 0.587 * c.g + 0.114 * c.b) < 0.5
-  }
-  readonly property color chromeTop: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], darkBg ? 2.0 : 1.30)
-  readonly property color chromeMid: Cpp_ThemeManager.colors["widget_base"]
-  readonly property color chromeBot: Qt.darker(Cpp_ThemeManager.colors["widget_base"], darkBg ? 1.05 : 1.18)
-
   //
   // Sword-hand silhouette shared by the hour/minute hands and their drop shadows;
   // geom supplies tipLen/tipW/baseW/neckW/tailW/tailLen/shoulderY.

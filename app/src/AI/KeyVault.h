@@ -58,7 +58,8 @@ private:
 };
 
 /**
- * @brief Per-machine encrypted storage for BYOK API keys.
+ * @brief Per-machine OBFUSCATED storage for BYOK API keys: SimpleCrypt under a machine-derived
+ * key, which keeps a key out of a settings file as plain text and is not encryption.
  */
 class KeyVault {
 public:

@@ -110,7 +110,7 @@ public:
   void setMarkers(std::vector<MarkerData>&& markers);
   void setAxisModel(const AxisModel& axis);
   void setCursorPosition(const QPointF& pos, const bool hovering) noexcept;
-  void updateMarkerStates(const float* smoothed, const int spectrumSize);
+  [[nodiscard]] bool updateMarkerStates(const float* smoothed, const int spectrumSize);
   void render(const QSizeF& itemSize, const qreal devicePixelRatio);
 
 private:

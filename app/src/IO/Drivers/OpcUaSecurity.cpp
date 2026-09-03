@@ -31,6 +31,7 @@
 #include <QFile>
 #include <QHostAddress>
 #include <QRegularExpression>
+#include <QSettings>
 #include <QStandardPaths>
 #include <QSysInfo>
 #include <QtEndian>
@@ -49,6 +50,9 @@ static constexpr const char* kKeyFile           = "client_key.der";
 static constexpr const char* kTrustDir          = "trusted";
 static constexpr int kMaxSubjectAltNames        = 128;
 static constexpr qsizetype kMaxCertificateBytes = 64 * 1024;
+
+// Per-installation acknowledgement that a password may travel over an unencrypted channel
+static constexpr const char* kPlaintextPasswordKey = "OpcUaDriver/allowPlaintextPassword";
 
 //--------------------------------------------------------------------------------------------------
 // Storage layout
@@ -358,6 +362,27 @@ bool IO::Drivers::OpcUaSecurity::revokeTrust(const QString& fingerprint)
     return false;
 
   return QFile::remove(path);
+}
+
+/**
+ * @brief Whether the user has accepted that a password may cross an unencrypted channel. Off until
+ *        granted: open62541 refuses it by default, and overriding that for everyone shipped every
+ *        None-policy login's password in the clear without ever asking. Per-INSTALLATION like the
+ *        trust store, never a project key, so opening someone else's project cannot grant it.
+ */
+bool IO::Drivers::OpcUaSecurity::plaintextPasswordAllowed()
+{
+  QSettings settings;
+  return settings.value(QString::fromLatin1(kPlaintextPasswordKey), false).toBool();
+}
+
+/**
+ * @brief Records the user's answer to the plaintext-password prompt.
+ */
+void IO::Drivers::OpcUaSecurity::setPlaintextPasswordAllowed(const bool allowed)
+{
+  QSettings settings;
+  settings.setValue(QString::fromLatin1(kPlaintextPasswordKey), allowed);
 }
 
 /**

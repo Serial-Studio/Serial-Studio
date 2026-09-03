@@ -120,6 +120,21 @@ space on both sides). The whole codebase carries baseline `--` debt, so both shi
 - **Reactive bindings**: `Q_PROPERTY` + `NOTIFY`. No comma-expression hacks.
 - **Enums**: `SerialStudio.BusType`, `ProjectModel.SomeEnum`. Never hardcoded integers.
 - **No inline `//` comments mid-statement**; section headers on their own line only.
+- **`Cpp_ThemeManager.colors` is a `QQmlPropertyMap`** (spec 0075 G2). The bracket syntax you
+  already write (`Cpp_ThemeManager.colors["highlight"]`) is unchanged, but the notify granularity
+  is not: the map emits **per key**, so a theme republish that changes three colors re-evaluates
+  the bindings that read those three, not every binding in the window. `Misc::syncColorMap()`
+  republishes key by key and writes nothing when a key's value did not move, so a no-op
+  republish notifies nothing at all. Do not cache the whole map into a local `var` and index that
+  — you get one binding on the map object and lose the per-key granularity the type exists for.
+- **A `Canvas` does not repaint when the theme changes.** A `Canvas` paints imperatively, so
+  nothing re-runs its `onPaint` when a color it read inside `paint()` changes: it needs an
+  explicit hook,
+  `Connections { target: Cpp_ThemeManager; function onThemeChanged() { canvas.requestPaint() } }`.
+  Every `Canvas` that reads a theme color owes one; a separator that stayed light-themed inside a
+  dark window is what this rule is made of (G3). The same is true for any imperative drawing
+  surface, and it is orthogonal to the per-key notify above: a property binding updates itself, a
+  canvas does not.
 
 Font helpers: `uiFont`, `boldUiFont`, `monoFont`, `customUiFont(fraction, bold)`,
 `customMonoFont(fraction, bold)`, `widgetFont(fraction, bold)`. Scales: `kScaleSmall=0.85`,
@@ -138,6 +153,21 @@ Font helpers: `uiFont`, `boldUiFont`, `monoFont`, `customUiFont(fraction, bold)`
 SPDX headers required: `GPL-3.0-or-later`, `LicenseRef-SerialStudio-Commercial`, or both.
 Validate at system boundaries only (API input, file I/O, network). Trust internal data.
 
+### The One Private-Qt Dependency
+
+`app/CMakeLists.txt` links
+<!-- claim-verify off -->
+**`Qt6::GuiPrivate`**,
+<!-- claim-verify on -->
+and it is the app target's only private-Qt dependency. It is there for exactly one file: `<rhi/qrhi.h>` lives under Qt's private include
+path, and `UI/Widgets/Waterfall/WaterfallRingTexture.cpp` needs it to own a `QRhiTexture` and
+upload one scanline per tick instead of a whole image. QRhi is semi-public: source-compatible
+within a Qt minor series only, so **a Qt minor upgrade re-checks `WaterfallRingTexture.cpp`**,
+and the CMake comment says so at the point of the change. What limits the blast radius is that
+the ring texture is not the only path — `WaterfallSpectrogramNodes` falls back to the 64-row
+tile path whenever `WaterfallRingTexture::supported()` is false, so a moved API costs performance,
+not the widget. Do not add a second private-Qt dependency without the same kind of fallback.
+
 ## Safety-Critical Code — NASA Power of Ten
 
 Mission-critical telemetry. Hotpath violations are blockers.
@@ -148,8 +178,9 @@ Mission-critical telemetry. Hotpath violations are blockers.
 2. **Loops have fixed upper bounds.** External-data loops use explicit `kMaxIterations`.
    `while(true)` only with a provable termination invariant — document it.
 3. **No allocation after init on the hotpath.** No `new`/`make_shared`/`.append()` on the
-   dashboard path. Since spec 0055 `FrameBuilder::claimBlockSlot()` draws each published
-   `DataBlockPtr` from a fixed-size pool whose columns are sized once at bind, so staging a
+   dashboard path. Since spec 0055 the block pool draws each published
+   `DataBlockPtr` from a fixed-size pool whose columns are sized once at bind (`BlockStager` on
+   the frame lane, `StreamProcessor::claimBlockSlot()` on the stream lane), so staging a
    parsed row is a plain store; a slot is free exactly when the pool's shared_ptr is its only
    reference, and the hand-out aliases it (no per-block control block). Don't bypass the pool
    with a direct `std::make_shared<DataBlock>(...)` on the hotpath — that re-introduces a

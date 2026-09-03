@@ -142,6 +142,25 @@ QString Misc::Utilities::hdpiImagePath(const QString& path)
 }
 
 /**
+ * @brief Queues an informational message box for the next event-loop pass. Callers that cannot
+ *        afford a nested modal loop under their own stack use this: a network reply handler
+ *        (whose reply the loop can outlive) and an API command dispatch (whose client would wait
+ *        for a human to click). Nothing is returned, because nobody is there to read an answer.
+ */
+void Misc::Utilities::postMessageBox(const QString& text,
+                                     const QString& informativeText,
+                                     QMessageBox::Icon icon,
+                                     const QString& windowTitle)
+{
+  QMetaObject::invokeMethod(
+    qApp,
+    [text, informativeText, icon, windowTitle] {
+      (void)showMessageBox(text, informativeText, icon, windowTitle);
+    },
+    Qt::QueuedConnection);
+}
+
+/**
  * @brief Shows a macOS-like message box; a QMessageBox on every platform because AppKit stops an
  *        NSAlert opened from its own terminate/close callbacks. A worker-thread caller is
  *        re-posted to the GUI thread and answered NoButton: building the dialog off the main

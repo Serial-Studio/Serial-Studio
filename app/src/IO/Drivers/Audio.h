@@ -32,6 +32,7 @@
 #include <QVector>
 
 #include "IO/Drivers/Audio/AudioDeviceCatalog.h"
+#include "IO/Drivers/Audio/PlaybackRing.h"
 #include "IO/HAL_Driver.h"
 #include "ThirdParty/miniaudio.h"
 #include "ThirdParty/readerwriterqueue.h"
@@ -118,6 +119,8 @@ public:
   void close() override;
 
   [[nodiscard]] bool normalization() const noexcept;
+  [[nodiscard]] quint64 inputDrops() const noexcept;
+  [[nodiscard]] quint64 playbackUnderruns() const noexcept;
   [[nodiscard]] bool isOpen() const noexcept override;
   [[nodiscard]] bool isStreamCapable() const noexcept override;
   [[nodiscard]] bool streamLaneActive() const noexcept;
@@ -208,6 +211,8 @@ private:
 
   void persistSettings();
   void restoreSettings();
+  void seedInputPool(qsizetype slotBytes);
+  [[nodiscard]] bool packPlaybackFrame(const QByteArray& line, int channels, ma_format format);
 
 private:
   bool m_init;
@@ -228,7 +233,11 @@ private:
   mutable QByteArray m_csvData;
   mutable QTextStream m_csvStream;
 
-  moodycamel::ReaderWriterQueue<QVector<quint8>> m_outputQueue;
+  PlaybackRing m_playbackRing;
+  moodycamel::ReaderWriterQueue<QByteArray> m_inputPool;
+  QByteArray m_inputScratch;
+  QVector<quint8> m_playbackScratch;
+  std::atomic<quint64> m_inputDrops;
 
   QTimer* m_inputWorkerTimer;
   QThread m_inputWorkerThread;

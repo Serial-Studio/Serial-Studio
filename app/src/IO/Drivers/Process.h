@@ -126,11 +126,16 @@ private slots:
   void onPipeClosed();
   void onPipeAttached();
   void onReadyRead();
+  void onProcessListReady();
+  void onReadyReadStandardError();
   void onProcessFinished(int exitCode, QProcess::ExitStatus status);
   void onProcessError(QProcess::ProcessError error);
 
 private:
   void doClose();
+  void retireProcess();
+  void publishProcessList(const QStringList& list);
+  void reportDropOnce();
   void queuePipeTeardown();
   void pipeReadLoop();
   void pipeReadLoopWindows();
@@ -141,7 +146,9 @@ private:
 
 private:
   Mode m_mode;
+  bool m_dropReported;
   QProcess* m_process;
+  QProcess* m_listProbe;
 
   std::atomic<bool> m_pipeRunning;
   QThread m_pipeThread;

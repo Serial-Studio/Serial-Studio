@@ -592,7 +592,7 @@ Item {
 
                 SequentialAnimation {
                   loops: Animation.Infinite
-                  running: model.alarmTriggered
+                  running: model.alarmTriggered && model.hasData
                   PropertyAction { target: valueBox; property: "alarmFlashOn"; value: true }
                   PauseAnimation { duration: 450 }
                   PropertyAction { target: valueBox; property: "alarmFlashOn"; value: false }
@@ -677,12 +677,13 @@ Item {
         Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
 
         property bool alarmFlashOn: false
-        readonly property color targetColor: root.model.alarmTriggered && digitalBox.alarmFlashOn
+        readonly property color targetColor: root.model.alarmTriggered && root.model.hasData
+                                              && digitalBox.alarmFlashOn
                                               ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity)
                                               : Cpp_ThemeManager.colors["console_base"]
         SequentialAnimation {
           loops: Animation.Infinite
-          running: root.model.alarmTriggered
+          running: root.model.alarmTriggered && root.model.hasData
           PropertyAction { target: digitalBox; property: "alarmFlashOn"; value: true }
           PauseAnimation { duration: 450 }
           PropertyAction { target: digitalBox; property: "alarmFlashOn"; value: false }
@@ -762,30 +763,8 @@ Item {
     }
   }
 
-  //
-  // Suppresses the page auto-save while restore assigns the persisted index
-  //
-  property bool restoringPage: false
-
-  //
-  // Restore per-widget page from project settings, then persist on change.
-  //
-  Component.onCompleted: {
-    root.restoringPage = true
-    const s = Cpp_JSON_ProjectModel.widgetSettings(root.widgetId)
-    if (s["page"] !== undefined)
-      swipeView.currentIndex = parseInt(s["page"])
-
-    root.restoringPage = false
-  }
-  Connections {
-    target: swipeView
-    function onCurrentIndexChanged() {
-      if (root.restoringPage)
-        return
-
-      Cpp_JSON_ProjectModel.saveWidgetSetting(
-            root.widgetId, "page", swipeView.currentIndex)
-    }
+  SwipePages {
+    view: swipeView
+    widgetId: root.widgetId
   }
 }

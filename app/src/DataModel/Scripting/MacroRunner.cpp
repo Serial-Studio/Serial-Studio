@@ -50,6 +50,7 @@ extern "C" {
 #include "DataModel/Scripting/LuaCompatJIT.h"
 #include "DataModel/Scripting/MacroWorker.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
+#include "DataModel/Scripting/ScriptDryRun.h"
 #include "IO/PipelineHost.h"
 #include "SerialStudio.h"
 #include "SSAssert.h"
@@ -383,15 +384,29 @@ QVariantMap DataModel::MacroRunner::verify(const QString& source, int language) 
 
 /**
  * @brief Parses JS by evaluating a function-expression wrapper, so the macro body is compiled
- *        but never run; the wrapper adds one line, subtracted from reported line numbers.
+ *        but never run; the wrapper adds one line, subtracted from reported line numbers. The
+ *        evaluation is deadline-guarded because a source that closes the wrapper early does run.
  */
 QVariantMap DataModel::MacroRunner::verifyJs(const QString& source) const
 {
-  QJSEngine engine;
-  const QJSValue result =
-    engine.evaluate(QStringLiteral("(function() {\n%1\n})").arg(source), QStringLiteral("macro"));
+  ScriptDryRun session(ScriptDryRun::Language::JavaScript, kScriptDryRunBudgetMs, "macro.verify");
 
   QVariantMap out;
+  if (!session.valid()) {
+    out.insert(QStringLiteral("ok"), false);
+    out.insert(QStringLiteral("error"), tr("Failed to create the JavaScript engine"));
+    return out;
+  }
+
+  const QJSValue result =
+    session.evaluate(QStringLiteral("(function() {\n%1\n})").arg(source), QStringLiteral("macro"));
+  if (session.timedOut()) {
+    out.insert(QStringLiteral("ok"), false);
+    out.insert(QStringLiteral("error"),
+               tr("The macro did not finish compiling within %1 ms").arg(session.budgetMs()));
+    return out;
+  }
+
   out.insert(QStringLiteral("ok"), !result.isError());
   if (result.isError()) {
     const int source_lines = static_cast<int>(source.count(QLatin1Char('\n'))) + 1;

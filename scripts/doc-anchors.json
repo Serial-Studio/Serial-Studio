@@ -1,83 +1,248 @@
 {
-  "purpose": "Constants the AI-facing docs quote, bound to the code that owns them. Checked by scripts/claim-verify.py: the source_pattern must still match in the source file, and every docs entry's must_contain literal must still appear in the doc that quotes it. Either half going stale is a finding -- a number that changed in code and nowhere else is exactly the drift the CLAUDE.md canary was built to detect.",
+  "purpose": "Constants the AI-facing docs quote, bound to the code that owns them. Checked by scripts/claim-verify.py: the source_pattern must still match in the source file, and every docs entry's must_contain literal must still appear in the doc that quotes it. Either half going stale is a finding -- a number that changed in code and nowhere else is exactly the drift the CLAUDE.md canary was built to detect. An anchor with \"kind\": \"ordered\" pins a SEQUENCE instead of a constant: every capture of source_pattern (optionally narrowed by source_scope) must appear in the doc, in the same order. Construction order is itself a contract, and a doc that lists the same names in the wrong order reads as authoritative while being wrong.",
   "anchors": [
     {
       "name": "qt-version",
       "source": ".github/workflows/ci.yml",
       "source_pattern": "QT_VERSION_LINUX:\\s*6\\.11\\.2",
-      "docs": [{ "path": "CLAUDE.md", "must_contain": "qt 6.11.2" }]
+      "docs": [
+        {
+          "path": "CLAUDE.md",
+          "must_contain": "qt 6.11.2"
+        }
+      ]
     },
     {
       "name": "cxx-standard",
       "source": "CMakeLists.txt",
       "source_pattern": "set\\(CMAKE_CXX_STANDARD 20\\)",
-      "docs": [{ "path": "CLAUDE.md", "must_contain": "cpp20" }]
+      "docs": [
+        {
+          "path": "CLAUDE.md",
+          "must_contain": "cpp20"
+        }
+      ]
     },
     {
       "name": "hotpath-min-fps",
       "source": "app/src/Misc/CLI.h",
       "source_pattern": "min-fps[^\\n]*default: 256000",
-      "docs": [{ "path": "CLAUDE.md", "must_contain": "hotpath 256k" }]
+      "docs": [
+        {
+          "path": "CLAUDE.md",
+          "must_contain": "hotpath 256k"
+        }
+      ]
     },
     {
       "name": "benchmark-native-numeric-fps",
       "source": "app/src/Benchmark/BenchmarkRunner.cpp",
       "source_pattern": "kNativeNumericFps\\s*=\\s*1024000\\.0",
-      "docs": [{ "path": "CLAUDE.md", "must_contain": "native 1024k" }]
+      "docs": [
+        {
+          "path": "CLAUDE.md",
+          "must_contain": "native 1024k"
+        }
+      ]
     },
     {
       "name": "benchmark-js-mixed-fps",
       "source": "app/src/Benchmark/BenchmarkRunner.cpp",
       "source_pattern": "kJsMixedFps\\s*=\\s*64000\\.0",
-      "docs": [{ "path": "CLAUDE.md", "must_contain": "js 64k" }]
+      "docs": [
+        {
+          "path": "CLAUDE.md",
+          "must_contain": "js 64k"
+        }
+      ]
     },
     {
       "name": "pipeline-queue-rule",
       "source": "app/src/IO/PipelineHost.cpp",
       "source_pattern": "65536-queue rule",
-      "docs": [{ "path": "CLAUDE.md", "must_contain": "queue 65536" }]
+      "docs": [
+        {
+          "path": "CLAUDE.md",
+          "must_contain": "queue 65536"
+        }
+      ]
     },
     {
       "name": "api-tcp-port",
       "source": "app/src/API/Server.h",
       "source_pattern": "#define API_TCP_PORT 7777",
-      "docs": [{ "path": "CLAUDE.md", "must_contain": "api 7777" }]
+      "docs": [
+        {
+          "path": "CLAUDE.md",
+          "must_contain": "api 7777"
+        }
+      ]
     },
     {
       "name": "style-column-limit",
       "source": ".clang-format",
       "source_pattern": "ColumnLimit:\\s+100",
-      "docs": [{ "path": "CLAUDE.md", "must_contain": "style 100/2" }]
+      "docs": [
+        {
+          "path": "CLAUDE.md",
+          "must_contain": "style 100/2"
+        }
+      ]
     },
     {
       "name": "style-indent-width",
       "source": ".clang-format",
       "source_pattern": "IndentWidth:\\s+2",
-      "docs": [{ "path": "CLAUDE.md", "must_contain": "style 100/2" }]
+      "docs": [
+        {
+          "path": "CLAUDE.md",
+          "must_contain": "style 100/2"
+        }
+      ]
     },
     {
       "name": "frame-block-sample-cap",
-      "source": "app/src/DataModel/FrameBuilder.h",
+      "source": "app/src/DataModel/FrameBuilder/BlockStager.h",
       "source_pattern": "kFrameBlockSampleCap\\s*=\\s*64",
-      "docs": [{ "path": "CLAUDE.md", "must_contain": "kFrameBlockSampleCap" }]
+      "docs": [
+        {
+          "path": "CLAUDE.md",
+          "must_contain": "kFrameBlockSampleCap"
+        }
+      ]
     },
     {
       "name": "stream-block-sample-cap",
       "source": "app/src/IO/StreamWorker.h",
       "source_pattern": "kStreamBlockSampleCap\\s*=\\s*4096",
-      "docs": [{ "path": "CLAUDE.md", "must_contain": "kStreamBlockSampleCap" }]
+      "docs": [
+        {
+          "path": "CLAUDE.md",
+          "must_contain": "kStreamBlockSampleCap"
+        }
+      ]
+    },
+    {
+      "name": "script-dry-run-budget",
+      "source": "app/src/DataModel/Scripting/ScriptDryRun.h",
+      "source_pattern": "kScriptDryRunBudgetMs\\s*=\\s*2000",
+      "docs": [
+        {
+          "path": "doc/claude/architecture/scripting.md",
+          "must_contain": "`kScriptDryRunBudgetMs` (2000)"
+        }
+      ]
+    },
+    {
+      "name": "monotonic-clock-persist-interval",
+      "source": "app/src/Licensing/MonotonicClock.cpp",
+      "source_pattern": "kPersistIntervalMs\\s*=\\s*60000",
+      "docs": [
+        {
+          "path": "doc/claude/architecture/startup.md",
+          "must_contain": "`kPersistIntervalMs`, 60000"
+        }
+      ]
+    },
+    {
+      "name": "api-port-setting",
+      "source": "app/src/API/Server.cpp",
+      "source_pattern": "m_settings\\.value\\(\"API/Port\", API_TCP_PORT\\)",
+      "docs": [
+        {
+          "path": "tests/README.md",
+          "must_contain": "`API/Port` QSettings key"
+        }
+      ]
+    },
+    {
+      "name": "api-pending-write-cap",
+      "source": "app/src/API/Server/ServerWorker.cpp",
+      "source_pattern": "kMaxApiPendingWriteBytes\\s*=\\s*16 \\* 1024 \\* 1024",
+      "docs": [
+        {
+          "path": "tests/README.md",
+          "must_contain": "16 MiB per socket"
+        }
+      ]
     },
     {
       "name": "function-length-limit",
       "source": "scripts/code-verify.py",
       "source_pattern": "cxx-function-too-long`\\s*.\\s*function body > 100 lines",
-      "docs": [{ "path": "CLAUDE.md", "must_contain": "hard limit 100" }]
+      "docs": [
+        {
+          "path": "CLAUDE.md",
+          "must_contain": "hard limit 100"
+        }
+      ]
     },
     {
       "name": "tu-length-threshold",
       "source": "scripts/code-verify.py",
       "source_pattern": "_TU_CENSUS_THRESHOLD = 1500",
-      "docs": [{ "path": "CLAUDE.md", "must_contain": "1500" }]
+      "docs": [
+        {
+          "path": "CLAUDE.md",
+          "must_contain": "1500"
+        }
+      ]
+    },
+    {
+      "name": "composition-root-order",
+      "kind": "ordered",
+      "note": "The doc-side match keys on a symbol's LAST namespace segment, so the seven singletons whose leaf is Player or Export (CSV/MDF4/Sessions players, CSV/MDF4/Console/Sessions exports) are indistinguishable in the doc and are skipped by the lookahead below. Their presence is pinned by composition-root-players and composition-root-exports; every other entry is pinned in order.",
+      "source": "app/src/Misc/ModuleManager.cpp",
+      "source_scope": "void Misc::ModuleManager::instantiateCoreModules\\(\\)\\n\\{[\\s\\S]*?\\n\\}",
+      "source_pattern": "(?:\\(void\\)\\s*|SessionContext::create<)((?:[A-Za-z_]\\w*::)*(?!Player\\b|Export\\b)[A-Za-z_]\\w*)(?:::instance\\(\\)|>)",
+      "docs": [
+        {
+          "path": "doc/claude/architecture/startup.md",
+          "scope": "\\*\\*Pinned instantiation order\\*\\*[\\s\\S]*?\\n\\n"
+        }
+      ]
+    },
+    {
+      "name": "composition-root-players",
+      "source": "app/src/Misc/ModuleManager.cpp",
+      "source_pattern": "\\(void\\)CSV::Player::instance\\(\\);\\n\\s*\\(void\\)MDF4::Player::instance\\(\\);",
+      "docs": [
+        {
+          "path": "doc/claude/architecture/startup.md",
+          "must_contain": "`CSV::Player`"
+        },
+        {
+          "path": "doc/claude/architecture/startup.md",
+          "must_contain": "`MDF4::Player`"
+        },
+        {
+          "path": "doc/claude/architecture/startup.md",
+          "must_contain": "`Sessions::Player`"
+        }
+      ]
+    },
+    {
+      "name": "composition-root-exports",
+      "source": "app/src/Misc/ModuleManager.cpp",
+      "source_pattern": "\\(void\\)CSV::Export::instance\\(\\);\\n\\s*\\(void\\)MDF4::Export::instance\\(\\);\\n\\s*\\(void\\)Console::Export::instance\\(\\);",
+      "docs": [
+        {
+          "path": "doc/claude/architecture/startup.md",
+          "must_contain": "`Sessions::Export`"
+        },
+        {
+          "path": "doc/claude/architecture/startup.md",
+          "must_contain": "`CSV::Export`"
+        },
+        {
+          "path": "doc/claude/architecture/startup.md",
+          "must_contain": "`MDF4::Export`"
+        },
+        {
+          "path": "doc/claude/architecture/startup.md",
+          "must_contain": "`Console::Export`"
+        }
+      ]
     }
   ]
 }

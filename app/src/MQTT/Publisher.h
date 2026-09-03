@@ -396,6 +396,14 @@ private:
   QTimer m_statsTimer;
   moodycamel::ReaderWriterQueue<TimestampedRawBytes> m_rawBytesQueue;
   moodycamel::ReaderWriterQueue<TimestampedRawBytes> m_rawFramesQueue;
+  // code-verify off
+  // The publish gate the pipeline thread reads per frame. Mirrors of the GUI-owned configuration
+  // above: reading those directly raced every setter, and QString m_topicBase gave a d-pointer
+  // race on a topic edit (A5). Written once per settings change, read relaxed per frame.
+  // code-verify on
+  alignas(64) std::atomic<bool> m_hotEnabled;
+  alignas(64) std::atomic<bool> m_hotSparkplug;
+  alignas(64) std::atomic<bool> m_hotHasTopic;
   alignas(64) std::atomic<int> m_workerMode;
   alignas(64) std::atomic<int> m_workerScriptLanguage;
   alignas(64) std::atomic<bool> m_isConnected;

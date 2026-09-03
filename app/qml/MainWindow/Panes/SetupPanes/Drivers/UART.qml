@@ -48,9 +48,9 @@ Item {
     // COM port selector
     //
     Label {
+      enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
       text: qsTr("COM Port") + ":"
-      enabled: app.ioEnabled
     } ComboBox {
       id: _portCombo
 
@@ -93,9 +93,9 @@ Item {
     // Baud rate selector
     //
     Label {
+      enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
       text: qsTr("Baud Rate") + ":"
-      enabled: app.ioEnabled
     } ComboBox {
       id: _baudCombo
 
@@ -178,9 +178,9 @@ Item {
     // Data bits selector
     //
     Label {
-      text: qsTr("Data Bits") + ":"
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
+      text: qsTr("Data Bits") + ":"
     } Widgets.Combo {
       id: _dataCombo
 
@@ -199,9 +199,9 @@ Item {
     // Parity selector
     //
     Label {
+      enabled: app.ioEnabled
       text: qsTr("Parity") + ":"
       opacity: enabled ? 1 : 0.5
-      enabled: app.ioEnabled
     } Widgets.Combo {
       id: _parityCombo
 
@@ -220,9 +220,9 @@ Item {
     // Stop bits selector
     //
     Label {
-      text: qsTr("Stop Bits") + ":"
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
+      text: qsTr("Stop Bits") + ":"
     } Widgets.Combo {
       id: _stopBitsCombo
 
@@ -241,9 +241,9 @@ Item {
     // Flow control selector
     //
     Label {
-      text: qsTr("Flow Control") + ":"
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
+      text: qsTr("Flow Control") + ":"
     } Widgets.Combo {
       id: _flowCombo
 

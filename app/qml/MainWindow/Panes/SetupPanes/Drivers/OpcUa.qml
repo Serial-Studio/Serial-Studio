@@ -48,9 +48,9 @@ Item {
     // Endpoint URL + discover
     //
     Label {
-      text: qsTr("Endpoint") + ":"
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
+      text: qsTr("Endpoint") + ":"
     } RowLayout {
       spacing: 4
       Layout.fillWidth: true
@@ -85,9 +85,9 @@ Item {
     // Publishing interval
     //
     Label {
-      text: qsTr("Poll Interval (ms)") + ":"
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
+      text: qsTr("Poll Interval (ms)") + ":"
     } Widgets.LineField {
       Layout.fillWidth: true
       enabled: app.ioEnabled
@@ -106,9 +106,9 @@ Item {
     // Discovered endpoints (secured rows disabled)
     //
     Label {
-      text: qsTr("Security") + ":"
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
+      text: qsTr("Security") + ":"
       visible: Cpp_IO_OpcUa.endpointList.length > 0
     } ComboBox {
       id: _endpointCombo
@@ -157,9 +157,9 @@ Item {
     // Security policy and message mode
     //
     Label {
+      enabled: app.ioEnabled
       text: qsTr("Policy") + ":"
       opacity: enabled ? 1 : 0.5
-      enabled: app.ioEnabled
     } Widgets.Combo {
       Layout.fillWidth: true
       enabled: app.ioEnabled
@@ -173,9 +173,9 @@ Item {
     }
 
     Label {
+      enabled: app.ioEnabled
       text: qsTr("Mode") + ":"
       opacity: enabled ? 1 : 0.5
-      enabled: app.ioEnabled
       visible: Cpp_IO_OpcUa.securityPolicyIndex > 0
     } Widgets.Combo {
       Layout.fillWidth: true
@@ -207,9 +207,9 @@ Item {
     // Authentication
     //
     Label {
-      text: qsTr("Authentication") + ":"
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
+      text: qsTr("Authentication") + ":"
     } Widgets.Combo {
       Layout.fillWidth: true
       enabled: app.ioEnabled
@@ -223,9 +223,9 @@ Item {
     }
 
     Label {
-      text: qsTr("Username") + ":"
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
+      text: qsTr("Username") + ":"
       visible: Cpp_IO_OpcUa.authMode === 1
     } Widgets.LineField {
       Layout.fillWidth: true
@@ -240,9 +240,9 @@ Item {
     }
 
     Label {
-      text: qsTr("Password") + ":"
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
+      text: qsTr("Password") + ":"
       visible: Cpp_IO_OpcUa.authMode === 1
     } Widgets.LineField {
       Layout.fillWidth: true
@@ -258,9 +258,9 @@ Item {
     }
 
     Label {
-      text: qsTr("Certificate") + ":"
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
+      text: qsTr("Certificate") + ":"
       visible: Cpp_IO_OpcUa.authMode === 2
     } RowLayout {
       spacing: 4
@@ -283,9 +283,9 @@ Item {
     }
 
     Label {
-      text: qsTr("Private Key") + ":"
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
+      text: qsTr("Private Key") + ":"
       visible: Cpp_IO_OpcUa.authMode === 2
     } RowLayout {
       spacing: 4
@@ -321,12 +321,26 @@ Item {
     }
 
     //
+    // Explicit opt-in before a password crosses an unencrypted channel
+    //
+    Item {
+      visible: Cpp_IO_OpcUa.credentialsExposed
+    } CheckBox {
+      Layout.fillWidth: true
+      enabled: app.ioEnabled
+      visible: Cpp_IO_OpcUa.credentialsExposed
+      checked: Cpp_IO_OpcUa.allowPlaintextPassword
+      onCheckedChanged: Cpp_IO_OpcUa.allowPlaintextPassword = checked
+      text: qsTr("Send the password anyway on this unencrypted channel")
+    }
+
+    //
     // This installation's client certificate
     //
     Label {
-      text: qsTr("Identity") + ":"
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
+      text: qsTr("Identity") + ":"
       visible: Cpp_IO_OpcUa.securityPolicyIndex > 0
     } ColumnLayout {
       spacing: 4

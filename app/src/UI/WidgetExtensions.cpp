@@ -28,6 +28,7 @@
 #include <QVariantMap>
 #include <utility>
 
+#include "Misc/ContextRegistry.h"
 #include "Misc/IconRegistry.h"
 #include "Misc/JsonValidator.h"
 #include "Misc/WorkspaceManager.h"
@@ -134,31 +135,11 @@ QStringList UI::WidgetExtensions::reservedIds()
  * @brief Returns the host context-property names an extension's QML context shadows. This is a
  *        speed bump and not a boundary: the QML engine is shared, so a package that means to
  *        reach the host still can; the consent flow is what makes the trust model honest. The
- *        list mirrors ModuleManager's registrations; a name missing here only leaks a name.
+ *        ONE table is Misc::ContextRegistry's, which is also what the composition root registers.
  */
 QStringList UI::WidgetExtensions::hostContextNames()
 {
-  static const QStringList names =
-    QStringLiteral(
-      "Cpp_AppState Cpp_Updater Cpp_IO_Serial Cpp_CSV_Export Cpp_CSV_Player Cpp_IO_Manager "
-      "Cpp_IO_Network Cpp_MDF4_Export Cpp_MDF4_Player Cpp_Misc_ModuleManager Cpp_UI_Dashboard "
-      "Cpp_UI_TaskbarSettings Cpp_Console_Export Cpp_NativeWindow Cpp_API_Server Cpp_API_Mirror "
-      "Cpp_Misc_Utilities Cpp_IO_Bluetooth_LE Cpp_ThemeManager Cpp_Console_Handler "
-      "Cpp_Misc_Translator Cpp_JSON_ProjectModel Cpp_JSON_ProjectEditor Cpp_ControlScript "
-      "Cpp_JSON_ProtoImporter Cpp_JSON_FrameBuilder Cpp_Notifications Cpp_Misc_TimerEvents "
-      "Cpp_Misc_CommonFonts Cpp_IO_FileTransmission Cpp_Misc_WorkspaceManager Cpp_Examples "
-      "Cpp_HelpCenter Cpp_ExtensionManager Cpp_Misc_IconEngine "
-      "Cpp_Misc_IconRegistry Cpp_Misc_ProblemCenter Cpp_Misc_ConnectionDiagnostics Cpp_UI_CommandRegistry "
-      "Cpp_UI_WidgetExtensions Cpp_Misc_GraphicsBackend Cpp_Misc_HighDpiScaling "
-      "Cpp_Misc_CrashTracker Cpp_Misc_BackupManager Cpp_Benchmark_Runner Cpp_IO_Audio "
-      "Cpp_IO_CANBus Cpp_IO_Modbus Cpp_IO_USB Cpp_IO_HID Cpp_IO_Process Cpp_IO_Mqtt Cpp_IO_OpcUa "
-      "Cpp_IO_S7 Cpp_IO_Eip Cpp_IO_Iec104 "
-      "Cpp_MQTT_Publisher Cpp_JSON_DBCImporter Cpp_JSON_ModbusMapImporter Cpp_Licensing_Trial "
-      "Cpp_Licensing_LemonSqueezy Cpp_Licensing_OfflineLicense Cpp_Sessions_Export "
-      "Cpp_Sessions_Player Cpp_Sessions_Manager Cpp_ShortcutGenerator Cpp_AI_Assistant "
-      "Cpp_InfluxDB_Export Cpp_GRPC_Server Cpp_Image_Export Cpp_Audio_Export")
-      .split(QLatin1Char(' '), Qt::SkipEmptyParts);
-  return names;
+  return Misc::ContextRegistry::objectNames();
 }
 
 /**

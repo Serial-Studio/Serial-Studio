@@ -56,6 +56,7 @@ Licensing::LemonSqueezy::LemonSqueezy()
   , m_appName(APP_NAME)
   , m_silentValidation(true)
   , m_revalidatingCache(false)
+  , m_requestPending(false)
   , m_lastNotifiedEntitled(false)
   , m_gracePeriod(0)
 {
@@ -213,13 +214,18 @@ void Licensing::LemonSqueezy::buy()
  */
 void Licensing::LemonSqueezy::activate()
 {
-  if (!canActivate())
+  if (!canActivate()) {
+    Q_EMIT requestFinished(false, tr("The license key format is not valid."));
     return;
+  }
 
-  if (busy())
+  if (busy()) {
+    Q_EMIT requestFinished(false, tr("Another licensing request is already running."));
     return;
+  }
 
-  m_busy = true;
+  m_busy           = true;
+  m_requestPending = true;
   Q_EMIT busyChanged();
 
   QJsonObject payload;
@@ -324,16 +330,25 @@ void Licensing::LemonSqueezy::deactivate()
   static auto& offlineLicense = OfflineLicense::instance();
   if (offlineLicense.isActivated()) {
     offlineLicense.deactivate();
+    Q_EMIT requestFinished(!offlineLicense.isActivated(),
+                           offlineLicense.isActivated()
+                             ? tr("The offline certificate was kept on this device.")
+                             : QString());
     return;
   }
 
-  if (!isOnlineActivated())
+  if (!isOnlineActivated()) {
+    Q_EMIT requestFinished(false, tr("No online license is active on this device."));
     return;
+  }
 
-  if (busy())
+  if (busy()) {
+    Q_EMIT requestFinished(false, tr("Another licensing request is already running."));
     return;
+  }
 
-  m_busy = true;
+  m_busy           = true;
+  m_requestPending = true;
   Q_EMIT busyChanged();
 
   QJsonObject payload;
@@ -384,6 +399,26 @@ void Licensing::LemonSqueezy::notifyEntitlementMaybeChanged()
 
   m_lastNotifiedEntitled = entitled;
   Q_EMIT activatedChanged();
+}
+
+/**
+ * @brief Reports the verdict of the activate/deactivate request in flight, exactly once. The CLI
+ *        waits on this rather than on activatedChanged, which by design stays silent when the
+ *        entitlement did not actually change -- a rejected key therefore never flipped it and the
+ *        command hung until its own timeout (K1).
+ */
+void Licensing::LemonSqueezy::finishRequest(const bool ok, const QString& reason)
+{
+  if (!m_requestPending)
+    return;
+
+  m_requestPending = false;
+  if (m_busy) {
+    m_busy = false;
+    Q_EMIT busyChanged();
+  }
+
+  Q_EMIT requestFinished(ok, reason);
 }
 
 /**
@@ -530,6 +565,7 @@ void Licensing::LemonSqueezy::handleEmptyValidationResponse(const bool cachedRes
 
   m_busy = false;
   Q_EMIT busyChanged();
+  finishRequest(false, tr("The activation server could not be reached."));
 }
 
 /**
@@ -555,10 +591,11 @@ bool Licensing::LemonSqueezy::checkValidationRules(const QJsonObject& json,
   if (!error.isNull() && !error.toString().simplified().isEmpty()) {
     qWarning() << "[LemonSqueezy] Validation error:" << error.toString();
     if (live)
-      Misc::Utilities::showMessageBox(
+      Misc::Utilities::postMessageBox(
         tr("There was an issue validating your license."), error.toString(), QMessageBox::Critical);
 
     clearLicenseCache(false, live);
+    finishRequest(false, error.toString());
     return false;
   }
 
@@ -573,13 +610,14 @@ bool Licensing::LemonSqueezy::checkValidationRules(const QJsonObject& json,
   if (storeId != STORE_ID || productId != PRDCT_ID) {
     qWarning() << "[LemonSqueezy] Store ID or Product ID mismatch";
     if (live)
-      Misc::Utilities::showMessageBox(
+      Misc::Utilities::postMessageBox(
         tr("The license key you provided does not belong to Serial Studio."),
         tr("Please double-check that you purchased your license from the official "
            "Serial Studio store."),
         QMessageBox::Critical);
 
     clearLicenseCache(false, live);
+    finishRequest(false, tr("This license key does not belong to Serial Studio."));
     return false;
   }
 
@@ -587,45 +625,49 @@ bool Licensing::LemonSqueezy::checkValidationRules(const QJsonObject& json,
   if (instanceName != machineId.machineId()) {
     qWarning() << "[LemonSqueezy] Machine ID mismatch";
     if (live)
-      Misc::Utilities::showMessageBox(tr("This license key was activated on a different device."),
+      Misc::Utilities::postMessageBox(tr("This license key was activated on a different device."),
                                       tr("Deactivate it there first or contact support for help."),
                                       QMessageBox::Critical);
 
     clearLicenseCache(false, live);
+    finishRequest(false, tr("This license key is activated on a different device."));
     return false;
   }
 
   if (licenseStatus != "active") {
     qWarning() << "[LemonSqueezy] License status is not active:" << licenseStatus;
     if (live)
-      Misc::Utilities::showMessageBox(
+      Misc::Utilities::postMessageBox(
         tr("This license is not currently active."),
         tr("It may have expired or been deactivated (status: %1).").arg(licenseStatus),
         QMessageBox::Warning);
 
     clearLicenseCache(false, live);
+    finishRequest(false, tr("The license is not active (status: %1).").arg(licenseStatus));
     return false;
   }
 
   if (instanceId.isEmpty()) {
     qWarning() << "[LemonSqueezy] Activation response missing instance ID";
     if (live)
-      Misc::Utilities::showMessageBox(tr("Something went wrong on the server."),
+      Misc::Utilities::postMessageBox(tr("Something went wrong on the server."),
                                       tr("No activation ID was returned."),
                                       QMessageBox::Critical);
 
     clearLicenseCache(false, live);
+    finishRequest(false, tr("The server returned no activation ID."));
     return false;
   }
 
   if (!valid) {
     qWarning() << "[LemonSqueezy] Validation failed";
     if (live)
-      Misc::Utilities::showMessageBox(tr("Could not validate your license at this time."),
+      Misc::Utilities::postMessageBox(tr("Could not validate your license at this time."),
                                       tr("Try again later."),
                                       QMessageBox::Warning);
 
     clearLicenseCache(false, live);
+    finishRequest(false, tr("The server could not validate this license."));
     return false;
   }
 
@@ -701,10 +743,11 @@ void Licensing::LemonSqueezy::applyValidatedLicense(const QJsonObject& json,
   }
 
   notifyEntitlementMaybeChanged();
+  finishRequest(true);
 
   if (!m_silentValidation) {
     m_silentValidation = true;
-    Misc::Utilities::showMessageBox(
+    Misc::Utilities::postMessageBox(
       tr("Your license has been successfully activated."),
       tr("Thank you for supporting Serial Studio!\nYou now have access to all premium features."),
       QMessageBox::Information);
@@ -727,12 +770,15 @@ void Licensing::LemonSqueezy::readValidationResponse(const QByteArray& data,
   if (parseError.error != QJsonParseError::NoError) {
     qWarning() << "[LemonSqueezy] JSON parse error" << parseError.errorString();
     clearLicenseCache(false, liveVerdict(cachedResponse));
+    finishRequest(false, tr("The server response could not be read."));
     return;
   }
 
   const auto json = doc.object();
-  if (json.isEmpty())
+  if (json.isEmpty()) {
+    finishRequest(false, tr("The server returned an empty response."));
     return;
+  }
 
   if (!checkValidationRules(json, cachedResponse))
     return;
@@ -759,59 +805,65 @@ bool Licensing::LemonSqueezy::checkActivationRules(const QJsonObject& json)
 
   if (!error.isNull()) {
     qWarning() << "[LemonSqueezy] Activation error:" << error.toString();
-    Misc::Utilities::showMessageBox(
+    Misc::Utilities::postMessageBox(
       tr("There was an issue activating your license."), error.toString(), QMessageBox::Critical);
     clearLicenseCache(true);
+    finishRequest(false, error.toString());
     return false;
   }
 
   if (storeId != STORE_ID || productId != PRDCT_ID) {
     qWarning() << "[LemonSqueezy] Store ID or Product ID mismatch";
-    Misc::Utilities::showMessageBox(
+    Misc::Utilities::postMessageBox(
       tr("The license key you provided does not belong to Serial Studio."),
       tr("Double-check that you purchased your license from the official Serial Studio store."),
       QMessageBox::Critical);
     clearLicenseCache(true);
+    finishRequest(false, tr("This license key does not belong to Serial Studio."));
     return false;
   }
 
   static auto& machineId = MachineID::instance();
   if (instanceName != machineId.machineId()) {
     qWarning() << "[LemonSqueezy] Machine ID mismatch";
-    Misc::Utilities::showMessageBox(tr("This license key was activated on a different device."),
+    Misc::Utilities::postMessageBox(tr("This license key was activated on a different device."),
                                     tr("Deactivate it there first or contact support for help."),
                                     QMessageBox::Critical);
     clearLicenseCache(true);
+    finishRequest(false, tr("This license key is activated on a different device."));
     return false;
   }
 
   if (licenseStatus != "active") {
     qWarning() << "[LemonSqueezy] License status is not active:" << licenseStatus;
 
-    Misc::Utilities::showMessageBox(
+    Misc::Utilities::postMessageBox(
       tr("This license is not currently active."),
       tr("It may have expired or been deactivated (status: %1).").arg(licenseStatus),
       QMessageBox::Warning);
 
     clearLicenseCache(true);
+    finishRequest(false, tr("The license is not active (status: %1).").arg(licenseStatus));
     return false;
   }
 
   if (instanceId.isEmpty()) {
     qWarning() << "[LemonSqueezy] Activation response missing instance ID";
-    Misc::Utilities::showMessageBox(tr("Something went wrong on the server…"),
+    Misc::Utilities::postMessageBox(tr("Something went wrong on the server."),
                                     tr("No activation ID was returned."),
                                     QMessageBox::Critical);
     clearLicenseCache();
+    finishRequest(false, tr("The server returned no activation ID."));
     return false;
   }
 
   if (!activated) {
     qWarning() << "[LemonSqueezy] Activation failed";
-    Misc::Utilities::showMessageBox(tr("Could not activate your license at this time."),
+    Misc::Utilities::postMessageBox(tr("Could not activate your license at this time."),
                                     tr("Try again later."),
                                     QMessageBox::Warning);
     clearLicenseCache();
+    finishRequest(false, tr("The server refused to activate this license."));
     return false;
   }
 
@@ -826,6 +878,7 @@ void Licensing::LemonSqueezy::readActivationResponse(const QByteArray& data)
   if (data.isEmpty()) {
     qWarning() << "[LemonSqueezy] Empty activation response";
     clearLicenseCache();
+    finishRequest(false, tr("The activation server could not be reached."));
     return;
   }
 
@@ -834,12 +887,15 @@ void Licensing::LemonSqueezy::readActivationResponse(const QByteArray& data)
   if (parseError.error != QJsonParseError::NoError) {
     qWarning() << "[LemonSqueezy] JSON parse error" << parseError.errorString();
     clearLicenseCache();
+    finishRequest(false, tr("The server response could not be read."));
     return;
   }
 
   const auto json = doc.object();
-  if (!checkActivationRules(json))
+  if (!checkActivationRules(json)) {
+    finishRequest(false, tr("The server refused to activate this license."));
     return;
+  }
 
   const auto instanceId = json.value("instance").toObject().value("id").toString();
   QMetaObject::invokeMethod(this, [this, instanceId] {
@@ -851,13 +907,16 @@ void Licensing::LemonSqueezy::readActivationResponse(const QByteArray& data)
 }
 
 /**
- * @brief Processes the response from the license deactivation request.
+ * @brief Processes the response from the license deactivation request. Only a server-confirmed
+ *        `deactivated == true` clears the local cache: clearing it on a refusal told the user the
+ *        seat was released while the server still counted it, and the next launch re-activated
+ *        from the surviving blob (K1).
  */
 void Licensing::LemonSqueezy::readDeactivationResponse(const QByteArray& data)
 {
   if (data.isEmpty()) {
-    qWarning() << "[LemonSqueezy] Empty activation response";
-    clearLicenseCache();
+    qWarning() << "[LemonSqueezy] Empty deactivation response";
+    finishRequest(false, tr("The activation server could not be reached."));
     return;
   }
 
@@ -865,7 +924,7 @@ void Licensing::LemonSqueezy::readDeactivationResponse(const QByteArray& data)
   auto doc = QJsonDocument::fromJson(data, &parseError);
   if (parseError.error != QJsonParseError::NoError) {
     qWarning() << "[LemonSqueezy] JSON parse error" << parseError.errorString();
-    clearLicenseCache();
+    finishRequest(false, tr("The server response could not be read."));
     return;
   }
 
@@ -879,33 +938,34 @@ void Licensing::LemonSqueezy::readDeactivationResponse(const QByteArray& data)
 
   if (!error.isNull()) {
     qWarning() << "[LemonSqueezy] Deactivation error:" << error.toString();
-    Misc::Utilities::showMessageBox(
+    Misc::Utilities::postMessageBox(
       tr("There was an issue deactivating your license."), error.toString(), QMessageBox::Critical);
-    clearLicenseCache();
+    finishRequest(false, error.toString());
     return;
   }
 
   if (storeId != STORE_ID || productId != PRDCT_ID) {
     qWarning() << "[LemonSqueezy] Store ID or Product ID mismatch";
-    Misc::Utilities::showMessageBox(
+    Misc::Utilities::postMessageBox(
       tr("The license key you provided does not belong to Serial Studio."),
       tr("Double-check that you purchased your license from the official Serial Studio store."),
       QMessageBox::Critical);
-    clearLicenseCache();
+    finishRequest(false, tr("This license key does not belong to Serial Studio."));
     return;
   }
 
   if (!deactivated) {
     qWarning() << "[LemonSqueezy] Deactivation failed";
-    Misc::Utilities::showMessageBox(tr("Could not deactivate your license at this time."),
-                                    tr("Try again later."),
+    Misc::Utilities::postMessageBox(tr("Could not deactivate your license at this time."),
+                                    tr("Try again later. Your seat is still in use."),
                                     QMessageBox::Warning);
-    clearLicenseCache();
+    finishRequest(false, tr("The server did not release this device's seat."));
     return;
   }
 
   clearLicenseCache(true);
-  Misc::Utilities::showMessageBox(
+  finishRequest(true);
+  Misc::Utilities::postMessageBox(
     tr("Your license has been deactivated."),
     tr("Access to Pro features has been removed.\nThank you again for supporting Serial Studio!"),
     QMessageBox::Information);

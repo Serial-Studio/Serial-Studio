@@ -80,6 +80,13 @@
 namespace Platform {
 
 //---------------------------------------------------------------------------------------------------
+// Constants
+//---------------------------------------------------------------------------------------------------
+
+// MMCSS characteristics are per thread, so the latch must be too (spec 0075, N2)
+static thread_local bool s_mmcssRegistered = false;
+
+//---------------------------------------------------------------------------------------------------
 // TrackpadScrollFilter
 //---------------------------------------------------------------------------------------------------
 
@@ -669,18 +676,19 @@ SS_NEVER_INLINE bool lockMemoryResident(const void* ptr, size_t len)
 }
 
 /**
- * @brief Registers the calling (ingest/main) thread with MMCSS "Pro Audio"; call only after the
- *        Qt message handler is installed (common-mistakes.md: benign InheritPriority warning).
+ * @brief Registers the CALLING thread with an MMCSS task profile. Only ever call this from inside
+ *        the thread that needs the band -- a QThread never inherits it -- and only after the Qt
+ *        message handler is installed, so the benign InheritPriority warning is filtered
+ *        (common-mistakes.md).
  */
-void registerIngestThreadWithMmcss()
+static void registerWithMmcss(const wchar_t* taskName)
 {
-#if defined(Q_OS_WIN)
-  static bool registered = false;
-  if (registered)
+  if (s_mmcssRegistered)
     return;
 
-  registered = true;
+  s_mmcssRegistered = true;
 
+#if defined(Q_OS_WIN)
   using SetCharacteristicsFn = HANDLE(WINAPI*)(LPCWSTR, LPDWORD);
   using SetPriorityFn        = BOOL(WINAPI*)(HANDLE, AVRT_PRIORITY);
 
@@ -696,10 +704,42 @@ void registerIngestThreadWithMmcss()
     return;
 
   DWORD taskIndex    = 0;
-  const HANDLE mmcss = setCharacteristics(L"Pro Audio", &taskIndex);
+  const HANDLE mmcss = setCharacteristics(taskName, &taskIndex);
   if (mmcss && setPriority)
     (void)setPriority(mmcss, AVRT_PRIORITY_HIGH);
+#else
+  Q_UNUSED(taskName);
 #endif
+}
+
+/**
+ * @brief Claims the band for a thread carrying a sample deadline: the frame pipeline and the dense
+ *        stream workers. "Pro Audio" is the profile whose deadline is a dropped sample.
+ */
+void registerIngestThreadWithMmcss()
+{
+  registerWithMmcss(L"Pro Audio");
+}
+
+/**
+ * @brief Claims the band for the GUI thread, so another process cannot cost the user frames. The
+ *        profile is "Games" rather than "Pro Audio" deliberately: a missed repaint is a dropped
+ *        frame, a missed ingest deadline is a dropped measurement, and putting a 60 Hz renderer in
+ *        the audio band on a small machine starves everything else including our own pipeline.
+ */
+void registerRenderThreadWithMmcss()
+{
+  registerWithMmcss(L"Games");
+}
+
+/**
+ * @brief Whether registerIngestThreadWithMmcss() already ran on this thread. The latch is
+ *        recorded on every platform even though the boost is Windows-only, so the per-thread
+ *        guard -- the half that broke -- stays observable to the unit tier everywhere.
+ */
+bool mmcssRegisteredOnCurrentThread() noexcept
+{
+  return s_mmcssRegistered;
 }
 
 /**

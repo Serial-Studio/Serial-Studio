@@ -46,9 +46,8 @@ Sessions::ReplaySynthesis::ReplaySynthesis(SessionDbReader& reader,
 {}
 
 /**
- * @brief Returns @c true while an injection is on the stack. FrameBuilder marshals blocking and
- *        pumps the caller's event loop, so a queued teardown can land mid-injection; the player
- *        polls this to re-queue instead of tearing down state the builder is still reading.
+ * @brief Returns @c true while an injection is on the stack. The player polls this to re-queue a
+ *        teardown instead of freeing state the builder is still reading through borrowed views.
  */
 bool Sessions::ReplaySynthesis::injecting() const noexcept
 {
@@ -128,8 +127,9 @@ void Sessions::ReplaySynthesis::injectFrame(const ReplayRowValues& frame, qint64
     return;
 
   // code-verify off
-  // replayChannels() marshals blocking and pumps this thread's event loop, so a queued close can
-  // clear these members mid-loop. Guard against re-entry and walk copies, as the other players do.
+  // The replay marshal is a plain BlockingQueuedConnection: it does NOT run this thread's event
+  // loop (dataflow.md). The latch is what makes the player re-queue a close, and the loop walks
+  // copies so a re-queued close cannot clear these members between iterations.
   // code-verify on
   if (m_injecting)
     return;

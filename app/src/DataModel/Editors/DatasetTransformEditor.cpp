@@ -50,6 +50,7 @@ extern "C" {
 #include "DataModel/Scripting/LuaCompat.h"
 #include "DataModel/Scripting/LuaCompatJIT.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
+#include "DataModel/Scripting/ScriptDryRun.h"
 #include "DataModel/Scripting/ScriptTemplates.h"
 #include "Misc/CommonFonts.h"
 #include "Misc/ThemeManager.h"
@@ -728,46 +729,39 @@ DataModel::DatasetTransformEditor::TransformStatus DataModel::DatasetTransformEd
   }
 
   if (language == SerialStudio::Lua) {
-    lua_State* L = luaL_newstate();
-    if (!L) {
+    ScriptDryRun session(ScriptDryRun::Language::Lua, kScriptDryRunBudgetMs, "transform");
+    if (!session.valid()) {
       error = tr("Failed to create the Lua engine.");
       return TransformStatus::SyntaxError;
     }
 
-    static const luaL_Reg kSafeLibs[] = {
-      {    "_G",   luaopen_base},
-      { "table",  luaopen_table},
-      {"string", luaopen_string},
-      {  "math",   luaopen_math},
-      {   "bit",    luaopen_bit},
-      { nullptr,        nullptr}
-    };
-
-    for (const luaL_Reg* lib = kSafeLibs; lib->func; ++lib) {
-      luaL_requiref(L, lib->name, lib->func, 1);
-      lua_pop(L, 1);
-    }
-
+    lua_State* L = session.luaState();
     DataModel::installLuaCompat(L);
     DataModel::NotificationCenter::installScriptApi(L);
     frameBuilder.injectTableApiLua(L);
 
-    const QByteArray utf8 = code.toUtf8();
-    if (luaL_dostring(L, utf8.constData()) != LUA_OK) {
-      error = QString::fromUtf8(lua_tostring(L, -1));
-      lua_close(L);
+    if (session.runLuaChunk(code, "transform") != LUA_OK) {
+      error = session.luaError();
       return TransformStatus::SyntaxError;
     }
 
     lua_getglobal(L, "transform");
-    const bool hasFn = lua_isfunction(L, -1);
-    lua_close(L);
-    return hasFn ? TransformStatus::Ok : TransformStatus::NoFunction;
+    return lua_isfunction(L, -1) ? TransformStatus::Ok : TransformStatus::NoFunction;
   }
 
-  QJSEngine jsEngine;
-  DataModel::ScriptApiCall::installAll(&jsEngine, 0);
-  auto evalResult = jsEngine.evaluate(code);
+  ScriptDryRun session(ScriptDryRun::Language::JavaScript, kScriptDryRunBudgetMs, "transform");
+  if (!session.valid()) {
+    error = tr("Failed to create the JavaScript engine.");
+    return TransformStatus::SyntaxError;
+  }
+
+  DataModel::ScriptApiCall::installAll(session.jsEngine(), 0);
+  auto evalResult = session.evaluate(code, QStringLiteral("transform.js"));
+  if (session.timedOut()) {
+    error = tr("The transform did not finish evaluating within %1 ms.").arg(session.budgetMs());
+    return TransformStatus::SyntaxError;
+  }
+
   if (evalResult.isError()) {
     error = tr("Line %1: %2")
               .arg(evalResult.property(QStringLiteral("lineNumber")).toInt())
@@ -775,7 +769,7 @@ DataModel::DatasetTransformEditor::TransformStatus DataModel::DatasetTransformEd
     return TransformStatus::SyntaxError;
   }
 
-  auto transformFn = jsEngine.globalObject().property(QStringLiteral("transform"));
+  auto transformFn = session.jsEngine()->globalObject().property(QStringLiteral("transform"));
   return transformFn.isCallable() ? TransformStatus::Ok : TransformStatus::NoFunction;
 }
 
@@ -823,71 +817,53 @@ QString DataModel::DatasetTransformEditor::testTransform(const QString& code,
   m_frameBuilder.refreshTableStoreFromProjectModel();
 
   if (language == SerialStudio::Lua) {
-    lua_State* L = luaL_newstate();
-    if (!L)
+    ScriptDryRun session(ScriptDryRun::Language::Lua, kScriptDryRunBudgetMs, "transform");
+    if (!session.valid())
       return tr("Engine error");
 
-    static const luaL_Reg kSafeLibs[] = {
-      {    "_G",   luaopen_base},
-      { "table",  luaopen_table},
-      {"string", luaopen_string},
-      {  "math",   luaopen_math},
-      {   "bit",    luaopen_bit},
-      { nullptr,        nullptr}
-    };
-
-    for (const luaL_Reg* lib = kSafeLibs; lib->func; ++lib) {
-      luaL_requiref(L, lib->name, lib->func, 1);
-      lua_pop(L, 1);
-    }
-
+    lua_State* L = session.luaState();
     DataModel::installLuaCompat(L);
     DataModel::NotificationCenter::installScriptApi(L);
     m_frameBuilder.injectTableApiLua(L);
 
-    const QByteArray utf8 = code.toUtf8();
-    if (luaL_dostring(L, utf8.constData()) != LUA_OK) {
-      QString err = QString::fromUtf8(lua_tostring(L, -1));
-      lua_close(L);
-      return tr("Error: %1").arg(err);
-    }
+    if (session.runLuaChunk(code, "transform") != LUA_OK)
+      return tr("Error: %1").arg(session.luaError());
 
     lua_getglobal(L, "transform");
-    if (!lua_isfunction(L, -1)) {
-      lua_close(L);
+    if (!lua_isfunction(L, -1))
       return tr("Error: transform() not defined");
-    }
 
     lua_pushnumber(L, inputValue);
-    if (lua_pcall(L, 1, 1, 0) != LUA_OK) {
-      QString err = QString::fromUtf8(lua_tostring(L, -1));
-      lua_close(L);
-      return tr("Error: %1").arg(err);
-    }
+    if (session.callLua(1, 1) != LUA_OK)
+      return tr("Error: %1").arg(session.luaError());
 
-    if (!lua_isnumber(L, -1)) {
-      lua_close(L);
+    if (!lua_isnumber(L, -1))
       return tr("Error: transform() must return a number");
-    }
 
-    const double result = lua_tonumber(L, -1);
-    lua_close(L);
-    return QString::number(result, 'g', 15);
+    return QString::number(lua_tonumber(L, -1), 'g', 15);
   }
 
-  QJSEngine jsEngine;
-  DataModel::ScriptApiCall::installAll(&jsEngine, 0);
-  auto evalResult = jsEngine.evaluate(code);
+  ScriptDryRun session(ScriptDryRun::Language::JavaScript, kScriptDryRunBudgetMs, "transform");
+  if (!session.valid())
+    return tr("Engine error");
+
+  DataModel::ScriptApiCall::installAll(session.jsEngine(), 0);
+  auto evalResult = session.evaluate(code, QStringLiteral("transform.js"));
+  if (session.timedOut())
+    return tr("Error: the transform did not finish within %1 ms").arg(session.budgetMs());
+
   if (evalResult.isError())
     return tr("Error: %1").arg(evalResult.property("message").toString());
 
-  auto transformFn = jsEngine.globalObject().property(QStringLiteral("transform"));
+  auto transformFn = session.jsEngine()->globalObject().property(QStringLiteral("transform"));
   if (!transformFn.isCallable())
     return tr("Error: transform() not defined");
 
   QJSValueList args;
   args << QJSValue(inputValue);
-  auto result = transformFn.call(args);
+  auto result = session.call(transformFn, args);
+  if (session.timedOut())
+    return tr("Error: the transform did not finish within %1 ms").arg(session.budgetMs());
 
   if (result.isError())
     return tr("Error: %1").arg(result.property("message").toString());

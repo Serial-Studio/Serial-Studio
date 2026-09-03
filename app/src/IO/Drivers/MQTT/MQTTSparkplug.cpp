@@ -73,6 +73,26 @@ static qint64 sparkplugSteadyNs()
 }
 
 /**
+ * @brief Reads a driver-property value back as a JSON array. A project round-trip hands the value
+ *        through QVariant, which turns a stored array into a QVariantList rather than a QJsonArray.
+ */
+[[nodiscard]] static QJsonArray sparkplugJsonArray(const QVariant& value)
+{
+  if (value.canConvert<QJsonArray>())
+    return value.toJsonArray();
+
+  if (value.typeId() != QMetaType::QVariantList)
+    return {};
+
+  QJsonArray array;
+  const auto list = value.toList();
+  for (const auto& item : list)
+    array.append(QJsonValue::fromVariant(item));
+
+  return array;
+}
+
+/**
  * @brief Wire type a latched slot encodes as; a slot with no value channel has none.
  */
 static SpWire::Type sparkplugWireType(Sparkplug::ValueKind kind) noexcept
@@ -575,6 +595,57 @@ void IO::Drivers::MQTT::reportSparkplugDrops()
   qCWarning(lcMqttSub).nospace() << "sparkplug drops since the last sample: decode=" << errors
                                  << " caps=" << caps << " preBirth=" << dropped
                                  << " seqGaps=" << gaps << " unsupported=" << unsup;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Driver property model
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Appends the Sparkplug rows of the driver property model. The slot table rides along only
+ *        while the lane is on, so a plain MQTT project carries no table it would never read; a
+ *        generated project stores it, which is what pins the wire indices its datasets bind to.
+ */
+void IO::Drivers::MQTT::appendSparkplugProperties(QList<IO::DriverProperty>& props) const
+{
+  SS_ASSERT_LOG(sparkplugSession().slotCount() <= SpLimits::kMaxSlots);
+  SS_ASSERT_LOG(m_sparkplugGroupId.size() >= 0);
+
+  IO::DriverProperty enabled;
+  enabled.key   = QStringLiteral("sparkplugEnabled");
+  enabled.label = tr("Sparkplug");
+  enabled.type  = IO::DriverProperty::CheckBox;
+  enabled.value = m_sparkplugEnabled;
+  props.append(enabled);
+
+  IO::DriverProperty group;
+  group.key   = QStringLiteral("sparkplugGroupId");
+  group.label = tr("Sparkplug Group ID");
+  group.type  = IO::DriverProperty::Text;
+  group.value = m_sparkplugGroupId;
+  props.append(group);
+
+  if (!m_sparkplugEnabled)
+    return;
+
+  IO::DriverProperty table;
+  table.key   = Keys::SparkplugSlots;
+  table.type  = IO::DriverProperty::Text;
+  table.value = QVariant::fromValue(sparkplugSession().slotsJson());
+  props.append(table);
+}
+
+/**
+ * @brief Restores the persisted slot table from a project's connection block, before the session
+ *        has seen a birth certificate. The session refuses the restore once it has assigned slots
+ *        of its own, so a live link never has its indices moved under it.
+ */
+void IO::Drivers::MQTT::restoreSparkplugSlots(const QVariant& value)
+{
+  SS_ASSERT_LOG(sparkplugSession().slotCount() <= SpLimits::kMaxSlots);
+  SS_ASSERT_LOG(m_sparkplugState.frame.size() <= SpWire::kMaxFrameBytes);
+
+  sparkplugSession().restoreSlots(sparkplugJsonArray(value));
 }
 
 //--------------------------------------------------------------------------------------------------

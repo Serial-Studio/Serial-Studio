@@ -116,6 +116,65 @@ static void teardownTrace(const char* stage)
 }
 
 /**
+ * @brief Tears the session down in the pinned reverse order, with qApp alive and the QML engine
+ *        already destroyed (INV-6). Every exit from the session scope runs this, including a
+ *        failed UI load: returning early instead left nine modules and a live pipeline thread to
+ *        the static SessionContext destructor, after ~QApplication (K4).
+ */
+static void shutdownSession()
+{
+  teardownTrace("module-manager-destroyed");
+  Misc::ModuleManager::stopFrameConsumerWorkers();
+  IO::ConnectionManager::instance().shutdownDrivers();
+  teardownTrace("drivers-shut-down");
+
+  qInstallMessageHandler(nullptr);
+  SessionContext::current().shutdown();
+  teardownTrace("session-shutdown-done");
+}
+
+/**
+ * @brief Brings the session up and runs the event loop, returning the process exit status. A UI
+ *        that fails to load returns here rather than out of the caller, so the teardown ladder
+ *        below runs on both paths.
+ */
+static int runConfiguredSession(QApplication& app,
+                                Misc::CLI& cli,
+                                Misc::ModuleManager& moduleManager,
+                                bool headless,
+                                const QString& shortcutPath)
+{
+  if (!bootstrapModuleManager(moduleManager, cli, headless, shortcutPath)) {
+    qCritical() << "Critical QML error";
+    return EXIT_FAILURE;
+  }
+
+  Misc::CrashTracker::instance().setCheckpoint(QStringLiteral("event-loop"));
+
+  if (cli.postRootSelfTestRequested()) {
+    const bool ok = cli.runPostRootSelfTests() == Misc::CLI::ProcessResult::ExitSuccess;
+    teardownTrace("post-root-selftest-done");
+    return ok ? EXIT_SUCCESS : EXIT_FAILURE;
+  }
+
+  cli.applyProjectAndAutoConnect(app);
+
+#ifdef BUILD_COMMERCIAL
+  if (cli.runtimeMode())
+    cli.applyOperatorRuntimeSettings();
+  else
+    cli.applyExportToggles();
+#endif
+
+  cli.applyVisualizationOptions();
+  cli.applyBusConfiguration();
+
+  const int status = app.exec();
+  teardownTrace("event-loop-exited");
+  return status;
+}
+
+/**
  * @brief Runs the whole application lifecycle inside one QApplication scope: QApplication reads
  *        argv for its entire lifetime, so main() may free the adjusted argv only after this
  *        returns and ~QApplication has run.
@@ -160,37 +219,10 @@ static int runApplication(int argc, char** argv, bool headless, const QString& s
   int status = EXIT_SUCCESS;
   {
     Misc::ModuleManager moduleManager;
-    if (!bootstrapModuleManager(moduleManager, cli, headless, shortcutPath)) {
-      qCritical() << "Critical QML error";
-      return EXIT_FAILURE;
-    }
-
-    Misc::CrashTracker::instance().setCheckpoint(QStringLiteral("event-loop"));
-
-    cli.applyProjectAndAutoConnect(app);
-
-#ifdef BUILD_COMMERCIAL
-    if (cli.runtimeMode())
-      cli.applyOperatorRuntimeSettings();
-    else
-      cli.applyExportToggles();
-#endif
-
-    cli.applyVisualizationOptions();
-    cli.applyBusConfiguration();
-
-    status = app.exec();
-    teardownTrace("event-loop-exited");
+    status = runConfiguredSession(app, cli, moduleManager, headless, shortcutPath);
   }
 
-  teardownTrace("module-manager-destroyed");
-  IO::ConnectionManager::instance().shutdownDrivers();
-  teardownTrace("drivers-shut-down");
-
-  qInstallMessageHandler(nullptr);
-  SessionContext::current().shutdown();
-  teardownTrace("session-shutdown-done");
-
+  shutdownSession();
   return status;
 }
 

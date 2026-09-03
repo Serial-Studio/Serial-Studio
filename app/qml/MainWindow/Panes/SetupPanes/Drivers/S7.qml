@@ -46,9 +46,9 @@ Item {
     // Controller address
     //
     Label {
+      enabled: app.ioEnabled
       text: qsTr("Host") + ":"
       opacity: enabled ? 1 : 0.5
-      enabled: app.ioEnabled
     } Widgets.LineField {
       id: _hostField
 
@@ -72,9 +72,9 @@ Item {
     // Rack
     //
     Label {
+      enabled: app.ioEnabled
       text: qsTr("Rack") + ":"
       opacity: enabled ? 1 : 0.5
-      enabled: app.ioEnabled
     } Widgets.LineField {
       id: _rackField
 
@@ -101,9 +101,9 @@ Item {
     // Slot (S7-1200/1500 use slot 1, S7-300/400 use slot 2)
     //
     Label {
+      enabled: app.ioEnabled
       text: qsTr("Slot") + ":"
       opacity: enabled ? 1 : 0.5
-      enabled: app.ioEnabled
     } Widgets.LineField {
       id: _slotField
 

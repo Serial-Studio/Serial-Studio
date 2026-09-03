@@ -120,18 +120,20 @@ Mode is sticky (persisted to QSettings). Switch with
 `dashboard.setOperationMode{mode}`. `project.open` auto-switches to
 ProjectFile.
 
-## The auto-save loop
+## The checkpoint loop
 
-Successful mutating AI tool calls schedule a debounced save (~1s) to the
-project's existing file path. The assistant runtime skips autosave only
-for read-only Safe tools, meta tools, and explicit project lifecycle
-commands such as `project.save`, `project.new`, and `project.open`.
-You don't need to drive normal autosave manually.
+Successful mutating AI tool calls schedule a debounced checkpoint (~1s),
+recoverable through `assistant.restore`. The project file on disk changes
+only on `project.save` or when the user saves. The runtime skips the
+checkpoint for read-only Safe tools, meta tools, and explicit project
+lifecycle commands such as `project.save`, `project.new`, and
+`project.open`.
 
-- Don't call `project.save{}` after every edit; it's redundant.
+- Don't call `project.save{}` after every edit inside a batch; call it
+  once when the user asks for their work to be saved.
 - Do call `project.save{filePath: "..."}` when the user wants Save As.
-- New/empty projects without a file path skip auto-save (nothing to
-  save to). The user must explicitly save with a path.
+- New/empty projects without a file path cannot be saved until the user
+  or `project.save{filePath}` gives them one.
 
 ## Bulk edits: STOP. Use `project.batch` / `project.dataset.addMany`.
 

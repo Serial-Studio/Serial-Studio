@@ -92,4 +92,19 @@ template<typename List>
   return nearestIndex(bands, value);
 }
 
+/**
+ * @brief Severity an instrument reports for band @a activeIndex: unclassified (-1) whenever no
+ *        sample has arrived, whatever the lookup resolved. The clamp above is right for overrange
+ *        data and wrong for the placeholder 0.0 a widget shows before its first byte, which would
+ *        otherwise alarm forever on a project whose bands sit above zero (spec 0075, N3).
+ */
+template<typename List>
+[[nodiscard]] inline int reportedSeverity(const List& bands, int activeIndex, bool hasData) noexcept
+{
+  if (!hasData || activeIndex < 0 || activeIndex >= static_cast<int>(bands.size()))
+    return -1;
+
+  return static_cast<int>(bands[static_cast<std::size_t>(activeIndex)].severity);
+}
+
 }  // namespace Widgets::Bands

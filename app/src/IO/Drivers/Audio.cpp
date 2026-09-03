@@ -39,6 +39,13 @@ using namespace IO::Drivers::AudioPcm;
 // SPSC queue depth for audio in/out buffers; sized for ~24Hz drain vs ~10ms produce
 static constexpr std::size_t kAudioQueueCapacity = 1024;
 
+// Playback ring: a quarter second of 48 kHz stereo float32, so a burst of written samples survives
+static constexpr qsizetype kPlaybackRingBytes = 48000 * 2 * 4 / 4;
+
+// Pre-sized capture slots handed to the real-time callback, so it never allocates
+static constexpr int kInputPoolSlots      = 32;
+static constexpr qsizetype kInputSlotSize = 16384;
+
 // Continuous-clock resync bound: jitter under this is absorbed, drift over it snaps to wall time
 static constexpr std::chrono::milliseconds kAudioClockResync{50};
 
@@ -58,7 +65,9 @@ IO::Drivers::Audio::Audio()
   , m_discoveryPaused(false)
   , m_catalog(&m_context, m_init)
   , m_inputQueue(kAudioQueueCapacity)
-  , m_outputQueue(kAudioQueueCapacity)
+  , m_playbackRing(kPlaybackRingBytes)
+  , m_inputPool(kAudioQueueCapacity)
+  , m_inputDrops(0)
   , m_inputWorkerTimer(nullptr)
   , m_sampleClockValid(false)
   , m_stopNotifyArmed(false)
@@ -151,12 +160,12 @@ void IO::Drivers::Audio::closeDevice()
     QByteArray dropped;
     while (m_inputQueue.try_dequeue(dropped)) {
     }
-  }
-  {
-    QVector<quint8> dropped;
-    while (m_outputQueue.try_dequeue(dropped)) {
+
+    while (m_inputPool.try_dequeue(dropped)) {
     }
   }
+
+  m_playbackRing.reset();
 
   m_sampleClockValid = false;
 
@@ -224,40 +233,75 @@ bool IO::Drivers::Audio::configurationOk() const noexcept
 }
 
 /**
- * @brief Writes a CSV-formatted audio frame into the internal output queue; values are normalized
- * -1..1 floats or raw per-format magnitudes, matching whatever capture publishes. The lock-free
- * SPSC enqueue is safe because the main thread is the sole producer of this queue.
+ * @brief Writes CSV-formatted audio frames into the playback ring; values are normalized -1..1
+ *        floats or raw per-format magnitudes, matching whatever capture publishes. One call may
+ *        carry many newline-separated frames, which is what makes a continuous tone possible: a
+ *        single frame per call could only ever be one sample of an output period.
  */
 qint64 IO::Drivers::Audio::write(const QByteArray& data)
 {
   if (!m_isOpen || m_config.playback.channels <= 0) {
-    qWarning() << "Output device not available or misconfigured.";
+    logDriverError(tr("Audio output unavailable"),
+                   tr("No output device is configured for this session."));
     return 0;
   }
 
-  const int channels            = m_config.playback.channels;
-  const ma_format format        = m_config.playback.format;
-  const QList<QByteArray> parts = data.trimmed().split(',');
-  if (parts.size() != channels) {
-    qWarning() << "Channel mismatch: expected" << channels << "but got" << parts.size() << ":"
-               << data;
-    return 0;
-  }
+  const int channels     = m_config.playback.channels;
+  const ma_format format = m_config.playback.format;
 
-  QVector<quint8> frame;
-  for (int i = 0; i < channels; ++i) {
-    const bool packed = m_normalization ? packNormalizedSample(format, parts[i], frame)
-                                        : packCsvSample(format, parts[i], frame);
-    if (!packed)
+  const auto lines = data.split('\n');
+  for (const auto& line : lines) {
+    if (line.trimmed().isEmpty())
+      continue;
+
+    if (!packPlaybackFrame(line, channels, format))
       return 0;
   }
 
-  if (!m_outputQueue.try_enqueue(std::move(frame))) [[unlikely]] {
-    qWarning() << "Audio output queue full -- dropping frame";
-    return 0;
+  return data.size();
+}
+
+/**
+ * @brief Packs one CSV frame and hands it to the ring, reporting whether it landed. The scratch
+ *        buffer is a member so a steady tone does not allocate once per sample frame.
+ */
+bool IO::Drivers::Audio::packPlaybackFrame(const QByteArray& line, int channels, ma_format format)
+{
+  const QList<QByteArray> parts = line.trimmed().split(',');
+  if (parts.size() != channels) {
+    logDriverError(tr("Audio channel mismatch"),
+                   tr("Expected %1 value(s) per frame, got %2.")
+                     .arg(QString::number(channels), QString::number(parts.size())));
+    return false;
   }
 
-  return data.size();
+  m_playbackScratch.clear();
+  for (int i = 0; i < channels; ++i) {
+    const bool packed = m_normalization ? packNormalizedSample(format, parts[i], m_playbackScratch)
+                                        : packCsvSample(format, parts[i], m_playbackScratch);
+    if (!packed)
+      return false;
+  }
+
+  return m_playbackRing.write(reinterpret_cast<const char*>(m_playbackScratch.constData()),
+                              m_playbackScratch.size());
+}
+
+/**
+ * @brief How many capture blocks the real-time callback had to drop for want of a free slot;
+ *        pulled, never pushed (spec 0033).
+ */
+quint64 IO::Drivers::Audio::inputDrops() const noexcept
+{
+  return m_inputDrops.load(std::memory_order_relaxed);
+}
+
+/**
+ * @brief How many output callbacks ran out of buffered samples and played silence instead.
+ */
+quint64 IO::Drivers::Audio::playbackUnderruns() const noexcept
+{
+  return m_playbackRing.underruns();
 }
 
 /**
@@ -294,14 +338,18 @@ bool IO::Drivers::Audio::open(const QIODevice::OpenMode mode)
   m_rtPlaybackFormat.store(m_config.playback.format, std::memory_order_relaxed);
   m_rtPlaybackChannels.store(m_config.playback.channels, std::memory_order_release);
 
+  m_playbackRing.reset();
+  seedInputPool(kInputSlotSize);
+
   std::memset(&m_device, 0, sizeof(m_device));
   if (ma_device_init(&m_context, &m_config, &m_device) != MA_SUCCESS) {
-    qWarning() << "Failed to initialize miniaudio device.";
+    logDriverError(tr("Audio device error"),
+                   tr("The selected audio device could not be initialized."));
     return false;
   }
 
   if (ma_device_start(&m_device) != MA_SUCCESS) {
-    qWarning() << "Failed to start miniaudio device.";
+    logDriverError(tr("Audio device error"), tr("The selected audio device could not be started."));
     ma_device_uninit(&m_device);
     return false;
   }
@@ -311,6 +359,27 @@ bool IO::Drivers::Audio::open(const QIODevice::OpenMode mode)
   m_stopNotifyArmed.store(true, std::memory_order_release);
   m_isOpen = true;
   return true;
+}
+
+/**
+ * @brief Fills the capture pool with pre-sized slots so the real-time callback never allocates:
+ *        it dequeues a slot, fills it and hands it on, and the worker returns it here.
+ */
+void IO::Drivers::Audio::seedInputPool(qsizetype slotBytes)
+{
+  SS_ASSERT(slotBytes > 0, return);
+
+  QByteArray dropped;
+  while (m_inputPool.try_dequeue(dropped)) {
+  }
+
+  for (int i = 0; i < kInputPoolSlots; ++i) {
+    QByteArray slot;
+    slot.reserve(slotBytes);
+    (void)m_inputPool.try_enqueue(std::move(slot));
+  }
+
+  m_inputDrops.store(0, std::memory_order_relaxed);
 }
 
 /**
@@ -878,11 +947,16 @@ void IO::Drivers::Audio::configureOutput()
  */
 void IO::Drivers::Audio::processInputBuffer()
 {
-  QByteArray raw;
-  QByteArray chunk;
-  while (m_inputQueue.try_dequeue(chunk))
-    raw.append(chunk);
+  m_inputScratch.resize(0);
 
+  QByteArray chunk;
+  while (m_inputQueue.try_dequeue(chunk)) {
+    m_inputScratch.append(chunk);
+    chunk.resize(0);
+    (void)m_inputPool.try_enqueue(std::move(chunk));
+  }
+
+  const QByteArray& raw = m_inputScratch;
   if (raw.isEmpty())
     return;
 
@@ -1152,11 +1226,16 @@ bool IO::Drivers::Audio::updateInputDevices(const AudioDeviceCatalog::Enumeratio
 }
 
 /**
- * @brief Adopts the enumerated output devices under the same rule as the input list.
+ * @brief Adopts the enumerated output devices. A capture-only session is NOT dropped when the
+ *        output list changes: an absent output was read as "the session's device vanished", so
+ *        unplugging a headset killed a live microphone capture, and a machine with no output at
+ *        all dropped every session a second after it opened.
  */
 bool IO::Drivers::Audio::updateOutputDevices(const AudioDeviceCatalog::Enumeration& probe)
 {
-  if (!m_isOpen)
+  const bool playbackInUse =
+    m_isOpen && m_config.playback.channels > 0 && m_catalog.outputDeviceSelected();
+  if (!playbackInUse)
     return m_catalog.replaceOutputDevices(probe, false);
 
   if (m_catalog.outputSelectionPresent(probe))
@@ -1227,27 +1306,25 @@ void IO::Drivers::Audio::handleCallback(void* output, const void* input, ma_uint
   const ma_uint32 bytesPerFrame  = bytesPerSample * channels;
 
   if (input && channels > 0 && format != ma_format_unknown) {
-    const char* inputPtr = reinterpret_cast<const char*>(input);
-    QByteArray chunk(inputPtr, static_cast<int>(frameCount * bytesPerFrame));
-    (void)m_inputQueue.try_enqueue(std::move(chunk));
+    const auto bytes = static_cast<qsizetype>(frameCount * bytesPerFrame);
+
+    QByteArray slot;
+    if (!m_inputPool.try_dequeue(slot)) [[unlikely]] {
+      m_inputDrops.fetch_add(1, std::memory_order_relaxed);
+    }
+
+    else {
+      slot.resize(bytes);
+      std::memcpy(slot.data(), input, static_cast<std::size_t>(bytes));
+      if (!m_inputQueue.try_enqueue(std::move(slot))) [[unlikely]]
+        m_inputDrops.fetch_add(1, std::memory_order_relaxed);
+    }
   }
 
   if (output && playbackChans > 0 && playbackFormat != ma_format_unknown) {
     char* out                        = reinterpret_cast<char*>(output);
     const ma_uint32 outBytesPerFrame = ma_get_bytes_per_sample(playbackFormat) * playbackChans;
-
-    QVector<quint8> frame;
-    for (ma_uint32 i = 0; i < frameCount; ++i, out += outBytesPerFrame) {
-      if (!m_outputQueue.try_dequeue(frame)) [[unlikely]] {
-        std::memset(out, 0, outBytesPerFrame);
-        continue;
-      }
-
-      const ma_uint32 bytesToCopy = qMin(outBytesPerFrame, static_cast<ma_uint32>(frame.size()));
-      std::memcpy(out, frame.constData(), bytesToCopy);
-      if (bytesToCopy < outBytesPerFrame) [[unlikely]]
-        std::memset(out + bytesToCopy, 0, outBytesPerFrame - bytesToCopy);
-    }
+    (void)m_playbackRing.read(out, static_cast<qsizetype>(frameCount * outBytesPerFrame));
   }
 }
 
@@ -1424,7 +1501,7 @@ void IO::Drivers::Audio::applyConnectionSettings(const QJsonObject& settings)
     return;
 
   if (settings.contains(QStringLiteral("normalization")))
-    m_normalization = settings.value(QStringLiteral("normalization")).toBool();
+    setNormalization(settings.value(QStringLiteral("normalization")).toBool());
 
   const auto deviceId = settings.value(QStringLiteral("deviceId")).toObject();
   if (!m_catalog.applySavedSelection(settings, deviceId, m_normalization))

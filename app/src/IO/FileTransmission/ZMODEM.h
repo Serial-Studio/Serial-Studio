@@ -146,6 +146,7 @@ private:
   int m_timeoutMs;
   int m_maxRetries;
   int m_retryCount;
+  quint32 m_chunkGeneration;
 
   QByteArray m_headerBuf;
   int m_headerBytesExpected;

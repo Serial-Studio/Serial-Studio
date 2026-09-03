@@ -48,6 +48,7 @@
 #include "DataModel/Scripting/JsScriptEngine.h"
 #include "DataModel/Scripting/LuaScriptEngine.h"
 #include "DataModel/Scripting/NativeTemplates/NativeTemplate.h"
+#include "DataModel/Scripting/ScriptDryRun.h"
 #include "SerialStudio.h"
 #ifdef BUILD_COMMERCIAL
 #  include "UI/Widgets/Output/Base.h"
@@ -617,10 +618,17 @@ API::CommandResponse API::Handlers::ProjectDryRunCommands::painterDryRun(const Q
 
   const auto code = params.value(QStringLiteral("code")).toString();
 
-  QJSEngine engine;
+  DataModel::ScriptDryRun session(DataModel::ScriptDryRun::Language::JavaScript,
+                                  DataModel::kScriptDryRunBudgetMs,
+                                  "painter.dryRun");
+  if (!session.valid())
+    return CommandResponse::makeError(
+      id, ErrorCode::ExecutionError, QStringLiteral("Failed to create the dry-run engine"));
+
+  auto& engine = *session.jsEngine();
   engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
 
-  auto stub = engine.evaluate(
+  auto stub = session.evaluate(
     QStringLiteral("var datasets = []; datasets.length = 0;"
                    "var group = { id: 0, title: '', columns: 0, sourceId: 0 };"
                    "var frame = { number: 0, timestampMs: 0 };"
@@ -628,14 +636,23 @@ API::CommandResponse API::Handlers::ProjectDryRunCommands::painterDryRun(const Q
                    "function tableGet() { return 0; }"
                    "function tableSet() {}"
                    "function datasetGetRaw() { return 0; }"
-                   "function datasetGetFinal() { return 0; }"));
+                   "function datasetGetFinal() { return 0; }"),
+    QStringLiteral("painter_stub.js"));
   if (stub.isError())
     return CommandResponse::makeError(id,
                                       ErrorCode::ExecutionError,
                                       QStringLiteral("Painter dry-run bootstrap failed: %1")
                                         .arg(stub.property(QStringLiteral("message")).toString()));
 
-  const auto compiled = engine.evaluate(code, QStringLiteral("painter_dryrun.js"));
+  const auto compiled = session.evaluate(code, QStringLiteral("painter_dryrun.js"));
+  if (session.timedOut())
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::ScriptTimeout,
+      QStringLiteral("Painter code did not finish evaluating within %1 ms (infinite loop at the "
+                     "top level?)")
+        .arg(session.budgetMs()));
+
   if (compiled.isError()) {
     QJsonObject result;
     result[QStringLiteral("ok")] = false;
@@ -671,13 +688,16 @@ API::CommandResponse API::Handlers::ProjectDryRunCommands::painterDryRun(const Q
 namespace API::Handlers {
 
 /**
- * @brief Runs a compiled transmit() against one sample value, reporting bytes or a runtime error.
+ * @brief Runs a compiled transmit() against one sample value under the session deadline, reporting
+ *        bytes, a runtime error, or a timeout.
  */
-static QJsonObject runOutputWidgetSample(QJSEngine& engine,
+static QJsonObject runOutputWidgetSample(DataModel::ScriptDryRun& session,
                                          QJSValue& transmitFn,
                                          const QJsonValue& inputValue,
                                          bool hex)
 {
+  QJSEngine& engine = *session.jsEngine();
+
   QJSValue jsValue;
   if (hex)
     jsValue =
@@ -691,8 +711,16 @@ static QJsonObject runOutputWidgetSample(QJSEngine& engine,
     jsValue         = numeric ? engine.toScriptValue(num) : engine.toScriptValue(text);
   }
 
-  const auto called = transmitFn.call(QJSValueList{jsValue});
+  const auto called = session.call(transmitFn, QJSValueList{jsValue});
   QJsonObject out;
+  if (session.timedOut()) {
+    out[QStringLiteral("ok")]       = false;
+    out[QStringLiteral("timedOut")] = true;
+    out[QStringLiteral("runtimeError")] =
+      QStringLiteral("transmit() did not return within %1 ms").arg(session.budgetMs());
+    return out;
+  }
+
   if (called.isError()) {
     out[QStringLiteral("ok")]           = false;
     out[QStringLiteral("runtimeError")] = called.toString();
@@ -724,7 +752,14 @@ API::CommandResponse API::Handlers::ProjectDryRunCommands::outputWidgetDryRun(
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
   frameBuilder.refreshTableStoreFromProjectModel();
 
-  QJSEngine engine;
+  DataModel::ScriptDryRun session(DataModel::ScriptDryRun::Language::JavaScript,
+                                  DataModel::kScriptDryRunBudgetMs,
+                                  "outputWidget.dryRun");
+  if (!session.valid())
+    return CommandResponse::makeError(
+      id, ErrorCode::ExecutionError, QStringLiteral("Failed to create the dry-run engine"));
+
+  QJSEngine& engine = *session.jsEngine();
   engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
 #ifdef BUILD_COMMERCIAL
   Widgets::Output::Base::installProtocolHelpers(engine);
@@ -735,7 +770,15 @@ API::CommandResponse API::Handlers::ProjectDryRunCommands::outputWidgetDryRun(
     QStringLiteral("(function() { %1\n"
                    "return typeof transmit === 'function' ? transmit : undefined; })()")
       .arg(code);
-  auto transmitFn = engine.evaluate(wrapped, QStringLiteral("output_widget_dryrun.js"));
+  auto transmitFn = session.evaluate(wrapped, QStringLiteral("output_widget_dryrun.js"));
+  if (session.timedOut())
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::ScriptTimeout,
+      QStringLiteral("Transmit code did not finish evaluating within %1 ms (infinite loop at the "
+                     "top level?)")
+        .arg(session.budgetMs()));
+
   if (transmitFn.isError()) {
     QJsonObject result;
     result[QStringLiteral("ok")] = false;
@@ -761,7 +804,7 @@ API::CommandResponse API::Handlers::ProjectDryRunCommands::outputWidgetDryRun(
   result[QStringLiteral("hasTransmit")] = true;
   if (params.contains(QStringLiteral("inputValue")))
     result[QStringLiteral("sampleRun")] =
-      runOutputWidgetSample(engine,
+      runOutputWidgetSample(session,
                             transmitFn,
                             params.value(QStringLiteral("inputValue")),
                             params.value(QStringLiteral("hex")).toBool());

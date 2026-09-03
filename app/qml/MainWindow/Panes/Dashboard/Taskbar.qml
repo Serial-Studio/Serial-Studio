@@ -724,9 +724,9 @@ Item {
           model: taskBar ? taskBar.taskbarButtons : null
 
           delegate: Widgets.TaskbarButton {
-            required property var model
-
             id: button
+
+            required property var model
 
             text: model.widgetName
             forceHidden: Cpp_UI_Dashboard.frozen

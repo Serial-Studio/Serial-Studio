@@ -46,9 +46,9 @@ Item {
     // Gateway address
     //
     Label {
-      text: qsTr("Gateway") + ":"
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
+      text: qsTr("Gateway") + ":"
     } Widgets.LineField {
       id: _hostField
 
@@ -72,9 +72,9 @@ Item {
     // CIP routing path from the gateway to the CPU
     //
     Label {
-      text: qsTr("CIP Path") + ":"
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
+      text: qsTr("CIP Path") + ":"
     } Widgets.LineField {
       id: _pathField
 
@@ -98,9 +98,9 @@ Item {
     // Controller family
     //
     Label {
-      text: qsTr("Controller") + ":"
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
+      text: qsTr("Controller") + ":"
     } Widgets.Combo {
       id: _familyCombo
 

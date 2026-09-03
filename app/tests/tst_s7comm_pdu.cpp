@@ -145,6 +145,7 @@ private slots:
   void responseYieldsOneResultPerItem();
   void refusedItemsAreCountedAndKeepTheirNeighbours();
   void oddLengthItemsCarryAFillOctet();
+  void aZeroLengthSuccessItemDecodesToNothing();
   void truncatedResponsesAppendNothing_data();
   void truncatedResponsesAppendNothing();
   void aRefusedJobIsNotAMalformedOne();
@@ -470,6 +471,50 @@ void TstS7CommPdu::oddLengthItemsCarryAFillOctet()
   const auto response = readAck(5, answers.size(), data);
   QCOMPARE(response.mid(results.at(1).offset, results.at(1).size), bytes({0x2A}));
   QCOMPARE(response.mid(results.at(2).offset, results.at(2).size), bytes({0x12, 0x34}));
+}
+
+/**
+ * @brief A controller may answer an item with a SUCCESS code and a declared length of zero. The
+ *        length is the peer's choice, so the walk accepts it and the decoder answers "no value"
+ *        instead of asserting: this exact packet aborted a debug build before spec 0075 (E1).
+ */
+void TstS7CommPdu::aZeroLengthSuccessItemDecodesToNothing()
+{
+  const auto response = bytes({0x32,
+                               0x03,
+                               0x00,
+                               0x00,
+                               0x00,
+                               0x01,
+                               0x00,
+                               0x02,
+                               0x00,
+                               0x04,
+                               0x00,
+                               0x00,
+                               0x04,
+                               0x01,
+                               0xFF,
+                               0x04,
+                               0x00,
+                               0x00});
+
+  PduCodec codec;
+  QList<ReadResult> results;
+  QCOMPARE(codec.parseReadResponse(response, 1, results), PduResult::Ok);
+  QCOMPARE(results.size(), qsizetype(1));
+  QCOMPARE(results.at(0).returnCode, static_cast<std::uint8_t>(kReturnSuccess));
+  QCOMPARE(results.at(0).size, qsizetype(0));
+  QCOMPARE(codec.malformedPdus(), quint64(0));
+  QCOMPARE(codec.refusedItems(), quint64(0));
+
+  QString error;
+  const auto address = S7Address::parse(QStringLiteral("MD0:REAL"), error);
+  QVERIFY(S7Address::isValid(address));
+
+  const auto empty = QByteArrayView(response).sliced(results.at(0).offset, results.at(0).size);
+  QVERIFY(empty.isEmpty());
+  QVERIFY(!decodeValue(address, empty).isValid());
 }
 
 /**

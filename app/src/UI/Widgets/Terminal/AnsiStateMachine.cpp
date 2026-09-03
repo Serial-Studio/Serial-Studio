@@ -148,7 +148,10 @@ void Widgets::AnsiStateMachine::processFormat(const QChar& byte)
   }
 
   if (byte == ';') {
-    m_formatValues.append(m_currentFormatValue);
+    static constexpr int kMaxCsiParams = 32;
+    if (m_formatValues.size() < kMaxCsiParams)
+      m_formatValues.append(m_currentFormatValue);
+
     m_currentFormatValue = 0;
     m_state              = Format;
     return;

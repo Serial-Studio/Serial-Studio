@@ -227,7 +227,7 @@ Item {
 
     Label {
       color: Cpp_ThemeManager.colors["text"]
-      text: qsTr("Enable API Server (Port 7777)")
+      text: qsTr("Enable API Server")
     } Switch {
       id: _apiServer
 
@@ -244,6 +244,31 @@ Item {
         target: Cpp_API_Server
         function onEnabledChanged() {
           _apiServer.checked = Cpp_API_Server.enabled
+        }
+      }
+    }
+
+    Label {
+      enabled: _apiServer.checked
+      opacity: enabled ? 1 : 0.5
+      color: Cpp_ThemeManager.colors["text"]
+      text: qsTr("API Server Port")
+    } SpinBox {
+      id: _apiPort
+
+      to: 65535
+      from: 1024
+      editable: true
+      value: Cpp_API_Server.port
+      opacity: enabled ? 1 : 0.5
+      enabled: _apiServer.checked
+      Layout.alignment: Qt.AlignRight
+      onValueModified: Cpp_API_Server.port = value
+
+      Connections {
+        target: Cpp_API_Server
+        function onPortChanged() {
+          _apiPort.value = Cpp_API_Server.port
         }
       }
     }

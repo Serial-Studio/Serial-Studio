@@ -445,6 +445,7 @@ def test_timestamp_pipeline_starts_in_driver_and_shares_parsed_frames():
     reader_cpp = _read("app/src/IO/FrameReader.cpp")
     builder_h = _read("app/src/DataModel/FrameBuilder.h")
     builder_cpp = _read("app/src/DataModel/FrameBuilder.cpp")
+    publisher_cpp = _read("app/src/DataModel/FrameBuilder/BlockPublisher.cpp")
     dashboard_h = _read("app/src/UI/Dashboard.h")
     sessions_h = _read("app/src/Sessions/Export.h")
 
@@ -478,13 +479,18 @@ def test_timestamp_pipeline_starts_in_driver_and_shares_parsed_frames():
     # through PipelineHost's SPSC ring, drained on the GUI display tick; it must
     # never call into UI::Dashboard directly from the frame path.
     assert "void hotpathTxFrame" not in builder_h
-    assert "pipeline.publishBlockToDashboard(block);" in builder_cpp
-    assert "publishFrameToDashboard" not in builder_cpp
+    # The fan-out moved into BlockPublisher (spec 0075 R12.8); the dashboard hop
+    # and the ONE trimmed sink copy live there, still on the pipeline thread.
+    assert "m_sinks.pipeline->publishBlockToDashboard(block);" in publisher_cpp
+    assert "publishFrameToDashboard" not in publisher_cpp
+    assert "dashboard.hotpathRxFrame(" not in publisher_cpp
     assert "dashboard.hotpathRxFrame(" not in builder_cpp
 
     # Source owns time: each row's stamp is derived from the driver's timestamp
     # (data->timestamp + step * i), never a builder-side clock.
-    assert "const auto frameTs = data->timestamp + step * i;" in builder_cpp
+    assert re.search(
+        r"const auto frameTs\s+= data->timestamp \+ step \* i;", builder_cpp
+    ), "each replayed row's stamp must derive from the driver timestamp, not a builder clock"
     assert "updateTimestampedFramesEnabled" not in builder_cpp
     assert "nextTimestampedFrameTime" not in builder_cpp
 
@@ -1173,31 +1179,26 @@ def test_dashboard_snapshots_around_every_clearing_trigger():
         snap_pos < reset_pos < update_pos < restore_pos
     ), "reconfigureDashboard must snapshot before resetData and restore after updateDataSeries"
 
-    # setPlotTimeRange: snapshot around configureLineSeries / configureMultiLineSeries.
-    range_body = re.search(
-        r"void UI::Dashboard::setPlotTimeRange[\s\S]*?\n\}",
+    # setPlotTimeRange and setPoints share one rebuild helper (spec 0075 F4) that snapshots
+    # before configureLineSeries / configureMultiLineSeries and restores after both.
+    helper_body = re.search(
+        r"void UI::Dashboard::rebuildLineSeriesPreservingState[\s\S]*?\n\}",
         text,
     )
-    assert range_body is not None
-    range_snippet = range_body.group(0)
-    assert _SNAPSHOT_DECL.search(range_snippet) is not None
-    assert "restorePlotTimeRings(savedPlotRings);" in range_snippet
-    assert range_snippet.index("snapshotPlotTimeRings") < range_snippet.index(
-        "configureLineSeries"
-    )
-    assert range_snippet.index("configureMultiLineSeries") < range_snippet.index(
+    assert helper_body is not None
+    helper = helper_body.group(0)
+    assert _SNAPSHOT_DECL.search(helper) is not None
+    assert "restorePlotTimeRings(savedPlotRings);" in helper
+    assert helper.index("snapshotPlotTimeRings") < helper.index("configureLineSeries")
+    assert helper.index("configureMultiLineSeries") < helper.index(
         "restorePlotTimeRings"
     )
+    assert "restorePlotSweepConfig(savedPlotSweep)" in helper
 
-    # setPoints: same shape.
-    pts_body = re.search(
-        r"void UI::Dashboard::setPoints[\s\S]*?\n  \}\n\}",
-        text,
-    )
-    assert pts_body is not None
-    pts_snippet = pts_body.group(0)
-    assert _SNAPSHOT_DECL.search(pts_snippet) is not None
-    assert "restorePlotTimeRings(savedPlotRings);" in pts_snippet
+    for fn in ("setPlotTimeRange", "setPoints"):
+        body = re.search(r"void UI::Dashboard::%s\b[\s\S]*?\n\}" % fn, text)
+        assert body is not None, fn
+        assert "rebuildLineSeriesPreservingState();" in body.group(0), fn
 
 
 # ----------------------------------------------------------------------------------
@@ -1524,9 +1525,10 @@ def test_ai_history_sanitizer_strips_orphan_tool_results():
     assert "fresh && !hasToolResult" in fresh.group(0)
 
     # Reply errors must clear pending confirmations so a later approval can't resume.
+    # The table itself moved into ToolTurnRunner (spec 0075 J7); the rule is the same.
     error_fn = re.search(r"void AI::Conversation::onReplyError[\s\S]*?\n\}", text)
     assert error_fn is not None
-    assert "m_awaitingConfirm.clear();" in error_fn.group(0)
+    assert "m_tools.clearPending();" in error_fn.group(0)
 
 
 def _strip_orphan_tool_results(history: list) -> list:
@@ -1680,7 +1682,7 @@ def test_control_script_agent_surface():
     # dryRun mirrors the worker: control flag + SDK prelude, watchdogged evaluation.
     assert "__ss_control" in handler
     assert ":/api/SerialStudio.js" in handler
-    assert "JsWatchdog" in handler
+    assert "JsWatchdog" in handler or "ScriptDryRun" in handler
 
     # The control_script_js doc kind is registered everywhere it must be: the
     # ContextBuilder doc roster (scriptingDocFor) and the meta.fetchScriptingDocs
@@ -1698,3 +1700,370 @@ def test_control_script_agent_surface():
     assert "controlScript.getCode" in tiers["safe"]
     assert "controlScript.setCode" in tiers["alwaysConfirm"]
     assert "controlScript.set" in tiers["alwaysConfirm"]
+
+
+# ----------------------------------------------------------------------------------
+# R20 -- Modbus group attribution survives a failed poll, and the published bytes are
+#        a real RTU frame (spec 0075 E3/E12)
+# ----------------------------------------------------------------------------------
+
+
+def test_modbus_failed_poll_keeps_group_attribution():
+    """The generated Lua parser infers a reply's register group by counting frames, so a
+    poll the driver silently skipped shifted every later frame onto the wrong group for
+    the rest of the session -- a whole dashboard of plausible, wrong readings.
+
+    The driver now publishes a zero-length placeholder [unit, fc, 0] for the failed
+    group, and the generated parser skips a zero byte-count frame while still advancing
+    the cycle. Old generated parsers see a zero-length payload and decode nothing, which
+    is why no header byte was added.
+    """
+    driver = _read("app/src/IO/Drivers/Modbus.cpp")
+
+    assert (
+        "advanceAfterFailedPoll" in driver
+    ), "a failed reply must publish the placeholder instead of silently skipping"
+    fn = re.search(
+        r"void IO::Drivers::Modbus::advanceAfterFailedPoll\(\)[\s\S]*?\n\}", driver
+    )
+    assert fn is not None
+    body = fn.group(0)
+    assert "ModbusRtu::functionCodeForType" in body
+    assert "publishReceivedData(placeholder)" in body
+    assert "++m_currentGroupIndex;" in body
+
+    # Both failure exits go through it: a reply error and an empty/invalid data unit.
+    on_ready = re.search(
+        r"void IO::Drivers::Modbus::onReadReady\(\)[\s\S]*?\n\}", driver
+    )
+    assert on_ready is not None
+    assert on_ready.group(0).count("advanceAfterFailedPoll();") == 2
+
+    gen = _read("app/src/IO/Drivers/Modbus/ModbusProjectGenerator.cpp")
+    assert "local byteCount = frame[3]" in gen
+    assert "if byteCount == 0 then" in gen
+    assert "local function resync(fc, bytes, current)" in gen
+    assert "if matches == 1 then return found end" in gen
+
+
+def test_modbus_rtu_frames_carry_a_checksum_and_the_responding_unit():
+    """buildRtuFrame published [slave, fc, byteCount, data...] with no CRC and echoed the
+    REQUESTED unit id, so the bytes were a header-shaped fragment and a gateway's reply
+    was labelled with the address the poll asked for rather than the one that answered.
+    """
+    driver = _read("app/src/IO/Drivers/Modbus.cpp")
+
+    fn = re.search(
+        r"QByteArray IO::Drivers::Modbus::buildRtuFrame\([\s\S]*?\n\}", driver
+    )
+    assert fn is not None
+    body = fn.group(0)
+    assert body.count("ModbusRtu::appendCrc(data);") == 2, "both shapes need the CRC"
+    assert "serverAddress" in body, "the responding unit id must reach the frame"
+    assert "buildRtuFrame(unit, reply->serverAddress())" in driver
+
+    codec = _read("app/src/IO/Drivers/Modbus/ModbusRtuCodec.cpp")
+    assert "0xA001" in codec, "CRC-16/Modbus uses the reflected 0xA001 polynomial"
+
+
+def test_modbus_bit_reads_get_their_own_request_cap():
+    """FC01/FC02 answer up to 2000 bits; sharing the 125-register ceiling refused four
+    fifths of a legal coil read. The poll interval bound must also match the UI's own
+    validator (50 ms), not advertise a floor the setter clamps away."""
+    groups = _read("app/src/IO/Drivers/Modbus/ModbusRegisterGroups.cpp")
+    assert "kMaxBitCount      = 2000" in groups
+    assert "maxCountForType(group.registerType)" in groups
+    assert "maxCountForType(type)" in groups
+
+    driver = _read("app/src/IO/Drivers/Modbus.cpp")
+    poll = re.search(
+        r"poll\.value = m_pollInterval;\s*\n\s*poll\.min\s*=\s*(\d+);", driver
+    )
+    assert poll is not None and poll.group(1) == "50"
+    qml = _read("app/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml")
+    assert "IntValidator { bottom: 50; top: 60000 }" in qml
+
+
+# ----------------------------------------------------------------------------------
+# R21 -- OPC UA: Trust overrides a name/clock refusal, and a password never crosses a
+#        clear channel unasked (spec 0075 E11)
+# ----------------------------------------------------------------------------------
+
+
+def test_opcua_trust_is_checked_before_the_name_and_the_clock():
+    """verifyServerCertificate refused on expiry, then not-yet-valid, then hostname, and
+    only reached the trust store last. A self-signed controller dialed by IP therefore
+    reported HostnameMismatch forever: accepting it in the trust prompt changed nothing,
+    because the next attempt was refused before the trust store was consulted.
+
+    Trust pins the exact bytes by SHA-256, so it is now read straight after the
+    parse check and answers Good on its own.
+    """
+    session = _read("app/src/IO/Drivers/OpcUaSession.cpp")
+    fn = re.search(
+        r"IO::Drivers::OpcUaTypes::StatusCode "
+        r"IO::Drivers::OpcUaSession::verifyServerCertificate\([\s\S]*?\n\}",
+        session,
+    )
+    assert fn is not None
+    body = fn.group(0)
+
+    trusted = body.index("m_serverCertificate.trusted")
+    for later in (
+        "m_serverCertificate.expired",
+        "m_serverCertificate.notYetValid",
+        "m_serverCertificate.hostnameMatches",
+    ):
+        assert trusted < body.index(later), f"trust must be read before {later}"
+
+    assert (
+        body.index("m_serverCertificate.valid") < trusted
+    ), "an unreadable cert stays refused"
+
+
+def test_opcua_plaintext_password_needs_an_explicit_grant():
+    """allowNonePolicyPassword was set unconditionally for username mode, so every
+    None-policy login shipped its password in the clear whether or not anyone agreed to
+    it. It now follows a per-installation acknowledgement that starts off, and the
+    acknowledgement is deliberately NOT a driver property: a security grant that
+    travelled inside a project file would be given by opening the file."""
+    session = _read("app/src/IO/Drivers/OpcUaSession.cpp")
+    assert (
+        "config->allowNonePolicyPassword = identity.allowPlaintextPassword;" in session
+    )
+    assert "config->allowNonePolicyPassword = true;" not in session
+
+    security = _read("app/src/IO/Drivers/OpcUaSecurity.cpp")
+    assert "plaintextPasswordAllowed" in security
+    assert "value(QString::fromLatin1(kPlaintextPasswordKey), false)" in security
+
+    driver = _read("app/src/IO/Drivers/OpcUa.cpp")
+    props = re.search(
+        r"QList<IO::DriverProperty> IO::Drivers::OpcUa::driverProperties\(\)[\s\S]*?\n\}",
+        driver,
+    )
+    assert props is not None
+    assert "allowPlaintextPassword" not in props.group(0)
+
+
+def test_opcua_write_reports_failure_like_its_siblings():
+    """Read-only drivers return -1 from write() so a caller sees a hard failure; OPC UA
+    returned 0, which reads as 'wrote nothing, no error'."""
+    header = (ROOT / "app/src/IO/Drivers/OpcUa.h").read_text(encoding="utf-8")
+    fn = re.search(
+        r"qint64 write\(const QByteArray& data\) override\s*\{[\s\S]*?\}", header
+    )
+    assert fn is not None and "return -1;" in fn.group(0)
+
+
+# ----------------------------------------------------------------------------------
+# R22 -- IEC 104 slot identity is (address, type id), and the credential store is
+#        never called encrypted (spec 0075 E16, E14/K6)
+# ----------------------------------------------------------------------------------
+
+
+def test_iec104_slots_are_keyed_by_address_and_type():
+    """The point table was keyed on the information-object address alone, so a station
+    reporting a single-point input and a measurand at the same address latched the second
+    into the first one's slot and published it with the first one's wire type. The key is
+    now the (address, type id) pair, and a report's LIVE kind overwrites the restored one
+    because the station is the authority on what it is sending."""
+    asdu = _read("app/src/IO/Drivers/Iec104/Asdu.h")
+    assert "quint64 slotKey(quint32 ioa, std::uint8_t typeId)" in asdu
+
+    driver = _read("app/src/IO/Drivers/Iec104.cpp")
+    assert "m_slotForIoa" not in driver, "the address-only index must be gone"
+    assert "m_slotForKey.constFind(slotKey(point.ioa, point.typeId))" in driver
+
+    fn = re.search(r"int IO::Drivers::Iec104::slotForPoint\([\s\S]*?\n\}", driver)
+    assert fn is not None
+    assert "m_points[slot].kind = point.kind;" in fn.group(0)
+
+    header = (ROOT / "app/src/IO/Drivers/Iec104.h").read_text(encoding="utf-8")
+    assert "QHash<quint64, int> m_slotForKey;" in header
+
+
+def test_influx_counts_one_error_per_failed_write():
+    """onSslErrors counted a failure and the finished handler counted a second one, so a
+    single refused certificate read as two HTTP errors. The TLS reason is now recorded and
+    reported once, by the finished handler. The wall-clock offset is also re-sampled when
+    the sink re-opens: sampling it once at bootstrap shifted every later point after an
+    NTP step."""
+    influx = _read("app/src/InfluxDB/Export.cpp")
+
+    ssl = re.search(r"void InfluxDB::ExportWorker::onSslErrors\([\s\S]*?\n\}", influx)
+    assert ssl is not None
+    assert "noteHttpFailure" not in ssl.group(
+        0
+    ), "the TLS handler must not count its own"
+    assert "m_sslFailure = reason;" in ssl.group(0)
+
+    finished = re.search(
+        r"void InfluxDB::ExportWorker::onReplyFinished\(\)[\s\S]*?\n\}", influx
+    )
+    assert finished is not None
+    assert finished.group(0).count("noteHttpFailure(") == 1
+    assert "sampleEpochOffset();" in finished.group(0)
+    assert influx.count("sampleEpochOffset();") >= 3
+
+
+def test_no_user_facing_string_calls_the_credential_store_encrypted():
+    """SimpleCrypt under a machine-derived key is obfuscation, not encryption. The OS
+    keychain migration is a shelved decision, so the wording is what has to be true."""
+    claims = (
+        "stored encrypted",
+        "encrypted at rest",
+        "are encrypted",
+        "encrypted vault",
+        "encrypted storage",
+        "encrypted on this",
+    )
+    for rel in ("app/qml", "app/src/MQTT", "app/src/AI"):
+        for path in sorted((ROOT / rel).rglob("*")):
+            if path.suffix not in (".qml", ".cpp", ".h") or not path.is_file():
+                continue
+
+            text = path.read_text(encoding="utf-8", errors="replace")
+            for claim in claims:
+                assert (
+                    claim not in text
+                ), f"{path} still calls the credential store encrypted"
+
+
+def test_startup_failure_runs_the_same_teardown_ladder():
+    """A UI that fails to load must not skip the session teardown (spec 0075, K4).
+
+    The old shape returned EXIT_FAILURE from inside the ModuleManager scope, so the
+    pipeline thread kept running and nine adopted modules were released by the static
+    SessionContext destructor -- after ~QApplication. Both exits now leave the scope and
+    run one ladder: workers joined, drivers stopped, message handler removed, context
+    shut down, all with qApp alive (INV-6).
+    """
+    main = _read("app/src/main.cpp")
+
+    assert "static void shutdownSession()" in main
+    assert main.count("SessionContext::current().shutdown()") == 1
+    assert main.count("shutdownSession();") == 1
+
+    ladder = main.split("static void shutdownSession()", 1)[1]
+    ladder = ladder.split("\n}", 1)[0]
+    order = [
+        ladder.index("stopFrameConsumerWorkers"),
+        ladder.index("shutdownDrivers"),
+        ladder.index("qInstallMessageHandler(nullptr)"),
+        ladder.index("SessionContext::current().shutdown()"),
+    ]
+    assert order == sorted(order), "teardown ladder is out of order"
+
+    # The failed-bootstrap path returns a status instead of escaping the scope.
+    session = main.split("static int runConfiguredSession", 1)[1].split("\n}", 1)[0]
+    assert "Critical QML error" in session
+    assert "return EXIT_FAILURE;" in session
+
+    run_app = main.split("static int runApplication", 1)[1]
+    assert "Critical QML error" not in run_app
+
+
+def test_cli_reset_clears_the_store_the_application_reads():
+    """--reset must clear the same QSettings the app uses, keeping licensing (K2).
+
+    The old call built QSettings(APP_SUPPORT_URL, APP_NAME) -- a different store on all
+    three platforms -- so it printed success and changed nothing.
+    """
+    cli = _read("app/src/Misc/CLI.cpp")
+    assert "QSettings(APP_SUPPORT_URL, APP_NAME).clear()" not in cli
+    assert "CrashTracker::resetSettingsPreservingLicense" in cli
+
+    tracker = _read("app/src/Misc/CrashTracker.cpp")
+    body = tracker.split("resetSettingsPreservingLicense(QSettings& settings)", 1)[1]
+    body = body.split("\n}", 1)[0]
+    assert '"licensing"' in body and '"trial"' in body
+    assert "settings.clear()" in body
+
+
+def test_cli_license_commands_wait_on_the_request_verdict():
+    """--activate/--deactivate report the server's answer, not an entitlement flip (K1).
+
+    activatedChanged is latched to real validity transitions, so a rejected key never
+    raised it; the CLI hung for its full timeout and printed a misleading message.
+    """
+    cli = _read("app/src/Misc/CLI.cpp")
+    for command in ("activateLicense", "deactivateLicense"):
+        body = cli.split(f"int CLI::{command}", 1)[1].split("\n}", 1)[0]
+        assert "requestFinished" in body, f"{command} must wait on requestFinished"
+        assert "LemonSqueezy::activatedChanged" not in body
+
+    lemon = _read("app/src/Licensing/LemonSqueezy.cpp")
+    deactivation = lemon.split("readDeactivationResponse(const QByteArray& data)", 1)[1]
+    deactivation = deactivation.split("\n}", 1)[0]
+    refusal = deactivation.split("if (!deactivated)", 1)[1].split("return;", 1)[0]
+    assert (
+        "clearLicenseCache" not in refusal
+    ), "a refused deactivation must keep the cache"
+    assert deactivation.count("clearLicenseCache(true)") == 1
+
+
+def test_api_token_can_be_supplied_without_argv():
+    """A token on the command line is readable by every process on the box (K14)."""
+    cli = _read("app/src/Misc/CLI.cpp")
+    header = _read("app/src/Misc/CLI.h")
+    assert "api-token-file" in header
+    assert "SS_API_TOKEN" in cli
+
+    body = cli.split("QString CLI::resolveApiToken()", 1)[1].split("\n}", 1)[0]
+    assert (
+        body.index("apiTokenFileOpt")
+        < body.index("SS_API_TOKEN")
+        < body.index("apiTokenOpt")
+    )
+
+
+def test_reply_handlers_do_not_open_modal_dialogs():
+    """A modal spins a nested loop under the reply's stack, which can outlive it (K13)."""
+    for path in (
+        "app/src/Licensing/LemonSqueezy.cpp",
+        "app/src/Licensing/Trial.cpp",
+    ):
+        text = _read(path)
+        assert (
+            "Utilities::showMessageBox" not in text
+        ), f"{path} still opens a modal inline"
+        assert "Utilities::postMessageBox" in text
+
+    utils = _read("app/src/Misc/Utilities.cpp")
+    assert "void Misc::Utilities::postMessageBox" in utils
+    assert "Qt::QueuedConnection" in utils
+
+
+def test_assistant_checkpoints_instead_of_writing_the_project():
+    """With auto-approve on, an assistant edit must not reach the .ssproj (J2)."""
+    conversation = _read("app/src/AI/Conversation.cpp")
+    assert (
+        "saveJsonFile" not in conversation
+    ), "the assistant must not save the document"
+    assert 'QStringLiteral("assistant.checkpoint")' in conversation
+
+    tiers = json.loads(_read("app/rcc/ai/command_safety.json"))
+    assert (
+        "assistant.checkpoint" in tiers["safe"]
+    ), "the debounced checkpoint must stay Safe"
+    assert (
+        "project.save" in tiers["confirm"]
+    ), "project.save stays the one explicit disk write"
+
+
+def test_extension_install_verifies_digests_and_stages():
+    """A partial or replaced download must never become the installed version (K3, K5)."""
+    installer = _read("app/src/Misc/Extensions/ExtensionInstaller.cpp")
+    assert "parseFileList" in installer and "digestMatches" in installer
+    assert ".staging" in installer and ".previous" in installer
+
+    write = installer.split("bool Misc::ExtensionInstaller::writeStagedFile", 1)[1]
+    write = write.split("\n}", 1)[0]
+    assert "digestMatches" in write and "isPathSafe" in write
+
+    catalog = _read("app/src/Misc/Extensions/ExtensionCatalog.cpp")
+    assert (
+        "QVersionNumber::compare" in catalog
+    ), "updates compare numerically, not as strings"
+    assert "isTrustedRepoUrl" in catalog

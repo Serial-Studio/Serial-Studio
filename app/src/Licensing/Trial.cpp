@@ -68,6 +68,7 @@ Licensing::Trial::Trial()
   , m_silentFetch(false)
   , m_trialEnabled(false)
   , m_deviceRegistered(false)
+  , m_daysRemaining(0)
   , m_trialExpiry(QDateTime::currentDateTimeUtc())
 {
   static auto& lemonSqueezy = Licensing::LemonSqueezy::instance();
@@ -165,11 +166,28 @@ bool Licensing::Trial::trialAvailable() const
 }
 
 /**
- * @brief Gets the number of days remaining in the active trial.
+ * @brief Gets the number of days remaining in the active trial. The answer only changes when the
+ *        date rolls over or the expiry moves, so it is cached against both: this is a
+ *        Q_PROPERTY read, and computing it floors the monotonic clock, which persists to the
+ *        settings store (K10).
  */
 int Licensing::Trial::daysRemaining() const
 {
-  return MonotonicClock::now().toUTC().daysTo(m_trialExpiry);
+  const auto today = QDate::currentDate();
+  if (m_daysCachedOn != today) {
+    m_daysCachedOn  = today;
+    m_daysRemaining = MonotonicClock::now().toUTC().daysTo(m_trialExpiry);
+  }
+
+  return m_daysRemaining;
+}
+
+/**
+ * @brief Drops the cached day count; every path that moves the expiry calls it.
+ */
+void Licensing::Trial::invalidateDaysCache()
+{
+  m_daysCachedOn = QDate();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -192,6 +210,7 @@ void Licensing::Trial::readSettings()
 {
   m_trialEnabled = false;
   m_trialExpiry  = QDateTime::currentDateTimeUtc();
+  invalidateDaysCache();
 
   m_settings.beginGroup("trial");
   auto expStr = m_crypt.decryptToString(m_settings.value("expiry").toString());
@@ -201,8 +220,10 @@ void Licensing::Trial::readSettings()
 
   if (!expStr.isEmpty()) {
     QDateTime expiry = QDateTime::fromString(expStr, Qt::ISODate).toUTC();
-    if (expiry.isValid())
+    if (expiry.isValid()) {
       m_trialExpiry = expiry;
+      invalidateDaysCache();
+    }
   }
 
   const bool enabledStored    = (enaStr == "true");
@@ -273,9 +294,9 @@ void Licensing::Trial::fetchTrialState()
 
 /**
  * @brief Handles the trial server response (expiry capped at 14 days). A malformed reply leaves
- *        state untouched and the token slot is only cleared when the trial owns it. The startup
- *        refresh is silent and enabledChanged fires only on a real state change: redundant
- *        emissions reach device-rebuilding consumers and looped connections on offline stands.
+ *        state untouched; the token slot is cleared only when the trial owns it. Messages are
+ *        posted, not shown: a modal here runs its loop under the reply's stack (K13).
+ *        enabledChanged fires only on a real change, which device-rebuilding consumers rely on.
  */
 void Licensing::Trial::onServerReply(QNetworkReply* reply)
 {
@@ -287,7 +308,7 @@ void Licensing::Trial::onServerReply(QNetworkReply* reply)
 
   if (reply->error() != QNetworkReply::NoError) {
     if (!silent)
-      Misc::Utilities::showMessageBox(QObject::tr("Network error"),
+      Misc::Utilities::postMessageBox(QObject::tr("Network error"),
                                       reply->errorString(),
                                       QMessageBox::Critical,
                                       QObject::tr("Trial Activation Error"));
@@ -303,7 +324,7 @@ void Licensing::Trial::onServerReply(QNetworkReply* reply)
   const QJsonDocument document = QJsonDocument::fromJson(data, &parseError);
   if (parseError.error != QJsonParseError::NoError || !document.isObject()) {
     if (!silent)
-      Misc::Utilities::showMessageBox(
+      Misc::Utilities::postMessageBox(
         QObject::tr("Invalid server response"),
         QObject::tr("The server returned malformed data: %1").arg(parseError.errorString()),
         QMessageBox::Warning,
@@ -323,7 +344,7 @@ void Licensing::Trial::onServerReply(QNetworkReply* reply)
 
   if (!expiry.isValid()) {
     if (!silent)
-      Misc::Utilities::showMessageBox(
+      Misc::Utilities::postMessageBox(
         QObject::tr("Unexpected server response"),
         QObject::tr("The server response is missing required fields."),
         QMessageBox::Warning,
@@ -340,7 +361,8 @@ void Licensing::Trial::onServerReply(QNetworkReply* reply)
   const bool wasRegistered  = m_deviceRegistered;
   const QDateTime wasExpiry = m_trialExpiry;
 
-  m_trialExpiry      = expiry;
+  m_trialExpiry = expiry;
+  invalidateDaysCache();
   m_trialEnabled     = enabledVal.toBool() && (expiry > now);
   m_deviceRegistered = deviceRegistered.toBool();
 

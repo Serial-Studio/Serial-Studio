@@ -36,14 +36,22 @@ struct SuiteResult {
 };
 
 /**
- * @brief Runs the in-process self-test suites reached through --selftest. The suites execute
- *        inside CLI::process(), before ModuleManager::instantiateCoreModules() has run, so a
- *        suite must never touch an application singleton.
+ * @brief Runs the in-process self-test suites reached through --selftest. Two registries: the
+ *        pre-root suites execute inside CLI::process() before instantiateCoreModules() and must
+ *        never touch an application singleton, while the post-root suites run after the
+ *        composition root and are opt-in by name, so a bare --selftest never reaches them.
  */
 class Runner {
 public:
   [[nodiscard]] static QStringList suiteNames();
+  [[nodiscard]] static QStringList postRootSuiteNames();
   [[nodiscard]] static int runAndReport(const QString& suiteFilter);
+  [[nodiscard]] static int runPostRootAndReport(const QString& suiteFilter);
 };
+
+/**
+ * @brief Instantiates every compiled QML file against stubbed `Cpp_*` globals (post-root).
+ */
+void runQmlInstantiationSuite(SuiteResult& result);
 
 }  // namespace SelfTest

@@ -79,7 +79,51 @@ private slots:
   void timestampedFramePtrRoundTripsThroughMakeShared();
 
   void frameConsumerConfigDefaultsMatchDocumentedValues();
+
+  void flushLatchCoalescesEveryPostUntilADrain();
+  void flushLatchStartsUnclaimed();
 };
+
+//--------------------------------------------------------------------------------------------------
+// FrameConsumerWorkerBase flush-post latch (spec 0075 B8)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief A worker that has never been woken starts unclaimed, so the first enqueue past the
+ *        threshold posts.
+ */
+void TstFrameConsumer::flushLatchStartsUnclaimed()
+{
+  ConcreteFrameConsumerWorker worker;
+
+  QVERIFY(!worker.markFlushPosted());
+  QVERIFY(worker.markFlushPosted());
+}
+
+/**
+ * @brief Exactly one post per drain cycle: a burst past the threshold claims the latch once and
+ *        every further enqueue coalesces into that pending wake-up, until the drain releases it.
+ *        Before the fix every enqueue past the threshold allocated a QMetaCallEvent on the publish
+ *        path and queued it behind an fsync-bound worker.
+ */
+void TstFrameConsumer::flushLatchCoalescesEveryPostUntilADrain()
+{
+  ConcreteFrameConsumerWorker worker;
+
+  int posts = 0;
+  for (int burst = 0; burst < 5000; ++burst)
+    if (!worker.markFlushPosted())
+      ++posts;
+
+  QCOMPARE(posts, 1);
+
+  worker.clearFlushPost();
+  for (int burst = 0; burst < 5000; ++burst)
+    if (!worker.markFlushPosted())
+      ++posts;
+
+  QCOMPARE(posts, 2);
+}
 
 //--------------------------------------------------------------------------------------------------
 // FrameConsumerWorkerBase::monotonicFrameNs / resetMonotonicClock

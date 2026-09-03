@@ -22,6 +22,7 @@
 #  include <QFile>
 #  include <QFileDialog>
 #  include <QFileInfo>
+#  include <QGuiApplication>
 #  include <QJsonDocument>
 #  include <QJsonParseError>
 #  include <QThread>
@@ -39,8 +40,6 @@
 #  include "Sessions/Player/ReplayAlignment.h"
 #  include "SSAssert.h"
 #  include "UI/Dashboard.h"
-
-static constexpr int kSessionMaxSeekWindowRows = 262144;
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access
@@ -66,14 +65,14 @@ Sessions::Player::Player()
   qApp->installEventFilter(this);
   connect(this, &Sessions::Player::playerStateChanged, this, &Sessions::Player::updateData);
 
-  constexpr int kSeekTickMs   = 33;
-  constexpr int kSeekSettleMs = 250;
-  m_seekTimer.setSingleShot(true);
-  m_seekTimer.setInterval(kSeekTickMs);
-  m_settleTimer.setSingleShot(true);
-  m_settleTimer.setInterval(kSeekSettleMs);
-  connect(&m_seekTimer, &QTimer::timeout, this, &Sessions::Player::performSeekTick);
-  connect(&m_settleTimer, &QTimer::timeout, this, &Sessions::Player::performSeekSettle);
+  connect(&m_engine,
+          &DataModel::ReplayPlaybackEngine::seekTick,
+          this,
+          &Sessions::Player::performSeekTick);
+  connect(&m_engine,
+          &DataModel::ReplayPlaybackEngine::seekSettle,
+          this,
+          &Sessions::Player::performSeekSettle);
 
   initWorker();
 }
@@ -266,11 +265,10 @@ void Sessions::Player::play()
   if (m_framePos >= frameCount() - 1)
     m_framePos = 0;
 
+  (void)m_engine.nextEpoch();
   m_elapsedTimer.start();
   m_startTimestampSeconds = m_timestampsNs[static_cast<size_t>(m_framePos)] / 1e9;
-
-  m_seekTimer.stop();
-  m_settleTimer.stop();
+  m_engine.stopSeek();
 
   anchorSteadyBase(m_framePos);
   m_playing = true;
@@ -285,6 +283,7 @@ void Sessions::Player::pause()
   if (!isOpen())
     return;
 
+  (void)m_engine.nextEpoch();
   m_playing = false;
   Q_EMIT playerStateChanged();
 }
@@ -350,8 +349,7 @@ void Sessions::Player::closeFile()
   m_playing  = false;
   m_framePos = 0;
   m_loading  = false;
-  m_seekTimer.stop();
-  m_settleTimer.stop();
+  m_engine.stopSeek();
 
   clearLocalState();
 
@@ -729,15 +727,12 @@ void Sessions::Player::setProgress(const double progress)
   m_framePos = newPos;
   updateTimestampDisplay();
 
-  if (!m_seekTimer.isActive())
-    m_seekTimer.start();
-
-  m_settleTimer.start();
+  m_engine.armSeek();
 }
 
 /**
  * @brief First row of the scrub window ending at @p target: walks back until the plot time
- *        range is covered (never fewer than points() rows), capped at kSessionMaxSeekWindowRows so
+ *        range is covered (never fewer than points() rows), capped by the engine so
  *        dense recordings bound the per-tick cost.
  */
 int Sessions::Player::seekWindowStartRow(int target) const
@@ -747,22 +742,10 @@ int Sessions::Player::seekWindowStartRow(int target) const
             return qMax(0, static_cast<int>(m_timestampsNs.size()) - 1));
 
   static auto& dashboard = UI::Dashboard::instance();
-  const double range     = dashboard.plotTimeRange();
-  const double targetSec = m_timestampsNs[static_cast<size_t>(target)] / 1e9;
-
-  const int minStart = qMax(0, target - qMax(1, dashboard.points()) + 1);
-  const int capStart = qMax(0, target - kSessionMaxSeekWindowRows + 1);
-
-  int start = minStart;
-  for (int i = 0; i < kSessionMaxSeekWindowRows && start > capStart; ++i) {
-    const double sec = m_timestampsNs[static_cast<size_t>(start - 1)] / 1e9;
-    if (targetSec - sec > range)
-      break;
-
-    --start;
-  }
-
-  return start;
+  return DataModel::ReplayPlaybackEngine::seekWindowStartRow(
+    target, dashboard.points(), dashboard.plotTimeRange(), [this](int row) {
+      return m_timestampsNs[static_cast<size_t>(row)] / 1e9;
+    });
 }
 
 /**
@@ -937,9 +920,8 @@ void Sessions::Player::updateData()
   qint64 msUntilNext      = qMax(0LL, static_cast<qint64>((nextSec - targetSec) * 1000.0));
 
   if (msUntilNext <= 0) {
-    constexpr qint64 kCatchUpBudgetMs = 20;
-    constexpr int kCatchUpMaxFrames   = 4096;
-    const QDeadlineTimer budget(kCatchUpBudgetMs);
+    constexpr int kCatchUpMaxFrames = 4096;
+    const QDeadlineTimer budget(DataModel::ReplayPlaybackEngine::kCatchUpBudgetMs);
 
     int processed = 0;
     while (m_framePos < frameCount() - 1 && msUntilNext <= 0 && !budget.hasExpired()
@@ -962,20 +944,22 @@ void Sessions::Player::updateData()
 
     updateTimestampDisplay();
 
-    if (m_framePos < frameCount() - 1)
-      QTimer::singleShot(qMax(0LL, msUntilNext), Qt::PreciseTimer, this, [this] {
-        if (isOpen() && isPlaying()) {
+    if (m_framePos < frameCount() - 1) {
+      const quint64 epoch = m_engine.epoch();
+      QTimer::singleShot(qMax(0LL, msUntilNext), Qt::PreciseTimer, this, [this, epoch] {
+        if (isOpen() && isPlaying() && m_engine.isCurrentEpoch(epoch)) {
           ++m_framePos;
           updateData();
         }
       });
-    else
+    } else
       pause();
   }
 
   else {
-    QTimer::singleShot(msUntilNext, Qt::PreciseTimer, this, [this] {
-      if (!isOpen() || !isPlaying())
+    const quint64 epoch = m_engine.epoch();
+    QTimer::singleShot(msUntilNext, Qt::PreciseTimer, this, [this, epoch] {
+      if (!isOpen() || !isPlaying() || !m_engine.isCurrentEpoch(epoch))
         return;
 
       ++m_framePos;
@@ -1026,25 +1010,8 @@ void Sessions::Player::updateTimestampDisplay()
     return;
 
   const double seconds = m_timestampsNs[static_cast<size_t>(m_framePos)] / 1e9;
-  m_timestamp          = formatTimestamp(seconds);
+  m_timestamp          = DataModel::ReplayPlaybackEngine::formatTimestamp(seconds);
   Q_EMIT timestampChanged();
-}
-
-/**
- * @brief Formats @p seconds as HH:MM:SS.mmm for the player status label.
- */
-QString Sessions::Player::formatTimestamp(double seconds) const
-{
-  constexpr double kInvHour = 1.0 / 3600.0;
-  constexpr double kInvMin  = 1.0 / 60.0;
-  int hours                 = static_cast<int>(seconds * kInvHour);
-  int minutes               = static_cast<int>((seconds - hours * 3600.0) * kInvMin);
-  double secs               = seconds - hours * 3600.0 - minutes * 60.0;
-
-  return QString("%1:%2:%3")
-    .arg(hours, 2, 10, QChar('0'))
-    .arg(minutes, 2, 10, QChar('0'))
-    .arg(secs, 6, 'f', 3, QChar('0'));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1054,11 +1021,16 @@ QString Sessions::Player::formatTimestamp(double seconds) const
 /**
  * @brief Intercepts global key events while a session is loaded.
  */
+
+/**
+ * @brief Captures key events and routes playback shortcuts to handleKeyPress.
+ */
 bool Sessions::Player::eventFilter(QObject* obj, QEvent* event)
 {
   if (isOpen() && event->type() == QEvent::KeyPress) {
     auto* keyEvent = static_cast<QKeyEvent*>(event);
-    return handleKeyPress(keyEvent);
+    if (!DataModel::ReplayPlaybackEngine::playbackKeyIsClaimed(keyEvent->key()))
+      return handleKeyPress(keyEvent);
   }
 
   return QObject::eventFilter(obj, event);

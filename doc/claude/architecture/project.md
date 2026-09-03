@@ -26,8 +26,11 @@
   `API::CommandRegistry::execute()`, multi-select fan-outs) are one atomic step by
   construction.
 - **Invariant: a new document-mutating slot must open a `ProjectUndoScope`.**
-  `code-verify.py:undo-scope-missing` (error) enforces it, scanning the `ProjectModel*.cpp`
-  TUs (Editor TUs excluded); the whitelist in that rule holds
+  `code-verify.py:undo-scope-missing` (error) enforces it, and it scans **every spec-0070
+  sub-object TU**, not just `ProjectModel*.cpp`: `ProjectModel`, `ProjectEntities`,
+  `ProjectOutputWidgets`, `ProjectBulkOps`, `ProjectSources`, `ProjectTables`, `ProjectFolders`,
+  `ProjectWorkspaces`, `ProjectLoader`, `ProjectPersistence` and `ProjectPresentation` (Editor
+  TUs excluded). The whitelist in that rule holds
   the intentional exceptions — workspace CRUD, presentation-blob setters (`widgetSettings`,
   `widgetDisplay`, tree expansion, layouts), and the history machinery itself. Those stay
   outside undo history by spec; their edits fold into neighboring whole-document snapshots
@@ -43,10 +46,11 @@
   `applying` flag.
 - Boundaries: `loadFromJsonDocument`, `newJsonFile`, and `lockProject`/`unlockProject` clear
   history. The standard save paths (`finalizeProjectSave`, `autoSave`) call
-  `m_history.markSaved()` — but not every `writeProjectFile()` caller does: the Dashboard
-  `pointsChanged` write-back (`ProjectModel.cpp` lambda, no scope, no `setModified`) and
-  `persistLegacyMigration()` bypass it, so treat `markSaved()` as a property of the two save
-  slots, not of disk writes. `markSaved()` also breaks the top step's coalesce chain; truncating the
+  `m_history.markSaved()` — but not every `writeProjectFile()` caller does:
+  `persistLegacyMigration()` bypasses it, so treat `markSaved()` as a property of the two save
+  slots, not of disk writes. The Dashboard `pointsChanged` handler is **no longer** one of them:
+  it calls `setPointCount()` (scope + `setModified`) instead of writing the whole document to
+  disk, so changing a display setting no longer rewrites the `.ssproj` (H1). `markSaved()` also breaks the top step's coalesce chain; truncating the
   redo tail invalidates a save point inside it. The modified flag after undo/redo is
   `position != savePosition`, and the position moves only after a snapshot applied cleanly
   (`peekUndoState`/`confirmUndo` pairs).
@@ -59,6 +63,48 @@
 - Bounds: 100 steps / 64 MiB, oldest dropped; a dropped save point pins the project modified
   until the next save. API verbs: `project.undo` / `project.redo` (never error on empty
   history — `{performed:false, reason}`).
+
+## Mutation Rules Earned in Spec 0075
+
+- **Deletion order is an explicit rank, not the `ItemKind` enum's numeric order.**
+  `ProjectBulkOps.h`'s `batchDeleteRank()` / `batchDeleteOrderBefore()` are inline in the header
+  (so the rule is unit-testable without the application, and the `.cpp` `static_assert`s the nine
+  kind constants against `ProjectEditor::ItemKind`): datasets, tables, actions, output widgets,
+  groups, workspaces, then folders, descending id within a rank. A folder deleted before the
+  tables inside it left orphans (H3).
+- **A deferred document mutation must be flushed before serialization.** The auto-workspace
+  regeneration is queued (`scheduleWorkspaceRegen()` / `flushWorkspaceRegen()`) so a bulk delete
+  regenerates once instead of once per group, and `writeProjectFile()` — the single choke point
+  for every disk write, auto-save and save-as included — flushes it first, or a save could
+  serialize a stale workspace list. Any future "coalesce this ProjectModel work" change owes the
+  same flush. It also costs one event-loop turn: code reading `activeWorkspaces()` immediately
+  after a group mutation sees the previous list for that turn.
+- **Do not defer `frameDetectionChanged`.** `API::CommandRegistry::execute()` gates auto-save and
+  the project apply on `mutationEpoch()` changing *within* the handler call, and the epoch is
+  bumped by signal emissions — so deferring the one signal a delimiter-only command emits would
+  make `project.frameParser.update` look like a no-op: no auto-save, no pipeline apply. A safe
+  version of that optimisation has to debounce the *consumer*
+  (`AppState::onProjectLoaded` -> `FrameBuilder::syncFromProjectModel`) and flush before
+  `AppState::frameConfig()` is read at driver-open time, or a delimiter typed just before Connect
+  opens the link with the previous frame config.
+- **A 0 ms coalescing timer cannot collapse keystrokes.** Each keystroke is its own event-loop
+  turn, so "one sync per burst" only ever means one per turn. The workspace-regen queue helps
+  because a bulk delete emits N `groupsChanged` inside ONE call; a per-keystroke path needs a real
+  idle debounce with the flush obligation above.
+- **Compound edits get a compound mutator.** `setSourceFrameParserTemplateAndParams()` writes the
+  template id and its params in one scope, so picking a native template is one undo step rather
+  than two (H5).
+- **`ProjectHistory::enterScope()` consumes the pending editor hint unconditionally**, so moving a
+  `ProjectUndoScope` below a guard return also stops the hint being consumed on that path, and it
+  can leak into an unrelated later step. Check every caller before relocating a scope.
+- **`Dataset::sourceId` has exactly one derivation rule** (`finalize_frame`: it equals its
+  group's). Normalising it inside `ProjectEntities::updateGroup` covers the editor and the API
+  `group.update` path in one place (H9).
+- **A failed external reload leaves the document attached.** `restoreDetachedDocument()`
+  re-attaches the path, re-arms the watcher, restores or raises the modified flag and posts a
+  NotificationCenter warning (H6) — a corrupt write on disk used to detach the open project.
+- **`savePluginState` is ProjectFile-only**, like its sibling `saveWidgetSetting`: a QuickPlot
+  plugin must not mutate or dirty a loaded project's widget-settings blob.
 
 ## On-Disk Change Detection — `ProjectModel` File Watcher
 
@@ -93,11 +139,15 @@
 
 ## Project File JSON Keys — `Keys::` Namespace
 
-Every JSON key used in `.json`/`.ssproj` files is declared in `namespace Keys` at the top
-of `app/src/DataModel/Frame.h` as `inline constexpr QLatin1StringView` (alias `KeyView`).
+Every JSON key used in `.json`/`.ssproj` files is declared in `namespace Keys` in
+**`app/src/DataModel/FrameKeys.h`** (which `Frame.h` includes — the namespace has not been in
+`Frame.h` itself since spec 0070) as `inline constexpr QLatin1StringView` (alias `KeyView`).
 
 - **Never hardcode** `"busType"`, `"frameStart"`, etc. in writers/readers or MCP handlers —
-  use `Keys::BusType`, `Keys::FrameStart`. (`code-verify.py:keys-hardcoded-literal`.)
+  use `Keys::BusType`, `Keys::FrameStart`. (`code-verify.py:keys-hardcoded-literal`.) That lint
+  matches a hand-curated `_PROJECT_KEY_LITERALS` set in `scripts/code_verify_rules.py`, **not**
+  `FrameKeys.h`: adding a `Keys::` constant does not make its raw literal an error until the set
+  gains it too.
 - `ss_jsr(obj, Keys::Foo, default)` is the canonical reader.
 - **Legacy aliases (read canonical first, write both)**: `checksum` ↔ `checksumAlgorithm`,
   `decoder` ↔ `decoderMethod`. Older Serial Studio versions still load 3.3+ files.

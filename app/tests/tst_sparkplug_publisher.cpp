@@ -363,7 +363,10 @@ void TstSparkplugPublisher::birthDeathSequenceMatchesTheWill()
 
 /**
  * @brief A Node Control/Rebirth command re-issues the full birth certificate; anything else is
- *        counted and ignored, and a payload that does not decode is counted as such (R43).
+ *        counted and ignored, and a payload that does not decode is counted as such (R43). The
+ *        re-issued NBIRTH restarts the sequence at zero, which the specification requires of every
+ *        NBIRTH (tck-id-payloads-sequence-num-zero-nbirth): a running value makes a conformant host
+ *        ask for a rebirth again on the next message, forever.
  */
 void TstSparkplugPublisher::rebirthCommandReissuesTheBirth()
 {
@@ -379,6 +382,11 @@ void TstSparkplugPublisher::rebirthCommandReissuesTheBirth()
   QCOMPARE(birth.size(), qsizetype(1));
   QCOMPARE(node.counters().births, quint64(1));
 
+  node.updateValue(11, 21.5, QString(), true);
+  const auto data = node.dataMessages(1200);
+  QCOMPARE(data.size(), qsizetype(1));
+  QCOMPARE(decoded(data.constFirst()).seq, quint64(1));
+
   QVERIFY(node.isRebirthCommand(encodeRebirthRequest(1500)));
   QCOMPARE(node.counters().rebirthCommands, quint64(1));
 
@@ -390,7 +398,12 @@ void TstSparkplugPublisher::rebirthCommandReissuesTheBirth()
   const auto payload = decoded(rebirth.constFirst());
   QCOMPARE(payload.metrics.size(), qsizetype(3));
   QCOMPARE(metricNamed(payload, "Temperature").alias, quint64(1));
-  QCOMPARE(payload.seq, quint64(1));
+  QCOMPARE(payload.seq, quint64(0));
+
+  node.updateValue(11, 22.5, QString(), true);
+  const auto resumed = node.dataMessages(1600);
+  QCOMPARE(resumed.size(), qsizetype(1));
+  QCOMPARE(decoded(resumed.constFirst()).seq, quint64(1));
 
   QVERIFY(!node.isRebirthCommand(QByteArray("\x08\x01", 2)));
   QCOMPARE(node.counters().ignoredCommands, quint64(1));

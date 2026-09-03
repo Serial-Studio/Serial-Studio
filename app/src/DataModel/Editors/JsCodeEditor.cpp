@@ -34,9 +34,6 @@
 #include "DataModel/ProjectEditor.h"
 #include "DataModel/ProjectModel.h"
 #include "DataModel/Scripting/FrameParser.h"
-#include "Misc/CommonFonts.h"
-#include "Misc/ThemeManager.h"
-#include "Misc/TimerEvents.h"
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
 #include "SSAssert.h"
@@ -50,27 +47,14 @@
  *        which stays instantiated once opened, hence the window-visibility render gate.
  */
 DataModel::JsCodeEditor::JsCodeEditor(QQuickItem* parent)
-  : QQuickPaintedItem(parent)
+  : EmbeddedCodeEditorItem(EmbeddedCodeEditor::RenderGate::WindowVisible, parent)
   , m_sourceId(0)
   , m_language(0)
   , m_readingCode(false)
-  , m_themeManager(Misc::ThemeManager::instance())
-  , m_timerEvents(Misc::TimerEvents::instance())
   , m_projectModel(DataModel::ProjectModel::instance())
   , m_projectEditor(DataModel::ProjectEditor::instance())
   , m_frameParser(DataModel::FrameParser::instance())
-  , m_editor(*this,
-             m_themeManager,
-             Misc::CommonFonts::instance(),
-             EmbeddedCodeEditor::RenderGate::WindowVisible)
 {
-  m_editor.configureHost();
-
-  connect(&m_themeManager,
-          &Misc::ThemeManager::themeChanged,
-          this,
-          &DataModel::JsCodeEditor::onThemeChanged);
-
   auto& widget = m_editor.widget();
   connect(&widget, &QCodeEditor::textChanged, this, [this] { Q_EMIT modifiedChanged(); });
   connect(&widget, &QCodeEditor::textChanged, this, &DataModel::JsCodeEditor::textChanged);
@@ -110,16 +94,6 @@ DataModel::JsCodeEditor::JsCodeEditor(QQuickItem* parent)
           &DataModel::ProjectEditor::selectedSourceFrameParserCodeChanged,
           this,
           &DataModel::JsCodeEditor::readCode);
-
-  connect(this, &QQuickPaintedItem::widthChanged, this, &DataModel::JsCodeEditor::resizeWidget);
-  connect(this, &QQuickPaintedItem::heightChanged, this, &DataModel::JsCodeEditor::resizeWidget);
-
-  connect(&widget, &QCodeEditor::textChanged, this, &DataModel::JsCodeEditor::scheduleRender);
-  connect(&widget, &QCodeEditor::selectionChanged, this, &DataModel::JsCodeEditor::scheduleRender);
-  connect(
-    &widget, &QCodeEditor::cursorPositionChanged, this, &DataModel::JsCodeEditor::scheduleRender);
-  connect(
-    &m_timerEvents, &Misc::TimerEvents::uiTimeout, this, &DataModel::JsCodeEditor::renderWidget);
 
   readCode();
 }
@@ -379,7 +353,10 @@ void DataModel::JsCodeEditor::evaluate()
 }
 
 /**
- * @brief Reloads the editor text from the current project model code.
+ * @brief Reloads the editor text from this source's own parser code. A source that carries no
+ *        code shows an empty document: falling back to source 0's script made source N's editor
+ *        display a script it did not own, and the first keystroke persisted that whole script
+ *        onto source N.
  */
 void DataModel::JsCodeEditor::readCode()
 {
@@ -398,9 +375,6 @@ void DataModel::JsCodeEditor::readCode()
       break;
     }
   }
-
-  if (code.isEmpty())
-    code = m_projectModel.frameParserCode();
 
   setLanguage(lang);
   m_editor.setSourceText(code);
@@ -490,184 +464,4 @@ void DataModel::JsCodeEditor::reload(const bool guiTrigger)
 void DataModel::JsCodeEditor::loadDefaultTemplate(const bool guiTrigger)
 {
   m_frameParser.loadDefaultTemplate(m_sourceId, guiTrigger);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Theme
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Updates the editor colour scheme to match the active theme.
- */
-void DataModel::JsCodeEditor::onThemeChanged()
-{
-  m_editor.applyTheme();
-}
-
-//--------------------------------------------------------------------------------------------------
-// Rendering
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Marks the cached pixmap stale; the next UI tick does the grab, so a burst of edits
- *        costs one widget render instead of one per event.
- */
-void DataModel::JsCodeEditor::scheduleRender()
-{
-  m_editor.scheduleRender();
-}
-
-/**
- * @brief Captures the editor widget as a pixmap for QML painting.
- */
-void DataModel::JsCodeEditor::renderWidget()
-{
-  m_editor.renderWidget();
-}
-
-/**
- * @brief Resizes the backing widget to match the QML item dimensions.
- */
-void DataModel::JsCodeEditor::resizeWidget()
-{
-  m_editor.resizeWidget();
-}
-
-//--------------------------------------------------------------------------------------------------
-// Event processing
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Paints the cached editor pixmap into the QML scene.
- */
-void DataModel::JsCodeEditor::paint(QPainter* painter)
-{
-  m_editor.paint(painter);
-}
-
-/**
- * @brief Routes ShortcutOverride to the editor widget so editing keys (undo, copy, paste...)
- *        are handled natively instead of being consumed by QML Shortcut bindings.
- */
-bool DataModel::JsCodeEditor::event(QEvent* event)
-{
-  if (m_editor.handleShortcutOverride(event))
-    return true;
-
-  return QQuickPaintedItem::event(event);
-}
-
-/**
- * @brief Forwards completer navigation/commit keys to the popup when visible; everything else
- *        goes straight to the editor widget so QCompleter's focus check cannot hide the popup.
- */
-void DataModel::JsCodeEditor::keyPressEvent(QKeyEvent* event)
-{
-  m_editor.handleKeyPress(event);
-}
-
-/**
- * @brief Forwards key-release events to the backing QCodeEditor widget.
- */
-void DataModel::JsCodeEditor::keyReleaseEvent(QKeyEvent* event)
-{
-  m_editor.forwardToWidget(event);
-}
-
-/**
- * @brief Forwards input-method events (IME composition) to the backing widget.
- */
-void DataModel::JsCodeEditor::inputMethodEvent(QInputMethodEvent* event)
-{
-  m_editor.forwardToWidget(event);
-  m_editor.scheduleRender();
-}
-
-/**
- * @brief Forwards focus-in events to the backing widget.
- */
-void DataModel::JsCodeEditor::focusInEvent(QFocusEvent* event)
-{
-  m_editor.forwardToWidget(event);
-}
-
-/**
- * @brief Forwards focus-out events to the backing widget.
- */
-void DataModel::JsCodeEditor::focusOutEvent(QFocusEvent* event)
-{
-  m_editor.forwardToWidget(event);
-}
-
-/**
- * @brief Forwards mouse-press events to the backing widget, claiming focus for the item.
- */
-void DataModel::JsCodeEditor::mousePressEvent(QMouseEvent* event)
-{
-  m_editor.handleMouse(event, true);
-}
-
-/**
- * @brief Forwards mouse-move events to the backing widget.
- */
-void DataModel::JsCodeEditor::mouseMoveEvent(QMouseEvent* event)
-{
-  m_editor.handleMouse(event, false);
-}
-
-/**
- * @brief Forwards mouse-release events to the backing widget.
- */
-void DataModel::JsCodeEditor::mouseReleaseEvent(QMouseEvent* event)
-{
-  m_editor.handleMouse(event, false);
-}
-
-/**
- * @brief Forwards double-click events to the backing widget.
- */
-void DataModel::JsCodeEditor::mouseDoubleClickEvent(QMouseEvent* event)
-{
-  m_editor.handleMouse(event, false);
-}
-
-/**
- * @brief Forwards wheel events to the editor viewport.
- */
-void DataModel::JsCodeEditor::wheelEvent(QWheelEvent* event)
-{
-  m_editor.forwardToViewport(event);
-  m_editor.scheduleRender();
-}
-
-/**
- * @brief Forwards drag-enter events to the editor viewport.
- */
-void DataModel::JsCodeEditor::dragEnterEvent(QDragEnterEvent* event)
-{
-  m_editor.forwardToViewport(event);
-}
-
-/**
- * @brief Forwards drag-move events to the editor viewport.
- */
-void DataModel::JsCodeEditor::dragMoveEvent(QDragMoveEvent* event)
-{
-  m_editor.forwardToViewport(event);
-}
-
-/**
- * @brief Forwards drag-leave events to the editor viewport.
- */
-void DataModel::JsCodeEditor::dragLeaveEvent(QDragLeaveEvent* event)
-{
-  m_editor.forwardToViewport(event);
-}
-
-/**
- * @brief Forwards drop events to the editor viewport.
- */
-void DataModel::JsCodeEditor::dropEvent(QDropEvent* event)
-{
-  m_editor.forwardToViewport(event);
 }

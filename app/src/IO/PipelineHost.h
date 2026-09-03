@@ -114,6 +114,9 @@ private:
 class PipelineHost : public QObject {
   Q_OBJECT
 
+signals:
+  void parkedOnGuiChanged(bool parked);
+
 private:
   friend class ::SessionContext;
   explicit PipelineHost();
@@ -135,6 +138,7 @@ public:
   [[nodiscard]] int dashboardRingCapacity() const noexcept;
 
   void registerFrameReader(int deviceId, FrameReader* reader);
+  void registerIngestThread();
   void relocateProcessingObjects();
   void moveProcessingObjectsTo(QThread* target);
 
@@ -151,7 +155,7 @@ public:
   void shutdown();
 
   [[nodiscard]] static bool pipelineParkedOnGui() noexcept;
-  static void setPipelineParkedOnGui(bool parked) noexcept;
+  static void setPipelineParkedOnGui(bool parked);
 
   [[nodiscard]] static bool tearingDown() noexcept;
   static void beginTeardown() noexcept;
@@ -231,7 +235,7 @@ public slots:
   void setupExternalConnections();
 
 public:
-  // Each queued block pins a pool slot: must stay well under FrameBuilder::kBlockPoolSlots
+  // Each queued block pins a pool slot: must stay well under BlockStager::kBlockPoolSlots
   static constexpr int kBlockRingSize = 32;
 
 private:

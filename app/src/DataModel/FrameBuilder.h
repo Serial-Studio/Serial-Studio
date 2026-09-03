@@ -32,6 +32,7 @@ extern "C" {
 #include <chrono>
 #include <map>
 #include <memory>
+#include <optional>
 #include <QByteArrayView>
 #include <QDeadlineTimer>
 #include <QHash>
@@ -49,8 +50,11 @@ extern "C" {
 #include "DataModel/DataBlock.h"
 #include "DataModel/DataTable.h"
 #include "DataModel/Frame.h"
+#include "DataModel/FrameBuilder/BlockPublisher.h"
+#include "DataModel/FrameBuilder/BlockStager.h"
 #include "DataModel/FrameBuilder/LatestFrameTap.h"
 #include "DataModel/FrameBuilder/QuickPlotBuilder.h"
+#include "DataModel/FrameBuilder/ReplayIngest.h"
 #include "DataModel/FrameBuilder/TableScriptBridge.h"
 #include "DataModel/FrameBuilder/TableSnapshotChannel.h"
 #include "DataModel/FrameBuilder/TransformCompiler.h"
@@ -68,23 +72,61 @@ namespace Misc {
 class TimerEvents;
 }  // namespace Misc
 
+namespace CSV {
+class Export;
+}  // namespace CSV
+
+namespace MDF4 {
+class Export;
+}  // namespace MDF4
+
+namespace API {
+class Server;
+
+namespace GRPC {
+class GRPCServer;
+}  // namespace GRPC
+}  // namespace API
+
+#ifdef BUILD_COMMERCIAL
+namespace Sessions {
+class Export;
+}  // namespace Sessions
+
+namespace MQTT {
+class Publisher;
+}  // namespace MQTT
+
+namespace Widgets {
+class AudioExport;
+}  // namespace Widgets
+
+namespace InfluxDB {
+class Export;
+}  // namespace InfluxDB
+#endif
+
 namespace DataModel {
+
+class ControlScript;
 
 /**
  * @brief Assembles a DataModel::Frame from raw I/O bytes and distributes it to the dashboard and
  * export workers.
  */
-class FrameBuilder : public QObject {
+class FrameBuilder
+  : public QObject
+  , public DataModel::BlockStagerHost {
   // clang-format off
   Q_OBJECT
   // clang-format on
 
 signals:
   void jsonFileMapChanged();
-  void frameChanged(const DataModel::Frame& frame);
   void structureGenerationChanged(quint64 generation);
   void structurePublished(int sourceId, const DataModel::Frame& frame);
   void sessionStructureReady(const DataModel::Frame& frame);
+  void sessionBoundary(bool connected, bool paused);
 
 private:
   friend class ::SessionContext;
@@ -118,14 +160,7 @@ public:
   [[nodiscard]] int lastTransformDataset() const noexcept;
   [[nodiscard]] const QString& lastTransformError() const noexcept;
 
-  /**
-   * @brief One replay cell for the typed lane: a borrowed text pointer for string channels,
-   *        or a native double (text == nullptr) for numeric channels.
-   */
-  struct ReplayCell {
-    const QString* text;
-    double number;
-  };
+  using ReplayCell = DataModel::ReplayIngest::Cell;
 
   [[nodiscard]] const DataModel::TableApiContext& guiTableApiContext();
 
@@ -206,6 +241,8 @@ public slots:
 
 private slots:
   void onSourceRemoved();
+  void onPausedChanged();
+  void onPipelineParkedChanged(bool parked);
   void onConnectedChanged();
   void onOperationModeChanged();
   void refreshProjectSourceSnapshot();
@@ -218,6 +255,27 @@ private:
     quint64 frameNumber = 0;
     int sourceId        = 0;
     qint64 timestampMs  = 0;
+  };
+
+  /**
+   * @brief Every module whose enable edge feeds the cached m_anyAsyncSink or m_captureLatestFrame
+   *        flag. The composition root resolves them once in setupExternalConnections() and hands
+   *        them here, so the wiring body reaches through no singleton (spec 0001).
+   */
+  struct AsyncSinks {
+    CSV::Export* csv                 = nullptr;
+    MDF4::Export* mdf4               = nullptr;
+    API::Server* server              = nullptr;
+    DataModel::ControlScript* script = nullptr;
+#ifdef BUILD_COMMERCIAL
+    Sessions::Export* sessions  = nullptr;
+    MQTT::Publisher* mqtt       = nullptr;
+    Widgets::AudioExport* audio = nullptr;
+    InfluxDB::Export* influx    = nullptr;
+#endif
+#ifdef ENABLE_GRPC
+    API::GRPC::GRPCServer* grpc = nullptr;
+#endif
   };
 
   /**
@@ -237,8 +295,8 @@ private:
   int m_quickPlotChannels;
   bool m_parseBudgetEnabled;
   bool m_lastConnectedState;
+  bool m_lastPausedState;
   bool m_playerOpen;
-  bool m_anyAsyncSink;
   bool m_captureDatasetValues;
   bool m_captureFlagsDirty;
   bool m_externalTableApiUsers;
@@ -254,7 +312,6 @@ private:
   quint64 m_skippedFrameCount;
 
   bool m_jsTransformTimedOut;
-  QStringList m_channelScratch;
 
   DataModel::Frame m_frame;
   DataModel::DataTableStore m_tableStore;
@@ -270,6 +327,7 @@ private:
   DataModel::QuickPlotBuilder m_quickPlot;
   DataModel::TableScriptBridge m_tableApi;
   DataModel::TransformCompiler m_transforms;
+  DataModel::ReplayIngest m_replay;
 
   bool m_streamValuesDirty;
   QSet<int> m_streamSourceIds;
@@ -277,7 +335,6 @@ private:
   DataModel::RepublishGate m_republishGate;
   QMap<int, DataModel::Frame> m_sourceFrames;
   std::map<int, quint64> m_sourceFrameCounters;
-  std::unordered_map<int, std::unordered_map<int, int>> m_replayColumnMap;
   std::unordered_map<int, DatasetDeps> m_datasetDeps;
 
   int m_latestFrameSourceId;
@@ -312,43 +369,16 @@ private:
   static constexpr int kFramePoolSize     = 8192;
   static constexpr size_t kInvalidSlotIdx = DataModel::FramePoolPolicy::kInvalidSlot;
 
-  // Memory ceiling for materialised slots; kFramePoolSize alone assumes small frames
-  static constexpr size_t kFramePoolBudgetBytes = 192ULL * 1024ULL * 1024ULL;
-
   std::vector<std::shared_ptr<PooledFrameSlot>> m_framePool;
   DataModel::FramePoolPolicy m_poolPolicy;
   quint64 m_framePoolGeneration;
 
-  /**
-   * @brief Recyclable pool slot holding one staged DataBlock plus the generation and source it
-   *        is bound to. A slot is free exactly when the pool's shared_ptr is its only reference,
-   *        so the builder keeps its own reference while a block is open and hands out an aliasing
-   *        shared_ptr on publish -- no per-block control block, and no other source can steal a
-   *        slot that is still filling.
-   */
-  struct PooledBlockSlot {
-    PooledBlockSlot();
-    DataModel::DataBlock block;
-    quint64 generation;
-    quint64 flushEpoch;
-    int sourceId;
-  };
-
-  static constexpr int kBlockPoolSlots = 64;
-
-  // Frame-lane flush cap (spec 0055 D1/D6); low because these columns carry a string per sample
-  static constexpr qsizetype kFrameBlockSampleCap = 64;
-
-  // Memory ceiling for materialised block slots; a slot's storage scales with the dataset count
-  static constexpr size_t kBlockPoolBudgetBytes = 192ULL * 1024ULL * 1024ULL;
-
-  std::vector<std::shared_ptr<PooledBlockSlot>> m_blockPool;
-  std::map<int, std::shared_ptr<PooledBlockSlot>> m_openBlocks;
-  std::map<int, quint64> m_blockNumbers;
-  std::size_t m_blockPoolHint;
-  int m_blockSlotsUsable;
   bool m_maskSinks;
   std::map<int, quint64> m_publishedStructureGeneration;
+
+  // Bind m_framePoolGeneration and m_maskSinks above, so their addresses never move
+  DataModel::BlockStager m_stager;
+  DataModel::BlockPublisher m_publisher;
 
   /**
    * @brief ProjectModel state carried from the GUI thread to the builder thread, so the builder
@@ -362,25 +392,25 @@ private:
     SerialStudio::DecoderMethod decoder = SerialStudio::PlainText;
   };
 
+  // Holds a sync that arrived while the pipeline was parked; applied once it is running again
+  std::optional<ProjectSnapshot> m_deferredProjectSnapshot;
+
   [[nodiscard]] static ProjectSnapshot collectProjectSnapshot();
   void applyProjectSnapshot(ProjectSnapshot snapshot);
-  [[nodiscard]] std::shared_ptr<PooledBlockSlot> claimBlockSlot(int sourceId) noexcept;
-  void refreshBlockPoolBudget(const DataModel::Frame& src) noexcept;
+  void applyDeferredProjectSnapshot();
   [[nodiscard]] DataModel::StructureSnapshotPtr buildStructureSnapshot(const DataModel::Frame& src);
   [[nodiscard]] bool structureIsCurrent(int sourceId) const noexcept;
   void noteStructurePublished(int sourceId) noexcept;
 
   void ensureStructurePublished(int sourceId, const DataModel::Frame& src);
-  void bindBlockToFrame(PooledBlockSlot& slot, const DataModel::Frame& src, bool uniform);
-  [[nodiscard]] PooledBlockSlot* openBlockFor(int sourceId, const DataModel::Frame& src);
-  SS_HOT void stageFrameValues(int sourceId,
-                               const DataModel::Frame& src,
-                               const DataModel::TimestampedFrame::SteadyTimePoint& ts);
-  void flushBlock(int sourceId);
-  void publishBlock(const DataModel::DataBlockPtr& block);
+  void emitSessionBoundary();
+
+  void noteStagingPoolExhausted() final;
+  void publishStagedBlock(const DataModel::DataBlockPtr& block) final;
+  void announceStructure(int sourceId, const DataModel::Frame& src) final;
+  [[nodiscard]] quint64 stagingFlushEpoch() const final;
 
   void invalidateFramePool() noexcept;
-  void refreshFramePoolBudget(const DataModel::Frame& src) noexcept;
   SS_COLD void notePoolExhausted();
   [[nodiscard]] size_t claimPoolSlot(int sourceId, bool hintedOnly = false) noexcept;
   bool republishOneFrame(DataModel::Frame& frame, int key, bool feedExports);
@@ -396,6 +426,7 @@ private:
 
   DataModel::Frame& ensureSourceFrame(int sourceId);
   SerialStudio::DecoderMethod resolveDecoderMethod(int sourceId, bool applyPerSourceOverride) const;
+  void parseProjectFrameFor(int sourceId, bool perSource, const IO::CapturedDataPtr& data);
   void parseProjectFrame(const IO::CapturedDataPtr& data);
   void parseProjectFrame(int sourceId, const IO::CapturedDataPtr& data);
   void parseQuickPlotFrame(const IO::CapturedDataPtr& data);
@@ -405,7 +436,9 @@ private:
   void publishSourceTemplateFrame(const DataModel::Source& src);
   [[nodiscard]] bool republishFrames(bool feedExports);
   void wireDisplayTickHooks(Misc::TimerEvents& timers, IO::PipelineHost& pipeline);
-  void refreshAnyAsyncSink();
+  void wireAsyncSinkHooks(const AsyncSinks& sinks);
+  [[nodiscard]] BlockPublisher::Sinks resolveBlockSinks(const AsyncSinks& sinks,
+                                                        IO::PipelineHost& host);
   void refreshDatasetCaptureFlag();
   void refreshLatestFrameCapture();
   void clearLatestFrames();
@@ -441,15 +474,6 @@ private:
                          const TransformFrameInfo& info,
                          const std::unordered_map<int, int>* replayColumns,
                          bool finalValueReplay);
-  [[nodiscard]] const std::unordered_map<int, int>* replayColumnsFor(int sourceId) const;
-  void applyReplaySpanValue(Dataset& dataset,
-                            const QByteArrayView* cells,
-                            qsizetype count,
-                            const std::unordered_map<int, int>* columns);
-  void applyReplayTypedValue(Dataset& dataset,
-                             const ReplayCell* cells,
-                             qsizetype count,
-                             const std::unordered_map<int, int>* columns);
   SS_HOT void applyDatasetValueSpan(Dataset& dataset,
                                     const QByteArrayView* spans,
                                     qsizetype count,

@@ -65,7 +65,6 @@ AI::GeminiReply::GeminiReply(QNetworkAccessManager& nam,
   , m_requestBody(requestBody)
   , m_reply(nullptr)
   , m_sse(new SseEventReader(this))
-  , m_finished(false)
 {
   connect(m_sse, &SseEventReader::frameReceived, this, &GeminiReply::onSseEvent);
   connect(m_sse, &SseEventReader::parseError, this, &GeminiReply::onSseError);
@@ -75,6 +74,7 @@ AI::GeminiReply::GeminiReply(QNetworkAccessManager& nam,
   req.setRawHeader("x-goog-api-key", apiKey.toUtf8());
   req.setRawHeader("accept", "text/event-stream");
   req.setTransferTimeout(kGeminiInitialResponseTimeoutMs);
+  applyStreamPolicy(req);
 
   qCDebug(serialStudioAI) << "POST gemini url=" << redactUrl(endpoint)
                           << "key=" << KeyVault::redact(apiKey)
@@ -111,7 +111,7 @@ void AI::GeminiReply::onSseEvent(const QString& name, const QJsonObject& data)
 {
   Q_UNUSED(name);
 
-  if (m_finished)
+  if (isFinished())
     return;
 
   processChunk(data);
@@ -124,7 +124,7 @@ void AI::GeminiReply::onSseEvent(const QString& name, const QJsonObject& data)
 void AI::GeminiReply::onSseError(const QString& reason)
 {
   qCWarning(serialStudioAI) << "Gemini SSE parse error:" << reason;
-  if (!SseEventReader::fatalReason(reason))
+  if (!endsTurnOnParseError(reason))
     return;
 
   finishWithError(tr("Stream parse error: %1").arg(reason));
@@ -218,7 +218,7 @@ void AI::GeminiReply::processChunk(const QJsonObject& chunk)
  */
 void AI::GeminiReply::onReplyReadyRead()
 {
-  if (!m_reply || m_finished)
+  if (!m_reply || isFinished())
     return;
 
   const auto status = m_reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
@@ -233,7 +233,7 @@ void AI::GeminiReply::onReplyReadyRead()
  */
 void AI::GeminiReply::onReplyFinished()
 {
-  if (m_finished)
+  if (isFinished())
     return;
 
   const auto status = m_reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
@@ -270,48 +270,4 @@ void AI::GeminiReply::handleHttpError(int status)
     finishWithError(tr("Invalid API key"));
   else
     finishWithError(tr("Gemini %1: %2").arg(QString::number(status), msg));
-}
-
-//--------------------------------------------------------------------------------------------------
-// Finalization
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Charges bytes against the shared per-reply budget; on breach, ends the turn with a
- *        visible error and aborts the transport so Qt stops buffering the runaway stream.
- */
-bool AI::GeminiReply::streamBudgetBreached(qsizetype bytes)
-{
-  if (!chargeStreamBudget(bytes))
-    return false;
-
-  finishWithError(
-    tr("Reply exceeded the %1 MB stream limit").arg(kMaxStreamedReplyBytes / (1024 * 1024)));
-  abort();
-  return true;
-}
-
-/**
- * @brief Marks the stream finished, emits @ref finished.
- */
-void AI::GeminiReply::finishOk()
-{
-  if (m_finished)
-    return;
-
-  m_finished = true;
-  Q_EMIT finished();
-}
-
-/**
- * @brief Marks the stream finished with an error message.
- */
-void AI::GeminiReply::finishWithError(const QString& message)
-{
-  if (m_finished)
-    return;
-
-  m_finished = true;
-  Q_EMIT errorOccurred(message);
-  Q_EMIT finished();
 }

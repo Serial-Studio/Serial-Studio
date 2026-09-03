@@ -35,6 +35,7 @@
 #include "DSP.h"
 #include "IO/StreamWorker.h"
 #include "SerialStudio.h"
+#include "UI/Dashboard/DashboardIngest.h"
 #include "UI/Dashboard/DashboardTools.h"
 #include "UI/Dashboard/DashboardViewState.h"
 #include "UI/Dashboard/PlotControlBank.h"
@@ -73,7 +74,9 @@ namespace UI {
 /**
  * @brief Real-time dashboard manager for displaying data-driven widgets.
  */
-class Dashboard : public QObject {
+class Dashboard
+  : public QObject
+  , private IngestHost {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(bool available
@@ -300,11 +303,11 @@ public:
 
   // clang-format off
   [[nodiscard]] const QMap<int, DataModel::Dataset> &datasets() const { return m_datasets; }
-  [[nodiscard]] const DataModel::Group &getGroupWidget(const SerialStudio::DashboardWidget widget, const int index) const;
-  [[nodiscard]] const DataModel::Dataset &getDatasetWidget(const SerialStudio::DashboardWidget widget, const int index) const;
+  [[nodiscard]] const DataModel::Group &getGroupWidget(const SerialStudio::DashboardWidget widget, const int index) const override;
+  [[nodiscard]] const DataModel::Dataset &getDatasetWidget(const SerialStudio::DashboardWidget widget, const int index) const override;
   // clang-format on
 
-  [[nodiscard]] bool useTimeXAxis(const DataModel::Dataset& dataset) const;
+  [[nodiscard]] bool useTimeXAxis(const DataModel::Dataset& dataset) const override;
   [[nodiscard]] bool useTimeXAxisGroup(const DataModel::Group& group) const;
 
   [[nodiscard]] const DataModel::Frame& rawFrame() { return m_lastFrame; }
@@ -472,174 +475,27 @@ private:
   void connectViewStateResets(AppState& appState);
   void reconfigureDashboard(const DataModel::Frame& frame);
   [[nodiscard]] DataModel::Frame combineSourceFrames(const DataModel::Frame& seed) const;
-  void handleMissingDataset(const DataModel::Frame& frame);
+  void handleMissingDataset(const DataModel::Frame& frame) override;
   void registerXAxisIfNeeded(const DataModel::Dataset& dataset);
 
-  void updateDataSeries(int sourceId = -1);
-  void updateFftSeries(int sourceId);
-  void updateGpsSeries(int sourceId);
-  void updatePlot3DSeries(int sourceId);
-  void updateLineSeries(int sourceId);
+  void configureGpsSeries() override;
+  void configureFftSeries() override;
+  void configureLineSeries() override;
+  void configureMultiLineSeries() override;
 #ifdef BUILD_COMMERCIAL
-  void updateWaterfallSeries(int sourceId);
+  void configurePlot3DSeries() override;
+  void configureWaterfallSeries() override;
 #endif
 
-  void configureGpsSeries();
-  void configureFftSeries();
-  void configureLineSeries();
-  void buildLinePushes();
-  void configurePlot3DSeries();
-  void configureMultiLineSeries();
-  void buildMultiplotPushes();
-
-#ifdef BUILD_COMMERCIAL
-  void configureWaterfallSeries();
-#endif
-
-  void foldExtremes(int sourceId);
-  void clearPushTables();
-
-private:
-  /**
-   * @brief Pre-resolved descriptor that pushes one value into one ring buffer.
-   */
-  struct LinePush {
-    struct Consumer {
-      int sourceId;
-      const bool* activeFlag;
-    };
-
-    std::vector<Consumer> consumers;
-    DSP::AxisData* buf;
-    const double* value;
-  };
-
-  /**
-   * @brief Pre-resolved descriptor that appends one (time, value) into a decimating ring. The
-   *        ring and sweep are addressed by plotIndex (key into m_plotTimeRings / m_plotSweep) and
-   *        resolved at use time, never cached as raw pointers: a layout rebuild that reallocates
-   *        those QMap nodes would dangle a cached pointer, so the index must be re-looked-up.
-   */
-  struct TimePush {
-    std::vector<LinePush::Consumer> consumers;
-    int plotIndex;
-    const double* value;
-  };
-
-  /**
-   * @brief Pre-resolved descriptor for one multiplot, time-ring or sample mode. The time rings and
-   *        sweep are addressed by groupIndex (key into m_multiplotTimeRings / m_multiplotSweep) and
-   *        resolved at use time; only per-curve value pointers (stable across the build) are
-   * cached.
-   */
-  struct MultiPush {
-    struct TimeCurve {
-      int curveIndex;
-      const double* value;
-    };
-
-    int sourceId;
-    int groupIndex;
-    const bool* activeFlag;
-    std::vector<TimeCurve> timeCurves;
-    std::vector<std::pair<DSP::AxisData*, const double*>> samples;
-  };
-
-  /**
-   * @brief Pre-resolved stream ingest targets for one dataset uniqueId: widget indexes only
-   *        (never raw ring pointers -- a layout rebuild reallocates those), rebuilt lazily
-   *        after every reconfigure (spec 0051 T25).
-   */
-  struct StreamTargets {
-    std::vector<int> plotIndexes;
-    std::vector<std::pair<int, int>> multiplotCurves;
-    std::vector<int> fftIndexes;
-#ifdef BUILD_COMMERCIAL
-    std::vector<int> waterfallIndexes;
-#endif
-  };
-
-  [[nodiscard]] const StreamTargets& streamTargetsFor(int uniqueId);
-  void applyBlockColumn(const DataModel::BlockColumn& column,
-                        const DataModel::DataBlock& block,
-                        double baseSec);
-  [[nodiscard]] bool applyBlockValues(const DataModel::DataBlock& block, qsizetype index);
-  void feedFftFromSamples(const DataModel::BlockColumn& column,
-                          const StreamTargets& targets,
-                          std::size_t count);
-  void feedPlotBlockSweep(int plotIndex,
-                          const DataModel::BlockColumn& column,
-                          const DataModel::DataBlock& block,
-                          double baseSec);
-  void feedMultiplotBlockSweep(int groupIndex, const DataModel::DataBlock& block, double baseSec);
   void growTimeRings();
   void resetPlotClocks();
+  void rebuildPushTables();
+  void rebuildLineSeriesPreservingState();
   void growTimeRing(DSP::EnvelopeRing& ring, int sourceId, double windowSec);
   void drainStructureSnapshots();
   void drainBlockRing(const QElapsedTimer& clock, qint64 budgetNs);
-  double advancePlotClock(int sourceId,
-                          const std::chrono::steady_clock::time_point& ts,
-                          double blockSpanSec = 0.0);
 
-  /**
-   * @brief Pre-resolved descriptor that pushes one dataset value into one sample ring.
-   */
-  struct SeriesPush {
-    int sourceId;
-    const bool* activeFlag;
-    DSP::AxisData* buf;
-    const double* value;
-#ifdef BUILD_COMMERCIAL
-    bool record;
-    quint32 sessionKey;
-#endif
-  };
-
-  /**
-   * @brief Pre-resolved GPS coordinate sources: numeric gate + value pointer per axis.
-   */
-  struct GpsPush {
-    struct Field {
-      const double* value;
-      const bool* numeric;
-    };
-
-    int sourceId;
-    DSP::GpsSeries* series;
-    Field lat;
-    Field lon;
-    Field alt;
-  };
-
-#ifdef BUILD_COMMERCIAL
-  /**
-   * @brief Pre-resolved 3D trajectory sources feeding an O(1) overwrite ring.
-   */
-  struct Plot3DPush {
-    int sourceId;
-    DSP::FixedQueue<QVector3D>* ring;
-    const double* x;
-    const double* y;
-    const double* z;
-  };
-#endif
-
-  /**
-   * @brief Per-source plot clock: origin, smoothed sample period and forward-only display
-   *        time. Each source owns its own clock so interleaved frames from one source never
-   *        advance or rewind another source's plot rings.
-   */
-  struct PlotClock {
-    bool originSet                               = false;
-    int groupCount                               = 0;
-    double relativeFrameTimeSec                  = 0.0;
-    double displayTimeSec                        = 0.0;
-    double groupStartSec                         = 0.0;
-    double samplePeriodSec                       = 0.0;
-    double blockSpanSec                          = 0.0;
-    std::chrono::steady_clock::time_point origin = {};
-  };
-
+private:
   // Resolved once at construction: Dashboard is built last, so no method body resolves a singleton.
   AppState* m_appState;
   WidgetRegistry* m_widgetRegistry;
@@ -686,15 +542,7 @@ private:
   QVector<DSP::LineSeries> m_pltValues;
   QVector<DSP::MultiLineSeries> m_multipltValues;
 
-  std::vector<LinePush> m_yLinePushes;
-  std::vector<LinePush> m_xLinePushes;
-  std::vector<TimePush> m_timePushes;
-  std::vector<MultiPush> m_multiplotPushes;
-  std::vector<SeriesPush> m_fftPushes;
-  std::vector<GpsPush> m_gpsPushes;
 #ifdef BUILD_COMMERCIAL
-  std::vector<SeriesPush> m_waterfallPushes;
-  std::vector<Plot3DPush> m_plot3DPushes;
   QVector<DSP::FixedQueue<QVector3D>> m_plot3DRings;
 
   // Ordered snapshot materialized from the ring at read (render) cadence, off the hotpath
@@ -718,10 +566,6 @@ private:
 
   DataModel::Frame m_lastFrame;
   QMap<int, DataModel::Frame> m_sourceRawFrames;
-  QHash<int, StreamTargets> m_streamTargets;
-
-  // Curve-index -> column scratch for one multiplot sweep; reused so a tick allocates nothing
-  std::vector<const DataModel::BlockColumn*> m_streamSweepCurves;
 
   // Subordinate to m_sourceRawFrames (validated by its contains(sid) check); never cleared alone.
   QHash<int, quint64> m_sourceStructureGen;
@@ -733,6 +577,7 @@ private:
   PlotControlBank m_plotControls;
   ReplaySeekEngine m_replaySeek;
   WidgetMapBuilder m_widgetMapBuilder;
+  DashboardIngest m_ingest;
 };
 }  // namespace UI
 
