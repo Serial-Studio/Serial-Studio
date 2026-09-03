@@ -307,6 +307,12 @@ Full contract, including the ctor-edge proof and the licensing consumer inventor
   worker join in `stopFrameConsumerWorkers()`. **Never call `SessionContext::current()` from a
   method body** — composition root and `instance()` forwarders only; the singleton census
   (`code-verify.py --singleton-census --check`) fails on any increase.
+- **A composition root that skips `setupCrossModuleConnections()` must still bind the block
+  sinks.** `instantiateCoreModules()` constructs modules but wires nothing, and the publish path
+  holds its pipeline as a bound pointer (spec 0075), not a singleton reach.
+  `FrameBuilder::setupExternalConnections()` binds it for the GUI and headless-session roots;
+  `--benchmark-hotpath` builds its own root and calls `FrameBuilder::bindBlockSinks()`. Skip it and
+  the first flushed block publishes through a null host.
 - **License-gated state must exist before `restoreLastProject()` or re-derive on
   `activatedChanged`.** The licensing block is the FIRST thing `instantiateCoreModules()` builds
   after Translator (spec 0042). `activatedChanged` fires only on real token-validity transitions.

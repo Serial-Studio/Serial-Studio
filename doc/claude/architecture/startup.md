@@ -197,6 +197,15 @@ The pipeline thread is joined in `stopFrameConsumerWorkers()` **before**
 `SessionContext::shutdown()` frees the modules, with `prepareShutdown()` queued ahead of the
 quit so Lua states and QJSEngines die on the thread that owns them.
 
+**A composition root that skips `setupCrossModuleConnections()` still has to bind the block
+sinks.** `instantiateCoreModules()` constructs the modules but wires nothing, and since spec 0075
+the publish path holds its pipeline as a bound pointer (`BlockPublisher::Sinks::pipeline`) rather
+than reaching `IO::PipelineHost::instance()` per block. `FrameBuilder::setupExternalConnections()`
+binds it for the GUI and headless-session roots; `--benchmark-hotpath` builds its own root and
+calls `FrameBuilder::bindBlockSinks()` instead, which resolves the same sink list without wiring a
+signal. Skipping it publishes through a null host: the benchmark segfaulted on its first flushed
+block for exactly that reason.
+
 M3 (a real second session) is not started; everything above is single-context with session
 id 0. Ctor-edge proofs: `0039-session-context/ctor-proof.md` (M1) and `ctor-proof-m2.md`
 (M2 ownership).

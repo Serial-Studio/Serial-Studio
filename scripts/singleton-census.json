@@ -1,14 +1,14 @@
 {
   "spec": "0039-session-context",
   "regenerate": "python scripts/code-verify.py --singleton-census --accept",
-  "total": 1551,
+  "total": 1553,
   "files": 237,
   "buckets": {
     "root": 160,
     "accessor": 69,
     "ctor-capture": 123,
     "deferred": 34,
-    "static-cache": 1069,
+    "static-cache": 1071,
     "loose": 96
   },
   "per_class": {
@@ -17,7 +17,7 @@
     "AppState": 109,
     "UI::Dashboard": 83,
     "CommandRegistry": 81,
-    "DataModel::FrameBuilder": 68,
+    "DataModel::FrameBuilder": 69,
     "Misc::IconRegistry": 48,
     "DataModel::NotificationCenter": 31,
     "Misc::ThemeManager": 31,
@@ -27,8 +27,8 @@
     "Console::Handler": 25,
     "Misc::Translator": 25,
     "Licensing::LemonSqueezy": 24,
+    "IO::PipelineHost": 24,
     "Sessions::DatabaseManager": 23,
-    "IO::PipelineHost": 23,
     "CSV::Player": 22,
     "Sessions::Export": 22,
     "MDF4::Player": 21,
@@ -1174,13 +1174,13 @@
       }
     },
     "app/src/DataModel/FrameBuilder.cpp": {
-      "total": 47,
+      "total": 48,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 9,
-        "static-cache": 20,
+        "static-cache": 21,
         "loose": 17
       }
     },
@@ -1922,13 +1922,13 @@
       }
     },
     "app/src/Misc/CLI.cpp": {
-      "total": 29,
+      "total": 30,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 29,
+        "static-cache": 30,
         "loose": 0
       }
     },

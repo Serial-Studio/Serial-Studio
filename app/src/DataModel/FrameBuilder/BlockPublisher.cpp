@@ -136,6 +136,7 @@ void DataModel::BlockPublisher::publish(const DataBlockPtr& block)
 {
   SS_ASSERT_HOTPATH(block != nullptr);
   SS_ASSERT_HOTPATH(block->samples > 0);
+  SS_ASSERT(m_sinks.pipeline != nullptr, return);
 
   m_sinks.pipeline->publishBlockToDashboard(block);
 

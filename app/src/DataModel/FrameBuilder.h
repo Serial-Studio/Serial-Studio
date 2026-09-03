@@ -215,6 +215,7 @@ public:
 
 public slots:
   void prepareShutdown();
+  void bindBlockSinks();
   void setupExternalConnections();
   void syncFromProjectModel();
 
@@ -437,6 +438,7 @@ private:
   [[nodiscard]] bool republishFrames(bool feedExports);
   void wireDisplayTickHooks(Misc::TimerEvents& timers, IO::PipelineHost& pipeline);
   void wireAsyncSinkHooks(const AsyncSinks& sinks);
+  [[nodiscard]] AsyncSinks resolveAsyncSinks();
   [[nodiscard]] BlockPublisher::Sinks resolveBlockSinks(const AsyncSinks& sinks,
                                                         IO::PipelineHost& host);
   void refreshDatasetCaptureFlag();

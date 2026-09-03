@@ -115,16 +115,16 @@ void TstSimpleCrypt::wrongKeyDoesNotReturnThePlaintext()
  */
 void TstSimpleCrypt::tamperedCiphertextFailsTheIntegrityCheck()
 {
-  auto writer = makeCrypt(0x3333333333333333ULL);
-  auto cipher = writer.encryptToString(QStringLiteral("license-blob"));
+  auto writer       = makeCrypt(0x3333333333333333ULL);
+  const auto cipher = writer.encryptToString(QStringLiteral("license-blob"));
   QVERIFY(cipher.size() > 8);
 
-  const auto flipped =
-    cipher.at(cipher.size() - 2) == QLatin1Char('A') ? QLatin1Char('B') : QLatin1Char('A');
-  cipher.replace(cipher.size() - 2, 1, flipped);
+  auto raw = QByteArray::fromBase64(cipher.toLatin1());
+  QVERIFY(raw.size() > 8);
+  raw[raw.size() - 1] = static_cast<char>(raw.at(raw.size() - 1) ^ 0x40);
 
   auto reader    = makeCrypt(0x3333333333333333ULL);
-  const auto out = reader.decryptToString(cipher);
+  const auto out = reader.decryptToString(QString::fromLatin1(raw.toBase64()));
   QVERIFY(out != QStringLiteral("license-blob"));
   QVERIFY(reader.lastError() != Licensing::SimpleCrypt::ErrorNoError || out.isEmpty());
 }

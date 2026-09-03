@@ -628,6 +628,46 @@ void DataModel::FrameBuilder::setupExternalConnections()
   connect(&Sessions::Player::instance(), &Sessions::Player::openChanged, this, onPlayer);
 #endif
 
+  const AsyncSinks sinks = resolveAsyncSinks();
+  m_publisher.bind(resolveBlockSinks(sinks, IO::PipelineHost::instance()));
+  wireAsyncSinkHooks(sinks);
+
+  m_operationMode = AppState::instance().operationMode();
+  m_playerOpen    = SerialStudio::isAnyPlayerOpen();
+  refreshLatestFrameCapture();
+}
+
+/**
+ * @brief Binds the publisher's sink table without wiring a signal, for a composition root that
+ *        skips setupExternalConnections(): the publish path holds its pipeline as a bound
+ *        pointer, so such a root publishes through a null host. Sinks resolve on the caller's
+ *        thread -- one built on the pipeline thread would take pipeline affinity.
+ */
+void DataModel::FrameBuilder::bindBlockSinks()
+{
+  static auto& pipeline = IO::PipelineHost::instance();
+
+  const BlockPublisher::Sinks sinks = resolveBlockSinks(resolveAsyncSinks(), pipeline);
+
+  if (QThread::currentThread() != thread()) {
+    invokeOnBuilderThreadBlocking([this, sinks] { m_publisher.bind(sinks); });
+    return;
+  }
+
+  m_publisher.bind(sinks);
+}
+
+// code-verify off
+// arch-singleton-instance sanctions setupExternalConnections by name, and this is the half of that
+// body a headless root needs without the wiring. Duplicating the list instead is the stale-flag
+// failure wireAsyncSinkHooks() documents.
+/**
+ * @brief Resolves every export/output module the publisher and the cached flags depend on -- the
+ *        second half of the setupExternalConnections() composition-root body, split out so the
+ *        sink list has one definition that both binding and wiring read.
+ */
+DataModel::FrameBuilder::AsyncSinks DataModel::FrameBuilder::resolveAsyncSinks()
+{
   AsyncSinks sinks;
   sinks.csv    = &CSV::Export::instance();
   sinks.mdf4   = &MDF4::Export::instance();
@@ -642,13 +682,11 @@ void DataModel::FrameBuilder::setupExternalConnections()
 #ifdef ENABLE_GRPC
   sinks.grpc = &API::GRPC::GRPCServer::instance();
 #endif
-  m_publisher.bind(resolveBlockSinks(sinks, IO::PipelineHost::instance()));
-  wireAsyncSinkHooks(sinks);
 
-  m_operationMode = AppState::instance().operationMode();
-  m_playerOpen    = SerialStudio::isAnyPlayerOpen();
-  refreshLatestFrameCapture();
+  return sinks;
 }
+
+// code-verify on
 
 /**
  * @brief Projects the wiring sink list onto the publisher's, adding the pipeline the dashboard

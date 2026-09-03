@@ -83,7 +83,7 @@ env:
   #
   # Note: setting batch size to 0 results in a single TU with all sources
   #
-  SS_UNITY_BATCH: 0
+  SS_UNITY_BATCH: 32
 
   #
   # Test gating: every publication blocks on the live pytest suite. Setting this
@@ -2771,15 +2771,24 @@ jobs:
 
     #
     # The ctest tier ran on Linux only until spec 0075, so 100+ suites never compiled under
-    # clang-cl. Same lean Debug tier as the Linux jobs, on the toolchain that actually ships
-    # the Windows binary; the application target never builds here
+    # clang-cl, on the toolchain that actually ships the Windows binary; the application
+    # target never builds here.
+    #
+    # RelWithDebInfo, not the Debug the Linux and macOS jobs use: a Debug configure links
+    # /MDd, which defines _DEBUG and so raises _ITERATOR_DEBUG_LEVEL to 2, while the Qt
+    # binaries this job installs are the release MSVC build at level 0. QMap is std::map on
+    # the MS STL, so any QVariantMap built inside Qt6Core (QVariant::toMap,
+    # QJsonObject::toVariantMap) reaches the test with the level-0 node layout and the
+    # level-2 _Tree code in the test binary walks it into an access violation. Import
+    # libraries carry no detect_mismatch record, so the link succeeds and only the run
+    # fails.
     #
     - name: '🚧 Configure unit-test tier'
       run: |
         cmake -G Ninja -B build/unit-ci `
           -DCMAKE_CXX_COMPILER=clang-cl `
           -DCMAKE_C_COMPILER=clang-cl `
-          -DCMAKE_BUILD_TYPE=Debug `
+          -DCMAKE_BUILD_TYPE=RelWithDebInfo `
           -DSS_BUILD_TESTS=ON `
           -DBUILD_GPL3=ON `
           -DENABLE_GRPC=OFF `

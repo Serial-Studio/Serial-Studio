@@ -370,8 +370,8 @@ void CLI::scheduleExitAfter(QApplication& app)
 /**
  * @brief Runs the frame-extraction throughput benchmark and maps the result to an exit code.
  *        The benchmark exits before any ModuleManager is built, so it runs the pinned module
- *        order itself: without it every session subsystem the benchmark reaches would be
- *        constructed lazily, out of order, and unowned (spec 0039 M2).
+ *        order itself, sink bind included: instantiateCoreModules() constructs the modules but
+ *        binds nothing, and the publish path holds its pipeline as a pointer (spec 0039 M2).
  */
 CLI::ProcessResult CLI::runHotpathBenchmark()
 {
@@ -405,6 +405,8 @@ CLI::ProcessResult CLI::runHotpathBenchmark()
     output = m_parser.value(m_opts.benchmarkOutputOpt).trimmed();
 
   Misc::ModuleManager::instantiateCoreModules();
+  static auto& frameBuilder = DataModel::FrameBuilder::instance();
+  frameBuilder.bindBlockSinks();
 
   const int rc = Benchmark::HotpathBenchmark::runAndReport(frames, minFps, seconds, output);
   return rc == EXIT_SUCCESS ? ProcessResult::ExitSuccess : ProcessResult::ExitFailure;

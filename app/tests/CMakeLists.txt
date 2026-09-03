@@ -52,6 +52,31 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 endif()
 
 #---------------------------------------------------------------------------------------------------
+# UBSan vptr carve-out
+#---------------------------------------------------------------------------------------------------
+#
+# -fsanitize=vptr instruments every call through a polymorphic reference with a check that names
+# the class, so the object file ends up with a reference to `typeinfo for <class>`. That symbol
+# lives in the TU holding the class's key function, and this tier deliberately does not link those
+# TUs: session_context_stub.cpp supplies SessionContext::current() alone, because linking the real
+# SessionContext.cpp drags the dtor closure of all eight core modules (the tst_proto_importer trap
+# below). NotificationCenter.cpp calls a virtual on SessionContext, so tst_frame_delimiters failed
+# to link in the sanitizer tier -- in that tier only, on a suite that is green everywhere else.
+#
+# vptr is the one UBSan check a link-set carve-out cannot satisfy; every other check stays on, and
+# the application target keeps vptr too. Only the suites drop it.
+#
+#---------------------------------------------------------------------------------------------------
+
+function(ss_relax_vptr_sanitizer NAME)
+  if(NOT DEBUG_SANITIZER)
+    return()
+  endif()
+
+  target_compile_options(${NAME} PRIVATE -fno-sanitize=vptr)
+endfunction()
+
+#---------------------------------------------------------------------------------------------------
 # Suite registration helper
 #---------------------------------------------------------------------------------------------------
 #
@@ -89,6 +114,7 @@ function(ss_add_unit_test NAME)
 
   add_executable(${NAME} ${resolved_sources})
   target_link_libraries(${NAME} PRIVATE Qt6::Test ${SS_TEST_LIBS})
+  ss_relax_vptr_sanitizer(${NAME})
   add_test(NAME ${NAME} COMMAND ${NAME})
 
   list(APPEND SS_UNIT_TEST_TARGETS ${NAME})
@@ -157,6 +183,8 @@ function(ss_add_fuzz_target NAME)
     target_compile_definitions(${NAME} PRIVATE SS_FUZZ_CORPUS_DIR="${corpus_dir}")
     add_test(NAME ${NAME} COMMAND ${NAME})
   endif()
+
+  ss_relax_vptr_sanitizer(${NAME})
 
   list(APPEND SS_UNIT_TEST_TARGETS ${NAME})
   set(SS_UNIT_TEST_TARGETS "${SS_UNIT_TEST_TARGETS}" PARENT_SCOPE)
