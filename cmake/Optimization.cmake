@@ -361,15 +361,30 @@ endif()
 #---------------------------------------------------------------------------------------------------
 #
 # On non-MSVC x86-64 toolchains (GCC/Clang/AppleClang/IntelLLVM) an explicit -msse4.1 is added for
-# vectorized DSP/FFT work. MSVC and clang-cl are skipped: the x64 ABI already guarantees an SSE2
-# baseline and neither is handed an explicit SSE4.1 flag here. ARM SIMD (NEON) comes from the
-# -march flags in the production-optimization section above.
+# vectorized DSP/FFT work. ARM SIMD (NEON) comes from the -march flags in the
+# production-optimization section above.
+#
+# clang-cl needs the same flag through the /clang: passthrough. DSPSimd.h's kernels use SSSE3 and
+# SSE4.1 intrinsics on every x86-64 lane, and its file comment names the x86-64-v2 baseline as the
+# contract that makes them legal. cl.exe honours that unconditionally -- it exposes every intrinsic
+# regardless of flags -- but clang-cl rejects them as always_inline calls into a function compiled
+# without the target feature. Its only baseline flag used to live inside the production branch, so
+# a configure with PRODUCTION_OPTIMIZATION off had no SSE4.1 at all, and the Debug unit-test tier
+# failed to compile the DSP kernels the moment Windows started building it.
+#
+# Instruction availability only: no fast-math, no /fp:fast, so the bit-exact-per-lane invariant the
+# kernels are held to is untouched.
 #
 #---------------------------------------------------------------------------------------------------
 
-if(NOT MSVC AND CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64|AMD64)$")
-  message(STATUS "Enabling SSE4.1 optimizations")
-  add_compile_options(-msse4.1)
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64|AMD64)$")
+  if(NOT MSVC)
+    message(STATUS "Enabling SSE4.1 optimizations")
+    add_compile_options(-msse4.1)
+  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    message(STATUS "Enabling SSE4.1 optimizations (clang-cl)")
+    add_compile_options(/clang:-msse4.1)
+  endif()
 endif()
 
 #---------------------------------------------------------------------------------------------------

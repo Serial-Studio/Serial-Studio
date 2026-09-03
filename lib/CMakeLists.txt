@@ -409,7 +409,14 @@ if(SS_ENABLE_OPCUA AND (BUILD_COMMERCIAL OR SS_BUILD_TESTS))
   add_subdirectory(mbedtls)
   add_subdirectory(open62541)
 
-  foreach(_ss_mbed_target mbedtls mbedx509 mbedcrypto)
+  #
+  # everest and p256m are separate targets under mbedtls/3rdparty, so the three library targets
+  # alone left them on the app's warning set and their -Wundef reports (MBEDTLS_GCC_VERSION unset
+  # outside GCC) were the only third-party noise left in a clean build.
+  #
+  foreach(_ss_mbed_target
+          mbedtls mbedx509 mbedcrypto
+          ${MBEDTLS_TARGET_PREFIX}everest ${MBEDTLS_TARGET_PREFIX}p256m)
     if(TARGET ${_ss_mbed_target})
       if(MSVC)
         target_compile_options(${_ss_mbed_target} PRIVATE /w)

@@ -274,6 +274,7 @@ private:
   static constexpr std::size_t kCacheLine = 64;
 
   bool m_inApply;
+  bool m_exportRequested;
   bool m_savingToProjectModel;
   QString m_url;
   QString m_organization;

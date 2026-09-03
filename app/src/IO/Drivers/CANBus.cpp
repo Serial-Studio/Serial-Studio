@@ -926,6 +926,7 @@ void IO::Drivers::CANBus::publishReassembled(const quint32 can_id,
  * @brief Publishes one burst of bus frames as a single chunk carrying its frame count and spacing.
  *        One CapturedData per frame put up to 8k queued emissions per second on the GUI thread;
  *        the logicalFramesHint/frameStep pair is what lets the batch keep per-frame times.
+ *        The gap count casts to nanoseconds::rep, long on libstdc++, since qsizetype is long long.
  */
 void IO::Drivers::CANBus::flushFrameBatch()
 {
@@ -936,7 +937,8 @@ void IO::Drivers::CANBus::flushFrameBatch()
   if (m_batchedFrames > 1) {
     const auto span =
       std::chrono::duration_cast<std::chrono::nanoseconds>(m_batchLastStamp - m_batchFirstStamp);
-    step = std::max(std::chrono::nanoseconds(1), span / (m_batchedFrames - 1));
+    const auto gaps = static_cast<std::chrono::nanoseconds::rep>(m_batchedFrames - 1);
+    step            = std::max(std::chrono::nanoseconds(1), span / gaps);
   }
 
   const qsizetype frames = m_batchedFrames;

@@ -19,6 +19,7 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 - Multi-device projects (several data sources in one dashboard).
 - MDF4 file export and playback.
 - Historian recording, browsing, and PDF reports.
+- InfluxDB 2.x export of live samples to a time-series bucket.
 - File transfers over XMODEM, YMODEM, and ZMODEM.
 - In-app AI Assistant (bring your own API key).
 - Official binaries under proprietary license terms, with no copyleft obligations.
@@ -77,6 +78,7 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 | | MDF4 (MF4) Export | ❌ | ✅ |
 | | MDF4 Playback | ❌ | ✅ |
 | | Historian (SQLite recording + reports) | ❌ | ✅ |
+| | InfluxDB 2.x export | ❌ | ✅ |
 | **Dashboard Features** | | | |
 | | Real-time 60 FPS Updates | ✅ | ✅ |
 | | Multi-window Support | ✅ | ✅ |
@@ -399,6 +401,14 @@ signal debugging.
 **How it works:** The Historian browses, tags, and exports stored sessions. The SQLite Player replays a recorded session through the live pipeline, so dashboards behave identically on recorded data. Session Reports turn the same database into a styled PDF with charts.
 
 **Learn more:** [Historian](Session-Database.md) | [Session Reports](Session-Reports.md)
+
+### InfluxDB export
+
+**What it is:** A sink that writes every parsed sample into an InfluxDB 2.x bucket over the database's HTTP write API, while the capture runs.
+
+**How it works:** The InfluxDB Sink node in the Project Editor holds the server URL, organization, bucket and measurement; the API token goes to the machine's credential vault rather than the project file. Samples are rendered as line protocol with the block's own nanosecond timestamps and POSTed from a worker thread, so a slow server never blocks acquisition.
+
+**Learn more:** [InfluxDB Export](InfluxDB.md)
 
 ### File Transmission
 

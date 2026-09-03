@@ -125,3 +125,46 @@ if(ENABLE_FUZZERS)
    )
    message(STATUS "libFuzzer instrumentation ENABLED (-fsanitize=fuzzer-no-link)")
 endif()
+
+#---------------------------------------------------------------------------------------------------
+# Build-time host tools: opt out of sanitizer instrumentation
+#---------------------------------------------------------------------------------------------------
+#
+# Sanitizer flags are added at directory scope, so every target in the tree inherits them --
+# including the code generators that are built AND executed during the build (LuaJIT's minilua and
+# buildvm). Instrumenting those is worse than pointless:
+#
+#   - minilua is stock Lua 5.1, whose table lookup casts a double key to int unconditionally.
+#     DynASM feeds it 0x100000000, UBSan reports float-cast-overflow, and UBSAN_OPTIONS
+#     halt_on_error=1 aborts the generator -- so buildvm_arch.h is never written and the build
+#     stops at exit 134 before a single Serial Studio translation unit is compiled.
+#   - A finding in a vendored bootstrap interpreter says nothing about this codebase, which is
+#     what the sanitizer tier exists to inspect.
+#
+# Surgical by design: the exclusion names two host targets, and the app, the suites and the fuzz
+# entry points stay fully instrumented. Blanket-disabling the failing check instead
+# (-fno-sanitize=float-cast-overflow) would also blind every numeric conversion in the parse
+# pipeline, which is precisely where the tier is supposed to look.
+#
+# CMake initializes a target's COMPILE_OPTIONS / LINK_OPTIONS from the directory properties at
+# target-creation time, so the flags can be filtered back out per target afterwards -- the same
+# mechanism ss_exclude_from_pgo() relies on.
+#
+#---------------------------------------------------------------------------------------------------
+
+function(ss_exclude_from_sanitizers)
+   foreach(target ${ARGN})
+      if(NOT TARGET ${target})
+         message(WARNING "ss_exclude_from_sanitizers: no such target: ${target}")
+         continue()
+      endif()
+
+      foreach(property COMPILE_OPTIONS LINK_OPTIONS)
+         get_target_property(options ${target} ${property})
+         if(options)
+            list(FILTER options EXCLUDE REGEX "sanitize")
+            set_target_properties(${target} PROPERTIES ${property} "${options}")
+         endif()
+      endforeach()
+   endforeach()
+endfunction()

@@ -26,6 +26,7 @@ OfflineLicense transitions are ctor-forwarded).
 | `Sessions/Export.cpp:785` | per-operation guard | sample | — |
 | `Sessions/Export.cpp:608` | re-derive on activation | **bakes** | wired in place |
 | `MQTT/Publisher.cpp:2106` | `licenseValid()` per publish path call | sample | — |
+| `InfluxDB/Export.cpp:940` | `licenseValid()` per enable | **bakes** (sink enable) | wired in place; the hook REPLAYS the recorded request, it does not only disable — the sink's enable comes from the project, so a trial token installed after `restoreLastProject()` must still switch it on |
 | `API/Handlers/LicensingHandler.cpp:265` | status query per call | sample | — |
 
 Indirect consumers reaching the token through `SerialStudio::activated()` /

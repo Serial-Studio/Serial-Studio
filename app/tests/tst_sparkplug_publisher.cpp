@@ -494,7 +494,7 @@ void TstSparkplugPublisher::twoSourcesGetDistinctStableAliases()
   node.registerMetric(kSourceB, 21, QStringLiteral("Pressure"), code(DataType::Double), 1);
   QCOMPARE(node.metricCount(), 3);
 
-  node.beginConnection(1000);
+  (void)node.beginConnection(1000);
   const auto birth = decoded(node.birthMessages(1000).constFirst());
   node.commitBirth();
   QCOMPARE(metricNamed(birth, "Temp").alias, quint64(1));
@@ -535,8 +535,8 @@ void TstSparkplugPublisher::restructuringOneSourceKeepsTheOther()
   node.registerMetric(kSourceA, 11, QStringLiteral("Temp"), code(DataType::Double), 1);
   node.registerMetric(kSourceB, 21, QStringLiteral("Pressure"), code(DataType::Double), 1);
 
-  node.beginConnection(1000);
-  node.birthMessages(1000);
+  (void)node.beginConnection(1000);
+  (void)node.birthMessages(1000);
   node.commitBirth();
   QVERIFY(!node.needsRebirth());
 
@@ -566,7 +566,7 @@ void TstSparkplugPublisher::singleSourceMatchesTheLegacyWire()
   node.registerMetric(0, 22, QStringLiteral("Sensors/State"), code(DataType::String), 1);
   node.registerMetric(0, 33, QStringLiteral("Sensors/Valve"), code(DataType::Boolean), 1);
 
-  node.beginConnection(1000);
+  (void)node.beginConnection(1000);
   const auto birth = decoded(node.birthMessages(1700000000000ULL).constFirst());
   node.commitBirth();
 
@@ -601,8 +601,8 @@ void TstSparkplugPublisher::aSwapDropsTheDepartedSource()
   node.registerMetric(kSourceA, 12, QStringLiteral("Humidity"), code(DataType::Double), 1);
   QCOMPARE(node.metricCount(), 2);
 
-  node.beginConnection(1000);
-  node.birthMessages(1000);
+  (void)node.beginConnection(1000);
+  (void)node.birthMessages(1000);
   node.commitBirth();
 
   node.setLiveGeneration(2);
@@ -655,7 +655,7 @@ void TstSparkplugPublisher::oneDeviceCarriesEverySource()
   node.registerMetric(kSourceA, 11, QStringLiteral("Temp"), code(DataType::Double), 1);
   node.registerMetric(kSourceB, 21, QStringLiteral("Pressure"), code(DataType::Double), 1);
 
-  node.beginConnection(1000);
+  (void)node.beginConnection(1000);
   const auto birth = node.birthMessages(1000);
   node.commitBirth();
   QCOMPARE(birth.size(), qsizetype(2));
@@ -680,7 +680,7 @@ void TstSparkplugPublisher::collidingTitlesAreSourceQualified()
   node.registerMetric(kSourceB, 21, QStringLiteral("Temperature"), code(DataType::Double), 1);
   node.registerMetric(kSourceB, 22, QStringLiteral("Pressure"), code(DataType::Double), 1);
 
-  node.beginConnection(1000);
+  (void)node.beginConnection(1000);
   const auto birth = decoded(node.birthMessages(1000).constFirst());
   node.commitBirth();
 

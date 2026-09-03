@@ -508,13 +508,16 @@ qint64 InfluxDB::ExportWorker::epochNs(const DataModel::DataBlock& block, qsizet
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Constructs the sink controller and arms the late-activation guard: a build whose licence
- *        is revoked (or was never valid) must stop writing without waiting for a project reload.
+ * @brief Constructs the sink controller and arms the late-activation guard, which re-derives the
+ *        enabled flag from the project on every entitlement transition. It runs both ways: a
+ *        revoked licence stops writing without a project reload, and a trial token that lands
+ *        after the project loaded switches a sink the project asked for back on.
  */
 InfluxDB::Export::Export()
   : DataModel::FrameConsumer<DataModel::DataBlockPtr>(
       DataModel::FrameConsumerConfig{8192, 1024, 1000})
   , m_inApply(false)
+  , m_exportRequested(false)
   , m_savingToProjectModel(false)
   , m_measurement(kInfluxDefaultMeasurement)
   , m_vault(kInfluxVaultScope)
@@ -540,8 +543,7 @@ InfluxDB::Export::Export()
 
   static auto& lemonSqueezy = Licensing::LemonSqueezy::instance();
   connect(&lemonSqueezy, &Licensing::LemonSqueezy::activatedChanged, this, [this] {
-    if (exportEnabled() && !licenseValid())
-      setExportEnabled(false);
+    setExportEnabled(m_exportRequested);
   });
 }
 
@@ -750,10 +752,14 @@ void InfluxDB::Export::resetProjectConfig()
 
 /**
  * @brief Enables or disables the sink. Licensing is re-checked here, not cached at load time, so
- *        a project that ships with the sink on cannot turn it on in an unlicensed build.
+ *        a project that ships with the sink on cannot turn it on in an unlicensed build. The
+ *        request is recorded before the licence AND so the entitlement hook can replay it: a
+ *        trial or activation arriving after the project loaded then honours what was asked for.
  */
 void InfluxDB::Export::setExportEnabled(const bool enabled)
 {
+  m_exportRequested = enabled;
+
   const bool allow = enabled && licenseValid();
   if (m_exportEnabled.load(std::memory_order_relaxed) == allow)
     return;

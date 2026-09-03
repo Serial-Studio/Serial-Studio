@@ -282,6 +282,12 @@
   "file": "Session-Reports.md"
  },
  {
+  "id": "influxdb",
+  "title": "InfluxDB Export",
+  "section": "Data Management",
+  "file": "InfluxDB.md"
+ },
+ {
   "id": "backup-recovery",
   "title": "Backups & Recovery",
   "section": "Data Management",

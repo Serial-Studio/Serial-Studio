@@ -153,6 +153,7 @@ if(NOT MSVC)
 endif()
 set_target_properties(luajit-minilua PROPERTIES INTERPROCEDURAL_OPTIMIZATION FALSE)
 ss_exclude_from_pgo(luajit-minilua)
+ss_exclude_from_sanitizers(luajit-minilua)
 
 add_custom_command(
   OUTPUT "${LJ_GEN}/buildvm_arch.h"
@@ -186,6 +187,7 @@ target_include_directories(luajit-buildvm PRIVATE
 target_compile_definitions(luajit-buildvm PRIVATE ${LJ_BUILDVM_DEFS})
 set_target_properties(luajit-buildvm PROPERTIES INTERPROCEDURAL_OPTIMIZATION FALSE)
 ss_exclude_from_pgo(luajit-buildvm)
+ss_exclude_from_sanitizers(luajit-buildvm)
 
 #---------------------------------------------------------------------------------------------------
 # Stage 2 — generated VM + tables
