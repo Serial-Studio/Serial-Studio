@@ -983,9 +983,14 @@ API::CommandResponse API::Handlers::AssistantHandler::listCheckpoints(const QStr
   return CommandResponse::makeSuccess(id, result);
 }
 
+#ifdef BUILD_COMMERCIAL
 /**
  * @brief Queue a memory proposal for user confirmation; deliberately side-effect-free --
  *        nothing persists unless the user clicks the confirmation chip in the chat.
+ *
+ *        Commercial-only: AI::MemoryStore lives in src/AI/, which is only compiled when
+ *        BUILD_COMMERCIAL=ON. Referencing it from an unconditional translation unit
+ *        breaks the link in GPL3-only builds (BUILD_GPL3=ON forces BUILD_COMMERCIAL=OFF).
  */
 API::CommandResponse API::Handlers::AssistantHandler::memoryPropose(const QString& id,
                                                                     const QJsonObject& params)
@@ -1013,6 +1018,7 @@ API::CommandResponse API::Handlers::AssistantHandler::memoryPropose(const QStrin
     QStringLiteral("Proposal shown to the user for confirmation; nothing has been stored.");
   return CommandResponse::makeSuccess(id, result);
 }
+#endif
 
 //--------------------------------------------------------------------------------------------------
 // Registration
@@ -1295,8 +1301,12 @@ void API::Handlers::AssistantHandler::registerCheckpointCommands()
     &API::Handlers::AssistantHandler::projectBulkApply);
 }
 
+#ifdef BUILD_COMMERCIAL
 /**
- * @brief Register the consent-gated memory-proposal command.
+ * @brief Register the consent-gated memory-proposal command (Commercial).
+ *
+ *        Guarded together with memoryPropose(): the handler itself depends on
+ *        AI::MemoryStore, which only exists in commercial builds.
  */
 void API::Handlers::AssistantHandler::registerMemoryCommands()
 {
@@ -1321,6 +1331,7 @@ void API::Handlers::AssistantHandler::registerMemoryCommands()
       {}),
     &API::Handlers::AssistantHandler::memoryPropose);
 }
+#endif
 
 /**
  * @brief Wire every assistant.* command into CommandRegistry.
@@ -1330,5 +1341,7 @@ void API::Handlers::AssistantHandler::registerCommands()
   registerResolverCommands();
   registerEditCommands();
   registerCheckpointCommands();
+#ifdef BUILD_COMMERCIAL
   registerMemoryCommands();
+#endif
 }
