@@ -74,8 +74,9 @@ SerialStudio::XAxisMode SerialStudio::groupXAxisMode(const DataModel::Group& g)
 }
 
 /**
- * @brief Resolves a dataset's X-axis policy: Time for the time sentinel, Dataset when a licensed
- * dataset X source resolves against the live map, else Samples (the unlicensed/unresolved degrade).
+ * @brief Resolves a dataset's X-axis policy: Time for the time sentinel, Dataset when the X source
+ * resolves against the live map, else Samples. No license tier gates this mode; an xAxisId that no
+ * longer names a live dataset is the only path to the Samples degrade.
  */
 SerialStudio::XAxisPolicy SerialStudio::resolveXAxisPolicy(
   const DataModel::Dataset& d, const QMap<int, DataModel::Dataset>& datasets)

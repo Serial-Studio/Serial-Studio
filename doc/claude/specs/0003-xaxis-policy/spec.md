@@ -230,6 +230,13 @@ mode-specialized at configure time. The three-way render branch (sweep-ring / ti
 sample-ring) is irreducible because the data sources differ; unification means one predicate
 decides which arm runs.
 
+> **Amendment (2026-09-03): the licensing paragraph below was never implemented and is now
+> withdrawn.** `datasetXAxisEnabled()` was never written, no `activated()` check ever reached the
+> plot X-axis path, and `SerialStudio::commercialCfg()` never listed `xAxisId`. Dataset-vs-dataset
+> X-axis is a free feature; the maintainer confirmed the tier rather than wiring the gate, because
+> the shipped help manual has always described it untiered and the bundled LorenzAttractor example
+> depends on it. Read the paragraph as design history, not as the current tier.
+
 **Licensing** collapses to `SerialStudio::datasetXAxisEnabled()`, mirroring the
 `activated()` / `proWidgetsEnabled()` precedent (`SerialStudio.cpp:44-68`). The
 `#ifdef BUILD_COMMERCIAL` internals are

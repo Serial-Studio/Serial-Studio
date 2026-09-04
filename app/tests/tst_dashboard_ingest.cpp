@@ -116,6 +116,12 @@ struct Stores {
   QVector<DSP::AxisData> fftValues;
   QVector<DSP::LineSeries> pltValues;
   QVector<DSP::MultiLineSeries> multipltValues;
+#ifdef BUILD_COMMERCIAL
+  QMap<int, bool> activeWaterfalls;
+  QVector<DSP::AxisData> waterfallValues;
+  QVector<DSP::FixedQueue<QVector3D>> plot3DRings;
+  QVector<DSP::LineSeries3D> plotData3D;
+#endif
   QMap<int, DataModel::Dataset> datasets;
   QMap<int, UI::DatasetExtremes> datasetExtremes;
   QHash<int, std::vector<UI::ValuePush>> valuePushes;
@@ -149,14 +155,20 @@ struct Stores {
                               .fftValues             = fftValues,
                               .pltValues             = pltValues,
                               .multipltValues        = multipltValues,
-                              .datasets              = datasets,
-                              .datasetExtremes       = datasetExtremes,
-                              .valuePushes           = valuePushes,
-                              .extremePushes         = extremePushes,
-                              .widgetGroups          = widgetGroups,
-                              .widgetDatasets        = widgetDatasets,
-                              .sourceRawFrames       = sourceRawFrames,
-                              .sourceStructureGen    = sourceStructureGen};
+#ifdef BUILD_COMMERCIAL
+                              .activeWaterfalls = activeWaterfalls,
+                              .waterfallValues  = waterfallValues,
+                              .plot3DRings      = plot3DRings,
+                              .plotData3D       = plotData3D,
+#endif
+                              .datasets           = datasets,
+                              .datasetExtremes    = datasetExtremes,
+                              .valuePushes        = valuePushes,
+                              .extremePushes      = extremePushes,
+                              .widgetGroups       = widgetGroups,
+                              .widgetDatasets     = widgetDatasets,
+                              .sourceRawFrames    = sourceRawFrames,
+                              .sourceStructureGen = sourceStructureGen};
   }
 };
 
@@ -175,6 +187,12 @@ public:
   void configureLineSeries() override { ++reconfigures; }
 
   void configureMultiLineSeries() override { ++reconfigures; }
+
+#ifdef BUILD_COMMERCIAL
+  void configurePlot3DSeries() override { ++reconfigures; }
+
+  void configureWaterfallSeries() override { ++reconfigures; }
+#endif
 
   void handleMissingDataset(const DataModel::Frame&) override { ++missingDatasets; }
 

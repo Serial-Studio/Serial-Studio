@@ -116,11 +116,14 @@ if(ENABLE_HARDENING)
 
       # The directory-level floor, inherited by every target including lib/. Targets that call
       # serial_studio_harden() append their own ordered pair after this one and win, so a target
-      # opting in is never left on the floor level; see _ss_apply_fortify below.
+      # opting in is never left on the floor level; see _ss_apply_fortify below. SHELL: keeps the
+      # pair atomic: CMake de-duplicates compile options, so a bare -U_FORTIFY_SOURCE here and the
+      # identical token in the per-target pair collapse into one, leaving both -D levels on the
+      # line with no -U between them -- GCC then warns "_FORTIFY_SOURCE redefined" on every TU.
       if(PRODUCTION_OPTIMIZATION OR CMAKE_BUILD_TYPE STREQUAL "Release")
-         add_compile_options(-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2)
+         add_compile_options("SHELL:-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2")
       elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
-         add_compile_options(-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2)
+         add_compile_options("SHELL:-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2")
       else()
          message(WARNING "FORTIFY_SOURCE disabled: requires optimization flags (-O1 or higher)")
       endif()
@@ -243,6 +246,11 @@ endfunction()
 # own -U, and target options are appended after the directory-level ones, so this pair is the
 # last FORTIFY token the compiler sees.
 #
+# SHELL: is what keeps the two tokens together. Without it CMake de-duplicates -U_FORTIFY_SOURCE
+# against the identical directory-level token and drops this one, leaving -D_FORTIFY_SOURCE=2 and
+# -D_FORTIFY_SOURCE=3 on the same line with nothing cancelling the first: the level still ends up
+# correct, but GCC warns "_FORTIFY_SOURCE redefined" on every translation unit.
+#
 #---------------------------------------------------------------------------------------------------
 
 function(_ss_apply_fortify _tgt)
@@ -257,7 +265,7 @@ function(_ss_apply_fortify _tgt)
     set(_level 3)
   endif()
 
-  target_compile_options(${_tgt} PRIVATE -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=${_level})
+  target_compile_options(${_tgt} PRIVATE "SHELL:-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=${_level}")
   message(STATUS "${_tgt}: _FORTIFY_SOURCE=${_level}")
 endfunction()
 

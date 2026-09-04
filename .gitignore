@@ -26,6 +26,7 @@
 .code-report
 .doc-report
 .claim-report
+.osv-report
 /TODO.md
 /findings.md
 

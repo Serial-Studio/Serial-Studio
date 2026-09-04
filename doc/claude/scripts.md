@@ -13,6 +13,7 @@ to run from any directory.
 | `registry-verify.py` | Spec-0028/0036 registry lint: icon tree + command manifests + commercial-guard scan of `app/qml/Commands/` + QML icon render-size + property-manifest rules. Run after touching icons, manifests, or bindings; gated in `sanitize-commit.py`. |
 | `generate-command-strings.py` | Manifests -> `app/src/UI/CommandStrings.cpp` (lupdate stub, "Commands" context). Hooked into sanitize-commit; `--check` gates drift. |
 | `generate-legacy-icons.py` | icon-map.csv -> `Misc::legacyIconPath()` table mapping pre-0028 icon URLs persisted in user project files. Rerun only if the migration manifest changes. |
+| `osv-scan.py` | Supply-chain gate over the vendored trees in [`lib/VERSIONS.json`](../../lib/VERSIONS.json). Two legs: `version-drift` (OSV's `determineversion` hashes the tree and compares the result to the declared version -- blocking) and `upstream-lag` (newest upstream GitHub release vs the declared one -- advisory, `--strict` promotes it). Writes `.osv-report`; `--accept` re-seeds `scripts/osv-baseline.json`. Exit 2 means the check could not run, which is a failure and not a pass. Not run by `sanitize-commit.py`: it needs the network, and the answer changes without a commit. `.github/workflows/supply-chain.yml` runs it weekly and on any PR touching `lib/`. |
 
 Suppression: wrap a region in `// code-verify off` / `// code-verify on` (C++ and QML);
 `<!-- doc-verify off -->` / `<!-- doc-verify on -->` (Markdown);
@@ -32,7 +33,10 @@ are invisible to a per-file linter because each file passes on its own) and `cla
 
 Vendored provenance lives in [`lib/VERSIONS.json`](../../lib/VERSIONS.json): upstream project,
 release or commit, and the file inside each tree that asserts it. Update it in the same commit
-that bumps a tree.
+that bumps a tree. `osv-scan.py` is what keeps that file honest, and `osv-scanner` itself is
+deliberately not pointed at `lib/`: OSV has no upstream version index for these C libraries, so
+querying it by name and version returns distro package records whose ranges say nothing about an
+upstream tree. The measurements behind that are in the script's module docstring.
 
-`.code-report`, `.doc-report` and `.claim-report` are the cleanup checklists. If a rule appears as advisory,
+`.code-report`, `.doc-report`, `.claim-report` and `.osv-report` are the cleanup checklists. If a rule appears as advisory,
 that means the existing codebase has baseline debt — new code should still clear it.

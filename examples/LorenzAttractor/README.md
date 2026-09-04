@@ -49,7 +49,7 @@ Because the loop free-runs (the worker re-arms it about once per millisecond), t
 
 - **Self-contained.** No Python, no external process, no real data source.
 - **Real-time visualization.** Watch the Lorenz attractor's chaotic motion as it happens.
-- **Custom X-axis.** Use Serial Studio's project editor to pick any dataset as the X-axis source (Pro feature; license or free trial).
+- **Custom X-axis.** Use Serial Studio's project editor to pick any dataset as the X-axis source.
 - **Dynamic visualization.** Plot $x$, $y$, and $z$ on 2D or 3D graphs.
 
 ## Requirements
@@ -70,7 +70,7 @@ Here is how the project editor should look:
 
 ### Custom X-axis example
 
-Serial Studio's custom X-axis feature lets you map any dataset to serve as the X-axis source for plots. Dataset-vs-dataset X-axis selection requires a Pro license; without one the axis falls back to Samples and the cross-referenced attractor trace shown in the screenshot will not render. It is particularly useful for:
+Serial Studio's custom X-axis feature lets you map any dataset to serve as the X-axis source for plots. If the selected X source no longer names a live dataset the axis falls back to Samples, and the cross-referenced attractor trace shown in the screenshot will not render. It is particularly useful for:
 
 - Plotting values against elapsed time or packet numbers.
 - Advanced visualizations like the Lorenz attractor.

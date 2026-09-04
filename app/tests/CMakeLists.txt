@@ -52,6 +52,40 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 endif()
 
 #---------------------------------------------------------------------------------------------------
+# Pro-configure carve-outs
+#---------------------------------------------------------------------------------------------------
+#
+# BUILD_COMMERCIAL is a global add_compile_definitions(), so a Pro configure of this tier compiles
+# every #ifdef BUILD_COMMERCIAL branch in the production TUs a suite links -- which is the whole
+# point of the sanitizer legs building Pro. Those branches reach two symbols no link set carried,
+# because until then the tier had only ever been configured GPL:
+#
+#   SS_LICENSING_SRC   CommercialToken::current()/isValid()/featureTier(), reached from the
+#                      isProTierActive() helpers in NotificationCenter.cpp and Translator.cpp. That
+#                      TU is small and QtCore-only, so the real thing links; SS_LICENSE_GUARD is a
+#                      generated-header macro and needs nothing at link time.
+#
+#   SS_MQTT_STUB_SRC   MQTT::Publisher, reached from TableApiBridge::mqttPublish() in DataTable.cpp.
+#                      Stubbed, not linked: Publisher.cpp pulls FrameBuilder and ProjectModel in.
+#
+# Both are empty in a GPL configure, where the branches do not compile and the files may not even
+# ship in the source tarball -- ss_add_unit_test() fails the configure on a source that is not on
+# disk, so an unconditional entry would break the GPL build outright.
+#
+#---------------------------------------------------------------------------------------------------
+
+set(SS_LICENSING_SRC "")
+set(SS_MQTT_STUB_SRC "")
+set(SS_MQTT_LIBS "")
+
+if(BUILD_COMMERCIAL)
+  find_package(Qt6 REQUIRED COMPONENTS Mqtt Network)
+  set(SS_LICENSING_SRC "${SS_APP_SRC}/Licensing/CommercialToken.cpp")
+  set(SS_MQTT_STUB_SRC "${CMAKE_CURRENT_SOURCE_DIR}/mqtt_publisher_stub.cpp")
+  set(SS_MQTT_LIBS Qt6::Mqtt Qt6::Network)
+endif()
+
+#---------------------------------------------------------------------------------------------------
 # UBSan vptr carve-out
 #---------------------------------------------------------------------------------------------------
 #
@@ -352,6 +386,7 @@ ss_add_unit_test(tst_frame_delimiters
           ${SS_APP_SRC}/DataModel/NotificationCenter.cpp
           ${SS_APP_SRC}/Platform/AppPlatform.cpp
           ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_LICENSING_SRC}
   LIBS    Qt6::Core
           Qt6::Gui
           Qt6::Qml
@@ -468,6 +503,7 @@ ss_add_unit_test(tst_console_annotations
           ${SS_APP_SRC}/Misc/Translator.cpp
           ${SS_APP_SRC}/Misc/LanguageTable.cpp
           ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_LICENSING_SRC}
   LIBS    Qt6::Core
           Qt6::Gui
           Qt6::Qml
@@ -1190,6 +1226,7 @@ ss_add_unit_test(tst_frame_reader_modes
           ${SS_APP_SRC}/DataModel/NotificationCenter.cpp
           ${SS_APP_SRC}/Platform/AppPlatform.cpp
           ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_LICENSING_SRC}
   LIBS    Qt6::Core
           Qt6::Gui
           Qt6::Qml
@@ -1639,6 +1676,7 @@ ss_add_unit_test(tst_language_table
   SOURCES tst_language_table.cpp
           ${SS_APP_SRC}/Misc/LanguageTable.cpp
           ${SS_APP_SRC}/Misc/Translator.cpp
+          ${SS_LICENSING_SRC}
   LIBS    Qt6::Core
           Qt6::Widgets
 )
@@ -1880,7 +1918,8 @@ ss_add_unit_test(tst_table_snapshot_channel
           ${SS_APP_SRC}/DataModel/Project/PropertyValidators.cpp
           ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
           ${SS_APP_SRC}/SSAssert.cpp
-  LIBS    Qt6::Core Qt6::Core5Compat Qt6::Gui Qt6::Qml
+          ${SS_MQTT_STUB_SRC}
+  LIBS    Qt6::Core Qt6::Core5Compat Qt6::Gui Qt6::Qml ${SS_MQTT_LIBS}
 )
 
 #

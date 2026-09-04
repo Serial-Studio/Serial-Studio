@@ -1,0 +1,26 @@
+{
+  "purpose": "Vendored-tree findings that have been judged and are being carried on purpose. The gate fails on any finding NOT listed here, so new drift blocks immediately while this backlog is worked down.",
+  "regenerate": "python3 scripts/osv-scan.py --accept",
+  "accepted": [
+    {
+      "key": "lib/hidapi::upstream-lag",
+      "kind": "upstream-lag",
+      "detail": "vendored 0.14.0, upstream released hidapi-0.15.0"
+    },
+    {
+      "key": "lib/KissFFT::upstream-lag",
+      "kind": "upstream-lag",
+      "detail": "vendored 131.1.0, upstream released 131.2.0"
+    },
+    {
+      "key": "lib/libplctag::upstream-lag",
+      "kind": "upstream-lag",
+      "detail": "vendored 2.6.0, upstream released v2.7.1"
+    },
+    {
+      "key": "lib/mbedtls::upstream-lag",
+      "kind": "upstream-lag",
+      "detail": "vendored 3.6.7, upstream released mbedtls-4.2.0"
+    }
+  ]
+}

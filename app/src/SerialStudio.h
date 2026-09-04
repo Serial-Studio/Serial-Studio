@@ -301,8 +301,8 @@ public:
    */
   enum class XAxisMode : quint8 {
     Time    = 0,  ///< Plot against the source time base
-    Samples = 1,  ///< Plot against the running sample index (free)
-    Dataset = 2,  ///< Plot against another dataset's value (Pro)
+    Samples = 1,  ///< Plot against the running sample index
+    Dataset = 2,  ///< Plot against another dataset's value
   };
 
   /**

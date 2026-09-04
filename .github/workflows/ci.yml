@@ -193,13 +193,27 @@ jobs:
           
     #
     # gRPC arrives as a prebuilt tarball from GRPC_REPO; building it from source would cost more
-    # than the rest of the job put together
+    # than the rest of the job put together.
+    #
+    # Retried: the release-asset endpoint answers HTTP 500 often enough to redden a run on its own
+    # (2026-09-03, Linux arm64), and a single failed GET here costs the whole job. --clobber so a
+    # partial download from the previous attempt does not make the retry fail on an existing file.
     #
     - name: '⚙️ Download prebuilt gRPC'
       run: |
-        gh release download v${{env.GRPC_VERSION}} \
-          -R ${{env.GRPC_REPO}} \
-          -p "grpc-${{env.GRPC_VERSION}}-linux-x86_64.tar.gz"
+        for attempt in 1 2 3 4 5; do
+          if gh release download v${{env.GRPC_VERSION}} \
+               -R ${{env.GRPC_REPO}} \
+               -p "grpc-${{env.GRPC_VERSION}}-linux-x86_64.tar.gz" \
+               --clobber; then
+            break
+          fi
+          if [ "$attempt" -eq 5 ]; then
+            echo "::error::gh release download failed after $attempt attempts"
+            exit 1
+          fi
+          sleep $((attempt * 15))
+        done
         mkdir -p ${{github.workspace}}/grpc-prefix
         tar -xzf grpc-${{env.GRPC_VERSION}}-linux-x86_64.tar.gz -C ${{github.workspace}}/grpc-prefix
       env:
@@ -1212,13 +1226,27 @@ jobs:
           
     #
     # gRPC arrives as a prebuilt tarball from GRPC_REPO; building it from source would cost more
-    # than the rest of the job put together
+    # than the rest of the job put together.
+    #
+    # Retried: the release-asset endpoint answers HTTP 500 often enough to redden a run on its own
+    # (2026-09-03, Linux arm64), and a single failed GET here costs the whole job. --clobber so a
+    # partial download from the previous attempt does not make the retry fail on an existing file.
     #
     - name: '⚙️ Download prebuilt gRPC'
       run: |
-        gh release download v${{env.GRPC_VERSION}} \
-          -R ${{env.GRPC_REPO}} \
-          -p "grpc-${{env.GRPC_VERSION}}-linux-aarch64.tar.gz"
+        for attempt in 1 2 3 4 5; do
+          if gh release download v${{env.GRPC_VERSION}} \
+               -R ${{env.GRPC_REPO}} \
+               -p "grpc-${{env.GRPC_VERSION}}-linux-aarch64.tar.gz" \
+               --clobber; then
+            break
+          fi
+          if [ "$attempt" -eq 5 ]; then
+            echo "::error::gh release download failed after $attempt attempts"
+            exit 1
+          fi
+          sleep $((attempt * 15))
+        done
         mkdir -p ${{github.workspace}}/grpc-prefix
         tar -xzf grpc-${{env.GRPC_VERSION}}-linux-aarch64.tar.gz -C ${{github.workspace}}/grpc-prefix
       env:
@@ -2014,13 +2042,24 @@ jobs:
         submodules: 'recursive'
 
     #
-    # One universal tarball feeds both macOS slices, so the arm64 and x86_64 jobs stay in sync
+    # One universal tarball feeds both macOS slices, so the arm64 and x86_64 jobs stay in sync.
+    # Retried for the same reason as the Linux legs; see the x86_64 job.
     #
     - name: '⚙️ Download prebuilt gRPC (universal)'
       run: |
-        gh release download v${{env.GRPC_VERSION}} \
-          -R ${{env.GRPC_REPO}} \
-          -p "grpc-${{env.GRPC_VERSION}}-macos-universal.tar.gz"
+        for attempt in 1 2 3 4 5; do
+          if gh release download v${{env.GRPC_VERSION}} \
+               -R ${{env.GRPC_REPO}} \
+               -p "grpc-${{env.GRPC_VERSION}}-macos-universal.tar.gz" \
+               --clobber; then
+            break
+          fi
+          if [ "$attempt" -eq 5 ]; then
+            echo "::error::gh release download failed after $attempt attempts"
+            exit 1
+          fi
+          sleep $((attempt * 15))
+        done
         mkdir -p ${{github.workspace}}/grpc-prefix
         tar -xzf grpc-${{env.GRPC_VERSION}}-macos-universal.tar.gz -C ${{github.workspace}}/grpc-prefix
       env:
@@ -2307,13 +2346,24 @@ jobs:
         submodules: 'recursive'
 
     #
-    # One universal tarball feeds both macOS slices, so the arm64 and x86_64 jobs stay in sync
+    # One universal tarball feeds both macOS slices, so the arm64 and x86_64 jobs stay in sync.
+    # Retried for the same reason as the Linux legs; see the x86_64 job.
     #
     - name: '⚙️ Download prebuilt gRPC (universal)'
       run: |
-        gh release download v${{env.GRPC_VERSION}} \
-          -R ${{env.GRPC_REPO}} \
-          -p "grpc-${{env.GRPC_VERSION}}-macos-universal.tar.gz"
+        for attempt in 1 2 3 4 5; do
+          if gh release download v${{env.GRPC_VERSION}} \
+               -R ${{env.GRPC_REPO}} \
+               -p "grpc-${{env.GRPC_VERSION}}-macos-universal.tar.gz" \
+               --clobber; then
+            break
+          fi
+          if [ "$attempt" -eq 5 ]; then
+            echo "::error::gh release download failed after $attempt attempts"
+            exit 1
+          fi
+          sleep $((attempt * 15))
+        done
         mkdir -p ${{github.workspace}}/grpc-prefix
         tar -xzf grpc-${{env.GRPC_VERSION}}-macos-universal.tar.gz -C ${{github.workspace}}/grpc-prefix
       env:
@@ -2747,13 +2797,23 @@ jobs:
 
     #
     # gRPC arrives as a prebuilt tarball from GRPC_REPO; building it from source would cost more
-    # than the rest of the job put together
+    # than the rest of the job put together.
+    #
+    # Retried: the release-asset endpoint answers HTTP 500 often enough to redden a run on its own
+    # (2026-09-03, Linux arm64), and a single failed GET here costs the whole job. --clobber so a
+    # partial download from the previous attempt does not make the retry fail on an existing file.
     #
     - name: '⚙️ Download prebuilt gRPC'
       run: |
-        gh release download v${{env.GRPC_VERSION}} `
-          -R ${{env.GRPC_REPO}} `
-          -p "grpc-${{env.GRPC_VERSION}}-windows-x86_64.zip"
+        for ($attempt = 1; $attempt -le 5; $attempt++) {
+          gh release download v${{env.GRPC_VERSION}} `
+            -R ${{env.GRPC_REPO}} `
+            -p "grpc-${{env.GRPC_VERSION}}-windows-x86_64.zip" `
+            --clobber
+          if ($LASTEXITCODE -eq 0) { break }
+          if ($attempt -eq 5) { throw "gh release download failed after $attempt attempts" }
+          Start-Sleep -Seconds ($attempt * 15)
+        }
         mkdir "${{github.workspace}}\grpc-prefix"
         7z x grpc-${{env.GRPC_VERSION}}-windows-x86_64.zip -o"${{github.workspace}}\grpc-prefix"
       env:

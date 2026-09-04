@@ -24,6 +24,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QSet>
 #include <QString>
 #include <QStringList>
 #include <QTest>
@@ -49,8 +50,16 @@ static const QByteArray kSmokeBinary = QByteArray::fromHex("0102030405060708090a
 
 // Registry sizes as shipped: ten text templates, thirteen binary protocols, two multi-frame
 // expanders. Adding a template is expected to update these numbers together with the catalog.
-static constexpr qsizetype kTextTemplateCount   = 10;
-static constexpr qsizetype kBinaryTemplateCount = 13;
+// binaryNativeTemplates() also appends wireLatchNativeTemplates(), which carries the five
+// driver-generated decoders in a Pro build and is empty in a GPL one, so the binary count is a
+// sum rather than a literal.
+static constexpr qsizetype kTextTemplateCount = 10;
+#ifdef BUILD_COMMERCIAL
+static constexpr qsizetype kWireLatchTemplateCount = 5;
+#else
+static constexpr qsizetype kWireLatchTemplateCount = 0;
+#endif
+static constexpr qsizetype kBinaryTemplateCount = 13 + kWireLatchTemplateCount;
 static constexpr qsizetype kMultiTemplateCount  = 2;
 static constexpr qsizetype kTotalTemplateCount =
   kTextTemplateCount + kBinaryTemplateCount + kMultiTemplateCount;
@@ -176,6 +185,10 @@ private slots:
 
   void everyTemplateLoadsWithDefaults_data();
   void everyTemplateLoadsWithDefaults();
+
+#ifdef BUILD_COMMERCIAL
+  void wireLatchTemplatesRejectTheirOwnDefaults();
+#endif
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -1187,17 +1200,27 @@ void TstCFrameParser::everyTemplateLoadsWithDefaults_data()
 {
   QTest::addColumn<QString>("id");
 
+  QSet<QString> driver_generated;
+  const auto wire_latch = DataModel::wireLatchNativeTemplates();
+  for (const auto* tmpl : wire_latch)
+    driver_generated.insert(tmpl->id());
+
   const auto catalog = DataModel::CFrameParser::templateCatalog();
   for (const auto& value : catalog) {
     const QString id = value.toObject().value(QStringLiteral("id")).toString();
+    if (driver_generated.contains(id))
+      continue;
+
     QTest::newRow(id.toUtf8().constData()) << id;
   }
 }
 
 /**
- * @brief Every shipped template must accept its own published defaults and survive all three
- *        entry points on a payload it was not designed for: the project editor loads a template
- *        with exactly these defaults the moment the user selects it, before any device is open.
+ * @brief Every user-selectable template must accept its own published defaults and survive all
+ *        three entry points on a payload it was not designed for: the project editor loads a
+ *        template with exactly these defaults the moment the user selects it, before any device is
+ *        open. The driver-generated wire-latch templates are excluded because their schema is
+ *        machine-written; wireLatchTemplatesRejectTheirOwnDefaults() pins that contract instead.
  */
 void TstCFrameParser::everyTemplateLoadsWithDefaults()
 {
@@ -1230,6 +1253,30 @@ void TstCFrameParser::everyTemplateLoadsWithDefaults()
   parser.reset();
   QVERIFY(!parser.isLoaded());
 }
+
+#ifdef BUILD_COMMERCIAL
+/**
+ * @brief The wire-latch templates ship an empty schema on purpose: the OPC UA, Sparkplug, S7comm,
+ *        EtherNet/IP and IEC 60870-5-104 project generators write the channel list, so a load that
+ *        carries only the published defaults describes no channels and must be refused with a
+ *        message rather than yielding a parser that decodes nothing.
+ */
+void TstCFrameParser::wireLatchTemplatesRejectTheirOwnDefaults()
+{
+  const auto wire_latch = DataModel::wireLatchNativeTemplates();
+  QCOMPARE(wire_latch.size(), kWireLatchTemplateCount);
+
+  for (const auto* tmpl : wire_latch) {
+    const auto defaults  = DataModel::nativeTemplateDefaults(*tmpl);
+    const QString script = DataModel::CFrameParser::buildDescriptor(tmpl->id(), defaults);
+
+    DataModel::CFrameParser parser;
+    QVERIFY2(!parser.loadScript(script, 0, false), qPrintable(tmpl->id()));
+    QVERIFY(!parser.isLoaded());
+    QVERIFY(!parser.lastError().isEmpty());
+  }
+}
+#endif
 
 QTEST_GUILESS_MAIN(TstCFrameParser)
 

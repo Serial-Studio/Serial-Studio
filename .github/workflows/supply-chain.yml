@@ -1,0 +1,148 @@
+#---------------------------------------------------------------------------------------------------
+# Supply-chain gate
+#
+# lib/ carries ten upstream trees with no submodules and no package manager, so nothing in CI
+# watched them: a CVE in Mbed TLS or open62541 reached this project only if somebody happened to
+# read the announcement. This workflow is that watch.
+#
+# It runs on a schedule as well as on pull requests, because a new advisory lands without anybody
+# pushing a commit. A PR that does not touch lib/ or the scanner still gets the first job, which
+# covers this repository's own manifests.
+#---------------------------------------------------------------------------------------------------
+
+name: Supply Chain
+
+on:
+  schedule:
+  - cron: '0 6 * * 1'
+
+  pull_request:
+    paths:
+    - 'lib/**'
+    - 'tests/requirements*'
+    - 'scripts/osv-scan.py'
+    - '.github/workflows/supply-chain.yml'
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  #-------------------------------------------------------------------------------------------------
+  # First-party manifests, scanned by osv-scanner itself
+  #-------------------------------------------------------------------------------------------------
+
+  osv-scanner:
+    runs-on: ubuntu-24.04
+    name: '🛡️ OSV (first-party manifests)'
+    permissions:
+      contents: read
+    steps:
+    #
+    # No submodules: this job reads manifests, not vendored source
+    #
+    - name: '🧰 Checkout'
+      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+
+    #
+    # Pinned to a release and verified against the SHA256SUMS published in that same release, so
+    # the binary is fixed without hardcoding a hash this repository cannot re-derive
+    #
+    - name: '📥 Install osv-scanner'
+      env:
+        OSV_SCANNER_VERSION: 'v2.5.1'
+      run: |
+        set -euo pipefail
+        base="https://github.com/google/osv-scanner/releases/download/${OSV_SCANNER_VERSION}"
+        curl -sSfL -o osv-scanner "${base}/osv-scanner_linux_amd64"
+        curl -sSfL -o SHA256SUMS "${base}/osv-scanner_SHA256SUMS"
+        grep 'osv-scanner_linux_amd64$' SHA256SUMS | sha256sum --check --strict -
+        chmod +x osv-scanner
+
+    #
+    # Two passes. The lock pass is the one that matters: tests/requirements.lock is the
+    # hash-pinned resolution CI actually installs, while tests/requirements.txt carries `>=`
+    # floors that osv-scanner reads as literal versions and reports as years-old releases nobody
+    # installs. The directory pass exists so a manifest added anywhere later is covered without
+    # editing this file; it drops lib/, whose only hits are the vendored projects' own build and
+    # documentation tooling (Mbed TLS CI requirements, mdflib's Jekyll Gemfile) and never ship.
+    # The vendored C itself has no usable OSV index and is the next job's problem.
+    #
+    - name: '🛡️ Scan first-party manifests'
+      run: |
+        set -euo pipefail
+        ./osv-scanner scan source --lockfile 'requirements.txt:tests/requirements.lock' \
+          --format json > osv-lock.json || true
+        ./osv-scanner scan source --recursive --format json . > osv-dir.json || true
+        python3 - <<'PY'
+        import json, sys
+
+        SUPERSEDED = ("tests/requirements.txt",)
+
+        def findings(path, skip_vendored):
+            try:
+                with open(path, encoding="utf-8") as handle:
+                    report = json.load(handle)
+            except (OSError, json.JSONDecodeError):
+                print(f"::error::{path} is missing or unreadable; the scan did not run")
+                sys.exit(2)
+
+            for result in report.get("results", []):
+                source = result.get("source", {}).get("path", "")
+                if skip_vendored and ("/lib/" in source or source.startswith("lib/")):
+                    continue
+                if any(source.endswith(name) for name in SUPERSEDED):
+                    continue
+                for package in result.get("packages", []):
+                    meta = package.get("package", {})
+                    for vuln in package.get("vulnerabilities", []):
+                        yield (
+                            f"{source}: {meta.get('name', '?')} "
+                            f"{meta.get('version', '?')}: {vuln.get('id', '?')}"
+                        )
+
+        hits = set(findings("osv-lock.json", False)) | set(findings("osv-dir.json", True))
+        for hit in sorted(hits):
+            print(f"::error::{hit}")
+
+        print(f"{len(hits)} finding(s) in first-party manifests")
+        sys.exit(1 if hits else 0)
+        PY
+
+  #-------------------------------------------------------------------------------------------------
+  # Vendored trees, checked against lib/VERSIONS.json
+  #-------------------------------------------------------------------------------------------------
+
+  vendored-trees:
+    runs-on: ubuntu-24.04
+    name: '🛡️ Vendored trees (lib/VERSIONS.json)'
+    permissions:
+      contents: read
+    steps:
+    - name: '🧰 Checkout'
+      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+
+    - name: '🐍 Set up Python'
+      uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+      with:
+        python-version: '3.11'
+
+    #
+    # GITHUB_TOKEN lifts the upstream-release lookups off the 60-per-hour unauthenticated limit.
+    # Version drift blocks; upstream lag is advisory, because being one release behind is not by
+    # itself a vulnerability and a hard gate there would go red on every upstream tag. Exit code 2
+    # means the check could not run at all, which is a failure and not a pass.
+    #
+    - name: '🛡️ Check vendored versions and upstream lag'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: python3 scripts/osv-scan.py
+
+    - name: '📤 Upload report'
+      if: always()
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      with:
+        name: osv-report
+        path: .osv-report
+        if-no-files-found: ignore
