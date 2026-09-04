@@ -18,6 +18,7 @@ SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 import os
 import sys
 import tempfile
+import time
 from pathlib import Path
 
 import pytest
@@ -99,7 +100,16 @@ def test_allowed_paths_reach_the_handler(security_client):
                 error.code != "PATH_NOT_ALLOWED"
             ), f"a file under the temp root was refused by the path policy: {allowed}"
     finally:
-        os.unlink(allowed)
+        try:
+            security_client.command("csvPlayer.close")
+        except APIError:
+            pass
+        for _ in range(20):
+            try:
+                os.unlink(allowed)
+                break
+            except PermissionError:
+                time.sleep(0.1)
 
 
 @pytest.mark.security

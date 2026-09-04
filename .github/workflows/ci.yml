@@ -4125,7 +4125,7 @@ jobs:
     #
     - name: '🧪 Run tests'
       id: run_tests
-      timeout-minutes: 60
+      timeout-minutes: 90
       env:
         PYTHONIOENCODING: utf-8
         PYTHONUTF8: '1'

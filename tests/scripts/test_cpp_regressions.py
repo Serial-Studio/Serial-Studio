@@ -2062,7 +2062,11 @@ def test_extension_install_verifies_digests_and_stages():
 
     write = installer.split("bool Misc::ExtensionInstaller::writeStagedFile", 1)[1]
     write = write.split("\n}", 1)[0]
-    assert "digestMatches" in write and "isPathSafe" in write
+    assert "digestMatches" in write
+
+    staged = installer.split("bool Misc::ExtensionInstaller::writeStagedPayload", 1)[1]
+    staged = staged.split("\n}", 1)[0]
+    assert "isPathSafe" in staged
 
     catalog = _read("core/Ui/Misc/Extensions/ExtensionCatalog.cpp")
     assert (

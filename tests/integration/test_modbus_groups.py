@@ -19,6 +19,8 @@ import time
 
 import pytest
 
+from utils.api_client import APIError
+
 pytestmark = [pytest.mark.integration, pytest.mark.pro]
 
 GROUP_A = (0, 0, 2)  # holding registers @ 0, 2 registers  -> 4 payload bytes
@@ -141,6 +143,15 @@ def describe(frame: bytes) -> int:
     return frame[2]
 
 
+def _disconnect_quietly(api_client):
+    """io.disconnect answers EXECUTION_ERROR when no link is open; the fixture wants idle."""
+    try:
+        if api_client.is_connected():
+            api_client.disconnect_device()
+    except APIError:
+        pass
+
+
 @pytest.fixture
 def modbus_server():
     server = ModbusTcpServer()
@@ -154,7 +165,7 @@ def modbus_session(api_client, modbus_server):
     if not api_client.command_exists("io.modbus.getConfig"):
         pytest.skip("Modbus driver commands not available (Pro feature)")
 
-    api_client.command("io.disconnect")
+    _disconnect_quietly(api_client)
     api_client.set_bus_type("modbus")
     api_client.command("io.modbus.setProtocolIndex", {"protocolIndex": 1})
     api_client.command("io.modbus.setHost", {"host": "127.0.0.1"})
@@ -171,7 +182,7 @@ def modbus_session(api_client, modbus_server):
     api_client.command("io.connect")
     time.sleep(1.0)
     yield modbus_server
-    api_client.command("io.disconnect")
+    _disconnect_quietly(api_client)
     api_client.command("io.modbus.clearRegisterGroups")
 
 

@@ -46,7 +46,7 @@ import pytest
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 PROPERTY_MANIFEST = REPO_ROOT / "app" / "rcc" / "properties" / "dataset.json"
-FRAME_HEADER = REPO_ROOT / "app" / "src" / "DataModel" / "FrameKeys.h"
+FRAME_HEADER = REPO_ROOT / "core" / "Pipeline" / "DataModel" / "FrameKeys.h"
 BASELINE_DIR = Path(__file__).resolve().parent / "baselines"
 MANIFEST = (
     REPO_ROOT

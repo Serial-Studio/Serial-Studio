@@ -81,7 +81,11 @@ def test_activate_offline_unreadable_file(api_client):
             "licensing.activateOffline", {"path": "/nonexistent/does-not-exist.sslic"}
         )
 
-    assert exc_info.value.code in ("EXECUTION_ERROR", "INVALID_PARAM")
+    assert exc_info.value.code in (
+        "EXECUTION_ERROR",
+        "INVALID_PARAM",
+        "PATH_NOT_ALLOWED",
+    )
     status = api_client.command("licensing.getStatus")
     assert status.get("offlineActivated") is False
 

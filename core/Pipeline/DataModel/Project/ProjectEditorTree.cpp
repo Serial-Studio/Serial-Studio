@@ -217,7 +217,7 @@ void DataModel::ProjectEditor::buildTreeModel()
     restoreTreeSelection();
 
   if (!seeding && !filterActive)
-    m_projectModelRef.setTreeExpansion(snapshotTreeExpansion());
+    m_projectModelRef.storeTreeExpansion(snapshotTreeExpansion());
 
   Q_EMIT treeRebuildFinished(revealIndex);
 }

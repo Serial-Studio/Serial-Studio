@@ -475,10 +475,10 @@ bool IO::Drivers::OpcUaSession::applyIdentity(const Identity& identity)
 }
 
 /**
- * @brief Answers the stack's certificate check from the installation's trust store, recording WHY
- *        a certificate was refused: the four causes have four different fixes. TRUST is read
- *        FIRST, because it pins these exact bytes by SHA-256; checking the name or the clock ahead
- *        of it made Trust a button that could not accept a self-signed server dialed by IP.
+ * @brief Answers the stack's certificate check from the trust store, recording WHY a certificate
+ *        was refused. The validity window comes BEFORE trust: renewal is its only fix (spec 0067
+ *        AC11). Trust comes before the hostname: it pins exact bytes by SHA-256, and a name check
+ *        ahead of it made Trust unable to accept a self-signed server dialed by IP.
  */
 IO::Drivers::OpcUaTypes::StatusCode IO::Drivers::OpcUaSession::verifyServerCertificate(
   const QByteArray& certificate)
@@ -491,11 +491,6 @@ IO::Drivers::OpcUaTypes::StatusCode IO::Drivers::OpcUaSession::verifyServerCerti
     return UA_STATUSCODE_BADCERTIFICATEINVALID;
   }
 
-  if (m_serverCertificate.trusted) {
-    m_trustFailure = OpcUaTypes::TrustFailure::None;
-    return UA_STATUSCODE_GOOD;
-  }
-
   if (m_serverCertificate.expired) {
     m_trustFailure = OpcUaTypes::TrustFailure::Expired;
     return UA_STATUSCODE_BADCERTIFICATETIMEINVALID;
@@ -504,6 +499,11 @@ IO::Drivers::OpcUaTypes::StatusCode IO::Drivers::OpcUaSession::verifyServerCerti
   if (m_serverCertificate.notYetValid) {
     m_trustFailure = OpcUaTypes::TrustFailure::NotYetValid;
     return UA_STATUSCODE_BADCERTIFICATETIMEINVALID;
+  }
+
+  if (m_serverCertificate.trusted) {
+    m_trustFailure = OpcUaTypes::TrustFailure::None;
+    return UA_STATUSCODE_GOOD;
   }
 
   if (!m_serverCertificate.hostnameMatches) {

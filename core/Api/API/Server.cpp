@@ -588,12 +588,13 @@ void API::Server::disconnectClient(QTcpSocket* socket,
 }
 
 /**
- * @brief Whether a device link is open, for the raw-write paths.
+ * @brief Whether a device link is open or still dialing, for the raw-write paths: the driver
+ *        holds bytes written during an in-flight dial and flushes them on connect.
  */
 bool API::Server::deviceConnected() const
 {
   static auto& manager = IO::ConnectionManager::instance();
-  return manager.isConnected();
+  return manager.isConnected() || manager.isConnecting();
 }
 
 /**

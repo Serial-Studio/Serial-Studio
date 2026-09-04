@@ -315,9 +315,30 @@
     {
       "datasets": [
         {
+          "alarmBands": [
+            {
+              "label": "Cruise",
+              "max": 97.5,
+              "min": 0,
+              "severity": 1
+            },
+            {
+              "label": "Fast",
+              "max": 135,
+              "min": 97.5,
+              "severity": 2
+            },
+            {
+              "blink": true,
+              "label": "Top Speed",
+              "max": 150,
+              "min": 135,
+              "severity": 3
+            }
+          ],
           "datasetId": 0,
           "displayFormat": "0d",
-          "displayTickCount": 5,
+          "displayTickCount": 16,
           "fft": false,
           "fftMax": 150,
           "fftMin": 0,
@@ -534,42 +555,42 @@
       "showNasaWeather": false,
       "showWeather": false
     },
-    "activeGroup": 1000,
+    "activeGroup": 1007,
     "layout:1000": {
       "data": {
         "autoLayout": true,
-        "canvasHeight": 546,
-        "canvasWidth": 1051,
+        "canvasHeight": 914,
+        "canvasWidth": 1731,
         "geometries": [
           {
-            "height": 546,
+            "height": 914,
             "id": 4,
             "relativeIndex": 0,
             "state": "normal",
             "widgetType": 4,
-            "width": 525,
+            "width": 866,
             "x": 0,
             "y": 0
           },
           {
-            "height": 273,
+            "height": 457,
             "id": 5,
             "relativeIndex": 0,
             "state": "normal",
             "widgetType": 5,
-            "width": 527,
-            "x": 524,
+            "width": 865,
+            "x": 865,
             "y": 0
           },
           {
-            "height": 273,
+            "height": 457,
             "id": 3,
             "relativeIndex": 0,
             "state": "normal",
             "widgetType": 3,
-            "width": 527,
-            "x": 524,
-            "y": 272
+            "width": 865,
+            "x": 865,
+            "y": 456
           }
         ],
         "userReordered": true,
@@ -594,19 +615,48 @@
         ]
       }
     },
+    "layout:1002": {
+      "data": {
+        "autoLayout": true,
+        "canvasHeight": 880,
+        "canvasWidth": 1683,
+        "geometries": [
+          {
+            "height": 880,
+            "id": 4,
+            "relativeIndex": 0,
+            "state": "normal",
+            "widgetType": 4,
+            "width": 1683,
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "userReordered": false,
+        "windowOrder": [
+          4
+        ],
+        "windowOrderTyped": [
+          {
+            "relativeIndex": 0,
+            "widgetType": 4
+          }
+        ]
+      }
+    },
     "layout:1003": {
       "data": {
         "autoLayout": true,
-        "canvasHeight": 546,
-        "canvasWidth": 1051,
+        "canvasHeight": 914,
+        "canvasWidth": 1731,
         "geometries": [
           {
-            "height": 546,
+            "height": 914,
             "id": 3,
             "relativeIndex": 0,
             "state": "normal",
             "widgetType": 3,
-            "width": 1051,
+            "width": 1731,
             "x": 0,
             "y": 0
           }
@@ -626,27 +676,27 @@
     "layout:1004": {
       "data": {
         "autoLayout": true,
-        "canvasHeight": 546,
-        "canvasWidth": 1051,
+        "canvasHeight": 914,
+        "canvasWidth": 1731,
         "geometries": [
           {
-            "height": 546,
+            "height": 914,
             "id": 5,
             "relativeIndex": 0,
             "state": "normal",
             "widgetType": 5,
-            "width": 526,
+            "width": 866,
             "x": 0,
             "y": 0
           },
           {
-            "height": 546,
+            "height": 914,
             "id": 10,
             "relativeIndex": 0,
             "state": "normal",
             "widgetType": 9,
-            "width": 526,
-            "x": 525,
+            "width": 865,
+            "x": 865,
             "y": 0
           }
         ],
@@ -667,30 +717,59 @@
         ]
       }
     },
+    "layout:1005": {
+      "data": {
+        "autoLayout": true,
+        "canvasHeight": 914,
+        "canvasWidth": 1731,
+        "geometries": [
+          {
+            "height": 914,
+            "id": 16,
+            "relativeIndex": 0,
+            "state": "normal",
+            "widgetType": 12,
+            "width": 1731,
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "userReordered": false,
+        "windowOrder": [
+          16
+        ],
+        "windowOrderTyped": [
+          {
+            "relativeIndex": 0,
+            "widgetType": 12
+          }
+        ]
+      }
+    },
     "layout:1006": {
       "data": {
         "autoLayout": true,
-        "canvasHeight": 546,
-        "canvasWidth": 1051,
+        "canvasHeight": 914,
+        "canvasWidth": 1731,
         "geometries": [
           {
-            "height": 546,
+            "height": 914,
             "id": 15,
             "relativeIndex": 0,
             "state": "normal",
             "widgetType": 11,
-            "width": 526,
+            "width": 866,
             "x": 0,
             "y": 0
           },
           {
-            "height": 546,
+            "height": 914,
             "id": 14,
             "relativeIndex": 0,
             "state": "normal",
             "widgetType": 10,
-            "width": 526,
-            "x": 525,
+            "width": 865,
+            "x": 865,
             "y": 0
           }
         ],
@@ -714,38 +793,38 @@
     "layout:1007": {
       "data": {
         "autoLayout": true,
-        "canvasHeight": 546,
-        "canvasWidth": 1051,
+        "canvasHeight": 914,
+        "canvasWidth": 1731,
         "geometries": [
           {
-            "height": 546,
+            "height": 914,
             "id": 11,
             "relativeIndex": 1,
             "state": "normal",
             "widgetType": 9,
-            "width": 525,
+            "width": 866,
             "x": 0,
             "y": 0
           },
           {
-            "height": 273,
+            "height": 457,
             "id": 12,
             "relativeIndex": 2,
             "state": "normal",
             "widgetType": 9,
-            "width": 527,
-            "x": 524,
+            "width": 865,
+            "x": 865,
             "y": 0
           },
           {
-            "height": 273,
+            "height": 457,
             "id": 13,
             "relativeIndex": 3,
             "state": "normal",
             "widgetType": 9,
-            "width": 527,
-            "x": 524,
-            "y": 272
+            "width": 865,
+            "x": 865,
+            "y": 456
           }
         ],
         "userReordered": false,
@@ -771,6 +850,6 @@
       }
     }
   },
-  "writerVersion": "4.0.3",
+  "writerVersion": "4.1.0",
   "writerVersionAtCreation": "4.0.3"
 }

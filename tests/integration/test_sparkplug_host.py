@@ -273,13 +273,22 @@ def sparkplug_publisher(cycling_broker):
             pass
 
 
+def _disconnect_quietly(api_client):
+    """io.disconnect answers EXECUTION_ERROR when no link is open; the fixture wants idle."""
+    try:
+        if api_client.is_connected():
+            api_client.disconnect_device()
+    except APIError:
+        pass
+
+
 @pytest.fixture
 def sparkplug_session(api_client, cycling_broker):
     """Loads a Sparkplug-enabled MQTT project and opens the link; skips on a GPL build."""
     if not api_client.command_exists("project.mqtt.subscriber.getStatus"):
         pytest.skip("MQTT driver commands not available (Pro feature)")
 
-    api_client.command("io.disconnect")
+    _disconnect_quietly(api_client)
     api_client.load_project_from_json(_sparkplug_project(cycling_broker.port))
     api_client.set_operation_mode("project")
     time.sleep(0.3)
@@ -291,7 +300,7 @@ def sparkplug_session(api_client, cycling_broker):
         pytest.skip("the Sparkplug lane is not active on this build")
 
     yield status
-    api_client.command("io.disconnect")
+    _disconnect_quietly(api_client)
 
 
 def test_a_broker_cycle_keeps_every_slot_index(

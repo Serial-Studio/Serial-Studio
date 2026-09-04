@@ -2383,8 +2383,8 @@
     "layout:5000": {
       "data": {
         "autoLayout": true,
-        "canvasHeight": 546,
-        "canvasWidth": 1051,
+        "canvasHeight": 545,
+        "canvasWidth": 1139,
         "geometries": [
           {
             "height": 273,
@@ -2392,7 +2392,7 @@
             "relativeIndex": 0,
             "state": "normal",
             "widgetType": 18,
-            "width": 351,
+            "width": 380,
             "x": 0,
             "y": 0
           },
@@ -2402,8 +2402,8 @@
             "relativeIndex": 0,
             "state": "normal",
             "widgetType": 5,
-            "width": 350,
-            "x": 350,
+            "width": 380,
+            "x": 379,
             "y": 0
           },
           {
@@ -2412,38 +2412,38 @@
             "relativeIndex": 0,
             "state": "normal",
             "widgetType": 22,
-            "width": 350,
-            "x": 699,
+            "width": 379,
+            "x": 758,
             "y": 0
           },
           {
-            "height": 273,
+            "height": 272,
             "id": 10,
             "relativeIndex": 1,
             "state": "normal",
             "widgetType": 18,
-            "width": 351,
+            "width": 380,
             "x": 0,
             "y": 272
           },
           {
-            "height": 273,
+            "height": 272,
             "id": 6,
             "relativeIndex": 1,
             "state": "normal",
             "widgetType": 5,
-            "width": 350,
-            "x": 350,
+            "width": 380,
+            "x": 379,
             "y": 272
           },
           {
-            "height": 273,
+            "height": 272,
             "id": 15,
             "relativeIndex": 1,
             "state": "normal",
             "widgetType": 22,
-            "width": 350,
-            "x": 699,
+            "width": 379,
+            "x": 758,
             "y": 272
           }
         ],
@@ -4176,6 +4176,6 @@
       "workspaceId": 5017
     }
   ],
-  "writerVersion": "4.0.3",
+  "writerVersion": "4.1.0",
   "writerVersionAtCreation": "4.0.3"
 }

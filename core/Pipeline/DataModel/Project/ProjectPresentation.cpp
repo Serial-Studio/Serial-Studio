@@ -568,6 +568,15 @@ void DataModel::ProjectPresentation::setTreeExpansion(const QJsonObject& expansi
 }
 
 /**
+ * @brief Stores the editor tree expansion map a rebuild derived, without dirtying the document:
+ *        a rebuild queued behind a save must not re-mark the project modified.
+ */
+void DataModel::ProjectPresentation::storeTreeExpansion(const QJsonObject& expansion)
+{
+  m_treeExpansion = expansion;
+}
+
+/**
  * @brief Stores the diagram collapse map, marking the project dirty when it changed.
  */
 void DataModel::ProjectPresentation::setDiagramCollapse(const QJsonObject& state)

@@ -34,6 +34,8 @@ def saved_project(api_client, temp_dir):
     """A project saved to disk, so a later write is observable as a hash change."""
     path = Path(temp_dir) / "assistant_autosave.ssproj"
     api_client.create_new_project(title="Autosave guard")
+    group_id = api_client.add_group("Seed")
+    api_client.add_dataset(group_id)
     time.sleep(0.3)
 
     result = api_client.command("project.save", {"filePath": str(path)})

@@ -136,7 +136,9 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   `connectToHost()` had already been called and QTcpSocket buffered. With probe-then-connect
   nothing is connected yet, so `Network::write()` routes a TCP write made while `m_dialPending`
   into `queueTcpWrite()` (capped at 1 MiB; an over-cap write is refused whole) and flushes the
-  buffer once on a successful verdict, clearing it on failure and on `closeTcp()`.
+  buffer once on a successful verdict, clearing it on failure and on `closeTcp()`. The API
+  write gates (`io.writeData`, the raw lane's `Server::deviceConnected()`) admit a write while
+  `isConnecting()` for the same reason; a "Not connected" refusal there would drop it.
 - **`io.connect`'s response flag is a public contract, and TCP changed meaning.**
   `IOManagerHandler::connect()` answers `connected: manager.isConnected()` immediately, so for an
   async bus that flag means "the attempt started", not "the link is up" — which is now also true

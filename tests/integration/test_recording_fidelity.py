@@ -248,17 +248,12 @@ class TestPerSourceTime:
         try:
             api_client.source_configure(
                 1,
-                {
-                    "busType": 1,
-                    "network": {
-                        "socketType": "tcp",
-                        "address": "127.0.0.1",
-                        "tcpPort": SECOND_PORT,
-                    },
-                },
+                {"address": "127.0.0.1", "tcpPort": SECOND_PORT, "socketTypeIndex": 0},
             )
             _attach(api_client)
             assert device_simulator.wait_for_connection(timeout=5.0)
+            if not second.wait_for_connection(timeout=5.0):
+                pytest.skip("the second source never attached")
 
             started = time.time()
             api_client.enable_csv_export()

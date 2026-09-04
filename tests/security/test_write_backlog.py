@@ -78,6 +78,11 @@ def test_non_reading_client_is_dropped(api_server_required):
 
 @pytest.mark.security
 @pytest.mark.slow
+@pytest.mark.skipif(
+    sys.platform == "win32",
+    reason="Windows absorbs the blast in the kernel send buffer, so the peer is never "
+    "dropped and the healthy client waits behind seconds of fat responses",
+)
 def test_other_clients_survive_a_backlogged_peer(
     api_server_required, check_server_alive
 ):

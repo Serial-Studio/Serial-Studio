@@ -364,7 +364,7 @@ API::CommandResponse API::Handlers::IOManagerHandler::writeData(const QString& i
   }
 
   static auto& manager = IO::ConnectionManager::instance();
-  if (!manager.isConnected()) {
+  if (!manager.isConnected() && !manager.isConnecting()) {
     return CommandResponse::makeError(
       id, ErrorCode::ExecutionError, QStringLiteral("Not connected"));
   }

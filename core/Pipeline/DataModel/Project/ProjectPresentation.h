@@ -86,6 +86,7 @@ public:
   void promptRenameWidget(int widgetType, int uniqueId, const QString& currentTitle);
 
   void setTreeExpansion(const QJsonObject& expansion);
+  void storeTreeExpansion(const QJsonObject& expansion);
   void setDiagramCollapse(const QJsonObject& state);
 
   [[nodiscard]] QStringList xDataSources() const;

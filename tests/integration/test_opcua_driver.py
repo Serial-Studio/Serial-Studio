@@ -625,19 +625,41 @@ class TestOpcUaSimulatorFlags:
     def test_connect_username_and_bad_credentials(
         self, api_client, clean_state, opcua_simulator_process
     ):
-        sim = opcua_simulator_process(48411, "--user", "op", "--password", "pw")
+        """A password travels only over an encrypted channel unless the installation opted into
+        plaintext (spec 0067 R15, hardened by spec 0075), so the credentials are exercised on a
+        SignAndEncrypt channel: the first attempt may be refused over the simulator's unknown
+        certificate, and trusting it is what lets the credentials through."""
+        _require_pro(api_client)
+        sim = opcua_simulator_process(
+            48411, "--security", "Basic256Sha256", "--user", "op", "--password", "pw"
+        )
+        policy = "http://opcfoundation.org/UA/SecurityPolicy#Basic256Sha256"
 
-        _configure(api_client, sim.url, auth_mode=1, user="op", pw="pw")
-        _generate(api_client)
-        status = _connect(api_client)
-        assert status["isConnected"] is True
-        _disconnect(api_client)
+        fingerprint = ""
+        try:
+            _configure(api_client, sim.url, auth_mode=1, user="op", pw="pw")
+            _configure_security(api_client, policy, 3)
+            _generate(api_client)
+            status = _connect(api_client)
+            if not status["isConnected"]:
+                fingerprint = _trust_pending(api_client)
+                status = _connect(api_client)
+            else:
+                st = api_client.command("io.opcua.getStatus")
+                fingerprint = st.get("serverCertificate", {}).get("fingerprint", "")
 
-        _configure(api_client, sim.url, auth_mode=1, user="op", pw="wrong")
-        status = _connect(api_client)
-        assert status["isConnected"] is False
-        assert status["linkState"] == "idle"
-        assert api_client.command("io.opcua.getStatus")["lastError"]
+            assert status["isConnected"] is True
+            _disconnect(api_client)
+
+            _configure(api_client, sim.url, auth_mode=1, user="op", pw="wrong")
+            _configure_security(api_client, policy, 3)
+            status = _connect(api_client)
+            assert status["isConnected"] is False
+            assert status["linkState"] == "idle"
+            assert api_client.command("io.opcua.getStatus")["lastError"]
+        finally:
+            _disconnect(api_client)
+            _forget(api_client, fingerprint)
 
         _configure(api_client, sim.url, auth_mode=0)
         status = _connect(api_client)

@@ -546,6 +546,11 @@ public slots:
     m_presentation.setTreeExpansion(expansion);
   }
 
+  void storeTreeExpansion(const QJsonObject& expansion)
+  {
+    m_presentation.storeTreeExpansion(expansion);
+  }
+
   void setDiagramCollapse(const QJsonObject& state) { m_presentation.setDiagramCollapse(state); }
 
   void setupExternalConnections();

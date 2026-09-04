@@ -78,7 +78,7 @@ def test_http_request_closes_the_connection(api_server_required, request_bytes):
 @pytest.mark.security
 def test_http_body_command_never_runs(api_server_required, security_client):
     """The command in a browser POST body must not reach the dispatcher."""
-    before = security_client.command("project.get").get("title")
+    before = security_client.command("project.getStatus").get("title")
 
     sock = socket.create_connection((API_HOST, API_PORT), timeout=5.0)
     try:
@@ -90,7 +90,7 @@ def test_http_body_command_never_runs(api_server_required, security_client):
     finally:
         sock.close()
 
-    after = security_client.command("project.get").get("title")
+    after = security_client.command("project.getStatus").get("title")
     assert after == before, "a command in an HTTP body was executed"
 
 

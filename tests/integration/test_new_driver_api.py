@@ -531,7 +531,14 @@ class TestProcessDriver:
         api_client.command("io.setBusType", {"busType": 8})
         time.sleep(0.2)
 
+        # The enumeration runs off an asynchronous `ps` probe: the first answer can still
+        # carry the previous (empty) list, so poll until the probe has reported.
+        deadline = time.time() + 5.0
         result = api_client.command("io.process.listRunning")
+        while result.get("count", 0) == 0 and time.time() < deadline:
+            time.sleep(0.2)
+            result = api_client.command("io.process.listRunning")
+
         assert "processes" in result, "Expected 'processes' key"
         assert "count" in result, "Expected 'count' key"
         assert isinstance(result["processes"], list)

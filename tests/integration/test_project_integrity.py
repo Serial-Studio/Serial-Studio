@@ -295,7 +295,7 @@ def test_legacy_separator_parser_is_migrated(api_client, clean_state):
         "code", ""
     )
     assert "separator" not in code.split("*/")[-1]
-    assert 'frame.split(",")' in code
+    assert 'frame.split(",")' in code or "frame.split(',')" in code
 
 
 @pytest.mark.project
