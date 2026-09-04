@@ -547,8 +547,8 @@ IO::Drivers::SparkplugB::Metric MQTT::SparkplugPublisher::bdSeqMetric(quint64 ti
   SS_ASSERT_LOG(m_bdSeq < SpPubLimits::kSeqModulus);
 
   auto metric         = namedMetric(SpPubLimits::kBirthDeathSequence,
-                            static_cast<quint32>(Sparkplug::DataType::Int64),
-                            timestampMs);
+                                    static_cast<quint32>(Sparkplug::DataType::Int64),
+                                    timestampMs);
   metric.numericValue = static_cast<double>(m_bdSeq);
   return metric;
 }

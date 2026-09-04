@@ -1296,7 +1296,7 @@ QJsonObject IO::Drivers::S7::buildProject() const
   source[Keys::FrameParserLanguage]   = static_cast<int>(SerialStudio::Native);
   source[Keys::FrameParserTemplate]   = QStringLiteral("s7");
   source[Keys::FrameParserParams]     = QJsonObject{
-        {QStringLiteral("schema"), wireSchema()}
+    {QStringLiteral("schema"), wireSchema()}
   };
 
   QJsonObject conn;

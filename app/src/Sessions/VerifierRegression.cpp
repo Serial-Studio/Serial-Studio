@@ -792,13 +792,13 @@ int Sessions::Verifier::failRegress(const QString& code, const QString& reason, 
 {
   m_verdict = QStringLiteral("error");
   m_report  = QJsonObject{
-     {     QStringLiteral("mode"), QStringLiteral("regression")},
-     {  QStringLiteral("verdict"),                    m_verdict},
-     {    QStringLiteral("error"),                       reason},
-     {QStringLiteral("errorCode"),                         code},
-     {     QStringLiteral("hint"),                         hint},
-     {  QStringLiteral("archive"),             m_options.dbPath},
-     {QStringLiteral("sessionId"),                  m_sessionId}
+    {     QStringLiteral("mode"), QStringLiteral("regression")},
+    {  QStringLiteral("verdict"),                    m_verdict},
+    {    QStringLiteral("error"),                       reason},
+    {QStringLiteral("errorCode"),                         code},
+    {     QStringLiteral("hint"),                         hint},
+    {  QStringLiteral("archive"),             m_options.dbPath},
+    {QStringLiteral("sessionId"),                  m_sessionId}
   };
   cleanupRegenerated();
   return kExitError;

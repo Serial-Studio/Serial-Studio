@@ -627,9 +627,10 @@ void Misc::ExtensionManager::collectCatalogFindings(
   QList<Misc::ProblemCenter::Finding>& findings) const
 {
   for (const auto& entry : std::as_const(m_allExtensions)) {
-    const auto obj   = entry.toObject();
-    const auto files = obj.value("files").toArray().toVariantList();
-    if (files.isEmpty() || ExtensionCatalog::hasVerifiableFiles(files))
+    const auto obj     = entry.toObject();
+    const auto files   = obj.value("files").toArray().toVariantList();
+    const auto digests = obj.value("sha256").toObject().toVariantMap();
+    if (files.isEmpty() || ExtensionCatalog::hasVerifiableFiles(files, digests))
       continue;
 
     Misc::ProblemCenter::Finding finding;
@@ -875,11 +876,13 @@ void Misc::ExtensionManager::onExtensionMetaReply()
   reply->deleteLater();
 
   if (reply->error() == QNetworkReply::NoError) {
-    const auto parsed = Misc::JsonValidator::parseAndValidate(reply->readAll());
-    auto obj          = parsed.valid ? parsed.document.object() : QJsonObject();
+    const auto payload = reply->readAll();
+    const auto parsed  = Misc::JsonValidator::parseAndValidate(payload);
+    auto obj           = parsed.valid ? parsed.document.object() : QJsonObject();
     if (!obj.isEmpty() && !obj.value("id").toString().isEmpty()) {
       const auto addonBase = reply->property("addonBase").toString();
       obj.insert("_repoBase", addonBase);
+      obj.insert("_metaRaw", QString::fromUtf8(payload));
       m_allExtensions.append(obj);
     }
   }

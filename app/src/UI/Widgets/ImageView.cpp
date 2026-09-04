@@ -178,10 +178,10 @@ Widgets::ImageFrameReader::StepResult Widgets::ImageFrameReader::extractWebpFram
         && m_accumulator[11] == 'P'))
     return StepResult::Unhandled;
 
-  const auto* raw         = reinterpret_cast<const quint8*>(m_accumulator.constData());
-  const quint32 chunkSize = static_cast<quint32>(raw[4]) | (static_cast<quint32>(raw[5]) << 8)
-                          | (static_cast<quint32>(raw[6]) << 16)
-                          | (static_cast<quint32>(raw[7]) << 24);
+  const auto* raw          = reinterpret_cast<const quint8*>(m_accumulator.constData());
+  const quint32 chunkSize  = static_cast<quint32>(raw[4]) | (static_cast<quint32>(raw[5]) << 8)
+                           | (static_cast<quint32>(raw[6]) << 16)
+                           | (static_cast<quint32>(raw[7]) << 24);
   const qsizetype frameLen = 8 + static_cast<qsizetype>(chunkSize);
 
   if (chunkSize > kMaxImageSize) {

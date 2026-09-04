@@ -13,8 +13,8 @@ oversized SVG and is flagged (spec 0028: request px must match render size). Spe
 `widget-manifest.json`, the reserved builtin-id list agrees across the schema, the
 C++ catalog and the widget-string mappers, the packages stay in sync with rcc.qrc,
 and `WidgetExtensions::hostContextNames()` still mirrors ModuleManager. Spec 0075
-adds the extension catalog v2 gate: `catalog.json` requires a per-file SHA-256, a
-v1 entry is rejected by the schema, and the installer still routes every file
+adds the extension catalog v2 gate: `catalog.json` requires a per-file SHA-256
+(inline or in the `sha256` sidecar table), a v1 entry is rejected by the schema, and the installer still routes every file
 through the digest parser and the staged swap. The
 alias report counts live
 source references to each old path -- task T21 drops the alias block only when
@@ -1171,9 +1171,30 @@ def check_extension_catalog(errors: list[str]) -> None:
                 + "; ".join(validate(v2)),
             )
 
+        sidecar = dict(
+            v2,
+            files=["Widget.qml"],
+            sha256={"Widget.qml": {"sha256": "a" * 64, "size": 10}},
+        )
+        if validate(sidecar):
+            fail(
+                errors,
+                "catalog.json rejects the sidecar digest form, which is what keeps `files` a "
+                "plain string list for releases up to 4.1.0: "
+                + "; ".join(validate(sidecar)),
+            )
+
         v1 = dict(v2, files=["Widget.qml"], schemaVersion=1)
         if not validate(v1):
             fail(errors, "catalog.json accepts a v1 entry whose files carry no digests")
+
+        undigested = dict(v2, files=["Widget.qml"])
+        if not validate(undigested):
+            fail(
+                errors,
+                "catalog.json accepts string files with no sha256 sidecar table, which is a v1 "
+                "entry wearing a v2 schemaVersion",
+            )
 
     catalog_cpp = EXTENSION_CATALOG_CPP.read_text(encoding="utf-8")
     if "parseFileList" not in catalog_cpp or "digestMatches" not in catalog_cpp:

@@ -96,47 +96,102 @@ bool Misc::ExtensionCatalog::isTrustedRepoUrl(const QString& url)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Parses a catalog v2 file list. Every entry must carry a path and a lowercase hex
- *        SHA-256; a bare string is catalog v1, which an install cannot verify anything against,
- *        so the whole entry is refused with a reason rather than installed unchecked (K3, K5).
+ * @brief Merges a platform override's digest table over the entry-wide one, so an override may
+ *        publish digests for the files only it names without restating the rest.
+ */
+QVariantMap Misc::ExtensionCatalog::mergeDigests(const QVariantMap& base,
+                                                 const QVariantMap& overrides)
+{
+  auto merged = base;
+  for (auto it = overrides.cbegin(); it != overrides.cend(); ++it)
+    merged.insert(it.key(), it.value());
+
+  return merged;
+}
+
+/**
+ * @brief Reads one file list element: the inline shape carries its own digest and size, the
+ *        sidecar shape is a bare path whose digest comes from @p digests, and any other type
+ *        fails. The sidecar shape leaves `files` a plain string list, which is what releases up
+ *        to 4.1.0 read, so publishing digests does not break the installer those versions ship.
+ */
+static bool readCatalogFile(const QVariant& value,
+                            const QVariantMap& digests,
+                            Misc::ExtensionCatalog::CatalogFile& file)
+{
+  if (value.typeId() == QMetaType::QVariantMap) {
+    const auto map = value.toMap();
+    file.path      = map.value(QStringLiteral("path")).toString();
+    file.sha256    = map.value(QStringLiteral("sha256")).toString().toLower();
+    file.size      = map.value(QStringLiteral("size")).toLongLong();
+    return true;
+  }
+
+  if (value.typeId() != QMetaType::QString)
+    return false;
+
+  file.path       = value.toString();
+  const auto side = digests.value(file.path).toMap();
+  file.sha256     = side.value(QStringLiteral("sha256")).toString().toLower();
+  file.size       = side.value(QStringLiteral("size")).toLongLong();
+  return true;
+}
+
+/**
+ * @brief Reports @p reason to the optional out-parameter and yields the empty list that refuses
+ *        the catalog entry, so a refusal stays one statement deep inside the parse loop.
+ */
+static QList<Misc::ExtensionCatalog::CatalogFile> refuseEntry(QString* rejectReason,
+                                                              const QString& reason)
+{
+  if (rejectReason)
+    *rejectReason = reason;
+
+  return {};
+}
+
+/**
+ * @brief Parses a catalog v2 file list in either published shape, inline or sidecar, so one
+ *        repository can serve every Serial Studio version. A file resolving to no lowercase hex
+ *        SHA-256 refuses the whole entry with a reason instead of installing unchecked (K3, K5);
+ *        the entry's own info.json is exempt, and an entry of nothing else is refused as well.
  */
 QList<Misc::ExtensionCatalog::CatalogFile> Misc::ExtensionCatalog::parseFileList(
-  const QVariantList& files, QString* rejectReason)
+  const QVariantList& files, const QVariantMap& digests, QString* rejectReason)
 {
   static const QRegularExpression kDigest(QStringLiteral("^[0-9a-f]{64}$"));
 
   QList<CatalogFile> parsed;
+  int verifiable = 0;
   for (const auto& value : files) {
-    if (value.typeId() != QMetaType::QVariantMap) {
-      if (rejectReason)
-        *rejectReason = QStringLiteral("catalog v1 entry: files carry no sha256 digest");
-
-      return {};
-    }
-
-    const auto map = value.toMap();
     CatalogFile file;
-    file.path   = map.value(QStringLiteral("path")).toString();
-    file.sha256 = map.value(QStringLiteral("sha256")).toString().toLower();
-    file.size   = map.value(QStringLiteral("size")).toLongLong();
+    if (!readCatalogFile(value, digests, file))
+      return refuseEntry(
+        rejectReason, QStringLiteral("catalog entry: a file is neither a path nor a file object"));
 
-    if (file.path.isEmpty()) {
-      if (rejectReason)
-        *rejectReason = QStringLiteral("catalog entry: a file has no path");
+    if (file.path.isEmpty())
+      return refuseEntry(rejectReason, QStringLiteral("catalog entry: a file has no path"));
 
-      return {};
+    if (file.sha256.isEmpty() && file.path == QLatin1String(kMetadataFile)) {
+      file.selfMetadata = true;
+      parsed.append(file);
+      continue;
     }
 
-    if (!kDigest.match(file.sha256).hasMatch()) {
-      if (rejectReason)
-        *rejectReason =
-          QStringLiteral("catalog entry: file '%1' has no valid sha256").arg(file.path);
+    if (!kDigest.match(file.sha256).hasMatch())
+      return refuseEntry(
+        rejectReason,
+        file.sha256.isEmpty()
+          ? QStringLiteral("catalog v1 entry: file '%1' carries no sha256 digest").arg(file.path)
+          : QStringLiteral("catalog entry: file '%1' has an invalid sha256 digest").arg(file.path));
 
-      return {};
-    }
-
+    ++verifiable;
     parsed.append(file);
   }
+
+  if (verifiable == 0)
+    return refuseEntry(rejectReason,
+                       QStringLiteral("catalog entry: no file carries a sha256 digest"));
 
   return parsed;
 }
@@ -144,9 +199,10 @@ QList<Misc::ExtensionCatalog::CatalogFile> Misc::ExtensionCatalog::parseFileList
 /**
  * @brief Whether a file list is installable at all: non-empty and parseable as catalog v2.
  */
-bool Misc::ExtensionCatalog::hasVerifiableFiles(const QVariantList& files)
+bool Misc::ExtensionCatalog::hasVerifiableFiles(const QVariantList& files,
+                                                const QVariantMap& digests)
 {
-  return !files.isEmpty() && !parseFileList(files, nullptr).isEmpty();
+  return !files.isEmpty() && !parseFileList(files, digests, nullptr).isEmpty();
 }
 
 /**

@@ -97,11 +97,11 @@ QString DataModel::ModbusMapImporter::registerInfo(int index) const
 
   const auto& r = m_registers[index];
   QString info  = QStringLiteral("%1: %2 @ %3 (%4, %5)")
-                   .arg(index + 1)
-                   .arg(r.name)
-                   .arg(r.address)
-                   .arg(registerTypeName(r.registerType))
-                   .arg(r.dataType);
+                    .arg(index + 1)
+                    .arg(r.name)
+                    .arg(r.address)
+                    .arg(registerTypeName(r.registerType))
+                    .arg(r.dataType);
 
   if (!r.units.isEmpty())
     info += QStringLiteral(" [%1]").arg(r.units);

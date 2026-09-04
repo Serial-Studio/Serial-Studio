@@ -509,9 +509,9 @@ void DataModel::MacroRunner::saveMacro(const QString& source, int language)
 {
   const bool lua = (language == SerialStudio::Lua);
   auto* dialog   = new QFileDialog(nullptr,
-                                 tr("Save macro"),
-                                 macrosDirectory(),
-                                 lua ? QStringLiteral("*.lua") : QStringLiteral("*.js"));
+                                   tr("Save macro"),
+                                   macrosDirectory(),
+                                   lua ? QStringLiteral("*.lua") : QStringLiteral("*.js"));
   dialog->setAcceptMode(QFileDialog::AcceptSave);
   dialog->setDefaultSuffix(lua ? QStringLiteral("lua") : QStringLiteral("js"));
   dialog->setAttribute(Qt::WA_DeleteOnClose);

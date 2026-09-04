@@ -1311,7 +1311,7 @@ QJsonObject IO::Drivers::EthernetIp::buildProject() const
   source[Keys::FrameParserLanguage]   = static_cast<int>(SerialStudio::Native);
   source[Keys::FrameParserTemplate]   = QStringLiteral("ethernetip");
   source[Keys::FrameParserParams]     = QJsonObject{
-        {QStringLiteral("schema"), wireSchema()}
+    {QStringLiteral("schema"), wireSchema()}
   };
 
   QJsonObject conn;

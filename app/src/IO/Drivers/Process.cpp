@@ -714,13 +714,13 @@ void IO::Drivers::Process::pipeReadLoopWindows()
 #ifdef Q_OS_WIN
   const QString dosPath = QDir::toNativeSeparators(m_pipePath);
   HANDLE hPipe          = CreateNamedPipeW(reinterpret_cast<LPCWSTR>(dosPath.utf16()),
-                                  PIPE_ACCESS_INBOUND | FILE_FLAG_OVERLAPPED,
-                                  PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
-                                  1,
-                                  0,
-                                  4096,
-                                  0,
-                                  nullptr);
+                                           PIPE_ACCESS_INBOUND | FILE_FLAG_OVERLAPPED,
+                                           PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
+                                           1,
+                                           0,
+                                           4096,
+                                           0,
+                                           nullptr);
 
   if (hPipe == INVALID_HANDLE_VALUE) {
     QMetaObject::invokeMethod(this, "onPipeError", Qt::QueuedConnection);

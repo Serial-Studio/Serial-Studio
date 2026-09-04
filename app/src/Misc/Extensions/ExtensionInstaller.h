@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <QByteArray>
 #include <QJsonObject>
 #include <QList>
 #include <QObject>
@@ -84,6 +85,8 @@ private:
   void loadInstalledManifest();
   void saveInstalledManifest();
   [[nodiscard]] bool writeStagedFile(QNetworkReply* reply);
+  [[nodiscard]] bool writeStagedPayload(const QString& localName, const QByteArray& payload);
+  [[nodiscard]] static QByteArray metadataPayload(const QVariantMap& entry);
   [[nodiscard]] bool commitStagedInstall();
   void startDownloads(const QVariantMap& entry, const QList<ExtensionCatalog::CatalogFile>& files);
   [[nodiscard]] bool copyLocalFiles(const QList<ExtensionCatalog::CatalogFile>& files,

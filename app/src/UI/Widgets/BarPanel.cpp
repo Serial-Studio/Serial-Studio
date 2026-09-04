@@ -337,11 +337,11 @@ bool Widgets::BarPanel::refreshRow(int index, const DataModel::Dataset& dataset)
     }
   }
 
-  const bool changed = (numeric != m_numeric[index]) || (severity != m_severities[index])
-                    || (extremesOk != m_extremesOk[index]) || (text != m_valueTexts[index])
-                    || DSP::notEqual(frac, m_fracs[index])
-                    || DSP::notEqual(minSeenFrac, m_minSeenFracs[index])
-                    || DSP::notEqual(maxSeenFrac, m_maxSeenFracs[index]);
+  const bool changed    = (numeric != m_numeric[index]) || (severity != m_severities[index])
+                       || (extremesOk != m_extremesOk[index]) || (text != m_valueTexts[index])
+                       || DSP::notEqual(frac, m_fracs[index])
+                       || DSP::notEqual(minSeenFrac, m_minSeenFracs[index])
+                       || DSP::notEqual(maxSeenFrac, m_maxSeenFracs[index]);
   m_numeric[index]      = numeric;
   m_severities[index]   = severity;
   m_extremesOk[index]   = extremesOk;

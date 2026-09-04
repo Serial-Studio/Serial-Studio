@@ -135,8 +135,8 @@ Widgets::GPS::GPS(const int index, QQuickItem* parent)
   m_showNasaWeather = m_settings.value("gpsNasaWeather", false).toBool();
   m_plotTrajectory  = m_settings.value("gpsPlotTrajectory", true).toBool();
   m_zoom            = qBound(static_cast<double>(MIN_ZOOM),
-                  SerialStudio::toDouble(m_settings.value("gpsZoomLevel", MIN_ZOOM)),
-                  18.0);
+                             SerialStudio::toDouble(m_settings.value("gpsZoomLevel", MIN_ZOOM)),
+                             18.0);
 
   if (m_showNasaWeather && m_showWeather)
     m_showWeather = false;

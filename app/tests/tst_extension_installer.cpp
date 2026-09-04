@@ -53,6 +53,11 @@ private slots:
 
   void catalogV1EntryIsRefused();
   void entryWithBadDigestIsRefused();
+  void sidecarDigestsInstallEveryFile();
+  void sidecarMismatchLeavesPreviousVersionIntact();
+  void metadataFileNeedsNoDigest();
+  void metadataOnlyEntryIsRefused();
+  void platformDigestsOverrideEntryWideOnes();
   void goodDigestInstallsEveryFile();
   void corruptFileLeavesPreviousVersionIntact();
   void installedRecordCarriesDigests();
@@ -64,7 +69,9 @@ private:
   [[nodiscard]] QString repoDir() const;
   [[nodiscard]] QString installDir() const;
   void writeRepoFile(const QString& name, const QByteArray& payload);
-  [[nodiscard]] QVariantMap entryFor(const QVariantList& files, const QString& version) const;
+  [[nodiscard]] QVariantMap entryFor(const QVariantList& files,
+                                     const QString& version,
+                                     const QVariantMap& digests = {}) const;
 
   QTemporaryDir m_root;
 };
@@ -79,6 +86,17 @@ private:
 static QString digestOf(const QByteArray& payload)
 {
   return QString::fromLatin1(QCryptographicHash::hash(payload, QCryptographicHash::Sha256).toHex());
+}
+
+/**
+ * @brief Builds one sidecar digest row: what `"sha256": {"<path>": ...}` maps a path to.
+ */
+static QVariantMap digestRow(const QByteArray& payload)
+{
+  QVariantMap row;
+  row.insert(QStringLiteral("sha256"), digestOf(payload));
+  row.insert(QStringLiteral("size"), static_cast<qlonglong>(payload.size()));
+  return row;
 }
 
 /**
@@ -124,13 +142,18 @@ void TstExtensionInstaller::writeRepoFile(const QString& name, const QByteArray&
 /**
  * @brief Builds the local catalog entry the installer consumes.
  */
-QVariantMap TstExtensionInstaller::entryFor(const QVariantList& files, const QString& version) const
+QVariantMap TstExtensionInstaller::entryFor(const QVariantList& files,
+                                            const QString& version,
+                                            const QVariantMap& digests) const
 {
   QVariantMap entry;
   entry.insert(QStringLiteral("id"), QStringLiteral("demo"));
   entry.insert(QStringLiteral("type"), QStringLiteral("theme"));
   entry.insert(QStringLiteral("version"), version);
   entry.insert(QStringLiteral("files"), files);
+  if (!digests.isEmpty())
+    entry.insert(QStringLiteral("sha256"), digests);
+
   entry.insert(QStringLiteral("_isLocal"), true);
   entry.insert(QStringLiteral("_repoBase"), repoDir());
   return entry;
@@ -297,8 +320,138 @@ void TstExtensionInstaller::installedRecordCarriesDigests()
 }
 
 //--------------------------------------------------------------------------------------------------
+// Sidecar digest form
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief The sidecar form installs exactly like the inline one. It exists so `files` can stay a
+ *        plain string list -- what releases up to 4.1.0 read -- while still carrying digests.
+ */
+void TstExtensionInstaller::sidecarDigestsInstallEveryFile()
+{
+  const auto meta = QByteArrayLiteral("{\"id\":\"demo\"}");
+  const auto body = QByteArrayLiteral("body-v1");
+  writeRepoFile(QStringLiteral("info.json"), meta);
+  writeRepoFile(QStringLiteral("theme.qml"), body);
+
+  Test::FakeTransport transport;
+  Misc::ExtensionInstaller installer(transport, Misc::WorkspaceManager::instance());
+
+  const QVariantList files{QStringLiteral("info.json"), QStringLiteral("theme.qml")};
+  QVariantMap digests;
+  digests.insert(QStringLiteral("info.json"), digestRow(meta));
+  digests.insert(QStringLiteral("theme.qml"), digestRow(body));
+
+  QVERIFY(installer.install(entryFor(files, QStringLiteral("1.0.0"), digests)));
+  QVERIFY(installer.isInstalled(QStringLiteral("demo")));
+
+  QFile written(installDir() + QStringLiteral("/theme.qml"));
+  QVERIFY(written.open(QIODevice::ReadOnly));
+  QCOMPARE(written.readAll(), body);
+}
+
+/**
+ * @brief A sidecar digest that does not match the bytes aborts the install, and the version
+ *        already installed keeps its files. The staging guarantee does not depend on the shape
+ *        the digest was published in.
+ */
+void TstExtensionInstaller::sidecarMismatchLeavesPreviousVersionIntact()
+{
+  const auto body = QByteArrayLiteral("body-v1");
+  writeRepoFile(QStringLiteral("theme.qml"), body);
+
+  Test::FakeTransport transport;
+  Misc::ExtensionInstaller installer(transport, Misc::WorkspaceManager::instance());
+
+  const QVariantList files{QStringLiteral("theme.qml")};
+  QVariantMap digests;
+  digests.insert(QStringLiteral("theme.qml"), digestRow(body));
+  QVERIFY(installer.install(entryFor(files, QStringLiteral("1.0.0"), digests)));
+
+  writeRepoFile(QStringLiteral("theme.qml"), QByteArrayLiteral("body-v2-tampered"));
+
+  QSignalSpy failed(&installer, &Misc::ExtensionInstaller::installFailed);
+  QVERIFY(!installer.install(entryFor(files, QStringLiteral("2.0.0"), digests)));
+  QCOMPARE(failed.count(), 1);
+
+  QFile kept(installDir() + QStringLiteral("/theme.qml"));
+  QVERIFY(kept.open(QIODevice::ReadOnly));
+  QCOMPARE(kept.readAll(), body);
+  QCOMPARE(installer.installedVersion(QStringLiteral("demo")), QStringLiteral("1.0.0"));
+}
+
+/**
+ * @brief info.json needs no digest: the digest would have to live inside the bytes it covers.
+ *        Every other file still does, and the metadata still lands in the install directory.
+ */
+void TstExtensionInstaller::metadataFileNeedsNoDigest()
+{
+  const auto meta = QByteArrayLiteral("{\"id\":\"demo\"}");
+  const auto body = QByteArrayLiteral("body-v1");
+  writeRepoFile(QStringLiteral("info.json"), meta);
+  writeRepoFile(QStringLiteral("theme.qml"), body);
+
+  Test::FakeTransport transport;
+  Misc::ExtensionInstaller installer(transport, Misc::WorkspaceManager::instance());
+
+  const QVariantList files{QStringLiteral("info.json"), QStringLiteral("theme.qml")};
+  QVariantMap digests;
+  digests.insert(QStringLiteral("theme.qml"), digestRow(body));
+
+  QVERIFY(installer.install(entryFor(files, QStringLiteral("1.0.0"), digests)));
+
+  QFile installedMeta(installDir() + QStringLiteral("/info.json"));
+  QVERIFY(installedMeta.open(QIODevice::ReadOnly));
+  QCOMPARE(installedMeta.readAll(), meta);
+
+  const auto rows =
+    installer.installedInfo(QStringLiteral("demo")).value(QStringLiteral("files")).toArray();
+  QCOMPARE(rows.size(), 2);
+  QVERIFY(!rows.at(0).toObject().contains(QStringLiteral("sha256")));
+  QCOMPARE(rows.at(1).toObject().value(QStringLiteral("sha256")).toString(), digestOf(body));
+}
+
+/**
+ * @brief An entry whose only file is the exempt info.json is refused: it would install nothing
+ *        that was verified against anything.
+ */
+void TstExtensionInstaller::metadataOnlyEntryIsRefused()
+{
+  writeRepoFile(QStringLiteral("info.json"), QByteArrayLiteral("{\"id\":\"demo\"}"));
+
+  Test::FakeTransport transport;
+  Misc::ExtensionInstaller installer(transport, Misc::WorkspaceManager::instance());
+  QSignalSpy failed(&installer, &Misc::ExtensionInstaller::installFailed);
+
+  const QVariantList files{QStringLiteral("info.json")};
+  QVERIFY(!installer.install(entryFor(files, QStringLiteral("1.0.0"))));
+  QCOMPARE(failed.count(), 1);
+  QVERIFY(!QDir(installDir()).exists());
+}
+
+//--------------------------------------------------------------------------------------------------
 // Pure catalog decisions
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief A platform override's digests are merged over the entry-wide table, so an override
+ *        publishes digests only for the files it adds.
+ */
+void TstExtensionInstaller::platformDigestsOverrideEntryWideOnes()
+{
+  QVariantMap base;
+  base.insert(QStringLiteral("a"), QStringLiteral("entry"));
+  base.insert(QStringLiteral("b"), QStringLiteral("entry"));
+
+  QVariantMap plat;
+  plat.insert(QStringLiteral("b"), QStringLiteral("platform"));
+  plat.insert(QStringLiteral("c"), QStringLiteral("platform"));
+
+  const auto merged = Misc::ExtensionCatalog::mergeDigests(base, plat);
+  QCOMPARE(merged.value(QStringLiteral("a")).toString(), QStringLiteral("entry"));
+  QCOMPARE(merged.value(QStringLiteral("b")).toString(), QStringLiteral("platform"));
+  QCOMPARE(merged.value(QStringLiteral("c")).toString(), QStringLiteral("platform"));
+}
 
 /**
  * @brief The digest check rejects both a wrong size and wrong bytes of the right size.

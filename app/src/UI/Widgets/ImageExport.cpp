@@ -186,9 +186,9 @@ bool Widgets::VideoExportWorker::ensureSession(int groupId,
   static auto& workspaceManager = Misc::WorkspaceManager::instance();
   const auto base               = workspaceManager.path(QStringLiteral("Video Recordings"));
   const QString path            = QStringLiteral("%1/%2/%3")
-                         .arg(base,
-                              Misc::WorkspaceManager::sanitizeName(projectTitle),
-                              Misc::WorkspaceManager::sanitizeName(groupTitle));
+                                    .arg(base,
+                                         Misc::WorkspaceManager::sanitizeName(projectTitle),
+                                         Misc::WorkspaceManager::sanitizeName(groupTitle));
 
   QDir dir(path);
   if (!dir.exists() && !dir.mkpath(QStringLiteral("."))) {

@@ -310,9 +310,9 @@ void Sessions::Player::openFile()
 {
   static auto& workspaceManager = Misc::WorkspaceManager::instance();
   auto* dialog                  = new QFileDialog(qApp->activeWindow(),
-                                 tr("Open Session File"),
-                                 workspaceManager.path("Session Databases"),
-                                 tr("Session files (*.db)"));
+                                                  tr("Open Session File"),
+                                                  workspaceManager.path("Session Databases"),
+                                                  tr("Session files (*.db)"));
 
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);

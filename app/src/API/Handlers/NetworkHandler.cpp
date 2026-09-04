@@ -153,10 +153,10 @@ void API::Handlers::NetworkHandler::registerUrlTransportCommands(CommandRegistry
   method_prop.type         = QStringLiteral("string");
   method_prop.description  = QStringLiteral("HTTP method");
   method_prop.enumValues   = QJsonArray{QStringLiteral("GET"),
-                                      QStringLiteral("POST"),
-                                      QStringLiteral("PUT"),
-                                      QStringLiteral("PATCH"),
-                                      QStringLiteral("DELETE")};
+                                        QStringLiteral("POST"),
+                                        QStringLiteral("PUT"),
+                                        QStringLiteral("PATCH"),
+                                        QStringLiteral("DELETE")};
   method_prop.defaultValue = QStringLiteral("GET");
   registry.registerCommand(
     QStringLiteral("io.network.setHttpMethod"),

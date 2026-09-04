@@ -138,7 +138,7 @@ QJsonObject IO::Drivers::OpcUaProjectBuilder::buildProject(
   source[Keys::FrameParserLanguage]   = static_cast<int>(SerialStudio::Native);
   source[Keys::FrameParserTemplate]   = QStringLiteral("opcua");
   source[Keys::FrameParserParams]     = QJsonObject{
-        {QStringLiteral("schema"), wireSchema()}
+    {QStringLiteral("schema"), wireSchema()}
   };
 
   source[Keys::SourceConn] = connectionSettings;

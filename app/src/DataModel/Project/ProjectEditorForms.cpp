@@ -525,7 +525,7 @@ void DataModel::ProjectEditor::buildSourceFrameDetectionRows(const DataModel::So
   const bool showStart = (detection == SerialStudio::StartDelimiterOnly
                           || detection == SerialStudio::StartAndEndDelimiter);
   const bool showEnd   = (detection == SerialStudio::EndDelimiterOnly
-                        || detection == SerialStudio::StartAndEndDelimiter);
+                          || detection == SerialStudio::StartAndEndDelimiter);
 
   if (showStart) {
     auto* startSeqItem = new QStandardItem();

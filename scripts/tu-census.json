@@ -2,13 +2,13 @@
   "rule": "cxx-tu-too-long",
   "regenerate": "python scripts/code-verify.py --tu-census --accept",
   "threshold": 1500,
-  "excess": 2790,
-  "files": 9,
+  "excess": 2793,
+  "files": 10,
   "worst": 3022,
   "buckets": {
     "critical": 0,
     "god": 1,
-    "oversized": 8
+    "oversized": 9
   },
   "per_file": {
     "app/src/DataModel/FrameBuilder.cpp": 3022,
@@ -19,6 +19,7 @@
     "app/src/IO/Drivers/MQTT.cpp": 1572,
     "app/src/CSV/Player.cpp": 1565,
     "app/src/MQTT/Publisher.cpp": 1539,
-    "app/src/IO/Drivers/Audio.cpp": 1537
+    "app/src/IO/Drivers/Audio.cpp": 1537,
+    "app/src/Misc/ExtensionManager.cpp": 1503
   }
 }

@@ -120,14 +120,8 @@ static constexpr FunctionSpec kFunctions[] = {
   {"hypot", 2, nullptr, +[](double a, double b) { return std::hypot(a, b); }, nullptr},
   {"clamp",
    3, nullptr,
-   nullptr, +[](double a, double lo, double hi) {
-     return std::fmin(std::fmax(a, lo), hi);
-   }},
-  {"lerp",
-   3, nullptr,
-   nullptr, +[](double a, double b, double f) {
-     return a + (b - a) * f;
-   }},
+   nullptr, +[](double a, double lo, double hi) { return std::fmin(std::fmax(a, lo), hi); }},
+  {"lerp", 3, nullptr, nullptr, +[](double a, double b, double f) { return a + (b - a) * f; }},
 };
 // code-verify on
 

@@ -30,13 +30,13 @@
   key.type        = QStringLiteral("string");
   key.description = QStringLiteral("Property key");
   key.enumValues  = QJsonArray{QStringLiteral("host"),
-                              QStringLiteral("port"),
-                              QStringLiteral("commonAddress"),
-                              QStringLiteral("windowK"),
-                              QStringLiteral("windowW"),
-                              QStringLiteral("timeoutT1"),
-                              QStringLiteral("timeoutT2"),
-                              QStringLiteral("timeoutT3")};
+                               QStringLiteral("port"),
+                               QStringLiteral("commonAddress"),
+                               QStringLiteral("windowK"),
+                               QStringLiteral("windowW"),
+                               QStringLiteral("timeoutT1"),
+                               QStringLiteral("timeoutT2"),
+                               QStringLiteral("timeoutT3")};
 
   API::SchemaProp value;
   value.name        = QStringLiteral("value");

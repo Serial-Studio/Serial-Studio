@@ -165,6 +165,9 @@ bool Misc::ExtensionInstaller::install(const QVariantMap& entry)
     if (!files.contains(f))
       files.append(f);
 
+  const auto digests = ExtensionCatalog::mergeDigests(entry.value("sha256").toMap(),
+                                                      selection.value("sha256").toMap());
+
   m_lastError.clear();
   if (id.isEmpty() || files.isEmpty())
     return false;
@@ -176,7 +179,7 @@ bool Misc::ExtensionInstaller::install(const QVariantMap& entry)
   }
 
   QString reason;
-  const auto parsed = ExtensionCatalog::parseFileList(files, &reason);
+  const auto parsed = ExtensionCatalog::parseFileList(files, digests, &reason);
   if (parsed.isEmpty()) {
     m_lastError = reason.isEmpty() ? tr("Catalog entry lists no verifiable files.") : reason;
     qWarning() << "[ExtensionInstaller] refusing" << id << ":" << m_lastError;
@@ -249,7 +252,7 @@ bool Misc::ExtensionInstaller::copyLocalFiles(const QList<ExtensionCatalog::Cata
 
     const auto payload = source.readAll();
     source.close();
-    if (!ExtensionCatalog::digestMatches(payload, file))
+    if (!file.selfMetadata && !ExtensionCatalog::digestMatches(payload, file))
       return false;
 
     QDir().mkpath(QFileInfo(dst).absolutePath());
@@ -281,16 +284,30 @@ void Misc::ExtensionInstaller::startDownloads(const QVariantMap& entry,
   m_currentFiles           = files;
   m_currentInstallDir      = installDirFor(entry.value("type").toString(), m_currentInstallId);
   m_currentStagingDir      = m_currentInstallDir + ".staging";
-  m_downloadQueue          = files;
 
   QDir(m_currentStagingDir).removeRecursively();
   QDir().mkpath(m_currentStagingDir);
 
-  m_busy             = true;
-  m_progress         = 0;
+  m_busy     = true;
+  m_progress = 0;
+  Q_EMIT busyChanged();
+  Q_EMIT progressChanged();
+
+  m_downloadQueue.clear();
+  for (const auto& file : files) {
+    if (!file.selfMetadata) {
+      m_downloadQueue.append(file);
+      continue;
+    }
+
+    if (!writeStagedPayload(file.path, metadataPayload(entry))) {
+      abortInstall(tr("The extension metadata could not be staged."));
+      return;
+    }
+  }
+
   m_totalDownloads   = m_downloadQueue.count();
   m_pendingDownloads = m_totalDownloads;
-  Q_EMIT busyChanged();
   Q_EMIT progressChanged();
 
   downloadNextFile();
@@ -489,7 +506,9 @@ QJsonObject Misc::ExtensionInstaller::buildInstalledRecord() const
   for (const auto& file : m_currentFiles) {
     QJsonObject row;
     row.insert("path", file.path);
-    row.insert("sha256", file.sha256);
+    if (!file.sha256.isEmpty())
+      row.insert("sha256", file.sha256);
+
     if (file.size > 0)
       row.insert("size", static_cast<double>(file.size));
 
@@ -524,12 +543,23 @@ bool Misc::ExtensionInstaller::writeStagedFile(QNetworkReply* reply)
   if (match == m_currentFiles.constEnd())
     return false;
 
-  const auto filePath = m_currentStagingDir + "/" + localName;
-  if (!ExtensionCatalog::isPathSafe(filePath, m_currentStagingDir))
-    return false;
-
   const auto payload = reply->readAll();
   if (!ExtensionCatalog::digestMatches(payload, *match))
+    return false;
+
+  return writeStagedPayload(localName, payload);
+}
+
+/**
+ * @brief Writes verified bytes into the staging directory, refusing a path that would leave it.
+ *        Everything that lands in staging goes through here, so the containment check has one
+ *        home rather than one per producer.
+ */
+bool Misc::ExtensionInstaller::writeStagedPayload(const QString& localName,
+                                                  const QByteArray& payload)
+{
+  const auto filePath = m_currentStagingDir + "/" + localName;
+  if (!ExtensionCatalog::isPathSafe(filePath, m_currentStagingDir))
     return false;
 
   QDir().mkpath(QFileInfo(filePath).absolutePath());
@@ -541,6 +571,26 @@ bool Misc::ExtensionInstaller::writeStagedFile(QNetworkReply* reply)
   const bool written = file.write(payload) == payload.size();
   file.close();
   return written;
+}
+
+/**
+ * @brief The bytes to install as the entry's own info.json. The metadata document the catalog was
+ *        read from is written back verbatim when the repository served one (`_metaRaw`); an entry
+ *        published inline in a manifest has no such file, so the entry itself is serialized,
+ *        minus the underscore-prefixed fields the manager attaches at runtime.
+ */
+QByteArray Misc::ExtensionInstaller::metadataPayload(const QVariantMap& entry)
+{
+  const auto raw = entry.value("_metaRaw").toString().toUtf8();
+  if (!raw.isEmpty())
+    return raw;
+
+  QVariantMap clean;
+  for (auto it = entry.cbegin(); it != entry.cend(); ++it)
+    if (!it.key().startsWith(QLatin1Char('_')))
+      clean.insert(it.key(), it.value());
+
+  return QJsonDocument(QJsonObject::fromVariantMap(clean)).toJson(QJsonDocument::Indented);
 }
 
 /**

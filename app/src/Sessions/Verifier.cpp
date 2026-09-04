@@ -217,13 +217,13 @@ int Sessions::Verifier::fail(const QString& code,
 {
   m_verdict = QStringLiteral("error");
   m_report  = QJsonObject{
-     {  QStringLiteral("verdict"),        m_verdict},
-     {    QStringLiteral("error"),           reason},
-     {QStringLiteral("errorCode"),             code},
-     {    QStringLiteral("stage"),            stage},
-     {     QStringLiteral("hint"),             hint},
-     {  QStringLiteral("archive"), m_options.dbPath},
-     {QStringLiteral("sessionId"),      m_sessionId}
+    {  QStringLiteral("verdict"),        m_verdict},
+    {    QStringLiteral("error"),           reason},
+    {QStringLiteral("errorCode"),             code},
+    {    QStringLiteral("stage"),            stage},
+    {     QStringLiteral("hint"),             hint},
+    {  QStringLiteral("archive"), m_options.dbPath},
+    {QStringLiteral("sessionId"),      m_sessionId}
   };
   appendVerificationRecord();
   cleanupRegenerated();
@@ -431,7 +431,7 @@ void Sessions::Verifier::classifySession()
   m_controlScriptSeen      = obj.value(QStringLiteral("controlScript")).toBool();
   const bool transformsFed = obj.value(QStringLiteral("transformsPresent")).toBool()
                           && obj.value(QStringLiteral("tablesPresent")).toBool();
-  m_finalsVerifiable = !transformsFed;
+  m_finalsVerifiable       = !transformsFed;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -744,17 +744,17 @@ QJsonObject Sessions::Verifier::diffDataset(QSqlDatabase& regen,
 
     const bool parseStage = !rawMatch;
     firstMismatch         = QJsonObject{
-              {                    QStringLiteral("row"),                                                                row},
-              {    QStringLiteral("recordedTimestampNs"),                                                      a.timestampNs},
-              {                  QStringLiteral("stage"), parseStage ? QStringLiteral("parse") : QStringLiteral("transform")},
-              {            QStringLiteral("recordedRaw"),                                                        a.rawString},
-              {         QStringLiteral("regeneratedRaw"),                                                        b.rawString},
-              {     QStringLiteral("recordedRawNumeric"),                                                       a.rawNumeric},
-              {  QStringLiteral("regeneratedRawNumeric"),                                                       b.rawNumeric},
-              {          QStringLiteral("recordedFinal"),                                                      a.finalString},
-              {       QStringLiteral("regeneratedFinal"),                                                      b.finalString},
-              {   QStringLiteral("recordedFinalNumeric"),                                                     a.finalNumeric},
-              {QStringLiteral("regeneratedFinalNumeric"),                                                     b.finalNumeric}
+      {                    QStringLiteral("row"),                                                                row},
+      {    QStringLiteral("recordedTimestampNs"),                                                      a.timestampNs},
+      {                  QStringLiteral("stage"), parseStage ? QStringLiteral("parse") : QStringLiteral("transform")},
+      {            QStringLiteral("recordedRaw"),                                                        a.rawString},
+      {         QStringLiteral("regeneratedRaw"),                                                        b.rawString},
+      {     QStringLiteral("recordedRawNumeric"),                                                       a.rawNumeric},
+      {  QStringLiteral("regeneratedRawNumeric"),                                                       b.rawNumeric},
+      {          QStringLiteral("recordedFinal"),                                                      a.finalString},
+      {       QStringLiteral("regeneratedFinal"),                                                      b.finalString},
+      {   QStringLiteral("recordedFinalNumeric"),                                                     a.finalNumeric},
+      {QStringLiteral("regeneratedFinalNumeric"),                                                     b.finalNumeric}
     };
   }
 

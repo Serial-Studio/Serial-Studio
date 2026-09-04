@@ -238,9 +238,9 @@ void MDF4::Player::openFile()
 {
   static auto& workspaceManager = Misc::WorkspaceManager::instance();
   auto* dialog                  = new QFileDialog(qApp->activeWindow(),
-                                 tr("Select MDF4 file"),
-                                 workspaceManager.path("MDF4"),
-                                 tr("MDF4 files (*.mf4 *.dat)"));
+                                                  tr("Select MDF4 file"),
+                                                  workspaceManager.path("MDF4"),
+                                                  tr("MDF4 files (*.mf4 *.dat)"));
 
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
@@ -730,7 +730,7 @@ void MDF4::Player::buildSeekWindow(int startRow,
     for (int k = 0; k < n; ++k) {
       const auto row = static_cast<size_t>(startRow + k);
       const bool ok  = numeric_col && row < m_numeric[static_cast<size_t>(column)].size()
-                   && channelActive(column, startRow + k);
+                    && channelActive(column, startRow + k);
       values[k] =
         ok ? m_numeric[static_cast<size_t>(column)][row] : std::numeric_limits<double>::quiet_NaN();
     }

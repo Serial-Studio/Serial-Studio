@@ -1239,12 +1239,12 @@ bool UI::WindowManager::startManualPress(const QPointF& pos, Qt::MouseButton but
     return true;
   }
 
-  const auto local     = m_focusedWindow->mapFromItem(this, m_initialMousePos);
-  const int captionH   = m_focusedWindow->property("captionHeight").toInt();
-  const int menuCtlW   = m_focusedWindow->property("menuControlWidth").toInt();
-  const int buttonsW   = m_focusedWindow->property("windowControlsWidth").toInt();
-  const bool onCaption = local.y() <= captionH && local.x() > menuCtlW
-                      && local.x() <= m_focusedWindow->width() - buttonsW;
+  const auto local      = m_focusedWindow->mapFromItem(this, m_initialMousePos);
+  const int captionH    = m_focusedWindow->property("captionHeight").toInt();
+  const int menuCtlW    = m_focusedWindow->property("menuControlWidth").toInt();
+  const int buttonsW    = m_focusedWindow->property("windowControlsWidth").toInt();
+  const bool onCaption  = local.y() <= captionH && local.x() > menuCtlW
+                       && local.x() <= m_focusedWindow->width() - buttonsW;
   const bool onControls = local.y() <= captionH && !onCaption;
   if (onControls)
     return false;

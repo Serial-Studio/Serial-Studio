@@ -597,8 +597,8 @@ void UI::WidgetExtensions::resolveDependencies()
     for (const auto& dependency : package.dependencies) {
       const bool present = m_descriptors.contains(dependency.id);
       const bool usable  = present
-                       && WidgetManifestParser::versionInRange(
-                            m_descriptors.value(dependency.id).version, dependency.versionRange);
+                        && WidgetManifestParser::versionInRange(
+                             m_descriptors.value(dependency.id).version, dependency.versionRange);
       if (usable)
         continue;
 

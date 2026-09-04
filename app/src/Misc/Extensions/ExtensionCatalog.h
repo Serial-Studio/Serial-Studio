@@ -49,14 +49,22 @@ struct CatalogFilter {
 };
 
 /**
- * @brief One installable file of a catalog v2 entry: where it goes, the digest an install
- *        verifies the downloaded bytes against, and the size checked before hashing them.
+ * @brief One installable file of a catalog v2 entry: its path, the digest an install verifies
+ *        the downloaded bytes against, and the size checked before hashing them. `selfMetadata`
+ *        marks the entry's own info.json, which cannot hold a digest of the bytes that contain
+ *        it; the installer writes the already-parsed catalog document instead of fetching it.
  */
 struct CatalogFile {
   QString path;
   QString sha256;
-  qint64 size = 0;
+  qint64 size       = 0;
+  bool selfMetadata = false;
 };
+
+/**
+ * @brief The file name a catalog entry is published under; see CatalogFile::selfMetadata.
+ */
+inline constexpr auto kMetadataFile = "info.json";
 
 /**
  * @brief The install-state facts the catalog cannot derive from a manifest entry on its own; the
@@ -74,11 +82,14 @@ struct EntryState {
 [[nodiscard]] int typeSortRank(const QString& type);
 [[nodiscard]] bool isLocalRepo(const QString& url);
 [[nodiscard]] bool isTrustedRepoUrl(const QString& url);
-[[nodiscard]] bool hasVerifiableFiles(const QVariantList& files);
+[[nodiscard]] bool hasVerifiableFiles(const QVariantList& files, const QVariantMap& digests);
 [[nodiscard]] bool digestMatches(const QByteArray& payload, const CatalogFile& file);
 [[nodiscard]] int compareVersions(const QString& remote, const QString& local);
 
-[[nodiscard]] QList<CatalogFile> parseFileList(const QVariantList& files, QString* rejectReason);
+[[nodiscard]] QList<CatalogFile> parseFileList(const QVariantList& files,
+                                               const QVariantMap& digests,
+                                               QString* rejectReason);
+[[nodiscard]] QVariantMap mergeDigests(const QVariantMap& base, const QVariantMap& overrides);
 [[nodiscard]] bool isSafePathComponent(const QString& component);
 [[nodiscard]] bool isPathSafe(const QString& filePath, const QString& baseDir);
 [[nodiscard]] QUrl resolveFileUrl(const QString& repoBaseUrl, const QString& relativePath);

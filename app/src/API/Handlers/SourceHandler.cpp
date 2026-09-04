@@ -217,9 +217,9 @@ API::CommandResponse API::Handlers::SourceHandler::sourceList(const QString& id,
   } else if (sources.size() == 1) {
     const auto& s = sources.front();
     summary       = QStringLiteral("One source: \"%1\" via %2, frames %3.")
-                .arg(s.title,
-                     EnumLabels::busTypeLabel(s.busType),
-                     EnumLabels::frameDetectionLabel(s.frameDetection));
+                      .arg(s.title,
+                           EnumLabels::busTypeLabel(s.busType),
+                           EnumLabels::frameDetectionLabel(s.frameDetection));
   } else {
     QStringList names;
     for (const auto& s : sources)

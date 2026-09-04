@@ -324,7 +324,7 @@ public:
   // appears when /clr is on
   AE_NO_TSAN weak_atomic(nullptr_t) : value(nullptr) {}
 #endif
-  AE_NO_TSAN weak_atomic(weak_atomic const& other) : value(other.load()) {}
+  AE_NO_TSAN weak_atomic(const weak_atomic& other) : value(other.load()) {}
 
   AE_NO_TSAN weak_atomic(weak_atomic&& other) : value(std::move(other.load())) {}
 #ifdef AE_VCPP
@@ -335,7 +335,7 @@ public:
 
 #ifndef AE_USE_STD_ATOMIC_FOR_WEAK_ATOMIC
   template<typename U>
-  AE_FORCEINLINE weak_atomic const& operator=(U&& x) AE_NO_TSAN
+  AE_FORCEINLINE const weak_atomic& operator=(U&& x) AE_NO_TSAN
   {
     value = std::forward<U>(x);
     return *this;
@@ -382,7 +382,7 @@ public:
   }
 #else
   template<typename U>
-  AE_FORCEINLINE weak_atomic const& operator=(U&& x) AE_NO_TSAN
+  AE_FORCEINLINE const weak_atomic& operator=(U&& x) AE_NO_TSAN
   {
     value.store(std::forward<U>(x), std::memory_order_relaxed);
     return *this;

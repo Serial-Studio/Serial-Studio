@@ -2,9 +2,15 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://serial-studio.com/schemas/catalog.json",
   "title": "Serial Studio extension catalog entry (v2)",
-  "description": "The info.json / manifest entry an extension repository publishes (spec 0075, K3/K5). Every installable file carries a SHA-256 digest and a byte size: the installer downloads into a staging directory, verifies each file against its digest, and only then swaps it over the installed version. An entry whose files are bare strings is catalog v1 and is refused -- there is nothing to verify a download against.",
+  "description": "The info.json / manifest entry an extension repository publishes (spec 0075, K3/K5). Every installable file carries a SHA-256 digest and a byte size: the installer downloads into a staging directory, verifies each file against its digest, and only then swaps it over the installed version. A file that carries no digest is catalog v1 and is refused -- there is nothing to verify a download against. The digest may be published inline (files as objects) or in the `sha256` sidecar table keyed by path (files as plain strings); the sidecar form leaves `files` readable by releases up to 4.1.0, so one repository serves every version. The sole exemption is the entry's own info.json, whose digest would have to live inside the bytes it covers: the installer writes the catalog document it already parsed instead of fetching it.",
   "type": "object",
-  "required": ["schemaVersion", "id", "type", "version", "files"],
+  "required": [
+    "schemaVersion",
+    "id",
+    "type",
+    "version",
+    "files"
+  ],
   "properties": {
     "schemaVersion": {
       "const": 2,
@@ -19,15 +25,40 @@
     },
     "type": {
       "type": "string",
-      "enum": ["theme", "frame-parser", "project-template", "plugin", "widget"],
+      "enum": [
+        "theme",
+        "frame-parser",
+        "project-template",
+        "plugin",
+        "widget"
+      ],
       "description": "Package kind. The install location is chosen from the local package type, never from this field alone."
     },
-    "title": { "type": "string", "minLength": 1, "maxLength": 128 },
-    "description": { "type": "string", "maxLength": 4096 },
-    "author": { "type": "string", "maxLength": 128 },
-    "license": { "type": "string", "maxLength": 128 },
-    "category": { "type": "string", "maxLength": 64 },
-    "screenshot": { "type": "string", "maxLength": 512 },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 4096
+    },
+    "author": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "license": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "category": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "screenshot": {
+      "type": "string",
+      "maxLength": 512
+    },
     "version": {
       "type": "string",
       "pattern": "^[0-9]+(\\.[0-9]+){0,3}([+-][0-9A-Za-z.-]+)?$",
@@ -37,27 +68,47 @@
       "type": "array",
       "minItems": 1,
       "maxItems": 512,
-      "items": { "$ref": "#/definitions/catalogFile" }
+      "items": {
+        "$ref": "#/definitions/fileRef"
+      }
     },
     "platforms": {
       "type": "object",
-      "description": "Per-platform overrides keyed by \"<os>/<arch>\", \"<os>/*\" or \"*\"; each override may carry its own files array of the same shape.",
+      "description": "Per-platform overrides keyed by \"<os>/<arch>\", \"<os>/*\" or \"*\"; each override may carry its own files array of the same shape, and its own sha256 sidecar, which is merged over the entry-wide one.",
       "additionalProperties": {
         "type": "object",
         "properties": {
           "files": {
             "type": "array",
             "maxItems": 512,
-            "items": { "$ref": "#/definitions/catalogFile" }
+            "items": {
+              "$ref": "#/definitions/fileRef"
+            }
+          },
+          "sha256": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/definitions/fileDigest"
+            }
           }
         }
+      }
+    },
+    "sha256": {
+      "type": "object",
+      "description": "Sidecar digest table keyed by the same repository-relative path a `files` string names. Required whenever `files` holds strings; ignored for a file published inline as an object.",
+      "additionalProperties": {
+        "$ref": "#/definitions/fileDigest"
       }
     }
   },
   "definitions": {
     "catalogFile": {
       "type": "object",
-      "required": ["path", "sha256"],
+      "required": [
+        "path",
+        "sha256"
+      ],
       "properties": {
         "path": {
           "type": "string",
@@ -77,6 +128,60 @@
         }
       },
       "additionalProperties": false
+    },
+    "fileRef": {
+      "description": "One installable file: either a repository-relative path whose digest lives in the `sha256` sidecar, or the file object carrying its own digest.",
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        {
+          "$ref": "#/definitions/catalogFile"
+        }
+      ]
+    },
+    "fileDigest": {
+      "type": "object",
+      "required": [
+        "sha256"
+      ],
+      "properties": {
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "Lowercase hex SHA-256 of the file's bytes."
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Byte size, checked before the digest so an oversized body is rejected without hashing it."
+        }
+      },
+      "additionalProperties": false
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "files": {
+            "contains": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "files"
+        ]
+      },
+      "then": {
+        "required": [
+          "sha256"
+        ],
+        "description": "files published as plain strings need the sha256 sidecar table"
+      }
+    }
+  ]
 }

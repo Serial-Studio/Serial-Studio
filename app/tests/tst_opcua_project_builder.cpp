@@ -240,8 +240,8 @@ void TstOpcUaProjectBuilder::connectionSettingsAreStored()
 
   const QList<OpcUaTag> tags = {makeTag("ns=2;i=1", "Speed", IO::Drivers::OpcUaWire::Type::F64)};
   const auto stored          = projectSource(OpcUaProjectBuilder(tags).buildProject(connection))
-                        .value(Keys::SourceConn)
-                        .toObject();
+                                 .value(Keys::SourceConn)
+                                 .toObject();
 
   QCOMPARE(stored.value(QStringLiteral("endpointUrl")).toString(),
            QStringLiteral("opc.tcp://plc.local:4840"));

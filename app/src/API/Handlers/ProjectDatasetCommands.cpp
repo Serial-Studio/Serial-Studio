@@ -729,8 +729,8 @@ API::CommandResponse API::Handlers::ProjectDatasetCommands::datasetSetOptions(
 
   const QString chosen = widgetForDatasetOptions(options);
   const bool wasOneOf  = d.widget == QStringLiteral("bar") || d.widget == QStringLiteral("gauge")
-                     || d.widget == QStringLiteral("compass")
-                     || d.widget == QStringLiteral("meter");
+                      || d.widget == QStringLiteral("compass")
+                      || d.widget == QStringLiteral("meter");
   if (!chosen.isEmpty())
     d.widget = chosen;
   else if (wasOneOf)

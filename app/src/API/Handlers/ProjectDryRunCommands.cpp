@@ -465,9 +465,9 @@ API::CommandResponse API::Handlers::ProjectDryRunCommands::frameParserDryRun(
   result[QStringLiteral("totalRows")]      = totalRows;
   result[QStringLiteral("hint")]           = QStringLiteral(
     "Bytes flow through extraction (delimiters / detection) -> decoder method -> parser, the "
-              "same path the live FrameBuilder uses. Pick the Binary decoder for non-text streams "
-              "(COBS, Modbus, custom binary) -- PlainText / Hex / Base64 route through "
-              "QString::fromUtf8 and mojibake non-ASCII bytes.");
+    "same path the live FrameBuilder uses. Pick the Binary decoder for non-text streams "
+    "(COBS, Modbus, custom binary) -- PlainText / Hex / Base64 route through "
+    "QString::fromUtf8 and mojibake non-ASCII bytes.");
 
   return CommandResponse::makeSuccess(id, result);
 }

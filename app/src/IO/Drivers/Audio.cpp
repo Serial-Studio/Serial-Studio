@@ -1028,9 +1028,9 @@ void IO::Drivers::Audio::renderCsv(const QByteArray& raw,
           break;
         }
         case ma_format_s24: {
-          const quint8* b  = reinterpret_cast<const quint8*>(ptr);
-          const qint32 s24 = static_cast<qint32>(b[0]) | (static_cast<qint32>(b[1]) << 8)
-                           | (static_cast<qint32>(b[2]) << 16);
+          const quint8* b     = reinterpret_cast<const quint8*>(ptr);
+          const qint32 s24    = static_cast<qint32>(b[0]) | (static_cast<qint32>(b[1]) << 8)
+                              | (static_cast<qint32>(b[2]) << 16);
           const qint32 sample = (s24 & 0x800000) ? (s24 | static_cast<qint32>(0xFF000000)) : s24;
           m_csvStream << sample;
           break;

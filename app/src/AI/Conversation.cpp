@@ -1130,8 +1130,8 @@ void AI::Conversation::recordToolResult(const QString& callId,
 
   constexpr int kFsResultByteBudget = 48 * 1024;
   const bool isFsReadResult         = name == QStringLiteral("fs.read")
-                           || name == QStringLiteral("fs.search")
-                           || name == QStringLiteral("fs.list");
+                                   || name == QStringLiteral("fs.search")
+                                   || name == QStringLiteral("fs.list");
   const int kMaxToolResultBytes =
     isFsReadResult ? kFsResultByteBudget
                    : qBound(2048,

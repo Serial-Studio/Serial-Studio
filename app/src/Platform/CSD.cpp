@@ -559,7 +559,7 @@ void Titlebar::drawButton(QPainter* painter, Button button, const QString& svgPa
                              .arg(pixelSize.width())
                              .arg(pixelSize.height())
                              .arg(QString::number(dpr, 'f', 3));
-  auto cacheIt = m_iconCache.constFind(cacheKey);
+  auto cacheIt           = m_iconCache.constFind(cacheKey);
   if (cacheIt != m_iconCache.cend()) {
     painter->drawPixmap(iconRect.topLeft(), cacheIt.value());
     return;

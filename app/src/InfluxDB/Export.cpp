@@ -132,7 +132,7 @@ void InfluxDB::ExportWorker::sampleEpochOffset()
   const auto wall   = std::chrono::system_clock::now().time_since_epoch();
   const auto steady = std::chrono::steady_clock::now().time_since_epoch();
   m_epochOffsetNs   = std::chrono::duration_cast<std::chrono::nanoseconds>(wall).count()
-                  - std::chrono::duration_cast<std::chrono::nanoseconds>(steady).count();
+                    - std::chrono::duration_cast<std::chrono::nanoseconds>(steady).count();
 }
 
 /**

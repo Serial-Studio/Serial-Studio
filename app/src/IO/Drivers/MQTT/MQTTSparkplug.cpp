@@ -682,7 +682,7 @@ QJsonObject IO::Drivers::MQTT::buildSparkplugProject() const
   source[Keys::FrameParserLanguage]   = static_cast<int>(SerialStudio::Native);
   source[Keys::FrameParserTemplate]   = QStringLiteral("sparkplug");
   source[Keys::FrameParserParams]     = QJsonObject{
-        {QStringLiteral("schema"), sparkplugSchema(slotTable)}
+    {QStringLiteral("schema"), sparkplugSchema(slotTable)}
   };
 
   QJsonObject conn;

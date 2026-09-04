@@ -215,9 +215,9 @@ bool IO::Drivers::HID::open(const QIODevice::OpenMode mode)
 
   const uint16_t up = m_deviceUsagePages.value(m_deviceIndex, 0);
   const uint16_t u  = m_deviceUsages.value(m_deviceIndex, 0);
-  m_usagePage       = up
-                      ? QStringLiteral("0x") + QString::number(up, 16).rightJustified(4, QLatin1Char('0'))
-                      : QString();
+  m_usagePage = up
+                ? QStringLiteral("0x") + QString::number(up, 16).rightJustified(4, QLatin1Char('0'))
+                : QString();
   m_usage = u ? QStringLiteral("0x") + QString::number(u, 16).rightJustified(4, QLatin1Char('0'))
               : QString();
   Q_EMIT deviceInfoChanged();
@@ -499,9 +499,9 @@ void IO::Drivers::HID::updateHidUsageCache()
 {
   const uint16_t up = m_deviceUsagePages.value(m_deviceIndex, 0);
   const uint16_t u  = m_deviceUsages.value(m_deviceIndex, 0);
-  m_usagePage       = up
-                      ? QStringLiteral("0x") + QString::number(up, 16).rightJustified(4, QLatin1Char('0'))
-                      : QString();
+  m_usagePage = up
+                ? QStringLiteral("0x") + QString::number(up, 16).rightJustified(4, QLatin1Char('0'))
+                : QString();
   m_usage = u ? QStringLiteral("0x") + QString::number(u, 16).rightJustified(4, QLatin1Char('0'))
               : QString();
 }
